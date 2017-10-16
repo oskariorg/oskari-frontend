@@ -13,6 +13,14 @@ Some extra tags:
 
 ### [mod] [rpc] DrawingEvent
 
+Fixed an issue where:
+
+1) Draw a shape (like Polygon) with functionality id 1
+2) Draw another type of shape (like LineString) with functionality id 2
+3) Draw the same shape as in step 1 with functionality id 3
+
+Resulted in DrawingEvents on step 3 to have an empty features array. Features the user draws are now sent correctly.
+
 DrawingEvent with isFinished = true is now correctly triggered also when user modifies the geometry.
 Previously isFinished was only ever "true" for the original draw and always false for any modifications.
 

@@ -19,6 +19,8 @@ Oskari.clazz.define(
         this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
         this._mode = "";
         this._featuresValidity = {};
+        // TODO: figure out why we have some variables that are "globally reset" and some that are functionality id specific.
+        // As some are "global" resuming a previous id will probably NOT work the way expected and storing these/id probably not needed.
         this._draw = {};
         this._modify = {};
         this._functionalityIds = {};
@@ -108,6 +110,7 @@ Oskari.clazz.define(
             var me = this;
             //disable gfi
             me.setGFIEnabled(false);
+            // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
             me.removeInteractions(me._draw, me._id);
             me.removeInteractions(me._modify, me._id);
 
@@ -122,7 +125,7 @@ Oskari.clazz.define(
             me._id = id;
             // setup options
             me._options = options;
-            me._layerId = this.getCurrentLayerId();
+            // this sets styles for this and all the following requests (not functionality id specific, written to "class variables")
             me.setDefaultStyle(this.getOpts('style'));
 
             // creating layer for drawing (if layer not already added)
@@ -170,19 +173,47 @@ Oskari.clazz.define(
         getCurrentDrawShape : function () {
             return this._shape;
         },
+        /**
+         * This is the layer ID for the current functionality
+         * @return {String}
+         */
         getCurrentLayerId : function () {
             return this.getCurrentDrawShape() + 'DrawLayer';
         },
+        /**
+         * This is the layer for the current functionality
+         * @return {ol.Layer}
+         */
         getCurrentDrawLayer : function () {
-            return this._drawLayers[this.getCurrentLayerId()];
+            return this.getLayer(this.getCurrentLayerId());
         },
+        /**
+         * Returns a shared buffering layer.
+         */
         // for some reason there's always just one buffered features layer even though there are multiple draw layers
         getBufferedFeatureLayer: function() {
-            if(!this._drawLayers[this._bufferedFeatureLayerId]) {
+            if(!this.getLayer(this._bufferedFeatureLayerId)) {
                 // creating layer for buffered features (if layer not already added)
                 this.addVectorLayer(this._bufferedFeatureLayerId);
             }
-            return this._drawLayers[this._bufferedFeatureLayerId];
+            return this.getLayer(this._bufferedFeatureLayerId);
+        },
+        /**
+         * Layer id for functionality.
+         * TODO: is this really needed? some of the variables used are shared between functionalities anyway. Consider using just "currentLayer"
+         * @param  {String|Number} id functionality id
+         * @return {String} layer ID
+         */
+        getLayerIdForFunctionality : function(id) {
+            return this._functionalityIds[id];
+        },
+        /**
+         * Returns the actual layer matching the given id
+         * @param  {String} layerId
+         * @return {ol.Layer}
+         */
+        getLayer : function(layerId) {
+            return this._drawLayers[layerId];
         },
         /**
          * The id sent in startdrawing request like "measure" or "feedback"
@@ -242,16 +273,18 @@ Oskari.clazz.define(
                 clearCurrent: clearCurrent,
                 isFinished: true
             };
-            if(me._functionalityIds[id]) {
-                me.sendDrawingEvent(id, options);
-                //deactivate draw and modify controls
-                me.removeInteractions(me._draw, id);
-                me.removeInteractions(me._modify, id);
-                me._cleanupInternalState();
-                me.getMap().un('pointermove', me.pointerMoveHandler, me);
-                //enable gfi
-                me.setGFIEnabled(true);
+            if(!me.getLayerIdForFunctionality(id)) {
+                // layer not found for functionality id, nothing to do?
+                return;
             }
+            me.sendDrawingEvent(id, options);
+            // deactivate draw and modify controls (should these be in _cleanupInternalState()?)
+            me.removeInteractions(me._draw, id);
+            me.removeInteractions(me._modify, id);
+            me._cleanupInternalState();
+            me.getMap().un('pointermove', me.pointerMoveHandler, me);
+            // enable gfi
+            me.setGFIEnabled(true);
         },
         _cleanupInternalState: function() {
             this._shape = null;
@@ -261,7 +294,34 @@ Oskari.clazz.define(
                jQuery('div.' + this._tooltipClassForMeasure + "." + this._sketch.getId()).remove();
             }
             this._sketch = null;
-            this._layerId = null;
+        },
+         /**
+         * @method clearDrawing
+         * -  remove features from the draw layers
+         * @param {String} functionality id. If not given, will remove features from the current draw layer
+         */
+        clearDrawing : function(id){
+            var me = this;
+            if(id) {
+                var layer = me.getLayer(me.getLayerIdForFunctionality(id));
+                if(layer) {
+                    layer.getSource().getFeaturesCollection().clear();
+                }
+            } else {
+                if(me.getLayer(me.getCurrentLayerId())) {
+                    me.getLayer(me.getCurrentLayerId()).getSource().getFeaturesCollection().clear();
+                }
+                // TODO: why is buffered layer only cleared here, but not when id is given?
+                // Should this be moved outside of the if/else?
+                me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
+            }
+            // remove overlays (measurement tooltips)
+            me.getMap().getOverlays().forEach(function (o) {
+              if(!id || o.id === id) {
+                  me.getMap().removeOverlay(o);
+              }
+            });
+            jQuery('.' + me._tooltipClassForMeasure).remove();
         },
         /**
          * @method sendDrawingEvent
@@ -286,15 +346,14 @@ Oskari.clazz.define(
                 // TODO: check the ifs below if they should only be run if buffer is used
                 bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
             }
-            if(me._shape === 'Circle') {
+            if(me.getCurrentDrawShape() === 'Circle') {
                 bufferedFeatures = me.getCircleAsPolygonFeature(features);
                 features = me.getCircleAsPointFeature(features);
                 // FIXME: circles don't get the area measurement
-            } else if(me._shape === 'LineString' && requestedBuffer > 0) {
+            } else if(me.getCurrentDrawShape() === 'LineString' && requestedBuffer > 0) {
                 // TODO: Why is it that only linestrings get buffer properties?
                 me.addBufferPropertyToFeatures(features, requestedBuffer);
             }
-            // TODO: get geojson for matching id
             var geojson = me.getFeaturesAsGeoJSON(features);
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
 
@@ -312,7 +371,6 @@ Oskari.clazz.define(
             }
 
             if(options.clearCurrent) {
-                // TODO: clear the drawing matching the id from map
                 me.clearDrawing(id);
             }
             if(options.isFinished) {
@@ -323,7 +381,7 @@ Oskari.clazz.define(
             me.getSandbox().notifyAll(event);
         },
         /**
-         * @method getLineLength
+         * @method getFeatures
          * -  gets features from layer
          *
          * @param {String} layerId
@@ -332,7 +390,7 @@ Oskari.clazz.define(
         getFeatures: function (layerId) {
             var me = this,
                 features = [];
-            var featuresFromLayer = me._drawLayers[layerId].getSource().getFeatures();
+            var featuresFromLayer = me.getLayer(layerId).getSource().getFeatures();
             featuresFromLayer.forEach(function (f) {
                 features.push(f);
             });
@@ -345,6 +403,8 @@ Oskari.clazz.define(
         /**
          * @method getFeaturesAsGeoJSON
          * - converts features to GeoJson
+         * - adds measurements (length/area) as properties
+         * - adds buffer as property if buffer is defined
          *
          * @param {Array} features
          * @return {String} geojson
@@ -383,6 +443,11 @@ Oskari.clazz.define(
 
             return geoJsonObject;
         },
+        /**
+         * Calculates line length and polygon area as measurements
+         * @param  {Array} features features with geometries
+         * @return {Object} object with length and area keys with numbers as values indicating meters/m2.
+         */
         sumMeasurements : function(features) {
             var me = this;
             var value = {
@@ -451,7 +516,7 @@ Oskari.clazz.define(
         },
         /**
          * @method addVectorLayer
-         * -  adding layer to the map
+         * -  adds a new layer to the map
          *
          * @param {String} layerId
          */
@@ -464,32 +529,6 @@ Oskari.clazz.define(
             });
             me.getMap().addLayer(vector);
             me._drawLayers[layerId] = vector;
-        },
-         /**
-         * @method clearDrawing
-         * -  remove features from the draw layers
-         * @param {String} functionality id. If not given, will remove features from the current draw layer
-         */
-        clearDrawing : function(id){
-            var me = this;
-            if(id) {
-                var layer = me.getLayer(me.getLayerIdForFunctionality(id));
-                if(layer) {
-                    layer.getSource().getFeaturesCollection().clear();
-                }
-            } else {
-                if(me.getLayer(me._layerId)) {
-                    me.getLayer(me._layerId).getSource().getFeaturesCollection().clear();
-                }
-                me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
-            }
-            // remove overlays
-            me.getMap().getOverlays().forEach(function (o) {
-              if(!id || o.id === id) {
-                  me.getMap().removeOverlay(o);
-              }
-            });
-            jQuery('.' + me._tooltipClassForMeasure).remove();
         },
          /**
          * @method addDrawInteraction
@@ -508,44 +547,44 @@ Oskari.clazz.define(
             };
             if (shape === 'LineString') {
                  geometryFunction = function (coordinates, geometry) {
-                     if (!geometry) {
-                          geometry = new ol.geom.LineString(null);
-                      }
-                      geometry.setCoordinates(coordinates);
-                      if (options.buffer > 0) {
-                          me.drawBufferedGeometry(geometry, options.buffer);
-                      }
-                      me.pointerMoveHandler();
-                      me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
-                      return geometry;
-                  };
+                    if (!geometry) {
+                        geometry = new ol.geom.LineString(null);
+                    }
+                    geometry.setCoordinates(coordinates);
+                    if (options.buffer > 0) {
+                        me.drawBufferedGeometry(geometry, options.buffer);
+                    }
+                    me.pointerMoveHandler();
+                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    return geometry;
+                };
             } else if (shape === 'Box') {
                  maxPoints = 2;
                  geometryType = 'LineString';
                  geometryFunction = function(coordinates, geometry) {
-                   if (!geometry) {
-                     geometry = new ol.geom.Polygon(null);
-                   }
-                   var start = coordinates[0];
-                   var end = coordinates[1];
-                   geometry.setCoordinates([[start, [start[0], end[1]], end, [end[0], start[1]], start]]);
-                   me.pointerMoveHandler();
-                   me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
-                   return geometry;
-                 };
+                    if (!geometry) {
+                         geometry = new ol.geom.Polygon(null);
+                    }
+                    var start = coordinates[0];
+                    var end = coordinates[1];
+                    geometry.setCoordinates([[start, [start[0], end[1]], end, [end[0], start[1]], start]]);
+                    me.pointerMoveHandler();
+                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    return geometry;
+                };
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
                 geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
             } else if (shape === 'Circle' && options.buffer > 0) {
                 geometryType = 'Point';
                 geometryFunction = function(coordinates, geometry) {
-                     if (!geometry) {
-                         geometry = new ol.geom.Circle(coordinates, options.buffer);
-                     }
-                     me.pointerMoveHandler();
-                     me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
-                     return geometry;
-                 };
+                    if (!geometry) {
+                        geometry = new ol.geom.Circle(coordinates, options.buffer);
+                    }
+                    me.pointerMoveHandler();
+                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    return geometry;
+                };
             } else if(shape === 'Polygon') {
                 geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
@@ -565,7 +604,7 @@ Oskari.clazz.define(
               features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
               type: geometryType,
               style: me._styles['draw'],
-              geometryFunction:  geometryFunction,
+              geometryFunction: geometryFunction,
               maxPoints: maxPoints
             });
             // does this need to be registered here and/or for each functionalityId?
@@ -581,15 +620,15 @@ Oskari.clazz.define(
             }
         },
          /**
-         * @method drawStartEvent
-         * -  handles drawstart event
+         * @method bindDrawStartEvent
+         * -  binds drawstart event handling to interaction
          * @param {Object} options
          */
         bindDrawStartEvent: function(interaction, options) {
             var me = this;
             interaction.on('drawstart', function(evt) {
                 me._showIntersectionWarning = false;
-                // stop modify iteraction while draw-mode is active
+                // stop modify interaction while draw-mode is active
                 me.removeInteractions(me._modify, me._id);
                 me._mode = 'draw';
                 var id = me.generateNewFeatureId();
@@ -598,13 +637,13 @@ Oskari.clazz.define(
                 if(options.allowMultipleDrawing === 'single') {
                     me.clearDrawing();
                 }
-                var tooltipClass = me._tooltipClassForMeasure + ' ' + me._shape;
+                var tooltipClass = me._tooltipClassForMeasure + ' ' + me.getCurrentDrawShape();
                 me.createDrawingTooltip(id, tooltipClass);
             });
         },
          /**
-         * @method drawingEndEvent
-         * -  handles drawend event
+         * @method bindDrawEndEvent
+         * -  binds drawend event handling to interaction
          * @param {Object} options
          */
         bindDrawEndEvent: function(interaction, options, shape) {
@@ -621,9 +660,9 @@ Oskari.clazz.define(
                     me.stopDrawing(me._id, false);
                 }
                 evt.feature.setStyle(me._styles['modify']);
-                // activate modify iteraction after new drawing is finished
+                // activate modify interaction after new drawing is finished
                 if(options.modifyControl !== false) {
-                    me.addModifyInteraction(me._layerId, shape, options);
+                    me.addModifyInteraction(me.getCurrentLayerId(), shape, options);
                 }
                 me._sketch = null;
             });
@@ -849,7 +888,7 @@ Oskari.clazz.define(
         },
         toggleDrawLayerChangeFeatureEventHandler: function(enable) {
             var me = this,
-                layer = me.getLayer(me._layerId);
+                layer = me.getLayer(me.getCurrentLayerId());
             if(layer) {
                  if (enable) {
                     layer.getSource().on('changefeature', me.modifyFeatureChangeEventCallback, me);
@@ -887,17 +926,17 @@ Oskari.clazz.define(
         },
         /**
          * @method removeInteractions
-         * -  removes draw and modify controls, sets _shape, _id and _sketch to null
+         * -  removes draw and modify controls
          * @param {String} id
          */
-        removeInteractions : function(iteraction, id) {
+        removeInteractions : function(interaction, id) {
             var me = this;
             if(!id || id===undefined || id === '') {
-                Object.keys(iteraction).forEach(function (key) {
-                    me.getMap().removeInteraction(iteraction[key]);
+                Object.keys(interaction).forEach(function (key) {
+                    me.getMap().removeInteraction(interaction[key]);
                 });
             } else {
-                me.getMap().removeInteraction(iteraction[id]);
+                me.getMap().removeInteraction(interaction[id]);
             }
         },
         /**
@@ -1006,22 +1045,6 @@ Oskari.clazz.define(
            tooltipElement.parentElement.style.pointerEvents = 'none';
            tooltip.id = id;
            me.getMap().addOverlay(tooltip);
-       },
-       getLayerIdForFunctionality : function(id) {
-           var me = this,
-               layerId = null;
-           if(me._functionalityIds[id]) {
-               layerId = me._functionalityIds[id];
-           }
-           return layerId;
-       },
-       getLayer : function(layerId) {
-            var me = this,
-                layer = null;
-            if(me._drawLayers[layerId]) {
-                layer = me._drawLayers[layerId];
-            }
-            return layer;
        }
    }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

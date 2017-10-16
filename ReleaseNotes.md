@@ -12,13 +12,7 @@ Fixed an issue where the button to add layers in publisher didn't work.
 
 ### drawtools
 
-Fixed an issue where:
-
-1) Draw a shape (like Polygon) with functionality id 1
-2) Draw another type of shape (like LineString) with functionality id 2
-3) Draw the same shape as in step 1 with functionality id 3
-
-Resulted in DrawingEvents on step 3 NOT to be sent. They are now sent correctly.
+See [api/CHANGELOG.md](api/CHANGELOG.md) for changes.
 Refactored the code for the functionality to make it more accessible.
 
 ## 1.44.0
