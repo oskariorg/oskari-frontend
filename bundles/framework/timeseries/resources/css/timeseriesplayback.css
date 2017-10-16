@@ -64,9 +64,9 @@
   cursor: pointer;
   position: relative;
 }
-.timeseries-back:hover,
+.timeseries-back:not(.disabled):hover,
 .timeseries-playpause:hover,
-.timeseries-forward:hover {
+.timeseries-forward:not(.disabled):hover {
   background: radial-gradient(ellipse at center, #e7f1f5 18%,#c8dae2 43%,#95b4c4 100%);
   color: #369
 }
@@ -136,6 +136,10 @@
 }
 .timeseries-playpause.pause:after {
   left: 19px;
+}
+.timeseries-stepper .disabled {
+  cursor: auto;
+  opacity: 0.5;
 }
 .timeseries-datetime {
   width: 122px;

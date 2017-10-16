@@ -153,6 +153,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var index = Math.max(d3.bisect(this._uiState.times, time)-1, 0);
             return this._uiState.times[index];
         },
+        _doSingleStep: function(delta) {
+            if(this.isAnimating) {
+                return;
+            }
+            var index = d3.bisectLeft(this._uiState.times, this._uiState.currentTime);
+            var newTime = this._uiState.times[index + delta];
+            if(newTime && newTime > this._uiState.rangeStart &&  newTime < this._uiState.rangeEnd) {
+                this._uiState.currentTime = newTime;
+                this._throttleNewTime();
+                this._renderHandle();
+                this._updateTimeDisplay();
+            }
+        },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
@@ -183,7 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._updateTimeDisplay();
             }
         },
-        _generateSelectOptions(prefix, options){
+        _generateSelectOptions: function(prefix, options){
             var me = this;
             return options.map(function(e) {
                 return {
@@ -244,6 +257,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             template.find('.timeseries-playpause').on('click', function(e){
                 me._setAnmationState(!me._uiState.isAnimating);
             });
+            template.find('.timeseries-back').on('click', this._doSingleStep.bind(this, -1));
+            template.find('.timeseries-forward').on('click', this._doSingleStep.bind(this, 1));
             this._element.find('.timeseries-aux').append(template);
         },
         _updateCurrentTime: function(newTime) {
@@ -365,6 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
         _setAnmationState: function(shouldAnimate){
             this._element.find('.timeseries-playpause').toggleClass('pause', shouldAnimate);
+            this._element.find('.timeseries-back, .timeseries-forward').toggleClass('disabled', shouldAnimate);
             if(shouldAnimate !== this._uiState.isAnimating) {
                 this._uiState.isAnimating = shouldAnimate;
                 if(shouldAnimate) {
