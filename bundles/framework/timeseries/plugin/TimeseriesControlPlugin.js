@@ -56,6 +56,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
     }, {
         __timelineWidth: 600,
         __fullAxisYPos: 35,
+        __localeData: {
+            fi: {
+                "dateTime": "%A, %-d. %Bta %Y klo %X",
+                "date": "%-d.%-m.%Y",
+                "time": "%H:%M:%S",
+                "periods": ["a.m.", "p.m."],
+                "days": ["sunnuntai", "maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai"],
+                "shortDays": ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"],
+                "months": ["tammikuu", "helmikuu", "maaliskuu", "huhtikuu", "toukokuu", "kesäkuu", "heinäkuu", "elokuu", "syyskuu", "lokakuu", "marraskuu", "joulukuu"],
+                "shortMonths": ["Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu"]
+            },
+            sv: {
+                "dateTime": "%A den %d %B %Y %X",
+                "date": "%Y-%m-%d",
+                "time": "%H:%M:%S",
+                "periods": ["fm", "em"],
+                "days": ["Söndag", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag"],
+                "shortDays": ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
+                "months": ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"],
+                "shortMonths": ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"]
+            }
+        },
 
         // Returns a function, that, when invoked, will only be triggered at most once
         // during a given window of time. Normally, the throttled function will run
@@ -279,9 +301,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             this._renderHandle();
             this._updateTimeDisplay();
         },
+        _getTickFormatter() {
+            var localeString = Oskari.getLang();
+            var locale;
+            var formatterFunction;
+            if(this.__localeData[localeString]){
+                locale = d3.timeFormatLocale(this.__localeData[localeString]);
+                formatterFunction = locale.format.bind(locale);
+            } else {
+                formatterFunction = d3.timeFormat.bind(d3);
+            }
+            var formatMillisecond = formatterFunction(".%L"),
+                formatSecond = formatterFunction(":%S"),
+                formatMinute = formatterFunction(locale ? "%H:%M" : "%I:%M"),
+                formatHour = formatterFunction(locale ? "%H:%M" : "%I %p"),
+                formatDay = formatterFunction(locale ? "%d.%m." : "%d %b")
+                formatYear = formatterFunction("%Y");
+
+            return function multiFormat(date) {
+                return (d3.timeSecond(date) < date ? formatMillisecond
+                : d3.timeMinute(date) < date ? formatSecond
+                : d3.timeHour(date) < date ? formatMinute
+                : d3.timeDay(date) < date ? formatHour
+                : d3.timeMonth(date) < date ? formatDay
+                : formatYear)(date);
+            }
+        },
         _updateTimelines: function() {
-            var margin = {left: 15, right: 15}
             var me = this;
+            var margin = {left: 15, right: 15}
+            var tickFormatter = me._getTickFormatter();
             var svg = d3.select(this._element.find('.timeline-desktop').get(0));
             svg
                 .attr('width', this.__timelineWidth)
@@ -296,12 +345,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .domain([new Date(this._uiState.rangeStart), new Date(this._uiState.rangeEnd)])
                 .range([margin.left, this.__timelineWidth - margin.right]);
 
-            var axisFull = d3.axisTop(scaleFull).tickPadding(7);
+            var axisFull = d3.axisTop(scaleFull)
+                    .tickPadding(7)
+                    .tickFormat(tickFormatter);
             svg.select('.full-axis')
                 .attr('transform', 'translate(0,' + me.__fullAxisYPos + ')')
                 .call(axisFull);
 
-            var axisSubset = d3.axisTop(scaleSubset).tickPadding(7);
+            var axisSubset = d3.axisTop(scaleSubset)
+                .tickPadding(7)
+                .tickFormat(tickFormatter);
             svg.select('.subset-axis')
                 .attr('transform', 'translate(0,80)')
                 .call(axisSubset);
