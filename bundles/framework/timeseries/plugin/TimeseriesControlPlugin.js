@@ -150,7 +150,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             return el;
         },
         _getClosestTime: function (time){
-            var index = Math.max(d3.bisect(this._uiState.times, time)-1, 0);
+            var index1 = Math.max(d3.bisectRight(this._uiState.times, time)-1, 0);
+            var index2 = index1 + 1;
+            var index;
+            if(index1 < this._uiState.times.length - 1 && Math.abs(moment(this._uiState.times[index1]).diff(time)) > Math.abs(moment(this._uiState.times[index2]).diff(time))) {
+                index = index2;
+            } else {
+                index = index1;
+            }
             return this._uiState.times[index];
         },
         _doSingleStep: function(delta) {
@@ -337,7 +344,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 timeFromMouse(newX);
             })
             .on('end', function(){
-                // if brush too small, enlarge it
+                // TODO: if brush too small, enlarge it
             })
 
             handle.call(dragBehavior);
@@ -355,20 +362,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             function brushed() {
                 var selection = d3.event.selection;
-                var inverted = selection.map(scaleFull.invert, scaleFull);
-                scaleSubset.domain(inverted);
+                var inverted = selection.map(function(e) {return scaleFull.invert(e).toISOString()});
+                scaleSubset.domain(inverted.map(function(t) {return new Date(me._getClosestTime(t))}));
                 svg.select('.subset-axis').call(axisSubset);
-                var invertedISO = inverted.map(function(e){return e.toISOString()});
 
                 var changedTime = me._uiState.currentTime;
-                if(invertedISO[0] > me._uiState.currentTime) {
-                    changedTime = invertedISO[0];
+                if(inverted[0] > me._uiState.currentTime) {
+                    changedTime = inverted[0];
                 }
-                if(invertedISO[1] < me._uiState.currentTime) {
-                    changedTime = invertedISO[1];
+                if(inverted[1] < me._uiState.currentTime) {
+                    changedTime = inverted[1];
                 }
-                me._uiState.rangeStart = invertedISO[0];
-                me._uiState.rangeEnd = invertedISO[1];
+                me._uiState.rangeStart = inverted[0];
+                me._uiState.rangeEnd = inverted[1];
                 me._updateCurrentTime(changedTime);
             }
         },
