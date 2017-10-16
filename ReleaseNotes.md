@@ -10,6 +10,14 @@ Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to 
 
 Fixed an issue where the button to add layers in publisher didn't work.
 
+### FormInput
+
+Floating labels were created to all FormInput components which used setPlaceHolder method. Now floating labels are created by calling setFloatingLabel. If you want to use floating labels with FormInput component, you have to use new method. Floating label position can be adjusted with topPosition, which adds a value to the css-directive "top".
+
+Optionally tooltip can be bound to input (default binds to label).
+
+Now floating label is floated when input is selected instead of typing text.
+
 ### drawtools
 
 See [api/CHANGELOG.md](api/CHANGELOG.md) for changes.
