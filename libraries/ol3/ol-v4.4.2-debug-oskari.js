@@ -1,6 +1,6 @@
 // OpenLayers. See https://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/openlayers/master/LICENSE.md
-// Version: 1.44.0-5-g5dc7b99
+// Version: 1.44.0-6-ge69f3ba
 ;(function (root, factory) {
   if (typeof exports === "object") {
     module.exports = factory();
@@ -77203,7 +77203,7 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
  * @return {!ol.Tile}
  */
 ol.source.OskariAsyncTileImage.prototype.createOskariAsyncTile = function(z, x, y, pixelRatio, projection, key) {
-  var tileCoordKey = this.getKeyZXY(z, x, y);
+  var tileCoordKey = ol.tilecoord.getKeyZXY(z, x, y);
   if (this.tileCache.containsKey(tileCoordKey)) {
     return /**@type {!ol.Tile}*/(this.tileCache.get(tileCoordKey));
   } else {
@@ -95557,7 +95557,7 @@ goog.exportProperty(
     ol.View.prototype,
     'un',
     ol.View.prototype.un);
-ol.VERSION = '1.44.0-5-g5dc7b99';
+ol.VERSION = '1.44.0-6-ge69f3ba';
 OPENLAYERS.ol = ol;
 
   return OPENLAYERS.ol;

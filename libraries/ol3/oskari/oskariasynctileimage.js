@@ -136,7 +136,7 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
  * @return {!ol.Tile}
  */
 ol.source.OskariAsyncTileImage.prototype.createOskariAsyncTile = function(z, x, y, pixelRatio, projection, key) {
-  var tileCoordKey = this.getKeyZXY(z, x, y);
+  var tileCoordKey = ol.tilecoord.getKeyZXY(z, x, y);
   if (this.tileCache.containsKey(tileCoordKey)) {
     return /**@type {!ol.Tile}*/(this.tileCache.get(tileCoordKey));
   } else {
