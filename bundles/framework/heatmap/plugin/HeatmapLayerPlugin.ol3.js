@@ -54,7 +54,6 @@ Oskari.clazz.define(
                 }
             };
         },
-
         /**
          * Adds a single WMS layer to this map
          *
@@ -76,20 +75,15 @@ Oskari.clazz.define(
             var defaultParams = {
                     LAYERS: layer.getLayerName(),
                     TRANSPARENT: true,
-                    id: layer.getId(),
+                    ID: layer.getId(),
                     STYLES: layer.getCurrentStyle().getName(),
                     FORMAT: 'image/png',
                     SLD_BODY : this.__getSLD(layer),
                 },
-                defaultOptions = {
-                    layerId: layer.getLayerName(),
-                    isBaseLayer: false,
-                    displayInLayerSwitcher: false,
-                    visibility: true,
-                    buffer: 0
-                },
                 layerParams = layer.getParams(),
                 layerOptions = layer.getOptions();
+                layerAttributes = layer.getAttributes() || undefined;
+
             if (layer.getMaxScale() || layer.getMinScale()) {
                 // use resolutions instead of scales to minimize chance of transformation errors
                 var layerResolutions = this.getMapModule().calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
@@ -101,24 +95,29 @@ Oskari.clazz.define(
                     defaultParams[key] = layerParams[key];
                 }
             }
-            for (key in layerOptions) {
-                if (layerOptions.hasOwnProperty(key)) {
-                    defaultOptions[key] = layerOptions[key];
-                }
+            var projection = this.getMapModule().getProjection(),
+            reverseProjection;
+
+            if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
+                    // use reverse coordinate order for this layer!
+                    if (layerAttributes.reverseXY[projectionCode]) {
+                        reverseProjection = this._createReverseProjection(projection);
+                    }
             }
+
             var wmsSource = new ol.source.ImageWMS({
                 id:layerIdPrefix + layer.getId(),
                 url: layer.getLayerUrls()[0],
-                params: defaultParams,
-                // defaultOptions
-
+                params: defaultParams
             });
             // ol.layer.Tile or ol.layer.Image for wms
             var openlayer = new ol.layer.Image({
                 title: layerIdPrefix + layer.getId(),
-                source: wmsSource
+                source: wmsSource,
+                projection: reverseProjection ? reverseProjection : undefined,
+                opacity: layer.getOpacity() / 100,
+                visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
             });
-            openlayer.opacity = layer.getOpacity() / 100;
 
             var params = openlayer.getSource().getParams();
 
@@ -128,13 +127,35 @@ Oskari.clazz.define(
             );
             //setAt or use setZIndex() for the layer
             if (keepLayerOnTop) {
-                // openlayer.setZIndex();
-                this.getMap().getLayers().setAt(this.getMap().getLayers().getArray().length, openlayer);
+                this.getMap().getLayers().setAt(this.getMapModule().getLayers().length, openlayer);
             } else {
                 this.getMap().getLayers().setAt(0, openlayer);
             }
         },
+        /**
+         *
+         * @method @private _createReverseProjection Create a clone of the projection object with axis order neu
+         *
+         */
+        _createReverseProjection: function(projectionCode) {
+            var originalProjection = ol.proj.get(projectionCode);
 
+            if (!originalProjection) {
+                return null;
+            }
+
+            reverseProjection = new ol.proj.Projection({
+                "code": projectionCode,
+                "units": originalProjection.getUnits(),
+                "extent": originalProjection.getExtent(),
+                "axisOrientation": "neu",
+                "global": originalProjection.isGlobal(),
+                "metersPerUnit": originalProjection.getMetersPerUnit(),
+                "worldExtent": originalProjection.getWorldExtent(),
+                "getPointResolution": originalProjection.getPointResolution
+            });
+            return reverseProjection;
+        },
         /**
          * @method _afterMapLayerRemoveEvent
          * Handle AfterMapLayerRemoveEvent
@@ -315,7 +336,15 @@ Oskari.clazz.define(
                 mapLayer[0].setOpacity(layer.getOpacity() / 100);
             }
         },
-
+        updateLayerParams: function (layer, forced, params) {
+            var params = params || {};
+            params.SLD_BODY = this.__getSLD(layer);
+            
+            var updateLayer = this.getLayersByName('layer_'+ layer.getId() );
+            updateLayer.forEach( function ( layer ) {
+                layer.getSource().updateParams( params );
+            });
+        },
         /**
          * Updates the OpenLayers and redraws them if scales have changed.
          *
@@ -324,7 +353,6 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         _updateLayer: function(layer) {
-            
             var oLayers = this.getOLMapLayers(layer),
                 subs = layer.getSubLayers(),
                 layerList = subs.length ? subs : [layer],
