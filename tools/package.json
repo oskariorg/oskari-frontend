@@ -39,7 +39,7 @@
     "jshint": "^2.9.1",
     "lodash": "^4.12.0",
     "node-fs-extra": "^0.8.1",
-    "openlayers": "4.3.1",
+    "openlayers": "4.4.2",
     "uglify-js": "^2.6.2",
     "uglifycss": "0.0.20",
     "xml2js": "^0.4.16"
