@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._mobileDefs = {
             buttons: {
                 'mobile-timeseries': {
-                    iconCls: 'mobile-info-marker',
+                    iconCls: 'mobile-timeseries',
                     tooltip: '',
                     sticky: true,
                     toggleChangeIcon: true,
