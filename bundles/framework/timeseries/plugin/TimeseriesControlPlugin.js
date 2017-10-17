@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._defaultLocation = 'bottom center';
         me._index = 90;
         me._name = 'TimeseriesControlPlugin';
+        me._timelineWidth = 600;
 
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
 
@@ -38,23 +39,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         this._uiState.rangeEnd = times[times.length-1];
         this._uiState.currentTime = delegate.getCurrentTime();
 
+        me._isMobileVisible = false;
+
         me._mobileDefs = {
             buttons: {
-                'mobile-featuredata': {
+                'mobile-timeseries': {
                     iconCls: 'mobile-info-marker',
                     tooltip: '',
                     sticky: true,
                     toggleChangeIcon: true,
                     show: true,
                     callback: function () {
-
+                        if(me._isMobileVisible) {
+                            me.teardownUI();
+                            me._isMobileVisible = false;
+                        } else {
+                            me._isMobileVisible = true;
+                            me._buildUI(true);
+                        }
                     }
                 }
             },
             buttonGroup: 'mobile-toolbar'
         };
     }, {
-        __timelineWidth: 600,
         __fullAxisYPos: 35,
         __localeData: {
             fi: {
@@ -162,7 +170,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 sandbox = me.getSandbox(),
                 el = jQuery(
                     '<div class="mapplugin timeseriescontrolplugin">' +
-                        '<div class="timeseries-aux"></div><div class="timeseries-timelines"><svg class="timeline-desktop">' +
+                        '<div class="timeseries-timelines"><svg class="timeline-svg">' +
                             '<g class="full-axis"></g>' +
                             '<g class="full-axis-controls"><line x1="0" y1="' + me.__fullAxisYPos + '" x2="0" y2="' + me.__fullAxisYPos + '" /><circle cx="0" cy="' + me.__fullAxisYPos + '" r="8"/><circle cx="0" cy="' + me.__fullAxisYPos + '" r="8"/></g>' +
                             '<g class="full-axis-brush"></g>' +
@@ -218,14 +226,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                me._element = me._createControlElement();
-                this.addToPluginContainer(me._element);
-                me._initMenus();
-                me._initStepper();
-                me._updateTimelines();
-                me._updateTimeDisplay();
             }
+            if(!mapInMobileMode || me._isMobileVisible) {
+                me._buildUI(mapInMobileMode);
+            }
+        },
+        _buildUI(isMobile) {
+            var me = this;
+            me._element = me._createControlElement();
+            this.addToPluginContainer(me._element);
+            var aux = '<div class="timeseries-aux"></div>';
+            if(isMobile) {
+                me._timelineWidth = 260;
+                me._element.toggleClass('mobile', isMobile);
+                me._element.append(aux);
+            } else {
+                me._timelineWidth = 600;
+                me._element.prepend(aux);
+                me._initMenus();
+            }
+            me._initStepper();
+            me._updateTimelines(isMobile);
+            me._updateTimeDisplay();
         },
         _generateSelectOptions: function(prefix, options){
             var me = this;
@@ -327,32 +349,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 : formatYear)(date);
             }
         },
-        _updateTimelines: function() {
+        _updateTimelines: function(isMobile) {
             var me = this;
             var margin = {left: 15, right: 15}
             var tickFormatter = me._getTickFormatter();
-            var svg = d3.select(this._element.find('.timeline-desktop').get(0));
-            svg
-                .attr('width', this.__timelineWidth)
-                .attr('height', 100);
+            var tickCount = me._timelineWidth / 60;
+            var svg = d3.select(this._element.find('.timeline-svg').get(0));
+            svg 
+                .attr('viewBox', isMobile ? '0 50 ' + this._timelineWidth + ' 50' : null)
+                .attr('width', this._timelineWidth)
+                .attr('height', isMobile ? 50 : 100);
 
             var times = this._uiState.times;
             var scaleFull = d3.scaleTime()
                 .domain([new Date(times[0]), new Date(times[times.length-1])])
-                .range([margin.left, this.__timelineWidth - margin.right]);
+                .range([margin.left, this._timelineWidth - margin.right]);
 
             var scaleSubset = d3.scaleTime()
-                .domain([new Date(this._uiState.rangeStart), new Date(this._uiState.rangeEnd)])
-                .range([margin.left, this.__timelineWidth - margin.right]);
+                .domain(isMobile ? scaleFull.domain() : [new Date(this._uiState.rangeStart), new Date(this._uiState.rangeEnd)])
+                .range([margin.left, this._timelineWidth - margin.right]);
 
             var axisFull = d3.axisTop(scaleFull)
-                    .tickPadding(7)
-                    .tickFormat(tickFormatter);
+                .ticks(tickCount)
+                .tickPadding(7)
+                .tickFormat(tickFormatter);
             svg.select('.full-axis')
                 .attr('transform', 'translate(0,' + me.__fullAxisYPos + ')')
                 .call(axisFull);
 
             var axisSubset = d3.axisTop(scaleSubset)
+                .ticks(tickCount)
                 .tickPadding(7)
                 .tickFormat(tickFormatter);
             svg.select('.subset-axis')
@@ -395,7 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .attr('fill', 'rgba(255,255,255,0.01)')
                 .attr('x', margin.left)
                 .attr('y', 50)
-                .attr('width', this.__timelineWidth - margin.left - margin.right)
+                .attr('width', this._timelineWidth - margin.left - margin.right)
                 .attr('height', 50)
                 .on('click', null) // remove old event handlers
                 .on('click', function(e) {
@@ -413,20 +439,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 });
 
             handle.call(dragBehavior);
+            
+            if(!isMobile) {
+                var brush = d3.brushX()
+                    .extent([[margin.left, 0], [this._timelineWidth - margin.right, 50]])
+                    .handleSize(40)
+                    .on(".brush", null) // remove old event handlers
+                    .on('brush', brushed);
 
-            var brush = d3.brushX()
-                .extent([[margin.left, 0], [this.__timelineWidth - margin.right, 50]])
-                .handleSize(40)
-                .on(".brush", null) // remove old event handlers
-                .on('brush', brushed);
-
-            svg.select('.full-axis-brush')
-                .attr('class', 'brush')
-                .call(brush)
-                .call(brush.move, [scaleFull(new Date(this._uiState.rangeStart)), scaleFull(new Date(this._uiState.rangeEnd))])
-                .select('.selection')
-                .attr('stroke', null)
-                .attr('fill-opacity', 0);
+                svg.select('.full-axis-brush')
+                    .attr('class', 'brush')
+                    .call(brush)
+                    .call(brush.move, [scaleFull(new Date(this._uiState.rangeStart)), scaleFull(new Date(this._uiState.rangeEnd))])
+                    .select('.selection')
+                    .attr('stroke', null)
+                    .attr('fill-opacity', 0);
+            }
 
             function brushed() {
                 var selection = d3.event.selection;

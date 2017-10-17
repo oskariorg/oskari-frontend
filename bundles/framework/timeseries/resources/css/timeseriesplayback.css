@@ -1,5 +1,5 @@
 /* override these to theme component */
-.timeseries-aux, .timeseries-timelines {
+.timeseriescontrolplugin {
   background-color: rgba(255, 255, 255, 1);
 }
 g.full-axis .tick line {
@@ -35,10 +35,12 @@ g.subset-axis text, g.full-axis text {
 }
 /* end theming */
 
+.timeseriescontrolplugin {
+  white-space: nowrap;
+}
 
 .timeseries-aux{
   display: inline-block;
-  height: 100px;
   vertical-align: top;
 }
 .timeseries-aux .oskari-textinput, .timeseries-aux select {
@@ -182,11 +184,16 @@ g.subset-axis text, g.full-axis text {
 }
 .timeseries-timelines{
   display: inline-block;
-  height: 100px;
 }
 .timeseries-timelines text{
   font-family: "Open Sans", Arial, sans-serif;
 }
-svg.timeline-desktop{
+svg.timeline-svg{
+  display: block;
+}
+
+/* mobile mode */
+
+.timeseriescontrolplugin.mobile .timeseries-timelines {
   display: block;
 }
