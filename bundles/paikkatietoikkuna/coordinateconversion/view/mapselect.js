@@ -21,14 +21,14 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
 
             cancelBtn.setHandler(function() {
                 dialog.close();
-                me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate( me.getName() );
+                me.instance.toggleViews();
                 me.mapcoords = [];
             });
 
             btn.setHandler(function() {
                 dialog.close();
                 me.instance.plugins['Oskari.userinterface.Flyout'].getViews().conversion.table.addRows( me.mapcoords );
-                me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
+                me.instance.toggleViews();
                 me.mapcoords = [];
             });
 

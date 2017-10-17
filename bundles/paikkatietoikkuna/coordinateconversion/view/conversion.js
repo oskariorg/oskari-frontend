@@ -176,6 +176,9 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             });
             return { "instances": selectInstances, "dropdowns": dropdowns };
         },
+        show: function () {
+            this.container.show();
+        },
           /**
          * @method handleSelectionChanged
          * which key corresponds to which dropdown in the array:
@@ -427,7 +430,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                 me.table.isEditable( me.clipboardInsert );
             });
                 jQuery('.mapselect').on("click", function() {
-                    me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
+                    me.instance.toggleViews("mapselect");
                     me.mapselect = true; 
                     me.clipboardInsert = false;                   
                 });
@@ -453,11 +456,12 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                 rows.each(function () {
                     var lat = jQuery(this).find('.lat').html();
                     var lon = jQuery(this).find('.lon').html();
-                    if(lat != "  " && lon != "  "){
+                    if(lat != "  " && lon != "  ") {
                         var coords = { lon: lon, lat: lat };
                         me.helper.addMarkerForCoords(coords, me.startingSystem);
                     }
-                })
+                });
+                me.instance.toggleViews("mapmarkers");
             });
             jQuery(this.conversionContainer).find('.export').on("click", function () {
                 var exportfile = me.file.getElement().export;

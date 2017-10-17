@@ -5,7 +5,7 @@
         metadata : {
             "Import-Bundle" : {
                 "coordinateconversion" : {
-                    bundlePath : '/Oskari/packages/framework/bundle/'
+                    bundlePath : '/Oskari/packages/paikkatietoikkuna/bundle/'
                 }
             }
         }
@@ -28,6 +28,7 @@ function () {
         this.plugins = {};
         this._mapmodule = null;
         this.conversionservice = null;
+        this.views = null;
 }, {
     __name: 'coordinateconversion',
     /**
@@ -36,6 +37,9 @@ function () {
      */
     getName: function () {
         return this.__name;
+    },
+    getViews: function () {
+        return this.views;
     },
     /**
      * Needed by sandbox.register()
@@ -101,9 +105,6 @@ function () {
         }
         return this._localization;
     },
-    isEmbedded: function() {
-        return jQuery('#contentMap').hasClass('published');
-    },
      /**
      * @method start
      * implements BundleInstance protocol start methdod
@@ -117,14 +118,13 @@ function () {
         this.conversionservice = this.createService(sandbox, conf);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization();
+        me.instantiateViews();
         sandbox.register(me);
-        if( !me.isEmbedded() ) {
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-            sandbox.request(this, request);
-            me.createUi();
-        } else {
-            
-        }
+
+        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+        sandbox.request(this, request);
+        me.createUi();
+
     },
     stop: function () {
         this.sandbox = null;
@@ -132,6 +132,22 @@ function () {
     },
     getPlugins: function() {
         return this.plugins;
+    },
+    instantiateViews: function () {
+        this.views = {
+            conversion: Oskari.clazz.create('Oskari.coordinateconversion.view.conversion', this),
+            mapselect: Oskari.clazz.create('Oskari.coordinateconversion.view.mapselect', this),
+            mapmarkers: Oskari.clazz.create('Oskari.coordinateconversion.view.mapmarkers', this)
+        }
+    },
+    toggleViews: function (view) {
+        this.plugins['Oskari.userinterface.Flyout'].toggleFlyout( view === 'conversion' );
+        if( this.getViews()[view] ) {
+            this.getViews()[view].show();
+        }
+        else {
+            this.getViews().hide();
+        }
     },
     /**
      * @method createUi

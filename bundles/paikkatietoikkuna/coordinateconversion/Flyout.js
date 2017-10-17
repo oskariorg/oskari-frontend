@@ -11,10 +11,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
         me.instance = instance;
         me.loc = this.instance.getLocalization();
         me.container = null;
-        this.views = {
-            conversion: Oskari.clazz.create('Oskari.coordinateconversion.view.conversion', me.instance),
-            mapselect: Oskari.clazz.create('Oskari.coordinateconversion.view.mapselect', me.instance)
-        }
     }, {
         /**
          * @method getName
@@ -36,14 +32,12 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
             }
         },
         createUi: function() {
-            var view = this.getViews().conversion.createUI(this.container);
+            var view = this.instance.getViews().conversion.createUI(this.container);
         },
-        shouldUpdate: function ( caller ) {
-            if( caller === this.getViews().conversion.getName() ) {
+        toggleFlyout: function ( visible ) {
+            if( !visible ) {
                 jQuery( this.container ).parent().parent().hide();
-                var mapselect = this.getViews().mapselect.show();
-            }
-            else {
+            } else {
                 jQuery( this.container ).parent().parent().show();
             }
         },
@@ -54,7 +48,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
          * that will be used to create the UI
          */
         startPlugin: function() {
-
             this.template = jQuery();
             var elParent = this.container.parentElement.parentElement;
             jQuery( elParent ).addClass('coordinateconversion-flyout');

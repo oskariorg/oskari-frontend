@@ -32,7 +32,8 @@ Oskari.registerLocalization(
                 "uploading":"Ladataan",
                 "success":"Valmis",
                 "error":"Virhe!",
-                "cancel":"Peruuta"
+                "cancel":"Peruuta",
+                "mapmarkers": "Tarkastele muunnettuja koordinaatteja kartalla."
             },
             "coordinatefield": {
                 "input": "Muunnettavat koordinaatit",

@@ -19,7 +19,7 @@ Oskari.clazz.define("Oskari.coordinateconversion.bundle", function () {
         "scripts": [
         {
             "type": "text/json",
-            "src": "../../../../bundles/framework/coordinateconversion/resources/values.json"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/resources/values.json"
         },
         /*
          * Abstract base
@@ -39,51 +39,54 @@ Oskari.clazz.define("Oskari.coordinateconversion.bundle", function () {
          */
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/instance.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/Tile.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/Tile.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/components/table.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/components/table.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/Flyout.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/Flyout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/util/helper.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/util/helper.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/view/conversion.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/view/conversion.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/view/mapselect.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/view/mapselect.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/view/filesettings.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/view/mapmarkers.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/service/ConversionService.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/view/filesettings.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/service/ConversionService.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/coordinateconversion/resources/css/filesettings.css"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/resources/css/filesettings.css"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/coordinateconversion/resources/css/coordinateconversion.css"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/resources/css/coordinateconversion.css"
         }
         ],
         "locales": [ {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/resources/locale/en.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/resources/locale/en.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/resources/locale/fi.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/resources/locale/fi.js"
         },{
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/resources/locale/sv.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/resources/locale/sv.js"
         } ]
     },
     "bundle": {
