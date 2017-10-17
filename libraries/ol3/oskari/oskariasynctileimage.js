@@ -1,5 +1,5 @@
 goog.provide('ol.source.OskariAsyncTileImage');
-goog.require('ol.TileStyle');
+goog.require('ol.TileState');
 goog.require('ol.proj');
 goog.require('ol.source.TileImage');
 goog.require('ol.events');
@@ -58,12 +58,6 @@ ol.source.OskariAsyncTileImage = function(options) {
 
 goog.inherits(ol.source.OskariAsyncTileImage, ol.source.TileImage);
 
-/**
- * @api
- */
-ol.source.OskariAsyncTileImage.prototype.getTileRangeForExtentAndResolution =  function (extent, resolution) {
-    return this.tileGrid.getTileRangeForExtentAndResolution(extent, resolution);
-}
 
 /**
  * Strip bbox for unique key because of some inaccucate cases
@@ -196,8 +190,8 @@ ol.ImageTile.prototype.setState = function(state) {
  * Workaround for obtaining a tilerange for a resolution and extent in wfslayerplugin
  * @api
  */
- ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndResolutionWrapper = function(mapExtent, resolution) {
-    var tileRange = this.getTileRangeForExtentAndResolution(mapExtent, resolution);
+ ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndZoomWrapper = function(mapExtent, zoom) {
+    var tileRange = this.getTileRangeForExtentAndZ(mapExtent, zoom);
     //return as array to avoid the closure compiler's dirty renaming deeds without having to expose the tilerange as well...
     return [tileRange.minX, tileRange.minY, tileRange.maxX, tileRange.maxY];
 
