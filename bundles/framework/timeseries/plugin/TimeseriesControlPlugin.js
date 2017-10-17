@@ -168,7 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                             '<g class="full-axis-brush"></g>' +
                             '<g class="subset-axis"></g>' +
                             '<g class="subset-bg"><rect x="-10" y="-10" width="10" height="10"/></g>' +
-                            '<g class="drag-handle"><circle cx="0" cy="0" r="8"/></g>' +
+                            '<g class="drag-handle" cursor="ew-resize"><rect x="-15" y="-15" width="30" height="30" fill-opacity="0"/><circle cx="0" cy="0" r="8"/></g>' +
                         '</svg></div>' +
                     '</div>');
             return el;
@@ -404,13 +404,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 }); 
             
             var dragBehavior = d3.drag()
-            .on('drag', function(){
-                var newX = d3.event.x;
-                timeFromMouse(newX);
-            })
-            .on('end', function(){
-                // TODO: if brush too small, enlarge it
-            })
+                .subject(function (d) {
+                    return { x: scaleSubset(new Date(me._uiState.currentTime)), y: d3.event.y };
+                })
+                .on('drag', function () {
+                    var newX = d3.event.x;
+                    timeFromMouse(newX);
+                });
 
             handle.call(dragBehavior);
 
