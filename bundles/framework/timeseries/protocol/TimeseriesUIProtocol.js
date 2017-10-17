@@ -41,14 +41,5 @@ function() {
      */
     requestNewTime : function(newTime, nextTime, doneCallback) {
         throw new Error("Implement your own");
-    },
-    /**
-     * @method registerStateUpdate
-     * Registers state update function that implementing class can use to update UI state
-     * @param {function} callback 
-     * @throws always override this
-     */
-    registerStateUpdate : function(callback) {
-        throw new Error("Implement your own");
     }
 });

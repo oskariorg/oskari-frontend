@@ -40,6 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         this._uiState.currentTime = delegate.getCurrentTime();
 
         me._isMobileVisible = false;
+        me._inMobileMode = false;
 
         me._mobileDefs = {
             buttons: {
@@ -216,6 +217,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
+            me._inMobileMode = mapInMobileMode;
+
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
@@ -231,23 +234,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._buildUI(mapInMobileMode);
             }
         },
-        _buildUI(isMobile) {
+        _buildUI: function(isMobile) {
             var me = this;
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
             var aux = '<div class="timeseries-aux"></div>';
+            var times = me._uiState.times;
             if(isMobile) {
                 me._timelineWidth = 260;
+                me._uiState.rangeStart = times[0];
+                me._uiState.rangeEnd = times[times.length-1];
                 me._element.toggleClass('mobile', isMobile);
                 me._element.append(aux);
             } else {
-                me._timelineWidth = 600;
+                me._setWidth(me.getSandbox().getMap().getWidth(), true);
                 me._element.prepend(aux);
                 me._initMenus();
             }
             me._initStepper();
             me._updateTimelines(isMobile);
             me._updateTimeDisplay();
+        },
+        _setWidth: function(mapWidth, suppressUpdate) {
+            var targetWidth = Math.min(mapWidth, 860) - 260 - 10;
+            if(!this._inMobileMode && this._timelineWidth !== targetWidth) {
+                this._timelineWidth = targetWidth;
+                if(!suppressUpdate) {
+                    this._updateTimelines(this._inMobileMode);
+                }
+            }
         },
         _generateSelectOptions: function(prefix, options){
             var me = this;
@@ -323,7 +338,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             this._renderHandle();
             this._updateTimeDisplay();
         },
-        _getTickFormatter() {
+        _getTickFormatter: function() {
             var localeString = Oskari.getLang();
             var locale;
             var formatterFunction;
@@ -366,7 +381,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .range([margin.left, this._timelineWidth - margin.right]);
 
             var scaleSubset = d3.scaleTime()
-                .domain(isMobile ? scaleFull.domain() : [new Date(this._uiState.rangeStart), new Date(this._uiState.rangeEnd)])
+                .domain([new Date(this._uiState.rangeStart), new Date(this._uiState.rangeEnd)])
                 .range([margin.left, this._timelineWidth - margin.right]);
 
             var axisFull = d3.axisTop(scaleFull)
@@ -448,12 +463,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     .on('brush', brushed);
 
                 svg.select('.full-axis-brush')
-                    .attr('class', 'brush')
                     .call(brush)
                     .call(brush.move, [scaleFull(new Date(this._uiState.rangeStart)), scaleFull(new Date(this._uiState.rangeEnd))])
                     .select('.selection')
                     .attr('stroke', null)
                     .attr('fill-opacity', 0);
+                
+                updateFullAxisControls();
             }
 
             function brushed() {
@@ -494,6 +510,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
         _createEventHandlers: function () {
             return {
+                MapSizeChangedEvent: function (evt) {
+                    this._setWidth(evt.getWidth());
+                }
             };
         },
 

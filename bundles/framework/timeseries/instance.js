@@ -157,13 +157,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             me.sandbox = null;
         },
         /**
-         * @method  @private _handleMapSizeChanged handle map size change event
-         * @param  {Object} size map size
-         */
-        _handleMapSizeChanged: function(size){
-
-        },
-        /**
          * @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
@@ -183,9 +176,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          * @return {Object.<string, Function>} EventHandlers
          */
         eventHandlers: {
-            MapSizeChangedEvent: function (evt) {
-                this._handleMapSizeChanged({width:evt.getWidth(), height:evt.getHeight()});
-            },
             'MapLayerEvent': function(event) {
                 this._checkIfTimeseriesLayersExist();
             },
@@ -195,11 +185,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             'AfterMapLayerRemoveEvent': function(event) {
                 this._checkIfTimeseriesLayersExist();
             },
-            /*
-            'TimeseriesAnimationEvent': function(event) {
-                 this._modules.playback.setPlaybackState(event.getLayerId(), event.getTime(), event.getPlaying());
-            },
-            */
             'ProgressEvent': function(event) {
                 if(event.getStatus() && this._plugin.getCurrentLayerId() === event.getId()) {
                     console.log('progressevent. hass cb:', !!this._doneCallback)
