@@ -134,14 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         getLayers: function () {
             return this.getMap().getLayers().getArray();
         },
-        /**
-         * Update a specific layer
-         * @param  ol.layer the layer to update
-         * @param params params for the layer source
-         */
-        updateLayer: function ( layer, params ) {
-            layer.getSource().updateParams( params );
-        },
         getInteractionInstance: function (interactionName) {
             var interactions = this.getMap().getInteractions().getArray();
             var interactionInstance = interactions.filter(function(interaction) {
