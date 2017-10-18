@@ -22,12 +22,18 @@ function() {
         this.description = desc;
     },
     getDescription: function() {
+        if (this.description) {
+          return Oskari.util.sanitize(this.description);
+        }
         return this.description;
     },
     setSource: function(source) {
         this.source = source;
     },
     getSource: function() {
+        if (this.source) {
+          return Oskari.util.sanitize(this.source);
+        }
         return this.source;
     },
     setRenderingElement: function(element) {

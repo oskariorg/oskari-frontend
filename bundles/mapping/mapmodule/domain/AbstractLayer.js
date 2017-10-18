@@ -280,9 +280,9 @@ Oskari.clazz.define(
                 if(!value) {
                     value = this._name[Oskari.getDefaultLanguage()];
                 }
-                return value;
+                return Oskari.util.sanitize(value);
             }
-            return this._name;
+            return Oskari.util.sanitize(this._name);
         },
         /**
          * @method setType
@@ -343,9 +343,9 @@ Oskari.clazz.define(
                 if(!value) {
                     value = this._organizationName[Oskari.getDefaultLanguage()];
                 }
-                return value;
+                return Oskari.util.sanitize(value);
             }
-            return this._organizationName;
+            return Oskari.util.sanitize(this._organizationName);
         },
         /**
          * @method setInspireName
@@ -373,9 +373,9 @@ Oskari.clazz.define(
                 if(!value) {
                     value = this._inspireName[Oskari.getDefaultLanguage()];
                 }
-                return value;
+                return Oskari.util.sanitize(value);
             }
-            return this._inspireName;
+            return Oskari.util.sanitize(this._inspireName);
         },
         /**
          * @method setFeatureInfoEnabled
@@ -420,9 +420,9 @@ Oskari.clazz.define(
                 if(!value) {
                     value = this._description[Oskari.getDefaultLanguage()];
                 }
-                return value;
+                return Oskari.util.sanitize(value);
             }
-            return this._description;
+            return Oskari.util.sanitize(this._description);
         },
         /**
          * Called when openlayers 2/3 starts loading tiles

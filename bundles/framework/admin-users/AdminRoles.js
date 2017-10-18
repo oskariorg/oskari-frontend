@@ -94,7 +94,7 @@ Oskari.clazz.define(
                     me._deleteRole(role);
                 }
             );
-            item.find('h3').html(role.name);
+            item.find('h3').text(role.name);
             btn.insertTo(item.find('div.header'));
             return item;
         },

@@ -112,6 +112,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var me = this;
             var listContainer = me.container.find('.viewsList');
             listContainer.empty();
+
+            views.forEach(function(view) {
+              view.name = Oskari.util.sanitize(view.name);
+              view.description = Oskari.util.sanitize(view.description);
+            });
+            
             this.viewData = views;
 
             var model = this._getGridModel(views);
