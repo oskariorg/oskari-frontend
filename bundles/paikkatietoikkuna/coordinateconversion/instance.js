@@ -141,13 +141,15 @@ function () {
         }
     },
     toggleViews: function (view) {
-        this.plugins['Oskari.userinterface.Flyout'].toggleFlyout( view === 'conversion' );
-        if( this.getViews()[view] ) {
-            this.getViews()[view].show();
+        var views = this.getViews();
+        if( !views[view] ) {
+           return;
         }
-        else {
-            this.getViews().hide();
-        }
+        Object.keys( this.getViews() ).forEach( function ( view ) {
+            views[view].setVisible(false);
+        });
+
+        views[view].setVisible(true);
     },
     /**
      * @method createUi

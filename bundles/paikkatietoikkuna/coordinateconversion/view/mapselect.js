@@ -6,9 +6,20 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
         me.helper = Oskari.clazz.create('Oskari.coordinateconversion.helper', me.instance, me.loc);
         me.mapselectContainer = null;
         me.mapcoords = [];
+        me.dialog = null;
     }, {
         getName: function() {
             return 'Oskari.coordinateconversion.view.mapselect';
+        },
+        setVisible: function ( visible ) {
+            if(this.dialog === null && !visible) {
+                return;
+            }
+            if( !visible ) {
+                this.dialog.close();
+            } else {
+                this.show();
+            }
         },
         show: function() {
             var me = this;
@@ -18,17 +29,17 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
             cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.loc.datasourceinfo.cancel);
             btn.addClass('primary');
+            me.dialog = dialog;
 
             cancelBtn.setHandler(function() {
                 dialog.close();
-                me.instance.toggleViews();
+                me.instance.toggleViews("conversion");
                 me.mapcoords = [];
             });
 
             btn.setHandler(function() {
-                dialog.close();
-                me.instance.plugins['Oskari.userinterface.Flyout'].getViews().conversion.table.addRows( me.mapcoords );
-                me.instance.toggleViews();
+                me.instance.getViews().conversion.table.addRows( me.mapcoords );
+                me.instance.toggleViews("conversion");
                 me.mapcoords = [];
             });
 

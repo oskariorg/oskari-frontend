@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             return 'Oskari.coordinateconversion.view.conversion';
         },
         getContainer: function () {
-            return this.conversionContainer;
+            return jQuery(this.conversionContainer);
         },
         getSelectInstances: function () {
             return this._selectInstances;
@@ -176,8 +176,12 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             });
             return { "instances": selectInstances, "dropdowns": dropdowns };
         },
-        show: function () {
-            this.container.show();
+        setVisible: function ( visible ) {
+            if( !visible ) {
+                this.getContainer().parent().parent().hide();
+            } else {
+                this.getContainer().parent().parent().show();
+            }
         },
           /**
          * @method handleSelectionChanged
