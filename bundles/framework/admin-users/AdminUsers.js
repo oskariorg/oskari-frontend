@@ -201,8 +201,11 @@ Oskari.clazz.define(
                 if (roleData.hasOwnProperty('id')) {
                     value = roleData.id;
                     name = roleData.name;
-                    opt = jQuery('<option value="' + value + '">' + name + '</option>');
-                    sel.append(opt);
+                    var optEl = document.createElement('option');
+                    optEl.value = value;
+                    optEl.textContent = name;
+                    //opt = jQuery('<option value="' + value + '">' + name + '</option>');
+                    sel.append(optEl);
                 }
             }
 
@@ -332,7 +335,7 @@ Oskari.clazz.define(
             var me = this;
 
             item.attr('data-id', user.id);
-            item.find('h3').html(
+            item.find('h3').text(
                 user.user +
                 ' (' + user.firstName + ' ' + user.lastName + ')'
             );
@@ -559,16 +562,14 @@ Oskari.clazz.define(
                 optiontemplate.remove();
             }
             if (operation === 'update') {
-                option.html(role.name);
-                optiontemplate.html(role.name);
+                option.text(role.name);
+                optiontemplate.text(role.name);
             }
             if (operation === 'add') {
-                select.append(
-                    '<option value="' + role.id + '">' + role.name + '</option>'
-                );
-                selecttemplate.append(
-                    '<option value="' + role.id + '">' + role.name + '</option>'
-                );
+                var optionEl = document.createElement('option');
+                optionEl.value = role.id;
+                optionEl.textContent = role.name;
+                select.append(optionEl);
             }
         },
         eventHandlers: {
