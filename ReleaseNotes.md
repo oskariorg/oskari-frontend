@@ -29,6 +29,10 @@ Now floating label is floated when input is selected instead of typing text.
 See [api/CHANGELOG.md](api/CHANGELOG.md) for changes.
 Refactored the code for the functionality to make it more accessible.
 
+### Data sanitation
+
+Improved security by sanitizing values.
+
 ## 1.44.0
 
 ### layerselector2
