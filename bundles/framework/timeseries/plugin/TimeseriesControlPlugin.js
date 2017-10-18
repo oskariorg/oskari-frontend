@@ -10,14 +10,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
      *      Object that has all the answers
      */
     function (delegate, conf) {
+        conf = conf || {};
         var me = this;
         me._clazz = 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
-        me._defaultLocation = 'bottom center';
+        me._defaultLocation = conf.location || 'bottom center';
         me._index = 90;
         me._name = 'TimeseriesControlPlugin';
         me._timelineWidth = 600;
-
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
+        me._sideMargin = conf.sideMargin || 10;
 
         me._delegate = delegate;
 
@@ -256,7 +257,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             me._updateTimeDisplay();
         },
         _setWidth: function(mapWidth, suppressUpdate) {
-            var targetWidth = Math.min(mapWidth, 860) - 260 - 10;
+            var targetWidth = Math.min(mapWidth - this._sideMargin, 860) - 260 ;
             if(!this._inMobileMode && this._timelineWidth !== targetWidth) {
                 this._timelineWidth = targetWidth;
                 if(!suppressUpdate) {
