@@ -31,17 +31,13 @@ function(instance) {
 
 
     getConvertedCoordinates: function( payload, successCb, errorCb ) {
+        debugger;
         successCb(payload.coords);
         jQuery.ajax({
            dataType: "json",
            type: "POST",
-           url: "/action?action_route=CoordinateTransformation&",
-           data: {
-               "sourceCrs": payload.sourceCrs,
-               "heightCrs": "10",
-               "targetCrs": payload.targetCrs,
-               "coords": JSON.stringify(payload.coords)
-           },
+           url: "/action?action_route=CoordinateTransformation&sourceCrs="+payload.sourceCrs+"&sourceHeightCrs="+payload.sourceHeightCrs+"&targetCrs="+payload.targetCrs+"&targetHeightCrs="+payload.targetHeightCrs+"",
+           data: JSON.stringify(payload.coords),
            success: function(response) {
                successCb(response);
            }

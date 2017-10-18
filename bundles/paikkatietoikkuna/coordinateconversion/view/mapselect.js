@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
             });
 
             btn.setHandler(function() {
-                me.instance.getViews().conversion.table.addRows( me.mapcoords );
+                me.instance.getViews().conversion.inputTable.addRows( me.mapcoords );
                 me.instance.toggleViews("conversion");
                 me.mapcoords = [];
             });

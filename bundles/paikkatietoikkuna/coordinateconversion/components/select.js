@@ -1,8 +1,7 @@
 Oskari.clazz.define('Oskari.coordinateconversion.component.select',
-    function (instance, loc) {
+    function ( instance ) {
         var me = this;
         me.instance = instance;
-        me.loc = loc;
         me.selects = [];
         me.dropdowns = [];
     }, {
@@ -54,7 +53,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                 this.dropdowns = dropdowns;
                 this.selects = selects;
         },
-                  /**
+        /**
          * @method handleSelectionChanged
          * which key corresponds to which dropdown in the array:
          * [0] = geodetic datum,
@@ -68,7 +67,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
             var values = [];
             var instances = this.getSelect();
             var dropdowns = this.getDropdown();
-            var rows = me.instance.table.getElements().rows;
+            var rows = me.instance.inputTable.getElements().rows;
                 element.on( "change", function() {
                     for (var i = 0; i < instances.length; i++ ) {
 
@@ -150,8 +149,12 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                         values.push( vl );
                     }
                     if( i == instances.length -1 ) {
-                        me.instance.table.updateTitle( values );
-                        me.instance.table.isEditable( me.instance.clipboardInsert );
+                        if( this.id === 'inputcoordsystem' ) {
+                            me.instance.inputTable.updateTitle( values );
+                            me.instance.inputTable.isEditable( me.instance.clipboardInsert );
+                        } else if( this.id === 'targetcoordsystem' ) {
+                            me.instance.outputTable.updateTitle( values );
+                        }
                         me.instance.currentDatum = instances[0].getValue();
                         me.instance.currentCoordinatesystem = instances[1].getValue();
                     }

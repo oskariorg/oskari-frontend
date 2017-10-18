@@ -144,9 +144,9 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
             'COORDSYS_KKJ4': "EPSG:2394", 
             'COORDSYS_KKJ5': "EPSG:3387", 
             'COORDSYS_KKJ_GEO': "EPSG:4123", 
-            'KORKEUSJ.N2000': "EPSG:3900",
-            'KORKEUSJ.N60': "EPSG:5717",
-            'KORKEUSJ.N43': "N43"
+            'KORKEUSJ_N2000': "EPSG:3900",
+            'KORKEUSJ_N60': "EPSG:5717",
+            'KORKEUSJ_N43': "N43"
 	    }
 
         return EPSG[value];
