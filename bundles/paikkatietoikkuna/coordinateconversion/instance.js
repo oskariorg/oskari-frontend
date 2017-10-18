@@ -145,10 +145,9 @@ function () {
         if( !views[view] ) {
            return;
         }
-        Object.keys( this.getViews() ).forEach( function ( view ) {
+        Object.keys( views ).forEach( function ( view ) {
             views[view].setVisible(false);
         });
-
         views[view].setVisible(true);
     },
     /**

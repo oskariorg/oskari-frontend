@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
             me.dialog = dialog;
 
             cancelBtn.setHandler(function() {
+                me.helper.removeMarkers();
                 dialog.close();
                 me.instance.toggleViews("conversion");
                 me.mapcoords = [];

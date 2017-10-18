@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
     this.instance = instance;
     this.sb = instance.sandbox;
     this.sb.register(this);
+    this.removeMarkersReq = this.sb.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
     for ( var p in this.eventHandlers ) {
         this.sb.registerForEventByName(this, p);
         this.clickCoordinates = null;
@@ -38,12 +39,11 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
             this.sb.request('MainMapModule', request);
         }
     },
-    /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded
-     * if not.
-     */
+    removeMarkers: function () {
+        if( this.removeMarkersReq ) {
+            this.sb.request('MainMapModule', this.removeMarkersReq());
+        }
+    },
     onEvent : function(event) {
     	var handler = this.eventHandlers[event.getName()];
 
