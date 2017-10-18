@@ -53,10 +53,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     callback: function () {
                         if(me._isMobileVisible) {
                             me.teardownUI();
-                            me._isMobileVisible = false;
                         } else {
                             me._isMobileVisible = true;
                             me._buildUI(true);
+                            me.getSandbox().getService('Oskari.userinterface.component.PopupService').closeAllPopups(false);
                         }
                     }
                 }
@@ -230,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             }
-            if(!mapInMobileMode || me._isMobileVisible) {
+            if(!mapInMobileMode) {
                 me._buildUI(mapInMobileMode);
             }
         },
@@ -494,6 +494,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
         teardownUI: function () {
             //remove old element
+            this._isMobileVisible = false;
             this.removeFromPluginContainer(this.getElement());
         },
 
@@ -512,6 +513,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             return {
                 MapSizeChangedEvent: function (evt) {
                     this._setWidth(evt.getWidth());
+                },
+                'Toolbar.ToolSelectedEvent': function(evt){
+                    if(evt.getGroupId() === 'mobileToolbar-mobile-toolbar' && evt.getToolId() !== 'mobile-timeseries') {
+                        this.teardownUI();
+                    }
                 }
             };
         },
