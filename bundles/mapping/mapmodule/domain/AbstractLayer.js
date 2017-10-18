@@ -260,7 +260,15 @@ Oskari.clazz.define(
          *          name for the maplayer that is shown in UI
          */
         setName: function (name) {
-            this._name = name;
+            if (name && typeof name === 'object') {
+                var values = {};
+                Object.keys(name).forEach(function(key) {
+                    values[key] = Oskari.util.sanitize(name[key]);
+                });
+                this._name = values;
+            } else {
+                this._name = Oskari.util.sanitize(name);
+            }
         },
         /**
          * Returns a name for the layer.
@@ -280,9 +288,9 @@ Oskari.clazz.define(
                 if(!value) {
                     value = this._name[Oskari.getDefaultLanguage()];
                 }
-                return Oskari.util.sanitize(value);
+                return value;
             }
-            return Oskari.util.sanitize(this._name);
+            return this._name;
         },
         /**
          * @method setType
@@ -323,7 +331,15 @@ Oskari.clazz.define(
          *          organization name under which the layer is listed in UI
          */
         setOrganizationName: function (param) {
-            this._organizationName = param;
+            if (param && typeof param === 'object') {
+                var values = {};
+                Object.keys(param).forEach(function(key) {
+                    values[key] = Oskari.util.sanitize(param[key]);
+                });
+                this._organizationName = values;
+            } else {
+                this._organizationName = Oskari.util.sanitize(param);
+            }
         },
         /**
          * Returns a organization name for the layer.
@@ -343,9 +359,9 @@ Oskari.clazz.define(
                 if(!value) {
                     value = this._organizationName[Oskari.getDefaultLanguage()];
                 }
-                return Oskari.util.sanitize(value);
+                return value;
             }
-            return Oskari.util.sanitize(this._organizationName);
+            return this._organizationName;
         },
         /**
          * @method setInspireName
@@ -353,7 +369,15 @@ Oskari.clazz.define(
          *          inspire theme name under which the layer is listed in UI
          */
         setInspireName: function (param) {
-            this._inspireName = param;
+            if (param && typeof param === 'object') {
+                var values = {};
+                Object.keys(param).forEach(function(key) {
+                    values[key] = Oskari.util.sanitize(param[key]);
+                });
+                this._inspireName = values;
+            } else {
+                this._inspireName = Oskari.util.sanitize(param);
+            }
         },
         /**
          * Returns an inspire name for the layer.
@@ -373,9 +397,9 @@ Oskari.clazz.define(
                 if(!value) {
                     value = this._inspireName[Oskari.getDefaultLanguage()];
                 }
-                return Oskari.util.sanitize(value);
+                return value;
             }
-            return Oskari.util.sanitize(this._inspireName);
+            return this._inspireName;
         },
         /**
          * @method setFeatureInfoEnabled
