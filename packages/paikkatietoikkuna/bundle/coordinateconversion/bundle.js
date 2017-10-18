@@ -48,6 +48,9 @@ Oskari.clazz.define("Oskari.coordinateconversion.bundle", function () {
             "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/components/table.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/components/select.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/paikkatietoikkuna/coordinateconversion/Flyout.js"
         }, {
             "type": "text/javascript",

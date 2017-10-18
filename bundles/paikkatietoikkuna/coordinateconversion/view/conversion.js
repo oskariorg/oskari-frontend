@@ -11,6 +11,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
         me.file = Oskari.clazz.create('Oskari.coordinateconversion.view.filesettings', me.instance, me.loc);
         me.table = Oskari.clazz.create('Oskari.coordinateconversion.component.table', this, me.loc );
+        me.inputSelect = Oskari.clazz.create('Oskari.coordinateconversion.component.select', this, me.loc );
+        me.targetSelect = Oskari.clazz.create('Oskari.coordinateconversion.component.select', this, me.loc );
         me.file.create();
         me._selectInstances = { input: null, target: null };
         me._userSelections = { import: null, export: null };
@@ -115,66 +117,26 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
 
             wrapper.append(utilbuttons);
 
-            var input_instance = me.createSelect();
-            this._selectInstances.input = input_instance.instances;
+            me.inputSelect.create();
+            this._selectInstances.input = me.inputSelect.getSelect();
             wrapper.find('#inputcoordsystem').find('.select').each(function (index) {
-                jQuery(this).append(input_instance.dropdowns[index]);
+                jQuery(this).append( me.inputSelect.getDropdown()[index] );
             });
-            var target_instance = me.createSelect();
-            this._selectInstances.target = target_instance.instances;
+            me.targetSelect.create();
+            this._selectInstances.target = me.targetSelect.getSelect();
            wrapper.find('#targetcoordsystem').find('.select').each(function (index) {
-                jQuery(this).append(target_instance.dropdowns[index]);
+                jQuery(this).append( me.targetSelect.getDropdown()[index] );
             });
 
             jQuery(container).append(wrapper);
-
-            var inputValues = this.handleSelectionChanged(input_instance, false);
-            var targetValues = this.handleSelectionChanged(target_instance, true);
+            var input = wrapper.find('#inputcoordsystem');
+            var target = wrapper.find('#targetcoordsystem');
+            me.inputSelect.handleSelectionChanged(input);
+            me.targetSelect.handleSelectionChanged(target);
             this.handleClipboard();
             this.handleButtons();
             this.handleRadioButtons();
             this.table.displayNumOfRows();
-        },
-        createSelect: function() {
-            var json = this.helper.getOptionsJSON();
-
-            var selections = [];
-            var dropdowns = [];
-            var selectInstances = [];
-            var options = {}
-            jQuery.each( json, function ( key, value ) {
-                var size = Object.keys( value ).length;
-                 jQuery.each( value, function ( key, val ) {
-                    var valObject = {
-                        id : val.id,
-                        title : val.title,
-                        cls: val.cls
-                    };
-                    selections.push( valObject );
-                    if ( key === "0" ) {
-                        options = {
-                            placeholder_text: val.title,
-                            allow_single_deselect : true,
-                            disable_search_threshold: 10,
-                            width: '100%'
-                        };
-                    }
-                     if ( key == size -1 ) {
-                        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', "id");
-                        var dropdown = select.create(selections, options);
-                        selections = [];
-                        options = {};
-
-                        dropdown.css( { width:'170px', float:'right' } );
-                        select.adjustChosen();
-                        select.selectFirstValue();
-
-                        dropdowns.push( dropdown );
-                        selectInstances.push( select );
-                     }
-                });
-            });
-            return { "instances": selectInstances, "dropdowns": dropdowns };
         },
         setVisible: function ( visible ) {
             if( !visible ) {
@@ -182,118 +144,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             } else {
                 this.getContainer().parent().parent().show();
             }
-        },
-          /**
-         * @method handleSelectionChanged
-         * which key corresponds to which dropdown in the array:
-         * [0] = geodetic datum,
-         * [1] = coordinate system
-         * [2] = map projection
-         * [3] = geodetic coordinate system
-         * [4] = heigth system
-         */
-        handleSelectionChanged: function ( instance, called ) {
-            var me = this;
-            var values = [];
-            var rows = this.table.getElements().rows;
-            if( !called ) {
-                jQuery( this.conversionContainer ).find('#inputcoordsystem').on("change", function() {
-                    for (var i = 0; i < instance.instances.length; i++ ) {
-
-                    instance.dropdowns[i].find('option').hide();
-                    instance.dropdowns[i].find('.'+ instance.instances[0].getValue()).show();
-
-                    // Koordinaatisto special cases
-                    if( instance.instances[1].getValue() === "KOORDINAATISTO_MAANT_2D" ) {
-                        instance.dropdowns[3].find('option').hide();
-                        jQuery(instance.dropdowns[i].find('.'+instance.instances[0].getValue()+'.'+ instance.instances[1].getValue())).show();
-        
-                    }
-                    if( instance.instances[1].getValue() === "KOORDINAATISTO_MAANT_3D" ) {
-                        instance.dropdowns[3].find('option').hide();
-                        instance.dropdowns[i].find('.'+ instance.instances[1].getValue()).show();
-                    }
-                    if( instance.instances[1].getValue() === "KOORDINAATISTO_SUORAK_2D" ) {
-                        instance.dropdowns[3].find('option').hide();
-                        instance.dropdowns[i].find('.'+ instance.instances[1].getValue()).show();
-                    }
-                    if( instance.instances[1].getValue() === "KOORDINAATISTO_SUORAK_3D" ) {
-                        instance.dropdowns[3].find('option').hide();
-                        instance.dropdowns[i].find('.'+ instance.instances[1].getValue()).show();
-                    }
-                    // Karttaprojektiojärjestelmä special cases
-                    if( instance.instances[2].getValue() === "KKJ_KAISTA" ) {
-                        instance.dropdowns[3].find('option').hide();
-                        instance.dropdowns[i].find('.'+ instance.instances[2].getValue()).show();
-                    }
-                    if( instance.instances[2].getValue() === "TM" ) {
-                        instance.dropdowns[3].find('option').hide();
-                        instance.dropdowns[i].find('.'+ instance.instances[2].getValue()).show();
-                    } 
-                    if( instance.instances[2].getValue() === "GK" ) {
-                        instance.dropdowns[3].find('option').hide();
-                        instance.dropdowns[i].find('.'+ instance.instances[2].getValue()).show();
-                    }
-                    if( instance.instances[3].getValue() !== "COORDSYS_DEFAULT" ) {
-                        me.startingSystem = true;
-                    } else {
-                        me.startingSystem = true;
-                    }
-                    if( instance.instances[4].getValue() === "KORKEUSJ_DEFAULT") {
-                        rows.each( function ( idx, row ) {
-                            var lastCell = jQuery(this).find('td:nth-last-child(2)');
-                            if( !lastCell.hasClass('heightsystem' )) {
-                                lastCell.addClass('heightsystem');
-                            }
-                        });
-                    } else {
-                        rows.each( function ( idx, row ) {
-                            var lastCell = jQuery(this).find('td:nth-last-child(2)');
-                            lastCell.attr("contenteditable", false);
-                            lastCell.removeClass('heightsystem');
-                        })
-                    }
-                        
-                    if( instance.instances[1].getValue() === 'KOORDINAATISTO_SUORAK_2D' ) {
-                        jQuery('.map-projection').show();
-                    } else {
-                        jQuery('.map-projection').hide();
-                        instance.instances[2].resetToPlaceholder();
-                    }
-
-                    if( instance.instances[0].getValue() !== this.currentDatum || this.currentDatum === undefined ) {
-                        if( i !== 0 ) {
-                            instance.instances[i].resetToPlaceholder();
-                        }
-                    }
-                    if( instance.instances[1].getValue() !== this.currentCoordinatesystem || this.currentCoordinatesystem === undefined ) {
-                        if( i > 1) {
-                            instance.instances[i].resetToPlaceholder();
-                        }
-                    }
-                    values = [];
-                    instance.instances[i].update();
-                    for ( var j = 0; j < instance.instances.length; j++ ) {
-                        var vl = instance.instances[j].getValue();
-                        values.push( vl );
-                    }
-                    if( i == instance.instances.length -1 ) {
-                        me.table.updateTitle( values );
-                        me.table.isEditable( me.clipboardInsert );
-                        this.currentDatum = instance.instances[0].getValue();
-                        this.currentCoordinatesystem = instance.instances[1].getValue();
-                    }
-                }
-                });
-            } else {
-                jQuery( this.conversionContainer ).find('#targetcoordsystem').on("change", function() {
-                var selects = jQuery(this).find(".oskari-select");
-                for (var i = 0; i < selects.length; i++ ) {
-                   var vl = instance.instances[i].getValue();
-                }
-                });
-            }
-            return values;
         },
         /**
          * @method validateData
@@ -413,9 +263,10 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
          */
         handleRadioButtons: function () {
             var me = this;
-            var clipboardInfo = jQuery(me.conversionContainer).find('.coordinateconversion-clipboardinfo');
-            var mapInfo = jQuery(me.conversionContainer).find('.coordinateconversion-mapinfo');
-            var fileInput = jQuery(me.conversionContainer).find('.oskari-fileinput');
+            var container = me.getContainer();
+            var clipboardInfo = container.find('.coordinateconversion-clipboardinfo');
+            var mapInfo = container.find('.coordinateconversion-mapinfo');
+            var fileInput = container.find('.oskari-fileinput');
             var importfile = me.file.getElement().import;
             jQuery('input[type=radio][name=load]').change(function() {
                 if (this.value == '1') {
@@ -446,16 +297,12 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
          */
         handleButtons: function () {
             var me = this;
-            jQuery(this.conversionContainer).find('.clear').on("click", function () {
-                var cells = jQuery('#oskari-coordinate-table tr .cell:not(.cell.control)');
-                for(var i = 0; i < cells.length; i++) {
-                    var trimmedCellValue = jQuery.trim( jQuery( cells[i] ).html());
-                    if( trimmedCellValue !== "" ) {
-                        jQuery(cells[i]).parent().remove();
-                    }
-                }
+            var container = me.getContainer();
+            container.find('.clear').on("click", function () {
+                me.table.clearRows();
+                me.helper.removeMarkers();
             });
-            jQuery(this.conversionContainer).find('.show').on("click", function () {
+            container.find('.show').on("click", function () {
                 var rows = me.table.getElements().rows;
                 rows.each(function () {
                     var lat = jQuery(this).find('.lat').html();
@@ -467,11 +314,11 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                 });
                 me.instance.toggleViews("mapmarkers");
             });
-            jQuery(this.conversionContainer).find('.export').on("click", function () {
+            container.find('.export').on("click", function () {
                 var exportfile = me.file.getElement().export;
                 me.showDialogue( exportfile, true );
             });
-            jQuery(this.conversionContainer).find('#convert').on("click", function () {
+            container.find('#convert').on("click", function () {
                 var crs = me.getCrsOptions();
                 var rows = me.table.getElements().rows;
                 var coordinateArray = [];
