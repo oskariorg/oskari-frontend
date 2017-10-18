@@ -26,10 +26,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundle"
                 "src": "../../../../bundles/framework/timeseries/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/timeseries/TimeseriesAnimationPlugin.js"
+                "src": "../../../../bundles/framework/timeseries/service/TimeseriesService.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/timeseries/service/TimeseriesLayerService.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/timeseries/plugin/TimeseriesControlPlugin.js"
+            },{
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/timeseries/WMSAnimator.js"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/timeseries/resources/css/timeseriesplayback.css"

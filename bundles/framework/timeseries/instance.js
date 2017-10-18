@@ -5,18 +5,16 @@
  * Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPlugin plugin for main map.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance",
-
     /**
      * @method create called automatically on construction
      * @static
      */
-
     function () {
-        this.sandbox = null;
+        this._sandbox;
         this.started = false;
-        this._plugin = null;
-        this._controlPlugin = null;
-        this._layer;
+        this._controlPlugin;
+        this._timeseriesService;
+        this._timeseriesLayerService;
     }, {
         __name: 'timeseries',
         /**
@@ -25,21 +23,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          */
         getName: function () {
             return this.__name;
-        },
-        /**
-         * @method setSandbox
-         * @param {Oskari.Sandbox} sandbox
-         * Sets the sandbox reference to this component
-         */
-        setSandbox: function (sbx) {
-            this.sandbox = sbx;
-        },
-        /**
-         * @method getSandbox
-         * @return {Oskari.Sandbox}
-         */
-        getSandbox: function () {
-            return this.sandbox;
         },
         /**
          * @method update
@@ -58,16 +41,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             }
             me.started = true;
 
-            var conf = me.conf || {},
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
-            me.setSandbox(sandbox);
+            var sandboxName = (me.conf ? me.conf.sandbox : null) || 'sandbox';
+            var sandbox = me._sandbox = Oskari.getSandbox(sandboxName);
 
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPlugin', mapModule);
-            mapModule.registerPlugin(plugin);
-            mapModule.startPlugin(plugin);
-            this._plugin = plugin;
+            me._timeseriesService = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesService');
+            sandbox.registerService(me._timeseriesService);
+
+            me._timeseriesLayerService = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesLayerService', sandbox, me._timeseriesService);
+            sandbox.registerService(me._timeseriesLayerService);
+            me._timeseriesLayerService.registerLayerType('wms', 'Oskari.mapframework.bundle.timeseries.WMSAnimator');
+
+            Oskari.on('app.start', function() {
+                me._timeseriesService.on('activeChanged', me._updateControl.bind(me));
+                me._timeseriesLayerService.updateTimeseriesLayers();
+            });
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -75,32 +62,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                     sandbox.registerForEventByName(me, p);
                 }
             }
-            //because of timing issues, the eventhandlers may or may not be initialised by the time a time series layer is added ->
-            //so check this out manually the first time around and set the eventhandlers only after.
-            me._checkIfTimeseriesLayersExist();
         },
         /**
         * @method init
         * implements Module protocol init method - initializes request handlers
         */
         init: function(){
-            var me = this;
-            var sandbox = me.getSandbox();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         },
-        /**
-         * @method initTimeSeries
-         * inits the timeline ui with values of a layer supporting times
-         */
-        initTimeseries: function(layer) {
-            this._layer = layer;
-            if(!this._controlPlugin) {
-                this._createControlPlugin();
+        _updateControl: function(active) {
+            if(active){
+                this._createControlPlugin(active.delegate, active.conf);
+            } else {
+                this._removeControlPlugin();
             }
         },
-        _createControlPlugin: function (){
-            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-            var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', this);
+        _createControlPlugin: function (delegate, conf){
+            this._removeControlPlugin();
+            var mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
+            var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', delegate, conf);
             mapModule.registerPlugin(controlPlugin);
             mapModule.startPlugin(controlPlugin);
             this._controlPlugin = controlPlugin;
@@ -109,32 +88,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             if(!this._controlPlugin) {
                 return;
             }
-            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            var mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
             mapModule.stopPlugin(this._controlPlugin);
             mapModule.unregisterPlugin(this._controlPlugin);
             this._controlPlugin = null;
-        },
-        getTimes: function() {
-            var times = this._layer.getAttributes().times;
-            if(!Array.isArray(times)) {
-                var interval = moment.duration(times.interval);
-                var end = moment(times.end);
-                var t = moment(times.start);
-                times = [t.toISOString()];
-                while(t.add(interval) < end) {
-                    times.push(t.toISOString());
-                }
-                times.push(end.toISOString());
-            }
-            return times;
-        },
-        getCurrentTime: function() {
-            var times = this.getTimes();
-            return times[times.length-1];
-        },
-        requestNewTime: function(newTime, nextTime, doneCallback) {
-            this._plugin.configureTimeseriesPlayback(this._layer.getId(), newTime, false, 500, moment.duration(1, 'minutes'));
-            this._doneCallback = doneCallback;
         },
         /**
          * @method stop
@@ -145,16 +102,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             me.started = false;
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.sandbox.unregisterFromEventByName(me, p);
+                    me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
-            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-            mapModule.stopPlugin(this._plugin);
-            mapModule.unregisterPlugin(this._plugin);
-
             this._removeControlPlugin();
-
-            me.sandbox = null;
+            me._sandbox = null;
         },
         /**
          * @method onEvent
@@ -176,15 +128,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          * @return {Object.<string, Function>} EventHandlers
          */
         eventHandlers: {
-            'MapLayerEvent': function(event) {
-                this._checkIfTimeseriesLayersExist();
-            },
-            'AfterMapLayerAddEvent': function (event) {
-                this._checkIfTimeseriesLayersExist();
-            },
-            'AfterMapLayerRemoveEvent': function(event) {
-                this._checkIfTimeseriesLayersExist();
-            },
+            /*,
             'ProgressEvent': function(event) {
                 if(event.getStatus() && this._plugin.getCurrentLayerId() === event.getId()) {
                     console.log('progressevent. hass cb:', !!this._doneCallback)
@@ -195,32 +139,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                     }
                 }
             }
-        },
-        /**
-         * @method @private _checkIfTimeseriesLayersExist
-         * when map layers are added / removed, check if layers supporting time series are found and toggle the timeline accordingly.
-         */
-        _checkIfTimeseriesLayersExist: function() {
-            var me = this,
-                layers = me.sandbox.findAllSelectedMapLayers();
-            for (var i = 0; i < layers.length; i++) {
-                //the first layer to have times set, we'll use!
-                if (layers[i].hasTimeseries()) {
-                    if (me._controlPlugin) {
-                        this._removeControlPlugin();
-                    }
-                    me.initTimeseries(layers[i]);
-                    //time series layer found -> nothing more to do.
-                    return;
-                }
-            }
-            // no timeseries, remove control
-            this._removeControlPlugin();
+            */
         }
     }, {
         /**
          * @property {String[]} protocol
          * @static
          */
-       "extend": ["Oskari.userinterface.extension.DefaultExtension"]
+        protocol: ['Oskari.bundle.BundleInstance']
     });
