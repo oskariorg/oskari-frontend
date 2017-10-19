@@ -31,7 +31,7 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "title": "Työkalut",
-            "message": "Työkalujen avulla voit muokata karttanäkymää. Pidä hiiren kursoroa työkalun päällä ja saat ohjeet sen käyttöön. <br/> <br/> Osa työkaluista on saatavilla vain kirjautuneille käyttäjille."
+            "message": "Työkalujen avulla voit muokata karttanäkymää. Pidä hiiren kursoria työkalun päällä ja saat ohjeet sen käyttöön. <br/> <br/> Osa työkaluista on saatavilla vain kirjautuneille käyttäjille."
         }
     }
 });

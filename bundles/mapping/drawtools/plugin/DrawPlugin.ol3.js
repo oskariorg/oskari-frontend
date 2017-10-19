@@ -312,7 +312,7 @@ Oskari.clazz.define(
                       me.pointerMoveHandler();
                       me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                       return geometry;
-                  }
+                  };
             } else if (shape === 'Box') {
                  maxPoints = 2;
                  geometryType = 'LineString';
@@ -326,7 +326,7 @@ Oskari.clazz.define(
                    me.pointerMoveHandler();
                    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                    return geometry;
-                 }
+                 };
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
                 geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
@@ -339,7 +339,7 @@ Oskari.clazz.define(
                      me.pointerMoveHandler();
                      me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                      return geometry;
-                 }
+                 };
             } else if(shape === 'Polygon') {
                 geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
@@ -350,7 +350,7 @@ Oskari.clazz.define(
                     me.pointerMoveHandler();
                     me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                     return geometry;
-                 }
+                 };
             }
 
             me._draw[me._id] = new ol.interaction.Draw({
@@ -502,7 +502,7 @@ Oskari.clazz.define(
                             var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
                             ii.html(output);
                             if(output==="") {
-                                ii.addClass('withoutText')
+                                ii.addClass('withoutText');
                             } else {
                                 ii.removeClass('withoutText');
                             }
@@ -587,11 +587,6 @@ Oskari.clazz.define(
              var bufferedFeature = me.getBufferedFeature(geometry, buffer, me._styles['draw'], 30);
              me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
              me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(bufferedFeature);
-//           _.each(me._drawLayers[me._layerId].getSource().getFeaturesCollection(), function (f) {
-//                console.log(f);
-//                var feature = me.getBufferedFeature(f.values_.geometry, buffer, me._style);
-//                me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(feature);
-//           });
         },
          /**
          * @method modifyStartEvent
@@ -713,25 +708,25 @@ Oskari.clazz.define(
 
             if(me._draw[me._id]) {
                 me._draw.on('drawstart', function() {
-                    console.log("drawstart");
+                    Oskari.log('DrawPlugin').debug('drawstart');
                 });
                 me._draw[me._id].on('drawend', function() {
-                    console.log("drawend");
+                    Oskari.log('DrawPlugin').debug('drawend');
                 });
                 me._draw[me._id].on('change:active', function() {
-                    console.log("drawchange");
+                    Oskari.log('DrawPlugin').debug('drawchange');
                 });
             }
             if(me._modify[me._id]) {
                 me._modify[me._id].on('modifystart', function() {
-                    console.log("modifystart");
+                    Oskari.log('DrawPlugin').debug('modifystart');
                 });
                 me._modify[me._id].on('change', function() {
-                    console.log("modifychange");
+                    Oskari.log('DrawPlugin').debug('modifychange');
                 });
 
                 me._modify[me._id].on('modifyend', function() {
-                    console.log("modifyend");
+                    Oskari.log('DrawPlugin').debug('modifyend');
                 });
             }
         },

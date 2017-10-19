@@ -13,12 +13,12 @@ Oskari.clazz.define(
      * instance
      *      reference to component that created the tile
      */
-    function (instance, localization) {
+    function (instance) {
         var me = this,
             p;
 
         me.instance = instance;
-        me.loc = localization;
+        me.loc = Oskari.getMsg.bind(null, 'Analyse');
         me.grid = undefined;
         me.container = undefined;
 
@@ -94,7 +94,7 @@ Oskari.clazz.define(
 
             // setup localization
             visibleFields.forEach(function (key) {
-                grid.setColumnUIName(key, me.loc.grid[key]);
+                grid.setColumnUIName(key, me.loc('personalDataTab.grid.' + key));
             });
 
             me.container = me.template.main.clone();
@@ -166,7 +166,7 @@ Oskari.clazz.define(
                     'id': layer.getId(),
                     'name': layer.getName(),
                     'layer': layer,
-                    'delete': me.loc.buttons['delete']
+                    'delete': me.loc('personalDataTab.buttons.delete')
                 });
             });
 
@@ -201,10 +201,10 @@ Oskari.clazz.define(
             });
 
             dialog.show(
-                me.loc.title,
-                me.loc.confirmDeleteMsg + '"' + data.name + '"' + '?',
+                me.loc('personalDataTab.title'),
+                me.loc('personalDataTab.confirmDeleteMsg', {name: data.name}),
                 [
-                    dialog.createCloseButton(me.loc.buttons.cancel),
+                    dialog.createCloseButton(me.loc('personalDataTab.buttons.cancel')),
                     okBtn
                 ]
             );
@@ -274,8 +274,8 @@ Oskari.clazz.define(
                     'Oskari.userinterface.component.Popup'
                 );
                 dialog.show(
-                    this.loc.notification.deletedTitle,
-                    this.loc.notification.deletedMsg
+                    this.loc('personalDataTab.notification.deletedTitle'),
+                    this.loc('personalDataTab.notification.deletedMsg')
                 );
                 dialog.fadeout(3000);
             }
@@ -289,8 +289,8 @@ Oskari.clazz.define(
             var dialog = Oskari.clazz.create(
                     'Oskari.userinterface.component.Popup'
                 ),
-                okBtn = dialog.createCloseButton(this.loc.buttons.ok);
+                okBtn = dialog.createCloseButton(this.loc('personalDataTab.buttons.ok'));
 
-            dialog.show(this.loc.error.title, this.loc.error.generic, [okBtn]);
+            dialog.show(this.loc('personalDataTab.error.title'), this.loc('personalDataTab.error.generic'), [okBtn]);
         }
     });

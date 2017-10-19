@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.filterTemplate = jQuery('<div class="filter filter-border"><center><div class="filter-icon"></div><div class="filter-text"></div></center></div>');
         this.filters= [];
         this._filterNewestCount = 20;
-        this._newestLayers = null;
+        this._currentFilter = null;
     }, {
 
         /**
@@ -110,8 +110,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             // Add newest filter
             me.addNewestFilter();
 
-            // Add featuredata filter // stats name
-            me.addStatsFilter();
+            // Add featuredata filter
+            me.addFeaturedataFilter();
         },
 
         /**
@@ -127,46 +127,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             me.addFilterTool(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount),
-                function(layer){
-                    if(me._newestLayers === null) {
-                        me._newestLayers = mapLayerService.getNewestLayers(me._filterNewestCount);
-                    }
-                    var ids = [];
-                    jQuery(me._newestLayers).each(function(index, layer){
-                       ids.push(layer.getId());
-                    });
-                    return (jQuery.inArray(layer.getId(), ids) !== -1);
-                },
                 'layer-newest',
                 'layer-newest-disabled',
             'newest');
         },
 
         /**
-         * Clear newest filter cache.
-         * @method  @public clearNewestFilter
+         * Add featuredata filter.
+         * @method  @public addFeaturedataFilter
          */
-        clearNewestFilter: function(){
-            var me = this;
-            me._newestLayers = null;
-        },
-
-        /**
-         * Add stats filter.
-         * @method  @public addStatsFilter
-         */
-        addStatsFilter: function(){
+        addFeaturedataFilter: function(){
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
-            me.addFilterTool(loc.buttons.stats,
-                loc.tooltips.stats,
-                function(layer){
-                    return (layer.hasFeatureData());
-                },
+            me.addFilterTool(loc.buttons.featuredata,
+                loc.tooltips.featuredata,
                 'layer-stats',
                 'layer-stats-disabled',
-            'stats');
+            'featuredata');
         },
 
         /**
@@ -237,25 +215,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 }
             }
         },
-        /**
-         * Hande selected filter request
-         * @method  public enableFilter
-         * @param  {String} selectedFilter selected filter, can be a 'stats', 'newest' or 'publishable'
-         */
-        enableFilter: function(selectedFilter) {
-            var me = this,
-                filterButton = jQuery('.layer-filter .filter-'+selectedFilter).first(),
-                filterIcon = filterButton.find('.filter-icon'),
-                active = jQuery('.layer-filter').find('.filter-icon.active');
-
-            if(selectedFilter !== null) {
-                if(!filterIcon.hasClass('active')) {
-                    filterButton.trigger('click');
-                }
-            } else if(active.length>0) {
-                me.deactivateAllFilters();
-            }
-        },
 
         getContentState: function () {
             //"use strict";
@@ -289,12 +248,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me.tabContainer = Oskari.clazz.create(
                 'Oskari.userinterface.component.TabContainer'
             );
+
+            // Add filter tab change listener
+            me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                if(me._currentFilter) {
+                    me.activateFilter(me._currentFilter);
+                }
+            });
             me.tabContainer.insertTo(cel);
             for (i = 0; i < me.layerTabs.length; i += 1) {
                 tab = me.layerTabs[i];
                 me.tabContainer.addPanel(tab.getTabPanel());
             }
-            //me.tabContainer.addTabChangeListener(me._tabsChanged); // -> filter with same keyword when changing tabs?
+
             me.tabContainer.addTabChangeListener(
                 function (previousTab, newTab) {
                     // Make sure this fires only when the flyout is open
@@ -309,8 +275,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             // Create default filters
             me.addDefaultFilters();
-
-
             me.populateLayers();
         },
 
@@ -332,12 +296,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         populateLayers: function () {
             //"use strict";
+            var me = this;
             var sandbox = this.instance.getSandbox(),
                 // populate layer list
                 mapLayerService = sandbox.getService(
                     'Oskari.mapframework.service.MapLayerService'
                 ),
-                layers = mapLayerService.getAllLayers(),
+                layers = (me._currentFilter) ? mapLayerService.getFilteredLayers(me._currentFilter) : mapLayerService.getAllLayers(),
                 i,
                 tab,
                 layersCopy,
@@ -387,14 +352,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
                         groupAttr
                     );
-
-
                     groupList.push(group);
                 }
 
-                if (!this.layerListFilteringFunction || (this.layerListFilteringFunction && this.layerListFilteringFunction(layer))) {
-                    group.addLayer(layer);
-                }
+                group.addLayer(layer);
             }
             var sortedGroupList = jQuery.grep(groupList, function(group,index){
                 return group.getLayers().length > 0;
@@ -510,75 +471,109 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         },
 
         /**
-         * @method  @public setLayerListFilteringFunction set layer list function
-         * @param {Function} layerListFilteringFunction layer list filter function
-         */
-        setLayerListFilteringFunction: function(layerListFilteringFunction) {
-            this.layerListFilteringFunction = layerListFilteringFunction;
-        },
-
-        /**
          * Add filter tool to layer list.
          * @method  @public addFilterTool
          * @param {String} toolText             tool button text
          * @param {String} tooltip              tool tooltip text
-         * @param {Function} filterFunction     filter function
          * @param {String} iconClassActive      tool icon active class
          * @param {String} iconClassDeactive    tool icon deactive class
          * @param {String} filterName           filter name
          */
-        addFilterTool: function(toolText, tooltip, filterFunction, iconClassActive, iconClassDeactive, filterName) {
-            var me = this,
-                filterButton = me.filterTemplate.clone(),
-                filter = {
-                    toolText: toolText,
-                    tooltip: tooltip,
-                    filterFunction: filterFunction,
-                    iconClassActive: iconClassActive,
-                    iconClassDeactive: iconClassDeactive,
-                    filterName: filterName
-                },
-                filterContainer = jQuery('.layerselector2-layer-filter'),
-                loc = me.instance.getLocalization('layerFilter');
+        addFilterTool: function(toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
+            var me = this;
 
-            filterButton.find('.filter-text').html(toolText);
-            filterButton.attr('title', tooltip);
-            filterButton.find('.filter-icon').addClass('filter-'+filterName);
-            filterButton.find('.filter-icon').addClass(iconClassDeactive);
-
-            filterButton.unbind('click');
-            filterButton.bind('click', function(){
-                var filterIcon = jQuery('.filter-icon.' + 'filter-'+filterName);
-
-                me.deactivateAllFilters(filterName);
-
-                if(filterIcon.hasClass(iconClassDeactive)){
-                    // Activate this filter
-                    filterIcon.removeClass(iconClassDeactive);
-                    filterIcon.addClass(iconClassActive);
-                    filterIcon.addClass('active');
-                    me.activateFilter(filterFunction);
-                    filterIcon.parents('.filter').attr('title',loc.tooltips.remove);
-                } else {
-                    // Deactivate all filters
-                    me.deactivateAllFilters();
-                }
-
-            });
-
+            var filter = {
+                toolText: toolText,
+                tooltip: tooltip,
+                iconClassActive: iconClassActive,
+                iconClassDeactive: iconClassDeactive,
+                filterName: filterName
+            };
             me.filters.push(filter);
-            filterContainer.append(filterButton);
+            var loc = me.instance.getLocalization('layerFilter');
+
+            me.layerTabs.forEach(function(tab){
+                var filterButton = me.filterTemplate.clone(),
+                    filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
+
+                filterButton.attr('data-filter', filterName);
+                filterButton.find('.filter-text').html(toolText);
+                filterButton.attr('title', tooltip);
+                filterButton.find('.filter-icon').addClass('filter-'+filterName);
+                filterButton.find('.filter-icon').addClass(iconClassDeactive);
+
+                filterButton.unbind('click');
+                filterButton.bind('click', function(){
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filterName);
+                    me.deactivateAllFilters(filterName);
+                    if(filterIcon.hasClass(iconClassDeactive)){
+                        // Activate this filter
+                        me._setFilterIconClasses(filterName);
+                        me.activateFilter(filterName);
+                        me._setFilterTooltip(filterName, loc.tooltips.remove);
+                    } else {
+                        // Deactivate all filters
+                        me.deactivateAllFilters();
+                    }
+                });
+
+                filterContainer.append(filterButton);
+            });
         },
+
+        /**
+         * Set filter button tooltip
+         * @method  @private _setFilterTooltip
+         * @param {String} filterName filter name
+         * @param {String} tooltip    tooltip
+         */
+        _setFilterTooltip: function(filterName, tooltip) {
+            var me = this;
+            me.layerTabs.forEach(function(tab){
+                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
+                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filterName);
+                filterIcon.parents('.filter').attr('title',tooltip);
+            });
+        },
+        /**
+         * Set filter icon classes
+         * @method  @private _setFilterIconClasses
+         * @param {String} filterName filter name
+         */
+        _setFilterIconClasses: function(filterName) {
+            var me = this;
+            me.layerTabs.forEach(function(tab){
+                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
+                me.filters.forEach(function(filter){
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.filterName);
+                    // First remove all active classes
+                    filterIcon.removeClass(filter.iconClassActive);
+                    filterIcon.removeClass(filter.iconClassDeactive);
+                    filterIcon.removeClass('active');
+                    // If filter has same than currently selected then activate icon
+                    if(filter.filterName === filterName) {
+                        filterIcon.addClass(filter.iconClassActive);
+                        filterIcon.addClass('active');
+                    }
+                    // Otherwise use deactive icon
+                    else {
+                        filterIcon.addClass(filter.iconClassDeactive);
+                    }
+                });
+            });
+        },
+
         /**
          * Activate selected filter.
          * @method @public activateFilter
-         * @param  {Function} filterFunction activate filter
+         * @param  {Function} filterName activate filter name
          */
-        activateFilter: function(filterFunction){
+        activateFilter: function(filterName){
             var me = this;
-            me.setLayerListFilteringFunction(filterFunction);
+            me._currentFilter = filterName;
             me.populateLayers();
         },
+
         /**
          * Deactivate all filters
          * @method  @public deactivateAllFilters
@@ -588,19 +583,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         deactivateAllFilters: function(notDeactivateThisFilter){
             var me = this;
 
-            jQuery.each(me.filters, function(index, filter) {
-                if(!notDeactivateThisFilter || filter.filterName !== notDeactivateThisFilter) {
-                    var filterIcon = jQuery('.filter-icon.' + 'filter-'+filter.filterName);
-                    filterIcon.removeClass(filter.iconClassActive);
-                    filterIcon.removeClass('active');
-                    filterIcon.addClass(filter.iconClassDeactive);
-                    filterIcon.parents('.filter').attr('title',filter.tooltip);
-                }
+            me._currentFilter = null;
+            me.layerTabs.forEach(function(tab, tabIndex){
+                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
+
+                me.filters.forEach(function(filter, index) {
+                    if(!notDeactivateThisFilter || filter.filterName !== notDeactivateThisFilter) {
+                        var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.filterName);
+                        filterIcon.removeClass(filter.iconClassActive);
+                        filterIcon.removeClass('active');
+                        filterIcon.addClass(filter.iconClassDeactive);
+                        // Set tooltip for one per filter
+                        if(tabIndex === 0) {
+                            me._setFilterTooltip(filter.filterName, filter.tooltip);
+                        }
+                    }
+                });
             });
 
-            me.activateFilter(function(){
-                return true;
-            });
+            if(!notDeactivateThisFilter) {
+                me.activateFilter();
+            }
         }
     }, {
 

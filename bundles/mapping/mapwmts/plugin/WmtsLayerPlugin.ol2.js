@@ -90,7 +90,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 map.addLayer(wmtsLayer);
                 map.setLayerIndex(wmtsLayer, oldLayerIndex);
             }, function() {
-//                console.log("Error updating WMTS layer");
             });
         },
         /**
@@ -160,7 +159,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                         map.setLayerIndex(wmtsLayer, 0);
                     }
             }, function() {
-//                console.log("Error loading capabilitiesXML");
             });
         },
 

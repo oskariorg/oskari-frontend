@@ -3,19 +3,17 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Analyse",
     "value": {
-        "title": "Analysis <font color=red>(BETA)</font>",
-        "flyouttitle": "Analysis <font color=red>(BETA)</font>",
+        "title": "Analysis",
+        "flyouttitle": "Analysis",
         "desc": "",
         "btnTooltip": "Analysis",
         "NotLoggedView": {
             "text": "With Analysis function you can make simple spatial analysis for map layers including feature data. The function is available only for logged-in users.",
             "signup": "Log in",
-            "signupUrl": "/web/en/login",
-            "register": "Register",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Register"
         },
         "AnalyseView": {
-            "title": "Analysis <font color=red>(BETA)</font>",
+            "title": "Analysis",
             "content": {
                 "label": "Map Layers",
                 "drawToolsLabel": "Feature Tools",
@@ -436,7 +434,7 @@ Oskari.registerLocalization(
                 "delete": "Remove"
             },
             "title": "Analysis",
-            "confirmDeleteMsg": "Do you want to remove the analysis layer:",
+            "confirmDeleteMsg": "Do you want to remove the analysis layer \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Cancel",

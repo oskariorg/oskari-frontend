@@ -210,8 +210,6 @@ Oskari.clazz.define(
                     layerId = event.getLayerId(),
                     layer;
 
-                flyout.clearNewestFilter();
-
                 if (event.getOperation() === 'update') {
                     layer = mapLayerService.findMapLayer(layerId);
                     flyout.handleLayerModified(layer);
@@ -230,12 +228,11 @@ Oskari.clazz.define(
                     // refresh layer count
                     tile.refresh();
                 }
-
-
             },
 
             'BackendStatus.BackendStatusChangedEvent': function (event) {
-                var layerId = event.getLayerId(),
+                var me = this,
+                    layerId = event.getLayerId(),
                     status = event.getStatus(),
                     flyout = this.plugins['Oskari.userinterface.Flyout'],
                     mapLayerService = this.sandbox.getService(
@@ -246,6 +243,7 @@ Oskari.clazz.define(
                 if (layerId === null || layerId === undefined) {
                     // Massive update so just recreate the whole ui
                     flyout.populateLayers();
+
                 } else {
                     layer = mapLayerService.findMapLayer(layerId);
                     flyout.handleLayerModified(layer);
@@ -270,7 +268,6 @@ Oskari.clazz.define(
                 // Remove the filtering, if opened by ShowFilteredLayerListRequest.
                 else if(me.filteredLayerListOpenedByRequest) {
                     plugin.deactivateAllFilters();
-                    plugin.setLayerListFilteringFunction(null);
                     me.filteredLayerListOpenedByRequest = false;
                 }
             }

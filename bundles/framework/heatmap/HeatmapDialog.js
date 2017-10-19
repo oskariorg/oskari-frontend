@@ -60,6 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
     		var me = this,
     			dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
+            dialog.addClass('heatmap settings-dialog');
     		var content = jQuery(this.__templates.main());
 
 

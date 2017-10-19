@@ -39,8 +39,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.NotLoggedIn',
                 registerTmp = register.find('a');
 
             if (conf) {
-                loginUrl = sandbox.getLocalizedProperty(conf.loginUrl);
-                registerUrl = sandbox.getLocalizedProperty(conf.registerUrl);
+                loginUrl = Oskari.getLocalized(conf.loginUrl);
+                registerUrl = Oskari.getLocalized(conf.registerUrl);
             }
             content.append(me.loc.text);
             container.append(content);
