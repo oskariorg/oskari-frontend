@@ -10,6 +10,7 @@ function (sandbox, layerId) {
     
     var times = this.getTimes();
     this._currentTime = times[times.length-1];
+    this._subsetRange = [times[0], times[times.length-1]];
 }, {
     __name : 'WMSAnimator',
     _clazz : 'Oskari.mapframework.bundle.timeseries.WMSAnimator',
@@ -17,7 +18,6 @@ function (sandbox, layerId) {
      * @method getTimes
      * Returns all available time instants that can be shown
      * @return {String[]} list of available timeseries times
-     * @throws always override this
      */
     getTimes : function() {
         var times = this._layer.getAttributes().times;
@@ -37,10 +37,25 @@ function (sandbox, layerId) {
      * @method getCurrentTime
      * Returns current selected time instant
      * @return {String} current time as ISO-string
-     * @throws always override this
      */
     getCurrentTime : function() {
         return this._currentTime;
+    },
+    /**
+     * @method getSubsetRange
+     * Returns current selected time range subset
+     * @return {String[]} range Array with 2 elements, start & end, ISO-string
+     */
+    getSubsetRange: function() {
+        return this._subsetRange.slice();
+    },
+    /**
+     * @method getSubsetRange
+     * Set current selected time range subset
+     * @param {String[]} range Array with 2 elements, start & end, ISO-string
+     */
+    setSubsetRange : function(range) {
+        this._subsetRange = range;
     },
     /**
      * @method requestNewTime
@@ -48,7 +63,6 @@ function (sandbox, layerId) {
      * @param {String} newTime change current time to this value(ISO string)
      * @param {String} nextTime time value at next animation frame(ISO string). Can be null if not animating
      * @param {function} doneCallback callback that will be called after new time has been loaded
-     * @throws always override this
      */
     requestNewTime : function(newTime, nextTime, doneCallback) {
         console.log('ansking layer to animate')

@@ -16,7 +16,7 @@ function() {
     /**
      * @method getTimes
      * Returns all available time instants that can be shown
-     * @return {String[]} list of available timeseries times
+     * @return {String[]} list of available timeseries time instants as ISO-strings
      * @throws always override this
      */
     getTimes : function() {
@@ -29,6 +29,24 @@ function() {
      * @throws always override this
      */
     getCurrentTime : function() {
+        throw new Error("Implement your own");
+    },
+    /**
+     * @method getSubsetRange
+     * Returns current selected time range subset
+     * @return {String[]} range Array with 2 elements, start & end, ISO-string
+     * @throws always override this
+     */
+    getSubsetRange: function() {
+        throw new Error("Implement your own");
+    },
+    /**
+     * @method setSubsetRange
+     * Set current selected time range subset
+     * @param {String[]} range Array with 2 elements, start & end, ISO-string
+     * @throws always override this
+     */
+    setSubsetRange : function(range) {
         throw new Error("Implement your own");
     },
     /**

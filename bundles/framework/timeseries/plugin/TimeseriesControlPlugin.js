@@ -34,10 +34,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._setFrameInterval(me._uiState.frameInterval); // sets throttle for animation, too
         me._throttleNewTime = me._throttle(me._requestNewTime.bind(me), 500);
 
-        var times = delegate.getTimes();
-        this._uiState.times = times;
-        this._uiState.rangeStart = times[0];
-        this._uiState.rangeEnd = times[times.length-1];
+        this._uiState.times = delegate.getTimes();
+        var range = delegate.getSubsetRange();
+        this._uiState.rangeStart = range[0];
+        this._uiState.rangeEnd = range[1];
         this._uiState.currentTime = delegate.getCurrentTime();
 
         me._isMobileVisible = false;
@@ -138,6 +138,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             });
         },
+        _setRange: function(start, end){
+            this._uiState.rangeStart = start;
+            this._uiState.rangeEnd = end;
+            this._delegate.setSubsetRange([start, end]);
+        },
         _animationStep: function() {
             var targetTime = moment(this._uiState.currentTime);
             var index;
@@ -165,7 +170,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @method _createControlElement
          * @private
          * Creates UI for timeseries control
-         * div where this plugin registered.
          */
         _createControlElement: function () {
             var me = this,
@@ -243,8 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var times = me._uiState.times;
             if(isMobile) {
                 me._timelineWidth = 260;
-                me._uiState.rangeStart = times[0];
-                me._uiState.rangeEnd = times[times.length-1];
+                me._setRange(times[0], times[times.length-1]);
                 me._element.toggleClass('mobile', isMobile);
                 me._element.append(aux);
             } else {
@@ -486,8 +489,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 if(inverted[1] < me._uiState.currentTime) {
                     changedTime = inverted[1];
                 }
-                me._uiState.rangeStart = inverted[0];
-                me._uiState.rangeEnd = inverted[1];
+                me._setRange(inverted[0], inverted[1]);
                 me._updateCurrentTime(changedTime);
                 updateFullAxisControls();
             }
