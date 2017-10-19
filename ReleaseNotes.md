@@ -11,6 +11,8 @@ Fixed issues:
 #### VectorLayerPlugin ol2/ol3
 
 Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer which has none.
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer that is not on the map (now ignores the call, previously cleared all features from all layers).
+Fixed an error introduced in 1.44.0 where ``MapModulePlugin.AddFeaturesToMapRequest`` with priority value resulted in a JavaScript error.
 
 ### publisher2
 
@@ -32,6 +34,11 @@ Refactored the code for the functionality to make it more accessible.
 ### Data sanitation
 
 Improved security by sanitizing values.
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools couldn't restore thematic maps functionality (for editing) from a previously saved published map.
+This resulted in thematic maps functionality being removed from the published map on edit.
 
 ## 1.44.0
 

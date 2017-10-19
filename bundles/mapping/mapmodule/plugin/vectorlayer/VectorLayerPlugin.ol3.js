@@ -487,6 +487,8 @@ Oskari.clazz.define(
                 });
 
                 if (options.prio && !isNaN(options.prio)) {
+                    // clear any features since we are re-adding the same features sorted by priority
+                    vectorSource.clear();
                     me._features[options.layerId].sort(function(a, b) {
                         return b.prio - a.prio;
                     });
