@@ -11,9 +11,41 @@ function (sandbox, layerId) {
     var times = this.getTimes();
     this._currentTime = times[times.length-1];
     this._subsetRange = [times[0], times[times.length-1]];
+
+    this._doneCallback = null;
+
+    this._sandbox.register(this);
+    var p;
+    for (p in this.__eventHandlers) {
+        if (this.__eventHandlers.hasOwnProperty(p)) {
+            sandbox.registerForEventByName(this, p);
+        }
+    }
 }, {
     __name : 'WMSAnimator',
+    getName: function () {
+        return this.__name;
+    },
     _clazz : 'Oskari.mapframework.bundle.timeseries.WMSAnimator',
+    __eventHandlers: {
+        'ProgressEvent': function(event) {
+            if(event.getStatus() && this._layer.getId() === event.getId()) {
+                console.log('progressevent');
+                if(this._doneCallback){
+                    var cb = this._doneCallback;
+                    this._doneCallback = null;
+                    cb();
+                }
+            }
+        }
+    },
+    onEvent: function (event) {
+        var handler = this.__eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
+    },
     /**
      * @method getTimes
      * Returns all available time instants that can be shown
@@ -33,6 +65,7 @@ function (sandbox, layerId) {
         }
         return times;
     },
+    init: function() {},
     /**
      * @method getCurrentTime
      * Returns current selected time instant
@@ -65,13 +98,30 @@ function (sandbox, layerId) {
      * @param {function} doneCallback callback that will be called after new time has been loaded
      */
     requestNewTime : function(newTime, nextTime, doneCallback) {
-        console.log('ansking layer to animate')
         this._currentTime = newTime;
-        this._mapModule.handleMapLayerUpdateRequest(this._layer.getId(), true, {"TIME": newTime});
+        var requestBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+        if(requestBuilder) {
+            this._doneCallback = doneCallback;
+            var request = requestBuilder(this._layer.getId(), true, {"TIME": newTime});
+            this._sandbox.request(this, request);
+        }
+    },
+    /**
+     * @method destroy
+     * Releases any event handlers and any other resources
+     */
+    destroy: function() {
+        var p;
+        for (var p in this.__eventHandlers) {
+            if (this.__eventHandlers.hasOwnProperty(p)) {
+                this._sandbox.unregisterFromEventByName(this, p);
+            }
+        }
     }
 }, {
     'protocol': [
-        'Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol'
+        'Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol',
+        'Oskari.mapframework.module.Module'
     ]
 }
 );

@@ -76,8 +76,12 @@ Oskari.clazz.define(
                 throw new Error('All arguments must be given!');
             }
             var key = this._key(id, type);
-            delete this._timeseriesThings[key];
-            this._scheduleUpdate();
+            var series = this._timeseriesThings[key];
+            if(series){
+                delete this._timeseriesThings[key];
+                this._scheduleUpdate();
+            }
+            return series;
         },
         updateTimeseriesPriority: function(id, type, priority) {
             var key = this._key(id, type);

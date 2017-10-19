@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._timelineWidth = 600;
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
         me._sideMargin = conf.sideMargin || 10;
+        me._waitingForFrame = false;
 
         me._delegate = delegate;
 
@@ -131,11 +132,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         },
         _requestNewTime: function() {
             var me = this;
+            me._waitingForFrame = true;
             me._delegate.requestNewTime(me._uiState.currentTime, null, function(){
+                me._waitingForFrame = false;
                 if(me._uiState.isAnimating) {
                     me._throttleAnimation();
                 }
-
             });
         },
         _setRange: function(start, end){
@@ -144,6 +146,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             this._delegate.setSubsetRange([start, end]);
         },
         _animationStep: function() {
+            if(this._waitingForFrame) {
+                return;
+            }
             var targetTime = moment(this._uiState.currentTime);
             var index;
             if(this._uiState.stepInterval) {

@@ -33,20 +33,10 @@ No statehandling has been implemented for the bundle.
 </tr>
 <tr>
   <td> `MapModulePlugin.MapLayerUpdateRequest` </td>
-  <td> Updates layers time parameter </td>
+  <td> WMSAnimator clazz uses to update layer's time parameter </td>
 </tr>
 </table>
 
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <th>TimeseriesAnimationEvent</th><th>Is sent out when timeseries animation advances or is stopped</th>
-  </tr>
-</table>
 
 ## Events the bundle listens to
 
@@ -55,21 +45,18 @@ No statehandling has been implemented for the bundle.
     <th>Event</th><th>Why/when</th>
   </tr>
   <tr>
-    <td> MapLayerEvent </td><td> Check timeseries playback UI visibility</td>
+    <td> MapSizeChangedEvent </td><td> Resize timeseries UI to support different map window sizes </td>
   </tr>
   <tr>
-    <td> MapSizeChangedEvent </td><td> Build timeseries UI again to support different map window sizes </td>
+    <td> AfterRearrangeSelectedMapLayerEvent </td><td>Show timeseries UI control for topmost timeseries enabled layer</td>
   </tr>
   <tr>
-    <td> AfterMapLayerAddEvent </td><td>Shows timeseries playback UI if added layer have time dimension </td>
+    <td> AfterMapLayerAddEvent </td><td>Show timeseries UI control for topmost timeseries enabled layer</td>
   </tr>
   <tr>
-    <td> AfterMapLayerRemoveEvent </td><td>Remove timeseries playback UI from map if removed layer is same than animated layer</td>
+    <td> AfterMapLayerRemoveEvent </td><td>Show  timeseries UI control for topmost timeseries enabled layer</td>
   </tr>
   <tr>
     <td> ProgressEvent </td><td>Track loading status of animating layer</td>
-  </tr>
-    <tr>
-    <td> TimeseriesAnimationEvent </td><td>The bundle sends out and listens to this event. It is used to update timeseries control UI.</td>
   </tr>
 </table>

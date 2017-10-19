@@ -59,5 +59,13 @@ function() {
      */
     requestNewTime : function(newTime, nextTime, doneCallback) {
         throw new Error("Implement your own");
+    },
+    /**
+     * @method destroy
+     * Releases any event handlers and any other resources
+     * @throws always override this
+     */
+    destroy: function() {
+        throw new Error("Implement your own");
     }
 });

@@ -98,7 +98,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var me = this;
+            var me = this,
+                p;
             me.started = false;
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {

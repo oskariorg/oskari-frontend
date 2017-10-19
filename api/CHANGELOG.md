@@ -52,6 +52,10 @@ Notes:
 - Only lines and polygons are counted for the area/length (circles/points with buffers are not).
 - The measurements are for non-buffered features.
 
+### [rem] [breaking] TimeseriesAnimationEvent, AnimateLayerRequest
+
+Timeseries functionality rewrite. Old event & request removed.
+
 ## 1.44
 
 ### [mod] [breaking] AddLayerListFilterRequest
