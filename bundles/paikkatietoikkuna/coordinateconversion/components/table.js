@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
             table:_.template('<div class="coordinatefield-table" style="display:inline-block;">' +
                                         '<h5> <%= input %> </h5>' +
                                         '<div class="oskari-table-content">'+
-                                         '<div style="width:100%;height:98%; overflow:auto;">'+
+                                         '<div style="width:100%; overflow:auto;">'+
                                             '<table class="hoverable" id="oskari-coordinate-table" style="border: 1px solid black;" cellpadding="0" cellspacing="0" border="0">'+
                                                 '<tbody></tbody'+
                                             '</table>'+
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
 
 
                 var coords = {};
-                for( var i = 0; i < 6; i++ ) {
+                for( var i = 0; i < 10; i++ ) {
                     table.find("#oskari-coordinate-table").append(this.template.row( { coords: coords } ) );
                     me.incrementNumRows();
                 }
@@ -95,6 +95,10 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                 });
             }
         },
+        removeRow: function () {
+            this.getElements().rows.first().remove();
+            this.decrementNumRows();
+        },
         /**
          * @method populate
          *
@@ -102,11 +106,15 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
          */
         populate: function( cell, data ) {
             var table = this.getElements().table;
+            var i = 0;
             for ( var key in data ) {
-                if ( data.hasOwnProperty( key ) ) {
-                    var row = this.template.row( { coords: data[key] } );
-                    jQuery( cell ).parent().after( row );
-                    this.incrementNumRows();
+                if ( i === 9 ) {
+                    if ( data.hasOwnProperty( key ) ) {
+                        var row = this.template.row( { coords: data[key] } );
+                        jQuery( cell ).parent().after( row );
+                        this.incrementNumRows();
+                        i++;
+                    }
                 }
             }
             table.trigger('rowCountChanged');

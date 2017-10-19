@@ -31,8 +31,6 @@ function(instance) {
 
 
     getConvertedCoordinates: function( payload, successCb, errorCb ) {
-        debugger;
-        successCb(payload.coords);
         jQuery.ajax({
            dataType: "json",
            type: "POST",

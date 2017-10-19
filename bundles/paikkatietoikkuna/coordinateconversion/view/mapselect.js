@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
                 me.helper.removeMarkers();
                 dialog.close();
                 me.instance.toggleViews("conversion");
+                me.instance.getViews().conversion.mapselect = false;
                 me.mapcoords = [];
             });
 

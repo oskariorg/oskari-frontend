@@ -194,6 +194,9 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         getSelectionValue: function ( selectListInstance ) {
             return selectListInstance.getValue();
         },
+        setSelectionValue: function ( selectInstance, value ) {
+            selectInstance.setValue( value );
+        },
         getCrsOptions: function () {
             var instances = this.getSelectInstances();
             var sourceSelection = this.getSelectionValue( instances.input[3] );
@@ -292,9 +295,18 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                 jQuery('.mapselect').on("click", function() {
                     me.instance.toggleViews("mapselect");
                     me.mapselect = true; 
-                    me.clipboardInsert = false;                   
+                    me.clipboardInsert = false;
+                    me.selectEPSG3067();
                 });
          },
+        selectEPSG3067: function () {
+            var instances = this.getSelectInstances();
+            // EPSG-3067 settings
+            var sourceSelection = this.setSelectionValue( instances.input[0], "DATUM_EUREF-FIN" );
+            var sourceHeightSelection = this.setSelectionValue( instances.input[1], "KOORDINAATISTO_SUORAK_2D" );
+            var sourceSelection = this.setSelectionValue( instances.input[2], "TM" );
+            var sourceHeightSelection = this.setSelectionValue( instances.input[3], "COORDSYS_ETRS-TM35FIN" );
+        },
         /**
          * @method handleRadioButtons
          * Inits the on change listeners for the radio buttons

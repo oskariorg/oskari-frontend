@@ -67,6 +67,7 @@
 .coordinateconversion-buttons{
     clear: left;
     width: 100%;
+    padding-top: 1em;
 }
 .coordinateconversion-buttons.show.clear{
     float:left;
@@ -141,18 +142,14 @@ input[type="radio"]:checked + label span {
 *TABLE
 */
 #oskari-coordinate-table {
-    height: 100%;
-    overflow-y: scroll;
-}
-#oskari-coordinate-table-result {
-    height: 100%;
+    height: 80%;
     overflow-y: scroll;
 }
 .oskari-table-content {
     float:left;
     width: 20em !important;
     height: 20em;
-    overflow: hidden;
+    overflow: auto;
     margin-top: 0px;
     border: 1px solid rgba(255,255,255,0.3);
 }
@@ -255,15 +252,6 @@ tr:hover td {
     background-image: url('../images/icon-info.png');
     height: 1.3em;
     width: 1.3em;
-}
-::-webkit-scrollbar {
-    width: 6px;
-} 
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-} 
-::-webkit-scrollbar-thumb {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
 }
 
 @media screen and (max-width: 640px) {
