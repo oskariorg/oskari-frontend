@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.timeseries.TimeseriesUIProtocol
+ * @class Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol
  *
  * Interface/protocol definition for Timeseries Control UI delegate
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesUIProtocol',
+Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol',
 /**
  * @method create called automatically on construction
  * @static
@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesUIProtocol'
  * Implement protocol, never instantiate
  */
 function() {
-    throw new Error("Oskari.mapframework.bundle.timeseries.TimeseriesUIProtocol should not be instantiated");
+    throw new Error("Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol should not be instantiated");
 }, {
     /**
      * @method getTimes

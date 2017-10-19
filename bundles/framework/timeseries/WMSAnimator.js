@@ -57,7 +57,7 @@ function (sandbox, layerId) {
     }
 }, {
     'protocol': [
-        'Oskari.mapframework.bundle.timeseries.TimeseriesUIProtocol'
+        'Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol'
     ]
 }
 );
