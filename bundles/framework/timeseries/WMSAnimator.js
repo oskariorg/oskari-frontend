@@ -13,6 +13,8 @@ function (sandbox, layerId) {
     this._subsetRange = [times[0], times[times.length-1]];
 
     this._doneCallback = null;
+    this._isBuffering = false;
+    this._isLoading = false;
 
     this._sandbox.register(this);
     var p;
@@ -31,11 +33,8 @@ function (sandbox, layerId) {
         'ProgressEvent': function(event) {
             if(event.getStatus() && this._layer.getId() === event.getId()) {
                 console.log('progressevent');
-                if(this._doneCallback){
-                    var cb = this._doneCallback;
-                    this._doneCallback = null;
-                    cb();
-                }
+                this._isLoading = false;
+                this._resolveWait();
             }
         }
     },
@@ -98,12 +97,54 @@ function (sandbox, layerId) {
      * @param {function} doneCallback callback that will be called after new time has been loaded
      */
     requestNewTime : function(newTime, nextTime, doneCallback) {
+        var me = this;
         this._currentTime = newTime;
         var requestBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
         if(requestBuilder) {
+            this._isLoading = true;
             this._doneCallback = doneCallback;
+            if(nextTime) {
+                this._bufferImages(this._mapModule._getLayerTileUrls(this._layer.getId()), nextTime, function(success){
+                    me._isBuffering = false;
+                    me._resolveWait();
+                });
+            }
             var request = requestBuilder(this._layer.getId(), true, {"TIME": newTime});
             this._sandbox.request(this, request);
+        }
+    },
+    _bufferImages: function(urls, nextTime, callback) {
+        this._isBuffering = true;
+        var imgCount = urls.length;
+        if(imgCount === 0) {
+            callback(true);
+            return;
+        }
+        var aborted = false;
+        var timeout = setTimeout(function() {
+            aborted = true;
+            callback(false);
+        }, 5000);
+        urls.forEach(function (url) {
+            var image = document.createElement('img');
+            image.onload = function () {
+                if(aborted) {
+                    return;
+                }
+                imgCount--;
+                if(imgCount === 0){
+                    clearTimeout(timeout);
+                    callback(true);
+                }
+            };
+            image.src = url.replace(/([?&])(TIME=[^&]*)/, '$1TIME=' + encodeURIComponent(nextTime));
+        });
+    },
+    _resolveWait: function() {
+        if(!this._isLoading && !this._isBuffering && this._doneCallback){
+            var cb = this._doneCallback;
+            this._doneCallback = null;
+            cb();
         }
     },
     /**
@@ -125,57 +166,3 @@ function (sandbox, layerId) {
     ]
 }
 );
-
-Oskari.clazz.define('Oskari.mapframework.domain.ImageBuffer',
-function () {
-    this._images = [];
-    this._currentBatch = 0;
-    this._timeout = null;
-    this._startTime = null;
-},
-{
-    loadImages: function (urls, millisToTarget, millisToTimeout, callback) {
-        var me = this;
-        me._images = [];
-        me._startTime = Date.now();
-        me._currentBatch += 1;
-        clearTimeout(me._timeout);
-
-        var batch = me._currentBatch;
-        var aborted = false;
-        var numCompleted = 0;
-
-        urls.forEach(function (url) {
-            var image = document.createElement('img');
-            image.onload = function () {
-                if (batch === me._currentBatch && !aborted) {
-                    numCompleted += 1;
-                    if (numCompleted === urls.length) {
-                        clearTimeout(me._timeout);
-                        var timeLeftToTarget = me._startTime + millisToTarget - Date.now();
-                        if(timeLeftToTarget <= 0){
-                            callback(true);
-                        } else {
-                            me._timeout = setTimeout(function () {
-                                callback(true);
-                            }, timeLeftToTarget);
-                        }
-                    }
-                }
-            };
-            image.src = url;
-            me._images.push(image);
-        });
-
-        me._timeout = setTimeout(function () {
-            if (numCompleted < urls.length && !aborted) {
-                callback(false);
-            }
-        }, millisToTimeout);
-
-        return function() {
-            aborted = true;
-            clearTimeout(me._timeout);
-        };
-    }
-});

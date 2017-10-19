@@ -49,15 +49,12 @@ Oskari.clazz.define(
          */
         __eventHandlers: {
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
-                console.log('AfterRearrangeSelectedMapLayerEvent', event)
                 this.updateTimeseriesLayers();
             },
             'AfterMapLayerAddEvent': function (event) {
-                console.log('AfterMapLayerAddEvent', event)
                 this.updateTimeseriesLayers();
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                console.log('AfterMapLayerRemoveEvent', event)
                 this.updateTimeseriesLayers();
                 var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
                 series.delegate.destroy();

@@ -132,8 +132,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         },
         _requestNewTime: function() {
             var me = this;
+            var index = d3.bisectLeft(this._uiState.times, this._uiState.currentTime) +1;
+            var nextTime = null;
+            if(me._uiState.isAnimating) {
+                nextTime = this._getNextTime(this._uiState.currentTime);
+            }
             me._waitingForFrame = true;
-            me._delegate.requestNewTime(me._uiState.currentTime, null, function(){
+            me._delegate.requestNewTime(me._uiState.currentTime, nextTime, function(){
                 me._waitingForFrame = false;
                 if(me._uiState.isAnimating) {
                     me._throttleAnimation();
@@ -149,7 +154,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             if(this._waitingForFrame) {
                 return;
             }
-            var targetTime = moment(this._uiState.currentTime);
+            var nextTime = this._getNextTime(this._uiState.currentTime);
+
+            if(!nextTime){
+                var index = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeEnd)-1, 0);
+                nextTime = this._uiState.times[index];
+                this._setAnmationState(false);
+            }
+            
+            if(this._uiState.currentTime !== nextTime) {
+                this._uiState.currentTime = nextTime;
+                this._requestNewTime();
+                this._renderHandle();
+                this._updateTimeDisplay();
+            }
+        },
+        _getNextTime(fromTime){
+            var targetTime = moment(fromTime);
             var index;
             if(this._uiState.stepInterval) {
                 targetTime.add(1, this._uiState.stepInterval);
@@ -158,18 +179,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
             }
             if(targetTime.toISOString() > this._uiState.rangeEnd) {
-                this._setAnmationState(false);
-                index = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeEnd)-1, 0);
+                return null;
+                
             } else if(index >= this._uiState.times.length-1) {
-                this._setAnmationState(false);
-                index = this._uiState.times.length-1;
+                return null;
             }
-            if(this._uiState.currentTime !== this._uiState.times[index]) {
-                this._uiState.currentTime = this._uiState.times[index];
-                this._requestNewTime();
-                this._renderHandle();
-                this._updateTimeDisplay();
-            }
+            return this._uiState.times[index];
         },
         /**
          * @method _createControlElement
