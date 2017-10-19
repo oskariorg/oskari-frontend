@@ -104,6 +104,7 @@ Oskari.clazz.define(
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
+                    this._registerLayerEvents(layerImpl, _layer, 'image');
                 } else {
                     layerImpl = new ol.layer.Tile({
                         source : new ol.source.OskariTileWMS({
@@ -116,7 +117,7 @@ Oskari.clazz.define(
                         opacity: layer.getOpacity() / 100
                     });
 
-                    this._registerLayerEvents(layerImpl, _layer);
+                    this._registerLayerEvents(layerImpl, _layer, 'tile');
                 }
                 // Set min max Resolutions
                 if (_layer.getMaxScale() && _layer.getMaxScale() !== -1 ) {
@@ -136,19 +137,19 @@ Oskari.clazz.define(
             this.setOLMapLayers(layer.getId(), olLayers);
 
         },
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function(layer, oskariLayer, prefix){
           var me = this;
           var source = layer.getSource();
 
-          source.on('tileloadstart', function() {
+          source.on(prefix + 'loadstart', function() {
             me.getMapModule().loadingState( oskariLayer._id, true);
           });
 
-          source.on('tileloadend', function() {
+          source.on(prefix + 'loadend', function() {
             me.getMapModule().loadingState( oskariLayer._id, false);
           });
 
-          source.on('tileloaderror', function() {
+          source.on(prefix + 'loaderror', function() {
             me.getMapModule().loadingState( oskariLayer.getId(), null, true );
           });
 
