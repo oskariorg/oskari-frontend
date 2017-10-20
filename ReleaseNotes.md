@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.45.0
+
+### ProgressEvents for maplayers
+
+WMS singletile layers in OpenLayers 3 implementation now send progress events like tiled layers.
+
 ## 1.44.1
 
 ### Grid
