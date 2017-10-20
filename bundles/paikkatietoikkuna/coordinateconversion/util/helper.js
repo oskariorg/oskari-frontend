@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
             this.instance.getViews().mapselect.getCoords( this.clickCoordinates )
         }
     },
-    getClickCoordinates: function( cb ) {
+    getClickCoordinates: function() {
         return this.clickCoordinates;
     },
     addMarkerForCoords: function (coords, startingSystem) {
