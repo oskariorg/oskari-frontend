@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         var me = this;
         me.instance = instance;
         me.loc = me.instance.getLocalization("flyout");
-        me.helper = Oskari.clazz.create('Oskari.coordinateconversion.helper', me.instance, me.loc);
+        me.helper = me.instance.helper;
         me.mapselect = false;
         me.clipboardInsert = false;
         me.conversionContainer = null
@@ -46,13 +46,13 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                                     '</div>'
                                     ),  
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
-            conversionbutton: _.template('<div class="conversionbtn" style="display:inline-block; padding-left: 8px;">' +
+            conversionbutton: _.template('<div class="conversionbtn" style="display:inline-block;">' +
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
             utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
                                         '<input id="overlay-btn" class="clear" type="button" value="<%= clear %> ">' +
                                         '<input id="overlay-btn" class="show" type="button" value="<%= show %> ">' +
-                                        '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %> ">' +
+                                        // '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %> ">' +
                                         '</div>')
         }
     }, {
@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             me.fileinput.create();
             var inputTable = me.inputTable.create();
             var targetTable = me.outputTable.create();
-            me.outputTable.getElements().table.addClass('target');
+            me.outputTable.getContainer().find(".coordinatefield-table").addClass('target');
 
             if( me.fileinput.canUseAdvancedUpload() ) {
                 var fileInputElement = me.fileinput.handleDragAndDrop( this.handleFile.bind(this) );

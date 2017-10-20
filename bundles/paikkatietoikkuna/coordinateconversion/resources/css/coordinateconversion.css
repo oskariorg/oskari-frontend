@@ -61,6 +61,7 @@
     width: 20em !important;
 }
 .conversionbtn {
+    padding-left: 1.5em;
     float:left;
     margin-top: 6.25rem;
 }
@@ -169,6 +170,9 @@ input[type="radio"]:checked + label span {
     margin-bottom: 0;
     table-layout: fixed;
     word-wrap: break-word;
+}
+.target {
+    padding-left:2.5em;
 }
 th {
   padding: 20px 8px;

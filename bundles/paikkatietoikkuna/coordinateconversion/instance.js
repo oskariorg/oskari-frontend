@@ -29,6 +29,7 @@ function () {
         this._mapmodule = null;
         this.conversionservice = null;
         this.views = null;
+        this.helper = null;
 }, {
     __name: 'coordinateconversion',
     /**
@@ -118,6 +119,7 @@ function () {
         this.conversionservice = this.createService(sandbox, conf);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization();
+        this.helper = Oskari.clazz.create('Oskari.coordinateconversion.helper', this, this._localization);
         me.instantiateViews();
         sandbox.register(me);
 
