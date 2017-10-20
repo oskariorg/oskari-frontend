@@ -99,10 +99,18 @@ function() {
     *
     * @returns {Boolean} is tool displayed
     */
-    isDisplayed: function() {
-        var me = this,
-            statsLayer = me._getStatsLayer();
-        return statsLayer !== null;
+    isDisplayed: function(data) {
+        var configExists = Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
+        if(!configExists) {
+            return false;
+        }
+        if(!Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid')) {
+            Oskari.log('Oskari.mapframework.publisher.tool.ClassificationTool')
+                .warn("Published map had config, but current appsetup doesn't include StatsGrid! " +
+                  "The thematic map functionality will be removed if user saves the map!!");
+            return false;
+        }
+        return true;
     },
     getValues: function() {
         var me = this,

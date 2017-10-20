@@ -239,8 +239,8 @@ Oskari.clazz.define(
                     delete this._features[layerId];
                 }
             }
-            // Removes all features from all layers
-            else {
+            // Removes all features from all layers if layer is not specified
+            else if(!layer) {
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
@@ -487,6 +487,8 @@ Oskari.clazz.define(
                 });
 
                 if (options.prio && !isNaN(options.prio)) {
+                    // clear any features since we are re-adding the same features sorted by priority
+                    vectorSource.clear();
                     me._features[options.layerId].sort(function(a, b) {
                         return b.prio - a.prio;
                     });

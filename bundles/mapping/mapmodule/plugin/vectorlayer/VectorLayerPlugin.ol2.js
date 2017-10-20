@@ -231,8 +231,8 @@ Oskari.clazz.define(
                     delete this._features[layerId];
                 }
             }
-            // Removes all features from all layers
-            else {
+            // Removes all features from all layers if layer is not specified
+            else if(!layer) {
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
