@@ -262,7 +262,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         handleFile: function( fileContent ) {
             var dataJson = this.validateData( fileContent );
             var insertTarget = jQuery('#oskari-coordinate-table').find('td').first();
-            this.table.populate( insertTarget, dataJson );
+            this.inputTable.populate( insertTarget, dataJson );
         },
         /**
          * @method handleRadioButtons
@@ -278,7 +278,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             var importfile = me.file.getElement().import;
             jQuery('input[type=radio][name=load]').change(function() {
                 if (this.value == '1') {
-                    me.showDialogue( importfile, false );
+                    // me.showDialogue( importfile, false );
                     clipboardInfo.hide();
                     fileInput.show();
                     me.mapselect = false;

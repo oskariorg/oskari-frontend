@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
             var table = this.getElements().table;
             var i = 0;
             for ( var key in data ) {
-                if ( i === 9 ) {
+                if ( i <= 9 ) {
                     if ( data.hasOwnProperty( key ) ) {
                         var row = this.template.row( { coords: data[key] } );
                         jQuery( cell ).parent().after( row );
