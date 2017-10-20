@@ -293,8 +293,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                 me.inputTable.isEditable( me.clipboardInsert );
             });
                 jQuery('.mapselect').on("click", function() {
+                    me.mapselect = true;    
                     me.instance.toggleViews("mapselect");
-                    me.mapselect = true; 
                     me.clipboardInsert = false;
                     me.selectEPSG3067();
                 });

@@ -98,7 +98,7 @@ function () {
      */
     getLocalization: function (key) {
         if (!this._localization) {
-            this._localization = Oskari.getLocalization(this.getName());
+            this._localization = Oskari.getLocalization( this.getName() );
         }
         if (key) {
             return this._localization[key];

@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
     this.sb = instance.sandbox;
     this.sb.register(this);
     this.removeMarkersReq = this.sb.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+    this.addMarkerReq = this.sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
     for ( var p in this.eventHandlers ) {
         this.sb.registerForEventByName(this, p);
         this.clickCoordinates = null;
@@ -15,17 +16,17 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
     },
     init: function () {},
     eventHandlers: {
-        'MapClickedEvent': function (event) {
+        'MapClickedEvent': function ( event, cb ) {
             this.clickCoordinates = event._lonlat;
             this.addMarkerForCoords( this.clickCoordinates );
+            this.instance.getViews().mapselect.getCoords( this.clickCoordinates )
         }
     },
-    getMapCoordinates: function() {
+    getClickCoordinates: function( cb ) {
         return this.clickCoordinates;
     },
     addMarkerForCoords: function (coords, startingSystem) {
-    var reqBuilder = this.sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
-        if (reqBuilder) {
+        if ( this.addMarkerReq ) {
                 var data = {
                     x: Number(coords.lon),
                     y: Number(coords.lat),
@@ -35,7 +36,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
                 if ( startingSystem ) {
                     data.msg = "lon: "+coords.lon+ "lat: "+coords.lat;
                 }
-            var request = reqBuilder(data);
+            var request = this.addMarkerReq(data);
             this.sb.request('MainMapModule', request);
         }
     },

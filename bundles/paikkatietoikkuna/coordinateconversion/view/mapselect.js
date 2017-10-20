@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
         var me = this;
         me.instance = instance;
         me.loc = me.instance.getLocalization("flyout");
-        me.helper = Oskari.clazz.create('Oskari.coordinateconversion.helper', me.instance, me.loc);
+        me.helper = me.instance.helper;
         me.mapselectContainer = null;
         me.mapcoords = [];
         me.dialog = null;
@@ -47,16 +47,20 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
 
             dialog.show('Note', this.loc.datasourceinfo.mapinfo, [cancelBtn, btn]);
             dialog.moveTo(jQuery('.oskari-tile.coordinateconversion'), 'right', true);
-            this.getMapCoordinates();
+            this.mapClicksListener();
         },
-        getMapCoordinates: function() {
+        getCoords: function ( coords ) {
+            if( coords != null ) {
+                this.mapcoords.push(coords);
+            }
+        },
+        mapClicksListener: function() {
             var me = this;
-            jQuery('#mapdiv').on("click", function () {
-                    var coords = me.helper.getMapCoordinates();
-                    if(coords != null) {
-                        me.mapcoords.push(coords);
-                    }
-            });
+            if( me.instance.getViews().conversion.mapselect ) {
+                jQuery('#mapdiv').on("click", function () {});
+            } else {
+                return;
+            }
         }
     }
 );
