@@ -20,6 +20,8 @@ Oskari.clazz.define(
         me._layerTypeAnimators = {};
         me._timeseriesService = timeseriesService;
         me._sandbox = sandbox;
+        me._popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
+        me.loc = Oskari.getMsg.bind(null, 'timeseries');
         for (p in me.__eventHandlers) {
             if (me.__eventHandlers.hasOwnProperty(p)) {
                 me._sandbox.registerForEventByName(me, p);
@@ -55,9 +57,21 @@ Oskari.clazz.define(
                 this.updateTimeseriesLayers();
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                this.updateTimeseriesLayers();
                 var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
                 series.delegate.destroy();
+                this.updateTimeseriesLayers();
+            }
+        },
+        _checkMultipleLayers: function() {
+            if(this._timeseriesService.getCountByType('layer') > 1) {
+                this._popupService.closeAllPopups(false);
+                var popup = this._popupService.createPopup();
+                var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                closeBtn.setTitle(this.loc('alert.ok'));
+                closeBtn.setHandler(function () {
+                    popup.close(true);
+                });
+                popup.show(this.loc('alert.title'), this.loc('alert.message'), [closeBtn]);
             }
         },
         /**
@@ -98,5 +112,6 @@ Oskari.clazz.define(
                     }
                 }
             }
+            me._checkMultipleLayers();
         }
     });

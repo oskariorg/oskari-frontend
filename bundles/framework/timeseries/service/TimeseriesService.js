@@ -114,5 +114,11 @@ Oskari.clazz.define(
                 }
             });
             return out;
+        },
+        getCountByType: function(type) {
+            var me = this;
+            return Object.keys(this._timeseriesThings).filter(function(key){
+                return me._timeseriesThings[key].type === type;
+            }).length;
         }
     });
