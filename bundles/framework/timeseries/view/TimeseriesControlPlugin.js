@@ -339,13 +339,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 '<div class="timeseries-stepper">' +
                     '<div class="timeseries-back"></div><div class="timeseries-playpause"></div><div class="timeseries-forward"></div><div class="timeseries-datetime"></div>' +
                 '</div>');
-            var dateTimeInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput');
-            dateTimeInput.setName('datetime');
-            dateTimeInput.setEnabled(false);
+            var dateTime = template.find('.timeseries-datetime');
             me._updateTimeDisplay = function() {
-                dateTimeInput.setValue(me.loc('dateRender', {val: new Date(me._uiState.currentTime)}));
-            },
-            template.find('.timeseries-datetime').append(dateTimeInput.getElement());
+                dateTime.text(me.loc('dateRender', {val: new Date(me._uiState.currentTime)}));
+            };
             template.find('.timeseries-playpause').on('click', function(e){
                 me._setAnmationState(!me._uiState.isAnimating);
             });

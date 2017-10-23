@@ -43,19 +43,14 @@ g.subset-axis text, g.full-axis text {
   display: inline-block;
   vertical-align: top;
 }
-.timeseries-aux .oskari-textinput, .timeseries-aux select {
+.timeseries-aux select {
   width: 100%!important;
+  height: 24px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
-.timeseries-aux .oskari-textinput .icon-close {
-  display: none!important;
-}
-.timeseries-aux label.oskari-formcomponent input[type=text],
 .timeseries-aux label.oskari-formcomponent.oskari-select {
   width: 100%!important;
-}
-.timeseries-aux label.oskari-formcomponent input[type=text] {
-  color: #000!important;
-  opacity: 0.7!important;
 }
 .timeseries-aux label.oskari-formcomponent.oskari-select > div{
   text-align: left;
@@ -181,6 +176,9 @@ g.subset-axis text, g.full-axis text {
   width: 122px;
   height: 40px;
   margin: 0 0 0 10px;
+  text-align: left;
+  line-height: 40px;
+  font-size: 15px;
 }
 .timeseries-timelines{
   display: inline-block;
