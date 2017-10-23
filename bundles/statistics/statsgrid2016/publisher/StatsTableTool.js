@@ -86,11 +86,6 @@ function() {
             return;
         }
         stats.showToggleButtons(enabled);
-
-        if(enabled) {
-            // reset flyout location to the edge of the publish sidebar for the preview (this doesn't open the flyout)
-            stats.getFlyout().move(0, jQuery('.basic_publisher').width() + jQuery('.basic_publisher').position().left);
-        }
     },
     /**
     * Is displayed.

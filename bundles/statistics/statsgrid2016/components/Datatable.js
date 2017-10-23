@@ -1,7 +1,7 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, locale) {
     this.locale = locale;
     this.sb = sandbox;
-    this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this.log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
     this._bindToEvents();
@@ -259,7 +259,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
                 // If not published then show close icon
                 if(me.indicatorRemovalEnabled) {
+                    tableHeader.find('.icon').attr('data-ind-hash', ind.hash);
                     tableHeader.find('.icon').bind('click', function(){
+                        var hash = jQuery(this).attr('data-ind-hash');
                         log.info('Removing indicator ', + ind.hash);
 
                         // Set default sort order
@@ -374,7 +376,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     _bindToEvents : function() {
         var me = this;
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-        var state = this.service.getStateService();
+        if(me._bindedEvents === true) {
+            return;
+        }
 
         this.service.on('StatsGrid.IndicatorEvent', function(event) {
             if(event.isRemoved()) {
@@ -408,6 +412,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 me.grid.selectColumn(current.hash);
             }
         });
+        me._bindedEvents = true;
     },
 
     _setSort: function(){
@@ -451,7 +456,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
     setHeaderHeight: function(){
         var me = this;
-        var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
+        var statsTableEl = jQuery('.oskari-flyout.statsgrid-data-flyout .stats-table');
 
         // IE fix
         if(statsTableEl.length > 0) {
@@ -511,7 +516,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     updateModel : function(model, regions) {
         var me = this;
-        var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
+        var statsTableEl = jQuery('.oskari-flyout.statsgrid-data-flyout .stats-table');
         var gridLoc = me.locale.statsgrid || {};
 
         var indicators = this.getIndicators();
