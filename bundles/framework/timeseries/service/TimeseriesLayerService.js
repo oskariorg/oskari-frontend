@@ -62,8 +62,13 @@ Oskari.clazz.define(
                 this.updateTimeseriesLayers();
             }
         },
-        _checkMultipleLayers: function() {
-            if(this._timeseriesService.getCountByType('layer') > 1) {
+        /**
+         * @method _checkMultipleLayers
+         * @private
+         * Show popup if there are more than one selected timeseries layers
+         */
+        _checkMultipleLayers: function () {
+            if (this._timeseriesService.getCountByType('layer') > 1) {
                 this._popupService.closeAllPopups(false);
                 var popup = this._popupService.createPopup();
                 var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -77,7 +82,6 @@ Oskari.clazz.define(
         /**
          * @public @method onEvent
          * Event is handled forwarded to correct eventHandlers if found or discarded if not.
-         *
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          */
         onEvent: function (event) {
@@ -87,9 +91,23 @@ Oskari.clazz.define(
             }
             return handler.apply(this, [event]);
         },
+        /**
+         * @method registerLayerType
+         * Registers animator/delegate class name for certain type of layer
+         * @param {String} type layer type (AbstractLayer.getLayerType())
+         * @param {String} className class name to use for layer type
+         */
         registerLayerType: function (type, className) {
             this._layerTypeAnimators[type] = className;
         },
+        /**
+         * @method _layerDelegateFactory
+         * @private
+         * Requests change in current selected time
+         * @param {String} layerId id of layer
+         * @param {String} layerType type of layer (AbstractLayer.getLayerType())
+         * @return {Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol} doneCallback callback that will be called after new time has been loaded
+         */
         _layerDelegateFactory: function (layerId, layerType) {
             var animatorClassName = this._layerTypeAnimators[layerType];
             if (!animatorClassName) {
@@ -97,6 +115,10 @@ Oskari.clazz.define(
             }
             return Oskari.clazz.create(animatorClassName, this._sandbox, layerId);
         },
+        /**
+         * @method updateTimeseriesLayers
+         * Update timeseries service state based on current selected layers
+         */
         updateTimeseriesLayers: function () {
             var me = this,
                 layers = me._sandbox.findAllSelectedMapLayers();
