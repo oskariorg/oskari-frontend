@@ -102,7 +102,8 @@ function() {
     isDisplayed: function(data) {
         var hasStatsLayerOnMap = this._getStatsLayer() !== null;
         if(hasStatsLayerOnMap) {
-            // If there's a statslayer on the map, the user wants to publish it
+            // If there's a statslayer on the map show the tool for statistics functionality
+            // relevant when creating a new published map
             return true;
         }
         // If there isn't one, the user hasn't visited the functionality on this session
