@@ -100,6 +100,13 @@ function() {
     * @returns {Boolean} is tool displayed
     */
     isDisplayed: function(data) {
+        var hasStatsLayerOnMap = this._getStatsLayer() !== null;
+        if(hasStatsLayerOnMap) {
+            // If there's a statslayer on the map, the user wants to publish it
+            return true;
+        }
+        // If there isn't one, the user hasn't visited the functionality on this session
+        // Check if the user is editing a map with statslayer
         var configExists = Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
         if(!configExists) {
             return false;
