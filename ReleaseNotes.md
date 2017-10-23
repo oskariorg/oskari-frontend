@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.44.2
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools for statistics functionality activated only when editing published maps with said functionality and not when creating new published maps.
+
+### Build-script
+
+Fixed an issue where images were not correctly copied for minified application when folder name included uppercase characters.
+
 ## 1.44.1
 
 ### Grid
