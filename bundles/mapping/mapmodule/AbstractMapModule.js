@@ -2380,12 +2380,12 @@ Oskari.clazz.define(
             positionAlign: 'left'
         }],
         /**
-         * @method _getLayerTileUrls
+         * @method getLayerTileUrls
          * @param layerId id of the layer
          * @return {String[]}
          * Get urls of tile layer tiles. Override in implementation
          */
-        _getLayerTileUrls: function(layerId) {
+        getLayerTileUrls: function(layerId) {
             return [];
         },
         /**

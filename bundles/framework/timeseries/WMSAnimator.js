@@ -104,7 +104,7 @@ function (sandbox, layerId) {
             this._isLoading = true;
             this._doneCallback = doneCallback;
             if(nextTime) {
-                this._bufferImages(this._mapModule._getLayerTileUrls(this._layer.getId()), nextTime, function(success){
+                this._bufferImages(this._mapModule.getLayerTileUrls(this._layer.getId()), nextTime, function(success){
                     me._isBuffering = false;
                     me._resolveWait();
                 });
