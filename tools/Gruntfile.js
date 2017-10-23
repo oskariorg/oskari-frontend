@@ -3,12 +3,7 @@ var _ = require('lodash'),
     path =  require('path');
 var workDir = process.cwd();
 console.log('Running process from:', workDir);
-var OSKARI_FOLDER = '';
-if(workDir.indexOf(path.sep + 'tools') === -1) {
-    console.warn('Grunt installed as global? Images might not copy correctly on build!');
-} else {
-    OSKARI_FOLDER = path.basename(path.join(workDir,'..'));
-}
+var OSKARI_FOLDER = path.basename(path.join(workDir,'..'));
 
 module.exports = function (grunt) {
     'use strict';
@@ -434,9 +429,8 @@ module.exports = function (grunt) {
             });
         };
         var getResourcePaths = function(list) {
-            // TODO: OSKARI_FOLDER isn't detected correctly if Grunt is installed with --global
-            var TO_MATCH = OSKARI_FOLDER + path.sep + 'bundles';
-            console.log('Trying to find resources from:', TO_MATCH);
+            var TO_MATCH = (OSKARI_FOLDER + path.sep + 'bundles').toLowerCase();
+            console.log('Trying to find resources under:', TO_MATCH);
             var matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {
