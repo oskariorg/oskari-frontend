@@ -6,11 +6,11 @@ Oskari.registerLocalization(
         "title": "",
         "desc": "",
         "label": {
-            "animationSpeed": "Animering hastighet",
+            "animationSpeed": "Animeringshastighet",
             "skipAhead": "Hoppa över"
         },
         "animationSpeed": {
-            "slow": "Långsamt",
+            "slow": "Långsam",
             "normal": "Normal",
             "fast": "Snabb"
         },
@@ -25,7 +25,7 @@ Oskari.registerLocalization(
         "dateRender": "{val, date, short} {val, time, short}",
         "alert": {
             "title": "Obs!",
-            "message": "Du har flera valda tidsserie kartlager. Bara den placerad högst upp kan kotrolleras.",
+            "message": "Flera kartlager med tidsserier är valda. Bara den översta kan kotrolleras.",
             "ok": "OK"
         }
     }
