@@ -10,10 +10,10 @@ var handlersToClean = [];
 // ##################### //
 
 var general = {
-    "ExpectedOskariVersion": "1.43.0",
-    "ExpectedRPCVersion": "2.0.4",
-    "IsSupported": true,
-    "srsName": "EPSG:4326"
+  "ExpectedOskariVersion": "1.44.1",
+  "ExpectedRPCVersion": "2.0.4",
+  "IsSupported": true,
+  "srsName": "EPSG:4326"
 };
 
 // ##################### //
@@ -21,24 +21,216 @@ var general = {
 // ##################### //
 
 var defaultPosition = {
-    "centerX": 687936,
-    "centerY": 7295056,
-    "zoom": 0,
-    "scale": 5805343,
-    "srsName": "EPSG:3067"
-};
-var defaultLayer = {
-    "Id": "4",
-    "Opacity": 100,
-    "visible": true,
-    "name": "OSM Worldwide",
+  "centerX": 386020,
+  "centerY": 6670057,
+  "zoom": 0,
+  "scale": 5805343,
+  "srsName": "EPSG:3067"
 };
 
+var defaultLayer = {
+  "Id": "base_35",
+  "Opacity": 100,
+  "visible": true,
+  "name": "Taustakarttasarja",
+};
+
+// ##################### //
+// ##### Features ##### //
+// ##################### //
+
+var pointGeojsonObject = {
+  'type': 'FeatureCollection',
+  'crs': {
+    'type': 'name',
+    'properties': {
+      'name': defaultPosition.srsName
+    }
+  },
+  'features': [{
+    'type': 'Feature',
+    'geometry': {
+      'type': 'Point',
+      'coordinates': [defaultPosition.centerX, defaultPosition.centerY]
+    },
+    'properties': {
+      'label': 'I am a point feature!',
+      'test_property': "point feature"
+    }
+  }]
+};
+
+var addPointFeatureParams = [pointGeojsonObject, {
+  layerId: 'VECTOR',
+  clearPrevious: false,
+  centerTo: true,
+  cursor: 'zoom-in',
+  featureStyle: {
+    image: {
+      shape: 4,
+      size: 5,
+      color: '#ff3300',
+      stroke: '#000000'
+    },
+    text: {
+      scale: 1.3,
+      fill: {
+        color: 'rgba(0,0,0,1)'
+      },
+      stroke: {
+        color: 'rgba(255,255,255,1)',
+        width: 2
+      },
+      labelProperty: 'label',
+      offsetX: 65,
+      offsetY: 8
+    }
+  }
+}];
+
+var lineGeojsonObject = {
+  'type': 'FeatureCollection',
+  'crs': {
+    'type': 'name',
+    'properties': {
+      'name': defaultPosition.srsName
+    }
+  },
+  'features': [{
+    'type': 'Feature',
+    'geometry': {
+      'type': 'LineString',
+      'coordinates': [
+        [defaultPosition.centerX, defaultPosition.centerY],
+        [defaultPosition.centerX + 100000, defaultPosition.centerY + 1100000]
+      ]
+    },
+    'properties': {
+      'label': "I am a line feature!",
+      'test_property': "line feature"
+    }
+  }]
+};
+
+var addLineFeatureParams = [lineGeojsonObject, {
+  layerId: 'VECTOR',
+  clearPrevious: true,
+  layerOptions: testLayerOptions,
+  centerTo: true,
+  cursor: 'zoom-in',
+  featureStyle: {
+    fill: {
+      color: '#2200ff'
+    },
+    stroke: {
+      color: '#2200ff',
+      width: 3
+    },
+    text: {
+      scale: 2.0,
+      fill: {
+        color: 'rgba(2,2,0,1)'
+      },
+      stroke: {
+        color: 'rgba(0,255,1,1)',
+        width: 0
+      },
+      labelProperty: 'label'
+    }
+  },
+  prio: 4,
+  //minScale: 1451336
+}];
+
+// Styling for object
+var featureStyle = {
+  fill: {
+    color: 'rgba(0,0,0,0.3)',
+  },
+  stroke: {
+    color: '#FF0000',
+    width: 5
+  },
+  text : {
+    scale : 2,
+    fill : {
+      color : 'rgba(0,0,0,1)'
+    },
+    stroke : {
+      color : 'rgba(255,255,255,0)',
+      width : 1
+    },
+    labelText: 'Test feature'
+  }
+};
+
+var testLayerOptions = {
+  'minResolution': 0,
+  'maxResolution': 10000
+};
+
+// # Requests: Change map layer style
+var styleParams = {
+  SLD_BODY: '<StyledLayerDescriptor xmlns=\"http://www.opengis.net/sld\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd">' +
+    '    <NamedLayer>' +
+    '    <Name>oskari:kunnat2013</Name>' +
+    '    <UserStyle>' +
+    '    <Title>SLD Cook Book: Simple polygon</Title>' +
+    '    <FeatureTypeStyle>' +
+    '    <Rule>' +
+    '    <PolygonSymbolizer>' +
+    '    <Fill>' +
+    '    <CssParameter name="fill">#000080</CssParameter>' +
+    '    <CssParameter name="fill-opacity">#000080</CssParameter>' +
+    '    </Fill>' +
+    '    </PolygonSymbolizer>' +
+    '    </Rule>' +
+    '    </FeatureTypeStyle>' +
+    '    </UserStyle>' +
+    '    </NamedLayer>' +
+    '    </StyledLayerDescriptor>'
+};
+var resetStyleParams = {
+  SLD_BODY: null
+};
+// ###################### //
+// ###### Markers ###### //
+// ###################### //
+
+var MARKER_ID = "TEST_MARKER";
+
+var testMarker = {
+  x: 0,
+  y: 0,
+  color: "ff0000",
+  msg: 'Shape: 2',
+  shape: 2, // icon number (0-6)
+  size: 12
+};
+
+var markerShapeSvg = '<svg width="32" height="32"><g fill="#9955ff" transform="matrix(0.06487924,0,0,0.06487924,0,1.73024e-6)"><g><path d="M 246.613,0 C 110.413,0 0,110.412 0,246.613 c 0,136.201 110.413,246.611 246.613,246.611 136.2,0 246.611,-110.412 246.611,-246.611 C 493.224,110.414 382.812,0 246.613,0 Z m 96.625,128.733 c 21.128,0 38.256,17.128 38.256,38.256 0,21.128 -17.128,38.256 -38.256,38.256 -21.128,0 -38.256,-17.128 -38.256,-38.256 0,-21.128 17.128,-38.256 38.256,-38.256 z m -196.743,0 c 21.128,0 38.256,17.128 38.256,38.256 0,21.128 -17.128,38.256 -38.256,38.256 -21.128,0 -38.256,-17.128 -38.256,-38.256 0,-21.128 17.128,-38.256 38.256,-38.256 z m 100.738,284.184 c -74.374,0 -138.225,-45.025 -165.805,-109.302 l 48.725,0 c 24.021,39.5 67.469,65.885 117.079,65.885 49.61,0 93.058,-26.384 117.079,-65.885 l 48.725,0 C 385.46,367.892 321.608,412.917 247.233,412.917 Z" /></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></g><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /></svg>';
+var markerShapeLink = 'http://oskari.org/logo.png';
+
+var infoboxContent = [{
+  'html': 'Test Marker Popup Content'
+}];
+
+var markerInfobox = [
+  'TEST_MARKER',
+  'Marker info box header',
+  infoboxContent, {
+    marker: MARKER_ID
+  }, {
+    mobileBreakpoints: {
+      width: 0,
+      height: 0
+    },
+    hidePrevious: true
+  }
+];
 // ###################### //
 // ###### UI ###### //
 // ###################### //
-
-// # Show a progress spinner
 
 // # Show or hide info box
 var myInfoBox =[
@@ -136,84 +328,91 @@ var infoboxId = 'myInfoBox';
 
 // # Send UI event
 var UIEvents = [
-    'coordinatetool',
-    'mapmodule.crosshair'
+  'coordinatetool',
+  'mapmodule.crosshair'
 ];
 
 // # Set cursor style
 var cursorStyles = [
-    "progress",
-    "crosshair",
-    "move",
-    "pointer",
-    "default"
+  "progress",
+  "crosshair",
+  "move",
+  "pointer",
+  "default"
 ];
+
+// ##################### //
+// ##### Location ##### //
+// ##################### //
+
+var searchCriteria = "Vantaa";
+
 
 // ##################### //
 // ##### Supported ##### //
 // ##################### //
 
 var supportedEvents = [
-    "AfterMapMoveEvent",
-    "MapClickedEvent",
-    "AfterAddMarkerEvent",
-    "MarkerClickEvent",
-    "RouteResultEvent",
-    "FeedbackResultEvent",
-    "SearchResultEvent",
-    "UserLocationEvent",
-    "DrawingEvent",
-    "FeatureEvent",
-    "InfoboxActionEvent",
-    "InfoBox.InfoBoxEvent",
-    "RPCUIEvent",
-    "map.rotated"
+  "AfterMapMoveEvent",
+  "MapClickedEvent",
+  "AfterAddMarkerEvent",
+  "MarkerClickEvent",
+  "RouteResultEvent",
+  "FeedbackResultEvent",
+  "SearchResultEvent",
+  "UserLocationEvent",
+  "DrawingEvent",
+  "FeatureEvent",
+  "InfoboxActionEvent",
+  "InfoBox.InfoBoxEvent",
+  "RPCUIEvent",
+  "map.rotated"
 ];
 
 var supportedFunctions = [
-    "getSupportedEvents",
-    "getSupportedFunctions",
-    "getSupportedRequests",
-    "getInfo",
-    "getAllLayers",
-    "getMapBbox",
-    "getMapPosition",
-    "getZoomRange",
-    "zoomIn",
-    "zoomOut",
-    "zoomTo",
-    "getPixelMeasuresInScale",
-    "resetState",
-    "getCurrentState",
-    "useState",
-    "getFeatures",
-    "setCursorStyle",
-    "sendUIEvent",
-    "getScreenshot"
+  "getSupportedEvents",
+  "getSupportedFunctions",
+  "getSupportedRequests",
+  "getInfo",
+  "getAllLayers",
+  "getMapBbox",
+  "getMapPosition",
+  "getZoomRange",
+  "zoomIn",
+  "zoomOut",
+  "zoomTo",
+  "getPixelMeasuresInScale",
+  "resetState",
+  "getCurrentState",
+  "useState",
+  "getFeatures",
+  "setCursorStyle",
+  "sendUIEvent",
+  "getScreenshot"
 ];
 
 var supportedRequests = [
-    "InfoBox.ShowInfoBoxRequest",
-    "InfoBox.HideInfoBoxRequest",
-    "MapModulePlugin.AddMarkerRequest",
-    "MapModulePlugin.AddFeaturesToMapRequest",
-    "MapModulePlugin.RemoveFeaturesFromMapRequest",
-    "MapModulePlugin.GetFeatureInfoRequest",
-    "MapModulePlugin.MapLayerVisibilityRequest",
-    "MapModulePlugin.RemoveMarkersRequest",
-    "MapModulePlugin.MarkerVisibilityRequest",
-    "MapMoveRequest",
-    "ShowProgressSpinnerRequest",
-    "GetRouteRequest",
-    "GetFeedbackServiceRequest",
-    "GetFeedbackRequest",
-    "PostFeedbackRequest",
-    "rotate.map",
-    "SearchRequest",
-    "ChangeMapLayerOpacityRequest",
-    "MyLocationPlugin.GetUserLocationRequest",
-    "DrawTools.StartDrawingRequest",
-    "DrawTools.StopDrawingRequest",
-    "MapModulePlugin.ZoomToFeaturesRequest",
-    "MapModulePlugin.MapLayerUpdateRequest"
+  "InfoBox.ShowInfoBoxRequest",
+  "InfoBox.HideInfoBoxRequest",
+  "MapModulePlugin.AddMarkerRequest",
+  "MapModulePlugin.AddFeaturesToMapRequest",
+  "MapModulePlugin.RemoveFeaturesFromMapRequest",
+  "MapModulePlugin.GetFeatureInfoRequest",
+  "MapModulePlugin.MapLayerVisibilityRequest",
+  "MapModulePlugin.RemoveMarkersRequest",
+  "MapModulePlugin.MarkerVisibilityRequest",
+  "MapMoveRequest",
+  "ShowProgressSpinnerRequest",
+  "GetRouteRequest",
+  "GetFeedbackServiceRequest",
+  "GetFeedbackRequest",
+  "PostFeedbackRequest",
+  "rotate.map",
+  "SearchRequest",
+  "ChangeMapLayerOpacityRequest",
+  "MyLocationPlugin.GetUserLocationRequest",
+  "DrawTools.StartDrawingRequest",
+  "DrawTools.StopDrawingRequest",
+  "MapModulePlugin.ZoomToFeaturesRequest",
+  "MapModulePlugin.MapLayerUpdateRequest"
 ];
