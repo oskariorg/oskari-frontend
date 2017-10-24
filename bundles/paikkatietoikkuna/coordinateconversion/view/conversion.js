@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             this.handleClipboard();
             this.handleButtons();
             this.handleRadioButtons();
-            this.inputTable.displayNumOfRows();
+            this.inputTable.bindRowCountListener();
         },
         setVisible: function ( visible ) {
             if( !visible ) {
