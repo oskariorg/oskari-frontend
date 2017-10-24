@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                 var instanceKey = key;
                 var value = json[key];
                 var size = Object.keys( value ).length;
-                 Object.keys( value ).forEach( function ( key ) {
+                Object.keys( value ).forEach( function ( key ) {
                     var obj = value[key];
                     var valObject = {
                         id : obj.id,
@@ -76,6 +76,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
             var rows = me.instance.inputTable.getElements().rows;
                 element.on( "change", function() {
                     Object.keys( instances ).forEach( function ( key ) {
+                        var instanceLength = Object.keys(instances).length;
                         dropdowns[key].find( 'option' ).hide();
                         dropdowns[key].find( '.' + instances.datum.getValue() ).show();
 
@@ -137,22 +138,19 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                         }
 
                         if ( instances.datum.getValue() !== me.instance.currentDatum || me.instance.currentDatum === undefined ) {
-                            if( i !== 0 ) {
-                                instances[key].resetToPlaceholder();
-                            }
-                        }
-                        if ( instances.dimension.getValue() !== me.instance.currentCoordinatesystem || me.instance.currentCoordinatesystem === undefined ) {
-                            if( i > 1) {
+                            if( key !== 'datum' ) {
                                 instances[key].resetToPlaceholder();
                             }
                         }
                         values = [];
                         instances[key].update();
-                        for ( var j = 0; j < instances.length; j++ ) {
-                            var vl = instances[j].getValue();
+                        // get value of each select
+                        for ( var j = 0; j < instanceLength; j++ ) {
+                            var vl = instances[ Object.keys( instances) [j] ].getValue();
                             values.push( vl );
                         }
-                        if ( i == instances.length -1 ) {
+                        // last key update stuff
+                        if ( i == instanceLength ) {
                             if( this.id === 'inputcoordsystem' ) {
                                 me.instance.inputTable.updateTitle( values );
                                 me.instance.inputTable.isEditable( me.instance.clipboardInsert );
@@ -160,7 +158,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                                 me.instance.outputTable.updateTitle( values );
                             }
                             me.instance.currentDatum = instances.datum.getValue();
-                            me.instance.currentCoordinatesystem = instances[1].getValue();
                         }
                         i++;
                     });
