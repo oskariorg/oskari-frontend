@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     /**@method create
     *  creates a select with data specified
     * @param {Object} data, needs to have the keys id and title to construct a list
+    *   * cls - optional param in data which sets a class to the list element so you can ex. toggle visible items in a dropdown based on class.
     * @param {Object} options
     * @return {jQuery Element} a list with chosen applied
      */
@@ -28,7 +29,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       }
 
       //append empty options so we can use the placeholder
-      if(options.allowReset){
+      if( options.allowReset ) {
         var emptyoption = this._option.clone();
         select.find('select').append(emptyoption);
       }
@@ -53,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     *  applies jQuery chosen to specidied element
     * @param {element} el
      */
-    makeChosen: function(el, options){
+    makeChosen: function(el, options) {
       el.find('select').chosen({
           width: options.width,
           no_results_text: options.no_results_text,
@@ -84,7 +85,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     * @param {element} select jQuery chosen elemetn
     * @param {data} data to apply
      */
-    updateOptions: function( data ){
+    updateOptions: function( data ) {
       var me = this;
       var chosen = this.element.find('select');
       chosen.trigger('chosen:close');
@@ -108,41 +109,40 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     getId: function(){
       return this.id;
     },
-    setValue: function(value){
-      if(!this.element.find('select')){
+    setValue: function( value ) {
+      if( !this.element.find( 'select' ) ) {
         Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");
       }
-      this.element.find('select').val(value);
+      this.element.find( 'select' ).val( value );
       this.update();
     },
-    getValue: function(){
-      if(typeof this.element === 'undefined'){
-        Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't get value, no element set");
+    getValue: function() {
+      if( typeof this.element === 'undefined' ) {
+        Oskari.log( 'Oskari.userinterface.component.SelectList' ).warn( "Couldn't get value, no element set" );
         return;
       }
-      return this.element.find('select').val();
+      return this.element.find( 'select' ).val();
     },
     /**@method adjustChosen
     *  checks if the dropdown needs to show up or down
     * @param {element} select
      */
-    adjustChosen: function(){
-      var selected = this.element.find('select');
+    adjustChosen: function () {
+      var selected = this.element.find( 'select' );
       //check parent element(s) to apply overflow visible if needed
       selected.on('chosen:showing_dropdown', function () {
-
-          jQuery(this).parents('div').each(function() {
+          jQuery( this ).parents( 'div' ).each( function () {
               var el = jQuery(this);
-              if(!el.hasClass('oskari-flyoutcontentcontainer')) {
-                  el.css('overflow', 'visible');
+              if( !el.hasClass( 'oskari-flyoutcontentcontainer' ) ) {
+                  el.css( 'overflow', 'visible' );
               }
           });
       });
       // determine which way the dropdown should open
-        selected.on('chosen:showing_dropdown', function(event, params) {
+        selected.on( 'chosen:showing_dropdown', function( event, params ) {
            var chosen_container = jQuery( event.target ).next( '.chosen-container' );
            var dropdown = chosen_container.find( '.chosen-drop' );
-           var dropdown_top = dropdown.offset().top - jQuery(window).scrollTop();
+           var dropdown_top = dropdown.offset().top - jQuery( window ).scrollTop();
            var dropdown_height = dropdown.height();
            var viewport_height = jQuery(window).height();
 
@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
             chosen_container.addClass( 'chosen-drop-up' );
          }
       });
-      selected.on('chosen:hiding_dropdown', function(event, params) {
+      selected.on( 'chosen:hiding_dropdown', function( event, params ) {
          jQuery( event.target ).next( '.chosen-container' ).removeClass( 'chosen-drop-up' );
       });
     }

@@ -55,19 +55,19 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
     },
     getOptionsJSON: function() {
          var json = {
-            "geodeticdatum": {
+            "datum": {
                 0: { "id":"DATUM_DEFAULT", "title":"Mikä tahansa", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 1: { "id":"DATUM_KKJ", "title":"KKJ", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 2: { "id":"DATUM_EUREF-FIN", "title":"EUREF-FIN", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"}
                 },
-            "koordinaatisto": {
+            "dimension": {
                 0: { "id":"KOORDINAATISTO_DEFAULT", "title":"Mikä tahansa" },
                 1: { "id":"KOORDINAATISTO_SUORAK_2D", "title":"Suorakulmainen 2D (Taso)", "cls":"DATUM_KKJ DATUM_EUREF-FIN" },
                 2: { "id":"KOORDINAATISTO_SUORAK_3D", "title":"Suorakulmainen 3D", "cls":"DATUM_EUREF-FIN" },
                 3: { "id":"KOORDINAATISTO_MAANT_2D", "title":"Maantieteellinen 2D", "cls":"DATUM_EUREF-FIN DATUM_KKJ" },
                 4: { "id":"KOORDINAATISTO_MAANT_3D", "title":"Maantieteellinen 3D", "cls":"DATUM_EUREF-FIN" }
                 },
-            "mapprojection": {
+            "projection": {
                 0: { "id":"DATUM_KARTTAPJ_DEFAULT", "title":"Mikä tahansa"},
                 1: { "id":"KKJ_KAISTA", "title":"KKJ", "cls":"DATUM_KKJ"},
                 2: { "id":"TM", "title":"ETRS-TM",  "cls":"DATUM_EUREF-FIN"},

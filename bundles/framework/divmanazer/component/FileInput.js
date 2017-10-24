@@ -1,15 +1,16 @@
 /**
  * @class Oskari.userinterface.component.FileInput
- *
+ * Simple file uploading component
+ * Call create to create element and with getElement reference the element.
  */
 Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (localization) {
     this.loc = localization;
     this.el = null;
     this._template = {
         fileBox: _.template('<div class="oskari-fileinput" style="display:none"> '+
-                    '<form method="post" action="", enctype="multipart/form-data" class="box" id="fileinput">'+
+                    '<form method="post" action="" enctype="multipart/form-data" class="box">'+
                         '<div class="box__input">'+
-                            '<input type="file" name="file" id="file" class="box__file" />'+
+                            '<input type="file" class="box__file" />'+
                             '<label>  <%= fileupload %> <label for="file" style="cursor: pointer;"> <a> <%= link %> </a> </label> </label> '+
                         '</div>'+
                         '<div class="box__uploading"> <%= uploading %>&hellip;</div>'+
@@ -33,13 +34,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
          */
         canUseAdvancedUpload: function() {
             var div = document.createElement('div');
-            return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+            return ( ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div) )
+                        && 'FormData' in window && 'FileReader' in window;
          },
-                /**
+        /**
          * @method handleDragAndDrop
          * Checks for drag and drop events, on submit makes ajax request
-         * 
-         *
          */
         handleDragAndDrop: function( cb ) {
             var me = this;
@@ -60,7 +60,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
             })
             .on('drop', function(e) {
                 droppedFiles = e.originalEvent.dataTransfer.files;
-                // form.trigger('submit');
                 me.readFilesInBrowser( droppedFiles, cb );
             });
             
@@ -83,10 +82,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
             this.setElement( form.parent() );
             return this.getElement();
         },
+        /**
+         * @method readFilesInBrowser
+         * Checks for drag and drop events, on submit makes ajax request
+         */
         readFilesInBrowser: function ( files, cb ) {
             var files = files; // FileList object
 
-            // Loop through the FileList and render image files as thumbnails.
             for (var i = 0, f; f = files[i]; i++) {
                 var reader = new FileReader();
 
@@ -99,9 +101,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
                 })(f);
 
                 reader.readAsText(f);
-            
             }
         },
+        /**
+         * @method create
+         * Creates the element for handlign drag and drop
+         */
         create: function() {
             var fileinput = this._template.fileBox({ link: this.loc.datasourceinfo.link,
                                                     fileupload: this.loc.datasourceinfo.fileupload,

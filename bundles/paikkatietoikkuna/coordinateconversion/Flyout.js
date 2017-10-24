@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.framework.bundle.admin-layerrights.AdminLayerRightsBundleInstance}
+     * @param {Oskari.coordinateconversion.instance}
      *        instance reference to component that created the tile
      */
     function( instance ) {
