@@ -524,8 +524,8 @@ Oskari.clazz.define(
             // notify other components that features have been added
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
-            var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
-            var errorEvent = sandbox.getEventBuilder('FeatureEvent')().setOpError('feature has no geometry');
+            var addEvent = Oskari.eventBuilder('FeatureEvent')().setOpAdd();
+            var errorEvent = Oskari.eventBuilder('FeatureEvent')().setOpError('feature has no geometry');
 
             _.forEach(features, function(feature) {
                 var geojson = formatter.writeFeaturesObject([feature]);
@@ -555,21 +555,18 @@ Oskari.clazz.define(
                 }
             }
 
-            if(options.showLayer && !mapLayerService.findMapLayer(options.layerId)) {
-                mapLayerService.addLayer(layer);
-
-                var requestBuilder = me._sandbox.getRequestBuilder(
-                    'AddMapLayerRequest'
-                );
-                if (requestBuilder) {
-                    var request = requestBuilder(layer.getId());
+            if(options.showLayer) {
+                if(!mapLayerService.findMapLayer(options.layerId)) {
+                    mapLayerService.addLayer(layer);
+                }
+                if(!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId)) {
+                    var request = Oskari.requestBuilder('AddMapLayerRequest')(layer.getId());
                     me._sandbox.request(me, request);
                 }
-            }
-
-            if(options.showLayer) {
+                // not too sure about this logic and if we can assume AddMapLayerRequest is sync
                 olLayer.setVisible(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
             }
+
         },
          /**
          * @method _updateFeature
