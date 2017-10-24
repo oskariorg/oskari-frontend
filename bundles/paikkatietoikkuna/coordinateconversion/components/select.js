@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                         }
 
                         if ( instances.datum.getValue() !== me.instance.currentDatum || me.instance.currentDatum === undefined ) {
-                            if( key !== 'datum' ) {
+                            if ( key !== 'datum' ) {
                                 instances[key].resetToPlaceholder();
                             }
                         }
@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                             values.push( vl );
                         }
                         // last key update stuff
-                        if ( i == instanceLength ) {
+                        if ( i == instanceLength -1 ) {
                             if( this.id === 'inputcoordsystem' ) {
                                 me.instance.inputTable.updateTitle( values );
                                 me.instance.inputTable.isEditable( me.instance.clipboardInsert );
