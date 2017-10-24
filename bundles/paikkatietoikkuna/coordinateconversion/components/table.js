@@ -131,40 +131,37 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                 }
             }
         },
-        displayNumOfRows: function () {
+        bindRowCountListener: function () {
             var me = this;
             var table = this.getElements().table;
             table.bind('rowCountChanged', function (evt) {
                 var rows = me.getElements().rows;
-                    if( rows.length >= 1000 ) {
-                        rows.slice(1000).css('display', 'none');
-                    }
-                });
+
+            });
         },
         updateTitle: function (values) {
             this.getElements().header.remove();
             
             var x = y = z = "";
-            if( values[3].indexOf("COORDSYS_KKJ" ) !== -1 ) {
+            if ( values.coordinatesystem === "COORDSYS_KKJ" ) {
                 x = this.loc.coordinatefield.kkjnorth
                 y = this.loc.coordinatefield.kkjeast
                 z = ""
-            }
-            if( values[3].indexOf("COORDSYS_ETRS" ) !== -1 ) {
+            } else if ( values.coordinatesystem === "COORDSYS_ETRS" ) {
                 x = this.loc.coordinatefield.kkjeast
                 y = this.loc.coordinatefield.kkjnorth
                 z = ""
             }
-            if( values[1].indexOf("KOORDINAATISTO_MAANT_2D" ) !== -1 ) {
+            if ( values.dimension === "KOORDINAATISTO_MAANT_2D" ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
                 z = ""
-            } else if( values[1].indexOf("KOORDINAATISTO_MAANT_3D" ) !== -1 ) {
+            } else if ( values.dimension === "KOORDINAATISTO_MAANT_3D" ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
                 z = this.loc.coordinatefield.ellipse_height
             }
-            if( values[1].indexOf("KOORDINAATISTO_SUORAK_3D" ) !== -1 ) {
+            if ( values.dimension === "KOORDINAATISTO_SUORAK_3D" ) {
                     x = this.loc.coordinatefield.geox
                     y = this.loc.coordinatefield.geoy
                     z = this.loc.coordinatefield.geoz
