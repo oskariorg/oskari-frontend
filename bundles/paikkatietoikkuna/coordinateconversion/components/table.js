@@ -4,7 +4,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
     this.numrows = 1;
     this.container = null;
     this.template = {
-            tableWrapper: jQuery('<div class="table"></div>'),
+            tableWrapper: _.template('<div class="table"></div>'),
             rowcounter: _.template('<div class="rowcount"><span id="num"></span> <%= rows %> </div>'),
             header: _.template('<div class="oskari-table-header">'+
                                         '<table id="oskari-tbl-header" cellpadding="0" cellspacing="0" border="0">'+
@@ -59,7 +59,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                                                                 east:this.loc.coordinatefield.east,
                                                                 ellipse_height: "" });
 
-                var table = this.template.tableWrapper.clone();
+                var table = this.template.tableWrapper();
+                table = jQuery(table);
 
                 table.append(coordinatefield);                
 
@@ -95,10 +96,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                 });
             }
         },
-        removeRow: function () {
-            this.getElements().rows.first().remove();
-            this.decrementNumRows();
-        },
         /**
          * @method populate
          *
@@ -106,15 +103,11 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
          */
         populate: function( cell, data ) {
             var table = this.getElements().table;
-            var i = 0;
             for ( var key in data ) {
-                if ( i <= 9 ) {
-                    if ( data.hasOwnProperty( key ) ) {
-                        var row = this.template.row( { coords: data[key] } );
-                        jQuery( cell ).parent().after( row );
-                        this.incrementNumRows();
-                        i++;
-                    }
+                if ( data.hasOwnProperty( key ) ) {
+                    var row = this.template.row( { coords: data[key] } );
+                    jQuery( cell ).parent().after( row );
+                    this.incrementNumRows();
                 }
             }
             table.trigger('rowCountChanged');
@@ -123,7 +116,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
             var table = this.getElements().table;
             for (var i = 0; i < coords.length; i++ ) {
                 var row = this.template.row( { coords: coords[i] } );
-                table.find('tr:first').after(row);
+                table.prepend(row);
                 this.incrementNumRows();
             }
             table.trigger('rowCountChanged');
