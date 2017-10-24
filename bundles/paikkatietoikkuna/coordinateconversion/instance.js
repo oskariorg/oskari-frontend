@@ -1,4 +1,5 @@
 /*
+Ways to start the bundle in console:
 * Oskari.app.playBundle(
     {
     bundlename : 'coordinateconversion',
@@ -12,12 +13,7 @@
 });
             var l = appSetup.startupSequence.length;
             appSetup.startupSequence[l] = {
-                "bundleinstancename":"coordinateconversion",
                 "bundlename":"coordinateconversion" ,
-                "fi":"",
-                "sv":"",
-                "en":"",
-                "title":"coordinateconversion" 
             }
             appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinateconversion": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } } };
 */
