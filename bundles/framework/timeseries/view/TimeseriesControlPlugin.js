@@ -444,16 +444,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 formatSecond = formatterFunction(":%S"),
                 formatMinute = formatterFunction(locale ? "%H:%M" : "%I:%M"),
                 formatHour = formatterFunction(locale ? "%H:%M" : "%I %p"),
-                formatDay = formatterFunction(locale ? "%d.%m." : "%d %b")
-            formatYear = formatterFunction("%Y");
+                formatDay = formatterFunction(locale ? "%d.%m." : "%d %b"),
+                formatMonth = formatterFunction("%b"),
+                formatYear = formatterFunction("%Y");
 
             return function multiFormat(date) {
                 return (d3.timeSecond(date) < date ? formatMillisecond
                     : d3.timeMinute(date) < date ? formatSecond
-                        : d3.timeHour(date) < date ? formatMinute
-                            : d3.timeDay(date) < date ? formatHour
-                                : d3.timeMonth(date) < date ? formatDay
-                                    : formatYear)(date);
+                    : d3.timeHour(date) < date ? formatMinute
+                    : d3.timeDay(date) < date ? formatHour
+                    : d3.timeMonth(date) < date ? formatDay
+                    : d3.timeYear(date) < date ? formatMonth
+                    : formatYear)(date);
             }
         },
         /**
