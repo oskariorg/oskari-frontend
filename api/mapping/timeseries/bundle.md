@@ -25,8 +25,9 @@ var id = 'sivcgeu'; // should be unique within "type"
 var type = 'myTypeOfThing'; // arbitrary type for id
 var priority = 23; // priority of registered thing, one with lowest priority across all registred things will be shown UI. Additionally type "layer" has lower priority than all other types
 var delegate = ...; // Istance of a class that implements Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol. The UI communicates with your timeseries implementation via the delegate. Each separate "thing" that has timeseries state should have their own delegate instance that is registered to timeseriesService
+var conf = {location: 'bottom center'}; // configuration given to TimeseriesControlPlugin when it's created with registered delegate.
 
-timeseriesService.registerTimeseries(id, type, priority, delegate);
+timeseriesService.registerTimeseries(id, type, priority, delegate, conf);
 
 ```
 
@@ -38,26 +39,22 @@ timeseriesService.unregisterTimeseries(id, type);
 
 ## Example - new layer type
 
-If the bundle wants to add support for timeseries functionality for a certain layer type (AbstractLayer.getLayerType()):
-
+If the bundle wants to add support for timeseries functionality for a certain layer type (AbstractLayer.getLayerType()), it can register a factory function for creating timeseries delegates for that type:
 
 ```javascript
 var timeseriesLayerService = sandbox.getService('Oskari.mapframework.bundle.timeseries.TimeseriesLayerService');
-timeseriesLayerService.registerLayerType('<type>', '<fully qualified class name>');
+timeseriesLayerService.registerLayerType('<type of layer>', function(layerId) {
+  return ...; // instantiate something implementing Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol and return it
+});
 
 ```
 
-After registering the new type, TimeseriesLayerService will create delegates automatically for any layers of the given type.
-
-The class whose name is given must implement `Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol` and its first two constructor parameters must be `sandbox`, `layerId`. The class must be loaded as part of your bundle.
+After registering the new type, TimeseriesLayerService will create delegates automatically using the factory function for any layers of the given type that become selected.
 
 ## Bundle configuration
 
 No configuration is required.
 
-## Bundle state
-
-No statehandling has been implemented for the bundle.
 
 ## Events the bundle listens to
 

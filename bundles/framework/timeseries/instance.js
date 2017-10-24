@@ -49,7 +49,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
 
             me._timeseriesLayerService = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesLayerService', sandbox, me._timeseriesService);
             sandbox.registerService(me._timeseriesLayerService);
-            me._timeseriesLayerService.registerLayerType('wms', 'Oskari.mapframework.bundle.timeseries.WMSAnimator');
+            me._timeseriesLayerService.registerLayerType('wms', function (layerId) {
+                return Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.WMSAnimator', sandbox, layerId);
+            });
 
             Oskari.on('app.start', function () {
                 me._timeseriesService.on('activeChanged', me._updateControl.bind(me));

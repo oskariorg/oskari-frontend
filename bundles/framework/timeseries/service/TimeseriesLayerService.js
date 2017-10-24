@@ -94,12 +94,12 @@ Oskari.clazz.define(
         },
         /**
          * @method registerLayerType
-         * Registers animator/delegate class name for certain type of layer
+         * Registers animator/delegate implementation for certain type of layer
          * @param {String} type layer type (AbstractLayer.getLayerType())
-         * @param {String} className class name to use for layer type
+         * @param {Function} factory function that takes layerId as parameter and returns instance that implements Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol
          */
-        registerLayerType: function (type, className) {
-            this._layerTypeAnimators[type] = className;
+        registerLayerType: function (type, factory) {
+            this._layerTypeAnimators[type] = factory;
         },
         /**
          * @method _layerDelegateFactory
@@ -110,12 +110,12 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol} doneCallback callback that will be called after new time has been loaded
          */
         _layerDelegateFactory: function (layerId, layerType) {
-            var animatorClassName = this._layerTypeAnimators[layerType];
-            if (!animatorClassName) {
+            var factory = this._layerTypeAnimators[layerType];
+            if (!factory) {
                 this._log.warn('No animator defined for layer type "' + layerType + '"!');
                 return;
             }
-            return Oskari.clazz.create(animatorClassName, this._sandbox, layerId);
+            return factory(layerId);
         },
         /**
          * @method updateTimeseriesLayers
