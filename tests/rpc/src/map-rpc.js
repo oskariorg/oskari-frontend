@@ -1,7 +1,7 @@
 /*
 Switch map URL to test other maps
 */
-var mapUrl = 'http://demo.oskari.org/?lang=en&uuid=31a3333b-9670-482d-8d5e-ebbe7c8326c7';
+var mapUrl = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-5055628dbd42';
 
 // set source
 document.getElementById('map').src = mapUrl;
