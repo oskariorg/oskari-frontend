@@ -22,6 +22,7 @@ Oskari.clazz.define(
         me._sandbox = sandbox;
         me._popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
+        me._log = Oskari.log('TimeseriesLayerService');
         for (p in me.__eventHandlers) {
             if (me.__eventHandlers.hasOwnProperty(p)) {
                 me._sandbox.registerForEventByName(me, p);
@@ -111,7 +112,8 @@ Oskari.clazz.define(
         _layerDelegateFactory: function (layerId, layerType) {
             var animatorClassName = this._layerTypeAnimators[layerType];
             if (!animatorClassName) {
-                throw new Error('No animator defined for layer type "' + layerType + '"!');
+                this._log.warn('No animator defined for layer type "' + layerType + '"!');
+                return;
             }
             return Oskari.clazz.create(animatorClassName, this._sandbox, layerId);
         },
@@ -128,6 +130,9 @@ Oskari.clazz.define(
                     var series = this._timeseriesService.getTimeseries(layer.getId(), 'layer');
                     if (!series) {
                         var delegate = me._layerDelegateFactory(layer.getId(), layer.getLayerType());
+                        if(!delegate) {
+                            continue;
+                        }
                         this._timeseriesService.registerTimeseries(layer.getId(), 'layer', -i, delegate);
                     } else {
                         this._timeseriesService.updateTimeseriesPriority(layer.getId(), 'layer', -i);
