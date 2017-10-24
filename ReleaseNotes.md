@@ -1,6 +1,111 @@
 # Release Notes
 
+## 1.45.0
+
+### ProgressEvents for maplayers
+
+WMS singletile layers in OpenLayers 3 implementation now send progress events like tiled layers.
+
+## 1.44.2
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools for statistics functionality activated only when editing published maps with said functionality and not when creating new published maps.
+
+### Build-script
+
+Fixed an issue where images were not correctly copied for minified application when folder name included uppercase characters.
+
+## 1.44.1
+
+### Grid
+
+Fixed issues:
+- grid paging didn't work
+- grid selection error when ``select``-function  is used to select row when grid has not data yet
+
+#### VectorLayerPlugin ol2/ol3
+
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer which has none.
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer that is not on the map (now ignores the call, previously cleared all features from all layers).
+Fixed an error introduced in 1.44.0 where ``MapModulePlugin.AddFeaturesToMapRequest`` with priority value resulted in a JavaScript error.
+
+### publisher2
+
+Fixed an issue where the button to add layers in publisher didn't work.
+
+### FormInput
+
+Floating labels were created to all FormInput components which used setPlaceHolder method. Now floating labels are created by calling setFloatingLabel. If you want to use floating labels with FormInput component, you have to use new method. Floating label position can be adjusted with topPosition, which adds a value to the css-directive "top".
+
+Optionally tooltip can be bound to input (default binds to label).
+
+Now floating label is floated when input is selected instead of typing text.
+
+### drawtools
+
+See [api/CHANGELOG.md](api/CHANGELOG.md) for changes.
+Refactored the code for the functionality to make it more accessible.
+
+### Data sanitation
+
+Improved security by sanitizing values.
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools couldn't restore thematic maps functionality (for editing) from a previously saved published map.
+This resulted in thematic maps functionality being removed from the published map on edit.
+
 ## 1.44.0
+
+### layerselector2
+
+Filter buttons are now shown on each tab instead of just the first one. Also fixed undefined error for ShowFilteredLayerListRequest.
+
+Changed ``stats`` filter name to ``featuredata`` for consistency as it filters layers having feature data and not stats layers.
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'featuredata']);
+```
+
+Filtering performance has been improved.
+
+Requests should be serializable to JSON and shouldn't be used to pass functions. AddLayerListFilterRequest and ShowFilteredLayerListRequest refactored based on this and the function parameters have been removed.
+Filter-functions can be registered to MapLayerService. By default it includes built-in filters for 'featuredata' and 'newest' ids.
+
+Use built-in filters:
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest']);
+```
+
+Register new filter and use this:
+```javascript
+// Register new filter
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
+});
+// Use new filter by request, the second parameter opens the layer listing flyout if it's closed
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', true]);
+```
+
+Add new filter button for layer listing:
+```javascript
+// Add layer filter to map layer service
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('publishable', function(layer){
+    return (layer.getPermission('publish') === 'publication_permission_ok');
+});
+
+// Add layerlist filter button
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+        'Publishable',
+        'Show publishable layers',
+        'layer-publishable',
+        'layer-publishable-disabled',
+        'publishable'
+]);
+```
 
 ### Timeseries improvements
 
@@ -11,7 +116,7 @@ Changed ProgressEvent to include layer id instead of 'maplayer' (functionality i
 
 ### divmanazer Chart component
 
-``New component`` allows make bar or line charts.
+``New component`` for creating bar or line charts.
 
 ```javascript
 var barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox());
@@ -42,6 +147,10 @@ Prints out:
 
 - myOldFunc() will be removed in future release. Remove calls to it.
 - myOtherOldFunc() will be removed in future release. Use myNewFunc() instead.
+
+#### Oskari.util
+
+Changed mobile mode detection. Now the mode switch is determined from ´#mapdiv´-element size (previous was window size).
 
 ### featuredata2
 
@@ -95,9 +204,27 @@ Known issues:
 
 Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
 
+Fixed followings in point map style:
+- allowed change classify (distinct/discontinous)
+- maked smaller point more smaller
+- legend: dublicate values now displayed one time ( 0.0000 - 0.0000  --> 0.0000)
+- legend: fixed distinct legend value labels
+
+Changes:
+- used d3 library for calculating point symbol sizes
+
+UI improvements:
+- moved show values checkbox before color selection
+- layer opacity value are now showed opacity selectbox
+
 ### mapmodule
 
+Fixed an issue where layers disappeared when pinch zooming on Android. Caused by zoom level having decimals instead of integer values.
+
+Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
+
 Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
+
 
 #### VectorLayerPlugin ol2/ol3
 
@@ -109,10 +236,6 @@ New functionalities for ``AddFeaturesToMapRequest``. New options available:
 - layerName: Added layer name (showed in layerselector2/layerselection2)
 - layerDescription: Added layer description (showed subtitle in layerselection2)
 - layerPermissions: Added layer permission
-
-### Oskari.util
-
-Changed mobile mode detection. Now size is checked from ´#mapdiv´-element (previous was window size):
 
 ### infobox
 
@@ -131,15 +254,18 @@ The drawn figures are now removed from the map when PlaceForm is closed by click
 DrawPlugin now checks preconditions before trying to save the drawn figures on the map.
 A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
 
+Fix for layer updating on map when myplaces are updated by the user.
+
 ### Search
 
 The default search UI now includes an optional autocomplete functionality.
 Searchchannels in oskari-server must provide support for it to be useful.
 See oskari-server ReleaseNotes on details how to support autocompletion.
 
-### Visualization form UI for polygon styles with no fill / no stroke
+### Visualization form UI
 
-User can select "no stroke" and "no fill" as stroke and fill colors. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
+User can select "no stroke" and "no fill" as stroke and fill colors for polygons. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
+Bug fixes for default values (point marker), color selections and restoring values for the forms when editing.
 
 ### Background layerselector plugin
 
@@ -149,6 +275,10 @@ This change keeps the layer selector visible always (except Publish map), but tu
 ### Analysis
 
 Fixed an issue with english translations where selecting analysis method "Analysis Layer Union" showed the parameters for "Buffers and sector".
+
+### Initial tests for RPC
+
+Initial versions of tests have been added under oskari-frontend/test/rpc.
 
 ## 1.43.0
 

@@ -201,9 +201,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Du kan opprette 'embedda' kart etter at du har logga inn",
             "signup": "Logg inn",
-            "signupUrl": "/web/fi/login",
-            "register": "Register",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Register"
         },
         "StartView": {
             "text": "Du kan lage kartet og 'embedde' det inn i din eiga nettstad",

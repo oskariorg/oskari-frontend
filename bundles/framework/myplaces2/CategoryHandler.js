@@ -511,8 +511,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                         dialog.fadeout();
                         // refresh map layer on map -> send update request
                         var layerId = me._getMapLayerId(category.getId()),
-                            request = me.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
-                        me.instance.sandbox.request(me, request);
+                            request = me.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true),
+                            layerIsSelected = me.instance.sandbox.isLayerAlreadySelected(layerId);
+                        if (layerIsSelected){
+                            me.instance.sandbox.request(me, request);
+                        }
                     } else {
                         // blnNew should always be true since we are adding a category
                         if (blnNew) {

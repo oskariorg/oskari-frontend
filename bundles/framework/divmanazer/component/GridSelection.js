@@ -44,8 +44,11 @@ Oskari.clazz.category(
          * @param {Object} scrollableElement If element defined then scroll grid to selected row. If scrollableELment is null then not scroll.
          */
         select: function (value, keepPrevious, scrollableElement) {
-            var me = this,
-                key = this.model.getIdField(),
+            var me = this;
+            if(!me.model) {
+                return;
+            }
+            var key = me.model.getIdField(),
                 dataArray = this.model.getData(),
                 index,
                 rows,

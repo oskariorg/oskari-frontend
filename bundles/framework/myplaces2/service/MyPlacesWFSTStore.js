@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
 
                 category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
                 category.setId(id);
-                category.setName(featAtts.category_name);
+                category.setName(Oskari.util.sanitize(featAtts.category_name));
                 category.setDefault("true" === featAtts['default']);
                 category.setLineWidth(featAtts.stroke_width);
                 category.setLineStyle(featAtts.stroke_dasharray);
@@ -403,11 +403,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 id = this._parseNumericId(f.fid);
                 place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
                 place.setId(id);
-                place.setName(featAtts.name);
-                place.setDescription(featAtts.place_desc);
-                place.setAttention_text(featAtts.attention_text);
-                place.setLink(featAtts.link);
-                place.setImageLink(featAtts.image_url);
+                place.setName(Oskari.util.sanitize(featAtts.name));
+                place.setDescription(Oskari.util.sanitize(featAtts.place_desc));
+                place.setAttention_text(Oskari.util.sanitize(featAtts.attention_text));
+                place.setLink(Oskari.util.sanitize(featAtts.link));
+                place.setImageLink(Oskari.util.sanitize(featAtts.image_url));
                 place.setCategoryID(featAtts.category_id);
                 place.setCreateDate(featAtts.created);
                 place.setUpdateDate(featAtts.updated);

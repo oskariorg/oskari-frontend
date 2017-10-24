@@ -17,9 +17,6 @@ Oskari.clazz.define(
         this.defaultValues = defaultValues;
         this.instance = parent;
 
-        // Temporary IE8 fix
-        this.first = true;
-
         this.values = {
             lineWidth: this.defaultValues.line.width,
             lineCorner: this.defaultValues.line.corner,
@@ -208,7 +205,8 @@ Oskari.clazz.define(
          * @return {jQuery} jquery reference for the form
          */
         showForm: function (renderButton, state) {
-            var me = this;
+            var me = this,
+                tempValues = jQuery.extend(true, {}, me.values);
 
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.area);
@@ -365,7 +363,7 @@ Oskari.clazz.define(
                             values[i] = '0' + values[i];
                         }
                     }
-                    me.values[(colorType === 0) ? 'lineColor' : 'fillColor'] = values.join('');
+                    me.values[(colorType === '0') ? 'lineColor' : 'fillColor'] = values.join('');
                     me._updatePreview();
                 };
 
@@ -457,8 +455,7 @@ Oskari.clazz.define(
                     dialogContent.find('input#' + c.toString() + 'green-value.custom-color').prop('disabled', false);
                     dialogContent.find('input#' + c.toString() + 'blue-value.custom-color').prop('disabled', false);
                 }
-
-                content.find('.custom-color').change(customColorChangeHandler.bind(null, c));
+                content.find('.custom-color').change(customColorChangeHandler.bind(null, c.toString()));
             }
 
             // remove color links
@@ -497,7 +494,7 @@ Oskari.clazz.define(
                 var fillBtnContainer = me.templateButton.clone();
                 fillBtnContainer.addClass(me.fillButtonNames[i]);
                 fillBtnContainer.attr('id', i + 'fillstyle');
-                if (i === me.values.fillStyle) {
+                if (i == me.values.fillStyle) {
                     this._styleSelectedButton(fillBtnContainer);
                 }
                 fillBtnContainer.click(function () {
@@ -532,12 +529,12 @@ Oskari.clazz.define(
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(me.loc.buttons.cancel);
             cancelBtn.setHandler(function () {
-                me.values.lineWidth = me.defaultValues.line.width;
-                me.values.lineCorner = me.defaultValues.line.corner;
-                me.values.lineStyle = me.defaultValues.line.style;
-                me.values.lineColor = me.defaultValues.line.color;
-                me.values.fillColor = me.defaultValues.fill.color;
-                me.values.fillStyle = me.defaultValues.fill.style;
+                me.values.lineWidth = tempValues.lineWidth;
+                me.values.lineCorner = tempValues.lineCorner;
+                me.values.lineStyle = tempValues.lineStyle;
+                me.values.lineColor = tempValues.lineColor;
+                me.values.fillColor = tempValues.fillColor;
+                me.values.fillStyle = tempValues.fillStyle;
                 renderDialog.close();
             });
             renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
@@ -562,12 +559,6 @@ Oskari.clazz.define(
         },
 
         _updatePreview: function (dialog) {
-            // Temporary IE8 fix
-            if (this.first) {
-                this.first = false;
-                this.values.fillStyle = this.defaultValues.fill.style;
-            }
-
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery('.areaform') : dialog,
                 preview = view.find('.preview');
@@ -593,11 +584,10 @@ Oskari.clazz.define(
             });
 
             preview.empty();
-
             // Patterns (IE8 compatible version)
             if (me.values.fillStyle >= 0) {
                 var pathSvg = jQuery('<path></path>');
-                switch (me.values.fillStyle) {
+                switch (parseInt(me.values.fillStyle)) {
                     case 0:
                         var p01a = [10.5,17.5];
                         var p02a = [12.3,19.7];
