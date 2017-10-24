@@ -1,4 +1,4 @@
-.oskari-fileinput.box__file {
+.oskari-fileinput .box__file {
 	width: 0.1px;
 	height: 0.1px;
 	opacity: 0;
@@ -6,14 +6,14 @@
 	position: absolute;
 	z-index: -1;
 }
-.oskari-fileinput.box__file + label {
+.oskari-fileinput .box__file + label {
     margin-top:2%;
     margin-left:3%;
     font-size: 1em;
     font-weight: 700;
     display: inline-block;
 }
-.oskari-fileinput.box__input {
+.oskari-fileinput .box__input {
     height:4em;
 }
 
