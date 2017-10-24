@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                 this.getContainer().parent().parent().show();
             }
         },
-        /**
+        /** 
          * @method validateData
          * check different conditions if data matches to them
          */
@@ -167,7 +167,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
             var numeric = new RegExp(/[0-9.]+/);
             var numericMatcher = new RegExp(/([0-9.])+\s*,?/g);
-            var whitespaceseparatednum = new RegExp(/^[0-9.]+\s[0-9.]+,/gmi)
+            var whitespaceseparatednum = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi)
 
             var getMatchedValues = function( matchedData, useLonLatMatcher ) {
                 var jsonLonLat = {};
@@ -223,8 +223,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             }
         },
         handleServerResponce: function ( response ) {
-            var insertTarget = this.outputTable.getContainer().find('td').first();
-            this.outputTable.populate( insertTarget, response );
+            var insertTargetRow = this.outputTable.getContainer().find('tr').first();
+            this.outputTable.populate( insertTargetRow, response );
         },
         /**
          * @method handleClipboard
@@ -267,7 +267,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
          */
         handleFile: function( fileContent ) {
             var dataJson = this.validateData( fileContent );
-            var insertTarget = jQuery('#oskari-coordinate-table').find('td').first();
+            var insertTarget = this.inputTable.getElements().table.find('tr').first();
             this.inputTable.populate( insertTarget, dataJson );
         },
         /**
