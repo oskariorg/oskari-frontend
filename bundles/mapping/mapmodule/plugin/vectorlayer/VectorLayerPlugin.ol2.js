@@ -522,7 +522,7 @@ Oskari.clazz.define(
                     center = new OpenLayers.LonLat((right - ((right - left) / 2)), (top - ((top - bottom) / 2)));
                 }
 
-                mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds);
+                mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
                 me._sandbox.request(me, mapmoveRequest);
 
                 // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
@@ -534,20 +534,15 @@ Oskari.clazz.define(
                 }
             }
 
-            if(options.showLayer && !mapLayerService.findMapLayer(options.layerId)) {
-                mapLayerService.addLayer(layer);
-
-                var requestBuilder = me._sandbox.getRequestBuilder(
-                    'AddMapLayerRequest'
-                );
-                if (requestBuilder) {
-                    var request = requestBuilder(layer.getId());
+            if(options.showLayer) {
+                if(!mapLayerService.findMapLayer(options.layerId)) {
+                    mapLayerService.addLayer(layer);
+                }
+                if(!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId)) {
+                    var request = Oskari.requestBuilder('AddMapLayerRequest')(layer.getId());
                     me._sandbox.request(me, request);
                 }
-
-            }
-
-            if(options.showLayer) {
+                // not too sure about this logic and if we can assume AddMapLayerRequest is sync
                 olLayer.display(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
             }
         },
