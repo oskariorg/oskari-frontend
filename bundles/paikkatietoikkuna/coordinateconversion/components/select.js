@@ -69,12 +69,12 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
          */
         handleSelectionChanged: function ( element ) {
             var me = this;
-            var values = [];
+            var values = {};
             var instances = this.getSelectInstances();
             var dropdowns = this.getDropdowns();
-            var i = 0;
             var rows = me.instance.inputTable.getElements().rows;
                 element.on( "change", function() {
+                    var self = this;
                     Object.keys( instances ).forEach( function ( key ) {
                         var instanceLength = Object.keys(instances).length;
                         dropdowns[key].find( 'option' ).hide();
@@ -142,24 +142,21 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                                 instances[key].resetToPlaceholder();
                             }
                         }
-                        values = [];
+                        values = {};
                         instances[key].update();
                         // get value of each select
                         for ( var j = 0; j < instanceLength; j++ ) {
                             var vl = instances[ Object.keys( instances) [j] ].getValue();
-                            values.push( vl );
+                            values[ Object.keys( instances) [j] ] = vl;
                         }
                         // last key update stuff
-                        if ( i == instanceLength -1 ) {
-                            if( this.id === 'inputcoordsystem' ) {
+                            if( self.id === 'inputcoordsystem' ) {
                                 me.instance.inputTable.updateTitle( values );
                                 me.instance.inputTable.isEditable( me.instance.clipboardInsert );
-                            } else if( this.id === 'targetcoordsystem' ) {
+                            } else if( self.id === 'targetcoordsystem' ) {
                                 me.instance.outputTable.updateTitle( values );
                             }
                             me.instance.currentDatum = instances.datum.getValue();
-                        }
-                        i++;
                     });
                 });
             
