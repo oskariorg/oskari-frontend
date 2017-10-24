@@ -121,14 +121,20 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             wrapper.append(utilbuttons);
 
             me.inputSelect.create();
-            this._selectInstances.input = me.inputSelect.getSelect();
-            wrapper.find('#inputcoordsystem').find('.select').each(function (index) {
-                jQuery(this).append( me.inputSelect.getDropdown()[index] );
+            this._selectInstances.input = me.inputSelect.getSelectInstances();
+            var inp_dropdowns = me.inputSelect.getDropdowns();
+            var i = 0;
+            Object.keys( inp_dropdowns ).forEach( function( key ) {
+                jQuery( wrapper.find('#inputcoordsystem').find('.select')[i] ).append( inp_dropdowns[key] );
+                i++;
             });
             me.targetSelect.create();
-            this._selectInstances.target = me.targetSelect.getSelect();
-           wrapper.find('#targetcoordsystem').find('.select').each(function (index) {
-                jQuery(this).append( me.targetSelect.getDropdown()[index] );
+            this._selectInstances.target = me.targetSelect.getSelectInstances();
+            var out_dropdowns = me.targetSelect.getDropdowns();
+            var j = 0;
+            Object.keys( out_dropdowns ).forEach( function( key ) {
+                jQuery( wrapper.find('#targetcoordsystem').find('.select')[j] ).append( out_dropdowns[key] );
+                j++;
             });
 
             jQuery(container).append(wrapper);
@@ -199,10 +205,10 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         },
         getCrsOptions: function () {
             var instances = this.getSelectInstances();
-            var sourceSelection = this.getSelectionValue( instances.input[3] );
-            var targetSelection = this.getSelectionValue( instances.target[3] );
-            var sourceHeightSelection = this.getSelectionValue( instances.input[4] );
-            var targetHeightSelection = this.getSelectionValue( instances.target[4] );
+            var sourceSelection = this.getSelectionValue( instances.input.coordinatesystem );
+            var targetSelection = this.getSelectionValue( instances.target.coordinatesystem );
+            var sourceHeightSelection = this.getSelectionValue( instances.input.heigthsystem );
+            var targetHeightSelection = this.getSelectionValue( instances.target.heigthsystem );
 
             var source = this.helper.getMappedEPSG( sourceSelection );
             var target = this.helper.getMappedEPSG( targetSelection );
@@ -302,10 +308,10 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         selectEPSG3067: function () {
             var instances = this.getSelectInstances();
             // EPSG-3067 settings
-            var sourceSelection = this.setSelectionValue( instances.input[0], "DATUM_EUREF-FIN" );
-            var sourceHeightSelection = this.setSelectionValue( instances.input[1], "KOORDINAATISTO_SUORAK_2D" );
-            var sourceSelection = this.setSelectionValue( instances.input[2], "TM" );
-            var sourceHeightSelection = this.setSelectionValue( instances.input[3], "COORDSYS_ETRS-TM35FIN" );
+            var sourceSelection = this.setSelectionValue( instances.input.datum, "DATUM_EUREF-FIN" );
+            var sourceHeightSelection = this.setSelectionValue( instances.input.dimension, "KOORDINAATISTO_SUORAK_2D" );
+            var sourceSelection = this.setSelectionValue( instances.input.projection, "TM" );
+            var sourceHeightSelection = this.setSelectionValue( instances.input.coordinatesystem, "COORDSYS_ETRS-TM35FIN" );
         },
         /**
          * @method handleRadioButtons

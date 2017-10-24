@@ -2,34 +2,38 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
     function ( instance ) {
         var me = this;
         me.instance = instance;
-        me.selects = [];
-        me.dropdowns = [];
+        me.selectInstances = {};
+        me.dropdowns = {};
     }, {
-        getSelect: function () {
-            return this.selects;
+        getSelectInstances: function () {
+            return this.selectInstances;
         },
-        getDropdown: function () {
+        getDropdowns: function () {
             return this.dropdowns;
         },
         create: function () {
             var json = this.instance.helper.getOptionsJSON();
 
             var selections = [];
-            var dropdowns = [];
-            var selects = [];
+            var dropdowns = {};
+            var selects = {};
             var options = {}
-            jQuery.each( json, function ( key, value ) {
+            Object.keys( json ).forEach( function ( key ) {
+                var instanceKey = key;
+                var value = json[key];
                 var size = Object.keys( value ).length;
-                 jQuery.each( value, function ( key, val ) {
+                 Object.keys( value ).forEach( function ( key ) {
+                    var obj = value[key];
                     var valObject = {
-                        id : val.id,
-                        title : val.title,
-                        cls: val.cls
+                        id : obj.id,
+                        title : obj.title,
+                        cls: obj.cls
                     };
                     selections.push( valObject );
+                    // First element, set placeholder
                     if ( key === "0" ) {
                         options = {
-                            placeholder_text: val.title,
+                            placeholder_text: obj.title,
                             allow_single_deselect : true,
                             disable_search_threshold: 10,
                             width: '100%'
@@ -40,18 +44,19 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                         var dropdown = select.create(selections, options);
                         selections = [];
                         options = {};
-
+                        var id = obj.id;
                         dropdown.css( { width:'170px', float:'right' } );
                         select.adjustChosen();
                         select.selectFirstValue();
-
-                        selects.push(select);
-                        dropdowns.push(dropdown);
+                        selects[instanceKey] = select;
+                        dropdowns[instanceKey] = dropdown;  
+                        // selects.push(select);
+                        // dropdowns.push(dropdown);
                      }
                 });
             });
                 this.dropdowns = dropdowns;
-                this.selects = selects;
+                this.selectInstances = selects;
         },
         /**
          * @method handleSelectionChanged
@@ -65,104 +70,103 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
         handleSelectionChanged: function ( element ) {
             var me = this;
             var values = [];
-            var instances = this.getSelect();
-            var dropdowns = this.getDropdown();
+            var instances = this.getSelectInstances();
+            var dropdowns = this.getDropdowns();
+            var i = 0;
             var rows = me.instance.inputTable.getElements().rows;
                 element.on( "change", function() {
-                    for (var i = 0; i < instances.length; i++ ) {
+                    Object.keys( instances ).forEach( function ( key ) {
+                        dropdowns[key].find( 'option' ).hide();
+                        dropdowns[key].find( '.' + instances.datum.getValue() ).show();
 
-                    dropdowns[i].find('option').hide();
-                    dropdowns[i].find('.'+ instances[0].getValue()).show();
+                        if ( instances.dimension.getValue() === "KOORDINAATISTO_MAANT_2D" ) {
+                            dropdowns.coordinatesystem.find('option').hide();
+                            jQuery( dropdowns[key].find( '.' + instances.datum.getValue()+'.'+ instances.dimension.getValue() ) ).show();
+                        }
+                        if ( instances.dimension.getValue() === "KOORDINAATISTO_MAANT_3D" ) {
+                            dropdowns.coordinatesystem.find('option').hide();
+                            dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
+                        }
+                        if ( instances.dimension.getValue() === "KOORDINAATISTO_SUORAK_2D" ) {
+                            dropdowns.coordinatesystem.find('option').hide();
+                            dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
+                        }
+                        if ( instances.dimension.getValue() === "KOORDINAATISTO_SUORAK_3D" ) {
+                            dropdowns.coordinatesystem.find('option').hide();
+                            dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
+                        }
+                        // Karttaprojektiojärjestelmä special cases
+                        if ( instances.projection.getValue() === "KKJ_KAISTA" ) {
+                            dropdowns.coordinatesystem.find('option').hide();
+                            dropdowns[key].find('.'+ instances.projection.getValue()).show();
+                        }
+                        if ( instances.projection.getValue() === "TM" ) {
+                            dropdowns.coordinatesystem.find('option').hide();
+                            dropdowns[key].find('.'+ instances.projection.getValue()).show();
+                        } 
+                        if ( instances.projection.getValue() === "GK" ) {
+                            dropdowns.coordinatesystem.find('option').hide();
+                            dropdowns[key].find('.'+ instances.projection.getValue()).show();
+                        }
+                        if ( instances.coordinatesystem.getValue() !== "COORDSYS_DEFAULT" ) {
+                            me.instance.startingSystem = true;
+                        } else {
+                            me.instance.startingSystem = true;
+                        }
 
-                    // Koordinaatisto special cases
-                    if( instances[1].getValue() === "KOORDINAATISTO_MAANT_2D" ) {
-                        dropdowns[3].find('option').hide();
-                        jQuery(dropdowns[i].find('.'+instances[0].getValue()+'.'+ instances[1].getValue())).show();
-        
-                    }
-                    if( instances[1].getValue() === "KOORDINAATISTO_MAANT_3D" ) {
-                        dropdowns[3].find('option').hide();
-                        dropdowns[i].find('.'+ instances[1].getValue()).show();
-                    }
-                    if( instances[1].getValue() === "KOORDINAATISTO_SUORAK_2D" ) {
-                        dropdowns[3].find('option').hide();
-                        dropdowns[i].find('.'+ instances[1].getValue()).show();
-                    }
-                    if( instances[1].getValue() === "KOORDINAATISTO_SUORAK_3D" ) {
-                        dropdowns[3].find('option').hide();
-                        dropdowns[i].find('.'+ instances[1].getValue()).show();
-                    }
-                    // Karttaprojektiojärjestelmä special cases
-                    if( instances[2].getValue() === "KKJ_KAISTA" ) {
-                        dropdowns[3].find('option').hide();
-                        dropdowns[i].find('.'+ instances[2].getValue()).show();
-                    }
-                    if( instances[2].getValue() === "TM" ) {
-                        dropdowns[3].find('option').hide();
-                        dropdowns[i].find('.'+ instances[2].getValue()).show();
-                    } 
-                    if( instances[2].getValue() === "GK" ) {
-                        dropdowns[3].find('option').hide();
-                        dropdowns[i].find('.'+ instances[2].getValue()).show();
-                    }
-                    if( instances[3].getValue() !== "COORDSYS_DEFAULT" ) {
-                        me.instance.startingSystem = true;
-                    } else {
-                        me.instance.startingSystem = true;
-                    }
-                    if( instances[4].getValue() === "KORKEUSJ_DEFAULT") {
-                        rows.each( function ( idx, row ) {
-                            var lastCell = jQuery(this).find('td:nth-last-child(2)');
-                            if( !lastCell.hasClass('heightsystem' )) {
-                                lastCell.addClass('heightsystem');
+                        if ( instances.heigthsystem.getValue() === "KORKEUSJ_DEFAULT") {
+                            rows.each( function ( idx, row ) {
+                                var lastCell = jQuery(this).find('td:nth-last-child(2)');
+                                if( !lastCell.hasClass( 'heightsystem' ) ) {
+                                    lastCell.addClass( 'heightsystem');
+                                }
+                            });
+                        } else {
+                            rows.each( function ( idx, row ) {
+                                var lastCell = jQuery(this).find('td:nth-last-child(2)');
+                                lastCell.attr("contenteditable", false);
+                                lastCell.removeClass('heightsystem');
+                            })
+                        }
+                            
+                        if ( instances.dimension.getValue() === 'KOORDINAATISTO_SUORAK_2D' ) {
+                            jQuery('.map-projection').show();
+                        } else {
+                            jQuery('.map-projection').hide();
+                            instances.projection.resetToPlaceholder();
+                        }
+
+                        if ( instances.datum.getValue() !== me.instance.currentDatum || me.instance.currentDatum === undefined ) {
+                            if( i !== 0 ) {
+                                instances[key].resetToPlaceholder();
                             }
-                        });
-                    } else {
-                        rows.each( function ( idx, row ) {
-                            var lastCell = jQuery(this).find('td:nth-last-child(2)');
-                            lastCell.attr("contenteditable", false);
-                            lastCell.removeClass('heightsystem');
-                        })
-                    }
-                        
-                    if( instances[1].getValue() === 'KOORDINAATISTO_SUORAK_2D' ) {
-                        jQuery('.map-projection').show();
-                    } else {
-                        jQuery('.map-projection').hide();
-                        instances[2].resetToPlaceholder();
-                    }
-
-                    if( instances[0].getValue() !== me.instance.currentDatum ||me.instance.currentDatum === undefined ) {
-                        if( i !== 0 ) {
-                            instances[i].resetToPlaceholder();
                         }
-                    }
-                    if( instances[1].getValue() !== me.instance.currentCoordinatesystem ||me.instance.currentCoordinatesystem === undefined ) {
-                        if( i > 1) {
-                            instances[i].resetToPlaceholder();
+                        if ( instances.dimension.getValue() !== me.instance.currentCoordinatesystem || me.instance.currentCoordinatesystem === undefined ) {
+                            if( i > 1) {
+                                instances[key].resetToPlaceholder();
+                            }
                         }
-                    }
-                    values = [];
-                    instances[i].update();
-                    for ( var j = 0; j < instances.length; j++ ) {
-                        var vl = instances[j].getValue();
-                        values.push( vl );
-                    }
-                    if( i == instances.length -1 ) {
-                        if( this.id === 'inputcoordsystem' ) {
-                            me.instance.inputTable.updateTitle( values );
-                            me.instance.inputTable.isEditable( me.instance.clipboardInsert );
-                        } else if( this.id === 'targetcoordsystem' ) {
-                            me.instance.outputTable.updateTitle( values );
+                        values = [];
+                        instances[key].update();
+                        for ( var j = 0; j < instances.length; j++ ) {
+                            var vl = instances[j].getValue();
+                            values.push( vl );
                         }
-                        me.instance.currentDatum = instances[0].getValue();
-                        me.instance.currentCoordinatesystem = instances[1].getValue();
-                    }
-                }
-            });
+                        if ( i == instances.length -1 ) {
+                            if( this.id === 'inputcoordsystem' ) {
+                                me.instance.inputTable.updateTitle( values );
+                                me.instance.inputTable.isEditable( me.instance.clipboardInsert );
+                            } else if( this.id === 'targetcoordsystem' ) {
+                                me.instance.outputTable.updateTitle( values );
+                            }
+                            me.instance.currentDatum = instances.datum.getValue();
+                            me.instance.currentCoordinatesystem = instances[1].getValue();
+                        }
+                        i++;
+                    });
+                });
             
             return values;
-        },
-    }
-);
+        }
+});
  
