@@ -9,7 +9,7 @@ JasmineJS test suite for testing Oskari rpc functions, events and requests.
 To run tests on your published map set the URL in map-rpc.js.
 
 ```
-mapURL = 'http://demo.oskari.org/?lang=en&uuid=678cd0e0-6caa-48f3-8b8a-54706cb2018a
+mapURL = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-5055628dbd42'
 ```
 
 ### Adding tests
