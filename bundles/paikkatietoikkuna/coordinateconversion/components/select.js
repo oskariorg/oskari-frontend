@@ -50,8 +50,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                         select.selectFirstValue();
                         selects[instanceKey] = select;
                         dropdowns[instanceKey] = dropdown;  
-                        // selects.push(select);
-                        // dropdowns.push(dropdown);
                      }
                 });
             });
@@ -129,11 +127,11 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
                                 lastCell.removeClass('heightsystem');
                             })
                         }
-                            
+                        // show the hidden select
                         if ( instances.dimension.getValue() === 'KOORDINAATISTO_SUORAK_2D' ) {
-                            jQuery('.map-projection').show();
+                            dropdowns.projection.parent().parent().show();
                         } else {
-                            jQuery('.map-projection').hide();
+                            dropdowns.projection.parent().parent().hide();
                             instances.projection.resetToPlaceholder();
                         }
 
