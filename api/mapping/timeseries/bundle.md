@@ -31,6 +31,12 @@ timeseriesService.registerTimeseries(id, type, priority, delegate, conf);
 
 ```
 
+To keep track which registered timeseries is currently active (has UI), for example to check if it's your bundle's timeseries:
+
+```javascript
+timeseriesService.on('activeChanged', function (active) {...});
+```
+
 And when the bundle wants to remove UI from view:
 
 ```javascript
