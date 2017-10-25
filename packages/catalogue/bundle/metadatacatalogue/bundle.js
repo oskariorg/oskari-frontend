@@ -44,7 +44,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	        /* instance */
 	        {
 				"type" : "text/javascript",
-				"src" : "../../../../bundles/catalogue/metadatacatalogue/instance.js"
+				"src" : "../../../../bundles/catalogue/metadatacatalogue/instance.ol2.js"
 			}, 
 			/* request */
 	        {
