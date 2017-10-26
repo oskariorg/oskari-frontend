@@ -59,8 +59,10 @@ Oskari.clazz.define(
             },
             'AfterMapLayerRemoveEvent': function (event) {
                 var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
-                series.delegate.destroy();
-                this.updateTimeseriesLayers();
+                if (series) {
+                    series.delegate.destroy();
+                    this.updateTimeseriesLayers();
+                }
             }
         },
         /**
