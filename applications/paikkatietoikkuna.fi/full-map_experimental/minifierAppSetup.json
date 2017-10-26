@@ -38,6 +38,9 @@
                     "maparcgis": {
                         "bundlePath": "../../../packages/arcgis/bundle/"
                     },
+	                "mapstats": {
+	                    "bundlePath": "../../../packages/mapping/ol2/"
+	                },
                     "mapmyplaces": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
