@@ -184,6 +184,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     dropdown.css({ width: '100%' });
     me._template.select.append(dropdown);
     select.adjustChosen();
+    select.setValue("mapClr");
 
     //update color based on selection
     dropdown.on("change", { select: select }, function (evt) {
