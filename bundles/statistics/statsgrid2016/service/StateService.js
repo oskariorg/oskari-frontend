@@ -74,6 +74,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param {String} componentId component id
          */
         toggleRegion : function(region, componentId) {
+            // TODO: why does this need componentId?
             var me = this;
 
             // if region is same than previous then unselect region
@@ -86,6 +87,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 me.activeRegion = region;
                 // notify
                 var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
+                // TODO: send which region was deselected so implementations can optimize rendering!!!!
                 me.sandbox.notifyAll(eventBuilder(me.getRegionset(), region, null, componentId));
             }, 100);
         },

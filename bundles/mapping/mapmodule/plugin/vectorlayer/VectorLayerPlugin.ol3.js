@@ -239,8 +239,8 @@ Oskari.clazz.define(
                     delete this._features[layerId];
                 }
             }
-            // Removes all features from all layers
-            else {
+            // Removes all features from all layers if layer is not specified
+            else if(!layer) {
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
@@ -252,7 +252,8 @@ Oskari.clazz.define(
             }
         },
         _removeFeaturesByAttribute: function(olLayer, identifier, value) {
-            var source = olLayer.getSource(),
+            var me = this,
+                source = olLayer.getSource(),
                 featuresToRemove = [];
 
             // add all features if identifier and value are missing or
@@ -264,19 +265,23 @@ Oskari.clazz.define(
                 }
             });
 
+            // If there is no features to remove then return
+            if(featuresToRemove.length === 0) {
+                return;
+            }
+
             // notify other components of removal
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
             var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
 
-            for (var i = 0; i < featuresToRemove.length; i++) {
-                var feature = featuresToRemove[i];
+            featuresToRemove.forEach(function(feature) {
                 source.removeFeature(feature);
                 // remove from "cache"
-                this._removeFromCache(olLayer.get('id'), feature);
+                me._removeFromCache(olLayer.get('id'), feature);
                 var geojson = formatter.writeFeaturesObject([feature]);
                 removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
-            }
+            });
             sandbox.notifyAll(removeEvent);
         },
         _removeFromCache : function(layerId, feature) {
@@ -482,6 +487,8 @@ Oskari.clazz.define(
                 });
 
                 if (options.prio && !isNaN(options.prio)) {
+                    // clear any features since we are re-adding the same features sorted by priority
+                    vectorSource.clear();
                     me._features[options.layerId].sort(function(a, b) {
                         return b.prio - a.prio;
                     });
@@ -517,8 +524,8 @@ Oskari.clazz.define(
             // notify other components that features have been added
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
-            var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
-            var errorEvent = sandbox.getEventBuilder('FeatureEvent')().setOpError('feature has no geometry');
+            var addEvent = Oskari.eventBuilder('FeatureEvent')().setOpAdd();
+            var errorEvent = Oskari.eventBuilder('FeatureEvent')().setOpError('feature has no geometry');
 
             _.forEach(features, function(feature) {
                 var geojson = formatter.writeFeaturesObject([feature]);
@@ -548,21 +555,18 @@ Oskari.clazz.define(
                 }
             }
 
-            if(options.showLayer && !mapLayerService.findMapLayer(options.layerId)) {
-                mapLayerService.addLayer(layer);
-
-                var requestBuilder = me._sandbox.getRequestBuilder(
-                    'AddMapLayerRequest'
-                );
-                if (requestBuilder) {
-                    var request = requestBuilder(layer.getId());
+            if(options.showLayer) {
+                if(!mapLayerService.findMapLayer(options.layerId)) {
+                    mapLayerService.addLayer(layer);
+                }
+                if(!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId)) {
+                    var request = Oskari.requestBuilder('AddMapLayerRequest')(layer.getId());
                     me._sandbox.request(me, request);
                 }
-            }
-
-            if(options.showLayer) {
+                // not too sure about this logic and if we can assume AddMapLayerRequest is sync
                 olLayer.setVisible(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
             }
+
         },
          /**
          * @method _updateFeature

@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     'id': view.id,
                     'uuid': view.uuid,
                     'state': view.state,
-                    'name': view.name,
+                    'name': Oskari.util.sanitize(view.name),
                     'url': view.url,
                     'domain': view.pubDomain,
                     'lang': view.lang,
@@ -314,7 +314,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 }
                 // create link
                 var link = me.templateLink.clone();
-                link.append(name);
+                link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
                         window.open(
@@ -353,7 +353,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // set up the link from name field
             var showRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-                link.append(name);
+                link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
                         setMapState(data, false, function () {
@@ -392,7 +392,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             var htmlRenderer = function (name, data) {
                 var url = sandbox.createURL(data.url);
                 var link = me.templateLink.clone();
-                link.append(name);
+                link.text(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id),
                         size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
@@ -407,7 +407,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             //sending a request to publisher for editing view
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-                link.append(name);
+                link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
                         if (setMapState(data, false, function () {
@@ -426,7 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // set up the link from delete field
             var deleteRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-                link.append(name);
+                link.text(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
@@ -442,7 +442,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             service = instance.getViewService();
             var publishRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-                link.html(name);
+                link.text(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {

@@ -345,6 +345,7 @@ Oskari.clazz.define(
         },
         /**
          * @method  @public showLegendOnMap Render published  legend
+         * This method is also used to setup functionalities for publisher preview
          */
         showLegendOnMap: function(enabled){
             var me = this;
@@ -376,7 +377,7 @@ Oskari.clazz.define(
 
         /**
          * @method  @public enableClassification change published map classification visibility.
-         * @param  {Boolean} visible visible or not
+         * @param  {Boolean} enabled allow user to change classification or not
          */
         enableClassification: function(enabled) {
             if(!this.plugin) {
