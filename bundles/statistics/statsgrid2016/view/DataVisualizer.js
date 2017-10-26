@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       this.shouldUpdate = true;
       return;
     }
-    var keyValue = {};
+    //var keyValue = {};
 
     this.service.getIndicatorMetadata(this.getIndicator().datasource, this.getIndicator().indicator, function (err, indicator) {
 
@@ -115,13 +115,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
           var name = val.name || val.id || val;
           val.title = val.name;
           var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
-          // ALERT HACK
-          // FIXME  Remove this, not needed or get different way
-          val.selections.Tiedot = val.id;
-          // HACK END
-
-          // save the id as a key in an object and put the selections as value, in the select on change event we can then compare the value we get to the key and get the value
-          keyValue[val.id] = val.selections;
           var valObject = {
             id: val.id || val,
             title: optName
@@ -141,6 +134,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         dropdown.css({ width: '100%' });
         me._template.select.append(dropdown);
         select.adjustChosen();
+        // FIXME select active indicator
         select.selectFirstValue();
         me._select = select;
 
@@ -150,23 +144,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       });
     });
 
-    me._template.tabControl.on('change', { self: me, keyValue: keyValue }, function (event) {
+    me._template.tabControl.on('change', { self: me }, function (event) {
       // hackish way of setting selected value as and new indicator and then getting the new indicator
-      var hash = event.data.self.service.getStateService().getHash(
-        event.data.self.getIndicator().datasource,
-        event.data.self.getIndicator().indicator,
-        event.data.keyValue[event.data.self.getSelect().getValue()]
-      );
+      var activeIndicator = event.data.self.service.getStateService().getActiveIndicator();
 
-      event.data.self.service.getStateService().addIndicator(event.data.self.getIndicator().datasource,
-        event.data.self.getIndicator().indicator,
-        event.data.keyValue[event.data.self.getSelect().getValue()],
-        event.data.self.getIndicator().classification);
+      event.data.self.service.getStateService().addIndicator(activeIndicator.datasource,
+        activeIndicator.indicator,
+        activeIndicator.selections,
+        activeIndicator.classification);
 
-      var data = event.data.self.getIndicatorData(hash);
-
+      var data = event.data.self.getIndicatorData(activeIndicator.hash);
+      var container = event.data.self.tabsContainer.panels[0].getContainer();
       var updated = event.data.self._barchart.redraw(data);
-      event.data.self.tabsContainer.panels[0].getContainer().append(updated);
+      container.append(updated);
     });
 
     return this._template.tabControl;
