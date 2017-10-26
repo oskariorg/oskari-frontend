@@ -186,11 +186,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     select.adjustChosen();
 
     //update color based on selection
-    dropdown.on("change", function (evt) {
+    dropdown.on("change", { select: select }, function (evt) {
         evt.stopPropagation();
-        var barchart = me._barchart.createBarChart(me.getIndicatorData(), { activeIndicator: me.getIndicator() });
-        me.tabsContainer.panels[1].getContainer().append(barchart);
-        me._barchart.redraw();
+        if ( evt.data.select.getValue() === "mapClr") {
+          me._barchart.redraw(null);
+        } else {
+          me._barchart.redraw(null, { color: ["#DC143C"] } );
+        }
     });
 
     var titleEl = jQuery('<div class="title">' + title + '</div>');
