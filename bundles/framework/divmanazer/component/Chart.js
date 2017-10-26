@@ -76,20 +76,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         return svg;
     },
     initAxis: function () {
-        // var stateService = this.service.getStateService();
-        // var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
-        // var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-        var color = "#DC143C";
         // Init axes
         this.yAxis = d3.axisLeft(this.y)
         .tickSize(10);
 
         this.xAxis = d3.axisBottom(this.x)
         .tickSize(10);
-
-        this.colorScale = d3.scaleQuantize()
-        .domain([0, this.data.length])
-        .range(color);
     },
     /**
      * initializes the chart skeleton without any specific line or bar options
@@ -153,6 +145,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         if( Object.keys(opts).length !== 0 ) {
             this.parseOptions( opts );
         }
+        if ( options.color ) {
+            var colors = options.color;
+        } else {
+            var stateService = this.service.getStateService();
+            var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
+            var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+        }
         this.initChart();
 
         var me = this;
@@ -160,6 +159,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             .data(this.data)
             .enter()
             .append("g");
+
+        //define color scale
+        this.colorScale = d3.scaleQuantize()
+        .domain([0, this.data.length])
+        .range(colors);
 
         //append rects
         bars.append("rect")
