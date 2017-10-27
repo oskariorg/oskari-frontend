@@ -1,10 +1,62 @@
 # Release Notes
 
+## 1.45.0
+
+### ProgressEvents for maplayers
+
+WMS singletile layers in OpenLayers 3 implementation now send progress events like tiled layers.
+
+## 1.44.2
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools for statistics functionality activated only when editing published maps with said functionality and not when creating new published maps.
+
+### Build-script
+
+Fixed an issue where images were not correctly copied for minified application when folder name included uppercase characters.
+
+## 1.44.1
+
+### Grid
+
+Fixed issues:
+- grid paging didn't work
+- grid selection error when ``select``-function  is used to select row when grid has not data yet
+
+#### VectorLayerPlugin ol2/ol3
+
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer which has none.
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer that is not on the map (now ignores the call, previously cleared all features from all layers).
+Fixed an error introduced in 1.44.0 where ``MapModulePlugin.AddFeaturesToMapRequest`` with priority value resulted in a JavaScript error.
+
+### publisher2
+
+Fixed an issue where the button to add layers in publisher didn't work.
+
+### FormInput
+
+Floating labels were created to all FormInput components which used setPlaceHolder method. Now floating labels are created by calling setFloatingLabel. If you want to use floating labels with FormInput component, you have to use new method. Floating label position can be adjusted with topPosition, which adds a value to the css-directive "top".
+
+Optionally tooltip can be bound to input (default binds to label).
+
+Now floating label is floated when input is selected instead of typing text.
+
+### drawtools
+
+See [api/CHANGELOG.md](api/CHANGELOG.md) for changes.
+Refactored the code for the functionality to make it more accessible.
+
+### Data sanitation
+
+Improved security by sanitizing values.
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools couldn't restore thematic maps functionality (for editing) from a previously saved published map.
+This resulted in thematic maps functionality being removed from the published map on edit.
+
 ## 1.44.0
-
-### Openlayers version upgrade
-
-For ol3 mapmodule (published maps) from 3.20.1 to 4.3.1
 
 ### layerselector2
 
@@ -167,9 +219,12 @@ UI improvements:
 
 ### mapmodule
 
+Fixed an issue where layers disappeared when pinch zooming on Android. Caused by zoom level having decimals instead of integer values.
+
 Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
 
 Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
+
 
 #### VectorLayerPlugin ol2/ol3
 

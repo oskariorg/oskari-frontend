@@ -180,7 +180,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         getMapZoom: function () {
-            return this.getMap().getZoom();
+            // Touch devices zoom level (after pinch zoom) may contains decimals
+            // for this reason zoom need rounded to nearest integer.
+            // Tested with Android pinch zoom.
+            return Math.round(this.getMap().getZoom());
         },
 
         getSize: function() {
