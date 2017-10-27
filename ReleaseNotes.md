@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.44.3
+
+### VectorLayerPlugin / AddFeaturesToMapRequest
+
+Fixed an issue where a vectorlayer that was shown on the UI layer selection (created with the request showLayer=true) could not be re-added to the map after being removed.
+
+### Map plugin localization
+
+Fixed an issue where plugin couldn't start because it didn't have localization. This fixes an issue where map legends tool in publisher was not working properly.
+
 ## 1.44.2
 
 ### statistics/statsgrid2016
