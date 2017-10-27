@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
-  // this.filter = Oskari.clazz.create('Oskari.statistics.statsgrid.Filter', this.instance);
   this.container = null;
   this.service = instance.statsService;
   this._isOpen = false;
@@ -61,7 +60,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   },
   _getPanels: function () {
     var visualizerPanel = this._createDataVisualizerPanel(this.loc.datacharts.desc);
-    // var filterPanel = this._createFilterPanel();
     return [ visualizerPanel ];
   },
   /**
@@ -76,14 +74,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     container.append(this._template.charts);
     panel.setTitle(title);
     panel.open();
-    return panel;
-  },
-  _createFilterPanel: function () {
-    this.filter.setContent(this.createIndicatorSelector(this.loc.datacharts.indicatorVar));
-    var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-    var container = panel.getContainer();
-    container.append(this.filter.getElement());
-    panel.setTitle(this.loc.filter.title);
     return panel;
   },
   _createGrid: function () {
@@ -103,24 +93,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       this.shouldUpdate = true;
       return;
     }
-
-    this.service.getIndicatorMetadata(this.getIndicator().datasource, this.getIndicator().indicator, function (err, indicator) {
-
-      indicator.selectors.forEach(function (selector, index) {
-        var selections = [];
-        var self = me;
-        selector.allowedValues.forEach(function (val) {
-          val.selections = {};
-          var name = val.name || val.id || val;
-          val.title = val.name;
-          var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
+    var options = this.service.getStateService().getIndicators();
+      var selections = [];
+      var errorCallback = function ( data ) {
+        Oskari.log(data);
+        return;
+      };
+      options.forEach( function ( option ) {
+        var indicatorData;
+        var label = function ( data ) {
+          indicatorData = data;
+        }
+        var optName = me.service.getUILabels( option, label );
           var valObject = {
-            id: val.id || val,
-            title: optName
+              id: option.indicator,
+              title: indicatorData.full
           };
           selections.push(valObject);
-        });
-
+      });
         var options = {
           placeholder_text: "",
           allow_single_deselect: true,
@@ -140,18 +130,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         var titleHolder = jQuery('<div class="title">' + title + '</div>');
         me._template.tabControl.append(titleHolder);
         me._template.tabControl.append(dropdown);
+
+    me._template.tabControl.on('change', { self: me, select: select }, function (event) {
+      var select = event.data.select;
+      var activeIndicator;
+      var ind = me.service.getStateService().getIndicators();
+      // not sure if optimal way to get indicator
+      ind.forEach( function (indicator) {
+        if( indicator.indicator === select.getValue() ) {
+          activeIndicator = indicator;
+        }
       });
-    });
-
-    me._template.tabControl.on('change', { self: me }, function (event) {
-      // hackish way of setting selected value as and new indicator and then getting the new indicator
-      var activeIndicator = event.data.self.service.getStateService().getActiveIndicator();
-
-      event.data.self.service.getStateService().addIndicator(activeIndicator.datasource,
-        activeIndicator.indicator,
-        activeIndicator.selections,
-        activeIndicator.classification);
-
       var data = event.data.self.getIndicatorData(activeIndicator.hash);
       var container = event.data.self.tabsContainer.panels[0].getContainer();
       var updated = event.data.self._barchart.redraw(data);
