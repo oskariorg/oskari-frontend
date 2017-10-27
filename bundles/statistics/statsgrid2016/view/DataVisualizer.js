@@ -103,7 +103,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       this.shouldUpdate = true;
       return;
     }
-    //var keyValue = {};
 
     this.service.getIndicatorMetadata(this.getIndicator().datasource, this.getIndicator().indicator, function (err, indicator) {
 
@@ -156,7 +155,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       var data = event.data.self.getIndicatorData(activeIndicator.hash);
       var container = event.data.self.tabsContainer.panels[0].getContainer();
       var updated = event.data.self._barchart.redraw(data);
-      container.append(updated);
+      // container.append(updated);
     });
 
     return this._template.tabControl;

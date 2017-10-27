@@ -20,8 +20,8 @@ function(instance, service) {
     // FIXME localize these
     this._templates = {
         search: jQuery('<div class="statsgrid-functionality search" data-view="search"><div class="icon"></div><div class="text">Aineistohaku</div><div class="clear"></div></div>'),
-        view: jQuery('<div class="statsgrid-functionality dataview" data-view="dataview"><div class="icon"></div><div class="text">Haun tulokset</div><div class="clear"></div></div>'),
-        filterdata: jQuery('<div class="statsgrid-functionality filterdata" data-view="filterdata"><div class="icon"></div><div class="text">Aineiston suodatus</div><div class="clear"></div></div>')
+        view: jQuery('<div class="statsgrid-functionality dataview" data-view="dataview"><div class="icon"></div><div class="text">Haun tulokset</div><div class="clear"></div></div>')
+        // filterdata: jQuery('<div class="statsgrid-functionality filterdata" data-view="filterdata"><div class="icon"></div><div class="text">Aineiston suodatus</div><div class="clear"></div></div>')
     };
 }, {
     /**
