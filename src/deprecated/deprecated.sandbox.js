@@ -16,7 +16,8 @@
         printWarn: 'Use Oskari.log() instead.',
         printError: 'Use Oskari.log() instead.',
         setUser: 'Use Oskari.user() instead.',
-        getUser: 'Use Oskari.user() instead.'
+        getUser: 'Use Oskari.user() instead.',
+        getLocalizedProperty: 'Use Oskari.getLocalized() instead.'
     };
     // Warn 2 times before falling silent
     var warn = function (name) {
@@ -127,6 +128,15 @@
         getUser: function () {
             warn('getUser');
             return Oskari.user();
+        },
+        /**
+         * @method getLocalizedProperty
+         * @param property Property
+         * @param lang Optional language
+         */
+        getLocalizedProperty: function (property, lang) {
+            warn('getLocalizedProperty');
+            return Oskari.getLocalized(property, lang);
         }
     });
 }(Oskari));

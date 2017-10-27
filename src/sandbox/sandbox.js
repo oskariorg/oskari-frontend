@@ -867,40 +867,6 @@
                 }
             },
             /**
-             * @method getLocalizedProperty
-             * @param property Property
-             * @param lang Optional language
-             */
-            getLocalizedProperty: function (property, lang) {
-                var ret,
-                    supportedLocales,
-                    i,
-                    language = lang || Oskari.getLang();
-                if (property === null || property === undefined) {
-                    return null;
-                }
-                if (typeof property === 'object') {
-                    // property value is an object, so it's prolly localized
-                    ret = property[language];
-                    if (ret === null) {
-                        supportedLocales = Oskari.getSupportedLocales();
-                        for (i = 0; i < supportedLocales.length; i += 1) {
-                            ret = property[supportedLocales[i]];
-                            if (ret) {
-                                // We found the property in _some_ language...
-                                break;
-                            }
-                        }
-                        // TODO (needs supportedLocales)
-                        // try default lang
-                        // try any lang?
-                    }
-                    return ret;
-                }
-                // property is not localized
-                return property;
-            },
-            /**
              * Fills in missing details for base url. Uses
              * window.location.protocol/host/port/path if needed.
              * @method createURL
