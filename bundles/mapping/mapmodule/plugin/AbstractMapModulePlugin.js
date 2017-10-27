@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
                 this._mapModule = mapModule;
                 this._map = mapModule.getMap();
                 this._pluginName = mapModule.getName() + this._name;
-                if(Object.keys(this._loc).length === 0) {
+                if(!this._loc || Object.keys(this._loc).length === 0) {
                     // don't blindly overwrite if localization already has some content
                     this._loc = mapModule.getLocalization('plugin', true)[this._name] || {};
                 }
