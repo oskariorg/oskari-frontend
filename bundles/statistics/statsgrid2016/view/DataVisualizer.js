@@ -242,22 +242,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       me._select.setValue( current.indicator );
       if (current) {
         if (me.getCharts() !== null) {
-          me._barchart.redraw(me.getIndicatorData());
+          me._barchart.redraw( me.getIndicatorData() );
         } else {
           me.createBarCharts();
         }
       }
     });
     this.service.on('StatsGrid.IndicatorEvent', function (event) {
-      var label = me.getIndicatorUILabels( event );
-      var dataObject = {
-        id: event.indicator,
-        title: label.full
-      };
-      if( event.wasAdded ) {
+      if( !event.isRemoved() ) {
+        var label = me.getIndicatorUILabels( event );
+        var dataObject = {
+          id: event.indicator,
+          title: label.full
+        };
         me._select.addOption( dataObject );
       } else {
-        me._select.removeOption( dataObject );
+        me._select.removeOption( event.indicator );
       }
     });
     this.service.on('StatsGrid.Filter', function(event) {
@@ -272,14 +272,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       return;
     }
 
-    if (!this._barchart.chartIsInitialized()) {
-      var barchart = this._barchart.createBarChart(data, { activeIndicator: this.getIndicator() });
+    if ( !this._barchart.chartIsInitialized() ) {
+      var barchart = this._barchart.createBarChart(data, { activeIndicator: this.getIndicator(), width: 500 });
       var bEl = jQuery(barchart);
-      bEl.css({
-        'max-width':'400px',
-        'max-height':'400px',
-        'overflow':'auto'
-      });
       var e = this.tabsContainer.panels[1];
       return bEl;
     } else {
