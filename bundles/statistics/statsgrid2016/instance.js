@@ -68,12 +68,6 @@ Oskari.clazz.define(
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
             this.plugins['Oskari.userinterface.Tile'].initFlyoutManager();
-
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
