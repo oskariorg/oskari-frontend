@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
-  // this.filter = Oskari.clazz.create('Oskari.statistics.statsgrid.Filter', this.instance);
   this.container = null;
   this.service = instance.statsService;
   this._isOpen = false;
@@ -61,7 +60,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   },
   _getPanels: function () {
     var visualizerPanel = this._createDataVisualizerPanel(this.loc.datacharts.desc);
-    // var filterPanel = this._createFilterPanel();
     return [ visualizerPanel ];
   },
   /**
@@ -78,14 +76,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     panel.open();
     return panel;
   },
-  _createFilterPanel: function () {
-    this.filter.setContent(this.createIndicatorSelector(this.loc.datacharts.indicatorVar));
-    var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-    var container = panel.getContainer();
-    container.append(this.filter.getElement());
-    panel.setTitle(this.loc.filter.title);
-    return panel;
-  },
   _createGrid: function () {
     var gridPoint = jQuery('<div></div>');
     var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable',this.sb, this.instance.getLocalization());
@@ -95,40 +85,36 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     this._grid = grid;
     return gridPoint;
   },
+  getIndicatorUILabels: function ( option ) {
+      var indicatorData;
+      var label = function ( data ) {
+        indicatorData = data;
+      }
+      this.service.getUILabels( option, label );
+      return indicatorData;
+  },
   createIndicatorSelector: function (title) {
     var me = this;
     var datasources = this.service.getDatasource();
     var panelLoc = this.loc.panels.newSearch;
-    if (this.getIndicator() === null) {
+    if ( this.getIndicator() === null ) {
       this.shouldUpdate = true;
       return;
     }
-    var keyValue = {};
-
-    this.service.getIndicatorMetadata(this.getIndicator().datasource, this.getIndicator().indicator, function (err, indicator) {
-
-      indicator.selectors.forEach(function (selector, index) {
-        var selections = [];
-        var self = me;
-        selector.allowedValues.forEach(function (val) {
-          val.selections = {};
-          var name = val.name || val.id || val;
-          val.title = val.name;
-          var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
-          // ALERT HACK
-          // FIXME  Remove this, not needed or get different way
-          val.selections.Tiedot = val.id;
-          // HACK END
-
-          // save the id as a key in an object and put the selections as value, in the select on change event we can then compare the value we get to the key and get the value
-          keyValue[val.id] = val.selections;
+    var options = this.service.getStateService().getIndicators();
+      var selections = [];
+      options.forEach( function ( option ) {
+        var indicatorData;
+        var label = function ( data ) {
+          indicatorData = data;
+        }
+        var label = me.getIndicatorUILabels( option );
           var valObject = {
-            id: val.id || val,
-            title: optName
+              id: option.indicator,
+              title: label.full
           };
           selections.push(valObject);
-        });
-
+      });
         var options = {
           placeholder_text: "",
           allow_single_deselect: true,
@@ -141,32 +127,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         dropdown.css({ width: '100%' });
         me._template.select.append(dropdown);
         select.adjustChosen();
+        // FIXME select active indicator
         select.selectFirstValue();
         me._select = select;
 
         var titleHolder = jQuery('<div class="title">' + title + '</div>');
         me._template.tabControl.append(titleHolder);
         me._template.tabControl.append(dropdown);
+
+    me._template.tabControl.on('change', { self: me, select: select }, function (event) {
+      var select = event.data.select;
+      var activeIndicator;
+      var ind = me.service.getStateService().getIndicators();
+      // not sure if optimal way to get indicator
+      ind.forEach( function (indicator) {
+        if( indicator.indicator === select.getValue() ) {
+          activeIndicator = indicator;
+        }
       });
-    });
-
-    me._template.tabControl.on('change', { self: me, keyValue: keyValue }, function (event) {
-      // hackish way of setting selected value as and new indicator and then getting the new indicator
-      var hash = event.data.self.service.getStateService().getHash(
-        event.data.self.getIndicator().datasource,
-        event.data.self.getIndicator().indicator,
-        event.data.keyValue[event.data.self.getSelect().getValue()]
-      );
-
-      event.data.self.service.getStateService().addIndicator(event.data.self.getIndicator().datasource,
-        event.data.self.getIndicator().indicator,
-        event.data.keyValue[event.data.self.getSelect().getValue()],
-        event.data.self.getIndicator().classification);
-
-      var data = event.data.self.getIndicatorData(hash);
-
+      var data = event.data.self.getIndicatorData(activeIndicator.hash);
+      var container = event.data.self.tabsContainer.panels[0].getContainer();
       var updated = event.data.self._barchart.redraw(data);
-      event.data.self.tabsContainer.panels[0].getContainer().append(updated);
+      // container.append(updated);
     });
 
     return this._template.tabControl;
@@ -194,13 +176,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     dropdown.css({ width: '100%' });
     me._template.select.append(dropdown);
     select.adjustChosen();
+    select.setValue("mapClr");
 
     //update color based on selection
-    dropdown.on("change", function (evt) {
+    dropdown.on("change", { select: select }, function (evt) {
         evt.stopPropagation();
-        var barchart = me._barchart.createBarChart(me.getIndicatorData(), { activeIndicator: me.getIndicator() });
-        me.tabsContainer.panels[1].getContainer().append(barchart);
-        me._barchart.redraw();
+        if ( evt.data.select.getValue() === "mapClr") {
+          me._barchart.redraw(null);
+        } else {
+          me._barchart.redraw(null, { color: ["#DC143C"] } );
+        }
     });
 
     var titleEl = jQuery('<div class="title">' + title + '</div>');
@@ -254,12 +239,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
 
       var current = event.getCurrent();
+      me._select.setValue( current.indicator );
       if (current) {
         if (me.getCharts() !== null) {
           me._barchart.redraw(me.getIndicatorData());
         } else {
           me.createBarCharts();
         }
+      }
+    });
+    this.service.on('StatsGrid.IndicatorEvent', function (event) {
+      var label = me.getIndicatorUILabels( event );
+      var dataObject = {
+        id: event.indicator,
+        title: label.full
+      };
+      if( event.wasAdded ) {
+        me._select.addOption( dataObject );
+      } else {
+        me._select.removeOption( dataObject );
       }
     });
     this.service.on('StatsGrid.Filter', function(event) {

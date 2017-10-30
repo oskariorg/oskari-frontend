@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
                 verticalCenterPadding: 8
             },
             width: function () {
-                return 960 - this.margin.left - this.margin.right;
+                return 380 - this.margin.left - this.margin.right;
             },
             height: function () {
                 return ( me.data.length * 21 ) - ( this.margin.top - this.margin.bottom );
@@ -76,20 +76,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         return svg;
     },
     initAxis: function () {
-        // var stateService = this.service.getStateService();
-        // var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
-        // var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-        var color = "#DC143C";
         // Init axes
         this.yAxis = d3.axisLeft(this.y)
         .tickSize(10);
 
         this.xAxis = d3.axisBottom(this.x)
         .tickSize(10);
-
-        this.colorScale = d3.scaleQuantize()
-        .domain([0, this.data.length])
-        .range(color);
     },
     /**
      * initializes the chart skeleton without any specific line or bar options
@@ -141,17 +133,33 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             .attr("class", "x axis")
             .call(this.xAxis);
     },
+    setColorScale: function ( colors ) {
+        this.colorScale = d3.scaleQuantize()
+        .domain([0, this.data.length])
+        .range(colors);
+    },
     /**
      * handles data & options passed to it, initializes skeleton chart and then applies barchart specific options to the element
      * @method createBarChart
+     * @param [Array] data, the indicator data
+     * @param { Object } options if options color is passed it needs to be an array for d3 to apply it 
      */
     createBarChart: function ( data, options ) {
+        var options = options || {};
         if( data != undefined ) {
             this.handleData(data);
         }
         var opts = options || {};
         if( Object.keys(opts).length !== 0 ) {
             this.parseOptions( opts );
+        }
+        if ( options.color ) {
+            this.setColorScale(options.color);
+        } else {
+            var stateService = this.service.getStateService();
+            var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
+            var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+            this.setColorScale(colors);
         }
         this.initChart();
 
@@ -219,7 +227,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
 
         selection.each( function (data) {
             // this._g = me.svg.select(this).append('g');
-            var axis = me.initAxis();
+            me.initAxis();
             me.callGroups();
             // add the X gridlines
             me.svg.append("g")
@@ -237,7 +245,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
      * @method redraw
      * @param  [data]
      */
-    redraw: function (data) {
+    redraw: function (data, options) {
         var chart;
         if( data != undefined ) {
             this.handleData(data);
@@ -245,7 +253,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         //Clear previous graphs
         this._template.graph.empty();
         if( this.chartType === 'barchart' ) {
-            chart = this.createBarChart(this.data);
+            chart = this.createBarChart(this.data, options);
         } else if( this.chartType === 'linechart' ) {
             chart = this.createLineChart(this.data);
         }

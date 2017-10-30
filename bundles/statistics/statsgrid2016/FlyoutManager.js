@@ -10,9 +10,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         me.initFlyouts();
         me.initViews();
     },
-    open: function(type) {
+    open: function( type ) {
         var me = this;
-        if(me.openFlyouts[type]) {
+        if ( me.openFlyouts[type] ) {
             me.hide(type);
             return;
         }
@@ -20,15 +20,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         var view = me.views[type];
         var flyout = me.flyouts[type];
 
-        if(view.getElement() === null ) {
+        if( view.getElement() === null ) {
             view.createUi();
             flyout.makeDraggable({
                 handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
                 scroll : false
             });
-            flyout.setContent(view.getElement());
+            flyout.setContent( view.getElement() );
             var tile = me.instance.plugins['Oskari.userinterface.Tile'];
-            flyout.getElement().find('.icon-close').bind('click', function(){
+            flyout.getElement().find('.icon-close').bind('click', function() {
                 tile.toggleExtensionClass(type, true);
             });
         }
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
 
         this.openFlyouts[type] = true;
     },
-    hide: function (type) {
+    hide: function ( type ) {
         var me = this;
         me.flyouts[type].hide();
         delete me.openFlyouts[type];
@@ -59,27 +59,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                 cls: 'statsgrid-data-flyout',
                 view:'dataview',
                 pos: {
-                    x: 600,
-                    y: 300
-                }
-            }),
-            filterdata: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().filter.title, {
-                width: 'auto',
-                cls: 'statsgrid-filter-flyout',
-                view:'filter',
-                pos: {
-                    x: 1200,
+                    x: 730,
                     y: 30
                 }
             })
+            // filterdata: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().filter.title, {
+            //     width: 'auto',
+            //     cls: 'statsgrid-filter-flyout',
+            //     view:'filter',
+            //     pos: {
+            //         x: 1200,
+            //         y: 30
+            //     }
+            // })
         };
     },
     initViews: function () {
         var me = this;
         me.views = {
             search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Search', this.instance, me.flyouts.search),
-            dataview: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DataVisualizer', this.instance),
-            filterdata: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Filter', this.instance)
+            dataview: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DataVisualizer', this.instance)
+            // filterdata: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Filter', this.instance)
         };
     },
     getFlyout: function (type) {
