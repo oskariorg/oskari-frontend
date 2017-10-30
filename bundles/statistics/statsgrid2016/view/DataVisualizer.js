@@ -273,8 +273,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     }
 
     if ( !this._barchart.chartIsInitialized() ) {
-      var barchart = this._barchart.createBarChart(data, { activeIndicator: this.getIndicator(), width: 500 });
+      var barchart = this._barchart.createBarChart(data, { activeIndicator: this.getIndicator() });
       var bEl = jQuery(barchart);
+      bEl.css({
+        "width": "100%"
+      })
       var e = this.tabsContainer.panels[1];
       return bEl;
     } else {

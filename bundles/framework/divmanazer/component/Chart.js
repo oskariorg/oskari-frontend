@@ -13,10 +13,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
   this._g = null;
 }, {
     _template: {
-        btn: _.template('<button>${ icon }</button>'),
-        select: jQuery('<div class="dropdown"></div>'),
-        graph: jQuery('<div id="graphic"></div>'),
-        container: jQuery('<div class="dataDescriptionContainer" style="padding:10px"></div>')
+        graph: jQuery('<div id="graphic" style="width:100%"></div>')
     },
     chartIsInitialized: function() {
         return this.svg !== null;
@@ -41,7 +38,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
                 verticalCenterPadding: 8
             },
             width: function () {
-                var width = me.containerWidth || 380;
+                var width = me.containerWidth || 500;
                 return width - this.margin.left - this.margin.right;
             },
             height: function () {
@@ -91,7 +88,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
      * @method initChart
      *
      */
-    initChart: function() {
+    initChart: function () {
         var svg = this.initSVG();
         var scales = this.initScales();
         var chart = this.chart(svg);
@@ -117,9 +114,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         if( options.activeIndicator ) {
             this.activeIndicator = options.activeIndicator;
         }
-        if( options.width ) {
+        if(options.width) {
             this.containerWidth = options.width;
-            this.dimensions.width();
         }
     },
     /**
@@ -256,6 +252,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         if( data != undefined ) {
             this.handleData(data);
         }
+        var options = options || {};
+        options.width = this.getGraph().width();
         //Clear previous graphs
         this._template.graph.empty();
         if( this.chartType === 'barchart' ) {
@@ -268,13 +266,5 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
     },
     getGraph: function() {
         return this._template.graph;
-    },
-      // getters and setters for `chart`
-    "chart.g": function( val ) {
-        if ( !val ) {
-            return this.chart_g;
-        }
-        this._g = val;
-        return line_chart;
     }
 });

@@ -81,9 +81,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     /**  @method removeOption removes an options where value mathces id
      *   @param { Object } object with keys id and title
      */
-    removeOption: function ( data ) {
+    removeOption: function ( id ) {
         var chosen = this.element.find('select');
-        var optionToRemove = chosen.find('option[value=' + data.id + ']');
+        var optionToRemove = chosen.find('option[value=' + id + ']');
         optionToRemove.remove();
         chosen.trigger('chosen:updated');
     },
