@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
   this.colorScale = null;
   this.data = null;
   this.chartType = null;
+  this.containerWidth = null;
   this._g = null;
 }, {
     _template: {
@@ -40,7 +41,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
                 verticalCenterPadding: 8
             },
             width: function () {
-                return 380 - this.margin.left - this.margin.right;
+                var width = me.containerWidth || 380;
+                return width - this.margin.left - this.margin.right;
             },
             height: function () {
                 return ( me.data.length * 21 ) - ( this.margin.top - this.margin.bottom );
@@ -65,7 +67,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             return d.name;
         }));
     },
-    initSelection: function() {
+    initSVG: function() {
             var svg = d3.select(this._template.graph[0]).append("svg")
                 .attr("width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right)
                 .attr("height", this.dimensions.height() + this.dimensions.margin.top + this.dimensions.margin.bottom)
@@ -90,9 +92,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
      *
      */
     initChart: function() {
-        var selections = this.initSelection();
+        var svg = this.initSVG();
         var scales = this.initScales();
-        var chart = this.chart(selections);
+        var chart = this.chart(svg);
         return chart;
     },
     /**
@@ -114,6 +116,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
     parseOptions: function (options) {
         if( options.activeIndicator ) {
             this.activeIndicator = options.activeIndicator;
+        }
+        if( options.width ) {
+            this.containerWidth = options.width;
+            this.dimensions.width();
         }
     },
     /**
