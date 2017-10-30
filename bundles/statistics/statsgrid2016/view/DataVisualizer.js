@@ -85,29 +85,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     this._grid = grid;
     return gridPoint;
   },
+  getIndicatorUILabels: function ( option ) {
+      var indicatorData;
+      var label = function ( data ) {
+        indicatorData = data;
+      }
+      this.service.getUILabels( option, label );
+      return indicatorData;
+  },
   createIndicatorSelector: function (title) {
     var me = this;
     var datasources = this.service.getDatasource();
     var panelLoc = this.loc.panels.newSearch;
-    if (this.getIndicator() === null) {
+    if ( this.getIndicator() === null ) {
       this.shouldUpdate = true;
       return;
     }
     var options = this.service.getStateService().getIndicators();
       var selections = [];
-      var errorCallback = function ( data ) {
-        Oskari.log(data);
-        return;
-      };
       options.forEach( function ( option ) {
         var indicatorData;
         var label = function ( data ) {
           indicatorData = data;
         }
-        var optName = me.service.getUILabels( option, label );
+        var label = me.getIndicatorUILabels( option );
           var valObject = {
               id: option.indicator,
-              title: indicatorData.full
+              title: label.full
           };
           selections.push(valObject);
       });
@@ -235,12 +239,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
 
       var current = event.getCurrent();
+      me._select.setValue( current.indicator );
       if (current) {
         if (me.getCharts() !== null) {
           me._barchart.redraw(me.getIndicatorData());
         } else {
           me.createBarCharts();
         }
+      }
+    });
+    this.service.on('StatsGrid.IndicatorEvent', function (event) {
+      var label = me.getIndicatorUILabels( event );
+      var dataObject = {
+        id: event.indicator,
+        title: label.full
+      };
+      if( event.wasAdded ) {
+        me._select.addOption( dataObject );
+      } else {
+        me._select.removeOption( dataObject );
       }
     });
     this.service.on('StatsGrid.Filter', function(event) {
