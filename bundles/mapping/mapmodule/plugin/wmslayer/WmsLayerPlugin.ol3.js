@@ -95,7 +95,7 @@ Oskari.clazz.define(
                 }
                 if(layerOptions.singleTile === true) {
                     layerImpl = new ol.layer.Image({
-                        source: new ol.source.ImageWMS({
+                        source: new ol.source.OskariImageWMS({
                             url : _layer.getLayerUrl(),
                             params : defaultParams,
                             crossOrigin : _layer.getAttributes('crossOrigin'),
@@ -219,7 +219,7 @@ Oskari.clazz.define(
                     		var layerSource = olLayerList[i].getSource();
                     		//TileWMS -> original is ol.source.TileWMS.getTileLoadFunction
                     		if (layerSource.getTileLoadFunction && typeof(layerSource.getTileLoadFunction) === 'function') {
-                    			var originalTileLoadFunction = new ol.source.TileWMS().getTileLoadFunction();
+                    			var originalTileLoadFunction = new ol.source.OskariTileWMS().getTileLoadFunction();
 								layerSource.setTileLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
 										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
@@ -231,7 +231,7 @@ Oskari.clazz.define(
                     		}
                     		//ImageWMS -> original is ol.source.ImageWMS.getImageLoadFunction
                     		else if (layerSource.getImageLoadFunction && typeof(layerSource.getImageLoadFunction) === 'function') {
-                    			var originalImageLoadFunction = new ol.source.ImageWMS().getImageLoadFunction();
+                    			var originalImageLoadFunction = new ol.source.OskariImageWMS().getImageLoadFunction();
 								layerSource.setImageLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
 										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
