@@ -63,6 +63,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   getCharts: function () {
     return this._barchart;
   },
+  clearChart: function () {
+    this._barchart.clear();
+  },
   _getPanels: function () {
     var visualizerPanel = this._createDataVisualizerPanel( this.loc.datacharts.desc );
     return [ visualizerPanel ];
@@ -231,10 +234,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     var me = this;
     this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
       var current = event.getCurrent();
-      if( me._select != null ) {
-        me._select.setValue( current.indicator );
-      }
       if (current) {
+        me._select.setValue( current.indicator );
         if (me.getCharts().svg !== null) {
           me._barchart.redraw( me.getIndicatorData(), { colors: me.getColorScale() } );
         } else {
@@ -256,6 +257,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
           me._select.addOption( dataObject );
         } else {
           me._select.removeOption( event.indicator );
+          if ( me.service.getStateService().getIndicators().length === 0 ) {
+              me.cleanChart();
+          }
         }
     });
     this.service.on('StatsGrid.Filter', function(event) {
