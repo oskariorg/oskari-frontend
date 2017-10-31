@@ -1,7 +1,6 @@
 Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, loc) {
   this.sb = sandbox;
   this.loc = loc;
-  this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this.svg = null;
   this.dimensions = this.chartDimensions();
   this.x = null;
@@ -137,17 +136,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
     },
     setColorScale: function ( colors ) {
         this.colorScale = d3.scaleQuantize()
-        .domain([0, this.data.length])
-        .range(colors);
+            .domain([0, this.data.length])
+            .range(colors);
     },
     /**
      * handles data & options passed to it, initializes skeleton chart and then applies barchart specific options to the element
      * @method createBarChart
      * @param [Array] data, the indicator data
-     * @param { Object } options if options color is passed it needs to be an array for d3 to apply it 
+     * @param { Object } options if options color is passed it needs to be an array for d3 to apply it
      */
     createBarChart: function ( data, options ) {
-        var options = options || {};
         if( data != undefined ) {
             this.handleData(data);
         }
@@ -155,14 +153,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         if( Object.keys(opts).length !== 0 ) {
             this.parseOptions( opts );
         }
-        if ( options.color ) {
-            this.setColorScale(options.color);
-        } else {
-            var stateService = this.service.getStateService();
-            var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
-            var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-            this.setColorScale(colors);
+        var colors = ['#ebb819'];
+        if(typeof opts.colors === 'string') {
+            colors = [opts.colors];
+        } else if(opts.colors){
+            colors = opts.colors;
         }
+
+        this.setColorScale(colors);
         this.initChart();
 
         var me = this;
@@ -197,10 +195,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         if( data != undefined ) {
             this.handleData(data);
         }
+
         var opts = options || {};
         if( Object.keys(opts).length !== 0 ) {
             this.parseOptions( opts );
         }
+        var colors = ['#ebb819'];
+        if(typeof opts.colors === 'string') {
+            colors = [opts.colors];
+        } else if(opts.colors){
+            colors = opts.colors;
+        }
+
+        this.setColorScale(colors);
         this.initChart();
         var me = this;
         var linegen = d3.line()
@@ -208,10 +215,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             .y(function(d) { return me.y(d.name); });
 
         this.svg.append('path')
-        .attr('d', linegen(this.data))
-        .attr('stroke', 'green')
-        .attr('stroke-width', 2)
-        .attr('fill', 'none');
+            .attr('d', linegen(this.data))
+            .attr('stroke', function(d,i){ return me.colorScale(i); })
+            .attr('stroke-width', 2)
+            .attr('fill', 'none');
 
         this.chartType = 'linechart';
         return this.getGraph();
@@ -252,14 +259,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         if( data != undefined ) {
             this.handleData(data);
         }
-        var options = options || {};
-        options.width = this.getGraph().width();
+        var opts = options || {};
+        opts.width = this.getGraph().width();
         //Clear previous graphs
         this._template.graph.empty();
         if( this.chartType === 'barchart' ) {
-            chart = this.createBarChart(this.data, options);
+            chart = this.createBarChart(this.data, opts);
         } else if( this.chartType === 'linechart' ) {
-            chart = this.createLineChart(this.data);
+            chart = this.createLineChart(this.data, opts);
         }
 
         return chart;
