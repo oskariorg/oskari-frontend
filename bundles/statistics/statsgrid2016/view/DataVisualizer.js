@@ -30,6 +30,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     return this.container;
   },
   getPanel: function ( id ) {
+    if( this.tabsContainer.panels.length === 0 ) {
+      return;
+    }
     var foundPanel;
     this.tabsContainer.panels.forEach( function ( panel ) {
        if( panel.id === id) {
@@ -127,7 +130,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         select.selectFirstValue();
         me._select = select;
 
-        me._template.chartControls.on('change', { self: me, select: select }, function (event) {
+        me._template.chartControls.on('change', { select: select }, function (event) {
+          var self = event.data.self;
           var select = event.data.select;
           var activeIndicator;
           var ind = me.service.getStateService().getIndicators();
@@ -137,9 +141,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
               activeIndicator = indicator;
             }
           });
-          var data = event.data.self.getIndicatorData(activeIndicator.hash);
-          var container = event.data.self.tabsContainer.panels[0].getContainer();
-          var updated = event.data.self._barchart.redraw(data);
+          me.service.getStateService().setActiveIndicator(activeIndicator.hash);
+          var data = me.getIndicatorData(activeIndicator.hash);
+          var container = me.tabsContainer.panels[0].getContainer();
+          var updated = me._barchart.redraw(data);
           // container.append(updated);
         });
 
