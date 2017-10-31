@@ -10,9 +10,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
   this.chartType = null;
   this.containerWidth = null;
   this._g = null;
+  this._options = {
+    colors: ['#ebb819']
+  };
 }, {
     _template: {
         graph: jQuery('<div id="graphic" style="width:100%"></div>')
+    },
+    _checkColors: function(opts){
+        var options = opts || {};
+        options.colors = options.colors || this._options.colors;
+        if(typeof options.colors === 'string') {
+            options.colors = [options.colors];
+        } else if(options.colors){
+            options.colors = options.colors;
+        }
     },
     chartIsInitialized: function() {
         return this.svg !== null;
@@ -149,18 +161,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         if( data != undefined ) {
             this.handleData(data);
         }
-        var opts = options || {};
+        var opts = options || this._options;
+
         if( Object.keys(opts).length !== 0 ) {
             this.parseOptions( opts );
         }
-        var colors = ['#ebb819'];
-        if(typeof opts.colors === 'string') {
-            colors = [opts.colors];
-        } else if(opts.colors){
-            colors = opts.colors;
-        }
 
-        this.setColorScale(colors);
+        this._checkColors(opts);
+        this.setColorScale(opts.colors);
         this.initChart();
 
         var me = this;
@@ -196,18 +204,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             this.handleData(data);
         }
 
-        var opts = options || {};
+        var opts = options || this._options;
         if( Object.keys(opts).length !== 0 ) {
             this.parseOptions( opts );
         }
-        var colors = ['#ebb819'];
-        if(typeof opts.colors === 'string') {
-            colors = [opts.colors];
-        } else if(opts.colors){
-            colors = opts.colors;
-        }
-
-        this.setColorScale(colors);
+        this._checkColors(opts);
+        this.setColorScale(opts.colors);
         this.initChart();
         var me = this;
         var linegen = d3.line()
