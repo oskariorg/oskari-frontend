@@ -90,28 +90,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   getIndicatorUILabels: function ( option ) {
       var indicatorData;
       var label = function ( data ) {
-        indicatorData = data;
-      }
+          indicatorData = data;
+      };
       this.service.getUILabels( option, label );
       return indicatorData;
   },
   createIndicatorSelector: function (title) {
-    var me = this;
-    var options = this.service.getStateService().getIndicators();
+      var me = this;
+      var options = this.service.getStateService().getIndicators();
       var selections = [];
       options.forEach( function ( option ) {
-        var indicatorData;
-        var label = function ( data ) {
-          indicatorData = data;
-        }
-        var label = me.getIndicatorUILabels( option );
+          var indicatorData;
+          var label = me.getIndicatorUILabels( option );
           var valObject = {
               id: option.indicator,
               title: label.full
           };
           selections.push(valObject);
       });
-        var options = {
+        var dropdownOptions = {
           placeholder_text: "",
           allow_single_deselect: true,
           disable_search_threshold: 10,
@@ -119,7 +116,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
           width: '100%'
         };
         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        var dropdown = select.create(selections, options);
+        var dropdown = select.create(selections, dropdownOptions);
         dropdown.css({ width: '100%' });
         me._template.select.append(dropdown);
         select.adjustChosen();
@@ -277,7 +274,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       var el = jQuery(barchart);
       el.css({
         "width": "100%"
-      })
+      });
       return el;
     } else {
       this._barchart.redraw( data );
