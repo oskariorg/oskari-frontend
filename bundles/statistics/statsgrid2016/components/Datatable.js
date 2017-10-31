@@ -219,6 +219,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         });
     },
 
+    _updateHeaderHeight: function(){
+        if(this.grid) {
+            this.grid.updateHeaderHeight();
+        }
+    },
+
     /**
      * @method  @private _setIndicators set indicators
      * @param {Object} indicators indicators
@@ -490,13 +496,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
     /**
      * @method  @public showResults Show results
-     * @param  {Object} statsTableEl jQuery object for stats table
      * @param  {Object} indicators   indicators array
      * @return {Boolean}              is shown datatable
      */
-    showResults: function(statsTableEl, indicators){
+    showResults: function(indicators){
+        var me = this;
+
+        var currentIndicators = indicators || me.getIndicators();
+        var statsTableEl = jQuery('.oskari-flyout.statsgrid-data-flyout .stats-table');
         // Show no results text
-        if(indicators.length === 0) {
+        if(currentIndicators.length === 0) {
             statsTableEl.find('.oskari-grid').hide();
             statsTableEl.find('.noresults').show();
             return false;
@@ -516,12 +525,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     updateModel : function(model, regions) {
         var me = this;
-        var statsTableEl = jQuery('.oskari-flyout.statsgrid-data-flyout .stats-table');
         var gridLoc = me.locale.statsgrid || {};
 
         var indicators = this.getIndicators();
 
-        if (!me.showResults(statsTableEl, indicators)){
+        if (!me.showResults(indicators)){
             return;
         }
 

@@ -35,6 +35,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
         flyout.show();
 
+        if(type==='dataview' && view._grid) {
+            view.checkGridVisibility();
+        }
+
         this.openFlyouts[type] = true;
     },
     hide: function ( type ) {

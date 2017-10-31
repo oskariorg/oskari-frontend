@@ -311,17 +311,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   },
   addTab: function () {
     var me = this,
-      flyout = jQuery(me.container);
+        flyout = jQuery(me.container);
     // Change into tab mode if not already
     if (me.tabsContainer.panels.length === 0) {
       me.tabsContainer.insertTo(flyout);
     }
+    me.tabsContainer.addTabChangeListener(function(previousTab, newTab) {
+        if(newTab.getId() === 'oskari-grid-statsgrid') {
+            me.checkGridVisibility();
+        }
+    });
     this.gridTab();
     this.chartsTab();
     this._template.charts.append(me.tabsContainer.ui);
   },
   isVisible: function () {
     return this._isOpen;
+  },
+  checkGridVisibility: function(){
+      var me = this;
+      me._grid._updateHeaderHeight();
+
+      // Check also need hide no result texts
+      me._grid.showResults();
   }
 }, {
   extend: ['Oskari.userinterface.extension.DefaultView']
