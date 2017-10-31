@@ -131,21 +131,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         me._select = select;
 
         me._template.chartControls.on('change', { select: select }, function (event) {
-          var self = event.data.self;
           var select = event.data.select;
           var activeIndicator;
           var ind = me.service.getStateService().getIndicators();
           // not sure if optimal way to get indicator
-          ind.forEach( function (indicator) {
+          ind.forEach( function ( indicator ) {
             if( indicator.indicator === select.getValue() ) {
               activeIndicator = indicator;
             }
           });
-          me.service.getStateService().setActiveIndicator(activeIndicator.hash);
-          var data = me.getIndicatorData(activeIndicator.hash);
-          var container = me.tabsContainer.panels[0].getContainer();
-          var updated = me._barchart.redraw(data);
-          // container.append(updated);
+          me.service.getStateService().setActiveIndicator( activeIndicator.hash );
+          var data = me.getIndicatorData( activeIndicator.hash );
+          var updated = me._barchart.redraw( data );
         });
 
         var titleHolder = jQuery('<div class="title">' + title + '</div>');
