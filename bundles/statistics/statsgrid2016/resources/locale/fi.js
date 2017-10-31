@@ -4,7 +4,9 @@ Oskari.registerLocalization(
     "key": "StatsGrid",
     "value": {
         "tile": {
-            "title": "Teemakartat"
+            "title": "Teemakartat",
+            "search": "Aineistohaku",
+            "displayResults":"Haun tulokset"
         },
         "flyout": {
             "title": "Teemakartat"

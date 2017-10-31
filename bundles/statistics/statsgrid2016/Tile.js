@@ -12,15 +12,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile',
 function(instance, service) {
     this.instance = instance;
     this.sb = this.instance.getSandbox();
+    this.loc = this.instance.getLocalization();
     this.statsService = service;
     this.container = null;
     this.template = null;
     this._tileExtensions = [];
     this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
-    // FIXME localize these
     this._templates = {
-        search: jQuery('<div class="statsgrid-functionality search" data-view="search"><div class="icon"></div><div class="text">Aineistohaku</div><div class="clear"></div></div>'),
-        view: jQuery('<div class="statsgrid-functionality dataview" data-view="dataview"><div class="icon"></div><div class="text">Haun tulokset</div><div class="clear"></div></div>')
+        search: jQuery('<div class="statsgrid-functionality search" data-view="search"><div class="icon"></div><div class="text">'+ this.loc.tile.search +'</div><div class="clear"></div></div>'),
+        view: jQuery('<div class="statsgrid-functionality dataview" data-view="dataview"><div class="icon"></div><div class="text">'+ this.loc.tile.displayResults +'</div><div class="clear"></div></div>')
         // filterdata: jQuery('<div class="statsgrid-functionality filterdata" data-view="filterdata"><div class="icon"></div><div class="text">Aineiston suodatus</div><div class="clear"></div></div>')
     };
 }, {
@@ -86,7 +86,7 @@ function(instance, service) {
      * @return {String} localized text for the title of the tile
      */
     getTitle : function() {
-        return this.instance.getLocalization().flyout.title;
+        return this.loc.flyout.title;
     },
     /**
      * @method getDescription
