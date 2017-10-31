@@ -242,6 +242,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             );
         });
     },
+    clear: function () {
+        this._template.graph.empty();
+    },
     /**
      * remove old graph and redraw
      * @method redraw
@@ -253,9 +256,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             this.handleData(data);
         }
         var options = options || {};
-        options.width = this.getGraph().width();
+        options.width = 620;
         //Clear previous graphs
-        this._template.graph.empty();
+        this.clear();
         if( this.chartType === 'barchart' ) {
             chart = this.createBarChart(this.data, options);
         } else if( this.chartType === 'linechart' ) {
