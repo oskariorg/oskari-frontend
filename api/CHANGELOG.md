@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.45.0
+
+### [rem] [breaking] TimeseriesAnimationEvent, AnimateLayerRequest
+
+Timeseries functionality rewrite. Old event & request removed.
+
 ## 1.44.1
 
 ### [mod] [rpc] DrawingEvent
@@ -51,10 +57,6 @@ Notes:
 - If you have just one feature ever this works like before.
 - Only lines and polygons are counted for the area/length (circles/points with buffers are not).
 - The measurements are for non-buffered features.
-
-### [rem] [breaking] TimeseriesAnimationEvent, AnimateLayerRequest
-
-Timeseries functionality rewrite. Old event & request removed.
 
 ## 1.44
 
