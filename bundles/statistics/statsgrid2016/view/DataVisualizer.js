@@ -138,8 +138,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
             }
           });
           me.service.getStateService().setActiveIndicator( activeIndicator.hash );
-          var data = me.getIndicatorData( activeIndicator.hash );
-          var updated = me._barchart.redraw( data );
         });
 
         var titleHolder = jQuery('<div class="title">' + title + '</div>');
@@ -176,10 +174,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     //update color based on selection
     dropdown.on("change", { select: select }, function (evt) {
         evt.stopPropagation();
-        if ( evt.data.select.getValue() === "mapClr") {
-          me._barchart.redraw(null);
+        if ( evt.data.select.getValue() === 'mapClr') {
+          me._barchart.redraw(null, { colors: me.getColorScale() });
         } else {
-          me._barchart.redraw(null, { color: ["#DC143C"] } );
+          me._barchart.redraw(null, { colors: '#DC143C' } );
         }
     });
 
@@ -238,7 +236,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       }
       if (current) {
         if (me.getCharts().svg !== null) {
-          me._barchart.redraw( me.getIndicatorData() );
+          me._barchart.redraw( me.getIndicatorData(), { colors: me.getColorScale() } );
         } else {
           var el = me.createBarCharts();
           me.getPanel("oskari-chart-statsgrid").append( el );
@@ -264,6 +262,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       var filterOptions = event.getFilter();
     });
   },
+
+  getColorScale: function(){
+      var stateService = this.service.getStateService();
+      var activeIndicator = stateService.getActiveIndicator();
+      var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
+      var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+      return colors;
+  },
+
   createBarCharts: function () {
     var me = this;
     var data = this.getIndicatorData();
@@ -271,15 +278,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       Oskari.log("no indicator data");
       return null;
     }
+
     if ( !this._barchart.chartIsInitialized() ) {
-      var barchart = this._barchart.createBarChart(data, { activeIndicator: this.getIndicator() });
+      var barchart = this._barchart.createBarChart(data, { colors:  me.getColorScale()});
       var el = jQuery(barchart);
       el.css({
         "width": "100%"
       });
       return el;
     } else {
-      this._barchart.redraw( data );
+      this._barchart.redraw( data, { colors:  me.getColorScale()} );
     }
   },
   gridTab: function () {
