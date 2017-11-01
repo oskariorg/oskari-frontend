@@ -72,10 +72,8 @@ Oskari.clazz.define(
          */
         _checkMultipleLayers: function () {
             if (this._timeseriesService.getCountByType('layer') > 1) {
-                this._popupService.closeAllPopups(false);
                 var popup = this._popupService.createPopup();
-                var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                closeBtn.setTitle(this.loc('alert.ok'));
+                var closeBtn = popup.createCloseButton(this.loc('alert.ok'));
                 closeBtn.setHandler(function () {
                     popup.close(true);
                 });
