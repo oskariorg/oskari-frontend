@@ -18,6 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._name = 'TimeseriesControlPlugin';
         me._timelineWidth = 600;
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
+        me._d3TimeDef = Oskari.getLocalization('timeseries').d3TimeDef;
         me._sideMargin = conf.sideMargin || 10;
         me._waitingForFrame = false;
 
@@ -67,28 +68,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         };
     }, {
         __fullAxisYPos: 35,
-        __localeData: {
-            fi: {
-                "dateTime": "%A, %-d. %Bta %Y klo %X",
-                "date": "%-d.%-m.%Y",
-                "time": "%H:%M:%S",
-                "periods": ["a.m.", "p.m."],
-                "days": ["sunnuntai", "maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai"],
-                "shortDays": ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"],
-                "months": ["tammikuu", "helmikuu", "maaliskuu", "huhtikuu", "toukokuu", "kesäkuu", "heinäkuu", "elokuu", "syyskuu", "lokakuu", "marraskuu", "joulukuu"],
-                "shortMonths": ["Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu"]
-            },
-            sv: {
-                "dateTime": "%A den %d %B %Y %X",
-                "date": "%Y-%m-%d",
-                "time": "%H:%M:%S",
-                "periods": ["fm", "em"],
-                "days": ["Söndag", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag"],
-                "shortDays": ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
-                "months": ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"],
-                "shortMonths": ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"]
-            }
-        },
 
         // Returns a function, that, when invoked, will only be triggered at most once
         // during a given window of time. Normally, the throttled function will run
@@ -431,11 +410,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {Function} time formatting function
          */
         _getTickFormatter: function () {
-            var localeString = Oskari.getLang();
             var locale;
             var formatterFunction;
-            if (this.__localeData[localeString]) {
-                locale = d3.timeFormatLocale(this.__localeData[localeString]);
+            if (this._d3TimeDef) {
+                locale = d3.timeFormatLocale(this._d3TimeDef);
                 formatterFunction = locale.format.bind(locale);
             } else {
                 formatterFunction = d3.timeFormat.bind(d3);
