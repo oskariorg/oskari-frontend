@@ -2,31 +2,31 @@
 .timeseriescontrolplugin {
   background-color: rgba(255, 255, 255, 1);
 }
-g.full-axis .tick line {
+.timeline-svg g.full-axis .tick line {
   visibility: hidden;
 }
-g.full-axis .domain {
+.timeline-svg g.full-axis .domain {
   stroke-width: 3px;
   stroke: #E4E6E7;
 }
-g.full-axis-controls circle {
+.timeline-svg g.full-axis-controls circle {
   stroke: #E4E6E7;
   stroke-width: 2px;
   fill: #5C6160;
 }
-g.full-axis-controls line {
+.timeline-svg g.full-axis-controls line {
   stroke: #FAD500;
   stroke-width: 3px;
 }
-g.drag-handle circle{
+.timeline-svg g.drag-handle circle{
   fill: #FAD500;
   stroke: #4E4E4E;
   stroke-width: 2px;
 }
-g.subset-axis line, g.subset-axis path {
+.timeline-svg g.subset-axis line, g.subset-axis path {
   stroke: #333;
 }
-g.subset-axis text, g.full-axis text {
+.timeline-svg g.subset-axis text, g.full-axis text {
   fill: #333;
   stroke: none;
 }
