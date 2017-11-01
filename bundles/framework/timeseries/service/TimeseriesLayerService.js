@@ -74,9 +74,6 @@ Oskari.clazz.define(
             if (this._timeseriesService.getCountByType('layer') > 1) {
                 var popup = this._popupService.createPopup();
                 var closeBtn = popup.createCloseButton(this.loc('alert.ok'));
-                closeBtn.setHandler(function () {
-                    popup.close(true);
-                });
                 popup.show(this.loc('alert.title'), this.loc('alert.message'), [closeBtn]);
             }
         },
