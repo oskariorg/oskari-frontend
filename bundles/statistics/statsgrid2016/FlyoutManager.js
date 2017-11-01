@@ -48,14 +48,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     },
     initFlyouts: function () {
         var me = this;
+        var p = jQuery( "#mapdiv" );
+        var position = p.position();
+        var offset = 40;
+        var width = p.width() / 4;
         me.flyouts = {
             search: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().tile.title, {
-                width: 'auto',
+                width: width + 'px',
                 cls: 'statsgrid-search-flyout',
                 view:'search',
                 pos: {
-                    x: 210,
-                    y: 30
+                    x: position.left + offset,
+                    y: 5
                 }
             }),
             dataview: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().datacharts.flyout, {
@@ -63,8 +67,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                 cls: 'statsgrid-data-flyout',
                 view:'dataview',
                 pos: {
-                    x: 730,
-                    y: 30
+                    x: width + position.left + offset,
+                    y: 5
                 }
             })
             // filterdata: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().filter.title, {
