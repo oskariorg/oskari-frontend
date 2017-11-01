@@ -258,7 +258,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         } else {
           me._select.removeOption( event.indicator );
           if ( me.service.getStateService().getIndicators().length === 0 ) {
-              me.cleanChart();
+              me.clearChart();
           }
         }
     });
