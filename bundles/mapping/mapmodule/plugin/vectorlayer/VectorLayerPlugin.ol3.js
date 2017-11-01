@@ -244,6 +244,7 @@ Oskari.clazz.define(
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
+                        this._removeFeaturesByAttribute(olLayer);
                         this._map.removeLayer(olLayer);
                         delete this._olLayers[layerId];
                         delete this._features[layerId];
