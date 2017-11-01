@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             stepInterval: 'minutes'
         };
         me._setFrameInterval(me._uiState.frameInterval); // sets throttle for animation, too
-        me._throttleNewTime = me._throttle(me._requestNewTime.bind(me), 500);
+        me._throttleNewTime = Oskari.util.throttle(me._requestNewTime.bind(me), 500);
 
         this._uiState.times = delegate.getTimes();
         var range = delegate.getSubsetRange();
@@ -68,43 +68,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         };
     }, {
         __fullAxisYPos: 35,
-
-        // Returns a function, that, when invoked, will only be triggered at most once
-        // during a given window of time. Normally, the throttled function will run
-        // as much as it can, without ever going more than once per `wait` duration;
-        // but if you'd like to disable the execution on the leading edge, pass
-        // `{leading: false}`. To disable execution on the trailing edge, ditto.
-        _throttle: function (func, wait, options) {
-            var context, args, result;
-            var timeout = null;
-            var previous = 0;
-            if (!options) options = {};
-            var later = function () {
-                previous = options.leading === false ? 0 : Date.now();
-                timeout = null;
-                result = func.apply(context, args);
-                if (!timeout) context = args = null;
-            };
-            return function () {
-                var now = Date.now();
-                if (!previous && options.leading === false) previous = now;
-                var remaining = wait - (now - previous);
-                context = this;
-                args = arguments;
-                if (remaining <= 0 || remaining > wait) {
-                    if (timeout) {
-                        clearTimeout(timeout);
-                        timeout = null;
-                    }
-                    previous = now;
-                    result = func.apply(context, args);
-                    if (!timeout) context = args = null;
-                } else if (!timeout && options.trailing !== false) {
-                    timeout = setTimeout(later, remaining);
-                }
-                return result;
-            };
-        },
         /**
          * @method _setFrameInterval Sets animation frame interval & updates associated throttle function
          * @private
@@ -112,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _setFrameInterval: function (interval) {
             this._uiState.frameInterval = interval;
-            this._throttleAnimation = this._throttle(this._animationStep.bind(this), interval);
+            this._throttleAnimation = Oskari.util.throttle(this._animationStep.bind(this), interval);
         },
         /**
          * @method _requestNewTime Requests delegate to set new current time and hadles callback when done
