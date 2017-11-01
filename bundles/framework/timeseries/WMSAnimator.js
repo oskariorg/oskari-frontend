@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
         requestNewTime: function (newTime, nextTime, doneCallback) {
             var me = this;
             this._currentTime = newTime;
-            var requestBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+            var requestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
             if (requestBuilder) {
                 this._isLoading = true;
                 this._doneCallback = doneCallback;
