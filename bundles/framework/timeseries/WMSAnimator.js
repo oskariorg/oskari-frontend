@@ -103,6 +103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 this._isLoading = true;
                 this._doneCallback = doneCallback;
                 if (nextTime) {
+                    this._isBuffering = true;
                     this._bufferImages(this._mapModule.getLayerTileUrls(this._layer.getId()), nextTime, function (success) {
                         me._isBuffering = false;
                         me._resolveWait();
@@ -121,7 +122,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
          * @param {Function} callback is called when loading is ready or 5000 ms timeout reached
          */
         _bufferImages: function (urls, nextTime, callback) {
-            this._isBuffering = true;
             var imgCount = urls.length;
             if (imgCount === 0) {
                 callback(true);
