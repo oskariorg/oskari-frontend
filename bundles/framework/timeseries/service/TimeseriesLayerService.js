@@ -125,18 +125,21 @@ Oskari.clazz.define(
             var me = this,
                 layers = me._sandbox.findAllSelectedMapLayers();
             for (var i = 0; i < layers.length; i++) {
-                if (layers[i].hasTimeseries()) {
-                    var layer = layers[i];
-                    var series = this._timeseriesService.getTimeseries(layer.getId(), 'layer');
-                    if (!series) {
-                        var delegate = me._layerDelegateFactory(layer.getId(), layer.getLayerType());
-                        if(!delegate) {
-                            continue;
-                        }
-                        this._timeseriesService.registerTimeseries(layer.getId(), 'layer', -i, delegate);
-                    } else {
-                        this._timeseriesService.updateTimeseriesPriority(layer.getId(), 'layer', -i);
-                    }
+                if (!layers[i].hasTimeseries()) {
+                    continue;
+                }
+                var layer = layers[i];
+                var series = this._timeseriesService.getTimeseries(layer.getId(), 'layer');
+                if (series) {
+                    // existing timeseries layer -> update it (priority changed if layers rearranged)
+                    this._timeseriesService.updateTimeseriesPriority(layer.getId(), 'layer', -i);
+                    continue;
+                }
+                // new timeseries layer -> try to get a handler for the layer type
+                var delegate = me._layerDelegateFactory(layer.getId(), layer.getLayerType());
+                if (delegate) {
+                    // layer type can be handled as timeseries - register it
+                    this._timeseriesService.registerTimeseries(layer.getId(), 'layer', -i, delegate);
                 }
             }
             me._checkMultipleLayers();
