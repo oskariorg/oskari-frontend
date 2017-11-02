@@ -18,41 +18,28 @@ Oskari.clazz.define(
         me._name = 'HeatmapLayerPlugin';
     },
     {
-    	TYPE : 'HEATMAP',
         /**
-         * @method register
-         * Interface method for the plugin protocol.
-         * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
+         * @method _afterChangeMapLayerOpacityEvent
+         * Handle AfterChangeMapLayerOpacityEvent
+         * @private
+         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
+         *            event
          */
-        register: function () {
-            this.getMapModule().setLayerPlugin('heatmaplayer', this);
-        },
-        /**
-         * @method unregister
-         * Interface method for the plugin protocol
-         * Unregisters self from mapmodules layerPlugins
-         */
-        unregister: function () {
-            this.getMapModule().setLayerPlugin('heatmaplayer', null);
-        },
+        _afterChangeMapLayerOpacityEvent: function (event) {
+            var layer = event.getMapLayer(),
+                mapLayer;
 
-        _createEventHandlers: function () {
-            return {
-                MapLayerEvent: function(event) {
-                    var op = event.getOperation(),
-                        layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
+            if (!layer.isLayerOfType(this.TYPE)) {
+                return;
+            }
 
-                    if (op === 'update' && layer && layer.isLayerOfType(this.TYPE)) {
-                        this._updateLayer(layer);
-                    }
-                },
-                AfterMapLayerRemoveEvent: function (event) {
-                    this._afterMapLayerRemoveEvent(event);
-                },
-                AfterChangeMapLayerOpacityEvent: function (event) {
-                    this._afterChangeMapLayerOpacityEvent(event);
-                }
-            };
+            this.getSandbox().printDebug(
+                'Setting Layer Opacity for ' + layer.getId() + ' to ' + layer.getOpacity()
+            );
+            mapLayer = this.getLayersByName('layer_' + layer.getId());
+            if (mapLayer[0] !== null && mapLayer[0] !== undefined) {
+                mapLayer[0].setOpacity(layer.getOpacity() / 100);
+            }
         },
         /**
          * Adds a single WMS layer to this map
@@ -133,42 +120,6 @@ Oskari.clazz.define(
             }
         },
         /**
-         *
-         * @method @private _createReverseProjection Create a clone of the projection object with axis order neu
-         *
-         */
-        _createReverseProjection: function(projectionCode) {
-            var originalProjection = ol.proj.get(projectionCode);
-
-            if (!originalProjection) {
-                return null;
-            }
-
-            reverseProjection = new ol.proj.Projection({
-                "code": projectionCode,
-                "units": originalProjection.getUnits(),
-                "extent": originalProjection.getExtent(),
-                "axisOrientation": "neu",
-                "global": originalProjection.isGlobal(),
-                "metersPerUnit": originalProjection.getMetersPerUnit(),
-                "worldExtent": originalProjection.getWorldExtent(),
-                "getPointResolution": originalProjection.getPointResolution
-            });
-            return reverseProjection;
-        },
-        /**
-         * @method _afterMapLayerRemoveEvent
-         * Handle AfterMapLayerRemoveEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent}
-         *            event
-         */
-        _afterMapLayerRemoveEvent: function (event) {
-            var layer = event.getMapLayer();
-
-            this._removeMapLayerFromMap(layer);
-        },
-        /**
          * @method _afterMapLayerRemoveEvent
          * Removes the layer from the map
          * @private
@@ -176,16 +127,16 @@ Oskari.clazz.define(
          */
         _removeMapLayerFromMap: function (layer) {
             var me = this;
-            if (!layer.isLayerOfType(this.TYPE)) {
+            if ( !layer.isLayerOfType( this.TYPE ) ) {
                 return;
             }
             var remLayer;
             if (layer.isBaseLayer() || layer.isGroupLayer()) {
                 var i;
                 if (layer.getSubLayers().length > 0) {
-                    for (i = 0; i < layer.getSubLayers().length; i += 1) {
+                    for (i = 0; i < layer.getSubLayers().length; i += 1 ) {
                         var subtmp = layer.getSubLayers()[i];
-                        remLayer = this.getLayersByName('basemap_' + subtmp.getId());
+                        remLayer = this.getLayersByName( 'basemap_' + subtmp.getId() );
                         if ( remLayer ) {
                             remLayer.forEach( function  (layer ) {
                                 me.getMapModule().removeLayer( layer );
@@ -193,17 +144,31 @@ Oskari.clazz.define(
                         }
                     }
                 } else {
-                    remLayer = this.getLayersByName('layer_' + layer.getId());
+                    remLayer = this.getLayersByName( 'layer_' + layer.getId() );
                     remLayer.forEach( function  (layer ) {
                         me.getMapModule().removeLayer( layer );
                     });       
                 }
             } else {
-                remLayer = this.getLayersByName('layer_' + layer.getId());
+                remLayer = this.getLayersByName( 'layer_' + layer.getId() );
                 remLayer.forEach( function  (layer ) {
                     me.getMapModule().removeLayer( layer );
                 });
             }
+        },
+        /**
+         * @method getOLMapLayers
+         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
+         * @param {Oskari.mapframework.domain.WmsLayer} layer
+         * @return {OpenLayers.Layer[]}
+         */
+        getOLMapLayers: function (layer) {
+
+            if (!layer.isLayerOfType(this.TYPE)) {
+                return null;
+            }
+
+            return this.getLayersByName('layer_' + layer.getId());
         },
         getLayersByName: function (name) {
             var layers = this.getMapModule().getLayers();
@@ -215,128 +180,8 @@ Oskari.clazz.define(
             }
             return foundLayers;
         },
-        /**
-         * @method getOLMapLayers
-         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
-         * @param {Oskari.mapframework.domain.WmsLayer} layer
-         * @return {OpenLayers.Layer[]}
-         */
-        getOLMapLayers: function (layer) {
-            var olLayers = [];
-            if (!layer.isLayerOfType(this.TYPE)) {
-                return null;
-            }
-            var layers = this.getMapModule().getLayers();
-
-            var layer;
-            for( var i = 0; i < layers.length; i++ ) {
-                if( layers[i].get("title") === 'layer_'+ layer._id ) {
-                    layer = layers[i];
-                    olLayers.push(layer);
-                }
-            }
-            return olLayers;
-        },
-        __getSLD: function(layer) {
-			 var SLD = '<?xml version="1.0" ?>' +
-			'<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">'+
-			'<NamedLayer>'+
-			'<Name>'+ layer.getSLDNamedLayer() + '</Name>'+
-			'<UserStyle>'+
-			'<Title>Heatmap</Title>'+
-			'<FeatureTypeStyle>'+
-			'<Transformation>'+
-			'<ogc:Function name="gs:Heatmap">'+
-			'<ogc:Function name="parameter">'+
-			'<ogc:Literal>data</ogc:Literal>'+
-			'</ogc:Function>';
-			if(layer.getWeightedHeatmapProperty()) {
-				SLD = SLD +
-					'<ogc:Function name="parameter">'+
-					'<ogc:Literal>weightAttr</ogc:Literal>'+
-					'<ogc:Literal>'+layer.getWeightedHeatmapProperty()+'</ogc:Literal>'+
-					'</ogc:Function>';
-			}
-			SLD = SLD +
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>radiusPixels</ogc:Literal>'+
-				'<ogc:Function name="env">'+
-				'<ogc:Literal>radius</ogc:Literal>'+
-				'<ogc:Literal>'+layer.getRadius()+'</ogc:Literal>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>pixelsPerCell</ogc:Literal>'+
-				'<ogc:Literal>'+ layer.getPixelsPerCell() +'</ogc:Literal>'+
-				'</ogc:Function>'+
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>outputBBOX</ogc:Literal>'+
-				'<ogc:Function name="env">'+
-				'<ogc:Literal>wms_bbox</ogc:Literal>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>outputWidth</ogc:Literal>'+
-				'<ogc:Function name="env">'+
-				'<ogc:Literal>wms_width</ogc:Literal>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>outputHeight</ogc:Literal>'+
-				'<ogc:Function name="env">'+
-				'<ogc:Literal>wms_height</ogc:Literal>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'</Transformation>'+
-				'<Rule>'+
-				'<RasterSymbolizer>'+
-				'<Geometry>'+
-				'<ogc:PropertyName>' + layer.getGeometryProperty() + '</ogc:PropertyName></Geometry>'+
-				'<Opacity>1</Opacity>'+
-				'<ColorMap type="ramp" >';
-
-			// setup color map
-			//'<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>';
-			var colors = layer.getColorConfig();
-			var entryTemplate = _.template('<ColorMapEntry color="${color}" quantity="${quantity}" opacity="${opacity}" />');
-			_.each(colors, function(color) {
-				SLD = SLD + entryTemplate(color);
-			});
-			SLD = SLD +
-				'</ColorMap>'+
-				'</RasterSymbolizer>'+
-				'</Rule>'+
-				'</FeatureTypeStyle>'+
-				'</UserStyle>'+
-				'</NamedLayer>'+
-				'</StyledLayerDescriptor>';
-			return SLD;
-        },
-        /**
-         * @method _afterChangeMapLayerOpacityEvent
-         * Handle AfterChangeMapLayerOpacityEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
-         *            event
-         */
-        _afterChangeMapLayerOpacityEvent: function (event) {
-            var layer = event.getMapLayer(),
-                mapLayer;
-
-            if ( !layer.isLayerOfType( this.TYPE ) ) {
-                return;
-            }
-
-            this.getSandbox().printDebug(
-                'Setting Layer Opacity for ' + layer.getId() + ' to ' + layer.getOpacity()
-            );
-            mapLayer = this.getLayersByName('layer_' + layer.getId());
-            if (mapLayer !== null && mapLayer !== undefined) {
-                mapLayer[0].setOpacity(layer.getOpacity() / 100);
-            }
-        },
         updateLayerParams: function (layer, forced, params) {
+            debugger;
             var params = params || {};
             params.SLD_BODY = this.__getSLD(layer);
             
@@ -344,59 +189,10 @@ Oskari.clazz.define(
             updateLayer.forEach( function ( layer ) {
                 layer.getSource().updateParams( params );
             });
-        },
-        /**
-         * Updates the OpenLayers and redraws them if scales have changed.
-         *
-         * @method _updateLayer
-         * @param  {Oskari.mapframework.domain.WmsLayer} layer
-         * @return {undefined}
-         */
-        _updateLayer: function(layer) {
-            var oLayers = this.getOLMapLayers(layer),
-                subs = layer.getSubLayers(),
-                layerList = subs.length ? subs : [layer],
-                llen = layerList.length,
-                scale = this.getMapModule().getMap().getScale(),
-                i,
-                newRes,
-                isInScale;
-
-            for (i = 0; i < llen; i += 1) {
-                newRes = this._calculateResolutions(layerList[i]);
-                isInScale = layerList[i].isInScale(scale);
-                // Make sure the sub exists before mucking about with it
-                if (newRes && isInScale && oLayers && oLayers[i]) {
-                    oLayers[i].addOptions({
-                        resolutions: newRes
-                    });
-                    oLayers[i].setVisibility(isInScale);
-                    oLayers[i].redraw(true);
-                }
-            }
-        },
-
-        /**
-         * Calculates the resolutions based on layer scales.
-         *
-         * @method _calculateResolutions
-         * @param  {Oskari.mapframework.domain.WmsLayer} layer
-         * @return {Array[Number]}
-         */
-        _calculateResolutions: function(layer) {
-            var mm = this.getMapModule(),
-                minScale = layer.getMinScale(),
-                maxScale = layer.getMaxScale();
-
-            if (minScale || maxScale) {
-                // use resolutions instead of scales to minimiz
-                // chance of transformation errors
-                return mm.calculateLayerResolutions(maxScale, minScale);
-            }
         }
     },
     {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        'extend': ['Oskari.mapframework.heatmap.AbstractHeatmapPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
