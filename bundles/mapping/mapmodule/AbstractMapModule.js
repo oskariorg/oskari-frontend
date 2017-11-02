@@ -1146,8 +1146,7 @@ Oskari.clazz.define(
         },
 
         _adjustMobileMapSize: function() {
-            // TODO: should use mapdiv height, not window since publisher can force the size to smaller than fullscreen
-            var mapDivHeight = jQuery(window).height();
+            var mapDivHeight = this.getMapEl().height();
             var mobileDiv = this.getMobileDiv();
             var toolbar = mobileDiv.find('.mobileToolbarContent');
 
@@ -1170,11 +1169,12 @@ Oskari.clazz.define(
                 }
             }
 
+
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
             // only reduce size if div is visible, otherwise padding will make the map smaller than it should be
             if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
                 mapDivHeight -= mobileDiv.outerHeight();
-                if((mobileDiv.attr('data-height') + '') !== mapDivHeight) {
+                if((mobileDiv.attr('data-height')) !== mapDivHeight.toString()) {
                     jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
                     this.updateDomain();
                     mobileDiv.attr('data-height', mapDivHeight);
