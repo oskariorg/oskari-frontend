@@ -24,8 +24,8 @@ Oskari.registerLocalization(
         },
         "dateRender": "{val, date} {val, time, short}",
         "alert": {
-            "title": "Obs!",
-            "message": "Flera kartlager med tidsserier är valda. Bara den översta kan kotrolleras.",
+            "title": "Flera kartlager med tidsserier är valda",
+            "message": "Bara den översta kan kontrolleras.",
             "ok": "OK"
         },
         "d3TimeDef": {

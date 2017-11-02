@@ -24,8 +24,8 @@ Oskari.registerLocalization(
         },
         "dateRender": "{val, date} {val, time, short}",
         "alert": {
-            "title": "Warning",
-            "message": "Multiple layers with timeseries selected. Only topmost can be controlled.",
+            "title": "Multiple layers with timeseries in use",
+            "message": "You can only control the topmost layer.",
             "ok": "OK"
         }
     }

@@ -24,8 +24,8 @@ Oskari.registerLocalization(
         },
         "dateRender": "{val, date} {val, time, short}",
         "alert": {
-            "title": "Huom!",
-            "message": "Useita aikasarjatasoja valittu. Vain päällimmäistä voi ohjata.",
+            "title": "Useita aikasarjatasoja valittu",
+            "message": "Voit ohjata vain päällimmäistä tasoa.",
             "ok": "OK"
         },
         "d3TimeDef": {
