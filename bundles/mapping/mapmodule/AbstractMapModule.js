@@ -2379,7 +2379,15 @@ Oskari.clazz.define(
             },
             positionAlign: 'left'
         }],
-
+        /**
+         * @method getLayerTileUrls
+         * @param layerId id of the layer
+         * @return {String[]}
+         * Get urls of tile layer tiles. Override in implementation
+         */
+        getLayerTileUrls: function(layerId) {
+            return [];
+        },
         /**
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
