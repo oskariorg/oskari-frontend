@@ -191,6 +191,7 @@
 }
 svg.timeline-svg{
   display: block;
+  overflow: hidden;
 }
 
 /* mobile mode */
