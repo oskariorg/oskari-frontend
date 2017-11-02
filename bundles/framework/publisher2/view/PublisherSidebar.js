@@ -295,7 +295,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // group tools per tool-group
             _.each(definedTools, function(ignored, toolname) {
                 var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
-                if(tool.isDisplayed() === true && tool.isShownInToolsPanel()) {
+                if(tool.isDisplayed(me.data) === true && tool.isShownInToolsPanel()) {
                     var group = tool.getGroup();
                     if(!grouping[group]) {
                         grouping[group] = [];
@@ -304,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     grouping[group].push(tool);
                 }
 
-                if (tool.isDisplayed() === true) {
+                if (tool.isDisplayed(me.data) === true) {
                     allTools.push(tool);
                 }
             });
