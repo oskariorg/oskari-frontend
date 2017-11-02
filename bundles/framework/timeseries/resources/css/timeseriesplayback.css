@@ -30,6 +30,9 @@
   fill: #333;
   stroke: none;
 }
+.timeline-svg g.tick text.bold {
+  font-weight: 600;
+}
 .timeseries-menus label.oskari-select {
   color: #333;
 }

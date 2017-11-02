@@ -390,13 +390,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 formatYear = formatterFunction("%Y");
 
             return function multiFormat(date) {
+                var textEl = d3.select(this);
                 return (d3.timeSecond(date) < date ? formatMillisecond
                     : d3.timeMinute(date) < date ? formatSecond
                     : d3.timeHour(date) < date ? formatMinute
                     : d3.timeDay(date) < date ? formatHour
                     : d3.timeMonth(date) < date ? formatDay
                     : d3.timeYear(date) < date ? formatMonth
-                    : formatYear)(date);
+                    : (textEl.classed('bold', true), formatYear))(date);
             }
         },
         /**
