@@ -95,7 +95,7 @@ jQuery.ajaxSetup({ cache: false });
                     if (typeof modifyCB === 'function') {
                         modifyCB(setup);
                     }
-                    me.setApplicationSetup(setup);
+                    me.init(setup);
                     me.startApplication(successCB);
                 },
                 error: function (jqXHR) {
@@ -106,16 +106,16 @@ jQuery.ajaxSetup({ cache: false });
             });
         },
         /**
-         * @public @method setApplicationSetup
-         * Each bundledef is of kind playable by method playBundle. callback:
-         * property may be set to receive some feedback - as well as
-         * registerLoaderStateListener
+         * @public @method init
+         * Initializes the internal state so startApplication() can be called to startup the initialized app.
          *
          * @param {Object} setup JSON application setup {
-         * startupSequence: [ <bundledef1>, <bundledef2>, <bundledef3>, ] }
-         *
+         *     startupSequence: [ <bundledef1>, <bundledef2>, ...],
+         *     env: { ... },
+         *     configuration: { ... }
+         *   }
          */
-        setApplicationSetup: function (setup) {
+        init: function (setup) {
             this.appSetup = setup;
             if (setup.configuration) {
                 this.setConfiguration(setup.configuration);
@@ -134,6 +134,56 @@ jQuery.ajaxSetup({ cache: false });
             if (typeof Oskari.setMarkers === 'function') {
                 Oskari.setMarkers(setup.env.svgMarkers || []);
             }
+
+            if (typeof Oskari.user === 'function') {
+                Oskari.user(setup.env.user);
+            }
+
+            Oskari.urls.set(setup.env.urls);
+        },
+        /**
+         * @public @method setApplicationSetup
+         * @deprecated Use init() instead.
+         *
+         * @param {Object} setup JSON application setup {
+         *     startupSequence: [ <bundledef1>, <bundledef2>, ...],
+         *     env: { ... },
+         *     configuration: { ... }
+         *   }
+         */
+        setApplicationSetup: function (setup) {
+            if(window.console && window.console.warn) {
+                console.warn('Oskari.app.setApplicationSetup() is deprecated. Use Oskari.app.init() instead.');
+            }
+            this.init(setup);
+        },
+        /**
+         * Returns the identifier for this appsetup (if loaded from oskari-server/db)
+         * @return {String}
+         */
+        getUuid: function() {
+            var env = this.getApplicationSetup().env || {};
+            var app = env.app || {};
+            return app.uuid;
+        },
+        /**
+         * Returns appsetup type like "user", "published" etc
+         * @return {String}
+         */
+        getType: function() {
+            var env = this.getApplicationSetup().env || {};
+            var app = env.app || {};
+            return app.type;
+        },
+        /**
+         * Returns true if this appsetup is publicly available.
+         * Returns false if it's a non-public personal view of a user.
+         * @return {Boolean}
+         */
+        isPublic: function() {
+            var env = this.getApplicationSetup().env || {};
+            var app = env.app || {};
+            return !!app.public;
         },
 
         /**
@@ -141,7 +191,7 @@ jQuery.ajaxSetup({ cache: false });
          * @return {Object} Application setup
          */
         getApplicationSetup: function () {
-            return this.appSetup;
+            return this.appSetup || {};
         },
 
         /**
@@ -157,7 +207,7 @@ jQuery.ajaxSetup({ cache: false });
          * @return {Object}
          */
         getConfiguration: function () {
-            return this.appConfig;
+            return this.appConfig || {};
         },
 
         startApplication: function (callback) {
