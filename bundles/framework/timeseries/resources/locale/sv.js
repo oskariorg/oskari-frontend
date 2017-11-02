@@ -22,7 +22,7 @@ Oskari.registerLocalization(
             "week": "1 vecka",
             "month": "1 månad"
         },
-        "dateRender": "{val, date, short} {val, time, short}",
+        "dateRender": "{val, date} {val, time, short}",
         "alert": {
             "title": "Obs!",
             "message": "Flera kartlager med tidsserier är valda. Bara den översta kan kotrolleras.",

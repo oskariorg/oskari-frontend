@@ -177,8 +177,8 @@
   height: 40px;
   margin: 0 0 0 10px;
   text-align: left;
-  line-height: 40px;
-  font-size: 15px;
+  line-height: 42px;
+  font-size: 13px;
 }
 .timeseries-timelines{
   display: inline-block;
