@@ -181,7 +181,6 @@ Oskari.clazz.define(
             return foundLayers;
         },
         updateLayerParams: function (layer, forced, params) {
-            debugger;
             var params = params || {};
             params.SLD_BODY = this.__getSLD(layer);
             

@@ -172,7 +172,7 @@ Oskari.clazz.define(
         },
     },
     {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        'extend': ['Oskari.mapframework.heatmap.AbstractHeatmapPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
