@@ -71,7 +71,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 for (i = 0; i < categories.length; ++i) {
                     cat = categories[i];
                     option = this.templateOption.clone();
-                    option.append(cat.getName());
+                    option.text(cat.getName());
                     option.attr('value', cat.getId());
                     // find another way if we want to keep selection between places
                     if (this.initialValues) {

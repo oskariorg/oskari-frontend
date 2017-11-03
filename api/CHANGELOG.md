@@ -9,6 +9,60 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.45.0
+
+### [rem] [breaking] TimeseriesAnimationEvent, AnimateLayerRequest
+
+Timeseries functionality rewrite. Old event & request removed.
+
+### [rem] [breaking] mapfull configuration
+
+Mapfull no longer receives or handles "globalMapAjaxUrl" and "user" in bundle configuration. Handling has been moved to Oskari.app.init().
+If you haven't implemented a custom version of "mapfull" bundle or the Oskari-global this has no effect.
+
+## 1.44.1
+
+### [mod] [rpc] DrawingEvent
+
+Fixed an issue where:
+
+1) Draw a shape (like Polygon) with functionality id 1
+2) Draw another type of shape (like LineString) with functionality id 2
+3) Draw the same shape as in step 1 with functionality id 3
+
+Resulted in DrawingEvents on step 3 to have an empty features array. Features the user draws are now sent correctly.
+
+DrawingEvent with isFinished = true is now correctly triggered also when user modifies the geometry.
+Previously isFinished was only ever "true" for the original draw and always false for any modifications.
+
+Length and area information in the event are now the sum for all the LineStrings (for length) and (non-intersecting) Polygons instead of the last drawn shape.
+The length/area is written to geojson properties per feature so if you need to access measurement for the latest feature it's still there like this:
+
+```javascript
+    {
+        data : {
+             length : 0,
+             area : 39696895.99975586
+        },
+        geojson : {
+            features : [{ geometry: ..., properties : {
+                    area : 20396544
+                },
+                { geometry: ..., properties : {
+                    area : 19300351.99975586
+                }]
+        }
+    }
+```
+
+To get the same information you can do `event.geojson.features[event.geojson.features.length - 1].properties.area`, but it makes more sense to have the sum on the data block instead of measures for the latest feature in a collection of features.
+
+Notes:
+
+- If you have just one feature ever this works like before.
+- Only lines and polygons are counted for the area/length (circles/points with buffers are not).
+- The measurements are for non-buffered features.
+
 ## 1.44
 
 ### [mod] [breaking] AddLayerListFilterRequest

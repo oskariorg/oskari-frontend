@@ -112,6 +112,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var me = this;
             var listContainer = me.container.find('.viewsList');
             listContainer.empty();
+
+            views.forEach(function(view) {
+              view.name = Oskari.util.sanitize(view.name);
+              view.description = Oskari.util.sanitize(view.description);
+            });
+            
             this.viewData = views;
 
             var model = this._getGridModel(views);
@@ -195,7 +201,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
             var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
             nameInput.setPlaceholder(this.loc('tabs.myviews.popup.name_placeholder'));
-            nameInput.addMarginToLabel(9);
             var title = this.loc('tabs.myviews.popup.title');
             if (viewName) {
                 title = this.loc('tabs.myviews.popup.edit');

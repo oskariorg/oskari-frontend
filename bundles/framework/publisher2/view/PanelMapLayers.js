@@ -727,7 +727,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             var requestName = 'ShowFilteredLayerListRequest';
             this.instance.getSandbox().postRequestByName(
                 requestName,
-                [null, 'publishable', true]
+                ['publishable', true]
             );
         },
         /**

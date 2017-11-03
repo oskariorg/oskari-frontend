@@ -36,7 +36,7 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this;
-            var map = me.mapModule.getMap();
+            var map = me.mapModule.getMap();
 
             //Loop cropping layers and create cropping btns
             jQuery.each(me.getCroppingLayers(), function( key, value ) {
@@ -546,7 +546,7 @@ Oskari.clazz.define(
                         bottom: feature_value.geometry.bounds.bottom,
                         left: feature_value.geometry.bounds.left,
                         right: feature_value.geometry.bounds.right,
-                        top: feature_value.geometry.bounds.top,
+                        top: feature_value.geometry.bounds.top
                     };
                     basketObject.cropMode = feature_value.attributes.croppingMode;
 

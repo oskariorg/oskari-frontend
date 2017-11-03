@@ -2,6 +2,7 @@
  * @class Oskari.hsy.bundle.downloadBasket.Cropping
  *
  * Renders the "admin channels" flyout.
+ * FIXME: ^ this has nothing to do with admin channels, but how does this differ from the one under framework???
  *
  */
 Oskari.clazz.define(
@@ -36,7 +37,8 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this;
-            _map = me.mapModule.getMap();
+            // FIXME: why introduce a global here?
+            _map = me.mapModule.getMap();
 
             //Loop cropping layers and create cropping btns
             jQuery.each(me.getCroppingLayers(), function( key, value ) {
