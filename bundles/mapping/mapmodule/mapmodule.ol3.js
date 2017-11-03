@@ -816,6 +816,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 feature = wktFormat.readFeature(wkt);
 
             return feature;
+        },
+        /**
+         * @method getLayerTileUrls
+         * @param layerId id of the layer
+         * @return {String[]}
+         * Get urls of tile layer tiles.
+         */
+        getLayerTileUrls: function(layerId) {
+            var OLlayers = this.getOLMapLayers(layerId);
+            var urls = [];
+            var source = OLlayers[0].getSource();
+            if (ol.source.OskariImageWMS && source instanceof ol.source.OskariImageWMS) {
+                urls.push(source.getImageUrl());
+            }
+            return urls;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {

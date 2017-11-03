@@ -65,7 +65,7 @@ Oskari.registerLocalization(
             },
             "warning":{
                 "features_skipped":"OBS! <xx> objekt övergavs vid importeringen på grund av saknande eller felaktiga koordinater eller geometri."
-            },
+            }
         },
         "tab": {
             "title": "Dataset",

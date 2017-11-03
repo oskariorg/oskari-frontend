@@ -132,7 +132,7 @@ Oskari.clazz.category(
                     groupHeader.attr('data-page', page);
                     me._changePage(groupHeader);
                 };
-                table.find('th.grouping').each(function(){
+                table.find('th.grouping').each(function(i,el){
                     var groupHeader = jQuery(this);
                     var groupCols = groupHeader.attr('colspan') ?  Number(groupHeader.attr('colspan')) :  1;
                     var maxCols = groupHeader.attr('data-max-cols');
