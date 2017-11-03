@@ -45,7 +45,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometryeditor.GeometryEditorBun
             }, {
                 "type" : "text/javascript",
                 "src" : "../../../../libraries/jsts/jsts-0.16.0.min.js"
-
+            }, {
+                "type" : "text/javascript",
+                "src" : "../../../../libraries/jsts/javascript.util.min.js"
             }],
             "locales": [{
                 "lang": "fi",
