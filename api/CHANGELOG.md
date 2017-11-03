@@ -15,6 +15,11 @@ Some extra tags:
 
 Timeseries functionality rewrite. Old event & request removed.
 
+### [rem] [breaking] mapfull configuration
+
+Mapfull no longer receives or handles "globalMapAjaxUrl" and "user" in bundle configuration. Handling has been moved to Oskari.app.init().
+If you haven't implemented a custom version of "mapfull" bundle or the Oskari-global this has no effect.
+
 ## 1.44.1
 
 ### [mod] [rpc] DrawingEvent
