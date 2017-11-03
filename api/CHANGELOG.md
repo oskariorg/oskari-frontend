@@ -11,6 +11,11 @@ Some extra tags:
 
 ## 1.45.0
 
+#### [mod] DrawTools.StopDrawingRequest
+
+A new optional third parameter suppressEvent (boolean).
+If true the request doesn't trigger a DrawingEvent. Defaults to false.
+
 ### [rem] [breaking] TimeseriesAnimationEvent, AnimateLayerRequest
 
 Timeseries functionality rewrite. Old event & request removed.

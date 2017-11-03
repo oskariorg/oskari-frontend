@@ -34,7 +34,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	        /* plugin */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.js"
+	            "src": "../../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.ol2.js"
 	        }, 
 	        /* event */
 	        {
