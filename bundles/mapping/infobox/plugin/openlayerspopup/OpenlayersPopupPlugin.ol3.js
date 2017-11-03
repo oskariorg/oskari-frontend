@@ -672,7 +672,7 @@ Oskari.clazz.define(
                     panx = width - (pixels.x + infoboxWidth);
                 }
             }
-            if (pixels[1] + infoboxHeight > height) {
+            if (pixels.y + infoboxHeight > height) {
                 pany = height - (pixels.y + infoboxHeight);
             }
             // check that we are not "over the top"
