@@ -561,7 +561,7 @@ Oskari.clazz.define(
             var optionsForDrawingEvent = {
                 isFinished: false
             };
-            if (shape === 'LineString' || shape === 'line') {
+            if (shape === 'LineString') {
                  geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
                         geometry = new ol.geom.LineString(null);
