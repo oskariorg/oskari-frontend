@@ -216,10 +216,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 me.contentMapDivId = conf.mapContainer;
             }
 
-            // Init user
-            Oskari.user(conf.user);
-            sandbox.setAjaxUrl(conf.globalMapAjaxUrl);
-
             // create services & enhancements
             var services = me._createServices(conf);
             services.forEach(function(service) {

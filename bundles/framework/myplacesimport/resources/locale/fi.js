@@ -67,7 +67,7 @@ Oskari.registerLocalization(
             },
             "warning":{
                 "features_skipped":"Huomio! Aineiston tuonnissa <xx> kohdetta hylättiin puuttuvien tai viallisten koordinaattien tai geometrian vuoksi."
-            },
+            }
         },
         "tab": {
             "title": "Aineistot",

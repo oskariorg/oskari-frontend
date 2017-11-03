@@ -143,7 +143,7 @@ Oskari.clazz.define(
                     var showAsDropdown = buttonWidth * this._config.baseLayers.length > evt.getWidth() - 300; /// 150px margin on each side -> -300
 
                     el.find('div.content').toggleClass('dropdown', showAsDropdown);
-                },
+                }
             };
         },
 

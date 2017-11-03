@@ -1,52 +1,66 @@
-# timeseries
+# Timeseries
 
-Adds time dimension support for wms and wmts layer.
-
-## Description
-
-Defines a timeseries playback ui. The ui is visible when layer where have a time dimension is added to map.
+- Adds generalized timeseries UI that any other bundle can use with TimeseriesService
+- Adds support for registering layer animation implementations with TimeseriesLayerService (via TimeseriesService)
+- Adds implementation for animating WMS layers (via TimeseriesLayerService)
 
 ## Screenshot
 
 ![Timeseries](timeseries.png)
 
-## Bundle configuration
+## Description
 
-No configuration is required, but it can be used to customize animotion speen in milliseconds. If not set, animation speed will be 4000 ms.
+Bundles that handle timeseries data/functionality can register with TimeseriesService when they want to show a timeseries control UI. Only one timeseries control UI can be visible at once and TimeseriesService keeps track which one should be visible based on priority. Of different things that can have timeseries UI, layers have the lowest priority.
+
+Bundles that define a new layer type, and which want to support animation, must register a class that will be instantiated for each timeseries enabled layer to implement the animation. This bundle itself registers a animator for "WMS" layers.
+
+## Example - general case
+
+Bundle that wants to show timeseries control UI can register with TimeseriesService:
 
 ```javascript
-{
-  "animationSpeed" : 3000
-}
+var timeseriesService = sandbox.getService('Oskari.mapframework.bundle.timeseries.TimeseriesService');
+
+var id = 'sivcgeu'; // should be unique within "type"
+var type = 'myTypeOfThing'; // arbitrary type for id
+var priority = 23; // priority of registered thing, one with lowest priority across all registred things will be shown UI. Additionally type "layer" has lower priority than all other types
+var delegate = ...; // Istance of a class that implements Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol. The UI communicates with your timeseries implementation via the delegate. Each separate "thing" that has timeseries state should have their own delegate instance that is registered to timeseriesService
+var conf = {location: 'bottom center'}; // configuration given to TimeseriesControlPlugin when it's created with registered delegate.
+
+timeseriesService.registerTimeseries(id, type, priority, delegate, conf);
+
 ```
 
-## Bundle state
+To keep track which registered timeseries is currently active (has UI), for example to check if it's your bundle's timeseries:
 
-No statehandling has been implemented for the bundle.
+```javascript
+timeseriesService.on('activeChanged', function (active) {...});
+```
 
-## Requests the bundle sends out
+And when the bundle wants to remove UI from view:
 
-<table class="table">
-<tr>
-  <th> Request </th>
-  <th> Where/why it's used</th>
-</tr>
-<tr>
-  <td> `MapModulePlugin.MapLayerUpdateRequest` </td>
-  <td> Updates layers time parameter </td>
-</tr>
-</table>
+```javascript
+timeseriesService.unregisterTimeseries(id, type);
+```
 
-## Events the bundle sends out
+## Example - new layer type
 
-<table class="table">
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <th>TimeseriesAnimationEvent</th><th>Is sent out when timeseries animation advances or is stopped</th>
-  </tr>
-</table>
+If the bundle wants to add support for timeseries functionality for a certain layer type (AbstractLayer.getLayerType()), it can register a factory function for creating timeseries delegates for that type:
+
+```javascript
+var timeseriesLayerService = sandbox.getService('Oskari.mapframework.bundle.timeseries.TimeseriesLayerService');
+timeseriesLayerService.registerLayerType('<type of layer>', function(layerId) {
+  return ...; // instantiate something implementing Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol and return it
+});
+
+```
+
+After registering the new type, TimeseriesLayerService will create delegates automatically using the factory function for any layers of the given type that become selected.
+
+## Bundle configuration
+
+No configuration is required.
+
 
 ## Events the bundle listens to
 
@@ -55,21 +69,18 @@ No statehandling has been implemented for the bundle.
     <th>Event</th><th>Why/when</th>
   </tr>
   <tr>
-    <td> MapLayerEvent </td><td> Check timeseries playback UI visibility</td>
+    <td> MapSizeChangedEvent </td><td> Resize timeseries UI to support different map window sizes </td>
   </tr>
   <tr>
-    <td> MapSizeChangedEvent </td><td> Build timeseries UI again to support different map window sizes </td>
+    <td> AfterRearrangeSelectedMapLayerEvent </td><td>Show timeseries UI control for topmost timeseries enabled layer</td>
   </tr>
   <tr>
-    <td> AfterMapLayerAddEvent </td><td>Shows timeseries playback UI if added layer have time dimension </td>
+    <td> AfterMapLayerAddEvent </td><td>Show timeseries UI control for topmost timeseries enabled layer</td>
   </tr>
   <tr>
-    <td> AfterMapLayerRemoveEvent </td><td>Remove timeseries playback UI from map if removed layer is same than animated layer</td>
+    <td> AfterMapLayerRemoveEvent </td><td>Show timeseries UI control for topmost timeseries enabled layer</td>
   </tr>
   <tr>
     <td> ProgressEvent </td><td>Track loading status of animating layer</td>
-  </tr>
-    <tr>
-    <td> TimeseriesAnimationEvent </td><td>The bundle sends out and listens to this event. It is used to update timeseries control UI.</td>
   </tr>
 </table>
