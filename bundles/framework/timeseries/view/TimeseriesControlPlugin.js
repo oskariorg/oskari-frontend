@@ -13,13 +13,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         conf = conf || {};
         var me = this;
         me._clazz = 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
-        me._defaultLocation = conf.location || 'bottom center';
+        me._defaultLocation = conf.location || 'top left';
         me._index = 90;
         me._name = 'TimeseriesControlPlugin';
         me._timelineWidth = 600;
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
         me._d3TimeDef = Oskari.getLocalization('timeseries').d3TimeDef;
-        me._sideMargin = conf.sideMargin || 10;
+        me._widthMargin = conf.widthMargin || 130;
         me._waitingForFrame = false;
 
         me._delegate = delegate;
@@ -289,10 +289,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._setWidth(me.getSandbox().getMap().getWidth(), true);
                 me._element.prepend(aux);
                 me._initMenus();
+                me._makeDraggable();
             }
             me._initStepper();
             me._updateTimelines(isMobile);
             me._updateTimeDisplay();
+        },
+        _makeDraggable: function () {
+            this._element.prepend('<div class="timeseries-handle oskari-flyoutheading"></div>');
+            this._element.draggable({
+                scroll: false,
+                handle: '.timeseries-handle'
+            });
         },
         /**
          * @method _setWidth Set timeline width and update them if needed
@@ -301,7 +309,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param {Boolean} suppressUpdate true if no timelines update should be done
          */
         _setWidth: function (mapWidth, suppressUpdate) {
-            var targetWidth = Math.min(mapWidth - this._sideMargin, 860) - 260;
+            var targetWidth = Math.min(mapWidth - this._widthMargin, 860) - 260;
             if (!this._inMobileMode && this._timelineWidth !== targetWidth) {
                 this._timelineWidth = targetWidth;
                 if (!suppressUpdate) {
