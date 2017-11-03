@@ -16,7 +16,7 @@ Oskari.clazz.define(
         me._index = 1;
         me._name = 'FullScreenPlugin';
         me._element = null;
-        me.state = null;
+        me.state = {};
         me._sandbox = null;
     },
     {
@@ -65,7 +65,7 @@ Oskari.clazz.define(
             this.removeFromPluginContainer(this.getElement());
             sandbox.unregisterStateful(this._clazz);
         },
-        
+
         _getImagePath: function(image) {
             return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/' + image;
         },
@@ -123,7 +123,6 @@ Oskari.clazz.define(
             me.getMapModule().getMapEl().parents('#contentMap').addClass('oskari-map-window-fullscreen');
             me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
         }
-
     },
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
