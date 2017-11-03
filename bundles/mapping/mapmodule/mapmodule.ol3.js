@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 interactions: interactions,
                 loadTilesWhileInteracting: true,
                 loadTilesWhileAnimating: true,
-                moveTolerance: 5
+                moveTolerance: 2
             });
 
             var projection = ol.proj.get(me.getProjection());
