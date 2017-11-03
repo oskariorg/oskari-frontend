@@ -52,7 +52,6 @@ Oskari.clazz.define(
         _startPluginImpl : function(sandbox) {
             var me = this;
             me.setEnabled(me._enabled);
-            sandbox.registerAsStateful(me._clazz, me);
             return me.setVisible(me._visible);
         },
         /**
@@ -63,7 +62,6 @@ Oskari.clazz.define(
          */
         _stopPluginImpl : function(sandbox) {
             this.removeFromPluginContainer(this.getElement());
-            sandbox.unregisterStateful(this._clazz);
         },
 
         _getImagePath: function(image) {
