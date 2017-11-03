@@ -61,30 +61,6 @@ Oskari.clazz.define(
         __name: 'catalogue.bundle.metadatacatalogue',
         /**
          * @static
-         * @property __drawStyle
-         */
-        __drawStyle:{
-            draw : {
-                fill : {
-                     color: 'rgba(35, 216, 194, 0.3)'
-                },
-                stroke : {
-                      color: 'rgba(35, 216, 194, 1)',
-                      width: 2
-                }
-            },
-            modify : {
-                fill : {
-                     color: 'rgba(0, 0, 238, 0.3)'
-                },
-                stroke : {
-                      color: 'rgba(0, 0, 238, 1)',
-                      width: 2
-                }
-            }
-        },
-        /**
-         * @static
          * @property templates
          */
         templates: {
@@ -330,15 +306,11 @@ Oskari.clazz.define(
             /**
              * @method FeatureData.FinishedDrawingEvent
              */
-            'DrawingEvent': function (event) {
+            'MetaData.FinishedDrawingEvent': function (event) {
                 var me = this,
                     coverageFeature;
 
-                if(event.getId() !== me.getName() || event.getIsFinished() !== true || me.drawCoverage){
-                    return;
-                }
-
-                coverageFeature = event.getGeoJson();
+                coverageFeature = this.selectionPlugin.getFeaturesAsGeoJSON();
 
                 this.coverageButton.val(me.getLocalization('deleteArea'));
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
@@ -361,7 +333,9 @@ Oskari.clazz.define(
                 }
 
                 if (!isShown && me.drawCoverage === false) {
-                    me._stopCoverage();
+                    if (me.selectionPlugin) {
+                        me.selectionPlugin.stopDrawing();
+                    }
                     if (me.coverageButton) {
                         me.coverageButton.val(me.getLocalization('delimitArea'));
                     }
@@ -704,11 +678,10 @@ Oskari.clazz.define(
                       });
                       me.coverageButton.val(me.getLocalization('startDraw'));
                       me._getCoverage();
-                      me.drawCoverage = false;
                     }else {
-                        me.drawCoverage = true;
-                        me._stopCoverage();
+                        me.selectionPlugin.stopDrawing();
                         me.coverageButton.val(me.getLocalization('delimitArea'));
+                        me.drawCoverage = true;
                         document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                         var emptyData = {};
                         me.coverageButton[0].data = '';
@@ -751,14 +724,17 @@ Oskari.clazz.define(
 
         _getCoverage: function () {
             var me = this;
-            
-            me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.getName(), 'Box', {
-                style: me.__drawStyle
-            }]);
-        },
+            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
 
-        _stopCoverage: function() {
-            this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.getName(), true]);
+            var config = {
+                id: 'MetaData',
+                enableTransform: true
+            };
+
+            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, me.sandbox);
+            mapModule.registerPlugin(this.selectionPlugin);
+            mapModule.startPlugin(this.selectionPlugin);
+            this.selectionPlugin.startDrawing({drawMode: 'square'});
         },
 
         /**

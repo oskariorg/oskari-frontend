@@ -18,6 +18,11 @@ Some extra tags:
 
 Timeseries functionality rewrite. Old event & request removed.
 
+### [rem] [breaking] mapfull configuration
+
+Mapfull no longer receives or handles "globalMapAjaxUrl" and "user" in bundle configuration. Handling has been moved to Oskari.app.init().
+If you haven't implemented a custom version of "mapfull" bundle or the Oskari-global this has no effect.
+
 ## 1.44.1
 
 ### [mod] [rpc] DrawingEvent
@@ -60,6 +65,10 @@ Notes:
 - If you have just one feature ever this works like before.
 - Only lines and polygons are counted for the area/length (circles/points with buffers are not).
 - The measurements are for non-buffered features.
+
+### metadatacatalogue [add]
+
+Added new OpenLayers independent version of metadatacatalogue. New bundle.js is under packages/catalogue/metadatacatalogue/. In the new version `MetaData.FinishedDrawingEvent` is removed. Instead you can listen to `DrawingEvent` where id "catalogue.bundle.metadatacatalogue" and isFinished is true.
 
 ## 1.44
 
