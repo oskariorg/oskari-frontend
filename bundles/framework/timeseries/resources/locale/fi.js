@@ -22,10 +22,10 @@ Oskari.registerLocalization(
             "week": "1 viikko",
             "month": "1 kuukausi"
         },
-        "dateRender": "{val, date, short} {val, time, short}",
+        "dateRender": "{val, date} {val, time, short}",
         "alert": {
-            "title": "Huom!",
-            "message": "Useita aikasarjatasoja valittu. Vain päällimmäistä voi ohjata.",
+            "title": "Useita aikasarjatasoja valittu",
+            "message": "Voit ohjata vain päällimmäistä tasoa.",
             "ok": "OK"
         },
         "d3TimeDef": {

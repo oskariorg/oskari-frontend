@@ -62,6 +62,18 @@ After registering the new type, TimeseriesLayerService will create delegates aut
 No configuration is required.
 
 
+## Requests the bundle sends out
+
+<table class="table">
+  <tr>
+    <th> Request </th><th> Where/why it's used</th>
+  </tr>
+  <tr>
+    <td>MapModulePlugin.MapLayerUpdateRequest</td><td> When WMSAnimator changes the current TIME parameter in the WMS url</td>
+  </tr>
+</table>
+
+
 ## Events the bundle listens to
 
 <table class="table">

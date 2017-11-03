@@ -13,13 +13,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         conf = conf || {};
         var me = this;
         me._clazz = 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
-        me._defaultLocation = conf.location || 'bottom center';
+        me._defaultLocation = conf.location || 'top left';
         me._index = 90;
         me._name = 'TimeseriesControlPlugin';
         me._timelineWidth = 600;
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
         me._d3TimeDef = Oskari.getLocalization('timeseries').d3TimeDef;
-        me._sideMargin = conf.sideMargin || 10;
+        me._widthMargin = conf.widthMargin || 130;
         me._waitingForFrame = false;
 
         me._delegate = delegate;
@@ -35,12 +35,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         };
         me._setFrameInterval(me._uiState.frameInterval); // sets throttle for animation, too
         me._throttleNewTime = Oskari.util.throttle(me._requestNewTime.bind(me), 500);
-
         this._uiState.times = delegate.getTimes();
         var range = delegate.getSubsetRange();
         this._uiState.rangeStart = range[0];
         this._uiState.rangeEnd = range[1];
         this._uiState.currentTime = delegate.getCurrentTime();
+        this._validSkipOptions = this._filterSkipOptions(this._uiState.times);
 
         me._isMobileVisible = false;
         me._inMobileMode = false;
@@ -68,6 +68,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         };
     }, {
         __fullAxisYPos: 35,
+        __speedOptions: [
+            { key: 'fast', value: 1000 },
+            { key: 'normal', value: 2000 },
+            { key: 'slow', value: 3000 }
+        ],
+        __skipOptions : [
+            { key: 'none', value: '' },
+            { key: 'minute', value: 'minutes' },
+            { key: 'hour', value: 'hours' },
+            { key: 'day', value: 'days' },
+            { key: 'week', value: 'weeks' },
+            { key: 'month', value: 'months' }
+        ],
+        /**
+         * @method _filterSkipOptions Return animation skip options that are longer or as long than the shortest time interval in the series
+         * @private
+         * @param  {String[]} times time instants in timeseries, ISO-string
+         */
+        _filterSkipOptions: function (times) {
+            times = times.map(function (t) { return moment(t) }); // optimization: parse time strings once
+            var shortestInterval = Number.MAX_VALUE;
+            for (var i = 0; i < times.length - 1; i++) {
+                var current = times[i];
+                var next = times[i+1];
+                var difference = next.diff(current);
+                if(difference < shortestInterval) {
+                    shortestInterval = difference;
+                }
+            }
+            return this.__skipOptions.filter(function (option) {
+                return option.value === '' || moment.duration(1, option.value).asMilliseconds() >= shortestInterval;
+            });
+        },
         /**
          * @method _setFrameInterval Sets animation frame interval & updates associated throttle function
          * @private
@@ -256,10 +289,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._setWidth(me.getSandbox().getMap().getWidth(), true);
                 me._element.prepend(aux);
                 me._initMenus();
+                me._makeDraggable();
             }
             me._initStepper();
             me._updateTimelines(isMobile);
             me._updateTimeDisplay();
+        },
+        _makeDraggable: function () {
+            this._element.prepend('<div class="timeseries-handle oskari-flyoutheading"></div>');
+            this._element.draggable({
+                scroll: false,
+                handle: '.timeseries-handle'
+            });
         },
         /**
          * @method _setWidth Set timeline width and update them if needed
@@ -268,7 +309,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param {Boolean} suppressUpdate true if no timelines update should be done
          */
         _setWidth: function (mapWidth, suppressUpdate) {
-            var targetWidth = Math.min(mapWidth - this._sideMargin, 860) - 260;
+            var targetWidth = Math.min(mapWidth - this._widthMargin, 860) - 260;
             if (!this._inMobileMode && this._timelineWidth !== targetWidth) {
                 this._timelineWidth = targetWidth;
                 if (!suppressUpdate) {
@@ -301,11 +342,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var template = jQuery('<div class="timeseries-menus"><div class="timeseries-menus-half"></div><div class="timeseries-menus-half"></div></div>');
 
             var speedMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
-            speedMenu.setOptions(this._generateSelectOptions('animationSpeed.', [
-                { key: 'fast', value: 1000 },
-                { key: 'normal', value: 2000 },
-                { key: 'slow', value: 3000 }
-            ]));
+            speedMenu.setOptions(this._generateSelectOptions('animationSpeed.', this.__speedOptions));
             speedMenu.setTitle(this.loc('label.animationSpeed'));
             speedMenu.setValue(this._uiState.frameInterval);
             speedMenu.setHandler(function (value) {
@@ -315,14 +352,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             template.find('.timeseries-menus-half').first().append(speedMenu.getElement());
 
             var skipMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
-            skipMenu.setOptions(this._generateSelectOptions('skip.', [
-                { key: 'none', value: '' },
-                { key: 'minute', value: 'minutes' },
-                { key: 'hour', value: 'hours' },
-                { key: 'day', value: 'days' },
-                { key: 'week', value: 'weeks' },
-                { key: 'month', value: 'months' }
-            ]));
+            skipMenu.setOptions(this._generateSelectOptions('skip.', this._validSkipOptions));
             skipMenu.setTitle(this.loc('label.skipAhead'));
             skipMenu.setValue(this._uiState.stepInterval);
             skipMenu.setHandler(function (value) {
@@ -390,13 +420,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 formatYear = formatterFunction("%Y");
 
             return function multiFormat(date) {
+                var textEl = d3.select(this);
                 return (d3.timeSecond(date) < date ? formatMillisecond
                     : d3.timeMinute(date) < date ? formatSecond
                     : d3.timeHour(date) < date ? formatMinute
                     : d3.timeDay(date) < date ? formatHour
                     : d3.timeMonth(date) < date ? formatDay
                     : d3.timeYear(date) < date ? formatMonth
-                    : formatYear)(date);
+                    : (textEl.classed('bold', true), formatYear))(date);
             }
         },
         /**

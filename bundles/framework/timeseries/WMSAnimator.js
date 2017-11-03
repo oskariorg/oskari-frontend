@@ -9,13 +9,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
         this._layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
 
         var times = this.getTimes();
-        this._currentTime = times[times.length - 1];
+        this._currentTime = times[0];
         this._subsetRange = [times[0], times[times.length - 1]];
 
         this._doneCallback = null;
         this._isBuffering = false;
         this._isLoading = false;
-
+        
         this._sandbox.register(this);
         var p;
         for (p in this.__eventHandlers) {
@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 sandbox.registerForEventByName(this, p);
             }
         }
+        this.requestNewTime(this._currentTime, null, function(){});
     }, {
         __name: 'WMSAnimator',
         getName: function () {
