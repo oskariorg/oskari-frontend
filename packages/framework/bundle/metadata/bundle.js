@@ -47,7 +47,7 @@ function() {
             "src" : "../../../../bundles/framework/metadata/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/metadata/plugin/MapSelectionPlugin.js"
+            "src" : "../../../../bundles/framework/metadata/plugin/MapSelectionPlugin.ol2.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/metadata/event/MapSelectionEvent.js"
