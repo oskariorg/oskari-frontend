@@ -2137,7 +2137,6 @@ Oskari.clazz.define(
             // Get the container
             var container = this._getMapControlPluginContainer(containerClasses),
                 content = container.find('.mappluginsContainer .mappluginsContent'),
-                pos = position + '',
                 inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
                 precedingPlugin = null,
                 curr;
@@ -2164,8 +2163,8 @@ Oskari.clazz.define(
                 content.find('.mapplugin').each(function () {
                     curr = jQuery(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
-                    if ((!inverted && curr.attr('data-position') <= pos) ||
-                        (inverted && curr.attr('data-position') > pos)) {
+                    if ((!inverted && parseInt(curr.attr('data-position')) <= position) ||
+                        (inverted && parseInt(curr.attr('data-position')) > position)) {
                         precedingPlugin = curr;
                     }
                 });
