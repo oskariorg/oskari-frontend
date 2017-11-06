@@ -20,7 +20,6 @@ Oskari.clazz.define(
         me.prefix = 'Default.';
         me.sandbox = sandbox;
         me.WFSLayerService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-        me._currentRequestID = null;
         me._features;
         me._drawing;
 
@@ -34,9 +33,7 @@ Oskari.clazz.define(
         me.multipart = (me._config && me._config.multipart === true);
         Oskari.makeObservable(this);
     }, {
-        getCurrentDrawReqId: function () {
-            return this._currentRequestID;
-        },
+        DRAW_REQUEST_ID: 'FeatureData.featureselection',
         /**
          * @method startDrawing
          * Activates the selection tool
@@ -51,7 +48,7 @@ Oskari.clazz.define(
             var me = this;
             var sb = this.getSandbox();
             sb.postRequestByName('DrawTools.StopDrawingRequest', [
-                    me.getCurrentDrawReqId(),
+                    me.DRAW_REQUEST_ID,
                     true,
                     false
             ]);
@@ -115,36 +112,31 @@ Oskari.clazz.define(
 
             me.drawControls = {
                 point: function() {
-                    me._currentRequestID = me.getName() +'PointDrawRequest';
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.getName() +'PointDrawRequest', 
+                    me.DRAW_REQUEST_ID,
                     'Point'
                     ]
                 )},
                 line: function() {
-                    me._currentRequestID = me.getName() +'LineStringDrawRequest';
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.getName() +'LineStringDrawRequest', 
+                    me.DRAW_REQUEST_ID,
                     'LineString'
                     ]
                 )},
                 polygon: function() {
-                    me._currentRequestID = me.getName() +'PolygonDrawRequest';
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.getName() +'PolygonDrawRequest', 
+                    me.DRAW_REQUEST_ID,
                     'Polygon'
                 ])},
                 square: function() {
-                    me._currentRequestID = me.getName() +'SquareDrawRequest';
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.getName() +'SquareDrawRequest', 
+                    me.DRAW_REQUEST_ID,
                     'Square'
                     ]
                 )},
                 circle: function() {
-                    me._currentRequestID = me.getName() +'CircleDrawRequest';
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.getName() +'CircleDrawRequest', 
+                    me.DRAW_REQUEST_ID,
                     'Circle'
                     ]
                 )}
