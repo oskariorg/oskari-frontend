@@ -5,8 +5,8 @@
 Oskari.clazz.define(
     'Oskari.mapframework.heatmap.HeatmapLayerPlugin',
     function () {
-    },
-    {
+    }, {
+        
         /**
          * Adds a single WMS layer to this map
          *
@@ -16,9 +16,6 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            if (!layer.isLayerOfType(this.TYPE)) {
-                return;
-            }
 
             var me = this,
             	layerIdPrefix = 'layer_',
@@ -84,13 +81,7 @@ Oskari.clazz.define(
             this.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for ' + layer.getId()
             );
-        },
-        /**
-         * @method _afterMapLayerRemoveEvent
-         * Removes the layer from the map
-         * @private
-         * @param {Oskari.mapframework.domain.WmsLayer} layer
-         */
+        }
     },
     {
         'extend': ['Oskari.mapframework.heatmap.AbstractHeatmapPlugin'],

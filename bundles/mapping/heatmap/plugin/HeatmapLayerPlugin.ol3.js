@@ -17,9 +17,6 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            if (!layer.isLayerOfType(this.TYPE)) {
-                return;
-            }
 
             var me = this,
             	layerIdPrefix = 'layer_',
@@ -85,7 +82,7 @@ Oskari.clazz.define(
             var params = params || {};
             params.SLD_BODY = this.__getSLD(layer);
             
-            var updateLayer = this.getLayersByName('layer_'+ layer.getId() );
+            var updateLayer = this.getOLMapLayers( layer.getId() );
             updateLayer.forEach( function ( layer ) {
                 layer.getSource().updateParams( params );
             });

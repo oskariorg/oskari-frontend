@@ -8,8 +8,10 @@ Oskari.clazz.define(
         var me = this;
         me._clazz = 'Oskari.mapframework.heatmap.HeatmapLayerPlugin';
         me._name = 'HeatmapLayerPlugin';
-    }, {   
-        TYPE : 'HEATMAP',
+    }, {
+        getLayerTypeSelector: function () {
+            return 'HEATMAP';
+        },
         /**
          * @method register
          * Interface method for the plugin protocol.
@@ -26,24 +28,6 @@ Oskari.clazz.define(
         unregister: function () {
             this.getMapModule().setLayerPlugin('heatmaplayer', null);
         },
-        _createEventHandlers: function () {
-            return {
-                MapLayerEvent: function(event) {
-                    var op = event.getOperation(),
-                        layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
-
-                    if (op === 'update' && layer && layer.isLayerOfType(this.TYPE)) {
-                        this._updateLayer(layer);
-                    }
-                },
-                AfterMapLayerRemoveEvent: function (event) {
-                    this._afterMapLayerRemoveEvent(event);
-                },
-                AfterChangeMapLayerOpacityEvent: function (event) {
-                    this._afterChangeMapLayerOpacityEvent(event);
-                }
-            };
-        },
         /**
          * @method preselectLayers
          * Adds given layers to map if of type WMS
@@ -59,13 +43,14 @@ Oskari.clazz.define(
                 layer = layers[i];
                 layerId = layer.getId();
 
-                if (layer.isLayerOfType(this.TYPE)) {
+                if ( layer.isLayerOfType( this.getLayerTypeSelector() ) ) {
                     sandbox.printDebug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
 
         },
+    
         /**
          * Updates the OpenLayers and redraws them if scales have changed.
          *
@@ -189,20 +174,8 @@ Oskari.clazz.define(
                 // chance of transformation errors
                 return mm.calculateLayerResolutions(maxScale, minScale);
             }
-        },
-        /**
-         * @method _afterMapLayerRemoveEvent
-         * Handle AfterMapLayerRemoveEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent}
-         *            event
-         */
-        _afterMapLayerRemoveEvent: function (event) {
-            var layer = event.getMapLayer();
-
-            this._removeMapLayerFromMap(layer);
         }
     }, {
-    'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+    'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
 
 });
