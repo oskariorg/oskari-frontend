@@ -30,9 +30,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.heatmap.HeatmapBundle", function
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/mapping/heatmap/plugin/AbstractHeatmapPlugin.js"
-        },{
+        }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/heatmap/plugin/HeatmapLayerPlugin.ol2.js"
+            "src": "../../../../bundles/mapping/heatmap/plugin/HeatmapLayerPlugin.ol3.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/mapping/heatmap/domain/HeatmapLayer.js"
