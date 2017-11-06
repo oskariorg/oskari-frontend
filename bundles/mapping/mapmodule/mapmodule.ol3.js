@@ -131,9 +131,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
 /* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
-        getLayers: function () {
-            return this.getMap().getLayers().getArray();
-        },
         getInteractionInstance: function (interactionName) {
             var interactions = this.getMap().getInteractions().getArray();
             var interactionInstance = interactions.filter(function(interaction) {
