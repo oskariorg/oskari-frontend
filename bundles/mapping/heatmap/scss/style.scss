@@ -1,0 +1,75 @@
+.heatmap {
+	&.settings-dialog {
+		.color-box {
+			float: left;
+			width:30px;
+			height:30px;
+			margin:5px;
+			border: 1px solid white;
+		}
+
+		.color-themes {
+			display: block;
+		}
+
+		.color-theme {
+			display: inline-block;
+		}
+
+		.color-theme .color-box {
+			float: left;
+			width:20px;
+			height:30px;
+			border: 1px solid white;
+		}
+
+		.theme-box {
+			margin-left: 0px;
+			margin-right: 0px;
+		}
+
+		.colpick {
+			z-index: 20100;
+		}
+
+		.colpick_field input {
+			border: 0px!important;
+			padding: 0px!important;
+			box-shadow: inset 0px 0px 0px!important;
+			border-radius: 0px!important;
+		}
+
+		.colpick_hex_field input {
+			border: 0px!important;
+			padding: 0px!important;
+			box-shadow: inset 0px 0px 0px!important;
+			border-radius: 0px!important;
+		}
+
+		input[name="colorThemes"] {
+			float: left;
+			margin-top: 14px;
+		}
+
+		label.oskari-formcomponent {
+			display: inline-block;
+			width: 140px;
+		}
+
+		input[name="heatmap-input"] {
+			width: 120px!important;
+		}
+
+		select[name="heatmapProperties"] {
+			display: block;
+			margin-top: 5px;
+			margin-bottom: 10px;
+			width: 260px!important;
+		}
+
+		.heatmap-actions {
+			margin-left: 60px!important;
+			display: inline-block;
+		}
+	}
+}
