@@ -47,7 +47,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
 
             var content = me._templates.tabContent.clone();
             var description = content.find('.appsetup__description');
-            var currentViewUrl = me.sandbox.getAjaxUrl('Views') + '&uuid=' + controlParams.uuid;
+            var currentViewUrl = me.sandbox.getAjaxUrl('Views') + '&uuid=' + Oskari.app.getUuid();
             description.html('<div>' + me._localization.description.fillJSON + ' ' +
                 '(<a href="' + currentViewUrl + '" target="_blank">' + me._localization.description.current + '</a>).</div>' +
                 '<div>' + this._localization.description.differentUuid + '</div>'

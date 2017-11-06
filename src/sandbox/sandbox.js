@@ -7,12 +7,10 @@
  * the Oskari Module protocol.
  */
 (function(Oskari) {
-    var ajaxUrl;
     var log;
     var services = {};
     var requestHandlers = {};
     var isDebugMode = false;
-
 
     Oskari.clazz.define('Oskari.Sandbox',
 
@@ -74,28 +72,6 @@
                 isDebugMode = !!setDebug;
                 log.enableDebug(isDebugMode);
                 return isDebugMode;
-            },
-
-            /**
-             * @method setAjaxUrl
-             * Sets a global Url that is used to communicate with the server
-             * @param {String} pUrl
-             */
-            setAjaxUrl: function (pUrl) {
-                ajaxUrl = pUrl;
-            },
-
-            /**
-             * @method getAjaxUrl
-             * Returns global ajax url for the application. See #setAjaxUrl
-             * @param {String} route optional route that's used as action_route parameter
-             * @return {String}
-             */
-            getAjaxUrl: function (route) {
-                if(route) {
-                    return ajaxUrl + 'action_route=' + route;
-                }
-                return ajaxUrl;
             },
 
             /**

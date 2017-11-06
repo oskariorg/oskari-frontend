@@ -26,6 +26,7 @@ Oskari.clazz.define(
         this._modify = {};
         this._functionalityIds = {};
         this._showIntersectionWarning = false;
+        this._circleHasGeom = false;
         this._defaultStyle = {
             fill : {
                 color : 'rgba(255,0,255,0.2)'
@@ -51,7 +52,6 @@ Oskari.clazz.define(
                 }
             }
         };
-
         this.wgs84Sphere = new ol.Sphere(6378137);
         this._loc = Oskari.getLocalization('DrawTools');
     },
@@ -72,6 +72,13 @@ Oskari.clazz.define(
                 var styleDef = jQuery.extend({}, me._defaultStyle, styleForType);
                 me._styles[type] = me.getMapModule().getStyle(styleDef);
             });
+        },
+        /**
+         * @Return{String} reference system as defined in GeoJSON format
+         * @method _getSRS
+         */
+        _getSRS: function () {
+            return this.getSandbox().getMap().getSrsName();
         },
         /**
          * Used to toggle GFI functionality off when the user is drawing to not generate popups on clicks
@@ -273,8 +280,11 @@ Oskari.clazz.define(
          * @param {String} id
          * @param {boolean} clearCurrent: if true, all selection will be removed from the map
          */
-        stopDrawing : function(id, clearCurrent) {
+        stopDrawing : function(id, clearCurrent, supressEvent) {
             var me = this;
+            if( typeof supressEvent === undefined ) {
+                supressEvent = false;
+            }
             var options = {
                 clearCurrent: clearCurrent,
                 isFinished: true
@@ -283,14 +293,14 @@ Oskari.clazz.define(
                 // layer not found for functionality id, nothing to do?
                 return;
             }
-            me.sendDrawingEvent(id, options);
-            // deactivate draw and modify controls (should these be in _cleanupInternalState()?)
-            me.removeInteractions(me._draw, id);
-            me.removeInteractions(me._modify, id);
-            me._cleanupInternalState();
-            me.getMap().un('pointermove', me.pointerMoveHandler, me);
-            // enable gfi
-            me.setGFIEnabled(true);
+                supressEvent === true ? me.clearDrawing(id) : me.sendDrawingEvent(id, options);
+                //deactivate draw and modify controls
+                me.removeInteractions(me._draw, id);
+                me.removeInteractions(me._modify, id);
+                me._cleanupInternalState();
+                me.getMap().un('pointermove', me.pointerMoveHandler, me);
+                //enable gfi
+                me.setGFIEnabled(true);
         },
         _cleanupInternalState: function() {
             this._shape = null;
@@ -361,6 +371,7 @@ Oskari.clazz.define(
                 me.addBufferPropertyToFeatures(features, requestedBuffer);
             }
             var geojson = me.getFeaturesAsGeoJSON(features);
+            geojson.crs = me._getSRS();
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
 
             var measures = me.sumMeasurements(features);
@@ -382,7 +393,6 @@ Oskari.clazz.define(
             if(options.isFinished) {
                 isFinished = options.isFinished;
             }
-
             var event = Oskari.eventBuilder('DrawingEvent')(id, geojson, data, isFinished);
             me.getSandbox().notifyAll(event);
         },
@@ -568,29 +578,44 @@ Oskari.clazz.define(
                  maxPoints = 2;
                  geometryType = 'LineString';
                  geometryFunction = function(coordinates, geometry) {
-                    if (!geometry) {
-                         geometry = new ol.geom.Polygon(null);
-                    }
-                    var start = coordinates[0];
-                    var end = coordinates[1];
-                    geometry.setCoordinates([[start, [start[0], end[1]], end, [end[0], start[1]], start]]);
-                    me.pointerMoveHandler();
-                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
-                    return geometry;
-                };
+                   if (!geometry) {
+                     geometry = new ol.geom.Polygon(null);
+                   }
+                   var start = coordinates[0];
+                   var end = coordinates[1];
+                   geometry.setCoordinates([[start, [start[0], end[1]], end, [end[0], start[1]], start]]);
+                   me.pointerMoveHandler();
+                   me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                   return geometry;
+                 }
+            } else if (shape === 'Point') {
+                 maxPoints = 2;
+                 geometryType = 'Point';
+                 geometryFunction = function(coordinates, geometry) {
+                   if (!geometry) {
+                     geometry = new ol.geom.Circle(coordinates, options.buffer);
+                   }
+                   me.pointerMoveHandler();
+                   me.sendDrawingEvent(me._id, optionsForDrawingEvent);
+                   return geometry;
+                 }
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
                 geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
             } else if (shape === 'Circle' && options.buffer > 0) {
                 geometryType = 'Point';
+                me._circleHasGeom = true;
                 geometryFunction = function(coordinates, geometry) {
-                    if (!geometry) {
-                        geometry = new ol.geom.Circle(coordinates, options.buffer);
-                    }
-                    me.pointerMoveHandler();
-                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
-                    return geometry;
-                };
+                     if (!geometry) {
+                         geometry = new ol.geom.Circle(coordinates, options.buffer);
+                     }
+                     me.pointerMoveHandler();
+                     me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                     return geometry;
+                 }
+            } else if(shape === 'Circle' && ! options.buffer) {
+                geometryType = 'Circle';
+                geometryFunction = ol.interaction.Draw.createRegularPolygon(400);
             } else if(shape === 'Polygon') {
                 geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
@@ -605,7 +630,6 @@ Oskari.clazz.define(
                     return geometry;
                  };
             }
-
             var drawInteraction = new ol.interaction.Draw({
               features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
               type: geometryType,
