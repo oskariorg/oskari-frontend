@@ -6,7 +6,6 @@ Oskari.clazz.define(
     'Oskari.mapframework.heatmap.HeatmapLayerPlugin',
     function () {
     }, {
-        
         /**
          * Adds a single WMS layer to this map
          *

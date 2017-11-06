@@ -4,10 +4,8 @@
  */
 Oskari.clazz.define(
     'Oskari.mapframework.heatmap.HeatmapLayerPlugin',
-    
     function () {
-    },
-    {
+    }, {
         /**
          * Adds a single WMS layer to this map
          *
@@ -17,7 +15,6 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-
             var me = this,
             	layerIdPrefix = 'layer_',
             	key;
@@ -73,7 +70,7 @@ Oskari.clazz.define(
             var params = openlayer.getSource().getParams();
 
             this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
-            this.setOLMapLayers(layer.getId(), openLayer);
+            this.setOLMapLayers(layer.getId(), openlayer);
             this.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for ' + layer.getId()
             );
@@ -81,7 +78,7 @@ Oskari.clazz.define(
         updateLayerParams: function (layer, forced, params) {
             var params = params || {};
             params.SLD_BODY = this.__getSLD(layer);
-            
+
             var updateLayer = this.getOLMapLayers( layer.getId() );
             updateLayer.forEach( function ( layer ) {
                 layer.getSource().updateParams( params );
