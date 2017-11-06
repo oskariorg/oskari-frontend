@@ -427,7 +427,11 @@
                         module,
                         event
                     );
-                    module.onEvent(event);
+                    try {
+                        module.onEvent(event);
+                    } catch(err) {
+                        log.warn('Error notifying',  module.getName(), 'about', eventName, event, err);
+                    }
                     this._debugPopEvent();
                 }
 
