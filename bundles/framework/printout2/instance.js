@@ -14,15 +14,20 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
      */
     function () {
         this.started = false;
-        this.localization = undefined;
+        this._localization = undefined;
         this.sandbox = null;
         this.views = null;
+        this.buttonGroup = 'viewtools';
     }, {
     /**
      * @static
      * @property __name
      */
-    __name: 'Printout',
+    __name: 'Printout2',
+
+    init: function () {
+
+    },
     /**
      * @method getName
      * @return {String} the name for the component
@@ -45,7 +50,13 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
             return;
         }
         this.sandbox = Oskari.getSandbox();
-        this.localization = Oskari.getLocalization(this.getName());
+        this.localization = Oskari.getLocalization( this.getName() );
+        this.sandbox.register(this);
+        for (p in this.eventHandlers) {
+            if (this.eventHandlers.hasOwnProperty(p)) {
+                this.sandbox.registerForEventByName(this, p);
+            }
+        }
         this.addToToolbar();
         this._initViews();
         this.views["print"].createUi();
@@ -53,7 +64,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
     addToToolbar: function () {
         var me = this;
             // request toolbar to add buttons
-            var addBtnRequestBuilder = this.sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
+            var addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
                 tool,
                 btns = {
                     'print': {
@@ -65,29 +76,62 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                         }
                     }
                 };
+            for (tool in btns) {
+                // Button not in UI - activated in an other route
+                if (btns.hasOwnProperty(tool)) {
+                    me.sandbox.request( me, addBtnRequestBuilder(tool, this.buttonGroup, btns[tool]));
+                }
+            }
     },
     _initViews: function () {
         this.views = {
             print: Oskari.clazz.create("Oskari.mapping.printout2.view.print", this )
         }
     },
-    getLocalization: function (key) {
-    if (!this._localization) {
-        this._localization = Oskari.getLocalization(this.getName());
-    }
-    if (key) {
-        return this._localization[key];
-    }
-    return this._localization;
-},
+    getLocalization: function ( key ) {
+        if ( !this._localization ) {
+            this._localization = Oskari.getLocalization( this.getName() );
+        }
+        if ( key ) {
+            return this._localization[key];
+        }
+        return this._localization;
+    },
+    /**
+     * @method onEvent
+     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     */
+    onEvent: function (event) {
+        var handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
+    },
     /**
      * @property {Object} eventHandlers
      * @static
      */
     eventHandlers: {
+        /**
+         * @method userinterface.ExtensionUpdatedEvent
+         */
+        'userinterface.ExtensionUpdatedEvent': function (event) {
+            debugger;
+            var me = this;
 
+            if (event.getExtension().getName() !== me.getName()) {
+                // not me -> do nothing
+                return;
+            }
+
+            var isOpen = event.getViewState() !== "close";
+            me.displayContent(isOpen);
+
+        }
     }
 
     }, {
-
+        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension', 'Oskari.userinterface.Stateful']
     });

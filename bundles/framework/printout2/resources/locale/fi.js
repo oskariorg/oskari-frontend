@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "fi",
-    "key": "Printout",
+    "key": "Printout2",
     "value": {
         "title": "Tulosta karttanäkymä",
         "flyouttitle": "Tulosta karttanäkymä",
