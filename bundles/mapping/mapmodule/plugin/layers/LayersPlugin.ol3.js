@@ -48,6 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 me._scheduleVisiblityCheck();
             },
             AfterMapLayerAddEvent: function (event) {
+                console.log('parse geometry');
                 // parse geom if available
                 me._parseGeometryForLayer(event.getMapLayer());
                 me._scheduleVisiblityCheck();
@@ -87,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      */
     _parseGeometryForLayer : function(layer) {
         // parse geometry if available
-        if(layer.getGeometry && layer.getGeometry().length == 0) {
+        if(layer.getGeometry && layer.getGeometry().length === 0) {
             var layerWKTGeom = layer.getGeometryWKT();
             if(!layerWKTGeom) {
                 // no wkt, dont parse
@@ -95,10 +96,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             }
 
             var wkt = new ol.format.WKT();
-            var geometries = wkt.readGeometry(layerWKTGeom);
+            var geometry = wkt.readGeometry(layerWKTGeom);
 
-            if (geometries) {
-                layer.setGeometry(geometries);
+            if (geometry) {
+                layer.setGeometry([geometry]);
             }
         }
     },
@@ -125,10 +126,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
 
         var viewBounds = this.getMapModule().getCurrentExtent();
         var ol3Extent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
-        if(geometries.intersectsExtent(ol3Extent)) {
+        if(geometries[0].intersectsExtent(ol3Extent)) {
             return true;
         }
         return false;
+    },
+    /**
+     * @method getGeometryCenter
+     *
+     * @param {ol.geom.Geometry} geometry
+     * @return {Object} centroid
+     */
+    getGeometryCenter: function (geometry) {
+        if (geometry.getType()==="Point") {
+            var point = geometry.getCoordinates();
+            return {lon: point[0], lat: point[1]};
+        } else if (geometry.getType()==="Polygon"){
+            var extent = geometry.getExtent();
+            return {
+                lon: extent[0] + (extent[2]-extent[0])/2,
+                lat: extent[1] + (extent[3]-extent[1])/2
+            };
+        } else {
+            //
+        }
+    },
+    /**
+     * @method getGeometryBounds
+     *
+     * @param {ol.geom.Geometry} geometry
+     * @return {Object} like OpenLayers bounds
+     */
+    getGeometryBounds: function (geometry) {
+        var extent = geometry.getExtent();
+        return {
+            left: extent[0],
+            bottom: extent[1],
+            right: extent[2],
+            top: extent[3]
+        };
     },
     /**
      * @method _scheduleVisiblityCheck
