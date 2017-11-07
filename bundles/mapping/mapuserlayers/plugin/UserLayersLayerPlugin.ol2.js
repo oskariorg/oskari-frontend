@@ -86,8 +86,8 @@ Oskari.clazz.define(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for UserLayer ' +
                 layer.getId()
             );
-
-            this.handleBounds(layer);
+            //move and zoom map to layer extent
+            sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest',[layer.getId(), true]);
         },
         /**
          * Adds event listeners to ol-layers
