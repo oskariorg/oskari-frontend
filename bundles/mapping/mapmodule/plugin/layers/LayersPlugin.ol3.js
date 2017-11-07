@@ -48,7 +48,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 me._scheduleVisiblityCheck();
             },
             AfterMapLayerAddEvent: function (event) {
-                console.log('parse geometry');
                 // parse geom if available
                 me._parseGeometryForLayer(event.getMapLayer());
                 me._scheduleVisiblityCheck();
