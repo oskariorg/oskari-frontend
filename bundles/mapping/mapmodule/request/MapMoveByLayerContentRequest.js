@@ -12,11 +12,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
  *
  * @param {String}
  *            mapLayerId id of map layer used in
+ * @param {boolean} zoomToExtent (optional) if true zooms map to layer extent, default false
  * Oskari.mapframework.service.MapLayerService
  */
-function(mapLayerId) {
+function(mapLayerId, zoomToExtent) {
     this._creator = null;
     this._mapLayerId = mapLayerId;
+    this._zoomToExtent = (zoomToExtent === true);
 }, {
     /** @static @property __name request name */
     __name : "MapModulePlugin.MapMoveByLayerContentRequest",
@@ -34,6 +36,14 @@ function(mapLayerId) {
      */
     getMapLayerId : function() {
         return this._mapLayerId;
+    },
+    /**
+     * @method getZoomToExtent
+     * @return {Boolean} zoomToExtent
+     * Oskari.mapframework.service.MapLayerService
+     */
+    getZoomToExtent : function() {
+        return this._zoomToExtent;
     }
 }, {
     /**
