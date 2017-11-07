@@ -184,7 +184,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             me._popup.draggable(dragOptions);
         },
         getElement: function(){
-            return this.__popup;
+            return this._popup;
         },
 
 /************************************************************************************************

@@ -168,13 +168,24 @@ Oskari.clazz.define(
                 var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
                 if( wasClosed ) {
-                    me.getTile().hideExtension();
+                    for( var extension in me.getTile().getExtensions() ) {
+                        me.getTile().getExtensions()[extension];
+                        me.getTile().getFlyoutManager().hide( extension )
+                    } 
                     return;
+                }
+                if( this.isEmbedded() && !wasClosed ) {
+                    for(var extension in me.getTile().getExtensions()){
+                        me.getTile().getExtensions()[extension];
+                        if ( extension === 'dataview' ) {
+                            me.getTile().openFlyout( extension );
+                        }
+                    } 
                 } else {
                     for(var extension in me.getTile().getExtensions()){
                         me.getTile().showExtension(
                             me.getTile().getExtensions()[extension],
-                            function(type) {
+                            function( type ) {
                                 me.getTile().openFlyout(type);
                             }
                         );

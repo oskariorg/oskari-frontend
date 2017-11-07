@@ -235,12 +235,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
       var current = event.getCurrent();
       if (current) {
-        me._select.setValue( current.indicator );
-        if (me.getCharts().svg !== null) {
+        if ( me._select ) {
+          me._select.setValue( current.indicator );
+        }
+        if ( me.getCharts().svg !== null ) {
           me._barchart.redraw( me.getIndicatorData(), { colors: me.getColorScale() } );
         } else {
           var el = me.createBarCharts();
-          me.getPanel("oskari-chart-statsgrid").append( el );
+          if( me.getPanel( "oskari-chart-statsgrid" ) ) {
+            me.getPanel("oskari-chart-statsgrid").append( el );
+          }
         }
       }
     });
