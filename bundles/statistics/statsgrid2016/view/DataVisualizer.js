@@ -316,7 +316,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       'oskari_datachart_tabpanel_header'
       );
     chartPanel.getContainer().append( me.createIndicatorSelector( this.loc.datacharts.indicatorVar ) );
-    chartPanel.getContainer().append( me.createColorSelector( this.loc.datacharts.descColor ) );
+    // chartPanel.getContainer().append( me.createColorSelector( this.loc.datacharts.descColor ) );
     this._chart = me.createBarCharts();
     if( this._chart != null ) {
           chartPanel.getContainer().append( this._chart );

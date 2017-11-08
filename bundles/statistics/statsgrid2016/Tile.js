@@ -173,6 +173,10 @@ function(instance, service) {
         return this._flyoutManager.getFlyout(type);
     },
     openFlyout: function (type) {
+        if ( this._flyoutManager.openFlyouts[type] ) {
+            this._flyoutManager.hide(type);
+            return;
+        }
         this._flyoutManager.open(type);
     },
     /**

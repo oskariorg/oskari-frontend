@@ -167,6 +167,9 @@ Oskari.clazz.define(
                 // moving flyout around will trigger attach states on each move
                 var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
+                if( !visibilityChanged ) {
+                    return;
+                }
                 if( wasClosed ) {
                     for( var extension in me.getTile().getExtensions() ) {
                         me.getTile().getExtensions()[extension];
@@ -174,7 +177,7 @@ Oskari.clazz.define(
                     } 
                     return;
                 }
-                if( this.isEmbedded() && !wasClosed ) {
+                if( this.isEmbedded()  && !wasClosed ) {
                     for(var extension in me.getTile().getExtensions()){
                         me.getTile().getExtensions()[extension];
                         if ( extension === 'dataview' ) {
@@ -182,7 +185,7 @@ Oskari.clazz.define(
                         }
                     } 
                 } else {
-                    for(var extension in me.getTile().getExtensions()){
+                    for( var extension in me.getTile().getExtensions() ) {
                         me.getTile().showExtension(
                             me.getTile().getExtensions()[extension],
                             function( type ) {

@@ -12,15 +12,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     },
     open: function( type ) {
         var me = this;
-        if ( me.openFlyouts[type] ) {
-            me.hide(type);
-            return;
-        }
-
         var view = me.views[type];
         var flyout = me.flyouts[type];
 
-        if( view.getElement() === null ) {
+        if ( view.getElement() === null ) {
             view.createUi();
             flyout.makeDraggable({
                 handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
@@ -29,7 +24,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             flyout.setContent( view.getElement() );
             var tile = me.instance.plugins['Oskari.userinterface.Tile'];
             flyout.getElement().find('.icon-close').bind('click', function() {
-                tile.toggleExtensionClass(type, true);
+                tile.toggleExtensionClass( type, true );
             });
         }
         flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
