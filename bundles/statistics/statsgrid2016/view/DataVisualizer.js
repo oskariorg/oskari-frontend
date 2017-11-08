@@ -48,12 +48,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     var el = this._template.container;
     this.clearUi();
     this.createTabs();
-    var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-    var panels = this._getPanels();
-    for (var i = 0; i < panels.length; i++ ) {
-      accordion.addPanel(panels[i]);
-    }
-
+    var accordion = this.createAccordion();
     accordion.insertTo(el);
     this.setElement(el);
   },
@@ -248,9 +243,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       }
     });
     this.service.on('StatsGrid.IndicatorEvent', function (event) {
-      if( me.getCharts.svg === null ) {
-        return;
-      }
         if( !event.isRemoved() ) {
           var label = me.getIndicatorUILabels( event );
           var dataObject = {
@@ -324,6 +316,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
 
     return gridPanel;
   },
+  appendChartsToContainer: function ( element ) {
+    this._chart = this.createBarCharts();
+    if( this._chart != null ) {
+          element.getContainer().append( this._chart );
+    }
+  },
   /**
    * @method createChartsTab
    * Creates the tab containing the charts
@@ -337,10 +335,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     );
     chartPanel.getContainer().append( me.createIndicatorSelector( this.loc.datacharts.indicatorVar ) );
     // chartPanel.getContainer().append( me.createColorSelector( this.loc.datacharts.descColor ) );
-    this._chart = me.createBarCharts();
-    if( this._chart != null ) {
-          chartPanel.getContainer().append( this._chart );
-    }
+    this.appendChartsToContainer( chartPanel );
     chartPanel.setId('oskari-chart-statsgrid');
     this.tabsContainer.addPanel( chartPanel );
   },
@@ -355,14 +350,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     if (me.tabsContainer.panels.length === 0) {
       me.tabsContainer.insertTo(flyout);
     }
-    me.tabsContainer.addTabChangeListener(function(previousTab, newTab) {
-        if(newTab.getId() === 'oskari-grid-statsgrid') {
+    me.tabsContainer.addTabChangeListener( function( previousTab, newTab ) {
+        if ( newTab.getId() === 'oskari-grid-statsgrid' ) {
             me.checkGridVisibility();
+        } if ( newTab.getId() === 'oskari-chart-statsgrid' ) {
+            if ( !me.getCharts().chartIsInitialized() ) {
+                  me.appendChartsToContainer( newTab );
+            } else {
+              me.redrawCharts();
+            }
         }
     });
     this.createGridTab();
     this.createChartsTab();
     this._template.charts.append(me.tabsContainer.ui);
+  },
+  /**
+   * @method createAccordion
+   * Creates accordion for the ui
+   * @return {Oskari.userinterface.component.AccordionPanel} panel without content
+   */
+  createAccordion: function () {
+    var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    var panels = this._getPanels();
+    for (var i = 0; i < panels.length; i++ ) {
+      accordion.addPanel(panels[i]);
+    }
+    return accordion;
   },
   isVisible: function () {
     return this._isOpen;
