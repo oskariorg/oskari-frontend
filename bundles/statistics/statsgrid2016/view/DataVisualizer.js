@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   this.container = null;
   this.service = instance.statsService;
   this._isOpen = false;
-  this._barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox(), this.loc);
+  this._chartInstance = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox(), this.loc);
   this._select = null;
   this._grid = null;
   this._chart = null;
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   createUi: function () {
     var el = this._template.container;
     this.clearUi();
-    this.addTab();
+    this.createTabs();
     var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     var panels = this._getPanels();
     for (var i = 0; i < panels.length; i++ ) {
@@ -61,10 +61,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     return this.service.getStateService().getActiveIndicator();
   },
   getCharts: function () {
-    return this._barchart;
+    return this._chartInstance;
   },
   clearChart: function () {
-    this._barchart.clear();
+    this.getCharts().clear();
   },
   _getPanels: function () {
     var visualizerPanel = this._createDataVisualizerPanel( this.loc.datacharts.desc );
@@ -126,7 +126,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         dropdown.css({ width: '100%' });
         me._template.select.append(dropdown);
         select.adjustChosen();
-        // FIXME select active indicator
         select.selectFirstValue();
         me._select = select;
 
@@ -150,7 +149,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     return this._template.chartControls;
   },
 
-  createColorSelector: function (title) {
+  createColorSelector: function ( title ) {
     var me = this;
     var selections = [{
       id: "singleColor",
@@ -178,9 +177,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     dropdown.on("change", { select: select }, function (evt) {
         evt.stopPropagation();
         if ( evt.data.select.getValue() === 'mapClr') {
-          me._barchart.redraw(null, { colors: me.getColorScale() });
+          me.getCharts().redraw( null, { colors: me.getColorScale() } );
         } else {
-          me._barchart.redraw(null, { colors: '#DC143C' } );
+          me.getCharts().redraw( null, { colors: '#DC143C' } );
         }
     });
 
@@ -239,11 +238,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
           me._select.setValue( current.indicator );
         }
         if ( me.getCharts().svg !== null ) {
-          me._barchart.redraw( me.getIndicatorData(), { colors: me.getColorScale() } );
+          me.redrawCharts();
         } else {
-          var el = me.createBarCharts();
+          var chartElement = me.createBarCharts();
           if( me.getPanel( "oskari-chart-statsgrid" ) ) {
-            me.getPanel("oskari-chart-statsgrid").append( el );
+            me.getPanel("oskari-chart-statsgrid").append( chartElement );
           }
         }
       }
@@ -270,15 +269,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       var filterOptions = event.getFilter();
     });
   },
-
-  getColorScale: function(){
+  /**
+   * @method getColorScale
+   * gets the color scale of the mapselection
+   * @return colors[] containing colors
+   */
+  getColorScale: function () {
       var stateService = this.service.getStateService();
       var activeIndicator = stateService.getActiveIndicator();
       var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
       var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
       return colors;
   },
-
+  /**
+   * @method createBarCharts
+   * Creates the barchart component if chart is not initialized
+   */
   createBarCharts: function () {
     var me = this;
     var data = this.getIndicatorData();
@@ -287,18 +293,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       return null;
     }
 
-    if ( !this._barchart.chartIsInitialized() ) {
-      var barchart = this._barchart.createBarChart(data, { colors:  me.getColorScale()});
+    if ( !this.getCharts().chartIsInitialized() ) {
+      var barchart = this.getCharts().createBarChart( data, { colors:  me.getColorScale() } );
       var el = jQuery(barchart);
       el.css({
         "width": "100%"
       });
       return el;
-    } else {
-      this._barchart.redraw( data, { colors:  me.getColorScale()} );
-    }
+    } 
   },
-  gridTab: function () {
+  /**
+   * @method redrawCharts
+   * redraws the charts
+   */
+  redrawCharts: function () {
+    var data = this.getIndicatorData();
+    this.getCharts().redraw( data, { colors:  this.getColorScale()} );
+  },
+  /**
+   * @method createGridTab
+   * Creates the tab containing the grid
+   */
+  createGridTab: function () {
     var gridPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
     gridPanel.setTitle(this.loc.datacharts.table);
 
@@ -308,13 +324,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
 
     return gridPanel;
   },
-  chartsTab: function () {
+  /**
+   * @method createChartsTab
+   * Creates the tab containing the charts
+   */
+  createChartsTab: function () {
     var me = this;
     var chartPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
     chartPanel.setTitle(
       this.loc.datacharts.barchart,
       'oskari_datachart_tabpanel_header'
-      );
+    );
     chartPanel.getContainer().append( me.createIndicatorSelector( this.loc.datacharts.indicatorVar ) );
     // chartPanel.getContainer().append( me.createColorSelector( this.loc.datacharts.descColor ) );
     this._chart = me.createBarCharts();
@@ -324,10 +344,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     chartPanel.setId('oskari-chart-statsgrid');
     this.tabsContainer.addPanel( chartPanel );
   },
-  addTab: function () {
+  /**
+   * @method createTabs
+   * Creates tabs for the ui
+   * @return {Oskari.userinterface.component.AccordionPanel} panel without content
+   */
+  createTabs: function () {
     var me = this,
         flyout = jQuery(me.container);
-    // Change into tab mode if not already
     if (me.tabsContainer.panels.length === 0) {
       me.tabsContainer.insertTo(flyout);
     }
@@ -336,8 +360,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
             me.checkGridVisibility();
         }
     });
-    this.gridTab();
-    this.chartsTab();
+    this.createGridTab();
+    this.createChartsTab();
     this._template.charts.append(me.tabsContainer.ui);
   },
   isVisible: function () {
