@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "en",
-    "key": "Printout",
+    "key": "Printout2",
     "value": {
         "title": "Print Map View",
         "flyouttitle": "Print Map View",

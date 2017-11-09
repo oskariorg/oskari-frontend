@@ -1,9 +1,10 @@
 Oskari.clazz.define("Oskari.mapping.printout2.components.preview",
 
     function ( instance ) {
-        this.loc = instance.localization["BasicView"];
+        this.loc = instance._localization["BasicView"];
         this.instance = instance;
         this.previewPanel = null;
+        this.previewImgDiv = null;
         this.progressSpinner = Oskari.clazz.create(
             'Oskari.userinterface.component.ProgressSpinner'
         );
@@ -57,6 +58,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.preview",
                 }
             }
             this.setElement( panel );
+            return this.getElement();
         },
         /**
          * @private @method _cleanMapPreview

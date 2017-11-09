@@ -4,22 +4,48 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
         this.instance = instance;
         this.container = null;
         this.preview = Oskari.clazz.create( 'Oskari.mapping.printout2.components.preview', instance );
+        this.settings = Oskari.clazz.create( 'Oskari.mapping.printout2.components.settings', instance );
+        this.accordion = null;
     }, {
         _templates: {
-            container: '<div class="print-container"></div>'
+            wrapper: '<div class="print-container"> hello person </div>'
         },
         setElement: function ( element ) {
             this.container = element;
         },
-        createPreview: function () {
-            this.preview.createPreviewPanel();
-            return this.preview.getElement();
+        getElement: function () {
+            return this.container;
         },
-        createUi: function () {
-            var container = jQuery( this._templates.container );
-            var preview = this.createPreview();
-            container.append( preview );
+        createAccordion: function () {
+            var accordion = Oskari.clazz.create(
+                'Oskari.userinterface.component.Accordion'
+            );
+            this.accordion = accordion;
+        },
+        createPreview: function () {
+            var previewPanel = this.preview.createPreviewPanel();
+            previewPanel.open();
+            this.accordion.addPanel( previewPanel );
+        },
+        createSettingsPanel: function () {
+            var settingsPanel = this.settings._createSettingsPanel();
+            settingsPanel.open();
+            this.accordion.addPanel( settingsPanel );
+        },
+        createUi: function ( ) {
+            var wrapper = jQuery( this._templates.wrapper );
+            this.createAccordion();
+            this.createSettingsPanel();
+            this.createPreview();
+            var container = jQuery('<div></div>');
+            container.append( wrapper );
+            this.accordion.insertTo( container );
             this.setElement( container );
+        },
+        render: function ( container ) {
+        },
+        refresh: function () {
+
         }
     }, {
 

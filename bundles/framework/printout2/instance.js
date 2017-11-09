@@ -6,6 +6,11 @@
  *
  * See Oskari.mapframework.bundle.printout.PrintoutBundle for bundle definition.
  *
+ * 
+ *             appSetup.startupSequence[17] = {
+                "bundlename":"printout2" ,
+            }
+            appSetup.startupSequence[17].metadata= { "Import-Bundle": { "printout2": { "bundlePath": "/Oskari/packages/framework/bundle/" } } };
  */
 Oskari.clazz.define("Oskari.mapping.printout2.instance",
     /**
@@ -16,8 +21,11 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
         this.started = false;
         this._localization = undefined;
         this.sandbox = null;
+        this._mapmodule = null; 
         this.views = null;
         this.buttonGroup = 'viewtools';
+        this.plugins = {};
+        this._flyoutManager = null;
     }, {
     /**
      * @static
@@ -35,8 +43,17 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
     getName: function () {
         return this.__name;
     },
+    getViews: function () {
+        return this.views;
+    },
     isInitialized: function () {
         return this.started;
+    },    
+    startExtension: function () {
+        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapping.printout2.Flyout', this);
+    },
+    stopExtension: function () {
+        this.plugins['Oskari.userinterface.Flyout'] = null;
     },
     /**
      * @method getSandbox
@@ -49,17 +66,19 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
         if( this.isInitialized() ) {
             return;
         }
+        this.started = true;
         this.sandbox = Oskari.getSandbox();
-        this.localization = Oskari.getLocalization( this.getName() );
+        this.localization = this.getLocalization( this.getName() );
         this.sandbox.register(this);
+        this._mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         for (p in this.eventHandlers) {
             if (this.eventHandlers.hasOwnProperty(p)) {
                 this.sandbox.registerForEventByName(this, p);
             }
         }
+        this._flyoutManager = Oskari.clazz.create('Oskari.mapping.printout2.FlyoutManager', this);
+        this._flyoutManager.init();
         this.addToToolbar();
-        this._initViews();
-        this.views["print"].createUi();
     },
     addToToolbar: function () {
         var me = this;
@@ -69,10 +88,11 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                 btns = {
                     'print': {
                         iconCls: 'tool-print',
-                        tooltip: this.localization.btnTooltip,
+                        tooltip: this._localization.btnTooltip,
                         sticky: true,
                         callback: function () {
-                            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
+                            // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
+                            me.sayhello();
                         }
                     }
                 };
@@ -83,10 +103,11 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                 }
             }
     },
-    _initViews: function () {
-        this.views = {
-            print: Oskari.clazz.create("Oskari.mapping.printout2.view.print", this )
-        }
+    sayhello: function () {
+        this.displayContent();
+    },
+    displayContent: function () {
+        this._flyoutManager.open("print");
     },
     getLocalization: function ( key ) {
         if ( !this._localization ) {
@@ -118,7 +139,6 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
          * @method userinterface.ExtensionUpdatedEvent
          */
         'userinterface.ExtensionUpdatedEvent': function (event) {
-            debugger;
             var me = this;
 
             if (event.getExtension().getName() !== me.getName()) {
@@ -126,12 +146,12 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                 return;
             }
 
-            var isOpen = event.getViewState() !== "close";
-            me.displayContent(isOpen);
+            // var isOpen = event.getViewState() !== "close";
+            // me.displayContent(isOpen);
 
         }
     }
 
     }, {
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension', 'Oskari.userinterface.Stateful']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });
