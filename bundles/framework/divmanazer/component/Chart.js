@@ -9,14 +9,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
   this.data = null;
   this.chartType = null;
   this.containerWidth = null;
+  this.graph = jQuery('<div style="width:100%"></div>');
   this._g = null;
   this._options = {
     colors: ['#ebb819']
   };
 }, {
-    _template: {
-        graph: jQuery('<div id="graphic" style="width:100%"></div>')
-    },
     _checkColors: function ( opts ) {
         var options = opts || {};
         options.colors = options.colors || this._options.colors;
@@ -76,7 +74,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         }));
     },
     getSVGTemplate: function () {
-        var svg = d3.select( this._template.graph.get(0) ).append("svg")
+        var svg = d3.select( this.graph.get(0) ).append("svg")
             .attr( "width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
             .attr( "height", this.dimensions.height() + this.dimensions.margin.top + this.dimensions.margin.bottom )
             .append( "g" )
@@ -254,7 +252,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         });
     },
     clear: function () {
-        this._template.graph.empty();
+        this.graph.empty();
     },
     /**
      * remove old graph and redraw
@@ -280,6 +278,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         return chart;
     },
     getGraph: function() {
-        return this._template.graph;
+        return this.graph;
     }
 });
