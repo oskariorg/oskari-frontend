@@ -55,11 +55,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   hasActiveIndicator: function () {
     return this.service.getStateService().getActiveIndicator();
   },
-  getCharts: function () {
+  getChartInstance: function () {
     return this._chartInstance;
   },
   clearChart: function () {
-    this.getCharts().clear();
+    this.getChartInstance().clear();
   },
   _getPanels: function () {
     var visualizerPanel = this._createDataVisualizerPanel( this.loc.datacharts.desc );
@@ -172,9 +172,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     dropdown.on("change", { select: select }, function (evt) {
         evt.stopPropagation();
         if ( evt.data.select.getValue() === 'mapClr') {
-          me.getCharts().redraw( null, { colors: me.getColorScale() } );
+          me.getChartInstance().redraw( null, { colors: me.getColorScale() } );
         } else {
-          me.getCharts().redraw( null, { colors: '#DC143C' } );
+          me.getChartInstance().redraw( null, { colors: '#DC143C' } );
         }
     });
 
@@ -232,7 +232,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         if ( me._select ) {
           me._select.setValue( current.indicator );
         }
-        if ( me.getCharts().svg !== null ) {
+        if ( me.getChartInstance().svg !== null ) {
           me.redrawCharts();
         } else {
           var chartElement = me.createBarCharts();
@@ -285,8 +285,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       return null;
     }
 
-    if ( !this.getCharts().chartIsInitialized() ) {
-      var barchart = this.getCharts().createBarChart( data, { colors:  me.getColorScale() } );
+    if ( !this.getChartInstance().chartIsInitialized() ) {
+      var barchart = this.getChartInstance().createBarChart( data, { colors:  me.getColorScale() } );
       var el = jQuery(barchart);
       el.css({
         "width": "100%"
@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
    */
   redrawCharts: function () {
     var data = this.getIndicatorData();
-    this.getCharts().redraw( data, { colors:  this.getColorScale()} );
+    this.getChartInstance().redraw( data, { colors:  this.getColorScale() } );
   },
   /**
    * @method createGridTab
@@ -354,7 +354,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         if ( newTab.getId() === 'oskari-grid-statsgrid' ) {
             me.checkGridVisibility();
         } if ( newTab.getId() === 'oskari-chart-statsgrid' ) {
-            if ( !me.getCharts().chartIsInitialized() ) {
+            if ( !me.getChartInstance().chartIsInitialized() ) {
                   me.appendChartsToContainer( newTab );
             } else {
               me.redrawCharts();
