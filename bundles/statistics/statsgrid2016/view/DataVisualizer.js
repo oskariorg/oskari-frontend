@@ -291,6 +291,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       el.css({
         "width": "100%"
       });
+      el.attr('id', 'graphic');
       return el;
     } 
   },
