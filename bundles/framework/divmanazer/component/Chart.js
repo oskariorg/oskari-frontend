@@ -75,13 +75,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             return d.name;
         }));
     },
-    initSVG: function () {
-        var svg = d3.select( this._template.graph[0] ).append("svg")
+    getSVGTemplate: function () {
+        var svg = d3.select( this._template.graph.get(0) ).append("svg")
             .attr( "width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
             .attr( "height", this.dimensions.height() + this.dimensions.margin.top + this.dimensions.margin.bottom )
             .append( "g" )
             .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" );
-        this.svg = svg;
         return svg;
     },
     /**
@@ -103,9 +102,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
      *
      */
     initChart: function () {
-        var svg = this.initSVG();
+        this.svg = this.getSVGTemplate();
         var scales = this.initScales();
-        var chart = this.chart( svg );
+        var chart = this.chart( this.svg );
         return chart;
     },
     /**
