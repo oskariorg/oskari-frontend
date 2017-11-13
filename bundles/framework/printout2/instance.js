@@ -26,6 +26,13 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
         this.buttonGroup = 'viewtools';
         this.plugins = {};
         this._flyoutManager = null;
+        //  Format producers
+        this.backendConfiguration = {
+            formatProducers: {
+                "application/pdf": "",
+                "image/png": ""
+            }
+        };
     }, {
     /**
      * @static

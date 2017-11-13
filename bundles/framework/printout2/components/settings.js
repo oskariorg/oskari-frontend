@@ -1,8 +1,9 @@
 Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
 
-    function ( instance ) {
-        this.loc = instance._localization["BasicView"];
-        this.instance = instance;
+    function ( view ) {
+        this.view = view;
+        this.loc = view.instance._localization["BasicView"];
+        this.instance = view.instance;
         this.selectionsPanel = null;
         /* format options listed in localisations */
         this.formatOptions = this.loc.format.options;
@@ -177,6 +178,47 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
             this.setElement(panel);
             return this.getElement();
         },
+                /**
+         * @private @method _gatherSelections
+         * Gathers printout selections and returns them as JSON object
+         *
+         *
+         * @return {Object}
+         */
+        _gatherSelections: function (format) {
+            var me = this;
+                var container = me.view.getElement();
+                if(!container) {
+                    return;
+                }
+                var sandbox = me.instance.getSandbox();
+                var size = container.find('input[name=size]:checked').val();
+                var selectedFormat = (format !== null && format !== undefined) ? format : container.find('input[name=format]:checked').val();
+                var title = container.find('.printout_title_field').val();
+                maplinkArgs = sandbox.generateMapLinkParameters(),
+                p,
+                selections = {
+                    pageTitle: title,
+                    pageSize: size,
+                    maplinkArgs: maplinkArgs,
+                    format: selectedFormat || 'application/pdf'
+                };
+
+            if (!size) {
+                var firstSizeOption = container.find('input[name=size]').first();
+                firstSizeOption.attr('checked', 'checked');
+                selections.pageSize = firstSizeOption.val();
+            }
+
+            for (p in me.contentOptionsMap) {
+                if (me.contentOptionsMap.hasOwnProperty(p)) {
+                    selections[p] = me.contentOptionDivs[p].find('input').prop('checked');
+                }
+            }
+
+            return selections;
+        },
+
     }, {
 
     });

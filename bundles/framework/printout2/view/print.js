@@ -3,8 +3,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
     function ( instance ) {
         this.instance = instance;
         this.container = null;
-        this.preview = Oskari.clazz.create( 'Oskari.mapping.printout2.components.preview', instance );
-        this.settings = Oskari.clazz.create( 'Oskari.mapping.printout2.components.settings', instance );
+        this.preview = Oskari.clazz.create( 'Oskari.mapping.printout2.components.preview', this );
+        this.settings = Oskari.clazz.create( 'Oskari.mapping.printout2.components.settings', this );
         this.accordion = null;
     }, {
         _templates: {
@@ -25,6 +25,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
         createPreview: function () {
             var previewPanel = this.preview.createPreviewPanel();
             previewPanel.open();
+            this.preview._cleanMapPreview();
+            this.preview._updateMapPreview();
             this.accordion.addPanel( previewPanel );
         },
         createSettingsPanel: function () {
@@ -34,13 +36,15 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
         },
         createUi: function ( ) {
             var wrapper = jQuery( this._templates.wrapper );
+            
             this.createAccordion();
             this.createSettingsPanel();
-            this.createPreview();
+
             var container = jQuery('<div></div>');
             container.append( wrapper );
             this.accordion.insertTo( container );
             this.setElement( container );
+            this.createPreview();
         },
         render: function ( container ) {
         },

@@ -1,13 +1,19 @@
 Oskari.clazz.define("Oskari.mapping.printout2.components.preview",
 
-    function ( instance ) {
-        this.loc = instance._localization["BasicView"];
-        this.instance = instance;
+    function ( view ) {
+        this.view = view;
+        this.loc = view.instance._localization["BasicView"];
+        this.instance = view.instance;
         this.previewPanel = null;
         this.previewImgDiv = null;
         this.progressSpinner = Oskari.clazz.create(
             'Oskari.userinterface.component.ProgressSpinner'
         );
+        this.sizeOptions = this.loc.size.options;
+        this.sizeOptionsMap = {};
+        for (s = 0; s < this.sizeOptions.length; s += 1) {
+            this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
+        }
     }, {      
         _templates: {
             preview: jQuery('<div class="preview"><img /><span></span></div>'),
@@ -78,8 +84,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.preview",
          */
         _updateMapPreview: function () {
             var me = this,
-                selections = me._gatherSelections('image/png'),
-                urlBase = me.backendConfiguration.formatProducers[selections.format],
+                selections = me.view.settings._gatherSelections('image/png'),
+                urlBase = me.instance.backendConfiguration.formatProducers[selections.format],
                 maplinkArgs = selections.maplinkArgs,
                 pageSizeArgs = '&pageSize=' + selections.pageSize,
                 previewScaleArgs = '&scaledWidth=200',
@@ -87,7 +93,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.preview",
 
             me.previewContent.removeClass('preview-portrait');
             me.previewContent.removeClass('preview-landscape');
-            me.previewContent.addClass(me.sizeOptionsMap[selections.pageSize].classForPreview);
+            me.previewContent.addClass(me.sizeOptionsMap["A4"].classForPreview);
 
             var previewImgDiv = me.previewImgDiv,
                 previewSpan = me.previewSpan;
