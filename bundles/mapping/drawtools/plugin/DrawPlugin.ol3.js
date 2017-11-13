@@ -561,6 +561,13 @@ Oskari.clazz.define(
             var optionsForDrawingEvent = {
                 isFinished: false
             };
+            function makeClosedPolygonCoords(coords) {
+                return coords.map(function(ring) {
+                    ring = ring.slice();
+                    ring.push(ring[0].slice());
+                    return ring;
+                });
+            }
             if (shape === 'LineString') {
                  geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
@@ -621,7 +628,7 @@ Oskari.clazz.define(
                     if (!geometry) {
                         geometry = new ol.geom.Polygon(null);
                     }
-                    geometry.setCoordinates(coordinates);
+                    geometry.setCoordinates(makeClosedPolygonCoords(coordinates));
                     if(options.selfIntersection !== false) {
                         me.checkIntersection(geometry);
                     }
