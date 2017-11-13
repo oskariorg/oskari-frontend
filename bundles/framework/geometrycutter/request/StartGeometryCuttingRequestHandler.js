@@ -1,10 +1,9 @@
-Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCuttingRequestHandler', function(sandbox, geometryEditPlugin) {
-    
+Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCuttingRequestHandler', function(sandbox, geometryCutterInstance) {
         this.sandbox = sandbox;
-        this.geometryEditPlugin = geometryEditPlugin;
+        this.geometryCutterInstance = geometryCutterInstance;
     }, {
         handleRequest : function(core, request) {
-            this.geometryEditPlugin.startEditDrawing(request.getId(), request.getGeometry(), request.getMode());
+            this.geometryCutterInstance.startEditing(request.getId(), request.getGeometry(), request.getMode());
         }
     }, {
         protocol : ['Oskari.mapframework.core.RequestHandler']

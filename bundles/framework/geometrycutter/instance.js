@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
     this._geometryProcessor = Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor');
 }, {
     __name: 'GeometryCutterBundleInstance',
-    __idPrefix: 'geometryEdit-',
+    __idPrefix: 'geometryCutter-',
 
     /**
      * @method getName
@@ -35,16 +35,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
      */
     eventHandlers: {
         'DrawingEvent': function (event) {
+            var me = this;
             var drawId = event.getId();
             if (drawId.substr(0, this.__idPrefix.length) !== this.__idPrefix || !event.getIsFinished()) {
                 return;
             }
             var editState = this._editsInProgress[drawId];
-            if(!editState) {
-                throw new Error('No editable geometry for id: ', drawId);
+            if(!editState || !editState.drawing) {
+                return;
             }
-            this.executeEdit(editState, event.getGeoJson());
-            // TODO: remove drawn fatures if edit successful
+            var featureCollection = event.getGeoJson();
+            var editSuccess = this.executeEdit(editState, featureCollection.features[0]);
+            if(editSuccess) {
+                this.showResult(editState);
+            }
+            editState.drawing = false;
+            // Workaround: doing call as sync will mess up DrawPlugin
+            setTimeout(this.stopEditDrawing.bind(this, editState), 0);
         },
         'FeatureEvent': function(event) {
             // check if feature is ours
@@ -59,39 +66,51 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         }
     },
     executeEdit: function(editState, geometry) {
-        editState.drawnGeometry = geometry;
+        editState.drawnFeature = geometry;
         switch (editState.mode) {
             case 'lineSplit':
-                editState.resultGeometry = this._geometryProcessor.splitByLine(editState.sourceGeometry, editState.drawnGeometry);
+                editState.resultFeature = this._geometryProcessor.splitByLine(editState.sourceFeature, editState.drawnFeature);
                 break;
             case 'polygonClip':
-                editState.resultGeometry = this._geometryProcessor.clipByPolygon(editState.sourceGeometry, editState.drawnGeometry);
+                editState.resultFeature = this._geometryProcessor.clipByPolygon(editState.sourceFeature, editState.drawnFeature);
                 break;
         }
-        if(editState.resultGeometry) {
-            var builder = this.__sandbox.getRequestBuilder('MapModulePlugin.AddFeaturesToMapRequest');
+        return !!editState.resultFeature;
+    },
+    showResult: function(editState) {
+        if(editState.resultFeature) {
+            var builder = this.sandbox.getRequestBuilder('MapModulePlugin.AddFeaturesToMapRequest');
             var featureCollection = {
                 type: 'FeatureCollection',
-                features: editState.resultGeometry
+                features: [editState.resultFeature]
             };
             if (builder) {
                 var request = builder(featureCollection, {
                     layerId: 'GEOM_EDITOR'
                 });
-                this.__sandbox.request(this, request);
+                this.sandbox.request(this, request);
             }
         }
     },
-    /**
-     * @method startEditing
-     */
-    startEditDrawing: function (functionalityId, geometry, mode) {
 
-        var drawId = this.__idPrefix + functionalityId,
-            options = {allowMultipleDrawing : false},
-            geometryType;
+    startEditing: function (functionalityId, feature, mode) {
+        var drawId = this.__idPrefix + functionalityId;
+        // TODO: what if editing already in progress with same ID?
+        var editState = {
+            id: drawId,
+            mode: mode,
+            sourceFeature: feature,
+            drawnFeature: null,
+            resultFeature: null,
+            drawing: true
+        };
+        this._editsInProgress[drawId] = editState;
+        this.startEditDrawing(editState);
+    },
 
-        switch (mode) {
+    startEditDrawing: function (editState) {
+        var geometryType;
+        switch (editState.mode) {
             case 'lineSplit':
                 geometryType = 'LineString';
                 break;
@@ -100,22 +119,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
                 break;
         }
 
-        this._editsInProgress[drawId] = {
-            id: drawId,
-            mode: mode,
-            sourceGeometry: geometry,
-            drawnGeometry: null,
-            resultGeometry: null
-        };
-
-        var startDrawingRequest = this.__sandbox.getRequestBuilder('DrawTools.StartDrawingRequest');
-        if (startDrawingRequest) {
-            var request = startDrawingRequest(drawId, geometryType, options);
-            this.__sandbox.request(this, request);
+        var builder = this.sandbox.getRequestBuilder('DrawTools.StartDrawingRequest');
+        if (builder) {
+            var request = builder(editState.id, geometryType); //, {allowMultipleDrawing : false});
+            this.sandbox.request(this, request);
+        }
+    },
+    stopEditDrawing: function(editState) {
+        var builder = this.sandbox.getRequestBuilder('DrawTools.StopDrawingRequest');
+        if (builder) {
+            var request = builder(editState.id, true);
+            this.sandbox.request(this, request);
         }
     },
 
-    cancelEditing: function(functionalityId) {
+    cancelEditing: function(drawId) {
 
     },
 
@@ -128,9 +146,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
     start: function (sandbox) {
         var me = this;
         sandbox.register(this);
+        me.sandbox = sandbox;
 
         Object.keys(this.requestHandlers).forEach(function(requestName) {
-            sandbox.requestHandler(requestName, me.requestHandlers[requestName]());
+            sandbox.requestHandler(requestName, me.requestHandlers[requestName].call(me));
         });
         Object.keys(this.eventHandlers).forEach(function(eventName) {
             sandbox.registerForEventByName(me, eventName);

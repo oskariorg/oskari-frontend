@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
     this._reader = new jsts.io.GeoJSONReader();
     this._writer = new jsts.io.GeoJSONWriter();
 }, {
-    splitByLine: function(sourceGeometry, drawnGeometry) {
+    splitByLine: function(sourceFeature, drawnFeature) {
         var source = this._reader.read(sourceGeometry);
         var drawn = this._reader.read(drawnGeometry);
 
@@ -23,15 +23,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
         
 
     },
-    clipByPolygon: function(sourceGeometry, drawnGeometry) {
-        var source = this._reader.read(sourceGeometry);
-        var drawn = this._reader.read(drawnGeometry);
+    clipByPolygon: function(sourceFeature, drawnFeature) {
+        var source = this._reader.read(sourceFeature.geometry);
+        var drawn = this._reader.read(drawnFeature.geometry);
         var diff;
         try {
             diff = source.difference(drawn);
         } catch(e) {
-            // tolopogy exception
+            return null;
         }
-        return [this._writer.write(diff)];
+        return {
+            type: 'Feature',
+            geometry: this._writer.write(diff)
+        }
     }
 }, {});
