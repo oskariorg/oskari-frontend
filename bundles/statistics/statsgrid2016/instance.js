@@ -172,9 +172,9 @@ Oskari.clazz.define(
                 }
                 if( wasClosed ) {
                     for( var extension in me.getTile().getExtensions() ) {
-                        me.getTile().getExtensions()[extension];
                         me.getTile().getFlyoutManager().hide( extension )
-                    } 
+                    }
+                    me.getTile().hideExtension();
                     return;
                 }
                 if( this.isEmbedded()  && !wasClosed ) {

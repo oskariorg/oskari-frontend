@@ -135,6 +135,7 @@ function(instance, service) {
         var me = this;
         for(var type in me._tileExtensions) {
             var extension = me._tileExtensions[type];
+            extension.removeClass('material-selected');
             extension.hide();
         }
     },
