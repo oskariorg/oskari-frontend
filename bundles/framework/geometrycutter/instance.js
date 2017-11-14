@@ -8,6 +8,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
 }, {
     __name: 'GeometryCutterBundleInstance',
     __idPrefix: 'geometryCutter-',
+    __basicStyle: {
+        stroke: {
+            color: '#ff0000',
+            width: 1
+        },
+        fill: {
+            color: 'rgba(255,126,123, 0.5)'
+        }
+    },
+    __selectedStyle: {
+        stroke: {
+            color: '#0000ff',
+            width: 1
+        },
+        fill: {
+            color: 'rgba(50,50,255, 0.5)'
+        }
+    },
 
     /**
      * @method getName
@@ -91,7 +109,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             features: editState.resultFeatures
         };
         var request = builder(featureCollection, {
-            layerId: editState.drawId
+            layerId: editState.drawId,
+            clearPrevious: true,
+            featureStyle: this.__basicStyle,
+            optionalStyles: [{
+                property: {
+                    key: 'id',
+                    value: editState.selectedFeatureIndex
+                },
+                fill: this.__selectedStyle.fill,
+                stroke: this.__selectedStyle.stroke
+            }]
         });
         this.sandbox.request(this, request);
     },
