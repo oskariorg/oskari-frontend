@@ -2,6 +2,7 @@
  * @class Oskari.mapframework.ui.module.common.geometrycutter.GeometryCutterBundleInstance
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBundleInstance', function () {
+    this.sandbox = null;
     this._editsInProgress = {};
     this._geometryProcessor = Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor');
 }, {
@@ -69,40 +70,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         editState.drawnFeature = geometry;
         switch (editState.mode) {
             case 'lineSplit':
-                editState.resultFeature = this._geometryProcessor.splitByLine(editState.sourceFeature, editState.drawnFeature);
+                editState.resultFeatures = this._geometryProcessor.splitByLine(editState.sourceFeature, editState.drawnFeature);
                 break;
             case 'polygonClip':
-                editState.resultFeature = this._geometryProcessor.clipByPolygon(editState.sourceFeature, editState.drawnFeature);
+                editState.resultFeatures = this._geometryProcessor.clipByPolygon(editState.sourceFeature, editState.drawnFeature);
                 break;
         }
-        return !!editState.resultFeature;
+        return !!editState.resultFeatures;
     },
     showResult: function(editState) {
-        if(editState.resultFeature) {
-            var builder = this.sandbox.getRequestBuilder('MapModulePlugin.AddFeaturesToMapRequest');
-            var featureCollection = {
-                type: 'FeatureCollection',
-                features: [editState.resultFeature]
-            };
-            if (builder) {
-                var request = builder(featureCollection, {
-                    layerId: 'GEOM_EDITOR'
-                });
-                this.sandbox.request(this, request);
-            }
+        if(!editState.resultFeatures) {
+            return;
         }
+        var builder = this.sandbox.getRequestBuilder('MapModulePlugin.AddFeaturesToMapRequest');
+        if (!builder) {
+            return;
+        }
+        var featureCollection = {
+            type: 'FeatureCollection',
+            features: editState.resultFeatures
+        };
+        var request = builder(featureCollection, {
+            layerId: editState.drawId
+        });
+        this.sandbox.request(this, request);
+    },
+    hideResult: function(editState) {
+        if(!editState.resultFeatures) {
+            return;
+        }
+        var builder = this.sandbox.getRequestBuilder('MapModulePlugin.RemoveFeaturesFromMapRequest');
+        if (!builder) {
+            return;
+        }
+        var request = builder(null, null, editState.drawId);
+        this.sandbox.request(this, request);
     },
 
-    startEditing: function (functionalityId, feature, mode) {
-        var drawId = this.__idPrefix + functionalityId;
+    startEditing: function (operationId, feature, mode) {
+        var drawId = this.__idPrefix + operationId;
         // TODO: what if editing already in progress with same ID?
         var editState = {
             id: drawId,
             mode: mode,
             sourceFeature: feature,
             drawnFeature: null,
-            resultFeature: null,
-            drawing: true
+            resultFeatures: null,
+            selectedFeatureIndex: 0,
+            drawing: false
         };
         this._editsInProgress[drawId] = editState;
         this.startEditDrawing(editState);
@@ -123,6 +138,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         if (builder) {
             var request = builder(editState.id, geometryType); //, {allowMultipleDrawing : false});
             this.sandbox.request(this, request);
+            editState.drawing = true;
         }
     },
     stopEditDrawing: function(editState) {
@@ -130,11 +146,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         if (builder) {
             var request = builder(editState.id, true);
             this.sandbox.request(this, request);
+            editState.drawing = false;
         }
     },
 
-    cancelEditing: function(drawId) {
+    stopEditing: function(operationId, sendEvent) {
+        var drawId = this.__idPrefix + operationId;
+        var editState = this._editsInProgress[drawId];
+        if(!editState) {
+            return;
+        }
+        this.clearEditState(editState);
+        delete this._editsInProgress[drawId];
+        if(!sendEvent) {
+            return;
+        }
+        var feature = null;
+        if(editState.resultFeatures) {
+            var index = editState.selectedFeatureIndex;
+            feature = editState.resultFeatures[index];
+        }
+        var event = Oskari.eventBuilder('FinishedGeometryCuttingEvent')(operationId, feature);
+        this.sandbox.notifyAll(event);
+    },
 
+    clearEditState: function(editState) {
+        if (editState.drawing) {
+            this.stopEditDrawing(editState);
+        }
+        if (editState.resultFeatures) {
+            this.hideResult(editState);
+        }
     },
 
     init: function() {},

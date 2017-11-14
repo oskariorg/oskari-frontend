@@ -5,13 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StopGeometryCutti
     },
     {
         handleRequest: function (core, request) {
-            if (request.isCancel()) {
-                this.geometryCutterInstance.cancelEditing(request.getId());
-            }
-            else {
-
-                this.geometryCutterInstance.finishEditing(request.getId());
-            }
+            this.geometryCutterInstance.stopEditing(request.getId(), !request.isCancel());
         }
     }, {
         protocol: ['Oskari.mapframework.core.RequestHandler']

@@ -32,9 +32,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
         } catch(e) {
             return null;
         }
-        return {
+        return [{
             type: 'Feature',
             geometry: this._writer.write(diff)
-        }
+        }];
     }
 }, {});

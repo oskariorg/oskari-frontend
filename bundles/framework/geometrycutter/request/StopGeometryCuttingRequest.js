@@ -1,10 +1,10 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StopGeometryCuttingRequest',
     /** @constructor
-     * @param {Sting} functionalityId ID of initiating functionality
+     * @param {Sting} operationId ID of edit operation. Caller defined, for example bundle name
      * @param {boolean} isCancel 
      */
-    function (functionalityId, isCancel) {
-        this._functionalityId = functionalityId;
+    function (operationId, isCancel) {
+        this._operationId = operationId;
         this._isCancel = (isCancel == true);
     }, {
         __name: "StopGeometryCuttingRequest",
@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StopGeometryCutti
             return this.__name;
         },
         getId: function() {
-            return this._functionalityId;
+            return this._operationId;
         },
         isCancel: function () {
             return (this._isCancel === true);

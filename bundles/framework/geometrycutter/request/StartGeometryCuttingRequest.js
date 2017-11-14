@@ -1,15 +1,15 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCuttingRequest',
 
 /** @constructor
- * @param {Sting} functionalityId ID of initiating functionality
+ * @param {Sting} operationId ID of edit operation. Caller defined, for example bundle name
  * @param {String} mode kind of geometry editing, see __modes
  * @param {GeoJSONGeometry} geometry
  */
-function(functionalityId, mode, geometry) {
+function(operationId, mode, geometry) {
     if (!this.__modes[mode]) {
         throw "Unknown geometry edit mode '" + mode + "'";
     }
-    this._functionalityId = functionalityId;
+    this._operationId = operationId;
     this._geometry = geometry;
     this._mode = mode;
 
@@ -24,7 +24,7 @@ function(functionalityId, mode, geometry) {
     },
 
     getId: function() {
-        return this._functionalityId;
+        return this._operationId;
     },
 
     getMode : function() {

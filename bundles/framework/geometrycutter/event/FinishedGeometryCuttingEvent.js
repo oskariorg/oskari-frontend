@@ -7,15 +7,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.FinishedGeometryC
 /**
  * @method create called automatically on construction
  * @static
- * @param {String} functionalityId 
- * @param {GeoJSONGeometry} geometry the result of the geometry cutting
+ * @param {String} operationId 
+ * @param {GeoJSONFeature} feature the result of the geometry cutting, or null if cutting failed (topology exception)
  */
-function(functionalityId, geometry) {
-    this._functionalityId = functionalityId;
-    this._geometry = geometry;
+function(operationId, feature) {
+    this._operationId = operationId;
+    this._feature = feature;
 }, {
     /** @static @property __name event name */
-    __name : "GeometryCuttingPlugin.FinishedGeometryCuttingEvent",
+    __name : "FinishedGeometryCuttingEvent",
     /**
      * @method getName
      * Returns event name
@@ -26,19 +26,19 @@ function(functionalityId, geometry) {
     },
     /**
      * @method getId
-     * Returns the functionality id that started the geometry editing
+     * Returns the operation id that started the geometry editing
      * @return {String}
      */
     getId: function() {
-        return this._functionalityId;
+        return this._operationId;
     },
     /**
      * @method getGeometry
      * Returns the edited geometry
      * @return {GeoJSONGeometry}
      */
-    getGeometry : function() {
-        return this._filtered;
+    getFeature : function() {
+        return this._feature;
     }
 }, {
     /**
