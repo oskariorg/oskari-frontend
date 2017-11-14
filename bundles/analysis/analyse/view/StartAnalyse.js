@@ -1101,7 +1101,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                         }
 
-                        me.contentPanel._toggleSelectionTools();
+                        me.contentPanel.toggleSelectionTools();
 
                     });
 
@@ -1178,7 +1178,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.WFSLayerService.setAnalysisWFSLayerId(layer.getId());
                 }
             }
-            me.contentPanel._toggleSelectionTools();
+            me.contentPanel.toggleSelectionTools();
 
             if (!me.contentPanel.getSelectedGeometry()) {
                 me.setContentPanelSelectedGeometry();
