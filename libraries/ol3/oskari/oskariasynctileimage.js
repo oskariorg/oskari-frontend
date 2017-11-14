@@ -1,5 +1,5 @@
 goog.provide('ol.source.OskariAsyncTileImage');
-goog.require('ol.Tile');
+goog.require('ol.TileState');
 goog.require('ol.proj');
 goog.require('ol.source.TileImage');
 goog.require('ol.events');
@@ -58,12 +58,6 @@ ol.source.OskariAsyncTileImage = function(options) {
 
 goog.inherits(ol.source.OskariAsyncTileImage, ol.source.TileImage);
 
-/**
- * @api
- */
-ol.source.OskariAsyncTileImage.prototype.getTileRangeForExtentAndResolution =  function (extent, resolution) {
-    return this.tileGrid.getTileRangeForExtentAndResolution(extent, resolution);
-}
 
 /**
  * Strip bbox for unique key because of some inaccucate cases
@@ -113,7 +107,7 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
             if (tile ) {
                 if( tile.PLACEHOLDER === true) {
                     result.push(grid.bounds[i]);
-                } else if(tile.getState() !== ol.Tile.State.LOADED) {
+                } else if(tile.getState() !== ol.TileState.LOADED) {
                     result.push(grid.bounds[i]);
                 } else if( tile.isBoundaryTile === true ) {
                     result.push(grid.bounds[i]);
@@ -142,7 +136,7 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
  * @return {!ol.Tile}
  */
 ol.source.OskariAsyncTileImage.prototype.createOskariAsyncTile = function(z, x, y, pixelRatio, projection, key) {
-  var tileCoordKey = this.getKeyZXY(z, x, y);
+  var tileCoordKey = ol.tilecoord.getKeyZXY(z, x, y);
   if (this.tileCache.containsKey(tileCoordKey)) {
     return /**@type {!ol.Tile}*/(this.tileCache.get(tileCoordKey));
   } else {
@@ -157,7 +151,7 @@ ol.source.OskariAsyncTileImage.prototype.createOskariAsyncTile = function(z, x, 
         // always set state as LOADING since loading is handled outside ol3
         // IDLE state will result in a call to loadTileFunction and block rendering on other sources if
         // we don't get results because of async load errors/job cancellation etc
-        ol.Tile.State.LOADING,
+        ol.TileState.LOADING,
         tileUrl !== undefined ? tileUrl : '',
         this.crossOrigin,
         this.tileLoadFunction);
@@ -196,8 +190,8 @@ ol.ImageTile.prototype.setState = function(state) {
  * Workaround for obtaining a tilerange for a resolution and extent in wfslayerplugin
  * @api
  */
- ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndResolutionWrapper = function(mapExtent, resolution) {
-    var tileRange = this.getTileRangeForExtentAndResolution(mapExtent, resolution);
+ ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndZoomWrapper = function(mapExtent, zoom) {
+    var tileRange = this.getTileRangeForExtentAndZ(mapExtent, zoom);
     //return as array to avoid the closure compiler's dirty renaming deeds without having to expose the tilerange as well...
     return [tileRange.minX, tileRange.minY, tileRange.maxX, tileRange.maxY];
 
@@ -229,13 +223,13 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
       return;
     }
     switch(tile.getState()) {
-        case ol.Tile.State.IDLE : // IDLE: 0,
-        case ol.Tile.State.LOADING: //LOADING: 1,
+        case ol.TileState.IDLE : // IDLE: 0,
+        case ol.TileState.LOADING: //LOADING: 1,
             me.__fixTile(tile, imageData, layer, map);
             break;
-        case ol.Tile.State.LOADED: // LOADED: 2
-        case ol.Tile.State.ERROR: // ERROR: 3
-        case ol.Tile.State.EMPTY: // EMPTY: 4
+        case ol.TileState.LOADED: // LOADED: 2
+        case ol.TileState.ERROR: // ERROR: 3
+        case ol.TileState.EMPTY: // EMPTY: 4
             me.__fixTile(tile, imageData, layer, map);
             break;
         default:
@@ -253,7 +247,7 @@ ol.source.OskariAsyncTileImage.prototype.__fixTile = function(tile, imageData, l
     clearTimeout(this.__refreshTimer);
     tile.PLACEHOLDER = false;
     tile.getImage().src = imageData;
-    tile.setState(ol.Tile.State.LOADED);
+    tile.setState(ol.TileState.LOADED);
 
     var me = this;
     this.__refreshTimer = setTimeout(function() {

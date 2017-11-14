@@ -92,15 +92,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         setState: function (state) {
             this.state = state;
         },
-        setContentState: function () {
-
-        },
-        getContentState: function () {
-
-            return {
-
-            };
-        },
         createUi: function () {
             this.refresh();
         },

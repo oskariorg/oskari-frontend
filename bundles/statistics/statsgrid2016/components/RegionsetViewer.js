@@ -244,6 +244,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         });
 
         me.service.on('StatsGrid.RegionSelectedEvent', function(event){
+            // FIXME: this needs some serious optimization
+            // we need previous selection from event so we can update the style
+            //  for 2 features instead of ALL the regions
             me.render(event.getRegion());
         });
 

@@ -295,7 +295,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // group tools per tool-group
             _.each(definedTools, function(ignored, toolname) {
                 var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
-                if(tool.isDisplayed() === true && tool.isShownInToolsPanel()) {
+                if(tool.isDisplayed(me.data) === true && tool.isShownInToolsPanel()) {
                     var group = tool.getGroup();
                     if(!grouping[group]) {
                         grouping[group] = [];
@@ -304,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     grouping[group].push(tool);
                 }
 
-                if (tool.isDisplayed() === true) {
+                if (tool.isDisplayed(me.data) === true) {
                     allTools.push(tool);
                 }
             });
@@ -378,7 +378,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             draggables.draggable('destroy');
             jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
 
-            var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
+            var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
         },
 
@@ -474,17 +474,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 type: 'POST',
                 dataType: 'json',
                 data: {
+                    publishedFrom: Oskari.app.getUuid(),
                     uuid: (me.data && me.data.uuid) ? me.data.uuid : undefined,
                     pubdata: JSON.stringify(selections)
                 },
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
-                },
                 success: function (response) {
                     if (response.id > 0) {
-                        var event = sandbox.getEventBuilder(
+                        var event = Oskari.eventBuilder(
                             'Publisher.MapPublishedEvent'
                         )(
                             response.id,

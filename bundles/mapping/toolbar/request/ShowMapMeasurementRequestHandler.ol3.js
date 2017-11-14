@@ -63,7 +63,9 @@ Oskari.clazz.define(
                     dialog.show(me._title, '', me._buttons);
                     var cancelBtn = me._buttons[0];
                     cancelBtn.setHandler(function () {
-                        me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [false, true]);
+                        if(me._toolbar.currentMeasureTool){
+                            me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [me._toolbar.currentMeasureTool, true]);
+                        }
                         me._dialogShown = false;
                         // ask toolbar to select default tool
                         var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
@@ -93,7 +95,9 @@ Oskari.clazz.define(
             if (!me.toolContentDivData) {
                 var cancelBtn = me._buttons[0];
                 cancelBtn.setHandler(function () {
-                    me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [false, false]);
+                    if(me._toolbar.currentMeasureTool){
+                        me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [me._toolbar.currentMeasureTool, false]);
+                    }
                     // ask toolbar to select default tool
                     var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                     me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);

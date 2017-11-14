@@ -216,6 +216,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             return false;
         },
         /**
+         * @method getGeometryCenter
+         *
+         * @param {OpenLayers.Geometry} geometry
+         * @return {Object} centroid
+         */
+        getGeometryCenter: function (geometry){
+            var center = geometry.getCentroid();
+            return {
+                lon: center.x,
+                lat: center.y
+            };
+        },
+        /**
+         * @method getGeometryBounds
+         *
+         * @param {OpenLayers.Geometry} geometry
+         * @return {OpenLayers.Bounds} bounds
+         */
+        getGeometryBounds: function (geometry){
+            return geometry.getBounds();
+        },
+        /**
          * @method notifyLayerVisibilityChanged
          * Notifies bundles about layer visibility changes by sending MapLayerVisibilityChangedEvent.
          * @param

@@ -46,7 +46,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
             this.__setupLayerTools();
 
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
             var plugin = Oskari.clazz.create('Oskari.mapframework.heatmap.HeatmapLayerPlugin');
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);

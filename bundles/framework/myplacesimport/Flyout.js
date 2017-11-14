@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             msg = msg + " " + warning;
                         }
                         me.__showMessage(title, msg, false);
-                    },
+                    }
                 });
                 // Prevent page from submitting
                 return false;
@@ -402,23 +402,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             if (fadeout) {
                 dialog.fadeout(5000);
             }
-        },
-        /**
-         * Checks if json is null or undefined or if it has a key `error`.
-         *
-         * @method __jsonError
-         * @private
-         * @param  {JSON} json
-         * @return {Boolean}
-         *//*
-        __jsonError: function(json) {
-            var error = false;
-
-            if (json === null || json === undefined) error = true;
-            else if (json.error) error = true;
-
-            return error;
-        }*/
+        }
     }, {
         "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
     });
