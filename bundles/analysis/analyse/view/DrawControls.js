@@ -132,7 +132,7 @@ Oskari.clazz.define(
             searchButton.setTitle(loc.content.search.title);
             searchButton.addClass('primary');
             searchButton.setHandler(function () {
-                me.openFlyoutAs('Search');
+                me._openFlyoutAs('Search');
             });
             searchButton.insertTo(buttons);
 
