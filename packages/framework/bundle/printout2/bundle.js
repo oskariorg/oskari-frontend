@@ -41,6 +41,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.bundle", function () {
             "src": "../../../../bundles/framework/printout2/components/settings.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/printout2/components/sizepanel.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/printout2/tools/thematicmap.js"
         }],
         "locales": [{

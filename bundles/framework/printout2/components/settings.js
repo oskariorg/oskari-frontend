@@ -133,10 +133,17 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
 
             }
 
+            // var legend = this.createLegend( contentPanel );
+            // contentPanel.append(legend);
+            this.setElement(panel);
+            return this.getElement();
+        },
+        createLegend: function () {
+            var me = this;
             // Lengend options
             var closureMagic2 = function (tool) {
                 return function () {
-                    var legend = contentPanel.find('input[name=legend]:checked').val(),
+                    var legend = el.find('input[name=legend]:checked').val(),
                         i;
                     // reset previous setting
                     for (i = 0; i < me.legendOptions.length; i += 1) {
@@ -174,9 +181,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
                     me._createLegend();
                 });
             }
-            contentPanel.append(legend);
-            this.setElement(panel);
-            return this.getElement();
+            return legend;
+            // this.setElement(el);
+            // return this.getElement();
         },
                 /**
          * @private @method _gatherSelections
@@ -218,7 +225,6 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
 
             return selections;
         },
-
     }, {
 
     });
