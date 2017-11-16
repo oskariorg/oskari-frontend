@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   this.container = null;
   this.service = instance.statsService;
   this._isOpen = false;
-  this._chartInstance = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox(), this.loc);
+  this._chartInstance = Oskari.clazz.create('Oskari.userinterface.component.Chart');
   this._select = null;
   this._grid = null;
   this._chart = null;
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   },
   _createGrid: function () {
     var gridPoint = jQuery('<div></div>');
-    var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable',this.sb, this.instance.getLocalization());
+    var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', this.sb, this.loc);
     grid.showRegionsetSelector(!this.isEmbedded);
     grid.showIndicatorRemoval(!this.isEmbedded);
     grid.render(gridPoint);
@@ -293,7 +293,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       });
       el.attr('id', 'graphic');
       return el;
-    } 
+    }
   },
   /**
    * @method redrawCharts
