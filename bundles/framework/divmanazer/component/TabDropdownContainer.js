@@ -80,22 +80,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
         },
 
         /**
-         * @method addTabChangeListener
-         * Adds a listener function that should be called when tab selection changes
-         * (tab is selected).
-         * The function will receive two parameters:
-         * - first the previously selected panel
-         * - second the newly selected panel
-         * function(previousTab, newTab)
-         * If previousTab is undefined, this was the first tab added.
-         * If newTab is undefined, all tabs have been removed.
-         * @param {Function} pCallback function to call when tabs are changed
-         */
-        addTabChangeListener: function (pCallback) {
-            this.tabChangeListeners.push(pCallback);
-        },
-
-        /**
          * @method select
          * Selects the given panel programmatically and notifies tabChangeListeners if any.
          * @param {Oskari.userinterface.component.TabPanel} panel
@@ -196,13 +180,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
                 return true;
             }
             return false;
-        },
-        /**
-         * @method insertTo
-         * Adds this set of tabs to given container.
-         * @param {jQuery} container reference to DOM element
-         */
-        insertTo: function (container) {
-            container.append(this.ui);
         }
+    }, {
+        extend : ['Oskari.userinterface.component.TabContainer']
     });
