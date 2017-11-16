@@ -362,7 +362,7 @@ Oskari.clazz.define(
                 // TODO: check the ifs below if they should only be run if buffer is used
                 bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
             }
-            if(me.getCurrentDrawShape() === 'Circle') {
+            if(me.getCurrentDrawShape() === 'Circle' || me.getCurrentDrawShape() === 'Point') {
                 bufferedFeatures = me.getCircleAsPolygonFeature(features);
                 features = me.getCircleAsPointFeature(features);
                 // FIXME: circles don't get the area measurement
