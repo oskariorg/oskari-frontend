@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             width: 1
         },
         fill: {
-            color: 'rgba(255,126,123, 0.5)'
+            color: 'rgba(255,126,123, 0.7)'
         }
     },
     __selectedStyle: {
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             width: 1
         },
         fill: {
-            color: 'rgba(50,50,255, 0.5)'
+            color: 'rgba(50,50,255, 0.7)'
         }
     },
 
@@ -73,7 +73,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             setTimeout(this.stopEditDrawing.bind(this, editState), 0);
         },
         'FeatureEvent': function(event) {
-            // check if feature is ours
+            var op = event.getOperation();
+            if(op !== 'click') {
+                return;
+            }
+            var featureLayers = event.getFeatures();
+            var relevantLayers = featureLayers.filter(function(l){return this._editsInProgress[l.layerId]}, this);
+            if(!relevantLayers.length) {
+                return;
+            }
+            var editState = this._editsInProgress[relevantLayers[0].layerId];
+            var newSelectedIndex = relevantLayers[0].geojson.features[0].properties.id;
+            if(editState && typeof newSelectedIndex === 'number') {
+                editState.selectedFeatureIndex = newSelectedIndex;
+                this.showResult(editState);
+            }
         }
     },
     requestHandlers:  {
@@ -109,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             features: editState.resultFeatures
         };
         var request = builder(featureCollection, {
-            layerId: editState.drawId,
+            layerId: editState.id,
             clearPrevious: true,
             featureStyle: this.__basicStyle,
             optionalStyles: [{

@@ -45,6 +45,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.FeatureEvent',
         getName: function () {
             return this.__name;
         },
+        getFeatures: function() {
+            return this._features;
+        },
+        getOperation: function() {
+            return this._operation;
+        },
         addFeature : function(id, geojson, layerId) {
             this._features.push({
                 id : id,
