@@ -84,12 +84,12 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.preview",
          */
         _updateMapPreview: function () {
             var me = this,
-                selections = me.view.settings._gatherSelections('image/png'),
+                selections = me.view.getSettingsForPrint('image/png'),
                 urlBase = me.instance.backendConfiguration.formatProducers[selections.format],
                 maplinkArgs = selections.maplinkArgs,
                 pageSizeArgs = '&pageSize=' + selections.pageSize,
                 previewScaleArgs = '&scaledWidth=200',
-                url = urlBase + maplinkArgs + pageSizeArgs + previewScaleArgs;
+                url = "action?action_route=GetPreview&format=image/png&"+urlBase + maplinkArgs + pageSizeArgs + previewScaleArgs;
 
             me.previewContent.removeClass('preview-portrait');
             me.previewContent.removeClass('preview-landscape');

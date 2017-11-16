@@ -55,7 +55,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
                 me.view.preview._cleanMapPreview();
                 me.view.preview._updateMapPreview();
                 // Update legend
-                me._createLegend();
+                me.view.settings.createLegend();
             };
         };
         for (i = 0; i < me.sizeOptions.length; i += 1) {

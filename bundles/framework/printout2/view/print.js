@@ -8,6 +8,12 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
         this.settings = Oskari.clazz.create( 'Oskari.mapping.printout2.components.settings', this );
         this.sizepanel = Oskari.clazz.create( 'Oskari.mapping.printout2.components.sizepanel', this );
         this.accordion = null;
+        /* content options listed in localisations */
+        this.contentOptions = this.loc.content.options;
+        this.contentOptionsMap = {};
+        for (f = 0; f < this.contentOptions.length; f += 1) {
+            this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
+        }
     }, {
         _templates: {
             wrapper: '<div class="print-container"> hello person </div>',
@@ -55,7 +61,40 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
             this.createPreview();
             wrapper.append( this._getButtons() );   
         },
-                /**
+        getSettingsForPrint: function ( format ) {
+            var me = this;
+                var container = me.getElement();
+                if(!container) {
+                    return;
+                }
+                var sandbox = me.instance.getSandbox();
+                var size = container.find('input[name=size]:checked').val();
+                var selectedFormat = (format !== null && format !== undefined) ? format : container.find('input[name=format]:checked').val();
+                var title = container.find('.printout_title_field').val();
+                maplinkArgs = sandbox.generateMapLinkParameters(),
+                p,
+                selections = {
+                    pageTitle: title,
+                    pageSize: size,
+                    maplinkArgs: maplinkArgs,
+                    format: selectedFormat || 'application/pdf'
+                };
+
+            if (!size) {
+                var firstSizeOption = container.find('input[name=size]').first();
+                firstSizeOption.attr('checked', 'checked');
+                selections.pageSize = firstSizeOption.val();
+            }
+
+            for (p in me.contentOptionsMap) {
+                if (me.contentOptionsMap.hasOwnProperty(p)) {
+                    selections[p] = me.settings.getContentOptions()[p].find('input').prop('checked');
+                }
+            }
+
+            return selections;
+        },
+        /**
          * @private @method _getButtons
          * Renders printout buttons to DOM snippet and returns it.
          *
@@ -97,21 +136,50 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
             saveBtn.setHandler(function () {
                 var map = me.instance.sandbox.getMap(),
                     features = (map.geojs === undefined || map.geojs === null) ? null : map.geojs,
-                    selections = me._gatherSelections();
+                    selections = me.getSettingsForPrint();
 
                 if (selections) {
-                    me._printMap(selections, features);
+                    me.print(selections, features);
                 }
             });
             saveBtn.insertTo(buttonCont);
 
             return buttonCont;
         },
-        render: function ( container ) {
+        print: function ( settings, features ) {
+            var tools = this.createExtendingTools();
+            debugger;
         },
-        refresh: function () {
+        createExtendingTools: function () {
+            var me = this;
+            var sandbox = this.instance.getSandbox();
+            var mapmodule = sandbox.findRegisteredModuleInstance("MainMapModule");
+            var definedTools = Oskari.clazz.protocol('Oskari.mapping.printout2.Tool');
+            var grouping = {};
+            var allTools = [];
+            // group tools per tool-group
+            _.each(definedTools, function(ignored, toolname) {
+                var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
+                if ( tool.isDisplayed(me.data) === true && tool.isShownInToolsPanel()) {
+                    var group = tool.getGroup();
+                    if(!grouping[group]) {
+                        grouping[group] = [];
+                    }
+                    me._addToolConfig(tool);
+                    grouping[group].push(tool);
+                }
 
-        }
+                if (tool.isDisplayed(me.data) === true) {
+                    allTools.push(tool);
+                }
+            });
+            return {
+                groups : grouping,
+                tools: allTools
+            };
+        },
+        render: function ( container ) { },
+        refresh: function () { }
     }, {
 
     });
