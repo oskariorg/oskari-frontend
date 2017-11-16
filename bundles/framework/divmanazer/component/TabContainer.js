@@ -150,6 +150,23 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 this.tabChangeListeners[i](previousPanel, panel);
             }
         },
+        /**
+         * Returns panel with requested id or null if not found
+         * @param  {String|Number} id id for panel to find
+         * @return {Oskari.userinterface.component.TabPanel} panel with requested id or null if not found
+         */
+        getPanelById: function (id) {
+            if(arguments.length === 0) {
+                return null;
+            }
+            var panels = this.panels.filter(function(panel) {
+                return panel.getId() === id;
+            });
+            if(panels.length) {
+                return panels[0];
+            }
+            return null;
+        },
 
         /**
          * @method isSelected
