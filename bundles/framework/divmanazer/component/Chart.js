@@ -1,6 +1,4 @@
-Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, loc) {
-  this.sb = sandbox;
-  this.loc = loc;
+Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
   this.svg = null;
   this.dimensions = this.chartDimensions();
   this.x = null;
