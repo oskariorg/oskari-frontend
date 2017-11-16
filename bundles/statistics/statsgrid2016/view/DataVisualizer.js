@@ -29,18 +29,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   getElement: function () {
     return this.container;
   },
-  getPanel: function ( id ) {
-    if( this.tabsContainer.panels.length === 0 ) {
-      return;
-    }
-    var foundPanel;
-    this.tabsContainer.panels.forEach( function ( panel ) {
-       if( panel.id === id) {
-          foundPanel = panel;
-       }
-    });
-    return foundPanel.getContainer();
-  },
   clearUi: function () {
     this.container = null;
   },
@@ -224,6 +212,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     });
     return indicatorData;
   },
+  getPanelContainer: function ( id ) {
+    var panel = this.tabsContainer.getPanelById(id);
+    if (panel) {
+      return panel.getContainer();
+    }
+  },
   events: function () {
     var me = this;
     this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
@@ -236,8 +230,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
           me.redrawCharts();
         } else {
           var chartElement = me.createBarCharts();
-          if( me.getPanel( "oskari-chart-statsgrid" ) ) {
-            me.getPanel("oskari-chart-statsgrid").append( chartElement );
+          var container = me.getPanelContainer( "oskari-chart-statsgrid" );
+          if (container) {
+            container.append( chartElement );
           }
         }
       }
