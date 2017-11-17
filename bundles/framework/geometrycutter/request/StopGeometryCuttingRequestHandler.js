@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StopGeometryCutti
     this.geometryCutterInstance = geometryCutterInstance;
 }, {
     handleRequest: function (core, request) {
-        this.geometryCutterInstance.stopEditing(request.getId(), !request.isCancel());
+        this.geometryCutterInstance.stopEditing(request.getId());
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']

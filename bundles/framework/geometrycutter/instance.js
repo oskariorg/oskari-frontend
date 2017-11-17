@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             if (editSuccess) {
                 editState.showResult();
             }
+            this.sendEvent(editState);
             // Workaround: doing call sync would mess up DrawPlugin
             setTimeout(editState.stopDrawing.bind(editState), 0);
         },
@@ -40,6 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             if (editState && typeof newSelectedIndex === 'number') {
                 editState.selectedFeatureIndex = newSelectedIndex;
                 editState.showResult();
+                this.sendEvent(editState);
             }
         }
     },
@@ -76,9 +78,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
     /**
      * @method stopEditing
      * @param {String} operationId unique id for geometry editing operation
-     * @param {Boolean} sendEvent should FinishedGeometryCuttingEvent be sent?
+     * @param {Boolean} sendEvent should GeometryCuttingEvent be sent?
      */
-    stopEditing: function (operationId, sendEvent) {
+    stopEditing: function (operationId) {
         var drawId = this.__idPrefix + operationId;
         var editState = this._editsInProgress[drawId];
         if (!editState) {
@@ -86,15 +88,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         }
         editState.clear();
         delete this._editsInProgress[drawId];
-        if (!sendEvent) {
-            return;
-        }
+        this.sendEvent(editState, true);
+    },
+    /**
+     * @method sendEvent
+     * @param {Oskari.mapframework.bundle.geometrycutter.EditState} editState the editing state to notify about
+     */
+    sendEvent: function(editState, isFinished){
         var feature = null;
         if (editState.resultFeatures) {
             var index = editState.selectedFeatureIndex;
             feature = editState.resultFeatures[index];
         }
-        var event = Oskari.eventBuilder('FinishedGeometryCuttingEvent')(operationId, feature);
+        var event = Oskari.eventBuilder('GeometryCuttingEvent')(editState.id.substr(this.__idPrefix.length), feature, !!isFinished);
         this.sandbox.notifyAll(event);
     }
 }, {

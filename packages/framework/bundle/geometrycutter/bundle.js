@@ -46,7 +46,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
                 "src": "../../../../bundles/framework/geometrycutter/request/StopGeometryCuttingRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/geometrycutter/event/FinishedGeometryCuttingEvent.js"
+                "src": "../../../../bundles/framework/geometrycutter/event/GeometryCuttingEvent.js"
             }, {
                 "type" : "text/javascript",
                 "expose": "jsts",

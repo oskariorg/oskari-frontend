@@ -1,21 +1,23 @@
 /**
- * @class Oskari.mapframework.bundle.geometrycutter.FinishedGeometryCuttingEvent
+ * @class Oskari.mapframework.bundle.geometrycutter.GeometryCuttingEvent
  *
- * Used to notify components that the geometry editing has finished
+ * Used to notify components about geometry cutting results
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.FinishedGeometryCuttingEvent',
+Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCuttingEvent',
     /**
      * @method create called automatically on construction
      * @static
      * @param {String} operationId 
      * @param {GeoJSONFeature} feature the result of the geometry cutting, or null if cutting failed (topology exception)
+     * @param {Boolean} isFinished 
      */
-    function (operationId, feature) {
+    function (operationId, feature, isFinished) {
         this._operationId = operationId;
         this._feature = feature;
+        this._finished = isFinished;
     }, {
         /** @static @property __name event name */
-        __name: "FinishedGeometryCuttingEvent",
+        __name: "GeometryCuttingEvent",
         /**
          * @method getName
          * Returns event name
@@ -33,9 +35,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.FinishedGeometryC
             return this._operationId;
         },
         /**
+         * @method getFinished
+         * @return {Boolean} is the editing finished?
+         */
+        getFinished: function() {
+            return this._finished;
+        },
+        /**
          * @method getGeometry
          * Returns the edited geometry
-         * @return {GeoJSONGeometry}
+         * @return {org.geojson.Feature}
          */
         getFeature: function () {
             return this._feature;

@@ -13,9 +13,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StopGeometryCutti
         },
         getId: function () {
             return this._operationId;
-        },
-        isCancel: function () {
-            return (this._isCancel === true);
         }
     }, {
         'protocol': ['Oskari.mapframework.request.Request']
