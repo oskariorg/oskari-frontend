@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
         }
         return out;
     },
-
     _lineSplit: function (sourceGeometry, drawnGeometry) {
         var splitted = sourceGeometry.difference(drawnGeometry);
         var parts = [];
@@ -70,7 +69,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
             }
         }, this);
     },
-
     clipByPolygon: function (sourceFeature, drawnFeature) {
         var source = this._reader.read(sourceFeature.geometry);
         var drawn = this._reader.read(drawnFeature.geometry);
