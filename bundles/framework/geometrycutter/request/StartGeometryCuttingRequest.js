@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCutt
      */
     function (operationId, mode, geometry) {
         if (!this.__modes[mode]) {
-            throw "Unknown geometry edit mode '" + mode + "'";
+            throw new Error("Unknown geometry edit mode: '" + mode + "'");
         }
         this._operationId = operationId;
         this._geometry = geometry;
