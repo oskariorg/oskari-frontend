@@ -22,13 +22,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         "source": {
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/geometrycutter/instance.js"
-            },{
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/geometrycutter/BundleModule.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/geometrycutter/EditState.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/geometrycutter/GeometryProcessor.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/geometrycutter/instance.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/geometrycutter/request/StartGeometryCuttingRequest.js"
