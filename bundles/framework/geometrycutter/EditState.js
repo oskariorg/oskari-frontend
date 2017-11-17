@@ -31,6 +31,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
             color: 'rgba(50,50,255, 0.4)'
         }
     },
+    /**
+     * @method startDrawing
+     * Starts drawing on map
+     */
     startDrawing: function () {
         if(this.drawing) {
             return;
@@ -47,6 +51,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
         this.drawing = true;
         this.makeRequest('DrawTools.StartDrawingRequest', [this.id, geometryType]);
     },
+    /**
+     * @method stopDrawing
+     * Stops drawing on map
+     */
     stopDrawing: function() {
         if(!this.drawing) {
             return;
@@ -54,6 +62,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
         this.drawing = false;
         this.makeRequest('DrawTools.StopDrawingRequest', [this.id, true]);
     },
+    /**
+     * @method showResult
+     * Shows cutting result on map
+     */
     showResult: function() {
         if(!this.resultFeatures) {
             return;
@@ -76,12 +88,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
             }]
         }]);
     },
+    /**
+     * @method hideResult
+     * Removes cutting result from map
+     */
     hideResult: function() {
         if(!this.resultFeatures) {
             return;
         }
         this.makeRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, this.id]);
     },
+    /**
+     * @method clear
+     * Clears any ongoing map operations: drawing & result display
+     */
     clear: function() {
         this.stopDrawing();
         this.hideResult();

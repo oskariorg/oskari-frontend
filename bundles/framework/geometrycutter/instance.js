@@ -6,10 +6,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
 }, {
     __name: 'GeometryCutterBundleInstance',
     __idPrefix: 'geometryCutter-',
-    /**
-     * @property {Object} eventHandlers
-     * @static
-     */
     eventHandlers: {
         'DrawingEvent': function (event) {
             var me = this;
@@ -55,6 +51,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             return Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.StopGeometryCuttingRequestHandler', this.sandbox, this);
         }
     },
+    /**
+     * @method startEditing
+     * @param {String} operationId unique id for geometry editing operation
+     * @param {org.geojson.Feature} feature the target feature to be edited
+     * @param {String} mode cutting mode: "lineSplit" or "polygonClip"
+     */ 
     startEditing: function (operationId, feature, mode) {
         var drawId = this.__idPrefix + operationId;
         this.stopEditing(operationId, false); // cleanup any previous edits with same operationId
@@ -71,6 +73,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         this._editsInProgress[drawId] = editState;
         editState.startDrawing();
     },
+    /**
+     * @method stopEditing
+     * @param {String} operationId unique id for geometry editing operation
+     * @param {Boolean} sendEvent should FinishedGeometryCuttingEvent be sent?
+     */
     stopEditing: function(operationId, sendEvent) {
         var drawId = this.__idPrefix + operationId;
         var editState = this._editsInProgress[drawId];
