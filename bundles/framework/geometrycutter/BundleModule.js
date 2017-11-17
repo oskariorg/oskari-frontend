@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.BundleModule', fu
     getName: function () {
         return this.__name
     },
-    
+
     /**
      * @method onEvent
      * @param {Oskari.mapframework.event.Event} event a Oskari event object
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.BundleModule', fu
      * @method init
      * Module protocol method
      */
-    init: function() {},
+    init: function () { },
 
     /** 
      * @method start
@@ -39,10 +39,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.BundleModule', fu
         sandbox.register(this);
         this.sandbox = sandbox;
 
-        Object.keys(this.requestHandlers).forEach(function(requestName) {
+        Object.keys(this.requestHandlers).forEach(function (requestName) {
             sandbox.requestHandler(requestName, this.requestHandlers[requestName].call(this));
         }, this);
-        Object.keys(this.eventHandlers).forEach(function(eventName) {
+        Object.keys(this.eventHandlers).forEach(function (eventName) {
             sandbox.registerForEventByName(this, eventName);
         }, this);
     },
@@ -51,17 +51,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.BundleModule', fu
      * @method update
      * Called from sandbox
      */
-    update: function (sandbox) {},
+    update: function (sandbox) { },
 
     /**
      * @method stop
      * Called from sandbox
      */
     stop: function (sandbox) {
-        Object.keys(this.requestHandlers).forEach(function(requestName) {
+        Object.keys(this.requestHandlers).forEach(function (requestName) {
             sandbox.requestHandler(requestName, null);
         }, this);
-        Object.keys(this.eventHandlers).forEach(function(eventName) {
+        Object.keys(this.eventHandlers).forEach(function (eventName) {
             sandbox.unregisterFromEventByName(this, eventName);
         }, this);
 

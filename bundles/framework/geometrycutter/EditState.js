@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
      * Starts drawing on map
      */
     startDrawing: function () {
-        if(this.drawing) {
+        if (this.drawing) {
             return;
         }
         var geometryType;
@@ -55,8 +55,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
      * @method stopDrawing
      * Stops drawing on map
      */
-    stopDrawing: function() {
-        if(!this.drawing) {
+    stopDrawing: function () {
+        if (!this.drawing) {
             return;
         }
         this.drawing = false;
@@ -66,8 +66,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
      * @method showResult
      * Shows cutting result on map
      */
-    showResult: function() {
-        if(!this.resultFeatures) {
+    showResult: function () {
+        if (!this.resultFeatures) {
             return;
         }
         var featureCollection = {
@@ -92,8 +92,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
      * @method hideResult
      * Removes cutting result from map
      */
-    hideResult: function() {
-        if(!this.resultFeatures) {
+    hideResult: function () {
+        if (!this.resultFeatures) {
             return;
         }
         this.makeRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, this.id]);
@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
      * @method clear
      * Clears any ongoing map operations: drawing & result display
      */
-    clear: function() {
+    clear: function () {
         this.stopDrawing();
         this.hideResult();
     },
@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
      * @param {org.geojson.Feature} feature
      * @return {boolean} was the operation a success?
      */
-    executeGeometryOp: function(feature) {
+    executeGeometryOp: function (feature) {
         this.drawnFeature = feature;
         switch (this.mode) {
             case 'lineSplit':

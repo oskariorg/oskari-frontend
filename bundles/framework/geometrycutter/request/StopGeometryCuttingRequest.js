@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StopGeometryCutti
         getName: function () {
             return this.__name;
         },
-        getId: function() {
+        getId: function () {
             return this._operationId;
         },
         isCancel: function () {

@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
     this._writer = new jsts.io.GeoJSONWriter();
     this._geomFactory = new jsts.geom.GeometryFactory();
 }, {
-    splitByLine: function(sourceFeature, drawnFeature) {
+    splitByLine: function (sourceFeature, drawnFeature) {
         var source = this._reader.read(sourceFeature.geometry);
         var drawn = this._reader.read(drawnFeature.geometry);
         var sourceType = source.getGeometryType();
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
                 throw new Error('Unsupported split source geometry: ' + sourceType);
         }
     },
-    _polygonSplit: function(sourceGeometry, drawnGeometry) {
+    _polygonSplit: function (sourceGeometry, drawnGeometry) {
         var linework = sourceGeometry.getBoundary().union(drawnGeometry);
         var polygonizer = new jsts.operation.polygonize.Polygonizer();
         polygonizer.add(linework);
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
         for (var i = polygons.iterator(), c = 0; i.hasNext(); c++) {
             var polygon = i.next();
             var point = polygon.getInteriorPoint();
-            if(sourceGeometry.contains(point)) {
+            if (sourceGeometry.contains(point)) {
                 out.push({
                     type: 'Feature',
                     geometry: this._writer.write(polygon),
@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
         return out;
     },
 
-    _lineSplit: function(sourceGeometry, drawnGeometry) {
+    _lineSplit: function (sourceGeometry, drawnGeometry) {
         var splitted = sourceGeometry.difference(drawnGeometry);
         var parts = [];
         switch (splitted.getGeometryType()) {
@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
             default:
                 throw new Error('Unsupported split geometry result!');
         }
-        return parts.map(function(part, i) {
+        return parts.map(function (part, i) {
             return {
                 type: 'Feature',
                 geometry: this._writer.write(part),
@@ -71,13 +71,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
         }, this);
     },
 
-    clipByPolygon: function(sourceFeature, drawnFeature) {
+    clipByPolygon: function (sourceFeature, drawnFeature) {
         var source = this._reader.read(sourceFeature.geometry);
         var drawn = this._reader.read(drawnFeature.geometry);
         var diff;
         try {
             diff = source.difference(drawn);
-        } catch(e) {
+        } catch (e) {
             return null;
         }
         return [{
