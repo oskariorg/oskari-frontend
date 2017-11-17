@@ -2,7 +2,6 @@
  * @class Oskari.mapframework.ui.module.common.geometrycutter.GeometryCutterBundleInstance
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBundleInstance', function () {
-    this.sandbox = null;
     this._editsInProgress = {};
     this._geometryProcessor = Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor');
 }, {
@@ -25,27 +24,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         fill: {
             color: 'rgba(50,50,255, 0.7)'
         }
-    },
-
-    /**
-     * @method getName
-     * Returns the name
-     * @returns {string} Name
-     */
-    getName: function () {
-        return this.__name
-    },
-    /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-     */
-    onEvent: function (event) {
-        var handler = this.eventHandlers[event.getName()];
-        if (!handler) {
-            return;
-        }
-        return handler.call(this, event);
     },
 
     /**
@@ -219,48 +197,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         if (editState.resultFeatures) {
             this.hideResult(editState);
         }
-    },
-
-    init: function() {},
-
-    /** 
-     * @method start
-     * Called from sandbox
-     */
-    start: function (sandbox) {
-        var me = this;
-        sandbox.register(this);
-        me.sandbox = sandbox;
-
-        Object.keys(this.requestHandlers).forEach(function(requestName) {
-            sandbox.requestHandler(requestName, me.requestHandlers[requestName].call(me));
-        });
-        Object.keys(this.eventHandlers).forEach(function(eventName) {
-            sandbox.registerForEventByName(me, eventName);
-        });
-    },
-
-    /**
-     * @method update
-     * Called from sandbox
-     */
-    update: function (sandbox) {},
-
-    /**
-     * @method stop
-     * Called from sandbox
-     */
-    stop: function (sandbox) {
-        var me = this;
-        Object.keys(this.requestHandlers).forEach(function(requestName) {
-            sandbox.requestHandler(requestName, null);
-        });
-        Object.keys(this.eventHandlers).forEach(function(eventName) {
-            sandbox.unregisterFromEventByName(me, eventName);
-        });
-
-        sandbox.unregister(this);
     }
 }, {
+    'extend': ['Oskari.mapframework.bundle.geometrycutter.BundleModule'],
     'protocol': ['Oskari.bundle.BundleInstance']
 });
