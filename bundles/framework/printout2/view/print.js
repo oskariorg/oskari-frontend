@@ -148,35 +148,32 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
         },
         print: function ( settings, features ) {
             var tools = this.createExtendingTools();
-            debugger;
+            tools.forEach( function ( tool ) {
+                if ( typeof tool._getStatsLayer === 'function' ) {
+                    if ( tool._getStatsLayer() ) {
+                        var legend = tool.getGeoJSON();
+                        jQuery("#mapdiv").prepend( jQuery( legend ) );
+                        console.log("stats");
+                    }
+                }
+            });
+        },
+        getProtocolImplementers: function () {
+            return Oskari.clazz.protocol('Oskari.mapping.printout2.Tool');
         },
         createExtendingTools: function () {
             var me = this;
             var sandbox = this.instance.getSandbox();
             var mapmodule = sandbox.findRegisteredModuleInstance("MainMapModule");
-            var definedTools = Oskari.clazz.protocol('Oskari.mapping.printout2.Tool');
-            var grouping = {};
-            var allTools = [];
-            // group tools per tool-group
-            _.each(definedTools, function(ignored, toolname) {
-                var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
-                if ( tool.isDisplayed(me.data) === true && tool.isShownInToolsPanel()) {
-                    var group = tool.getGroup();
-                    if(!grouping[group]) {
-                        grouping[group] = [];
-                    }
-                    me._addToolConfig(tool);
-                    grouping[group].push(tool);
-                }
-
-                if (tool.isDisplayed(me.data) === true) {
-                    allTools.push(tool);
+            var definedTools = this.getProtocolImplementers();
+            var tools = [];
+            Object.keys( definedTools ).forEach( function ( tool ) {
+                var tool = Oskari.clazz.create( tool );
+                if ( tool.isActive() === true ) {
+                    tools.push(tool);
                 }
             });
-            return {
-                groups : grouping,
-                tools: allTools
-            };
+            return tools;
         },
         render: function ( container ) { },
         refresh: function () { }
