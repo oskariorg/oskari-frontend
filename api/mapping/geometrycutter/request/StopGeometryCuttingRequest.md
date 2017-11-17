@@ -1,0 +1,3 @@
+# StopGeometryCuttingRequest
+
+Stops cutting.
