@@ -1,4 +1,4 @@
-Oskari.clazz.define("Oskari.mapping.printout2.view.print",
+Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
 
     function ( instance ) {
         this.instance = instance;
@@ -7,12 +7,14 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
         this.preview = Oskari.clazz.create( 'Oskari.mapping.printout2.components.preview', this );
         this.settings = Oskari.clazz.create( 'Oskari.mapping.printout2.components.settings', this );
         this.sizepanel = Oskari.clazz.create( 'Oskari.mapping.printout2.components.sizepanel', this );
+        this.toolholder = Oskari.clazz.create( 'Oskari.mapping.printout2.components.toolholder', this );
+        this.printarea = Oskari.clazz.create( 'Oskari.mapping.printout2.components.printarea', this );
         this.accordion = null;
         /* content options listed in localisations */
         this.contentOptions = this.loc.content.options;
         this.contentOptionsMap = {};
-        for (f = 0; f < this.contentOptions.length; f += 1) {
-            this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
+        for ( f = 0; f < this.contentOptions.length; f += 1 ) {
+            this.contentOptionsMap[ this.contentOptions[f].id ] = this.contentOptions[f];
         }
     }, {
         _templates: {
@@ -147,13 +149,14 @@ Oskari.clazz.define("Oskari.mapping.printout2.view.print",
             return buttonCont;
         },
         print: function ( settings, features ) {
+            var me = this;
             var tools = this.createExtendingTools();
             tools.forEach( function ( tool ) {
                 if ( typeof tool._getStatsLayer === 'function' ) {
                     if ( tool._getStatsLayer() ) {
                         var legend = tool.getGeoJSON();
+                        me.toolholder.setPosition( legend, "top-right" );
                         jQuery("#mapdiv").prepend( jQuery( legend ) );
-                        console.log("stats");
                     }
                 }
             });

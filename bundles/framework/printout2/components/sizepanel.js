@@ -52,6 +52,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
                     me.sizeOptions[i].selected = false;
                 }
                 tool.selected = true;
+                me.view.printarea.plotPrintAreaOnMap( tool.id );
                 me.view.preview._cleanMapPreview();
                 me.view.preview._updateMapPreview();
                 // Update legend
@@ -84,7 +85,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
 
         this.setElement( panel );
         return this.getElement();
-    },
+    }
 }, {
 
 });
