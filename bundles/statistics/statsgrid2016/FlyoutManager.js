@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
         flyout.show();
 
-        if(type==='dataview' && view._grid) {
+        if(type==='table' && view._grid) {
             view.checkGridVisibility();
         }
 
@@ -47,8 +47,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         var position = p.position();
         var offset = 40;
         var width = p.width() / 4;
+
+        var loc = this.instance.getLocalization();
         me.flyouts = {
-            search: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().tile.title, {
+            search: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', loc.tile.search, {
                 width: width + 'px',
                 cls: 'statsgrid-search-flyout',
                 view:'search',
@@ -57,10 +59,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                     y: 5
                 }
             }),
-            dataview: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().datacharts.flyout, {
+            table: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', loc.tile.table, {
                 width: 'auto',
                 cls: 'statsgrid-data-flyout',
-                view:'dataview',
+                view:'table',
+                pos: {
+                    x: width + position.left + offset,
+                    y: 5
+                }
+            }),
+            diagram: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', loc.tile.diagram, {
+                width: 'auto',
+                cls: 'statsgrid-diagram-flyout',
+                view:'diagram',
                 pos: {
                     x: width + position.left + offset,
                     y: 5
@@ -81,7 +92,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         var me = this;
         me.views = {
             search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Search', this.instance, me.flyouts.search),
-            dataview: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DataVisualizer', this.instance)
+            table: Oskari.clazz.create('Oskari.statistics.statsgrid.view.TableVisualizer', this.instance),
+            diagram: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DiagramVisualizer', this.instance, me.flyouts.search)
             // filterdata: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Filter', this.instance)
         };
     },

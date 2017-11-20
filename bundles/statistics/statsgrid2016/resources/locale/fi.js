@@ -6,7 +6,8 @@ Oskari.registerLocalization(
         "tile": {
             "title": "Teemakartat",
             "search": "Aineistohaku",
-            "displayResults":"Haun tulokset"
+            "table": "Taulukko",
+            "diagram": "Pylväsdiagrammi"
         },
         "flyout": {
             "title": "Teemakartat"

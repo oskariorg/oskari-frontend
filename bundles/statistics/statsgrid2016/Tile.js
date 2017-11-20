@@ -20,7 +20,8 @@ function(instance, service) {
     this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
     this._templates = {
         search: jQuery('<div class="statsgrid-functionality search" data-view="search"><div class="icon"></div><div class="text">'+ this.loc.tile.search +'</div><div class="clear"></div></div>'),
-        dataview: jQuery('<div class="statsgrid-functionality dataview" data-view="dataview"><div class="icon"></div><div class="text">'+ this.loc.tile.displayResults +'</div><div class="clear"></div></div>')
+        table: jQuery('<div class="statsgrid-functionality table" data-view="table"><div class="icon"></div><div class="text">'+ this.loc.tile.table +'</div><div class="clear"></div></div>'),
+        diagram: jQuery('<div class="statsgrid-functionality diagram" data-view="diagram"><div class="icon"></div><div class="text">'+ this.loc.tile.diagram +'</div><div class="clear"></div></div>')
         // filterdata: jQuery('<div class="statsgrid-functionality filterdata" data-view="filterdata"><div class="icon"></div><div class="text">Aineiston suodatus</div><div class="clear"></div></div>')
     };
 }, {
@@ -30,9 +31,6 @@ function(instance, service) {
      */
     getName : function() {
         return 'Oskari.statistics.statsgrid.Tile';
-    },
-    hasData: function () {
-        return this.statsService.getDatasource().length;
     },
     /**
      * @method setEl
@@ -96,21 +94,6 @@ function(instance, service) {
         return this.instance.getLocalization('desc');
     },
     /**
-     * @method getOptions
-     * Interface method implementation, does nothing atm
-     */
-    getOptions : function() {
-
-    },
-    /**
-     * @method setState
-     * @param {Object} state
-     *      state that this component should use
-     * Interface method implementation, does nothing atm
-     */
-    setState : function(state) {
-    },
-    /**
      * @method refresh
      * Creates the UI for a fresh start
      */
@@ -118,7 +101,6 @@ function(instance, service) {
         var me = this;
         var instance = me.instance;
         var sandbox = instance.getSandbox();
-        // this.setEnabled(this.hasData());
         for ( var type in this._templates ) {
             var icon = this._templates[type];
             this.extendTile(icon, type);

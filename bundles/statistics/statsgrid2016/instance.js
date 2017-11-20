@@ -183,7 +183,7 @@ Oskari.clazz.define(
                         if ( extension === 'dataview' ) {
                             me.getTile().openFlyout( extension );
                         }
-                    } 
+                    }
                 } else {
                     for( var extension in me.getTile().getExtensions() ) {
                         me.getTile().showExtension(
