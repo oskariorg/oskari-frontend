@@ -11,14 +11,30 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
     },
     createOverlay: function () {
        this.overlay = this.templates.overlay.clone();
-       this.overlay.css({ pointerEvents: "none", width: jQuery("#mapdiv").width(), height: jQuery("#mapdiv").height(), backgroundColor:"rgba(0,0,0,0.4)", top:0, position: "absolute" });
+       this.overlay.css({ pointerEvents: "none", width: jQuery("#mapdiv").width(), height: jQuery("#mapdiv").height(), backgroundColor:"rgba(0,0,0,0.7)", top:0, position: "absolute" });
        return this.overlay;
     },
+    calculateDistanceToMapEdges: function ( element ) {
+        var mapdiv = jQuery("#mapdiv");
+        var mapoffset = mapdiv.offset();
+
+        var printarea = element.offset();
+
+        var topDistance = mapoffset.top - printarea.top;
+        var leftDistance = printarea.left - mapoffset.left;
+        var rightDistance = mapdiv.width() - element.width() - leftDistance;
+        var bottomDistance ;
+        return {
+            top: topDistance,
+            left: leftDistance,
+            right: rightDistance,
+            bottom: bottomDistance
+        }
+    },
     updateBorders: function ( element ) {
-        // border-top-width: 25px !important;
-        // border-left-width: 500px !important;
-        // border-right-width: 500px !important;
-        element.css( { "border-top-width": "25px !important", "border-left-width": "500px !important", "border-right-width": "500px !important" } );
+
+        var distances = this.calculateDistanceToMapEdges( element );
+        element.css( { "borderTopWidth": "25px !important", "borderLeftWidth": distances.left + 'px', "borderRightWidth": distances.right + 'px' } );
     },
     plotPrintAreaOnMap: function ( size ) {
         // if ( !this.overlay ) {
@@ -62,9 +78,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         });
        var area = this.templates.printarea.clone();
 
-       area.css( { pointerEvents: "none", width: pixelMeasures[0]+'px', height: pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.4)', position: 'absolute', zIndex:'10' } );
-       this.updateBorders( area );
+       area.css( { pointerEvents: "none", width: pixelMeasures[0]+'px', height: pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.7)', position: 'absolute', zIndex:'10' } );
         jQuery("#mapdiv").prepend( area );
+        this.updateBorders( area );
        return area;
         // return {
         //     pixelMeasures: pixelMeasures,

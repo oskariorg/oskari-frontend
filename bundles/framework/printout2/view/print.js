@@ -150,6 +150,9 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
         },
         print: function ( settings, features ) {
             var me = this;
+            var sandbox = me.instance.getSandbox();
+            var url = sandbox.getAjaxUrl();
+            var urlBase = me.instance.backendConfiguration.formatProducers[settings.format];
             var tools = this.createExtendingTools();
             tools.forEach( function ( tool ) {
                 if ( typeof tool._getStatsLayer === 'function' ) {

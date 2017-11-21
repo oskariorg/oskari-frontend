@@ -82,6 +82,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
             });
             toolContainer.find('input').change(closureMagic(option));
         }
+            this.view.printarea.plotPrintAreaOnMap( "A4" );
 
         this.setElement( panel );
         return this.getElement();

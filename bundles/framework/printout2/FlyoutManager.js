@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapping.printout2.FlyoutManager', function (instance
         var p = jQuery( "#mapdiv" );
         var position = p.position();
         var offset = 40;
-        var width = p.width() / 4;
+        var width = 300;
         me.flyouts = {
             print: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', "this.instance.getLocalization().tile.title", {
                 width: width + 'px',
