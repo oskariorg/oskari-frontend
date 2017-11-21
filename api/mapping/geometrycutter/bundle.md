@@ -4,6 +4,8 @@
 
 The bundle provides tools for geometry editing. Currently supported functionality includes spliting Polygon or LineString with user drawn LineString and clipping any geometry with user drawn Polygon.
 
+The target geometry to be cut is assumed to be rendered by the requesting functionality. Geometrycutter only renders the user drawn cutting feature and the cutting results for the duration of the cutting operation. That is, after StopGeometryCuttingRequest, map is cleared from any temporary features rendered by geometrycutter. 
+
 ### Usage
 1. Send `StartGeometryCuttingRequest` with target GeoJSON and mode
 2. Listen to `GeometryCuttingEvent` for updates (if needed)
