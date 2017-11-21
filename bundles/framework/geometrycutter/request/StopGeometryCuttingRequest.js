@@ -1,7 +1,6 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StopGeometryCuttingRequest',
     /** @constructor
      * @param {Sting} operationId ID of edit operation. Caller defined, for example bundle name
-     * @param {boolean} isCancel 
      */
     function (operationId, isCancel) {
         this._operationId = operationId;

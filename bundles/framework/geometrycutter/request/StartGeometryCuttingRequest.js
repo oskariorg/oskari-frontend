@@ -3,14 +3,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCutt
     /** @constructor
      * @param {Sting} operationId ID of edit operation. Caller defined, for example bundle name
      * @param {String} mode kind of geometry editing, see __modes
-     * @param {GeoJSONGeometry} geometry
+     * @param {org.geojson.Feature} feature to edit
      */
-    function (operationId, mode, geometry) {
+    function (operationId, mode, feature) {
         if (!this.__modes[mode]) {
             throw new Error("Unknown geometry edit mode: '" + mode + "'");
         }
         this._operationId = operationId;
-        this._geometry = geometry;
+        this._feature = feature;
         this._mode = mode;
 
     }, {
@@ -31,8 +31,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCutt
             return this._mode;
         },
 
-        getGeometry: function () {
-            return this._geometry;
+        getFeature: function () {
+            return this._feature;
         },
     }, {
         'protocol': ['Oskari.mapframework.request.Request']

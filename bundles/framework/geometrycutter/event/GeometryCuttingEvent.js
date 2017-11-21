@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCuttingEv
      * @method create called automatically on construction
      * @static
      * @param {String} operationId 
-     * @param {GeoJSONFeature} feature the result of the geometry cutting, or null if cutting failed (topology exception)
+     * @param {org.geojson.Feature} feature the result of the geometry cutting, or null if cutting failed (topology exception)
      * @param {Boolean} isFinished 
      */
     function (operationId, feature, isFinished) {
