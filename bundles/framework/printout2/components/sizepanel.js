@@ -55,7 +55,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
                     me.sizeOptions[i].selected = false;
                 }
                 tool.selected = true;
-                me.view.printarea.createPlotElement( tool.id );
+                me.view.printarea.createPlotArea( tool.id );
                 me.view.preview._cleanMapPreview();
                 me.view.preview._updateMapPreview();
                 // Update legend
@@ -85,7 +85,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
             });
             toolContainer.find('input').change(closureMagic(option));
         }
-            this.view.printarea.plotPrintAreaOnMap( "A4" );
+            this.view.printarea.createPlotArea( "A4" );
 
         this.setElement( panel );
         return this.getElement();

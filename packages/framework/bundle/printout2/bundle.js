@@ -32,6 +32,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.bundle", function () {
             "src": "../../../../bundles/framework/printout2/FlyoutManager.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/printout2/event/PrintableContentEvent.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/printout2/view/print.js"
         }, {
             "type": "text/javascript",

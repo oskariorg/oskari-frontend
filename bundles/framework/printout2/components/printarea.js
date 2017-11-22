@@ -36,10 +36,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         var distances = this.calculateDistanceToMapEdges( element );
         element.css( { "margin-left": -distances.left, "borderTopWidth": distances.top, "borderBottomWidth": distances.bottom, "borderLeftWidth": distances.left + 'px', "borderRightWidth": distances.right + 'px', left: mapdiv.width() / 4 +'px' } );
     },
-    plotPrintAreaOnMap: function ( size ) {
-        // if ( !this.overlay ) {
-        //     jQuery("#mapdiv").append( this.createOverlay() );
-        // }
+    getMeasuresForAreaPlot: function ( size ) {
         var mmMeasures = [];
        switch( size ) {
             case "A4" :
@@ -83,9 +80,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
             zoomLevel: zoomLevel
         };
     },
-    createPlotElement: function ( size ) {
-        var measures = this.plotPrintAreaOnMap( size );
-        debugger;
+    createPlotArea: function ( size ) {
+        var measures = this.getMeasuresForAreaPlot( size );
         this.area = this.templates.printarea.clone();
         this.area.css( { pointerEvents: "none", width: measures.pixelMeasures[0]+'px', height: measures.pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.9)', position: 'absolute', zIndex:'10' } );
         this.updateBorders( this.area );
