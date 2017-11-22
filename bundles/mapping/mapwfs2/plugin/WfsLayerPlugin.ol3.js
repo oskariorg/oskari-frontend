@@ -1501,11 +1501,8 @@ Oskari.clazz.define(
             if (!imageUrl || !boundsObj) {
                 return;
             }
-
-
-
             if (layerType === me.__typeHighlight) {
-                  ols = [imageSize.width,imageSize.height];  //ol.Size
+                ols = [imageSize.width,imageSize.height];  //ol.Size
                 layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
 
                 wfsMapImageLayer = new ol.layer.Image({
@@ -1530,13 +1527,14 @@ Oskari.clazz.define(
                 }
 
                 // highlight picture on top of normal layer images
-                highlightLayer = me.getOLMapLayer(layer, me.__typeHighlight);
+                var layerToMove = me.getOLMapLayer(layer, me.__typeHighlight);
+                var higlightLayerIndex = mapmodule.getLayerIndex(layerToMove);
+                highlightLayer = map.getLayers().removeAt(higlightLayerIndex);
 
                 if (normalLayer && highlightLayer) {
                     normalLayerIndex = mapmodule.getLayerIndex(normalLayer);
                     map.getLayers().insertAt(normalLayerIndex, highlightLayer);
                 }
-
             } else { // "normal"
                 var ollayer = normalLayer;
                 ollayer.getSource().setupImageContent(boundsObj, imageUrl, ollayer, map, boundaryTile);
