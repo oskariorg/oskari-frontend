@@ -410,7 +410,13 @@ Oskari.clazz.define(
          */
         getFeatures: function (layerId) {
             var me = this,
-                features = [];
+                features = [],
+                layer = me.getLayer(layerId);
+
+            if(!layer) {
+                return features;
+            }
+
             var featuresFromLayer = me.getLayer(layerId).getSource().getFeatures();
             featuresFromLayer.forEach(function (f) {
                 features.push(f);
@@ -987,9 +993,6 @@ Oskari.clazz.define(
          */
         reportDrawingEvents : function() {
             var me = this;
-            if(window.console === undefined) {
-                return;
-            }
 
             if(me._draw[me._id]) {
                 me._draw[me._id].on('drawstart', function() {
@@ -1015,6 +1018,20 @@ Oskari.clazz.define(
                 });
             }
         },
+        _getFeatureCenter: function(feature) {
+            var me = this;
+            if(me.getCurrentDrawShape() === 'Circle') {
+                return ol.extent.getCenter(feature.getGeometry().getExtent());
+            }
+            return feature.getGeometry().getCenter();
+        },
+        _getFeatureRadius: function(feature) {
+            var me = this;
+            if(me.getCurrentDrawShape() === 'Circle' && feature.getGeometry().getArea) {
+                return Math.sqrt(feature.getGeometry().getArea()/Math.PI);
+            }
+            return feature.getGeometry().getRadius();
+        },
          /**
          * @method getCircleAsPolygonFeature
          * - converts circle geometry to polygon geometry
@@ -1029,8 +1046,8 @@ Oskari.clazz.define(
                 return polygonFeatures;
             }
             features.forEach(function (f) {
-                var pointFeature = new ol.geom.Point(ol.extent.getCenter(f.getGeometry().getExtent()));
-                var bufferedFeature = me.getBufferedFeature(pointFeature, f.getGeometry().getRadius(), me._styles.draw, 100);
+                var pointFeature = new ol.geom.Point(me._getFeatureCenter(f));
+                var bufferedFeature = me.getBufferedFeature(pointFeature, me._getFeatureRadius(f), me._styles.draw, 100);
                 polygonFeatures.push(bufferedFeature);
             });
             return polygonFeatures;
@@ -1050,9 +1067,9 @@ Oskari.clazz.define(
             }
             features.forEach(function (f) {
                 var feature = new ol.Feature({
-                      geometry:  new ol.geom.Point(f.getGeometry().getCenter())
+                      geometry:  new ol.geom.Point(me._getFeatureCenter(f))
                     });
-                me.addBufferPropertyToFeatures([feature], f.getGeometry().getRadius());
+                me.addBufferPropertyToFeatures([feature], me._getFeatureRadius(f));
                 pointFeatures.push(feature);
             });
             return pointFeatures;
