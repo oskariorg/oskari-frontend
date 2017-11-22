@@ -962,11 +962,14 @@ Oskari.clazz.define(
             }
 
             if (fids && fids.length > 0) {
-                panel.grid.select(fids[0], event.isKeepSelection());
-                if (fids.length > 1) {
-                    for (i = 1; i < fids.length; i += 1) {
-                        panel.grid.select(fids[i],true);
+                var needKeepSelection = function(featureIndex){
+                    if(featureIndex === 0) {
+                        return event.isKeepSelection();
                     }
+                    return !!featureIndex;
+                };
+                for (i = 0; i < fids.length; i += 1) {
+                    panel.grid.select(fids[i],needKeepSelection(i));
                 }
             } else {
                 if (panel && panel.grid && isOk) {
