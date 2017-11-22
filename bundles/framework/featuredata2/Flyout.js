@@ -961,11 +961,11 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (fids !== null && fids !== undefined && fids.length > 0) {
+            if (fids && fids.length > 0) {
                 panel.grid.select(fids[0], event.isKeepSelection());
                 if (fids.length > 1) {
                     for (i = 1; i < fids.length; i += 1) {
-                        panel.grid.select(fids[i], event.isKeepSelection());
+                        panel.grid.select(fids[i],true);
                     }
                 }
             } else {
