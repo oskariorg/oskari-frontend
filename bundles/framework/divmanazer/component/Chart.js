@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     },
     sortData: function () {
         this.data = this.data.sort(function (a, b) {
-            return d3.ascending(a.value, b.value);
+            return d3.ascending(a.value || 0, b.value || 0);
         });
     },
     chartDimensions: function () {
@@ -58,10 +58,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         return d3.axisBottom( this.x ).ticks(10);
     },
     initScales: function () {
+        // from zero to max value. This could also be from min to max value, but it causes problems if
+        // some values are missing -> resulting to negative widths for bars.
+        // TODO: we need some proper handling for missing values AND negative values.
         this.x = d3.scaleLinear()
-        .domain([ d3.min( this.data, function ( d ) {
-                return d.value;
-            }), d3.max( this.data, function ( d ) {
+        .domain([ 0, d3.max( this.data, function ( d ) {
                 return d.value;
             })
         ]);
@@ -186,7 +187,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr("height", 15)
             .attr("x", 0)
             .attr("width", function (d) {
-                return me.x(d.value);
+                return me.x(d.value || 0);
             });
 
         this.chartType = 'barchart';
