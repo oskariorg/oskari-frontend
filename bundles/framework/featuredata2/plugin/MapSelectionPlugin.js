@@ -60,7 +60,6 @@ Oskari.clazz.define(
          * @params {Boolean} remove active draw tool
          */
         stopDrawing: function (removeActive) {
-            this.WFSLayerService.setSelectionToolsActive(false);
             if(removeActive === true) {
                 this.removeActiveClass();
             } else {
