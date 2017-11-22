@@ -73,7 +73,7 @@ Oskari.clazz.define(
             return jQuery('#contentMap').hasClass('published');
         },
         hasData: function () {
-            return this.statsService.getDatasource().length;
+            return !!this.statsService.getDatasource().length;
         },
 
         /**
