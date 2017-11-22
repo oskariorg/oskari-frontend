@@ -81,6 +81,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         };
     },
     createPlotArea: function ( size ) {
+        if( this.area ) {
+            this.destroy();
+        }
         var measures = this.getMeasuresForAreaPlot( size );
         this.area = this.templates.printarea.clone();
         this.area.css( { pointerEvents: "none", width: measures.pixelMeasures[0]+'px', height: measures.pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.9)', position: 'absolute', zIndex:'10' } );
@@ -88,6 +91,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         jQuery("#mapdiv").prepend( this.area );
     },
     destroy: function () {
+        this.area = null;
         jQuery("#mapdiv").find( ".oskari-map-print-area" ).remove();
     }
 }, {
