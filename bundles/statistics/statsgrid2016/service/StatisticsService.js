@@ -36,6 +36,9 @@
         getName: function () {
             return this.__name;
         },
+        getSandbox: function() {
+            return this.sandbox;
+        },
         setMapModes: function(mapModes){
             this._mapModes = mapModes;
         },
