@@ -20,12 +20,13 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
     function () {
         this.started = false;
         this._localization = undefined;
-        this.sandbox = null;
+        this.sandbox = Oskari.getSandbox();
         this._mapmodule = null; 
         this.views = null;
         this.buttonGroup = 'viewtools';
         this.plugins = {};
         this._flyoutManager = null;
+        this.isOpen = false;
         //  Format producers
         this.backendConfiguration = {
             formatProducers: {
@@ -74,7 +75,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
             return;
         }
         this.started = true;
-        this.sandbox = Oskari.getSandbox();
+        // this.sandbox = Oskari.getSandbox();
         this.localization = this.getLocalization( this.getName() );
         this.sandbox.register(this);
         this._mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -87,6 +88,11 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
         this._flyoutManager.init();
         this.addToToolbar();
     },
+    stop: function () {
+        this._flyoutManager.destroy();
+        this.sandbox.unregister(this);
+        this.started = false;
+  },
     addToToolbar: function () {
         var me = this;
             // request toolbar to add buttons
@@ -99,7 +105,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                         sticky: true,
                         callback: function () {
                             // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
-                            me.sayhello();
+                            me.isOpen = !me.isOpen;
+                            me.sayhello(me.isOpen);
                         }
                     }
                 };
@@ -110,8 +117,12 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                 }
             }
     },
-    sayhello: function () {
-        this.displayContent();
+    sayhello: function ( open ) {
+        if ( open ) {
+            this.displayContent();
+        } else {
+            this.stop();
+        }
     },
     displayContent: function () {
         this._flyoutManager.open("print");
@@ -131,6 +142,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
      * @param {Oskari.mapframework.event.Event} event a Oskari event object
      */
     onEvent: function (event) {
+        
         var handler = this.eventHandlers[event.getName()];
         if (!handler) {
             return;
@@ -153,10 +165,36 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                 return;
             }
 
-            // var isOpen = event.getViewState() !== "close";
+            var isOpen = event.getViewState() !== "close";
+            if( !isOpen ) {
+                me.sayhello();
+            } else {
+                me.stop();
+            }
             // me.displayContent(isOpen);
 
-        }
+        },
+        'Printout.PrintableContentEvent': function (event) {
+            debugger;
+            var contentId = event.getContentId(),
+                layer = event.getLayer(),
+                layerId = ((layer && layer.getId) ? layer.getId() : null),
+                tileData = event.getTileData(),
+                geoJson = event.getGeoJsonData();
+
+            // Save the GeoJSON for later use if provided.
+            // TODO:
+            // Save the GeoJSON for each contentId separately.
+            // view/BasicPrintOut.js should be changed as well
+            // to parse the geoJson for the backend.
+            if (geoJson) {
+                this.geoJson = geoJson;
+            }
+            // Save the tile data per layer for later use.
+            if (tileData && layerId) {
+                this.tileData[layerId] = tileData;
+            }
+        },
     }
 
     }, {

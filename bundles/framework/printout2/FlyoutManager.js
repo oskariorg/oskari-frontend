@@ -49,8 +49,8 @@ Oskari.clazz.define('Oskari.mapping.printout2.FlyoutManager', function (instance
                 cls: 'printout2-print-flyout',
                 view:'print',
                 pos: {
-                    x: position.left + offset,
-                    y: 5
+                    x: 0,
+                    y: 0
                 }
             })
         };
@@ -62,7 +62,11 @@ Oskari.clazz.define('Oskari.mapping.printout2.FlyoutManager', function (instance
     },
     getFlyout: function (type) {
         return this.flyouts[type];
-    }
+    },
+     destroy: function () {
+         this.views["print"].destroy();
+         this.flyouts["print"].hide();
+     }
 }, {
 
 });

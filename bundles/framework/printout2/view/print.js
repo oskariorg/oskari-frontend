@@ -10,6 +10,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
         this.toolholder = Oskari.clazz.create( 'Oskari.mapping.printout2.components.toolholder', this );
         this.printarea = Oskari.clazz.create( 'Oskari.mapping.printout2.components.printarea', this );
         this.accordion = null;
+        this.layoutParams = {};
         /* content options listed in localisations */
         this.contentOptions = this.loc.content.options;
         this.contentOptionsMap = {};
@@ -153,6 +154,35 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             var sandbox = me.instance.getSandbox();
             var url = sandbox.getAjaxUrl();
             var urlBase = me.instance.backendConfiguration.formatProducers[settings.format];
+            var maplinkArgs = settings.maplinkArgs;
+            var pageSizeArgs = '&pageSize=' + settings.pageSize;  
+            var pageTitleArgs = '&pageTitle=' + encodeURIComponent(settings.pageTitle);
+            var saveFileArgs = '';
+            var contentOptions = [];
+            var p;
+            var layoutArgs;
+
+            layoutArgs = me._getLayoutParams(selections.pageSize);
+
+            for (p in me.contentOptionsMap) {
+                if (me.contentOptionsMap.hasOwnProperty(p)) {
+                    if (settings[p]) {
+                        contentOptions.push('&' + p + '=true');
+                    }
+                }
+            }
+            var contentOptionArgs = contentOptions.join(''),
+                formatArgs = '&format=' + settings.format,
+                parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + layoutArgs;
+
+            url = url + parameters;
+
+            me.openUrlWindow(url, settings);
+        },
+        getProtocolImplementers: function () {
+            return Oskari.clazz.protocol('Oskari.mapping.printout2.Tool');
+        },
+        handleExtendingTools: function () {
             var tools = this.createExtendingTools();
             tools.forEach( function ( tool ) {
                 if ( typeof tool._getStatsLayer === 'function' ) {
@@ -163,9 +193,6 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
                     }
                 }
             });
-        },
-        getProtocolImplementers: function () {
-            return Oskari.clazz.protocol('Oskari.mapping.printout2.Tool');
         },
         createExtendingTools: function () {
             var me = this;
@@ -181,8 +208,75 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             });
             return tools;
         },
+        openUrlWindow: function ( infoUrl, settings ) {
+            var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200';
+            if (this._isLandscape( settings )) {
+                wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=1200,' + 'height=850';
+            }
+            var link = infoUrl;
+            window.open(link, 'BasicPrintout', wopParm);
+        },
+                /**
+         * @public @method getLayoutParams
+         * Get params for backend print layout.
+         * pdf template based on page Size
+         *
+         * @param {String} pageSize
+         *
+         */
+        _getLayoutParams: function (pageSize) {
+            var me = this,
+                params = '',
+                ind = me._getPageMapRectInd(pageSize);
+
+            if (me.layoutParams.pageTemplate) {
+                params = '&pageTemplate=' + me.layoutParams.pageTemplate + '_' + pageSize + '.pdf';
+            }
+            if (me.layoutParams.pageMapRect) {
+                if (ind < me.layoutParams.pageMapRect.length) {
+                    params = params + '&pageMapRect=' + me.layoutParams.pageMapRect[ind];
+                }
+            }
+            if (me.layoutParams.tableTemplate) {
+                params = params + '&tableTemplate=' + me.layoutParams.tableTemplate + '_' + pageSize;
+            }
+
+            return params;
+        },
+        /**
+         * @private @method _getPageMapRectInd
+         * get index of pagesize for mapRectangle bbox
+         *
+         * @param {String} pageSize
+         *
+         * @return {Number} Page size index
+         */
+        _getPageMapRectInd: function (pageSize) {
+            var ind = 0;
+
+            if (pageSize === 'A4_Landscape') {
+                ind = 1;
+            } else if (pageSize === 'A3') {
+                ind = 2;
+            } else if (pageSize === 'A3_Landscape') {
+                ind = 3;
+            }
+            return ind;
+        },
+        _isLandscape: function ( settings ) {
+            var ret = false;
+            var sizeOptions = this.sizepanel.getSizeOptions();
+            if (sizeOptions[settings.pageSize].id.indexOf('Land') > -1) {
+                ret = true;
+            }
+            return ret;
+        },
         render: function ( container ) { },
-        refresh: function () { }
+        refresh: function () { },
+        destroy: function () {
+            this.setElement(null);
+            this.printarea.destroy();
+        }
     }, {
 
     });

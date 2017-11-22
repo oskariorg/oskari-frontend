@@ -23,6 +23,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
     setElement: function ( element ) {
         this.panel = element;
     },
+    getSizeOptions: function () {
+        return this.sizeOptionsMap;
+    },
     /**
      * @private @method _createSizePanel
      * Creates the size selection panel for printout
@@ -52,7 +55,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
                     me.sizeOptions[i].selected = false;
                 }
                 tool.selected = true;
-                me.view.printarea.plotPrintAreaOnMap( tool.id );
+                me.view.printarea.createPlotElement( tool.id );
                 me.view.preview._cleanMapPreview();
                 me.view.preview._updateMapPreview();
                 // Update legend
