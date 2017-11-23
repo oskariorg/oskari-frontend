@@ -270,7 +270,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
 
                     var dataJson = me.validateData(pastedData);
 
-                    me.inputTable.populate(e.target, dataJson);
+                    me.inputTable.populate( dataJson );
                 });
             }
         },
@@ -280,8 +280,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
          */
         handleFile: function( fileContent ) {
             var dataJson = this.validateData( fileContent );
-            var insertTarget = this.inputTable.getElements().table.find('tr').first();
-            this.inputTable.populate( insertTarget, dataJson );
+            this.inputTable.populate( dataJson );
         },
         /**
          * @method handleRadioButtons
