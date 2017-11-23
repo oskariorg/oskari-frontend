@@ -381,7 +381,10 @@
                 regionset : regionset,
                 selectors : JSON.stringify(params || {})
             };
-            var cacheKey = 'GetIndicatorData_' + JSON.stringify(data);
+            var serialized = Object.keys(params).sort().map(function(key) {
+                return key + "=" + JSON.stringify(params[key]);
+            }).join(':');
+            var cacheKey = 'GetIndicatorData_' + ds + '_' + indicator + '_' + regionset + '_' + serialized;
             if(this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
