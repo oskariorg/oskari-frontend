@@ -177,7 +177,6 @@ Oskari.clazz.define(
             if(options.modifyControl !== false) {
                 me.addModifyInteraction(me.getCurrentLayerId(), shape, options);
             }
-//          me.reportDrawingEvents();
         },
         /**
          * This is the shape type that is currently being drawn
@@ -374,7 +373,6 @@ Oskari.clazz.define(
             else if(me.getCurrentDrawShape() === 'Point') {
                 bufferedFeatures = me.getCircleAsPolygonFeature(features);
                 features = me.getCircleAsPointFeature(features);
-                // FIXME: circles don't get the area measurement
             } else if(me.getCurrentDrawShape() === 'LineString' && requestedBuffer > 0) {
                 // TODO: Why is it that only linestrings get buffer properties?
                 me.addBufferPropertyToFeatures(features, requestedBuffer);
@@ -1063,6 +1061,9 @@ Oskari.clazz.define(
             features.forEach(function (f) {
                 var pointFeature = new ol.geom.Point(me._getFeatureCenter(f));
                 var bufferedFeature = me.getBufferedFeature(pointFeature, me._getFeatureRadius(f), me._styles.draw, 100);
+                var id = me.generateNewFeatureId();
+                bufferedFeature.setId(id);
+                me._featuresValidity[id]=true;
                 polygonFeatures.push(bufferedFeature);
             });
             return polygonFeatures;
