@@ -419,20 +419,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     return;
                 }
 
-
-            console.log(evt, evt.getGeoJson());
-            /*
-            var geoJSON = evt.getData().bufferedGeoJson || evt.getGeoJson();
-
-            var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-            Oskari.getSandbox().postRequestByName(rn, [geoJSON, {
-                layerId: 'MY_VECTOR_LAYER',
-                clearPrevious: true,
-                centerTo: false
-            }]);
-            */
-
-
                 if (!me.selectionPlugin) {
                     me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
                 }
