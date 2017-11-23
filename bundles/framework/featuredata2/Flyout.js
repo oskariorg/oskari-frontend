@@ -326,6 +326,7 @@ Oskari.clazz.define(
             selected.forEach(function(selectedFeature, index){
                panel.grid.select(selectedFeature, !!index);
             });
+            panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked() === true);
         },
 
         /**
@@ -369,10 +370,7 @@ Oskari.clazz.define(
 
             // in scale, proceed
             this._prepareData(layer);
-
-            if(panel.grid && panel.grid.getSelection().values.length === 0) {
-                this.selectGridValues(layer.getClickedGeometries().map(function(val) {return val[0];}), layer);
-            }
+            this.selectGridValues(layer.getClickedGeometries().map(function(val) {return val[0];}), layer);
 
             // Grid opacity
             this.setGridOpacity(layer, 1.0);
