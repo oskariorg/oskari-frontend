@@ -101,12 +101,13 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
          *
          * {Object} data, each key need to have property lon & lat 
          */
-        populate: function( cell, data ) {
+        populate: function( data ) {
             var table = this.getElements().table;
+
             for ( var key in data ) {
                 if ( data.hasOwnProperty( key ) ) {
                     var row = this.template.row( { coords: data[key] } );
-                    jQuery( cell ).parent().after( row );
+                    table.prepend(row);
                     this.incrementNumRows();
                 }
             }

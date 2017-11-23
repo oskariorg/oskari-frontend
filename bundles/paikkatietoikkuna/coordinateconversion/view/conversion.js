@@ -223,8 +223,21 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             }
         },
         handleServerResponce: function ( response ) {
-            var insertTargetRow = this.outputTable.getContainer().find('tr').first();
-            this.outputTable.populate( insertTargetRow, response );
+            var responseCoords = response.coordinates;
+            var obj = {};
+            if( Array.isArray( responseCoords ) ) {
+                for ( var i in responseCoords ) {
+                    if( Array.isArray(responseCoords[i]) ) {
+                        for ( var j = 0; j < responseCoords[i].length; j++ ) {
+                            obj[i] = {
+                                lon: responseCoords[i][0],
+                                lat: responseCoords[i][1]
+                            }
+                        }
+                    }
+                }
+            }
+            this.outputTable.populate( obj );
         },
         /**
          * @method handleClipboard
