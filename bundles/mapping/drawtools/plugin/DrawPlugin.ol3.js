@@ -1022,13 +1022,24 @@ Oskari.clazz.define(
                 });
             }
         },
+        /**
+         * @method  @private _getFeatureCenter get feature center coordinates.
+         * @param  {ol.feature} feature feature where need to get center point
+         * @return {Array} coordinates array
+         */
         _getFeatureCenter: function(feature) {
             var me = this;
+            // Circle needs special handling so at center is calculated from geometry extent.
             if(me.getCurrentDrawShape() === 'Circle') {
                 return ol.extent.getCenter(feature.getGeometry().getExtent());
             }
             return feature.getGeometry().getCenter();
         },
+        /**
+         * @method  @private _getFeatureRadius get circle/point geometry radius.
+         * @param  {ol.feature} feature fetarue where need to get circle radius
+         * @return {Number}     circle radius
+         */
         _getFeatureRadius: function(feature) {
             var me = this;
             if(me.getCurrentDrawShape() === 'Circle' && feature.getGeometry().getArea) {
