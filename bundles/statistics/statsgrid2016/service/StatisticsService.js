@@ -512,26 +512,21 @@
                         hash : ind.hash
                     };
                     response.indicators.push(metadata);
-                    // inProgress is a flag for detecting if both async ops have completed
-                    var inProgress = true;
-                    count++;
                     me.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+                        count++;
                         if(err) {
                             errors++;
                             return;
                         }
                         metadata.name = Oskari.getLocalized(indicator.name);
-                        // detect if this indicator is fully populated
-                        if(!inProgress) {
-                            count--;
-                        }
-                        inProgress = false;
-                        if(count === 0) {
+                        if(count === indicators.length * 2) {
+                            // if count is 2 x indicators length both metadata and indicator data has been loaded for all indicators
                             done();
                         }
                     });
 
                     me.getIndicatorData(ind.datasource, ind.indicator, ind.selections, setId, function(err, indicatorData) {
+                        count++;
                         if(err) {
                             errors++;
                             return;
@@ -539,12 +534,7 @@
                         response.data.forEach(function(item) {
                             item.values[ind.hash] = indicatorData[item.id];
                         });
-                        // detect if this indicator is fully populated
-                        if(!inProgress) {
-                            count--;
-                        }
-                        inProgress = false;
-                        if(count === 0) {
+                        if(count === indicators.length * 2) {
                             done();
                         }
                     });
