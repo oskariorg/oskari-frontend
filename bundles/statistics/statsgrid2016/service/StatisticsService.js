@@ -244,7 +244,10 @@
                 },
                 url: this.sandbox.getAjaxUrl('GetRegions'),
                 success: function (pResp) {
-                    me.cache.respondToQueue(cacheKey, null, pResp.regions);
+                    var onlyWithNames = pResp.regions.filter(function(region) {
+                        return !!region.name;
+                    })
+                    me.cache.respondToQueue(cacheKey, null, onlyWithNames);
                 },
                 error: function (jqXHR, textStatus) {
                     me.cache.respondToQueue(cacheKey, 'Error loading regions');
