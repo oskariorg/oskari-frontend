@@ -133,6 +133,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramVisualizer', functi
                 me.updateUI();
             }
         });
+        this.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
+            me.updateUI();
+        });
     },
     /**
      * @method getColorScale
