@@ -57,7 +57,10 @@ Oskari.clazz.define("Oskari.mapping.printout2.bundle", function () {
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/printout2/tools/thematicmap.js"
-        }],
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/printout2/tools/testtool.js"
+        } ],
         "locales": [{
             "lang": "hy",
             "type": "text/javascript",

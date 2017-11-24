@@ -59,16 +59,16 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         zoomLevel = 0,
         nextScale;
 
-        if(mmMeasures && mmMeasures.constructor === Array){
-            if(!scalein){
-                scalein = this.mapmodule.calculateFitScale4Measures(mmMeasures);
+        if ( mmMeasures && mmMeasures.constructor === Array ) {
+            if ( !scalein ) {
+                scalein = this.mapmodule.calculateFitScale4Measures( mmMeasures );
             }
-            pixelMeasures =  this.mapmodule.calculatePixelsInScale(mmMeasures, scalein);
+            pixelMeasures =  this.mapmodule.calculatePixelsInScale( mmMeasures, scalein );
         }
 
         var scales =  this.mapmodule.getScaleArray();
-        scales.forEach(function(sc, index) {
-            if ((!nextScale || nextScale > sc) && sc > scalein) {
+        scales.forEach( function ( sc, index ) {
+            if ( ( !nextScale || nextScale > sc ) && sc > scalein ) {
                 nextScale = sc;
                 zoomLevel = index;
             }
@@ -89,6 +89,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         this.area.css( { pointerEvents: "none", width: measures.pixelMeasures[0]+'px', height: measures.pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.9)', position: 'absolute', zIndex:'10' } );
         this.updateBorders( this.area );
         jQuery("#mapdiv").prepend( this.area );
+    },
+    getPrintArea: function () {
+        return this.area;
     },
     destroy: function () {
         this.area = null;

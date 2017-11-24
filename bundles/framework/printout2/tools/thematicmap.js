@@ -57,6 +57,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.tools.thematicmap",
         }
         return statsLayer;
     },
+    getElement: function () {
+        return null;
+    }
 }, {
     'extend' : ['Oskari.mapping.printout2.tools.AbstractTool'],
     'protocol' : ['Oskari.mapping.printout2.Tool']

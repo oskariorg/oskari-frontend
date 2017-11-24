@@ -161,7 +161,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             var contentOptions = [];
             var p;
             var layoutArgs;
-
+            this.handleExtendingTools();
             layoutArgs = me._getLayoutParams(selections.pageSize);
 
             for (p in me.contentOptionsMap) {
@@ -183,15 +183,22 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             return Oskari.clazz.protocol('Oskari.mapping.printout2.Tool');
         },
         handleExtendingTools: function () {
+            var me = this;
             var tools = this.createExtendingTools();
             tools.forEach( function ( tool ) {
                 if ( typeof tool._getStatsLayer === 'function' ) {
                     if ( tool._getStatsLayer() ) {
                         var legend = tool.getGeoJSON();
-                        me.toolholder.setPosition( legend, "top-right" );
-                        jQuery("#mapdiv").prepend( jQuery( legend ) );
+                        me.toolholder.setPosition( legend, "bottom-right" );
+                        me.printarea.getPrintArea().prepend( jQuery( legend ) );
                     }
                 }
+                var legend = tool.getElement();
+                if( !legend ) {
+                    return;
+                }
+                me.toolholder.setPosition( legend, "bottom-right" );
+                me.printarea.getPrintArea().prepend( jQuery( legend ) );
             });
         },
         createExtendingTools: function () {

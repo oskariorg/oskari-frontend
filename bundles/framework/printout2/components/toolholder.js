@@ -11,16 +11,16 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.toolholder",
     setPosition: function ( tool, radioSelection ) {
        switch( radioSelection ) {
            case "top-right" :
-                tool.css( { right: 0, top: 0 } );
+                tool.css( { right: 0, top: 0, position: 'absolute' } );
                 break;
             case "top-left" :
-                tool.css( { left: 0, top: 0 } );
+                tool.css( { left: 0, top: 0, position: 'absolute' } );
                 break;
             case "bottom-right" :
-                tool.css( { right: 0, bottom: 0 } );
+                tool.css( { right: 0, bottom: 0, position: 'absolute' } );
                 break;
             case "bottom-left" :
-                tool.css( { left: 0, bottom: 0 } );
+                tool.css( { left: 0, bottom: 0, position: 'absolute' } );
                 break;
             default:
                 break;
