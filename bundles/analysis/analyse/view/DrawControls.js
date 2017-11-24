@@ -13,7 +13,7 @@ Oskari.clazz.define(
             var config = {
                 id: "FeatureData"
             };
-            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, sandbox);
+            this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
             mapModule.registerPlugin(me.selectionPlugin);
             mapModule.startPlugin(me.selectionPlugin);
         }
@@ -321,7 +321,7 @@ Oskari.clazz.define(
 
             if (toolsPanel.html.find('div[class*=selection-]').hasClass('active')) {
                 toolsPanel.html.find('div[class*=selection-]').removeClass('active');
-                me.selectionPlugin.stopDrawing(true);
+                me.selectionPlugin.stopDrawing();
             }
         },
 

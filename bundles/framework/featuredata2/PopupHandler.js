@@ -225,6 +225,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 activeTool = null,
                 startDrawing;
 
+            content.addClass("selectionToolsDiv");
+
             _.forEach(me.buttons, function (button) {
                 var btnContainer = me.template.toolsButton.clone();
 
@@ -261,8 +263,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
          * Handles active-class of tool buttons
          */
         removeButtonSelection: function (content) {
-            if(typeof content === undefined) {
-                content = jQuery(".FeatureDataPopupWrapper");
+            if(!content) {
+                content = jQuery(".selectionToolsDiv");
             }
             var me = this,
                 isActive = jQuery(content).find(".tool").hasClass("active");

@@ -121,7 +121,6 @@ Oskari.clazz.define(
          * @return {OpenLayers.Feature.Vector}
          */
         parseFeatureFromClickedFeature: function(clickedGeometry) {
-            //TODO: could not yet been tested that geom is correct
             var data = clickedGeometry[1],
                 wkt = new ol.format.WKT(),
                 feature = wkt.readFeature(data),
@@ -129,7 +128,7 @@ Oskari.clazz.define(
 
             if (geom instanceof ol.geom.LineString || geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon) {
                 return new ol.feature.Vector({
-                    geometry: feature.geometry
+                    geometry: geom
                 });
             }
 
@@ -1023,6 +1022,9 @@ Oskari.clazz.define(
         },
 
         _operateDrawFilters: function () {
+            //TODO: enable when geometryeditor is integrated
+            return;
+            
             var preSelector = 'div.drawFilter.analysis-selection-',
                 pointButton = jQuery(preSelector + 'point'),
                 lineButton = jQuery(preSelector + 'line'),

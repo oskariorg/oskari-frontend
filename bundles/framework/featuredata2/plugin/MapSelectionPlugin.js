@@ -45,23 +45,23 @@ Oskari.clazz.define(
             this._toggleControl(params.drawMode);
         },
         clearDrawing: function() {
+            debugger;
             var me = this;
             var sb = this.getSandbox();
             sb.postRequestByName('DrawTools.StopDrawingRequest', [
                     me.DRAW_REQUEST_ID,
                     true,
-                    false
+                    true
             ]);
         },
         /**
          * @method stopDrawing
          * Disables all draw controls and
          * clears the layer of any drawn features
-         * @params {Boolean} remove active draw tool
          */
-        stopDrawing: function (removeActive) {
+        stopDrawing: function () {
             this.WFSLayerService.setSelectionToolsActive(false);
-            removeActive === true ? this.removeActiveClass() : this.clearDrawing();
+            this.clearDrawing();
             // disable all draw controls
             this._toggleControl();
         },
