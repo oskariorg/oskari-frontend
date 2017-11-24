@@ -30,9 +30,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramVisualizer', functi
     getIndicator: function() {
         return this.service.getStateService().getActiveIndicator();
     },
-    getRegionset: function() {
-        return this.service.getStateService().getRegionset();
-    },
     hasIndicators: function() {
         return !!this.service.getStateService().getIndicators().length;
     },
