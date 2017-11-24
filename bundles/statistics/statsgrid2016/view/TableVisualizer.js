@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.TableVisualizer', function
 }, {
   _template: {
     error: _.template('<div class="datacharts-noactive">${ msg }</div>'),
-    container: jQuery('<div class="oskari-datacharts" style=""></div>')
+    container: jQuery('<div class="oskari-datacharts"></div>')
   },
   setElement: function ( el ) {
     this.container = el;
