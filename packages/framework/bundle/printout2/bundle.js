@@ -47,7 +47,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.bundle", function () {
             "src": "../../../../bundles/framework/printout2/components/sizepanel.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout2/components/toolholder.js"
+            "src": "../../../../bundles/framework/printout2/components/toolhandler.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/printout2/components/printarea.js"
