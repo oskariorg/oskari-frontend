@@ -18,19 +18,6 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.toolhandler",
         var container = jQuery('<div></div>');
         var tools = this.createExtendingTools();
         tools.forEach( function ( tool ) {
-            // if ( typeof tool._getStatsLayer === 'function' ) {
-            //     if ( tool._getStatsLayer() ) {
-            //         var legend = tool.getGeoJSON();
-            //         me.toolholder.setPosition( legend, "bottom-right" );
-            //         me.printarea.getPrintArea().prepend( jQuery( legend ) );
-            //     }
-            // }
-            // var legend = tool.getElement();
-            // if( !legend ) {
-            //     return;
-            // }
-            // me.setPosition( legend, "bottom-right" );
-            // me.view.printarea.getPrintArea().prepend( jQuery( legend ) );
             var toolEl = me.templates.tool.clone();
             toolEl.find('input').attr("name", tool.getName);
             toolEl.bind(tool);
@@ -48,6 +35,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.toolhandler",
                 me.availableTools.forEach( function ( tool ) {
                     if ( tool.getName() === self.name ) {
                         var printElement = tool.getElement();
+                        if( !printElement ) {
+                            return;
+                        }
                         me.setPosition( printElement, "bottom-right" );
                         me.view.printarea.getPrintArea().prepend( jQuery( printElement ) );
                         return;
@@ -60,8 +50,6 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.toolhandler",
     },
     createExtendingTools: function () {
         var me = this;
-        var sandbox = this.instance.getSandbox();
-        var mapmodule = sandbox.findRegisteredModuleInstance("MainMapModule");
         var definedTools = this.getProtocolImplementers();
         var tools = [];
         Object.keys( definedTools ).forEach( function ( tool ) {
