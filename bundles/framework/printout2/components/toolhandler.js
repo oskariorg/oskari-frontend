@@ -39,12 +39,16 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.toolhandler",
                             return;
                         }
                         me.setPosition( printElement, "bottom-right" );
-                        me.view.printarea.getPrintArea().prepend( jQuery( printElement ) );
+                        me.view.printarea.getPrintArea().prepend( printElement );
                         return;
                     }
                 });
             } else {
-
+                me.availableTools.forEach( function ( tool ) {
+                    if ( tool.getName() === self.name ) {
+                        //TODO:remove tool from area
+                    }
+                });
             }
         });
     },
