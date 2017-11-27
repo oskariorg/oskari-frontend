@@ -7,7 +7,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
         this.preview = Oskari.clazz.create( 'Oskari.mapping.printout2.components.preview', this );
         this.settings = Oskari.clazz.create( 'Oskari.mapping.printout2.components.settings', this );
         this.sizepanel = Oskari.clazz.create( 'Oskari.mapping.printout2.components.sizepanel', this );
-        this.toolholder = Oskari.clazz.create( 'Oskari.mapping.printout2.components.toolholder', this );
+        this.toolhandler = Oskari.clazz.create( 'Oskari.mapping.printout2.components.toolhandler', this );
         this.printarea = Oskari.clazz.create( 'Oskari.mapping.printout2.components.printarea', this );
         this.accordion = null;
         this.layoutParams = {};
@@ -19,7 +19,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
         }
     }, {
         _templates: {
-            wrapper: '<div class="print-container"> hello person </div>',
+            wrapper: '<div class="print-container"></div>',
             buttons: jQuery('<div class="buttons"></div>')
         },
         setElement: function ( element ) {
@@ -51,18 +51,24 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             sizePanel.open();
             this.accordion.addPanel( sizePanel );
         },
+        createToolsPanel: function () {
+            var toolPanel = this.toolhandler.createToolsPanel();
+            toolPanel.open();
+            this.accordion.addPanel( toolPanel );
+        },
         createUi: function ( ) {
-            var wrapper = jQuery( this._templates.wrapper );
+            var wrapper = jQuery( this._templates.wrapper ).clone();
             
             this.createAccordion();
             this.createSizePanel();
             this.createSettingsPanel();
+            this.createToolsPanel();
             var container = jQuery('<div></div>');
             container.append( wrapper );
             this.accordion.insertTo( container );
             this.setElement( container );
             this.createPreview();
-            wrapper.append( this._getButtons() );   
+            container.append( this._getButtons() );   
         },
         getSettingsForPrint: function ( format ) {
             var me = this;
@@ -161,7 +167,6 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             var contentOptions = [];
             var p;
             var layoutArgs;
-            this.handleExtendingTools();
             layoutArgs = me._getLayoutParams(selections.pageSize);
 
             for (p in me.contentOptionsMap) {
@@ -178,42 +183,6 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             url = url + parameters;
 
             me.openUrlWindow(url, settings);
-        },
-        getProtocolImplementers: function () {
-            return Oskari.clazz.protocol('Oskari.mapping.printout2.Tool');
-        },
-        handleExtendingTools: function () {
-            var me = this;
-            var tools = this.createExtendingTools();
-            tools.forEach( function ( tool ) {
-                if ( typeof tool._getStatsLayer === 'function' ) {
-                    if ( tool._getStatsLayer() ) {
-                        var legend = tool.getGeoJSON();
-                        me.toolholder.setPosition( legend, "bottom-right" );
-                        me.printarea.getPrintArea().prepend( jQuery( legend ) );
-                    }
-                }
-                var legend = tool.getElement();
-                if( !legend ) {
-                    return;
-                }
-                me.toolholder.setPosition( legend, "bottom-right" );
-                me.printarea.getPrintArea().prepend( jQuery( legend ) );
-            });
-        },
-        createExtendingTools: function () {
-            var me = this;
-            var sandbox = this.instance.getSandbox();
-            var mapmodule = sandbox.findRegisteredModuleInstance("MainMapModule");
-            var definedTools = this.getProtocolImplementers();
-            var tools = [];
-            Object.keys( definedTools ).forEach( function ( tool ) {
-                var tool = Oskari.clazz.create( tool );
-                if ( tool.isActive() === true ) {
-                    tools.push(tool);
-                }
-            });
-            return tools;
         },
         openUrlWindow: function ( infoUrl, settings ) {
             var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200';

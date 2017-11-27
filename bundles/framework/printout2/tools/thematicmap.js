@@ -2,6 +2,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.tools.thematicmap",
     function ( ) {
         this.sandbox = Oskari.getSandbox();
 }, {
+    getName: function () {
+        return "Thematicmap"
+    },
     getStatsInstance : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         return stats;
