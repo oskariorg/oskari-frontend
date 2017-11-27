@@ -50,6 +50,9 @@ Oskari.registerLocalization(
                     }
                 ]
             },
+            "tools": {
+                "label": "Tools"
+            },
             "preview": {
                 "label": "Preview",
                 "tooltip": "Click the preview image to open a larger image in another window.",

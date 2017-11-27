@@ -50,6 +50,9 @@ Oskari.registerLocalization(
                     }
                 ]
             },
+            "tools": {
+                "label": "Tools"
+            },
             "preview": {
                 "label": "Esikatselu",
                 "tooltip": "Klikkaa esikatselukuvaa avataksesi sen suuremmassa koossa uudessa ikkunassa.",

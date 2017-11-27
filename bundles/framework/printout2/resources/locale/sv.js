@@ -50,6 +50,9 @@ Oskari.registerLocalization(
                     }
                 ]
             },
+            "tools": {
+                "label": "Tools"
+            },
             "preview": {
                 "label": "Förhandsgranska",
                 "tooltip": "Du kan förstora förhandsgranskningsbilden genom att klicka på den.",
