@@ -29,9 +29,6 @@ Oskari.clazz.define("Oskari.mapping.printout2.bundle", function () {
             "src": "../../../../bundles/framework/printout2/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout2/FlyoutManager.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/printout2/event/PrintableContentEvent.js"
         }, {
             "type": "text/javascript",
@@ -43,6 +40,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.bundle", function () {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/printout2/components/settings.js"
         }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/printout2/components/sidepanel.js"
+        },{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/printout2/components/sizepanel.js"
         }, {
@@ -60,6 +60,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.bundle", function () {
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/printout2/tools/testtool.js"
+        }, {
+            "type": "text/css",
+            "src": "../../../../bundles/framework/printout2/resources/css/style.css"
         } ],
         "locales": [{
             "lang": "hy",
