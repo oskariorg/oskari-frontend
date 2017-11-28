@@ -26,6 +26,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
         this.buttonGroup = 'viewtools';
         this.plugins = {};
         this._flyoutManager = null;
+        this.printview = null;
         this.isOpen = false;
         //  Format producers
         this.backendConfiguration = {
@@ -84,8 +85,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                 this.sandbox.registerForEventByName(this, p);
             }
         }
-        this._flyoutManager = Oskari.clazz.create('Oskari.mapping.printout2.FlyoutManager', this);
-        this._flyoutManager.init();
+        // this._flyoutManager = Oskari.clazz.create('Oskari.mapping.printout2.FlyoutManager', this);
+        this.printview = Oskari.clazz.create('Oskari.mapping.printout2.view.print', this);
         this.addToToolbar();
     },
     stop: function () {
@@ -125,7 +126,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
         }
     },
     displayContent: function () {
-        this._flyoutManager.open("print");
+        this.printview.createUi();
     },
     getLocalization: function ( key ) {
         if ( !this._localization ) {

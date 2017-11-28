@@ -7,6 +7,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
         this.preview = Oskari.clazz.create( 'Oskari.mapping.printout2.components.preview', this );
         this.settings = Oskari.clazz.create( 'Oskari.mapping.printout2.components.settings', this );
         this.sizepanel = Oskari.clazz.create( 'Oskari.mapping.printout2.components.sizepanel', this );
+        this.sidepanel = Oskari.clazz.create( 'Oskari.mapping.printout2.components.sidepanel', this );
         this.toolhandler = Oskari.clazz.create( 'Oskari.mapping.printout2.components.toolhandler', this );
         this.printarea = Oskari.clazz.create( 'Oskari.mapping.printout2.components.printarea', this );
         this.accordion = null;
@@ -34,6 +35,10 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             );
             this.accordion = accordion;
         },
+        createSidepanel: function () {
+            this.sidepanel.create();
+            return this.sidepanel.getElement();
+        },
         createPreview: function () {
             var previewPanel = this.preview.createPreviewPanel();
             previewPanel.open();
@@ -43,7 +48,6 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
         },
         createSettingsPanel: function () {
             var settingsPanel = this.settings._createSettingsPanel();
-            settingsPanel.open();
             this.accordion.addPanel( settingsPanel );
         },
         createSizePanel: function () {
@@ -57,18 +61,20 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             this.accordion.addPanel( toolPanel );
         },
         createUi: function ( ) {
-            var wrapper = jQuery( this._templates.wrapper ).clone();
-            
+            var panel = this.createSidepanel();
+            var map = jQuery("#contentMap");
+            var container = panel.find('.print-panel');
             this.createAccordion();
             this.createSizePanel();
             this.createSettingsPanel();
             this.createToolsPanel();
-            var container = jQuery('<div></div>');
-            container.append( wrapper );
             this.accordion.insertTo( container );
-            this.setElement( container );
+            this.setElement( panel );
             this.createPreview();
-            container.append( this._getButtons() );   
+            container.append( this._getButtons() );
+            map.addClass('mapPrintoutMode');
+            Oskari.getSandbox().mapMode = 'mapPrintoutMode';
+            panel.insertBefore( map );
         },
         getSettingsForPrint: function ( format ) {
             var me = this;
@@ -89,7 +95,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
                     format: selectedFormat || 'application/pdf'
                 };
 
-            if (!size) {
+            if ( !size ) {
                 var firstSizeOption = container.find('input[name=size]').first();
                 firstSizeOption.attr('checked', 'checked');
                 selections.pageSize = firstSizeOption.val();
@@ -250,8 +256,11 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
         render: function ( container ) { },
         refresh: function () { },
         destroy: function () {
+            var map = jQuery("#contentMap");
             this.setElement(null);
             this.printarea.destroy();
+            this.sidepanel.getElement().remove();
+            map.removeClass('mapPrintoutMode');
         }
     }, {
 

@@ -9,17 +9,23 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         printarea: jQuery('<div class="oskari-map-print-area"></div>'),
         overlay: jQuery('<div class="oskari-map-print-overlay"></div>')
     },
-    createOverlay: function () {
-       this.overlay = this.templates.overlay.clone();
-       this.overlay.css({ pointerEvents: "none", width: jQuery("#mapdiv").width(), height: jQuery("#mapdiv").height(), backgroundColor:"rgba(0,0,0,0.7)", top:0, position: "absolute" });
-       return this.overlay;
-    },
     calculateDistanceToMapEdges: function ( element ) {
         var mapdiv = jQuery("#mapdiv");
+        var maptools = jQuery("#maptools").offset()
         var mapoffset = mapdiv.offset();
 
         var printarea = element.offset();
 
+        // var topDistance = mapoffset.top - printarea.top;
+        // var leftDistance = mapoffset.left - maptools.left;
+        // var rightDistance = mapdiv.width() - element.width() - leftDistance;
+        // var bottomDistance ;
+        // return {
+        //     top: topDistance,
+        //     left: leftDistance,
+        //     right: rightDistance,
+        //     bottom: 30
+        // }
         var topDistance = mapoffset.top - printarea.top;
         var leftDistance = mapdiv.width() / 4 - mapoffset.left;
         var rightDistance = mapdiv.width() - element.width() - leftDistance;
@@ -86,7 +92,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         }
         var measures = this.getMeasuresForAreaPlot( size );
         this.area = this.templates.printarea.clone();
-        this.area.css( { pointerEvents: "none", width: measures.pixelMeasures[0]+'px', height: measures.pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.8)', position: 'absolute', zIndex:'10' } );
+        this.area.css( {  pointerEvents: "none", width: measures.pixelMeasures[0]+'px', height: measures.pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.7)', position: 'absolute', zIndex:'10' } );
         this.updateBorders( this.area );
         jQuery("#mapdiv").prepend( this.area );
     },

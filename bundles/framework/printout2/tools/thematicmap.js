@@ -61,7 +61,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.tools.thematicmap",
         return statsLayer;
     },
     getElement: function () {
-        return null;
+        return this.getGeoJSON();
     }
 }, {
     'extend' : ['Oskari.mapping.printout2.tools.AbstractTool'],

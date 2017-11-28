@@ -15,6 +15,12 @@
   font-family: "Liberation Sans";
   src: url("../fonts/LiberationSans-Bold.ttf");
   font-weight: bold; }
+div.print-header {
+  background-color: #fdf8d9;
+  padding: 5px 10px;
+}
+div.print-header > div.icon-close {
+    float: right; }
 
 div.notLoggedIn {
   padding: 10px; }
@@ -37,9 +43,6 @@ div.printout div.startview div.error ul li {
 #contentMap div.basic_publisher div.content {
   padding: 10px; }
 
-div.printout div.startview div.icon-info,
-div.basic_printout div.icon-info {
-  float: right; }
 
 div.basic_printout div.form div.field input,
 div.field select {
@@ -71,20 +74,10 @@ div.field select {
   margin: 10px 5px; }
 
 /* Buttons */
-div.basic_printout div.buttons,
-div.printout div.startview div.buttons {
-  margin: 10px;
-  text-align: center; }
   div.basic_printout div.buttons input,
   div.printout div.startview div.buttons input {
     margin-left: 10px;
     margin-right: 10px; }
-
-div.basic_printout > div.header {
-  background-color: #FDF8D9;
-  padding: 5px 10px; }
-  div.basic_printout > div.header div.icon-close {
-    float: right; }
 
 div.basic_printout > div.content {
   overflow: auto;
