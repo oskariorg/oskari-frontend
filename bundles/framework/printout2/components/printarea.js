@@ -11,30 +11,17 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
     },
     calculateDistanceToMapEdges: function ( element ) {
         var mapdiv = jQuery("#mapdiv");
-        var maptools = jQuery("#maptools").offset()
         var mapoffset = mapdiv.offset();
 
         var printarea = element.offset();
 
-        // var topDistance = mapoffset.top - printarea.top;
-        // var leftDistance = mapoffset.left - maptools.left;
-        // var rightDistance = mapdiv.width() - element.width() - leftDistance;
-        // var bottomDistance ;
-        // return {
-        //     top: topDistance,
-        //     left: leftDistance,
-        //     right: rightDistance,
-        //     bottom: 30
-        // }
-        var topDistance = mapoffset.top - printarea.top;
-        var leftDistance = mapdiv.width() / 4 - mapoffset.left;
-        var rightDistance = mapdiv.width() - element.width() - leftDistance;
-        var bottomDistance ;
+        var verticalDistance = ( mapdiv.width() - element.width() )/ 2;
+        var horizontalDistance = ( mapdiv.height() - element.height() ) / 2;
         return {
-            top: 30,
-            left: 438,
-            right: rightDistance,
-            bottom: 30
+            top: horizontalDistance,
+            left: verticalDistance,
+            right: verticalDistance,
+            bottom: horizontalDistance
         }
     },
     updateBorders: function ( element ) {
