@@ -103,16 +103,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             }
         });
         this.service.on('StatsGrid.IndicatorEvent', function(event) {
-            if (!event.isRemoved()) {
-                var label = me.getIndicatorUILabels(event);
-                var dataObject = {
-                    id: event.indicator,
-                    title: label.full
-                };
-                me._select.addOption(dataObject);
-            } else {
-                me._select.removeOption(event.indicator);
+            var hash = me.service.getStateService().getHash(event.getDatasource(), event.getIndicator(), event.getSelections());
+            if (event.isRemoved()) {
+                me._select.removeOption(hash);
+                return;
             }
+            // add new option
+            me._getIndicatorUILabels(function(options) {
+                options.forEach(function(opt) {
+                    if(opt.id === hash) {
+                        me._select.addOption(opt);
+                    }
+                });
+            });
         });
     }
 
