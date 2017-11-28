@@ -127,7 +127,7 @@ Oskari.clazz.define(
                 geom = feature.getGeometry();
 
             if (geom instanceof ol.geom.LineString || geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon) {
-                return new ol.feature.Vector({
+                return new ol.Feature({
                     geometry: geom
                 });
             }
@@ -243,7 +243,7 @@ Oskari.clazz.define(
                     }
                 });
                 // if there are selected features, unselect them
-                me.selectControl.unselectAll();
+                me.selectInteraction.getFeatures().clear();
 
                 //set selected geometry for filter json
                 var geometries = [];
