@@ -396,9 +396,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
 
-            if (me.WFSLayerService.getWFSSelections().length > 0) {
-                me.WFSLayerService.emptyWFSFeatureSelections(layer);
-            }
+            me.WFSLayerService.emptyWFSFeatureSelections(layer);
 
             if (typeof layer.getFeatureProperties === "function" && layer.hasOrder() && data.data.features !== 'empty'){
                 // this is a "userlayer" type layer - props are sorted to match the original order
