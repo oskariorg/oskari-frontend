@@ -83,8 +83,11 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
      */
     removeOption: function ( id ) {
         var chosen = this.element.find('select');
-        var optionToRemove = chosen.find('option[value=' + id + ']');
-        optionToRemove.remove();
+        var options = chosen.find('option');
+        var tobeRemoved = options.filter(function(index, opt) {
+            return opt.value == id;
+        });
+        tobeRemoved.remove();
         chosen.trigger('chosen:updated');
     },
     /** @method updateOptions
