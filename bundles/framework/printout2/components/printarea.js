@@ -86,7 +86,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         }
         var measures = this.getMeasuresForAreaPlot( size );
         this.area = this.templates.printarea.clone();
-        this.area.css( { pointerEvents: "none", width: measures.pixelMeasures[0]+'px', height: measures.pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.9)', position: 'absolute', zIndex:'10' } );
+        this.area.css( { pointerEvents: "none", width: measures.pixelMeasures[0]+'px', height: measures.pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.8)', position: 'absolute', zIndex:'10' } );
         this.updateBorders( this.area );
         jQuery("#mapdiv").prepend( this.area );
     },

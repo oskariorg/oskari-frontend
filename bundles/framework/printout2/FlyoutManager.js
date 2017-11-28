@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.mapping.printout2.FlyoutManager', function (instance
                 cls: 'printout2-print-flyout',
                 view:'print',
                 pos: {
-                    x: 0,
+                    x: 40,
                     y: 0
                 }
             })

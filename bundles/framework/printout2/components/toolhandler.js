@@ -4,6 +4,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.toolhandler",
         this.instance = view.instance;
         this.loc = view.instance._localization["BasicView"];
         this.availableTools = null;
+        this.toolsOnMap = {};
 }, {
     templates: {
         toolContainer: jQuery('<div></div>'),
@@ -38,6 +39,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.toolhandler",
                         if( !printElement ) {
                             return;
                         }
+                        me.toolsOnMap[self.name] = printElement;
                         me.setPosition( printElement, "bottom-right" );
                         me.view.printarea.getPrintArea().prepend( printElement );
                         return;
@@ -46,7 +48,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.toolhandler",
             } else {
                 me.availableTools.forEach( function ( tool ) {
                     if ( tool.getName() === self.name ) {
-                        //TODO:remove tool from area
+                        var item = me.toolsOnMap[self.name];
+                        me.view.printarea.getPrintArea().find( item ).remove();
                     }
                 });
             }
