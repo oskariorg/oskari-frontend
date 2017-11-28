@@ -47,10 +47,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
     },
     requestHandlers: {
         'StartGeometryCuttingRequest': function () {
-            return Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.StartGeometryCuttingRequestHandler', this.sandbox, this);
+            return Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.StartGeometryCuttingRequestHandler', this);
         },
         'StopGeometryCuttingRequest': function () {
-            return Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.StopGeometryCuttingRequestHandler', this.sandbox, this);
+            return Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.StopGeometryCuttingRequestHandler', this);
         }
     },
     /**
@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         var drawId = this.__idPrefix + operationId;
         this.stopEditing(operationId, false); // cleanup any previous edits with same operationId
         function requestFunction(requestName, args) {
-            var builder = this.sandbox.getRequestBuilder(requestName);
+            var builder = Oskari.requestBuilder(requestName);
             if (!builder) {
                 return false;
             }

@@ -1,5 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCuttingRequestHandler', function (sandbox, geometryCutterInstance) {
-    this.sandbox = sandbox;
+Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCuttingRequestHandler', function (geometryCutterInstance) {
     this.geometryCutterInstance = geometryCutterInstance;
 }, {
     handleRequest: function (core, request) {

@@ -1,9 +1,16 @@
 /**
  * @class Oskari.mapframework.ui.module.common.geometrycutter.BundleModule
+ * Abstract class, for inheritance only
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.BundleModule', function () {
     this.sandbox = null;
 }, {
+    /**
+     * @static @property __name
+     * override in subclass!
+     */
+    __name: "",
+    
     getName: function () {
         return this.__name
     },
