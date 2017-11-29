@@ -1045,11 +1045,11 @@ Oskari.clazz.define(
          * @return {Number}     circle radius
          */
         _getFeatureRadius: function(feature) {
-            // Circle has ol polygon or point type and it radius need calculated different way
+            // If circle ol geometry type is polygon then calculate radius
             if(feature.getGeometry().getType() === 'Polygon') {
                 return Math.sqrt(feature.getGeometry().getArea()/Math.PI);
             }
-            // else other then radius is 0
+            // else if drawing point, radius is 0
             return 0;
         },
         /**
