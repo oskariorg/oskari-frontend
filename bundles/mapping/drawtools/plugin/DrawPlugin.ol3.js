@@ -366,16 +366,19 @@ Oskari.clazz.define(
                 // TODO: check the ifs below if they should only be run if buffer is used
                 bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
             }
-            if(me.getCurrentDrawShape() === 'Circle' ) {
-                bufferedFeatures = me.getCircleAsPolygonFeature(features);
-                features = me.getCircleAsPolygonFeature(features);
-            }
-            else if(me.getCurrentDrawShape() === 'Point') {
-                bufferedFeatures = me.getCircleAsPolygonFeature(features);
-                features = me.getCircleAsPointFeature(features);
-            } else if(me.getCurrentDrawShape() === 'LineString' && requestedBuffer > 0) {
-                // TODO: Why is it that only linestrings get buffer properties?
-                me.addBufferPropertyToFeatures(features, requestedBuffer);
+
+            switch (me.getCurrentDrawShape()) {
+                case 'Point':
+                case 'Circle':
+                    // Do common stuff
+                    features = me.getCircleFeature(features);
+                    bufferedFeatures = me.getCircleAsPolygonFeature(features);
+                    break;
+                case 'LineString':
+                    if(requestedBuffer > 0) {
+                        me.addBufferPropertyToFeatures(features, requestedBuffer);
+                    }
+                    break;
             }
             var geojson = me.getFeaturesAsGeoJSON(features);
             geojson.crs = me._getSRS();
@@ -1045,7 +1048,19 @@ Oskari.clazz.define(
             }
             return feature.getGeometry().getRadius();
         },
-         /**
+        /**
+         * [getCircleFeature description]
+         * @param  {Array} features
+         * @return {Array}  polygon or point features
+         */
+        getCircleFeature: function(features) {
+            var me = this;
+            if(me.getCurrentDrawShape() === 'Point') {
+                return me.getCircleAsPointFeature(features);
+            }
+            return me.getCircleAsPolygonFeature(features);
+        },
+        /**
          * @method getCircleAsPolygonFeature
          * - converts circle geometry to polygon geometry
          *
