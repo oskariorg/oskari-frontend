@@ -20,8 +20,8 @@ Oskari.clazz.define(
         me.prefix = 'Default.';
         me.sandbox = sandbox;
         me.WFSLayerService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-        me._features;
-        me._drawing;
+        me._features = null;
+        me._drawing = null;
 
         if (me._config && me._config.id) {
             me.prefix = me._config.id + '.';
@@ -45,7 +45,6 @@ Oskari.clazz.define(
             this._toggleControl(params.drawMode);
         },
         clearDrawing: function() {
-            debugger;
             var me = this;
             var sb = this.getSandbox();
             sb.postRequestByName('DrawTools.StopDrawingRequest', [
@@ -64,7 +63,6 @@ Oskari.clazz.define(
             this.clearDrawing();
             // disable all draw controls
             this._toggleControl();
-        },
 
         /**
          * @method _toggleControl
@@ -113,33 +111,34 @@ Oskari.clazz.define(
             me.drawControls = {
                 point: function() {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.DRAW_REQUEST_ID,
-                    'Point'
-                    ]
-                )},
+                        me.DRAW_REQUEST_ID,
+                        'Point'
+                    ]);
+                },
                 line: function() {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.DRAW_REQUEST_ID,
-                    'LineString'
-                    ]
-                )},
+                        me.DRAW_REQUEST_ID,
+                        'LineString'
+                    ]);
+                },
                 polygon: function() {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.DRAW_REQUEST_ID,
-                    'Polygon'
-                ])},
+                        me.DRAW_REQUEST_ID,
+                        'Polygon'
+                    ]);
+                },
                 square: function() {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.DRAW_REQUEST_ID,
-                    'Square'
-                    ]
-                )},
+                        me.DRAW_REQUEST_ID,
+                        'Square'
+                    ]);
+                },
                 circle: function() {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
-                    me.DRAW_REQUEST_ID,
-                    'Circle'
-                    ]
-                )}
+                        me.DRAW_REQUEST_ID,
+                        'Circle'
+                    ]);
+                }
             };
         },
         /**

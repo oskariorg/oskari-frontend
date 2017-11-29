@@ -148,11 +148,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 return;
             }
 
-            // close popup so we can update the selection geometry
-            // this is done so we can optimize grid updates on normal updateExtensionRequests.
-            // if the selection show wouldn't use this request but a custom one, this wouldn't be needed
-            me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
-
             //renders selections tools to the content
             me.renderSelectionToolButtons(content);
 
@@ -236,7 +231,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 btnContainer.bind('click', function (evt, deselect) {
                     me.removeButtonSelection(content);
                     if( deselect ) {
-                        activeTool = null;  
+                        activeTool = null;
                         startDrawing = false;
                         me.selectionPlugin.clearDrawing();
                         return;

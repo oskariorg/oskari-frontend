@@ -363,6 +363,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 // update grid information [don't update the grid if not active]
                 var layer = event.getLayer();
                 this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                this.plugins['Oskari.userinterface.Flyout'].featureSelected(layer);
             },
 
             /**
@@ -370,7 +371,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * Highlight the feature on flyout
              */
             'WFSFeaturesSelectedEvent': function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].featureSelected(event);
+                var layer = event.getMapLayer();
+                this.plugins['Oskari.userinterface.Flyout'].featureSelected(layer);
             },
 
             /**
@@ -418,6 +420,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     // only interested in finished drawings
                     return;
                 }
+
                 if (!me.selectionPlugin) {
                     me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
                 }
