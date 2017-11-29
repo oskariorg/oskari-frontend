@@ -271,7 +271,8 @@ Oskari.clazz.define(
                 }
                 if (event.getWfsFeatureIds().length === 0 && layerId === me.WFSLayerService.getAnalysisWFSLayerId()) {
                     me.selectedGeometry = null;
-                    me._disableAllDrawFilterButtons();
+                    //TODO: enable when geometryeditor is integrated
+                    //me._disableAllDrawFilterButtons();
                     this.drawControls.toggleEmptySelectionBtn(false);
                 }
             },
@@ -281,12 +282,12 @@ Oskari.clazz.define(
                     return;
                 }
                 var olMap = this.mapModule.getMap();
-                //layer = olMap.getLayersByName('AnalyseFeatureLayer')[0];
-                //this.mapModule.bringToTop(layer, 20);
+                this.mapModule.bringToTop(this.featureLayer);
             },
             'AfterMapLayerAddEvent': function(event) {
                 this.toggleSelectionTools();
                 this.drawControls.toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
+                this.mapModule.bringToTop(this.featureLayer);
             },
             'AfterMapLayerRemoveEvent': function(event) {
                 this.toggleSelectionTools();
