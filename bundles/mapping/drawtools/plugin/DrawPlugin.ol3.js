@@ -1033,9 +1033,8 @@ Oskari.clazz.define(
          * @return {Array} coordinates array
          */
         _getFeatureCenter: function(feature) {
-            var me = this;
-            // Circle needs special handling so at center is calculated from geometry extent.
-            if(me.getCurrentDrawShape() === 'Circle') {
+            // Circle has no getCenter function so it center need calculated different way
+            if(typeof feature.getGeometry().getCenter === 'undefined') {
                 return ol.extent.getCenter(feature.getGeometry().getExtent());
             }
             return feature.getGeometry().getCenter();
@@ -1046,11 +1045,11 @@ Oskari.clazz.define(
          * @return {Number}     circle radius
          */
         _getFeatureRadius: function(feature) {
-            var me = this;
-            if(me.getCurrentDrawShape() === 'Circle' && feature.getGeometry().getArea) {
+            // Circle has no getRadius function so it radius need calculated different way
+            if(typeof feature.getGeometry().getRadius === 'undefined' && typeof feature.getGeometry().getArea === 'function') {
                 return Math.sqrt(feature.getGeometry().getArea()/Math.PI);
             }
-            return feature.getGeometry().getRadius();
+            return (typeof feature.getGeometry().getRadius === 'function') ? feature.getGeometry().getRadius() : 0;
         },
         /**
          * [getCircleFeature description]
