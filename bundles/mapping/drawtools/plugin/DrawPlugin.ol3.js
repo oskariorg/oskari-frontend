@@ -359,9 +359,13 @@ Oskari.clazz.define(
                 layerId = me.getLayerIdForFunctionality(id),
                 isFinished = false;
             var requestedBuffer = me.getOpts('buffer') || 0;
-            if(layerId) {
-                features = me.getFeatures(layerId);
+            features = me.getFeatures(layerId);
+
+            if(!features) {
+                Oskari.log('DrawPlugin').debug('Layer "' + layerId + '" has no features, not send drawing event.');
+                return;
             }
+
             if(requestedBuffer > 0) {
                 // TODO: check the ifs below if they should only be run if buffer is used
                 bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
@@ -419,7 +423,7 @@ Oskari.clazz.define(
                 layer = me.getLayer(layerId);
 
             if(!layer) {
-                return features;
+                return null;
             }
 
             var featuresFromLayer = me.getLayer(layerId).getSource().getFeatures();
