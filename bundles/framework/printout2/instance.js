@@ -22,10 +22,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
         this._localization = undefined;
         this.sandbox = Oskari.getSandbox();
         this._mapmodule = null; 
-        this.views = null;
         this.buttonGroup = 'viewtools';
         this.plugins = {};
-        this._flyoutManager = null;
         this.printview = null;
         this.isOpen = false;
         //  Format producers
@@ -36,15 +34,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
             }
         };
     }, {
-    /**
-     * @static
-     * @property __name
-     */
     __name: 'Printout2',
 
-    init: function () {
-
-    },
+    init: function () {},
     /**
      * @method getName
      * @return {String} the name for the component
@@ -52,18 +44,11 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
     getName: function () {
         return this.__name;
     },
-    getViews: function () {
-        return this.views;
-    },
     isInitialized: function () {
         return this.started;
     },    
-    startExtension: function () {
-        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapping.printout2.Flyout', this);
-    },
-    stopExtension: function () {
-        this.plugins['Oskari.userinterface.Flyout'] = null;
-    },
+    startExtension: function () {},
+    stopExtension: function () {},
     /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
@@ -76,7 +61,6 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
             return;
         }
         this.started = true;
-        // this.sandbox = Oskari.getSandbox();
         this.localization = this.getLocalization( this.getName() );
         this.sandbox.register(this);
         this._mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -85,12 +69,10 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                 this.sandbox.registerForEventByName(this, p);
             }
         }
-        // this._flyoutManager = Oskari.clazz.create('Oskari.mapping.printout2.FlyoutManager', this);
         this.printview = Oskari.clazz.create('Oskari.mapping.printout2.view.print', this);
         this.addToToolbar();
     },
     stop: function () {
-        this._flyoutManager.destroy();
         this.sandbox.unregister(this);
         this.started = false;
   },
@@ -107,7 +89,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                         callback: function () {
                             // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
                             me.isOpen = !me.isOpen;
-                            me.sayhello(me.isOpen);
+                            me.openPrintPanel( me.isOpen );
                         }
                     }
                 };
@@ -118,7 +100,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
                 }
             }
     },
-    sayhello: function ( open ) {
+    openPrintPanel: function ( open ) {
         if ( open ) {
             this.displayContent();
         } else {
@@ -168,15 +150,13 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
 
             var isOpen = event.getViewState() !== "close";
             if( !isOpen ) {
-                me.sayhello();
+                me.openPrintPanel();
             } else {
                 me.stop();
             }
-            // me.displayContent(isOpen);
 
         },
         'Printout.PrintableContentEvent': function (event) {
-            debugger;
             var contentId = event.getContentId(),
                 layer = event.getLayer(),
                 layerId = ((layer && layer.getId) ? layer.getId() : null),

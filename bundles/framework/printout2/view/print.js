@@ -41,7 +41,6 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
         },
         createPreview: function () {
             var previewPanel = this.preview.createPreviewPanel();
-            previewPanel.open();
             this.preview._cleanMapPreview();
             this.preview._updateMapPreview();
             this.accordion.addPanel( previewPanel );
@@ -124,7 +123,8 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
                 );
 
             cancelBtn.setHandler(function () {
-                me.instance.setPublishMode(false);
+                me.destroy();
+                // me.instance.setPublishMode(false);
                 // Send print canceled event
                 me.instance.sendCanceledEvent('cancel');
             });

@@ -4,7 +4,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sidepanel",
         this.element = null;
 }, {
     template: {
-        header: jQuery('<div class="print-header"><h3>test</h3><div class="icon-close"></div></div>'),
+        header: jQuery('<div class="print-header"><h3></h3><div class="icon-close"></div></div>'),
         panel: jQuery('<div class="print-panel"></div>'),
         container: jQuery('<div class="print-container"></div>'),
         close: jQuery('')
@@ -17,6 +17,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sidepanel",
     },
     create: function () {
         var header = this.template.header.clone();
+        header.find('h3').html( this.view.loc.title );
         var panel = this.template.panel.clone();
         var container = this.template.container.clone();
         container.append( header );

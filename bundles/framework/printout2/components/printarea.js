@@ -11,11 +11,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
     },
     calculateDistanceToMapEdges: function ( element ) {
         var mapdiv = jQuery("#mapdiv");
-        var mapoffset = mapdiv.offset();
 
-        var printarea = element.offset();
-
-        var verticalDistance = ( mapdiv.width() - element.width() )/ 2;
+        var verticalDistance = ( mapdiv.width() - element.width() ) / 2;
         var horizontalDistance = ( mapdiv.height() - element.height() ) / 2;
         return {
             top: horizontalDistance,
