@@ -464,6 +464,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         //if user has not used Ctrl during selection, make totally new selection
         var makeNewSelection = !data.data.keepPrevious;
+        if(makeNewSelection) {
+            selectFeatures = false;
+        }
 
         if (!me.WFSLayerService.isSelectFromAllLayers()) {
             if (analysisWFSLayer && layer.getId() !== analysisWFSLayer) {
