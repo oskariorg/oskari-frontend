@@ -1,7 +1,7 @@
 /**
  * Used to notify that datasource or it's indicators have been added or removed.
  *
- * @class Oskari.statistics.statsgrid.event.IndicatorEvent
+ * @class Oskari.statistics.statsgrid.event.DatasourceEvent
  */
 Oskari.clazz.define('Oskari.statistics.statsgrid.event.DatasourceEvent',
     /**
