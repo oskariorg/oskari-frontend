@@ -124,9 +124,6 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
 
             cancelBtn.setHandler(function () {
                 me.destroy();
-                // me.instance.setPublishMode(false);
-                // Send print canceled event
-                me.instance.sendCanceledEvent('cancel');
             });
             cancelBtn.insertTo(buttonCont);
 
@@ -135,9 +132,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             );
             me.backBtn.setTitle(me.loc.buttons.back);
             me.backBtn.setHandler(function () {
-                me.instance.setPublishMode(false);
-                // Send print canceled event previous
-                me.instance.sendCanceledEvent('previous');
+
             });
             me.backBtn.insertTo(buttonCont);
             me.backBtn.hide();
@@ -253,8 +248,9 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             }
             return ret;
         },
-        render: function ( container ) { },
-        refresh: function () { },
+        refresh: function () { 
+            this.printarea.refresh();
+        },
         destroy: function () {
             var map = jQuery("#contentMap");
             this.setElement(null);

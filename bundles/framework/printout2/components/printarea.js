@@ -4,6 +4,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         this.instance = view.instance;
         this.loc = view.instance._localization["BasicView"];
         this.mapmodule = this.instance._mapmodule;
+        this.size = null;
 }, {
     templates: {
         printarea: jQuery('<div class="oskari-map-print-area"></div>'),
@@ -24,7 +25,12 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
     updateBorders: function ( element ) {
         var mapdiv = jQuery("#mapdiv"); 
         var distances = this.calculateDistanceToMapEdges( element );
-        element.css( { "margin-left": -distances.left, "borderTopWidth": distances.top, "borderBottomWidth": distances.bottom, "borderLeftWidth": distances.left + 'px', "borderRightWidth": distances.right + 'px', left: mapdiv.width() / 4 +'px' } );
+        element.css( { "margin-left": -distances.left,
+                       "borderTopWidth": distances.top,
+                       "borderBottomWidth": distances.bottom,
+                       "borderLeftWidth": distances.left + 'px',
+                       "borderRightWidth": distances.right + 'px',
+                       "left": mapdiv.width() / 3.3 + 'px' } );
     },
     getMeasuresForAreaPlot: function ( size ) {
         var mmMeasures = [];
@@ -71,6 +77,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         };
     },
     createPlotArea: function ( size ) {
+        this.size = size;
         if( this.area ) {
             this.destroy();
         }
@@ -82,6 +89,9 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
     },
     getPrintArea: function () {
         return this.area;
+    },
+    refresh: function () {
+        this.createPlotArea( this.size );
     },
     destroy: function () {
         this.area = null;

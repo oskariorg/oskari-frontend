@@ -73,6 +73,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
         this.addToToolbar();
     },
     stop: function () {
+        var request = this.sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+        this.sandbox.request(this, request);
         this.sandbox.unregister(this);
         this.started = false;
   },
@@ -137,6 +139,11 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
      * @static
      */
     eventHandlers: {
+        'AfterMapMoveEvent': function (event) {
+            if ( this.printview && !!this.printview.getElement() ) {
+                this.printview.refresh();
+            }
+        },
         /**
          * @method userinterface.ExtensionUpdatedEvent
          */

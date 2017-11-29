@@ -23,6 +23,10 @@ div.print-header {
 .help {
   float: right;
 }
+div.buttons {
+    margin-left: 10px;
+    margin-right: 10px;
+}
 div.print-header > div.icon-close {
     float: right; }
 div.print-header > h3 {
