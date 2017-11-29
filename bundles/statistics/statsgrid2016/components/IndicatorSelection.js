@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this.element = null;
 }, {
     __templates : {
         main : _.template('<div class="statsgrid-ds-selections"></div>'),
@@ -66,7 +67,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             }
         });
     },
-
+    setElement: function ( el ) {
+        this.element = el;
+    },
+    getElement: function () {
+        return this.element;
+    },
     /****** PUBLIC METHODS ******/
 
     /**
@@ -173,8 +179,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             // update indicator list
             me._populateIndicators(indicSelect, currentDS);
         });
-
+        me.setElement(main);
         return main;
+    },
+    getIndicatorSelector: function () {
+        var el = this.getElement();
+        var indicSel = el.find('.stats-ind-selector');
+        return indicSel;
     }
 
 });

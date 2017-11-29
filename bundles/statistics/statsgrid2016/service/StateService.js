@@ -298,7 +298,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
             this.indicators = newIndicators;
 
-            if(this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
+            if(removedIndicator && removedIndicator.hash && this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
                 // active was the one removed -> reset active
                 this.setActiveIndicator();
             }
@@ -328,8 +328,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 return key + "=" + JSON.stringify(selections[key]);
             }).join(':');
             return datasrc + '_' + indicator + '_' + serialized;
+        },
+        addFilter : function( filter ) {
+            // notify
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.Filter');
+            this.sandbox.notifyAll(eventBuilder(filter));
         }
-
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

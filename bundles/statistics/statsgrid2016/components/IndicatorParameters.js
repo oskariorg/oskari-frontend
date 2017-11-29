@@ -139,7 +139,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
                     }
                     me.service.getStateService().setRegionset(regionSelect.value());
 
-                    me.instance.getFlyout().closePanels();
+                    // FIXME need this anymore ?
+                    //me.instance.getFlyout().closePanels();
                 });
                 elements.btn.setEnabled(indicator.regionsets.length>0);
             }

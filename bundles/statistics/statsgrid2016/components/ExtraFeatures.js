@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(sandbo
         }
         var selectedLayers = sandbox.findAllSelectedMapLayers();
         selectedLayers.forEach(function(layer){
-            if(!checked && layer.getLayerType() !== 'stats') {
+            if(!checked && layer.getId() !== 'STATS_LAYER') {
                 sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), false]);
             } else {
                 sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), true]);
