@@ -63,6 +63,7 @@ Oskari.clazz.define(
             this.clearDrawing();
             // disable all draw controls
             this._toggleControl();
+        },
 
         /**
          * @method _toggleControl
