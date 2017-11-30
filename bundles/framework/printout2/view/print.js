@@ -123,7 +123,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
                 );
 
             cancelBtn.setHandler(function () {
-                me.destroy();
+                me.instance.closePrintPanel();
             });
             cancelBtn.insertTo(buttonCont);
 
@@ -193,7 +193,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             var link = infoUrl;
             window.open(link, 'BasicPrintout', wopParm);
         },
-                /**
+        /** 
          * @public @method getLayoutParams
          * Get params for backend print layout.
          * pdf template based on page Size

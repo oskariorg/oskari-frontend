@@ -29,7 +29,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sidepanel",
         var me = this;
         var element = this.getElement();
         element.find('.icon-close').on('click', function () {
-            me.view.destroy();
+            me.view.instance.closePrintPanel();
         });
     }
 }, {

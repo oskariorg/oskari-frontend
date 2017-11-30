@@ -13,16 +13,12 @@
             appSetup.startupSequence[17].metadata= { "Import-Bundle": { "printout2": { "bundlePath": "/Oskari/packages/framework/bundle/" } } };
  */
 Oskari.clazz.define("Oskari.mapping.printout2.instance",
-    /**
-     * @method create called automatically on construction
-     * @static
-     */
+
     function () {
         this.started = false;
         this._localization = undefined;
-        this.sandbox = Oskari.getSandbox();
+        this.sandbox = null;
         this._mapmodule = null; 
-        this.buttonGroup = 'viewtools';
         this.plugins = {};
         this.printview = null;
         this.isOpen = false;
@@ -56,11 +52,12 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
     getSandbox: function () {
         return this.sandbox;
     },
-    start: function () {
+    start: function ( sandbox ) {
         if( this.isInitialized() ) {
             return;
         }
         this.started = true;
+        this.sandbox = sandbox || Oskari.getSandbox();
         this.localization = this.getLocalization( this.getName() );
         this.sandbox.register(this);
         this._mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -80,34 +77,31 @@ Oskari.clazz.define("Oskari.mapping.printout2.instance",
   },
     addToToolbar: function () {
         var me = this;
-            // request toolbar to add buttons
-            var addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
-                tool,
-                btns = {
-                    'print': {
-                        iconCls: 'tool-print',
-                        tooltip: this._localization.btnTooltip,
-                        sticky: true,
-                        callback: function () {
-                            // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
-                            me.isOpen = !me.isOpen;
-                            me.openPrintPanel( me.isOpen );
-                        }
+        // request toolbar to add buttons
+        var addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
+            printicon = {
+                    iconCls: 'tool-print',
+                    tooltip: this._localization.btnTooltip,
+                    sticky: false,
+                    callback: function () {
+                        me.isOpen = !me.isOpen;
+                        me.openPrintPanel( me.isOpen );
                     }
-                };
-            for (tool in btns) {
-                // Button not in UI - activated in an other route
-                if (btns.hasOwnProperty(tool)) {
-                    me.sandbox.request( me, addBtnRequestBuilder(tool, this.buttonGroup, btns[tool]));
-                }
-            }
+            };
+        this.sandbox.request( this, addBtnRequestBuilder("print", "viewtools", printicon));
     },
     openPrintPanel: function ( open ) {
         if ( open ) {
             this.displayContent();
         } else {
-            this.stop();
+            this.closePrintPanel();
         }
+        this.sandbox.request(this, Oskari.requestBuilder('MapFull.MapSizeUpdateRequest')( true ));
+    },
+    closePrintPanel: function () {
+        this.isOpen = !this.isOpen;
+        this.printview.destroy();
+        this.sandbox.request(this, Oskari.requestBuilder('MapFull.MapSizeUpdateRequest')( true ));
     },
     displayContent: function () {
         this.printview.createUi();

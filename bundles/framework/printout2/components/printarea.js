@@ -16,21 +16,19 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         var verticalDistance = ( mapdiv.width() - element.width() ) / 2;
         var horizontalDistance = ( mapdiv.height() - element.height() ) / 2;
         return {
-            top: horizontalDistance,
-            left: verticalDistance,
-            right: verticalDistance,
-            bottom: horizontalDistance
+            horizontal: horizontalDistance,
+            vertical: verticalDistance
         }
     },
     updateBorders: function ( element ) {
         var mapdiv = jQuery("#mapdiv"); 
         var distances = this.calculateDistanceToMapEdges( element );
-        element.css( { "margin-left": -distances.left,
-                       "borderTopWidth": distances.top,
-                       "borderBottomWidth": distances.bottom,
-                       "borderLeftWidth": distances.left + 'px',
-                       "borderRightWidth": distances.right + 'px',
-                       "left": mapdiv.width() / 3.3 + 'px' } );
+        element.css( { "margin-left": -distances.vertical,
+                       "borderTopWidth": distances.horizontal,
+                       "borderBottomWidth": distances.horizontal,
+                       "borderLeftWidth": distances.vertical,
+                       "borderRightWidth": distances.vertical,
+                       "left": distances.vertical } );
     },
     getMeasuresForAreaPlot: function ( size ) {
         var mmMeasures = [];
@@ -84,8 +82,8 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         var measures = this.getMeasuresForAreaPlot( size );
         this.area = this.templates.printarea.clone();
         this.area.css( {  pointerEvents: "none", width: measures.pixelMeasures[0]+'px', height: measures.pixelMeasures[1]+'px', border: '1px solid rgba(0,0,0,0.7)', position: 'absolute', zIndex:'10' } );
-        this.updateBorders( this.area );
         jQuery("#mapdiv").prepend( this.area );
+        this.updateBorders( this.area );
     },
     getPrintArea: function () {
         return this.area;
