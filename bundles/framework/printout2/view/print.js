@@ -66,7 +66,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
             this.createAccordion();
             this.createSizePanel();
             this.createSettingsPanel();
-            this.createToolsPanel();
+            // this.createToolsPanel();
             this.accordion.insertTo( container );
             this.setElement( panel );
             this.createPreview();
