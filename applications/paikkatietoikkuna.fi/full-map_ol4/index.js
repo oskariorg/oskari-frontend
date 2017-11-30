@@ -70,34 +70,6 @@ jQuery(document).ready(function () {
         data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
         success: function (appSetup) {
-
-            var appConfig = appSetup.configuration;
-            appConfig['analyse']  = {
-                conf: {},
-                state: {}
-            };
-            appSetup.startupSequence.push({
-                bundleinstancename: 'analyse',
-                bundlename: 'analyse',
-                en: 'analyse',
-                fi: 'analyse',
-                sv: 'analyse',
-                title: 'analyse',
-                metadata: {
-                    'Import-Bundle': {
-                        'analyse' :{
-                            bundlePath: '/Oskari/packages/analysis/ol3/'
-                        }
-                    }
-                },
-                instanceProps: {}
-            });
-            console.log(appSetup);
-            // HACK ENDS
-
-            appSetup.startupSequence.splice(16,5);
-
-
             var app = Oskari.app;
             if (!appSetup.startupSequence) {
                 jQuery('#mapdiv').append('Unable to start');
@@ -119,8 +91,6 @@ jQuery(document).ready(function () {
             }
         }
     });
-
-
 
 // This should be removed in 1.45 version of Oskari!!!
 // currently personaldata, publisher, analysis etc require
