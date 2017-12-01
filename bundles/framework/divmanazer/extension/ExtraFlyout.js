@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
     function (title, options) {
         // UI text for title
         this.title = title;
-        this._visible = false;
+        this._visible = true;
         this._popup = null;
 
         /* @property container the DIV element */
@@ -47,12 +47,18 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    },
 	    show: function() {
 	    	var me = this;
+            if(me.isVisible()) {
+                return;
+            }
 	    	me._popup.show();
     		me._visible = true;
     		this.trigger('show');
 	    },
 	    hide: function(suppressEvent) {
 	    	var me = this;
+            if(!me.isVisible()) {
+                return;
+            }
 	    	me._popup.hide();
     		me._visible = false;
     		suppressEvent = suppressEvent ? suppressEvent: false;
