@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.view.Search', function (title, options, instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (title, options, instance) {
     this.instance = instance;
     this.element = null;
     var me = this;

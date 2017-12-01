@@ -1,7 +1,7 @@
 /*
  * Creates a flyout with tabs for different ways of visualizing data
  */
-Oskari.clazz.define('Oskari.statistics.statsgrid.view.TableVisualizer', function(title, options, instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.TableFlyout', function(title, options, instance) {
     this.isEmbedded = instance.isEmbedded();
     this.element = null;
     this._grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', instance.getSandbox(), instance.getLocalization());

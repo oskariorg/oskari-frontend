@@ -1,7 +1,7 @@
 /*
  * Creates a flyout with tabs for different ways of visualizing data
  */
-Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramVisualizer', function(title, options, instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(title, options, instance) {
     this.sb = instance.getSandbox();
     this.loc = instance.getLocalization();
     this.element = null;

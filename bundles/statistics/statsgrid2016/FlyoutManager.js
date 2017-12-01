@@ -1,27 +1,10 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (instance) {
     this.instance = instance;
     this.sb = instance.sb;
-    this.flyouts = null;
+    this.flyouts = {};
     this.openFlyouts = {};
 }, {
     init: function () {
-        var me = this;
-        me.initFlyouts();
-    },
-    open: function( type ) {
-        var me = this;
-        var flyout = me.flyouts[type];
-        flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
-        flyout.show();
-
-        this.openFlyouts[type] = true;
-    },
-    hide: function ( type ) {
-        var me = this;
-        me.flyouts[type].hide();
-        delete me.openFlyouts[type];
-    },
-    initFlyouts: function () {
         var me = this;
         var p = jQuery( "#mapdiv" );
         var position = p.position();
@@ -30,7 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
 
         var loc = this.instance.getLocalization();
         me.flyouts = {
-            search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Search', loc.tile.search, {
+            search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.SearchFlyout', loc.tile.search, {
                 width: width + 'px',
                 cls: 'statsgrid-search-flyout',
                 view:'search',
@@ -39,7 +22,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                     y: 5
                 }
             }, this.instance),
-            table: Oskari.clazz.create('Oskari.statistics.statsgrid.view.TableVisualizer', loc.tile.table, {
+            table: Oskari.clazz.create('Oskari.statistics.statsgrid.view.TableFlyout', loc.tile.table, {
                 width: 'auto',
                 cls: 'statsgrid-data-flyout',
                 view:'table',
@@ -48,7 +31,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                     y: 5
                 }
             }, this.instance),
-            diagram: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DiagramVisualizer', loc.tile.diagram, {
+            diagram: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DiagramFlyout', loc.tile.diagram, {
                 width: 'auto',
                 cls: 'statsgrid-diagram-flyout',
                 view:'diagram',
@@ -79,9 +62,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             });
         });
     },
+    open: function( type ) {
+        var me = this;
+        var flyout = me.flyouts[type];
+        flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
+        flyout.show();
+
+        this.openFlyouts[type] = true;
+    },
+    hide: function ( type ) {
+        var me = this;
+        me.flyouts[type].hide();
+        delete me.openFlyouts[type];
+    },
     getFlyout: function (type) {
         return this.flyouts[type];
     }
-}, {
-
 });
