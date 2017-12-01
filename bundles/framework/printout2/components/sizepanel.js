@@ -45,30 +45,16 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
         panel.setTitle(me.loc.size.label);
         tooltipCont.attr('title', me.loc.size.tooltip);
         contentPanel.append(tooltipCont);
-        // content
-        var closureMagic = function (tool) {
-            return function () {
-                var size = contentPanel.find('input[name=size]:checked').val(),
-                    i;
-                // reset previous setting
-                for (i = 0; i < me.sizeOptions.length; i += 1) {
-                    me.sizeOptions[i].selected = false;
-                }
-                tool.selected = true;
-                me.view.printarea.createPlotArea( tool.id );
-                me.view.preview._cleanMapPreview();
-                me.view.preview._updateMapPreview();
-            };
-        };
-        for (i = 0; i < me.sizeOptions.length; i += 1) {
-            var option = me.sizeOptions[i],
-                toolContainer = me.template.sizeOptionTool.clone(),
-                label = option.label;
+      
+        me.sizeOptions.forEach( function ( sizeOption ) {
+            var option = sizeOption;
+            var toolContainer = me.template.sizeOptionTool.clone();
+            var label = option.label;
 
-            if (option.width && option.height) {
+            if ( option.width && option.height ) {
                 label = label + ' (' + option.width + ' x ' + option.height + 'px)';
             }
-            toolContainer.find('label').append(label).attr({
+            toolContainer.find('label').append( label ).attr({
                 'for': option.id,
                 'class': 'printout_radiolabel'
             });
@@ -81,8 +67,21 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
                 'name': 'size',
                 'id': option.id
             });
-            toolContainer.find('input').change(closureMagic(option));
-        }
+            toolContainer.find('input').on('change', { self: me, sOption : option }, function ( evt ) {
+                var tool = evt.data.sOption;
+                var context = evt.data.self;
+                var val = jQuery( this ).val();
+
+                for (i = 0; i < context.sizeOptions.length; i += 1) {
+                    context.sizeOptions[i].selected = false;
+                }
+                tool.selected = true;
+                context.view.printarea.createPlotArea( tool.id );
+                context.view.preview._cleanMapPreview();
+                context.view.preview._updateMapPreview();
+            });
+        });
+
             this.view.printarea.createPlotArea( "A4" );
 
         this.setElement( panel );
