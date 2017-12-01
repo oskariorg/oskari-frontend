@@ -32,10 +32,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
             format: jQuery('<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>'),
             formatOptionTool: jQuery('<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>'),
             title: jQuery('<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>'),
-            option: jQuery('<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>'),
-            legend: jQuery('<div class="printout_legend_cont printout_settings_cont"><div class="printout_legend_label"></div></div>'),
-            legendOptionTool: jQuery('<div class="tool ">' + '<input type="radio" name="legend" />' + '<label></label></div>')
-
+            option: jQuery('<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>')
         },
         getElement: function () {
             return this.selectionsPanel;
@@ -74,20 +71,20 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
             me.formatOptions.forEach( function ( printformat ) {
                 option = printformat;
                 toolContainer = me._templates.formatOptionTool.clone();
-                label = printformat.label;
+                label = option.label;
 
                 toolContainer.find('label').append(label).attr({
-                    'for': printformat.id,
+                    'for': option.id,
                     'class': 'printout_radiolabel'
                 });
-                if (printformat.selected) {
+                if (option.selected) {
                     toolContainer.find('input').attr('checked', 'checked');
                 }
                 format.append(toolContainer);
                 toolContainer.find('input').attr({
-                    'value': printformat.format,
+                    'value': option.format,
                     'name': 'format',
-                    'id': printformat.id
+                    'id': option.id
                 });
                 toolContainer.find('input').on('change', { self : me, fOption: option }, function ( evt ) {
                     var self = evt.data.self;
