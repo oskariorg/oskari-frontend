@@ -70,7 +70,6 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
             toolContainer.find('input').on('change', { self: me, sOption : option }, function ( evt ) {
                 var tool = evt.data.sOption;
                 var context = evt.data.self;
-                var val = jQuery( this ).val();
 
                 for (i = 0; i < context.sizeOptions.length; i += 1) {
                     context.sizeOptions[i].selected = false;
@@ -82,7 +81,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.sizepanel",
             });
         });
 
-            this.view.printarea.createPlotArea( "A4" );
+        this.view.printarea.createPlotArea( "A4" );
 
         this.setElement( panel );
         return this.getElement();

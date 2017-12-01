@@ -95,7 +95,7 @@ Oskari.registerLocalization(
                 ]
             },
             "mapTitle": {
-                "label": "Näytettävät tiedot",
+                "label": "Kartan otsikko",
                 "tooltip": "Valitse tulosteessa näytettävät tiedot."
             },
             "content": {
