@@ -62,18 +62,6 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
             tooltipCont.attr('title', me.loc.settings.tooltip);
             contentPanel.append(tooltipCont);
 
-            var closureMagic = function (tool) {
-                return function () {
-                    var format = contentPanel.find('input[name=format]:checked').val(),
-                        i;
-                    // reset previous setting
-                    for (i = 0; i < me.formatOptions.length; i += 1) {
-                        me.formatOptions[i].selected = false;
-                    }
-                    tool.selected = true;
-
-                };
-            };
             /* format options from localisations files */
             var format = me._templates.format.clone(),
                 i,
@@ -83,26 +71,35 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
                 label;
 
             format.find('.printout_format_label').html(me.loc.format.label);
-            for (i = 0; i < me.formatOptions.length; i += 1) {
-                option = me.formatOptions[i];
+            me.formatOptions.forEach( function ( printformat ) {
+                option = printformat;
                 toolContainer = me._templates.formatOptionTool.clone();
-                label = option.label;
+                label = printformat.label;
 
                 toolContainer.find('label').append(label).attr({
-                    'for': option.id,
+                    'for': printformat.id,
                     'class': 'printout_radiolabel'
                 });
-                if (option.selected) {
+                if (printformat.selected) {
                     toolContainer.find('input').attr('checked', 'checked');
                 }
                 format.append(toolContainer);
                 toolContainer.find('input').attr({
-                    'value': option.format,
+                    'value': printformat.format,
                     'name': 'format',
-                    'id': option.id
+                    'id': printformat.id
                 });
-                toolContainer.find('input').change(closureMagic(option));
-            }
+                toolContainer.find('input').on('change', { self : me, fOption: option }, function ( evt ) {
+                    var self = evt.data.self;
+                    var option = evt.data.fOption;
+                    var format = jQuery( this ).val();
+                    for ( i = 0; i < self.formatOptions.length; i += 1 ) {
+                        self.formatOptions[i].selected = false;
+                    }
+                    option.selected = true;
+                });
+            });
+
             contentPanel.append(format);
 
             var mapTitle = me._templates.title.clone();
@@ -133,60 +130,11 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.settings",
 
             }
 
-            // var legend = this.createLegend( contentPanel );
-            // contentPanel.append(legend);
             this.setElement(panel);
             return this.getElement();
         },
         getContentOptions: function () {
             return this.contentOptionDivs;
-        },
-        createLegend: function () {
-            var me = this;
-            // Lengend options
-            var closureMagic2 = function (tool) {
-                return function () {
-                    var legend = el.find('input[name=legend]:checked').val(),
-                        i;
-                    // reset previous setting
-                    for (i = 0; i < me.legendOptions.length; i += 1) {
-                        me.legendOptions[i].selected = false;
-                    }
-                    tool.selected = true;
-
-                };
-            };
-
-            var legend = me._templates.legend.clone();
-            legend.find('.printout_legend_label').html(me.loc.legend.label);
-            for (i = 0; i < me.legendOptions.length; i += 1) {
-                option = me.legendOptions[i];
-                toolContainer = me._templates.legendOptionTool.clone();
-                label = option.label;
-
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'printout_radiolabel'
-
-                });
-                if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
-                legend.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.loca,
-                    'name': 'location',
-                    'id': option.id
-                });
-                toolContainer.find('input').change(closureMagic2(option));
-                toolContainer.find('input[name="location"]').click(function () {
-                    // Legend stuff
-                    me._createLegend();
-                });
-            }
-            return legend;
-            // this.setElement(el);
-            // return this.getElement();
         }
     }, {
 
