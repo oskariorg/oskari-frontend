@@ -28,7 +28,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         var p = jQuery( "#mapdiv" );
         var position = p.position().left;
         var offset = 40;
-        var width = p.width() / 4;
 
         var tile = me.instance.plugins['Oskari.userinterface.Tile'];
         this.flyoutInfo.forEach(function(info) {
@@ -49,44 +48,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             me.flyouts[info.id] = flyout;
             position = position + flyout.getSize().width;
         });
-
-
-        /*
-        me.flyouts = {
-            search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.SearchFlyout', loc.tile.search, {
-                width: width + 'px',
-                pos: {
-                    x: position.left + offset,
-                    y: 5
-                }
-            }, this.instance),
-            table: Oskari.clazz.create('Oskari.statistics.statsgrid.view.TableFlyout', loc.tile.table, {
-                width: 'auto',
-                pos: {
-                    x: width + position.left + offset,
-                    y: 5
-                }
-            }, this.instance),
-            diagram: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DiagramFlyout', loc.tile.diagram, {
-                width: 'auto',
-                pos: {
-                    x: width + position.left + offset,
-                    y: 5
-                }
-            }, this.instance)
-        };
-        var tile = me.instance.plugins['Oskari.userinterface.Tile'];
-        Object.keys(me.flyouts).forEach(function (key) {
-            var flyout = me.flyouts[key];
-            flyout.makeDraggable({
-                handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
-                scroll : false
-            });
-            flyout.on('hide', function() {
-                tile.toggleExtensionClass( key, true );
-            });
-        });
-        */
     },
     open: function( type ) {
         var me = this;
