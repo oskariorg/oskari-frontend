@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
     this.on('show', function() {
         if(!me.getElement()) {
             me.createUi();
+            me.addClass('statsgrid-diagram-flyout');
             me.setContent(me.getElement());
         }
     });

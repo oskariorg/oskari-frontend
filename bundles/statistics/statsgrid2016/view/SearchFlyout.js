@@ -5,6 +5,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.on('show', function() {
         if(!me.getElement()) {
             me.createUi();
+            me.addClass('statsgrid-search-flyout');
             me.setContent(me.getElement());
         }
     });

@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.TableFlyout', function(tit
     this.on('show', function() {
         if(!me.getElement()) {
             me.createUi();
+            me.addClass('statsgrid-data-flyout');
             me.setContent(me.getElement());
         }
         me._grid._updateHeaderHeight();

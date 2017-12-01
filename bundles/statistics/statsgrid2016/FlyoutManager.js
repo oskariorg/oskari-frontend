@@ -3,20 +3,58 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     this.sb = instance.sb;
     this.flyouts = {};
     this.openFlyouts = {};
+    var loc = instance.getLocalization();
+
+    this.flyoutInfo = [
+    {
+        id : 'search',
+        title: loc.tile.search,
+        oskariClass :'Oskari.statistics.statsgrid.view.SearchFlyout'
+    },
+    {
+        id : 'table',
+        title: loc.tile.table,
+        oskariClass :'Oskari.statistics.statsgrid.view.TableFlyout'
+    },
+    {
+        id : 'diagram',
+        title: loc.tile.diagram,
+        oskariClass :'Oskari.statistics.statsgrid.view.DiagramFlyout'
+    }
+    ];
 }, {
     init: function () {
         var me = this;
         var p = jQuery( "#mapdiv" );
-        var position = p.position();
+        var position = p.position().left;
         var offset = 40;
         var width = p.width() / 4;
 
-        var loc = this.instance.getLocalization();
+        var tile = me.instance.plugins['Oskari.userinterface.Tile'];
+        this.flyoutInfo.forEach(function(info) {
+            var flyout = Oskari.clazz.create(info.oskariClass, info.title, {
+                width: 'auto',
+                pos: {
+                    x: position + offset,
+                    y: 5
+                }
+            }, me.instance);
+            flyout.makeDraggable({
+                handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
+                scroll : false
+            });
+            flyout.on('hide', function() {
+                tile.toggleExtensionClass( info.id, true );
+            });
+            me.flyouts[info.id] = flyout;
+            position = position + flyout.getSize().width;
+        });
+
+
+        /*
         me.flyouts = {
             search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.SearchFlyout', loc.tile.search, {
                 width: width + 'px',
-                cls: 'statsgrid-search-flyout',
-                view:'search',
                 pos: {
                     x: position.left + offset,
                     y: 5
@@ -24,8 +62,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             }, this.instance),
             table: Oskari.clazz.create('Oskari.statistics.statsgrid.view.TableFlyout', loc.tile.table, {
                 width: 'auto',
-                cls: 'statsgrid-data-flyout',
-                view:'table',
                 pos: {
                     x: width + position.left + offset,
                     y: 5
@@ -33,22 +69,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             }, this.instance),
             diagram: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DiagramFlyout', loc.tile.diagram, {
                 width: 'auto',
-                cls: 'statsgrid-diagram-flyout',
-                view:'diagram',
                 pos: {
                     x: width + position.left + offset,
                     y: 5
                 }
             }, this.instance)
-            // filterdata: Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().filter.title, {
-            //     width: 'auto',
-            //     cls: 'statsgrid-filter-flyout',
-            //     view:'filter',
-            //     pos: {
-            //         x: 1200,
-            //         y: 30
-            //     }
-            // })
         };
         var tile = me.instance.plugins['Oskari.userinterface.Tile'];
         Object.keys(me.flyouts).forEach(function (key) {
@@ -61,6 +86,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                 tile.toggleExtensionClass( key, true );
             });
         });
+        */
     },
     open: function( type ) {
         var me = this;

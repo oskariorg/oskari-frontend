@@ -19,10 +19,7 @@ function(instance, service) {
     this._tileExtensions = [];
     this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
     this._templates = {
-        search: jQuery('<div class="statsgrid-functionality search" data-view="search"><div class="icon"></div><div class="text">'+ this.loc.tile.search +'</div><div class="clear"></div></div>'),
-        table: jQuery('<div class="statsgrid-functionality table" data-view="table"><div class="icon"></div><div class="text">'+ this.loc.tile.table +'</div><div class="clear"></div></div>'),
-        diagram: jQuery('<div class="statsgrid-functionality diagram" data-view="diagram"><div class="icon"></div><div class="text">'+ this.loc.tile.diagram +'</div><div class="clear"></div></div>')
-        // filterdata: jQuery('<div class="statsgrid-functionality filterdata" data-view="filterdata"><div class="icon"></div><div class="text">Aineiston suodatus</div><div class="clear"></div></div>')
+        extraSelection : _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div><div class="clear"></div></div>')
     };
 }, {
     /**
@@ -52,9 +49,6 @@ function(instance, service) {
      */
     startPlugin : function() {
         this._addTileStyleClasses();
-        for (var p in this.eventHandlers) {
-            this.instance.getSandbox().registerForEventByName(this, p);
-        }
         this.refresh();
     },
     initFlyoutManager: function () {
@@ -101,10 +95,14 @@ function(instance, service) {
         var me = this;
         var instance = me.instance;
         var sandbox = instance.getSandbox();
-        for ( var type in this._templates ) {
-            var icon = this._templates[type];
-            this.extendTile(icon, type);
-        }
+        var tpl = this._templates.extraSelection;
+        this._flyoutManager.flyoutInfo.forEach(function(flyout) {
+            var tileExtension = jQuery(tpl({
+                id: flyout.id,
+                label : flyout.title
+            }));
+            me.extendTile(tileExtension, flyout.id);
+        });
         this.hideExtension();
 
     },
@@ -161,28 +159,6 @@ function(instance, service) {
             return;
         }
         this._flyoutManager.open(type);
-    },
-    /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-     */
-    onEvent: function (event) {
-        var handler = this.eventHandlers[event.getName()];
-        if (!handler)
-            return;
-
-        // Skip events, if internally linked layer
-        if(typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer() ){
-            this.plugins['Oskari.userinterface.Tile'].refresh();
-            return;
-        }
-
-        return handler.apply(this, [event]);
-
-    },
-    eventHandlers: {
-
     }
 }, {
     /**
