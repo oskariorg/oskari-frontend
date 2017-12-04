@@ -1,6 +1,5 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (instance) {
     this.instance = instance;
-    this.sb = instance.sb;
     this.flyouts = {};
     var loc = instance.getLocalization();
 
@@ -23,6 +22,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     ];
 }, {
     init: function () {
+        if(Object.keys(this.flyouts).length) {
+            // already initialized
+            return;
+        }
         var me = this;
         var p = jQuery( "#mapdiv" );
         var position = p.position().left;
@@ -48,16 +51,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             position = position + flyout.getSize().width;
         });
     },
-    open: function( type ) {
+    open: function ( type ) {
         var me = this;
         var flyout = me.flyouts[type];
+        if(!flyout) {
+            return;
+        }
         flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
         flyout.show();
-
     },
     hide: function ( type ) {
         var me = this;
-        me.flyouts[type].hide();
+        var flyout = me.flyouts[type];
+        if(!flyout) {
+            return;
+        }
+        flyout.hide();
     },
     getFlyout: function (type) {
         return this.flyouts[type];

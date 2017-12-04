@@ -51,9 +51,6 @@ function(instance, service) {
         this._addTileStyleClasses();
         this.refresh();
     },
-    initFlyoutManager: function () {
-        this._flyoutManager.init();
-    },
     _addTileStyleClasses: function() {
         var isContainer = (this.container && this.instance.mediator) ? true : false;
         var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
@@ -96,12 +93,17 @@ function(instance, service) {
         var instance = me.instance;
         var sandbox = instance.getSandbox();
         var tpl = this._templates.extraSelection;
-        this._flyoutManager.flyoutInfo.forEach(function(flyout) {
+        this.getFlyoutManager().flyoutInfo.forEach(function(flyout) {
             var tileExtension = jQuery(tpl({
                 id: flyout.id,
                 label : flyout.title
             }));
             me.extendTile(tileExtension, flyout.id);
+            tileExtension.bind('click', function(event) {
+                event.stopPropagation();
+                me.toggleExtensionClass(flyout.id);
+                me.toggleFlyout(flyout.id);
+            });
         });
         this.hideExtension();
 
@@ -113,18 +115,23 @@ function(instance, service) {
     },
     hideExtension: function () {
         var me = this;
-        for(var type in me._tileExtensions) {
-            var extension = me._tileExtensions[type];
+        var extraOptions = me.getExtensions();
+        Object.keys(extraOptions).forEach(function(key) {
+            // hide all flyout
+            me.getFlyoutManager().hide( key );
+            // hide the tile "extra selection"
+            var extension = extraOptions[key];
             extension.removeClass('material-selected');
             extension.hide();
-        }
+        });
     },
     toggleExtensionClass: function(type, wasClosed) {
         var me = this;
-        var el = jQuery('.statsgrid-functionality.'+type);
+        var el = this.getExtensions()[type];
+        //jQuery('.statsgrid-functionality.'+type);
         if(wasClosed) {
             el.removeClass('material-selected');
-            me._flyoutManager.hide(type);
+            me.getFlyoutManager().hide(type);
             return;
         }
         if (el.hasClass('material-selected') ) {
@@ -133,15 +140,12 @@ function(instance, service) {
             el.addClass('material-selected');
         }
     },
-    showExtension: function (el, callback) {
+    showExtensions: function () {
         var me = this;
-        el.show();
-        el.unbind('click');
-        el.bind('click', function(event) {
-            var type = jQuery(this).attr('data-view');
-            me.toggleExtensionClass(type);
-            event.stopPropagation();
-            callback(type);
+        var extraOptions = me.getExtensions();
+        this.getFlyoutManager().init();
+        Object.keys(extraOptions).forEach(function(key) {
+            extraOptions[key].show();
         });
     },
     getExtensions: function () {
@@ -151,10 +155,10 @@ function(instance, service) {
         return this._flyoutManager;
     },
     getFlyout: function (type) {
-        return this._flyoutManager.getFlyout(type);
+        return this.getFlyoutManager().getFlyout(type);
     },
     toggleFlyout: function (type) {
-        var flyout = this._flyoutManager.getFlyout(type);
+        var flyout = this.getFlyoutManager().getFlyout(type);
         if(!flyout) {
             // unrecognized flyout
             return;
@@ -164,7 +168,7 @@ function(instance, service) {
             return;
         }
         // open flyout
-        this._flyoutManager.open(type);
+        this.getFlyoutManager().open(type);
     }
 }, {
     /**
