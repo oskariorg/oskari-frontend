@@ -21,6 +21,7 @@ Oskari.clazz.define(
             'Oskari.mapframework.mapmodule.ControlsPlugin';
         me._name = 'ControlsPlugin';
         me.boxZoom = null;
+        me.removedInteractions = [];
     }, {
         /**
          * @public @method hasUI
@@ -122,10 +123,10 @@ Oskari.clazz.define(
                     me.getMap().addInteraction( interaction );
                 });
             }
+            this.removedInteractions = [];
         },
         mouseDragZoomInteraction: function () {
             var me = this;
-            this.removedInteractions = [];
 
             me.getMap().getInteractions().forEach( function( interaction ) {
                 if ( interaction instanceof ol.interaction.DragPan || interaction instanceof ol.interaction.DragZoom ) {
@@ -133,12 +134,13 @@ Oskari.clazz.define(
                     me.removedInteractions.push( interaction );
                 }
             });
-
-            this.boxZoom = new ol.interaction.DragZoom( {
-                condition: function ( mapBrowserEvent ) {
-                    return ol.events.condition.mouseOnly( mapBrowserEvent );
-                }
-            });
+            if ( !this.boxZoom ) {
+                this.boxZoom = new ol.interaction.DragZoom({
+                    condition: function ( mapBrowserEvent ) {
+                        return ol.events.condition.mouseOnly( mapBrowserEvent );
+                    }
+                });
+            }
 
             this.getMap().addInteraction( this.boxZoom );
         },
