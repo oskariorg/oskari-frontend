@@ -66,7 +66,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
             return this._selectInstances;
         },
         createUI: function( container ) {
-           var me = this;
            this.conversionContainer = container;
 
            var inputTitle = this._template.title( { title: this.loc.title.input } );
@@ -83,7 +82,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
                                                                              clipboard: this.loc.datasource.clipboard,
                                                                              map: this.loc.datasource.map,
                                                                              choose: this.loc.datasource.choose });
-    
 
             var conversionbutton = this._template.conversionbutton({ convert: this.loc.coordinatefield.convert });
 
@@ -94,54 +92,53 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
                                                             show: this.loc.utils.show,
                                                             fileexport: this.loc.utils.export });
                                                             
-            var wrapper = me._template.wrapper;
-            wrapper.append(coordinatesystem);
-            wrapper.find('.coordinateconversion-csystem').attr('id','inputcoordsystem');
-            wrapper.find('#inputcoordsystem').prepend(inputTitle);
-            wrapper.append(coordinatesystem);
-            wrapper.find('.coordinateconversion-csystem').not('#inputcoordsystem').attr('id','targetcoordsystem');
-            wrapper.find('#targetcoordsystem').prepend(resultTitle);
-            wrapper.append(coordinatedatasource);
-            wrapper.append(datasourceinfo);
+            var wrapper = this._template.wrapper.clone();
+            wrapper.append( coordinatesystem );
+            wrapper.find( '.coordinateconversion-csystem' ).attr( 'id','inputcoordsystem' );
+            wrapper.find( '#inputcoordsystem' ).prepend( inputTitle );
+            wrapper.append( coordinatesystem );
+            wrapper.find( '.coordinateconversion-csystem' ).not( '#inputcoordsystem' ).attr( 'id','targetcoordsystem' );
+            wrapper.find( '#targetcoordsystem' ).prepend( resultTitle );
+            wrapper.append( coordinatedatasource );
+            wrapper.append( datasourceinfo );
 
-            me.fileinput.create();
-            var inputTable = me.inputTable.create();
-            var targetTable = me.outputTable.create();
-            me.outputTable.getContainer().find(".coordinatefield-table").addClass('target');
+            this.fileinput.create();
+            var inputTable = this.inputTable.create();
+            var targetTable = this.outputTable.create();
+            this.outputTable.getContainer().find( ".coordinatefield-table" ).addClass( 'target' );
 
-            if( me.fileinput.canUseAdvancedUpload() ) {
-                var fileInputElement = me.fileinput.handleDragAndDrop( this.handleFile.bind(this) );
+            if ( this.fileinput.canUseAdvancedUpload() ) {
+                var fileInputElement = this.fileinput.handleDragAndDrop( this.handleFile.bind( this ) );
             }
-            wrapper.find('.datasource-info').append( fileInputElement );
+            wrapper.find( '.datasource-info' ).append( fileInputElement );
 
             wrapper.append( inputTable );
-            wrapper.append(conversionbutton);
+            wrapper.append( conversionbutton );
             wrapper.append( targetTable );
+            wrapper.append( utilbuttons );
 
-            wrapper.append(utilbuttons);
-
-            me.inputSelect.create();
-            this._selectInstances.input = me.inputSelect.getSelectInstances();
-            var inp_dropdowns = me.inputSelect.getDropdowns();
+            this.inputSelect.create();
+            this._selectInstances.input = this.inputSelect.getSelectInstances();
+            var inp_dropdowns = this.inputSelect.getDropdowns();
             var i = 0;
             Object.keys( inp_dropdowns ).forEach( function( key ) {
-                jQuery( wrapper.find('#inputcoordsystem').find('.select')[i] ).append( inp_dropdowns[key] );
+                jQuery( wrapper.find( '#inputcoordsystem' ).find( '.select' )[i] ).append( inp_dropdowns[key] );
                 i++;
             });
-            me.targetSelect.create();
-            this._selectInstances.target = me.targetSelect.getSelectInstances();
-            var out_dropdowns = me.targetSelect.getDropdowns();
+            this.targetSelect.create();
+            this._selectInstances.target = this.targetSelect.getSelectInstances();
+            var out_dropdowns = this.targetSelect.getDropdowns();
             var j = 0;
             Object.keys( out_dropdowns ).forEach( function( key ) {
-                jQuery( wrapper.find('#targetcoordsystem').find('.select')[j] ).append( out_dropdowns[key] );
+                jQuery( wrapper.find( '#targetcoordsystem' ).find( '.select' )[j] ).append( out_dropdowns[key] );
                 j++;
             });
 
             jQuery(container).append(wrapper);
-            var input = wrapper.find('#inputcoordsystem');
-            var target = wrapper.find('#targetcoordsystem');
-            me.inputSelect.handleSelectionChanged(input);
-            me.targetSelect.handleSelectionChanged(target);
+            var input = wrapper.find( '#inputcoordsystem' );
+            var target = wrapper.find( '#targetcoordsystem' );
+            this.inputSelect.handleSelectionChanged( input );
+            this.targetSelect.handleSelectionChanged( target );
             this.handleClipboard();
             this.handleButtons();
             this.handleRadioButtons();
@@ -241,13 +238,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         },
         /**
          * @method handleClipboard
-         *
          * Handles the paste event in the input table
-         * example data to paste:
-            lon:385000.5, lat:667500.75,
-            lon:385545.5, lat:6675310.75
-         * currently only works in format specified above in the example
-         * https://regex101.com <- good place to test
          */
         handleClipboard: function () {
             var me = this;
@@ -263,7 +254,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
                     return;
                 }
                 var clipboardData, pastedData;
-
                     // Get pasted data via clipboard API
                     clipboardData = e.clipboardData || window.clipboardData;
                     pastedData = clipboardData.getData('Text');
@@ -285,7 +275,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         /**
          * @method handleRadioButtons
          * Inits the on change listeners for the radio buttons
-         * 
          */
         handleRadioButtons: function () {
             var me = this;
@@ -328,7 +317,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         /**
          * @method handleRadioButtons
          * Inits the on change listeners for the radio buttons
-         * 
          */
         handleButtons: function () {
             var me = this;

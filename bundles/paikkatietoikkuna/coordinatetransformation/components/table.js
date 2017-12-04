@@ -68,7 +68,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
 
                 this.setElement( table );
 
-
                 var coords = {};
                 for( var i = 0; i < 10; i++ ) {
                     table.find("#oskari-coordinate-table").append(this.template.row( { coords: coords } ) );
