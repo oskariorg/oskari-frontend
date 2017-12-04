@@ -1,23 +1,30 @@
 /*
  * Creates a flyout with tabs for different ways of visualizing data
  */
-Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramVisualizer', function(instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(title, options, instance) {
     this.sb = instance.getSandbox();
     this.loc = instance.getLocalization();
-    this.container = null;
-    this._isOpen = false;
+    this.element = null;
     var service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this._indicatorSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', service);
     this._diagram = Oskari.clazz.create('Oskari.statistics.statsgrid.Diagram', service, this.loc);
+    var me = this;
+    this.on('show', function() {
+        if(!me.getElement()) {
+            me.createUi();
+            me.addClass('statsgrid-diagram-flyout');
+            me.setContent(me.getElement());
+        }
+    });
 }, {
     _template: {
-        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div></div>')
+        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div><div class="chart"></div></div>')
     },
     setElement: function(el) {
-        this.container = el;
+        this.element = el;
     },
     getElement: function() {
-        return this.container;
+        return this.element;
     },
     createUi: function() {
         if (this.getElement()) {
@@ -29,12 +36,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramVisualizer', functi
         this._indicatorSelector.render(el.find('.chart-controls'));
         // this.loc.datacharts.descColor
         // Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu');
-        this._diagram.render(el);
+        this._diagram.render(el.find('.chart'));
         this.setElement(el);
-    },
-    isVisible: function() {
-        return this._isOpen;
     }
 }, {
-    extend: ['Oskari.userinterface.extension.DefaultView']
+    extend: ['Oskari.userinterface.extension.ExtraFlyout']
 });

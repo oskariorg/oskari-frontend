@@ -400,6 +400,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
         this.service.on('StatsGrid.RegionSelectedEvent', function(event) {
             log.info('Region selected! ', event.getRegion());
+            if(!me.mainEl) {
+                // ui not created yet
+                return;
+            }
 
             var scrollableElement = null;
             var gridEl = me.mainEl.find('table.oskari-grid:visible');
@@ -414,7 +418,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
             var current = event.getCurrent();
             log.info('Active indicator changed! ', current);
-            if(current) {
+            if(current && me.grid) {
                 me.grid.selectColumn(current.hash);
             }
         });
