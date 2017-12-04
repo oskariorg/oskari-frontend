@@ -22,6 +22,10 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Julkaise kartta",
             "titleEdit": "Muokkaa karttaa",
+            "transfer": {
+                "label": "Transfer configuration",
+                "PublishTransfer": "Enable transfer"
+            },
             "domain": {
                 "title": "Julkaisutiedot",
                 "label": "Verkkosivuston osoite (ilman http- ja www-etuliitteitä)",

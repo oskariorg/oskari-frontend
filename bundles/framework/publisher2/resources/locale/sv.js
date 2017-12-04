@@ -22,6 +22,10 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Inbädda kartan",
             "titleEdit": "Redigera den inbäddade karta",
+            "transfer": {
+                "label": "Transfer configuration",
+                "PublishTransfer": "Enable transfer"
+            },
             "domain": {
                 "title": "Webbplats",
                 "label": "Webbplats för inbäddad karta",
