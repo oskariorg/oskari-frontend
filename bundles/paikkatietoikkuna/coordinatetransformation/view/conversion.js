@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                                             '<form>'+
                                                 '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
                                                 '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
-                                                '<input type="button" id="overlay-btn" class="mapselect" name="load" value="<%= map %>">'+
+                                                '<input type="button" class="mapselect" name="load" value="<%= map %>">'+
                                             '</form>'+
                                             '</div>'),
             datasourceinfo: _.template('<div class="datasource-info">' +
