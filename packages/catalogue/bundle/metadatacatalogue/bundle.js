@@ -34,7 +34,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	        /* plugin */
 	        {
 	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.js"
+	            "src": "../../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.ol2.js"
 	        }, 
 	        /* event */
 	        {
@@ -44,7 +44,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	        /* instance */
 	        {
 				"type" : "text/javascript",
-				"src" : "../../../../bundles/catalogue/metadatacatalogue/instance.js"
+				"src" : "../../../../bundles/catalogue/metadatacatalogue/instance.ol2.js"
 			}, 
 			/* request */
 	        {

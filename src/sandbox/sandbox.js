@@ -7,12 +7,10 @@
  * the Oskari Module protocol.
  */
 (function(Oskari) {
-    var ajaxUrl;
     var log;
     var services = {};
     var requestHandlers = {};
     var isDebugMode = false;
-
 
     Oskari.clazz.define('Oskari.Sandbox',
 
@@ -74,28 +72,6 @@
                 isDebugMode = !!setDebug;
                 log.enableDebug(isDebugMode);
                 return isDebugMode;
-            },
-
-            /**
-             * @method setAjaxUrl
-             * Sets a global Url that is used to communicate with the server
-             * @param {String} pUrl
-             */
-            setAjaxUrl: function (pUrl) {
-                ajaxUrl = pUrl;
-            },
-
-            /**
-             * @method getAjaxUrl
-             * Returns global ajax url for the application. See #setAjaxUrl
-             * @param {String} route optional route that's used as action_route parameter
-             * @return {String}
-             */
-            getAjaxUrl: function (route) {
-                if(route) {
-                    return ajaxUrl + 'action_route=' + route;
-                }
-                return ajaxUrl;
             },
 
             /**
@@ -451,7 +427,11 @@
                         module,
                         event
                     );
-                    module.onEvent(event);
+                    try {
+                        module.onEvent(event);
+                    } catch(err) {
+                        log.warn('Error notifying',  module.getName(), 'about', eventName, event, err);
+                    }
                     this._debugPopEvent();
                 }
 
@@ -865,40 +845,6 @@
                 } else {
                     alert('No requests in queue');
                 }
-            },
-            /**
-             * @method getLocalizedProperty
-             * @param property Property
-             * @param lang Optional language
-             */
-            getLocalizedProperty: function (property, lang) {
-                var ret,
-                    supportedLocales,
-                    i,
-                    language = lang || Oskari.getLang();
-                if (property === null || property === undefined) {
-                    return null;
-                }
-                if (typeof property === 'object') {
-                    // property value is an object, so it's prolly localized
-                    ret = property[language];
-                    if (ret === null) {
-                        supportedLocales = Oskari.getSupportedLocales();
-                        for (i = 0; i < supportedLocales.length; i += 1) {
-                            ret = property[supportedLocales[i]];
-                            if (ret) {
-                                // We found the property in _some_ language...
-                                break;
-                            }
-                        }
-                        // TODO (needs supportedLocales)
-                        // try default lang
-                        // try any lang?
-                    }
-                    return ret;
-                }
-                // property is not localized
-                return property;
             },
             /**
              * Fills in missing details for base url. Uses

@@ -680,7 +680,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _renderBody: function (table, fieldNames) {
             var me = this,
                 // print data
-                body = table.find('tbody'),
+                body = table.find('tbody').last(),
                 dataArray = me.model.getData(),
                 row,
                 data,
@@ -1020,21 +1020,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             container.append(table);
 
-            // autosize header
-            if(typeof me.autoHeightHeader === 'number') {
-                var maxHeight = 0;
-                var thead = table.find('thead');
-                var theadRow = table.find('thead tr:not(.grouping)');
-
-                theadRow.find('th').each(function(){
-                    var el = jQuery(this);
-                    if(el.prop('scrollHeight')>maxHeight) {
-                        maxHeight = el.prop('scrollHeight');
-                    }
-                });
-
-                theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
-            }
+            me.updateHeaderHeight();
 
             if (me.resizableColumns) {
                 me._enableColumnResizer();
@@ -1046,6 +1032,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     me.table.find('tr[data-id="'+selection+'"]').addClass('selected');
                     me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
                 });
+            }
+        },
+
+        updateHeaderHeight: function(){
+            var me = this;
+            // autosize header
+            if(typeof me.autoHeightHeader === 'number' && me.table) {
+                var maxHeight = 0;
+                var thead = me.table.find('thead');
+                var theadRow = me.table.find('thead tr:not(.grouping)');
+                theadRow.height(me.autoHeightHeader || 30);
+
+                theadRow.find('th').each(function(){
+                    var el = jQuery(this);
+                    if(el.prop('scrollHeight')>maxHeight) {
+                        maxHeight = el.prop('scrollHeight');
+                    }
+                });
+
+                theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
             }
         },
 

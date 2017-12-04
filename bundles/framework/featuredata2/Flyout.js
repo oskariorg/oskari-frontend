@@ -312,6 +312,22 @@ Oskari.clazz.define(
                 delete this.layers[layerId];
             }
         },
+        /**
+         * @method  @public selectGridValues select grid values
+         * @param  {Array} selected     selected values
+         * @param  {Oskari.mapframework.domain.WfsLayer} layer     WFS layer that was select features
+         */
+        selectGridValues: function(selected, layer){
+            var me = this;
+            var panel = me.layers['' + layer.getId()];
+            if (!panel || !panel.grid) {
+                return;
+            }
+            selected.forEach(function(selectedFeature, index){
+               panel.grid.select(selectedFeature, !!index);
+            });
+            panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked() === true);
+        },
 
         /**
          * @method updateData
@@ -323,19 +339,14 @@ Oskari.clazz.define(
             var me = this;
             var panel = this.layers['' + layer.getId()];
             var isOk = this.tabsContainer.isSelected(panel);
-            if (!this.active || !layer || !isOk) {
+            if (!layer || !isOk) {
                 return;
             }
 
             var map = this.instance.sandbox.getMap(),
                 container = panel.getContainer(),
-                selection = null,
-                i,
-                selectedFeatures;
+                i;
 
-            if (panel.grid) {
-                selection = panel.grid._getSelectedRows();
-            }
             container.empty();
             if (!layer.isInScale(map.getScale())) {
                 container.append(this.instance.getLocalization('errorscale'));
@@ -359,12 +370,7 @@ Oskari.clazz.define(
 
             // in scale, proceed
             this._prepareData(layer);
-            if (selection && selection.values.length > 0) {
-                selection.values.forEach(function(selectedFeature){
-                    // update map
-                   panel.grid.select(selectedFeature, true);
-                });
-            }
+            this.selectGridValues(layer.getClickedGeometries().map(function(val) {return val[0];}), layer);
 
             // Grid opacity
             this.setGridOpacity(layer, 1.0);
@@ -545,8 +551,6 @@ Oskari.clazz.define(
                 conf = me.instance.conf,
                 isManualRefresh = layer.isManualRefresh(),
                 allowLocateOnMap = isManualRefresh && this.instance && this.instance.conf && this.instance.conf.allowLocateOnMap;
-
-
 
             if (isOk) {
                 panel.getContainer().parent().find('.featuredata2-show-selected-first').remove();
@@ -946,32 +950,19 @@ Oskari.clazz.define(
          * Handles changes on the UI when a feature has been selected (highlights grid row)
          *
          */
-        featureSelected: function (event) {
-            if (!this.active) {
-                return;
-            }
-
-            var layer = event.getMapLayer(),
-                panel = this.layers['' + layer.getId()],
-                fids = event.getWfsFeatureIds(),
-                isOk = this.tabsContainer.isSelected(panel),
-                i;
+        featureSelected: function (layer) {
+            var panel = this.layers['' + layer.getId()],
+                isOk = !!panel,
+                selected = layer.getClickedGeometries().map(function(val) {return val[0];});
 
             if(!isOk) {
                 return;
             }
 
-            if (fids !== null && fids !== undefined && fids.length > 0) {
-                panel.grid.select(fids[0], event.isKeepSelection());
-                if (fids.length > 1) {
-                    for (i = 1; i < fids.length; i += 1) {
-                        panel.grid.select(fids[i], event.isKeepSelection());
-                    }
-                }
-            } else {
-                if (panel && panel.grid && isOk) {
-                    panel.grid.removeSelections();
-                }
+            if (selected && selected.length > 0) {
+                this.selectGridValues(selected, layer);
+            } else if (panel && panel.grid && isOk) {
+                panel.grid.removeSelections();
             }
         },
 

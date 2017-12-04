@@ -35,8 +35,11 @@ function(id, geojson, data, isFinished) {
     getData : function() {
         return this._data;
     },
+    getCrs : function() {
+        return this._geoJson.crs;
+    },
     getIsFinished : function() {
-    	 return this._isFinished;
+        return this._isFinished;
     },
     /**
      * Serialization for RPC

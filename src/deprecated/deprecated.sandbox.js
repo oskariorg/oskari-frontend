@@ -16,7 +16,10 @@
         printWarn: 'Use Oskari.log() instead.',
         printError: 'Use Oskari.log() instead.',
         setUser: 'Use Oskari.user() instead.',
-        getUser: 'Use Oskari.user() instead.'
+        getUser: 'Use Oskari.user() instead.',
+        getLocalizedProperty: 'Use Oskari.getLocalized() instead.',
+        setAjaxUrl: 'Use Oskari.urls.set("api", [url]) instead.',
+        getAjaxUrl: 'Use Oskari.urls.getRoute() instead.'
     };
     // Warn 2 times before falling silent
     var warn = function (name) {
@@ -127,6 +130,36 @@
         getUser: function () {
             warn('getUser');
             return Oskari.user();
+        },
+        /**
+         * @method getLocalizedProperty
+         * @param property Property
+         * @param lang Optional language
+         */
+        getLocalizedProperty: function (property, lang) {
+            warn('getLocalizedProperty');
+            return Oskari.getLocalized(property, lang);
+        },
+        /**
+         * @method setAjaxUrl
+         * Sets a global Url that is used to communicate with the server
+         * @param {String} pUrl
+         */
+        setAjaxUrl: function (pUrl) {
+            warn('setAjaxUrl');
+            Oskari.urls.set("api", pUrl);
+        },
+
+        /**
+         * @method getAjaxUrl
+         * Returns global ajax url for the application. See #setAjaxUrl
+         * @param {String} route optional route that's used as action_route parameter
+         * @return {String}
+         */
+        getAjaxUrl: function (route) {
+            warn('getAjaxUrl');
+            return Oskari.urls.getRoute(route);
         }
+
     });
 }(Oskari));

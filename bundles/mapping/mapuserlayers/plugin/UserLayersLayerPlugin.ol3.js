@@ -93,8 +93,8 @@ Oskari.clazz.define(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for UserLayer ' +
                 layer.getId()
             );
-
-            this.handleBounds(layer);
+            //move and zoom map to layer extent
+            sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest',[layer.getId(), true]);
         },
         /**
          * Adds event listeners to ol-layers
@@ -103,98 +103,22 @@ Oskari.clazz.define(
          *
          */
         _registerLayerEvents: function(layer, oskariLayer){
-        var me = this;
-        var source = layer.getSource();
+            var me = this;
+            var source = layer.getSource();
 
-        source.on('imageloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), true);
-        });
+            source.on('imageloadstart', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-        source.on('imageloadend', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), false);
-        });
+            source.on('imageloadend', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-        source.on('imageloaderror', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-        });
-
-      },
-
-        /**
-         * Make use of the layer bounding box information to set appropriate map view
-         *
-         * @method handleBounds
-         * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer}
-         * layer for which to handle bounds
-         */
-        handleBounds: function (layer) {
-            var sandbox = this.getSandbox();
-
-            this._parseGeometryForLayer(layer);
-
-            var geom = layer.getGeometry();
-
-            if ((geom === null) || (typeof geom === 'undefined') || geom.length === 0) {
-                return;
-            }
-
-            var olPolygon = geom[0],
-                bounds = olPolygon.getBounds(),
-                centroid = olPolygon.getCentroid(),
-                epsilon = 1.0,
-                rb = sandbox.getRequestBuilder('MapMoveRequest'),
-                req;
-
-            if (rb) {
-                if (olPolygon.getArea() < epsilon) {
-                    // zoom to level 9 if a single point
-                    req = rb(centroid.x, centroid.y, 9);
-                    sandbox.request(this, req);
-                } else {
-                    req = rb(centroid.x, centroid.y, bounds);
-                    sandbox.request(this, req);
-                }
-            }
-        },
-
-        /**
-         * If layer.getGeometry() is empty, tries to parse layer.getGeometryWKT()
-         * and set parsed geometry to the layer
-         *
-         * @method _parseGeometryForLayer
-         * @private
-         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer}
-         * layer for which to parse geometry
-         */
-        _parseGeometryForLayer: function (layer) {
-            // parse geometry if available
-            if (layer.getGeometry && layer.getGeometry().length === 0) {
-                var layerWKTGeom = layer.getGeometryWKT();
-                if (!layerWKTGeom) {
-                    // no wkt, dont parse
-                    return;
-                }
-                // http://dev.openlayers.org/docs/files/OpenLayers/Format/WKT-js.html
-                // parse to OpenLayers.Geometry.Geometry[] array ->
-                // layer.setGeometry();
-                var wkt = new OpenLayers.Format.WKT(),
-                    features = wkt.read(layerWKTGeom);
-                if (features) {
-                    if (features.constructor !== Array) {
-                        features = [features];
-                    }
-                    var geometries = [],
-                        i;
-                    for (i = 0; i < features.length; i += 1) {
-                        geometries.push(features[i].geometry);
-                    }
-                    layer.setGeometry(geometries);
-                } else {
-                    // 'Bad WKT';
-                }
-            }
+            source.on('imageloaderror', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            });
         }
+
     }, {
         'extend': ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
         /**

@@ -21,7 +21,7 @@ Oskari.registerLocalization(
                 "submit": "Import",
                 "fileOverSizeError": {
                     "title": "Error",
-                    "message": "The selected file is too large. It can be at most <xx> Mb.",
+                    "message": "The selected file is too large. It can be at most <xx> Mb."
                 }
             },
             "layer": {
@@ -66,7 +66,7 @@ Oskari.registerLocalization(
             },
             "warning":{
                 "features_skipped":"Caution! During import <xx> features where rejected because of missing or corrupted coordinates or geometry"
-            },
+            }
         },
         "tab": {
             "title": "Datasets",

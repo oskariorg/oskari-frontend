@@ -1,9 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance
  *
- * Main component and starting point for the "all layers" functionality.
- * Lists all the layers available in Oskari.mapframework.service.MapLayerService and updates
- * UI if Oskari.mapframework.event.common.MapLayerEvent is received.
+ * Main component and starting point for the "map legend" functionality.
+ * Lists legends of maplayers that are currently on the map.
+ * Note! Not all layers have legends.
  *
  * See Oskari.mapframework.bundle.maplegend.MapLegendBundle for bundle definition.
  */
@@ -20,7 +20,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         this.plugins = {};
         this.plugin = null;
         this.localization = null;
-        this._mapmodule = null;
     }, {
         /**
          * @static
@@ -82,35 +81,25 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
 
             me.started = true;
 
-            var conf = this.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
-                p;
-
-            me.sandbox = sandbox;
-            me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            var conf = this.conf || {};
+            var sandbox = Oskari.getSandbox(conf.sandbox || 'sandbox');
+            this.setSandbox(sandbox);
 
             sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
+            Object.keys(me.eventHandlers).forEach(function(eventName) {
+                sandbox.registerForEventByName(me, eventName);
+            });
 
-            if(this.isEmbedded()){
+            if (this.isEmbedded()) {
                 this.createPlugin();
             } else {
-            //Let's extend UI
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-            sandbox.request(this, request);
+                //Let's extend UI
+                var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
+                sandbox.request(this, request);
 
-            // draw ui
-            me.createUi();
+                // draw ui
+                me.createUi();
             }
-
-            sandbox.registerAsStateful(this.mediator.bundleId, this);
-
-
         },
         /**
          * @method init
@@ -188,24 +177,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var sandbox = this.sandbox(),
-                p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
+            var me = this;
+            var sandbox = this.sandbox();
+            Object.keys(this.eventHandlers).forEach(function(eventName) {
+                sandbox.unregisterFromEventByName(me, eventName);
+            });
 
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
-
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
-            if(this.plugin){
-              this.stopPlugin();
-            }
-
-            this.sandbox.unregisterStateful(this.mediator.bundleId);
-            this.sandbox.unregister(this);
+            this.stopPlugin();
+            sandbox.unregister(this);
             this.started = false;
         },
         /**
@@ -254,9 +236,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             return jQuery('#contentMap').hasClass('published');
         },
         refreshUI: function() {
-            var plugin = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];
-            if(plugin) {
-                plugin.refresh();
+            var uicomponent = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];
+            if(uicomponent) {
+                uicomponent.refresh();
             }
         },
         /**
@@ -272,30 +254,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
 
           var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin', conf, this.plugins);
 
-          this._mapmodule.registerPlugin(plugin);
-          this._mapmodule.startPlugin(plugin);
+          var mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
+          mapmodule.registerPlugin(plugin);
+          mapmodule.startPlugin(plugin);
           this.plugin = plugin;
         },
         stopPlugin: function() {
-          this._mapmodule.unregisterPlugin(this.plugin);
-          this._mapmodule.stopPlugin(this.plugin);
-          this.plugin = null;
-        },
-
-        /**
-         * @method setState
-         * @param {Object} state bundle state as JSON
-         */
-        setState: function (state) {
-            this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
-        },
-
-        /**
-         * @method getState
-         * @return {Object} bundle state as JSON
-         */
-        getState: function () {
-            return this.plugins['Oskari.userinterface.Flyout'].getContentState();
+            if(!this.plugin) {
+                return;
+            }
+            var mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            mapmodule.unregisterPlugin(this.plugin);
+            mapmodule.stopPlugin(this.plugin);
+            this.plugin = null;
         }
     }, {
         /**
