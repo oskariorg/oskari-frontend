@@ -22,8 +22,6 @@ function () {
         var conf = this.getConfiguration();
         conf.name = 'coordinatetransformation';
         conf.flyoutClazz = 'Oskari.coordinatetransformation.Flyout'
-        this.sandbox = null;
-        this._localization = null;
         this.plugins = {};
         this._mapmodule = null;
         this.transformationService = null;
@@ -54,10 +52,6 @@ function () {
         this.instantiateViews();
         this.createUi();
     },
-    stop: function () {
-        this.sandbox = null;
-        this.started = false;
-    },
     getPlugins: function() {
         return this.plugins;
     },
@@ -81,17 +75,17 @@ function () {
     createUi: function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
     },
-        /**
-         * Creates the coordinatetransformation service and registers it to the sandbox.
-         * @method createService
-         * @param  {Oskari.Sandbox} sandbox
-         * @return {Oskari.coordinatetransformation.TransformationService}
-         */
-        createService: function(sandbox) {
-            var TransformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
-            sandbox.registerService(TransformationService);
-            return TransformationService;
-        }
+    /**
+     * Creates the coordinatetransformation service and registers it to the sandbox.
+     * @method createService
+     * @param  {Oskari.Sandbox} sandbox
+     * @return {Oskari.coordinatetransformation.TransformationService}
+     */
+    createService: function(sandbox) {
+        var TransformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
+        sandbox.registerService(TransformationService);
+        return TransformationService;
+    }
 }, {
         /**
          * @property {String[]} protocol
