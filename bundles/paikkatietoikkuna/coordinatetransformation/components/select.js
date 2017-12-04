@@ -58,12 +58,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
         },
         /**
          * @method handleSelectionChanged
-         * which key corresponds to which dropdown in the array:
-         * [0] = geodetic datum,
-         * [1] = coordinate system
-         * [2] = map projection
-         * [3] = geodetic coordinate system
-         * [4] = heigth system
          */
         handleSelectionChanged: function ( element ) {
             var me = this;
@@ -80,7 +74,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.select',
 
                         if ( instances.dimension.getValue() === "KOORDINAATISTO_MAANT_2D" ) {
                             dropdowns.coordinatesystem.find('option').hide();
-                            jQuery( dropdowns[key].find( '.' + instances.datum.getValue()+'.'+ instances.dimension.getValue() ) ).show();
+                            dropdowns[key].find( '.' + instances.datum.getValue()+'.'+ instances.dimension.getValue() ).show();
                         }
                         if ( instances.dimension.getValue() === "KOORDINAATISTO_MAANT_3D" ) {
                             dropdowns.coordinatesystem.find('option').hide();

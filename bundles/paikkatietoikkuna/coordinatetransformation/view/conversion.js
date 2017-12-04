@@ -22,11 +22,11 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             title: _.template('<h4 class="header"><%= title %></h4>'),
             coordinatesystem: _.template(' <div class="coordinateconversion-csystem">' +
                                     '<h5><%= title %></h5>'+
-                                    '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
-                                    '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div>  </div> </br> ' +
-                                    '<div class="map-projection" style="display:none;"> <%= map_projection %> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br>' +
-                                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> *</b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
-                                    '<div class="height-system"><b class="dropdown_title"><%= height_system %></b></div> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div>'
+                                    '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
+                                    '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div>  </div> </br> ' +
+                                    '<div class="map-projection" style="display:none;"> <%= map_projection %> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br>' +
+                                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> *</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
+                                    '<div class="height-system"><b class="dropdown_title"><%= height_system %></b></div> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div>'
                                 ),
             coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
                                             '<h4><%= title %></h4>'+
@@ -50,8 +50,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
             utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
-                                        '<input id="overlay-btn" class="clear" type="button" value="<%= clear %> ">' +
-                                        '<input id="overlay-btn" class="show" type="button" value="<%= show %> ">' +
+                                        '<input class="clear" type="button" value="<%= clear %> ">' +
+                                        '<input class="show" type="button" value="<%= show %> ">' +
                                         // '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %> ">' +
                                         '</div>')
         }

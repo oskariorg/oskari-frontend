@@ -1,9 +1,11 @@
 Oskari.registerLocalization(
 {
     "lang": "fi",
-    "key": "coordinateconversion",
+    "key": "coordinatetransformation",
     "value": {
-        "title": "Koordinaattimuunnos",
+        "tile": {
+            "title": "Koordinaattimuunnos"
+        },
         "flyout": {
         "title": {
             "input": "Lähtötiedot",

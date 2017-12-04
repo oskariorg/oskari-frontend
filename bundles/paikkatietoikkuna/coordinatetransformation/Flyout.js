@@ -67,5 +67,5 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.userinterface.Flyout']
+        "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
     });

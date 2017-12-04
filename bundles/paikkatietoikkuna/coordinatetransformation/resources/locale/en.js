@@ -1,28 +1,30 @@
 Oskari.registerLocalization(
 {
-    "lang": "sv",
-    "key": "coordinateconversion",
+    "lang": "en",
+    "key": "coordinatetransformation",
     "value": {
-        "title": "Koordinattransformation",
+        "tile": {
+            "title": "Coordinateconversion"
+        },
         "flyout": {
         "title": {
-            "input": "Från-system",
-            "result": "Till-system"
+            "input": "Lähtötiedot",
+            "result": "Tulostiedot"
         },
             "coordinatesystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
-                "geodetic_datum": "Geodetiskt datum",
-                "coordinate_system": "Koordinatsystem",
-                "map_projection": "Kartprojektionssystem",
-                "geodetic_coordinatesystem": "Geodetiskt koordinatsystem",
-                "heigth_system":"Höjdsystemet"
+                "geodetic_datum": "Geodeettinen datumi",
+                "coordinate_system": "Koordinaatisto",
+                "map_projection": "Karttaprojektiojärjestelmä",
+                "geodetic_coordinatesystem": "Geodeettinen koordinaattijärjestelmä",
+                "heigth_system":"Korkeusjärjestelmä"
             },
             "datasource": {
-                "title": "Källa för koordinatinformation",
-                "file": "Fil",
-                "clipboard": "kopiera från urklipp",
-                "map": "Välj platser från kartan",
-                "choose":"Välj plats från kartan"
+                "title": "Koordinaattitietojen lähde",
+                "file": "Tiedostosta",
+                "clipboard": "Näppäimistö/leikepöytä",
+                "map": "Valitse sijainnit kartalta",
+                "choose":"Valitse sijainti kartalta"
             },
             "datasourceinfo": {
                 "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
@@ -32,12 +34,13 @@ Oskari.registerLocalization(
                 "uploading":"Ladataan",
                 "success":"Valmis",
                 "error":"Virhe!",
-                "cancel":"Peruuta"
+                "cancel":"Peruuta",
+                "mapmarkers": "Tarkastele muunnettuja koordinaatteja kartalla."
             },
             "coordinatefield": {
                 "input": "Muunnettavat koordinaatit",
                 "result": "Tuloskoordinaatit",
-                "convert": "Transformera",
+                "convert": "Muunna",
                 "north":"N",
                 "east":"E",
                 "kkjnorth":"Pohjois-koordinaatti [m]",
@@ -53,9 +56,9 @@ Oskari.registerLocalization(
                 "clear": "Tyhjennä taulukot",
                 "show": "Näytä sijainnit kartalla",
                 "export": "Vie tulokset tiedostoon",
-                "done": "Färdig",
-                "cancel": "Ångra",
-                "rows": "Rader"
+                "done": "Valmis",
+                "cancel": "Peruuta",
+                "rows": "Riviä"
             },
             "filesetting": {
                 "general": {
@@ -72,7 +75,7 @@ Oskari.registerLocalization(
                 },
                 "export": {
                     "title": "Aineiston muodostaminen",
-                    "filename": "Filnamn",
+                    "filename": "Tiedoston nimi",
                 },
                 "import": {
                     "title": "Lähtöaineiston ominaisuudet",

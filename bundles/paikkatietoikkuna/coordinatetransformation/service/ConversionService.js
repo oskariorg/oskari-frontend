@@ -11,8 +11,7 @@ function(instance) {
     this._sandbox = instance.sandbox;
     this.urls = {};
 
-    var ajaxUrl = this._sandbox.getAjaxUrl() + '&action_route=';
-    this.urls.reverseGeocode = (ajaxUrl + 'GetConversionResult');
+    Oskari.urls.getRoute('GetConversionResult')
 }, {
     __name: "coordinateconversion.ConversionService",
     __qname : "Oskari.coordinateconversion.ConversionService",
