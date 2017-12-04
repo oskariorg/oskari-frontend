@@ -118,11 +118,9 @@ Oskari.clazz.define(
             if ( this.boxZoom ) {
                 this.getMap().removeInteraction( this.boxZoom );
             }
-            if ( this.removedInteractions ) {
-                this.removedInteractions.forEach( function ( interaction ) {
-                    me.getMap().addInteraction( interaction );
-                });
-            }
+            this.removedInteractions.forEach( function ( interaction ) {
+                me.getMap().addInteraction( interaction );
+            });
             this.removedInteractions = [];
         },
         mouseDragZoomInteraction: function () {
@@ -155,9 +153,6 @@ Oskari.clazz.define(
             conf = me.getConfig();
             var mouseInteractionRemove = [];
             var kbInteractionRemove = [];
-
-
-            //TODO: add Esc button handler
 
             // Map movement/keyboard control
             if (conf.keyboardControls === false) {
