@@ -16,7 +16,7 @@ function(instance, service) {
     this.statsService = service;
     this.container = null;
     this.template = null;
-    this._tileExtensions = [];
+    this._tileExtensions = {};
     this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
     this._templates = {
         extraSelection : _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div><div class="clear"></div></div>')
@@ -153,11 +153,17 @@ function(instance, service) {
     getFlyout: function (type) {
         return this._flyoutManager.getFlyout(type);
     },
-    openFlyout: function (type) {
-        if ( this._flyoutManager.openFlyouts[type] ) {
-            this._flyoutManager.hide(type);
+    toggleFlyout: function (type) {
+        var flyout = this._flyoutManager.getFlyout(type);
+        if(!flyout) {
+            // unrecognized flyout
             return;
         }
+        if(flyout.isVisible()) {
+            flyout.hide();
+            return;
+        }
+        // open flyout
         this._flyoutManager.open(type);
     }
 }, {

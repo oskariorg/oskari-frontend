@@ -180,8 +180,8 @@ Oskari.clazz.define(
                 if( this.isEmbedded()  && !wasClosed ) {
                     for(var extension in me.getTile().getExtensions()){
                         me.getTile().getExtensions()[extension];
-                        if ( extension === 'dataview' ) {
-                            me.getTile().openFlyout( extension );
+                        if ( extension === 'table' ) {
+                            me.getTile().toggleFlyout( extension );
                         }
                     }
                 } else {
@@ -189,7 +189,7 @@ Oskari.clazz.define(
                         me.getTile().showExtension(
                             me.getTile().getExtensions()[extension],
                             function( type ) {
-                                me.getTile().openFlyout(type);
+                                me.getTile().toggleFlyout(type);
                             }
                         );
                     }

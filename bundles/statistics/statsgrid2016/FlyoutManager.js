@@ -2,7 +2,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     this.instance = instance;
     this.sb = instance.sb;
     this.flyouts = {};
-    this.openFlyouts = {};
     var loc = instance.getLocalization();
 
     this.flyoutInfo = [
@@ -55,12 +54,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
         flyout.show();
 
-        this.openFlyouts[type] = true;
     },
     hide: function ( type ) {
         var me = this;
         me.flyouts[type].hide();
-        delete me.openFlyouts[type];
     },
     getFlyout: function (type) {
         return this.flyouts[type];
