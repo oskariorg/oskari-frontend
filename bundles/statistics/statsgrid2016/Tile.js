@@ -30,6 +30,20 @@ function(instance, service) {
         return 'Oskari.statistics.statsgrid.Tile';
     },
     /**
+     * @method getTitle
+     * @return {String} localized text for the title of the tile
+     */
+    getTitle : function() {
+        return this.loc.flyout.title;
+    },
+    /**
+     * @method getDescription
+     * @return {String} localized text for the description of the tile
+     */
+    getDescription : function() {
+        return this.instance.getLocalization('desc');
+    },
+    /**
      * @method setEl
      * @param {Object} el
      *      reference to the container in browser
@@ -67,6 +81,9 @@ function(instance, service) {
         });
         this.hideExtensions();
     },
+    /**
+     * Adds a class for the tile so we can programmatically identify which functionality the tile controls.
+     */
     _addTileStyleClasses: function() {
         var isContainer = (this.container && this.instance.mediator) ? true : false;
         var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
@@ -87,36 +104,16 @@ function(instance, service) {
         this.container.empty();
     },
     /**
-     * @method getTitle
-     * @return {String} localized text for the title of the tile
+     * Adds an extra option on the tile
      */
-    getTitle : function() {
-        return this.loc.flyout.title;
-    },
-    /**
-     * @method getDescription
-     * @return {String} localized text for the description of the tile
-     */
-    getDescription : function() {
-        return this.instance.getLocalization('desc');
-    },
     extendTile: function (el,type) {
           var container = this.container.append(el);
           var extension = container.find(el);
           this._tileExtensions[type] = extension;
     },
-    hideExtensions: function () {
-        var me = this;
-        var extraOptions = me.getExtensions();
-        Object.keys(extraOptions).forEach(function(key) {
-            // hide all flyout
-            me.getFlyoutManager().hide( key );
-            // hide the tile "extra selection"
-            var extension = extraOptions[key];
-            extension.removeClass('material-selected');
-            extension.hide();
-        });
-    },
+    /**
+     * Toggles an "active/deactive" class on tile extra options to indicate if the flyout opened by the extra option is visible or not
+     */
     toggleExtensionClass: function(type, wasClosed) {
         var me = this;
         var el = this.getExtensions()[type];
@@ -132,6 +129,25 @@ function(instance, service) {
             el.addClass('material-selected');
         }
     },
+    /**
+     * Hides all the extra options (used when tile is "deactivated")
+     */
+    hideExtensions: function () {
+        var me = this;
+        var extraOptions = me.getExtensions();
+        Object.keys(extraOptions).forEach(function(key) {
+            // hide all flyout
+            me.getFlyoutManager().hide( key );
+            // hide the tile "extra selection"
+            var extension = extraOptions[key];
+            extension.removeClass('material-selected');
+            extension.hide();
+        });
+    },
+    /**
+     * Shows the tile extra options (when tile is activated)
+     * @return {[type]} [description]
+     */
     showExtensions: function () {
         var me = this;
         var extraOptions = me.getExtensions();
@@ -140,6 +156,10 @@ function(instance, service) {
             extraOptions[key].show();
         });
     },
+    /**
+     * [getExtensions description]
+     * @return {Object} with key as flyout id and value of DOM-element for the extra option in the tile
+     */
     getExtensions: function () {
         return this._tileExtensions;
     },
