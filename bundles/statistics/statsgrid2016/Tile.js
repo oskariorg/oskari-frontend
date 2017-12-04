@@ -45,11 +45,27 @@ function(instance, service) {
     },
     /**
      * @method startPlugin
-     * Interface method implementation, calls #refresh()
+     * Interface method implementation, calls #createUi()
      */
     startPlugin : function() {
         this._addTileStyleClasses();
-        this.refresh();
+        var me = this;
+        var instance = me.instance;
+        var sandbox = instance.getSandbox();
+        var tpl = this._templates.extraSelection;
+        this.getFlyoutManager().flyoutInfo.forEach(function(flyout) {
+            var tileExtension = jQuery(tpl({
+                id: flyout.id,
+                label : flyout.title
+            }));
+            me.extendTile(tileExtension, flyout.id);
+            tileExtension.bind('click', function(event) {
+                event.stopPropagation();
+                me.toggleExtensionClass(flyout.id);
+                me.toggleFlyout(flyout.id);
+            });
+        });
+        this.hideExtensions();
     },
     _addTileStyleClasses: function() {
         var isContainer = (this.container && this.instance.mediator) ? true : false;
@@ -84,36 +100,12 @@ function(instance, service) {
     getDescription : function() {
         return this.instance.getLocalization('desc');
     },
-    /**
-     * @method refresh
-     * Creates the UI for a fresh start
-     */
-    refresh : function() {
-        var me = this;
-        var instance = me.instance;
-        var sandbox = instance.getSandbox();
-        var tpl = this._templates.extraSelection;
-        this.getFlyoutManager().flyoutInfo.forEach(function(flyout) {
-            var tileExtension = jQuery(tpl({
-                id: flyout.id,
-                label : flyout.title
-            }));
-            me.extendTile(tileExtension, flyout.id);
-            tileExtension.bind('click', function(event) {
-                event.stopPropagation();
-                me.toggleExtensionClass(flyout.id);
-                me.toggleFlyout(flyout.id);
-            });
-        });
-        this.hideExtension();
-
-    },
     extendTile: function (el,type) {
           var container = this.container.append(el);
           var extension = container.find(el);
           this._tileExtensions[type] = extension;
     },
-    hideExtension: function () {
+    hideExtensions: function () {
         var me = this;
         var extraOptions = me.getExtensions();
         Object.keys(extraOptions).forEach(function(key) {

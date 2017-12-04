@@ -170,10 +170,12 @@ Oskari.clazz.define(
                     return;
                 }
                 if( wasClosed ) {
-                    me.getTile().hideExtension();
+                    me.getTile().hideExtensions();
                     return;
                 }
-                if( this.isEmbedded()  && !wasClosed ) {
+                if( this.isEmbedded() && !wasClosed ) {
+                    // open table on embedded map
+                    // TODO: is wasClosed check unnecessary?
                     me.getTile().toggleFlyout( 'table' );
                 } else {
                     me.getTile().showExtensions();
