@@ -1,9 +1,9 @@
-Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
+Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
 
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.coordinateconversion.instance}
+     * @param {Oskari.coordinatetransformation.instance}
      *        instance reference to component that created the tile
      */
     function( instance ) {
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
          * @return {String} the name for the component
          */
         getName: function() {
-            return 'Oskari.coordinateconversion.Flyout';
+            return 'Oskari.coordinatetransformation.Flyout';
         },
         getTitle: function() {
             return this.loc.title;
@@ -27,8 +27,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
         },
         setEl: function(el, width, height) {
             this.container = el[0];
-            if ( !jQuery( this.container ).hasClass('coordinateconversion-flyout') ) {
-                jQuery( this.container ).addClass('coordinateconversion-flyout');
+            if ( !jQuery( this.container ).hasClass('coordinatetransformation-flyout') ) {
+                jQuery( this.container ).addClass('coordinatetransformation-flyout');
             }
         },
         createUi: function() {
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
         startPlugin: function() {
             this.template = jQuery();
             var elParent = this.container.parentElement.parentElement;
-            jQuery( elParent ).addClass('coordinateconversion-flyout');
+            jQuery( elParent ).addClass('coordinatetransformation-flyout');
         },
 
         /**

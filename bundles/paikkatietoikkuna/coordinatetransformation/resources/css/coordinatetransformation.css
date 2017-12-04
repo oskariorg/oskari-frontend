@@ -1,7 +1,7 @@
-.coordinateconversion-flyout > .oskari-flyoutcontentcontainer{
+.coordinatetransformation-flyout > .oskari-flyoutcontentcontainer{
     max-height: 875px !important;
 }
-.coordinateconversion-flyout {
+.coordinatetransformation-flyout {
     top: 0 !important;
 }
 .conversionwrapper {

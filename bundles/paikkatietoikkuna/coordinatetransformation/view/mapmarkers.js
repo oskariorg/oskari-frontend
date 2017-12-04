@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.coordinateconversion.view.mapmarkers',
+Oskari.clazz.define('Oskari.coordinatetransformation.view.mapmarkers',
     function (instance) {
         var me = this;
         me.instance = instance;
@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapmarkers',
         me.dialog = null;
     }, {
         getName: function() {
-            return 'Oskari.coordinateconversion.view.mapmarkers';
+            return 'Oskari.coordinatetransformation.view.mapmarkers';
         },
         setVisible: function ( visible ) {
             if(this.dialog === null  && !visible) {
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapmarkers',
             });
 
             dialog.show('View', this.loc.datasourceinfo.mapmarkers, [btn]);
-            dialog.moveTo(jQuery('.oskari-tile.coordinateconversion'), 'right', true);
+            dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
         }
     }
 );

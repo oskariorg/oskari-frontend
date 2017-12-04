@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.coordinateconversion.view.filesettings',
+Oskari.clazz.define('Oskari.coordinatetransformation.view.filesettings',
     function (instance, loc) {
         var me = this;
         me.instance = instance; 
@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.filesettings',
             this.element = el;
         },
         getName: function() {
-            return 'Oskari.coordinateconversion.view.filesettings';
+            return 'Oskari.coordinatetransformation.view.filesettings';
         },
         create: function() {
             var me = this;

@@ -35,7 +35,7 @@ Oskari.clazz.define("Oskari.coordinatetransformation.bundle", function () {
         },
 
         /*
-         * coordinateconversion
+         * coordinatetransformation
          */
         {
             "type": "text/javascript",
@@ -66,13 +66,13 @@ Oskari.clazz.define("Oskari.coordinatetransformation.bundle", function () {
             "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/view/filesettings.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/service/ConversionService.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/service/TransformationService.js"
         }, {
             "type": "text/css",
             "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/resources/css/filesettings.css"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/resources/css/coordinateconversion.css"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/resources/css/coordinatetransformation.css"
         }
         ],
         "locales": [ {

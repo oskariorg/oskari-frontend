@@ -2,10 +2,10 @@
 Ways to start the bundle in console:
 * Oskari.app.playBundle(
     {
-    bundlename : 'coordinateconversion',
+    bundlename : 'coordinatetransformation',
         metadata : {
             "Import-Bundle" : {
-                "coordinateconversion" : {
+                "coordinatetransformation" : {
                     bundlePath : '/Oskari/packages/paikkatietoikkuna/bundle/'
                 }
             }
@@ -13,20 +13,20 @@ Ways to start the bundle in console:
 });
             var l = appSetup.startupSequence.length;
             appSetup.startupSequence[l] = {
-                "bundlename":"coordinateconversion" ,
+                "bundlename":"coordinatetransformation" ,
             }
-            appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinateconversion": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } } };
+            appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinatetransformation": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } } };
 */
 Oskari.clazz.define("Oskari.coordinatetransformation.instance",
 function () {
         var conf = this.getConfiguration();
         conf.name = 'coordinatetransformation';
-        conf.flyoutClazz = 'Oskari.coordinateconversion.Flyout'
+        conf.flyoutClazz = 'Oskari.coordinatetransformation.Flyout'
         this.sandbox = null;
         this._localization = null;
         this.plugins = {};
         this._mapmodule = null;
-        this.conversionservice = null;
+        this.transformationService = null;
         this.views = null;
         this.helper = null;
 }, {
@@ -38,7 +38,7 @@ function () {
         return this.views;
     },
     getService: function () {
-        return this.conversionservice;
+        return this.transformationService;
     },
     /**
      * @method afterStart
@@ -47,11 +47,11 @@ function () {
         var me = this;
         var sandbox = this.getSandbox();
 
-        this.conversionservice = this.createService(sandbox);
+        this.transformationService = this.createService(sandbox);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization();
-        this.helper = Oskari.clazz.create('Oskari.coordinateconversion.helper', this, this._localization);
-        
+        this.helper = Oskari.clazz.create('Oskari.coordinatetransformation.helper', this, this._localization);
+
         me.instantiateViews();
         me.createUi();
 
@@ -65,9 +65,9 @@ function () {
     },
     instantiateViews: function () {
         this.views = {
-            conversion: Oskari.clazz.create('Oskari.coordinateconversion.view.conversion', this),
-            mapselect: Oskari.clazz.create('Oskari.coordinateconversion.view.mapselect', this),
-            mapmarkers: Oskari.clazz.create('Oskari.coordinateconversion.view.mapmarkers', this)
+            conversion: Oskari.clazz.create('Oskari.coordinatetransformation.view.conversion', this),
+            mapselect: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapselect', this),
+            mapmarkers: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapmarkers', this)
         }
     },
     toggleViews: function (view) {
@@ -88,7 +88,7 @@ function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
     },
             /**
-         * Creates the coordinateconversion service and registers it to the sandbox.
+         * Creates the coordinatetransformation service and registers it to the sandbox.
          *
          * @method createService
          * @param  {Oskari.Sandbox} sandbox
@@ -96,7 +96,7 @@ function () {
          * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
          */
         createService: function(sandbox) {
-            var coordinateToolService = Oskari.clazz.create( 'Oskari.coordinateconversion.ConversionService', this );
+            var coordinateToolService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
             sandbox.registerService(coordinateToolService);
             return coordinateToolService;
         },

@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.coordinatetool.CoordinateToolService
  */
-Oskari.clazz.define('Oskari.coordinateconversion.ConversionService',
+Oskari.clazz.define('Oskari.coordinatetransformation.TransformationService',
 /**
  * @method create called automatically on construction
  * @static
@@ -13,8 +13,8 @@ function(instance) {
 
     Oskari.urls.getRoute('GetConversionResult')
 }, {
-    __name: "coordinateconversion.ConversionService",
-    __qname : "Oskari.coordinateconversion.ConversionService",
+    __name: "coordinatetransformation.TransformationService",
+    __qname : "Oskari.coordinatetransformation.TransformationService",
     getQName : function() {
         return this.__qname;
     },

@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
+Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
     function (instance) {
         var me = this;
         me.instance = instance;
@@ -9,11 +9,11 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         me.conversionContainer = null
         me.startingSystem = false;
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
-        me.file = Oskari.clazz.create('Oskari.coordinateconversion.view.filesettings', me.instance, me.loc);
-        me.inputTable = Oskari.clazz.create('Oskari.coordinateconversion.component.table', this, me.loc );
-        me.outputTable = Oskari.clazz.create('Oskari.coordinateconversion.component.table', this, me.loc );       
-        me.inputSelect = Oskari.clazz.create('Oskari.coordinateconversion.component.select', this );
-        me.targetSelect = Oskari.clazz.create('Oskari.coordinateconversion.component.select', this );
+        me.file = Oskari.clazz.create('Oskari.coordinatetransformation.view.filesettings', me.instance, me.loc);
+        me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
+        me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );       
+        me.inputSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', this );
+        me.targetSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', this );
         me.file.create();
         me._selectInstances = { input: null, target: null };
         me._userSelections = { import: null, export: null };
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         }
     }, {
         getName: function() {
-            return 'Oskari.coordinateconversion.view.conversion';
+            return 'Oskari.coordinatetransformation.view.conversion';
         },
         getContainer: function () {
             return jQuery(this.conversionContainer);

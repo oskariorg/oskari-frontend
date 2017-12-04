@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
+Oskari.clazz.define('Oskari.coordinatetransformation.view.mapselect',
     function (instance) {
         var me = this;
         me.instance = instance;
@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
         me.dialog = null;
     }, {
         getName: function() {
-            return 'Oskari.coordinateconversion.view.mapselect';
+            return 'Oskari.coordinatetransformation.view.mapselect';
         },
         setVisible: function ( visible ) {
             if(this.dialog === null && !visible) {
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
             });
 
             dialog.show('Note', this.loc.datasourceinfo.mapinfo, [cancelBtn, btn]);
-            dialog.moveTo(jQuery('.oskari-tile.coordinateconversion'), 'right', true);
+            dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
             this.mapClicksListener();
         },
         getCoords: function ( coords ) {

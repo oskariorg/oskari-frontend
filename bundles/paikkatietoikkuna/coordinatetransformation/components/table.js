@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( instance, loc ) {
+Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function( instance, loc ) {
     this.instance = instance;
     this.loc = loc;
     this.numrows = 1;

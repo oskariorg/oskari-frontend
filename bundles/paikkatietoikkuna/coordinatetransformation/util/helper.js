@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, locale) {
+Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance, locale) {
     this.loc = locale;
     this.instance = instance;
     this.sb = instance.sandbox;
@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
     }
 }, {
     getName: function() {
-        return 'Oskari.coordinateconversion.helper';
+        return 'Oskari.coordinatetransformation.helper';
     },
     init: function () {},
     eventHandlers: {
