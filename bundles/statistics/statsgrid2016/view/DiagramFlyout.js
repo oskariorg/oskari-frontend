@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
     });
 }, {
     _template: {
-        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div></div>')
+        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div><div class="chart"></div></div>')
     },
     setElement: function(el) {
         this.element = el;
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
         this._indicatorSelector.render(el.find('.chart-controls'));
         // this.loc.datacharts.descColor
         // Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu');
-        this._diagram.render(el);
+        this._diagram.render(el.find('.chart'));
         this.setElement(el);
     }
 }, {
