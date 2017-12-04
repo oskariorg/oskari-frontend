@@ -268,7 +268,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
                     clipboardData = e.clipboardData || window.clipboardData;
                     pastedData = clipboardData.getData('Text');
 
-                    var dataJson = me.validateData(pastedData);
+                    var dataJson = me.validateData( pastedData );
 
                     me.inputTable.populate( dataJson );
                 });

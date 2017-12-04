@@ -11,7 +11,7 @@ function(instance) {
     this._sandbox = instance.sandbox;
     this.urls = {};
 
-    Oskari.urls.getRoute('GetConversionResult')
+    this.urls.result = Oskari.urls.getRoute('GetConversionResult');
 }, {
     __name: "coordinatetransformation.TransformationService",
     __qname : "Oskari.coordinatetransformation.TransformationService",

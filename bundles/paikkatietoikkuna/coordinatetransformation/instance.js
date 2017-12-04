@@ -44,17 +44,15 @@ function () {
      * @method afterStart
      */
     afterStart: function () {
-        var me = this;
         var sandbox = this.getSandbox();
 
         this.transformationService = this.createService(sandbox);
-        me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization();
-        this.helper = Oskari.clazz.create('Oskari.coordinatetransformation.helper', this, this._localization);
+        this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper', this, locale );
 
-        me.instantiateViews();
-        me.createUi();
-
+        this.instantiateViews();
+        this.createUi();
     },
     stop: function () {
         this.sandbox = null;
@@ -80,27 +78,20 @@ function () {
         });
         views[view].setVisible(true);
     },
-    /**
-     * @method createUi
-     * (re)creates the UI for "all layers" functionality
-     */
     createUi: function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
     },
-            /**
+        /**
          * Creates the coordinatetransformation service and registers it to the sandbox.
-         *
          * @method createService
          * @param  {Oskari.Sandbox} sandbox
-         * @param  {}  configuration   conf.reverseGeocodingIds is in use
-         * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
+         * @return {Oskari.coordinatetransformation.TransformationService}
          */
         createService: function(sandbox) {
-            var coordinateToolService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
-            sandbox.registerService(coordinateToolService);
-            return coordinateToolService;
-        },
-
+            var TransformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
+            sandbox.registerService(TransformationService);
+            return TransformationService;
+        }
 }, {
         /**
          * @property {String[]} protocol
