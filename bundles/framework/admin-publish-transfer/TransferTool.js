@@ -96,9 +96,7 @@ function() {
             }
             me.publisherInstance.publisher._editToolLayoutOff();
             me.publisherInstance.setPublishMode(false);
-            setTimeout(function() {
-                me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
-            }, 1000);
+            me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
         });
         okButton.setTitle('Apply changes');
         buttons.push(okButton);
