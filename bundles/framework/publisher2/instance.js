@@ -147,6 +147,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
             if (blnEnabled) {
+                var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
+                var req = stateRB(data.configuration);
+                this.getSandbox().request(this, req);
+
                 me.getService().setNonPublisherLayers(deniedLayers);
                 me.getService().removeLayers();
                 me.oskariLang = Oskari.getLang();

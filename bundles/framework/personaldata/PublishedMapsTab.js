@@ -329,14 +329,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             };
             grid.setColumnValueRenderer('name', nameRenderer);
 
-            var service = instance.getViewService();
+            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var setMapState = function (data, forced, confirmCallback) {
                 var setStateRequestBuilder = sandbox.getRequestBuilder(
                     'StateHandler.SetStateRequest'
                 );
                 // error handling: check if the layers referenced in view are
                 // loaded
-                var resp = service.isViewLayersLoaded(data, sandbox);
+                var resp = mapLayerService.isViewLayersLoaded(data.state);
                 if (resp.status || forced === true) {
                     if (setStateRequestBuilder) {
                         var req = setStateRequestBuilder(data.state);
@@ -410,11 +410,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
-                        if (setMapState(data, false, function () {
-                                setMapState(data, true);
-                                editRequestSender(data);
-                            })) {
+                        var resp = mapLayerService.isViewLayersLoaded(data.state);
+                        if (resp.status) {
                             editRequestSender(data);
+                        } else {
+                            me._confirmSetState(function() {
+                                editRequestSender(data);
+                            }, resp.msg === 'missing');
                         }
                         return false;
                     }

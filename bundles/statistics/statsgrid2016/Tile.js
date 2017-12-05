@@ -16,13 +16,10 @@ function(instance, service) {
     this.statsService = service;
     this.container = null;
     this.template = null;
-    this._tileExtensions = [];
+    this._tileExtensions = {};
     this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
     this._templates = {
-        search: jQuery('<div class="statsgrid-functionality search" data-view="search"><div class="icon"></div><div class="text">'+ this.loc.tile.search +'</div><div class="clear"></div></div>'),
-        table: jQuery('<div class="statsgrid-functionality table" data-view="table"><div class="icon"></div><div class="text">'+ this.loc.tile.table +'</div><div class="clear"></div></div>'),
-        diagram: jQuery('<div class="statsgrid-functionality diagram" data-view="diagram"><div class="icon"></div><div class="text">'+ this.loc.tile.diagram +'</div><div class="clear"></div></div>')
-        // filterdata: jQuery('<div class="statsgrid-functionality filterdata" data-view="filterdata"><div class="icon"></div><div class="text">Aineiston suodatus</div><div class="clear"></div></div>')
+        extraSelection : _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div><div class="clear"></div></div>')
     };
 }, {
     /**
@@ -31,6 +28,20 @@ function(instance, service) {
      */
     getName : function() {
         return 'Oskari.statistics.statsgrid.Tile';
+    },
+    /**
+     * @method getTitle
+     * @return {String} localized text for the title of the tile
+     */
+    getTitle : function() {
+        return this.loc.flyout.title;
+    },
+    /**
+     * @method getDescription
+     * @return {String} localized text for the description of the tile
+     */
+    getDescription : function() {
+        return this.instance.getLocalization('desc');
     },
     /**
      * @method setEl
@@ -48,18 +59,31 @@ function(instance, service) {
     },
     /**
      * @method startPlugin
-     * Interface method implementation, calls #refresh()
+     * Interface method implementation, calls #createUi()
      */
     startPlugin : function() {
         this._addTileStyleClasses();
-        for (var p in this.eventHandlers) {
-            this.instance.getSandbox().registerForEventByName(this, p);
-        }
-        this.refresh();
+        var me = this;
+        var instance = me.instance;
+        var sandbox = instance.getSandbox();
+        var tpl = this._templates.extraSelection;
+        this.getFlyoutManager().flyoutInfo.forEach(function(flyout) {
+            var tileExtension = jQuery(tpl({
+                id: flyout.id,
+                label : flyout.title
+            }));
+            me.extendTile(tileExtension, flyout.id);
+            tileExtension.bind('click', function(event) {
+                event.stopPropagation();
+                me.toggleExtensionClass(flyout.id);
+                me.toggleFlyout(flyout.id);
+            });
+        });
+        this.hideExtensions();
     },
-    initFlyoutManager: function () {
-        this._flyoutManager.init();
-    },
+    /**
+     * Adds a class for the tile so we can programmatically identify which functionality the tile controls.
+     */
     _addTileStyleClasses: function() {
         var isContainer = (this.container && this.instance.mediator) ? true : false;
         var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
@@ -80,53 +104,23 @@ function(instance, service) {
         this.container.empty();
     },
     /**
-     * @method getTitle
-     * @return {String} localized text for the title of the tile
+     * Adds an extra option on the tile
      */
-    getTitle : function() {
-        return this.loc.flyout.title;
-    },
-    /**
-     * @method getDescription
-     * @return {String} localized text for the description of the tile
-     */
-    getDescription : function() {
-        return this.instance.getLocalization('desc');
-    },
-    /**
-     * @method refresh
-     * Creates the UI for a fresh start
-     */
-    refresh : function() {
-        var me = this;
-        var instance = me.instance;
-        var sandbox = instance.getSandbox();
-        for ( var type in this._templates ) {
-            var icon = this._templates[type];
-            this.extendTile(icon, type);
-        }
-        this.hideExtension();
-
-    },
     extendTile: function (el,type) {
           var container = this.container.append(el);
           var extension = container.find(el);
           this._tileExtensions[type] = extension;
     },
-    hideExtension: function () {
-        var me = this;
-        for(var type in me._tileExtensions) {
-            var extension = me._tileExtensions[type];
-            extension.removeClass('material-selected');
-            extension.hide();
-        }
-    },
+    /**
+     * Toggles an "active/deactive" class on tile extra options to indicate if the flyout opened by the extra option is visible or not
+     */
     toggleExtensionClass: function(type, wasClosed) {
         var me = this;
-        var el = jQuery('.statsgrid-functionality.'+type);
+        var el = this.getExtensions()[type];
+        //jQuery('.statsgrid-functionality.'+type);
         if(wasClosed) {
             el.removeClass('material-selected');
-            me._flyoutManager.hide(type);
+            me.getFlyoutManager().hide(type);
             return;
         }
         if (el.hasClass('material-selected') ) {
@@ -135,17 +129,37 @@ function(instance, service) {
             el.addClass('material-selected');
         }
     },
-    showExtension: function (el, callback) {
+    /**
+     * Hides all the extra options (used when tile is "deactivated")
+     */
+    hideExtensions: function () {
         var me = this;
-        el.show();
-        el.unbind('click');
-        el.bind('click', function(event) {
-            var type = jQuery(this).attr('data-view');
-            me.toggleExtensionClass(type);
-            event.stopPropagation();
-            callback(type);
+        var extraOptions = me.getExtensions();
+        Object.keys(extraOptions).forEach(function(key) {
+            // hide all flyout
+            me.getFlyoutManager().hide( key );
+            // hide the tile "extra selection"
+            var extension = extraOptions[key];
+            extension.removeClass('material-selected');
+            extension.hide();
         });
     },
+    /**
+     * Shows the tile extra options (when tile is activated)
+     * @return {[type]} [description]
+     */
+    showExtensions: function () {
+        var me = this;
+        var extraOptions = me.getExtensions();
+        this.getFlyoutManager().init();
+        Object.keys(extraOptions).forEach(function(key) {
+            extraOptions[key].show();
+        });
+    },
+    /**
+     * [getExtensions description]
+     * @return {Object} with key as flyout id and value of DOM-element for the extra option in the tile
+     */
     getExtensions: function () {
         return this._tileExtensions;
     },
@@ -153,36 +167,20 @@ function(instance, service) {
         return this._flyoutManager;
     },
     getFlyout: function (type) {
-        return this._flyoutManager.getFlyout(type);
+        return this.getFlyoutManager().getFlyout(type);
     },
-    openFlyout: function (type) {
-        if ( this._flyoutManager.openFlyouts[type] ) {
-            this._flyoutManager.hide(type);
+    toggleFlyout: function (type) {
+        var flyout = this.getFlyoutManager().getFlyout(type);
+        if(!flyout) {
+            // unrecognized flyout
             return;
         }
-        this._flyoutManager.open(type);
-    },
-    /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-     */
-    onEvent: function (event) {
-        var handler = this.eventHandlers[event.getName()];
-        if (!handler)
-            return;
-
-        // Skip events, if internally linked layer
-        if(typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer() ){
-            this.plugins['Oskari.userinterface.Tile'].refresh();
+        if(flyout.isVisible()) {
+            flyout.hide();
             return;
         }
-
-        return handler.apply(this, [event]);
-
-    },
-    eventHandlers: {
-
+        // open flyout
+        this.getFlyoutManager().open(type);
     }
 }, {
     /**

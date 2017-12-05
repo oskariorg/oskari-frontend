@@ -67,7 +67,6 @@ Oskari.clazz.define(
 
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
-            this.plugins['Oskari.userinterface.Tile'].initFlyoutManager();
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
@@ -171,28 +170,15 @@ Oskari.clazz.define(
                     return;
                 }
                 if( wasClosed ) {
-                    for( var extension in me.getTile().getExtensions() ) {
-                        me.getTile().getFlyoutManager().hide( extension )
-                    }
-                    me.getTile().hideExtension();
+                    me.getTile().hideExtensions();
                     return;
                 }
-                if( this.isEmbedded()  && !wasClosed ) {
-                    for(var extension in me.getTile().getExtensions()){
-                        me.getTile().getExtensions()[extension];
-                        if ( extension === 'dataview' ) {
-                            me.getTile().openFlyout( extension );
-                        }
-                    }
+                if( this.isEmbedded() && !wasClosed ) {
+                    // open table on embedded map
+                    // TODO: is wasClosed check unnecessary?
+                    me.getTile().toggleFlyout( 'table' );
                 } else {
-                    for( var extension in me.getTile().getExtensions() ) {
-                        me.getTile().showExtension(
-                            me.getTile().getExtensions()[extension],
-                            function( type ) {
-                                me.getTile().openFlyout(type);
-                            }
-                        );
-                    }
+                    me.getTile().showExtensions();
                 }
             },
             /**

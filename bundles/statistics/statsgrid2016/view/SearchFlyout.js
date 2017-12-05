@@ -1,19 +1,26 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.view.Search', function (instance, flyout) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (title, options, instance) {
     this.instance = instance;
-    this.container = null;
-    this.flyout = flyout;
+    this.element = null;
+    var me = this;
+    this.on('show', function() {
+        if(!me.getElement()) {
+            me.createUi();
+            me.addClass('statsgrid-search-flyout');
+            me.setContent(me.getElement());
+        }
+    });
 }, {
     setElement: function ( el ) {
-        this.container = el;
+        this.element = el;
     },
     getElement: function () {
-        return this.container;
+        return this.element;
     },
     clearUi: function () {
-        if( this.container === null ) {
+        if( this.element === null ) {
             return;
         }
-            this.container.empty();
+        this.element.empty();
     },
     /**
      * @method lazyRender
@@ -125,11 +132,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Search', function (instanc
     showLegend : function(enabled) {
         var me = this;
         if(!enabled) {
-            me.flyout.removeSideTools();
+            me.removeSideTools();
             return;
         }
         var locale = this.instance.getLocalization();
-        me.flyout.addSideTool(locale.legend.title, function(el, bounds) {
+        me.addSideTool(locale.legend.title, function(el, bounds) {
             // lazy render
             var flyout = me.getLegendFlyout();
             if(flyout.isVisible()) {
@@ -145,5 +152,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Search', function (instanc
         });
     }
 }, {
-
+    extend: ['Oskari.userinterface.extension.ExtraFlyout']
 });

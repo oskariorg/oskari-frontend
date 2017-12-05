@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
     function (title, options) {
         // UI text for title
         this.title = title;
-        this._visible = false;
+        this._visible = true;
         this._popup = null;
 
         /* @property container the DIV element */
@@ -35,26 +35,30 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    		'	</div>' +
 	    		'</div>' +
 	    		'<div class="oskari-flyoutcontentcontainer"></div>' +
-	    		'</div>')
-	    },
-        __temp:{
-            sideTool:_.template(
+	    		'</div>'),
+            sideTool: _.template(
                 '<div class="sidetool">'  +
                 '<div class="icon icon-arrow-white-right"></div>' +
-                '<label class="verticalsidelabel"></label>'  +
+                '<label class="verticalsidelabel">${ label }</label>'  +
                 '</div>')
-        },
+	    },
 	    isVisible : function() {
 	    	return this._visible;
 	    },
-	    show: function(){
+	    show: function() {
 	    	var me = this;
+            if(me.isVisible()) {
+                return;
+            }
 	    	me._popup.show();
     		me._visible = true;
     		this.trigger('show');
 	    },
-	    hide: function(suppressEvent){
+	    hide: function(suppressEvent) {
 	    	var me = this;
+            if(!me.isVisible()) {
+                return;
+            }
 	    	me._popup.hide();
     		me._visible = false;
     		suppressEvent = suppressEvent ? suppressEvent: false;
@@ -62,7 +66,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 this.trigger('hide');
             }
         },
-        __render: function(){
+        __render: function() {
             var me = this;
             var popup = me._popup || me.__templates.popup.clone();
 
@@ -190,13 +194,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 /************************************************************************************************
 * Side tool functions
 ************************************************************************************************/
-         //this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
-        getSideLabel : function( text ) {
-            var sidelabel = jQuery(this.__temp.sideTool());
-            sidelabel.find('label').text(text);
-            return sidelabel;
-        },
-        _calcSideLabelPositions: function(){
+        _updateSideLabelPositions: function(){
             var me = this;
             var sidelabels = me._popup.find('.sidetool');
             var flyout = me._popup;
@@ -219,7 +217,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          */
         addSideTool: function(label, callback){
             var me = this;
-            var sidelabel = this.getSideLabel(label);
+            var sidelabel = jQuery(this.__templates.sideTool({label : label}));
 
             var textWidth = function (el)
             {
@@ -254,13 +252,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 });
             }
 
-            me._calcSideLabelPositions();
+            me._updateSideLabelPositions();
 
             if(!me._addedResizeListener){
                 me._popup.bind('DOMSubtreeModified', function(){
                     clearTimeout(me._sidetoolTimer);
                     me._sidetoolTimer = setTimeout(function(){
-                        me._calcSideLabelPositions();
+                        me._updateSideLabelPositions();
                     }, 10);
                 });
                 me._addedResizeListener = true;
@@ -269,12 +267,11 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         /**
          * @method  @public removeSideTools Remove sidetools
          */
-        removeSideTools: function(){
+        removeSideTools: function() {
             var me = this;
             var sidelabels = me._popup.find('.sidetool');
             sidelabels.each(function(index, sidelabel) {
                 jQuery(sidelabel).remove();
             });
-
         }
 });

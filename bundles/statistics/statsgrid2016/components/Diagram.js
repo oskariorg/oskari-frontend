@@ -44,6 +44,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
             this.clearChart();
             el.html(this.loc.statsgrid.noResults);
             return;
+        } else if (this._chartElement) {
+            // reattach possibly detached component
+            el.html(this._chartElement);
         }
         if(this._renderState.inProgress) {
             // handle render being called multiple times in quick succession
@@ -60,7 +63,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
             }
             if (!me._chartElement) {
                 me._chartElement = me.createBarCharts(data);
-                el.append(me._chartElement);
+                el.html(me._chartElement);
             } else {
                 me.getChartInstance().redraw(data, {
                     colors: me.getColorScale()
