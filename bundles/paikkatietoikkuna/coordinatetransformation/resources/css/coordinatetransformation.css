@@ -25,7 +25,7 @@
 #rowwidth {
     max-width: 100px !important;
 }
-.header {
+.coordinatetransformation-flyout .header {
     font-size: 15px;
     line-height: 22px;
     padding-bottom: 0.5em;
@@ -42,7 +42,7 @@
     float:left;
     width: 20em !important;
 }
-.conversionbtn {
+.coordinatetransformation-flyout .conversionbtn {
     padding-left: 1.5em;
     float:left;
     margin-top: 6.25rem;
@@ -58,37 +58,37 @@
 .coordinateconversion-datasource {
     width: 100%;
 }
-.export, .rowcount {
+.coordinatetransformation-flyout .export, .rowcount {
     float:right;
 }
 
-.heightsystem {
+.coordinatetransformation-flyout .heightsystem {
     background-color: lightgray;
 }
-#convert {
+.coordinatetransformation-flyout #convert {
     font-size:80%;
     vertical-align: middle;
 }
 
-.clipboardinfo {
+.coordinatetransformation-flyout .clipboardinfo {
     margin-top:2%;
     margin-left:3%;
     font-size:0.95em;
 }
-.mapinfo {
+.coordinatetransformation-flyout .mapinfo {
     margin-top:2%;
     margin-left:3%;
     font-size:0.95em;
 }
-input[type="radio"] {
+.coordinatetransformation-flyout input[type="radio"] {
     display:none;
 }
-input[type="radio"] + label {
+.coordinatetransformation-flyout input[type="radio"] + label {
     color: black;
     font-family:Arial, sans-serif;
     font-size:14px;
 }
-input[type="radio"] + label span {
+.coordinatetransformation-flyout input[type="radio"] + label span {
     display:inline-block;
     width:12px;
     height:12px;
@@ -99,15 +99,15 @@ input[type="radio"] + label span {
     border-radius:  50%;
     border: 0.5px solid black;
 }
-input[type="radio"] + label span {
+.coordinatetransformation-flyout input[type="radio"] + label span {
      background-color:whitesmoke;
 }
-input[type="radio"]:checked + label span{
+.coordinatetransformation-flyout input[type="radio"]:checked + label span{
      background-color:black;
 }
 
-input[type="radio"] + label span,
-input[type="radio"]:checked + label span {
+.coordinatetransformation-flyout input[type="radio"] + label span,
+.coordinatetransformation-flyout input[type="radio"]:checked + label span {
   -webkit-transition:background-color 0.4s linear;
   -o-transition:background-color 0.4s linear;
   -moz-transition:background-color 0.4s linear;
@@ -117,11 +117,11 @@ input[type="radio"]:checked + label span {
 /*
 *TABLE
 */
-#oskari-coordinate-table {
+.coordinatetransformation-flyout #oskari-coordinate-table {
     height: 80%;
     overflow-y: scroll;
 }
-.oskari-table-content {
+.coordinatetransformation-flyout .oskari-table-content {
     float:left;
     width: 20em !important;
     height: 20em;
@@ -129,7 +129,7 @@ input[type="radio"]:checked + label span {
     margin-top: 0px;
     border: 1px solid rgba(255,255,255,0.3);
 }
-.oskari-table-content-target {
+.coordinatetransformation-flyout .oskari-table-content-target {
     float:right;
     width: 20em !important;
     height: 20em;
@@ -137,19 +137,19 @@ input[type="radio"]:checked + label span {
     margin-top: 0px;
     border: 1px solid rgba(255,255,255,0.3);
 }
-.oskari-table-header {
+.coordinatetransformation-flyout .oskari-table-header {
     background-color:rgba(37, 184, 193, 0.8);
     width: 20em !important;
 }
-#oskari-tbl-header {
+.coordinatetransformation-flyout #oskari-tbl-header {
     margin-bottom: 0;
     table-layout: fixed;
     word-wrap: break-word;
 }
-.target {
+.coordinatetransformation-flyout .target {
     padding-left:2.5em;
 }
-th {
+.coordinatetransformation-flyout th {
   padding: 20px 8px;
   text-align: left;
   font-weight: 500;
@@ -158,14 +158,14 @@ th {
   text-transform: uppercase;
   width: 33% !important;
 }
-td {
+.coordinatetransformation-flyout td {
     background: #FAFAFA;
     text-align: center;
 }
-.cell {
+.coordinatetransformation-flyout .cell {
     height: 1em;
 }
-.cell.control {
+.coordinatetransformation-flyout .cell.control {
     border: inherit; 
     border-bottom: 1px solid black;
     display: none; 
@@ -175,7 +175,7 @@ td {
 /*
 * TABLE HOVER
 */
-.hoverable {
+.coordinatetransformation-flyout .hoverable {
   background: white;
   border-radius:3px;
   border-collapse: collapse;
@@ -187,18 +187,18 @@ td {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   animation: float 5s infinite;
 }
-.hoverable td { 
+.coordinatetransformation-flyout .hoverable td { 
     padding:7px; border:#4e95f4 1px solid;
     width:33% !important;
 }
 /* Define the hover highlight color for the table row */
-.hoverable tr:hover {
+.coordinatetransformation-flyout .hoverable tr:hover {
   background:#4E5066;
   color:#FFFFFF;
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
-tr:hover td {
+.coordinatetransformation-flyout tr:hover td {
   background:#4E5066;
   color:#FFFFFF;
   border-top: 1px solid #22262e;
@@ -209,7 +209,7 @@ tr:hover td {
     /* display: inline-block; */
 }
 
-.removerow {
+.coordinatetransformation-flyout .removerow {
     border-radius: 50%;
     height:1.3em;
     width:1.4em;
@@ -217,16 +217,16 @@ tr:hover td {
     right:-5em;
     position: absolute;
 }
-.select {
+.coordinatetransformation-flyout .select {
     float:right;
 }
-.dropdown_title {
+.coordinatetransformation-flyout .dropdown_title {
     float: left;
     font-weight: bold;
     word-break: break-word;
     max-width:12em !important;
 }
-.infolink {
+.coordinatetransformation-flyout .infolink {
     float:right;
     height: 1.3em;
     width: 1.3em;
