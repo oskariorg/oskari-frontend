@@ -252,7 +252,7 @@ div.oskari-flyout.statsgrid-data-flyout {
     border-top: 0;
     box-shadow: 0 1px 0 #fff inset; }
   div.oskari-flyout.statsgrid-data-flyout .stats-table {
-    margin-top: 14px; }
+    padding: 12px; }
     div.oskari-flyout.statsgrid-data-flyout .stats-table .noresults .title {
       background-color: #000;
       color: #fff;
@@ -450,10 +450,8 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     clear: both; }
   .oskari-tile.statsgrid .statsgrid-functionality.material-selected .icon {
     background-color: #ffd400; }
-  .oskari-tile.statsgrid .statsgrid-functionality.table .icon {
-    background-image: url("../images/table_light.png"); }
-  .oskari-tile.statsgrid .statsgrid-functionality.diagram .icon {
-    background-image: url("../images/barchart_light.png"); }
+  .oskari-tile.statsgrid .statsgrid-functionality.dataview .icon {
+    background-image: url("../images/icon-dataview.png"); }
   .oskari-tile.statsgrid .statsgrid-functionality.search .icon {
     background-image: url("../images/icon-search.png"); }
   .oskari-tile.statsgrid .statsgrid-functionality.filterdata .icon {
