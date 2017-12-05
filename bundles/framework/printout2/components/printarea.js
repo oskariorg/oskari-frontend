@@ -10,6 +10,26 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         printarea: jQuery('<div class="oskari-map-print-area"></div>'),
         overlay: jQuery('<div class="oskari-map-print-overlay"></div>')
     },
+    // width, height
+    sizeOptions: {
+        "A4": [210, 297],
+        "A4_Landscape": [297, 210],
+        "A3": [297, 420],
+        "A3_Landscape": [420, 297]
+    },
+    // width 1cm * 2, height 1,5cm * 2
+    paperMargins: [20, 30],
+    getPaperSize: function(size) {
+        var mmMeasures = this.sizeOptions[size] || [];
+        if(!mmMeasures.length) {
+            throw new Error('Invalid size option: ' + size);
+        }
+        mmMeasures = mmMeasures.slice(0);
+        // remove margins from page size
+        mmMeasures[0] -= this.paperMargins[0];
+        mmMeasures[1] -= this.paperMargins[1];
+        return mmMeasures;
+    },
     calculateDistanceToMapEdges: function ( element ) {
         var mapdiv = jQuery("#mapdiv");
 
@@ -21,7 +41,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         }
     },
     updateBorders: function ( element ) {
-        var mapdiv = jQuery("#mapdiv"); 
+        var mapdiv = jQuery("#mapdiv");
         var distances = this.calculateDistanceToMapEdges( element );
         element.css( { "margin-left": -distances.vertical,
                        "borderTopWidth": distances.horizontal,
@@ -31,35 +51,12 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
                        "left": distances.vertical } );
     },
     getMeasuresForAreaPlot: function ( size ) {
-        var mmMeasures = [];
-       switch( size ) {
-            case "A4" :
-                mmMeasures = [210, 297];
-                break;
-            case "A4_Landscape" :
-                mmMeasures = [297, 210];
-                break;
-            case "A3" :
-                mmMeasures = [297, 420];
-                break;
-            case "A3_Landscape" :
-                mmMeasures = [420, 297];
-                break;
-            default:
-                break;
-       }
-        var scalein = undefined,
-        pixelMeasures = [],
-        zoomLevel = 0,
-        nextScale;
+        var mmMeasures = this.getPaperSize(size);
+        var scalein = this.mapmodule.calculateFitScale4Measures( mmMeasures );
+        var pixelMeasures = this.mapmodule.calculatePixelsInScale( mmMeasures, scalein ) || [];
 
-        if ( mmMeasures && mmMeasures.constructor === Array ) {
-            if ( !scalein ) {
-                scalein = this.mapmodule.calculateFitScale4Measures( mmMeasures );
-            }
-            pixelMeasures =  this.mapmodule.calculatePixelsInScale( mmMeasures, scalein );
-        }
-
+        var zoomLevel = 0;
+        var nextScale;
         var scales =  this.mapmodule.getScaleArray();
         scales.forEach( function ( sc, index ) {
             if ( ( !nextScale || nextScale > sc ) && sc > scalein ) {
@@ -95,5 +92,4 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
         this.area = null;
         jQuery("#mapdiv").find( ".oskari-map-print-area" ).remove();
     }
-}, {
 });
