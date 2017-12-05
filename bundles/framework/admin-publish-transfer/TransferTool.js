@@ -69,7 +69,7 @@ function() {
                 me._showErrorDialog('No changes! Nothing to review.');
                 return;
             }
-            me._showConfirmationDialog(publishData, input, delta);
+            me._showConfirmationDialog(publishData, input, delta, dialog);
         });;
         okButton.setTitle('Review changes');
         buttons.push(okButton);
@@ -77,7 +77,8 @@ function() {
         dialog.makeModal();
         dialog.show('Transfer configuration', content, buttons);
     },
-    _showConfirmationDialog: function (currentData, input, delta) {
+    _showConfirmationDialog: function (currentData, input, delta, editDialog) {
+        var me = this;
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var buttons = [];
 
@@ -87,9 +88,19 @@ function() {
 
         var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
         okButton.setHandler(function () {
-
+            dialog.close();
+            editDialog.close();
+            var uuid = me.publisherInstance.publisher.data.uuid;
+            if(uuid) {
+                input.uuid = uuid;
+            }
+            me.publisherInstance.publisher._editToolLayoutOff();
+            me.publisherInstance.setPublishMode(false);
+            setTimeout(function() {
+                me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
+            }, 1000);
         });
-        okButton.setTitle('Save');
+        okButton.setTitle('Apply changes');
         buttons.push(okButton);
         var heading = '<h3>Are you sure? Removals in <span style="background-color:#ffbbbb;text-decoration:line-through;">red</span>, additions in <span style="background-color:#bbffbb">green</span>.</h3>';
         var content = jQuery(heading + jsondiffpatchformatters.html.format(delta, currentData));
