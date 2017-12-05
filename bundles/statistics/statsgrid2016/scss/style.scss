@@ -6,6 +6,8 @@ $buttonTextColor: #ffffff;
 $inputWidth: 94%;
 $buttonWidth: 86%;
 
+$flyoutPadding: 1.2em;
+
 
 /* ********************************************
  * These are for common code in statsgrid
@@ -156,7 +158,13 @@ $buttonWidth: 86%;
 }
 
 div.oskari-flyout {
+    /* ********************************************
+    * Search styles
+    * ********************************************/
     &.statsgrid-search-flyout {
+        .statsgrid-search-container {
+            padding: $flyoutPadding;
+        }
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
         max-width: 700px;
 
@@ -309,7 +317,13 @@ div.oskari-flyout {
         }
     }
 
+    /* ********************************************
+    * Data styles
+    * ********************************************/
     &.statsgrid-data-flyout {
+        .oskari-datacharts {
+            padding: $flyoutPadding;
+        }
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
         max-width: 700px;
 
@@ -421,8 +435,6 @@ div.oskari-flyout {
         }
 
         .stats-table{
-            padding:12px;
-
             .noresults {
                 .title {
                     background-color:#000;
@@ -509,6 +521,17 @@ div.oskari-flyout {
                     }
                 }
             }
+        }
+    }
+
+
+
+    /* ********************************************
+    * Diagram styles
+    * ********************************************/
+     &.statsgrid-diagram-flyout {
+        .oskari-datacharts {
+            padding: $flyoutPadding;
         }
     }
 }
@@ -742,8 +765,9 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
             float: left;
             margin-left: 4px;
             font-weight: bold;
-            margin-top: 4px;
             font-size: 12px;
+            line-height: 34px;
+            vertical-align: middle;
         }
         .clear {
             clear: both;
@@ -774,14 +798,7 @@ div.tab-material-controls div.title {
 }
 
 
-/* ********************************************
- * Search styles
- * ********************************************/
- .oskari-flyout.statsgrid-search-flyout {
-    .statsgrid-search-container {
-        padding: 1.2em;
-    }
-}
+
 
 
 /* ********************************************
