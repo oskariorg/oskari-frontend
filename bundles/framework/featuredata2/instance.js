@@ -436,8 +436,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     //no features
                     return;
                 }
+
                 me.selectionPlugin.setFeatures(geojson.features);
-                me.selectionPlugin.stopDrawing(true);
+                me.selectionPlugin.stopDrawing();
+                me.popupHandler.removeButtonSelection();
 
                 var event = me.sandbox.getEventBuilder("WFSSetFilter")(geojson);
                 me.sandbox.notifyAll(event);
