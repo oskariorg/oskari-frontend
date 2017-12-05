@@ -204,18 +204,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                 viewData.state.mapfull.state.selectedLayers) {
                 var selected = viewData.state.mapfull.state.selectedLayers,
                     mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-                    layers = mapLayerService.getAllLayers(),
                     loaded = mapLayerService.isAllLayersLoaded(),
-                    layerMissing = false,
-                    i,
-                    layer;
-                for (i = 0; i < selected.length; ++i) {
-                    layer = mapLayerService.findMapLayer(selected[i].id, layers);
-                    if (!layer) {
-                        layerMissing = true;
-                        break;
-                    }
-                }
+                    layerMissing = !mapLayerService.hasLayers(selected.map(function(l){return l.id}));
+                    
                 if (loaded) {
                     // layers loaded
                     if (layerMissing) {

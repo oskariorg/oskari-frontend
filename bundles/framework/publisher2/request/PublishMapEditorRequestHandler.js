@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
 
             if (request._viewData) {
                 //get the uuid from the request
-                var uuid = request._viewData.uuid && request._viewData.uuid ? request._viewData.uuid : null;
+                var uuid = request._viewData.uuid ||  null;
                 // make the ajax call
                 jQuery.ajax({
                     url: url + '&action_route=AppSetup&uuid='+uuid,
