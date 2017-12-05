@@ -377,7 +377,7 @@ Oskari.clazz.define(
 
             return [cancelBtn, finishBtn];
         },
-        
+
         closeHelpDialog: function () {
             if (this.helpDialog) {
                 this.helpDialog.close(true);

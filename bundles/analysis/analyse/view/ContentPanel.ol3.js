@@ -29,7 +29,7 @@ Oskari.clazz.define(
         me._defaultStyle = {
             draw : {
                 fill : {
-                     color: 'rgba(255,255,255,0.4)' 
+                     color: 'rgba(255,255,255,0.4)'
                 },
                 stroke : {
                       color: '#3399CC',
@@ -41,10 +41,10 @@ Oskari.clazz.define(
                         color: '#3399CC'
                       }
                 }
-            }, 
+            },
             modify : {
                 fill : {
-                     color: 'rgba(255,255,255,0.4)' 
+                     color: 'rgba(255,255,255,0.4)'
                 },
                 stroke : {
                       color: '#3399CC',
@@ -59,7 +59,7 @@ Oskari.clazz.define(
             },
             intersect : {
                 fill : {
-                     color: 'rgba(255,255,255,0.4)' 
+                     color: 'rgba(255,255,255,0.4)'
                 },
                 stroke : {
                       color: '#3399CC',
@@ -321,18 +321,18 @@ Oskari.clazz.define(
                 line: 0,
                 area: 0
             };
-            me.drawControls = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.DrawControls', 
+            me.drawControls = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.DrawControls',
                                 me.instance,
                                 me.loc,
-                                function (isCancel) {me._stopDrawing(isCancel)}, 
-                                function (drawMode) {me._startNewDrawing(drawMode)});
+                                function (isCancel) {me._stopDrawing(isCancel);},
+                                function (drawMode) {me._startNewDrawing(drawMode);});
 
             me.dataPanel = me.drawControls.createDataPanel(me.loc);
             me.drawToolsPanel = me.drawControls.createDrawToolsPanel(me.loc);
             me.drawFilterPluginId = me.instance.getName();
             //me.drawFilterPlugin = me._createDrawFilterPlugin();
-            
-            me.analyseHelper = Oskari.clazz.create('Oskari.analysis.bundle.analyse.service.AnalyseHelper')
+
+            me.analyseHelper = Oskari.clazz.create('Oskari.analysis.bundle.analyse.service.AnalyseHelper');
             me.featureLayer = me.analyseHelper.createFeatureLayer();
             me.featureSource = me.featureLayer.getSource();
             me._createSelectInteractions();
@@ -383,7 +383,7 @@ Oskari.clazz.define(
 
             me.isStarted = true;
         },
-        
+
 
         getDrawToolsPanel: function () {
             return this.drawToolsPanel;
@@ -510,33 +510,43 @@ Oskari.clazz.define(
          * Adds the given geometry to the feature layer
          * and to the internal list of features.
          *
-         * @param {Array} Array of geometry/geometries to add 
+         * @param {Array} Array of geometry/geometries to add
          * @param {String} mode geometry type
          * @param {String} name optional name for the temp feature
          *
          */
         addGeometry: function (geometries, mode, name) {
             var me = this;
+            var featureGeom = null;
 
             // This should be done by drawTools
-            if (geometries.length > 0) {
-                if (mode === "LineString") {
-                    var featureGeom = new ol.geom.MultiLineString();
-                    for (i=0; i < geometries.length; i++) {
-                        featureGeom.appendLineString(geometries[i]);
-                    }
-                } else if (mode === "Polygon") {
-                    var featureGeom = new ol.geom.MultiPolygon();
-                    for (i=0; i < geometries.length; i++) {
-                        featureGeom.appendPolygon(geometries[i]);
-                    }
-                } else if (mode === "Point") {
-                    var featureGeom = new ol.geom.MultiPoint();
-                    for (i=0; i < geometries.length; i++) {
-                        featureGeom.appendPoint(geometries[i]);
-                    }
+            var appendGeometry = function(geometry){
+                switch (geometry.getType()) {
+                    case 'Point':
+                        if(!featureGeom) {
+                             featureGeom = new ol.geom.MultiPoint();
+                        }
+                        featureGeom.appendPoint(geometry);
+                        break;
+                    case 'LineString':
+                        if(!featureGeom) {
+                             featureGeom = new ol.geom.MultiLineString();
+                        }
+                        featureGeom.appendLineString(geometry);
+                        break;
+                    case 'Polygon':
+                        if(!featureGeom) {
+                             featureGeom = new ol.geom.MultiPolygon();
+                        }
+                        featureGeom.appendPolygon(geometry);
+                        break;
                 }
-            }
+            };
+
+            geometries.forEach(function(geometry){
+                appendGeometry(geometry);
+            });
+
             // add feature to the analyseFeatureLayer to be shown on map
             var feature = new ol.Feature({geometry: featureGeom});
             feature.setId(this.drawLayerId);
@@ -545,7 +555,7 @@ Oskari.clazz.define(
 
             // create temporary layer with the feature to be shown on analyse layer list
             this.getFeatures().push(this._createFakeLayer(this.drawLayerId, mode, name));
-            
+
             this.view.refreshAnalyseData(this.drawLayerId);
         },
 
@@ -719,10 +729,7 @@ Oskari.clazz.define(
             me.selectInteraction.on('select', function (evt) {
               if (evt.selected.length > 0) {
                   var wkt = new ol.format.WKT();
-                      featureWKT = wkt.writeFeature(evt.selected[0]),
-                      map = me.mapModule.getMap(),
-                      sandbox = me.mapModule.getSandbox(),
-                      layers = sandbox.findAllSelectedMapLayers();
+                      featureWKT = wkt.writeFeature(evt.selected[0]);
 
                   //set geometry for drawFilter
                   me.selectedGeometry = featureWKT;
@@ -736,7 +743,7 @@ Oskari.clazz.define(
               }
             });
         },
- 
+
         /**
          * Activates featureLayer Highlight and Select Controls
          *
@@ -1025,7 +1032,7 @@ Oskari.clazz.define(
         _operateDrawFilters: function () {
             //TODO: enable when geometryeditor is integrated
             return;
-            
+
             var preSelector = 'div.drawFilter.analysis-selection-',
                 pointButton = jQuery(preSelector + 'point'),
                 lineButton = jQuery(preSelector + 'line'),

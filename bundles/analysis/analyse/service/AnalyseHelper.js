@@ -40,7 +40,7 @@ Oskari.clazz.define(
 
 	    /**
 	      * Create hover interaction for the given layer
-	      * @param {ol.layer.Vector} layer 
+	      * @param {ol.layer.Vector} layer
 	      * @return {ol.interaction.Select} hoverInteraction
 	    */
 	    createHoverInteraction: function (layer) {
@@ -68,7 +68,7 @@ Oskari.clazz.define(
 
 	    /**
 	      * Create select interaction for the given layer
-	      * @param {ol.layer.Vector} layer 
+	      * @param {ol.layer.Vector} layer
 	      * @return {ol.interaction.Select} selectInteraction
 	    */
 	    createSelectInteraction: function (layer) {
@@ -107,17 +107,12 @@ Oskari.clazz.define(
 	      * @return {String} drawRequestGeometryType 'Point', 'LineString' or 'Polygon'
 	    */
 	    getDrawRequestType: function (internalGeometryType) {
-			var drawRequestGeometryType;
-
-	    	if (internalGeometryType === 'point') {
-	          drawRequestGeometryType = 'Point'
-	        } else if (internalGeometryType === 'line') {
-	          drawRequestGeometryType = 'LineString'
+	    	if (internalGeometryType === 'line') {
+	          return 'LineString';
 	        } else if (internalGeometryType === 'area') {
-	          drawRequestGeometryType = 'Polygon'
+	          return 'Polygon';
 	        }
-
-	        return drawRequestGeometryType;
+	        return 'Point';
 	    },
 
 	    /**
@@ -126,17 +121,13 @@ Oskari.clazz.define(
 	      * @return {String} internalGeometryType 'point', 'line' or 'area'
 	    */
 	    getInternalType: function (drawRequestGeometryType) {
-	    	var internalGeometryType;
-
-	    	if (drawRequestGeometryType === 'Point') {
-	          internalGeometryType = 'point'
-	        } else if (drawRequestGeometryType === 'LineString') {
-	          internalGeometryType = 'line'
+	    	if (drawRequestGeometryType === 'LineString') {
+	          return 'line';
 	        } else if (drawRequestGeometryType === 'Polygon') {
-	          internalGeometryType = 'area'
+	          return 'area';
 	        }
 
-	        return internalGeometryType;
+	        return 'point';
 	    }
 	}, {
         protocol: ['Oskari.mapframework.service.Service']

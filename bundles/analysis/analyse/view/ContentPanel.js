@@ -309,12 +309,12 @@ Oskari.clazz.define(
                 area: 0
             };
 
-            me.drawControls = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.DrawControls', 
+            me.drawControls = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.DrawControls',
                                 me.instance,
                                 me.loc,
-                                function (isCancel) {me._stopDrawing(isCancel)}, 
-                                function (drawMode) {me._startNewDrawing(drawMode)});
-            
+                                function (isCancel) {me._stopDrawing(isCancel);},
+                                function (drawMode) {me._startNewDrawing(drawMode);});
+
             me.dataPanel = me.drawControls.createDataPanel(me.loc);
             me.drawToolsPanel = me.drawControls.createDrawToolsPanel(me.loc);
 
