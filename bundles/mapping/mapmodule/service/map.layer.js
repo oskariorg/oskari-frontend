@@ -1145,57 +1145,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /**
          * Checks if the layers in view data are available
          *
-         * @method isViewLayersLoaded
-         * @param {Object} viewConfig
-         * @return {Object} Returns object with boolean property status (true if everything ok, false if not)
-         *    and String property msg with message key:
-         *  - 'error' == generic error
-         *  - 'missing' == layers loaded but referenced layer not found
-         *  - 'notloaded' == layers ajax call hasnt completed yet
+         * @method mapHasLayers
+         * @param {Number[]} layerIds array of layer id
+         * @return {Boolean} Returns true if map has all layers in layerId's
          */
-        isViewLayersLoaded: function (viewConfig) {
-            var response = {
-                status: false,
-                msg: 'error'
-            };
-            //viewConfig.mapfull.state.selectedLayers[{id:<layerid>}]
-            if (viewConfig &&
-                viewConfig.mapfull &&
-                viewConfig.mapfull.state &&
-                viewConfig.mapfull.state.selectedLayers) {
-                var selected = viewConfig.mapfull.state.selectedLayers,
-                    layers = this.getAllLayers(),
-                    loaded = this.isAllLayersLoaded(),
-                    layerMissing = false,
-                    i,
-                    layer;
-                for (i = 0; i < selected.length; ++i) {
-                    layer = this.findMapLayer(selected[i].id, layers);
-                    if (!layer) {
-                        layerMissing = true;
-                        break;
-                    }
-                }
-                if (loaded) {
-                    // layers loaded
-                    if (layerMissing) {
-                        // but some layers are missing
-                        response.msg = 'missing';
-                    } else {
-                        // and all layers found
-                        response.status = true;
-                        response.msg = 'ok';
-                    }
-                } else if (layerMissing) {
-                    // not loaded yet and layer missing
-                    response.msg = 'notloaded';
-                } else {
-                    // not loaded yet but all layers found
-                    response.status = true;
-                    response.msg = 'ok';
+        mapHasLayers: function (layerIds) {
+            var layers = this.getAllLayers(),
+                i,
+                layer;
+            for (i = 0; i < layerIds.length; ++i) {
+                layer = this.findMapLayer(layerIds[i], layers);
+                if (!layer) {
+                    return false;
                 }
             }
-            return response;
+            return true;
         }
     }, {
         /**

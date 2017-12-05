@@ -329,14 +329,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             };
             grid.setColumnValueRenderer('name', nameRenderer);
 
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var service = instance.getViewService();
             var setMapState = function (data, forced, confirmCallback) {
                 var setStateRequestBuilder = sandbox.getRequestBuilder(
                     'StateHandler.SetStateRequest'
                 );
                 // error handling: check if the layers referenced in view are
                 // loaded
-                var resp = mapLayerService.isViewLayersLoaded(data.state);
+                var resp = service.isViewLayersLoaded(data, sandbox);
                 if (resp.status || forced === true) {
                     if (setStateRequestBuilder) {
                         var req = setStateRequestBuilder(data.state);
@@ -410,7 +410,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
-                        var resp = mapLayerService.isViewLayersLoaded(data.state);
+                        var resp = service.isViewLayersLoaded(data, sandbox);
                         if (resp.status) {
                             editRequestSender(data);
                         } else {
