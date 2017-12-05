@@ -1145,11 +1145,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /**
          * Checks if the layers in view data are available
          *
-         * @method mapHasLayers
+         * @method hasLayers
          * @param {Number[]} layerIds array of layer id
-         * @return {Boolean} Returns true if map has all layers in layerId's
+         * @return {Boolean} Returns true if service has all layers in layerId's
          */
-        mapHasLayers: function (layerIds) {
+        hasLayers: function (layerIds) {
             var layers = this.getAllLayers(),
                 i,
                 layer;
