@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 return;
             }
 	    	me._popup.show();
-            me._popup.css('z-index', me._baseZIndex + Oskari.seq.nextVal());
+            me.bringToTop();
     		me._visible = true;
     		this.trigger('show');
 	    },
@@ -82,9 +82,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                     me.hide();
                 });
                 me._popup = popup;
-                me._popup.css('z-index',  me._baseZIndex + Oskari.seq.nextVal());
+                me.bringToTop();
                 me._popup.bind('click', function(){
-                    me._popup.css('z-index',  me._baseZIndex + Oskari.seq.nextVal());
+                    me.bringToTop();
                 });
                 me.hide(true);
             }
@@ -185,18 +185,17 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          * @param options  optional options for draggable
          */
         makeDraggable: function (options) {
-            var me = this,
-                options = options || {},
-                dragOptions = {
-                    scroll: options.scroll || false,
-                    handle: options.handle || '.oskari-flyouttoolbar',
-                    start: options.start || function( event, ui ) {
-                        jQuery(this).css('z-index', me._baseZIndex + Oskari.seq.nextVal());
-                    }
-                };
-
+            var me = this;
+            options = options || {};
             me._popup.css('position', 'absolute');
-            me._popup.draggable(dragOptions);
+            me._popup.draggable({
+                scroll: !!options.scroll,
+                handle: options.handle || '.oskari-flyouttoolbar',
+                start: function() {
+                    // bring this flyout to top when user starts dragging it
+                    me.bringToTop();
+                }
+            });
         },
         getElement: function(){
             return this._popup;
