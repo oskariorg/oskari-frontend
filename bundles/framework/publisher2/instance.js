@@ -148,8 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
             if (blnEnabled) {
                 var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
-                var req = stateRB(data.configuration);
-                this.getSandbox().request(this, req);
+                this.getSandbox().request(this, stateRB(data.configuration));
 
                 me.getService().setNonPublisherLayers(deniedLayers);
                 me.getService().removeLayers();

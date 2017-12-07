@@ -12,9 +12,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
     function (instance) {
         this.instance = instance;
     }, {
-
-        __defaultToolsConfig: {
-            configuration: {
+        getDefaultData: function() {
+            var config = {
                 mapfull: {
                     conf: {
                         plugins: [
@@ -28,7 +27,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
                     conf: {
                     }
                 }
-            }
+            };
+            // setup current mapstate so layers are not removed
+            var sb = this.instance.getSandbox();
+            var state = sb.getCurrentState();
+            // only merge mapfull state so tools like statsgrid are not switched on "since they have state"
+            config.mapfull.state = state.mapfull.state;
+
+            return { configuration: config };
         },
         /**
          * @method handleRequest
@@ -41,28 +47,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
          */
         handleRequest: function (core, request) {
             var me = this,
-                sandbox = me.instance.getSandbox(),
-                url = sandbox.getAjaxUrl();
+                url = Oskari.urls.getRoute('AppSetup');
 
-            if (request._viewData) {
+            if (request.getEditMap()) {
                 //get the uuid from the request
-                var uuid = request._viewData.uuid ||  null;
+                var uuid = request.getEditMap().uuid ||  null;
                 // make the ajax call
                 jQuery.ajax({
-                    url: url + '&action_route=AppSetup&uuid='+uuid,
+                    url: url + '&uuid='+uuid,
                     type: 'GET',
                     dataType: 'json',
                     success: function (data) {
                         data.uuid = uuid;
                         me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), data);
                         me._showEditNotification();
-                    },
-                    error: function(response) {
                     }
                 });
             } else {
-                var defaultToolsConfig = me.__defaultToolsConfig;
-                me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), defaultToolsConfig);
+                me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), this.getDefaultData());
             }
 
         },
