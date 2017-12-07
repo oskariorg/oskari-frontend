@@ -6,7 +6,7 @@ JasmineJS test suite for testing Oskari rpc functions, events and requests.
 
 ### Published map
 
-To run tests on your published map set the URL in map-rpc.js.
+To run tests on your published map set the URL in common_parts.js.
 
 ```
 mapURL = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-5055628dbd42'

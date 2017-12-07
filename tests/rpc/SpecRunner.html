@@ -9,16 +9,17 @@
   <script src="lib/jasmine-2.5.2/jasmine.js"></script>
   <script src="lib/jasmine-2.5.2/jasmine-html.js"></script>
   <script src="lib/jasmine-2.5.2/boot.js"></script>
-  <script src="lib/all.js"></script>
+
   <script src="lib/rpc-client.min.js"></script>
+  <script src="lib/all.js"></script>
+  <script src="lib/handlers.js"></script>
 
 </head>
 <body>
   <iframe id="map" style="border: none; height: 100%; width: 100%;"></iframe>
 
   <!-- include source files here... -->
-  <script src="src/map-rpc.js"></script>
-  <script src="src/common_parameters.js"></script>
+  <script src="src/common_parameters.js" defer></script>
 
   <!-- include spec files here... -->
   <script src="spec/general_spec.js" defer></script>

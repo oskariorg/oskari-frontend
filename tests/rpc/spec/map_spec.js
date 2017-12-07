@@ -1,19 +1,11 @@
 describe('Map', function(){
 
-    function handleEvent(name, handler) {
-        channel.handleEvent(name, handler);
-            handlersToClean.push({
-            name: name,
-            handler: handler
-        });
-    };
-
     beforeEach(function(done) {
         channel.onReady(function() {
             // Channel is now ready and listening.
             channel.resetState(function() {
                 // Reset map and event counter.
-                eventCounter = 0;
+                counter = 0;
                 done();
             });
         });
@@ -21,12 +13,9 @@ describe('Map', function(){
 
     afterEach(function() {
         // Spy callback.
-        expect(eventCounter).toEqual(1);
+        expect(counter).toEqual(1);
         // Reset event handlers.
-        while (handlersToClean.length) {
-            var item = handlersToClean.shift();
-            channel.unregisterEventHandler(item.name, item.handler);
-        };
+        resetEventHandlers();
     });
 
 
@@ -48,7 +37,7 @@ describe('Map', function(){
                 //expect(data.maxZoom).toBeDefined();
 
                 channel.log('Get available map layers done. ', data);
-                eventCounter++;
+                counter++;
                 done();
             });
         });
@@ -75,7 +64,7 @@ describe('Map', function(){
                 expect(data.srsName).toContain("EPSG");
 
                 channel.log('Get Map Position done.', data);
-                eventCounter++;
+                counter++;
                 done();
             });
         });
@@ -95,7 +84,7 @@ describe('Map', function(){
                 expect(data.top).toEqual(jasmine.any(Number));
 
                 channel.log('Get Map Bbox done.', data);
-                eventCounter++;
+                counter++;
                 done();
             });
         });
@@ -113,10 +102,43 @@ describe('Map', function(){
                     expect(data).toContain("data:image/png;base64,");
                 
                     channel.log('Get Screenshot done.');
-                    eventCounter++;
+                    counter++;
                     done();
                 }, 1000);
             });
+        });
+
+    });
+
+    describe('Rotate map', function() {
+        
+        beforeEach(function(done) {
+            //Save map position.
+            channel.getMapPosition(function(data) {
+                defaultPosition = data;
+                done();
+            });
+        });
+
+        it('Rotates 180', function(done) {
+            // Listen AfterMapMoveEvent occurs and position stays same as before rotation
+            handleEvent('AfterMapMoveEvent', function(data) {
+                channel.log('AfterMapMoveEvent launched!');
+                expect(data.centerX).toBe(defaultPosition.centerX);
+                expect(data.centerY).toBe(defaultPosition.centerY);
+                expect(data.zoom).toBe(defaultPosition.zoom);
+                counter++;
+                done();
+            });
+            // rotate.map 180 degrees
+            channel.postRequest('rotate.map', [180]);
+            channel.log('rotate.map 180 request done.');
+        });
+        it('Resets rotation', function(done) {
+            channel.postRequest('rotate.map', []);
+            channel.log('rotate.map reset.');
+            counter++;
+            done();
         });
 
     });
@@ -142,7 +164,7 @@ describe('Map', function(){
                 expect(data.current).not.toBeLessThan(0);
 
                 channel.log('Get Zoom Range done.', data);
-                eventCounter++
+                counter++
                 done();
             });
         });
@@ -156,7 +178,7 @@ describe('Map', function(){
                 expect(data).not.toBeGreaterThan(zoom.max);
 
                 channel.log('Zoom level after zoomIn: ', data);
-                eventCounter++
+                counter++
                 done();
             });
         });
@@ -171,7 +193,7 @@ describe('Map', function(){
                 expect(data).not.toBeGreaterThan(zoom.max);
 
                 channel.log('Zoom level after zoomOut: ', data);
-                eventCounter++
+                counter++
                 done();
             });
         });
@@ -182,7 +204,7 @@ describe('Map', function(){
                 expect(data).toEqual(5);
 
                 channel.log('Zoom level after zoom to 5: ', data);
-                eventCounter++
+                counter++
                 done();
             });
         });
@@ -221,7 +243,7 @@ describe('Map', function(){
                 expect(data.scale).toBe(defaultPosition.scale);
 
                 channel.log('ResetState moved map:', data);
-                eventCounter++;
+                counter++;
                 done();
             });
             // Reset state.
@@ -244,6 +266,7 @@ describe('Map', function(){
                             selectedLayers:[jasmine.objectContaining({
                                 id: defaultLayer[0].id,
                                 opacity:defaultLayer[0].opacity,
+                                //style:"default"
                             })]
                         })
                     })
@@ -256,7 +279,7 @@ describe('Map', function(){
                 //expect(defaultLayer[0]).toEqual(jasmine.objectContaining(data.mapfull.state.selectedLayers[0]));
 
                 channel.log('GetCurrentState: ', data);
-                eventCounter++;
+                counter++;
                 done();
             });
         });
@@ -273,7 +296,7 @@ describe('Map', function(){
                 expect(data.scale).toBe(defaultPosition.scale);
                 
                 channel.log('UseState moved map:', data);
-                eventCounter++;
+                counter++;
                 done();
             });
             // Use saved state.
@@ -281,9 +304,7 @@ describe('Map', function(){
                 channel.log('UseState: ', savedState);
             });
         });
-
     });
-
 
 });
 

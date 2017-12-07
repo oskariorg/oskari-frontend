@@ -1,18 +1,10 @@
 describe('Features', function(){
 
-    function handleEvent(name, handler) {
-        channel.handleEvent(name, handler);
-            handlersToClean.push({
-            name: name,
-            handler: handler
-        });
-    };
-
     beforeEach(function(done) {
         channel.onReady(function() {
              // Reset map and event counter.
             channel.resetState(function() {
-                eventCounter = 0;
+                counter = 0;
                 // Get default position
                 channel.getMapPosition(function(data) {
                     defaultPosition = data;
@@ -32,12 +24,9 @@ describe('Features', function(){
 
     afterEach(function() {
         // Spy callback.
-        expect(eventCounter).toEqual(1, "Event count does not match");
+        expect(counter).toEqual(1);
         // Reset event handlers.
-        while (handlersToClean.length) {
-            var item = handlersToClean.shift();
-            channel.unregisterEventHandler(item.name, item.handler);
-        };
+        resetEventHandlers();
     });
 
     it("Adds point feature", function(done) {
@@ -47,7 +36,7 @@ describe('Features', function(){
             expect(data.features[0].geojson.type).toBe(pointGeojsonObject.type);
             expect(data.features[0].geojson.features[0].geometry.coordinates[0]).toBe(pointGeojsonObject.features[0].geometry.coordinates[0]);
             expect(data.features[0].geojson.features[0].geometry.coordinates[1]).toBe(pointGeojsonObject.features[0].geometry.coordinates[1]);
-            eventCounter++;
+            counter++;
             done();
         });
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
@@ -64,7 +53,7 @@ describe('Features', function(){
             expect(data.features[0].geojson.features[0].geometry.coordinates[0][1]).toBe(lineGeojsonObject.features[0].geometry.coordinates[0][1]);
             expect(data.features[0].geojson.features[0].geometry.coordinates[1][0]).toBe(lineGeojsonObject.features[0].geometry.coordinates[1][0]);
             expect(data.features[0].geojson.features[0].geometry.coordinates[1][1]).toBe(lineGeojsonObject.features[0].geometry.coordinates[1][1]);
-            eventCounter++;
+            counter++;
             done();
         });
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
@@ -81,7 +70,7 @@ describe('Features', function(){
         handleEvent('FeatureEvent', function(data) {
             channel.log('FeatureEvent trigggered:', data)
             expect(data.operation).toBe("remove");
-            eventCounter++;
+            counter++;
             done();
         });
         // Remove all features which 'test_property' === 'line feature' from the layer id==='VECTOR'
@@ -90,10 +79,10 @@ describe('Features', function(){
     });
 
     it("Removes all features", function(done) {
-        //annihilate everything - does not trigger featureEvent
+        //annihilate everything - does not trigger featureEvent currently
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
         channel.log('FeatureEvent triggered.');
-        eventCounter++;
+        counter++;
         done();
     });
 
@@ -101,7 +90,7 @@ describe('Features', function(){
         //requires feature layer to show popup
         channel.postRequest('MapModulePlugin.GetFeatureInfoRequest', [defaultPosition.centerX, defaultPosition.centerY]);
         channel.log('MapModulePlugin.GetFeatureInfoRequest done.');
-        eventCounter++;
+        counter++;
         done();
     });
 

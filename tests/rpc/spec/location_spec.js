@@ -1,25 +1,17 @@
 describe('Location', function(){
 
-    function handleEvent(name, handler) {
-        channel.handleEvent(name, handler);
-            handlersToClean.push({
-            name: name,
-            handler: handler
-        });
-    };
-
     beforeEach(function(done) {
         channel.onReady(function() {
              // Reset map and event counter.
             channel.resetState(function() {
-                eventCounter = 0;
+                counter = 0;
                 // Get default position
                 channel.getMapPosition(function(data) {
                     defaultPosition = data;
                     // Delay between tests
                     setTimeout(function() {
                         done();
-                    }, 0);
+                    }, 500);
                 });
              });
         });
@@ -27,22 +19,19 @@ describe('Location', function(){
 
     afterEach(function() {
         // Spy callback.
-        expect(eventCounter).toEqual(1, "Event count does not match");
+        expect(counter).toEqual(1);
         // Reset event handlers.
-        while (handlersToClean.length) {
-            var item = handlersToClean.shift();
-            channel.unregisterEventHandler(item.name, item.handler);
-        };
+        resetEventHandlers();
     });
 
     // # Requests: GetUserLocationRequest
     it("Get users location", function(done) {
-
+        // Https needed for user location
         handleEvent('UserLocationEvent', function(data) {
             channel.log('UserLocationEvent triggered:', data);
             expect(data.lat).toBeDefined("latitude not found.");
             expect(data.lon).toBeDefined("longitude not found.");
-            eventCounter++;
+            counter++;
             done();
         });
 
@@ -56,8 +45,19 @@ describe('Location', function(){
         handleEvent('SearchResultEvent', function(data) {
             channel.log('SearchResultEvent:', data);
             expect(data.success).toBe(true);
-            expect(data.result.locations[0].region).toBe(searchCriteria);
-            eventCounter++;
+            expect(data.result.locations[0].name).toContain(searchCriteria);
+            
+            result = Object.keys(data.result.locations[0]);
+                expect(result).toContain('channelId');
+                expect(result).toContain('id');
+                expect(result).toContain('lat');
+                expect(result).toContain('lon');
+                expect(result).toContain('rank');
+                expect(result).toContain('region');
+                expect(result).toContain('type');
+                expect(result).toContain('village');
+                //expect(result).toContain('zoomScale');
+            counter++;
             done();
         });
 
@@ -74,14 +74,23 @@ describe('Location', function(){
        ],
         function(routeRequest, done) {
 
-            var myRouteRequest = {
+            var myRouteRequest2 = {
               "fromlat": defaultPosition.centerY,
               "fromlon": defaultPosition.centerX,
               "srs": defaultPosition.srsName,
-              "tolat": defaultPosition.centerY+1000,
-              "tolon": defaultPosition.centerX+1000,
+              "tolat": defaultPosition.centerY+10,
+              "tolon": defaultPosition.centerX+1,
               "mode": routeRequest
             };
+
+            var myRouteRequest = {
+                'fromlat': '6683840',
+                'fromlon': '360448',
+                'srs': 'EPSG:3067',
+                'tolat': '6675728',
+                'tolon': '394240',
+                'mode': routeRequest // TRANSIT, WALK, BICYCLE, TRAIN and so on
+              };
 
             handleEvent('RouteResultEvent', function(data) {
                 channel.log('RouteResultEvent:', data);
@@ -91,7 +100,7 @@ describe('Location', function(){
                 expect(data.rawParams.fromlon).toEqual(myRouteRequest.fromlon);
                 expect(data.rawParams.tolat).toEqual(myRouteRequest.tolat);
                 expect(data.rawParams.tolon).toEqual(myRouteRequest.tolon);
-                eventCounter++;
+                counter++;
                 done();
             });
 
@@ -100,5 +109,34 @@ describe('Location', function(){
         }
     );
 
+    // # Requests: GetFeedbackServiceRequest
+    it("Get feedback service list", function(done) {
+
+        handleEvent('FeedbackResultEvent', function(data) {
+            
+            expect(data.success).toEqual(true);
+
+            result = Object.keys(data);
+                expect(result).toContain('success');
+                expect(result).toContain('data');
+                expect(result).toContain('requestParameters');
+            
+            serviceList = Object.keys(data.data.serviceList[0]);
+                expect(serviceList).toContain('keywords', data);
+                expect(serviceList).toContain('description');
+                expect(serviceList).toContain('service_name');
+                expect(serviceList).toContain('group');
+                expect(serviceList).toContain('type');
+                expect(serviceList).toContain('service_code');
+                expect(serviceList).toContain('metadata');
+
+            channel.log('FeedbackResultEvent', data);
+            counter++;
+            done();
+        });
+
+        channel.postRequest('GetFeedbackServiceRequest', []);
+        channel.log('GetUserLocationRequest request done.');
+    });
 });
 

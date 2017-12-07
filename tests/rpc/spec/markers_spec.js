@@ -1,18 +1,10 @@
 describe('Markers', function(){
 
-    function handleEvent(name, handler) {
-        channel.handleEvent(name, handler);
-            handlersToClean.push({
-            name: name,
-            handler: handler
-        });
-    };
-
     beforeEach(function(done) {
         channel.onReady(function() {
              // Reset map and event counter.
             channel.resetState(function() {
-                eventCounter = 0;
+                counter = 0;
                 // Get default position
                 channel.getMapPosition(function(data) {
                     defaultPosition = data;
@@ -29,12 +21,9 @@ describe('Markers', function(){
 
     afterEach(function() {
         // Spy callback.
-        expect(eventCounter).toEqual(1, "Event count does not match");
+        expect(counter).toEqual(1);
         // Reset event handlers.
-        while (handlersToClean.length) {
-            var item = handlersToClean.shift();
-            channel.unregisterEventHandler(item.name, item.handler);
-        };
+        resetEventHandlers();
     });
 
     describe('Add or remove markers', function(){
@@ -65,8 +54,8 @@ describe('Markers', function(){
 
                     handleEvent('AfterAddMarkerEvent', function(data) {
                         channel.log('AfterAddMarkerEvent triggered:', data);
-                        eventCounter++;
                         expect(data.id).toEqual(MARKER_ID);
+                        counter++;
                         done();
                     });
 
@@ -78,14 +67,14 @@ describe('Markers', function(){
         it("Removes marker", function(done) {
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [MARKER_ID]);
             channel.log('RemoveMarkersRequest:', MARKER_ID);
-            eventCounter++;
+            counter++;
             done();
         });
 
         it("Removes all markers", function(done) {
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
             channel.log('RemoveMarkersRequest: all');
-            eventCounter++;
+            counter++;
             done();
         });
     });
@@ -100,7 +89,7 @@ describe('Markers', function(){
             // If MARKER_ID is not defined then show all invisible markers
             channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [true, MARKER_ID]);
             channel.log('MarkerVisibilityRequest true:', MARKER_ID);
-            eventCounter++;
+            counter++;
             done();
         });
 
@@ -108,7 +97,7 @@ describe('Markers', function(){
             // If MARKER_ID is not defined then hide all invisible markers
             channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [false, MARKER_ID]);
             channel.log('MarkerVisibilityRequest false:', MARKER_ID);
-            eventCounter++;
+            counter++;
             done();
         });
     });
@@ -119,15 +108,15 @@ describe('Markers', function(){
             channel.postRequest('MapModulePlugin.AddMarkerRequest', [testMarker, MARKER_ID]);
         });
 
-        it("Hides infobox for marker", function(done) {
-            channel.postRequest('InfoBox.HideInfoBoxRequest', markerInfobox);
-            eventCounter++;
+        it("Shows infobox for marker", function(done) {
+            channel.postRequest('InfoBox.ShowInfoBoxRequest', markerInfobox);
+            counter++;
             done();
         });
 
-        it("Shows infobox for marker", function(done) {
-            channel.postRequest('InfoBox.ShowInfoBoxRequest', markerInfobox);
-            eventCounter++;
+        it("Hides infobox for marker", function(done) {
+            channel.postRequest('InfoBox.HideInfoBoxRequest', markerInfobox);
+            counter++;
             done();
         });
     });

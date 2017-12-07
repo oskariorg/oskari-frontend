@@ -1,19 +1,11 @@
 describe('Drawing', function(){
 
-    function handleEvent(name, handler) {
-        channel.handleEvent(name, handler);
-            handlersToClean.push({
-            name: name,
-            handler: handler
-        });
-    };
-
     beforeEach(function(done) {
         channel.onReady(function() {
             // Channel is now ready and listening.
             channel.resetState(function() {
-                // Reset map and event counter.
-                eventCounter = 0;
+                // Reset map and counter.
+                counter = 0;
                 // Delay between tests
                 setTimeout(function() {
                     done();
@@ -24,12 +16,9 @@ describe('Drawing', function(){
 
     afterEach(function() {
         // Spy callback.
-        expect(eventCounter).toEqual(1, "Event count does not match");
+        expect(counter).toEqual(1);
         // Reset event handlers.
-        while (handlersToClean.length) {
-            var item = handlersToClean.shift();
-            channel.unregisterEventHandler(item.name, item.handler);
-        };
+        resetEventHandlers();
     });
 
     describe('DrawTools', function() {
@@ -47,45 +36,60 @@ describe('Drawing', function(){
                 function(drawRequests, done) {
                     channel.postRequest('DrawTools.StartDrawingRequest', ['my functionality id', drawRequests]);
                     channel.log("StartDrawingRequest:", drawRequests)
-                    eventCounter++;
+                    counter++;
                     done();
                 }
             );
         });
 
+
         describe('Stop Drawing', function() {
 
-            it("Cancels Drawing request", function(done) {
+            function listenDrawingEvent(Id) {
+                // Create event handler for drawing event
                 handleEvent('DrawingEvent', function(data) {
-                    channel.log('DrawingEvent triggered!');
+                    channel.log('DrawingEvent triggered:', data);
                     expect(data.name).toBe("DrawingEvent");
-                    expect(data.id).toBe("Test");
+                    expect(data.id).toBe(Id);
                     expect(data.isFinished).toBe(true);
-                    eventCounter++;
-                    done();
+                    counter++;
                 });
+            }
+
+            function startDraw(Id) {
                 // DrawingEvent does not occur unless draw started
-                channel.postRequest('DrawTools.StartDrawingRequest', ['Test', 'Point']);
-                channel.log('StartDrawingRequest Test.');
+                channel.postRequest('DrawTools.StartDrawingRequest', [Id, 'Point']);
+                channel.log('StartDrawingRequest:', Id);
+            }
+
+            function cancelDraw(Id) {
                 // StopDrawingRequest Cancel
-                channel.postRequest('DrawTools.StopDrawingRequest', ['Test'])
-                channel.log('StopDrawingRequest Test Cancel.');
-            });
-            it("Clears Drawing request", function(done) {
-                handleEvent('DrawingEvent', function(data) {
-                    channel.log('DrawingEvent triggered!');
-                    expect(data.name).toBe("DrawingEvent");
-                    expect(data.id).toBe("Test");
-                    expect(data.isFinished).toBe(true);
-                    eventCounter++;
-                    done();
-                });
-                // Start drawing
-                channel.postRequest('DrawTools.StartDrawingRequest', ['Test', 'Point']);
-                channel.log('StartDrawingRequest Test.');
+                channel.postRequest('DrawTools.StopDrawingRequest', [Id])
+                channel.log('StopDrawingRequest Cancel:', Id);
+            }
+
+            function clearDraw(Id) {
                 // StopDrawingRequest Clear
-                channel.postRequest('DrawTools.StopDrawingRequest', ['Test', true])
-                channel.log('StopDrawingRequest Test Clear.');
+                channel.postRequest('DrawTools.StopDrawingRequest', [Id, true])
+                channel.log('StopDrawingRequest Clear:', Id);
+            }
+
+            it("Cancels Drawing request", function(done) {
+
+                listenDrawingEvent("Test");
+                startDraw("Test");
+                cancelDraw("Test");
+
+                setTimeout(function(){ done() }, 200);
+            });
+
+            it("Clears Drawing request", function(done) {
+
+                listenDrawingEvent("Test");
+                startDraw("Test");
+                clearDraw("Test");
+
+                setTimeout(function(){ done() }, 200);
             });
         });
     });

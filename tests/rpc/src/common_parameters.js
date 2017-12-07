@@ -1,16 +1,30 @@
 /*
-Test parameters
+Switch map URL to test other maps
 */
-var eventCounter;
-var eventHandler;
-var handlersToClean = [];
+var mapUrl = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-5055628dbd42';
+
+// sets source
+document.getElementById('map').src = mapUrl;
+// sets domain (localhost is allowed)
+var iFrameDomain = mapUrl.substring(0, mapUrl.indexOf('?'));
+// init connection 
+var iFrame = document.getElementById('map');
+window.channel = OskariRPC.connect(
+    iFrame,
+    iFrameDomain
+);
+
+/*
+Test parameters for specs
+*/
+var counter;
 
 // ##################### //
 // ##### General ##### //
 // ##################### //
 
 var general = {
-  "ExpectedOskariVersion": "1.44.1",
+  "ExpectedOskariVersion": "1.44.3",
   "ExpectedRPCVersion": "2.0.4",
   "IsSupported": true,
   "srsName": "EPSG:4326"
@@ -169,30 +183,6 @@ var testLayerOptions = {
   'maxResolution': 10000
 };
 
-// # Requests: Change map layer style
-var styleParams = {
-  SLD_BODY: '<StyledLayerDescriptor xmlns=\"http://www.opengis.net/sld\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd">' +
-    '    <NamedLayer>' +
-    '    <Name>oskari:kunnat2013</Name>' +
-    '    <UserStyle>' +
-    '    <Title>SLD Cook Book: Simple polygon</Title>' +
-    '    <FeatureTypeStyle>' +
-    '    <Rule>' +
-    '    <PolygonSymbolizer>' +
-    '    <Fill>' +
-    '    <CssParameter name="fill">#000080</CssParameter>' +
-    '    <CssParameter name="fill-opacity">#000080</CssParameter>' +
-    '    </Fill>' +
-    '    </PolygonSymbolizer>' +
-    '    </Rule>' +
-    '    </FeatureTypeStyle>' +
-    '    </UserStyle>' +
-    '    </NamedLayer>' +
-    '    </StyledLayerDescriptor>'
-};
-var resetStyleParams = {
-  SLD_BODY: null
-};
 // ###################### //
 // ###### Markers ###### //
 // ###################### //
@@ -203,7 +193,7 @@ var testMarker = {
   x: 0,
   y: 0,
   color: "ff0000",
-  msg: 'Shape: 2',
+  msg: 'This is shape #2',
   shape: 2, // icon number (0-6)
   size: 12
 };
@@ -345,7 +335,7 @@ var cursorStyles = [
 // ##### Location ##### //
 // ##################### //
 
-var searchCriteria = "Vantaa";
+var searchCriteria = "Helsinki";
 
 
 // ##################### //
