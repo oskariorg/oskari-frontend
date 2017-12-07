@@ -93,6 +93,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     _setGridGroupingHeaders: function(indicators,gridLoc){
         var me = this;
+        if(!me.grid) {
+            return;
+        }
         me.grid.setGroupingHeader([
             {
                 cls: 'statsgrid-grouping-header region',

@@ -16,16 +16,22 @@ Oskari.clazz.category(
          * @param {String} value id for the column to be selected
          */
         selectColumn: function (value) {
+            var me = this;
             // set selectedColumn in either case so render will use it immediately
             this.__selectedColumn = value;
 
-            if(!this.table) {
+            var columnIndex = me._fullFieldNames.findIndex(function(name) {
+                return name.key === value;
+            });
+
+            if(!this.table || columnIndex === -1) {
                 return;
             }
             // remove selection from headers
             this.table.find('th').removeClass('selected');
             // add selection to the one specified
-            var selected = this.table.find('th.' + this.__getHeaderClass(value));
+
+            var selected = this.table.find('th.' + me._columnClsPrefix + columnIndex);
             selected.addClass('selected');
 
             this._selectActivePage();
