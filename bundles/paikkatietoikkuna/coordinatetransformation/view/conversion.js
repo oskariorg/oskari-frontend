@@ -65,9 +65,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         getSelectInstances: function () {
             return this._selectInstances;
         },
-        isMapSelectMode: function () {
-            return this.isMapSelect;
-        },
         createUI: function( container ) {
            this.conversionContainer = container;
 
