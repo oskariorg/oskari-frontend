@@ -40,6 +40,15 @@ Show extra flyout.
 extraflyout.show();
 ```
 
+Make extra flyout draggable.
+```javascript
+extraFlyout.makeDraggable({
+  scroll: false, // Need container auto-scrolls while dragging? Default false.
+  handle: '.oskari-flyouttoolbar', // Make dragging for when mousedown triggered with this elemen. Default '.oskari-flyouttoolbar'.
+  start: function(event, ui) {} // Make custom draggins srtat handler. Defaults set draggable flyout  to top.
+});
+```
+
 
 ## Dependencies
 

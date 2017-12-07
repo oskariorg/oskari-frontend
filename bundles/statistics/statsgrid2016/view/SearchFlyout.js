@@ -56,12 +56,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var panels = this.getPanels(isEmbedded);
         var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
         var state = service.getStateService();
-        var openFirstPanel = state.getIndicators().length === 0;
-
+        el.append(me.getNewSearchElement(isEmbedded));
         _.each(panels, function(p) {
-            if(p.id === 'newSearchPanel' && openFirstPanel) {
-                p.panel.open();
-            }
             accordion.addPanel(p.panel);
         });
 
@@ -80,22 +76,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return panels;
         }
 
-        panels.push(this.getNewSearchPanel());
         panels.push(this.getExtraFeaturesPanel());
         return panels;
     },
-    getNewSearchPanel: function(){
+    getNewSearchElement: function(isEmbedded){
+        // no search for embedded map
+        if(isEmbedded) {
+            return null;
+        }
         var sb = this.instance.getSandbox();
-        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-        var container = panel.getContainer();
-        var locale = this.instance.getLocalization();
+        var container = jQuery('<div></div>');
 
-        panel.setTitle(locale.panels.newSearch.title);
+        var locale = this.instance.getLocalization();
 
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', this.instance, sb);
         container.append(selectionComponent.getPanelContent());
 
-        return {id:'newSearchPanel', panel:panel};
+        return container;
     },
     getExtraFeaturesPanel: function(){
         var sb = this.instance.getSandbox();
