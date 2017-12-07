@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 
         this.__render();
         Oskari.makeObservable(this);
+        this._baseZIndex = 20000;
     }, {
 	    __templates : {
 	    	popup: jQuery('<div class="oskari-flyout">' +
@@ -80,6 +81,10 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                     me.hide();
                 });
                 me._popup = popup;
+                me._popup.css('z-index',  me._baseZIndex + Oskari.seq.nextVal());
+                me._popup.bind('click', function(){
+                    me._popup.css('z-index',  me._baseZIndex + Oskari.seq.nextVal());
+                });
                 me.hide(true);
             }
 
@@ -132,7 +137,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             if(!this._popup) {
                 return;
             }
-            this._popup.css('z-index', 20000);
+            this._popup.css('z-index',  this._baseZIndex + Oskari.seq.nextVal());
         },
         move : function(left, top, keepOnScreen) {
             if(!this._popup) {
@@ -154,8 +159,8 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 }
             }
             this._popup.css({
-                left: left,
-                top: top
+                'left': left,
+                'top': top
             });
         },
         getPosition : function() {
@@ -184,6 +189,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 scroll: false,
                 handle: '.oskari-flyouttoolbar'
             };
+
+            // If options not contains start function then make draged flyout top of all elements
+            if(!dragOptions.start) {
+                dragOptions.start = function( event, ui ) {
+                    jQuery(this).css('z-index', me._baseZIndex + Oskari.seq.nextVal());
+                };
+            }
             me._popup.css('position', 'absolute');
             me._popup.draggable(dragOptions);
         },
