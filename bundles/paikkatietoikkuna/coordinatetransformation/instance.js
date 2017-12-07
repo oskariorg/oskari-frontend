@@ -43,7 +43,6 @@ function () {
      */
     afterStart: function () {
         var sandbox = this.getSandbox();
-
         this.transformationService = this.createService(sandbox);
         this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization();
@@ -74,6 +73,9 @@ function () {
     },
     createUi: function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
+    },
+    isMapSelectMode: function () {
+        return this.views["conversion"].isMapSelect;
     },
     /**
      * Creates the coordinatetransformation service and registers it to the sandbox.

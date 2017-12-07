@@ -35,12 +35,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapselect',
                 me.helper.removeMarkers();
                 dialog.close();
                 me.instance.toggleViews("conversion");
-                me.instance.getViews().conversion.mapselect = false;
+                me.instance.getViews().conversion.isMapSelect = false;
                 me.mapcoords = [];
             });
 
             btn.setHandler(function() {
                 me.instance.getViews().conversion.inputTable.addRows( me.mapcoords );
+                me.instance.getViews().conversion.isMapSelect = false;
                 me.instance.toggleViews("conversion");
                 me.mapcoords = [];
             });

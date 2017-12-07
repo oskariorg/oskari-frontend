@@ -2,13 +2,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
     this.loc = locale;
     this.instance = instance;
     this.sb = instance.sandbox;
-    this.sb.register(this);
-    this.removeMarkersReq = this.sb.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
-    this.addMarkerReq = this.sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+    this.removeMarkersReq = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
+    this.addMarkerReq = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
     for ( var p in this.eventHandlers ) {
         this.sb.registerForEventByName(this, p);
         this.clickCoordinates = null;
-        this.moveReq = this.sb.getRequestBuilder('MapMoveRequest');
+        this.moveReq = Oskari.requestBuilder('MapMoveRequest');
     }
 }, {
     getName: function() {
@@ -26,6 +25,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
         return this.clickCoordinates;
     },
     addMarkerForCoords: function (coords, startingSystem) {
+        // TODO: disable gfi when selecting markers
+        if ( !this.instance.isMapSelectMode()  ) {
+            return;
+        }
         if ( this.addMarkerReq ) {
                 var data = {
                     x: Number(coords.lon),
