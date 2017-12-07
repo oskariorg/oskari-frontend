@@ -2,7 +2,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
     this.loc = locale;
     this.instance = instance;
     this.sb = instance.sandbox;
-    this.sb.register(this);
     this.removeMarkersReq = this.sb.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
     this.addMarkerReq = this.sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
     for ( var p in this.eventHandlers ) {
@@ -26,6 +25,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
         return this.clickCoordinates;
     },
     addMarkerForCoords: function (coords, startingSystem) {
+        // TODO: disable gfi when selecting markers
+        if ( !this.instance.views["conversion"].isMapSelectMode()  ) {
+            return;
+        }
         if ( this.addMarkerReq ) {
                 var data = {
                     x: Number(coords.lon),

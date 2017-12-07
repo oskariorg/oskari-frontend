@@ -4,7 +4,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         me.instance = instance;
         me.loc = me.instance.getLocalization("flyout");
         me.helper = me.instance.helper;
-        me.mapselect = false;
+        me.isMapSelect = false;
         me.clipboardInsert = false;
         me.conversionContainer = null
         me.startingSystem = false;
@@ -64,6 +64,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         },
         getSelectInstances: function () {
             return this._selectInstances;
+        },
+        isMapSelectMode: function () {
+            return this.isMapSelect;
         },
         createUI: function( container ) {
            this.conversionContainer = container;
@@ -288,19 +291,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
                     // me.showDialogue( importfile, false );
                     clipboardInfo.hide();
                     fileInput.show();
-                    me.mapselect = false;
+                    me.isMapSelect = false;
                     me.clipboardInsert = false;
                 }
                 else if (this.value == '2') {
                     fileInput.hide();
                     me.clipboardInsert = true;
                     clipboardInfo.show();
-                    me.mapselect = false;
+                    me.isMapSelect = false;
                 }
                 me.inputTable.isEditable( me.clipboardInsert );
             });
                 jQuery('.mapselect').on("click", function() {
-                    me.mapselect = true;    
+                    me.isMapSelect = true;    
                     me.instance.toggleViews("mapselect");
                     me.clipboardInsert = false;
                     me.selectEPSG3067();
