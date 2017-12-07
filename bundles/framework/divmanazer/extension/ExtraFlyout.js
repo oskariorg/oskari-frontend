@@ -52,6 +52,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 return;
             }
 	    	me._popup.show();
+            me._popup.css('z-index', me._baseZIndex + Oskari.seq.nextVal());
     		me._visible = true;
     		this.trigger('show');
 	    },
@@ -185,17 +186,15 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          */
         makeDraggable: function (options) {
             var me = this,
-                dragOptions = options ? options : {
-                scroll: false,
-                handle: '.oskari-flyouttoolbar'
-            };
-
-            // If options not contains start function then make draged flyout top of all elements
-            if(!dragOptions.start) {
-                dragOptions.start = function( event, ui ) {
-                    jQuery(this).css('z-index', me._baseZIndex + Oskari.seq.nextVal());
+                options = options || {},
+                dragOptions = {
+                    scroll: options.scroll || false,
+                    handle: options.handle || '.oskari-flyouttoolbar',
+                    start: options.start || function( event, ui ) {
+                        jQuery(this).css('z-index', me._baseZIndex + Oskari.seq.nextVal());
+                    }
                 };
-            }
+
             me._popup.css('position', 'absolute');
             me._popup.draggable(dragOptions);
         },
