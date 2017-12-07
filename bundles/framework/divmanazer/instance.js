@@ -184,7 +184,13 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             this.started = false;
 
         },
-
+        getMapdivOffset: function () {
+            var mapdiv = jQuery("#mapdiv");
+            return {
+                "top": mapdiv.offset().top,
+                "left": mapdiv.offset().left
+            }
+        },
         /**
          * HTML templates
          */
@@ -244,8 +250,8 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
             /*flyout.css('left', '-3195px');
          flyout.css('top', '-3100px');*/
-            flyout.css('left', me.defaults.attach.left);
-            flyout.css('top', me.defaults.attach.top);
+            flyout.css('left', me.getFlyoutDefaultPositions().attach.left);
+            flyout.css('top', me.getFlyoutDefaultPositions().attach.top);
 
             me.compiledTemplates['Oskari.userinterface.Flyout'] = flyout;
 
@@ -819,7 +825,18 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
             this.sandbox.notifyAll(evt, true);
         },
-
+        getFlyoutDefaultPositions: function () {
+            return {
+                    detach: {
+                        left: '212px',
+                        top: '50px'
+                    },
+                    attach: {
+                        left: this.getMapdivOffset().left,
+                        top: '30px'
+                    }
+                }
+        },
         /*
          * @static @property validStates
          */
@@ -888,21 +905,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 sidebar: true
             }
         },
-
-        /**
-         * @static @property flyout default positioning
-         */
-        defaults: {
-            detach: {
-                left: '212px',
-                top: '50px'
-            },
-            attach: {
-                left: '192px',
-                top: '30px'
-            }
-        },
-
         /**
          * @static @property tileTransitions
          * CSS transitions for menu tiles
@@ -1021,9 +1023,9 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     //toState,
                     viewState;
 
-                if ((!extensionInfo.viewState.left || !extensionInfo.viewState.top) || (extensionInfo.viewState.left === me.defaults.attach.left && extensionInfo.viewState.top === me.defaults.attach.top)) {
-                    extensionInfo.viewState.left = me.defaults.detach.left;
-                    extensionInfo.viewState.top = me.defaults.detach.top;
+                if ((!extensionInfo.viewState.left || !extensionInfo.viewState.top) || (extensionInfo.viewState.left === me.getFlyoutDefaultPositions().attach.left && extensionInfo.viewState.top === me.getFlyoutDefaultPositions().attach.top)) {
+                    extensionInfo.viewState.left = me.getFlyoutDefaultPositions().detach.left;
+                    extensionInfo.viewState.top = me.getFlyoutDefaultPositions().detach.top;
                 }
                 /*toState = {
                     "left": extensionInfo.viewState.left,
