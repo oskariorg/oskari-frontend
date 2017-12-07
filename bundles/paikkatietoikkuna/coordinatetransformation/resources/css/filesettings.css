@@ -1,0 +1,40 @@
+.oskari-export {
+    width: 39em;
+    display: inline-block;
+}
+ .filerow, .formatrow, .separatorrow, .headerrow {
+    float:left;
+}
+ .filerow, .formatrow, .separatorrow, .headerrow {
+    clear: left;
+    padding-top: 0.875em; 
+}
+.title {
+    font-weight: bold;
+    word-break: break-word;
+    width: 12em !important;
+    font-size: 0.9em;
+    float: left;
+    padding-right: 0.4em;
+}
+.lbl > .chkbox {
+    float: left;
+}
+.lbl {
+    float: right;
+    padding-left: 3em;
+}
+.file-select {
+    float: left;
+}
+.file-select > select {
+    float: right;
+    width: 12em;
+}
+.cancel {
+    clear: left;
+    float: left;
+}
+.import {
+    float:right;
+}
