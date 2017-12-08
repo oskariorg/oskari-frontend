@@ -57,8 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var buttons = [];
 
-            var closeButton = dialog.createCloseButton();
-            closeButton.setTitle(this.loc('cancel'));
+            var closeButton = dialog.createCloseButton(this.loc('cancel'));
             buttons.push(closeButton);
 
             var content = jQuery('<div><h3>' + this.loc('beware') + '</h3><textarea style="width:600px;height:400px;"></textarea></div>');
@@ -100,8 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var buttons = [];
 
-            var closeButton = dialog.createCloseButton();
-            closeButton.setTitle(this.loc('back'));
+            var closeButton = dialog.createCloseButton(this.loc('back'));
             buttons.push(closeButton);
 
             var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
