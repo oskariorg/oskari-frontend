@@ -6,36 +6,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.bundle.publisher.PublisherBundleInstance} instance
-     *          reference to publisher instance
+     * @param {Function} openEditor
+     *          function to call to open the publish editor. Optional initial data can be passed as parameter.
      */
-    function (instance) {
-        this.instance = instance;
+    function (openEditor) {
+        this.openEditor = openEditor;
     }, {
-        getDefaultData: function() {
-            var config = {
-                mapfull: {
-                    conf: {
-                        plugins: [
-                            {id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'},
-                            {id: 'Oskari.mapframework.mapmodule.ControlsPlugin'},
-                            {id: 'Oskari.mapframework.mapmodule.GetInfoPlugin'}
-                        ]
-                    }
-                },
-                "featuredata2": {
-                    conf: {
-                    }
-                }
-            };
-            // setup current mapstate so layers are not removed
-            var sb = this.instance.getSandbox();
-            var state = sb.getCurrentState();
-            // only merge mapfull state so tools like statsgrid are not switched on "since they have state"
-            config.mapfull.state = state.mapfull.state;
-
-            return { configuration: config };
-        },
         /**
          * @method handleRequest
          * Shows/hides the maplayer specified in the request in OpenLayers implementation.
@@ -46,38 +22,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var me = this,
-                url = Oskari.urls.getRoute('AppSetup');
+            var me = this;
 
-            if (request.getEditMap()) {
-                //get the uuid from the request
-                var uuid = request.getEditMap().uuid ||  null;
-                // make the ajax call
-                jQuery.ajax({
-                    url: url + '&uuid='+uuid,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        data.uuid = uuid;
-                        me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), data);
-                        me._showEditNotification();
-                    }
-                });
-            } else {
-                me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), this.getDefaultData());
+            if (!request.getEditMap()) {
+                me.openEditor();
+                return;
             }
-
-        },
-        /**
-         * @method _showEditNotification
-         * Shows notification that the user starts editing an existing published map
-         * @private
-         */
-        _showEditNotification: function () {
-            var loc = this.instance.getLocalization('edit'),
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(loc.popup.title, loc.popup.msg);
-            dialog.fadeout();
+            //get the uuid from the request
+            var uuid = request.getEditMap().uuid || null;
+            // make the ajax call
+            jQuery.ajax({
+                url: Oskari.urls.getRoute('AppSetup'),
+                data: {
+                    uuid : uuid
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    data.uuid = uuid;
+                    me.openEditor(data);
+                }
+            });
         }
     }, {
         /**
