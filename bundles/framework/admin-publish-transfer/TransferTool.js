@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
             var me = this;
             var element = jQuery('<div><a href="#">' + this.loc('openEditor') + '</a></div>');
             element.find('a').click(function () {
-                var publishData = me.publisherInstance.publisher._gatherSelections();
+                var publishData = me.publisherInstance.publisher.gatherSelections();
                 if (publishData) {
                     me._showExportImportDialog(publishData);
                 }
