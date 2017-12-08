@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "",
-                "tooltip": "",
-                "options": [
-                    {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED",
-                        "selected": true
-                    },
-                    {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
-                    },
-                    {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
-                    },
-                    {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
-                    },
-                    {
-                        "id": "NOT TRANSLATED",
-                        "loca": "NOT TRANSLATED",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
-                    }
-                ]
-            },
             "help": "Ajuda",
             "error": {
                 "title": "Erro",
