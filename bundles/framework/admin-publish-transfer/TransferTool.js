@@ -95,8 +95,7 @@ function() {
             if(uuid) {
                 input.uuid = uuid;
             }
-            me.publisherInstance.publisher._editToolLayoutOff();
-            me.publisherInstance.setPublishMode(false);
+            me.publisherInstance.publisher.cancel(); // closes publisher without saving
             setTimeout(function(){ // give map time to return to normal mode
                 me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
             }, 500);

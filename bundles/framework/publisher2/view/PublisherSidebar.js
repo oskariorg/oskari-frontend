@@ -86,8 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             container.find('div.header div.icon-close').bind(
                 'click',
                 function () {
-                    me._editToolLayoutOff();
-                    me.instance.setPublishMode(false);
+                    me.cancel();
                 }
             );
 
@@ -381,7 +380,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
         },
-
+        /**
+         * @method cancel
+         * Closes publisher without saving
+         */
+        cancel: function() {
+            this._editToolLayoutOff();
+            this.instance.setPublishMode(false);
+        },
         /**
          * @private @method _getButtons
          * Renders publisher buttons to DOM snippet and returns it.
@@ -397,8 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             cancelBtn.setHandler(function () {
-                me._editToolLayoutOff();
-                me.instance.setPublishMode(false);
+                me.cancel();
             });
             cancelBtn.insertTo(buttonCont);
 
