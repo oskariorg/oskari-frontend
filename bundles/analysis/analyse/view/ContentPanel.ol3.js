@@ -701,7 +701,11 @@ Oskari.clazz.define(
                     return (featureLayer.opacity * 100);
                 },
                 getFeature: function () {
-                    return formatter.writeFeature(featureSource.getFeatureById(id));
+                    var formattedFeature = formatter.writeFeatureObject(featureSource.getFeatureById(id));
+                    if (formattedFeature.properties === null) {
+                        formattedFeature.properties = {};
+                    }
+                    return formattedFeature;
                 }
             };
         },
