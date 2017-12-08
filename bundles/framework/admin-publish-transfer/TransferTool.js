@@ -1,139 +1,139 @@
 Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
-function() {
-    this.publisherInstance = null;
-    this.loc = Oskari.getMsg.bind(null, 'admin-publish-transfer');
-}, {
-    getName: function() {
-        return "Oskari.mapframework.admin-publish-transfer.TransferTool";
-    },
-    group: 'transfer',
-    /**
-    * Get tool object.
-    * @method getTool
-    *
-    * @returns {Object} tool description
-    */
-    getTool: function() {
-        return {
-            id: 'Oskari.mapframework.admin-publish-transfer.TransferTool',
-            title: 'PublishTransfer',
-            config: {}
-        };
-    },
-    init: function(data, publisherInstance) {
-        this.publisherInstance = publisherInstance;
-        this.setEnabled(true);
-    },
-    /**
-    * Get extra options.
-    * @method getExtraOptions
-    * @public
-    *
-    * @returns {Object} jQuery element
-    */
-    getExtraOptions: function() {
-        var me = this;
-        var element = jQuery('<div><a href="#">' + this.loc('openEditor') + '</a></div>');
-        element.find('a').click(function(){
-            var publishData = me.publisherInstance.publisher._gatherSelections();
-            if(publishData) {
-                me._showExportImportDialog(publishData);
-            }
-            return false;
-        });
-        return element;
-    },
-    _showExportImportDialog: function (publishData) {
-        var me = this;
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var buttons = [];
+    function () {
+        this.publisherInstance = null;
+        this.loc = Oskari.getMsg.bind(null, 'admin-publish-transfer');
+    }, {
+        getName: function () {
+            return 'Oskari.mapframework.admin-publish-transfer.TransferTool';
+        },
+        group: 'transfer',
+        /**
+        * Get tool object.
+        * @method getTool
+        *
+        * @returns {Object} tool description
+        */
+        getTool: function () {
+            return {
+                id: 'Oskari.mapframework.admin-publish-transfer.TransferTool',
+                title: 'PublishTransfer',
+                config: {}
+            };
+        },
+        init: function (data, publisherInstance) {
+            this.publisherInstance = publisherInstance;
+            this.setEnabled(true);
+        },
+        /**
+        * Get extra options.
+        * @method getExtraOptions
+        * @public
+        *
+        * @returns {Object} jQuery element
+        */
+        getExtraOptions: function () {
+            var me = this;
+            var element = jQuery('<div><a href="#">' + this.loc('openEditor') + '</a></div>');
+            element.find('a').click(function () {
+                var publishData = me.publisherInstance.publisher._gatherSelections();
+                if (publishData) {
+                    me._showExportImportDialog(publishData);
+                }
+                return false;
+            });
+            return element;
+        },
+        _showExportImportDialog: function (publishData) {
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var buttons = [];
 
-        var closeButton = dialog.createCloseButton();
-        closeButton.setTitle(this.loc('cancel'));
-        buttons.push(closeButton);
+            var closeButton = dialog.createCloseButton();
+            closeButton.setTitle(this.loc('cancel'));
+            buttons.push(closeButton);
 
-        var content = jQuery('<div><h3>' + this.loc('beware') + '</h3><textarea style="width:600px;height:400px;"></textarea></div>');
-        content.find('textarea').val(JSON.stringify(publishData, null, 2));
+            var content = jQuery('<div><h3>' + this.loc('beware') + '</h3><textarea style="width:600px;height:400px;"></textarea></div>');
+            content.find('textarea').val(JSON.stringify(publishData, null, 2));
 
-        var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
-        okButton.setHandler(function () {
-            var text = content.find('textarea').val();
-            var input;
-            try {
-                input = JSON.parse(text);
-            } catch (error) {
-                me._showErrorDialog(me.loc('invalidJSON'));
-                return;
-            }
-            var delta = jsondiffpatch.diff(publishData, input);
-            if(!delta) {
-                me._showErrorDialog(me.loc('noChange'));
-                return;
-            }
-            me._showConfirmationDialog(publishData, input, delta, dialog);
-        });;
-        okButton.setTitle(this.loc('review'));
-        buttons.push(okButton);
-        
-        dialog.makeModal();
-        dialog.show(this.loc('transfer'), content, buttons);
-    },
-    _showConfirmationDialog: function (currentData, input, delta, editDialog) {
-        var me = this;
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var buttons = [];
+            var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+            okButton.setHandler(function () {
+                var text = content.find('textarea').val();
+                var input;
+                try {
+                    input = JSON.parse(text);
+                } catch (error) {
+                    me._showErrorDialog(me.loc('invalidJSON'));
+                    return;
+                }
+                var delta = window.jsondiffpatch.diff(publishData, input);
+                if (!delta) {
+                    me._showErrorDialog(me.loc('noChange'));
+                    return;
+                }
+                me._showConfirmationDialog(publishData, input, delta, dialog);
+            });;
+            okButton.setTitle(this.loc('review'));
+            buttons.push(okButton);
 
-        var closeButton = dialog.createCloseButton();
-        closeButton.setTitle(this.loc('back'));
-        buttons.push(closeButton);
+            dialog.makeModal();
+            dialog.show(this.loc('transfer'), content, buttons);
+        },
+        _showConfirmationDialog: function (currentData, input, delta, editDialog) {
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var buttons = [];
 
-        var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
-        okButton.setHandler(function () {
-            dialog.close();
-            editDialog.close();
-            var uuid = me.publisherInstance.publisher.data.uuid;
-            if(uuid) {
-                input.uuid = uuid;
-            }
-            me.publisherInstance.publisher.cancel(); // closes publisher without saving
-            setTimeout(function(){ // give map time to return to normal mode
-                me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
-            }, 500);
-        });
-        okButton.setTitle(this.loc('apply'));
-        buttons.push(okButton);
-        var heading = '<h3>' + this.loc('sure') +' <span style="background-color:#ffbbbb;text-decoration:line-through;">' +
-        this.loc('red') + '</span>, ' + this.loc('additions') + ' <span style="background-color:#bbffbb">' + this.loc('green') + '</span>.</h3>';
-        var content = jQuery(heading + jsondiffpatchformatters.html.format(delta, currentData));
+            var closeButton = dialog.createCloseButton();
+            closeButton.setTitle(this.loc('back'));
+            buttons.push(closeButton);
 
-        dialog.makeModal();
-        dialog.show(this.loc('review'), content, buttons);
-    },
-    _showErrorDialog: function (message) {
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var buttons = [dialog.createCloseButton()];
-        
-        var content = jQuery('<span>'+ message + '</span>');
+            var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+            okButton.setHandler(function () {
+                dialog.close();
+                editDialog.close();
+                var uuid = me.publisherInstance.publisher.data.uuid;
+                if (uuid) {
+                    input.uuid = uuid;
+                }
+                me.publisherInstance.publisher.cancel(); // closes publisher without saving
+                setTimeout(function () { // give map time to return to normal mode
+                    me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
+                }, 500);
+            });
+            okButton.setTitle(this.loc('apply'));
+            buttons.push(okButton);
+            var heading = '<h3>' + this.loc('sure') + ' <span style="background-color:#ffbbbb;text-decoration:line-through;">' +
+                this.loc('red') + '</span>, ' + this.loc('additions') + ' <span style="background-color:#bbffbb">' + this.loc('green') + '</span>.</h3>';
+            var content = jQuery(heading + window.jsondiffpatchformatters.html.format(delta, currentData));
 
-        dialog.show(this.loc('error'), content, buttons);
-    },
-    /**
-    * Get values.
-    * @method getValues
-    * @public
-    *
-    * @returns {Object} tool value object
-    */
-    getValues: function () {
-        return null;
-    },
-    setEnabled: function(enabled) {
-    	this.state.enabled = (enabled === true) ? true : false;
-    },
-    stop: function() {
-    	this.setEnabled(false);
-    }
-}, {
-    'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-    'protocol' : ['Oskari.mapframework.publisher.Tool']
-});
+            dialog.makeModal();
+            dialog.show(this.loc('review'), content, buttons);
+        },
+        _showErrorDialog: function (message) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var buttons = [dialog.createCloseButton()];
+
+            var content = jQuery('<span>' + message + '</span>');
+
+            dialog.show(this.loc('error'), content, buttons);
+        },
+        /**
+        * Get values.
+        * @method getValues
+        * @public
+        *
+        * @returns {Object} tool value object
+        */
+        getValues: function () {
+            return null;
+        },
+        setEnabled: function (enabled) {
+            this.state.enabled = !!enabled;
+        },
+        stop: function () {
+            this.setEnabled(false);
+        }
+    }, {
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
+    });
