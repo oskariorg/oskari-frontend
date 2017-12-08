@@ -20,6 +20,10 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
                 config: {}
             };
         },
+        /**
+         * @method init
+         * Called by publisher to init the tool
+         */
         init: function (data, publisherInstance) {
             this.publisherInstance = publisherInstance;
             this.setEnabled(true);
@@ -43,6 +47,11 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
             });
             return element;
         },
+        /**
+         * @private @method _showExportImportDialog
+         * Shows JSON editor dialog
+         * @param {Object} publishData published map state data
+         */
         _showExportImportDialog: function (publishData) {
             var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -70,15 +79,23 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
                     me._showErrorDialog(me.loc('noChange'));
                     return;
                 }
-                me._showConfirmationDialog(publishData, input, delta, dialog);
-            });;
+                me._showConfirmationDialog(publishData, input, delta, function () { dialog.close(); });
+            });
             okButton.setTitle(this.loc('review'));
             buttons.push(okButton);
 
             dialog.makeModal();
             dialog.show(this.loc('transfer'), content, buttons);
         },
-        _showConfirmationDialog: function (currentData, input, delta, editDialog) {
+        /**
+         * @private @method _showConfirmationDialog
+         * Shows dialog for reviewing changes in JSON
+         * @param {Object} currentData current published map state
+         * @param {Object} input user edited published map state
+         * @param {Object} delta jsondiffpatch delta
+         * @param {Function} closeParent function for closing parent dialog (JSON editor)
+         */
+        _showConfirmationDialog: function (currentData, input, delta, closeParent) {
             var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var buttons = [];
@@ -90,7 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
             var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
             okButton.setHandler(function () {
                 dialog.close();
-                editDialog.close();
+                closeParent();
                 var uuid = me.publisherInstance.publisher.data.uuid;
                 if (uuid) {
                     input.uuid = uuid;
@@ -109,6 +126,11 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
             dialog.makeModal();
             dialog.show(this.loc('review'), content, buttons);
         },
+        /**
+         * @private @method _showErrorDialog
+         * Show error message to user
+         * @param {String} message to show
+         */
         _showErrorDialog: function (message) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var buttons = [dialog.createCloseButton()];
