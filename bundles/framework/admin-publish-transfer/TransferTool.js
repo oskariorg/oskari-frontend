@@ -1,6 +1,7 @@
 Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
 function() {
     this.publisherInstance = null;
+    this.loc = Oskari.getMsg.bind(null, 'admin-publish-transfer');
 }, {
     getName: function() {
         return "Oskari.mapframework.admin-publish-transfer.TransferTool";
@@ -32,7 +33,7 @@ function() {
     */
     getExtraOptions: function() {
         var me = this;
-        var element = jQuery('<div><a href="#">Open editor</a></div>');
+        var element = jQuery('<div><a href="#">' + this.loc('openEditor') + '</a></div>');
         element.find('a').click(function(){
             var publishData = me.publisherInstance.publisher._gatherSelections();
             if(publishData) {
@@ -48,10 +49,10 @@ function() {
         var buttons = [];
 
         var closeButton = dialog.createCloseButton();
-        closeButton.setTitle('Cancel');
+        closeButton.setTitle(this.loc('cancel'));
         buttons.push(closeButton);
 
-        var content = jQuery('<div><h3>Copy/paste configuration below. Beware! Administrator feature,<br> do not edit the configuration text unless you are an expert.</h3><textarea style="width:600px;height:400px;"></textarea></div>');
+        var content = jQuery('<div><h3>' + this.loc('beware') + '</h3><textarea style="width:600px;height:400px;"></textarea></div>');
         content.find('textarea').val(JSON.stringify(publishData, null, 2));
 
         var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
@@ -61,21 +62,21 @@ function() {
             try {
                 input = JSON.parse(text);
             } catch (error) {
-                me._showErrorDialog('Invalid JSON format!');
+                me._showErrorDialog(me.loc('invalidJSON'));
                 return;
             }
             var delta = jsondiffpatch.diff(publishData, input);
             if(!delta) {
-                me._showErrorDialog('No changes! Nothing to review.');
+                me._showErrorDialog(me.loc('noChange'));
                 return;
             }
             me._showConfirmationDialog(publishData, input, delta, dialog);
         });;
-        okButton.setTitle('Review changes');
+        okButton.setTitle(this.loc('review'));
         buttons.push(okButton);
         
         dialog.makeModal();
-        dialog.show('Transfer configuration', content, buttons);
+        dialog.show(this.loc('transfer'), content, buttons);
     },
     _showConfirmationDialog: function (currentData, input, delta, editDialog) {
         var me = this;
@@ -83,7 +84,7 @@ function() {
         var buttons = [];
 
         var closeButton = dialog.createCloseButton();
-        closeButton.setTitle('Back');
+        closeButton.setTitle(this.loc('back'));
         buttons.push(closeButton);
 
         var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
@@ -96,15 +97,18 @@ function() {
             }
             me.publisherInstance.publisher._editToolLayoutOff();
             me.publisherInstance.setPublishMode(false);
-            me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
+            setTimeout(function(){ // give map time to return to normal mode
+                me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
+            }, 500);
         });
-        okButton.setTitle('Apply changes');
+        okButton.setTitle(this.loc('apply'));
         buttons.push(okButton);
-        var heading = '<h3>Are you sure? Removals in <span style="background-color:#ffbbbb;text-decoration:line-through;">red</span>, additions in <span style="background-color:#bbffbb">green</span>.</h3>';
+        var heading = '<h3>' + this.loc('sure') +' <span style="background-color:#ffbbbb;text-decoration:line-through;">' +
+        this.loc('red') + '</span>, ' + this.loc('additions') + ' <span style="background-color:#bbffbb">' + this.loc('green') + '</span>.</h3>';
         var content = jQuery(heading + jsondiffpatchformatters.html.format(delta, currentData));
 
         dialog.makeModal();
-        dialog.show('Review changes', content, buttons);
+        dialog.show(this.loc('review'), content, buttons);
     },
     _showErrorDialog: function (message) {
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -112,7 +116,7 @@ function() {
         
         var content = jQuery('<span>'+ message + '</span>');
 
-        dialog.show('Error', content, buttons);
+        dialog.show(this.loc('error'), content, buttons);
     },
     /**
     * Get values.

@@ -23,8 +23,8 @@ Oskari.registerLocalization(
             "title": "Julkaise kartta",
             "titleEdit": "Muokkaa karttaa",
             "transfer": {
-                "label": "Transfer configuration",
-                "PublishTransfer": "Enable transfer"
+                "label": "Siirrä konfiguraatio",
+                "PublishTransfer": "Salli siirto"
             },
             "domain": {
                 "title": "Julkaisutiedot",

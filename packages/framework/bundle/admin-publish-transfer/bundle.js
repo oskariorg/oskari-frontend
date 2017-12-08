@@ -34,6 +34,19 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/admin-publish-transfer/TransferTool.js"
+        }],
+        "locales" : [{
+            "lang" : "fi",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-publish-transfer/resources/locale/fi.js"
+        }, {
+            "lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-publish-transfer/resources/locale/sv.js"
+        }, {
+            "lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-publish-transfer/resources/locale/en.js"
         }]
     },
     "bundle" : {
