@@ -2,7 +2,7 @@ Oskari.clazz.define("Oskari.mapping.printout2.components.printarea",
     function ( view ) {
         this.view = view;
         this.instance = view.instance;
-        this.loc = view.instance._localization["BasicView"];
+        this.loc = view.instance.getLocalization("BasicView");
         this.mapmodule = this.instance._mapmodule;
         this.size = null;
 }, {

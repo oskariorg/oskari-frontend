@@ -1,6 +1,6 @@
 Oskari.clazz.define("Oskari.mapping.printout2.components.settings", function(view) {
     this.view = view;
-    this.loc = view.instance._localization["BasicView"];
+    this.loc = view.instance.getLocalization("BasicView");
     this.instance = view.instance;
     this.selectionsPanel = null;
     /* format options listed in localisations */

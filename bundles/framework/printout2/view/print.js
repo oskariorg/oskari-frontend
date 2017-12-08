@@ -2,7 +2,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
 
     function ( instance ) {
         this.instance = instance;
-        this.loc = instance._localization["BasicView"];
+        this.loc = instance.getLocalization("BasicView");
         this.container = null;
         this.preview = Oskari.clazz.create( 'Oskari.mapping.printout2.components.preview', this );
         this.settings = Oskari.clazz.create( 'Oskari.mapping.printout2.components.settings', this );
@@ -85,7 +85,7 @@ Oskari.clazz.define( "Oskari.mapping.printout2.view.print",
                 var size = container.find('input[name=size]:checked').val();
                 var selectedFormat = (format !== null && format !== undefined) ? format : container.find('input[name=format]:checked').val();
                 var title = container.find('.printout_title_field').val();
-                maplinkArgs = sandbox.generateMapLinkParameters(),
+                var maplinkArgs = sandbox.generateMapLinkParameters(),
                 p,
                 selections = {
                     pageTitle: title,
