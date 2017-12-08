@@ -285,11 +285,17 @@ Oskari.clazz.define(
                 this.mapModule.bringToTop(this.featureLayer);
             },
             'AfterMapLayerAddEvent': function(event) {
+                if (!me.instance.analyse.isEnabled) {
+                    return;
+                }
                 this.toggleSelectionTools();
                 this.drawControls.toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
                 this.mapModule.bringToTop(this.featureLayer);
             },
             'AfterMapLayerRemoveEvent': function(event) {
+                if (!me.instance.analyse.isEnabled) {
+                    return;
+                }
                 this.toggleSelectionTools();
                 this.drawControls.toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
             }
@@ -695,7 +701,11 @@ Oskari.clazz.define(
                     return (featureLayer.opacity * 100);
                 },
                 getFeature: function () {
-                    return formatter.writeFeature(featureSource.getFeatureById(id));
+                    var formattedFeature = formatter.writeFeatureObject(featureSource.getFeatureById(id));
+                    if (formattedFeature.properties === null) {
+                        formattedFeature.properties = {};
+                    }
+                    return formattedFeature;
                 }
             };
         },

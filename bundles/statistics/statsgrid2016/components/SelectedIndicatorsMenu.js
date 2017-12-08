@@ -103,6 +103,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             }
         });
         this.service.on('StatsGrid.IndicatorEvent', function(event) {
+            if(!me._select) {
+                return;
+            }
             var hash = me.service.getStateService().getHash(event.getDatasource(), event.getIndicator(), event.getSelections());
             if (event.isRemoved()) {
                 me._select.removeOption(hash);
