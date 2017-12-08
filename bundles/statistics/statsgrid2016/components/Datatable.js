@@ -403,7 +403,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
         this.service.on('StatsGrid.RegionSelectedEvent', function(event) {
             log.info('Region selected! ', event.getRegion());
-            if(!me.mainEl) {
+            if(!me.mainEl || !me.grid) {
                 // ui not created yet
                 return;
             }
