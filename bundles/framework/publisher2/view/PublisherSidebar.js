@@ -86,8 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             container.find('div.header div.icon-close').bind(
                 'click',
                 function () {
-                    me._editToolLayoutOff();
-                    me.instance.setPublishMode(false);
+                    me.cancel();
                 }
             );
 
@@ -322,10 +321,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         },
         /**
         * Gather selections.
-        * @method _gatherSelections
+        * @method gatherSelections
         * @private
         */
-        _gatherSelections: function(){
+        gatherSelections: function(){
             var me = this,
                 sandbox = this.instance.getSandbox(),
                 selections = {
@@ -381,7 +380,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
         },
-
+        /**
+         * @method cancel
+         * Closes publisher without saving
+         */
+        cancel: function() {
+            this._editToolLayoutOff();
+            this.instance.setPublishMode(false);
+        },
         /**
          * @private @method _getButtons
          * Renders publisher buttons to DOM snippet and returns it.
@@ -397,8 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             cancelBtn.setHandler(function () {
-                me._editToolLayoutOff();
-                me.instance.setPublishMode(false);
+                me.cancel();
             });
             cancelBtn.insertTo(buttonCont);
 
@@ -408,7 +413,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             if (me.data.uuid) {
                 var save = function () {
-                    var selections = me._gatherSelections();
+                    var selections = me.gatherSelections();
                     if (selections) {
                         me._editToolLayoutOff();
                         me._publishMap(selections);
@@ -435,7 +440,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             } else {
                 saveBtn.setTitle(me.loc.buttons.save);
                 saveBtn.setHandler(function () {
-                    var selections = me._gatherSelections();
+                    var selections = me.gatherSelections();
                     if (selections) {
                         me._editToolLayoutOff();
                         me._publishMap(selections);
@@ -450,7 +455,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * @private @method _publishMap
          * Sends the gathered map data to the server to save them/publish the map.
          *
-         * @param {Object} selections map data as returned by _gatherSelections()
+         * @param {Object} selections map data as returned by gatherSelections()
          *
          */
         _publishMap: function (selections) {
