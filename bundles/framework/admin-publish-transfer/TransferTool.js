@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
                 }
                 me.publisherInstance.publisher.cancel(); // closes publisher without saving
                 setTimeout(function () { // give map time to return to normal mode
-                    me.publisherInstance.setPublishMode(true, me.publisherInstance.getLayersWithoutPublishRights(), input);
+                    me.publisherInstance.setPublishMode(true, input);
                 }, 500);
             });
             okButton.setTitle(this.loc('apply'));
