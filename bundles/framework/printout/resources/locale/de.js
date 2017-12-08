@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Legende",
-                "tooltip": "Wählen Sie eine Position für die Legende. Wenn keine Position ausgewählt ist, wird die Legende im Ausdruck nicht angezeigt.",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "keine Legende",
-                        "tooltip": "Die Legende wird nicht im Ausdruck angezeigt.",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Linke untere Ecke",
-                        "tooltip": "Die Legende wird in der linken unteren Ecke im Ausdruck angezeigt."
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Linke obere Ecke",
-                        "tooltip": "Die Legende wird in der linken oberen Ecke im Ausdruck angezeigt."
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Rechte obere Ecke",
-                        "tooltip": "Die Legende wird in der rechten oberen Ecke im Ausdruck angezeigt."
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Rechte untere Ecke",
-                        "tooltip": "Die Legende wird in der rechten unteren Ecke im Ausdruck angezeigt."
-                    }
-                ]
-            },
             "help": "Hilfe",
             "error": {
                 "title": "Fehler",

@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Legenda karte",
-                "tooltip": "Določi položaj legende na karti. Če položaj legende ne bo določen, legenda ne bo prikazana.",
-                "options": [
-                    {
-                        "id": "oskari_legenda_NE",
-                        "loca": "NE",
-                        "label": "Ni legende karte",
-                        "tooltip": "Legenda karte ni prikazana na izrisu",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legenda_LS",
-                        "loca": "LS",
-                        "label": "Levi spodnji vogal",
-                        "tooltip": "Legenda karte je prikazana na levem spodnjem vogalu izrisa."
-                    },
-                    {
-                        "id": "oskari_legenda_LZ",
-                        "loca": "LZ",
-                        "label": "Levi zgornji vogal",
-                        "tooltip": "Legenda karte je prikazana na levem zgornjem vogalu izrisa."
-                    },
-                    {
-                        "id": "oskari_legenda_DZ",
-                        "loca": "DZ",
-                        "label": "Desni zgornji vogal",
-                        "tooltip": "Legenda karte je prikazana na desnem zgornjem vogalu izrisa."
-                    },
-                    {
-                        "id": "oskari_legenda_DS",
-                        "loca": "DS",
-                        "label": "Desni spodnji vogal",
-                        "tooltip": "Legenda karte je prikazana na desnem spodnjem vogalu izrisa."
-                    }
-                ]
-            },
             "help": "Pomoč",
             "error": {
                 "title": "Napaka",

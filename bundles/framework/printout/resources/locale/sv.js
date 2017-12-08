@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Kart legend",
-                "tooltip": "Välj en position för kartlegenden. Om någon position inte är vald, kommer en kart legend inte visas i kartutskriften.",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "Ingen kartlegend",
-                        "tooltip": "Kartlegenden visas inte i kart utskriften.",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Nedre vänstra hörn",
-                        "tooltip": "Kartlegenden visas i det nedre vänstra hörnet av utskriften."
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Övre vänstra hörn",
-                        "tooltip": "Kartlegenden visas i övre vänstra hörnet på utskriften."
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Övre högra hörnet",
-                        "tooltip": "Kartlegenden visas i övre högra hörnet på utskriften."
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Nedre högra hörn",
-                        "tooltip": "Kartlegenden visas i övre högra hörnet på utskriften."
-                    }
-                ]
-            },
             "help": "Hjälp",
             "error": {
                 "title": "Fel",

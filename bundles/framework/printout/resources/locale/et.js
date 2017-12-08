@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Kaardi legend",
-                "tooltip": "Määra legendi asukoht trükisel. Kui asukoht on määramata, siis legendi trükisele ei kuvata.",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "Legendi ei ole",
-                        "tooltip": "Trükisele legendi ei kuvata",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Vasakul alanurgas",
-                        "tooltip": "Legend lisatakse trükise alumisesse vasakusse nurka."
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Vasakul ülanurgas",
-                        "tooltip": "Legend lisatakse trükise ülemisse vasakusse nurka."
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Paremal ülanurgas",
-                        "tooltip": "Legend lisatakse trükise ülemisse paremasse nurka."
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Paremal alanurgas",
-                        "tooltip": "Legend lisatakse trükise alumisse paremasse nurka."
-                    }
-                ]
-            },
             "help": "Abi",
             "error": {
                 "title": "Viga",
