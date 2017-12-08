@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 
         this.__render();
         Oskari.makeObservable(this);
+        this._baseZIndex = 20000;
     }, {
 	    __templates : {
 	    	popup: jQuery('<div class="oskari-flyout">' +
@@ -51,6 +52,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 return;
             }
 	    	me._popup.show();
+            me.bringToTop();
     		me._visible = true;
     		this.trigger('show');
 	    },
@@ -80,6 +82,10 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                     me.hide();
                 });
                 me._popup = popup;
+                me.bringToTop();
+                me._popup.bind('click', function(){
+                    me.bringToTop();
+                });
                 me.hide(true);
             }
 
@@ -132,7 +138,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             if(!this._popup) {
                 return;
             }
-            this._popup.css('z-index', 20000);
+            this._popup.css('z-index',  this._baseZIndex + Oskari.seq.nextVal());
         },
         move : function(left, top, keepOnScreen) {
             if(!this._popup) {
@@ -154,8 +160,8 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 }
             }
             this._popup.css({
-                left: left,
-                top: top
+                'left': left,
+                'top': top
             });
         },
         getPosition : function() {
@@ -179,13 +185,17 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          * @param options  optional options for draggable
          */
         makeDraggable: function (options) {
-            var me = this,
-                dragOptions = options ? options : {
-                scroll: false,
-                handle: '.oskari-flyouttoolbar'
-            };
+            var me = this;
+            options = options || {};
             me._popup.css('position', 'absolute');
-            me._popup.draggable(dragOptions);
+            me._popup.draggable({
+                scroll: !!options.scroll,
+                handle: options.handle || '.oskari-flyouttoolbar',
+                start: function() {
+                    // bring this flyout to top when user starts dragging it
+                    me.bringToTop();
+                }
+            });
         },
         getElement: function(){
             return this._popup;

@@ -410,11 +410,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
-                        if (setMapState(data, false, function () {
-                                setMapState(data, true);
-                                editRequestSender(data);
-                            })) {
+                        var resp = service.isViewLayersLoaded(data, sandbox);
+                        if (resp.status) {
                             editRequestSender(data);
+                        } else {
+                            me._confirmSetState(function() {
+                                editRequestSender(data);
+                            }, resp.msg === 'missing');
                         }
                         return false;
                     }

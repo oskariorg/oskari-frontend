@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     /**@method create
     *  creates a select with data specified
     * @param {Object} data, needs to have the keys id and title to construct a list
+    *   * cls - optional param in data which sets a class to the list element so you can ex. toggle visible items in a dropdown based on class.
     * @param {Object} options
     * @return {jQuery Element} a list with chosen applied
      */
@@ -28,6 +29,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       }
 
       //append empty options so we can use the placeholder
+
       if ( options.allowReset ) {
         var emptyoption = this._option.clone();
         select.find('select').append(emptyoption);
@@ -41,8 +43,12 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         if ( !dataKey.id && !dataKey.title ) {
           option.val( dataKey ).text( dataKey );
         }
-        option.val( dataKey.id ).text( dataKey.title );
-        select.find( 'select' ).append( option );
+        if(dataKey.cls) {
+          option.addClass(dataKey.cls);
+        }
+        option.val(dataKey.id).text(dataKey.title);
+        select.find('select').append(option);
+
       }
       return this.makeChosen( select, options );
     },
@@ -66,11 +72,20 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     selectFirstValue: function () {
       var chosen = this.element.find('select');
       chosen.find('option:nth-child(2)').attr('selected', 'selected');
-      chosen.trigger('chosen:updated');
+      this.update();
+    },
+    resetToPlaceholder: function() {
+      var chosen = this.element.find('select');
+      chosen.find('option:first-child').attr('selected', 'selected');
+      this.update();
+    },
+    update: function() {
+      this.element.find('select').trigger('chosen:updated');
     },
     /**  @method addOption appends a new option to the select
      *   @param { Object } object with keys id and title
      */
+
     addOption: function ( data ) {
         var chosen = this.element.find('select');
         var option = this._option.clone();
@@ -113,11 +128,13 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         option.val( choice.id ).text( choice.title );
         chosen.append( option );
       });
-      chosen.trigger( 'chosen:updated' );
+      this.update();
+
     },
     getId: function () {
       return this.id;
     },
+
     setValue: function ( value ) {
       if ( !this.element.find('select') ) {
         Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");
@@ -130,8 +147,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't get value, no element set");
         return;
       }
-      return this.element.find('select').val();
+      return this.element.find( 'select' ).val();
     },
+
     /** @method adjustChosen
     *   adjusts the chosen direction according to the screen
     */
@@ -148,7 +166,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
           });
       });
       // determine which way the dropdown should open
-        selected.on('chosen:showing_dropdown', function ( event, params ) {
+        selected.on( 'chosen:showing_dropdown', function( event, params ) {
            var chosen_container = jQuery( event.target ).next( '.chosen-container' );
            var dropdown = chosen_container.find( '.chosen-drop' );
            var dropdown_top = dropdown.offset().top - jQuery( window ).scrollTop();
@@ -159,7 +177,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
             chosen_container.addClass( 'chosen-drop-up' );
          }
       });
-      selected.on('chosen:hiding_dropdown', function ( event, params ) {
+      selected.on( 'chosen:hiding_dropdown', function( event, params ) {
          jQuery( event.target ).next( '.chosen-container' ).removeClass( 'chosen-drop-up' );
       });
     }
