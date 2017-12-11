@@ -20,9 +20,9 @@ Oskari.clazz.category(
             // set selectedColumn in either case so render will use it immediately
             this.__selectedColumn = value;
 
-            var columnIndex = me._fullFieldNames.findIndex(function(name) {
-                return name.key === value;
-            });
+            var columnIndex = me._fullFieldNames.map( function( name ) {
+               return name.key;
+           }).indexOf( value );
 
             if(!this.table || columnIndex === -1) {
                 return;
