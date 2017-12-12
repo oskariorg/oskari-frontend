@@ -26,37 +26,16 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
     getName: function () {
         return this.__name;
     },
-    /**
-     * Needed by sandbox.register()
-     */
     init : function() {},
-    /**
-     * @method setSandbox
-     * @param {Oskari.Sandbox} sandbox
-     * Sets the sandbox reference to this component
-     */
     setSandbox: function (sbx) {
         this.sandbox = sbx;
     },
-    /**
-     * @method getSandbox
-     * @return {Oskari.Sandbox}
-     */
     getSandbox: function () {
         return this.sandbox;
     },
-
     handleRequest: function (core, request) {
       this.plugin.setRotation(request.getDegrees());
     },
-    /**
-     * @method start
-     *
-     * implements BundleInstance start methdod
-     *
-     * creates and registers request handlers
-     *
-     */
     start: function(sandbox) {
         var me = this;
         if(me._started){
@@ -67,7 +46,7 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
         me.setSandbox(sandbox);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         me.createPlugin(true);
-
+        me._registerEventHandlers();
         sandbox.register(me);
         sandbox.requestHandler('rotate.map', this);
     },
@@ -76,7 +55,7 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
         publisher = false;
       }
       var conf = this.conf || {};
-      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin', conf);
+      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.MapRotatorPlugin', conf);
       if(!plugin.isSupported() && !publisher){
         return;
       }
@@ -92,8 +71,38 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
     stop: function() {
       this.stopPlugin();
       this.getSandbox().requestHandler('rotate.map', null);
+      this._unregisterEventHandlers();
       this.sandbox = null;
       this.started = false;
+    },
+    _registerEventHandlers: function() {
+      var me = this;
+      for (var p in me.eventHandlers) {
+          if (me.eventHandlers.hasOwnProperty(p)) {
+              me.sandbox.registerForEventByName(me, p);
+          }
+      }
+    },
+    _unregisterEventHandlers: function() {
+        var me = this;
+        for (var p in me.eventHandlers) {
+            if (me.eventHandlers.hasOwnProperty(p)) {
+                me.sandbox.unregisterFromEventByName(me, p);
+            }
+        }
+    },
+    onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+    },
+    eventHandlers: {
+        MapSizeChangedEvent: function () {
+          var previous = this.plugin.getPreviousDegrees();
+          this.plugin.setRotation( previous );
+        }
     }
   }, {
       /**
