@@ -93,7 +93,6 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
       var me = this;
       var mobileDefs = this.getMobileDefs();
       var el = jQuery( me.getMapModule().getMobileDiv() ).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
-      var topOffsetElement = jQuery('div.mobileToolbarDiv');
       this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
       this._element = jQuery( "." + mobileDefs.buttons["mobile-maprotatetool"].iconCls );
       this.handleEvents();  

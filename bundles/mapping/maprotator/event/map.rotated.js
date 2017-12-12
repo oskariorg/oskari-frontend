@@ -18,9 +18,6 @@ function( degrees ) {
     },
     getRotationDegrees: function(){
       return this.degrees;
-    },
-    getStatus: function(){
-      return this._status;
     }
 }, {
     /**
