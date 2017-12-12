@@ -142,10 +142,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 
                     var flyoutManager = (me.instance && me.instance.getTile() && me.instance.getTile().getFlyoutManager()) ? me.instance.getTile().getFlyoutManager() : null;
                     var searchFlyout = (flyoutManager && flyoutManager.getFlyout('search')) ? flyoutManager.getFlyout('search') : null;
+
+                    // Need open table flyout ?
                     if(searchFlyout && searchFlyout.getExtraFeatures().hasChecked('open_table')) {
                         me.instance.getTile().openExtension('table');
                     }
-                    return false;
+
+                    // Need open diagram flyout ?
+                    if(searchFlyout && searchFlyout.getExtraFeatures().hasChecked('open_diagram')) {
+                        me.instance.getTile().openExtension('diagram');
+                    }
                 });
                 elements.btn.setEnabled(indicator.regionsets.length>0);
             }

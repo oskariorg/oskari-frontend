@@ -59,7 +59,8 @@ Oskari.registerLocalization(
             "extraFeatures": {
                 "title": "EXTRA CONDITIONS AND FEATURES",
                 "hideMapLayers": "Hide other map layers",
-                "openTableCheckbox": "Open table"
+                "openTableCheckbox": "Open table",
+                "openDiagramCheckbox": "Open bar chart"
             }
         },
         "statsgrid": {

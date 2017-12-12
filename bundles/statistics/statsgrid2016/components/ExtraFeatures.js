@@ -45,6 +45,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(sandbo
             id:'open_table',
             button: me._getOpenTableCheckbox()
         });
+        me._checkboxes.push({
+            id:'open_diagram',
+            button: me._getOpenDiagramCheckbox()
+        });
+    },
+    /**
+     * @method  @private _getOpenTableCheckbox  gets open table checbox element and sets this handler
+     * @return {Object} checkbox element
+     */
+    _getOpenDiagramCheckbox: function() {
+        var me = this;
+        var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+        checkbox.setTitle(this.locale.openDiagramCheckbox);
+        checkbox.setChecked(false);
+        return checkbox;
     },
     /**
      * @method  @private _getOpenTableCheckbox  gets open table checbox element and sets this handler
