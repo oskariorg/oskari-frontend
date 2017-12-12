@@ -3,4 +3,8 @@
   height:35px;
   background-image: url('../images/north_circle_dark.png');
   border-radius: 50%;
+  margin-bottom: 0.4375em !important;
+}
+.compass:hover {
+  color: #b3b3b3;
 }
