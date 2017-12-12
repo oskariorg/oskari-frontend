@@ -101,10 +101,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          _registerLayerEvents: function(layer, oskariLayer){
            var me = this;
 
-           layer.events.register("loadstart", layer, function(){
-             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer._id);
-           });
-
            layer.events.register("tileloadstart", layer, function(){
              me.getMapModule().loadingState( oskariLayer.getId(), true);
            });
