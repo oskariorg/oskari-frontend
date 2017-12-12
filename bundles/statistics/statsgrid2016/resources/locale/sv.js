@@ -58,7 +58,7 @@ Oskari.registerLocalization(
             },
             "extraFeatures": {
                 "title": "TILLLÄGSVILLKOR OCH -EGENSKAPER",
-                "showMapLayers": "Visa kartlager"
+                "hideMapLayers": "Gömma andra kartlager"
             }
         },
         "statsgrid": {

@@ -58,7 +58,7 @@ Oskari.registerLocalization(
             },
             "extraFeatures": {
                 "title": "EXTRA CONDITIONS AND FEATURES",
-                "showMapLayers": "Show map layers"
+                "hideMapLayers": "Hide other map layers"
             }
         },
         "statsgrid": {
