@@ -1,4 +1,5 @@
 .compass {
+  cursor: pointer;
   width:35px;
   height:35px;
   background-image: url('../images/north_circle_dark.png');
