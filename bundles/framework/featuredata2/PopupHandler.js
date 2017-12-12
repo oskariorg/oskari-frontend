@@ -266,6 +266,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
             if (isActive) {
                 jQuery(content).find(".active").removeClass("active");
+                me.WFSLayerService.setSelectionToolsActive(false);
             }
         }
     });

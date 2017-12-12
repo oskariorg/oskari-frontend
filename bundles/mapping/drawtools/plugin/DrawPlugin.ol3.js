@@ -122,7 +122,7 @@ Oskari.clazz.define(
             // use default style if options don't include custom style
             var me = this;
             //disable gfi
-            me.setGFIEnabled(false);
+            me.getMapModule().setDrawingMode(true);
             // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
             me.removeInteractions(me._draw, me._id);
             me.removeInteractions(me._modify, me._id);
@@ -304,7 +304,10 @@ Oskari.clazz.define(
             me._cleanupInternalState();
             me.getMap().un('pointermove', me.pointerMoveHandler, me);
             //enable gfi
-            me.setGFIEnabled(true);
+            setTimeout(function () {
+                me.getMapModule().setDrawingMode(false);
+            }, 500);
+            
         },
         _cleanupInternalState: function() {
             this._shape = null;

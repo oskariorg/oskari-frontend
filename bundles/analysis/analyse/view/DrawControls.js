@@ -319,10 +319,8 @@ Oskari.clazz.define(
             var me = this,
                 toolsPanel = me.drawToolsPanel;
 
-            if (toolsPanel.html.find('div[class*=selection-]').hasClass('active')) {
-                toolsPanel.html.find('div[class*=selection-]').removeClass('active');
-                me.selectionPlugin.stopDrawing();
-            }
+            me.selectionButtonsRenderer.removeButtonSelection();
+            me.selectionPlugin.stopDrawing();
         },
 
         /**

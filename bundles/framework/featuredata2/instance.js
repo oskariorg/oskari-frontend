@@ -439,10 +439,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                 me.selectionPlugin.setFeatures(geojson.features);
                 me.selectionPlugin.stopDrawing();
-                me.popupHandler.removeButtonSelection();
 
                 var event = me.sandbox.getEventBuilder("WFSSetFilter")(geojson);
                 me.sandbox.notifyAll(event);
+
+                me.popupHandler.removeButtonSelection();
             },
             'AfterMapMoveEvent': function() {
                 var me = this;
