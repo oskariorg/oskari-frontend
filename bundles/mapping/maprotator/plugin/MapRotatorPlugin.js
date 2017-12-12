@@ -45,7 +45,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
       this._map.on( 'pointerdrag', function( e ) {
         degrees = me._getRotation();
         me.updateIconRotation( degrees );
-          if(degrees != me.getPreviousDegrees() ) {
+          if ( degrees != me.getPreviousDegrees() ) {
             var event = eventBuilder( degrees );
             me._sandbox.notifyAll( event );
           }
@@ -121,6 +121,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
      */
     _createEventHandlers: function () {
         return {
+          MapSizeChangedEvent: function () {
+            this.setRotation( this.getPreviousDegrees() );
+          },
             /**
              * @method RPCUIEvent
              * will open/close coordinatetool's popup

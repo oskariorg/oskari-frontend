@@ -46,7 +46,6 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
         me.setSandbox(sandbox);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         me.createPlugin(true);
-        me._registerEventHandlers();
         sandbox.register(me);
         sandbox.requestHandler('rotate.map', this);
     },
@@ -71,43 +70,9 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
     stop: function() {
       this.stopPlugin();
       this.getSandbox().requestHandler('rotate.map', null);
-      this._unregisterEventHandlers();
       this.sandbox = null;
       this.started = false;
-    },
-    _registerEventHandlers: function() {
-      var me = this;
-      for (var p in me.eventHandlers) {
-          if (me.eventHandlers.hasOwnProperty(p)) {
-              me.sandbox.registerForEventByName(me, p);
-          }
-      }
-    },
-    _unregisterEventHandlers: function() {
-        var me = this;
-        for (var p in me.eventHandlers) {
-            if (me.eventHandlers.hasOwnProperty(p)) {
-                me.sandbox.unregisterFromEventByName(me, p);
-            }
-        }
-    },
-    onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
-    },
-    eventHandlers: {
-        MapSizeChangedEvent: function () {
-          var previous = this.plugin.getPreviousDegrees();
-          this.plugin.setRotation( previous );
-        }
     }
   }, {
-      /**
-       * @property {String[]} protocol
-       * @static
-       */
       protocol: ['Oskari.bundle.BundleInstance']
   });
