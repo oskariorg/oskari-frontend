@@ -8,6 +8,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(sandbo
      */
     getPanelContent: function() {
         var me = this;
+        var content = jQuery('<div></div>');
+
+        content.append(me._getHideOtherLayersCheckbox());
+        return content;
+    },
+
+    /****** PRIVATE METHODS ******/
+    _getHideOtherLayersCheckbox: function() {
+        var me = this;
         var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
         checkbox.setTitle(this.locale.hideMapLayers);
         checkbox.setChecked(false);
@@ -16,8 +25,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(sandbo
         });
         return checkbox.getElement();
     },
-
-    /****** PRIVATE METHODS ******/
     /**
      * @method  @private _toggleSelectedLayersVisibility toggle selected layers visibility
      * @param  {Boolean} checked if checked then hide all map layers
