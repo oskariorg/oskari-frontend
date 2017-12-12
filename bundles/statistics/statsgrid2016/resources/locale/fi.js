@@ -58,7 +58,8 @@ Oskari.registerLocalization(
             },
             "extraFeatures": {
                 "title": "LISÄEHDOT JA -OMINAISUUDET",
-                "hideMapLayers": "Piilota muut karttatasot"
+                "hideMapLayers": "Piilota muut karttatasot",
+                "openTableCheckbox": "Avaa taulukko"
             }
         },
         "statsgrid": {

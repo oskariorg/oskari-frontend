@@ -58,7 +58,8 @@ Oskari.registerLocalization(
             },
             "extraFeatures": {
                 "title": "TILLLÄGSVILLKOR OCH -EGENSKAPER",
-                "hideMapLayers": "Gömma andra kartlager"
+                "hideMapLayers": "Gömma andra kartlager",
+                "openTableCheckbox": "Öppna tabell"
             }
         },
         "statsgrid": {

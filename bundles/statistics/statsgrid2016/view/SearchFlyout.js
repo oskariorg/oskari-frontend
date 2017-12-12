@@ -9,6 +9,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             me.setContent(me.getElement());
         }
     });
+
+    this._extraFeatures = Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures', this.instance.getSandbox(), this.instance.getLocalization().panels.extraFeatures, this);
 }, {
     setElement: function ( el ) {
         this.element = el;
@@ -21,6 +23,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         this.element.empty();
+    },
+    getExtraFeatures: function(){
+        return this._extraFeatures;
     },
     /**
      * @method lazyRender
@@ -101,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var locale = this.instance.getLocalization();
 
         panel.setTitle(locale.panels.extraFeatures.title);
-        container.append(Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures', sb, locale.panels.extraFeatures).getPanelContent());
+        container.append(this._extraFeatures.getPanelContent());
 
         return {id:'extraFeaturesPanel', panel:panel};
     },

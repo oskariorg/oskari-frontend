@@ -122,7 +122,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
             }
 
             if(elements.btn) {
-                elements.btn.setHandler(function() {
+                elements.btn.setHandler(function(event) {
+                    event.stopPropagation();
                     var values = {
                         datasource : datasrc,
                         indicator : indId,
@@ -139,8 +140,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
                     }
                     me.service.getStateService().setRegionset(regionSelect.value());
 
-                    // FIXME need this anymore ?
-                    //me.instance.getFlyout().closePanels();
+                    var flyoutManager = (me.instance && me.instance.getTile() && me.instance.getTile().getFlyoutManager()) ? me.instance.getTile().getFlyoutManager() : null;
+                    var searchFlyout = (flyoutManager && flyoutManager.getFlyout('search')) ? flyoutManager.getFlyout('search') : null;
+                    if(searchFlyout && searchFlyout.getExtraFeatures().hasChecked('open_table')) {
+                        me.instance.getTile().openExtension('table');
+                    }
+                    return false;
                 });
                 elements.btn.setEnabled(indicator.regionsets.length>0);
             }

@@ -130,6 +130,23 @@ function(instance, service) {
         }
     },
     /**
+     * @method  @public openExtension opens extension
+     * @param  {String} type  flyout type
+     */
+    openExtension: function(type) {
+        var me = this;
+        var flyout = this.getFlyoutManager().getFlyout(type);
+        if(!flyout) {
+            // unrecognized flyout
+            return;
+        }
+        var el = this.getExtensions()[type];
+        me.getFlyoutManager().open(type);
+        if (!el.hasClass('material-selected') ) {
+            el.addClass('material-selected');
+        }
+    },
+    /**
      * Hides all the extra options (used when tile is "deactivated")
      */
     hideExtensions: function () {
