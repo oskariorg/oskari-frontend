@@ -3,6 +3,9 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "DivManazer",
     "value": {
+        "graph": {
+            "noValue": "N/A"
+        },
         "buttons": {
             "add": "Add",
             "cancel": "Cancel",

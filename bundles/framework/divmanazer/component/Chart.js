@@ -12,6 +12,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
   this._options = {
     colors: ['#ebb819']
   };
+  this.loc = Oskari.getMsg.bind(null, 'DivManazer');
+  this.noValStr = this.loc('graph.noValue');
 }, {
     _checkColors: function ( opts ) {
         var options = opts || {};
@@ -185,21 +187,35 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var bars = this.svg.insert('g','g.y').selectAll(".bar")
             .data(this.data)
             .enter()
-            .append("g");
+            .append("g")
+            .attr('transform', function (d) {
+                return 'translate(0 ' + (me.y( d.name ) + me.y.bandwidth() / 2) + ')'; 
+            });
 
         //append rects
         bars.append("rect")
             .attr("class", "bar")
             .attr("text-anchor", "middle")
-            .attr("y", function (d) {
-                return me.y( d.name ) + me.y.bandwidth() / 2 - 7; // 7 is half of 15 pixel aligned
-            })
+            .attr("y", -7) // 7 is half of 15 height (pixel aligned)
             .style('fill', function( d,i ){ return me.colorScale(i); })
             .attr("height", 15)
             .attr("x", 0)
             .attr("width", function (d) {
                 return me.x(d.value || 0);
             });
+        bars.each(function (d) {
+            if(typeof d.value === 'number') {
+                return;
+            }
+            d3.select(this)
+            .append('text')
+            .attr('x', 10)
+            .attr('y', 0)
+            .attr('dy', '0.32em')
+            .style('font-size', '11px')
+            .attr('fill', '#999')
+            .text(me.noValStr);
+        });
 
         this.chartType = 'barchart';
 

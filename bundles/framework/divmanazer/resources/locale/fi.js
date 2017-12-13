@@ -3,6 +3,9 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "DivManazer",
     "value": {
+        "graph": {
+            "noValue": "Ei arvoa"
+        },
         "buttons": {
             "add": "Lisää",
             "cancel": "Peruuta",
