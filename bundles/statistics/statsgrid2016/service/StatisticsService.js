@@ -246,7 +246,7 @@
                 success: function (pResp) {
                     var onlyWithNames = pResp.regions.filter(function(region) {
                         return !!region.name;
-                    })
+                    });
                     me.cache.respondToQueue(cacheKey, null, onlyWithNames);
                 },
                 error: function (jqXHR, textStatus) {
