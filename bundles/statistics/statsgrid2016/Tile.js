@@ -75,7 +75,6 @@ function(instance, service) {
             me.extendTile(tileExtension, flyout.id);
             tileExtension.bind('click', function(event) {
                 event.stopPropagation();
-                me.toggleExtensionClass(flyout.id);
                 me.toggleFlyout(flyout.id);
             });
         });
@@ -112,24 +111,6 @@ function(instance, service) {
           this._tileExtensions[type] = extension;
     },
     /**
-     * Toggles an "active/deactive" class on tile extra options to indicate if the flyout opened by the extra option is visible or not
-     */
-    toggleExtensionClass: function(type, wasClosed) {
-        var me = this;
-        var el = this.getExtensions()[type];
-        //jQuery('.statsgrid-functionality.'+type);
-        if(wasClosed) {
-            el.removeClass('material-selected');
-            me.getFlyoutManager().hide(type);
-            return;
-        }
-        if (el.hasClass('material-selected') ) {
-            el.removeClass('material-selected');
-        } else {
-            el.addClass('material-selected');
-        }
-    },
-    /**
      * @method  @public openExtension opens extension
      * @param  {String} type  flyout type
      */
@@ -145,6 +126,21 @@ function(instance, service) {
         if (!el.hasClass('material-selected') ) {
             el.addClass('material-selected');
         }
+    },
+     /**
+     * @method  @public closeExtension opens extension
+     * @param  {String} type  flyout type
+     */
+    closeExtension: function(type) {
+        var me = this;
+        var flyout = this.getFlyoutManager().getFlyout(type);
+        if(!flyout) {
+            // unrecognized flyout
+            return;
+        }
+        var el = this.getExtensions()[type];
+        me.getFlyoutManager().hide(type);
+        el.removeClass('material-selected');
     },
     /**
      * Hides all the extra options (used when tile is "deactivated")
@@ -193,11 +189,11 @@ function(instance, service) {
             return;
         }
         if(flyout.isVisible()) {
-            flyout.hide();
+            this.closeExtension(type);
             return;
         }
         // open flyout
-        this.getFlyoutManager().open(type);
+        this.openExtension(type);
     }
 }, {
     /**
