@@ -49,6 +49,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     _handleRegionsetChanged: function(setId) {
         var me = this;
+
+        // Grid not ready
+        if(!me.grid) {
+            return;
+        }
+
         var currentRegion = this.getCurrentRegionset();
         var locale = me.locale;
         var errorService = me.service.getErrorService();

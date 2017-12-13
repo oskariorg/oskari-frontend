@@ -174,6 +174,7 @@ Oskari.clazz.define(
                 if( this.isEmbedded() && !wasClosed ) {
                     // open table on embedded map
                     // TODO: is wasClosed check unnecessary?
+                    me.getTile().getFlyoutManager().init();
                     me.getTile().toggleFlyout( 'table' );
                 } else {
                     me.getTile().showExtensions();
