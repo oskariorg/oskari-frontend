@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             return d3.ascending(a.value || 0, b.value || 0);
         });
     },
-    chartDimensions: function () {
+    chartDimensions: function (leftMargin) {
         var me = this;
             //set up svg using margin conventions - we'll need plenty of room on the left for labels
         var dimensions = {
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                 top: 15,
                 right: 25,
                 bottom: 15,
-                left: 80
+                left: leftMargin ? Math.min(leftMargin, 180) : 80
             },
             label: {
                 padding: 20,
@@ -113,6 +113,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     handleData: function ( data ) {
         this.data = data;
         this.sortData( this.data );
+        var maxNameLength = d3.max(data, function (d) {return d.name.length});
+        this.dimensions = this.chartDimensions(maxNameLength * 5.5);
     },
     /**
      * parses the options passed in
