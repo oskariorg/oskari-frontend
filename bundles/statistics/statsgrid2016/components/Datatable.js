@@ -120,9 +120,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     _setGridAreaSelection: function(regions,gridLoc){
         var me = this;
+        // Grid not ready yet
+        if(!me.grid) {
+            return;
+        }
         var regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
 
-        this.grid.setColumnUIName('region', function(content) {
+        me.grid.setColumnUIName('region', function(content) {
             var tableHeader = jQuery(me.__templates.tableHeader());
             tableHeader.find('.title').remove();
             tableHeader.find('.info').html(gridLoc.areaSelection.info);
@@ -217,7 +221,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         regions.forEach(function(reg) {
             regionIdMap[reg.id] = reg.name;
         });
-        this.grid.setColumnValueRenderer('region', function(regionId) {
+        me.grid.setColumnValueRenderer('region', function(regionId) {
             return regionIdMap[regionId];
         });
     },
