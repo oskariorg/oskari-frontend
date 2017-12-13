@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    Oskari.makeObservable(this);
 }, {
     __templates : {
         main : _.template('<div class="stats-ind-params">'+
@@ -121,40 +122,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
                 errorService.show(locale.errors.title,locale.errors.indicatorMetadataIsEmpty);
             }
 
-            if(elements.btn) {
-                elements.btn.setHandler(function(event) {
-                    event.stopPropagation();
-                    var values = {
-                        datasource : datasrc,
-                        indicator : indId,
-                        selections : {}
-                    };
-                    selectContainer.forEach(function(select) {
-                        values.selections[select.getId()] = select.getValue();
-                    });
-                    var added = me.service.getStateService().addIndicator(datasrc, indId, values.selections);
-                    if(added === false) {
-                        // already added, set as active instead
-                        var hash = me.service.getStateService().getHash(datasrc, indId, values.selections);
-                        me.service.getStateService().setActiveIndicator(hash);
-                    }
-                    me.service.getStateService().setRegionset(regionSelect.value());
+            var values = {
+                datasource : datasrc,
+                indicator : indId,
+                selections : {},
+                enabled: indicator.regionsets.length>0,
+                regionset: regionSelect.value()
+            };
 
-                    var flyoutManager = (me.instance && me.instance.getTile() && me.instance.getTile().getFlyoutManager()) ? me.instance.getTile().getFlyoutManager() : null;
-                    var searchFlyout = (flyoutManager && flyoutManager.getFlyout('search')) ? flyoutManager.getFlyout('search') : null;
-
-                    // Need open table flyout ?
-                    if(searchFlyout && searchFlyout.getExtraFeatures().hasChecked('open_table')) {
-                        me.instance.getTile().openExtension('table');
-                    }
-
-                    // Need open diagram flyout ?
-                    if(searchFlyout && searchFlyout.getExtraFeatures().hasChecked('open_diagram')) {
-                        me.instance.getTile().openExtension('diagram');
-                    }
-                });
-                elements.btn.setEnabled(indicator.regionsets.length>0);
-            }
+            selectContainer.forEach(function(select) {
+                values.selections[select.getId()] = select.getValue();
+            });
+            me.trigger('change', values);
         });
     }
 });
