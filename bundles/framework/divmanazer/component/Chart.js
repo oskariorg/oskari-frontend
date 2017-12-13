@@ -80,11 +80,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      *
      */
     initAxis: function () {
+        var maxValue = d3.max(this.data, function (d) {return d.value});
+        var numDigits = Math.floor((Math.log(maxValue) * Math.LOG10E) + 1);
+        var range = this.x.range();
+        var width = range[1] - range[0];
+        var tickTarget = (width / numDigits) / 10;
+
         this.yAxis = d3.axisLeft( this.y )
         .tickSizeInner(5)
         .tickSizeOuter(0);
 
         this.xAxis = d3.axisTop( this.x )
+        .ticks(Math.min(10, tickTarget))
         .tickSizeInner(-this.dimensions.height()+this.dimensions.xAxisOffset)
         .tickSizeOuter(0);
     },
