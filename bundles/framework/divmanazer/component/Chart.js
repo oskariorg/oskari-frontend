@@ -82,6 +82,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      *
      */
     initAxis: function () {
+        var me = this;
         var maxValue = d3.max(this.data, function (d) {return d.value});
         var numDigits = Math.floor((Math.log(maxValue) * Math.LOG10E) + 1);
         var range = this.x.range();
@@ -95,7 +96,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         this.xAxis = d3.axisTop( this.x )
         .ticks(Math.min(10, tickTarget))
         .tickSizeInner(-this.dimensions.height()+this.dimensions.xAxisOffset)
-        .tickSizeOuter(0);
+        .tickSizeOuter(0)
+        .tickFormat(function (d) {return me.loc('graph.tick', {value: d})});
     },
     /**
      * initializes the chart skeleton without any specific line or bar options

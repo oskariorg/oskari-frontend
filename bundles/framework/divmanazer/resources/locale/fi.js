@@ -4,7 +4,8 @@ Oskari.registerLocalization(
     "key": "DivManazer",
     "value": {
         "graph": {
-            "noValue": "Ei arvoa"
+            "noValue": "Ei arvoa",
+            "tick": "{value, number}"
         },
         "buttons": {
             "add": "Lisää",
