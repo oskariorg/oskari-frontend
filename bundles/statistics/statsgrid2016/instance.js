@@ -151,10 +151,8 @@ Oskari.clazz.define(
             'StatsGrid.Filter': function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
-            'UIChangeEvent' : function() {
-                // close/tear down the ui when receiving the event
+            'UIChangeEvent' : function(evt) {
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
-
             },
             'userinterface.ExtensionUpdatedEvent': function ( event ) {
                 var me = this;
@@ -176,6 +174,7 @@ Oskari.clazz.define(
                 if( this.isEmbedded() && !wasClosed ) {
                     // open table on embedded map
                     // TODO: is wasClosed check unnecessary?
+                    me.getTile().getFlyoutManager().init();
                     me.getTile().toggleFlyout( 'table' );
                 } else {
                     me.getTile().showExtensions();

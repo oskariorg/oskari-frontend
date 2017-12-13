@@ -1,6 +1,9 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (title, options, instance) {
     this.instance = instance;
     this.element = null;
+    this.sandbox = this.instance.getSandbox();
+    this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this._extraFeatures = Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures', this.instance.getSandbox(), this.instance.getLocalization().panels.extraFeatures, this);
     var me = this;
     this.on('show', function() {
         if(!me.getElement()) {
@@ -21,6 +24,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         this.element.empty();
+    },
+    getExtraFeatures: function(){
+        return this._extraFeatures;
     },
     /**
      * @method lazyRender
@@ -48,13 +54,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     },
     addContent : function (el, isEmbedded) {
         var me = this;
-        var sb = this.instance.getSandbox();
-
         var accordion = Oskari.clazz.create(
                 'Oskari.userinterface.component.Accordion'
             );
-        var panels = this.getPanels(isEmbedded);
-        var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+        var panels = me.getPanels(isEmbedded);
+        var service = me.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         var state = service.getStateService();
         el.append(me.getNewSearchElement(isEmbedded));
         _.each(panels, function(p) {
@@ -80,28 +84,58 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         return panels;
     },
     getNewSearchElement: function(isEmbedded){
+        var me = this;
         // no search for embedded map
         if(isEmbedded) {
             return null;
         }
-        var sb = this.instance.getSandbox();
         var container = jQuery('<div></div>');
 
         var locale = this.instance.getLocalization();
 
-        var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', this.instance, sb);
+        var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
         container.append(selectionComponent.getPanelContent());
+
+        var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        btn.addClass('margintopLarge');
+        btn.setTitle(locale.panels.newSearch.addButtonTitle);
+        btn.setEnabled(false);
+        btn.insertTo(container);
+
+        selectionComponent.on('change', function(values){
+             btn.setHandler(function(event) {
+                event.stopPropagation();
+
+                var added = me.service.getStateService().addIndicator(values.datasource, values.indicator, values.selections);
+                if(added === false) {
+                    // already added, set as active instead
+                    var hash = me.service.getStateService().getHash(values.datasource, values.indicator.selections);
+                    me.service.getStateService().setActiveIndicator(hash);
+                }
+                me.service.getStateService().setRegionset(values.regionset);
+
+                var extraValues = me.getExtraFeatures().getValues();
+
+                if(extraValues.openTable) {
+                    me.instance.getTile().openExtension('table');
+                }
+                if(extraValues.openDiagram) {
+                    me.instance.getTile().openExtension('diagram');
+                }
+            });
+            btn.setEnabled(values.enabled);
+
+        });
 
         return container;
     },
     getExtraFeaturesPanel: function(){
-        var sb = this.instance.getSandbox();
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         var container = panel.getContainer();
         var locale = this.instance.getLocalization();
 
         panel.setTitle(locale.panels.extraFeatures.title);
-        container.append(Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures', sb, locale.panels.extraFeatures).getPanelContent());
+        container.append(this._extraFeatures.getPanelContent());
 
         return {id:'extraFeaturesPanel', panel:panel};
     },

@@ -469,11 +469,11 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   .oskari-tile.statsgrid .statsgrid-functionality.material-selected .icon {
     background-color: #ffd400; }
   .oskari-tile.statsgrid .statsgrid-functionality.table .icon {
-    background-image: url("../images/table-light.png"); }
+    background-image: url("../images/tile-table-light.png"); }
   .oskari-tile.statsgrid .statsgrid-functionality.search .icon {
-    background-image: url("../images/search-light.png"); }
+    background-image: url("../images/tile-search-light.png"); }
   .oskari-tile.statsgrid .statsgrid-functionality.diagram .icon {
-    background-image: url("../images/diagram-light.png"); }
+    background-image: url("../images/tile-diagram-light.png"); }
 
 /* ********************************************
  * DataVisualizer styles
