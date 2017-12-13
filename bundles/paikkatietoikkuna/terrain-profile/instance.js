@@ -40,32 +40,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             this.sandbox.request(this, builder());
         },
         createPopup: function () {
-            var me = this;
-            var title = 'Terrain Profile';
-            var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var buttons = [];
-            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-
-            cancelBtn.setHandler(function () {
-                me.cancelTool();
-            });
-            buttons.push(cancelBtn);
-
-            var queryButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-
-            queryButton.setTitle('Show profile');
-            queryButton.setHandler(function () {
-                me.doQuery();
-            });
-            buttons.push(queryButton);
-
-            var content = jQuery('<div></div>');
-
-            popup.show(title, content, buttons);
-            popup.addClass('myplaces2');
-            popup.moveTo('#toolbar div.tool[tool=TerrainProfile]', 'top');
-
-            return popup;
+            return Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainPopup',
+                this.cancelTool.bind(this),
+                this.doQuery.bind(this)
+            );
         },
         startDrawing: function () {
             var builder = Oskari.requestBuilder('DrawTools.StartDrawingRequest');
