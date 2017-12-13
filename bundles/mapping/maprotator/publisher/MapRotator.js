@@ -1,5 +1,5 @@
 
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapRotator',
+Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
 function() {
 }, {
   index : 500,
@@ -19,7 +19,7 @@ function() {
   */
   getTool: function() {
       return {
-          id: 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
+          id: 'Oskari.mapping.maprotator.MapRotatorPlugin',
           title: 'MapRotator',
           config: {
               instance: this.getMapRotatorInstance()
@@ -34,7 +34,7 @@ function() {
   getMapRotatorInstance : function() {
     return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
   },
-  getPlugin: function(){
+  getPlugin: function() {
     var maprotator = this.getMapRotatorInstance() || {};
     return maprotator.plugin;
   },
@@ -113,7 +113,6 @@ function() {
   * @return {Object} jQuery element template
   */
   getExtraOptions: function (toolContainer) {
-    //CREATE CHECKBOX
     var me = this,
         template = jQuery(me.templates.toolOptions).clone(),
         loc = Oskari.getLocalization('maprotator', Oskari.getLang()),
