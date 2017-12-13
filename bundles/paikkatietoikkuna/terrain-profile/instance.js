@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         this.active = false;
         this.feature = null;
         this.popup = null;
+        this.flyout = null;
     },
     {
         __name: 'TerrainProfile',
@@ -63,13 +64,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                 type: 'GET',
                 dataType: 'json',
                 url: url,
-                success: function (response) {
-                    console.log(response);
-                },
+                success: this.showFlyout.bind(this),
                 error: function (jqXHR, textStatus, errorThrown) {
-
+                    Oskari.log('TerrainProfile').warn('Could not load terrain profile data: ' + errorThrown);
                 }
             });
+            this.showFlyout(null);
+        },
+        showFlyout: function (data) {
+            if (this.flyout) {
+                this.flyout.update(data);
+            } else {
+                this.flyout = Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout', data);
+            }
         },
         eventHandlers: {
             'DrawingEvent': function (event) {
