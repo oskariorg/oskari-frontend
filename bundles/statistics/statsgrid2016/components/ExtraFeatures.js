@@ -1,7 +1,6 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(sandbox, locale, instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(sandbox, locale) {
     this.locale = locale;
     this.sb = sandbox;
-    this.instance = instance;
     this._checkboxes = [];
 }, {
     /****** PUBLIC METHODS ******/
@@ -19,34 +18,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(sandbo
     },
 
     /**
-     * @method  @public hasChecked has wanted checkbox checked
-     * @param  {String}  id button id
-     * @return {Boolean}    has checkbox checked ?
+     * @method @public getValues get extra feature values
+     * @return {Object} extra features values
      */
-    hasChecked: function(id) {
+    getValues: function(){
         var me = this;
-        var hasChecked = false;
-        me._checkboxes.forEach(function(buttonConf){
-            if(buttonConf.id === id) {
-                hasChecked = buttonConf.button.isChecked();
-            }
+        var values = {};
+        me._checkboxes.forEach(function(chkConf){
+            values[chkConf.id] = chkConf.button.isChecked();
         });
-        return hasChecked;
+        return values;
     },
 
     /****** PRIVATE METHODS ******/
     _initCheckboxes: function(){
         var me = this;
         me._checkboxes.push({
-            id:'hide_other_layers',
+            id:'hideOtherLayers',
             button: me._getHideOtherLayersCheckbox()
         });
         me._checkboxes.push({
-            id:'open_table',
+            id:'openTable',
             button: me._getOpenTableCheckbox()
         });
         me._checkboxes.push({
-            id:'open_diagram',
+            id:'openDiagram',
             button: me._getOpenDiagramCheckbox()
         });
     },
