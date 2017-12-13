@@ -171,12 +171,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 // footer tools
                 me._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
             }
-
             listContainer.sortable({
-                /*change: function (event,ui) {
-                 var item = ui.item ;
-                 me._layerOrderChanged(item)
-                 },*/
+                containment: "parent",
                 stop: function (event, ui) {
                     me._layerOrderChanged(ui.item);
                 }
@@ -195,7 +191,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             }
         },
-
         /**
          * @private @method _appendLayerFooter
          *
@@ -922,7 +917,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 );
             }
         },
-
+        findAddedBaseLayers: function () {
+            var listContainer = jQuery('ul.selectedLayersList');
+            var previousLayers = listContainer.find('li.layerselection2[layer_id^=base_]');
+            return previousLayers;
+        },
+        findAddedLayers: function () {
+            var listContainer = jQuery('ul.selectedLayersList');
+            var previousLayers = listContainer.find('.layerselection2.layer.selected');
+            return previousLayers;
+        },
         /**
          * @method handleLayerSelectionChanged
          * If isSelected is false, removes the matching layer container from the UI.
@@ -951,9 +955,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 // insert to top
                 if (layer.isBaseLayer() && !keepLayersOrder) {
                     // find all baselayers == layers whose id starts with 'base_'
-                    previousLayers = listContainer.find('li.layerselection2[layer_id^=base_]');
+                    previousLayers = me.findAddedBaseLayers();
                 } else {
-                    previousLayers = listContainer.find('.layerselection2.layer.selected');
+                    previousLayers = me.findAddedLayers();
                 }
 
                 if (previousLayers.length > 0) {
