@@ -35,15 +35,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             //set up svg using margin conventions - we'll need plenty of room on the left for labels
         var dimensions = {
             margin: {
-                top: 15,
+                top: 35,
                 right: 25,
                 bottom: 15,
                 left: leftMargin ? Math.min(leftMargin, 180) : 80
             },
-            label: {
-                padding: 20,
-                verticalCenterPadding: 8
-            },
+            xAxisOffset: -5,
             width: function () {
                 var width = me.containerWidth || 500;
                 return width - this.margin.left - this.margin.right;
@@ -53,9 +50,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             }
         };
         return dimensions;
-    },
-    createGridlines: function () {
-        return d3.axisBottom( this.x ).ticks(10);
     },
     initScales: function () {
         // from zero to max value. This could also be from min to max value, but it causes problems if
@@ -87,10 +81,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      */
     initAxis: function () {
         this.yAxis = d3.axisLeft( this.y )
-        .tickSize(10);
+        .tickSizeInner(5)
+        .tickSizeOuter(0);
 
-        this.xAxis = d3.axisBottom( this.x )
-        .tickSize(10);
+        this.xAxis = d3.axisTop( this.x )
+        .tickSizeInner(-this.dimensions.height()+this.dimensions.xAxisOffset)
+        .tickSizeOuter(0);
     },
     /**
      * initializes the chart skeleton without any specific line or bar options
@@ -132,17 +128,23 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      * @method callGroups
      */
     callGroups: function () {
-        var padding = this.dimensions.label.padding;
-        var lblCenterPadding = this.dimensions.label.verticalCenterPadding;
         //groups
+        var gx = this.svg.append( "g" )
+            .attr("class", "x axis" )
+            .attr("transform", "translate(0 " + this.dimensions.xAxisOffset + ")")
+            .call( this.xAxis );
+
+        gx.select('.domain').remove();
+        gx.selectAll('line, path')
+            .attr('stroke', '#999')
+            .attr('shape-rendering', 'crispEdges');
+            
         var gy = this.svg.append( "g" )
             .attr( "class", "y axis" )
-            .attr( "transform", "translate(0," + (padding + lblCenterPadding) + ")" )
             .call( this.yAxis );
-
-        var gx = this.svg.append( "g" )
-            .attr( "class", "x axis" )
-            .call( this.xAxis );
+        gy.selectAll('line, path')
+            .attr('stroke', '#999')
+            .attr('shape-rendering', 'crispEdges');
     },
     /**
      * @method setColorScale
@@ -173,7 +175,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         this.initChart();
 
         var me = this;
-        var bars = this.svg.selectAll(".bar")
+        var bars = this.svg.insert('g','g.y').selectAll(".bar")
             .data(this.data)
             .enter()
             .append("g");
@@ -183,7 +185,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr("class", "bar")
             .attr("text-anchor", "middle")
             .attr("y", function (d) {
-                return me.y( d.name ) + me.y.bandwidth() / 2 + me.dimensions.label.padding;
+                return me.y( d.name ) + me.y.bandwidth() / 2 - 7; // 7 is half of 15 pixel aligned
             })
             .style('fill', function( d,i ){ return me.colorScale(i); })
             .attr("height", 15)
@@ -241,15 +243,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             // this._g = me.svg.select(this).append('g');
             me.initAxis();
             me.callGroups();
-            // add the X gridlines
-            me.svg.append("g")
-                .attr("class", "grid")
-                .attr("text-anchor", "middle")
-                .attr("transform", "translate(0," +  me.dimensions.height() + ")")
-                .call( me.createGridlines()
-                .tickSize( -me.dimensions.height() +30, 0, 0 )
-                .tickFormat("")
-            );
         });
     },
     clear: function () {
