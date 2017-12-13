@@ -173,7 +173,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             }
             listContainer.sortable({
                 containment: "parent",
+                start: function (event, ui) {
+                    jQuery( ui.item ).css({ border: "1px solid #2c2c2c" })
+                },
                 stop: function (event, ui) {
+                    jQuery( ui.item ).css({ border: "" })
                     me._layerOrderChanged(ui.item);
                 }
             });
