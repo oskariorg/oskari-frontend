@@ -165,8 +165,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
                 });
         });
 
-        me._params.on('change', function(values){
-            me.trigger('change', values);
+        me._params.on('indicator.changed', function(enabled){
+            me.trigger('indicator.changed', enabled);
         });
 
         this.service.on('StatsGrid.DatasourceEvent', function(evt) {
@@ -179,6 +179,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
         });
         me.setElement(main);
         return main;
+    },
+    getValues: function() {
+        if(!this._params) {
+            return {};
+        }
+
+        return this._params.getValues();
     },
     getIndicatorSelector: function () {
         var el = this.getElement();
