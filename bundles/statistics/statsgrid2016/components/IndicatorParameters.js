@@ -3,6 +3,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this._values = {};
+    this._selections = [];
     Oskari.makeObservable(this);
 }, {
     __templates : {
@@ -69,7 +71,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
             }
 
             // selections
-            var selectContainer = [];
+            me._selections = [];
             indicator.selectors.forEach(function(selector, index) {
                 var placeholderText = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id].placeholder) ? panelLoc.selectionValues[selector.id].placeholder :panelLoc.defaultPlaceholder;
                 var label = (locale.parameters[selector.id]) ? locale.parameters[selector.id] : selector.id;
@@ -104,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
                     dropdown.parent().addClass('margintop');
                 }
                 cont.append(tempSelect);
-                selectContainer.push(select);
+                me._selections.push(select);
             });
 
             if(indicator.regionsets.length === 0) {
@@ -122,18 +124,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
                 errorService.show(locale.errors.title,locale.errors.indicatorMetadataIsEmpty);
             }
 
-            var values = {
+            me._values = {
                 datasource : datasrc,
                 indicator : indId,
-                selections : {},
-                enabled: indicator.regionsets.length>0,
                 regionset: regionSelect.value()
             };
 
-            selectContainer.forEach(function(select) {
-                values.selections[select.getId()] = select.getValue();
-            });
-            me.trigger('change', values);
+            me.trigger('indicator.changed', indicator.regionsets.length>0);
         });
+    },
+    getValues: function(){
+        var me = this;
+        var selections = {};
+        me._selections.forEach(function(select) {
+            selections[select.getId()] = select.getValue();
+        });
+        me._values.selections = selections;
+        return me._values;
     }
 });

@@ -102,29 +102,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         btn.setEnabled(false);
         btn.insertTo(container);
 
-        selectionComponent.on('change', function(values){
-             btn.setHandler(function(event) {
-                event.stopPropagation();
+        btn.setHandler(function(event) {
+            event.stopPropagation();
+            var values = selectionComponent.getValues();
 
-                var added = me.service.getStateService().addIndicator(values.datasource, values.indicator, values.selections);
-                if(added === false) {
-                    // already added, set as active instead
-                    var hash = me.service.getStateService().getHash(values.datasource, values.indicator.selections);
-                    me.service.getStateService().setActiveIndicator(hash);
-                }
-                me.service.getStateService().setRegionset(values.regionset);
+            var added = me.service.getStateService().addIndicator(values.datasource, values.indicator, values.selections);
+            if(added === false) {
+                // already added, set as active instead
+                var hash = me.service.getStateService().getHash(values.datasource, values.indicator.selections);
+                me.service.getStateService().setActiveIndicator(hash);
+            }
+            me.service.getStateService().setRegionset(values.regionset);
 
-                var extraValues = me.getExtraFeatures().getValues();
+            var extraValues = me.getExtraFeatures().getValues();
 
-                if(extraValues.openTable) {
-                    me.instance.getTile().openExtension('table');
-                }
-                if(extraValues.openDiagram) {
-                    me.instance.getTile().openExtension('diagram');
-                }
-            });
-            btn.setEnabled(values.enabled);
+            if(extraValues.openTable) {
+                me.instance.getTile().openExtension('table');
+            }
+            if(extraValues.openDiagram) {
+                me.instance.getTile().openExtension('diagram');
+            }
+        });
 
+        selectionComponent.on('indicator.changed', function(enabled){
+            btn.setEnabled(enabled);
         });
 
         return container;
