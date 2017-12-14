@@ -50,6 +50,9 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             'dblclick': movementHook(this.defaultDblClick),
             'dblrightclick': movementHook(this.defaultDblRightClick),
             'click': function(evt) {
+                if (me.mapmodule.getDrawingMode()) {
+                    return;
+                }
                 me.mapmodule.__sendMapClickEvent(evt);
                 return true;
             }

@@ -105,6 +105,8 @@ Oskari.clazz.define(
         this._cursorStyle = '';
         this.log = Oskari.log('AbstractMapModule');
 
+        this.isDrawing = false;
+
 
         this.templates = {
             'crosshair': jQuery(
@@ -113,6 +115,7 @@ Oskari.clazz.define(
                     '<div class="oskari-crosshair-horizontal-bar"></div>'+
                 '</div>')
         };
+
     }, {
         /**
          * Moved from core, to be removed
@@ -476,6 +479,14 @@ Oskari.clazz.define(
          */
         getProjection: function () {
             return this._projectionCode;
+        },
+
+        setDrawingMode: function (mode) {
+            this.isDrawing = !!mode;
+        },
+
+        getDrawingMode: function () {
+            return this.isDrawing;
         },
 /* --------------- MAP LOCATION ------------------------ */
         /**

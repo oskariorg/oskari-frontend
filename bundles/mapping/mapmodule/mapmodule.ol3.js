@@ -104,6 +104,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('singleclick', function (evt) {
+                if (me.getDrawingMode()) {
+                    return;
+                }
                 var CtrlPressed = evt.originalEvent.ctrlKey;
                 var lonlat = {
                   lon : evt.coordinate[0],
