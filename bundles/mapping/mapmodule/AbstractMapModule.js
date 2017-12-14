@@ -482,11 +482,7 @@ Oskari.clazz.define(
         },
 
         setDrawingMode: function (mode) {
-            if (mode) {
-                this.isDrawing = true;
-            } else {
-                this.isDrawing = false;
-            }
+            this.isDrawing = !!mode;
         },
 
         getDrawingMode: function () {
