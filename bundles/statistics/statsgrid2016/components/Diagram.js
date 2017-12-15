@@ -147,11 +147,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
      * @return colors[] containing colors
      */
     getColorScale: function() {
+        /*
         var stateService = this.service.getStateService();
         var activeIndicator = stateService.getActiveIndicator();
         var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
         var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-        return colors;
+        */
+        // TODO use ranges from classification to map colors
+        return ['#555','#555'];
     },
     events: function() {
         var me = this;
