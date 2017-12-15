@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Kartan pyöritys",
         "display":{
           "tooltip": {
-            "tool":"Palauta kartan orientaatio"
+            "tool": "Palauta pohjoinen ylös"
           },
           "publisher": {
                 "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
