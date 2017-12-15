@@ -147,14 +147,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
 
         gx.select('.domain').remove();
         gx.selectAll('line, path')
-            .attr('stroke', '#999')
+            .attr('stroke', '#aaa')
             .attr('shape-rendering', 'crispEdges');
             
         var gy = this.svg.append( "g" )
             .attr( "class", "y axis" )
             .call( this.yAxis );
         gy.selectAll('line, path')
-            .attr('stroke', '#999')
+            .attr('stroke', '#aaa')
             .attr('shape-rendering', 'crispEdges');
     },
     /**
