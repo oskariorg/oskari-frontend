@@ -22,8 +22,7 @@ Oskari.clazz.define(
             }, {
                 'type': 'text/javascript',
                 'src': '../../../../bundles/paikkatietoikkuna/terrain-profile/instance.js'
-            }]
-            /*,
+            }],
             'locales': [{
                 'lang': 'en',
                 'type': 'text/javascript',
@@ -37,7 +36,6 @@ Oskari.clazz.define(
                 'type': 'text/javascript',
                 'src': '../../../../bundles/paikkatietoikkuna/terrain-profile/resources/locale/sv.js'
             }]
-            */
         },
         'bundle': {
             'manifest': {

@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         this.feature = null;
         this.popup = null;
         this.flyout = null;
+        this.loc = Oskari.getMsg.bind(null, 'TerrainProfile');
     },
     {
         __name: 'TerrainProfile',
@@ -11,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
             var buttonConf = {
                 iconCls: 'upload-material',
-                tooltip: 'Terrain height profile',
+                tooltip: this.loc('terrainHeightProfile'),
                 sticky: true,
                 callback: function (el) { }
             };
@@ -72,6 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             this.showFlyout(null);
         },
         showFlyout: function (data) {
+            return
             if (this.flyout) {
                 this.flyout.update(data);
             } else {
