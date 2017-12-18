@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             return this.__service;
         },
         /**
-         * @return {STRING} reference to element-id to use instead of tile as bundle ui-element
+         * @return {String} reference to element-id to use instead of tile as bundle ui-element
          */
         configurationHasCustomElement: function () {
              return this.getConfiguration().tileElement;
@@ -165,7 +165,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
-
+            if ( !!this.configurationHasCustomElement ) {
+                 blnEnabled ? jQuery( this.configurationHasCustomElement() ).addClass('activePublish') : jQuery( this.configurationHasCustomElement() ).removeClass('activePublish');
+            }
             if (blnEnabled) {
                 var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                 this.getSandbox().request(this, stateRB(data.configuration));

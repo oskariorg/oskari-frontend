@@ -67,6 +67,13 @@ Example for coordinatetool:
   }
 }
 ```
+### Additional config
+For the bundle to start in a custom element instead of Oskari Tile, the bundle configuration needs to have a key "tileElement", that references a element in the DOM with a seletor (string)
+```javascript
+var conf = this.getConfiguration();
+conf.tileElement = '#sidebar';
+```
+
 
 ## Bundle Panels
 
