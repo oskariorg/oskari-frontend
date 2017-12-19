@@ -20,6 +20,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         var conf = this.getConfiguration();
         conf.name = 'Publisher2';
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
+        if( !!this.configurationHasCustomElement() ) {
+            conf.tileClazz = null;
+            this.customElementClickHandler();
+        }
         this.defaultConf = conf;
         this.publisher = null;
     }, {
@@ -96,7 +100,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var me = this;
             var sandbox = this.getSandbox();
             var loc = this.getLocalization();
-
+            
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
             // create and register request handler
             var reqHandler = Oskari.clazz.create(
@@ -130,7 +134,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         getService : function() {
             return this.__service;
         },
-
+        /**
+         * @return {String} reference to element-id to use instead of tile as bundle ui-element
+         */
+        configurationHasCustomElement: function () {
+             return this.getConfiguration().tileElement;
+        },
+        customElementClickHandler: function () {
+            var me = this;
+            jQuery( this.configurationHasCustomElement() ).on("click", function () {
+                me.getSandbox().postRequestByName(
+                    'userinterface.UpdateExtensionRequest', [me, 'toggle']
+                );
+            });
+        },
         /**
          * @method setPublishMode
          * Transform the map view to publisher mode if parameter is true and back to normal if false.
@@ -148,7 +165,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
-
+            if ( !!this.configurationHasCustomElement() ) {
+                 blnEnabled ? jQuery( this.configurationHasCustomElement() ).addClass('activePublish') : jQuery( this.configurationHasCustomElement() ).removeClass('activePublish');
+            }
             if (blnEnabled) {
                 var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                 this.getSandbox().request(this, stateRB(data.configuration));
