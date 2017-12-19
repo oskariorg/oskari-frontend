@@ -931,7 +931,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         },
         /**
          * @method handleLayerSelectionChanged
-         * If isSelected is false, removes the matching layer container from the UI.:de
+         * If isSelected is false, removes the matching layer container from the UI.
          * If isSelected is true, constructs a matching layer container and adds it
          * to the UI.
          *
