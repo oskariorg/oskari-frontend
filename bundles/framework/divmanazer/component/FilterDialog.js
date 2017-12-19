@@ -876,8 +876,8 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
         _displayValidationErrors: function (errors) {
             var loc = this.loc.validation,
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeButton = popup.createCloseButton(this.loc.buttons.ok),
-                popupTitle = this.loc.error.title,
+                closeButton = popup.createCloseButton(Oskari.getMsg('DivManazer', 'buttons.ok')),
+                popupTitle = (this.loc.error && this.loc.error.title) ? this.loc.error.title : '',
                 popupContent = '<h4>' + loc.title + '</h4>',
                 i;
 
