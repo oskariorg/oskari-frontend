@@ -36,6 +36,7 @@ publisher settings.
 Some configuration is needed for URLs:
 * loginUrl and registerUrl are shown as links for guest users to appropriate site pages (can be localized with an object notation or used with single url)
 * urlPrefix is used when displaying a preview for GFI popup. It is always appended with '/web/' and users language.
+* tileElement can be used to to give a reference to an element that should start the publisher functionality. The normal Oskari Tile is not added to the menu as a result, but clicking the element will start the publisher. An 'activePublish' class is added to the element when publisher is open and removed on close to allow styling. Value needs to be a DOM-selector (string).
 
 ```javascript
 "conf": {
@@ -50,11 +51,9 @@ Some configuration is needed for URLs:
       ...
     }
   },
-  "tileElement": "#sidebar"
+  "tileElement": "#publisherButton"
 }
 ```
-TileElement is used to bind the bundle in a custom element instead of Oskari Tile, value needs to be a DOM-selector (string).
-
 Toolsconfig can be used to configure bundle configurations for tools that are user selectable. Most configs can be included in the publish-template, but this makes publisher more versatile and allows different views in the same Oskari instance to have different preselected tool configurations. When initializing publisher tools the configuration is passed to the tool based on tool name. First one to utilize this feature is coordinatetool where you can specify projections transform support to be included in embedded maps. 
 
 Example for coordinatetool:
