@@ -1032,8 +1032,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if(selected.values.length > 0) {
                 selected.values.forEach(function(selection){
                     me.table.find('tr[data-id="'+selection+'"]').addClass('selected');
-                    me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
                 });
+                me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
             }
         },
 
