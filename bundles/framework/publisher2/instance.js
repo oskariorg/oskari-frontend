@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
-            if ( !!this.configurationHasCustomElement ) {
+            if ( !!this.configurationHasCustomElement() ) {
                  blnEnabled ? jQuery( this.configurationHasCustomElement() ).addClass('activePublish') : jQuery( this.configurationHasCustomElement() ).removeClass('activePublish');
             }
             if (blnEnabled) {

@@ -49,9 +49,12 @@ Some configuration is needed for URLs:
     "<tool>" : {
       ...
     }
-  }
+  },
+  "tileElement": "#sidebar"
 }
 ```
+TileElement is used to bind the bundle in a custom element instead of Oskari Tile, value needs to be a DOM-selector (string).
+
 Toolsconfig can be used to configure bundle configurations for tools that are user selectable. Most configs can be included in the publish-template, but this makes publisher more versatile and allows different views in the same Oskari instance to have different preselected tool configurations. When initializing publisher tools the configuration is passed to the tool based on tool name. First one to utilize this feature is coordinatetool where you can specify projections transform support to be included in embedded maps. 
 
 Example for coordinatetool:
@@ -67,13 +70,6 @@ Example for coordinatetool:
   }
 }
 ```
-### Additional config
-For the bundle to start in a custom element instead of Oskari Tile, the bundle configuration needs to have a key "tileElement", that references a element in the DOM with a seletor (string)
-```javascript
-var conf = this.getConfiguration();
-conf.tileElement = '#sidebar';
-```
-
 
 ## Bundle Panels
 
