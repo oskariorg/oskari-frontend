@@ -328,10 +328,7 @@ Oskari.clazz.define(
             if (!panel || !panel.grid) {
                 return;
             }
-            selected.forEach(function(selectedFeature, index){
-               panel.grid.select(selectedFeature, !!index);
-            });
-            panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked() === true);
+            panel.grid.select(selected, false);
         },
 
         /**
@@ -378,8 +375,6 @@ Oskari.clazz.define(
 
             // Grid opacity
             this.setGridOpacity(layer, 1.0);
-
-            //me.moveSelectedRowsTop(layer);
         },
 
         moveSelectedRowsTop: function(layer) {
