@@ -44,7 +44,7 @@ Oskari.clazz.category(
          * is used to determine the field which value is compared against.
          * If found, selects the corresponding row in the grid.
          *
-         * @param {String} value id for the data to be selected
+         * @param {String|Array} value id for the data to be selected
          * @param {Boolean} keepPrevious
          * True to keep previous selection, false to clear before selecting
          * @param {Object} scrollableElement If element defined then scroll grid to selected row. If scrollableELment is null then not scroll.
@@ -54,39 +54,27 @@ Oskari.clazz.category(
             if(!me.model) {
                 return;
             }
-            var key = me.model.getIdField(),
-                dataArray = this.model.getData(),
-                index,
-                rows,
-                data;
+            var isArray = Array.isArray(value);
+            if(!isArray) {
+                value = [value];
+            }
 
-            for (index = 0; index < dataArray.length; index += 1) {
-                data = dataArray[index];
-                if (data[key] === value) {
-                    // found
-                    break;
-                }
-            }
-            rows = this.table.find('tbody tr');
             if (keepPrevious !== true) {
-                rows.removeClass('selected');
+                me.table.find('tbody tr').removeClass('selected');
             }
-            jQuery(rows[index]).addClass('selected');
+
+            value.forEach(function(val) {
+                me.table.find('tbody tr[data-id="'+val+'"]').addClass('selected');
+            });
 
             // Move selected rows top if configured
-            if (me.lastSort && me.sortOptions.moveSelectedRowsTop) {
-                // sort with last know sort when updating data
-                // FIXME: now select has called multiple times some foreach so multiple time sort stuck browsers.
-                // For example featuredata2 datatable: filter data by some column and then click grid column header --> freezing...
-                clearTimeout(me._sorting);
-                me._sorting = setTimeout(function(){
-                    me.sortBy(me.lastSort.attr, me.lastSort.descending);
-                },10);
+            if(me.sortOptions.moveSelectedRowsTop) {
+                me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
             }
 
-            if(scrollableElement) {
+            if(scrollableElement && !isArray) {
                 scrollableElement.scrollTop(0);
-                var row = scrollableElement.find('tr[data-id="'+value+'"]');
+                var row = scrollableElement.find('tr[data-id="'+value[0]+'"]');
                 if(row.length > 0) {
                     scrollableElement.scrollTop(row.position().top);
                 }
