@@ -800,6 +800,11 @@ Oskari.clazz.define(
                     gridToolsEl.append(checkboxEl);
                 }
 
+                var selected = me.getSelectedFeatureIds(layer);
+                if(selected && selected.length>0) {
+                    me.selectGridValues(selected, layer);
+                }
+
             }
         },
         setGridOpacity: function (layer, opacity) {
