@@ -76,7 +76,12 @@ Oskari.clazz.category(
             // Move selected rows top if configured
             if (me.lastSort && me.sortOptions.moveSelectedRowsTop) {
                 // sort with last know sort when updating data
-                me.sortBy(me.lastSort.attr, me.lastSort.descending);
+                // FIXME: now select has called multiple times some foreach so multiple time sort stuck browsers.
+                // For example featuredata2 datatable: filter data by some column and then click grid column header --> freezing...
+                clearTimeout(me._sorting);
+                me._sorting = setTimeout(function(){
+                    me.sortBy(me.lastSort.attr, me.lastSort.descending);
+                },10);
             }
 
             if(scrollableElement) {
@@ -195,6 +200,7 @@ Oskari.clazz.category(
         _moveSelectedRowsTop: function(){
             var me = this;
             if(me.sortOptions.moveSelectedRowsTop) {
+                me.table.hide();
                 var selected = me._getSelectedRows();
                 var moveRow = function(rowEl) {
                     me.table.prepend(rowEl);
@@ -218,6 +224,7 @@ Oskari.clazz.category(
                 });
 
                 me.model.data = data;
+                me.table.show();
             }
         }
     }
