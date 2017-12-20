@@ -286,7 +286,8 @@
                     // try again after 10 seconds
                     me.getIndicatorList(ds, function (err, newList) {
                         if (err) {
-                            callback(err);
+                            // Don't call callback with err as we will be trying again.
+                            _log.warn('Error updating indicator list.');
                             return;
                         }
                         if (newList.indicators.length === previousList.length) {
