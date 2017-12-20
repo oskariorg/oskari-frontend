@@ -432,6 +432,8 @@ Oskari.clazz.define(
             me.mapModule.stopPlugin(me.drawPlugin);
             me.mapModule.unregisterPlugin(me.drawPlugin);
 
+            me.drawControls.closeHelpDialog();
+
             me.mapModule.stopPlugin(me.drawFilterPlugin);
             me.mapModule.unregisterPlugin(me.drawFilterPlugin);
 
