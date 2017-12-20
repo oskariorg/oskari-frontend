@@ -1,3 +1,0 @@
-
-These are OpenLayers licensed BSD
-even though scripts may update *.js sources to include nls.fi license

@@ -133,7 +133,8 @@ Oskari.clazz.define(
          * @return {jQuery} jquery reference for the form
          */
         showForm: function (renderButton, state, dialogLocation) {
-            var me = this;
+            var me = this,
+                tempValues = jQuery.extend(true, {}, me.values);
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.dot);
                 this.messageEnabled = state.messageEnabled;
@@ -174,7 +175,7 @@ Oskari.clazz.define(
 
                 btnContainer.html(svgObj.outerHTML());
 
-                if(i === this.defaultValues.shape) {
+                if(i == this.values.shape) {
                     btnContainer.css('border', '2px solid');
                 }
 
@@ -244,7 +245,8 @@ Oskari.clazz.define(
                 colorCell.attr('id', id);
                 colorCell.click(function () {
                     if (jQuery('.color-source').prop('checked')) {
-                        return;
+                        jQuery('.color-source').attr('checked', false);
+                        jQuery('input.custom-color').prop('disabled', true);
                     }
                     cellIndex = parseInt(this.id.substring(0, 2), 10);
                     if (cellIndex === me.activeColorCell) {
@@ -280,10 +282,18 @@ Oskari.clazz.define(
             var colorCheckbox = me.templateColorSource.clone();
 
             colorCheckbox.change(function () {
+                var cell = me.activeColorCell.toString();
                 jQuery('input.custom-color').prop('disabled', !this.checked);
-                var activeCell = jQuery('#' + me.activeColorCell + 'ColorCell');
+                if (me.activeColorCell < 10) {
+                    cell = '0' + cell;
+                }
+                var activeCell = jQuery('#' + cell + 'ColorCell');
                 if (this.checked) {
                     activeCell.css('border', '1px solid #000000');
+                    jQuery('.custom-red-value').val(parseInt(me.values.color.substring(0, 2), 16));
+                    jQuery('.custom-green-value').val(parseInt(me.values.color.substring(2, 4), 16));
+                    jQuery('.custom-blue-value').val(parseInt(me.values.color.substring(4), 16));
+                    me.activeColorCell = -1;
                 } else {
                     activeCell.css('border', '3px solid #ffffff');
                 }
@@ -382,9 +392,9 @@ Oskari.clazz.define(
 
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             cancelBtn.setHandler(function () {
-                me.values.size = me.defaultValues.size;
-                me.values.color = me.defaultValues.color;
-                me.values.shape = me.defaultValues.shape;
+                me.values.size = tempValues.size;
+                me.values.color = tempValues.color;
+                me.values.shape = tempValues.shape;
                 me.renderDialog.close();
             });
             this.cancelButton = cancelBtn;

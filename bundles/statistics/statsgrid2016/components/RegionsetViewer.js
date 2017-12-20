@@ -59,22 +59,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     var optionalStyles = [];
                     var color = colors[index];
 
-                    // Get point symbol size
-                    var min = classification.min;
-                    var max = classification.max;
-                    var iconSize = null;
-                    if(min && max) {
-                        var step = (max-min) / regiongroups.length;
-                        iconSize = min + step * index;
-                    }
+                    var iconSizePx = service.getClassificationService().getPixelForSize(index,
+                        {
+                            min:classification.min,
+                            max:classification.max
+                        },{
+                            min:0,
+                            max:classification.count-1
+                        }
+                    );
 
                     regiongroup.forEach(function(region){
-                        var wantedRegion = jQuery.grep(regions, function( r, i ) {
+                        var wantedRegion = jQuery.grep(regions, function(r) {
                             return r.id === region;
                         });
 
                         if(wantedRegion && wantedRegion.length === 1) {
-                            optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSize));
+                            optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSizePx));
                             features.push(me._getFeature(classification,wantedRegion[0], data[wantedRegion[0].id].toString()));
                         }
                     });
@@ -116,14 +117,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                             offsetY: 0
                         };
                     }
+
+                    var region = service.getRegionsets(currentRegion);
+
                     var params = [geoJSON, {
                         clearPrevious: false,
                         featureStyle: defaultFeatureStyle,
                         optionalStyles: optionalStyles,
                         layerId: me.LAYER_ID,
-                        prio: index
+                        prio: index,
+                        showLayer: true,
+                        opacity: classification.opacity ||80,
+                        layerName: locale.layer.name,
+                        layerInspireName: locale.layer.inspireName,
+                        layerOrganizationName: locale.layer.organizationName,
+                        layerDescription: (region && region.name) ? region.name : null,
+                        layerPermissions: {
+                            'publish': 'publication_permission_ok'
+                        }
                     }];
-
 
                     sandbox.postRequestByName(
                         'MapModulePlugin.AddFeaturesToMapRequest',
@@ -141,7 +153,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         var style = null;
         var strokeWidth = (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1;
         var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
-        var opacity = (classification.transparency) ? (parseFloat(classification.transparency))/100 : 0.8;
         if(mapStyle === 'points') {
             var svg = me._pointSymbol.clone();
             svg.attr('width', 64);
@@ -160,13 +171,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     key: 'id'
                 },
                 image: {
-                    opacity: opacity,
+                    opacity: 1,
                     shape:{
                         data: svg.html(),
                         x: 32,
                         y: 0
                     },
-                    size: size
+                    sizePx: size
                 }
             };
         }
@@ -184,7 +195,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     width: strokeWidth
                 },
                 image: {
-                    opacity: 0.8
+                    opacity: 1
                 }
             };
         }
@@ -233,6 +244,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         });
 
         me.service.on('StatsGrid.RegionSelectedEvent', function(event){
+            // FIXME: this needs some serious optimization
+            // we need previous selection from event so we can update the style
+            //  for 2 features instead of ALL the regions
             me.render(event.getRegion());
         });
 

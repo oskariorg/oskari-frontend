@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Ta bort plats",
-                    "confirm": "Vill du ta bort denna plats?",
+                    "confirm": "Vill du ta bort denna plats \"{name}\"?",
                     "btnDelete": "Ta bort",
                     "btnCancel": "Avbryt",
                     "success": "Platsen har tagits bort.",
@@ -285,8 +285,8 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Ta bort kartlagret",
-                "deleteConfirmMove": "Kartlager: {0} innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret {2} eller vill du ta bort kartlagret och dess platser?",
-                "deleteConfirm": "Vill du ta bort kartlagret {0}?",
+                "deleteConfirmMove": "Kartlager \"{0}\" innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret \"{2}\" eller vill du ta bort kartlagret och dess platser?",
+                "deleteConfirm": "Vill du ta bort kartlagret \"{0}\"?",
                 "deleted": "Kartlagret har tagtits bort."
             },
             "categoryToPublic": {

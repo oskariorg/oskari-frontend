@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "რუკის ფენები",
+            "message": "მონაცემთა შერჩევა შეგიძლიათ რუკის ფენების შერჩევით. კატეგორიის გასახსნელად მასზე დააწკაპუნეთ და აირჩიეთ ფენა ან საძიებელ ველში ჩაწერეთ რამდენიმე სომბოლო საძიებელ მონაცემთა დასახელებიდან",
+            "openLink": "რუკის ფენების ჩვენება",
+            "closeLink": "რუკის ფენების დამალვა",
+            "tileText": "რუკის ფენები"
         }
     }
 });

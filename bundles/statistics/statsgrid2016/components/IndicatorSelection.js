@@ -3,6 +3,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance, this.instance.getSandbox());
+    this.element = null;
+    Oskari.makeObservable(this);
 }, {
     __templates : {
         main : _.template('<div class="statsgrid-ds-selections"></div>'),
@@ -66,7 +69,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             }
         });
     },
-
+    setElement: function ( el ) {
+        this.element = el;
+    },
+    getElement: function () {
+        return this.element;
+    },
     /****** PUBLIC METHODS ******/
 
     /**
@@ -131,9 +139,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
         var selectionsContainer = jQuery(this.__templates.selections());
         main.append(selectionsContainer);
 
-        var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance, this.sb);
         dsSelector.on('change', function() {
-            params.clean();
+            me._params.clean();
 
             // If removed selection then need to be also update indicator selection
             if(select.getValue() === '') {
@@ -149,20 +156,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             me._populateIndicators(indicSelect , select.getValue());
         });
 
-        var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        btn.addClass('margintopLarge');
-        btn.setTitle(panelLoc.addButtonTitle);
-        btn.setEnabled(false);
-        btn.insertTo(main);
-
         indicatorSelector.on('change', function() {
-            params.indicatorSelected(selectionsContainer,
+            me._params.indicatorSelected(selectionsContainer,
                 select.getValue(),
                 indicSelect.getValue(),
                 {
-                    dataLabelWithTooltips:dataLabelWithTooltips,
-                    btn: btn
+                    dataLabelWithTooltips:dataLabelWithTooltips
                 });
+        });
+
+        me._params.on('indicator.changed', function(enabled){
+            me.trigger('indicator.changed', enabled);
         });
 
         this.service.on('StatsGrid.DatasourceEvent', function(evt) {
@@ -173,8 +177,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             // update indicator list
             me._populateIndicators(indicSelect, currentDS);
         });
-
+        me.setElement(main);
         return main;
+    },
+    getValues: function() {
+        if(!this._params) {
+            return {};
+        }
+
+        return this._params.getValues();
+    },
+    getIndicatorSelector: function () {
+        var el = this.getElement();
+        var indicSel = el.find('.stats-ind-selector');
+        return indicSel;
     }
 
 });

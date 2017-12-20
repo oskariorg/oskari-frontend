@@ -99,8 +99,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.WFSLayerService = me.instance.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         me._param_footer = me.template.footer.clone();
         me._param_footer.append(this.loc.aggregate.footer);
-        me._showFeatureDataAfterAnalysis;
-        me._showFeatureDataWithoutSaving;
+        me._showFeatureDataAfterAnalysis = null;
+        me._showFeatureDataWithoutSaving = null;
 
     }, {
         __templates: {
@@ -931,8 +931,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
                 values.area = {
                     size: formValues.area.lineWidth,
-                    lineColor: '#' + formValues.area.lineColor,
-                    fillColor: '#' + formValues.area.fillColor,
+                    lineColor: formValues.area.lineColor === null ? null : '#' + formValues.area.lineColor,
+                    fillColor: formValues.area.fillColor === null ? null : '#' + formValues.area.fillColor,
                     lineStyle: formValues.area.lineStyle,
                     fillStyle: formValues.area.fillStyle,
                     lineCorner: formValues.area.lineCorner
@@ -1101,7 +1101,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                         }
 
-                        me.contentPanel._toggleSelectionTools();
+                        me.contentPanel.toggleSelectionTools();
 
                     });
 
@@ -1178,7 +1178,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.WFSLayerService.setAnalysisWFSLayerId(layer.getId());
                 }
             }
-            me.contentPanel._toggleSelectionTools();
+            me.contentPanel.toggleSelectionTools();
 
             if (!me.contentPanel.getSelectedGeometry()) {
                 me.setContentPanelSelectedGeometry();
@@ -2552,10 +2552,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 intersectFeatures = [tempLayer.getFeature()];
             }
 
+            var spatialOperator = null;
             if (container.find('input[name=spatial_join_mode]:checked').val() === 'oskari_analyse_aggregate') {
-                var spatialOperator = container.find('input[name=spatial_join_mode]:checked').val();
+                spatialOperator = container.find('input[name=spatial_join_mode]:checked').val();
             } else {
-                var spatialOperator = container.find('input[name=spatial]:checked').val();
+                spatialOperator = container.find('input[name=spatial]:checked').val();
             }
             spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
 
@@ -2789,7 +2790,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         k;
 
                     if (_.indexOf(fields, "NoDataCnt") !== -1) {
-                        var noDataCnt = true;
+                        noDataCnt = true;
                     }
                     fields.unshift('Property');
                     locales.unshift(me.loc.aggregatePopup.property);
@@ -3001,10 +3002,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _saveAnalyse: function (selections, features) {
-            /*var sandbox = this.instance.getSandbox(),
-                url = sandbox.getAjaxUrl();
-            */
-            alert('TODO: save analyse data operations');
+            // TODO: save analyse data operations
+            var log = Oskari.log('Oskari.analysis.bundle.analyse.view.StartAnalyse');
+            log.warn('Save analyse not implemented!!');
         },
 
         /**
@@ -3102,9 +3102,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     selectedLayer = me._getSelectedMapLayer();
                     //Check weather the layer is selected of not
                     if (parseInt(layerId) === selectedLayer._id) {
-                        layer["_isLayerSelected"] = true;
+                        layer._isLayerSelected = true;
                     } else {
-                        layer["_isLayerSelected"] = false;
+                        layer._isLayerSelected = false;
                     }
 
                     me.filterDialog.createFilterDialog(layer, prevJson, function() {

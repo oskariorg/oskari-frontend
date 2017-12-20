@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Legenda della mappa",
-                "tooltip": "Scegli una posizione per la legenda della mappa. Se non è selezionata nessunza posizione, la legenda non sarà visualizzata nella mappa stampata",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "Nessuna legenda della mappa",
-                        "tooltip": "La legenda della mappa non è mostrata nella mappa stampata",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Angolo in basso a sinistra",
-                        "tooltip": "La legenda della mappa è mostrata nell'angolo in basso a sinistra della stampa"
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Angolo in alto a sinistra",
-                        "tooltip": "La legenda della mappa è mostrata nell'angolo in alto a sinistra della stampa"
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Angolo in alto a destra",
-                        "tooltip": "La legenda della mappa è mostrata nell'angolo in alto a destra della stampa"
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Angolo in basso a destra",
-                        "tooltip": "La legenda della mappa è mostrata nell'angolo in basso a destra della stampa"
-                    }
-                ]
-            },
             "help": "Aiuto",
             "error": {
                 "title": "Errore",

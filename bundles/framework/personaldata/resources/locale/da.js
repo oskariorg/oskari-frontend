@@ -31,7 +31,7 @@ Oskari.registerLocalization(
                     "cancel": "Annuller",
                     "error_noname": "Tast navnet",
                     "deletetitle": "Bekræft sletning",
-                    "deletemsg": "Vil du slette dette map view?"
+                    "deletemsg": "Vil du slette dette map view \"{name}\"?"
                 },
                 "save": {
                     "success": "Map view'et er blevet gemt",
@@ -129,6 +129,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Ja",
             "no": "Nej"
+        },
+        "guidedTour": {
+            "title": "Mine data",
+            "message": "Alle steder du har markeret på kortet, dine map views og indlejrede kort er vist her, når du er logget ind på servicen",
+            "openLink": "Vis mine data",
+            "closeLink": "Skjul mine data",
+            "tileText": "Mine data"
         }
     }
 });

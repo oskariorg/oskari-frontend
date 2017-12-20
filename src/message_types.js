@@ -1,7 +1,7 @@
 /**
  * Creates on, off, trigger functions for Oskari
  */
-(function(o) {
+(function (o) {
     if (!o) {
         // can't add eventbus if no Oskari ref
         return;
@@ -13,13 +13,13 @@
     var log = Oskari.log('Messages');
     var clazzes = {};
 
-    function getClazzByNameAndType(name, type) {
+    function getClazzByNameAndType (name, type) {
         var typeNames = clazzes[type];
-        if(!typeNames) {
+        if (!typeNames) {
             clazzes[type] = {};
             typeNames = clazzes[type];
         }
-        if(typeNames[name]) {
+        if (typeNames[name]) {
             return typeNames[name];
         }
         log.debug('Updating metadata for ' + type);
@@ -36,7 +36,7 @@
         return typeNames[name];
     }
 
-    o.requestBuilder = function(name) {
+    o.requestBuilder = function (name) {
         var qname = getClazzByNameAndType(name, 'Oskari.mapframework.request.Request');
         if (!qname) {
             log.warn('No builder found for', name);
@@ -45,7 +45,7 @@
         return Oskari.clazz.builder(qname);
     };
 
-    o.eventBuilder = function(name) {
+    o.eventBuilder = function (name) {
         var qname = getClazzByNameAndType(name, 'Oskari.mapframework.event.Event');
         if (!qname) {
             log.warn('No builder found for', name);
@@ -53,5 +53,4 @@
         }
         return Oskari.clazz.builder(qname);
     };
-
 }(Oskari));

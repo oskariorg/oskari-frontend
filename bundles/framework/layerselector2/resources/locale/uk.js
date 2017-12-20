@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Шари карти",
+            "message": "Ви можете обрати продукти для відображення на карті обираючи шари карти. Відкрийте категорію та оберіть необхідний шар або введіть в полі пошуку декілька букв з назви продукту який ви шукаєте",
+            "openLink": "Показати шари карти",
+            "closeLink": "Приховати шари карти",
+            "tileText": "Шари карти"
         }
     }
 });

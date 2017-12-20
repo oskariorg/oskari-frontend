@@ -38,8 +38,6 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                     type:'bar',
                     onclick: function (d, element) {
                         //give the id and index of the latest data set.
-
-                        console.log("onclick latest data", element);
                     },
                     onmouseover: function (d) {
 
@@ -47,7 +45,6 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                         //make the bar red
                         //d3.selectAll(k).style("fill", "red");
                         //event.stopPropagation();
-                        console.log("onmouseover latest data d", d);
 
                         //make all teh bar opacity 0.1
                         d3.selectAll(".c3-shape").style("opacity", 0.5);
@@ -63,7 +60,6 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                         //var k = ".c3-shape-" + d.index;
                         //make the clicked bar opacity
                         //d3.selectAll(k).style("fill",'#1f77b4');
-                        console.log("onmouseout latest data", d);
                     }
                 },
                 grid: {

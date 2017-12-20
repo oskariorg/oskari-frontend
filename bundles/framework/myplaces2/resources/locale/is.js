@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Eyða stað",
-                    "confirm": "Viltu eyða þessum stað?",
+                    "confirm": "Viltu eyða þessum stað \"{name}\"?",
                     "btnDelete": "Eyða",
                     "btnCancel": "Hætta við",
                     "success": "Staðnum var eytt.",

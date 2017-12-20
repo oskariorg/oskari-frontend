@@ -51,14 +51,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-            var me = this,
-                tabsLocalization = me.instance.getLocalization('tabs');
+            var me = this;
             // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
             this.tabsData = {
-                "myviews": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance, tabsLocalization.myviews),
-                "publishedmaps": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance, tabsLocalization.publishedmaps),
+                "myviews": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance),
+                "publishedmaps": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance),
                 // TODO should we pass conf to accounttab here?
-                "account": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.AccountTab', me.instance, tabsLocalization.account)
+                "account": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.AccountTab', me.instance)
             };
         },
         /**
@@ -112,26 +111,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 tab,
                 panel,
                 notLoggedIn = this.instance.getLocalization('notLoggedIn'),
-                notLoggedInText = this.instance.getLocalization('notLoggedInText'),
+                notLoggedInText = '',
                 notLoggedInFullText = notLoggedIn,
                 conf = this.instance.conf,
                 lang = Oskari.getLang();
 
 
             if(conf.logInUrl) {
-                if(typeof conf.logInUrl === 'object') {
-                    var value = conf.logInUrl[lang];
-                    if(!value) {
-                        value = conf.logInUrl[Oskari.getDefaultLanguage()];
-                    }
-
-                    if(value) {
-                        notLoggedInText = '<a href="' + value + '">' + notLoggedInText + '</a>';
-                    }
-                }
-                else if(typeof conf.logInUrl === 'string') {
-                    notLoggedInText = '<a href="' + conf.logInUrl + '">' + notLoggedInText + '</a>';
-                }
+                //loginUrl = Oskari.getLocalized(conf.loginUrl); !!!!
+                notLoggedInText = '<a href="' + Oskari.getLocalized(conf.logInUrl) + '">' + this.instance.getLocalization('notLoggedInText') + '</a>';
             }
 
             notLoggedInFullText += '<br/><br/>' + notLoggedInText;

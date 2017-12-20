@@ -9,10 +9,11 @@ Oskari.registerLocalization(
         "register": "Register",
         "logout": "Sign out",
         "popup": {
-            "title": "Sign Up to Paikkatietoikkuna",
-            "registerInfo": "As a registered user, you can publish embedded maps, use analysis function and import your own datasets. Signing up is done in the service hosted by the National Land Survey of Finland. After submitting your registration, you will be automatically forwarded back to Paikkatietoikkuna.",
-            "registerInfo2": "By signing up, you agree to our ",
-            "termsOfUseLink": "Terms of Use",
+            "title": "Register to Paikkatietoikkuna",
+            "registerInfo": "As a registered user, you can publish embedded maps on your website, create spatial analysis or import your own dataset. Registration is done in the authentication service provided by the National Land Survey of Finland. After registration, return to Paikkatietoikkuna to sign in.",
+            "registerInfo2": "By registering, you agree to the ",
+            "termsOfUseLinkText": "Terms of Use of Paikkatietoikkuna",
+            "termsOfUseLink": "http://maanmittauslaitos.fi/en/e-services/geodata-portal-paikkatietoikkuna",
             "continueBtn": "Continue",
             "cancelBtn": "Cancel"
         }

@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Camada",
                 "type-wfs": "Produto"
             }
+        },
+        "guidedTour": {
+            "title": "Camadas selecionadas",
+            "message": "Pode mudar a ordem de apresentação das camadas clicando e arrastando, bem como alterando a transparência. As alterações aparecem na vista",
+            "openLink": "Ver camadas selecionadas",
+            "closeLink": "Esconder camadas selecionadas",
+            "tileText": "Camadas selecionadas"
         }
     }
 });

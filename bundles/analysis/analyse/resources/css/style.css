@@ -37,10 +37,10 @@ div.analyse-startview-label {
 div.basic_analyse > div.content {
   overflow: auto;
   height: 89%;
-  height: -moz-calc(100% - 88px);
-  height: -webkit-calc(100% - 88px);
-  height: -o-calc(100% - 88px);
-  height: calc(100% - 88px); }
+  height: -moz-calc(100% - 48px);
+  height: -webkit-calc(100% - 48px);
+  height: -o-calc(100% - 48px);
+  height: calc(100% - 48px); }
 
 div.basic_analyse > div.header {
   background-color: #FDF8D9;

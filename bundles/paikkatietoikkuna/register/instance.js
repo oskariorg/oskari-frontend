@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         this.loginbarTemplate = jQuery('<div class="registerLoginBar"></div>');
         this.loginTemplate = jQuery('<div class="registerLinks"><a id="loginLink">' + this.loc.login + '</a>' +
                                     " - " + '<a id="registerLink">' + this.loc.register + '</a></div>');
+        this.loggedInTemplate = jQuery('<div class="loggedIn">' +  Oskari.user().getName() + '</br><a href="/logout">' + this.loc.logout + '</a></div>');
     },
     {
         /**
@@ -33,23 +34,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             var me = this;
 
             var conf = me.getConfiguration() || {};
-            me.termsUrl = conf.termsUrl || '';
-            me.registerUrl = conf.registerUrl || '';
+            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/?lang=' + Oskari.getLang();
+            me.loginUrl = conf.loginUrl || '/auth';
 
             me.loginbar = me.loginbarTemplate.clone();
-            me.loginbar.append(me.loginTemplate);
-
             me.loginContainer = jQuery(me.loginContainerId);
+            if (Oskari.user().isLoggedIn()) {
+                me.loginbar.append(me.loggedInTemplate);
+            } else {
+                me.loginbar.append(me.loginTemplate);
+                me.loginbar.find('#loginLink').attr('href', me.loginUrl);
+                me.loginbar.find('#registerLink').click(function () {
+                    me.showRegisterPopup();
+                });
+            }
+
             me.loginContainer.append(me.loginbar);
-
-            jQuery('#registerLink').click(function () {
-                me.showRegisterPopup();
-            });
-
-            jQuery('#loginLink').click(function () {
-                //TODO: go to login, and when user is logged in, change to loggedin mode
-                me.changeLoggedInMode();
-            });
         },
 
         /**
@@ -59,18 +59,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         showRegisterPopup: function () {
             var me = this,
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                popupTitle = this.loc.popup['title'],
                 buttons = [];
-            
+
             me.popupContent = me.wrapper.clone();
 
             registerInfo = me.registerInfo.clone();
-            registerInfo.append(me.loc.popup['registerInfo']);
+            registerInfo.append(me.loc.popup.registerInfo);
 
             var linkInfo = me.linkToTermsOfUse.clone();
-            var termsOfUseTemplate = jQuery('<a target="_blank" href=' + me.termsUrl + '>' + this.loc.popup['termsOfUseLink'] + '</a>');
+            var termsOfUseTemplate = jQuery('<a target="_blank" href=' + me.loc.popup.termsOfUseLink + '>' + me.loc.popup.termsOfUseLinkText + '</a>');
             linkInfo.append(termsOfUseTemplate);
-            linkInfo.prepend(me.loc.popup['registerInfo2']);
+            linkInfo.prepend(me.loc.popup.registerInfo2);
 
             me.popupContent.append(registerInfo);
             me.popupContent.append(linkInfo);
@@ -90,31 +89,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             );
             continueBtn.addClass('primary');
             continueBtn.setId('oskari_paikkatietoikkuna_register_buttons_continue');
-            continueBtn.setTitle(me.loc.popup['continueBtn']);
+            continueBtn.setTitle(me.loc.popup.continueBtn);
             continueBtn.setHandler(function () {
-                //TODO: open registration page
                 window.open(me.registerUrl, '_blank');
                 popup.close(true);
             });
             buttons.push(continueBtn);
 
             popup.addClass('oskari_paikkatietoikkuna_register_popup');
-            popup.show(me.loc.popup['title'], me.popupContent, buttons);
+            popup.show(me.loc.popup.title, me.popupContent, buttons);
             popup.makeModal();
-        },
-
-        changeLoggedInMode: function () {
-            var me = this,
-                user = Oskari.user().getName();
-            
-            $('.registerLinks').detach();
-
-            me.loggedInTemplate = jQuery('<div class="loggedIn">' + user + '</br><a id="logoutLink">' + this.loc.logout + '</a></div>');
-            me.loginbar.append(me.loggedInTemplate);
-            jQuery('#logoutLink').click(function () {
-                $('.loggedIn').detach();
-                me.loginbar.append(me.loginTemplate);
-            });
         }
     },
     {

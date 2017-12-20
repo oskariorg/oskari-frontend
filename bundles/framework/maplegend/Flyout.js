@@ -92,15 +92,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         setState: function (state) {
             this.state = state;
         },
-        setContentState: function () {
-
-        },
-        getContentState: function () {
-
-            return {
-
-            };
-        },
         createUi: function () {
             this.refresh();
         },
@@ -267,14 +258,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 invalidLegendUrl = this.instance.getLocalization('invalidLegendUrl'),
                 noLegendContainer = me.templateNoLegend.clone();
 
-
             if (legendDiv && layer) {
                 var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
                 if(legendUrl){
                     noLegendContainer.html(invalidLegendUrl);
-                    if(window.console !== undefined) {
-                        console.log(invalidLegendUrl + ": " + legendUrl);
-                    }
+                    Oskari.log(me.instance.getName()).debug(invalidLegendUrl + ": " + legendUrl);
                 }
                 legendDiv.append(noLegendContainer);
             }

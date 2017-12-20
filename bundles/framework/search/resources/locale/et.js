@@ -29,6 +29,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Sulge",
             "title": "Otsingutulemused"
+        },
+        "guidedTour": {
+            "title": "Otsi",
+            "message": "Kasuta otsingufunktsiooni, et nihutada kaardivaade kohta, mida otsite.",
+            "openLink": "Näita otsingut",
+            "closeLink": "Peida otsing",
+            "tileText": "Otsi"
         }
     }
 });

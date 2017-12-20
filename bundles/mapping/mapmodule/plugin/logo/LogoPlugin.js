@@ -54,15 +54,19 @@ Oskari.clazz.define(
             }
             return this._service;
         },
-        createExtendService: function(el) {
-          var me = this;
-          var element = el || this.getElement();
-          if(!this._extendService) {
-              this._extendService = Oskari.clazz.create('Oskari.map.LogoPluginService', this.getSandbox());
-          }
-          this._extendService.on('change', function() {
-              me.updateLabels(element);
-          });
+        registerForUpdateLabels: function (el) {
+            var me = this;
+            var element = el || this.getElement();
+            if (!this._extendService) {
+                this._extendService = Oskari.clazz.create('Oskari.map.LogoPluginService', this.getSandbox());
+                this._extendServiceHandler = function () {
+                    me._labelCallBack();
+                };
+                this._extendService.on('change', this._extendServiceHandler);
+            }
+            this._labelCallBack = function () {
+                me.updateLabels(element);
+            }
         },
         /**
          * @method _createEventHandlers
@@ -138,7 +142,7 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var container = this.templates.main.clone();
             var conf = this.getConfig() || {};
-            this.createExtendService(container);
+            this.registerForUpdateLabels(container);
             this.changeFont(conf.font || this.getToolFontFromMapModule(), container);
             this._createServiceLink(container);
 
@@ -148,11 +152,18 @@ Oskari.clazz.define(
             return container;
         },
 
+        _stopPluginImpl: function () {
+            if (this._extendService) {
+                this._extendService.off('change', this._extendServiceHandler);
+                this._extendService = null;
+            }
+            this.removeFromPluginContainer(this.getElement());
+        },
+
         _createServiceLink: function (el) {
             var me = this,
                 element = el || me.getElement(),
                 mapUrl = me.__getMapUrl(),
-                link,
                 linkParams;
             if(!element) {
                 return;
@@ -387,7 +398,7 @@ Oskari.clazz.define(
              if(link.options.id) {
                extend.addClass(link.options.id.toLowerCase());
              }
-             if(link.options.id != 'icon') {
+             if(link.options.id !== 'icon') {
                extend.css("margin","5px");
              }
              extend.find('a').text(link.title);

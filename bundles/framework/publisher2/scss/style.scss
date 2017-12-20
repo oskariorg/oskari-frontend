@@ -1,31 +1,27 @@
 #contentMap {
-
     &.mapPublishMode {
-
         > #mapdiv,
         > div.row-fluid {
             position: relative;
-            left: 212px
+            left: 212px;
         }
-
     }
 
     div.basic_publisher {
-        background : #FFF;
-        position : absolute;
+        background: #FFF;
+        position: absolute;
         height: 100%;
         top: 0;
         left: 0;
+
         /* sidebar has 3, we want to open it on top of this */
-        z-index : 2;
-        width : 382px;
+        z-index: 2;
+        width: 382px;
 
         div.content {
-            padding : 10px;
+            padding: 10px;
         }
-
     }
-
 }
 
 div.codesnippet {
@@ -42,7 +38,6 @@ div.notLoggedIn {
 }
 
 div.basic_publisher {
-
     // Temp, change inputs to TextInput and get rid of this
     input[type=text] {
         width: 260px;
@@ -65,7 +60,6 @@ div.basic_publisher {
     }
 
     .customsize {
-
         &:disabled {
             // This is just to fade the * between width & height a bit...
             color: #DDD;
@@ -90,11 +84,8 @@ div.basic_publisher {
                 &.error {
                     border: 1px solid red;
                 }
-
             }
-
         }
-
     }
 
     div.icon-info {
@@ -102,7 +93,7 @@ div.basic_publisher {
     }
 
     div.tool {
-      margin: 5px;
+        margin: 5px;
     }
 
     div.tool-options {
@@ -112,12 +103,10 @@ div.basic_publisher {
             padding-left: 27px;
             padding-top: 5px;
         }
-
     }
 
     div.tool,
     div.data {
-
         label {
             margin-right: 10px;
         }
@@ -129,9 +118,7 @@ div.basic_publisher {
                 margin-top: 5px;
                 margin-bottom: 5px;
             }
-
         }
-
     }
 
     > div.content {
@@ -146,7 +133,6 @@ div.basic_publisher {
         div.icon-close {
             float: right;
         }
-
     }
 
     .layer.selected {
@@ -162,7 +148,7 @@ div.basic_publisher {
         div.layer-info {
             background-color: #FFF;
             padding: 5px;
-      
+
             div.layer-title {
                 display: inline;
 
@@ -196,16 +182,14 @@ div.basic_publisher {
 
                 div.layer-opacity {
                     display: inline-block;
-                    background-image: url('../../../layerselection2/resources/images/opacity_slider.png');
-                    background-repeat: no-repeat;    
+                    background-image: url("../../../layerselection2/resources/images/opacity_slider.png");
+                    background-repeat: no-repeat;
 
                     input.opacity {
                         padding: 1px;
                         width: 25px;
                     }
-
                 }
-
             }
 
             div.right-tools {
@@ -215,20 +199,16 @@ div.basic_publisher {
                 div {
                     float: left;
                     margin-right: 5px;
-          
+
                     &.layer-rights,
                     &.object-data {
                         padding-top: 2px;
                     }
-
                 }
-
             }
-
         }
-
     }
-  
+
     ul.selectedLayersList {
         height: 100%;
         width: 100%;
@@ -241,15 +221,11 @@ div.basic_publisher {
             position: absolute;
             margin-left: -1.3em;
         }
-
     }
-
 }
 
 div.publisher {
-
     div.startview {
-
         div.content {
             margin-top: 5px;
         }
@@ -263,14 +239,13 @@ div.publisher {
         }
 
         div.layerlist {
-            border : 1px solid;
-            padding : 10px;
+            border: 1px solid;
+            padding: 10px;
 
             h4 {
                 line-height: 15px;
                 padding-bottom: 5px;
             }
-
         }
 
         div.tou {
@@ -279,24 +254,22 @@ div.publisher {
 
         ul {
             list-style: disc inside none;
-            padding : 5px;
+            padding: 5px;
         }
-
     }
-
 }
 
 div.basic_publisher div.form div.field input,
 div.field select {
-    width : 100%;
+    width: 100%;
+
     /*
     This used to have a defunct CSS hack for IE 10 only:
     width: 80%\0;
     It was never functional because SASS compiled it into single character.
-    It was removed.  
+    It was removed.
     */
     background-color: #FFF;
-
 }
 
 div.field {
@@ -308,17 +281,14 @@ div.field {
 /* Buttons */
 div.basic_publisher,
 div.publisher div.startview {
-
     div.buttons {
-        text-align : center;
-        margin-top : 10px;
+        text-align: center;
+        margin-top: 10px;
 
         input {
             margin: 5px 2px;
         }
-
     }
-
 }
 
 div#publisher-colour-inputs {
@@ -343,10 +313,9 @@ div#publisher-custom-colours {
             margin: 0 8px;
             width: 30px;
         }
-
     }
-
 }
+
 /* I don't think this is needed anymore?
 .maincontainer {
 
@@ -366,11 +335,10 @@ div#publisher-custom-colours {
 }
 */
 
-
 #editModeBtn {
     margin: 0;
 }
 
-#publisher-layout-colours{
+#publisher-layout-colours {
     padding-left: 28px;
 }

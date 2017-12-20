@@ -1,7 +1,7 @@
 # LogoPluginService
 
 ## Description
-This service can be used to extend the Logo-plugin.
+This service can be used to extend the Logo-plugin. The same LogoPluginService instance is returned on repeated calls to Oskari.clazz.create (singleton pattern).
 
 ```javascript
 var logoService = Oskari.getSandbox().getService('Oskari.map.LogoPluginService');

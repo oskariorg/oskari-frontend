@@ -74,6 +74,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": ""
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Vista panorâmica",
+                "message": "Pode mover a vista clicando e arrastando ou com os controlos panorâmicos| Volte à vista padrão clicando no meio dos controlos panorâmicos. Pista: pode também navegar sobre a vista com as teclas de seta"
+            },
+            "help2": {
+                "title": "Ampliar e reduzir",
+                "message": "Pode ampliar e reduzir a vista usando a barra respetiva ou os sinais de + e -. Pista: Pode usar também os sinais de + e – no teclado e ampliar com duplo-clique na vista. É ainda possível usar a roda central do rato"
+            }
         }
     }
 });

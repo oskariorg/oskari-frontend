@@ -1,8 +1,6 @@
 .fullscreenDiv {
   pointer-events: auto;
-  position: absolute;
-  top: 10px;
-  left: 10px;
+  margin-bottom: 10px;
   display: block;
   color: black;
   background: transparent;

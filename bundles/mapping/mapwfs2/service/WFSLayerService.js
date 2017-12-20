@@ -22,9 +22,9 @@ Oskari.clazz.define(
         me.WFSFeatureSelections = [];
         me.selectedWFSLayers = [];
         me.selectedWFSLayerIds = [];
-        me.selectFromAllLayers;
-        me.selectionToolsActive;
-        me.analysisWFSLayerId;
+        me.selectFromAllLayers = null;
+        me.selectionToolsActive = null;
+        me.analysisWFSLayerId = null;
 
         for (p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
@@ -206,9 +206,12 @@ Oskari.clazz.define(
          */
         emptyWFSFeatureSelections: function (layer) {
             var me = this;
-            _.remove(me.WFSFeatureSelections, {'layerId': layer._id});
-            var event = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
-            me.sandbox.notifyAll(event);
+
+            if (me.getSelectedFeatureIds(layer._id)) {
+                _.remove(me.WFSFeatureSelections, {'layerId': layer._id});
+                var event = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
+                me.sandbox.notifyAll(event);
+            }
         },
         /*
          * @method emptyWFSFeatureSelections

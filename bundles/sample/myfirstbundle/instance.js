@@ -39,7 +39,10 @@ Oskari.clazz.define("Oskari.sample.bundle.myfirstbundle.SimpleHelloWorldBundleIn
             //  **************************************
             //    Your code here
             //  **************************************
-            alert('Hello World');
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.show(null, 'Hello World');
+            dialog.makeModal();
+            dialog.fadeout();
             //  **************************************
             //    Your code ends
             //  **************************************

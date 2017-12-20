@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Mål en linje på kortet. Dobbeltklik for at stoppe måling.",
                 "measurearea": "Mål et område på kortet. Dobbeltklik for at stoppe måling."
             }
+        },
+        "guidedTour": {
+            "title": "Værktøjer",
+            "message": "Brug værktøjerne til at tilføje steder, gemme et map view, dele links til et map view eller gå tilbage til et tidligere map view. Hold din musemarkør henover det enkelte værktøj et øjeblik for at se oplysninger om det."
         }
     }
 });

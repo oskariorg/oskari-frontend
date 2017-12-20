@@ -16,7 +16,7 @@ Oskari.clazz.define(
     function (instance) {
         this.instance = instance;
         this.sandbox = this.instance.getSandbox();
-
+        this.searchservice = instance.service;
         this.state = null;
         // last search result is saved so we can sort it in client
         this.lastResult = null;
@@ -25,7 +25,6 @@ Oskari.clazz.define(
         this.lastSort = null;
         // Actions that get added to the search result popup
         this.resultActions = {};
-
         this._searchContainer = null;
 
         this.resultHeaders = [
@@ -83,10 +82,28 @@ Oskari.clazz.define(
             var button = this.getButton();
 
             var doSearch = function () {
+                field.setEnabled(false);
+                button.setEnabled(false);
             	me.__doSearch();
             };
+
+            var doAutocompleteSearch = function(e) {
+                if(e.keyCode === 38 || e.keyCode === 40 ) { // arrow keys up/down
+                    return;
+                }
+                me.__doAutocompleteSearch();
+            };
+
             button.setHandler(doSearch);
             field.bindEnterKey(doSearch);
+
+            if(this.instance.conf.autocomplete === true) {
+                field.bindUpKey(doAutocompleteSearch);
+                field.bindAutocompleteSelect(function(event, ui){
+                    field.setValue(ui.item.value);
+                    doSearch();
+                });
+            }
 
             var controls = searchContainer.find('div.controls');
             controls.append(field.getField());
@@ -167,8 +184,6 @@ Oskari.clazz.define(
 			var field = this.getField();
             var button = this.getButton();
             var searchContainer = this.getContainer();
-	        field.setEnabled(false);
-	        button.setEnabled(false);
 
             searchContainer.find('div.resultList').empty();
             searchContainer.find('div.info').empty();
@@ -185,15 +200,27 @@ Oskari.clazz.define(
 
             var reqBuilder = me.getSandbox().getRequestBuilder('SearchRequest');
             if(reqBuilder) {
-                me.getSandbox().request(this.instance, reqBuilder(searchKey));
+                var request = reqBuilder(searchKey);
+                me.getSandbox().request(this.instance, request);
             }
         },
+        __doAutocompleteSearch : function() {
+            var field = this.getField();
+            var searchKey = field.getValue(this.instance.safeChars);
+            this.searchservice.doAutocompleteSearch(searchKey, function(result) {
+                var autocompleteValues =  [];
+                for (var i = 0; i < result.methods.length; i++) {
+                    autocompleteValues.push({ value: result.methods[i], data: result.methods[i] });
+                }
+                field.autocomplete(autocompleteValues);
+            });
+        },
+
         handleSearchResult : function(isSuccess, result, searchedFor) {
             var me = this;
             var field = this.getField();
             var button = this.getButton();
             if(isSuccess) {
-                // happy case
                 field.setEnabled(true);
                 button.setEnabled(true);
                 me._renderResults(result, searchedFor);
@@ -211,12 +238,11 @@ Oskari.clazz.define(
                     msg = me.instance.getLocalization(errorKey);
                 }
             }
-
             me._showError(msg);
         },
 
         focus: function () {
-        	this.getField().focus();
+            this.getField().focus();
         },
 
         _validateSearchKey: function (key) {
@@ -307,10 +333,6 @@ Oskari.clazz.define(
             if (result.totalCount === 1) {
                 // move map etc
                 me._resultClicked(result.locations[0]);
-                // close flyout
-                inst.sandbox.postRequestByName('userinterface.UpdateExtensionRequest',
-                    [me.instance, 'close']
-                );
             }
             // render results
             var table = jQuery(this.__templates.resultTable()),
@@ -379,7 +401,7 @@ Oskari.clazz.define(
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if(result.zoomScale) {
-                var zoom = {scale : result.zoomScale};
+                zoom = {scale : result.zoomScale};
             }
             sandbox.request(
                 me.instance.getName(),
@@ -394,19 +416,19 @@ Oskari.clazz.define(
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
                     resultAction = {};
-                    resultAction['name'] = name;
-                    resultAction['type'] = 'link';
-                    resultAction['action'] = action(result);
-                    resultAction['group'] = 1;
+                    resultAction.name = name;
+                    resultAction.type = 'link';
+                    resultAction.action = action(result);
+                    resultAction.group = 1;
                     resultActions.push(resultAction);
                 }
             }
 
             var closeAction = {};
-            closeAction['name'] = loc.close;
-            closeAction['type'] = 'link';
-            closeAction['group'] = 1;
-            closeAction['action'] = function () {
+            closeAction.name = loc.close;
+            closeAction.type = 'link';
+            closeAction.group = 1;
+            closeAction.action = function () {
                 var rN = 'InfoBox.HideInfoBoxRequest',
                     rB = sandbox.getRequestBuilder(rN),
                     request = rB(popupId);
@@ -430,7 +452,10 @@ Oskari.clazz.define(
                     popupId,
                     loc.title,
                     content,
-                    new OpenLayers.LonLat(result.lon, result.lat),
+                    {   
+                        lon: result.lon,
+                        lat: result.lat
+                    },
                     options
                 );
 

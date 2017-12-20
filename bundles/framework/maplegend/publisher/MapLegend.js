@@ -45,7 +45,7 @@ function() {
   },
   isDisplayed: function() {
       var legendLayers = [];
-      var layers = this.__sandbox.findAllSelectedMapLayers().slice(0); 
+      var layers = this.__sandbox.findAllSelectedMapLayers().slice(0);
            layers.forEach(function(layer) {
               if (!layer.getLegendImage()) {
                   return;
@@ -55,7 +55,7 @@ function() {
                 id: layer.getId(),
                 title: layer.getName()
               };
-              
+
               legendLayers.push(layerObject);
             });
 

@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerL
          */
         handleRequest : function(core, request) {
             var layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
-            layerSelectorFlyout.addFilterTool(request.getToolText(), request.getTooltip(), request.getFilterFunction(), request.getIconClassActive(), request.getIconClassDeactive(), request.getFilterName());
+            layerSelectorFlyout.addFilterTool(request.getToolText(), request.getTooltip(), request.getIconClassActive(), request.getIconClassDeactive(), request.getFilterName());
         }
     }, {
         /**

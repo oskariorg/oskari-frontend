@@ -239,7 +239,7 @@ Oskari.clazz.define(
                 mapModule.getMap().addOverlay(popup);
                 jQuery(popup.getElement()).html(popupContentHtml);
 
-                me._panMapToShowPopup(lonlatArray);
+                setTimeout(me._panMapToShowPopup.bind(me, lonlatArray), 0);
 
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
@@ -649,30 +649,34 @@ Oskari.clazz.define(
          * @method _panMapToShowPopup
          * @private
          * Pans map if gfi popup would be out of screen
-         * @param {OpenLayers.LonLat} lonlat where to show the popup
+         * @param {Array} lonlat where to show the popup
          */
-        _panMapToShowPopup: function (lonlat) {
+        _panMapToShowPopup: function (lonlatArray) {
             var me = this,
-                pixels = me.getMapModule().getPixelFromCoordinate(lonlat),
+                pixels = me.getMapModule().getPixelFromCoordinate(lonlatArray),
                 size = me.getMapModule().getSize(),
-                width = size.width,
-                height = size.height;
+                width = size.width - 128, // add some safety margin here so the popup close button won't go under the zoombar...
+                height = size.height - 128;
             // if infobox would be out of screen
             // -> move map to make infobox visible on screen
             var panx = 0,
                 pany = 0,
                 popup = jQuery('.olPopup'),
-                infoboxWidth = popup.width() + 128, // add some safety margin here so the popup close button won't got under the zoombar...
-                infoboxHeight = popup.height() + 128;
+                infoboxWidth = popup.width(),
+                infoboxHeight = popup.height();
 
-            if (pixels[0] + infoboxWidth > width) {
-                panx = width - (pixels[0] + infoboxWidth);
+            if (pixels.x + infoboxWidth > width) {
+                if (infoboxWidth > width) {
+                    panx = -pixels.x;
+                } else {
+                    panx = width - (pixels.x + infoboxWidth);
+                }
             }
-            if (pixels[1] + infoboxHeight > height) {
-                pany = height - (pixels[1] + infoboxHeight);
+            if (pixels.y + infoboxHeight > height) {
+                pany = height - (pixels.y + infoboxHeight);
             }
             // check that we are not "over the top"
-            else if (pixels[1] < 70) {
+            else if (pixels.y < 70) {
                 pany = 70;
             }
             if (panx !== 0 || pany !== 0) {

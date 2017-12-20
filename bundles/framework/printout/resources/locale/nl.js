@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Kaart legenda",
-                "tooltip": "Kies een positie voor de kaart legenda. Als er geen positie is geselecteerd, wordt er geen kaartlegenda getoond in de kaart afdruk.",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "Geen kaart legenda",
-                        "tooltip": "De kaart legenda wordt niet getoond op de kaart afdruk",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Linksonder",
-                        "tooltip": "De kaart legenda wordt getoond linksonder op de afdruk"
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Linksboven",
-                        "tooltip": "De kaart legenda wordt getoond linksboven op de afdruk"
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Rechtsboven",
-                        "tooltip": "De kaart legenda wordt getoond rechtsboven op de afdruk"
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Rechtsonder",
-                        "tooltip": "De kaart legenda wordt getoond rechtsonder op de afdruk"
-                    }
-                ]
-            },
             "help": "Help",
             "error": {
                 "title": "Fout",

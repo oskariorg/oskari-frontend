@@ -75,7 +75,11 @@ jQuery(document).ready(function () {
                 jQuery('#mapdiv').append('Unable to start');
                 return;
             }
+
+            terribleHackToBeRemoved(appSetup.configuration, appSetup.env.lang || window.language);
+
             app.setApplicationSetup(appSetup);
+
             app.startApplication(function () {
                 var sb = Oskari.getSandbox();
                 gfiParamHandler(sb);
@@ -87,4 +91,47 @@ jQuery(document).ready(function () {
             }
         }
     });
+
+// This should be removed in 1.45 version of Oskari!!!
+// currently personaldata, publisher, analysis etc require
+// bundle-specific config for login/register urls
+// Should be changed so that Oskari.getURLs() could be used as a generic config/environment
+    function terribleHackToBeRemoved(conf, lang) {
+        if(!conf.personaldata) {
+            conf.personaldata = {};
+        }
+        if(!conf.personaldata.conf) {
+            conf.personaldata.conf = {};
+        }
+        if(!conf.personaldata.conf.logInUrl) {
+            conf.personaldata.conf.logInUrl = '/auth';
+            // personal data doesn't support registration link
+        }
+
+        if(!conf.analyse) {
+            conf.analyse = {};
+        }
+        if(!conf.analyse.conf) {
+            conf.analyse.conf = {};
+        }
+        if(!conf.analyse.conf.loginUrl) {
+            conf.analyse.conf.loginUrl = '/auth';
+        }
+        if(!conf.analyse.conf.registerUrl) {
+            conf.analyse.conf.registerUrl = 'https://omatili.maanmittauslaitos.fi/?lang=' + lang;
+        }
+
+        if(!conf.publisher2) {
+            conf.publisher2 = {};
+        }
+        if(!conf.publisher2.conf) {
+            conf.publisher2.conf = {};
+        }
+        if(!conf.publisher2.conf.loginUrl) {
+            conf.publisher2.conf.loginUrl = '/auth';
+        }
+        if(!conf.publisher2.conf.registerUrl) {
+            conf.publisher2.conf.registerUrl = 'https://omatili.maanmittauslaitos.fi/?lang=' + lang;
+        }
+    }
 });

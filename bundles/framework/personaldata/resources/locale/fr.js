@@ -32,7 +32,7 @@ Oskari.registerLocalization(
                     "cancel": "Annuler",
                     "error_noname": "Saisissez le nom de la vue cartographique",
                     "deletetitle": "Supprimer la vue cartographique",
-                    "deletemsg": "Souhaitez-vous supprimer cette vue cartographique ?",
+                    "deletemsg": "Souhaitez-vous supprimer cette vue cartographique \"{name}\"?",
                     "default": "Vue par défaut"
                 },
                 "save": {
@@ -132,6 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Oui",
             "no": "Non"
+        },
+        "guidedTour": {
+            "title": "My Data",
+            "message": "\"My data\" -menu contains all your saved places, map views, embedded maps, indicators, analysis and datasets. There you can also check your account information. My data are shown only for logged-in users.",
+            "openLink": "Show My data",
+            "closeLink": "Hide My data",
+            "tileText": "My Data"
         }
     }
 });

@@ -73,13 +73,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kaartlagen",
+            "message": "U kunt de productgegevens op de kaart laten weergeven door kaartlagen te selecteren. Klik op een categorie om deze te openen en selecteer een laag of typ een paar letters in van de naam van het product dat u zoekt in het zoekveld.",
+            "openLink": "Toon kaartlagen",
+            "closeLink": "Verberg kaartlagen",
+            "tileText": "Kaartlagen"
         }
     }
 });

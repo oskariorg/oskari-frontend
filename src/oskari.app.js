@@ -1,8 +1,8 @@
 // So IE won't use a cached xhr result -> adds a _=timestamp param for each request...
 jQuery.ajaxSetup({ cache: false });
 
-(function(o){
-    if(!o) {
+(function (o) {
+    if (!o) {
         // can't add loader if no Oskari ref
         return;
     }
@@ -56,22 +56,21 @@ jQuery.ajaxSetup({ cache: false });
          *
          */
         playBundle: function (recData, config, callback) {
-            if(typeof recData !== 'object') {
+            if (typeof recData !== 'object') {
                 throw new Error('Bundle def is not an object');
             }
-            if(typeof config === 'function') {
+            if (typeof config === 'function') {
                 callback = config;
                 config = undefined;
             }
 
-            if(config) {
+            if (config) {
                 // wrap to acceptable format
                 var configName = recData.bundleinstancename || recData.bundlename;
                 var tmp = {};
                 tmp[configName] = config;
                 config = tmp;
-            }
-            else {
+            } else {
                 config = this.appConfig;
             }
             var loader = Oskari.loader([recData], config);
@@ -85,56 +84,106 @@ jQuery.ajaxSetup({ cache: false });
          * @param  {Function} successCB Optional callback that is called when the application has started
          * @param  {Function} modifyCB  Optional callback that is called appsetup is loaded, but before it's used by Oskari
          */
-        loadAppSetup : function(url, params, errorCB, successCB, modifyCB) {
+        loadAppSetup: function (url, params, errorCB, successCB, modifyCB) {
             var me = this;
             jQuery.ajax({
-                type : 'GET',
-                dataType : 'json',
-                data : params || {},
+                type: 'GET',
+                dataType: 'json',
+                data: params || {},
                 url: url,
-                success : function(setup) {
-                    if(typeof modifyCB ==='function') {
+                success: function (setup) {
+                    if (typeof modifyCB === 'function') {
                         modifyCB(setup);
                     }
-                    me.setApplicationSetup(setup);
+                    me.init(setup);
                     me.startApplication(successCB);
                 },
-                error : function(jqXHR) {
-                    if(typeof errorCB === 'function') {
+                error: function (jqXHR) {
+                    if (typeof errorCB === 'function') {
                         errorCB(jqXHR);
                     }
                 }
             });
         },
         /**
-         * @public @method setApplicationSetup
-         * Each bundledef is of kind playable by method playBundle. callback:
-         * property may be set to receive some feedback - as well as
-         * registerLoaderStateListener
+         * @public @method init
+         * Initializes the internal state so startApplication() can be called to startup the initialized app.
          *
          * @param {Object} setup JSON application setup {
-         * startupSequence: [ <bundledef1>, <bundledef2>, <bundledef3>, ] }
-         *
+         *     startupSequence: [ <bundledef1>, <bundledef2>, ...],
+         *     env: { ... },
+         *     configuration: { ... }
+         *   }
          */
-        setApplicationSetup: function (setup) {
+        init: function (setup) {
             this.appSetup = setup;
-            if(setup.configuration) {
+            if (setup.configuration) {
                 this.setConfiguration(setup.configuration);
             }
             setup.env = setup.env || {};
-            if(typeof Oskari.setLang === 'function') {
+            if (typeof Oskari.setLang === 'function') {
                 Oskari.setLang(setup.env.lang || window.language);
             }
-            if(typeof Oskari.setSupportedLocales === 'function') {
+            if (typeof Oskari.setSupportedLocales === 'function') {
                 Oskari.setSupportedLocales(setup.env.locales);
             }
-            if(typeof Oskari.setDecimalSeparator === 'function') {
+            if (typeof Oskari.setDecimalSeparator === 'function') {
                 Oskari.setDecimalSeparator(setup.env.decimalSeparator);
             }
 
-            if(typeof Oskari.setMarkers === 'function') {
+            if (typeof Oskari.setMarkers === 'function') {
                 Oskari.setMarkers(setup.env.svgMarkers || []);
             }
+
+            if (typeof Oskari.user === 'function') {
+                Oskari.user(setup.env.user);
+            }
+
+            Oskari.urls.set(setup.env.urls);
+        },
+        /**
+         * @public @method setApplicationSetup
+         * @deprecated Use init() instead.
+         *
+         * @param {Object} setup JSON application setup {
+         *     startupSequence: [ <bundledef1>, <bundledef2>, ...],
+         *     env: { ... },
+         *     configuration: { ... }
+         *   }
+         */
+        setApplicationSetup: function (setup) {
+            if(window.console && window.console.warn) {
+                console.warn('Oskari.app.setApplicationSetup() is deprecated. Use Oskari.app.init() instead.');
+            }
+            this.init(setup);
+        },
+        /**
+         * Returns the identifier for this appsetup (if loaded from oskari-server/db)
+         * @return {String}
+         */
+        getUuid: function() {
+            var env = this.getApplicationSetup().env || {};
+            var app = env.app || {};
+            return app.uuid;
+        },
+        /**
+         * Returns appsetup type like "user", "published" etc
+         * @return {String}
+         */
+        getType: function() {
+            var env = this.getApplicationSetup().env || {};
+            var app = env.app || {};
+            return app.type;
+        },
+        /**
+         * Returns true if this appsetup is publicly available.
+         * Returns false if it's a non-public personal view of a user.
+         * @return {Boolean}
+         */
+        isPublic: function() {
+            var env = this.getApplicationSetup().env || {};
+            var app = env.app || {};
+            return !!app.public;
         },
 
         /**
@@ -142,7 +191,7 @@ jQuery.ajaxSetup({ cache: false });
          * @return {Object} Application setup
          */
         getApplicationSetup: function () {
-            return this.appSetup;
+            return this.appSetup || {};
         },
 
         /**
@@ -158,7 +207,7 @@ jQuery.ajaxSetup({ cache: false });
          * @return {Object}
          */
         getConfiguration: function () {
-            return this.appConfig;
+            return this.appConfig || {};
         },
 
         startApplication: function (callback) {

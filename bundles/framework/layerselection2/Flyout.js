@@ -171,13 +171,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 // footer tools
                 me._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
             }
-
             listContainer.sortable({
-                /*change: function (event,ui) {
-                 var item = ui.item ;
-                 me._layerOrderChanged(item)
-                 },*/
+                start: function (event, ui) {
+                    var height = ui.item.height();
+                    me.calculateContainerHeightDuringSort( height );
+                },
                 stop: function (event, ui) {
+                    me.calculateContainerHeightDuringSort();
                     me._layerOrderChanged(ui.item);
                 }
             });
@@ -195,7 +195,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             }
         },
-
+        calculateContainerHeightDuringSort: function ( height ) {
+            var container = jQuery(this.container);
+            if ( typeof height === "undefined" ) {
+                     container.css({ height: "" });  
+            }
+            var totalHeight = container.height() + height;
+            container.css({ height: totalHeight });
+        },
         /**
          * @private @method _appendLayerFooter
          *
@@ -922,7 +929,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 );
             }
         },
-
         /**
          * @method handleLayerSelectionChanged
          * If isSelected is false, removes the matching layer container from the UI.

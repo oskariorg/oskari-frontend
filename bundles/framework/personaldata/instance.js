@@ -32,6 +32,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
         "getName": function () {
             return this.__name;
         },
+
+        openProfileTab: function() {
+          Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+          var flyout = this.plugins['Oskari.userinterface.Flyout'];
+          flyout.tabsContainer.panels.forEach(function(panel){
+            if(panel.id === "account") {
+              flyout.tabsContainer.select(panel);
+            }
+          });
+        },
         /**
          * @method setSandbox
          * @param {Oskari.Sandbox} sandbox
@@ -122,6 +132,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             var eventBuilder = sandbox.getEventBuilder('Personaldata.PersonaldataLoadedEvent');
             var event = eventBuilder();
             sandbox.notifyAll(event);
+            this._registerForGuidedTour();
         },
         /**
          * @method init
@@ -230,6 +241,90 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
 
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
+        },
+        /**
+         * @static
+         * @property __guidedTourDelegateTemplate
+         * Delegate object given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        __guidedTourDelegateTemplate: {
+            priority: 50,
+            show: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
+            },
+            hide: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
+            },
+            getTitle: function () {
+                return this.getLocalization().guidedTour.title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.message);
+                return content;
+            },
+            getLinks: function() {
+                var me = this;
+                var loc = this.getLocalization().guidedTour;
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.bind('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.bind('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                closeLink.show();
+                openLink.hide();
+                return [openLink, closeLink];
+            }
+        },
+
+        /**
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
+         */
+        _registerForGuidedTour: function() {
+            var me = this;
+            function sendRegister() {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if(requestBuilder){
+                    var delegate = {
+                        bundleName: me.getName()
+                    };
+                    for(var prop in me.__guidedTourDelegateTemplate){
+                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
+                        } else {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
+                        }
+                    }
+                    me.sandbox.request(me, requestBuilder(delegate));
+                }
+            }
+
+            function handler(msg){
+                if(msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            if(tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
     }, {
         /**

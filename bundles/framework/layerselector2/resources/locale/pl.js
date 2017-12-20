@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Warstwy mapy",
+            "message": "Możesz wybrać dane z produktów które mają być pokazane na mapie poprzez wybranie warstw mapy. Kliknij kategorię i po otwarciu wybierz warstwę lub wpisz w polu wyszukiwania kilka liter zawartych w nazwie danych których szukasz.",
+            "openLink": "Wyświetl warstwy mapy",
+            "closeLink": "Ukryj warstwy mapy",
+            "tileText": "Warstwy mapy"
         }
     }
 });
