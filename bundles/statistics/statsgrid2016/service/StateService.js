@@ -324,10 +324,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @return {String}            an unique id for the parameters
          */
         getHash : function(datasrc, indicator, selections) {
-            var serialized = Object.keys(selections).sort().map(function(key) {
-                return key + "=" + JSON.stringify(selections[key]);
-            }).join(':');
-            return datasrc + '_' + indicator + '_' + serialized;
+            var hash = datasrc + '_' + indicator;
+            if(typeof selections === 'object') {
+                hash = hash + '_' + Object.keys(selections).sort().map(function(key) {
+                    return key + "=" + JSON.stringify(selections[key]);
+                }).join(':');
+            }
+            return hash;
         },
         addFilter : function( filter ) {
             // notify
