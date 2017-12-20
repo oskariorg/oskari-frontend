@@ -455,9 +455,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                     // reselect selection
                     idField = me.model.getIdField();
+                    var selections = [];
                     for (j = 0; j < selection.length; j += 1) {
-                        me.select(selection[j][idField], true);
+                        selections.push(selection[j][idField]);
                     }
+                    me.select(selections, false);
                     me.trigger('sort', {
                         column : scopedValue,
                         ascending : !descending
