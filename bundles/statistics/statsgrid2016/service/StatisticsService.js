@@ -389,10 +389,13 @@
                 regionset: regionset,
                 selectors: JSON.stringify(params || {})
             };
-            var serialized = Object.keys(params).sort().map(function (key) {
-                return key + '=' + JSON.stringify(params[key]);
-            }).join(':');
-            var cacheKey = 'GetIndicatorData_' + ds + '_' + indicator + '_' + regionset + '_' + serialized;
+            var serialized = '';
+            if (typeof params === 'object') {
+                serialized = '_' + Object.keys(params).sort().map(function (key) {
+                    return key + '=' + JSON.stringify(params[key]);
+                }).join(':');
+            }
+            var cacheKey = 'GetIndicatorData_' + ds + '_' + indicator + '_' + regionset + serialized;
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
