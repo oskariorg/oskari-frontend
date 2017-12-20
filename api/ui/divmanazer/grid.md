@@ -82,6 +82,9 @@ grid.renderTo(someElement);
 // select row and scroll table to selected
 grid.select(wantedRowValue, false, scrollableElement);
 
+// select multiple rows and scroll table to selected
+grid.select([wantedRowValue1, wantedRowValue2], false, scrollableElement);
+
 // moves selected rows as first rows of the table
 grid.moveSelectedRowsTop(true);
 
