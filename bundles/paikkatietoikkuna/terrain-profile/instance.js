@@ -30,11 +30,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                 if (!this.active) {
                     return;
                 }
+                this.active = false;
                 this.popup.close();
                 this.stopDrawing();
                 this.popup = null;
+                if (this.flyout) {
+                    this.flyout.hide();
+                }
                 this.feature = null;
-                this.active = false;
             }
         },
         cancelTool: function () {
@@ -73,17 +76,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             this.showFlyout(null);
         },
         showFlyout: function (data) {
-            return
             if (this.flyout) {
                 this.flyout.update(data);
             } else {
-                this.flyout = Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout', data);
+                var p = jQuery( "#mapdiv" );
+                var position = p.position().left;
+                var offset = 40;
+                this.flyout = Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout', this.loc('terrainHeightProfile'), {
+                    width: 'auto',
+                    pos: {
+                        x: position + offset,
+                        y: 5
+                    }
+                }, data);
             }
+            this.flyout.show();
         },
         eventHandlers: {
             'DrawingEvent': function (event) {
                 var drawId = event.getId();
-                if (drawId !== this.__name) {
+                if (drawId !== this.__name || !this.active) {
                     return;
                 }
                 if (event.getIsFinished()) {

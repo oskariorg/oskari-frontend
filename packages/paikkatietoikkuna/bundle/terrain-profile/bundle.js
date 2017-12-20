@@ -14,6 +14,13 @@ Oskari.clazz.define(
         'protocol': ['Oskari.bundle.Bundle'],
         'source': {
             'scripts': [{
+                "type": "text/javascript",
+                "expose": "d3",
+                "src": "../../../../libraries/d3/d3.min.js"
+            }, {
+                'type': 'text/javascript',
+                'src': '../../../../bundles/paikkatietoikkuna/terrain-profile/view/TerrainFlyout.js'
+            }, {
                 'type': 'text/javascript',
                 'src': '../../../../bundles/paikkatietoikkuna/terrain-profile/view/TerrainPopup.js'
             }, {
@@ -22,6 +29,9 @@ Oskari.clazz.define(
             }, {
                 'type': 'text/javascript',
                 'src': '../../../../bundles/paikkatietoikkuna/terrain-profile/instance.js'
+            }, {
+                "type": "text/css",
+                "src": "../../../../bundles/paikkatietoikkuna/terrain-profile/resources/css/terrainprofile.css"
             }],
             'locales': [{
                 'lang': 'en',

@@ -1,0 +1,18 @@
+.terrainprofile-graph {
+    display: block;
+}
+
+.terrainprofile-graph g.tick line, .terrainprofile-graph path.domain{
+    stroke: #aaa;
+    shape-rendering: crispEdges;
+}
+
+.terrainprofile-spinnerwrapper{
+    width: 600px;
+    height: 300px;
+    text-align: center;
+}
+.terrainprofile-spinnerholder{
+    display: inline-block;
+    margin-top: 150px;
+}

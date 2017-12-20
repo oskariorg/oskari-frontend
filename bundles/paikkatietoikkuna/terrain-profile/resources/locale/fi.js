@@ -6,7 +6,8 @@ Oskari.registerLocalization(
             "terrainHeightProfile": "Maastoprofiili",
             "popupTitle": "Mittaa maastoprofiili",
             "popupText": "Piirrä kartalle viiva, jota pitkin maastoprofiili mitataan.",
-            "showProfile": "Näytä profiili"
+            "showProfile": "Näytä profiili",
+            "legendValue": "{value, number}"
         }
     }
 );
