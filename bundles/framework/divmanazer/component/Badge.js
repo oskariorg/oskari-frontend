@@ -15,6 +15,7 @@ Oskari.clazz
             this.compileTemplates();
             this.ui = null;
             this.container = null;
+            this.compileTemplates();
         }, {
             templates: {
                 "default": '<span class="oskari-badge"></span>',
@@ -22,7 +23,8 @@ Oskari.clazz
                 "warning": '<span class="oskari-badge oskari-badge-warning"></span>',
                 "important": '<span class="oskari-badge oskari-badge-important"></span>',
                 "info": '<span class="oskari-badge oskari-badge-info"></span>',
-                "inverse": '<span class="oskari-badge oskari-badge-inverse"></span>'
+                "inverse": '<span class="oskari-badge oskari-badge-inverse"></span>',
+                "oskari":'<span class="oskari-badge oskari-badge-oskari"></span>'
             },
             compileTemplates: function () {
                 var p;
@@ -45,6 +47,15 @@ Oskari.clazz
                 txtspan.append(pContent);
                 this.container.append(txtspan);
                 this.ui = txtspan;
+                this.calculateRightFloat();
+            },
+            calculateRightFloat: function () {
+                var parent = this.container.parent();
+                var children = parent.children();
+                for ( var i = 0; i < children.length; i++ ) {
+                    var width = jQuery(children[i]).width()
+                    console.log(width)
+                }
             },
             hide: function () {
                 if (this.ui) {

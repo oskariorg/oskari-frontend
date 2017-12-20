@@ -266,13 +266,16 @@ Oskari.clazz.define(
                 groupPanel = Oskari.clazz.create(
                     'Oskari.userinterface.component.AccordionPanel'
                 );
-                groupPanel.setTitle(group.getTitle() + ' (' + layersLength +
-                    ')');
+                groupPanel.setTitle(group.getTitle());
                 groupPanel.setId(
                     'oskari_layerselector2_accordionPanel_' +
                     group.getTitle().replace(/[^a-z0-9\-_:\.]/gi, '-')
                 );
                 group.layerListPanel = groupPanel;
+
+                var badge = Oskari.clazz.create('Oskari.userinterface.component.Badge');
+                badge.insertTo( groupPanel.getHeader() );
+                badge.setContent( layersLength, "oskari" );
 
                 groupContainer = groupPanel.getContainer();
                 groupContainer.addClass('oskari-hidden');
@@ -655,9 +658,7 @@ Oskari.clazz.define(
                 }
                 group.layerListPanel.setVisible(true);
                 group.layerListPanel.close();
-                group.layerListPanel.setTitle(
-                    group.getTitle() + ' (' + layers.length + ')'
-                );
+                group.layerListPanel.setTitle( group.getTitle() );
             }
 
             this.accordion.removeMessage();
