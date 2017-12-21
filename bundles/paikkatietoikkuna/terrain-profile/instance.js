@@ -5,6 +5,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         this.popup = null;
         this.flyout = null;
         this.loc = Oskari.getMsg.bind(null, 'TerrainProfile');
+
+        function requestFunction(requestName, args) {
+            var builder = Oskari.requestBuilder(requestName);
+            if (!builder) {
+                return false;
+            }
+            var request = builder.apply(null, args);
+            this.sandbox.request(this, request);
+            return true;
+        }
+        this.markerHandler = Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.MarkerHandler', requestFunction.bind(this));
     },
     {
         __name: 'TerrainProfile',
@@ -88,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                         x: position + offset,
                         y: 5
                     }
-                });
+                }, this.markerHandler);
                 this.flyout.update(data);
             }
             this.flyout.show();

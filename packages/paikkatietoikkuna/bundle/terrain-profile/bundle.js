@@ -28,6 +28,9 @@ Oskari.clazz.define(
                 'src': '../../../../bundles/paikkatietoikkuna/terrain-profile/BundleModule.js'
             }, {
                 'type': 'text/javascript',
+                'src': '../../../../bundles/paikkatietoikkuna/terrain-profile/MarkerHandler.js'
+            }, {
+                'type': 'text/javascript',
                 'src': '../../../../bundles/paikkatietoikkuna/terrain-profile/instance.js'
             }, {
                 "type": "text/css",
