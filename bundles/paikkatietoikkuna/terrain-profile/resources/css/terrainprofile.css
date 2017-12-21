@@ -16,3 +16,18 @@
     display: inline-block;
     margin-top: 150px;
 }
+
+.terrainprofile-graph .overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+.terrainprofile-graph .cursor line {
+    stroke: #00c3ff;
+    stroke-opacity: 0.8;
+    shape-rendering: crispEdges;
+}
+
+.terrainprofile-graph .cursor circle {
+    fill: #00c3ff;
+}

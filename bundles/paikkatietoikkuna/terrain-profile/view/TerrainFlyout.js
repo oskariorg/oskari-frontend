@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
-    function (title, options, data) {
+    function (title, options) {
         this.loc = Oskari.getMsg.bind(null, 'TerrainProfile');
         this.makeDraggable({
             handle : '.oskari-flyouttoolbar',
@@ -7,7 +7,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
         });
         this._spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this._updateGraph = null;
-        this.update(data);
     }, {
         update: function (data) {
             if(!data) {
@@ -68,13 +67,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                         .tickFormat(function(d){return me.loc('legendValue', {value: d}) + ' m'});
             
             var pathContainer = svg.append('g');
+
+            var cursor = svg.append('g')
+                .attr('class', 'cursor')
+                .style('display', 'none');
+
             var xAxisContainer = svg.append('g')
-                .attr('transform', 'translate(0 ' + (graphHeight-graphMargin.bottom) + ')');
+                .attr('transform', 'translate(0 ' + (graphHeight - graphMargin.bottom) + ')');
             var yAxisContainer = svg.append('g')
                 .attr('transform', 'translate(' + (graphMargin.left) + ' 0)');
+
+            cursor.append('line')
+                .attr('x1', 0)
+                .attr('x2', 0)
+                .attr('y1', graphMargin.top)
+                .attr('y2', graphHeight - graphMargin.bottom);
+
+            var focus = cursor.append('g');
+
+            focus.append('circle')
+                .attr('r', 4.5);
+
+            focus.append('text')
+                .attr('y', -15)
+                .attr('text-anchor', 'middle')
+                .attr('dy', '.35em');
+
+            svg.append('rect')
+                .attr('class', 'overlay')
+                .attr('width', graphWidth - graphMargin.left - graphMargin.right)
+                .attr('height', graphHeight - graphMargin.top - graphMargin.bottom)
+                .attr('transform', 'translate(' + graphMargin.left + ' ' + graphMargin.top + ')')
+                .on('mouseover', function () { cursor.style('display', null); })
+                .on('mouseout', function () { cursor.style('display', 'none'); })
+                .on('mousemove', mousemove);
+
+            var bisectX = d3.bisector(function (d) { return d.distance; }).left;
+
+            function mousemove() {
+                var x0 = x.invert(d3.mouse(this)[0] + graphMargin.left),
+                    i = bisectX(processed[0], x0, 1),
+                    d0 = processed[0][i - 1],
+                    d1 = processed[0][i],
+                    d = x0 - d0.distance > d1.distance - x0 ? d1 : d0;
+                cursor.attr('transform', 'translate(' + x(d.distance) + ' 0)');
+                cursor.select('line').attr('y1', y(d.height));
+                focus.attr('transform', 'translate(0 ' + y(d.height) + ')');
+                cursor.select('text').text(me.loc('legendValue', { value: d.height }));
+            }
+            var processed;
             
             this._updateGraph = function(data){
-                var processed = this._processData(data);
+                processed = this._processData(data);
                 x.domain([0, d3.max(processed[0], function(d){return d.distance})]);
                 var extent = d3.extent(processed[0], function(d){return d.height});
                 if(extent[0] > 0) {
@@ -88,7 +132,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                             .data(processed);
                 
                 paths.enter().append('path')
-                    .attr('fill', 'steelblue')
+                    .attr('fill', '#ebb819')
                 .merge(paths)
                     .attr('d', area);
                 

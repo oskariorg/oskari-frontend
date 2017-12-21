@@ -88,7 +88,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                         x: position + offset,
                         y: 5
                     }
-                }, data);
+                });
+                this.flyout.update(data);
             }
             this.flyout.show();
         },
