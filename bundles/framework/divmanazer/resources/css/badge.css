@@ -9,6 +9,8 @@
  */
 /* Mixins */
 .oskari-badge {
+  position: relative;
+  left: 50%;
   font-weight: bold;
   color: #ffffff;
   vertical-align: baseline;
@@ -23,13 +25,20 @@
   border-radius: 9px;
   -webkit-background-clip: padding-box;
   -moz-background-clip: padding-box;
-  background-clip: padding-box; }
+  background-clip: padding-box; 
+}
 
 a.oskari-badge:hover {
   color: #ffffff;
   text-decoration: none;
   cursor: pointer; }
-
+.badge-wrapper {
+    display: inline-block;
+    position: absolute;
+    right: 8%;
+    height: 100%;
+    max-width: 50px;
+}
 .oskari-badge-important {
   background-color: #b94a48; }
   .oskari-badge-important[href] {
@@ -55,6 +64,8 @@ a.oskari-badge:hover {
   .oskari-badge-inverse[href] {
     background-color: #1a1a1a; }
 .oskari-badge-oskari {
-  background-color: #333438; }
+  background-color:#FFDE00;
+  color: #333438; }
   .oskari-badge-oskari {
-  background-color: #333438; }
+  background-color:#FFDE00;
+  color: #333438; }

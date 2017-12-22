@@ -16,6 +16,7 @@ Oskari.clazz
             this.ui = null;
             this.container = null;
             this.compileTemplates();
+            this.badges = [];
         }, {
             templates: {
                 "default": '<span class="oskari-badge"></span>',
@@ -24,7 +25,8 @@ Oskari.clazz
                 "important": '<span class="oskari-badge oskari-badge-important"></span>',
                 "info": '<span class="oskari-badge oskari-badge-info"></span>',
                 "inverse": '<span class="oskari-badge oskari-badge-inverse"></span>',
-                "oskari":'<span class="oskari-badge oskari-badge-oskari"></span>'
+                "oskari":'<span class="oskari-badge oskari-badge-oskari"></span>',
+                "wrapper": '<div class="badge-wrapper"></div>'
             },
             compileTemplates: function () {
                 var p;
@@ -44,18 +46,32 @@ Oskari.clazz
                 }
 
                 var txtspan = this.compiledTemplates[status || 'default'].clone();
+                var wrapper = this.compiledTemplates['wrapper'].clone();
                 txtspan.append(pContent);
-                this.container.append(txtspan);
+                wrapper.append(txtspan);
+                this.container.append(wrapper);
                 this.ui = txtspan;
-                this.calculateRightFloat();
+                this.badges.push(txtspan);
+                // this.calculateRightFloat();
+            },
+            getElement: function () {
+                return this.ui;
             },
             calculateRightFloat: function () {
-                var parent = this.container.parent();
-                var children = parent.children();
-                for ( var i = 0; i < children.length; i++ ) {
-                    var width = jQuery(children[i]).width()
-                    console.log(width)
-                }
+                var me = this;
+                setTimeout(function() {
+                    me.badges.forEach(function(badge) {
+                        var parent = badge.parent();
+                        var children = parent.children();
+                        var childrenWidth = 0;
+                        for ( var i = 0; i < children.length; i++ ) {
+                            childrenWidth += jQuery(children[i]).width();
+                        }
+                        var margin = 560 - badge.offset().left;
+                        console.log(margin);
+                        badge.css("margin-left", margin);
+                    });
+                }, 2000);
             },
             hide: function () {
                 if (this.ui) {
