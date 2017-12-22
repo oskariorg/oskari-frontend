@@ -412,7 +412,6 @@ div.oskari-flyout {
 div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons {
   border: 1px solid rgba(0, 0, 0, 0.2);
   float: right;
-  z-index: 100000;
   margin: 10px; }
   div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .map {
     background-color: #3c3c3c;

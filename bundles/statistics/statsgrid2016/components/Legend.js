@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     //   Legend
     //
     // Alternatively note about no indicator selected
-    render : function(el) {
+    render : function(el, handler) {
         if(this._renderState.inProgress) {
             // handle render being called multiple times in quick succession
             // previous render needs to end before repaint since we are doing async stuff
@@ -69,17 +69,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             // attach container to parent if provided, otherwise updates UI in the current parent
             el.append(container);
         }
+
+        var renderDone = function(){
+            me._renderDone();
+            if(typeof handler === 'function') {
+                handler();
+            }
+        };
         // check if we have an indicator to use or just render "no data"
         var activeIndicator = this.service.getStateService().getActiveIndicator();
         if(!activeIndicator) {
             container.append(this.__templates.error({msg : this.locale.legend.noActive}));
-            me._renderDone();
+            renderDone();
             return;
         }
         // Start creating the actual UI
         this._createHeader(activeIndicator, function(header) {
             if(!header) {
-                me._renderDone();
+                renderDone();
                 return;
             }
             // append header
@@ -89,7 +96,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 if(!classificationOpts) {
                     // didn't get classification options so not enough data to classify or other error
                     container.append(legendUI);
-                    me._renderDone();
+                    renderDone();
                     return;
                 }
                 // we have a legend and should display options in accordion
@@ -108,7 +115,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                     // add accordion to the container
                     accordion.insertTo(container);
                     // notify that we are done (to start a repaint if requested in middle of rendering)
-                    me._renderDone();
+                    renderDone();
                 });
             });
         });
