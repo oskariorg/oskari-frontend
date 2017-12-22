@@ -8,14 +8,15 @@ Oskari.clazz.define(
         this.drawStarter = startDrawingFunction;
         this.WFSLayerService = this.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         this.selectionPlugin = this.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
+        this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
 
         if (!this.selectionPlugin) {
             var config = {
                 id: "FeatureData"
             };
             this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
-            mapModule.registerPlugin(me.selectionPlugin);
-            mapModule.startPlugin(me.selectionPlugin);
+            this.mapModule.registerPlugin(me.selectionPlugin);
+            this.mapModule.startPlugin(me.selectionPlugin);
         }
 
     }, {
@@ -380,6 +381,9 @@ Oskari.clazz.define(
             if (this.helpDialog) {
                 this.helpDialog.close(true);
                 delete this.helpDialog;
+                if (this.mapModule.getDrawingMode()) {
+                    this.drawStopper(true);
+                }
             }
         },
 

@@ -285,7 +285,7 @@ Oskari.clazz.define(
                 this.mapModule.bringToTop(this.featureLayer);
             },
             'AfterMapLayerAddEvent': function(event) {
-                if (!me.instance.analyse.isEnabled) {
+                if (!this.instance.analyse.isEnabled) {
                     return;
                 }
                 this.toggleSelectionTools();
@@ -293,7 +293,7 @@ Oskari.clazz.define(
                 this.mapModule.bringToTop(this.featureLayer);
             },
             'AfterMapLayerRemoveEvent': function(event) {
-                if (!me.instance.analyse.isEnabled) {
+                if (!this.instance.analyse.isEnabled) {
                     return;
                 }
                 this.toggleSelectionTools();
@@ -483,6 +483,7 @@ Oskari.clazz.define(
             me.mapModule.getMap().removeLayer(me.featureLayer);
             me._deactivateSelectControls();
             me.drawControls.deactivateSelectTools();
+            me.drawControls.closeHelpDialog();
             //me._toggleDrawFilterPlugins(true);
 
             reqBuilder = Oskari.requestBuilder(rn);
@@ -648,12 +649,17 @@ Oskari.clazz.define(
          * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
          */
         _stopDrawing: function (isCancel) {
+            var suppressEvent = false;
             this.stopDrawing = true;
             this.getDrawToolsPanelContainer()
                 .find('div.toolContainer div.buttons')
                 .remove();
 
-            this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.drawLayerId, isCancel]);
+            if (isCancel) {
+                suppressEvent = true;
+            }
+
+            this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.drawLayerId, isCancel, suppressEvent]);
         },
 
         /**
