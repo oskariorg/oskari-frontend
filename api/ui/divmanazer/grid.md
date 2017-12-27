@@ -80,7 +80,11 @@ me.grid.setGroupingHeader([
 grid.renderTo(someElement);
 
 // select row and scroll table to selected
-grid.select(wantedRowValue, false, scrollableElement);
+var scrollableObject = {
+  element: jQuery('.scrallobleElement'),
+  fixTopPosition: 16 // if need fix calculated top position then use this number. Number means at how many pixels are decreased in calculated element row top location.
+  }:
+grid.select(wantedRowValue, false, scrollableObject);
 
 // moves selected rows as first rows of the table
 grid.moveSelectedRowsTop(true);

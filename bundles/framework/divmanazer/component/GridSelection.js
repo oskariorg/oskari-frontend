@@ -47,9 +47,9 @@ Oskari.clazz.category(
          * @param {String} value id for the data to be selected
          * @param {Boolean} keepPrevious
          * True to keep previous selection, false to clear before selecting
-         * @param {Object} scrollableElement If element defined then scroll grid to selected row. If scrollableELment is null then not scroll.
+         * @param {Object} scrollable If defined then scroll grid to selected row. If scrollable.eLement is null then not scroll.
          */
-        select: function (value, keepPrevious, scrollableElement) {
+        select: function (value, keepPrevious, scrollable) {
             var me = this;
             if(!me.model) {
                 return;
@@ -79,11 +79,12 @@ Oskari.clazz.category(
                 me.sortBy(me.lastSort.attr, me.lastSort.descending);
             }
 
-            if(scrollableElement) {
-                scrollableElement.scrollTop(0);
-                var row = scrollableElement.find('tr[data-id="'+value+'"]');
+            if(scrollable && scrollable.element) {
+                scrollable.element.scrollTop(0);
+                var row = scrollable.element.find('tr[data-id="'+value+'"]');
+                var fixTopPosition = scrollable.fixTopPosition || 0;
                 if(row.length > 0) {
-                    scrollableElement.scrollTop(row.position().top);
+                    scrollable.element.scrollTop(row.position().top - fixTopPosition);
                 }
             }
         },
