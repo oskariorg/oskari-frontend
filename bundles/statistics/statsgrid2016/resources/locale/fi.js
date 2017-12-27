@@ -57,7 +57,7 @@ Oskari.registerLocalization(
                 "noRegionset": "Ei aluevalintaa"
             },
             "extraFeatures": {
-                "title": "LISÄEHDOT JA -OMINAISUUDET",
+                "title": "Lisäominaisuudet",
                 "hideMapLayers": "Piilota muut karttatasot",
                 "openTableCheckbox": "Avaa taulukko",
                 "openDiagramCheckbox": "Avaa pylväsdiagrammiesitys"

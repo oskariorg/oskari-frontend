@@ -315,6 +315,19 @@ div.oskari-flyout {
                 }
             }
         }
+
+        div.extrafeatures {
+            div.title {
+                font-weight:bold;
+                margin-top:12px;
+            }
+
+            div.content {
+                label.oskari-formcomponent {
+                    margin-bottom: 0;
+                }
+            }
+        }
     }
 
     /* ********************************************

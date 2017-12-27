@@ -57,7 +57,7 @@ Oskari.registerLocalization(
                 "noRegionset": "No area selected"
             },
             "extraFeatures": {
-                "title": "EXTRA CONDITIONS AND FEATURES",
+                "title": "Additional features",
                 "hideMapLayers": "Hide other map layers",
                 "openTableCheckbox": "Open table",
                 "openDiagramCheckbox": "Open bar chart"
