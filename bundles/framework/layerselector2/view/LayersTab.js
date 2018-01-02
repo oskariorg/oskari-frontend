@@ -273,12 +273,9 @@ Oskari.clazz.define(
                 );
                 group.layerListPanel = groupPanel;
 
-                // if (group.layerListPanel.isVisible()) {
-                    var badge = Oskari.clazz.create('Oskari.userinterface.component.Badge');
-                    badge.insertTo( groupPanel.getHeader() );
-                    badge.setContent( layersLength, "oskari" );
-                // }
-                // badge.getElement().css({ position: 'absolute', right: '6%', marginTop: '0.8%' });
+                var badge = Oskari.clazz.create('Oskari.userinterface.component.Badge');
+                badge.insertTo( groupPanel.getHeader() );
+                badge.setContent( layersLength, "inverse" );
 
                 groupContainer = groupPanel.getContainer();
                 groupContainer.addClass('oskari-hidden');
