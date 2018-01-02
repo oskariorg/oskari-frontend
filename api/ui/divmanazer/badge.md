@@ -12,7 +12,7 @@ A stylized element for showing values.
     badge.setContent( someValue, "oskari" );
 ```
 The second parameter in badge.setContent() is the style param.
-ie:
+i.e.
 ## Screenshot
 
 ![screenshot](badge.png)
