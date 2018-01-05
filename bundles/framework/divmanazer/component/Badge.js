@@ -15,8 +15,6 @@ Oskari.clazz
             this.compileTemplates();
             this.ui = null;
             this.container = null;
-            this.compileTemplates();
-            this.badges = [];
         }, {
             templates: {
                 "default": '<span class="oskari-badge"></span>',
@@ -51,8 +49,6 @@ Oskari.clazz
                 wrapper.append(txtspan);
                 this.container.append(wrapper);
                 this.ui = txtspan;
-                this.badges.push(txtspan);
-                // this.calculateRightFloat();
             },
             getElement: function () {
                 return this.ui;
