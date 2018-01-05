@@ -57,22 +57,6 @@ Oskari.clazz
             getElement: function () {
                 return this.ui;
             },
-            calculateRightFloat: function () {
-                var me = this;
-                setTimeout(function() {
-                    me.badges.forEach(function(badge) {
-                        var parent = badge.parent();
-                        var children = parent.children();
-                        var childrenWidth = 0;
-                        for ( var i = 0; i < children.length; i++ ) {
-                            childrenWidth += jQuery(children[i]).width();
-                        }
-                        var margin = 560 - badge.offset().left;
-                        console.log(margin);
-                        badge.css("margin-left", margin);
-                    });
-                }, 2000);
-            },
             hide: function () {
                 if (this.ui) {
                     this.ui.remove();
