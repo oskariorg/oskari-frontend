@@ -1,0 +1,35 @@
+
+/**
+ * @class Oskari.framework.bundle.hierarchical-layerlist.request.AddHierarchicalLayerListFilterRequestHandler
+ * Handles Oskari.framework.bundle.hierarchical-layerlist.request.AddHierarchicalLayerListFilterRequest to show filter.
+ */
+Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.request.AddHierarchicalLayerListFilterRequestHandler',
+    /**
+     * @method create called automatically on construction
+     * @static
+     * @param {Oskari.framework.bundle.featuredata2.plugin.mapmodule.OpenlayersPopupPlugin} featureData
+     *          reference to featureData
+     */
+    function(sandbox, instance) {
+        this.sandbox = sandbox;
+        this.instance = instance;
+    }, {
+        /**
+         * @method handleRequest
+         * Shows WFS feature data with requested properties
+         * @param {Oskari.mapframework.core.Core} core
+         *      reference to the application core (reference sandbox core.getSandbox())
+         * @param {Oskari.framework.bundle.hierarchical-layerlist.request.AddLayerListFilterRequest} request
+         *      request to handle
+         */
+        handleRequest : function(core, request) {
+            var layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
+            layerSelectorFlyout.addFilterTool(request.getToolText(), request.getTooltip(), request.getIconClassActive(), request.getIconClassDeactive(), request.getFilterName());
+        }
+    }, {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        protocol : ['Oskari.mapframework.core.RequestHandler']
+    });

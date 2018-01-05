@@ -1,88 +1,54 @@
-
+/**
+ * @class Oskari.framework.bundle.hierarchical-layerlist.Tile
+ * Renders the "all layers" tile.
+ */
 Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Tile',
 
 /**
  * @method create called automatically on construction
  * @static
- * @param
- * {Oskari.framework.bundle.hierarchical-layerlist.HierarchicalLayerlistBundleInstance}
- * instance
- *      reference to component that created the tile
+ * @param {Oskari.framework.bundle.hierarchical-layerlist.LayerSelectorBundleInstance} instance
+ *     reference to component that created the tile
  */
-function(instance, service) {
+
+function (instance) {
+    //"use strict";
     this.instance = instance;
-    this.sb = this.instance.getSandbox();
-    this.loc = this.instance.getLocalization();
-    this.statsService = service;
     this.container = null;
     this.template = null;
-    this._tileExtensions = {};
-    this._flyoutManager = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.FlyoutManager', instance, service);
-    this._templates = {
-        extraSelection : _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div><div class="clear"></div></div>')
-    };
 }, {
     /**
      * @method getName
      * @return {String} the name for the component
      */
-    getName : function() {
+    getName: function () {
+        //"use strict";
         return 'Oskari.framework.bundle.hierarchical-layerlist.Tile';
-    },
-    /**
-     * @method getTitle
-     * @return {String} localized text for the title of the tile
-     */
-    getTitle : function() {
-        return this.loc.tile.title;
-    },
-    /**
-     * @method getDescription
-     * @return {String} localized text for the description of the tile
-     */
-    getDescription : function() {
-        return this.loc.desc;
     },
     /**
      * @method setEl
      * @param {Object} el
-     *      reference to the container in browser
+     *     reference to the container in browser
      * @param {Number} width
-     *      container size(?) - not used
+     *     container size(?) - not used
      * @param {Number} height
-     *      container size(?) - not used
+     *     container size(?) - not used
      *
      * Interface method implementation
      */
-    setEl : function(el, width, height) {
+    setEl: function (el, width, height) {
+        //"use strict";
         this.container = jQuery(el);
     },
     /**
      * @method startPlugin
-     * Interface method implementation, calls #createUi()
+     * Interface method implementation, calls #refresh()
      */
-    startPlugin : function() {
+    startPlugin: function () {
         this._addTileStyleClasses();
-        var me = this;
-        var instance = me.instance;
-        var sandbox = instance.getSandbox();
-        var tpl = this._templates.extraSelection;
-        this.getFlyoutManager().flyoutInfo.forEach(function(flyout) {
-            var tileExtension = jQuery(tpl({
-                id: flyout.id,
-                label : flyout.title
-            }));
-            me.extendTile(tileExtension, flyout.id);
-            tileExtension.bind('click', function(event) {
-                event.stopPropagation();
-                me.toggleFlyout(flyout.id);
-            });
-        });
-        this.hideExtensions();
+        this.refresh();
     },
-    /**
-     * Adds a class for the tile so we can programmatically identify which functionality the tile controls.
-     */
+
     _addTileStyleClasses: function() {
         var isContainer = (this.container && this.instance.mediator) ? true : false;
         var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
@@ -99,106 +65,52 @@ function(instance, service) {
      * @method stopPlugin
      * Interface method implementation, clears the container
      */
-    stopPlugin : function() {
+    stopPlugin: function () {
+        //"use strict";
         this.container.empty();
     },
     /**
-     * Adds an extra option on the tile
+     * @method getTitle
+     * @return {String} localized text for the title of the tile
      */
-    extendTile: function (el,type) {
-          var container = this.container.append(el);
-          var extension = container.find(el);
-          this._tileExtensions[type] = extension;
+    getTitle: function () {
+        //"use strict";
+        return this.instance.getLocalization('title');
     },
     /**
-     * @method  @public openExtension opens extension
-     * @param  {String} type  flyout type
+     * @method getDescription
+     * @return {String} localized text for the description of the tile
      */
-    openExtension: function(type) {
-        var me = this;
-        var flyout = this.getFlyoutManager().getFlyout(type);
-        if(!flyout) {
-            // unrecognized flyout
-            return;
-        }
-        var el = this.getExtensions()[type];
-        me.getFlyoutManager().open(type);
-        /*if (!el.hasClass('material-selected') ) {
-            el.addClass('material-selected');
-        }*/
-    },
-     /**
-     * @method  @public closeExtension opens extension
-     * @param  {String} type  flyout type
-     */
-    closeExtension: function(type) {
-        var me = this;
-        var flyout = this.getFlyoutManager().getFlyout(type);
-        if(!flyout) {
-            // unrecognized flyout
-            return;
-        }
-        var el = this.getExtensions()[type];
-        me.getFlyoutManager().hide(type);
-        //el.removeClass('material-selected');
+    getDescription: function () {
+        //"use strict";
+        return this.instance.getLocalization('desc');
     },
     /**
-     * Hides all the extra options (used when tile is "deactivated")
+     * @method getOptions
+     * Interface method implementation, does nothing atm
      */
-    hideExtensions: function () {
-        var me = this;
-        var extraOptions = me.getExtensions();
-        Object.keys(extraOptions).forEach(function(key) {
-            // hide all flyout
-            me.getFlyoutManager().hide( key );
-            // hide the tile "extra selection"
-            var extension = extraOptions[key];
-            //extension.removeClass('material-selected');
-            extension.hide();
-        });
+    getOptions: function () {
+        //"use strict";
     },
     /**
-     * Shows the tile extra options (when tile is activated)
-     * @return {[type]} [description]
+     * @method setState
+     * @param {Object} state
+     *     state that this component should use
+     * Interface method implementation, does nothing atm
      */
-    showExtensions: function () {
-        var me = this;
-        var extraOptions = me.getExtensions();
-        this.getFlyoutManager().init();
-        Object.keys(extraOptions).forEach(function(key) {
-            extraOptions[key].show();
-        });
+    setState: function (state) {
+        //"use strict";
     },
     /**
-     * [getExtensions description]
-     * @return {Object} with key as flyout id and value of DOM-element for the extra option in the tile
+     * @method refresh
+     * Creates the UI for a fresh start
      */
-    getExtensions: function () {
-        return this._tileExtensions;
-    },
-    getFlyoutManager: function () {
-        return this._flyoutManager;
-    },
-    getFlyout: function (type) {
-        return this.getFlyoutManager().getFlyout(type);
-    },
-    toggleFlyout: function (type) {
-        var flyout = this.getFlyoutManager().getFlyout(type);
-        if(!flyout) {
-            // unrecognized flyout
-            return;
-        }
-        if(flyout.isVisible()) {
-            this.closeExtension(type);
-            return;
-        }
-        // open flyout
-        this.openExtension(type);
+    refresh: function () {
     }
 }, {
     /**
      * @property {String[]} protocol
      * @static
      */
-    'protocol' : ['Oskari.userinterface.Tile']
+    'protocol': ['Oskari.userinterface.Tile']
 });

@@ -45,12 +45,49 @@ function() {
         },
         {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/FlyoutManager.js"
+                "src": "../../../../bundles/framework/hierarchical-layerlist/Flyout.js"
         },
         {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/Tile.js"
-        }],
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/model/LayerGroup.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/view/Layer.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/view/LayersTab.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/view/PublishedLayersTab.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/request/ShowFilteredHierarchicalLayerListRequest.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/request/ShowFilteredHierarchicalLayerListRequestHandler.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/request/AddHierarchicalLayerListFilterRequest.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/request/AddHierarchicalLayerListFilterRequestHandler.js"
+        },
+        {
+            "type": "text/css",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/resources/css/style.css"
+        }
+        ],
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
