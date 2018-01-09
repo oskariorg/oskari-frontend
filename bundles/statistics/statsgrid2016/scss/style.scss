@@ -6,7 +6,7 @@ $buttonTextColor: #ffffff;
 $inputWidth: 94%;
 $buttonWidth: 86%;
 
-$flyoutPadding: 1.2em;
+$flyoutPadding: 16px;
 
 
 /* ********************************************
@@ -312,6 +312,19 @@ div.oskari-flyout {
 
                 span {
                     font-weight: normal;
+                }
+            }
+        }
+
+        div.extrafeatures {
+            div.title {
+                font-weight:bold;
+                margin-top:12px;
+            }
+
+            div.content {
+                label.oskari-formcomponent {
+                    margin-bottom: 0;
                 }
             }
         }
