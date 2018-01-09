@@ -53,6 +53,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me.log = Oskari.log('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin');
 
         this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, locale);
+        this.__legend.on('rendered', function(){
+            me._calculatePluginSize();
+        });
     }, {
 
         /**
@@ -110,9 +113,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                 return me._element;
             }
             me._element = me._templates.main.clone();
-            this.__legend.render(me._element, function(){
-                me._calculatePluginSize();
-            });
+            this.__legend.render(me._element);
             return me._element;
         },
 

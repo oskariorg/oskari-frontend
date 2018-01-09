@@ -17,6 +17,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     // initialize with legend panel open
     this._renderState.panels[this.locale.legend.title] = true;
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    // some components need to know when rendering is completed.
+    Oskari.makeObservable(this);
 }, {
     /**
      * Enables/disables the classification editor form
@@ -46,7 +48,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     //   Legend
     //
     // Alternatively note about no indicator selected
-    render : function(el, handler) {
+    render : function(el) {
         if(this._renderState.inProgress) {
             // handle render being called multiple times in quick succession
             // previous render needs to end before repaint since we are doing async stuff
@@ -70,23 +72,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             el.append(container);
         }
 
-        var renderDone = function(){
-            me._renderDone();
-            if(typeof handler === 'function') {
-                handler();
-            }
-        };
         // check if we have an indicator to use or just render "no data"
         var activeIndicator = this.service.getStateService().getActiveIndicator();
         if(!activeIndicator) {
             container.append(this.__templates.error({msg : this.locale.legend.noActive}));
-            renderDone();
+            me._renderDone();
             return;
         }
         // Start creating the actual UI
         this._createHeader(activeIndicator, function(header) {
             if(!header) {
-                renderDone();
+                me._renderDone();
                 return;
             }
             // append header
@@ -96,7 +92,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 if(!classificationOpts) {
                     // didn't get classification options so not enough data to classify or other error
                     container.append(legendUI);
-                    renderDone();
+                    me._renderDone();
                     return;
                 }
                 // we have a legend and should display options in accordion
@@ -115,7 +111,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                     // add accordion to the container
                     accordion.insertTo(container);
                     // notify that we are done (to start a repaint if requested in middle of rendering)
-                    renderDone();
+                    me._renderDone();
                 });
             });
         });
@@ -130,6 +126,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         this._restorePanelState(this._accordion, state.panels);
         if(state.repaint) {
             this.render(state.el);
+        } else {
+            // trigger an event in case something needs to know that we just completed rendering
+            this.trigger('rendered');
         }
     },
     /**
