@@ -68,22 +68,6 @@ function() {
             "src": "../../../../bundles/framework/hierarchical-layerlist/view/PublishedLayersTab.js"
         },
         {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/hierarchical-layerlist/request/ShowFilteredHierarchicalLayerListRequest.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/hierarchical-layerlist/request/ShowFilteredHierarchicalLayerListRequestHandler.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/hierarchical-layerlist/request/AddHierarchicalLayerListFilterRequest.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/hierarchical-layerlist/request/AddHierarchicalLayerListFilterRequestHandler.js"
-        },
-        {
             "type": "text/css",
             "src": "../../../../bundles/framework/hierarchical-layerlist/resources/css/style.css"
         }

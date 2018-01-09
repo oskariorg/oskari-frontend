@@ -65,6 +65,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return (jQuery.inArray(layer.getId(), ids) !== -1);
             }
         };
+
+        this.layerlistFilterButtons  = {};
+
+         Oskari.makeObservable(this);
     }, {
         /** @static @property __qname fully qualified name for service */
         __qname: "Oskari.mapframework.service.MapLayerService",
@@ -562,6 +566,32 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
             me.layerFilters[filterId] = filterFunction;
+        },
+        registerLayerlistFilterButton: function(text, tooltip, cls, filterId){
+            var me = this;
+
+            if(me.layerlistFilterButtons[filterId]) {
+                Oskari.log(this.getName()).warn('[MapLayerService] "' + filterId + '" -layerlist filter button has allready defined. Not register layer list filter button.');
+                return;
+            }
+
+            var properties = {
+                text: text,
+                tooltip: tooltip,
+                cls: cls,
+                id: filterId
+            };
+            me.layerlistFilterButtons[filterId] = properties;
+            this.trigger('Layerlist.Filter.Button.Add', {filterId: filterId, properties: properties});
+        },
+        getLayerlistFilterButton: function(filterId){
+            var me = this;
+
+            if(filterId) {
+                return me.layerlistFilterButtons[filterId];
+            }
+
+            return me.layerlistFilterButtons;
         },
         /**
          * @method  @public getFilteredLayers  Get filtered layers

@@ -53,14 +53,6 @@ If filter is given, open groups will be ignored. If filter is undefined, groups 
 
 ## Requests the bundle handles
 
-<table class="table">
-  <tr>
-    <th>Request</th><th> Where/why it's used</th>
-  </tr>
-  <tr>
-    <td>ShowFilteredLayerListRequest</td><td>Shows filtered layer list.</td>
-  </tr>
-</table>
 
 
 ## Requests the bundle sends out

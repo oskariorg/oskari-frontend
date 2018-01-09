@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var me = this;
             var sandbox = this.getSandbox();
             var loc = this.getLocalization();
-            
+
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
             // create and register request handler
             var reqHandler = Oskari.clazz.create(
@@ -118,13 +118,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 });
 
                 // Add layerlist filter button
-                Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
-                        loc.layerFilter.buttons.publishable,
-                        loc.layerFilter.tooltips.publishable,
-                        'layer-publishable',
-                        'layer-publishable-disabled',
-                        'publishable'
-                ]);
+                mapLayerService.registerLayerlistFilterButton(loc.layerFilter.buttons.publishable,
+                loc.layerFilter.tooltips.publishable,
+                {
+                    active: 'layer-publishable',
+                    deactive: 'layer-publishable-disabled'
+                },
+                'publishable');
             }
             this._registerForGuidedTour();
         },

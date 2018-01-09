@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
         this.started = false;
         this.plugins = {};
         this.localization = null;
-        this.filteredLayerListOpenedByRequest = false;
     }, {
         /**
          * @static
@@ -101,14 +100,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             //Let's extend UI
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
-
-            // create and register request handlers
-            var reqHandler = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.request.ShowFilteredHierarchicalLayerListRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('ShowFilteredHierarchicalLayerListRequest', reqHandler);
-
-
-            var reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.request.AddHierarchicalLayerListFilterRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('AddHierarchicalLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
             // draw ui
             me.createUi();
@@ -257,11 +248,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
                 if (event.getViewState() !== 'close') {
                     plugin.focus();
-                }
-                // Remove the filtering, if opened by ShowFilteredLayerListRequest.
-                else if(me.filteredLayerListOpenedByRequest) {
-                    plugin.deactivateAllFilters();
-                    me.filteredLayerListOpenedByRequest = false;
                 }
             }
         },

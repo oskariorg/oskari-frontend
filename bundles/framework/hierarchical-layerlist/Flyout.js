@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
  */
 
 function (instance) {
+    var me = this;
     //"use strict";
     this.instance = instance;
     this.container = null;
@@ -20,9 +21,16 @@ function (instance) {
     this.state = null;
     this.layerTabs = [];
     this.filterTemplate = jQuery('<div class="filter filter-border"><center><div class="filter-icon"></div><div class="filter-text"></div></center></div>');
-    this.filters= [];
+
     this._filterNewestCount = 20;
     this._currentFilter = null;
+    this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+
+    this.addedButtons = {};
+
+    this.mapLayerService.on('Layerlist.Filter.Button.Add', function(button){
+        me.addFilterTool(button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
+    });
 }, {
 
     /**
@@ -98,6 +106,12 @@ function (instance) {
         elParent = this.container.parentElement.parentElement;
         elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
         elId.attr('id', 'oskari_hierarchical-layerlist_flyout_oskari_flyouttool_close');
+
+        var buttons = me.mapLayerService.getLayerlistFilterButton();
+        Object.keys(buttons).forEach(function(key){
+            var button = buttons[key];
+            me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
+        });
     },
 
     /**
@@ -120,16 +134,15 @@ function (instance) {
      */
     addNewestFilter: function(){
         var me = this,
-            loc = me.instance.getLocalization('layerFilter'),
-            mapLayerService = this.instance.getSandbox().getService(
-                    'Oskari.mapframework.service.MapLayerService'
-            );
+            loc = me.instance.getLocalization('layerFilter');
 
-        me.addFilterTool(loc.buttons.newest,
+        me.mapLayerService.registerLayerlistFilterButton(loc.buttons.newest,
             loc.tooltips.newest.replace('##', me._filterNewestCount),
-            'layer-newest',
-            'layer-newest-disabled',
-        'newest');
+            {
+                active: 'layer-newest',
+                deactive: 'layer-newest-disabled'
+            },
+            'newest');
     },
 
     /**
@@ -140,10 +153,12 @@ function (instance) {
         var me = this,
             loc = me.instance.getLocalization('layerFilter');
 
-        me.addFilterTool(loc.buttons.featuredata,
+        me.mapLayerService.registerLayerlistFilterButton(loc.buttons.featuredata,
             loc.tooltips.featuredata,
-            'layer-stats',
-            'layer-stats-disabled',
+            {
+                active: 'layer-stats',
+                deactive: 'layer-stats-disabled'
+            },
         'featuredata');
     },
 
@@ -299,10 +314,7 @@ function (instance) {
         var me = this;
         var sandbox = this.instance.getSandbox(),
             // populate layer list
-            mapLayerService = sandbox.getService(
-                'Oskari.mapframework.service.MapLayerService'
-            ),
-            layers = (me._currentFilter) ? mapLayerService.getFilteredLayers(me._currentFilter) : mapLayerService.getAllLayers(),
+            layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers(),
             i,
             tab,
             layersCopy,
@@ -481,6 +493,9 @@ function (instance) {
      */
     addFilterTool: function(toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
         var me = this;
+        if(me.addedButtons[filterName]) {
+            return;
+        }
 
         var filter = {
             toolText: toolText,
@@ -489,7 +504,6 @@ function (instance) {
             iconClassDeactive: iconClassDeactive,
             filterName: filterName
         };
-        me.filters.push(filter);
         var loc = me.instance.getLocalization('layerFilter');
 
         me.layerTabs.forEach(function(tab){
@@ -519,6 +533,7 @@ function (instance) {
 
             filterContainer.append(filterButton);
         });
+        me.addedButtons[filterName] = true;
     },
 
     /**
@@ -544,20 +559,22 @@ function (instance) {
         var me = this;
         me.layerTabs.forEach(function(tab){
             var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
-            me.filters.forEach(function(filter){
-                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.filterName);
+            var filters = me.mapLayerService.getLayerlistFilterButton();
+            Object.keys(filters).forEach(function(key){
+                var filter = filters[key];
+                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.id);
                 // First remove all active classes
-                filterIcon.removeClass(filter.iconClassActive);
-                filterIcon.removeClass(filter.iconClassDeactive);
+                filterIcon.removeClass(filter.cls.active);
+                filterIcon.removeClass(filter.cls.deactive);
                 filterIcon.removeClass('active');
                 // If filter has same than currently selected then activate icon
-                if(filter.filterName === filterName) {
-                    filterIcon.addClass(filter.iconClassActive);
+                if(filter.id === filterName) {
+                    filterIcon.addClass(filter.cls.active);
                     filterIcon.addClass('active');
                 }
                 // Otherwise use deactive icon
                 else {
-                    filterIcon.addClass(filter.iconClassDeactive);
+                    filterIcon.addClass(filter.cls.deactive);
                 }
             });
         });
@@ -586,16 +603,17 @@ function (instance) {
         me._currentFilter = null;
         me.layerTabs.forEach(function(tab, tabIndex){
             var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
-
-            me.filters.forEach(function(filter, index) {
-                if(!notDeactivateThisFilter || filter.filterName !== notDeactivateThisFilter) {
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.filterName);
-                    filterIcon.removeClass(filter.iconClassActive);
+            var filters = me.mapLayerService.getLayerlistFilterButton();
+            Object.keys(filters).forEach(function(key){
+                var filter = filters[key];
+                if(!notDeactivateThisFilter || filter.id !== notDeactivateThisFilter) {
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.id);
+                    filterIcon.removeClass(filter.cls.active);
                     filterIcon.removeClass('active');
-                    filterIcon.addClass(filter.iconClassDeactive);
+                    filterIcon.addClass(filter.cls.deactive);
                     // Set tooltip for one per filter
                     if(tabIndex === 0) {
-                        me._setFilterTooltip(filter.filterName, filter.tooltip);
+                        me._setFilterTooltip(filter.id, filter.tooltip);
                     }
                 }
             });
