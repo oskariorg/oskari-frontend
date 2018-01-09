@@ -86,6 +86,9 @@ var scrollableObject = {
   }:
 grid.select(wantedRowValue, false, scrollableObject);
 
+// select multiple rows and scroll table to selected
+grid.select([wantedRowValue1, wantedRowValue2], false, scrollableElement);
+
 // moves selected rows as first rows of the table
 grid.moveSelectedRowsTop(true);
 

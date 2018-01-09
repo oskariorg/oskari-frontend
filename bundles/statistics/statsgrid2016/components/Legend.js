@@ -17,6 +17,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     // initialize with legend panel open
     this._renderState.panels[this.locale.legend.title] = true;
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    // some components need to know when rendering is completed.
+    Oskari.makeObservable(this);
 }, {
     /**
      * Enables/disables the classification editor form
@@ -69,6 +71,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             // attach container to parent if provided, otherwise updates UI in the current parent
             el.append(container);
         }
+
         // check if we have an indicator to use or just render "no data"
         var activeIndicator = this.service.getStateService().getActiveIndicator();
         if(!activeIndicator) {
@@ -123,6 +126,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         this._restorePanelState(this._accordion, state.panels);
         if(state.repaint) {
             this.render(state.el);
+        } else {
+            // trigger an event in case something needs to know that we just completed rendering
+            this.trigger('rendered');
         }
     },
     /**

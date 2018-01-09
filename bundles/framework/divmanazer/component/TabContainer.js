@@ -175,7 +175,10 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @return {Boolean} true if given panel is currently selected
          */
         isSelected: function (panel) {
-            return panel.getHeader().hasClass('active');
+            if(panel && panel.getHeader()) {
+                return panel.getHeader().hasClass('active');
+            }
+            return false;
         },
 
         /**
