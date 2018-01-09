@@ -87,6 +87,9 @@ Oskari.registerLocalization(
             "openLink": "Show Map Layers",
             "closeLink": "Hide Map Layers",
             "tileText": "Map layers"
+        },
+        "SelectedLayersTab": {
+            "title": "Valitut tasot"
         }
     }
 });

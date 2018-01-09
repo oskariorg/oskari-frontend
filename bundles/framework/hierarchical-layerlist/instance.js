@@ -91,6 +91,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             me.sandbox = sandbox;
 
             sandbox.register(me);
+
+            // create the OskariEventNotifierService for handling Oskari events.
+
+            var notifierService = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
+            sandbox.registerService(notifierService);
+            me.notifierService = notifierService;
+
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     sandbox.registerForEventByName(me, p);
@@ -166,6 +173,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             AfterMapLayerRemoveEvent: function (event) {
                 //"use strict";
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
+                this.notifierService.notifyOskariEvent(event);
             },
 
             /**
@@ -177,6 +185,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             AfterMapLayerAddEvent: function (event) {
                 //"use strict";
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true);
+                this.notifierService.notifyOskariEvent(event);
             },
 
             /**
@@ -212,6 +221,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                     // refresh layer count
                     tile.refresh();
                 }
+
+                this.notifierService.notifyOskariEvent(event);
             },
 
             'BackendStatus.BackendStatusChangedEvent': function (event) {
@@ -248,6 +259,40 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
                 if (event.getViewState() !== 'close') {
                     plugin.focus();
+                }
+            },
+
+            /**
+             * @method MapLayerVisibilityChangedEvent
+             */
+            'MapLayerVisibilityChangedEvent': function (event) {
+                this.notifierService.notifyOskariEvent(event);
+            },
+            /**
+             * @method AfterChangeMapLayerOpacityEvent
+             */
+            'AfterChangeMapLayerOpacityEvent': function (event) {
+                if (event._creator !== this.getName()) {
+                    this.notifierService.notifyOskariEvent(event);
+                }
+            },
+            /**
+             * @method AfterChangeMapLayerStyleEvent
+             */
+            'AfterChangeMapLayerStyleEvent': function (event) {
+                if (event._creator !== this.getName()) {
+                    this.notifierService.notifyOskariEvent(event);
+                }
+            },
+            /**
+             * @method AfterRearrangeSelectedMapLayerEvent
+             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
+             *
+             * Rearranges layers
+             */
+            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+                if (event._creator !== this.getName()) {
+                    this.notifierService.notifyOskariEvent(event);
                 }
             }
         },

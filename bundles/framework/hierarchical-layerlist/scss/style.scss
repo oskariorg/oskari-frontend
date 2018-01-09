@@ -1,3 +1,6 @@
+$selectedLayersTabBackgroundColor: #1eb54e;
+$selectedLayersTabTextColor: #fff;
+
 div.hierarchical-layerlist {
     div.layer-filter {
         margin: 10px;
@@ -196,6 +199,22 @@ div.hierarchical-layerlist {
                     background-color: #333438;
                     color: white;
                 }
+            }
+        }
+    }
+
+    li#hierarchical-layerlist-selected-layers-tab {
+        background-color: $selectedLayersTabBackgroundColor;
+        color: $selectedLayersTabTextColor;
+
+        div.layers-selected {
+            position:relative;
+
+            .layer-count {
+                color: #000;
+                font-weight: normal;
+                text-align: center;
+                font-size: 11px;
             }
         }
     }
