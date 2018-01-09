@@ -3,8 +3,8 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "hierarchical-layerlist",
     "value": {
-        "title": "Hierarchical Layerlist -sv",
-        "desc": "Hierarchical Layerlist -sv",
+        "title": "Kartlager",
+        "desc": "Kartlager",
         "errors": {
             "title": "Fel!",
             "generic": "Systemfel. Försök på nytt senare.",

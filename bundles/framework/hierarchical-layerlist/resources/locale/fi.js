@@ -3,8 +3,8 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "hierarchical-layerlist",
     "value": {
-        "title": "Hierarchical Layerlist",
-        "desc": "Hierarchical Layerlist",
+        "title": "Karttatasot",
+        "desc": "Karttatasot",
         "errors": {
             "title": "Virhe",
             "generic": "Järjestelmässä tapahtui virhe.",

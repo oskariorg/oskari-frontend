@@ -73,6 +73,10 @@ function() {
         },
         {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/component/SelectableAccordionPanel.js"
+        },
+        {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/hierarchical-layerlist/view/SelectedLayersTab.js"
         },
         {

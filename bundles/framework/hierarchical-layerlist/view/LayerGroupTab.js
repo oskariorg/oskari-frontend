@@ -238,6 +238,7 @@ Oskari.clazz.define(
          * @param  {Array} groups
          */
         showLayerGroups: function (groups) {
+            console.log(groups);
             //"use strict";
             var me = this,
                 i,
@@ -262,7 +263,7 @@ Oskari.clazz.define(
                 layers = group.getLayers();
                 layersLength = layers.length;
                 groupPanel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.AccordionPanel'
+                    'Oskari.framework.bundle.hierarchical-layerlist.component.SelectableAccordionPanel'
                 );
                 groupPanel.setTitle(group.getTitle() + ' (' + layersLength +
                     ')');

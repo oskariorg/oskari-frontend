@@ -3,8 +3,8 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "hierarchical-layerlist",
     "value": {
-        "title": "Hierarchical Layerlist",
-        "desc": "Hierarchical Layerlist",
+        "title": "Map Layers",
+        "desc": "Map Layers",
         "errors": {
             "title": "Error",
             "generic": "The system error occurred.",

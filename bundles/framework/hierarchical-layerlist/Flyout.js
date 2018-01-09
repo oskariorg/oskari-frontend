@@ -79,7 +79,7 @@ function (instance) {
             elId;
 
         me.template = jQuery('<div class="allLayersTabContent"></div>');
-
+        layerGroupTab.groupingMethod = 'getInspireName';
         me.layerTabs.push(layerGroupTab);
 
         elParent = this.container.parentElement.parentElement;
