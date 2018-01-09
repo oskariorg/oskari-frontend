@@ -20,6 +20,7 @@ Oskari.registerLocalization(
             "shortDescription": "Search map layers by map layer name, data producer name or keyword.",
             "description": "Search map layers by map layer name, data producer name or keyword. You can type a whole term or a part of it. The search term must be at least four characters long.",
             "inspire": "By Theme",
+            "allLayers": "All layers",
             "organization": "By Data Provider",
             "published": "Users",
             "didYouMean": "Did you mean:"
