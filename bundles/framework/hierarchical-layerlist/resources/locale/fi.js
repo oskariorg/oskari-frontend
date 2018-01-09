@@ -88,6 +88,9 @@ Oskari.registerLocalization(
             "openLink": "Näytä Karttatasot",
             "closeLink": "Piilota Karttatasot",
             "tileText": "Karttatasot"
+        },
+        "SelectedLayersTab": {
+            "title": "Valitut tasot"
         }
     }
 });

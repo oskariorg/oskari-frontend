@@ -73,7 +73,11 @@ function() {
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/hierarchical-layerlist/view/PublishedLayersTab.js"
+            "src": "../../../../bundles/framework/hierarchical-layerlist/view/SelectedLayersTab.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/service/OskariEventNotifierService.js"
         },
         {
             "type": "text/css",

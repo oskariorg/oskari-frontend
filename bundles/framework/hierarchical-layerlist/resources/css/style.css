@@ -133,5 +133,15 @@ div.hierarchical-layerlist div.tab-content {
       div.hierarchical-layerlist div.tab-content div.oskarifield .related-keywords .focus {
         background-color: #333438;
         color: white; }
+div.hierarchical-layerlist li#hierarchical-layerlist-selected-layers-tab {
+  background-color: #1eb54e;
+  color: #fff; }
+  div.hierarchical-layerlist li#hierarchical-layerlist-selected-layers-tab div.layers-selected {
+    position: relative; }
+    div.hierarchical-layerlist li#hierarchical-layerlist-selected-layers-tab div.layers-selected .layer-count {
+      color: #000;
+      font-weight: normal;
+      text-align: center;
+      font-size: 11px; }
 
 /*# sourceMappingURL=style.css.map */

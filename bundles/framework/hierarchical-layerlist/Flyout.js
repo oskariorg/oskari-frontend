@@ -69,46 +69,18 @@ function (instance) {
     startPlugin: function () {
         //"use strict";
         var me = this,
-            /*inspireTab = Oskari.clazz.create(
-                'Oskari.framework.bundle.hierarchical-layerlist.view.LayersTab',
-                me.instance,
-                me.instance.getLocalization('filter').inspire,
-                'oskari_hierarchical-layerlist_tabpanel_inspiretab'
-            ),*/
             layerGroupTab = Oskari.clazz.create(
                 'Oskari.framework.bundle.hierarchical-layerlist.view.LayerGroupTab',
                 me.instance,
                 me.instance.getLocalization('filter').allLayers,
                 'oskari_hierarchical-layerlist_tabpanel_layergrouptab'
             ),
-            orgTab = Oskari.clazz.create(
-                'Oskari.framework.bundle.hierarchical-layerlist.view.LayersTab',
-                me.instance,
-                me.instance.getLocalization('filter').organization,
-                'oskari_hierarchical-layerlist_tabpanel_orgtab'
-            ),
-            publishedTab,
             elParent,
             elId;
 
-
         me.template = jQuery('<div class="allLayersTabContent"></div>');
-        //inspireTab.groupingMethod = 'getInspireName';
-        orgTab.groupingMethod = 'getOrganizationName';
 
-        //me.layerTabs.push(inspireTab);
         me.layerTabs.push(layerGroupTab);
-        me.layerTabs.push(orgTab);
-
-        // add published tab based on config
-        /*if (me.instance.conf && me.instance.conf.showPublishedTab === true) {
-            publishedTab = Oskari.clazz.create(
-                'Oskari.framework.bundle.hierarchical-layerlist.view.PublishedLayersTab',
-                me.instance,
-                me.instance.getLocalization('filter').published
-            );
-            this.layerTabs.push(publishedTab);
-        }*/
 
         elParent = this.container.parentElement.parentElement;
         elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
@@ -282,6 +254,11 @@ function (instance) {
             tab = me.layerTabs[i];
             me.tabContainer.addPanel(tab.getTabPanel());
         }
+
+
+        // Add other tabs
+        var selectedTab = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.view.SelectedLayersTab', me.instance);
+        me.tabContainer.addPanel(selectedTab.getTabPanel());
 
         me.tabContainer.addTabChangeListener(
             function (previousTab, newTab) {
