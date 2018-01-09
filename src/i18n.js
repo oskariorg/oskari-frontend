@@ -1,10 +1,11 @@
 /**
  * Adds internalization support for Oskari
  */
-(function(O) {
-	var oskariLang = 'en';
-	var localizations = {};
-	var supportedLocales = null;
+(function (O) {
+    var oskariLang = 'en';
+    var localizations = {};
+    var supportedLocales = null;
+    var log = Oskari.log('Oskari.deprecated');
 
     // ------------------------------------------------
     // Locales/lang
@@ -65,10 +66,10 @@
      * @return {string[]} Supported languages
      */
     O.getSupportedLanguages = function () {
-        var langs = [],
-            supported = O.getSupportedLocales(),
-            locale,
-            i;
+        var langs = [];
+        var supported = O.getSupportedLocales();
+        var locale;
+        var i;
 
         for (i = 0; i < supported.length; i += 1) {
             locale = supported[i];
@@ -87,7 +88,7 @@
     O.getDefaultLanguage = function () {
         var supported = O.getSupportedLocales();
 
-        if(supported.length === 0) {
+        if (supported.length === 0) {
             return this.getLang();
         }
         var locale = supported[0];
@@ -97,7 +98,6 @@
         }
         return this.getLang();
     };
-
 
     // ------------------------------------------------
     // Locale strings
@@ -135,7 +135,8 @@
      * @param  {boolean} fallbackToDefault whether to fall back to Oskari Default language in case localization is not found for given lang
      * @return {string}     Localized value for key
      */
-	O.getLocalization = function (key, lang, fallbackToDefault) {
+    O.getLocalization = function (key, lang, fallbackToDefault) {
+        log.deprecated('Oskari.getLocalization()', 'Use Oskari.getMsg() instead.');
         var l = lang || oskariLang;
         if (key === null || key === undefined) {
             throw new TypeError(
@@ -145,7 +146,7 @@
         if (!localizations) {
             return null;
         }
-        if(localizations[l] && localizations[l][key]) {
+        if (localizations[l] && localizations[l][key]) {
             return localizations[l][key];
         } else {
             var defaultLang = O.getDefaultLanguage();
@@ -176,49 +177,45 @@
             for (p = 0; p < props.length; p += 1) {
                 pp = props[p];
 
-                if(override && override === true){
-                    if(pp.key && pp.lang){
+                if (override && override === true) {
+                    if (pp.key && pp.lang) {
                         loc = O.getLocalization(pp.key, pp.lang);
                     }
 
-                    if(loc && loc !== null){
+                    if (loc && loc !== null) {
                         pp.value = jQuery.extend(true, {}, loc, pp.value);
                     }
-
                 } else {
-                    if(pp.key && pp.lang){
+                    if (pp.key && pp.lang) {
                         loc = O.getLocalization(pp.key, pp.lang);
                     }
 
-                    if(loc && loc !== null){
+                    if (loc && loc !== null) {
                         pp.value = jQuery.extend(true, {}, pp.value, loc);
                     }
                 }
 
                 setLocalization(pp.lang, pp.key, pp.value);
             }
-
         } else {
-            if(override && override === true){
-                if(props.key && props.lang){
+            if (override && override === true) {
+                if (props.key && props.lang) {
                     loc = O.getLocalization(props.key, props.lang);
                 }
 
-                if(loc && loc !== null){
+                if (loc && loc !== null) {
                     props.value = jQuery.extend(true, {}, loc, props.value);
                 }
-
             } else {
-                if(props.key && props.lang){
+                if (props.key && props.lang) {
                     loc = O.getLocalization(props.key, props.lang);
                 }
 
-                if(loc && loc !== null){
+                if (loc && loc !== null) {
                     props.value = jQuery.extend(true, {}, props.value, loc);
                 }
             }
-            setLocalization(props.lang,props.key,props.value);
-
+            setLocalization(props.lang, props.key, props.value);
         }
     };
 
@@ -234,7 +231,7 @@
      *
      */
     O.setDecimalSeparator = function (separator) {
-        if(!separator) {
+        if (!separator) {
             return;
         }
         decimalSeparator = separator;
@@ -244,14 +241,14 @@
      *
      * @return {string} Decimal separator
      */
-    O.getDecimalSeparator =  function () {
+    O.getDecimalSeparator = function () {
         return decimalSeparator || ',';
     };
 
     /**
      * Returns a string from localized content.
      */
-     O.getLocalized = function (locale, lang) {
+    O.getLocalized = function (locale, lang) {
         if (typeof locale !== 'object') {
             return locale;
         }
@@ -259,18 +256,53 @@
             lang = Oskari.getLang();
         }
         var value = locale[lang];
-        if(!value) {
+        if (!value) {
             value = locale[Oskari.getDefaultLanguage()];
         }
-        if(!value) {
-            for(var key in locale) {
-                if(locale[key]) {
+        if (!value) {
+            for (var key in locale) {
+                if (locale[key]) {
                     // any locale will do at this point
                     return locale[key];
                 }
             }
-
         }
         return value;
+    };
+    var intlCache = {};
+    function resolvePath(key, path) {
+        var ob = O.getLocalization(key);
+        var parts = path.split('.');
+        for (var i = 0; i < parts.length; i++) {
+            ob = ob[parts[i]];
+            if (!ob) {
+                if(i === parts.length-1 && ob === '') {
+                    return ob;
+                }
+                return null;
+            }
+        }
+        return ob;
+    }
+    O.getMsg = function (key, path, values) {
+        var message;
+        if (!values) {
+            message = resolvePath(key, path);
+            if(message === null) {
+                return path;
+            }
+            return message;
+        }
+        var cacheKey = oskariLang + '_' + key + '_' + path;
+        var formatter = intlCache[cacheKey];
+        if (!formatter) {
+            message = resolvePath(key, path);
+            if(message === null) {
+                return path;
+            }
+            formatter = new IntlMessageFormat(message, oskariLang);
+            intlCache[cacheKey] = formatter;
+        }
+        return formatter.format(values);
     };
 }(Oskari));

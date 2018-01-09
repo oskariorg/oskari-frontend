@@ -106,19 +106,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
             // Let's add publishable filter to layerlist if user is logged in
             if(Oskari.user().isLoggedIn()) {
-                request = Oskari.requestBuilder('AddLayerListFilterRequest')(
-                    loc.layerFilter.buttons.publishable,
-                    loc.layerFilter.tooltips.publishable,
-                    function(layer){
-                        return (layer.getPermission('publish') === 'publication_permission_ok');
-                    },
-                    'layer-publishable',
-                    'layer-publishable-disabled',
-                    'publishable'
-                );
+                var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+                mapLayerService.registerLayerFilter('publishable', function(layer){
+                    return (layer.getPermission('publish') === 'publication_permission_ok');
+                });
 
-                sandbox.request(this, request);
+                // Add layerlist filter button
+                Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+                        loc.layerFilter.buttons.publishable,
+                        loc.layerFilter.tooltips.publishable,
+                        'layer-publishable',
+                        'layer-publishable-disabled',
+                        'publishable'
+                ]);
             }
+            this._registerForGuidedTour();
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
@@ -234,6 +236,90 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 }
             }
             return deniedLayers;
+        },
+        /**
+         * @static
+         * @property __guidedTourDelegateTemplate
+         * Delegate object given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        __guidedTourDelegateTemplate: {
+            priority: 40,
+            show: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
+            },
+            hide: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']);
+            },
+            getTitle: function () {
+                return this.getLocalization().guidedTour.title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.message);
+                return content;
+            },
+            getLinks: function() {
+                var me = this;
+                var loc = this.getLocalization().guidedTour;
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.bind('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.bind('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']);
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                closeLink.show();
+                openLink.hide();
+                return [openLink, closeLink];
+            }
+        },
+
+        /**
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
+         */
+        _registerForGuidedTour: function() {
+            var me = this;
+            function sendRegister() {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if(requestBuilder){
+                    var delegate = {
+                        bundleName: me.getName()
+                    };
+                    for(var prop in me.__guidedTourDelegateTemplate){
+                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
+                        } else {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
+                        }
+                    }
+                    me.sandbox.request(me, requestBuilder(delegate));
+                }
+            }
+
+            function handler(msg){
+                if(msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            if(tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]

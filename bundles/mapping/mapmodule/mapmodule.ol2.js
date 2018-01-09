@@ -180,7 +180,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         getMapZoom: function () {
-            return this.getMap().getZoom();
+            // Touch devices zoom level (after pinch zoom) may contains decimals
+            // for this reason zoom need rounded to nearest integer.
+            // Tested with Android pinch zoom.
+            return Math.round(this.getMap().getZoom());
         },
 
         getSize: function() {
@@ -202,7 +205,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToExtent: function (bounds, suppressStart, suppressEnd) {
-            this.getMap().zoomToExtent(bounds);
+            // OpenLayers.Bounds or Array (left, bottom, right, top)
+            this.getMap().zoomToExtent(new OpenLayers.Bounds(bounds.left, bounds.bottom, bounds.right, bounds.top));
             this.updateDomain();
             // send note about map change
             if (suppressStart !== true) {
@@ -457,12 +461,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} ol2 specific style hash
          */
         getStyle : function(styleDef) {
-            var me = this;
-            var style = jQuery.extend(true, {}, styleDef);
+            var me = this,
+                style = jQuery.extend(true, {}, styleDef),
+                size;
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
+            // use sizePx if given
+            if (style.image && style.image.sizePx){
+                size = style.image.sizePx;
+            } else if (style.image && style.image.size){
+                size = this.getPixelForSize(style.image.size);
+            } else {
+                size = this._defaultMarker.size;
+            }
 
-            var size = (style.image && style.image.size) ? this.getMarkerIconSize(style.image.size) : this._defaultMarker.size;
+            if(typeof size !== 'number'){
+                size = this._defaultMarker.size;
+            }
+
             olStyle.graphicWidth = size;
             olStyle.graphicHeight = size;
 
@@ -518,6 +534,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(split[2]) {
                 olStyle.fontFamily = split[2];
             }
+          }
+
+          if(style.text.stroke && typeof style.text.stroke.width === 'number') {
+            olStyle.labelOutlineWidth = style.text.stroke.width;
+          }
+
+          if(Oskari.util.keyExists(style, 'fill.color')) {
+                olStyle.fillColor = style.fill.color;
           }
           if(Oskari.util.keyExists(style.text, 'fill.color')) {
               olStyle.fontColor = style.text.fill.color;

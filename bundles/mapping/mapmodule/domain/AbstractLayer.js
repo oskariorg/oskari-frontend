@@ -135,6 +135,10 @@ Oskari.clazz.define(
 
         me._created = null;
 
+        me.loading = 0;
+        me.loaded = 0;
+        me.tilesToLoad = 0;
+        me.errors = 0;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -202,12 +206,7 @@ Oskari.clazz.define(
          * (e.g. MapLayerService)
          */
         setId: function (id) {
-            //if (typeof id !== 'string') {
-            //    //console.warn('ID not passed as string:', id);
-            //    this._id = String(id);
-            //} else {
             this._id = id;
-            //}
         },
         /**
          * @method getId
@@ -261,7 +260,15 @@ Oskari.clazz.define(
          *          name for the maplayer that is shown in UI
          */
         setName: function (name) {
-            this._name = name;
+            if (name && typeof name === 'object') {
+                var values = {};
+                Object.keys(name).forEach(function(key) {
+                    values[key] = Oskari.util.sanitize(name[key]);
+                });
+                this._name = values;
+            } else {
+                this._name = Oskari.util.sanitize(name);
+            }
         },
         /**
          * Returns a name for the layer.
@@ -324,7 +331,15 @@ Oskari.clazz.define(
          *          organization name under which the layer is listed in UI
          */
         setOrganizationName: function (param) {
-            this._organizationName = param;
+            if (param && typeof param === 'object') {
+                var values = {};
+                Object.keys(param).forEach(function(key) {
+                    values[key] = Oskari.util.sanitize(param[key]);
+                });
+                this._organizationName = values;
+            } else {
+                this._organizationName = Oskari.util.sanitize(param);
+            }
         },
         /**
          * Returns a organization name for the layer.
@@ -354,7 +369,15 @@ Oskari.clazz.define(
          *          inspire theme name under which the layer is listed in UI
          */
         setInspireName: function (param) {
-            this._inspireName = param;
+            if (param && typeof param === 'object') {
+                var values = {};
+                Object.keys(param).forEach(function(key) {
+                    values[key] = Oskari.util.sanitize(param[key]);
+                });
+                this._inspireName = values;
+            } else {
+                this._inspireName = Oskari.util.sanitize(param);
+            }
         },
         /**
          * Returns an inspire name for the layer.
@@ -421,9 +444,74 @@ Oskari.clazz.define(
                 if(!value) {
                     value = this._description[Oskari.getDefaultLanguage()];
                 }
-                return value;
+                return Oskari.util.sanitize(value);
             }
-            return this._description;
+            return Oskari.util.sanitize(this._description);
+        },
+        /**
+         * Called when openlayers 2/3 starts loading tiles
+         * @method loadingStarted
+         * @param {Number} {optional} remaining
+         * @return {Number} number of currently loading items
+         */
+        loadingStarted: function(remaining) {
+
+          if(typeof remaining === 'undefined'){
+            this.loading +=1;
+          } else {
+            this.loading = remaining;
+          }
+          this.tilesToLoad = this.loading;
+
+          return this.loading === 1;
+        },
+        /**
+         * Called when openlayers 2/3 tileloadend event fires
+         * @method loadingDone
+         * @param {Number} {optional} remaining
+         * @return {Number} number of not yet loaded
+         */
+        loadingDone: function(remaining) {
+
+          if(typeof remaining === 'undefined'){
+            this.loading -=1;
+          } else {
+            this.loading = remaining;
+          }
+          this.loaded += 1;
+          return this.loading === 0;
+        },
+        /**
+         * Called when openlayers 2/3 tileloaderror event fires
+         * @method loadingError
+         * Increments the amount of errors for the layers
+         */
+        loadingError: function(errors) {
+
+          if(typeof errors === 'undefined'){
+            this.errors += 1;
+          } else {
+            this.errors = errors;
+          }
+          return this.errors;
+        },
+        /**
+         * Check if all the tiles/features have been loaded
+         * @method checkIfAllLoaded
+         * @return {boolean} true if this.loading === 0, else false
+         */
+        getLoadingState: function() {
+          var state = {
+            'loading': this.loading,
+            'loaded': this.loaded,
+            'errors': this.errors
+          };
+          return state;
+        },
+        resetLoadingState: function(){
+          this.loaded = 0;
+          this.errors = 0;
+          this.tilesToLoad = 0;
         },
         /**
          * @method addSubLayer
@@ -1127,6 +1215,14 @@ Oskari.clazz.define(
          */
         isRealtime: function () {
             return this._realtime;
+        },
+        /**
+         * @method hasTimeseries
+         * @return {Boolean}
+         * Has timeseries data
+         */
+        hasTimeseries: function () {
+            return !!this.getAttributes().times;
         },
         /**
          * @method setRefreshRate

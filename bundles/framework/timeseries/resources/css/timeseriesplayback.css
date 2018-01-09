@@ -6,6 +6,17 @@ div.mapplugin.timeseries {
   z-index: 100000;
   position: absolute;
   opacity: 0.9; }
+  div.mapplugin.timeseries div.timestep-holder {
+    margin-top: 10px;
+    float: left;
+    width: 90px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background: #333438;
+    margin-left: 10px; }
+    div.mapplugin.timeseries div.timestep-holder select {
+      width: calc(100% - 10px); }
   div.mapplugin.timeseries div.playback-button {
     margin-top: 10px;
     float: left; }
@@ -52,7 +63,7 @@ div.mapplugin.timeseries {
         right: 16.6666666667px; }
   div.mapplugin.timeseries .oskari-timeslider {
     margin-top: 10px;
-    width: 90%;
+    width: 80%;
     height: 40px;
     background-color: #333438;
     float: left; }

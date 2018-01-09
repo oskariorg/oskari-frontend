@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Картни слоеве",
+            "message": "Може да селектирате резултатите за данни да бъдат показани на картата чрез избиране на картни слоеве. Щракнете върху категория, за да я отворите, и селектирайте слой, или напишете няколко букви, които са част от името на данните, които търсите, в полето за Търсене.",
+            "openLink": "Показване на  картни слоеве",
+            "closeLink": "Скриване на  картни слоеве",
+            "tileText": "Картни слоеве"
         }
     }
 });

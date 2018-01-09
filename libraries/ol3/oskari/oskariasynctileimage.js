@@ -2,6 +2,8 @@ goog.provide('ol.source.OskariAsyncTileImage');
 goog.require('ol.Tile');
 goog.require('ol.proj');
 goog.require('ol.source.TileImage');
+goog.require('ol.events');
+goog.require('ol.tilecoord');
 
 /**
  * @classdesc
@@ -84,13 +86,6 @@ ol.source.OskariAsyncTileImage.prototype.getWFSTileCache_ = function() {
     return this.tileLayerCache;
 };
 
-ol.source.OskariAsyncTileImage.prototype.purgeWFSTileCache_ = function() {
-    var me = this,
-        wfsTileCache = this.getWFSTileCache_(),
-        layerTileInfos = wfsTileCache.tileInfos,
-        lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
-};
-
 /**
  * @api
  */
@@ -98,14 +93,10 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
     var result = [],
         i,
         me = this,
-        bboxKey,
-        dataForTile;
+        bboxKey;
 
-    var wfsTileCache = me.getWFSTileCache_(),
-        layerTileInfos = wfsTileCache.tileInfos,
-        lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
-
-    this.purgeWFSTileCache_();
+    var wfsTileCache = me.getWFSTileCache_();
+        var layerTileInfos = wfsTileCache.tileInfos;
 
     wfsTileCache.tileSetIdentifier =  ++wfsTileCache.tileSetIdentifier ;
     for (i = 0; i < grid.bounds.length; i += 1) {
@@ -226,7 +217,6 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
       return;
     }
 
-    var tileCache = this.getWFSTileCache_();
     var layerTileInfos = this.getWFSTileCache_().tileInfos;
     var tileInfo = layerTileInfos[bboxKey],
         tileCoord = tileInfo ? tileInfo.tileCoord: undefined,

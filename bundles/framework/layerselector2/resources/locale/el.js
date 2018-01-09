@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Επίπεδα χάρτη",
+            "message": "Μπορείτε να επιλέξετε τα δεδομένα που θα προβάλλονται στον χάρτη μέσω των επιπέδων του χάρτη.Κάντε κλικ σε μια κατηγορία για να την ανοίξετε και επιλέξτε ένα επίπεδο, ή γράψτε μερικά γράμματα  από τα δεδομένα στο πεσδίο αναζήτησης.",
+            "openLink": "Εμφάνιση επιπέδων χάρτη",
+            "closeLink": "Απόκρυψη επιπέδων χάρτη",
+            "tileText": "Επίπεδα χάρτη"
         }
     }
 });

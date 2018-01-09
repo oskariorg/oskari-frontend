@@ -107,6 +107,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 url;
             // underscore templates don't like missing values, so let's extend empty strings and arrays...
             dataTemplate = {
+                dataQualityObject: {},
                 dataQualities: [],
                 distributionFormats: [],
                 fileIdentifier: '',

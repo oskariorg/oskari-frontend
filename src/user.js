@@ -1,16 +1,16 @@
 
-(function(Oskari){
-    if(!Oskari) {
+(function (Oskari) {
+    if (!Oskari) {
         // can't add functions if no Oskari ref
         return;
     }
     var user = null;
-    Oskari.user = function(data) {
-        if(user === null) {
+    Oskari.user = function (data) {
+        if (user === null) {
             // always setup user if null, even without data
             user = Oskari.clazz.create('Oskari.User', data);
         }
-        if(typeof data === 'undefined') {
+        if (typeof data === 'undefined') {
             // getter
             return user;
         }
@@ -64,7 +64,7 @@
              *            name
              */
             getName: function () {
-                return this._firstName + " " + this._lastName;
+                return this._firstName + ' ' + this._lastName;
             },
             /**
              * @method getFirstName
@@ -164,16 +164,16 @@
              * @return {Boolean} true if any id match roles that user has
              */
             hasRole: function (idList) {
-                if(typeof idList === 'number') {
+                if (typeof idList === 'number') {
                     idList = [idList];
                 }
-                if(!idList || typeof idList.forEach !== 'function') {
+                if (!idList || typeof idList.forEach !== 'function') {
                     return false;
                 }
                 var found = false;
                 var userRoles = this.getRoles();
-                userRoles.forEach(function(role) {
-                    if(idList.indexOf(role.id) !== -1) {
+                userRoles.forEach(function (role) {
+                    if (idList.indexOf(role.id) !== -1) {
                         found = true;
                     }
                 });

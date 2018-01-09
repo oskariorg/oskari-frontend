@@ -1,20 +1,6 @@
 {
-    "startupSequence": [{      
-            "bundleinstancename": "oskariui",
-            "bundlename": "oskariui",
-            "instanceProps": {},
-            "metadata": {
-                "Import-Bundle": {
-                    "oskariui": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {         
-            "bundleinstancename": "openlayers-default-theme",
+    "startupSequence": [{
             "bundlename": "openlayers-default-theme",
-            "instanceProps": {},
             "metadata": {
                 "Import-Bundle": {
                     "openlayers-default-theme": {
@@ -23,36 +9,12 @@
                     "openlayers-full-map": {
                         "bundlePath": "../../../packages/openlayers/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
-        },
-
-        {        
-            "bundleinstancename": "mapfull",
+        }, {
             "bundlename": "mapfull",
-            "instanceProps": {},
             "metadata": {
                 "Import-Bundle": {
-
-                    "core-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "core-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "domain": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "event-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "event-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "event-map-layer": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
                     "mapfull": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
@@ -62,180 +24,104 @@
                     "mapwmts": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
+                    "mapwfs2": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
                     "maparcgis": {
                         "bundlePath": "../../../packages/arcgis/bundle/"
                     },
-                    "request-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "request-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "request-map-layer": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "sandbox-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "sandbox-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "service-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "service-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
                     "ui-components": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "oskariui": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
 
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
-            "bundleinstancename": "divmanazer",
-            "bundlename": "divmanazer",
-            "instanceProps": {},
-            "metadata": {
-                "Import-Bundle": {
-                    "divmanazer": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "Oskari DIV Manazer",
-            "bundleinstancename": "divmanazer",
-            "fi": "Oskari DIV Manazer",
-            "sv": "?",
-            "en": "Oskari DIV Manazer",
             "bundlename": "divmanazer",
             "metadata": {
                 "Import-Bundle": {
                     "divmanazer": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
-            "instanceProps": {},
-            "title": "Toolbar",
-            "bundleinstancename": "toolbar",
-            "fi": "toolbar",
-            "sv": "?",
-            "en": "?",
+            "bundlename": "divmanazer",
+            "metadata": {
+                "Import-Bundle": {
+                    "divmanazer": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
             "bundlename": "toolbar",
             "metadata": {
                 "Import-Bundle": {
                     "toolbar": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
-            "instanceProps": {},
-            "title": "Info Box",
-            "bundleinstancename": "infobox",
-            "fi": "infobox",
-            "sv": "?",
-            "en": "?",
             "bundlename": "infobox",
             "metadata": {
                 "Import-Bundle": {
                     "infobox": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         },  {
-            "instanceProps": {},
-            "title": "Haku",
-            "bundleinstancename": "search",
-            "fi": "search",
-            "sv": "?",
-            "en": "?",
             "bundlename": "search",
             "metadata": {
                 "Import-Bundle": {
                     "search": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
-            "instanceProps": {},
-            "title": "metadatacatalogue",
-            "bundleinstancename": "metadatacatalogue",
-            "fi": "metadatacatalogue",
-            "sv": "metadatacatalogue",
-            "en": "metadatacatalogue",
             "bundlename": "metadatacatalogue",
             "metadata": {
                 "Import-Bundle": {
                     "metadatacatalogue": {
                         "bundlePath": "../../../packages/catalogue/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
-            "instanceProps": {},
-            "title": "metadataflyout",
-            "bundleinstancename": "metadataflyout",
-            "fi": "metadataflyout",
-            "sv": "metadataflyout",
-            "en": "metadataflyout",
             "bundlename": "metadataflyout",
             "metadata": {
                 "Import-Bundle": {
                     "metadataflyout": {
                         "bundlePath": "../../../packages/catalogue/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         },  {
-            "instanceProps": {},
-            "title": "Karttatasot",
-            "bundleinstancename": "layerselector2",
-            "fi": "layerselector",
-            "sv": "?",
-            "en": "?",
             "bundlename": "layerselector2",
             "metadata": {
                 "Import-Bundle": {
                     "layerselector2": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
-            "instanceProps": {},
-            "title": "Valitut karttatasot",
-            "bundleinstancename": "layerselection2",
-            "fi": "layerselection",
-            "sv": "?",
-            "en": "?",
             "bundlename": "layerselection2",
             "metadata": {
                 "Import-Bundle": {
                     "layerselection2": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
             "bundlename" : "coordinatetool",
-            "bundleinstancename" : "coordinatetool",
             "metadata" : {
                 "Import-Bundle" : {
                     "coordinatetool" : {
@@ -244,53 +130,31 @@
                 }
             }
         }, {
-            "title": "PostProcessor",
-            "fi": "PostProcessor",
-            "sv": "PostProcessor",
-            "en": "PostProcessor",
             "bundlename": "postprocessor",
-            "bundleinstancename": "postprocessor",
             "metadata": {
                 "Import-Bundle": {
                     "postprocessor": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
-            },
-            "instanceProps": {}
-        },{ 
-        "title" : "statehandler",
-        "en" : "statehandler",
-        "fi" : "statehandler",
-        "sv" : "statehandler",
-        "bundleinstancename" : "statehandler",
-        "bundlename" : "statehandler",
-        "instanceProps" : {  },
-        "metadata" : { 
-            "Import-Bundle" : { 
-                "statehandler" : { "bundlePath" : "../../../packages/framework/bundle/" } 
-            },
-            "Require-Bundle-Instance" : [  ]
-        }
+                }
+            }
+        },{
+            "bundlename" : "statehandler",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "statehandler" : { "bundlePath" : "../../../packages/framework/bundle/" }
+                }
+            }
         }, {
-            "instanceProps": {},
-            "title": "Omat tiedot",
-            "bundleinstancename": "personaldata",
-            "fi": "personaldata",
-            "sv": "?",
-            "en": "?",
             "bundlename": "personaldata",
             "metadata": {
                 "Import-Bundle": {
                     "personaldata": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
       }, {
-            "bundleinstancename": "publisher2",
             "bundlename": "publisher2",
             "metadata": {
                 "Import-Bundle": {
@@ -300,7 +164,6 @@
                 }
             }
         }, {
-            "bundleinstancename": "maplegend",
             "bundlename": "maplegend",
             "metadata": {
                 "Import-Bundle": {
@@ -310,7 +173,6 @@
                 }
             }
         }, {
-            "bundleinstancename": "admin-layerselector",
             "bundlename": "admin-layerselector",
             "metadata": {
                 "Import-Bundle": {
@@ -324,7 +186,6 @@
             }
         }, {
             "bundlename": "admin-layerrights",
-            "bundleinstancename": "admin-layerrights",
             "metadata": {
                 "Import-Bundle": {
                     "admin-layerrights": {
@@ -334,7 +195,6 @@
             }
         }, {
             "bundlename" : "admin-users",
-            "bundleinstancename" : "admin-users",
             "metadata" : {
                 "Import-Bundle" : {
                     "admin-users" : {
@@ -344,7 +204,6 @@
             }
         }, {
             "bundlename" : "admin",
-            "bundleinstancename" : "admin",
             "metadata" : {
                 "Import-Bundle" : {
                     "admin" : {
@@ -353,7 +212,6 @@
                 }
             }
         }, {
-            "title": "Timeseries",
             "bundlename": "timeseries",
             "metadata": {
                 "Import-Bundle": {
@@ -363,7 +221,6 @@
                 }
             }
         }, {
-            "title": "ASDI login",
             "bundlename": "asdi-login",
             "metadata": {
                 "Import-Bundle": {
@@ -378,6 +235,15 @@
                 "Import-Bundle": {
                     "asdi-guided-tour": {
                         "bundlePath": "../../../packages/asdi/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "featuredata2",
+            "metadata": {
+                "Import-Bundle": {
+                    "featuredata2": {
+                        "bundlePath": "../../../packages/framework/bundle/"
                     }
                 }
             }

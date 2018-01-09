@@ -1,5 +1,15 @@
 {
-    "startupSequence": [{
+    "startupSequence": [
+        {
+            "bundlename": "lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "lang-overrides": {
+                        "bundlePath": "../../../packages/paikkatietoikkuna/"
+                    }
+                }
+            }
+        }, {
         "bundlename": "mapfull",
         "metadata": {
             "Import-Bundle" : {
@@ -146,21 +156,32 @@
         }
     },
     {
-            "title": "PostProcessor",
-            "fi": "PostProcessor",
-            "sv": "PostProcessor",
-            "en": "PostProcessor",
+        "bundlename": "maprotator",
+        "metadata": {
+            "Import-Bundle": {
+                "maprotator": {
+                    "bundlePath": "../../../packages/mapping/ol3/"
+                }
+            }
+        }
+    }, {
+        "bundlename": "maplegend",
+        "metadata": {
+            "Import-Bundle": {
+                "maplegend": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }, {
             "bundlename": "postprocessor",
-            "bundleinstancename": "postprocessor",
             "metadata": {
                 "Import-Bundle": {
                     "postprocessor": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
-            },
-            "instanceProps": {}
+                }
+            }
         }
 ]
 }

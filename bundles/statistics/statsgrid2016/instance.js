@@ -16,7 +16,8 @@ Oskari.clazz.define(
             sandbox: 'sandbox',
             stateful: true,
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
+            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout',
+            vectorViewer: false
         };
         this.visible = false;
 
@@ -25,6 +26,8 @@ Oskari.clazz.define(
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
+
+        this.regionsetViewer = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -36,6 +39,12 @@ Oskari.clazz.define(
             me.statsService = statsService;
 
             var conf = this.getConfiguration() || {};
+
+            // Check if vector is configurated
+            // If it is set map modes to support also vector
+            if(conf && conf.vectorViewer === true) {
+                me.statsService.setMapModes(['wms','vector']);
+            }
             statsService.addDatasource(conf.sources);
             // disable tile if we don't have anything to show or enable if we do
             this.getTile().setEnabled(this.hasData());
@@ -58,12 +67,15 @@ Oskari.clazz.define(
             if(dsiservice) {
                 dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
             }
+
+            // regionsetViewer creation need be there because of start order
+            this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
         },
         hasData: function () {
-            return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
+            return this.statsService.getDatasource().length;
         },
 
         /**
@@ -101,16 +113,21 @@ Oskari.clazz.define(
                     indicator : id,
                     selections : selections
                 }, function(labels) {
+                    var datasource = me.statsService.getDatasource(ds);
+
                     var data = {
                         'id' : dsid,
                         'name' : labels.indicator,
-                        'source' : labels.source
+                        'source' : [labels.source, {
+                            name : datasource.name,
+                            url : datasource.info.url
+                        }]
                     };
                     if(!service.addItemToGroup('indicators', data)) {
                         // if adding failed, it might because group was not registered.
                         service.addGroup('indicators', me.getLocalization().dataProviderInfoTitle || 'Indicators');
                         // Try adding again
-                        service.addItemToGroup('indicators', data)
+                        service.addItemToGroup('indicators', data);
                     }
                 });
         },
@@ -174,6 +191,9 @@ Oskari.clazz.define(
              *
              */
             MapLayerEvent: function (event) {
+                if(!this.getTile()) {
+                    return;
+                }
                 // Enable tile when stats layer is available
                 this.getTile().setEnabled(this.hasData());
                 // setup tools for new layers
@@ -188,8 +208,13 @@ Oskari.clazz.define(
                     // ajax call for all layers
                     this.__setupLayerTools();
                 }
-
-            }
+            },
+            FeatureEvent: function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
+            AfterChangeMapLayerOpacityEvent: function (evt) {
+                 this.statsService.notifyOskariEvent(evt);
+             }
         },
 
         /**
@@ -262,6 +287,10 @@ Oskari.clazz.define(
                 service.setActiveIndicator(state.active);
             }
 
+            if(state.activeRegion) {
+                service.toggleRegion(state.activeRegion);
+            }
+
             // if state says view was visible fire up the UI, otherwise close it
             var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
@@ -271,9 +300,9 @@ Oskari.clazz.define(
             var me = this;
             var service = this.statsService.getStateService();
             var state = {
-                indicators : [],
-                regionset : service.getRegionset(),
-                view :me.visible
+                indicators: [],
+                regionset: service.getRegionset(),
+                view: me.visible
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({
@@ -286,6 +315,11 @@ Oskari.clazz.define(
             var active = service.getActiveIndicator();
             if(active) {
                 state.active = active.hash;
+            }
+
+            var activeRegion = service.getRegion();
+            if(activeRegion) {
+                state.activeRegion = activeRegion;
             }
             return state;
         },
@@ -310,6 +344,7 @@ Oskari.clazz.define(
         },
         /**
          * @method  @public showLegendOnMap Render published  legend
+         * This method is also used to setup functionalities for publisher preview
          */
         showLegendOnMap: function(enabled){
             var me = this;
@@ -341,7 +376,7 @@ Oskari.clazz.define(
 
         /**
          * @method  @public enableClassification change published map classification visibility.
-         * @param  {Boolean} visible visible or not
+         * @param  {Boolean} enabled allow user to change classification or not
          */
         enableClassification: function(enabled) {
             if(!this.plugin) {

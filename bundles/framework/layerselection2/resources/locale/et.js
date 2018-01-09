@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Loogiline operaator puudub."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Valitud kaardikihid",
+            "message": "Kaardikihtide kuvamise järjestust saab muuta klikkimise ja vedamisega, samuti saab muuta nende läbipaistvust. Muudatused väljenduvad kaardiaknas.",
+            "openLink": "Näita valitud kaardikihte",
+            "closeLink": "Peida valitud kaardikihid",
+            "tileText": "Valitud kaardikihid"
         }
     }
 });

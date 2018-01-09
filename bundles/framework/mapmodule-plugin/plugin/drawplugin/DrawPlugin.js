@@ -10,6 +10,7 @@ Oskari.clazz.define(
         me._name = 'DrawPlugin';
 
         me.drawControls = null;
+        me.currentDrawing = null;
         me.drawLayer = null;
         me.editMode = false;
         me.currentDrawMode = null;
@@ -47,9 +48,12 @@ Oskari.clazz.define(
          */
         startDrawing: function (params) {
             this.getMapModule().bringToTop(this.drawLayer);
+            // no harm in activating straight away
+            this.modifyControls.modify.activate();
             if (params.isModify) {
                 // preselect it for modification
                 this.modifyControls.select.select(this.drawLayer.features[0]);
+
             } else {
                 // Solve OL problem in select modify feature
                 if(this.modifyControls.modify.feature){
@@ -89,12 +93,46 @@ Oskari.clazz.define(
             // disable all draw controls
             this.toggleControl();
             // clear drawing
+            this.currentDrawing = null;
             if (this.drawLayer) {
                 this.drawLayer.destroyFeatures();
+                // no harm in activating straight away
+                this.modifyControls.modify.deactivate();
             }
         },
 
         forceFinishDraw: function () {
+            var activeControls = this._getActiveDrawControls(),
+                drawControls = this.drawControls,
+                drawLayer = this.drawLayer;
+
+            for (i = 0; i < activeControls.length; i += 1) {
+                activeControl = activeControls[i];
+                switch (activeControl) {
+                    case 'point':
+                        if(drawLayer.features.length === 0){
+                            return;
+                        }
+                        break;
+                    case 'line':
+                        if (!drawControls.line.handler.line){
+                            return;
+                        }
+                        if (drawControls.line.handler.line.geometry.components.length < 3 && drawLayer.features.length === 0) {
+                            return;
+                        }
+                        break;
+                    case 'area':
+                        if (!drawControls.area.handler.polygon){
+                            return;
+                        }
+                        components = drawControls.area.handler.polygon.geometry.components;
+                        if (components[components.length - 1].components.length < 5 && drawLayer.features.length === 0) {
+                            return;
+                        }
+                        break;
+                }
+            };
             try {
                 //needed when preparing unfinished objects but causes unwanted features into the layer:
                 //this.drawControls[this.currentDrawMode].finishSketch();
@@ -139,13 +177,13 @@ Oskari.clazz.define(
                         // No need to finish geometry if already finished
                         switch (activeControl) {
                             case 'line':
-                                if (drawControls.line.handler.line.geometry.components.length < 2) {
+                                if (drawControls.line.handler.line.geometry.components.length < 3) {
                                     continue;
                                 }
                                 break;
                             case 'area':
                                 components = drawControls.area.handler.polygon.geometry.components;
-                                if (components[components.length - 1].components.length < 3) {
+                                if (components[components.length - 1].components.length < 5) {
                                     continue;
                                 }
                                 break;
@@ -242,7 +280,7 @@ Oskari.clazz.define(
                             me.finishedDrawing();
                         },
                         vertexmodified: function (event) {
-                            me._sendActiveGeometry(me.getDrawing());
+                            me._sendActiveGeometry(event.feature.geometry);
                         }
                     }
                 });
@@ -324,6 +362,7 @@ Oskari.clazz.define(
                     standalone: true
                 })
             };
+
             me.modifyControls.select = new OpenLayers.Control.SelectFeature(
                 me.drawLayer,
                 {
@@ -333,6 +372,7 @@ Oskari.clazz.define(
                     scope: me.modifyControls.modify
                 }
             );
+
 
             me.getMap().addLayers([me.drawLayer]);
             for (key in me.drawControls) {
@@ -345,8 +385,6 @@ Oskari.clazz.define(
                     me.getMap().addControl(me.modifyControls[key]);
                 }
             }
-            // no harm in activating straight away
-            me.modifyControls.modify.activate();
         },
 
         _createRequestHandlers: function () {
@@ -418,6 +456,7 @@ Oskari.clazz.define(
                     drawing = new OpenLayers.Geometry.MultiPolygon(components);
                     break;
             }
+            this.currentDrawing = drawing;
             return drawing;
         },
 
@@ -437,7 +476,7 @@ Oskari.clazz.define(
          * @return {OpenLayers.Geometry}
          */
         getActiveDrawing: function (geometry) {
-            var prevGeom = this.getDrawing(),
+            var prevGeom = this.currentDrawing,
                 composedGeom;
 
             if (prevGeom !== null && prevGeom !== undefined) {

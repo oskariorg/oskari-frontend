@@ -63,8 +63,11 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Kartlagren meny",
                 "CoordinateToolPlugin": "Koordinat verktyg",
                 "FeedbackServiceTool": "Feedback (Open311) functionality",
+                "MapLegend": "Visa kartförklaringen",
+                "MapRotator": "Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
                 "toolbarToolNames": {
+                    "history": "Gå bakåt eller framåt",
                     "history_back": "Gå bakåt",
                     "history_forward": "Gå framåt",
                     "measureline": "Mät avstånd",
@@ -200,9 +203,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Du kan skapa inbäddade kartor efter att du har loggat in på tjänsten.",
             "signup": "Logga in",
-            "signupUrl": "/web/sv/login",
-            "register": "Registrera dig",
-            "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrera dig"
         },
         "StartView": {
             "text": "Du kan inbädda den kartvy som du har definierat här på din egen webbplats.",
@@ -242,6 +243,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Visa endast kartlager som kan publiceras med kart publicering funktion"
             }
+        },
+        "guidedTour": {
+            "title": "Skapa karta",
+            "message": "I \"Skapa Karta\"-menyn kan du skapa din egen karta och publicera den på din hemsida. Du behöver bara välja kartlagret, ge några uppgifter om kartan för publicering, ange kartans storlek, välja lämpliga kartverktyg och utforma layouten. Efter alla dessa val får du en rad html-kod. Lägg den till din kod och nu har du en karta på din webbplats. Kom ihåg att kontrollera att alla valda kartlager är publicerbara.",
+            "openLink": "Visa skapa karta",
+            "closeLink": "Göm skapa karta",
+            "tileText": "Skapa karta"
         }
     }
 });

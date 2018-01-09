@@ -56,7 +56,7 @@ Oskari.registerLocalization(
                 "remove": "Kustuta",
                 "removeButton": "Kustuta"
             },
-            "confirmDeleteMsg": "Kas tahad kustutada andmestikku.",
+            "confirmDeleteMsg": "Kas tahad kustutada andmestikku \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Tühista",

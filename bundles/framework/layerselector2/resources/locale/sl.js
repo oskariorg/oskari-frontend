@@ -73,13 +73,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Novejši",
-                "stats": "Vektorski sloji"
+                "featuredata": "Vektorski sloji"
             },
             "tooltips": {
                 "newest": "Prikaži ## novejše sloje karte",
-                "stats": "Prikaži samo vektorske sloje",
+                "featuredata": "Prikaži samo vektorske sloje",
                 "remove": "Odstrani filter"
             }
+        },
+        "guidedTour": {
+            "title": "Sloji karte",
+            "message": "Za prikaz podatkovnih proizvodov na karti izberi sloje karte. Klikni na kategorijo in izberi sloj ali vpiši nekaj črk, ki vsebujejo ime podatkovnega proizvoda, ki ga iščeš v iskalnem polju.",
+            "openLink": "Prikaži sloje karte",
+            "closeLink": "Skrij sloje karte",
+            "tileText": "Sloji karte"
         }
     }
 });

@@ -58,13 +58,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
     /**
      * Handle plugin UI and change it when desktop / mobile mode
      * @method  @public redrawUI
-     * @param  {Boolean} mapInMobileMode is map in mobile mode
-     * @param {Boolean} forced application has started and ui should be rendered with assets that are available
      */
-    redrawUI: function(mapInMobileMode, forced) {
+    redrawUI: function() {
         var me = this;
-        var sandbox = me.getSandbox();
-        var mobileDefs = this.getMobileDefs();
         me._element = me._createControlElement();
         this.addToPluginContainer(me._element);
     },

@@ -37,6 +37,17 @@ No statehandling has been implemented for the bundle.
 </tr>
 </table>
 
+## Events the bundle sends out
+
+<table class="table">
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <th>TimeseriesAnimationEvent</th><th>Is sent out when timeseries animation advances or is stopped</th>
+  </tr>
+</table>
+
 ## Events the bundle listens to
 
 <table class="table">
@@ -54,5 +65,11 @@ No statehandling has been implemented for the bundle.
   </tr>
   <tr>
     <td> AfterMapLayerRemoveEvent </td><td>Remove timeseries playback UI from map if removed layer is same than animated layer</td>
+  </tr>
+  <tr>
+    <td> ProgressEvent </td><td>Track loading status of animating layer</td>
+  </tr>
+    <tr>
+    <td> TimeseriesAnimationEvent </td><td>The bundle sends out and listens to this event. It is used to update timeseries control UI.</td>
   </tr>
 </table>

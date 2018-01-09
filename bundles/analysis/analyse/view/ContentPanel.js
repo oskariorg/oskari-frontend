@@ -968,7 +968,7 @@ Oskari.clazz.define(
                 var requestName = 'ShowFilteredLayerListRequest';
                 me.sandbox.postRequestByName(
                     requestName,
-                    [null, 'stats']
+                    [null, 'featuredata']
                 );
                 clearTimeout(this._flyoutTimeOut);
                 this._flyoutTimeOut = setTimeout(function(){
@@ -1288,6 +1288,21 @@ Oskari.clazz.define(
         },
 
         /**
+         * @method  @private _isPluginNamed
+         * @param  {Object}  plugin Oskari plugin
+         * @param  {String}  regex  regex
+         * @return {Boolean}        is plugin not named
+         */
+        _isPluginNamed: function(plugin, regex) {
+            // Check at puligin has name
+            if(!plugin || !plugin.getName()) {
+                return false;
+            }
+
+            return plugin.getName().match(regex) && plugin.getName() !== me.drawPlugin.getName();
+        },
+
+        /**
          * Either starts or stops draw plugins which are added to the map module
          * (except the one created in this class).
          *
@@ -1298,14 +1313,14 @@ Oskari.clazz.define(
         _toggleDrawPlugins: function (enabled) {
             var me = this,
                 sandbox = me.sandbox,
-                mapModule = me.mapModule,
-                drawPlugins = _.filter(
-                    mapModule.getPluginInstances(),
-                    function (plugin) {
-                        return (plugin.getName().match(/DrawPlugin$/) &&
-                            plugin.getName() !== me.drawPlugin.getName());
-                    }
-                );
+                mapModule = me.mapModule;
+
+            var drawPlugins = _.filter(
+                mapModule.getPluginInstances(),
+                function (plugin) {
+                    return me._isPluginNamed(plugin, /DrawPlugin$/);
+                }
+            );
 
             _.each(drawPlugins, function (plugin) {
                 if (enabled) {
@@ -1326,14 +1341,14 @@ Oskari.clazz.define(
         _toggleDrawFilterPlugins: function (enabled) {
             var me = this,
                 sandbox = this.sandbox,
-                mapModule = this.mapModule,
-                drawFilterPlugins = _.filter(
-                    mapModule.getPluginInstances(),
-                    function (plugin) {
-                        return (plugin.getName().match(/DrawFilterPlugin$/) &&
-                            plugin.getName() !== me.drawFilterPlugin.getName());
-                    }
-                );
+                mapModule = this.mapModule;
+
+            var drawFilterPlugins = _.filter(
+                mapModule.getPluginInstances(),
+                function (plugin) {
+                    return  me._isPluginNamed(plugin, /DrawFilterPlugin$/);
+                }
+            );
 
             _.each(drawFilterPlugins, function (plugin) {
                 if (enabled) {

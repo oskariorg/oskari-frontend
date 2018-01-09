@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         this.indicators = [];
         this.regionset = null;
         this.activeIndicator = null;
+        this.activeRegion = null;
         this._defaults = {
             classification: {
                 count: 5,
@@ -42,7 +43,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.indicators.forEach(function(ind) {
                 me.removeIndicator(ind.datasource, ind.indicator, ind.selections);
             });
-            this.selectRegion();
+            this.toggleRegion();
             this.setRegionset();
             this.classification = null;
         },
@@ -68,14 +69,38 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
         },
         /**
-         * Selects the region. Only sends out an event for now, selected region is not tracked by the service.
+         * Toggle the region.
          * @param  {Number} region id for the region that was selected. Assumes it's from the current regionset.
+         * @param {String} componentId component id
          */
-        selectRegion : function(region) {
-            // notify only for now
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
-            this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
+        toggleRegion : function(region, componentId) {
+            // TODO: why does this need componentId?
+            var me = this;
+
+            // if region is same than previous then unselect region
+            if(region === me.activeRegion) {
+                region = null;
+            }
+            clearTimeout(me._timers.setActiveRegion);
+
+            me._timers.setActiveRegion = setTimeout(function(){
+                me.activeRegion = region;
+                // notify
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
+                // TODO: send which region was deselected so implementations can optimize rendering!!!!
+                me.sandbox.notifyAll(eventBuilder(me.getRegionset(), region, null, componentId));
+            }, 100);
         },
+
+        /**
+         * Gets the active region.
+         * @method  @public getRegion
+         * @return {null|Number} null or selected region
+         */
+        getRegion: function(){
+            return this.activeRegion;
+        },
+
 
         /**
          * Sets the current classification and sends out event notifying about the change
@@ -244,8 +269,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
 
-
-
             return ind;
         },
         /**
@@ -282,6 +305,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // notify
             var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, true));
+
+
+            // if no indicators then reset active region
+            if(this.indicators.length === 0) {
+                this.toggleRegion(null);
+            }
+
             return removedIndicator;
         },
         /**

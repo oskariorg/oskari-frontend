@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Térképrétegek",
+            "message": "A megfelelő térképrétegek kiválasztásával megkereheti a kívánt adatokat. Kattintson a kategóriára és válassza ki a réteget vagy írjon be néhány, a keresett adat nevében megtalálható betűt a keresési mezőbe.",
+            "openLink": "Térképrétegek megjelenítése",
+            "closeLink": "Térképrétegek elrejtése",
+            "tileText": "Térképrétegek"
         }
     }
 });

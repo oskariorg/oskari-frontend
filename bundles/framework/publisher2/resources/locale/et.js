@@ -66,6 +66,7 @@ Oskari.registerLocalization(
                 "CrosshairTool": "Näita kaardi keskpunkti",
                 "FeedbackServiceTool": "",
                 "toolbarToolNames": {
+                    "history": "Liigu eelmisesse või järgmisesse",
                     "history_back": "Liigu eelmisesse vaatesse",
                     "history_forward": "Liigu järgmisesse vaatesse",
                     "measureline": "Mõõda vahemaad",
@@ -201,9 +202,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Tere tulemast postitama lõimkaarti oma veebilehele. Postitamiseks tuleb ELF'i sisse logida või ennast kasutajaks registreerida.",
             "signup": "Logi sisse",
-            "signupUrl": "/web/fi/login",
-            "register": "Registreeri kasutajaks",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registreeri kasutajaks"
         },
         "StartView": {
             "text": "Tere tulemast postitama lõimkaarti oma veebilehele.",
@@ -243,6 +242,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Näita ainult avalikustatavaid kaardikihte."
             }
+        },
+        "guidedTour": {
+            "title": "Loo kaart",
+            "message": "Loodud kaardi saab lihtsalt põimida veebilehele. Lihtsalt määra oma kaardi suurus ja kasutajaliides ning kopeeri HTML-koodirida oma veebilehele.",
+            "openLink": "Näita loodud kaarti",
+            "closeLink": "Peida loodud kaart",
+            "tileText": "Loo kaart"
         }
     }
 });

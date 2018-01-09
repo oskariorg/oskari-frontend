@@ -48,6 +48,7 @@ Oskari.registerLocalization(
                 "noresults": "Antamallasi hakusanalla ei löytynyt yhtään kohdetta.",
                 "toomanyresults": "Hakusi tuotti yli 100 hakutulosta. Tarkenna hakusanaa ja yritä uudelleen.",
                 "column_name": "Nimi",
+                "column_region": "Alue",
                 "column_village": "Kunta",
                 "column_type": "Tyyppi"
             },
@@ -106,6 +107,16 @@ Oskari.registerLocalization(
             },
             "MyLocationPlugin": {
                 "tooltip": "Keskitä kartta omaan sijaintiisi."
+            }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Kartan liikuttaminen",
+                "message": "Kartan liikuttaminen onnistuu kolmella eri tavalla. <br/> Raahaa karttaa hiirellä, kun käsi-työkalu on valittuna. <br/> Liikuta karttaa näppäimistön nuolinäppäimillä. <br/> Klikkaa nuolia oikeassa yläkulmassa olevassa panorointityökalussa."
+            },
+            "help2": {
+                "title": "Lähentäminen ja loitontaminen",
+                "message": "Lähentämällä voit tarkentaa karttanäkymää. Loitontamalla saat näkyviin suuremman alueen. Nämä onnistuvat usealla eri tavalla. <br/> <br/> Valitse mittakaava mittakaavasäätimestä. Voit myös käyttää (+)- ja (-)-painikkeita mittakaavasäätimen päissä. <br/> <br/>  Käytä näppäimistön (+)- ja (-)-painikkeita. <br/> <br/>  Kaksoisklikkaa karttanäkymää tai käytä suurennuslasi-työkalua lähentääksesi karttaa."
             }
         }
     }

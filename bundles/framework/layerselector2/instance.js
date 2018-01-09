@@ -135,6 +135,8 @@ Oskari.clazz.define(
                 alert(me.getLocalization('errors').loadFailed);
             };
             mapLayerService.loadAllLayersAjax(successCB, failureCB);
+
+            this._registerForGuidedTour();
         },
         /**
          * @method init
@@ -208,8 +210,6 @@ Oskari.clazz.define(
                     layerId = event.getLayerId(),
                     layer;
 
-                flyout.clearNewestFilter();
-
                 if (event.getOperation() === 'update') {
                     layer = mapLayerService.findMapLayer(layerId);
                     flyout.handleLayerModified(layer);
@@ -228,12 +228,11 @@ Oskari.clazz.define(
                     // refresh layer count
                     tile.refresh();
                 }
-
-
             },
 
             'BackendStatus.BackendStatusChangedEvent': function (event) {
-                var layerId = event.getLayerId(),
+                var me = this,
+                    layerId = event.getLayerId(),
                     status = event.getStatus(),
                     flyout = this.plugins['Oskari.userinterface.Flyout'],
                     mapLayerService = this.sandbox.getService(
@@ -244,6 +243,7 @@ Oskari.clazz.define(
                 if (layerId === null || layerId === undefined) {
                     // Massive update so just recreate the whole ui
                     flyout.populateLayers();
+
                 } else {
                     layer = mapLayerService.findMapLayer(layerId);
                     flyout.handleLayerModified(layer);
@@ -268,7 +268,6 @@ Oskari.clazz.define(
                 // Remove the filtering, if opened by ShowFilteredLayerListRequest.
                 else if(me.filteredLayerListOpenedByRequest) {
                     plugin.deactivateAllFilters();
-                    plugin.setLayerListFilteringFunction(null);
                     me.filteredLayerListOpenedByRequest = false;
                 }
             }
@@ -379,6 +378,91 @@ Oskari.clazz.define(
         getState: function () {
             //"use strict";
             return this.plugins['Oskari.userinterface.Flyout'].getContentState();
+        },
+
+        /**
+         * @static
+         * @property __guidedTourDelegateTemplate
+         * Delegate object given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        __guidedTourDelegateTemplate: {
+            priority: 20,
+            show: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'LayerSelector']);
+            },
+            hide: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'LayerSelector']);
+            },
+            getTitle: function () {
+                return this.getLocalization('guidedTour').title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization('guidedTour').message);
+                return content;
+            },
+            getLinks: function() {
+                var me = this;
+                var loc = this.getLocalization('guidedTour');
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.bind('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'LayerSelector']);
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.bind('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'LayerSelector']);
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                closeLink.show();
+                openLink.hide();
+                return [openLink, closeLink];
+            }
+        },
+
+        /**
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
+         */
+        _registerForGuidedTour: function() {
+            var me = this;
+            function sendRegister() {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if(requestBuilder){
+                    var delegate = {
+                        bundleName: me.getName()
+                    };
+                    for(var prop in me.__guidedTourDelegateTemplate){
+                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
+                        } else {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
+                        }
+                    }
+                    me.sandbox.request(me, requestBuilder(delegate));
+                }
+            }
+
+            function handler(msg){
+                if(msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            if(tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
     }, {
         /**

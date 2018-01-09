@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kortlag",
+            "message": "Du kan vælge at vise dataprodukterne på kortet ved at vælge kortlag. Klik på kategorien for at åbne den og vælge et lag eller skriv nogle få bogstaver som er inkluderet i navnet på det datasæt du søger efter i søgefeltet.",
+            "openLink": "Vis kortlag",
+            "closeLink": "Skjul kortlag",
+            "tileText": "Kortlag"
         }
     }
 });

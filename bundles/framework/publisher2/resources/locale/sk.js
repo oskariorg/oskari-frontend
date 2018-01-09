@@ -201,9 +201,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Môžte zverejniť vloženú mapu na vašej stránke. Prosím, prihláste sa alebo sa najprv zaregistrujte.",
             "signup": "Prihlásiť",
-            "signupUrl": "/web/fi/login",
-            "register": "Register",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Register"
         },
         "StartView": {
             "text": "Môžte zverejniť vloženú mapu na vašej stránke.",
@@ -243,6 +241,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Zobraziť iba zverejniteľné mapové vrstvy."
             }
+        },
+        "guidedTour": {
+            "title": "Vytvoriť mapu",
+            "message": "Mapu, ktorú ste si vytvorili, môžete jednoducho vložiť na Vašu webovú stránku. Jednoducho zadefinujte veľkosť a užívateľské rozhranie Vašej mapy a skopírujte a vložte HTML link na Vašu webovú stránku.",
+            "openLink": "Zobraziť vytvorenie mapy",
+            "closeLink": "Skryť vytvorenie mapy",
+            "tileText": "Vytvoriť mapu"
         }
     }
 });

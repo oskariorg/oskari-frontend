@@ -191,6 +191,9 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/logo/DataProviderInfoService.js"
                 }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/logo/logo.service.js"
+                }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/logoplugin.css"
                 },
@@ -490,6 +493,9 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/map.layer.style.js"
+                }, {
+                   "type": "text/javascript",
+                   "src": "../../../../bundles/mapping/mapmodule/event/ProgressEvent.js"
                 }, {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapmodule/event/MouseHoverEvent.js"

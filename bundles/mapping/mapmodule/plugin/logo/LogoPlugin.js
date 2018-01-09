@@ -19,18 +19,11 @@ Oskari.clazz.define(
         constLayerGroupId : 'layers',
         templates: {
             main :  jQuery(
-                '<div class="mapplugin logoplugin">' +
-                '  <div class="icon"></div>' +
-                '  <div class="terms">' +
-                '    <a href="#" target="_blank"></a>' +
-                '  </div>' +
-                '  <div class="data-sources">' +
-                '    <a href="#"></a>' +
-                '  </div>' +
-                '</div>'
+                '<div class="mapplugin logoplugin"></div>'
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
-            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>')
+            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
+            extend: jQuery('<div style="display: inline-block;"><a href="#"></a></div>')
         },
         _initImpl : function() {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
@@ -38,6 +31,7 @@ Oskari.clazz.define(
         getService : function() {
             if(!this._service) {
                 this._service = Oskari.clazz.create('Oskari.map.DataProviderInfoService', this.getSandbox());
+
                 if(this._service) {
                     var me = this;
                     // init group for layers
@@ -52,7 +46,6 @@ Oskari.clazz.define(
                             'source' : layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
                         });
                     });
-
                     // if service was created, add a change listener
                     this._service.on('change', function() {
                         me.updateDialog();
@@ -60,6 +53,20 @@ Oskari.clazz.define(
                 }
             }
             return this._service;
+        },
+        registerForUpdateLabels: function (el) {
+            var me = this;
+            var element = el || this.getElement();
+            if (!this._extendService) {
+                this._extendService = Oskari.clazz.create('Oskari.map.LogoPluginService', this.getSandbox());
+                this._extendServiceHandler = function () {
+                    me._labelCallBack();
+                };
+                this._extendService.on('change', this._extendServiceHandler);
+            }
+            this._labelCallBack = function () {
+                me.updateLabels(element);
+            }
         },
         /**
          * @method _createEventHandlers
@@ -112,7 +119,7 @@ Oskari.clazz.define(
         _setLayerToolsEditModeImpl: function () {
             var me = this;
             // TODO document why this is done...
-            if (!me.inLayerToolsEditMode()) {
+            if (!me.inLayerToolsEditMode() && me.getElement()) {
                 me.setLocation(
                     me.getElement().parents('.mapplugins').attr(
                         'data-location'
@@ -135,35 +142,44 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var container = this.templates.main.clone();
             var conf = this.getConfig() || {};
+            this.registerForUpdateLabels(container);
             this.changeFont(conf.font || this.getToolFontFromMapModule(), container);
             this._createServiceLink(container);
 
             var termsUrl = this.getSandbox().getLocalizedProperty(conf.termsUrl);
             this._createTermsLink(termsUrl, container);
             this._createDataSourcesLink(container);
-
             return container;
+        },
+
+        _stopPluginImpl: function () {
+            if (this._extendService) {
+                this._extendService.off('change', this._extendServiceHandler);
+                this._extendService = null;
+            }
+            this.removeFromPluginContainer(this.getElement());
         },
 
         _createServiceLink: function (el) {
             var me = this,
-                el = el || me.getElement(),
+                element = el || me.getElement(),
                 mapUrl = me.__getMapUrl(),
-                link,
                 linkParams;
-            if(!el) {
+            if(!element) {
                 return;
             }
 
-            link = el.find('.icon');
-            link.unbind('click');
+            var options = {
+              id:'icon',
+              callback: function (event) {
+                  if (!me.inLayerToolsEditMode()) {
+                      linkParams = me.getSandbox().generateMapLinkParameters({});
+                      window.open(mapUrl + linkParams, '_blank');
+                  }
+              }
+            };
 
-            link.click(function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    linkParams = me.getSandbox().generateMapLinkParameters({});
-                    window.open(mapUrl + linkParams, '_blank');
-                }
-            });
+            me._extendService.addLabel('', options);
         },
 
         /**
@@ -180,52 +196,44 @@ Oskari.clazz.define(
         },
         _createTermsLink: function (termsUrl, el) {
             var me = this,
-                el = el || me.getElement();
-            if(!el) {
+                element = el || me.getElement();
+            if(!element || !termsUrl) {
                 return;
             }
-            var link = el.find('.terms a');
-
-            if (termsUrl) {
-                link.html(me._loc.terms);
-                link.attr('href', termsUrl);
-                link.click(function (evt) {
+              var options = {
+                id:'terms',
+                callback: function (evt) {
                     evt.preventDefault();
                     if (!me.inLayerToolsEditMode()) {
                         window.open(termsUrl, '_blank');
                     }
-                });
-                link.show();
-            } else {
-                link.hide();
-            }
+                }
+              };
+
+              me._extendService.addLabel(me._loc.terms, options);
         },
 
         _createDataSourcesLink: function (el) {
             var me = this,
                 conf = me.getConfig() || {},
-                el = el || me.getElement();
+                element = el || me.getElement();
 
-            if(!el) {
-                return;
+            if(!element || conf.hideDataSourceLink) {
+              return;
             }
-            var dataSources = el.find('.data-sources');
+            var options = {
+              id:'data-sources',
+              callback: function(e) {
+                if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
+                  me._openDataSourcesDialog(e.target);
+                } else if (me.dataSourcesDialog) {
+                  me.dataSourcesDialog.close(true);
+                  me.dataSourcesDialog = null;
+                }
+              }
+            };
 
-            if (conf.hideDataSourceLink) {
-                dataSources.hide();
-            } else {
-                dataSources.show();
-                dataSources.find('a').html(me._loc.dataSources);
-                dataSources.unbind('click');
-                dataSources.click(function (e) {
-                    if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
-                        me._openDataSourcesDialog(e.target);
-                    } else if (me.dataSourcesDialog) {
-                        me.dataSourcesDialog.close(true);
-                        me.dataSourcesDialog = null;
-                    }
-                });
-            }
+            me._extendService.addLabel(me._loc.dataSources, options);
         },
 
         /**
@@ -274,12 +282,50 @@ Oskari.clazz.define(
                 tpl.find('h4').html(group.name);
                 group.items.forEach(function(item) {
                     var itemTpl = jQuery('<div></div>');
-                    itemTpl.append(item.name + ' - ' + item.source);
+                    itemTpl.append(item.name);
+                    itemTpl.append(me.__formatItemSources(item.source));
                     tpl.append(itemTpl);
                 });
                 content.append(tpl);
             });
             return content;
+        },
+        /**
+         * The parameter can be undefined, string, object with url and name keys or array of such objects.
+         * @param  {String|Object|Object[]} src datasources for item to show on the UI
+         * @return {String|jQuery} appendable presentation of datasources for an UI item.
+         */
+        __formatItemSources : function(src) {
+            if(!src) {
+                return '';
+            }
+            var SEPARATOR = ' - ';
+            var formatSrc = function(item) {
+                if(typeof item ==='string') {
+                    return item;
+                }
+                if(!item.url) {
+                    return item.name;
+                }
+                var link = jQuery('<a target="_blank"></a>');
+                link.attr('href', item.url);
+                link.append(item.name);
+                return link;
+            };
+            var tpl = jQuery('<span></span>');
+            if(typeof src.forEach !== 'function') {
+                tpl.append(SEPARATOR);
+                tpl.append(formatSrc(src));
+                return tpl;
+            }
+
+            src.forEach(function(item) {
+                if(item) {
+                    tpl.append(SEPARATOR);
+                    tpl.append(formatSrc(item));
+                }
+            });
+            return tpl;
         },
         /**
          * @method _openDataSourcesDialog
@@ -331,7 +377,39 @@ Oskari.clazz.define(
                     'source' : indicators[id].organization
                 });
             });
-        }
+        },
+        /**
+         * @method updateLabels
+         * Adds functionality to plugin
+         *
+         * @param {jQuery} el
+         *
+         */
+         updateLabels: function (el) {
+           var me = this;
+           var template = el || this.getElement();
+           if(!template) {
+             return;
+           }
+           var labels = this._extendService.getLabels();
+
+           labels.forEach( function( link ) {
+             var extend = me.templates.extend.clone();
+             if(link.options.id) {
+               extend.addClass(link.options.id.toLowerCase());
+             }
+             if(link.options.id !== 'icon') {
+               extend.css("margin","5px");
+             }
+             extend.find('a').text(link.title);
+             template.append(extend);
+             if(typeof link.options.callback === 'function') {
+               extend.on("click", function(e) {
+                 link.options.callback(e);
+               });
+             }
+           });
+         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

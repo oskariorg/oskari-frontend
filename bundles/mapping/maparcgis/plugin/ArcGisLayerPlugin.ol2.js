@@ -165,6 +165,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
                 openLayer.opacity = layer.getOpacity() / 100;
                 openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
+                me._registerLayerEvents(openLayer, _layer);
                 me.getMapModule().addLayer(openLayer, !keepLayerOnTop);
 
             });
@@ -199,22 +200,49 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 params);
 
 
-                openLayer.isBaseLayer = false;
-                me._layer[layer.getId()] = openLayer;
+            openLayer.isBaseLayer = false;
+            me._layer[layer.getId()] = openLayer;
 
-                openLayer.opacity = layer.getOpacity() / 100;
-                openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
+            openLayer.opacity = layer.getOpacity() / 100;
+            openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
 
-                me.getMap().addLayer(openLayer, !keepLayerOnTop);
+            me._registerLayerEvents(openLayer, layer);
+            me.getMap().addLayer(openLayer, !keepLayerOnTop);
 
-                // Set queryable
-                layer.setQueryable(true);
+            // Set queryable
+            layer.setQueryable(true);
 
             me.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.ArcGis93Rest for ArcGisLayer ' +
                 layer.getId()
             );
         },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL2 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+         _registerLayerEvents: function(layer, oskariLayer){
+           var me = this;
+
+           layer.events.register("loadstart", layer, function(){
+             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer.getId());
+           });
+
+           layer.events.register("tileloadstart", layer, function(){
+             me.getMapModule().loadingState( oskariLayer.getId(), true);
+           });
+
+           layer.events.register("tileloaded", layer, function(){
+             me.getMapModule().loadingState( oskariLayer.getId(), false);
+           });
+
+          layer.events.register("tileerror", layer, function(){
+            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+
+         });
+         },
 
         /**
          * @method _afterMapLayerRemoveEvent

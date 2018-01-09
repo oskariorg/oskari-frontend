@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             }
             var locale = this.instance.getLocalization().legend;
             var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', locale.title, {
-                width: '200px',
+                width: 'auto',
                 cls: 'statsgrid-legend-flyout'
             });
             flyout.makeDraggable({

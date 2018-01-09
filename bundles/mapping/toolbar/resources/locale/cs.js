@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Změřit délku na mapě. Měření ukončíte dvojklikem.",
                 "measurearea": "Změřit plochu na mapě. Měření ukončíte dvojklikem."
             }
+        },
+        "guidedTour": {
+            "title": "Nástroje",
+            "message": "Pro přidání místa využijte nástroje, uložte zobrazení mapy, sdílejte odkaz na zobrazení mapy nebo se vraťte k předchozímu zobrazení mapy. Přidržte kurzor myši nad ikonou nástroje pro zobrazení tipu."
         }
     }
 });

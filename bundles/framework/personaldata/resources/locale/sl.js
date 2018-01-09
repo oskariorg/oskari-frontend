@@ -132,6 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Da",
             "no": "Ne"
+        },
+        "guidedTour": {
+            "title": "Moji podatki",
+            "message": "Meni ''Moji podatki'' vsebuje vsa shranjena mesta, poglede karte, vključene karte, indikatorje, analize in nabore podatkov. Tukaj lahko preveriš tudi vse podatke o svojem računu. Podatki so dostopni le za  prijavljene uporabnike.",
+            "openLink": "Pokaži moje podatke",
+            "closeLink": "Skrij moje podatke",
+            "tileText": "Moji podatki"
         }
     }
 });

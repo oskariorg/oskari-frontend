@@ -61,6 +61,8 @@ Outputs for instance:
 }
 ```
 
+`area.fillColor` and `area.lineColor` can have value `null` to mean "no fill" / "no stroke" respectively
+
 The component also accepts values with similar structure as above:
 
 ```javascript

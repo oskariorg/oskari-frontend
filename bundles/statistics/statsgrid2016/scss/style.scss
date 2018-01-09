@@ -54,7 +54,7 @@ $buttonWidth: 86%;
 
     .selection {
         margin-bottom: 6px;
-        width: 94%;
+        width: 98%;
     }
 
     .sortby {
@@ -160,11 +160,17 @@ div.oskari-flyoutcontent{
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
         max-width: 700px;
 
-        table.oskari-grid th.selected {
-          background-color: #FDF8D9;
-            animation-name: statsgridcolumnselection;
-            animation-duration: 0.5s;
-            animation-iteration-count: 3;
+        table.oskari-grid {
+            th.selected {
+                background-color: #FDF8D9;
+                animation-name: statsgridcolumnselection;
+                animation-duration: 0.5s;
+                animation-iteration-count: 3;
+            }
+
+            td {
+                text-align: left;
+            }
         }
 
         label span {
@@ -339,7 +345,7 @@ div.oskari-flyoutcontent{
 
 .statsgrid-legend-container {
     background-color: #FFFFFF;
-    width: 200px;
+    width: 300px;
     font-size: 12px;
 
     >div.header {
@@ -347,7 +353,7 @@ div.oskari-flyoutcontent{
         margin: 0;
         height:auto;
         padding: 6px;
-        width: 94%;
+        width: auto;
         font-weight: bold;
 
         div.title {
@@ -397,6 +403,14 @@ div.oskari-flyoutcontent{
         }
 
         .content .classifications {
+            .classification-options {
+                .numeric-value {
+                    .oskari-formcomponent {
+                        margin-bottom: 4px;
+                        margin-top: 8px;
+                    }
+                }
+            }
             .label {
                 font-weight: bold;
             }
@@ -413,11 +427,44 @@ div.oskari-flyoutcontent{
                 width: 95%;
                 padding: 4px 5px;
             }
+
+            .point-size {
+                .minmaxlabels {
+                    .min {
+                        float:left;
+                    }
+                    .max {
+                        float:right;
+                        margin-right: 4%;
+                    }
+                    .clear {
+                        clear:both;
+                    }
+                }
+                .point-range {
+                    width: 90%;
+                    background-image: url(../images/opacity_slider_long.png);
+                    background-repeat: no-repeat;
+                }
+            }
         }
 
         .oskari-color-selection {
             z-index: 10;
         }
+    }
+
+    .statsgrid-svg {
+        float: left;
+    }
+    .statsgrid-range {
+        float: left;
+    }
+    .statsgrid-counter {
+        float: left;
+    }
+    .clear {
+        clear: both;
     }
 }
 
@@ -480,4 +527,12 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         clear: both;
     }
 
+}
+
+
+.statsgrid-legend-flyout {
+    .oskari-flyoutcontentcontainer{
+        overflow-x:hidden;
+        overflow-y: auto;
+    }
 }

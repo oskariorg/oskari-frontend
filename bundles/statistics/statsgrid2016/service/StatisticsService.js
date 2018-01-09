@@ -17,11 +17,15 @@
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
+        this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
 
         // pushed from instance
         this.datasources = [];
         // attach on, off, trigger functions
         Oskari.makeObservable(this);
+
+        // possible values: wms, vector
+        this._mapModes = ['vector'];
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.statsgrid.StatisticsService",
@@ -31,6 +35,23 @@
         },
         getName: function () {
             return this.__name;
+        },
+        setMapModes: function(mapModes){
+            this._mapModes = mapModes;
+        },
+        getMapModes: function(){
+            return this._mapModes;
+        },
+        hasMapMode: function(mode){
+            var me = this;
+            var hasMode = false;
+            me._mapModes.forEach(function(mapmode){
+                if(mapmode === mode){
+                    hasMode = true;
+                    return;
+                }
+            });
+            return hasMode;
         },
         /**
          * Used to propate Oskari events for files that have reference to service, but don't need to be registered to sandbox.
@@ -51,6 +72,9 @@
         getColorService : function() {
             return this.colors;
         },
+        getErrorService : function() {
+            return this.error;
+        },
         addDatasource : function(ds) {
             if(!ds) {
                 // log error message
@@ -64,6 +88,8 @@
                 });
                 return;
             }
+            // normalize to always have info-object (so far only holds optional description url of service with "url" key)
+            ds.info = ds.info || {};
             this.datasources.push(ds);
         },
 
@@ -86,7 +112,9 @@
                     });
                     return;
                 }
+
                 var uiLabels = [];
+                var preferredFormatting = [];
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
 
@@ -107,15 +135,14 @@
                                 id : value.id || value,
                                 label : name
                             });
+
+                            preferredFormatting.push(name);
                         });
                     });
                 }
-                var preferredFormatting = [];
-                uiLabels.forEach(function(param) {
-                    preferredFormatting.push(param.label);
-                });
+
                 var name = Oskari.getLocalized(ind.name);
-                var selectorsFormatted = '( ' +  preferredFormatting.join(' / ') + ' )';
+                var selectorsFormatted = '(' +  preferredFormatting.join(' / ') + ')';
                 callback({
                     indicator : name,
                     source : Oskari.getLocalized(ind.source),
@@ -209,7 +236,8 @@
                 type: "GET",
                 dataType: 'json',
                 data : {
-                    regionset : regionset
+                    regionset : regionset,
+                    srs : this.sandbox.getMap().getSrsName()
                 },
                 url: this.sandbox.getAjaxUrl('GetRegions'),
                 success: function (pResp) {

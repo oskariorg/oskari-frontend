@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Den logiska operatören saknas."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Valda kartlager",
+            "message": "I \"Valda kartlager\"-menyn kan du definiera hur de valda kartlagren visas. Du kan sortera kartlagren genom att dra dem. Du kan också definiera opacitet och för några av kartlagren kan du också välja den fördefinierade stilen. För dataprodukter är det möjligt att visa funktions data i tabellform. Kartlagret kan visas eller döljas.",
+            "openLink": "Visa Valda kartlager",
+            "closeLink": "Göm Valda kartlager",
+            "tileText": "Valda kartlager"
         }
     }
 });

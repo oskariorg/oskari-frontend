@@ -29,7 +29,7 @@
     margin-bottom: 6px; }
   .statsgrid-grid-table-header .selection {
     margin-bottom: 6px;
-    width: 94%; }
+    width: 98%; }
   .statsgrid-grid-table-header .sortby {
     cursor: pointer;
     position: absolute;
@@ -104,6 +104,13 @@ div.oskari-flyoutcontent.statsgrid {
   /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
   max-width: 700px;
   /* Chosen fixes */ }
+  div.oskari-flyoutcontent.statsgrid table.oskari-grid th.selected {
+    background-color: #FDF8D9;
+    animation-name: statsgridcolumnselection;
+    animation-duration: 0.5s;
+    animation-iteration-count: 3; }
+  div.oskari-flyoutcontent.statsgrid table.oskari-grid td {
+    text-align: left; }
   div.oskari-flyoutcontent.statsgrid label span {
     /* Indicator selection form */
     width: 200px;
@@ -140,11 +147,6 @@ div.oskari-flyoutcontent.statsgrid {
       font-style: italic; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections input.oskari-button {
       margin-left: 10px; }
-  div.oskari-flyoutcontent.statsgrid table.oskari-grid th.selected {
-    background-color: #FDF8D9;
-    animation-name: statsgridcolumnselection;
-    animation-duration: 0.5s;
-    animation-iteration-count: 3; }
   div.oskari-flyoutcontent.statsgrid .chosen-container.chosen-drop-up .chosen-drop {
     border-bottom: 0;
     border-radius: 4px 4px 0 0;
@@ -180,21 +182,21 @@ div.oskari-flyoutcontent.statsgrid {
     width: 336px; }
   div.oskari-flyoutcontent.statsgrid div.parameter div.clear {
     clear: both; }
-div.oskari-flyoutcontent.statsgrid thead th {
-  border: none;
-  border-bottom: 1px solid #E6E6E6;
-  border-left: 1px solid #E6E6E6;
-  border-right: 1px solid #E6E6E6; }
-div.oskari-flyoutcontent .statsgrid-grouping-header {
-  text-align: left;
-  padding: 6px;
-  border-bottom: none !important;
-  border-top: 1px solid #E6E6E6; }
-  div.oskari-flyoutcontent .statsgrid-grouping-header.sources {
-    color: #ffffff;
-    background-color: #000000; }
-    div.oskari-flyoutcontent .statsgrid-grouping-header.sources span {
-      font-weight: normal; }
+  div.oskari-flyoutcontent.statsgrid thead th {
+    border: none;
+    border-bottom: 1px solid #E6E6E6;
+    border-left: 1px solid #E6E6E6;
+    border-right: 1px solid #E6E6E6; }
+  div.oskari-flyoutcontent.statsgrid .statsgrid-grouping-header {
+    text-align: left;
+    padding: 6px;
+    border-bottom: none !important;
+    border-top: 1px solid #E6E6E6; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-grouping-header.sources {
+      color: #ffffff;
+      background-color: #000000; }
+      div.oskari-flyoutcontent.statsgrid .statsgrid-grouping-header.sources span {
+        font-weight: normal; }
 
 /* ********************************************
  * Statsgrid legend
@@ -203,19 +205,19 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
   border: 1px solid rgba(0, 0, 0, 0.2);
   pointer-events: auto;
   text-align: left;
-    /* Float right to not overlap with other plugins */
-    float: right; }
+  /* Float right to not overlap with other plugins */
+  float: right; }
 
 .statsgrid-legend-container {
   background-color: #FFFFFF;
-  width: 200px;
+  width: 300px;
   font-size: 12px; }
   .statsgrid-legend-container > div.header {
     background-color: #fdf8d9;
     margin: 0;
     height: auto;
     padding: 6px;
-    width: 94%;
+    width: auto;
     font-weight: bold; }
     .statsgrid-legend-container > div.header div.title {
       font-size: 14px; }
@@ -244,6 +246,9 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
       font-size: 12px;
       padding: 0;
       font-weight: normal; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .classification-options .numeric-value .oskari-formcomponent {
+      margin-bottom: 4px;
+      margin-top: 8px; }
     .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .label {
       font-weight: bold; }
     .statsgrid-legend-container > .accordion .accordion_panel .content .classifications select {
@@ -255,8 +260,27 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
       margin-left: 0;
       width: 95%;
       padding: 4px 5px; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .min {
+      float: left; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .max {
+      float: right;
+      margin-right: 4%; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .clear {
+      clear: both; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .point-range {
+      width: 90%;
+      background-image: url(../images/opacity_slider_long.png);
+      background-repeat: no-repeat; }
     .statsgrid-legend-container > .accordion .accordion_panel .oskari-color-selection {
       z-index: 10; }
+  .statsgrid-legend-container .statsgrid-svg {
+    float: left; }
+  .statsgrid-legend-container .statsgrid-range {
+    float: left; }
+  .statsgrid-legend-container .statsgrid-counter {
+    float: left; }
+  .statsgrid-legend-container .clear {
+    clear: both; }
 
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend .popup-body > div.content {
@@ -273,29 +297,32 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   border: 1px solid rgba(0, 0, 0, 0.2);
   float: right;
   z-index: 100000;
-  margin: 10px;
-   }
-  .statsgrid-published-toggle-buttons .map {
+  margin: 10px; }
+  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .map {
     background-color: #3c3c3c;
     float: left;
     height: 36px;
     width: 36px;
     background-image: url("../images/map_dark.png");
     cursor: pointer; }
-    .statsgrid-published-toggle-buttons .map.active {
+    div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .map.active {
       background-color: #ffffff;
       background-image: url("../images/map_light.png"); }
-  .statsgrid-published-toggle-buttons .table {
+  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .table {
     background-color: #3c3c3c;
     float: left;
     height: 36px;
     width: 36px;
     background-image: url("../images/table_dark.png");
     cursor: pointer; }
-    .statsgrid-published-toggle-buttons .table.active {
+    div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .table.active {
       background-color: #ffffff;
       background-image: url("../images/table_light.png"); }
-  .statsgrid-published-toggle-buttons .clear {
+  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .clear {
     clear: both; }
+
+.statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
+  overflow-x: hidden;
+  overflow-y: auto; }
 
 /*# sourceMappingURL=style.css.map */

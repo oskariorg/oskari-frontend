@@ -129,6 +129,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Igen",
             "no": "Nem"
+        },
+        "guidedTour": {
+            "title": "Saját adatok",
+            "message": "Az összes bejelölt térképi hely, mentett térképnézet és beágyazott térkép megjelenik, amikor belép a szolgáltatásba.",
+            "openLink": "Saját adatok megjelenítése",
+            "closeLink": "Saját adatok elrejtése",
+            "tileText": "Saját adatok"
         }
     }
 });

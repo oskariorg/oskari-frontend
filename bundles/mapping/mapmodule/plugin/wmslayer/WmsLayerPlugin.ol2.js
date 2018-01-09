@@ -42,6 +42,8 @@ Oskari.clazz.define(
                 subLayers = layer.getSubLayers(),
                 layerIdPrefix = 'layer_',
                 sandbox = this.getSandbox();
+            var me = this;
+
 
             // insert layer or sublayers into array to handle them identically
             if (subLayers.length > 0) {
@@ -73,6 +75,10 @@ Oskari.clazz.define(
                     layerParams = oskariLayer.getParams(),
                     layerOptions = oskariLayer.getOptions(),
                     layerAttributes = oskariLayer.getAttributes();
+                
+                if(layerAttributes.times) {
+                    defaultOptions.singleTile = true;
+                }
 
                 if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
                     defaultOptions.yx = _.clone(layerAttributes.reverseXY);
@@ -108,6 +114,7 @@ Oskari.clazz.define(
                 }
 
                 var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + oskariLayer.getId(), oskariLayer.getWmsUrls(), defaultParams, defaultOptions);
+                me._registerLayerEvents(openLayer, oskariLayer);
                 openLayer.opacity = layer.getOpacity() / 100;
 
                 mapModule.addLayer(openLayer, !keepLayerOnTop);
@@ -121,7 +128,29 @@ Oskari.clazz.define(
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
         },
+        _registerLayerEvents: function(layer, oskariLayer){
+          var me = this;
 
+          layer.events.register("loadstart", layer, function(){
+            Oskari.log(me.getName()).info("Load Start for layer: "+layer.layerId);
+          });
+
+          layer.events.register("tileloadstart", layer, function(){
+            me.getMapModule().loadingState( oskariLayer._id, true);
+          });
+
+          layer.events.register("tileloaded", layer, function(){
+            me.getMapModule().loadingState( oskariLayer._id, false);
+          });
+
+          layer.events.register("loadend", layer, function(){
+         });
+
+         layer.events.register("tileerror", layer, function(){
+            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+
+        });
+        },
         /**
          * Handle AfterChangeMapLayerStyleEvent
          * @private

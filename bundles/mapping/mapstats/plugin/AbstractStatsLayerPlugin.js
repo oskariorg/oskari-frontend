@@ -97,6 +97,7 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
             });
         },
         handleRegionsetChanged: function(newSetId) {
+            return;
             if(!newSetId) {
                 var service = this.getService();
                 if(!service) {

@@ -71,8 +71,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
                 this._mapModule = mapModule;
                 this._map = mapModule.getMap();
                 this._pluginName = mapModule.getName() + this._name;
-                this._loc =
-                    mapModule.getLocalization('plugin', true)[this._name];
+                if(!this._loc || Object.keys(this._loc).length === 0) {
+                    // don't blindly overwrite if localization already has some content
+                    this._loc = mapModule.getLocalization('plugin', true)[this._name] || {};
+                }
             }
         },
         /**
@@ -102,7 +104,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          *
          */
         init: function () {
-            return this._initImpl();
+            try {
+                return this._initImpl();
+            } catch(e) {
+                Oskari.log('AbstractMapModulePlugin').error('Error initializing plugin impl ' + this.getName());
+            }
         },
 
         _initImpl: function () {},
@@ -229,7 +235,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
                 sandbox.requestHandler(key, me._requestHandlers[key]);
             });
 
-            var waitingForToolbar = me._startPluginImpl(sandbox);
+            var waitingForToolbar = false;
+            try {
+                waitingForToolbar = me._startPluginImpl(sandbox);
+            } catch(e) {
+                Oskari.log('AbstractMapModulePlugin').error('Error starting plugin impl ' + me.getName());
+            }
             // Make sure plugin's edit mode is set correctly
             // (we might already be in edit mode)
             me._setLayerToolsEditMode(
@@ -251,7 +262,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             var me = this,
                 handler;
 
-            me._stopPluginImpl(sandbox);
+            try {
+                me._stopPluginImpl(sandbox);
+            } catch(e) {
+                Oskari.log('AbstractMapModulePlugin').error('Error stopping plugin impl ' + me.getName());
+            }
 
             Object.keys(me._eventHandlers).forEach(function(key) {
                 sandbox.unregisterFromEventByName(me, key);

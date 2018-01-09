@@ -63,9 +63,12 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
-                "CrosshairTool": "Show map focal point",
                 "FeedbackServiceTool": "Feedback (Open311) service",
+                "MapLegend": "Show map legend",
+                "MapRotator": "Enable map rotation",
+                "CrosshairTool": "Show map focal point",
                 "toolbarToolNames": {
+                    "history": "Move to previous or next view",
                     "history_back": "Move to previous view",
                     "history_forward": "Move to next view",
                     "measureline": "Measure distance",
@@ -201,9 +204,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Welcome to publish embedded map on your website. Please log in or register first.",
             "signup": "Log in",
-            "signupUrl": "/web/fi/login",
-            "register": "Register",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Register"
         },
         "StartView": {
             "text": "Welcome to publish embedded map on your website.",
@@ -243,6 +244,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Show only publishable map layers."
             }
+        },
+        "guidedTour": {
+            "title": "Map Publishing",
+            "message": "In the Map Publishing menu you can publish embedded maps on your own website. <br/><br/> Select map layers, define a website, select tools and desing a layout. Click Save and your map is ready for publishing. Jast copy one line html code to your website. <br/><br/> If you want to update the map, you can find it in the My Data menu. Updates are shown immediately on your map. <br/><br/> Map Publishing is available only for logged-in users.",
+            "openLink": "Show Map Publishing",
+            "closeLink": "Hide Map Publishing",
+            "tileText": "Map Publishing"
         }
     }
 });

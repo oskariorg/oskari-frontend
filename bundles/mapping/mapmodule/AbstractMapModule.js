@@ -261,6 +261,7 @@ Oskari.clazz.define(
             me.startPlugins();
             me._adjustMobileMapSize();
             this.updateCurrentState();
+            this._registerForGuidedTour();
         },
         /**
          * @method stop
@@ -861,6 +862,90 @@ Oskari.clazz.define(
                     layersPlugin.preselectLayers(layers);
                 }
             }
+        },
+        isLoading: function() {
+          var oskariLayers = this.getSandbox().getMap().getLayers();
+          var loading = false;
+          oskariLayers.forEach( function( layer ) {
+          if(loading) {
+            return;
+          }
+            loading = layer.getLoadingState().loading > 0;
+          });
+          return loading;
+        },
+        /**
+         * @method loadingState
+         * Gather info on layer loading status
+         * @param {Number} layerid, the id number of the abstract layer in loading
+         * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
+         */
+        loadingState: function( layerId, started, errors ) {
+          if(typeof errors === 'undefined') {
+            errors = false;
+          }
+          var done = false;
+          var me = this;
+          var layers = this.getSandbox().findAllSelectedMapLayers();
+          var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
+          if( !oskariLayer ) {
+            return;
+          }
+
+          if( !this.progBar ) {
+            this.progBar = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
+            this.progBar.create(jQuery('#' + this.getMapElementId()));
+          }
+
+          if( this.loadtimer ) {
+            clearTimeout( this.loadtimer );
+          }
+
+          if( started ) {
+            var wasFirstTile = oskariLayer.loadingStarted();
+            if( wasFirstTile ) {
+                this.progBar.show();
+                layers.forEach( function( layer ) {
+                  oskariLayer.resetLoadingState();
+                });
+            }
+          }
+          else {
+            var tilesLoaded = 0;
+            var pendingTiles = 0;
+            if(!errors) {
+              layers.forEach( function( layer ) {
+                tilesLoaded += layer.loaded;
+                pendingTiles += layer.tilesToLoad;
+              });
+              done = oskariLayer.loadingDone();
+              this.progBar.updateProgressBar( pendingTiles -1, tilesLoaded );
+            } else {
+                this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
+                oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
+                errors = oskariLayer.getLoadingState().errors;
+                oskariLayer.loadingDone(0);
+
+                setTimeout(function(){
+                  me.progBar.hide();
+                },2000);
+                tilesLoaded = 0;
+                pendingTiles = 0;
+                this.notifyErrors( errors );
+            }
+          }
+          if( done && !oskariLayer.getLoadingState().errors ) {
+            Oskari.log( this.getName() ).info( oskariLayer._layerName + " done" );
+          }
+
+          this.loadtimer = setTimeout( function() {
+            var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
+            var event = eventBuilder(done, layerId);
+            me._sandbox.notifyAll( event );
+          }, 50 );
+        },
+        notifyErrors: function( errors ) {
+              Oskari.log( this.getName() ).warn( "error: "+errors );
         },
         /**
          * Returns state for mapmodule including plugins that have getState() function
@@ -1661,6 +1746,9 @@ Oskari.clazz.define(
 
             marker.append(svgObject.data);
 
+            // IE needs this because ol.style.Icon opacity property not work on IE
+            marker.css('opacity', style.opacity || 1);
+
             if(isWellknownMarker && style.shape.color) {
                 marker.find('.normal-color').attr('fill', style.shape.color);
                 var shadowRgb = Oskari.util.hexToRgb(style.shape.color);
@@ -1690,7 +1778,7 @@ Oskari.clazz.define(
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
             }
 
-            var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
+            var svgSrc = 'data:image/svg+xml,' + encodeURIComponent(markerHTML);
 
             return svgSrc;
         },
@@ -1718,7 +1806,7 @@ Oskari.clazz.define(
             var isMarkerShape  = (marker && marker.data && marker.data.shape !== null && !isNaN(marker.data.shape)) ? true : false;
             var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg')>-1))) ? true : false;
 
-            var markerSize = (marker && marker.data && marker.data.size) ? me.getMarkerIconSize(marker.data.size) : 32;
+            var markerSize = (marker && marker.data && marker.data.size) ? me.getPixelForSize(marker.data.size) : 32;
 
             var markerDetails = {
                 offsetX: 16,
@@ -1823,11 +1911,11 @@ Oskari.clazz.define(
         },
         /**
          * Converts from abstract marker size to real pixel size
-         * @method  @public getMarkerIconSize
-         * @param size Abstract size
-         * @returns {number} Size in pixels
+         * @method  @public getPixelForSize
+         * @param {Number} size Abstract size if number then calculated new size.
+         * @returns {Number} Size in pixels
          */
-        getMarkerIconSize : function(size) {
+        getPixelForSize : function(size) {
             return 40 + 10 * size;
         },
 /* --------------- /SVG MARKER ------------------------ */
@@ -2254,6 +2342,81 @@ Oskari.clazz.define(
                     plugin.updateLayerParams(layer, forced, params);
                 }
             });
+        },
+        /**
+         * @static
+         * @property __guidedTourDelegateTemplates
+         * Delegate object templates given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        __guidedTourDelegateTemplates: [{
+            priority: 70,
+            getTitle: function () {
+                return this.getLocalization().guidedTour.help1.title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.help1.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.panbuttonDiv');
+            },
+            positionAlign: 'left'
+        },
+        {
+            priority: 80,
+            getTitle: function () {
+                return this.getLocalization().guidedTour.help2.title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.help2.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.pzbDiv');
+            },
+            positionAlign: 'left'
+        }],
+
+        /**
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
+         */
+        _registerForGuidedTour: function() {
+            var me = this;
+            function sendRegister() {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if(requestBuilder){
+                    me.__guidedTourDelegateTemplates.forEach(function(template, i){
+                        var delegate = {
+                            bundleName: me.getName() + '_' + (i+1)
+                        };
+                        for(var prop in template){
+                            if(typeof template[prop] === 'function') {
+                                delegate[prop] = template[prop].bind(me); // bind methods to bundle instance
+                            } else {
+                                delegate[prop] = template[prop]; // assign values
+                            }
+                        }
+                        me._sandbox.request(me, requestBuilder(delegate));
+                    });
+                }
+            }
+
+            function handler(msg){
+                if(msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me._sandbox.findRegisteredModuleInstance('GuidedTour');
+            if(tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {

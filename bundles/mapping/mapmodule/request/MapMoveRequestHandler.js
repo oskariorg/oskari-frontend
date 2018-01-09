@@ -52,8 +52,6 @@ Oskari.clazz.define(
                     this.mapModule.setZoomLevel(zoom, false);
                 }
             }
-
-            this.sandbox.printDebug('[MapMoveRequestHandler] map moved');
         }
     }, {
         /**

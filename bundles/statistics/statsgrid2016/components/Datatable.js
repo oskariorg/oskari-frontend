@@ -1,4 +1,3 @@
-
 Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, locale) {
     this.locale = locale;
     this.sb = sandbox;
@@ -12,6 +11,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         item: 'region',
         descending: false
     };
+
+    this._maxCols = 3;
 
     // Keep latest sorting on memory
     this._sortOrder = null;
@@ -47,19 +48,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      * @param  {Integer} setId regionset id
      */
     _handleRegionsetChanged: function(setId) {
+        var me = this;
         var currentRegion = this.getCurrentRegionset();
-        // Region not changed, not need to handle then
-        /*if(currentRegion === setId) {
-            return;
-        }
-        */
+        var locale = me.locale;
+        var errorService = me.service.getErrorService();
+
         if(!setId) {
             setId = this.getCurrentRegionset();
         }
         if(!setId) {
             return;
         }
-        var me = this;
         var regionset = this.service.getRegionsets(setId);
 
         if(this.getIndicators().length>0){
@@ -70,12 +69,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 me.log.warn('Cannot get regions for wanted regionset='+setId);
                 me.spinner.stop();
                 // notify error!!
+                errorService.show(locale.errors.title,locale.errors.regionsDataError);
                 return;
+            }
+
+            if(regions.length === 0) {
+                errorService.show(locale.errors.title,locale.errors.regionsDataIsEmpty);
             }
             me.createModel(regions, function(model) {
                 me.updateModel(model, regions);
                 me.spinner.stop();
                 me.setHeaderHeight();
+                var state = me.service.getStateService();
+                me.grid.select(state.getRegion());
             });
         });
     },
@@ -86,14 +92,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      * @param {Object} gridLoc    locale
      */
     _setGridGroupingHeaders: function(indicators,gridLoc){
-        this.grid.setGroupingHeader([
+        var me = this;
+        me.grid.setGroupingHeader([
             {
                 cls: 'statsgrid-grouping-header region',
                 text: gridLoc.areaSelection.title
             },
             {
                 cls:'statsgrid-grouping-header sources',
-                text: gridLoc.title + ' <span>('+indicators.length+')</span>'
+                text: gridLoc.title + ' <span>('+indicators.length+')</span>',
+                maxCols: me._maxCols,
+                pagingHandler: function(element, data){
+                    element.html(gridLoc.title + ' <span>('+data.visible.start + '-' + data.visible.end +'/' + data.count+')</span>');
+                    me.setHeaderHeight();
+                }
             }
         ]);
     },
@@ -194,7 +206,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 sortBy.find('.orderTitle').attr('title', gridLoc.orderByAscending);
             }
 
-            content.css('width', '180px');
+            content.css('width', '30%');
         });
 
 
@@ -318,10 +330,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
+                // calculate cell width
+                var visibleCells = (indicators.length > me._maxCols) ? me._maxCols : indicators.length;
+                var cellWidth = 70 / visibleCells;
+                content.css('width', cellWidth + '%');
                 content.append(tableHeader);
             });
-
-            done();
+            if(indicators.length - 1 === id) {
+                done();
+            }
         });
     },
 
@@ -335,6 +352,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
         log.info('Indicator added ', src, indId, selections);
+        var state = this.service.getStateService();
+        var hash = this.service.getStateService().getHash(datasrc, indId, selections);
+
+        state.setActiveIndicator(hash);
         this._handleRegionsetChanged(this.getCurrentRegionset());
     },
     /**
@@ -353,6 +374,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     _bindToEvents : function() {
         var me = this;
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
+        var state = this.service.getStateService();
+
         this.service.on('StatsGrid.IndicatorEvent', function(event) {
             if(event.isRemoved()) {
                 me._handleIndicatorRemoved(event.getDatasource(), event.getIndicator(), event.getSelections());
@@ -364,13 +387,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             log.info('Region changed! ', event.getRegionset());
             me._handleRegionsetChanged(event.getRegionset());
         });
+
         this.service.on('StatsGrid.RegionSelectedEvent', function(event) {
             log.info('Region selected! ', event.getRegion());
-            if(me.getCurrentRegionset() !== event.getRegionset()) {
-                // shouldn't be the case ever
-                me._handleRegionsetChanged(event.getRegionset());
+
+            var scrollableElement = null;
+            var gridEl = me.mainEl.find('table.oskari-grid:visible');
+            var parent = gridEl.parents('.oskari-flyoutcontentcontainer');
+
+            if(event.getTriggeredBy() === 'map' && parent.length>0) {
+                scrollableElement = parent;
             }
-            me.grid.select(event.getRegion());
+            me.grid.select(event.getRegion(), false, scrollableElement);
         });
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
@@ -410,29 +438,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         noresults.find('.title').html(gridLoc.title);
         noresults.find('.content').html(gridLoc.noResults);
 
-        this.mainEl = main;
-        this.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+        me.mainEl = main;
+        me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
 
-        this.grid.addSelectionListener(function(grid, region) {
-            me.service.getStateService().selectRegion(region);
+        me.grid.addSelectionListener(function(grid, region) {
+            me.service.getStateService().toggleRegion(region, 'grid');
         });
 
         el.append(main);
-        this._handleRegionsetChanged();
+        me._handleRegionsetChanged();
     },
 
     setHeaderHeight: function(){
         var me = this;
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
+
+        // IE fix
         if(statsTableEl.length > 0) {
-            statsTableEl.addClass('autoheight');
+            var latestCell = statsTableEl.find('tbody tr').last();
+            latestCell.addClass('autoheight');
             // hack is needed by IE 11. Otherwise header elements with css like
             //   position : absolute, bottom : 0
             // will render in wrong location.
             // This will force a repaint which will fix the locations.
-            statsTableEl.removeClass('autoheight');
-            statsTableEl.hide();
-            statsTableEl.show(0);
+            latestCell.removeClass('autoheight');
+            latestCell.hide();
+            latestCell.show(0);
         }
     },
 

@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Camadas",
+            "message": "Pode selecionar os produtos a visualizar através da seleção de camadas. Clique numa categoria para abrir e selecione uma camada ou escreva algumas letras que façam parte da designação no campo de pesquisa",
+            "openLink": "Ver camadas",
+            "closeLink": "Esconder camadas",
+            "tileText": "Camadas"
         }
     }
 });

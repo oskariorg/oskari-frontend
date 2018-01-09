@@ -8,12 +8,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
      * @static
      * @param {Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance} instance
      *      reference to the statsgrid instance
-     * @param {Object} localization
-     *      instance's localization
      */
-    function (instance, localization) {
+    function (instance) {
         this.instance = instance;
-        this.loc = localization;
+        this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.visibleFields = [
             'name',
             'description',
@@ -43,7 +41,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
         },
 
         getTitle: function () {
-            return this.loc.title;
+            return this.loc('tab.title');
         },
 
         getContent: function () {
@@ -84,7 +82,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                 me._addDataSource(indicators);
             }, function () {
                 // error :(
-                me.showMessage(me.loc.error.title, me.loc.error.indicatorsError);
+                me.showMessage(me.loc('tab.error.title'), me.loc('tab.error.indicatorsError'));
             });
         },
         /**
@@ -101,7 +99,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                 req;
 
             if (reqBuilder) {
-                req = reqBuilder(title, content);
+                req = reqBuilder(title, content, false, "statsgrid");
                 sandbox.request(this.instance, req);
             }
         },
@@ -127,14 +125,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
             });
 
             grid.setColumnValueRenderer('delete', function (name, data) {
-                return jQuery('<div class="indicator-name-link"></div>').html(me.loc.destroyIndicator).
+                return jQuery('<div class="indicator-name-link"></div>').html(me.loc('tab.destroyIndicator')).
                 click(function () {
                     me._displayDeleteConfirmation(data);
                 });
             });
 
             _.each(this.visibleFields, function (field) {
-                grid.setColumnUIName(field, me.loc.grid[field]);
+                grid.setColumnUIName(field, me.loc('tab.grid.' + field));
             });
 
             return grid;
@@ -218,7 +216,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                 instance.addUserIndicator(indicator);
             }, function () {
                 // error :(
-                me.showMessage(me.loc.error.title, me.loc.error.indicatorError);
+                me.showMessage(me.loc('tab.error.title'), me.loc('tab.error.indicatorError'));
             });
         },
         /**
@@ -233,11 +231,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
             var me = this,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                cancelBtn = dialog.createCloseButton(me.loc.cancelDelete),
-                title = me.loc.deleteTitle,
-                content = me.loc.confirmDelete + indicator.name;
+                cancelBtn = dialog.createCloseButton(me.loc('tab.cancelDelete')),
+                title = me.loc('tab.deleteTitle'),
+                content = me.loc('tab.confirmDelete', {name: indicator.name});
 
-            okBtn.setTitle(me.loc.destroyIndicator);
+            okBtn.setTitle(me.loc('tab.destroyIndicator'));
             okBtn.addClass('primary');
 
             okBtn.setHandler(function () {
@@ -264,7 +262,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                 me._removeIndicatorFromGrid(indicatorId);
             }, function () {
                 // error :(
-                me.showMessage(me.loc.error.title, me.loc.error.indicatorDeleteError);
+                me.showMessage(me.loc('tab.error.title'), me.loc('tab.error.indicatorDeleteError'));
             });
         },
         /**
@@ -320,8 +318,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
         },
         _addDataSource: function (indicators) {
             var sandbox = this.instance.getSandbox(),
-                dataSourceTitle = this.instance
-                .getLocalization('tab').description,
+                dataSourceTitle = this.loc('tab.description'),
                 reqBuilder = sandbox.getRequestBuilder('StatsGrid.AddDataSourceRequest'),
                 userIndicators = _.map(indicators, function (indicator) {
                     indicator.ownIndicator = true;
@@ -390,11 +387,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
          * @param {String} message popup message
          */
         showMessage: function (title, message) {
-            var loc = this.instance.getLocalization(),
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
-            okBtn.setTitle(loc.buttons.ok);
+            okBtn.setTitle(this.loc('buttons.ok'));
             okBtn.addClass('primary');
             okBtn.setHandler(function () {
                 dialog.close(true);

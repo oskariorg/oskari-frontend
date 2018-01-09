@@ -40,7 +40,7 @@ Oskari.registerLocalization(
             "deleteTitle": "Delete Indicator",
             "destroyIndicator": "Delete",
             "cancelDelete": "Cancel",
-            "confirmDelete": "Are you sure you want to delete the indicator",
+            "confirmDelete": "Are you sure you want to delete the indicator \"{name}\"?",
             "newIndicator": "New indicator",
             "error": {
                 "title": "Erro",

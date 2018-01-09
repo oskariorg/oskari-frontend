@@ -561,7 +561,6 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-
                 // Clean layer data cache if not in scale
                 if ( layers[i].hasFeatureData()  && !me.OLlayerVisibility(layers[i]) ) {
                     me.getOLMapLayer(layers[i], me.__typeNormal).removeBackBuffer();
@@ -591,6 +590,7 @@ Oskari.clazz.define(
                     grid,
                     tiles
                 );
+                me.getMapModule().loadingState(layers[i]._id, false);
                 me._tilesLayer.redraw();
             }
 
@@ -691,6 +691,8 @@ Oskari.clazz.define(
         mapLayerRemoveHandler: function (event) {
             var me = this,
                 layer = event.getMapLayer();
+            //remove loading tiles attached to this layer
+            layer.loadingDone(0);
 
             if (layer.hasFeatureData()) {
                 me._isWFSOpen -= 1;
@@ -1242,6 +1244,7 @@ Oskari.clazz.define(
                 wfsMapImageLayer.opacity = layer.getOpacity() / 100;
                 map.addLayer(wfsMapImageLayer);
                 wfsMapImageLayer.setVisibility(true);
+
                 // also for draw
                 wfsMapImageLayer.redraw(true);
 
@@ -1486,7 +1489,6 @@ Oskari.clazz.define(
 
             this.getMap().addLayer(openLayer);
         },
-
         // from tilesgridplugin
 
         /**
@@ -1934,6 +1936,24 @@ Oskari.clazz.define(
         },
         hasUI: function() {
             return false;
+        },
+        updateScale: function(layer, minscale, maxscale) {
+          var me = this;
+          layer.setMinScale(minscale);
+          layer.setMaxScale(maxscale);
+          var olLayer = this.getOLMapLayers(layer)
+          olLayer[0].minScale = minscale;
+          olLayer[0].maxScale = maxscale;
+
+          this._dialog = Oskari.clazz.create(
+            'Oskari.userinterface.component.Popup'
+          );
+         var btn = this._dialog.createCloseButton('OK');
+
+         btn.setHandler(function() {
+             me._dialog.close();
+         });
+         this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
         },
         /*
         * add WMS layer as linked layer, if configured for wfs rendering
