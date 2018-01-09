@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
             }
         },
         _initGraph: function (data) {
-            var graphMargin = {top: 20, bottom: 30, left: 45, right: 30};
+            var graphMargin = {top: 25, bottom: 30, left: 45, right: 30};
             var graphHeight = 300;
             var graphWidth = 600;
             var wrapper = document.createElement('div');
@@ -65,6 +65,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                         });
             var yAxis = d3.axisLeft(y)
                         .tickSizeOuter(0)
+                        .ticks(4)
+                        .tickSizeInner(-graphWidth+graphMargin.right+graphMargin.left)
                         .tickFormat(function(d){return me.loc('legendValue', {value: d}) + ' m'});
             
             var pathContainer = svg.append('g');
@@ -72,6 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
             var xAxisContainer = svg.append('g')
                 .attr('transform', 'translate(0 ' + (graphHeight - graphMargin.bottom) + ')');
             var yAxisContainer = svg.append('g')
+                .classed('y-axis', true)
                 .attr('transform', 'translate(' + (graphMargin.left) + ' 0)');
 
             var cursor = svg.append('g')

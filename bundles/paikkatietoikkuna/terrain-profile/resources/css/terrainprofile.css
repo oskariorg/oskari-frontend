@@ -3,8 +3,12 @@
 }
 
 .terrainprofile-graph g.tick line, .terrainprofile-graph path.domain{
-    stroke: #aaa;
+    stroke: #bbb;
     shape-rendering: crispEdges;
+}
+
+.terrainprofile-graph .y-axis g.tick line{
+    stroke: rgba(0,0,0,0.27);
 }
 
 .terrainprofile-spinnerwrapper{
