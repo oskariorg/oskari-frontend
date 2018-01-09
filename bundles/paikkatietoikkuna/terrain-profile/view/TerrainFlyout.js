@@ -38,6 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                         .attr('height', graphHeight)
                         .attr('width', graphWidth)
                         .classed('terrainprofile-graph', true);
+
+            // Set up scales & axes
             
             var x = d3.scaleLinear()
                 .range([graphMargin.left, graphWidth-graphMargin.right]);
@@ -68,14 +70,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                         .ticks(4)
                         .tickSizeInner(-graphWidth+graphMargin.right+graphMargin.left)
                         .tickFormat(function(d){return me.loc('legendValue', {value: d}) + ' m'});
+
+            // Set up container groups (for draw ordering)
             
             var pathContainer = svg.append('g');
+
+            svg.append('rect') // white mask below graph
+                .attr('fill', '#fff')
+                .attr('x', 0)
+                .attr('y', graphHeight - graphMargin.bottom)
+                .attr('width', graphWidth)
+                .attr('height', graphMargin.bottom + 10);
 
             var xAxisContainer = svg.append('g')
                 .attr('transform', 'translate(0 ' + (graphHeight - graphMargin.bottom) + ')');
             var yAxisContainer = svg.append('g')
                 .classed('y-axis', true)
                 .attr('transform', 'translate(' + (graphMargin.left) + ' 0)');
+
+            // Setup hover cursor
 
             var cursor = svg.append('g')
                 .attr('class', 'cursor')
@@ -102,7 +115,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .attr('width', graphWidth - graphMargin.left - graphMargin.right)
                 .attr('height', graphHeight - graphMargin.top - graphMargin.bottom)
                 .attr('transform', 'translate(' + graphMargin.left + ' ' + graphMargin.top + ')')
-                .on('mouseover', function () {cursor.style('display', null); })
+                .on('mouseover', function () {
+                    cursor.style('display', null);
+                })
                 .on('mouseout', function () {
                     cursor.style('display', 'none');
                     me.markerHandler.hide();
@@ -117,6 +132,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                     d0 = processed[0][i - 1],
                     d1 = processed[0][i],
                     d = x0 - d0.distance > d1.distance - x0 ? d1 : d0;
+                if(d.height < y.domain()[0]) { // below minimum
+                    cursor.style('display', 'none');
+                } else {
+                    cursor.style('display', null);
+                }
                 cursor.attr('transform', 'translate(' + x(d.distance) + ' 0)');
                 cursor.select('line').attr('y1', y(d.height));
                 focus.attr('transform', 'translate(0 ' + y(d.height) + ')');
@@ -125,16 +145,64 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
 
                 me.markerHandler.showAt(d.coords[0], d.coords[1], text);
             }
+
+            // Set up Y-axis scaling
+
+            var resetScalingButton = svg.append('g').classed('reset-scaling', true);
+            resetScalingButton.append('path')
+                .attr('d', 'M -7 -1 L 7 -1 L 0 -7 Z');
+            resetScalingButton.append('path')
+                .attr('d', 'M -7 2 L 7 2 L 0 8 Z');
+            resetScalingButton.append('path')
+                .classed('touch-area', true)
+                .attr('d', 'M -15 -15 L 15 -15 L 15 15 L -15 15 Z')
+                .on('click', function(){
+                    recalculateYDomain();
+                    me._updateGraph();
+                    resetScalingButton.style('display', 'none');
+                });
+            resetScalingButton
+                .attr('transform', 'translate('+ graphMargin.left/2 +' '+ graphMargin.top/2 +')');
+            resetScalingButton.style('display', 'none');
+
+            var brush = d3.brushY()
+                    .extent([[graphMargin.left - 35, graphMargin.top], [graphMargin.left, graphHeight - graphMargin.bottom]])
+                    .on('end', brushed);
+
+            var brushGroup = svg.append('g')
+                .classed('axis-brush', true)
+                .call(brush);
+
+            function brushed () {
+                var selection = d3.event.selection;
+                if(!selection) {
+                    return;
+                }
+                var start = y.invert(selection[1]);
+                var end = y.invert(selection[0]);
+                brushGroup.call(brush.move, null);
+                y.domain([start, end]);
+                resetScalingButton.style('display', null);
+                me._updateGraph();
+            }
+
             var processed;
-            
-            this._updateGraph = function(data){
-                processed = this._processData(data);
-                x.domain([0, d3.max(processed[0], function(d){return d.distance})]);
+
+            function recalculateYDomain () {
                 var extent = d3.extent(processed[0], function(d){return d.height});
                 if(extent[0] > 0) {
                     extent[0] = 0;
                 }
                 y.domain(extent);
+            }
+            
+            this._updateGraph = function(data){
+                if(data) {
+                    processed = this._processData(data);
+                    x.domain([0, d3.max(processed[0], function(d){return d.distance})]);
+                    recalculateYDomain();
+                    resetScalingButton.style('display', 'none');
+                }
                 area.y0(y(0));
 
                 var paths = pathContainer

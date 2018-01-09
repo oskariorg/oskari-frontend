@@ -8,7 +8,15 @@
 }
 
 .terrainprofile-graph .y-axis g.tick line{
-    stroke: rgba(0,0,0,0.27);
+    stroke: rgba(0,0,0,0.2);
+}
+.terrainprofile-graph .reset-scaling {
+    fill: #666;
+}
+.terrainprofile-graph .reset-scaling .touch-area {
+    fill: none;
+    pointer-events: all;
+    cursor: pointer;
 }
 
 .terrainprofile-spinnerwrapper{
