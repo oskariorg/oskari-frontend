@@ -175,10 +175,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         _createEventHandlers: function () {
             return {
                 /**
-                 * @method AfterMapMoveEvent
-                 * Shows map center coordinates after map move
+                 * @method MapSizeChangedEvent
+                 * Adjust size if map size changes
                  */
-                AfterMapMoveEvent: function () {
+                MapSizeChangedEvent: function () {
                     this._calculatePluginSize();
                 }
             };
