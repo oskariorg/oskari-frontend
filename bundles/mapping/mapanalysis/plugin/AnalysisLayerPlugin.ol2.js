@@ -121,10 +121,6 @@ Oskari.clazz.define(
          _registerLayerEvents: function(layer, oskariLayer){
            var me = this;
 
-           layer.events.register("loadstart", layer, function(){
-             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer.getId());
-           });
-
            layer.events.register("tileloadstart", layer, function(){
              me.getMapModule().loadingState( oskariLayer.getId(), true);
            });

@@ -26,37 +26,16 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
     getName: function () {
         return this.__name;
     },
-    /**
-     * Needed by sandbox.register()
-     */
     init : function() {},
-    /**
-     * @method setSandbox
-     * @param {Oskari.Sandbox} sandbox
-     * Sets the sandbox reference to this component
-     */
     setSandbox: function (sbx) {
         this.sandbox = sbx;
     },
-    /**
-     * @method getSandbox
-     * @return {Oskari.Sandbox}
-     */
     getSandbox: function () {
         return this.sandbox;
     },
-
     handleRequest: function (core, request) {
       this.plugin.setRotation(request.getDegrees());
     },
-    /**
-     * @method start
-     *
-     * implements BundleInstance start methdod
-     *
-     * creates and registers request handlers
-     *
-     */
     start: function(sandbox) {
         var me = this;
         if(me._started){
@@ -67,7 +46,6 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
         me.setSandbox(sandbox);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         me.createPlugin(true);
-
         sandbox.register(me);
         sandbox.requestHandler('rotate.map', this);
     },
@@ -76,7 +54,7 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
         publisher = false;
       }
       var conf = this.conf || {};
-      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin', conf);
+      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.MapRotatorPlugin', conf);
       if(!plugin.isSupported() && !publisher){
         return;
       }
@@ -96,9 +74,5 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
       this.started = false;
     }
   }, {
-      /**
-       * @property {String[]} protocol
-       * @static
-       */
       protocol: ['Oskari.bundle.BundleInstance']
   });

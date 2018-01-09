@@ -54,15 +54,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
             me._popup = popupService.createPopup();
             var singleLegend = false;
+            var dropdown = null;
             popupService.closeAllPopups(true);
 
             var legends = me.getLegends();
-            if(legends.length === 1) {
+            if( legends.length === 1 ) {
                 singleLegend = true;
             }
+            var content = me._popup.getJqueryContent();
+            var legendContent = me.generateLegendContainer(singleLegend);
+
+            if( !singleLegend ) {
+              dropdown = legendContent.find('.oskari-select');
+            }
+
             var title = singleLegend ? me._loc.singleLegend + legends[0].title : me._loc.title;
             me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
-            var legendContainer = me.getLayerLegend(function() {
+
+            me.getLayerLegend( function( img ) {
+                content.find('.imgDiv').remove();
+                content.find('.legendLink').remove();
+                content.find('.error').remove();
+                var legendImage = jQuery('<div class="imgDiv"></div>');
+                var legendLink = jQuery('<div class="legendLink"><a target="_blank" ></a></br></br></div>');
+                legendLink.find('a').attr('href', img.src);
+                legendLink.find('a').text(me._loc.newtab);
+                legendImage.append(img);
+                content.append(legendContent);
+                content.append(legendLink);
+                content.append(legendImage);
                 // move popup if el and topOffsetElement
                 if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
                     me._popup.moveTo(el, 'bottom', true, topOffsetElement);
@@ -76,20 +96,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 } else {
                     me._popup.moveTo(me.getMapModule().getMapEl(), 'center', true, null);
                 }
-                me._popup.getJqueryContent().find('.accordion').remove();
-                me._popup.getJqueryContent().find('.error').remove();
-                me._popup.getJqueryContent().append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
-            }, singleLegend);
+                content.find('.error').remove();
+                content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
+            }, singleLegend, dropdown );
 
-            legendContainer.find('div.oskari-select').trigger('change');
+            if( !singleLegend ) {
+              dropdown.trigger('change');
+            }
 
-            if (me._isVisible) {
-                me._popup.show(title, legendContainer);
-                popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+            if ( me._isVisible ) {
+                me._popup.show( title, null );
+                popupCloseIcon = ( Oskari.util.isDarkColor( themeColours.activeColour ) ) ? 'icon-close-white' : undefined;
                 me._popup.createCloseIcon();
                 me._popup.onClose(function() {
                     me._isVisible = false;
-                    me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-maplegend'].iconCls);
+                    me._resetMobileIcon( el, me._mobileDefs.buttons['mobile-maplegend'].iconCls );
                 });
                 me._popup.setColourScheme({
                     'bgColour': themeColours.activeColour,
@@ -132,8 +153,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var legend = me._templates.maplegend.clone();
             var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
             me._popup = popupService.createPopup();
+            me._popup.addClass('maplegend__popup');
             var themeColours = me.getMapModule().getThemeColours();
             var singleLegend = false;
+            var dropdown = null;
             popupService.closeAllPopups(true);
 
             legend.attr('title', me._loc.tooltip);
@@ -149,10 +172,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 if(legends.length === 1) {
                     title = me._loc.singleLegend + legends[0].title;
                     singleLegend = true;
+                    me._popup.show(title, null);
+                } else {
+                  me._popup.show(title, null);
+                  me._popup.moveTo(legend, popupLocation, true);
                 }
-                var content = me._popup.getJqueryContent();
 
-                me._popup.close(true);
+                var content = me._popup.getJqueryContent();
+                var legendContent = me.generateLegendContainer(singleLegend);
+                if( !singleLegend ) {
+                  dropdown = legendContent.find('.oskari-select');
+                }
+                content.append(legendContent);
+
                 var popupCloseIcon = (me.getMapModule().getTheme() === 'dark') ? 'icon-close-white' : undefined;
 
                 me._popup.createCloseIcon();
@@ -170,23 +202,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 });
                 me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
                 me._isVisible = true;
-                var legendContainer = me.getLayerLegend( function() {
-                    me._popup.show(title, legendContainer);
+                me.getLayerLegend( function( img ) {
+                    content.find('.imgDiv').remove();
+                    content.find('.legendLink').remove();
+                    content.find('.error').remove();
+                    var legendImage = jQuery('<div class="imgDiv"></div>');
+                    var legendLink = jQuery('<div class="legendLink"><a target="_blank" ></a></br></br></div>');
+                    legendLink.find('a').attr('href', img.src);
+                    legendLink.find('a').text(me._loc.newtab);
+                    legendImage.append(img);
+                    content.append(legendLink);
+                    content.append(legendImage);
                     me._popup.moveTo(legend, popupLocation, true);
-                }, function() {
-                    me._popup.show(title, legendContainer);
+                }, function( ) {
                     me._popup.moveTo(legend, popupLocation, true);
-                    content.find('.accordion').remove();
-                    content.empty();
+                    content.find('.imgDiv').remove();
                     content.find('.error').remove();
                     content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
-                }, singleLegend);
-                if( singleLegend ) {
-                    me._popup.getJqueryContent().remove();
+                }, singleLegend, dropdown);
+
+                if( !singleLegend ) {
+                  dropdown.trigger('change');
                 }
-
-
-                legendContainer.find('div.oskari-select').trigger('change');
             });
             return legend;
         },
@@ -200,109 +237,91 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             }
         return popupLocation;
         },
-        getLayerLegend: function(successCb, errorCb, singleLegend) {
+        generateLegendContainer: function( singleLegend ) {
+          var me = this;
+          var legendContainer = this._templates.legendContainer.clone();
+          var legendInfo = this._templates.legendInfo.clone();
+          var legendDivider = this._templates.legendDivider.clone();
+
+          legendInfo.text(me._loc.infotext);
+
+          if( !singleLegend ) {
+            var dropdown = me.createDropdown();
+            legendContainer.append(legendInfo);
+            legendContainer.append(legendDivider);
+            legendContainer.append(dropdown);
+          } else {
+            legendContainer.append(legendDivider);
+          }
+          return legendContainer;
+
+        },
+        createDropdown: function() {
+          var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+
+          var legendLayers = this.getLegends();
+          var options = {
+              placeholder_text: 'layers',
+              allow_single_deselect: false,
+              disable_search_threshold: 10,
+              width: '100%'
+          };
+          var dropdown = select.create(legendLayers, options);
+          dropdown.css({
+              width: '96%',
+              paddingBottom: '1em'
+          });
+          select.adjustChosen();
+          select.selectFirstValue();
+          return dropdown;
+        },
+        getLayerLegend: function(successCb, errorCb, singleLegend, dropdown) {
 
             var layer,
-                layerContainer,
-                accordionPanel,
-                legendContainer = this._templates.legendContainer.clone(),
-                legendInfo = this._templates.legendInfo.clone(),
-                legendDivider = this._templates.legendDivider.clone(),
-                me = this,
-                accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+                me = this;
 
             if( singleLegend ) {
-                accordion.insertTo(legendContainer);
-                if (accordionPanel) {
-                    accordion.removePanel(accordionPanel);
-                }
                 var legendLayer = me.getLegends();
                 layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(legendLayer[0].id);
 
                 if (!layer) {
                     return;
                 }
-                var legendImg = jQuery('<img></img>');
-                var legendLink = jQuery('<div><a target="_blank" ></a></br></br></div>');
+                var legendImg = jQuery('<img id="legendImg"></img>');
                 legendImg.attr('src', layer.getLegendImage());
 
                 if(typeof successCb === 'function') {
                     legendImg.on('load', function() {
-                        successCb();
+                        successCb(this);
                     });
                 }
                 if(typeof errorCb === 'function') {
                     legendImg.on('error', function() {
-                        errorCb();
+                        errorCb(this);
                     });
                 }
-                legendLink.find('a').attr('href', layer.getLegendImage());
-                legendLink.find('a').text(me._loc.newtab);
 
-                accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                accordionPanel.open();
-                accordionPanel.getContainer().append(legendLink);
-                accordionPanel.getContainer().append(legendImg);
-                accordionPanel.getHeader().remove();
-                accordion.addPanel(accordionPanel);
-                return legendContainer;
             } else {
-                legendInfo.text(me._loc.infotext);
-                legendContainer.append(legendInfo);
-                legendContainer.append(legendDivider);
-
-                var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-
-                var legendLayers = me.getLegends();
-                var options = {
-                    placeholder_text: 'layers',
-                    allow_single_deselect: false,
-                    disable_search_threshold: 10,
-                    width: '100%'
-                };
-                var dropdown = select.create(legendLayers, options);
-                dropdown.css({
-                    width: '96%',
-                    paddingBottom: '1em'
-                });
-                select.adjustChosen();
-                select.selectFirstValue();
-                legendContainer.append(dropdown);
-
-                accordion.insertTo(legendContainer);
 
                 dropdown.on("change", function(e, params) {
-                    if (accordionPanel) {
-                        accordion.removePanel(accordionPanel);
-                    }
+
                     var id = e.target.value ? e.target.value : jQuery(e.target).find(':selected').val();
                     layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(id);
 
-                    if (!layer) {
+                    if ( !layer ) {
                         return;
                     }
-                    var legendImg = jQuery('<img></img>');
-                    var legendLink = jQuery('<div><a target="_blank" ></a></br></br></div>');
+                    var legendImg = jQuery('<img id="legendImg"></img>');
                     legendImg.attr('src', layer.getLegendImage());
                     legendImg.on('load', function() {
                         // do stuff on success
-                        successCb();
+                        successCb(this);
                     });
                     legendImg.on('error', function() {
-                        errorCb();
+                        errorCb(this);
                     });
-                    legendLink.find('a').attr('href', layer.getLegendImage());
-                    legendLink.find('a').text(me._loc.newtab);
-
-                    accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                    accordionPanel.open();
-                    accordionPanel.getContainer().append(legendLink);
-                    accordionPanel.getContainer().append(legendImg);
-                    accordionPanel.getHeader().remove();
-                    accordion.addPanel(accordionPanel);
 
                 });
-                return legendContainer;
             }
         },
         getLegends: function() {
@@ -339,12 +358,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         isOpen: function() {
             return this._isVisible;
         },
-        refresh: function() {
-            this._popup.dialog.children().empty();
-            var legendContainer = this.getLayerLegend();
-            jQuery(this._popup.dialog).append(legendContainer);
-            legendContainer.find('div.oskari-select').trigger('change');
-        },
 
         redrawUI: function(mapInMobileMode, forced) {
             if (this.getElement()) {
@@ -379,7 +392,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 isMobile = Oskari.util.isMobile();
 
             if (me.isOpen()) {
-                me._popup.dialog.children().empty();
                 me._isVisible = false;
                 me._popup.close(true);
                 return me.isOpen();

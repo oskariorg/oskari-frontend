@@ -31,7 +31,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
         // Additional data for each printable layer
         this.tileData = undefined;
         this.printService = undefined;
-        this.legendPlugin = undefined;
         //  Format producers
         this.backendConfiguration = {
             formatProducers: {
@@ -150,20 +149,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
             );
             sandbox.registerService(printService);
             this.printService = printService;
-
-            var locale = me.getLocalization(),
-                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                pluginConfig = this.conf.legend,
-                legendPlugin = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.printout.plugin.LegendPlugin',
-                    pluginConfig,
-                    me,
-                    locale
-                );
-
-            mapModule.registerPlugin(legendPlugin);
-            mapModule.startPlugin(legendPlugin);
-            this.legendPlugin = legendPlugin;
 
             //Let's extend UI
             var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
@@ -445,11 +430,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                     me.sandbox.request(me.getName(), request);
                     this.printout.setEnabled(false);
                     this.printout.hide();
-                    // clean legend
-                    if (this.printout) {
-                        this.legendPlugin.clearLegendLayers();
-                    }
-
                 }
             }
         },

@@ -11,14 +11,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
      *     reference to component that created the tile
      */
 
-    function (instance, localization) {
+    function (instance) {
         this.conf = instance.conf;
         this.instance = instance;
         this.template = jQuery('<div class="account"><table class="info oskari-grid"></table><div class="bottomlinks"></div></div>');
-        this.loc = localization;
+        this.loc = Oskari.getMsg.bind(null, 'PersonalData');
     }, {
         getTitle: function () {
-            return this.loc.title;
+            return this.loc('tabs.account.title');
         },
         addTabContent: function (container) {
             var content = this.template.clone();
@@ -31,18 +31,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
                 sandbox = me.instance.getSandbox(),
                 fieldTemplate = jQuery('<tr class="dataField"><th class="label"></th><td class="value"></td></tr>'),
                 user = Oskari.user(),
-                localization = this.loc,
+                profileLink = jQuery('#oskari-profile-link'),
                 accountData = [{
-                    label: localization.firstName,
+                    label: me.loc('tabs.account.firstName'),
                     value: user.getFirstName()
                 }, {
-                    label: localization.lastName,
+                    label: me.loc('tabs.account.lastName'),
                     value: user.getLastName()
                 }, {
-                    label: localization.nickName,
+                    label: me.loc('tabs.account.nickName'),
                     value: user.getNickName()
                 }, {
-                    label: localization.email,
+                    label: me.loc('tabs.account.email'),
                     value: user.getEmail()
                 }],
                 infoContainer = container.find('.info'),
@@ -53,6 +53,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
                 bottomLinksContainer,
                 link,
                 changeInfoUrl = null;
+
+            profileLink.on('click', function() {
+              me.instance.openProfileTab();
+              return false;
+            });
+
             for (i = 0; i < accountData.length; i += 1) {
                 data = accountData[i];
                 fieldContainer = fieldTemplate.clone();
@@ -67,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
 
             bottomLinks = [{
                 // FIXME get URL from bundle config
-                label: localization.changeInfo,
+                label: me.loc('tabs.account.changeInfo'),
                 href: changeInfoUrl
             }];
             bottomLinksContainer = container.find('div.bottomlinks');

@@ -50,7 +50,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
             headerContainer.append(header);
             panel.setHeader(header);
 
-            panel.insertTo(this.ui.find('div.tabsContent'));
             this.panels.push(panel);
             if (this.panels.length === 1) {
                 // select first by default
@@ -81,22 +80,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
         },
 
         /**
-         * @method addTabChangeListener
-         * Adds a listener function that should be called when tab selection changes
-         * (tab is selected).
-         * The function will receive two parameters:
-         * - first the previously selected panel
-         * - second the newly selected panel
-         * function(previousTab, newTab)
-         * If previousTab is undefined, this was the first tab added.
-         * If newTab is undefined, all tabs have been removed.
-         * @param {Function} pCallback function to call when tabs are changed
-         */
-        addTabChangeListener: function (pCallback) {
-            this.tabChangeListeners.push(pCallback);
-        },
-
-        /**
          * @method select
          * Selects the given panel programmatically and notifies tabChangeListeners if any.
          * @param {Oskari.userinterface.component.TabPanel} panel
@@ -113,15 +96,14 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
                     }
                 }
             }
-            var tabs = this.ui.children().children('div.tab-content');
-            tabs.hide();
+            this.ui.find('div.tab-content').detach();
+            panel.insertTo(this.ui.find('div.tabsContent'));
 
             var headerContainer = this.ui.find('ul li select');
             var options = headerContainer.find('option');
             options.removeAttr('selected');
             var panelIndex = this._getPanelIndex(panel);
             jQuery(options[panelIndex]).attr('selected', 'selected');
-            panel.getContainer().show();
             // notify listeners
             for (i = 0; i < this.tabChangeListeners.length; i++) {
                 this.tabChangeListeners[i](previousPanel, panel);
@@ -198,13 +180,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
                 return true;
             }
             return false;
-        },
-        /**
-         * @method insertTo
-         * Adds this set of tabs to given container.
-         * @param {jQuery} container reference to DOM element
-         */
-        insertTo: function (container) {
-            container.append(this.ui);
         }
+    }, {
+        extend : ['Oskari.userinterface.component.TabContainer']
     });

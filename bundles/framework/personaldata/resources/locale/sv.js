@@ -31,7 +31,7 @@ Oskari.registerLocalization(
                     "cancel": "Avbryt",
                     "error_noname": "Skriv namnet på kartvyn",
                     "deletetitle": "Ta bort kartvyn",
-                    "deletemsg": "Vill du ta bort denna kartvy?"
+                    "deletemsg": "Vill du ta bort denna kartvy \"{name}\"?"
                 },
                 "save": {
                     "success": "Kartvyn har sparats.",
@@ -87,7 +87,7 @@ Oskari.registerLocalization(
                     "cancel": "Avbryt",
                     "error_noname": "Namnge kartan",
                     "deletetitle": "Ta bort den inbäddade kartan",
-                    "deletemsg": "Vill du ta bort den inbäddade kartan? Efter radering kartan kommer inte längre att visas på din webbplats.",
+                    "deletemsg": "Vill du ta bort den inbäddade kartan \"{name}\"? Efter radering kartan kommer inte längre att visas på din webbplats.",
                     "showErrorTitle": "Ofullständig kartvy",
                     "showConfirmMissing": "Kartvyn är ofullständig. Några av kartlagren är inte tillgängliga. Vill du fortfarande öppna den här kartvyn?",
                     "showConfirmNotLoaded": "Alla kartlager har ännu inte laddats ned. Försök på nytt senare."
@@ -130,6 +130,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Ja",
             "no": "Nej"
+        },
+        "guidedTour": {
+            "title": "Min data",
+            "message": "\"Min data\"-menyn innehåller alla dina sparade platser, kartvyer, inbäddade kartor, indikatorer, analys och dataset. Där kan du också kontrollera din kontoinformation. Mina data visas endast för inloggade användare.",
+            "openLink": "Visa Mina data",
+            "closeLink": "Göm Mina data",
+            "tileText": "Min data"
         }
     }
 });

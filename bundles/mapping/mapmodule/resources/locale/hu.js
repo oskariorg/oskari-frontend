@@ -74,6 +74,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": ""
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "A térképnézet elmozgatása",
+                "message": "A nézetet mozgathatja a térképen kattintással és húzással vagy elmozgatás vezérlővel. Az elmozgatás vezérlő közepére kattintva visszatérhet az alapértelmezett nézetbe. Tipp: a térképet a billentyűzeten lévő nyilak segítségével is mozgathatja."
+            },
+            "help2": {
+                "title": "Nagyítás és kicsinyítés",
+                "message": "A térképen nagyíthat és kicsinyíthet a méretarány-görgetősávval vagy a görgetősáv melletti plusz és mínusz gombok segítségével. Tipp: a billentyűzeten lévő plusz és mínusz gombok segítségével is nagyíthat vagy a térképpe való dupla kattintással. A nagyítás az egér görgőjével is lehetséges."
+            }
         }
     }
 });

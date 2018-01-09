@@ -72,11 +72,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
          * @return {Object}               result with values and helper functions
          */
         getClassification : function(indicatorData, options) {
+            var me = this;
             if(typeof indicatorData !== 'object') {
                 throw new Error('Data expected as object with region/value as keys/values.');
             }
-            var opts = this._validateOptions(options);
-            var list = this._getDataAsList(indicatorData);
+            var opts = me._validateOptions(options);
+            var list = me._getDataAsList(indicatorData);
             if(list.length < 3) {
                 return;
             }
@@ -84,7 +85,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 opts.count = list.length -1;
             }
 
-            if (this._hasNonNumericValues(list)) {
+            if (me._hasNonNumericValues(list)) {
                 // geostats can handle this, but lets not support for now (gstats.getUniqueValues() used previously)
                 throw new Error('Non-numeric data not supported for now');
             }
@@ -155,11 +156,217 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             };
             // createLegend
             response.createLegend = function(colors, title) {
+                // Point legend
+                if(opts.mapStyle === 'points') {
+                    stats.doCount();
+                    var counter = stats.counter;
+                    var ranges = stats.getRanges();
+                    if(opts.mode ===  'discontinuous'){
+                        ranges = stats.getInnerRanges();
+                    }
+
+                    if(!ranges) {
+                        return;
+                    }
+
+                    return me._getPointsLegend(ranges, opts, colors[0], counter,
+                        {
+                            separator: stats.separator,
+                            precision: stats.precision,
+                            precisionflag: stats.precisionflag,
+                            legendSeparator: stats.legendSeparator
+                        }
+                    );
+                }
+
+                // Choropleth  legend
                 stats.setColors(colors);
-                var legendHTML = stats.getHtmlLegend(null, title || '', true, null, opts.mode);
-                return legendHTML;
+                return stats.getHtmlLegend(null, title || '', true, null, opts.mode);
             };
             return response;
+        },
+        getPixelForSize: function(index, size, range) {
+            var iconSize = size || {};
+            var ranges = range || {};
+            if(!iconSize.min) {
+                iconSize.min = 10;
+            }
+            if(!iconSize.max) {
+                iconSize.max = 150;
+            }
+            if(!ranges.min) {
+                ranges.min = 0;
+            }
+            if(!ranges.max) {
+                ranges.max = 4;
+            }
+            var x = d3.scaleSqrt()
+                .domain([ranges.min, ranges.max])
+                .range([iconSize.min, iconSize.max]);
+            return x(index+1);
+        },
+        _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
+            var me = this;
+            var sb = Oskari.getSandbox();
+            var x = 0, y = 0;
+            var fontSize = 8;
+
+            var legend = jQuery('<div class="statsgrid-svg-legend"></div>');
+            var svg = jQuery('<svg xmlns="http://www.w3.org/2000/svg">'+
+                '   <svg class="symbols"></svg>'+
+                '</svg>');
+
+            var pointSymbol = jQuery('<div>'+
+                '       <svg x="0" y="0">'+
+                '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"></circle>'+
+                '       </svg>'+
+                '</div>');
+
+            var lineAndText = jQuery('<div>'+
+                '   <svg>'+
+                '       <g>'+
+                '           <svg>'+
+                '               <line stroke="#000000" stroke-width="1"></line>'+
+                '           </svg>'+
+                '       </g>'+
+                '   </svg>'+
+                '</div>');
+
+            var maxSize = me.getPixelForSize(ranges.length-1,
+                {
+                    min: opts.min,
+                    max: opts.max
+                }, {
+                    min: 0,
+                    max: opts.count-1
+                }
+            );
+
+            var minSize = me.getPixelForSize(0,
+                {
+                    min: opts.min,
+                    max: opts.max
+                }, {
+                    min: 0,
+                    max: opts.count-1
+                }
+            );
+
+            svg.attr('height', maxSize + fontSize);
+            svg.find('svg.symbols').attr('y', fontSize);
+            svg.find('svg.texts').attr('y', fontSize);
+            svg.find('svg.texts').attr('height', maxSize + fontSize);
+
+            // Fixes legend texts when mode is distinct
+            if(opts.mode == 'distinct') {
+                var isInt = function(n) {
+                   return typeof n === 'number' && parseFloat(n) == parseInt(n, 10) && !isNaN(n);
+                }; // 6 characters
+                ranges.forEach(function(range, index){
+                    var tmp = range.split(statsOpts.separator);
+                    var start_value = parseFloat(tmp[0]).toFixed(statsOpts.precision);
+                    var end_value = parseFloat(tmp[1]).toFixed(statsOpts.precision);
+                    if(index != 0) {
+                        if(isInt(start_value)) {
+                            start_value = parseInt(start_value) + 1;
+                            // format to float if necessary
+                            if(statsOpts.precisionflag == 'manual' && statsOpts.precision != 0) start_value = parseFloat(start_value).toFixed(statsOpts.precision);
+                        } else {
+                            start_value = parseFloat(start_value) + (1 / Math.pow(10,statsOpts.precision));
+                            // strangely the formula above return sometimes long decimal values,
+                            // the following instruction fix it
+                            start_value = parseFloat(start_value).toFixed(statsOpts.precision);
+                        }
+                    }
+                    ranges[index] = start_value + statsOpts.separator + end_value;
+                });
+            }
+
+            var legendValuesPosition = function(size, index) {
+                var step = ((maxSize-1)-minSize/2)/(ranges.length-1);
+                var y = (ranges.length - index-1) * step;
+                if(y == 0) {
+                    y=1;
+                }
+                if(index == ranges.length-1) {
+                    y+=3;
+                }
+                return {
+                    x1: maxSize/2,
+                    x2: maxSize + 10,
+                    y1: y,
+                    y2: y
+                };
+            };
+
+            ranges.forEach(function(range, index){
+                // Create point symbol
+                var point = pointSymbol.clone();
+                var svgMain = point.find('svg').first();
+
+                var tmp = range.split(statsOpts.separator);
+                var start_value = parseFloat(tmp[0]).toFixed(statsOpts.precision);
+                var end_value = parseFloat(tmp[1]).toFixed(statsOpts.precision);
+
+                var size = me.getPixelForSize(index,
+                    {
+                        min: opts.min,
+                        max: opts.max
+                    }, {
+                        min: 0,
+                        max: opts.count-1
+                    }
+                );
+                svgMain.find('circle').attr('cx', size/2);
+                svgMain.find('circle').attr('cy', size/2);
+                svgMain.find('circle').attr('r', (size/2)-1);
+                x = (maxSize - size)/2;
+                y = (maxSize - size);
+
+                svgMain.attr('x', x);
+                svgMain.attr('y', y);
+
+                var circle = point.find('circle');
+                circle.attr({
+                    'fill': '#' + color
+                });
+
+                svg.find('svg.symbols').prepend(point.html());
+
+                // Create texts and lines
+                var label = lineAndText.clone();
+                var line = label.find('line');
+                var valPos = legendValuesPosition(size,index);
+                line.attr({
+                    x1: valPos.x1,
+                    y1: valPos.y1,
+                    x2: valPos.x2,
+                    y2: valPos.y2,
+                    'shape-rendering': 'crispEdges'
+                });
+
+                var count = counter[index];
+                var text = start_value + statsOpts.legendSeparator + end_value;
+                if(start_value === end_value) {
+                    text = start_value;
+                }
+                var textSvgEl = jQuery('<svg>'+
+                '   <text fill="#000000" font-size="'+fontSize+'" letter-spacing="0.7">'+
+                    text + '<tspan font-size="'+fontSize+'" fill="#666" dx="4">('+count+')</tspan>' +
+                '   </text>'+
+                '</svg>');
+
+                textSvgEl.find('text').attr({
+                    x: valPos.x2 + 4,
+                    y: valPos.y2 + fontSize/2
+                });
+
+                label.find('g').append(textSvgEl);
+                svg.find('svg.symbols').prepend(label.html());
+            });
+
+            legend.append(svg);
+            return legend;
         },
         /**
          * Validates and normalizes options
@@ -173,7 +380,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             // precision is an integer between 0-20. Will be computed automatically by geostats if no value is set
             //opts.precision = opts.precision || 1;
-            var range = this._colorService.getRange(opts.type);
+            var range = this._colorService.getRange(opts.type, opts.mapStyle);
             if(opts.count < range.min) {
                 // no need to classify if partitioning to less than 2 groups
                 throw new Error('Requires atleast ' + range.min + ' partitions. Count was ' + opts.count);
@@ -229,7 +436,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
             return false;
         }
-
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

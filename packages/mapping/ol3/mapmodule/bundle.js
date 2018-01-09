@@ -39,7 +39,7 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "expose" : "ol",
-                    "src": "../../../../libraries/ol3/ol-v3.20.1-oskari.js"
+                    "src": "../../../../libraries/ol3/ol-v4.4.2-oskari.js"
                 },
                 /*
                  * Abstract base
@@ -163,6 +163,9 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/logo/DataProviderInfoService.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/logo/logo.service.js"
                 }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/logoplugin.css"

@@ -77,7 +77,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 headerContainer.children().eq(index-1).after(header);
             }
 
-            panel.insertAt(this.ui.find('div.tabsContentItem'),index);
             this.panels.splice(index,0,panel);
             if (this.panels.length === 1) {
                 // select first by default
@@ -142,14 +141,31 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             headerContainer.find('li').removeClass('active');
             // only direct children since we can have another tabcontainer inside
             tabs = this.ui.children().children('div.tab-content');
-            tabs.hide();
+            tabs.detach();
             panel.getHeader().addClass('active');
-            panel.getContainer().show();
+            panel.insertTo(this.ui.find('div.tabsContent'));
             panel.handleSelection(true);
             // notify listeners
             for (i = 0; i < this.tabChangeListeners.length; i += 1) {
                 this.tabChangeListeners[i](previousPanel, panel);
             }
+        },
+        /**
+         * Returns panel with requested id or null if not found
+         * @param  {String|Number} id id for panel to find
+         * @return {Oskari.userinterface.component.TabPanel} panel with requested id or null if not found
+         */
+        getPanelById: function (id) {
+            if(arguments.length === 0) {
+                return null;
+            }
+            var panels = this.panels.filter(function(panel) {
+                return panel.getId() === id;
+            });
+            if(panels.length) {
+                return panels[0];
+            }
+            return null;
         },
 
         /**
@@ -159,7 +175,10 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @return {Boolean} true if given panel is currently selected
          */
         isSelected: function (panel) {
-            return panel.getHeader().hasClass('active');
+            if(panel && panel.getHeader()) {
+                return panel.getHeader().hasClass('active');
+            }
+            return false;
         },
 
         /**

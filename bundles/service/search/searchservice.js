@@ -79,8 +79,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          */
         doSearch: function(searchString, onSuccess, onError) {
             var lang = Oskari.getLang();
-            var sb = Oskari.getSandbox();
-            var epsg = Oskari.getSandbox().getMap().getSrsName();
+            var sb = this.sandbox || Oskari.getSandbox();
             var evtBuilder = sb.getEventBuilder('SearchResultEvent');
             jQuery.ajax({
                 dataType: "json",
@@ -89,7 +88,8 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                 data: {
                     "searchKey": searchString,
                     "Language": lang,
-                    "epsg": epsg
+                    "epsg": sb.getMap().getSrsName(),
+                    "autocomplete": false
                 },
                 success: function(response) {
                     sb.notifyAll(evtBuilder(true, searchString, response));
@@ -104,9 +104,28 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     }
                 }
             });
-        }
-    },
-    {
+        },
+        doAutocompleteSearch: function(searchKey, onSuccess) {
+            if(typeof onSuccess !== 'function') {
+                return;
+            }
+            var lang = Oskari.getLang();
+            var sb = this.sandbox || Oskari.getSandbox();
+            jQuery.ajax({
+                dataType: "json",
+                type: "POST",
+                url: this._searchUrl,
+                data: {
+                    "searchKey": searchKey,
+                    "Language": lang,
+                    "epsg": sb.getMap().getSrsName(),
+                    "autocomplete": true
+                },
+                success: function(response) {
+                    onSuccess(response);
+                }
+            });
+        },
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

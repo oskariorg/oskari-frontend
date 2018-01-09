@@ -42,7 +42,7 @@ Parameters for options-object:
 </tr>
 <tr>
   <td> style</td> <td> Object</td> <td> Styles for draw, modify and intersect mode. If options don't include custom style, sets default styles. See styling example at the last example of this page.</td>
-  <td> 
+  <td>
   		{
             fill : {
                 color : 'rgba(255,0,255,0.2)'
@@ -71,7 +71,7 @@ Parameters for options-object:
     </td>
 </tr>
 <tr>
-  <td> allowMiltipleDrawing </td><td> Boolean/String </td><td> true - multiple selection is allowed.<br> false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map.<br> 'single' - selection will be removed before drawing a new selection.</td><td> true</td>
+  <td> allowMultipleDrawing </td><td> Boolean/String </td><td> true - multiple selection is allowed.<br> false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map.<br> 'single' - selection will be removed before drawing a new selection.</td><td> true</td>
 </tr>
 <tr>
   <td> drawControl </td><td> Boolean </td><td> true - activates draw control.<br> false - drawing will not activated.</td><td> true</td>
@@ -95,12 +95,12 @@ Parameters for options-object:
 ```javascript
 var sb = Oskari.getSandbox();
 sb.postRequestByName('DrawTools.StartDrawingRequest', [
-		'bufferedLineSelection', 
+		'bufferedLineSelection',
 		'LineString']
 		{
         	buffer: 200,
             allowMultipleDrawing: 'single',
-			drawControl: true, 
+			drawControl: true,
             modifyControl: false
         }		
 );
@@ -139,7 +139,7 @@ Start to draw a polygon for 'myplaces' functionality with specific style and sho
  var style = {
 	    draw : {
 	        fill : {
-	             color: 'rgba(238,0,0,0.3)' 
+	             color: 'rgba(238,0,0,0.3)'
 	        },
 	        stroke : {
 	              color: 'rgba(0,0,0,1)',
@@ -151,10 +151,10 @@ Start to draw a polygon for 'myplaces' functionality with specific style and sho
 	                color: 'rgba(0,0,0,1)'
 	              }
 	        }
-	    }, 
+	    },
 	    modify : {
 	        fill : {
-	             color: 'rgba(153,102,255,0.3)' 
+	             color: 'rgba(153,102,255,0.3)'
 	        },
 	        stroke : {
 	              color: 'rgba(0,0,0,1)',
@@ -169,7 +169,7 @@ Start to draw a polygon for 'myplaces' functionality with specific style and sho
 	    },
 	    intersect : {
 	        fill : {
-	             color: 'rgba(255,255,255,0.3)' 
+	             color: 'rgba(255,255,255,0.3)'
 	        },
 	        stroke : {
 	              color: 'rgba(0,0,0,1)',

@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "L’opérateur logique est manquant."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Selected map layers",
+            "message": "In the \"Selected map layers\" -menu you can define how the selected map layers are displayed. You can sort map layer by dragging them. You can also define opacity and for some of map layers you can also select the pre-defined style. For data products it is possible to show feature data in a tabular form. The map layer can be shown or hidden.",
+            "openLink": "Show Selected map layers",
+            "closeLink": "Hide Selected map layers",
+            "tileText": "Selected Map Layers"
         }
     }
 });

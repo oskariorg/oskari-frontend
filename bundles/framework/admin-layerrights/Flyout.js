@@ -282,7 +282,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 option.remove();
             }
             if (operation == 'update') {
-                option.html(role.name);
+                option.text(role.name);
             }
             if (operation == 'add') {
                 select.append("<option value=" + role.id + ">" + role.name + "</option>");
@@ -349,7 +349,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 cell = me._templates.name.clone();
                 cell.attr('data-resource', layerRight.resourceName);
                 cell.attr('data-namespace', layerRight.namespace);
-                cell.html(layerRight.name);
+                cell.text(Oskari.util.sanitize(layerRight.name));
                 dataCell.append(cell);
                 dataRow.append(dataCell);
 
@@ -561,27 +561,28 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         makeExternalIdsSelect: function(result, externalType, selectedId) {
             "use strict";
             var externalIdSelect = jQuery(this.container).find("select.admin-layerrights-role"),
-                a,
+                optionEl,
                 d,
                 rightsLoc = this.instance._localization.rights;
 
             externalIdSelect.html("");
             if (externalType !== "0") {
-                if (selectedId !== "0") {
-                    a = '<option value="0" >-- ' + rightsLoc.selectValue + ' --</option>';
-                } else {
-                    a = '<option value="0" selected="selected">-- ' + rightsLoc.selectValue + ' --</option>';
+                optionEl = document.createElement('option');
+                optionEl.value = "0";
+                optionEl.textContent = '-- ' + rightsLoc.selectValue + ' --';
+                if (selectedId == "0") {
+                    optionEl.setAttribute('selected', 'selected');
                 }
+                externalIdSelect.append(optionEl);
                 for (d = 0; d < result.external.length; d += 1) {
-                    if (result.external[d].id === selectedId) {
-                        a += '<option selected="selected" value="' + result.external[d].id + '">' + result.external[d].name + "</option>";
-                    } else {
-                        a += '<option value="' + result.external[d].id + '">' + result.external[d].name + "</option>";
-                    }
+                  optionEl = document.createElement('option');
+                  optionEl.value = result.external[d].id;
+                  optionEl.textContent = result.external[d].name;
+                  if (result.external[d].id === selectedId) {
+                        optionEl.setAttribute('selected', 'selected');
+                  }
+                  externalIdSelect.append(optionEl);
                 }
-                externalIdSelect.html(a);
-            } else {
-                externalIdSelect.html("");
             }
         }
 

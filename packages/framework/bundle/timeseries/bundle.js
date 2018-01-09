@@ -26,19 +26,26 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundle"
                 "src": "../../../../bundles/framework/timeseries/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/timeseries/TimeseriesPlayback.js"
+                "src": "../../../../bundles/framework/timeseries/service/TimeseriesService.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/timeseries/service/TimeseriesLayerService.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/timeseries/view/TimeseriesControlPlugin.js"
+            },{
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/timeseries/WMSAnimator.js"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/timeseries/resources/css/timeseriesplayback.css"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/timeseries/request/AnimateLayerRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/timeseries/request/AnimateLayerRequestHandler.js"
-            }, {
-                "type": "text/javascript",
                 "src" : "../../../../libraries/moment/2.10.6/moment-with-locales.js"
+            }, {
+                "type": "text/javascript",
+                "expose": "d3",
+                "src": "../../../../libraries/d3/d3.min.js"
             }],
         "locales": [{
             "lang": "en",

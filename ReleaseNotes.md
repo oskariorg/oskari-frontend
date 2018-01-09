@@ -1,5 +1,350 @@
 # Release Notes
 
+## 1.45.0
+
+### ProgressEvents for maplayers
+
+WMS singletile layers in OpenLayers 3 implementation now send progress events like tiled layers.
+
+## 1.44.3
+
+### VectorLayerPlugin / AddFeaturesToMapRequest
+
+Fixed an issue where a vectorlayer that was shown on the UI layer selection (created with the request showLayer=true) could not be re-added to the map after being removed.
+
+### Map plugin localization
+
+Fixed an issue where plugin couldn't start because it didn't have localization. This fixes an issue where map legends tool in publisher was not working properly.
+
+## 1.44.2
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools for statistics functionality activated only when editing published maps with said functionality and not when creating new published maps.
+
+### Build-script
+
+Fixed an issue where images were not correctly copied for minified application when folder name included uppercase characters.
+
+## 1.44.1
+
+### Grid
+
+Fixed issues:
+- grid paging didn't work
+- grid selection error when ``select``-function  is used to select row when grid has not data yet
+
+#### VectorLayerPlugin ol2/ol3
+
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer which has none.
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer that is not on the map (now ignores the call, previously cleared all features from all layers).
+Fixed an error introduced in 1.44.0 where ``MapModulePlugin.AddFeaturesToMapRequest`` with priority value resulted in a JavaScript error.
+
+### publisher2
+
+Fixed an issue where the button to add layers in publisher didn't work.
+
+### FormInput
+
+Floating labels were created to all FormInput components which used setPlaceHolder method. Now floating labels are created by calling setFloatingLabel. If you want to use floating labels with FormInput component, you have to use new method. Floating label position can be adjusted with topPosition, which adds a value to the css-directive "top".
+
+Optionally tooltip can be bound to input (default binds to label).
+
+Now floating label is floated when input is selected instead of typing text.
+
+### drawtools
+
+See [api/CHANGELOG.md](api/CHANGELOG.md) for changes.
+Refactored the code for the functionality to make it more accessible.
+
+### Data sanitation
+
+Improved security by sanitizing values.
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools couldn't restore thematic maps functionality (for editing) from a previously saved published map.
+This resulted in thematic maps functionality being removed from the published map on edit.
+
+## 1.44.0
+
+### layerselector2
+
+Filter buttons are now shown on each tab instead of just the first one. Also fixed undefined error for ShowFilteredLayerListRequest.
+
+Changed ``stats`` filter name to ``featuredata`` for consistency as it filters layers having feature data and not stats layers.
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'featuredata']);
+```
+
+Filtering performance has been improved.
+
+Requests should be serializable to JSON and shouldn't be used to pass functions. AddLayerListFilterRequest and ShowFilteredLayerListRequest refactored based on this and the function parameters have been removed.
+Filter-functions can be registered to MapLayerService. By default it includes built-in filters for 'featuredata' and 'newest' ids.
+
+Use built-in filters:
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest']);
+```
+
+Register new filter and use this:
+```javascript
+// Register new filter
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
+});
+// Use new filter by request, the second parameter opens the layer listing flyout if it's closed
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', true]);
+```
+
+Add new filter button for layer listing:
+```javascript
+// Add layer filter to map layer service
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('publishable', function(layer){
+    return (layer.getPermission('publish') === 'publication_permission_ok');
+});
+
+// Add layerlist filter button
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+        'Publishable',
+        'Show publishable layers',
+        'layer-publishable',
+        'layer-publishable-disabled',
+        'publishable'
+]);
+```
+
+### Timeseries improvements
+
+Animation now waits for frame to load before advancing.
+The next animation frame is buffered before it's shown. Depending on the service used this might make the animation go slower, but is more user (and service) friendly.
+Added new event TimeseriesAnimationEvent.
+Changed ProgressEvent to include layer id instead of 'maplayer' (functionality id) string as ID value.
+
+### divmanazer Chart component
+
+``New component`` for creating bar or line charts.
+
+```javascript
+var barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox());
+var data = [{name:"2", value:1},{name:"1", value:3},{name:"11", value:31},{name:"12", value:32},{name:"13", value:300},{name:"14", value:355},{name:"15", value:366},{name:"16", value:377}];
+barchart.createBarChart(data);
+jQuery('<div></div>').append(barchart);
+
+```
+
+### Core/Oskari-global
+
+Added new localization function that supports message templates: Oskari.getMsg(). It should be used instead of Oskari.getLocalization().
+
+  Oskari.getMsg('<MyBundlesLocalizationKey>', '<path.to.message>', {key1: value1, key2: value2});
+
+Included intl-messageformat library into frontend core. It uses standard ICU message format and allows interpolation, pluralization, number/date formatting.
+
+For more details see http://oskari.org/documentation/development/localization
+
+#### Logger
+
+Oskari.log() now has an additional function for notifying about deprecated calls without spamming the developer console:
+
+     Oskari.log([name]).deprecated('myOldFunc()');
+     Oskari.log([name]).deprecated('myOtherOldFunc()', 'Use myNewFunc() instead.');
+
+Prints out:
+
+- myOldFunc() will be removed in future release. Remove calls to it.
+- myOtherOldFunc() will be removed in future release. Use myNewFunc() instead.
+
+#### Oskari.util
+
+Changed mobile mode detection. Now the mode switch is determined from ´#mapdiv´-element size (previous was window size).
+
+### featuredata2
+
+Featuredata2 now has a new control for showing selected rows on top of the table. This makes finding and comparing selected items easier.
+
+### Grid
+
+Grid split into smaller files to make it more manageable:
+
+- GridSelection.js includes select functionalities
+- GridPaging.js includes paging functionalities
+- GridSort.js includes sorting functionalaties
+
+New ``moveSelectedRowsTop()``-function. This can be used to move selected rows on top of the table. Boolean true param moves the selected rows on top while false will return them on correct places based on current sorting. If the table is not currently sorted the rows are not moved with false-parameter.
+
+```javascript
+  var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+  ...
+  // show selected rows top
+  grid.moveSelectedRowsTop(true);
+
+  // not show selected rows top
+  grid.moveSelectedRowsTop(false);
+```
+
+### FormInput
+
+Added floating label functionality to FormInput. Floating labels are created by calling setPlaceholder(). If the floating label is of from the input field you can adjust it with addMarginToLabel, which adds a a value (px) to the css-directive "top".
+
+### Guidedtour
+
+Bundles now register themselves into the guided tour with an AddToGuidedTourRequest, giving a delegate object with properties and methods used when rendering the guided tour dialog for the requesting bundle.
+
+By default (without guided tour bundle configuration), dialogs for all registered bundles are shown in the order of "priority" property given in AddToGuidedTourRequest. To override the default behavior, the guided tour bundle can be given configuration to show only a subset of the registered bundle dialogs and alter their ordering. The content of the dialogs can also be replaced with tags referring to GetArticlesByTag API articles.
+
+### framework/download-basket
+
+Added support to use download basket. Layers need following layer attributes:
+- unique: layer unique column name
+- geometryColumn (optional): cropping layer filter type, currently supported value STRING. These means at filter is made by STRING query for backend (property LIKE 'wantedvalue%'), otherwise used int/double/boolean filter
+- geometry: layer geometry column name
+- cropping: true/false, if true then used layer for cropping selection
+- basemap: true/false, if true then skipping it for using download basket
+- raster: true/false, is layer raster layer? if true then show popup for this at not supported and skipping it
+
+Known issues:
+    - only localized in Finnish
+    - only supported one license type
+
+### statistics/statsgrid2016
+
+Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
+
+Fixed followings in point map style:
+- allowed change classify (distinct/discontinous)
+- maked smaller point more smaller
+- legend: dublicate values now displayed one time ( 0.0000 - 0.0000  --> 0.0000)
+- legend: fixed distinct legend value labels
+
+Changes:
+- used d3 library for calculating point symbol sizes
+
+UI improvements:
+- moved show values checkbox before color selection
+- layer opacity value are now showed opacity selectbox
+
+### mapmodule
+
+Fixed an issue where layers disappeared when pinch zooming on Android. Caused by zoom level having decimals instead of integer values.
+
+Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
+
+Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
+
+
+#### VectorLayerPlugin ol2/ol3
+
+New functionalities for ``AddFeaturesToMapRequest``. New options available:
+- layerInspireName : Inspire name for added layer
+- layerOrganizationName: Organization name for added layer
+- showLayer: Show layer to layerselector2/layerselection2. If setted truue then show map (add layer to mapservice).
+- opacity: Added layer opacity. IE 11 cannot handle right vector laeyr opacity if used SVG icon.
+- layerName: Added layer name (showed in layerselector2/layerselection2)
+- layerDescription: Added layer description (showed subtitle in layerselection2)
+- layerPermissions: Added layer permission
+
+### infobox
+
+Fixed issue where Get Feature Info (GFI) popup did not fit on the visible map area.
+
+### Myplacesimport
+
+Changed import file POST to use ajax XHR2 instead of iframe. Added upload progress bar and error handling. Some localization changes and error messages added. Choose a file dialog now shows only zip-files and folders.
+
+Now shows imported feature count in the success message. On error shows error message and tips. The message popup doesn't fadeout if error or warning occurs.
+
+### Myplaces2
+
+The drawn figures are now removed from the map when PlaceForm is closed by clicking x-icon (cancel).
+
+DrawPlugin now checks preconditions before trying to save the drawn figures on the map.
+A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
+
+Fix for layer updating on map when myplaces are updated by the user.
+
+### Search
+
+The default search UI now includes an optional autocomplete functionality.
+Searchchannels in oskari-server must provide support for it to be useful.
+See oskari-server ReleaseNotes on details how to support autocompletion.
+
+### Visualization form UI
+
+User can select "no stroke" and "no fill" as stroke and fill colors for polygons. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
+Bug fixes for default values (point marker), color selections and restoring values for the forms when editing.
+
+### Background layerselector plugin
+
+Previously the layer selector UI was hidden if user opened Analysis, Thematic or Publish map modes.
+This change keeps the layer selector visible always (except Publish map), but turns the selector into a dropdown menu if the map is too narrow to fit the buttons.
+
+### Analysis
+
+Fixed an issue with english translations where selecting analysis method "Analysis Layer Union" showed the parameters for "Buffers and sector".
+
+### Initial tests for RPC
+
+Initial versions of tests have been added under oskari-frontend/test/rpc.
+
+## 1.43.0
+
+### Minifier script
+
+No longer assumes "oskari" as the folder name when processing images. Now determines the folder name based on the parent-folder name for the Gruntfile.js
+
+### Publisher2/history tools
+
+History tools (moving to previous or next view) can no be published only together. If there are published maps with only one of history tools, the other one will be added there as well. This is done because moving to next view is useless without possibility to move to previous view.
+
+### Grid
+
+Fixed subtable sorting.
+
+### LogoPluginService
+
+Logo-plugin now provides a new service which can be used to add new items next to the logo (links, texts):
+
+	var logoService = Oskari.getSandbox().getService('Oskari.map.LogoPluginService');
+	// just adding a text
+	logoService.addLabel('Hello');
+
+	// providing a callback and an id (to identify the label later on)
+	var options = {
+		id:'hello',
+		callback: function() {
+			alert("Hello");
+		}
+	};
+	logoService.addLabel('Alert', options);
+
+### admin/appsetup
+
+``New admin bundle`` for creating AppSetups (views) from JSON definition.
+
+
+### divmanazer TabContainer component
+
+TabPanel can now have an identifier that is added as class to both the header and content containers (easier to reference from tests etc).
+TabContainer now only includes the content panel that is visible to the user to the DOM. Previously all of the panels were part of the DOM, but hidden with CSS.
+When a tab is changed the previously shown panel is detached (previously hidden) and the current tabs panel is inserted to DOM (previously made visible).
+This might affect usage of the component if an external code snippet assumes that all the tabs are accessible via DOM.
+
+### paikkatietoikkuna/register
+
+New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in.
+Bundle also creates registration popup to give information about registration before directing to registration page.
+
+## 1.42.1
+
+### divmanazer Grid
+
+Programmatic selection of a row no longer triggers selection listeners.
+This fixes an issue where selecting a WFS-feature triggered an infinite loop in featuredata flyout.
+
 ## 1.42.0
 
 ### search UI
@@ -60,9 +405,22 @@ Can be activated with following bundle config (not production ready yet):
         vectorViewer: true
     }
 
-#### grid
+Indicator attribution data now include the datasource name and optional link in addition to indicator source.
 
-``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
+### divmanazer grid component
+
+``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols is the number of columns to show before paging the content. You can also define pagingHandler callback function. The callback function is called when page is being changed and receives the title element as first parameter and as a second parameter an object describing the paging status:
+
+```
+ {
+    visible: {
+        start:1,
+        end:3
+    },
+    count:3
+}
+```
+Where "visible" tells the indexes of the visible columns and "count" is the total number of columns available.
 
 For example:
 ```javascript
@@ -124,19 +482,23 @@ getScreenshot function is now asynchronous and responds after all tiles have bee
 
 Before:
 
+```javascript
   var imageData = mapModule.getScreenshot();
-
+```
 Now:
 
+```javascript
   mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
       //Do something with  imageData
   });
-
+```
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
 
 ol2 mapmodule now support fill.color -property when getting style.
 
-ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color. Also own SVG image handles opacity right.
+
+´map.DataProviderInfoService´ from LogoPlugin can now handle multiple sources for attribution data including an optional link in addition to name.
 
 ### publisher2
 

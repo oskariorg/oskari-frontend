@@ -3,6 +3,10 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "DivManazer",
     "value": {
+        "graph": {
+            "noValue": "Ei arvoa",
+            "tick": "{value, number}"
+        },
         "buttons": {
             "add": "Lisää",
             "cancel": "Peruuta",
@@ -214,6 +218,7 @@ Oskari.registerLocalization(
                     "labelOr": "tai",
                     "labelCustom": "Oma RGB-väri (0-255)"
                 },
+                "lineRemove": "Poista reunaviivan tyyli ja väri",
                 "color": {
                     "label": "Täyttöväri",
                     "labelOr": "tai",
@@ -222,6 +227,7 @@ Oskari.registerLocalization(
                 "fill": {
                     "label": "Täyttökuvio"
                 },
+                "fillRemove": "Poista täyttöväri ja -kuvio",
                 "preview": {
                     "label": "Esikatselu"
                 },

@@ -15,6 +15,15 @@ $toolShadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .featuredata {
+    label.oskari-formcomponent {
+        display: inline-block;
+        width: 140px;
+    }
+
+    .oskariTabs {
+        overflow: auto;
+    }
+
     div.tab-content {
         max-height: 535px;
         overflow: auto;
@@ -116,14 +125,22 @@ div.analyse-filter-popup-content div.filter-option {
     }
 }
 
-div.oskariTabs .tabsHeader ul li {
-    a {
-        display: inline-block;
+div.oskariTabs {
+    .tabsHeader ul li {
+        a {
+            display: inline-block;
+        }
+
+        .union-filter {
+            display: inline-block;
+            margin-right: 10px;
+        }
     }
 
-    .union-filter {
-        display: inline-block;
-        margin-right: 10px;
+    .tabsContent {
+        .oskari-checkboxinput {
+            margin-left: 10px;
+        }
     }
 }
 

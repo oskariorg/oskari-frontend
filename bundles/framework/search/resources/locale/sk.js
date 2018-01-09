@@ -29,6 +29,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Zatvoriť",
             "title": "Vyhľadať Výsledky"
+        },
+        "guidedTour": {
+            "title": "Vyhľadávať",
+            "message": "Použite funkciu vyhľadávania na presun zobrazenia mapy presne na miesto, ktoré hľadáte",
+            "openLink": "Zobraziť vyhľadávanie",
+            "closeLink": "Skryť vyhľadávanie",
+            "tileText": "Vyhľadávať"
         }
     }
 });

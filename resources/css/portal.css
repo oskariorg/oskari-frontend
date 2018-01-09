@@ -68,11 +68,11 @@ a:focus {
 
 /* Selection colours */
 ::selection {
-  background: #fdf8d9;
+  background: #ffd400;
 }
 
 ::-moz-selection {
-  background: #fdf8d9;
+  background: #ffd400;
 }
 
 img::selection {
@@ -110,13 +110,6 @@ img::-moz-selection {
   padding-left: 20px;
 }
 
-/* Wrapper is only in the portal version afaik so this could be moved there? */
-#wrapper {
-  background: url("../images/bg_wrapper.png") repeat-y top left;
-  overflow: hidden;
-  min-width: 980px;
-}
-
 /* Portal version */
 .mml-map #logo.no-hover {
   display: block !important;
@@ -138,10 +131,6 @@ img::-moz-selection {
   padding-left: 0;
   width: 100%;
   margin-left: 0;
-}
-.mml-map #wrapper {
-  background: #fff;
-  padding-left: 40px;
 }
 
 /* Portal menu list */

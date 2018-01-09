@@ -3,19 +3,17 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "Analyse",
     "value": {
-        "title": "Analys <font color=red>(BETA)</font>",
-        "flyouttitle": "Analys <font color=red>(BETA)</font>",
+        "title": "Analys",
+        "flyouttitle": "Analys",
         "desc": "",
         "btnTooltip": "Analys",
         "NotLoggedView": {
             "text": "Med häjlp av Analys funktion man kan göra enkla geografiska analys. Analyser kan göras för data produkter. Endast inloggade användare kan göra analys. Logga in <a href=\"/web/sv/login\">här</a>.",
             "signup": "Logga in",
-            "signupUrl": "/web/sv/login",
-            "register": "Registrera dig",
-            "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrera dig"
         },
         "AnalyseView": {
-            "title": "Analys <font color=red>(BETA)</font>",
+            "title": "Analys",
             "content": {
                 "label": "Kartlager",
                 "drawToolsLabel": "Objekt verktyg",
@@ -436,7 +434,7 @@ Oskari.registerLocalization(
                 "delete": "Ta bort"
             },
             "title": "Analyser",
-            "confirmDeleteMsg": "Vill du ta bort analyslager:",
+            "confirmDeleteMsg": "Vill du ta bort analyslager \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Avbryt",

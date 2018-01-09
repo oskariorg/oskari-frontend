@@ -49,9 +49,9 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
      * the moment.
      */
     getCurrentState: function () {
-        var state = {},
-            components = this.getStatefulComponents(),
-            bundleid;
+        var state = {};
+        var components = this.getStatefulComponents();
+        var bundleid;
         for (bundleid in components) {
             if (!components.hasOwnProperty(bundleid)) {
                 continue;
@@ -72,7 +72,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
      * Resets the application state to the initial state provided by GetAppSetup action route.
      */
     resetState: function () {
-         // conf got loaded when application started
+        // conf got loaded when application started
         this.useState(Oskari.app.getConfiguration());
     },
 
@@ -82,11 +82,11 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
      * @param  {Object} initialConf state configuration object including data for all bundles
      */
     useState: function (initialConf) {
-        var newStateConfig = jQuery.extend(true, {}, initialConf),
-            components = this.getStatefulComponents(),
-            bundleState,
-            bundle,
-            bundleid;
+        var newStateConfig = jQuery.extend(true, {}, initialConf);
+        var components = this.getStatefulComponents();
+        var bundleState;
+        var bundle;
+        var bundleid;
         // loop trough all the stateful bundles.
         for (bundleid in components) {
             if (!components.hasOwnProperty(bundleid)) {
@@ -98,10 +98,9 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
                 continue;
             }
             // newStateConfig has all the states from GetAppSetup.
-            if(newStateConfig[bundleid]) {
+            if (newStateConfig[bundleid]) {
                 bundleState = newStateConfig[bundleid].state;
-            }
-            else {
+            } else {
                 bundleState = {};
             }
             // reset to the default state
@@ -109,7 +108,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
         }
     },
     setSessionExpiring: function (minutes, callback) {
-        if(typeof minutes !== 'number' || typeof callback !== 'function') {
+        if (typeof minutes !== 'number' || typeof callback !== 'function') {
             return;
         }
         var milliSeconds = 60 * 1000 * minutes;
@@ -118,15 +117,15 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
         }, milliSeconds);
     },
     extendSession: function (errorCallback) {
-        var url = this.getAjaxUrl() + 'action_route=GetCurrentUser',
-            currentUuid = Oskari.user().getUuid(),
-            successCallback = function (res, textStatus, jqXHR) {
-                var resUuid = jqXHR.getResponseHeader('currentUserUid');
-                if (resUuid !== currentUuid) {
-                    // the uuid in response was not what we expected
-                    errorCallback();
-                }
-            };
+        var url = this.getAjaxUrl() + 'action_route=GetCurrentUser';
+        var currentUuid = Oskari.user().getUuid();
+        var successCallback = function (res, textStatus, jqXHR) {
+            var resUuid = jqXHR.getResponseHeader('currentUserUid');
+            if (resUuid !== currentUuid) {
+                // the uuid in response was not what we expected
+                errorCallback();
+            }
+        };
 
         this.ajax(url, successCallback, errorCallback);
     }

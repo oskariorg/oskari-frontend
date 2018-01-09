@@ -10,22 +10,20 @@ The ExtraFlyout component is defined in divmanazer bundle and provides a generic
 
 ## How to use
 
-Creates a extra flyout with visible, title "Alert", add custom CSS style class and size.
+Creates a extra flyout with title "Alert", custom CSS style class and size.
 
 ```javascript
-var extraflyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance, {title:'Alert'}, {
+var extraflyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', 'Alert', {
                 width: '200px',
                 height: '300px',
-                closeCallback: function(popup) {
-                     alert('extra flyout closed');
-                     console.log(popup);
-                },
-                showCallback: function(popup) {
-                    alert('extra flyout opened');
-                    console.log(popup);
-                },
                 cls: 'extra-flyout-css-class'
             });
+extraflyout.on('show', function() {
+    alert('extra flyout opened');
+});
+extraflyout.on('hide', function() {
+    alert('extra flyout closed');
+});
 ```
 
 Hide extra flyout.
@@ -38,6 +36,14 @@ Show extra flyout.
 
 ```javascript
 extraflyout.show();
+```
+
+Make extra flyout draggable.
+```javascript
+extraFlyout.makeDraggable({
+  scroll: false, // Need container auto-scrolls while dragging? Default false.
+  handle: '.oskari-flyouttoolbar' // Make dragging for when mousedown triggered with this elemen. Default '.oskari-flyouttoolbar'.
+});
 ```
 
 

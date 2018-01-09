@@ -73,13 +73,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kartenebenen",
+            "message": "Sie können die Datenprodukte auswählen, die auf der Karte angezeigt werden sollen, indem Sie die Kartenebenen markieren. Klicken Sie auf eine Kategorie, um sie zu öffnen und wählen Sie eine Ebene aus. Oder geben Sie einige Buchstaben Ihres Suchbegriffs in das Suchfeld ein.",
+            "openLink": "Zeige Kartenebenen",
+            "closeLink": "Verberge Kartenebenen",
+            "tileText": "Kartenebenen"
         }
     }
 });

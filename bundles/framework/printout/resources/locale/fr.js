@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Légende de la carte",
-                "tooltip": "Sélectionnez une position pour l'échelle de la carte. Si aucune position n'est sélectionnée, la légende ne s'affichera pas sur l'impression.",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "Pas de légende de la carte.",
-                        "tooltip": "La légende ne s'affiche pas sur l'impression.",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Coin en bas à gauche",
-                        "tooltip": "La légende de la carte s'affiche dans le coin en bas à gauche de l'impression."
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Coin en haut à gauche",
-                        "tooltip": "La légende de la carte s'affiche dans le coin en haut à gauche de l'impression."
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Coin en haut à droite",
-                        "tooltip": "La légende de la carte s'affiche dans le coin en bas à droite de l'impression."
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Coin en bas à droite",
-                        "tooltip": "La légende de la carte s'affiche dans le coin en bas à droite de l'impression."
-                    }
-                ]
-            },
             "help": "Aide",
             "error": {
                 "title": "Erreur",

@@ -32,6 +32,12 @@ Oskari.clazz.define(
                 "src": "../../../../bundles/framework/guidedtour/instance.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/guidedtour/request/AddToGuidedTourRequest.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/guidedtour/request/AddToGuidedTourRequestHandler.js"
+            },{
+                "type": "text/javascript",
                 "src": "../../../../libraries/jquery/plugins/jquery.cookie.js"
             }, {
                 "type": "text/css",

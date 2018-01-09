@@ -1,5 +1,5 @@
 
-(function(o){
+(function (o) {
     /**
      * Registers O2ClassSystem as global so Oskari can build on it
      */
@@ -569,13 +569,13 @@
                         throw new Error('Class ' + className + ' is missing super constructor ' + (i + 1) + '/' + constructors.length);
                     }
                     var returned = constructors[i].apply(classInstance, instanceArguments);
-                    if(returned) {
+                    if (returned) {
                         classInstance = returned;
                     }
                 }
             } else {
                 var returned = classInfo._constructor.apply(classInstance, instanceArguments);
-                if(returned) {
+                if (returned) {
                     classInstance = returned;
                 }
             }

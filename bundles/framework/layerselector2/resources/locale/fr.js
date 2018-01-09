@@ -73,13 +73,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Plus récent",
-                "stats": "Couches vecteur"
+                "featuredata": "Couches vecteur"
             },
             "tooltips": {
                 "newest": "Montrer les ## couches cartographiques les plus récentes",
-                "stats": "Ne montrer que les couches vecteur",
+                "featuredata": "Ne montrer que les couches vecteur",
                 "remove": "Supprimer le filtre"
             }
+        },
+        "guidedTour": {
+            "title": "Map layers",
+            "message": "From the Map Layers -menu you can select the map layer to show on the map. You can list map layers by theme or by data provider. You can also search map layers by a map layer name, a data provider name or a keyword. The selected map layers you can check in the Selected Layers -menu.",
+            "openLink": "Show map layers",
+            "closeLink": "Hide map layers",
+            "tileText": "Map layers"
         }
     }
 });

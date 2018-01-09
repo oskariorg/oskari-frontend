@@ -148,11 +148,10 @@ Oskari.clazz.define(
             if(this.userIndicatorsTab) {
                 return;
             }
-            var locale = this.getLocalization();
             if (Oskari.user().isLoggedIn()) {
                 var userIndicatorsTab = Oskari.clazz.create(
                     'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
-                    this, locale.tab
+                    this
                 );
                 this.userIndicatorsTab = userIndicatorsTab;
             }

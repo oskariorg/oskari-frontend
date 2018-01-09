@@ -73,13 +73,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Uusim",
-                "stats": "Vektorkihid"
+                "featuredata": "Vektorkihid"
             },
             "tooltips": {
                 "newest": "Näita ## uusimaid kaardikihte",
-                "stats": "Näita ainult vektorkihte",
+                "featuredata": "Näita ainult vektorkihte",
                 "remove": "Eemalda filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kaardikihid",
+            "message": "Kaardil kuvatavaid andmetooteid saab valida kaardikihte valides. Kliki avamiseks kategoorial ning vali kiht või kirjuta otsinguväljale mõned andmetoote nimes sisalduvad tähed.",
+            "openLink": "Näita kaardikihte",
+            "closeLink": "Peida kaardikihid",
+            "tileText": "Kaardikihid"
         }
     }
 });

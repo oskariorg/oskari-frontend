@@ -72,13 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kartes slāņi",
+            "message": "Jūs varat izvēlēties attēlojamos datus kartē, atzīmējot karšu slāņus. Klikšķiniet uz kategorijas, lai to atvērtu, un izvēlieties slāni vai ierakstiet meklētājā dažus simbolus, ko satur Jūsu meklētie dati.",
+            "openLink": "Rādīt kartes slāņus",
+            "closeLink": "Paslēpt kartes slāņus",
+            "tileText": "Kartes slāņi"
         }
     }
 });

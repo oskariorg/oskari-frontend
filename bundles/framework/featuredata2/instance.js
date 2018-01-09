@@ -274,16 +274,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     if (layer && layer.isManualRefresh()) {
                         if (event.getNop()) {
                             this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
-                        } else {
-                            if (event.getRequestType() !== event.type.image || layer._activeFeatures.length > 0) {
-                                //only update grid in case of active features... (or the grid gets reset for manual refresh wfs layers)
-                                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
-                            } else if (event.getRequestType() === event.type.image || layer._activeFeatures.length === 0) {
-                                this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
-                            }
+                        } else if (event.getRequestType() === event.type.image || layer._activeFeatures.length === 0) {
+                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
                         }
-                    } else if (layer && !event.getNop()) {
-                        this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
                     }
                 }
                 if(event.getStatus() === event.status.error)  {
@@ -370,7 +363,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * Highlight the feature on flyout
              */
             'WFSFeaturesSelectedEvent': function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].featureSelected(event);
+                var layer = event.getMapLayer();
+                this.plugins['Oskari.userinterface.Flyout'].featureSelected(layer);
             },
 
             /**
@@ -406,13 +400,43 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                 var features = me.selectionPlugin.getFeaturesAsGeoJSON();
 
-                me.selectionPlugin.removeFeatures();
+                me.selectionPlugin.clearDrawing();
 
                 var evt = me.sandbox.getEventBuilder("WFSSetFilter")(features);
                 me.sandbox.notifyAll(evt);
 
             },
+            'DrawingEvent': function(evt) {
+                var me = this;
+                if (!evt.getIsFinished()) {
+                    // only interested in finished drawings
+                    return;
+                }
 
+                if (!me.selectionPlugin) {
+                    me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
+                }
+                if (me.selectionPlugin.DRAW_REQUEST_ID !== evt.getId()) {
+                    // event is from some other functionality
+                    return;
+                }
+                var geojson = evt.getGeoJson();
+                var pixelTolerance = 15;
+                if( geojson.features.length > 0 ) {
+                    geojson.features[0].properties.buffer_radius = me.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
+                } else {
+                    //no features
+                    return;
+                }
+
+                me.selectionPlugin.setFeatures(geojson.features);
+                me.selectionPlugin.stopDrawing();
+
+                var event = me.sandbox.getEventBuilder("WFSSetFilter")(geojson);
+                me.sandbox.notifyAll(event);
+
+                me.popupHandler.removeButtonSelection();
+            },
             'AfterMapMoveEvent': function() {
                 var me = this;
                 me.plugin.mapStatusChanged();

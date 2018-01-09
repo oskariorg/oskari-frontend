@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.indicators.forEach(function(ind) {
                 me.removeIndicator(ind.datasource, ind.indicator, ind.selections);
             });
-            this.selectRegion();
+            this.toggleRegion();
             this.setRegionset();
             this.classification = null;
         },
@@ -69,16 +69,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
         },
         /**
-         * Selects the region.
+         * Toggle the region.
          * @param  {Number} region id for the region that was selected. Assumes it's from the current regionset.
          * @param {String} componentId component id
          */
-        selectRegion : function(region, componentId) {
+        toggleRegion : function(region, componentId) {
+            // TODO: why does this need componentId?
             var me = this;
 
-            // if region is same than previous then return
+            // if region is same than previous then unselect region
             if(region === me.activeRegion) {
-                return;
+                region = null;
             }
             clearTimeout(me._timers.setActiveRegion);
 
@@ -86,6 +87,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 me.activeRegion = region;
                 // notify
                 var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
+                // TODO: send which region was deselected so implementations can optimize rendering!!!!
                 me.sandbox.notifyAll(eventBuilder(me.getRegionset(), region, null, componentId));
             }, 100);
         },
@@ -296,7 +298,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
             this.indicators = newIndicators;
 
-            if(this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
+            if(removedIndicator && removedIndicator.hash && this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
                 // active was the one removed -> reset active
                 this.setActiveIndicator();
             }
@@ -307,7 +309,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
 
             // if no indicators then reset active region
             if(this.indicators.length === 0) {
-                this.selectRegion(null);
+                this.toggleRegion(null);
             }
 
             return removedIndicator;
@@ -322,9 +324,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @return {String}            an unique id for the parameters
          */
         getHash : function(datasrc, indicator, selections) {
-            return datasrc + '_' + indicator + '_' + JSON.stringify(selections);
+            var hash = datasrc + '_' + indicator;
+            if(typeof selections === 'object') {
+                hash = hash + '_' + Object.keys(selections).sort().map(function(key) {
+                    return key + "=" + JSON.stringify(selections[key]);
+                }).join(':');
+            }
+            return hash;
+        },
+        addFilter : function( filter ) {
+            // notify
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.Filter');
+            this.sandbox.notifyAll(eventBuilder(filter));
         }
-
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

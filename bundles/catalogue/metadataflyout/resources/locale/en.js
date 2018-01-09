@@ -387,7 +387,24 @@ Oskari.registerLocalization(
             },
             "qualityContent": {
                 "qualityPassTrue": "Dataset is conformant to the specification.",
-                "qualityPassFalse": "Dataset is not conformant to the specification."
+                "qualityPassFalse": "Dataset is not conformant to the specification.",
+                "nameOfMeasure" : "Name of Measure",
+                "citationTitle" : "Title",
+                "measureIdentificationCode" : "Measure identification code",
+                "measureIdentificationAuthorization" : "Measure identification authorization",
+                "measureDescription" : "Measure description",
+                "evaluationMethodType" : "Evaluation Method",
+                "evaluationMethodDescription" : "Evaluation method description",
+                "evaluationProcedure" : "Evaluation procedure",
+                "dateTime" : "Date / Time",
+                "specification" : "Specification title",
+                "explanation" : "Explanation",
+                "valueType" : "Value type",
+                "valueUnit" : "Value unit",
+                "errorStatistic" : "Error statistic",
+                "value" : "Value",
+                "conformanceResult" : "Conformance Result",
+                "quantitativeResult" : "Quantitative Result"
             },
             "heading": {
                 "abstractTextData": "Abstract text (data)",

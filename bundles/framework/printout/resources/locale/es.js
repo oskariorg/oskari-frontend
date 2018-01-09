@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Leyenda",
-                "tooltip": "Elija la posición de la leyenda",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "No hay leyenda",
-                        "tooltip": "La leyenda del mapa no se muestra en la impresión",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Esquina inferior izquierda",
-                        "tooltip": "La leyenda va situada en la esquina inferior izquierda del área de impresión"
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Esquina superior izquierda",
-                        "tooltip": "La leyenda va situada en la esquina superior izquierda del área de impresión"
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Esquina superior derecha",
-                        "tooltip": "La leyenda va situada en la esquina superior derecha del área de impresión"
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Esquina inferior derecha",
-                        "tooltip": "La leyenda va situada en la esquina inferior derecha del área de impresión"
-                    }
-                ]
-            },
             "help": "Ayuda",
             "error": {
                 "title": "Error",

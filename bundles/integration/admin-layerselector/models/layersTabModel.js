@@ -262,7 +262,7 @@
                             // flag changed if not flagged before and name has changed
                             hasChanges = (loadedGroup.names[lang] !== item.name[lang]);
                         }
-                        loadedGroup.names[lang] = item.name[lang];
+                        loadedGroup.names[lang] = Oskari.util.sanitize(item.name[lang]);
                     }
                 }
                 // update default name

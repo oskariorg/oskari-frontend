@@ -170,13 +170,13 @@ function () {
         var loc = this.getLocalization(),
             userLayersTab = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
-                this, loc.tab
+                this
             ),
             addTabReqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest'),
             addTabReq;
 
         if (addTabReqBuilder) {
-            addTabReq = addTabReqBuilder(loc.tab.title, userLayersTab.getContent());
+            addTabReq = addTabReqBuilder(loc.tab.title, userLayersTab.getContent(), false, 'userlayers');
             sandbox.request(this, addTabReq);
         }
         return userLayersTab;

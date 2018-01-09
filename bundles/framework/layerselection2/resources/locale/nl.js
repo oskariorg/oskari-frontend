@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "De logische operator ontbreekt."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Geselecteerde kaartlagen",
+            "message": "U kunt de volgorde waarin de kaartlagen worden weergegeven wijzigen door te klikken en slepen, alsmede de transparantie wijzigen. Veranderingen worden weergegeven in het kaartvenster.",
+            "openLink": "Toon geselecteerde kaartlagen",
+            "closeLink": "Verberg geselecteerde kaartlagen",
+            "tileText": "Geselecteerde kaartlagen"
         }
     }
 });

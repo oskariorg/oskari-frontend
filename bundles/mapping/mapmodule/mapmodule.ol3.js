@@ -55,7 +55,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
-            var controls = ol.control.defaults({ rotate: false });
+            var controls = ol.control.defaults({
+                zoom: false,
+                attribution: false,
+                rotate: false
+            });
             var interactions = ol.interaction.defaults({
                 altShiftDragRotate: false,
                 pinchRotate:false
@@ -66,7 +70,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 controls: controls,
                 interactions: interactions,
                 loadTilesWhileInteracting: true,
-                loadTilesWhileAnimating: true
+                loadTilesWhileAnimating: true,
+                moveTolerance: 2
             });
 
             var projection = ol.proj.get(me.getProjection());
@@ -99,6 +104,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('singleclick', function (evt) {
+                if (me.getDrawingMode()) {
+                    return;
+                }
                 var CtrlPressed = evt.originalEvent.ctrlKey;
                 var lonlat = {
                   lon : evt.coordinate[0],
@@ -214,7 +222,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         getMapZoom: function() {
-            return this.getMap().getView().getZoom();
+            // Touch devices zoom level (after pinch zoom) may contains decimals
+            // for this reason zoom need rounded to nearest integer.
+            // Tested with Android pinch zoom.
+            return Math.round(this.getMap().getView().getZoom());
         },
 
         getSize: function() {
@@ -324,14 +335,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 centerCoords = view.getCenter(),
                 centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
                 newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
-                newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels),
-                pan = ol.animation.pan({
-                    duration: 100,
-                    source: (centerCoords)
-                });
+                newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels);
 
-            this.getMap().beforeRender(pan);
-            view.setCenter(newCenterCoords);
+            view.animate({
+                duration: 100,
+                center: newCenterCoords
+            });
 
             this.updateDomain();
             // send note about map change
@@ -618,9 +627,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         __getStrokeStyle: function(styleDef) {
             var stroke = {};
+            if(styleDef.stroke.width === 0) {
+                return null;
+            }
             if(styleDef.stroke.color) {
                 stroke.color = styleDef.stroke.color;
             }
+
             if(styleDef.stroke.width) {
                 stroke.width = styleDef.stroke.width;
             }
@@ -643,9 +656,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {ol.style.Circle}
          */
         __getImageStyle: function(styleDef) {
-            var me = this;
-            var image = {};
-            var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
+            var me = this,
+                image = {},
+                size;
+
+            if (styleDef.image && styleDef.image.sizePx){
+                size = styleDef.image.sizePx;
+            } else if (styleDef.image && styleDef.image.size){
+                size = this.getPixelForSize(styleDef.image.size);
+            } else {
+                size = this._defaultMarker.size;
+            }
+
+            if(typeof size !== 'number'){
+                size = this._defaultMarker.size;
+            }
+
             styleDef.image.size = size;
 
             if(me.isSvg(styleDef.image)) {
@@ -653,7 +679,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 image = new ol.style.Icon({
                     src: svg,
                     size: [size, size],
-                    imgSize: [size, size]
+                    imgSize: [size, size],
+                    opacity: styleDef.image.opacity || 1
                 });
                 return image;
             }
@@ -665,7 +692,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     anchorYUnits: 'pixels',
                     anchorXUnits: 'pixels',
                     anchorOrigin: 'bottom-left',
-                    anchor: [offsetX,offsetY]
+                    anchor: [offsetX,offsetY],
+                    opacity: styleDef.image.opacity || 1
                 });
                 return image;
             }
@@ -792,6 +820,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 feature = wktFormat.readFeature(wkt);
 
             return feature;
+        },
+        /**
+         * @method getLayerTileUrls
+         * @param layerId id of the layer
+         * @return {String[]}
+         * Get urls of tile layer tiles.
+         */
+        getLayerTileUrls: function(layerId) {
+            var OLlayers = this.getOLMapLayers(layerId);
+            var urls = [];
+            var source = OLlayers[0].getSource();
+            if (ol.source.OskariImageWMS && source instanceof ol.source.OskariImageWMS) {
+                urls.push(source.getImageUrl());
+            }
+            return urls;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
