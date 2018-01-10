@@ -69,21 +69,18 @@ function (instance) {
     startPlugin: function () {
         //"use strict";
         var me = this,
-            inspireTab = Oskari.clazz.create(
-                'Oskari.framework.bundle.hierarchical-layerlist.view.LayersTab',
+            layerGroupTab = Oskari.clazz.create(
+                'Oskari.framework.bundle.hierarchical-layerlist.view.LayerGroupTab',
                 me.instance,
-                me.instance.getLocalization('filter').inspire,
-                'oskari_hierarchical-layerlist_tabpanel_inspiretab'
+                me.instance.getLocalization('filter').allLayers,
+                'oskari_hierarchical-layerlist_tabpanel_layergrouptab'
             ),
             elParent,
             elId;
 
-
         me.template = jQuery('<div class="allLayersTabContent"></div>');
-        inspireTab.groupingMethod = 'getInspireName';
-
-        me.layerTabs.push(inspireTab);
-
+        layerGroupTab.groupingMethod = 'getInspireName';
+        me.layerTabs.push(layerGroupTab);
 
         elParent = this.container.parentElement.parentElement;
         elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');

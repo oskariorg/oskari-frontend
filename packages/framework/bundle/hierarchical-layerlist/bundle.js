@@ -61,7 +61,19 @@ function() {
         },
         {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/view/LayerGroup.js"
+        },
+        {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/hierarchical-layerlist/view/LayersTab.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/view/LayerGroupTab.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/component/SelectableAccordionPanel.js"
         },
         {
             "type": "text/javascript",

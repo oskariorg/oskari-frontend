@@ -3,52 +3,53 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "hierarchical-layerlist",
     "value": {
-        "title": "Hierarchical Layerlist",
-        "desc": "Hierarchical Layerlist",
+        "title": "Kartlager",
+        "desc": "Kartlager",
         "errors": {
-            "title": "Error",
-            "generic": "The system error occurred.",
-            "loadFailed": "The map layers could not be loaded. Reload the webpage in your browser and select map layers again.",
-            "noResults": "No search results could be found. Please check the search term.",
-            "noResultsForKeyword": "No map layers could be found. Please check the search term.",
-            "minChars": "The search term is too short. Type at least four characters."
+            "title": "Fel!",
+            "generic": "Systemfel. Försök på nytt senare.",
+            "loadFailed": "Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren igen.",
+            "noResults": "Inga resultat hittades.",
+            "noResultsForKeyword": "Inga kartlager hittades av detta sökord.",
+            "minChars": "Skriv minst fyra tecken. Tillåtna tecken är bokstäverna a-z samt å, ä och ö, siffror, backsteg och bindestreck."
         },
-        "loading": "Searching...",
+        "loading": "Söker...",
         "filter": {
-            "text": "Search map layers.",
-            "keywordsTitle": "Keywords",
-            "shortDescription": "Search map layers by map layer name, data producer name or keyword.",
-            "description": "Search map layers by map layer name, data producer name or keyword. You can type a whole term or a part of it. The search term must be at least four characters long.",
-            "inspire": "By Theme",
-            "organization": "By Data Provider",
-            "published": "Users",
-            "didYouMean": "Did you mean:"
+            "text": "Sök kartlager",
+            "keywordsTitle": "Nyckelord:",
+            "shortDescription": "Sök kartlager med namnet på kartlagret, namnet på dataproducenten eller nyckelordet som beskriver kartlagret.",
+            "description": "Skriv en del av namnet på kartlagret, namnet på dataproducenten eller nyckelordet som beskriver kartlagret. Nyckelordssökningen startar när minst fyra tecken har skrivits. Tillåtna tecken är bokstäverna a-z samt å, ä och ö, siffror, backsteg och bindestreck.",
+            "inspire": "Enligt tema",
+            "allLayers": "All layers -sv"
+            "organization": "Enligt dataproducent",
+            "published": "Användare",
+            "didYouMean": "Menade du:"
         },
         "published": {
-            "organization": "Published map layer",
-            "inspire": "Published map layer"
+            "organization": "Publicerat kartlager",
+            "inspire": "Publicerat kartlager"
         },
         "tooltip": {
-            "type-base": "Background map",
-            "type-wms": "Map layer (WMS, WMTS)",
-            "type-wfs": "Data product (WFS)",
-            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window."
+            "type-base": "Bakgrundskarta",
+            "type-wms": "Kartlager (WMS, WMTS)",
+            "type-wfs": "Dataprodukt (WFS)",
+            "type-wfs-manual": "Data product (WFS) - Layer is drawn on a map via Feature Data or via Refresh button action"
         },
         "backendStatus": {
             "OK": {
-                "tooltip": "The map layer is currently available.",
+                "tooltip": "Kartlagret är tillgängligt just nu.",
                 "iconClass": "backendstatus-ok"
             },
             "DOWN": {
-                "tooltip": "The map layer is not currently available.",
+                "tooltip": "Kartlagret är inte tillgängligt just nu.",
                 "iconClass": "backendstatus-down"
             },
             "ERROR": {
-                "tooltip": "The map layer is not currently available.",
+                "tooltip": "Kartlagret är inte tillgängligt just nu.",
                 "iconClass": "backendstatus-error"
             },
             "MAINTENANCE": {
-                "tooltip": "The map layer may be periodically not available during the next few days.",
+                "tooltip": "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
@@ -65,28 +66,28 @@ Oskari.registerLocalization(
         },
         "types": {
             "syn": "Synonym",
-            "lk": "Related concept",
-            "vk": "Coordinate concept",
-            "ak": "Subordinate concept",
-            "yk": "Superordinate concept"
+            "lk": "Relaterat begrepp",
+            "vk": "Koordinatbegrepp",
+            "ak": "Underordnat begrepp",
+            "yk": "Överordnat begrepp"
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "featuredata": "Vector layers"
+                "newest": "Nyaste",
+                "featuredata": "Vektorlager"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "featuredata": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Visa de ## nyaste kartlager",
+                "featuredata": "Visa endast vektorlager",
+                "remove": "Ta bort filter"
             }
         },
         "guidedTour": {
-            "title": "Map layers",
-            "message": "In the Map Layers menu you can find all the map layers in the map service. <br/><br/> Sort map layers by theme or data provider. <br/><br/> Search map layers by a map layer name, a data provider name or a keyword. Newest map layers, vector layers and publishable layers you can find in pre-defined lists.<br/><br/> Open map layers you can check in the Selected Layers menu.",
-            "openLink": "Show Map Layers",
-            "closeLink": "Hide Map Layers",
-            "tileText": "Map layers"
+            "title": "Kartlager",
+            "message": "Från Kartlager-menyn du kan välja kartlagret för att visas på kartan. Du kan lista kartlager med tema eller dataleverantör. Du kan också söka kartlager med kartlagernamn, en dataleverantörs namn eller ett sökord. De valda kartlagren kan kontrolleras i valda lagren-menyn.",
+            "openLink": "Visa kartlagren",
+            "closeLink": "Göm kartlagren",
+            "tileText": "Kartlagren"
         }
     }
 });
