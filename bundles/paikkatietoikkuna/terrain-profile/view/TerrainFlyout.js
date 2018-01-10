@@ -88,6 +88,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .classed('y-axis', true)
                 .attr('transform', 'translate(' + (graphMargin.left) + ' 0)');
 
+            // Set up Y-axis scaling
+
+            var resetScalingButton = svg.append('g').classed('reset-scaling', true);
+            resetScalingButton.append('path')
+                .attr('d', 'M -7 -1 L 7 -1 L 0 -7 Z');
+            resetScalingButton.append('path')
+                .attr('d', 'M -7 2 L 7 2 L 0 8 Z');
+            resetScalingButton.append('path')
+                .classed('touch-area', true)
+                .attr('d', 'M -15 -15 L 15 -15 L 15 15 L -15 15 Z')
+                .on('click', function(){
+                    recalculateYDomain();
+                    me._updateGraph();
+                    resetScalingButton.style('display', 'none');
+                });
+            resetScalingButton
+                .attr('transform', 'translate('+ graphMargin.left/2 +' '+ graphMargin.top/2 +')');
+            resetScalingButton.style('display', 'none');
+
+            var brush = d3.brushY()
+                    .extent([[graphMargin.left, graphMargin.top], [graphWidth - graphMargin.right, graphHeight - graphMargin.bottom]])
+                    .on('end', brushed);
+
+            var brushGroup = svg.append('g')
+                .classed('axis-brush', true)
+                .call(brush);
+
+            function brushed () {
+                var selection = d3.event.selection;
+                if(!selection) {
+                    return;
+                }
+                var start = y.invert(selection[1]);
+                var end = y.invert(selection[0]);
+                brushGroup.call(brush.move, null);
+                y.domain([start, end]);
+                resetScalingButton.style('display', null);
+                me._updateGraph();
+            }
+
             // Setup hover cursor
 
             var cursor = svg.append('g')
@@ -110,11 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .attr('text-anchor', 'middle')
                 .attr('dy', '.35em');
 
-            svg.append('rect')
-                .attr('class', 'overlay')
-                .attr('width', graphWidth - graphMargin.left - graphMargin.right)
-                .attr('height', graphHeight - graphMargin.top - graphMargin.bottom)
-                .attr('transform', 'translate(' + graphMargin.left + ' ' + graphMargin.top + ')')
+            brushGroup.select('.overlay') // reuse brush overlay element
                 .on('mouseover', function () {
                     cursor.style('display', null);
                 })
@@ -127,7 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
             var bisectX = d3.bisector(function (d) { return d.distance; }).left;
 
             function mousemove() {
-                var x0 = x.invert(d3.mouse(this)[0] + graphMargin.left),
+                var x0 = x.invert(d3.mouse(this)[0]),
                     i = bisectX(processed[0], x0, 1),
                     d0 = processed[0][i - 1],
                     d1 = processed[0][i],
@@ -146,46 +182,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 me.markerHandler.showAt(d.coords[0], d.coords[1], text);
             }
 
-            // Set up Y-axis scaling
-
-            var resetScalingButton = svg.append('g').classed('reset-scaling', true);
-            resetScalingButton.append('path')
-                .attr('d', 'M -7 -1 L 7 -1 L 0 -7 Z');
-            resetScalingButton.append('path')
-                .attr('d', 'M -7 2 L 7 2 L 0 8 Z');
-            resetScalingButton.append('path')
-                .classed('touch-area', true)
-                .attr('d', 'M -15 -15 L 15 -15 L 15 15 L -15 15 Z')
-                .on('click', function(){
-                    recalculateYDomain();
-                    me._updateGraph();
-                    resetScalingButton.style('display', 'none');
-                });
-            resetScalingButton
-                .attr('transform', 'translate('+ graphMargin.left/2 +' '+ graphMargin.top/2 +')');
-            resetScalingButton.style('display', 'none');
-
-            var brush = d3.brushY()
-                    .extent([[graphMargin.left - 35, graphMargin.top], [graphMargin.left, graphHeight - graphMargin.bottom]])
-                    .on('end', brushed);
-
-            var brushGroup = svg.append('g')
-                .classed('axis-brush', true)
-                .call(brush);
-
-            function brushed () {
-                var selection = d3.event.selection;
-                if(!selection) {
-                    return;
-                }
-                var start = y.invert(selection[1]);
-                var end = y.invert(selection[0]);
-                brushGroup.call(brush.move, null);
-                y.domain([start, end]);
-                resetScalingButton.style('display', null);
-                me._updateGraph();
-            }
-
             var processed;
 
             function recalculateYDomain () {
@@ -195,6 +191,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 }
                 y.domain(extent);
             }
+
+            // graph update function
             
             this._updateGraph = function(data){
                 if(data) {

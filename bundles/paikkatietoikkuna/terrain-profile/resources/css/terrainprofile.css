@@ -29,9 +29,8 @@
     margin-top: 150px;
 }
 
-.terrainprofile-graph .overlay {
-    fill: none;
-    pointer-events: all;
+.terrainprofile-graph .cursor {
+    pointer-events: none;
 }
 
 .terrainprofile-graph .cursor line {
