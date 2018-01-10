@@ -25,6 +25,11 @@ jQuery.ajax({
                 },
                 instanceProps: {}
             });
+
+            appSetup.startupSequence = appSetup.startupSequence.filter(function(a){return a.bundleinstancename !== 'layerselection2';});
+            appSetup.startupSequence = appSetup.startupSequence.filter(function(a){return a.bundleinstancename !== 'layerselector2';});
+
+
             var app = Oskari.app;
             if (!appSetup.startupSequence) {
                 jQuery('#mapdiv').append('Unable to start');
