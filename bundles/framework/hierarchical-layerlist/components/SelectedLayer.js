@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
             '   <div class="layer-info">' +
             '       <div class="visible"><a></a></div>'+
             '       <div class="header">' +
-            '           <div class="breadcrumb">Aluesuunnittelu ja rajoitukset > Asemakaava</div>'+
+            '           <div class="breadcrumb"></div>'+
             '           <div class="title"></div>'+
             '       </div>'+
             '       <div class="header-tools">'+
@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         me._setBreadcrumb();
         me._setVisibility();
         me._setRemoveHandler();
+        me._setToolToggleHandler();
     },
     _setVisibility: function() {
         var me = this;
@@ -44,8 +45,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         }
         me._el.find('.visible a').html(visibilityText);
         me._el.find('.visible a').unbind('click');
-        me._el.find('.visible a').bind('click', function() {
-             me.sb.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [me._layer.getId(), !me._layer.isVisible()]);
+        me._el.find('.visible a').bind('click', function(evt) {
+            evt.stopPropagation();
+            me.sb.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [me._layer.getId(), !me._layer.isVisible()]);
         });
 
     },
@@ -58,9 +60,30 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
     },
     _setRemoveHandler: function(){
         var me = this;
+        me._el.find('.icon-remove').attr('title', me.locale.tooltips.removeLayer);
         me._el.find('.icon-remove').unbind('click');
-        me._el.find('.icon-remove').bind('click', function() {
+        me._el.find('.icon-remove').bind('click', function(evt) {
+            evt.stopPropagation();
             me.sb.postRequestByName('RemoveMapLayerRequest', [me._layer.getId()]);
+        });
+    },
+    _setToolToggleHandler: function(){
+        var me = this;
+        me._el.find('.layer-info').unbind('click');
+        var toggleIcon = me._el.find('.header-tools .toggle');
+
+        toggleIcon.attr('title', me.locale.tooltips.openLayerTools);
+
+        me._el.find('.layer-info').bind('click', function() {
+            if(toggleIcon.hasClass('open')) {
+                toggleIcon.attr('title', me.locale.tooltips.closeLayerTools);
+                toggleIcon.removeClass('open');
+                me._el.find('.layer-tools').hide();
+            } else {
+                toggleIcon.attr('title', me.locale.tooltips.openLayerTools);
+                toggleIcon.addClass('open');
+                me._el.find('.layer-tools').show();
+            }
         });
     },
     getElement: function(){

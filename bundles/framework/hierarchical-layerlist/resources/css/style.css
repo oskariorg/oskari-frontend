@@ -172,12 +172,20 @@ div.hierarchical-layerlist ul.layerlist {
         background-repeat: no-repeat;
         background-position: right center;
         width: 18px;
-        height: 18px;
+        height: 20px;
         float: left;
         margin: 4px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle.open {
+          background-image: url("../images/glyphicons/glyphicons-224-chevron-right.png");
+          -webkit-transform: rotate(90deg);
+          -moz-transform: rotate(90deg);
+          -ms-transform: rotate(90deg);
+          -o-transform: rotate(90deg);
+          transform: rotate(90deg); }
       div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .icon {
         float: left;
-        margin: 4px; }
+        margin: 4px;
+        margin-top: 6px; }
     div.hierarchical-layerlist ul.layerlist li.layer .layer-tools {
       display: none; }
 

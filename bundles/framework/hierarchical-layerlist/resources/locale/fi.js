@@ -93,7 +93,12 @@ Oskari.registerLocalization(
             "title": "Valitut tasot",
             "style": "Tyyli",
             "show": "Näytä",
-            "hide": "Piilota"
+            "hide": "Piilota",
+            "tooltips": {
+                "removeLayer": "Poista taso",
+                "openLayerTools": "Avaa tason toiminnot",
+                "closeLayerTools": "Sulje tason toiminnot",
+            }
         }
     }
 });

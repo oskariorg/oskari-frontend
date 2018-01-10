@@ -258,13 +258,23 @@ div.hierarchical-layerlist {
                         background-repeat: no-repeat;
                         background-position: right center;
                         width: 18px;
-                        height:18px;
+                        height:20px;
                         float:left;
                         margin: 4px;
+
+                        &.open {
+                            background-image:url("../images/glyphicons/glyphicons-224-chevron-right.png");
+                            -webkit-transform: rotate(90deg);
+                            -moz-transform: rotate(90deg);
+                            -ms-transform: rotate(90deg);
+                            -o-transform: rotate(90deg);
+                            transform: rotate(90deg);
+                        }
                     }
                     .icon {
                         float:left;
                         margin: 4px;
+                        margin-top: 6px;
                     }
                 }
             }
