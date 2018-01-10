@@ -8,12 +8,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.telemetry.TelemetryBundleInstanc
     eventHandlers: {
         'userinterface.ExtensionUpdatedEvent': function (event) {
             if(event.getViewState() === 'attach') {
-                this._pushEvent('SideBar', event.getExtension().getName());
+                this._pushEvent('Tile', event.getExtension().getName());
             }
         }
     },
     _startImpl: function() {
         this._initTelemetry();
+        var me = this;
+        jQuery('#maptools').on('click', '#toolbar .toolrow .tool', function(event){
+            var el = jQuery(this);
+            if(el.hasClass('disabled')) {
+                return;
+            }
+            me._pushEvent('Toolbar', el.attr('tool'));
+        });
+        jQuery('#mapdiv .mapplugin.mylocationplugin').click(function(event){
+            me._pushEvent('Maptools', 'mylocationtool');
+        });
+        jQuery('#mapdiv .mapplugin.coordinatetool').click(function(event){
+            me._pushEvent('Maptools', 'coordinatetool');
+        });
     },
     _initTelemetry: function() {
         var _paq = window._paq = window._paq || [];
