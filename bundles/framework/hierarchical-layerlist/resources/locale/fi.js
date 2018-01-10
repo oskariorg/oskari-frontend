@@ -99,6 +99,10 @@ Oskari.registerLocalization(
                 "openLayerTools": "Avaa tason toiminnot",
                 "closeLayerTools": "Sulje tason toiminnot",
             }
+        },
+        "manyLayersWarning": {
+            "title": "Huomio!",
+            "text": "Kartalla tällä hetkellä 10 tai enemmän karttasoa. Jos jatkat, saattaa karttatason lisääminen aiheuttaa suorituskykyongelmia!"
         }
     }
 });
