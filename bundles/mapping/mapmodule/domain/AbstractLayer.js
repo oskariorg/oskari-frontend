@@ -1332,7 +1332,7 @@ Oskari.clazz.define(
         */
         getGroups: function(groupId) {
             if(groupId){
-                var group = this.groups.filter(function (g) {
+                var group = this._groups.filter(function (g) {
                     return (g.id === groupId);
                 });
                 if(group.length === 1) {
