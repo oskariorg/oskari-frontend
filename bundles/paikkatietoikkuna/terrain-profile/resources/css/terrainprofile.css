@@ -29,10 +29,6 @@
     margin-top: 150px;
 }
 
-.terrainprofile-graph .cursor {
-    pointer-events: none;
-}
-
 .terrainprofile-graph .cursor line {
     stroke: #00c3ff;
     stroke-opacity: 0.8;
