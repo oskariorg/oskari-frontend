@@ -813,6 +813,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 baseLayer.setOpacity(100);
             }
 
+            baseLayer.setGroups(baseMapJson.groups);
+
 
             return baseLayer;
         },
@@ -964,6 +966,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     layer.setCreated(created);
                 }
             }
+
+            layer.setGroups(mapLayerJson.groups);
 
             return layer;
         },

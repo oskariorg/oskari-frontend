@@ -139,6 +139,8 @@ Oskari.clazz.define(
         me.loaded = 0;
         me.tilesToLoad = 0;
         me.errors = 0;
+
+        me._groups = [];
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -341,6 +343,7 @@ Oskari.clazz.define(
                 this._organizationName = Oskari.util.sanitize(param);
             }
         },
+
         /**
          * Returns a organization name for the layer.
          * If the name is populated with a string, always returns it.
@@ -1111,7 +1114,7 @@ Oskari.clazz.define(
          */
         isManualRefresh: function () {
             if (this.getAttributes().manualRefresh){
-                return this.getAttributes().manualRefresh
+                return this.getAttributes().manualRefresh;
             } else {
                 return false;
             }
@@ -1122,7 +1125,7 @@ Oskari.clazz.define(
          */
         isResolveDepth: function () {
             if (this.getAttributes().resolveDepth){
-                return this.getAttributes().resolveDepth
+                return this.getAttributes().resolveDepth;
             } else {
                 return false;
             }
@@ -1315,6 +1318,30 @@ Oskari.clazz.define(
          */
         getCreated: function(){
             return this._created;
+        },
+        /**
+        * @method @public setGroups
+        * @param {Array} groups groups array [{id:1,name:name"}]
+        */
+        setGroups: function(groups) {
+            this._groups = groups || [];
+        },
+        /**
+        * @method @public getGroups get groups
+        * @param {String/Integer} groupId group id
+        */
+        getGroups: function(groupId) {
+            if(groupId){
+                var group = this.groups.filter(function (g) {
+                    return (g.id === groupId);
+                });
+                if(group.length === 1) {
+                    return group;
+                }
+            }
+
+            return this._groups;
+
         }
 
     }
