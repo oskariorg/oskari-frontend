@@ -91,6 +91,10 @@ Oskari.registerLocalization(
         },
         "SelectedLayersTab": {
             "title": "Valitut tasot"
+        },
+        "manyLayersWarning": {
+            "title": "Huomio!",
+            "text": "Kartalla tällä hetkellä 10 tai enemmän karttasoa. Jos jatkat, saattaa karttatason lisääminen aiheuttaa suorituskykyongelmia!"
         }
     }
 });

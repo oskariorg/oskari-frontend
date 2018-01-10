@@ -17,7 +17,8 @@ Oskari.clazz.define(
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerGroups = [];
         this.layerContainers = {};
-
+        this.sb = this.instance.getSandbox();
+        this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
         this.templates = {
             spinner: '<span class="spinner-text"></span>',
             shortDescription: '<div class="field-description"></div>',
@@ -238,7 +239,6 @@ Oskari.clazz.define(
          * @param  {Array} groups
          */
         showLayerGroups: function (groups) {
-            console.log(groups);
             //"use strict";
             var me = this,
                 i,
@@ -263,7 +263,9 @@ Oskari.clazz.define(
                 layers = group.getLayers();
                 layersLength = layers.length;
                 groupPanel = Oskari.clazz.create(
-                    'Oskari.framework.bundle.hierarchical-layerlist.component.SelectableAccordionPanel'
+                    'Oskari.framework.bundle.hierarchical-layerlist.component.SelectableAccordionPanel',
+                    me.instance.sandbox,
+                    localization
                 );
                 groupPanel.setTitle(group.getTitle() + ' (' + layersLength +
                     ')');
@@ -676,6 +678,19 @@ Oskari.clazz.define(
             if (layerCont) {
                 layerCont.updateLayerContent(layer);
             }
+        },
+
+        _bindOskariEvents: function(){
+            var me = this;
+            me._notifierService.on('AfterMapLayerAddEvent',function(evt) {
+                console.log(evt);
+                //me._updateLayerCount();
+            });
+
+            me._notifierService.on('AfterMapLayerRemoveEvent',function(evt){
+                console.log(evt);
+                //me._updateLayerCount();
+            });
         }
     }
 );

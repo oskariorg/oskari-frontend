@@ -1,7 +1,8 @@
 /**
  * @class Oskari.framework.bundle.hierarchical-layerlist.component.SelectableAccordionPanel
  *
- * Panel that can be added to Oskari.userinterface.component.Accordion. Differs from AccordionPanel in such a way that it contains a checkbox for selecting the accordion panel.
+ * Panel that can be added to Oskari.userinterface.component.Accordion.
+ * Differs from AccordionPanel in such a way that it contains a checkbox for selecting the accordion panel and selecting all sub panels under this one.
  */
 Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.SelectableAccordionPanel',
 
@@ -10,7 +11,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
      * TODO: close/open methods?
      * @static
      */
-    function () {
+    function (sandbox, localization) {
         this.template = jQuery('<div class="accordion_panel">' +
                 '<div class="header">' +
                     '<div class="headerIcon icon-arrow-right">' +
@@ -22,14 +23,23 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
                 '<div class="content">' +
                 '</div>' +
             '</div>');
+        this.templates = {
+            description: '<div>' +
+                '  <h4 class="indicator-msg-popup"></h4>' +
+                '  <p></p>' +
+                '</div>'
+        };
         this.title = null;
         this.content = null;
         this.html = this.template.clone();
+        this.sandbox = sandbox;
+        this.localization = localization;
+        this._notifierService = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
 
         var me = this,
             headerIcon = me.html.find('div.headerIcon'),
             headerText = me.html.find('div.headerText'),
-            headerCheckbox = me.html.find('div.headerCheckbox');
+            headerCheckbox = me.html.find('input.headerCheckbox');
 
         headerIcon.click(function () {
             if (me.isOpen()) {
@@ -38,6 +48,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
                 me.open();
             }
         });
+
         headerText.click(function () {
             if (me.isOpen()) {
                 me.close();
@@ -45,11 +56,38 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
                 me.open();
             }
         });
-        headerCheckbox.click(function () {
-            if (me.isOpen()) {
-                me.close();
+
+        headerCheckbox.change(function () {
+            selectedLayers = me.sandbox.findAllSelectedMapLayers();
+            layersLength = selectedLayers.length;
+            var thisHeaderCheckbox = this;
+            var isChecked = jQuery(thisHeaderCheckbox).prop("checked");
+            //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
+            if(layersLength > 10 && isChecked) {
+                var desc = jQuery(me.templates.description),
+                dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
+                okBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.OkButton'
+                );
+                cancelBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.CancelButton'
+                );
+                desc.find('p').text(me.localization.manyLayersWarning.text);
+                okBtn.addClass('primary');
+                okBtn.setHandler(function () {
+                    dialog.close(true);
+                    me.handleCheckboxChange(thisHeaderCheckbox);
+                });
+                cancelBtn.addClass('secondary');
+                cancelBtn.setHandler(function () {
+                    dialog.close(true);
+                    jQuery(thisHeaderCheckbox).prop('checked', false);
+                });
+                dialog.show(me.localization.manyLayersWarning.title, desc, [okBtn, cancelBtn]);
             } else {
-                me.open();
+                me.handleCheckboxChange(thisHeaderCheckbox);
             }
         });
 
@@ -184,5 +222,53 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
          */
         insertTo: function (container) {
             container.append(this.html);
+        },
+        /**
+         * Helper method for handling the checkbox change.
+         * @param  {input} checkbox The checkbox that is changed.
+         */
+        handleCheckboxChange: function(checkbox) {
+            var me = this;
+            if (!me.isOpen()) {
+                me.open();
+            }
+            var inputsArr = me.html.find('div.content div.layer input');
+            if(checkbox.checked) {
+                me.toggleAllLayers(inputsArr, true);
+            } else {
+                me.toggleAllLayers(inputsArr, false);
+            }
+        },
+        /**
+         * Toggle all layerInputArray layers from the map.
+         * @param {Array} layerInputArray Array of Oskari layer input checkboxes whose parent is a div with a .layer class and contains layer_id as the id of the layer.
+         * @param {Boolean} addOrRemove Whether to add or remove the given layers from the map
+         */
+        toggleAllLayers: function(layerInputArray, addOrRemove) {
+            var me = this;
+            jQuery.each(layerInputArray ||[], function(key, input){
+                var input = jQuery(input);
+                var parent = input.parent(".layer");
+                var layerId = parent.attr("layer_id");
+                input.prop('checked', addOrRemove);
+                if(addOrRemove) {
+                    me.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
+                } else {
+                    me.sandbox.postRequestByName('RemoveMapLayerRequest', [layerId]);
+                }
+            });
+        },
+        _bindOskariEvents: function(){
+            var me = this;
+            me._notifierService.on('AfterMapLayerAddEvent',function(evt) {
+                console.log(evt);
+                //me._updateLayerCount();
+            });
+
+            me._notifierService.on('AfterMapLayerRemoveEvent',function(evt){
+                console.log(evt);
+                //me._updateLayerCount();
+            });
         }
-    });
+    }
+);
