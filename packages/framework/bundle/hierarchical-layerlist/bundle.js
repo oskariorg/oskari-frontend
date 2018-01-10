@@ -73,10 +73,6 @@ function() {
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/hierarchical-layerlist/component/SelectableAccordionPanel.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/hierarchical-layerlist/view/SelectedLayersTab.js"
         },
         {
@@ -86,6 +82,10 @@ function() {
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectedLayer.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectableAccordionPanel.js"
         },
         {
             "type": "text/css",
