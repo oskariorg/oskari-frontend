@@ -198,7 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         calculateContainerHeightDuringSort: function ( height ) {
             var container = jQuery(this.container);
             if ( typeof height === "undefined" ) {
-                     container.css({ height: "" });  
+                     container.css({ height: "" });
             }
             var totalHeight = container.height() + height;
             container.css({ height: totalHeight });
@@ -493,6 +493,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          */
         handleLayerOrderChanged: function (layer, fromPosition, toPosition) {
+            return;
             if (!layer) {
                 throw 'handleLayerOrderChanged: No layer provided';
             }
@@ -944,6 +945,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * True to ignore baselayer placement
          */
         handleLayerSelectionChanged: function (layer, isSelected, keepLayersOrder) {
+            return;
             // add layer
             if (isSelected) {
                 var me = this,

@@ -208,7 +208,6 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.view.Layer",
             });
 
             layerDiv.find('input').change(function () {
-                console.log("QWERQWERQWERQWER");
                 checkbox = jQuery(this);
                 if (checkbox.is(':checked')) {
                     sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);

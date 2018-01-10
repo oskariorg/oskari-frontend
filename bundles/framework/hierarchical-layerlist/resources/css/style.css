@@ -143,5 +143,42 @@ div.hierarchical-layerlist li#hierarchical-layerlist-selected-layers-tab {
       font-weight: normal;
       text-align: center;
       font-size: 11px; }
+div.hierarchical-layerlist ul.layerlist {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+  div.hierarchical-layerlist ul.layerlist li.layer {
+    border: 1pt solid #c0d0e0;
+    margin: 5px;
+    padding: 4px;
+    background-color: #fff; }
+    div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible {
+      float: left;
+      width: 50px;
+      font-size: 12px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible a {
+        cursor: pointer; }
+    div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header {
+      float: left; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .breadcrumb {
+        font-size: 10px; }
+    div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools {
+      float: right; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle {
+        background-image: url("../images/glyphicons/glyphicons-174-play.png");
+        background-repeat: no-repeat;
+        background-position: right center;
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin: 4px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .icon {
+        float: left;
+        margin: 4px; }
+    div.hierarchical-layerlist ul.layerlist li.layer .layer-tools {
+      display: none; }
 
 /*# sourceMappingURL=style.css.map */

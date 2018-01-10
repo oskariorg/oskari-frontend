@@ -90,7 +90,10 @@ Oskari.registerLocalization(
             "tileText": "Karttatasot"
         },
         "SelectedLayersTab": {
-            "title": "Valitut tasot"
+            "title": "Valitut tasot",
+            "style": "Tyyli",
+            "show": "Näytä",
+            "hide": "Piilota"
         },
         "manyLayersWarning": {
             "title": "Huomio!",

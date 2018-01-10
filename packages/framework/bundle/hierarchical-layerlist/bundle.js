@@ -73,15 +73,19 @@ function() {
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/hierarchical-layerlist/component/SelectableAccordionPanel.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/hierarchical-layerlist/view/SelectedLayersTab.js"
         },
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/hierarchical-layerlist/service/OskariEventNotifierService.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectedLayer.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectableAccordionPanel.js"
         },
         {
             "type": "text/css",
