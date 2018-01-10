@@ -104,6 +104,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         this.sandbox.notifyAll(event);
     }
 }, {
-    'extend': ['Oskari.mapframework.BasicBundle'],
+    'extend': ['Oskari.BasicBundle'],
     'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });
