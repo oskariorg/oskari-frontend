@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.BasicBundle
+ * @class Oskari.BasicBundle
  * Abstract class, for inheritance only
  */
-Oskari.clazz.define('Oskari.mapframework.BasicBundle', function () {
+Oskari.clazz.define('Oskari.BasicBundle', function () {
     this.sandbox = null;
 }, {
     /**
