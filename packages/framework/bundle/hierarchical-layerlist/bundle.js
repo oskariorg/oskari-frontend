@@ -72,6 +72,10 @@ function() {
             "src": "../../../../bundles/framework/hierarchical-layerlist/service/OskariEventNotifierService.js"
         },
         {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectedLayer.js"
+        },
+        {
             "type": "text/css",
             "src": "../../../../bundles/framework/hierarchical-layerlist/resources/css/style.css"
         }

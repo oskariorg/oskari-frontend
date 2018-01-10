@@ -218,4 +218,60 @@ div.hierarchical-layerlist {
             }
         }
     }
+
+    ul.layerlist {
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+        li.layer {
+            border: 1pt solid #c0d0e0;
+            margin: 5px;
+            padding: 4px;
+            background-color: #fff;
+
+            .layer-info {
+                .visible {
+                    float: left;
+                    width: 50px;
+                    font-size: 12px;
+
+                    a {
+                        cursor: pointer;
+                    }
+                }
+                .header {
+                    float:left;
+
+                    .breadcrumb{
+                        font-size:10px;
+                    }
+                }
+                .header-tools{
+                    float:right;
+
+                    .toggle {
+                        background-image:url("../images/glyphicons/glyphicons-174-play.png");
+                        background-repeat: no-repeat;
+                        background-position: right center;
+                        width: 18px;
+                        height:18px;
+                        float:left;
+                        margin: 4px;
+                    }
+                    .icon {
+                        float:left;
+                        margin: 4px;
+                    }
+                }
+            }
+
+            .layer-tools {
+                display: none;
+            }
+        }
+    }
 }

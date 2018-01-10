@@ -89,7 +89,10 @@ Oskari.registerLocalization(
             "tileText": "Map layers"
         },
         "SelectedLayersTab": {
-            "title": "Valitut tasot"
+            "title": "Valitut tasot",
+            "style": "Tyyli",
+            "show": "Näytä",
+            "hide": "Piilota"
         }
     }
 });
