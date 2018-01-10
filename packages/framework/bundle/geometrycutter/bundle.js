@@ -22,9 +22,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
         "source": {
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/geometrycutter/BundleModule.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/geometrycutter/EditState.js"
             }, {
                 "type": "text/javascript",

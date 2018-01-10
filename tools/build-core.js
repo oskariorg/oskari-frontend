@@ -39,6 +39,7 @@ var files = [
     // Oskari application helpers
 	'../src/loader.js',
     '../src/oskari.app.js',
+    '../src/BasicBundle.js',
     // deprecated functions
     '../src/deprecated/module_spec.js',
     '../src/deprecated/builder_api.js',

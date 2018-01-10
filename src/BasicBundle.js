@@ -1,18 +1,18 @@
 /**
- * @class Oskari.mapframework.ui.module.common.geometrycutter.BundleModule
+ * @class Oskari.mapframework.BasicBundle
  * Abstract class, for inheritance only
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.BundleModule', function () {
+Oskari.clazz.define('Oskari.mapframework.BasicBundle', function () {
     this.sandbox = null;
 }, {
     /**
      * @static @property __name
      * override in subclass!
      */
-    __name: "",
-    
+    __name: '',
+
     getName: function () {
-        return this.__name
+        return this.__name;
     },
 
     /**
@@ -28,9 +28,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.BundleModule', fu
         return handler.call(this, event);
     },
 
-    eventHandlers: {},
+    eventHandlers: {}, // Override in subclass
 
-    requestHandlers: {},
+    requestHandlers: {}, // Override in subclass
 
     /**
      * @method init
@@ -52,6 +52,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.BundleModule', fu
         Object.keys(this.eventHandlers).forEach(function (eventName) {
             sandbox.registerForEventByName(this, eventName);
         }, this);
+
+        if (this._startImpl) {
+            this._startImpl(sandbox);
+        }
     },
 
     /**
