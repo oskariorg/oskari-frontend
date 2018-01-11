@@ -221,6 +221,11 @@ Oskari.clazz.define(
             me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function(evt) {
                 me._handleLayerOrderChanged(evt);
             });
+
+            me._notifierService.on('AfterChangeMapLayerOpacityEvent', function(evt) {
+                var layer = evt.getMapLayer();
+                me._layers[layer.getId()].setLayer(layer);
+            });
         },
         _blink: function(element, count) {
             var me = this;

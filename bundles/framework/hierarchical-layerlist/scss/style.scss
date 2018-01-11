@@ -251,7 +251,7 @@ div.hierarchical-layerlist {
             border: 1pt solid #c0d0e0;
             margin: 5px;
             background-color: #fff;
-            font: 10pt Arial,sans-serif
+            font: 10pt Arial,sans-serif;
 
             .layer-info {
                 cursor: move;
@@ -323,6 +323,29 @@ div.hierarchical-layerlist {
                 .stylesel {
                     label {
                         display: inline-block;
+                    }
+                }
+
+                .opacity {
+                    display: inline-block;
+                    background-image: url(../images/opacity_slider.png);
+                    background-repeat: no-repeat;
+                    margin-left: 54px;
+                    margin-top: 4px;
+
+                    .slider {
+                        width: 140px;
+                        display: inline-block;
+                        margin-right: 16px;
+                    }
+
+                    .slider-text {
+                        display:inline-block;
+
+                        input {
+                            width: 25px;
+                            padding:1px;
+                        }
                     }
                 }
             }

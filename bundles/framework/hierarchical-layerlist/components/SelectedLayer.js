@@ -21,8 +21,16 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         '           <label for="style" class="width-prefix text-right">' + this.locale.style + '</label>' +
         '           <select name="style"></select>' +
         '       </div>' +
+        '       <div class="oskariui opacity">' +
+        '           <div class="slider"></div>' +
+        '           <div class="slider-text">' +
+        '               <div><input type="text" class="opacity-slider-text" />%</div>' +
+        '           </div>' +
+        '       </div>' +
         '   </div>' +
         '</li>');
+
+    // '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>'
 
     this._el = this._template.clone();
     this._layer = null;
@@ -44,6 +52,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         me._setRemoveHandler();
         me._setToolToggleHandler();
         me._updateStyles();
+        me._addOpacitySlider();
     },
     /**
      * Set visibility texts and handler
@@ -168,6 +177,43 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
                 stylesel.show();
             }
         }
+    },
+    /**
+     * Add opacity slider
+     * @method  _addOpacitySlider
+     * @private
+     */
+    _addOpacitySlider: function() {
+        var me = this;
+        var opacity = me._layer.getOpacity();
+        var input = me._el.find('.opacity-slider-text');
+
+        if (!me._bindedOpacity) {
+            var layerOpacityChanged = function(opacity) {
+                me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me._layer.getId(), opacity]);
+                me._el.find('.opacity-slider-text').attr('value', opacity);
+            };
+
+            var sliderEl = me._el.find('.opacity .slider');
+            sliderEl.slider({
+                min: 0,
+                max: 100,
+                value: opacity,
+                slide: function(event, ui) {
+                    layerOpacityChanged(ui.value);
+                },
+                stop: function(event, ui) {
+                    layerOpacityChanged(ui.value);
+                }
+            });
+
+            input.bind('change paste keyup', function() {
+                layerOpacityChanged(jQuery(this).val());
+            });
+        }
+
+        input.attr('value', me._layer.getOpacity());
+        me._bindedOpacity = true;
     },
     /**
      * Get jQuery element
