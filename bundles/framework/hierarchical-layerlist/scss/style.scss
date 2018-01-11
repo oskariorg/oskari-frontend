@@ -348,6 +348,23 @@ div.hierarchical-layerlist {
                         }
                     }
                 }
+
+                .bottom-tools {
+                    float:right;
+                    .tool {
+                        width: 24px;
+                        height:24px;
+                        float:left;
+                        margin-left:4px;
+
+                        &.zoom-to-extent {
+                            background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
+                            background-repeat: no-repeat;
+                            background-position: right center;
+                        }
+                    }
+
+                }
             }
         }
     }

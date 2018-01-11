@@ -229,5 +229,16 @@ div.hierarchical-layerlist ul.layerlist {
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity .slider-text input {
             width: 25px;
             padding: 1px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools {
+        float: right; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool {
+          width: 24px;
+          height: 24px;
+          float: left;
+          margin-left: 4px; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.zoom-to-extent {
+            background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
+            background-repeat: no-repeat;
+            background-position: right center; }
 
 /*# sourceMappingURL=style.css.map */
