@@ -164,6 +164,7 @@ div.hierarchical-layerlist ul.layerlist {
     margin: 5px;
     background-color: #fff; }
     div.hierarchical-layerlist ul.layerlist li.layer .layer-info {
+      cursor: move;
       padding: 6px; }
       div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible {
         float: left;
@@ -175,7 +176,13 @@ div.hierarchical-layerlist ul.layerlist {
       div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header {
         float: left; }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .breadcrumb {
-          font-size: 10px; }
+          font: 8pt Arial,sans-serif; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .title {
+          font: 14pt Arial,sans-serif;
+          margin-top: 4px;
+          margin-bottom: 4px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .description {
+          font: 10pt Arial,sans-serif; }
       div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools {
         float: right; }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle {
@@ -185,7 +192,8 @@ div.hierarchical-layerlist ul.layerlist {
           width: 18px;
           height: 20px;
           float: left;
-          margin: 4px; }
+          margin: 4px;
+          cursor: default; }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle.open {
             background-image: url("../images/glyphicons/glyphicons-224-chevron-right.png");
             -webkit-transform: rotate(90deg);
@@ -194,6 +202,7 @@ div.hierarchical-layerlist ul.layerlist {
             -o-transform: rotate(90deg);
             transform: rotate(90deg); }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .icon {
+          cursor: default;
           float: left;
           margin: 4px;
           margin-top: 6px; }

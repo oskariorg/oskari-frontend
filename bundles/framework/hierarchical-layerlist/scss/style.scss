@@ -251,8 +251,11 @@ div.hierarchical-layerlist {
             border: 1pt solid #c0d0e0;
             margin: 5px;
             background-color: #fff;
+            font: 10pt Arial,sans-serif
 
             .layer-info {
+                cursor: move;
+
                 padding: $selectedLayersTabLayerPadding;
 
                 .visible {
@@ -269,7 +272,15 @@ div.hierarchical-layerlist {
                     float:left;
 
                     .breadcrumb{
-                        font-size:10px;
+                        font-size: 8pt;
+                    }
+                    .title {
+                        font-size: 14pt;
+                        margin-top: 4px;
+                        margin-bottom: 4px;
+                    }
+                    .description {
+                        font-size: 10pt;
                     }
                 }
                 .header-tools{
@@ -283,6 +294,7 @@ div.hierarchical-layerlist {
                         height:20px;
                         float:left;
                         margin: 4px;
+                        cursor: default;
 
                         &.open {
                             background-image:url("../images/glyphicons/glyphicons-224-chevron-right.png");
@@ -294,6 +306,7 @@ div.hierarchical-layerlist {
                         }
                     }
                     .icon {
+                        cursor: default;
                         float:left;
                         margin: 4px;
                         margin-top: 6px;
