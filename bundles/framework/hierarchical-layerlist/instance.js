@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
      * @method create called automatically on construction
      * @static
      */
-    function () {
+    function() {
         //"use strict";
         this.sandbox = null;
         this.started = false;
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function () {
+        getName: function() {
             //"use strict";
             return this.__name;
         },
@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
-        setSandbox: function (sandbox) {
+        setSandbox: function(sandbox) {
             //"use strict";
             this.sandbox = sandbox;
         },
@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method getSandbox
          * @return {Oskari.Sandbox}
          */
-        getSandbox: function () {
+        getSandbox: function() {
             //"use strict";
             return this.sandbox;
         },
@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          *     JSON object for complete data depending on localization
          *     structure and if parameter key is given
          */
-        getLocalization: function (key) {
+        getLocalization: function(key) {
             //"use strict";
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method start
          * implements BundleInstance protocol start method
          */
-        start: function () {
+        start: function() {
             //"use strict";
             var me = this,
                 conf = me.conf,
@@ -117,23 +117,24 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
 
             sandbox.registerAsStateful(me.mediator.bundleId, me);
 
-            successCB = function () {
+            successCB = function() {
                 // massive update so just recreate the whole ui
                 //me.plugins['Oskari.userinterface.Flyout'].populateLayers();
                 // added through maplayerevent
             };
-            failureCB = function () {
+            failureCB = function() {
                 alert(me.getLocalization('errors').loadFailed);
             };
             mapLayerService.loadAllLayersAjax(successCB, failureCB);
 
+            this._updateAccordionHeight(jQuery('#mapdiv').height());
             this._registerForGuidedTour();
         },
         /**
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        init: function () {
+        init: function() {
             //"use strict";
             return null;
         },
@@ -141,7 +142,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        update: function () {
+        update: function() {
             //"use strict";
         },
         /**
@@ -149,7 +150,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
-        onEvent: function (event) {
+        onEvent: function(event) {
             //"use strict";
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
@@ -170,7 +171,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            AfterMapLayerRemoveEvent: function (event) {
+            AfterMapLayerRemoveEvent: function(event) {
                 //"use strict";
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
                 this.notifierService.notifyOskariEvent(event);
@@ -182,7 +183,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            AfterMapLayerAddEvent: function (event) {
+            AfterMapLayerAddEvent: function(event) {
                 //"use strict";
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true);
                 this.notifierService.notifyOskariEvent(event);
@@ -192,7 +193,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
-            MapLayerEvent: function (event) {
+            MapLayerEvent: function(event) {
                 //"use strict";
                 var me = this,
                     flyout = me.plugins['Oskari.userinterface.Flyout'],
@@ -225,7 +226,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 this.notifierService.notifyOskariEvent(event);
             },
 
-            'BackendStatus.BackendStatusChangedEvent': function (event) {
+            'BackendStatus.BackendStatusChangedEvent': function(event) {
                 var me = this,
                     layerId = event.getLayerId(),
                     status = event.getStatus(),
@@ -248,7 +249,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             /**
              * @method ExtensionUpdatedEvent
              */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
+            'userinterface.ExtensionUpdatedEvent': function(event) {
                 var me = this,
                     plugin = me.plugins['Oskari.userinterface.Flyout'];
 
@@ -265,13 +266,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             /**
              * @method MapLayerVisibilityChangedEvent
              */
-            'MapLayerVisibilityChangedEvent': function (event) {
+            'MapLayerVisibilityChangedEvent': function(event) {
                 this.notifierService.notifyOskariEvent(event);
             },
             /**
              * @method AfterChangeMapLayerOpacityEvent
              */
-            'AfterChangeMapLayerOpacityEvent': function (event) {
+            'AfterChangeMapLayerOpacityEvent': function(event) {
                 if (event._creator !== this.getName()) {
                     this.notifierService.notifyOskariEvent(event);
                 }
@@ -279,7 +280,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             /**
              * @method AfterChangeMapLayerStyleEvent
              */
-            'AfterChangeMapLayerStyleEvent': function (event) {
+            'AfterChangeMapLayerStyleEvent': function(event) {
                 if (event._creator !== this.getName()) {
                     this.notifierService.notifyOskariEvent(event);
                 }
@@ -290,18 +291,25 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
              *
              * Rearranges layers
              */
-            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+            'AfterRearrangeSelectedMapLayerEvent': function(event) {
                 if (event._creator !== this.getName()) {
                     this.notifierService.notifyOskariEvent(event);
                 }
+            },
+            MapSizeChangedEvent: function(evt) {
+                this._updateAccordionHeight(evt.getHeight());
             }
+        },
+
+        _updateAccordionHeight: function(mapHeight) {
+            jQuery('.hierarchical-layerlist .accordion').css('max-height', (mapHeight * 0.3) + 'px');
         },
 
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        stop: function () {
+        stop: function() {
             //"use strict";
             var me = this,
                 sandbox = me.sandbox(),
@@ -329,7 +337,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * Oskari.framework.bundle.hierarchical-layerlist.Flyout
          * Oskari.framework.bundle.hierarchical-layerlist.Tile
          */
-        startExtension: function () {
+        startExtension: function() {
             //"use strict";
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
                 'Oskari.framework.bundle.hierarchical-layerlist.Flyout',
@@ -345,7 +353,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * implements Oskari.userinterface.Extension protocol stopExtension method
          * Clears references to flyout and tile
          */
-        stopExtension: function () {
+        stopExtension: function() {
             //"use strict";
             this.plugins['Oskari.userinterface.Flyout'] = null;
             this.plugins['Oskari.userinterface.Tile'] = null;
@@ -355,7 +363,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * implements Oskari.userinterface.Extension protocol getPlugins method
          * @return {Object} references to flyout and tile
          */
-        getPlugins: function () {
+        getPlugins: function() {
             //"use strict";
             return this.plugins;
         },
@@ -363,7 +371,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method getTitle
          * @return {String} localized text for the title of the component
          */
-        getTitle: function () {
+        getTitle: function() {
             //"use strict";
             return this.getLocalization('title');
         },
@@ -371,7 +379,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
-        getDescription: function () {
+        getDescription: function() {
             //"use strict";
             return this.getLocalization('desc');
         },
@@ -379,7 +387,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method createUi
          * (re)creates the UI for "all layers" functionality
          */
-        createUi: function () {
+        createUi: function() {
             //"use strict";
             var me = this;
             me.plugins['Oskari.userinterface.Flyout'].createUi();
@@ -390,7 +398,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method setState
          * @param {Object} state bundle state as JSON
          */
-        setState: function (state) {
+        setState: function(state) {
             //"use strict";
             this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
         },
@@ -399,7 +407,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method getState
          * @return {Object} bundle state as JSON
          */
-        getState: function () {
+        getState: function() {
             //"use strict";
             return this.plugins['Oskari.userinterface.Flyout'].getContentState();
         },
@@ -412,16 +420,16 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          */
         __guidedTourDelegateTemplate: {
             priority: 20,
-            show: function(){
+            show: function() {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'HierarchicalLayerlist']);
             },
-            hide: function(){
+            hide: function() {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'HierarchicalLayerlist']);
             },
-            getTitle: function () {
+            getTitle: function() {
                 return this.getLocalization('guidedTour').title;
             },
-            getContent: function () {
+            getContent: function() {
                 var content = jQuery('<div></div>');
                 content.append(this.getLocalization('guidedTour').message);
                 return content;
@@ -433,7 +441,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
                 openLink.bind('click',
-                    function () {
+                    function() {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'HierarchicalLayerlist']);
                         openLink.hide();
                         closeLink.show();
@@ -441,7 +449,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
                 closeLink.bind('click',
-                    function () {
+                    function() {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'HierarchicalLayerlist']);
                         openLink.show();
                         closeLink.hide();
@@ -458,14 +466,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          */
         _registerForGuidedTour: function() {
             var me = this;
+
             function sendRegister() {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if(requestBuilder){
+                if (requestBuilder) {
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for(var prop in me.__guidedTourDelegateTemplate){
-                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                    for (var prop in me.__guidedTourDelegateTemplate) {
+                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
@@ -475,14 +484,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
             }
 
-            function handler(msg){
-                if(msg.id === 'guidedtour') {
+            function handler(msg) {
+                if (msg.id === 'guidedtour') {
                     sendRegister();
                 }
             }
 
             var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
-            if(tourInstance) {
+            if (tourInstance) {
                 sendRegister();
             } else {
                 Oskari.on('bundle.start', handler);

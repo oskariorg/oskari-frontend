@@ -11,7 +11,7 @@ Oskari.clazz.define(
      * @static
      */
 
-    function (instance) {
+    function(instance) {
         this.instance = instance;
         this.locale = this.instance.getLocalization('SelectedLayersTab');
         this.sb = this.instance.getSandbox();
@@ -29,14 +29,24 @@ Oskari.clazz.define(
         this._createUI();
         this._bindOskariEvents();
     }, {
-        getTabPanel: function () {
+        /**
+         * @method @public getTabPanel Gets tab panel
+         * @return {Oskari.userinterface.component.TabPanel} selected layer tab panel
+         */
+        getTabPanel: function() {
             return this.tabPanel;
         },
 
-        _updateLayerCount: function(){
+        /**
+         * @return {[type]}
+         */
+        _updateLayerCount: function() {
             var me = this;
             var selectedLayers = me.sb.findAllSelectedMapLayers();
-            me.tabPanel.getHeader().find('.layers-selected').html('<div class="layer-count">' + selectedLayers.length + '</div>');
+            var icon = me.tabPanel.getHeader().find('.layers-selected');
+            icon.html('<div class="layer-count">' + selectedLayers.length + '</div>');
+            icon.stop();
+            me._blink(icon, 2);
         },
 
         /**
@@ -45,7 +55,7 @@ Oskari.clazz.define(
          *
          * @param  {String} oskarifieldId oskari field id
          */
-        _createUI: function (oskarifieldId) {
+        _createUI: function(oskarifieldId) {
             var me = this;
 
             me.tabPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
@@ -55,11 +65,11 @@ Oskari.clazz.define(
             var layerContainer = me._templates.layerlist.clone();
 
             layerContainer.sortable({
-                start: function (event, ui) {
+                start: function(event, ui) {
                     var height = ui.item.height();
-                    me._calculateContainerHeightDuringSort( height );
+                    me._calculateContainerHeightDuringSort(height);
                 },
-                stop: function (event, ui) {
+                stop: function(event, ui) {
                     me._calculateContainerHeightDuringSort();
                     me._layerOrderChanged(ui.item);
                 }
@@ -71,46 +81,48 @@ Oskari.clazz.define(
             me._updateLayerCount();
         },
 
-        _setSelectedLayers: function(){
+        _setSelectedLayers: function() {
             var me = this;
             var selectedLayers = me.sb.findAllSelectedMapLayers();
 
             selectedLayers.reverse().forEach(function(layer) {
-               me._addLayer(layer, false, true);
+                me._addLayer(layer, false, true);
             });
 
         },
 
-        _calculateContainerHeightDuringSort: function ( height ) {
+        _calculateContainerHeightDuringSort: function(height) {
             var me = this;
             var container = me.tabPanel.getContainer();
-            if ( typeof height === "undefined" ) {
-                container.css({ height: "" });
+            if (typeof height === "undefined") {
+                container.css({
+                    height: ""
+                });
             }
             var totalHeight = container.height() + height;
-            container.css({ height: totalHeight });
+            container.css({
+                height: totalHeight
+            });
         },
 
         _addLayer: function(layer, keepLayersOrder, forceAdd) {
             var me = this;
-            if(me._layers[layer.getId()]) {
+            if (me._layers[layer.getId()]) {
                 return;
             }
             var list = me.tabPanel.getContainer().find('.layerlist');
-            var layerComponent = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer',layer,me.sb, me.locale);
+            var layerComponent = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', layer, me.sb, me.locale);
             var previousLayers = list.find('li.layer');
-            if(layer.isBaseLayer() && !keepLayersOrder && !forceAdd) {
+            if (layer.isBaseLayer() && !keepLayersOrder && !forceAdd) {
                 previousLayers = list.find('li.layer[data-layerid^=base_]');
             }
-            if(forceAdd) {
+            if (forceAdd) {
                 list.append(layerComponent.getElement());
-            }
-            else if(previousLayers.length > 0 && layer.isBaseLayer() && !keepLayersOrder){
+            } else if (previousLayers.length > 0 && layer.isBaseLayer() && !keepLayersOrder) {
                 previousLayers.last().after(layerComponent.getElement());
-            } else if(previousLayers.length > 0) {
+            } else if (previousLayers.length > 0) {
                 previousLayers.first().before(layerComponent.getElement());
-            }
-            else {
+            } else {
                 list.append(layerComponent.getElement());
             }
             me._layers[layer.getId()] = layerComponent;
@@ -123,7 +135,7 @@ Oskari.clazz.define(
          * @param {Number} newIndex index where the moved layer is now
          *
          */
-        _layerOrderChanged: function (item) {
+        _layerOrderChanged: function(item) {
             var me = this;
             var allNodes = me.tabPanel.getContainer().find('.layerlist li.layer'),
                 movedId = item.attr('data-layerid'),
@@ -147,7 +159,7 @@ Oskari.clazz.define(
          * @param {AfterRearrangeSelectedMapLayerEvent} event
          *
          */
-        _handleLayerOrderChanged: function (event) {
+        _handleLayerOrderChanged: function(event) {
             var me = this;
             var layer = event.getMovedMapLayer();
             var fromPosition = event.getFromPosition();
@@ -185,15 +197,15 @@ Oskari.clazz.define(
             }
         },
 
-        _bindOskariEvents: function(){
+        _bindOskariEvents: function() {
             var me = this;
-            me._notifierService.on('AfterMapLayerAddEvent',function(evt) {
+            me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
                 var layer = evt.getMapLayer();
                 me._addLayer(layer, evt.getKeepLayersOrder());
                 me._updateLayerCount();
             });
 
-            me._notifierService.on('AfterMapLayerRemoveEvent',function(evt){
+            me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
                 var layer = evt.getMapLayer();
                 me._layers[layer.getId()].getElement().remove();
                 delete me._layers[layer.getId()];
@@ -201,13 +213,37 @@ Oskari.clazz.define(
                 me._updateLayerCount();
             });
 
-            me._notifierService.on('MapLayerVisibilityChangedEvent', function(evt){
+            me._notifierService.on('MapLayerVisibilityChangedEvent', function(evt) {
                 var layer = evt.getMapLayer();
                 me._layers[layer.getId()].setLayer(layer);
             });
 
-            me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function(evt){
+            me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function(evt) {
                 me._handleLayerOrderChanged(evt);
+            });
+        },
+        _blink: function(element, count) {
+            var me = this;
+            if (!element) {
+                return;
+            }
+            if (!count) {
+                count = 1;
+            }
+            // animate to low opacity
+            element.animate({
+                opacity: 0.25
+            }, 500, function() {
+                // on complete, animate back to fully visible
+                element.animate({
+                    opacity: 1
+                }, 500, function() {
+                    // on complete, check and adjust the count parameter
+                    // recurse if count has not been reached yet
+                    if (count > 1) {
+                        me._blink(element, --count);
+                    }
+                });
             });
         }
     }

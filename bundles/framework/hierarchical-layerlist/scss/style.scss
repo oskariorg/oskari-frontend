@@ -1,5 +1,15 @@
 $selectedLayersTabBackgroundColor: #1eb54e;
 $selectedLayersTabTextColor: #fff;
+$selectedLayersTabLayerPadding: 6px;
+$selectedLayersTabLayerFontSize: 12px;
+$selectedLayersTabLabelWidth: 50px;
+
+.hierarchical-layerlist-flyout
+{
+    .oskari-flyoutcontentcontainer {
+        max-height:unset;
+    }
+}
 
 div.hierarchical-layerlist {
     div.layer-filter {
@@ -15,9 +25,11 @@ div.hierarchical-layerlist {
         margin-bottom: 5px;
         margin-left: -1px;
     }
-
-    div.accordion div.accordion_panel div.content {
-        padding: 0;
+    div.accordion {
+        overflow: auto;
+        div.accordion_panel div.content {
+            padding: 0;
+        }
     }
 
     div.layer {
@@ -227,20 +239,30 @@ div.hierarchical-layerlist {
         padding: 0;
         margin: 0;
 
+        .width-prefix {
+            width: $selectedLayersTabLabelWidth;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
         li.layer {
             border: 1pt solid #c0d0e0;
             margin: 5px;
-            padding: 4px;
             background-color: #fff;
 
             .layer-info {
+                padding: $selectedLayersTabLayerPadding;
+
                 .visible {
                     float: left;
-                    width: 50px;
-                    font-size: 12px;
+                    width: $selectedLayersTabLabelWidth;
+                    font-size: $selectedLayersTabLayerFontSize;
 
                     a {
                         cursor: pointer;
+                        text-decoration: underline;
                     }
                 }
                 .header {
@@ -281,6 +303,15 @@ div.hierarchical-layerlist {
 
             .layer-tools {
                 display: none;
+                background-color: #f3f3f3;
+                padding: $selectedLayersTabLayerPadding;
+                font-size: $selectedLayersTabLayerFontSize;
+
+                .stylesel {
+                    label {
+                        display: inline-block;
+                    }
+                }
             }
         }
     }
