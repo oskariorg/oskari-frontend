@@ -46,6 +46,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
 }, {
     /** PUBLIC METHODS ******************************************************************************************************************/
     /**
+     * Get jQuery element
+     * @method getElement
+     * @return {Object}   jQuery element
+     */
+    getElement: function() {
+        return this._el;
+    },
+    /**
      * Set Oskari layer to component and also get properties from this
      * @method setLayer
      * @param  {Object} layer Oskari layer
@@ -63,6 +71,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         me._updateStyles();
         me._addOpacitySlider();
         me._addLayerExtentTool();
+        me._addLayerTools();
         me._binded = true;
     },
     /**
@@ -269,7 +278,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
     _addLayerExtentTool: function() {
         var me = this;
         if (me._layer.getGeometryWKT() && me._layer.getGeometryWKT() !== '') {
-            me.addTool('zoom-to-extent', 'zoom-to-extent', me.locale.tooltips.zoomToLayerExtent, function(evt) {
+            me.addTool('zoom-to-extent', 'zoom-to-extent-tool', me.locale.tooltips.zoomToLayerExtent, function(evt) {
                 me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [me._layer.getGeometryWKT(), {
                     layerId: 'hierarchical-layerlist-layer-extent',
                     clearPrevious: true,
@@ -281,12 +290,28 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
             });
         }
     },
-    /**
-     * Get jQuery element
-     * @method getElement
-     * @return {Object}   jQuery element
-     */
-    getElement: function() {
-        return this._el;
+    _addLayerTools: function() {
+        var me = this;
+        me._layer.getTools().forEach(function(tool) {
+            me.addTool(tool.getName(), tool.getIconCls(), tool.getTooltip(), function(evt) {
+                tool.getCallback()();
+            });
+        });
+
+
+        /*if (me._layer.getLegendImage() && me._layer.getLegendImage() !== '') {
+            me.addTool('show-legend', 'show-legend', me.locale.tooltips.showLegend, function(evt) {
+                glyphicons-115-list
+
+                me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [me._layer.getGeometryWKT(), {
+                    layerId: 'hierarchical-layerlist-layer-extent',
+                    clearPrevious: true,
+                    layerOptions: null,
+                    centerTo: true,
+                }]);
+
+                me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'hierarchical-layerlist-layer-extent']);
+            });
+        }*/
     }
 });

@@ -352,15 +352,27 @@ div.hierarchical-layerlist {
                 .bottom-tools {
                     float:right;
                     .tool {
-                        width: 24px;
-                        height:24px;
+                        width: 26px;
+                        height:26px;
                         float:left;
                         margin-left:4px;
+                        background-repeat: no-repeat;
+                        background-position: center center;
 
-                        &.zoom-to-extent {
+                        &.zoom-to-extent-tool {
                             background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
-                            background-repeat: no-repeat;
-                            background-position: right center;
+                        }
+
+                        &.show-featuredata-tool {
+                            background-image:url("../images/glyphicons/glyphicons-115-list.png");
+                        }
+
+                        &.show-own-style-tool {
+                            background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png");
+                        }
+
+                        &.show-metadata-tool {
+                            background-image: url("../images/glyphicons/glyphicons-196-info-sign.png")
                         }
                     }
 

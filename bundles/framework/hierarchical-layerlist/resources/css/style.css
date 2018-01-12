@@ -232,13 +232,19 @@ div.hierarchical-layerlist ul.layerlist {
       div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools {
         float: right; }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool {
-          width: 24px;
-          height: 24px;
+          width: 26px;
+          height: 26px;
           float: left;
-          margin-left: 4px; }
-          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.zoom-to-extent {
-            background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
-            background-repeat: no-repeat;
-            background-position: right center; }
+          margin-left: 4px;
+          background-repeat: no-repeat;
+          background-position: center center; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.zoom-to-extent-tool {
+            background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.show-featuredata-tool {
+            background-image: url("../images/glyphicons/glyphicons-115-list.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.show-own-style-tool {
+            background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.show-metadata-tool {
+            background-image: url("../images/glyphicons/glyphicons-196-info-sign.png"); }
 
 /*# sourceMappingURL=style.css.map */
