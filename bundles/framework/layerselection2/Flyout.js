@@ -814,7 +814,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 laytool = laytools[s];
                 if (laytool) {
                     // Icon or text link
-                    if (laytool.getIconCls() && laytool.getName() !== 'ownStyle') {
+                    if (laytool.getIconCls() && laytool.getName() !== 'ownStyle' && laytool.getName() !== 'objectData') {
                         toolContainer = jQuery('<div></div>');
                         toolContainer.addClass(laytool.getIconCls());
                         toolContainer.attr('title', laytool.getTooltip());
