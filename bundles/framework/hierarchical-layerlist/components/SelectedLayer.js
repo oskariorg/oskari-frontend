@@ -166,7 +166,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
      */
     _setToolToggleHandler: function() {
         var me = this;
-        me._el.find('.layer-info').unbind('click');
         var toggleIcon = me._el.find('.header-tools .toggle');
 
         toggleIcon.attr('title', me.locale.tooltips.openLayerTools);
@@ -269,7 +268,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
      */
     _addLayerExtentTool: function() {
         var me = this;
-        if (me._layer.getGeometryWKT() !== '') {
+        if (me._layer.getGeometryWKT() && me._layer.getGeometryWKT() !== '') {
             me.addTool('zoom-to-extent', 'zoom-to-extent', me.locale.tooltips.zoomToLayerExtent, function(evt) {
                 me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [me._layer.getGeometryWKT(), {
                     layerId: 'hierarchical-layerlist-layer-extent',
