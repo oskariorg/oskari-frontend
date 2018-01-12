@@ -803,9 +803,15 @@ Oskari.clazz.define(
                 me._showIntersectionWarning = true;
                 me.pointerMoveHandler();
                 me._mode = '';
-                if(options.allowMultipleDrawing === false) {
+
+                //stop drawing without modifying
+                if(options.allowMultipleDrawing === false && options.modifyControl === false) {
                     me.stopDrawing(me._id, false);
+                } else if (options.allowMultipleDrawing === false) {
+                    //stop drawing and start modifying
+                    me.removeInteractions(me._draw, me._id);
                 }
+
                 evt.feature.setStyle(me._styles.modify);
                 // activate modify interaction after new drawing is finished
                 if(options.modifyControl !== false) {
