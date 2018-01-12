@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "fi",
     "key": "hierarchical-layerlist",
     "value": {
@@ -98,6 +97,7 @@ Oskari.registerLocalization(
                 "removeLayer": "Poista taso",
                 "openLayerTools": "Avaa tason toiminnot",
                 "closeLayerTools": "Sulje tason toiminnot",
+                "zoomToLayerExtent": "Sovita taso karttanäkymään"
             }
         },
         "manyLayersWarning": {
