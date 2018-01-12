@@ -62,6 +62,11 @@ div.layerselection2 .layer.selected {
           background-repeat: no-repeat; }
           div.layerselection2 .layer.selected div.layer-tools div.right-tools div.object-data div.show-metadata-tool:hover {
             background-image: url("../images/icon-info_hover.png"); }
+        div.layerselection2 .layer.selected div.layer-tools div.right-tools div.object-data div.show-filter-tool {
+          width: 18px;
+          height: 18px;
+          background-image: url("../images/icon-funnel.png");
+          background-repeat: no-repeat; }
   div.layerselection2 .layer.selected div.stylesel {
     background-color: #f3f3f3; }
     div.layerselection2 .layer.selected div.stylesel label {

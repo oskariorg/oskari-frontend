@@ -29,8 +29,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         this.templateLayerOutOfContentArea = null;
         this.sortableBinded = false;
         this._sliders = {};
-        this.WFS_TYPE = 'WFS';
-        this.ANALYSIS_TYPE = 'ANALYSIS';
     }, {
         /**
          * @method getName
@@ -77,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             this.templateLayer = jQuery('<li class="layerselection2 layer selected">' + '<div class="layer-info">' + '<div class="layer-icon"></div>' + '<div class="layer-tool-remove"></div>' + '<div class="layer-tool-refresh"></div>' + '<div class="layer-title"><h4></h4>' + '</div>' + '</div>' + '<div class="stylesel">' + '<label for="style">' + loc.style + '</label>' + '<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
 
             // footers are changed based on layer state
-            this.templateLayerFooterTools = jQuery('<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '</div>' + '<div class="layer-filter"></div>' + '</div>' + '<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc.hide + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc.hidden + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>');
+            this.templateLayerFooterTools = jQuery('<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '</div></div>' + '<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc.hide + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc.hidden + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>');
 
             this.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + loc.show + '</a> ' + loc.hidden + '</p>');
 
@@ -757,46 +755,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 return false;
             });
 
-            // Filter functionality for WFS layers
-            if ((layer.isLayerOfType(me.WFS_TYPE)) || (layer.isLayerOfType(me.ANALYSIS_TYPE))) {
-                var filterIcon = tools.find('div.layer-filter');
-
-                filterIcon.addClass('icon-funnel');
-
-                filterIcon.bind('click', function() {
-                    var icon = jQuery(this),
-                        prevJson;
-
-                    if (icon.hasClass('icon-funnel')) {
-                        var isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable(),
-                            fixedOptions = {
-                                bboxSelection: true,
-                                clickedFeaturesSelection: false,
-                                addLinkToAggregateValues: isAggregateValueAvailable,
-                                loc: loc
-                            };
-
-                        me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', fixedOptions);
-                        me.filterDialog.setUpdateButtonHandler(function(filters) {
-                            // throw event to new wfs
-                            var evt = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
-
-                            me.instance.sandbox.notifyAll(evt);
-                        });
-
-                        if (me.service) {
-                            me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter', me.instance, me.filterDialog);
-
-                            me.filterDialog.createFilterDialog(layer, prevJson, function() {
-                                me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
-                            });
-                        } else {
-                            me.filterDialog.createFilterDialog(layer);
-                        }
-                        me.filterDialog.setCloseButtonHandler(_.bind(me.turnOnClickOff, me));
-                    }
-                });
-            }
 
             var closureMagic = function(tool) {
                 return function() {
@@ -833,31 +791,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             this._updatePublishPermissionText(layer, tools);
 
             return tools;
-        },
-
-        /**
-         * @public @method checkIfAggregateValuesAreAvailable
-         * function gives value to addLinkToAggregateValues (true/false)
-         *
-         * @return {Boolean}
-         */
-        checkIfAggregateValuesAreAvailable: function() {
-            this.service = this.instance.sandbox.getService(
-                'Oskari.analysis.bundle.analyse.service.AnalyseService'
-            );
-            if (!this.service) {
-                return false;
-            }
-            return true;
-        },
-
-        /**
-         * @public @method turnOnClickOff
-         *
-         *
-         */
-        turnOnClickOff: function() {
-            this.filterDialog.popup.dialog.off('click', '.add-link');
         },
 
         /**

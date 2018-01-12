@@ -51,6 +51,6 @@ Oskari.registerLocalization(
         "scale_dialog": {
           "title": "Skaala päivitetty",
           "msg":"Karttataso ei ole käytettävissä nykyisellä tarkennustasolla."
-        }
+},        "filterTooltip": "Suodata aineistoja"
     }
 });
