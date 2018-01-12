@@ -251,5 +251,7 @@ div.hierarchical-layerlist ul.layerlist {
               background-image: url("../images/glyphicons/glyphicons-196-info-sign.png"); }
             div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-filter-tool {
               background-image: url("../images/glyphicons/glyphicons-321-filter.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-layer-legend-tool {
+              background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
 
 /*# sourceMappingURL=style.css.map */

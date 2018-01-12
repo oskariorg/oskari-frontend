@@ -770,9 +770,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             for (s = 0; s < laytools.length; s += 1) {
                 laytool = laytools[s];
-                if (laytool) {
+                if (laytool && laytool.getName() !== 'show-layer-legend-tool') {
                     // Icon or text link
-                    if (laytool.getIconCls() && laytool.getName() !== 'ownStyle' && laytool.getName() !== 'objectData') {
+                    if (laytool.getIconCls() &&
+                        laytool.getName() !== 'ownStyle' &&
+                        laytool.getName() !== 'objectData' &&
+                        laytool.getName() !== 'objectData') {
                         toolContainer = jQuery('<div></div>');
                         toolContainer.addClass(laytool.getIconCls());
                         toolContainer.attr('title', laytool.getTooltip());

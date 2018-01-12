@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
     _addLayerTools: function() {
         var me = this;
         me._layer.getTools().forEach(function(tool) {
-            me.addTool(tool.getName() + i, tool.getIconCls(), tool.getTooltip(), function(evt) {
+            me.addTool(tool.getName(), tool.getIconCls(), tool.getTooltip(), function(evt) {
                 tool.getCallback()();
             });
         });
