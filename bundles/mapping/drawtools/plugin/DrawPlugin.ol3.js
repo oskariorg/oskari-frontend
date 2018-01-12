@@ -359,7 +359,6 @@ Oskari.clazz.define(
          * @param {object} options include:
          *                  {Boolean} clearCurrent: true - all selection will be removed from the map after stopping plugin, false - will keep selection on the map. Default is false.
          *                  {Boolean} isFinished: true - if drawing is completed. Default is false.
-         *                  {Boolean} multiGeom: true - make multigeometry. Default is false
          */
         sendDrawingEvent: function(id, options) {
             var me = this,
