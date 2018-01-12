@@ -1,5 +1,15 @@
 $selectedLayersTabBackgroundColor: #1eb54e;
 $selectedLayersTabTextColor: #fff;
+$selectedLayersTabLayerPadding: 6px;
+$selectedLayersTabLayerFontSize: 12px;
+$selectedLayersTabLabelWidth: 50px;
+
+.hierarchical-layerlist-flyout
+{
+    .oskari-flyoutcontentcontainer {
+        max-height:unset;
+    }
+}
 
 div.hierarchical-layerlist {
     div.layer-filter {
@@ -15,9 +25,11 @@ div.hierarchical-layerlist {
         margin-bottom: 5px;
         margin-left: -1px;
     }
-
-    div.accordion div.accordion_panel div.content {
-        padding: 0;
+    div.accordion {
+        overflow: auto;
+        div.accordion_panel div.content {
+            padding: 0;
+        }
     }
 
     div.layer {
@@ -227,27 +239,48 @@ div.hierarchical-layerlist {
         padding: 0;
         margin: 0;
 
+        .width-prefix {
+            width: $selectedLayersTabLabelWidth;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
         li.layer {
             border: 1pt solid #c0d0e0;
             margin: 5px;
-            padding: 4px;
             background-color: #fff;
+            font: 10pt Arial,sans-serif;
 
             .layer-info {
+                cursor: move;
+
+                padding: $selectedLayersTabLayerPadding;
+
                 .visible {
                     float: left;
-                    width: 50px;
-                    font-size: 12px;
+                    width: $selectedLayersTabLabelWidth;
+                    font-size: $selectedLayersTabLayerFontSize;
 
                     a {
                         cursor: pointer;
+                        text-decoration: underline;
                     }
                 }
                 .header {
                     float:left;
 
                     .breadcrumb{
-                        font-size:10px;
+                        font-size: 8pt;
+                    }
+                    .title {
+                        font-size: 14pt;
+                        margin-top: 4px;
+                        margin-bottom: 4px;
+                    }
+                    .description {
+                        font-size: 10pt;
                     }
                 }
                 .header-tools{
@@ -261,6 +294,7 @@ div.hierarchical-layerlist {
                         height:20px;
                         float:left;
                         margin: 4px;
+                        cursor: default;
 
                         &.open {
                             background-image:url("../images/glyphicons/glyphicons-224-chevron-right.png");
@@ -272,6 +306,7 @@ div.hierarchical-layerlist {
                         }
                     }
                     .icon {
+                        cursor: default;
                         float:left;
                         margin: 4px;
                         margin-top: 6px;
@@ -281,6 +316,55 @@ div.hierarchical-layerlist {
 
             .layer-tools {
                 display: none;
+                background-color: #f3f3f3;
+                padding: $selectedLayersTabLayerPadding;
+                font-size: $selectedLayersTabLayerFontSize;
+
+                .stylesel {
+                    label {
+                        display: inline-block;
+                    }
+                }
+
+                .opacity {
+                    display: inline-block;
+                    background-image: url(../images/opacity_slider.png);
+                    background-repeat: no-repeat;
+                    margin-left: 54px;
+                    margin-top: 4px;
+
+                    .slider {
+                        width: 140px;
+                        display: inline-block;
+                        margin-right: 16px;
+                    }
+
+                    .slider-text {
+                        display:inline-block;
+
+                        input {
+                            width: 25px;
+                            padding:1px;
+                        }
+                    }
+                }
+
+                .bottom-tools {
+                    float:right;
+                    .tool {
+                        width: 24px;
+                        height:24px;
+                        float:left;
+                        margin-left:4px;
+
+                        &.zoom-to-extent {
+                            background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
+                            background-repeat: no-repeat;
+                            background-position: right center;
+                        }
+                    }
+
+                }
             }
         }
     }

@@ -1,3 +1,6 @@
+.hierarchical-layerlist-flyout .oskari-flyoutcontentcontainer {
+  max-height: unset; }
+
 div.hierarchical-layerlist div.layer-filter {
   margin: 10px;
   color: #949494; }
@@ -8,8 +11,10 @@ div.hierarchical-layerlist div.filter {
   cursor: pointer;
   margin-bottom: 5px;
   margin-left: -1px; }
-div.hierarchical-layerlist div.accordion div.accordion_panel div.content {
-  padding: 0; }
+div.hierarchical-layerlist div.accordion {
+  overflow: auto; }
+  div.hierarchical-layerlist div.accordion div.accordion_panel div.content {
+    padding: 0; }
 div.hierarchical-layerlist div.layer {
   padding: 6px 10px 6px 40px;
   background-color: #ffffff;
@@ -150,43 +155,90 @@ div.hierarchical-layerlist ul.layerlist {
   list-style-type: none;
   padding: 0;
   margin: 0; }
+  div.hierarchical-layerlist ul.layerlist .width-prefix {
+    width: 50px; }
+  div.hierarchical-layerlist ul.layerlist .text-right {
+    text-align: right; }
   div.hierarchical-layerlist ul.layerlist li.layer {
     border: 1pt solid #c0d0e0;
     margin: 5px;
-    padding: 4px;
-    background-color: #fff; }
-    div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible {
-      float: left;
-      width: 50px;
-      font-size: 12px; }
-      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible a {
-        cursor: pointer; }
-    div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header {
-      float: left; }
-      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .breadcrumb {
-        font-size: 10px; }
-    div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools {
-      float: right; }
-      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle {
-        background-image: url("../images/glyphicons/glyphicons-174-play.png");
-        background-repeat: no-repeat;
-        background-position: right center;
-        width: 18px;
-        height: 20px;
+    background-color: #fff;
+    font: 10pt Arial,sans-serif; }
+    div.hierarchical-layerlist ul.layerlist li.layer .layer-info {
+      cursor: move;
+      padding: 6px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible {
         float: left;
-        margin: 4px; }
-        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle.open {
-          background-image: url("../images/glyphicons/glyphicons-224-chevron-right.png");
-          -webkit-transform: rotate(90deg);
-          -moz-transform: rotate(90deg);
-          -ms-transform: rotate(90deg);
-          -o-transform: rotate(90deg);
-          transform: rotate(90deg); }
-      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .icon {
-        float: left;
-        margin: 4px;
-        margin-top: 6px; }
+        width: 50px;
+        font-size: 12px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible a {
+          cursor: pointer;
+          text-decoration: underline; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header {
+        float: left; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .breadcrumb {
+          font-size: 8pt; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .title {
+          font-size: 14pt;
+          margin-top: 4px;
+          margin-bottom: 4px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .description {
+          font-size: 10pt; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools {
+        float: right; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle {
+          background-image: url("../images/glyphicons/glyphicons-174-play.png");
+          background-repeat: no-repeat;
+          background-position: right center;
+          width: 18px;
+          height: 20px;
+          float: left;
+          margin: 4px;
+          cursor: default; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle.open {
+            background-image: url("../images/glyphicons/glyphicons-224-chevron-right.png");
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            transform: rotate(90deg); }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .icon {
+          cursor: default;
+          float: left;
+          margin: 4px;
+          margin-top: 6px; }
     div.hierarchical-layerlist ul.layerlist li.layer .layer-tools {
-      display: none; }
+      display: none;
+      background-color: #f3f3f3;
+      padding: 6px;
+      font-size: 12px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .stylesel label {
+        display: inline-block; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity {
+        display: inline-block;
+        background-image: url(../images/opacity_slider.png);
+        background-repeat: no-repeat;
+        margin-left: 54px;
+        margin-top: 4px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity .slider {
+          width: 140px;
+          display: inline-block;
+          margin-right: 16px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity .slider-text {
+          display: inline-block; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity .slider-text input {
+            width: 25px;
+            padding: 1px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools {
+        float: right; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool {
+          width: 24px;
+          height: 24px;
+          float: left;
+          margin-left: 4px; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.zoom-to-extent {
+            background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
+            background-repeat: no-repeat;
+            background-position: right center; }
 
 /*# sourceMappingURL=style.css.map */
