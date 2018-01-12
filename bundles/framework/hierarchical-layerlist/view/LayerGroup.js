@@ -51,6 +51,7 @@ Oskari.clazz.define(
          * @param {Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup/Object} layer group to render
          */
         _createLayerGroupContainer: function (layerGroup) {
+            console.log(layerGroup);
             var me = this,
                 sandbox = me.sandbox,
                 // create from layer group template

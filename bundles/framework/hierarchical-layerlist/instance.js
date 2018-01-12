@@ -114,6 +114,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             mapLayerService = me.sandbox.getService(
                 'Oskari.mapframework.service.MapLayerService'
             );
+            /*mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox, sandbox.getAjaxUrl('GetHierarchicalMapLayerGroups') + '&lang=' + Oskari.getLang());
+            sandbox.registerService(mapLayerService);*/
 
             sandbox.registerAsStateful(me.mediator.bundleId, me);
 
@@ -125,7 +127,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             failureCB = function() {
                 alert(me.getLocalization('errors').loadFailed);
             };
-            mapLayerService.loadAllLayersAjax(successCB, failureCB);
+            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB);
 
             this._updateAccordionHeight(jQuery('#mapdiv').height());
             this._registerForGuidedTour();

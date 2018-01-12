@@ -282,7 +282,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          *
          */
-        focus: function() {
+        focus: function () {
             if (this.layerTabs) {
                 this.layerTabs[0].focus();
             }
@@ -292,7 +292,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * Populate layer lists.
          * @method  @public populateLayers
          */
-        populateLayers: function() {
+        populateLayers: function () {
+            //TODO: TEE TÄNNE GROUPPIEN HAKU MAPLAYERSERVICESTÄ NIIN SAADAAN IDT MESSIIN!
             //"use strict";
             var me = this;
             var sandbox = this.instance.getSandbox(),

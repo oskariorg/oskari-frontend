@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
      * TODO: close/open methods?
      * @static
      */
-    function (sandbox, localization) {
+    function (sandbox, layerGroup, layers, localization) {
         this.template = jQuery('<div class="accordion_panel">' +
                 '<div class="header">' +
                     '<div class="headerIcon icon-arrow-right">' +
@@ -34,12 +34,16 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
         this.html = this.template.clone();
         this.sandbox = sandbox;
         this.localization = localization;
+        this.layerGroup = layerGroup;
+        this.layers = layers;
         this._notifierService = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
 
         var me = this,
             headerIcon = me.html.find('div.headerIcon'),
             headerText = me.html.find('div.headerText'),
             headerCheckbox = me.html.find('input.headerCheckbox');
+
+        //headerCheckbox.attr("layer_group_id", this.layerGroup.getId());
 
         headerIcon.click(function () {
             if (me.isOpen()) {

@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
 function (title) {
     //"use strict";
     this.name = title;
+    this.id = "";
     this.layers = [];
     this.searchIndex = {};
 }, {
@@ -26,6 +27,22 @@ function (title) {
     getTitle: function () {
         //"use strict";
         return this.name;
+    },
+    /**
+     * @method setId
+     * @param {String} value
+     */
+    setId: function (value) {
+        //"use strict";
+        this.id = value;
+    },
+    /**
+     * @method getId
+     * @return {String}
+     */
+    getId: function () {
+        //"use strict";
+        return this.id;
     },
     /**
      * @method addLayer
