@@ -214,39 +214,42 @@ div.hierarchical-layerlist ul.layerlist {
       font-size: 12px; }
       div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .stylesel label {
         display: inline-block; }
-      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity {
-        display: inline-block;
-        background-image: url(../images/opacity_slider.png);
-        background-repeat: no-repeat;
-        margin-left: 54px;
-        margin-top: 4px; }
-        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity .slider {
-          width: 140px;
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container {
+        display: inline-block; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .opacity {
           display: inline-block;
-          margin-right: 16px; }
-        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity .slider-text {
-          display: inline-block; }
-          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .opacity .slider-text input {
-            width: 25px;
-            padding: 1px; }
-      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools {
-        float: right; }
-        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool {
-          width: 26px;
-          height: 26px;
-          float: left;
-          margin-left: 4px;
+          background-image: url(../images/opacity_slider.png);
           background-repeat: no-repeat;
-          background-position: center center; }
-          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.zoom-to-extent-tool {
-            background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png"); }
-          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.show-featuredata-tool {
-            background-image: url("../images/glyphicons/glyphicons-115-list.png"); }
-          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.show-own-style-tool {
-            background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png"); }
-          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.show-metadata-tool {
-            background-image: url("../images/glyphicons/glyphicons-196-info-sign.png"); }
-          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .bottom-tools .tool.show-filter-tool {
-            background-image: url("../images/glyphicons/glyphicons-321-filter.png"); }
+          margin-left: 54px;
+          margin-top: 4px;
+          float: left; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .opacity .slider {
+            width: 140px;
+            display: inline-block;
+            margin-right: 16px; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .opacity .slider-text {
+            display: inline-block; }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .opacity .slider-text input {
+              width: 25px;
+              padding: 1px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools {
+          float: right; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool {
+            width: 26px;
+            height: 26px;
+            float: left;
+            margin-left: 4px;
+            background-repeat: no-repeat;
+            background-position: center center; }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.zoom-to-extent-tool {
+              background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-featuredata-tool {
+              background-image: url("../images/glyphicons/glyphicons-115-list.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-own-style-tool {
+              background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-metadata-tool {
+              background-image: url("../images/glyphicons/glyphicons-196-info-sign.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-filter-tool {
+              background-image: url("../images/glyphicons/glyphicons-321-filter.png"); }
 
 /*# sourceMappingURL=style.css.map */

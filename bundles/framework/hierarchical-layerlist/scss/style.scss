@@ -326,61 +326,66 @@ div.hierarchical-layerlist {
                     }
                 }
 
-                .opacity {
+                .tools-container {
                     display: inline-block;
-                    background-image: url(../images/opacity_slider.png);
-                    background-repeat: no-repeat;
-                    margin-left: 54px;
-                    margin-top: 4px;
 
-                    .slider {
-                        width: 140px;
+                    .opacity {
                         display: inline-block;
-                        margin-right: 16px;
-                    }
-
-                    .slider-text {
-                        display:inline-block;
-
-                        input {
-                            width: 25px;
-                            padding:1px;
-                        }
-                    }
-                }
-
-                .bottom-tools {
-                    float:right;
-                    .tool {
-                        width: 26px;
-                        height:26px;
-                        float:left;
-                        margin-left:4px;
+                        background-image: url(../images/opacity_slider.png);
                         background-repeat: no-repeat;
-                        background-position: center center;
+                        margin-left: 54px;
+                        margin-top: 4px;
+                        float:left;
 
-                        &.zoom-to-extent-tool {
-                            background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
+                        .slider {
+                            width: 140px;
+                            display: inline-block;
+                            margin-right: 16px;
                         }
 
-                        &.show-featuredata-tool {
-                            background-image:url("../images/glyphicons/glyphicons-115-list.png");
-                        }
+                        .slider-text {
+                            display:inline-block;
 
-                        &.show-own-style-tool {
-                            background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png");
+                            input {
+                                width: 25px;
+                                padding:1px;
+                            }
                         }
+                    }
 
-                        &.show-metadata-tool {
-                            background-image: url("../images/glyphicons/glyphicons-196-info-sign.png")
-                        }
+                    .bottom-tools {
+                        float:right;
+                        .tool {
+                            width: 26px;
+                            height:26px;
+                            float:left;
+                            margin-left:4px;
+                            background-repeat: no-repeat;
+                            background-position: center center;
 
-                        &.show-filter-tool {
-                            background-image: url("../images/glyphicons/glyphicons-321-filter.png")
+                            &.zoom-to-extent-tool {
+                                background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
+                            }
+
+                            &.show-featuredata-tool {
+                                background-image:url("../images/glyphicons/glyphicons-115-list.png");
+                            }
+
+                            &.show-own-style-tool {
+                                background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png");
+                            }
+
+                            &.show-metadata-tool {
+                                background-image: url("../images/glyphicons/glyphicons-196-info-sign.png")
+                            }
+
+                            &.show-filter-tool {
+                                background-image: url("../images/glyphicons/glyphicons-321-filter.png")
+                            }
+
                         }
 
                     }
-
                 }
             }
         }

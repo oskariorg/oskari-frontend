@@ -21,13 +21,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         '           <label for="style" class="width-prefix text-right">' + this.locale.style + '</label>' +
         '           <select name="style"></select>' +
         '       </div>' +
-        '       <div class="oskariui opacity">' +
-        '           <div class="slider"></div>' +
-        '           <div class="slider-text">' +
-        '               <div><input type="text" class="opacity-slider-text" />%</div>' +
+        '       <div class="tools-container">' +
+        '           <div class="oskariui opacity">' +
+        '               <div class="slider"></div>' +
+        '               <div class="slider-text">' +
+        '                   <div><input type="text" class="opacity-slider-text" />%</div>' +
+        '               </div>' +
         '           </div>' +
+        '           <div class="bottom-tools"></div>' +
         '       </div>' +
-        '       <div class="bottom-tools"></div>' +
         '   </div>' +
         '</li>');
 
@@ -290,28 +292,17 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
             });
         }
     },
+    /**
+     * Add layer tools
+     * @method  _addLayerTools
+     * @private
+     */
     _addLayerTools: function() {
         var me = this;
         me._layer.getTools().forEach(function(tool) {
-            me.addTool(tool.getName(), tool.getIconCls(), tool.getTooltip(), function(evt) {
+            me.addTool(tool.getName() + i, tool.getIconCls(), tool.getTooltip(), function(evt) {
                 tool.getCallback()();
             });
         });
-
-
-        /*if (me._layer.getLegendImage() && me._layer.getLegendImage() !== '') {
-            me.addTool('show-legend', 'show-legend', me.locale.tooltips.showLegend, function(evt) {
-                glyphicons-115-list
-
-                me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [me._layer.getGeometryWKT(), {
-                    layerId: 'hierarchical-layerlist-layer-extent',
-                    clearPrevious: true,
-                    layerOptions: null,
-                    centerTo: true,
-                }]);
-
-                me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'hierarchical-layerlist-layer-extent']);
-            });
-        }*/
     }
 });
