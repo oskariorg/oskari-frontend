@@ -5,7 +5,7 @@
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
 
-    function (sandbox) {
+    function(sandbox) {
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = sandbox;
     }, {
@@ -15,7 +15,7 @@ Oskari.clazz.define(
          * @param {Object} mapLayerJson JSON presentation of the layer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
-        parseLayerData: function (layer, mapLayerJson, maplayerService) {
+        parseLayerData: function(layer, mapLayerJson, maplayerService) {
             var me = this,
                 toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
 
@@ -24,8 +24,9 @@ Oskari.clazz.define(
                     toolOwnStyle = toolBuilder();
                 toolOwnStyle.setName("ownStyle");
                 toolOwnStyle.setTitle(locOwnStyle);
+                toolOwnStyle.setIconCls('show-own-style-tool');
                 toolOwnStyle.setTooltip(locOwnStyle);
-                toolOwnStyle.setCallback(function () {
+                toolOwnStyle.setCallback(function() {
                     me.sandbox.postRequestByName('ShowOwnStyleRequest', [layer.getId()]);
                 });
                 layer.addTool(toolOwnStyle);
@@ -61,7 +62,7 @@ Oskari.clazz.define(
             layer.setWpsLayerParams(mapLayerJson.wps_params);
 
             // WMS link layer id for wfs rendering option
-            if(mapLayerJson.WMSLayerId){
+            if (mapLayerJson.WMSLayerId) {
                 layer.setWMSLayerId(mapLayerJson.WMSLayerId);
             }
 
