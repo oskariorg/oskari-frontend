@@ -420,6 +420,73 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         /**
+         * @method loadAllLayerGroupsAjax
+         * Loads layers JSON using the ajax URL given on #create()
+         * and parses it to internal layer objects by calling #createMapLayer() and #addLayer()
+         * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
+         * @param {Function} callbackFailure method to be called when something went wrong
+         */
+        loadAllLayerGroupsAjax: function (callbackSuccess, callbackFailure) {
+            var me = this,
+                epsg = me._sandbox.getMap().getSrsName();
+            // Used to bypass browsers' cache especially in IE, which seems to cause
+            // problems with displaying publishing permissions in some situations.
+            var timeStamp = new Date().getTime();
+
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                data : {
+                    timestamp : timeStamp,
+                    srs : epsg
+                },
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url: me._sandbox.getAjaxUrl('GetHierarchicalMapLayerGroups') + '&lang=' + Oskari.getLang(),
+                success: function (pResp) {
+                    me._loadAllLayerGroupsAjaxCallBack(pResp, callbackSuccess);
+                },
+                error: function (jqXHR, textStatus) {
+                    if (callbackFailure && jqXHR.status !== 0) {
+                        callbackFailure();
+                    }
+                }
+            });
+        },
+        /**
+         * @method _loadAllLayerGroupsAjaxCallBack
+         * Internal callback method for ajax loading in #loadAllLayerGroupsAjax()
+         * @param {Object} pResp ajax response in JSON format
+         * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
+         * @private
+         */
+        _loadAllLayerGroupsAjaxCallBack: function (pResp, callbackSuccess) {
+            var me = this;
+            pResp.forEach(function(group) {
+                group.layers.forEach(function(layer) {
+                    mapLayer = me.createMapLayer(layer);
+                    if (!mapLayer) {
+                        // unsupported map type, skip
+                        // continue with next layer
+                        return;
+                    }
+
+                    if (me._reservedLayerIds[mapLayer.getId()] !== true) {
+                        me.addLayer(mapLayer, true);
+                    }
+                });
+            });
+            me._allLayersAjaxLoaded = true;
+            me._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
+            if (callbackSuccess) {
+                callbackSuccess();
+            }
+        },
+
+        /**
          * @method isAllLayersLoaded
          * @return {Boolean}
          */

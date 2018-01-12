@@ -294,6 +294,7 @@ function (instance) {
      * @method  @public populateLayers
      */
     populateLayers: function () {
+        //TODO: TEE TÄNNE GROUPPIEN HAKU MAPLAYERSERVICESTÄ NIIN SAADAAN IDT MESSIIN!
         //"use strict";
         var me = this;
         var sandbox = this.instance.getSandbox(),

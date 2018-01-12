@@ -34,6 +34,14 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.view.Layer",
             //"use strict";
             return this.layer.getId();
         },
+        /**
+         * @method getGroupIds
+         * @return {Array} group ids
+         */
+        getId: function () {
+            //"use strict";
+            return this.layer.getGroupIds();
+        },
         setVisible: function (bln) {
             //"use strict";
             // TODO assúme boolean and clean up everyhting that passes somehting else
@@ -212,6 +220,7 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.view.Layer",
                 if (checkbox.is(':checked')) {
                     sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
                 } else {
+                    //Poista valinta ryhmältä
                     sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
                 }
             });

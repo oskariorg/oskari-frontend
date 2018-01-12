@@ -36,6 +36,7 @@ Oskari.clazz.define(
                 '</div><div style="clear:both;"></div>'
         };
         this._createUI(id);
+        this._bindOskariEvents();
     },
     {
         getTitle: function () {
@@ -260,11 +261,14 @@ Oskari.clazz.define(
             localization = me.instance.getLocalization();
             for (i = 0; i < groupsLength; i += 1) {
                 group = groups[i];
+                console.log(group);
                 layers = group.getLayers();
                 layersLength = layers.length;
                 groupPanel = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.component.SelectableAccordionPanel',
                     me.instance.sandbox,
+                    group,
+                    layers,
                     localization
                 );
                 groupPanel.setTitle(group.getTitle() + ' (' + layersLength +
@@ -684,12 +688,12 @@ Oskari.clazz.define(
             var me = this;
             me._notifierService.on('AfterMapLayerAddEvent',function(evt) {
                 console.log(evt);
-                //me._updateLayerCount();
+                //Lisää valinta tasolle ja tsekkaa onko kaikki tasot ryhmien alta valittu ja lisää valinta ryhmälle/ryhmille
             });
 
             me._notifierService.on('AfterMapLayerRemoveEvent',function(evt){
                 console.log(evt);
-                //me._updateLayerCount();
+                //Poista valinta ryhmältä ja tasolta
             });
         }
     }
