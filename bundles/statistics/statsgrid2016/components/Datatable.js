@@ -49,6 +49,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     _handleRegionsetChanged: function(setId) {
         var me = this;
+
+        // Grid not ready
+        if(!me.grid) {
+            return;
+        }
+
         var currentRegion = this.getCurrentRegionset();
         var locale = me.locale;
         var errorService = me.service.getErrorService();
@@ -120,9 +126,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     _setGridAreaSelection: function(regions,gridLoc){
         var me = this;
+        // Grid not ready yet
+        if(!me.grid) {
+            return;
+        }
         var regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
 
-        this.grid.setColumnUIName('region', function(content) {
+        me.grid.setColumnUIName('region', function(content) {
             var tableHeader = jQuery(me.__templates.tableHeader());
             tableHeader.find('.title').remove();
             tableHeader.find('.info').html(gridLoc.areaSelection.info);
@@ -217,7 +227,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         regions.forEach(function(reg) {
             regionIdMap[reg.id] = reg.name;
         });
-        this.grid.setColumnValueRenderer('region', function(regionId) {
+        me.grid.setColumnValueRenderer('region', function(regionId) {
             return regionIdMap[regionId];
         });
     },
@@ -415,7 +425,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             if(event.getTriggeredBy() === 'map' && parent.length>0) {
                 scrollableElement = parent;
             }
-            me.grid.select(event.getRegion(), false, scrollableElement);
+            me.grid.select(event.getRegion(), false, {element: scrollableElement, fixTopPosition: jQuery('.oskari-flyout.statsgrid-data-flyout .oskari-flyouttoolbar').height()});
         });
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {

@@ -104,7 +104,11 @@ Oskari.clazz.define(
          * @param {Object} options include:
          *                  {Number} buffer: buffer for drawing buffered line and dot. If not given or 0, will disable dragging.
          *                  {Object} style: styles for draw, modify and intersect mode. If options don't include custom style, sets default styles
-         *                  {Boolean} allowMiltipleDrawing: true - multiple selection is allowed, false - selection will be removed before drawing a new selection. Default is false.
+         *                  {Boolean/String} allowMultipleDrawing: true - multiple selection is allowed, 
+         *                                                         false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map. 
+         *                                                        'single' - selection will be removed before drawing a new selection.
+         *                                                        'multiGeom' - form multigeometry from drawn features. 
+         *                                                         Default is false.
          *                  {Boolean} showMeasureOnMap: true - if measure result should be displayed on map near drawing feature. Default is false.
          *                  {Boolean} drawControl: true - will activate draw control, false - will not activate. Default is true.
          *                  {Boolean} modifyControl: true - will activate modify control, false, will not activate. Default is true.
@@ -122,7 +126,7 @@ Oskari.clazz.define(
             // use default style if options don't include custom style
             var me = this;
             //disable gfi
-            me.setGFIEnabled(false);
+            me.getMapModule().setDrawingMode(true);
             // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
             me.removeInteractions(me._draw, me._id);
             me.removeInteractions(me._modify, me._id);
@@ -288,6 +292,7 @@ Oskari.clazz.define(
                 clearCurrent: clearCurrent,
                 isFinished: true
             };
+
             if(!me.getLayerIdForFunctionality(id)) {
                 // layer not found for functionality id, nothing to do?
                 return;
@@ -304,7 +309,10 @@ Oskari.clazz.define(
             me._cleanupInternalState();
             me.getMap().un('pointermove', me.pointerMoveHandler, me);
             //enable gfi
-            me.setGFIEnabled(true);
+            setTimeout(function () {
+                me.getMapModule().setDrawingMode(false);
+            }, 500);
+            
         },
         _cleanupInternalState: function() {
             this._shape = null;
@@ -359,6 +367,7 @@ Oskari.clazz.define(
                 layerId = me.getLayerIdForFunctionality(id),
                 isFinished = false;
             var requestedBuffer = me.getOpts('buffer') || 0;
+
             features = me.getFeatures(layerId);
 
             if(!features) {
@@ -384,6 +393,7 @@ Oskari.clazz.define(
                     }
                     break;
             }
+
             var geojson = me.getFeaturesAsGeoJSON(features);
             geojson.crs = me._getSRS();
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
@@ -446,39 +456,113 @@ Oskari.clazz.define(
          * @return {String} geojson
          */
         getFeaturesAsGeoJSON : function(features) {
-            var me = this;
-            var geoJSONformatter = new ol.format.GeoJSON();
-            var geoJsonObject =  {
+            var me = this,
+                geoJsonObject =  {
                     type: 'FeatureCollection',
                     features: []
-                };
-            if(!features) {
+                },
+                measures,
+                jsonObject,
+                buffer,
+                i;
+
+            if(!features || features.length === 0) {
                 return geoJsonObject;
             }
-            features.forEach(function (f) {
-                var buffer, length, area;
-                if(f.buffer) {
-                    buffer = f.buffer;
+
+            // form multigeometry from features
+            if (me.drawMultiGeom) {
+                measures = me.sumMeasurements(features);
+                var geometries = [];
+
+                for (i=0; i < features.length; i++) {
+                    var feature = features[i];
+                    if (!buffer && feature.buffer) {
+                        buffer = feature.buffer;
+                    }
+                    var geometry = feature.getGeometry();
+                    geometries.push(geometry);
                 }
-                var measures = me.sumMeasurements([f]);
-                var jsonObject = geoJSONformatter.writeFeatureObject(f);
-                jsonObject.properties = {};
-                if(buffer) {
-                    jsonObject.properties.buffer = buffer;
-                }
-                if(measures.length) {
-                    jsonObject.properties.length = measures.length;
-                }
-                if(!me._featuresValidity[f.getId()]) {
-                    jsonObject.properties.area = me._loc.intersectionNotAllowed;
-                } else if(measures.area) {
-                    jsonObject.properties.area = measures.area;
-                }
+
+                var multiGeometry = me.createMultiGeometry(geometries);
+
+                var feature = new ol.Feature({geometry: multiGeometry});
+                feature.setId(me.generateNewFeatureId());
+
+                jsonObject = me.formJsonObject(feature, measures, buffer);
                 geoJsonObject.features.push(jsonObject);
-            });
+            } else {
+                features.forEach(function (feature) {
+                    if(feature.buffer) {
+                        buffer = feature.buffer;
+                    }
+                    measures = me.sumMeasurements([feature]);
+
+                    if(!me._featuresValidity[feature.getId()]) {
+                        measures.area = me._loc.intersectionNotAllowed;
+                    } 
+                    jsonObject = me.formJsonObject(feature, measures, buffer);
+                    geoJsonObject.features.push(jsonObject);
+                });
+            }
 
             return geoJsonObject;
         },
+
+        createMultiGeometry: function(geometries) {
+            var featureGeom = null;
+
+            var appendGeometry = function(geometry){
+                switch (geometry.getType()) {
+                    case 'Point':
+                        if(!featureGeom) {
+                             featureGeom = new ol.geom.MultiPoint();
+                        }
+                        featureGeom.appendPoint(geometry);
+                        break;
+                    case 'LineString':
+                        if(!featureGeom) {
+                             featureGeom = new ol.geom.MultiLineString();
+                        }
+                        featureGeom.appendLineString(geometry);
+                        break;
+                    case 'Polygon':
+                        if(!featureGeom) {
+                             featureGeom = new ol.geom.MultiPolygon();
+                        }
+                        featureGeom.appendPolygon(geometry);
+                        break;
+                }
+            };
+
+            geometries.forEach(function(geometry){
+                appendGeometry(geometry);
+            });
+
+            return featureGeom;
+        },
+
+        formJsonObject: function (feature, measures, buffer) {
+            var me = this,
+                geoJSONformatter = new ol.format.GeoJSON(),
+                jsonObject = geoJSONformatter.writeFeatureObject(feature);
+
+            jsonObject.properties = {};
+            
+            if(measures.length) {
+                jsonObject.properties.length = measures.length;
+            }
+            if(!me._featuresValidity[feature.getId()]) {
+                jsonObject.properties.area = me._loc.intersectionNotAllowed;
+            } else if(measures.area) {
+                jsonObject.properties.area = measures.area;
+            }
+            if(buffer) {
+                jsonObject.properties.buffer = buffer;
+            }
+            return jsonObject;
+        },
+
         /**
          * Calculates line length and polygon area as measurements
          * @param  {Array} features features with geometries
@@ -581,6 +665,11 @@ Oskari.clazz.define(
             var optionsForDrawingEvent = {
                 isFinished: false
             };
+
+            if (options.allowMultipleDrawing === 'multiGeom') {
+                me.drawMultiGeom = true;
+            }
+
             function makeClosedPolygonCoords(coords) {
                 return coords.map(function(ring) {
                     ring = ring.slice();
@@ -713,9 +802,15 @@ Oskari.clazz.define(
                 me._showIntersectionWarning = true;
                 me.pointerMoveHandler();
                 me._mode = '';
-                if(options.allowMultipleDrawing === false) {
+
+                //stop drawing without modifying
+                if(options.allowMultipleDrawing === false && options.modifyControl === false) {
                     me.stopDrawing(me._id, false);
+                } else if (options.allowMultipleDrawing === false) {
+                    //stop drawing and start modifying
+                    me.removeInteractions(me._draw, me._id);
                 }
+
                 evt.feature.setStyle(me._styles.modify);
                 // activate modify interaction after new drawing is finished
                 if(options.modifyControl !== false) {

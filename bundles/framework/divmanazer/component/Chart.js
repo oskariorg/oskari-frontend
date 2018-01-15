@@ -12,6 +12,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
   this._options = {
     colors: ['#ebb819']
   };
+  this.loc = Oskari.getMsg.bind(null, 'DivManazer');
+  this.noValStr = this.loc('graph.noValue');
 }, {
     _checkColors: function ( opts ) {
         var options = opts || {};
@@ -30,20 +32,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             return d3.ascending(a.value || 0, b.value || 0);
         });
     },
-    chartDimensions: function () {
+    chartDimensions: function (leftMargin) {
         var me = this;
             //set up svg using margin conventions - we'll need plenty of room on the left for labels
         var dimensions = {
             margin: {
-                top: 15,
+                top: 35,
                 right: 25,
                 bottom: 15,
-                left: 80
+                left: leftMargin ? Math.min(leftMargin, 180) : 80
             },
-            label: {
-                padding: 20,
-                verticalCenterPadding: 8
-            },
+            xAxisOffset: -5,
             width: function () {
                 var width = me.containerWidth || 500;
                 return width - this.margin.left - this.margin.right;
@@ -53,9 +52,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             }
         };
         return dimensions;
-    },
-    createGridlines: function () {
-        return d3.axisBottom( this.x ).ticks(10);
     },
     initScales: function () {
         // from zero to max value. This could also be from min to max value, but it causes problems if
@@ -86,11 +82,22 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      *
      */
     initAxis: function () {
-        this.yAxis = d3.axisLeft( this.y )
-        .tickSize(10);
+        var me = this;
+        var maxValue = d3.max(this.data, function (d) {return d.value});
+        var numDigits = Math.floor((Math.log(maxValue) * Math.LOG10E) + 1);
+        var range = this.x.range();
+        var width = range[1] - range[0];
+        var tickTarget = (width / numDigits) / 10;
 
-        this.xAxis = d3.axisBottom( this.x )
-        .tickSize(10);
+        this.yAxis = d3.axisLeft( this.y )
+        .tickSizeInner(5)
+        .tickSizeOuter(0);
+
+        this.xAxis = d3.axisTop( this.x )
+        .ticks(Math.min(10, tickTarget))
+        .tickSizeInner(-this.dimensions.height()+this.dimensions.xAxisOffset)
+        .tickSizeOuter(0)
+        .tickFormat(function (d) {return me.loc('graph.tick', {value: d})});
     },
     /**
      * initializes the chart skeleton without any specific line or bar options
@@ -113,6 +120,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     handleData: function ( data ) {
         this.data = data;
         this.sortData( this.data );
+        var maxNameLength = d3.max(data, function (d) {return d.name.length});
+        this.dimensions = this.chartDimensions(maxNameLength * 5.5);
     },
     /**
      * parses the options passed in
@@ -130,17 +139,23 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      * @method callGroups
      */
     callGroups: function () {
-        var padding = this.dimensions.label.padding;
-        var lblCenterPadding = this.dimensions.label.verticalCenterPadding;
         //groups
+        var gx = this.svg.append( "g" )
+            .attr("class", "x axis" )
+            .attr("transform", "translate(0 " + this.dimensions.xAxisOffset + ")")
+            .call( this.xAxis );
+
+        gx.select('.domain').remove();
+        gx.selectAll('line, path')
+            .attr('stroke', '#aaa')
+            .attr('shape-rendering', 'crispEdges');
+            
         var gy = this.svg.append( "g" )
             .attr( "class", "y axis" )
-            .attr( "transform", "translate(0," + (padding + lblCenterPadding) + ")" )
             .call( this.yAxis );
-
-        var gx = this.svg.append( "g" )
-            .attr( "class", "x axis" )
-            .call( this.xAxis );
+        gy.selectAll('line, path')
+            .attr('stroke', '#aaa')
+            .attr('shape-rendering', 'crispEdges');
     },
     /**
      * @method setColorScale
@@ -171,24 +186,38 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         this.initChart();
 
         var me = this;
-        var bars = this.svg.selectAll(".bar")
+        var bars = this.svg.insert('g','g.y').selectAll(".bar")
             .data(this.data)
             .enter()
-            .append("g");
+            .append("g")
+            .attr('transform', function (d) {
+                return 'translate(0 ' + (me.y( d.name ) + me.y.bandwidth() / 2) + ')'; 
+            });
 
         //append rects
         bars.append("rect")
             .attr("class", "bar")
             .attr("text-anchor", "middle")
-            .attr("y", function (d) {
-                return me.y( d.name ) + me.y.bandwidth() / 2 + me.dimensions.label.padding;
-            })
+            .attr("y", -7) // 7 is half of 15 height (pixel aligned)
             .style('fill', function( d,i ){ return me.colorScale(i); })
             .attr("height", 15)
             .attr("x", 0)
             .attr("width", function (d) {
                 return me.x(d.value || 0);
             });
+        bars.each(function (d) {
+            if(typeof d.value === 'number') {
+                return;
+            }
+            d3.select(this)
+            .append('text')
+            .attr('x', 10)
+            .attr('y', 0)
+            .attr('dy', '0.32em')
+            .style('font-size', '11px')
+            .attr('fill', '#999')
+            .text(me.noValStr);
+        });
 
         this.chartType = 'barchart';
 
@@ -239,15 +268,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             // this._g = me.svg.select(this).append('g');
             me.initAxis();
             me.callGroups();
-            // add the X gridlines
-            me.svg.append("g")
-                .attr("class", "grid")
-                .attr("text-anchor", "middle")
-                .attr("transform", "translate(0," +  me.dimensions.height() + ")")
-                .call( me.createGridlines()
-                .tickSize( -me.dimensions.height() +30, 0, 0 )
-                .tickFormat("")
-            );
         });
     },
     clear: function () {

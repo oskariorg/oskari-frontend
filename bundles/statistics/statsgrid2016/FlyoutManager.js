@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
 
             flyout.bringToTop();
             flyout.on('hide', function() {
-                tile.toggleExtensionClass( info.id, true );
+                tile.closeExtension( info.id );
             });
             me.flyouts[info.id] = flyout;
             position = position + flyout.getSize().width;

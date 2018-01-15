@@ -59,7 +59,6 @@ Oskari.clazz.define(
          * clears the layer of any drawn features
          */
         stopDrawing: function () {
-            this.WFSLayerService.setSelectionToolsActive(false);
             this.clearDrawing();
             // disable all draw controls
             this._toggleControl();
@@ -87,17 +86,7 @@ Oskari.clazz.define(
                 }
             }
         },
-        /**
-         * @method removeActiveClass
-         * triggers the click event on the button container in PopupHandler after draw has ended to deselct the drawing tool
-         */
-        removeActiveClass: function () {
-            if( this.caller ) {
-                this.caller.btnContainer.trigger("click", true);
-            } else {
-                Oskari.log(this.getName() + " no caller provided in configuration.");
-            }
-        },
+
         /**
          * Initializes the plugin:
          * - drawControls

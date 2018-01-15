@@ -53,6 +53,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me.log = Oskari.log('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin');
 
         this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, locale);
+        this.__legend.on('rendered', function(){
+            me._calculatePluginSize();
+        });
     }, {
 
         /**
@@ -71,6 +74,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             });
             this._popup.addClass('statsgrid-mobile-legend');
             this._popup.show(null, this.getElement());
+            this._popup.moveTo(jQuery('div.mobileToolbarDiv'), 'top', true);
+            me._calculatePluginSize();
         },
 
         /**
@@ -166,6 +171,35 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         },
         stopPlugin: function(){
             this.teardownUI(true);
+        },
+        _createEventHandlers: function () {
+            return {
+                /**
+                 * @method MapSizeChangedEvent
+                 * Adjust size if map size changes
+                 */
+                MapSizeChangedEvent: function () {
+                    this._calculatePluginSize();
+                }
+            };
+        },
+        _calculatePluginSize: function() {
+            var me = this;
+
+            var sandbox = me.getSandbox();
+            var height = sandbox.getMap().getHeight();
+            var headerHeight = me._element.find('.header').first().height();
+            if(Oskari.util.isMobile() && me._popup) {
+                me._popup.getJqueryContent().find('.accordion').css({
+                    'overflow': 'auto',
+                    'max-height': (height * 0.8 - headerHeight) + 'px'
+                });
+            } else if(!Oskari.util.isMobile()){
+                me._element.find('.accordion').css({
+                    'overflow': 'auto',
+                    'max-height': (height * 0.8 - headerHeight) + 'px'
+                });
+            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

@@ -57,8 +57,10 @@ Oskari.registerLocalization(
                 "noRegionset": "No area selected"
             },
             "extraFeatures": {
-                "title": "EXTRA CONDITIONS AND FEATURES",
-                "showMapLayers": "Show map layers"
+                "title": "Additional features",
+                "hideMapLayers": "Hide other map layers",
+                "openTableCheckbox": "Open table",
+                "openDiagramCheckbox": "Open bar chart"
             }
         },
         "statsgrid": {

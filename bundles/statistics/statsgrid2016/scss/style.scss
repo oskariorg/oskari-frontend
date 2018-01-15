@@ -6,7 +6,7 @@ $buttonTextColor: #ffffff;
 $inputWidth: 94%;
 $buttonWidth: 86%;
 
-$flyoutPadding: 1.2em;
+$flyoutPadding: 16px;
 
 
 /* ********************************************
@@ -312,6 +312,19 @@ div.oskari-flyout {
 
                 span {
                     font-weight: normal;
+                }
+            }
+        }
+
+        div.extrafeatures {
+            div.title {
+                font-weight:bold;
+                margin-top:12px;
+            }
+
+            div.content {
+                label.oskari-formcomponent {
+                    margin-bottom: 0;
                 }
             }
         }
@@ -675,7 +688,6 @@ div.oskari-flyout {
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend {
     .popup-body {
-
         >div.content {
             margin: 0px;
         }
@@ -697,9 +709,8 @@ div.oskari-flyout {
 /** Toggle buttons */
 div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons {
     border: 1px solid rgba(0, 0, 0, 0.2);
-  float: right;
-  z-index: 100000;
-  margin: 10px;
+    float: right;
+    margin: 10px;
 
     .map {
         background-color: $darkColor;
@@ -778,13 +789,13 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         }
 
         &.table .icon {
-            background-image: url("../images/table-light.png");
+            background-image: url("../images/tile-table-light.png");
         }
         &.search .icon {
-            background-image: url("../images/search-light.png");
+            background-image: url("../images/tile-search-light.png");
         }
         &.diagram .icon {
-            background-image: url("../images/diagram-light.png");
+            background-image: url("../images/tile-diagram-light.png");
         }
     }
 }

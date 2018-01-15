@@ -57,8 +57,10 @@ Oskari.registerLocalization(
                 "noRegionset": "Ingen områdesindelning"
             },
             "extraFeatures": {
-                "title": "TILLLÄGSVILLKOR OCH -EGENSKAPER",
-                "showMapLayers": "Visa kartlager"
+                "title": "Ytterligare egenskaper",
+                "hideMapLayers": "Gömma andra kartlager",
+                "openTableCheckbox": "Öppna tabell",
+                "openDiagramCheckbox": "Öppna diagram"
             }
         },
         "statsgrid": {

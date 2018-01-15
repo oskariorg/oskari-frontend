@@ -115,7 +115,7 @@ div.oskari-flyout {
     max-width: 700px;
     /* Chosen fixes */ }
     div.oskari-flyout.statsgrid-search-flyout .statsgrid-search-container {
-      padding: 1.2em; }
+      padding: 16px; }
     div.oskari-flyout.statsgrid-search-flyout label span {
       /* Indicator selection form */
       width: 200px;
@@ -200,12 +200,17 @@ div.oskari-flyout {
         background-color: #000000; }
         div.oskari-flyout.statsgrid-search-flyout .statsgrid-grouping-header.sources span {
           font-weight: normal; }
+    div.oskari-flyout.statsgrid-search-flyout div.extrafeatures div.title {
+      font-weight: bold;
+      margin-top: 12px; }
+    div.oskari-flyout.statsgrid-search-flyout div.extrafeatures div.content label.oskari-formcomponent {
+      margin-bottom: 0; }
   div.oskari-flyout.statsgrid-data-flyout {
     /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
     max-width: 700px;
     /* Chosen fixes */ }
     div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts {
-      padding: 1.2em; }
+      padding: 16px; }
     div.oskari-flyout.statsgrid-data-flyout table.oskari-grid th.selected {
       background-color: #FDF8D9;
       animation-name: statsgridcolumnselection;
@@ -312,7 +317,7 @@ div.oskari-flyout {
     div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .grid path {
       stroke-width: 0; }
   div.oskari-flyout.statsgrid-diagram-flyout .oskari-datacharts {
-    padding: 1.2em; }
+    padding: 16px; }
 
 /* ********************************************
  * Statsgrid legend
@@ -412,7 +417,6 @@ div.oskari-flyout {
 div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons {
   border: 1px solid rgba(0, 0, 0, 0.2);
   float: right;
-  z-index: 100000;
   margin: 10px; }
   div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .map {
     background-color: #3c3c3c;
@@ -469,11 +473,11 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   .oskari-tile.statsgrid .statsgrid-functionality.material-selected .icon {
     background-color: #ffd400; }
   .oskari-tile.statsgrid .statsgrid-functionality.table .icon {
-    background-image: url("../images/table-light.png"); }
+    background-image: url("../images/tile-table-light.png"); }
   .oskari-tile.statsgrid .statsgrid-functionality.search .icon {
-    background-image: url("../images/search-light.png"); }
+    background-image: url("../images/tile-search-light.png"); }
   .oskari-tile.statsgrid .statsgrid-functionality.diagram .icon {
-    background-image: url("../images/diagram-light.png"); }
+    background-image: url("../images/tile-diagram-light.png"); }
 
 /* ********************************************
  * DataVisualizer styles
