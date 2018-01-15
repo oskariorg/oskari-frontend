@@ -2,95 +2,102 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "hierarchical-layerlist",
     "value": {
-        "title": "Karttatasot",
-        "desc": "Karttatasot",
+        "title": "Kartlager",
+        "desc": "",
         "errors": {
-            "generic": "Järjestelmässä tapahtui virhe.",
-            "loadFailed": "Karttatasojen lataaminen epäonnistui. Päivitä sivu selaimessasi ja valitse karttatasot uudelleen.",
-            "noResults": "Hakutuloksia ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
-            "noResultsForKeyword": "Karttatasoja ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
+            "generic": "Systemfel. Försök på nytt senare.",
+            "loadFailed": "Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren igen.",
+            "noResults": "Inga resultat hittades.",
+            "noResultsForKeyword": "Inga kartlager hittades av detta sökord."
         },
-        "loading": "Haetaan...",
+        "loading": "Söker...",
 
         "filter": {
-            "text": "Hae karttatasoja",
-            "shortDescription": "Hae karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella.",
-            "description": "Voit hakea karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä. Hakusanassa on oltava vähintään neljä merkkiä.",
-            "allLayers": "Kaikki tasot",
-            "didYouMean": "Tarkoititko:"
+            "text": "Sök kartlager",
+            "shortDescription": "Sök kartlager med namnet på kartlagret, namnet på dataproducenten eller nyckelordet som beskriver kartlagret.",
+            "description": "Skriv en del av namnet på kartlagret, namnet på dataproducenten eller nyckelordet som beskriver kartlagret. Nyckelordssökningen startar när minst fyra tecken har skrivits. Tillåtna tecken är bokstäverna a-z samt å, ä och ö, siffror, backsteg och bindestreck.",
+            "allLayers": "Alla kartlager",
+            "didYouMean": "Menade du:"
         },
-        "tooltip": {
-            "type-base": "Taustakartta",
-            "type-wms": "Karttataso",
-            "type-wfs": "Tietotuote",
-            "type-wfs-manual": "Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä."
+    },
+    "tooltip": {
+        "type-base": "Bakgrundskarta",
+        "type-wms": "Kartlager (WMS, WMTS)",
+        "type-wfs": "Dataprodukt (WFS)",
+        "type-wfs-manual": "Data product (WFS) - Layer is drawn on a map via Feature Data or via Refresh button action"
+    },
+    "backendStatus": {
+        "OK": {
+            "tooltip": "Kartlagret är tillgängligt just nu.",
+            "iconClass": "backendstatus-ok"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Karttataso on käytettävissä tällä hetkellä.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "Karttataso ei tällä hetkellä käytettävissä.",
-                "iconClass": "backendstatus-down"
-            },
-            "ERROR": {
-                "tooltip": "Karttataso ei tällä hetkellä käytettävissä.",
-                "iconClass": "backendstatus-error"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-unknown"
-            },
-            "UNSTABLE": {
-                "tooltip": "",
-                "iconClass": "backendstatus-unstable"
-            }
+        "DOWN": {
+            "tooltip": "Kartlagret är inte tillgängligt just nu.",
+            "iconClass": "backendstatus-down"
         },
-        "buttons": {
-            "ok": "OK"
+        "ERROR": {
+            "tooltip": "Kartlagret är inte tillgängligt just nu.",
+            "iconClass": "backendstatus-error"
         },
-        "layerFilter": {
-            "buttons": {
-                "newest": "Uusimmat",
-                "featuredata": "Vektoritasot"
-            },
-            "tooltips": {
-                "newest": "Näytä ## uusinta karttatasoa",
-                "featuredata": "Näytä vain vektoritasot",
-                "remove": "Poista suodatus"
-            }
+        "MAINTENANCE": {
+            "tooltip": "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
+            "iconClass": "backendstatus-maintenance"
         },
-        "guidedTour": {
-            "title": "Karttatasot",
-            "message": "Karttatasot-valikosta löydät kaikki karttapalvelussa saatavilla olevat karttatasot. <br/><br/> Järjestä karttatasot joko aiheen tai tiedontuottajan mukaan. <br/><br/> Hae karttatasoja karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Löydät uusimmat karttatasot, vektoritasot ja julkaistavissa olevat karttatasot valmiiksi määritellyiltä listoilta. <br/><br/>  Avoinna olevat karttatasot voit tarkistaa Valitut tasot -valikosta.",
-            "openLink": "Näytä Karttatasot",
-            "closeLink": "Piilota Karttatasot",
-            "tileText": "Karttatasot"
+        "UNKNOWN": {
+            "tooltip": "",
+            "iconClass": "backendstatus-unknown"
         },
-        "SelectedLayersTab": {
-            "title": "Valitut tasot",
-            "style": "Tyyli",
-            "show": "Näytä",
-            "hide": "Piilota",
-            "rights": {
-                "can_be_published_map_user": "Julkaistavissa"
-            },
-            "tooltips": {
-                "removeLayer": "Poista taso",
-                "openLayerTools": "Avaa tason toiminnot",
-                "closeLayerTools": "Sulje tason toiminnot",
-                "zoomToLayerExtent": "Sovita taso karttanäkymään",
-                "can_be_published_map_user": "Karttatason voi julkaista upotetussa kartassa. Viikottainen käyttömäärä voi olla rajoitettu."
-            }
-        },
-        "manyLayersWarning": {
-            "title": "Huomio!",
-            "text": "Kartalla tällä hetkellä 10 tai enemmän karttasoa. Jos jatkat, saattaa karttatason lisääminen aiheuttaa suorituskykyongelmia!"
+        "UNSTABLE": {
+            "tooltip": "",
+            "iconClass": "backendstatus-unstable"
         }
+    },
+    "buttons": {
+        "ok": "OK"
+    },
+    "types": {
+        "syn": "Synonym",
+        "lk": "Relaterat begrepp",
+        "vk": "Koordinatbegrepp",
+        "ak": "Underordnat begrepp",
+        "yk": "Överordnat begrepp"
+    },
+    "layerFilter": {
+        "buttons": {
+            "newest": "Nyaste",
+            "featuredata": "Vektorlager"
+        },
+        "tooltips": {
+            "newest": "Visa de ## nyaste kartlager",
+            "featuredata": "Visa endast vektorlager",
+            "remove": "Ta bort filter"
+        }
+    },
+    "guidedTour": {
+        "title": "Kartlager",
+        "message": "Från Kartlager-menyn du kan välja kartlagret för att visas på kartan. Du kan lista kartlager med tema eller dataleverantör. Du kan också söka kartlager med kartlagernamn, en dataleverantörs namn eller ett sökord. De valda kartlagren kan kontrolleras i valda lagren-menyn.",
+        "openLink": "Visa kartlagren",
+        "closeLink": "Göm kartlagren",
+        "tileText": "Kartlagren"
+    },
+    "SelectedLayersTab": {
+        "title": "Valda kartlager",
+        "style": "Stil",
+        "show": "Visa",
+        "hide": "Göm",
+        "rights": {
+            "can_be_published_map_user": "Får publiceras"
+        },
+        "tooltips": {
+            "removeLayer": "Ta bort kartlager",
+            "openLayerTools": "Oöppnä kartlagerfunktionerna",
+            "closeLayerTools": "Stäng kartlagerfunktionerna",
+            "zoomToLayerExtent": "Matcha kartlager till kartvisningen",
+            "can_be_published_map_user": "Kartlagret får publiceras i ett inbäddat kartfönster. Antalet användare per vecka kan vara begränsat."
+        }
+    },
+    "manyLayersWarning": {
+        "title": "Attention!",
+        "text": "Kartan har för närvarande 10 eller flera kartlager. Om du fortsätter kommer det att uppstå problem med att öka kartlager!"
     }
 });

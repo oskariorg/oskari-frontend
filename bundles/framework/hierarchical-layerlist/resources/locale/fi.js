@@ -8,7 +8,7 @@ Oskari.registerLocalization({
             "generic": "Järjestelmässä tapahtui virhe.",
             "loadFailed": "Karttatasojen lataaminen epäonnistui. Päivitä sivu selaimessasi ja valitse karttatasot uudelleen.",
             "noResults": "Hakutuloksia ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
-            "noResultsForKeyword": "Karttatasoja ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
+            "noResultsForKeyword": "Karttatasoja ei löytynyt. Tarkista hakusana ja yritä uudelleen."
         },
         "loading": "Haetaan...",
 
@@ -81,7 +81,7 @@ Oskari.registerLocalization({
                 "can_be_published_map_user": "Julkaistavissa"
             },
             "tooltips": {
-                "removeLayer": "Poista taso",
+                "removeLayer": "Poista taso valituista",
                 "openLayerTools": "Avaa tason toiminnot",
                 "closeLayerTools": "Sulje tason toiminnot",
                 "zoomToLayerExtent": "Sovita taso karttanäkymään",
