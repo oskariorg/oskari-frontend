@@ -29,6 +29,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         '               </div>' +
         '           </div>' +
         '           <div class="bottom-tools"></div>' +
+        '           <div class="layer-rights"></div>' +
+        '           <div style="clear:both;"></div>' +
         '       </div>' +
         '   </div>' +
         '</li>');
@@ -74,6 +76,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         me._addOpacitySlider();
         me._addLayerExtentTool();
         me._addLayerTools();
+        me._addPublishableInformation();
         me._binded = true;
     },
     /**
@@ -293,12 +296,35 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         }
     },
     /**
+     * Add publishable information
+     * @method  _addPublishableInformation
+     * @private
+     */
+    _addPublishableInformation: function() {
+        var me = this;
+
+        // Not logged in, skipping
+        if (!Oskari.user().isLoggedIn()) {
+            return;
+        }
+
+        var publishPermission = me._layer.getPermission('publish');
+
+        if (publishPermission === 'publication_permission_ok') {
+            var layerRights = me._el.find('.layer-rights');
+            layerRights.html(me.locale.rights.can_be_published_map_user);
+            layerRights.attr('title', me.locale.tooltips.can_be_published_map_user);
+            layerRights.show();
+        }
+    },
+    /**
      * Add layer tools
      * @method  _addLayerTools
      * @private
      */
     _addLayerTools: function() {
         var me = this;
+
         me._layer.getTools().forEach(function(tool) {
             me.addTool(tool.getName(), tool.getIconCls(), tool.getTooltip(), function(evt) {
                 tool.getCallback()();

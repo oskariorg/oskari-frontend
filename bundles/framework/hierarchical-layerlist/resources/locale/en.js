@@ -1,33 +1,23 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "hierarchical-layerlist",
     "value": {
         "title": "Map Layers",
-        "desc": "Map Layers",
+        "desc": "",
         "errors": {
-            "title": "Error",
             "generic": "The system error occurred.",
             "loadFailed": "The map layers could not be loaded. Reload the webpage in your browser and select map layers again.",
             "noResults": "No search results could be found. Please check the search term.",
-            "noResultsForKeyword": "No map layers could be found. Please check the search term.",
-            "minChars": "The search term is too short. Type at least four characters."
+            "noResultsForKeyword": "No map layers could be found. Please check the search term."
         },
         "loading": "Searching...",
+
         "filter": {
             "text": "Search map layers.",
-            "keywordsTitle": "Keywords",
             "shortDescription": "Search map layers by map layer name, data producer name or keyword.",
             "description": "Search map layers by map layer name, data producer name or keyword. You can type a whole term or a part of it. The search term must be at least four characters long.",
-            "inspire": "By Theme",
             "allLayers": "All layers",
-            "organization": "By Data Provider",
-            "published": "Users",
             "didYouMean": "Did you mean:"
-        },
-        "published": {
-            "organization": "Published map layer",
-            "inspire": "Published map layer"
         },
         "tooltip": {
             "type-base": "Background map",
@@ -64,13 +54,6 @@ Oskari.registerLocalization(
         "buttons": {
             "ok": "OK"
         },
-        "types": {
-            "syn": "Synonym",
-            "lk": "Related concept",
-            "vk": "Coordinate concept",
-            "ak": "Subordinate concept",
-            "yk": "Superordinate concept"
-        },
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
@@ -88,6 +71,26 @@ Oskari.registerLocalization(
             "openLink": "Show Map Layers",
             "closeLink": "Hide Map Layers",
             "tileText": "Map layers"
+        },
+        "SelectedLayersTab": {
+            "title": "Selected layers",
+            "style": "Style",
+            "show": "Show",
+            "hide": "Hide",
+            "rights": {
+                "can_be_published_map_user": "Publication permitted"
+            },
+            "tooltips": {
+                "removeLayer": "Remove layer for selected",
+                "openLayerTools": "Open layer tools",
+                "closeLayerTools": "Close layer tools",
+                "zoomToLayerExtent": "Zoom to layer extent",
+                "can_be_published_map_user": "The map layer is publishable in embedded maps. The weekly usage limit may be limited."
+            }
+        },
+        "manyLayersWarning": {
+            "title": "Attention!",
+            "text": "The map currently has 10 or more map levels. If you continue, increasing the map level will cause performance problems!"
         }
     }
 });
