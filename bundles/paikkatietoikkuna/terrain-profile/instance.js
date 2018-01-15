@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         }
     },
     {
-        extend: ['Oskari.mapframework.bundle.terrain-profile.BundleModule'],
+        extend: ['Oskari.BasicBundle'],
         protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     }
 );
