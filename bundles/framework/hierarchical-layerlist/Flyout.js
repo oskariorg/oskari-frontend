@@ -293,7 +293,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method  @public populateLayers
          */
         populateLayers: function () {
-            //TODO: TEE TÄNNE GROUPPIEN HAKU MAPLAYERSERVICESTÄ NIIN SAADAAN IDT MESSIIN!
             //"use strict";
             var me = this;
             var sandbox = this.instance.getSandbox(),
@@ -303,14 +302,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 tab,
                 layersCopy,
                 groups;
-
             for (i = 0; i < this.layerTabs.length; i += 1) {
                 tab = this.layerTabs[i];
                 // populate tab if it has grouping method
                 if (tab.groupingMethod) {
-                    layersCopy = layers.slice(0);
+                    //layersCopy = layers.slice(0);
                     groups = this._getLayerGroups(
-                        layersCopy,
                         tab.groupingMethod
                     );
                     tab.showLayerGroups(groups);
@@ -322,21 +319,32 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method _getLayerGroups
          * @private
          */
-        _getLayerGroups: function(layers, groupingMethod) {
+        _getLayerGroups: function(groupingMethod) {
             //"use strict";
             var me = this,
                 groupList = [],
-                group = null,
+                groupModel = null,
                 n,
                 layer,
                 groupAttr;
-
+            console.log(me._currentFilter);
+            var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();//me.mapLayerService.getAllLayerGroups();
             // sort layers by grouping & name
-            layers.sort(function(a, b) {
+            /*layers.sort(function(a, b) {
                 return me._layerListComparator(a, b, groupingMethod);
+            });*/
+            console.log(allGroups);
+            allGroups = me.mapLayerService.getAllLayerGroups();
+            allGroups.forEach(function(group) {
+                groupModel = Oskari.clazz.create(
+                    'Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup',
+                    group,
+                    me.mapLayerService
+                );
+                groupList.push(groupModel);
             });
 
-            for (n = 0; n < layers.length; n += 1) {
+            /*for (n = 0; n < layers.length; n += 1) {
                 layer = layers[n];
                 if (layer.getMetaType && layer.getMetaType() === 'published') {
                     // skip published layers
@@ -352,7 +360,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 }
 
                 group.addLayer(layer);
-            }
+            }*/
             var sortedGroupList = jQuery.grep(groupList, function(group, index) {
                 return group.getLayers().length > 0;
             });

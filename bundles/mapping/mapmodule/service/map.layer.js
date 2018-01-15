@@ -27,6 +27,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this._reservedLayerIds = {};
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
         this._stickyLayerIds = {};
+        this._loadedLayerGroupList = [];
+        this._layerGroups = [];
 
         /**
          * @property typeMapping
@@ -465,6 +467,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _loadAllLayerGroupsAjaxCallBack: function (pResp, callbackSuccess) {
             var me = this;
+            me._layerGroups = pResp;
+            me._loadedLayerGroupsList = pResp;
             pResp.forEach(function(group) {
                 group.layers.forEach(function(layer) {
                     mapLayer = me.createMapLayer(layer);
@@ -502,6 +506,25 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getAllLayers: function () {
             return this._loadedLayersList;
         },
+
+        /**
+         * @method getAllLayerGroups
+         * Returns an array of layer groups added to the service
+         * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+         */
+        getAllLayerGroups: function () {
+            return this._layerGroups;
+        },
+
+        /**
+         * @method getAllLoadedLayerGroups
+         * Returns an array of layer groups added to the service
+         * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+         */
+        getAllLoadedLayerGroups: function () {
+            return this._loadedLayerGroupsList;
+        },
+
         /**
          * @method getAllLayersByMetaType
          * Returns an array of layers added to the service that have the given metatype (layer.getMetaType() === type).
@@ -680,6 +703,45 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             });
             return filteredLayers;
+        },
+        /**
+         * @method  @public getFilteredLayers  Get filtered layer groups
+         * @param  {String} filterId filter id
+         * @return {Array}   filtered layers list, if not found filter by id then return all layers
+         */
+        getFilteredLayerGroups: function(filterId) {
+            var me = this;
+            var filterFunction = me.layerFilters[filterId];
+            var allLayerGroups = me.getAllLoadedLayerGroups();
+            var allLayerGroupsCopy = allLayerGroups;
+            console.log("ALL");
+            console.dir(allLayerGroups);
+            if(!filterFunction) {
+                Oskari.log(this.getName()).warn('[MapLayerService] not found layer filter "' + filterId + '". Returning all layer groups.');
+                return allLayerGroups;
+            }
+            var filteredLayerGroups = [];
+            allLayerGroupsCopy.forEach(function(group){
+                var filteredLayers = [];
+                var groupCopy = group;
+                groupCopy.layers.forEach(function(layer){
+                    var layerCopy = layer;
+                    mapLayer = me.createMapLayer(layerCopy);
+                    if (!mapLayer) {
+                        // unsupported map type, skip
+                        // continue with next layer
+                        return;
+                    }
+                    if(filterFunction(mapLayer)) {
+                        filteredLayers.push(layerCopy);
+                    }
+                });
+                groupCopy['layers'] = filteredLayers;
+                filteredLayerGroups.push(groupCopy);
+            });
+            console.log("FILTERED");
+            console.dir(filteredLayerGroups);
+            return filteredLayerGroups;
         },
         /**
          * @method registerLayerModel
@@ -919,7 +981,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                  //Oskari.log(this.getName()).warn("Trying to create mapLayer without JSON data");
                 return null;
             }
-
             var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
                 Oskari.log(this.getName()).warn("Unknown layer type: " + mapLayerJson.type);

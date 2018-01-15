@@ -38,7 +38,7 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.view.Layer",
          * @method getGroupIds
          * @return {Array} group ids
          */
-        getId: function () {
+        getGroupIds: function () {
             //"use strict";
             return this.layer.getGroupIds();
         },
@@ -218,9 +218,26 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.view.Layer",
             layerDiv.find('input').change(function () {
                 checkbox = jQuery(this);
                 if (checkbox.is(':checked')) {
+                    /*//Add selection to the group if all layers are selected.
+                    layer.getGroups().forEach(function(group){
+                        var layerGroupAccordionCheckbox = jQuery('#oskari_hierarchical-layerlist_accordionPanel_'+group.id+' :input');
+                        var layerGroupLayerCheckboxes = jQuery('#oskari_hierarchical-layerlist_accordionPanel_'+group.id).next(".content").find("input");
+                        var allChecked = true;
+                        for(var i = 0; i < layerGroupLayerCheckboxes.length; ++i) {
+                            var checkbox = jQuery(layerGroupLayerCheckboxes[i]);
+                            if(!checkbox.prop('checked')) {
+                                allChecked = false;
+                            }
+                        }
+                        layerGroupAccordionCheckbox.prop('checked', allChecked);
+                    });*/
                     sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
                 } else {
-                    //Poista valinta ryhmältä
+                   /* //Remove selection from the group aswell
+                    layer.getGroups().forEach(function(group){
+                        var layerGroupAccordionCheckbox = jQuery('#oskari_hierarchical-layerlist_accordionPanel_'+group.id+' :input');
+                        layerGroupAccordionCheckbox.prop('checked', false);
+                    });*/
                     sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
                 }
             });

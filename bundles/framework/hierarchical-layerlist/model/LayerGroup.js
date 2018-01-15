@@ -5,19 +5,22 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
  * @static
  */
 
-function (title) {
-    //"use strict";
-    this.name = title;
-    this.id = "";
+function (group, mapLayerService) {
+    //FIXME: Get locale from somewhere?
+    this.name = group.name.fi;
+    this.id = group.id;
     this.layers = [];
+    var me =this;
     this.searchIndex = {};
+    group.layers.forEach(function(layer){
+        me.addLayer(mapLayerService.createMapLayer(layer));
+    });
 }, {
     /**
      * @method setId
      * @param {String} value
      */
     setTitle: function (value) {
-        //"use strict";
         this.name = value;
     },
     /**
@@ -25,7 +28,6 @@ function (title) {
      * @return {String}
      */
     getTitle: function () {
-        //"use strict";
         return this.name;
     },
     /**
@@ -33,7 +35,6 @@ function (title) {
      * @param {String} value
      */
     setId: function (value) {
-        //"use strict";
         this.id = value;
     },
     /**
@@ -41,7 +42,6 @@ function (title) {
      * @return {String}
      */
     getId: function () {
-        //"use strict";
         return this.id;
     },
     /**
@@ -49,20 +49,19 @@ function (title) {
      * @param {Layer} layer
      */
     addLayer: function (layer) {
-        //"use strict";
-        this.layers.push(layer);
-        this.searchIndex[layer.getId()] = this._getSearchIndex(layer);
+        if(layer && layer.getId() !== null) {
+            this.layers.push(layer);
+            this.searchIndex[layer.getId()] = this._getSearchIndex(layer);
+        }
     },
     /**
      * @method getLayers
      * @return {Layer[]}
      */
     getLayers: function () {
-        //"use strict";
         return this.layers;
     },
     _getSearchIndex: function (layer) {
-        //"use strict";
         var val = layer.getName() + ' ' +
             layer.getInspireName() + ' ' +
             layer.getOrganizationName();
@@ -70,7 +69,6 @@ function (title) {
         return val.toLowerCase();
     },
     matchesKeyword: function (layerId, keyword) {
-        //"use strict";
         var searchableIndex = this.searchIndex[layerId];
         return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
     }

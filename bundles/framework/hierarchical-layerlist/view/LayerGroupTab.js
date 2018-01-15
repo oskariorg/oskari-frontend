@@ -36,7 +36,6 @@ Oskari.clazz.define(
                 '</div><div style="clear:both;"></div>'
         };
         this._createUI(id);
-        this._bindOskariEvents();
     },
     {
         getTitle: function () {
@@ -261,7 +260,6 @@ Oskari.clazz.define(
             localization = me.instance.getLocalization();
             for (i = 0; i < groupsLength; i += 1) {
                 group = groups[i];
-                console.log(group);
                 layers = group.getLayers();
                 layersLength = layers.length;
                 groupPanel = Oskari.clazz.create(
@@ -275,7 +273,10 @@ Oskari.clazz.define(
                     ')');
                 groupPanel.setId(
                     'oskari_hierarchical-layerlist_accordionPanel_' +
-                    group.getTitle().replace(/[^a-z0-9\-_:\.]/gi, '-')
+                    group.getId()
+                );
+                groupPanel.setDataId(
+                    group.getId()
                 );
                 group.layerListPanel = groupPanel;
 
@@ -283,16 +284,18 @@ Oskari.clazz.define(
                 groupContainer.addClass('oskari-hidden');
                 for (n = 0; n < layersLength; n += 1) {
                     layer = layers[n];
-                    layerWrapper =
-                        Oskari.clazz.create(
-                            'Oskari.framework.bundle.hierarchical-layerlist.view.Layer',
-                            layer,
-                            me.instance.sandbox,
-                            localization
-                        );
-                    layerContainer = layerWrapper.getContainer();
-                    groupContainer.append(layerContainer);
-                    me.layerContainers[layer.getId()] = layerWrapper;
+                    //if(layer) {
+                        layerWrapper =
+                            Oskari.clazz.create(
+                                'Oskari.framework.bundle.hierarchical-layerlist.view.Layer',
+                                layer,
+                                me.instance.sandbox,
+                                localization
+                            );
+                        layerContainer = layerWrapper.getContainer();
+                        groupContainer.append(layerContainer);
+                        me.layerContainers[layer.getId()] = layerWrapper;
+                    //}
                 }
                 groupContainer.removeClass('oskari-hidden');
                 me.accordion.addPanel(groupPanel);
@@ -330,7 +333,6 @@ Oskari.clazz.define(
                 layerCont,
                 bln,
                 loc;
-
             if (!ids && me.sentKeyword === keyword) {
                 ids = me.ontologyLayers;
             }
@@ -654,9 +656,11 @@ Oskari.clazz.define(
 
                 for (n = 0; n < layers.length; n += 1) {
                     layer = layers[n];
-                    layerId = layer.getId();
-                    layerCont = this.layerContainers[layerId];
-                    layerCont.setVisible(true);
+                    //if(layer) {
+                        layerId = layer.getId();
+                        layerCont = this.layerContainers[layerId];
+                        layerCont.setVisible(true);
+                    //}
                 }
                 group.layerListPanel.setVisible(true);
                 group.layerListPanel.close();
@@ -682,19 +686,6 @@ Oskari.clazz.define(
             if (layerCont) {
                 layerCont.updateLayerContent(layer);
             }
-        },
-
-        _bindOskariEvents: function(){
-            var me = this;
-            me._notifierService.on('AfterMapLayerAddEvent',function(evt) {
-                console.log(evt);
-                //Lisää valinta tasolle ja tsekkaa onko kaikki tasot ryhmien alta valittu ja lisää valinta ryhmälle/ryhmille
-            });
-
-            me._notifierService.on('AfterMapLayerRemoveEvent',function(evt){
-                console.log(evt);
-                //Poista valinta ryhmältä ja tasolta
-            });
         }
     }
 );

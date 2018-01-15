@@ -37,13 +37,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
         this.layerGroup = layerGroup;
         this.layers = layers;
         this._notifierService = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
-
+        this._bindOskariEvents();
         var me = this,
             headerIcon = me.html.find('div.headerIcon'),
             headerText = me.html.find('div.headerText'),
             headerCheckbox = me.html.find('input.headerCheckbox');
-
-        //headerCheckbox.attr("layer_group_id", this.layerGroup.getId());
 
         headerIcon.click(function () {
             if (me.isOpen()) {
@@ -180,6 +178,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
             header.attr('id', id);
         },
         /**
+         * @method setDataId
+         * Sets the panel checkbox data attribute id
+         * @param {String} dataId dataId for the checkbox
+         */
+        setDataId: function (dataId) {
+            var checkbox = this.html.find('input.headerCheckbox');
+            checkbox.attr('data-id', dataId);
+        },
+        /**
          * @method setContent
          * Sets the panel content.
          * This can be also done with #getContainer()
@@ -262,16 +269,41 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
                 }
             });
         },
+        /**
+         * Toggle accordion panel checkbox on or off
+         * @param  {boolean} onOrOff Tells whether to check the checkbox or not
+         */
+        toggleCheckbox: function(onOrOff) {
+            var checkbox = this.html.find('input.headerCheckbox');
+            checkbox.prop('checked', onOrOff);
+        },
+
         _bindOskariEvents: function(){
             var me = this;
             me._notifierService.on('AfterMapLayerAddEvent',function(evt) {
-                console.log(evt);
-                //me._updateLayerCount();
+                var layer = evt.getMapLayer();
+                //Add selection to the group if all layers are selected.
+                layer.getGroups().forEach(function(group){
+                    var headerCheckbox = me.html.find('input.headerCheckbox');
+                    var layerGroupLayerCheckboxes = me.html.find('div.content input');
+                    var allChecked = true;
+                    for(var i = 0; i < layerGroupLayerCheckboxes.length; ++i) {
+                        var checkbox = jQuery(layerGroupLayerCheckboxes[i]);
+                        if(!checkbox.prop('checked')) {
+                            allChecked = false;
+                        }
+                    }
+                    headerCheckbox.prop('checked', allChecked);
+                });
             });
 
             me._notifierService.on('AfterMapLayerRemoveEvent',function(evt){
-                console.log(evt);
-                //me._updateLayerCount();
+                var layer = evt.getMapLayer();
+                //Remove selection from the group aswell
+                layer.getGroups().forEach(function(group){
+                    var headerCheckbox = me.html.find('input.headerCheckbox');
+                    headerCheckbox.prop('checked', false);
+                });
             });
         }
     }
