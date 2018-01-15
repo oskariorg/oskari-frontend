@@ -50,6 +50,12 @@ Oskari.clazz
                 this.container.append(wrapper);
                 this.ui = txtspan;
             },
+            updateContent: function (content) {
+                if( !this.ui ) {
+                    return;
+                }
+                this.ui.html(content);
+            },
             getElement: function () {
                 return this.ui;
             },
