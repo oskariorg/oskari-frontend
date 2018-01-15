@@ -75,14 +75,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
             
             var pathContainer = svg.append('g');
 
-            var cursor = svg.append('g');
-
             svg.append('rect') // mask above graph
                 .attr('fill', '#fafafa')
                 .attr('x', 0)
                 .attr('y', -10)
                 .attr('width', graphWidth)
                 .attr('height', graphMargin.top + 10);
+
+            var cursor = svg.append('g');
             
             svg.append('rect') // mask below graph
                 .attr('fill', '#fafafa')
