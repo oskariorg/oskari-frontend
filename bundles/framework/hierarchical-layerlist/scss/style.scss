@@ -327,14 +327,12 @@ div.hierarchical-layerlist {
                 }
 
                 .tools-container {
-                    display: inline-block;
-
                     .opacity {
-                        display: inline-block;
                         background-image: url(../images/opacity_slider.png);
                         background-repeat: no-repeat;
-                        margin-left: 54px;
+                        margin-left: $selectedLayersTabLabelWidth + 4px;
                         margin-top: 4px;
+                        margin-bottom: 4px;
                         float:left;
 
                         .slider {
@@ -353,13 +351,24 @@ div.hierarchical-layerlist {
                         }
                     }
 
+                    .layer-rights {
+                        float: right;
+                        display: none;
+                        text-align: center;
+                        height: 32px;
+                        line-height: 32px;
+                        margin-left: 4px;
+                    }
+
                     .bottom-tools {
                         float:right;
+
                         .tool {
                             width: 26px;
                             height:26px;
                             float:left;
                             margin-left:4px;
+                            margin-top: 4px;
                             background-repeat: no-repeat;
                             background-position: center center;
 
@@ -385,6 +394,10 @@ div.hierarchical-layerlist {
 
                             &.show-layer-legend-tool {
                                 background-image: url("../images/glyphicons/glyphicons-37-file.png");
+                            }
+
+                            &.show-content-editor-tool {
+                                background-image: url("../images/glyphicons/glyphicons-31-pencil.png");
                             }
 
                         }
