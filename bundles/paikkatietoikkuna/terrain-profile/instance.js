@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         _startImpl: function (sandbox) {
             var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
             var buttonConf = {
-                iconCls: 'upload-material',
+                iconCls: 'tool-terrainprofile',
                 tooltip: this.loc('terrainHeightProfile'),
                 sticky: true,
                 callback: function (el) { }
