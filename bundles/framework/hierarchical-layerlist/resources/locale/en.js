@@ -1,55 +1,45 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "hierarchical-layerlist",
     "value": {
-        "title": "Map Layers",
-        "desc": "Map Layers",
+        "title": "Karttatasot",
+        "desc": "Karttatasot",
         "errors": {
-            "title": "Error",
-            "generic": "The system error occurred.",
-            "loadFailed": "The map layers could not be loaded. Reload the webpage in your browser and select map layers again.",
-            "noResults": "No search results could be found. Please check the search term.",
-            "noResultsForKeyword": "No map layers could be found. Please check the search term.",
-            "minChars": "The search term is too short. Type at least four characters."
+            "generic": "Järjestelmässä tapahtui virhe.",
+            "loadFailed": "Karttatasojen lataaminen epäonnistui. Päivitä sivu selaimessasi ja valitse karttatasot uudelleen.",
+            "noResults": "Hakutuloksia ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
+            "noResultsForKeyword": "Karttatasoja ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
         },
-        "loading": "Searching...",
+        "loading": "Haetaan...",
+
         "filter": {
-            "text": "Search map layers.",
-            "keywordsTitle": "Keywords",
-            "shortDescription": "Search map layers by map layer name, data producer name or keyword.",
-            "description": "Search map layers by map layer name, data producer name or keyword. You can type a whole term or a part of it. The search term must be at least four characters long.",
-            "inspire": "By Theme",
-            "allLayers": "All layers",
-            "organization": "By Data Provider",
-            "published": "Users",
-            "didYouMean": "Did you mean:"
-        },
-        "published": {
-            "organization": "Published map layer",
-            "inspire": "Published map layer"
+            "text": "Hae karttatasoja",
+            "shortDescription": "Hae karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella.",
+            "description": "Voit hakea karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä. Hakusanassa on oltava vähintään neljä merkkiä.",
+            "allLayers": "Kaikki tasot",
+            "didYouMean": "Tarkoititko:"
         },
         "tooltip": {
-            "type-base": "Background map",
-            "type-wms": "Map layer (WMS, WMTS)",
-            "type-wfs": "Data product (WFS)",
-            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window."
+            "type-base": "Taustakartta",
+            "type-wms": "Karttataso",
+            "type-wfs": "Tietotuote",
+            "type-wfs-manual": "Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä."
         },
         "backendStatus": {
             "OK": {
-                "tooltip": "The map layer is currently available.",
+                "tooltip": "Karttataso on käytettävissä tällä hetkellä.",
                 "iconClass": "backendstatus-ok"
             },
             "DOWN": {
-                "tooltip": "The map layer is not currently available.",
+                "tooltip": "Karttataso ei tällä hetkellä käytettävissä.",
                 "iconClass": "backendstatus-down"
             },
             "ERROR": {
-                "tooltip": "The map layer is not currently available.",
+                "tooltip": "Karttataso ei tällä hetkellä käytettävissä.",
                 "iconClass": "backendstatus-error"
             },
             "MAINTENANCE": {
-                "tooltip": "The map layer may be periodically not available during the next few days.",
+                "tooltip": "Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
@@ -64,30 +54,43 @@ Oskari.registerLocalization(
         "buttons": {
             "ok": "OK"
         },
-        "types": {
-            "syn": "Synonym",
-            "lk": "Related concept",
-            "vk": "Coordinate concept",
-            "ak": "Subordinate concept",
-            "yk": "Superordinate concept"
-        },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "featuredata": "Vector layers"
+                "newest": "Uusimmat",
+                "featuredata": "Vektoritasot"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "featuredata": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Näytä ## uusinta karttatasoa",
+                "featuredata": "Näytä vain vektoritasot",
+                "remove": "Poista suodatus"
             }
         },
         "guidedTour": {
-            "title": "Map layers",
-            "message": "In the Map Layers menu you can find all the map layers in the map service. <br/><br/> Sort map layers by theme or data provider. <br/><br/> Search map layers by a map layer name, a data provider name or a keyword. Newest map layers, vector layers and publishable layers you can find in pre-defined lists.<br/><br/> Open map layers you can check in the Selected Layers menu.",
-            "openLink": "Show Map Layers",
-            "closeLink": "Hide Map Layers",
-            "tileText": "Map layers"
+            "title": "Karttatasot",
+            "message": "Karttatasot-valikosta löydät kaikki karttapalvelussa saatavilla olevat karttatasot. <br/><br/> Järjestä karttatasot joko aiheen tai tiedontuottajan mukaan. <br/><br/> Hae karttatasoja karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Löydät uusimmat karttatasot, vektoritasot ja julkaistavissa olevat karttatasot valmiiksi määritellyiltä listoilta. <br/><br/>  Avoinna olevat karttatasot voit tarkistaa Valitut tasot -valikosta.",
+            "openLink": "Näytä Karttatasot",
+            "closeLink": "Piilota Karttatasot",
+            "tileText": "Karttatasot"
+        },
+        "SelectedLayersTab": {
+            "title": "Valitut tasot",
+            "style": "Tyyli",
+            "show": "Näytä",
+            "hide": "Piilota",
+            "rights": {
+                "can_be_published_map_user": "Julkaistavissa"
+            },
+            "tooltips": {
+                "removeLayer": "Poista taso",
+                "openLayerTools": "Avaa tason toiminnot",
+                "closeLayerTools": "Sulje tason toiminnot",
+                "zoomToLayerExtent": "Sovita taso karttanäkymään",
+                "can_be_published_map_user": "Karttatason voi julkaista upotetussa kartassa. Viikottainen käyttömäärä voi olla rajoitettu."
+            }
+        },
+        "manyLayersWarning": {
+            "title": "Huomio!",
+            "text": "Kartalla tällä hetkellä 10 tai enemmän karttasoa. Jos jatkat, saattaa karttatason lisääminen aiheuttaa suorituskykyongelmia!"
         }
     }
 });
