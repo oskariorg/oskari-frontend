@@ -36,9 +36,7 @@ a.oskari-badge:hover {
 .badge-wrapper {
     display: inline-block;
     position: absolute;
-    right: 8%;
     height: inherit;
-    max-width: 50px;
 }
 .oskari-badge-important {
   background-color: #b94a48; }
