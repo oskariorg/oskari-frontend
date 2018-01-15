@@ -94,12 +94,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                 var position = p.position().left;
                 var offset = 40;
                 this.flyout = Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout', this.loc('terrainHeightProfile'), {
-                    width: 'auto',
-                    pos: {
-                        x: position + offset,
-                        y: 5
-                    }
+                    width: 'auto'
                 }, this.markerHandler);
+                this.flyout.move(position + offset, 0, true);
                 this.flyout.update(data);
             }
             this.flyout.show();
