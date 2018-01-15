@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         },
         startDrawing: function () {
             var builder = Oskari.requestBuilder('DrawTools.StartDrawingRequest');
-            this.sandbox.request(this, builder(this.__name, 'LineString', {modifyControl: true}));
+            this.sandbox.request(this, builder(this.__name, 'LineString', {modifyControl: true, allowMultipleDrawing : false}));
         },
         stopDrawing: function () {
             var builder = Oskari.requestBuilder('DrawTools.StopDrawingRequest');
