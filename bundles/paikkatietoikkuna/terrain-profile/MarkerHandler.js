@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.MarkerHandler',
     },
     {
         showAt: function (lon, lat, text) {
-            this.makeRequest('MapModulePlugin.AddMarkerRequest', [{ x: lon, y: lat, msg: text, shape: 5, color: '#00c3ff'}, 'TerrainProfileMarker']);
+            this.makeRequest('MapModulePlugin.AddMarkerRequest', [{ x: lon, y: lat, msg: text, shape: 5, color: '#00c3ff' }, 'TerrainProfileMarker']);
             this.markerOnMap = true;
         },
         hide: function () {

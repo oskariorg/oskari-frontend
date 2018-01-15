@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         },
         startDrawing: function () {
             var builder = Oskari.requestBuilder('DrawTools.StartDrawingRequest');
-            this.sandbox.request(this, builder(this.__name, 'LineString', {modifyControl: true, allowMultipleDrawing : false}));
+            this.sandbox.request(this, builder(this.__name, 'LineString', { modifyControl: true, allowMultipleDrawing: false }));
         },
         stopDrawing: function () {
             var builder = Oskari.requestBuilder('DrawTools.StopDrawingRequest');
@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             if (!this.feature) {
                 return;
             }
-            this.feature.properties = {numPoints: 100};
+            this.feature.properties = { numPoints: 100 };
             var url = this.sandbox.getAjaxUrl() + 'action_route=TerrainProfile&route=' + encodeURIComponent(JSON.stringify(this.feature));
             jQuery.ajax({
                 type: 'GET',
@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             if (this.flyout) {
                 this.flyout.update(data);
             } else {
-                var p = jQuery( "#mapdiv" );
+                var p = jQuery("#mapdiv");
                 var position = p.position().left;
                 var offset = 40;
                 this.flyout = Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout', this.loc('terrainHeightProfile'), {
@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                         this.feature = null;
                         return;
                     }
-                    var feature = {type: 'Feature', geometry: {type: 'LineString'}};
+                    var feature = { type: 'Feature', geometry: { type: 'LineString' } };
                     feature.geometry.coordinates = sketch.geometry.coordinates.slice(sketch.geometry.coordinates.length - 1);
                     this.feature = feature;
                 }
