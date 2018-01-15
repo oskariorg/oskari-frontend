@@ -9,6 +9,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
         this._updateGraph = null;
         this.markerHandler = markerHandler;
     }, {
+        /**
+         * @method update updates graph with new data
+         * @param {GeoJsonFeature} data visualization data
+         */
         update: function (data) {
             if (!data) {
                 this._updateGraph = null;
@@ -28,6 +32,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 this._initGraph(data);
             }
         },
+        /**
+         * @method _initGraph initializes graph 
+         * @param {GeoJsonFeature} data visualization data
+         */
         _initGraph: function (data) {
             var graphMargin = { top: 25, bottom: 30, left: 45, right: 30 };
             var graphHeight = 300;
@@ -229,6 +237,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
             this._updateGraph(data);
             this.setContent(wrapper);
         },
+        /**
+         * @method _processData processes input data into form suitable for graphing
+         * @param {GeoJsonFeature} data visualization data
+         */
         _processData: function (data) {
             var points = data.properties.distanceFromStart.map(function (d, i) {
                 return { distance: d, height: data.geometry.coordinates[i][2], coords: data.geometry.coordinates[i] };

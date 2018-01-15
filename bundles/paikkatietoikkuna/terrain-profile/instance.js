@@ -19,6 +19,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
     },
     {
         __name: 'TerrainProfile',
+        /**
+         * @method _startImpl bundle start hook. Called from superclass start()
+         * @param sandbox
+         */
         _startImpl: function (sandbox) {
             var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
             var buttonConf = {
@@ -29,6 +33,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             };
             sandbox.request(this, addToolButtonBuilder('TerrainProfile', 'basictools', buttonConf));
         },
+        /**
+         * @method setActive controls terrain profile functionality on/off state
+         * @param {Boolean} activeState should the functionality be on?
+         */
         setActive: function (activeState) {
             if (activeState) {
                 if (this.active) {
@@ -51,24 +59,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                 this.feature = null;
             }
         },
+        /**
+         * @method cancelTool deactivate terrain profile tool
+         */
         cancelTool: function () {
             var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
             this.sandbox.request(this, builder());
         },
+        /**
+         * @method createPopup creates UI popup for terrain profile
+        */
         createPopup: function () {
             return Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainPopup',
                 this.cancelTool.bind(this),
                 this.doQuery.bind(this)
             );
         },
+        /**
+         * @method startDrawing starts DrawRequest drawing
+         */
         startDrawing: function () {
             var builder = Oskari.requestBuilder('DrawTools.StartDrawingRequest');
             this.sandbox.request(this, builder(this.__name, 'LineString', { modifyControl: true, allowMultipleDrawing: false }));
         },
+        /**
+         * @method stopDrawing stops DrawRequest drawing
+         */
         stopDrawing: function () {
             var builder = Oskari.requestBuilder('DrawTools.StopDrawingRequest');
             this.sandbox.request(this, builder(this.__name, true));
         },
+        /**
+         * @method doQuery send query to backend
+         */
         doQuery: function () {
             if (!this.feature) {
                 return;
@@ -86,6 +109,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             });
             this.showFlyout(null);
         },
+        /**
+         * @method showFlyout shows graph flyout
+         * @param {GeoJsonFeature} data visualization data
+         */
         showFlyout: function (data) {
             if (this.flyout) {
                 this.flyout.update(data);
