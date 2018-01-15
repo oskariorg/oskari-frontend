@@ -65,3 +65,6 @@ a.oskari-badge:hover {
 .oskari-badge-oskari {
   background-color:#FFDE00;
   color: #333438; }
+  .oskari-badge-oskari-inverse {
+  background-color:#333438;
+  color: #FFDE00; }
