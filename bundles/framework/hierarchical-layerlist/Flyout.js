@@ -282,7 +282,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          *
          */
-        focus: function () {
+        focus: function() {
             if (this.layerTabs) {
                 this.layerTabs[0].focus();
             }
@@ -292,7 +292,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * Populate layer lists.
          * @method  @public populateLayers
          */
-        populateLayers: function () {
+        populateLayers: function() {
             //"use strict";
             var me = this;
             var sandbox = this.instance.getSandbox(),
@@ -327,7 +327,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 n,
                 layer,
                 groupAttr;
-            var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLoadedLayerGroups();
+
+            var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();
 
             allGroups.forEach(function(group) {
                 groupModel = Oskari.clazz.create(
