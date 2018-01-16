@@ -1,10 +1,10 @@
 jQuery(document).ready(function() {
-jQuery.ajax({
+    jQuery.ajax({
         type: 'POST',
         dataType: 'json',
-        data : window.controlParams,
+        data: window.controlParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
-        success: function (appSetup) {
+        success: function(appSetup) {
             appSetup.configuration['hierarchical-layerlist'] = {
                 conf: {},
                 state: {}
@@ -18,7 +18,7 @@ jQuery.ajax({
                 title: 'hierarchical-layerlist',
                 metadata: {
                     'Import-Bundle': {
-                        'hierarchical-layerlist' :{
+                        'hierarchical-layerlist': {
                             bundlePath: '/Oskari/packages/framework/bundle/'
                         }
                     }
@@ -26,8 +26,10 @@ jQuery.ajax({
                 instanceProps: {}
             });
 
-            appSetup.startupSequence = appSetup.startupSequence.filter(function(a){return a.bundleinstancename !== 'layerselection2';});
-            appSetup.startupSequence = appSetup.startupSequence.filter(function(a){return a.bundleinstancename !== 'layerselector2';});
+            //appSetup.startupSequence = appSetup.startupSequence.filter(function(a){return a.bundleinstancename !== 'layerselection2';});
+            appSetup.startupSequence = appSetup.startupSequence.filter(function(a) {
+                return a.bundleinstancename !== 'layerselector2';
+            });
 
 
             var app = Oskari.app;
@@ -38,11 +40,11 @@ jQuery.ajax({
 
             app.setApplicationSetup(appSetup);
 
-            app.startApplication(function () {
+            app.startApplication(function() {
                 var sb = Oskari.getSandbox();
             });
         },
-        error: function (jqXHR, textStatus) {
+        error: function(jqXHR, textStatus) {
             if (jqXHR.status !== 0) {
                 jQuery('#mapdiv').append('Unable to start');
             }
