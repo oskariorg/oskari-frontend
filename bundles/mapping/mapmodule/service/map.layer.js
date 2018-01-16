@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
         this._stickyLayerIds = {};
         this._loadedLayerGroupsList = [];
+        //FIXME: Find out why the groups are cached in the variable instead of using local storage!
         localStorage.setItem("loadedLayerGroupsList", JSON.stringify(this._loadedLayerGroupsList));
         this._layerGroups = [];
 
@@ -470,6 +471,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
             me._layerGroups = pResp;
             me._loadedLayerGroupsList = pResp;
+            //FIXME: Find out why the groups are cached in the variable instead of using local storage!
             localStorage.setItem("loadedLayerGroupsList", JSON.stringify(pResp));
             pResp.forEach(function(group) {
                 group.layers.forEach(function(layer) {
@@ -524,6 +526,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getAllLoadedLayerGroups: function () {
+            //FIXME: Find out why the groups are cached in the variable instead of using local storage!
             return JSON.parse(localStorage.getItem("loadedLayerGroupsList"));
         },
 
