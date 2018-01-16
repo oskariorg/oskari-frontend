@@ -64,8 +64,10 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
             layersLength = selectedLayers.length;
             var thisHeaderCheckbox = this;
             var isChecked = jQuery(thisHeaderCheckbox).prop("checked");
+            var layerInputsArr = me.html.find('div.content div.layer input');
+            var numberOfLayers = layerInputsArr.length;
             //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
-            if(layersLength > 10 && isChecked) {
+            if((numberOfLayers > 10 || layersLength > 10) && isChecked) {
                 var desc = jQuery(me.templates.description),
                 dialog = Oskari.clazz.create(
                     'Oskari.userinterface.component.Popup'
