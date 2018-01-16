@@ -301,9 +301,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.component.Se
 
             me._notifierService.on('AfterMapLayerRemoveEvent',function(evt){
                 var layer = evt.getMapLayer();
-                //Remove selection from the group aswell
+                //Remove selection from the corresponding group aswell
                 layer.getGroups().forEach(function(group){
-                    var headerCheckbox = me.html.find('input.headerCheckbox');
+                    var headerCheckbox = me.html.find('input.headerCheckbox[data-id='+group.id+']');
                     headerCheckbox.prop('checked', false);
                 });
             });
