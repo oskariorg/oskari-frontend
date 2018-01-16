@@ -197,18 +197,10 @@ Oskari.clazz.define(
 
                 var features = new ol.format.GeoJSON().readFeatures(event.getGeoJson());
 
-                if (features.length === 0) {
-                  return;
-                }
-
-                var geometries = [];
-
                 for (i=0; i < features.length; i++) {
-                    var geometry = features[i].getGeometry();
-                    geometries.push(geometry);
+                    this.addFeature(features[i], mode);
                 }
 
-                this.addGeometry(geometries, mode);
                 //remove drawLayer since we have added the features to analyseFeatureLayer
                 this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.drawLayerId, true]);
             },
@@ -221,7 +213,7 @@ Oskari.clazz.define(
                 if (geometries === null) {
                     this._cancelDrawFilter();
                 }
-                this.addGeometry(geometries);
+                this.addFeature(geometries);
                 this.drawFilterPlugin.stopDrawFiltering();
 
             },
@@ -513,49 +505,18 @@ Oskari.clazz.define(
         },
 
         /**
-         * @private @method addGeometry
+         * @private @method addFeature
          * Adds the given geometry to the feature layer
          * and to the internal list of features.
          *
-         * @param {Array} Array of geometry/geometries to add
+         * @param {ol.Feature} feature to add
          * @param {String} mode geometry type
          * @param {String} name optional name for the temp feature
          *
          */
-        addGeometry: function (geometries, mode, name) {
+        addFeature: function (feature, mode, name) {
             var me = this;
-            var featureGeom = null;
 
-            // This should be done by drawTools
-            var appendGeometry = function(geometry){
-                switch (geometry.getType()) {
-                    case 'Point':
-                        if(!featureGeom) {
-                             featureGeom = new ol.geom.MultiPoint();
-                        }
-                        featureGeom.appendPoint(geometry);
-                        break;
-                    case 'LineString':
-                        if(!featureGeom) {
-                             featureGeom = new ol.geom.MultiLineString();
-                        }
-                        featureGeom.appendLineString(geometry);
-                        break;
-                    case 'Polygon':
-                        if(!featureGeom) {
-                             featureGeom = new ol.geom.MultiPolygon();
-                        }
-                        featureGeom.appendPolygon(geometry);
-                        break;
-                }
-            };
-
-            geometries.forEach(function(geometry){
-                appendGeometry(geometry);
-            });
-
-            // add feature to the analyseFeatureLayer to be shown on map
-            var feature = new ol.Feature({geometry: featureGeom});
             feature.setId(this.drawLayerId);
 
             this.featureSource.addFeature(feature);
@@ -639,7 +600,7 @@ Oskari.clazz.define(
             this._deactivateSelectControls();
             this.drawLayerId = this.analyseHelper.generateDrawLayerId();
 
-            this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.drawLayerId, requestGeometryType, {style: this._defaultStyle}]);
+            this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.drawLayerId, requestGeometryType, {style: this._defaultStyle, allowMultipleDrawing: 'multiGeom'}]);
         },
 
         /**
@@ -856,7 +817,13 @@ Oskari.clazz.define(
                         ),
                         name = (result.name + ' (' + result.village + ')');
 
-                    me.addGeometry([geometry], name);
+                    var feature = new ol.Feature({
+                        geometry: geometry
+                    });
+
+                    var shape = 'Point';
+
+                    me.addFeature(feature, shape, name);
                 };
             };
         },
