@@ -1,14 +1,5 @@
 {
     "startupSequence": [{
-        "bundlename": "asdi-lang-overrides",
-            "metadata": {
-                "Import-Bundle": {
-                    "asdi-lang-overrides": {
-                        "bundlePath": "../../../packages/asdi/bundle/"
-                    }
-                }
-            }
-        }, {
         "bundlename": "mapfull",
         "metadata": {
             "Import-Bundle" : {
