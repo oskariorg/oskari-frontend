@@ -27,7 +27,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this._reservedLayerIds = {};
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
         this._stickyLayerIds = {};
-        this._loadedLayerGroupList = [];
+        this._loadedLayerGroupsList = [];
+        localStorage.setItem("loadedLayerGroupsList", JSON.stringify(this._loadedLayerGroupsList));
         this._layerGroups = [];
 
         /**
@@ -469,6 +470,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
             me._layerGroups = pResp;
             me._loadedLayerGroupsList = pResp;
+            localStorage.setItem("loadedLayerGroupsList", JSON.stringify(pResp));
             pResp.forEach(function(group) {
                 group.layers.forEach(function(layer) {
                     mapLayer = me.createMapLayer(layer);
@@ -522,7 +524,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getAllLoadedLayerGroups: function () {
-            return this._loadedLayerGroupsList;
+            return JSON.parse(localStorage.getItem("loadedLayerGroupsList"));
         },
 
         /**
@@ -714,8 +716,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var filterFunction = me.layerFilters[filterId];
             var allLayerGroups = me.getAllLoadedLayerGroups();
             var allLayerGroupsCopy = allLayerGroups;
-            console.log("ALL");
-            console.dir(allLayerGroups);
             if(!filterFunction) {
                 Oskari.log(this.getName()).warn('[MapLayerService] not found layer filter "' + filterId + '". Returning all layer groups.');
                 return allLayerGroups;
@@ -739,8 +739,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 groupCopy['layers'] = filteredLayers;
                 filteredLayerGroups.push(groupCopy);
             });
-            console.log("FILTERED");
-            console.dir(filteredLayerGroups);
             return filteredLayerGroups;
         },
         /**

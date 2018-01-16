@@ -327,14 +327,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 n,
                 layer,
                 groupAttr;
-            console.log(me._currentFilter);
-            var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();//me.mapLayerService.getAllLayerGroups();
-            // sort layers by grouping & name
-            /*layers.sort(function(a, b) {
-                return me._layerListComparator(a, b, groupingMethod);
-            });*/
-            console.log(allGroups);
-            allGroups = me.mapLayerService.getAllLayerGroups();
+            var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLoadedLayerGroups();
+
             allGroups.forEach(function(group) {
                 groupModel = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup',
@@ -343,24 +337,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 );
                 groupList.push(groupModel);
             });
-
-            /*for (n = 0; n < layers.length; n += 1) {
-                layer = layers[n];
-                if (layer.getMetaType && layer.getMetaType() === 'published') {
-                    // skip published layers
-                    continue;
-                }
-                groupAttr = layer[groupingMethod]();
-                if (!group || group.getTitle() !== groupAttr) {
-                    group = Oskari.clazz.create(
-                        'Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup',
-                        groupAttr
-                    );
-                    groupList.push(group);
-                }
-
-                group.addLayer(layer);
-            }*/
             var sortedGroupList = jQuery.grep(groupList, function(group, index) {
                 return group.getLayers().length > 0;
             });
