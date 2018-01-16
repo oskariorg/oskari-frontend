@@ -360,7 +360,6 @@ Oskari.clazz.define(
                 if (group.layerListPanel.isVisible()) {
                     visibleGroupCount += 1;
                 }
-                group.layerListPanel.setTitle(group.getTitle());
                 if( group.badge ) {
                     group.badge.updateContent( visibleLayerCount + '/' + layers.length );
                 }
@@ -662,8 +661,9 @@ Oskari.clazz.define(
                 }
                 group.layerListPanel.setVisible(true);
                 group.layerListPanel.close();
-                group.layerListPanel.setTitle( group.getTitle() );
-                group.badge.updateContent(layers.length);
+                if (group.badge) {
+                    group.badge.updateContent(layers.length);
+                }
             }
 
             this.accordion.removeMessage();
