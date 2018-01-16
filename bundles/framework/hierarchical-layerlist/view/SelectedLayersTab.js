@@ -79,6 +79,8 @@ Oskari.clazz.define(
 
             me._setSelectedLayers();
             me._updateLayerCount();
+
+            me._updateContainerHeight(jQuery('#mapdiv').height());
         },
 
         _setSelectedLayers: function() {
@@ -197,6 +199,11 @@ Oskari.clazz.define(
             }
         },
 
+        _updateContainerHeight: function(height) {
+            var me = this;
+            jQuery(me.tabPanel.getContainer()).css('max-height', (height * 0.7) + 'px');
+        },
+
         _bindOskariEvents: function() {
             var me = this;
             me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
@@ -226,6 +233,12 @@ Oskari.clazz.define(
                 var layer = evt.getMapLayer();
                 me._layers[layer.getId()].setLayer(layer);
             });
+
+            me._notifierService.on('MapSizeChangedEvent', function(evt) {
+                me._updateContainerHeight(evt.getHeight());
+            });
+
+
         },
         _blink: function(element, count) {
             var me = this;

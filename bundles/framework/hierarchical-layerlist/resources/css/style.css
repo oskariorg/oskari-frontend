@@ -175,7 +175,8 @@ div.hierarchical-layerlist ul.layerlist {
           cursor: pointer;
           text-decoration: underline; }
       div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header {
-        float: left; }
+        float: left;
+        max-width: 70%; }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .breadcrumb {
           font-size: 8pt; }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .title {
@@ -183,7 +184,7 @@ div.hierarchical-layerlist ul.layerlist {
           margin-top: 4px;
           margin-bottom: 4px; }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .description {
-          font-size: 10pt; }
+          font-size: 9pt; }
       div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools {
         float: right; }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle {

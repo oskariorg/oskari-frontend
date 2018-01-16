@@ -299,7 +299,10 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
             },
             MapSizeChangedEvent: function(evt) {
-                this._updateAccordionHeight(evt.getHeight());
+            this._updateAccordionHeight(evt.getHeight());
+                if (evt._creator !== this.getName()) {
+                    this.notifierService.notifyOskariEvent(evt);
+                }
             }
         },
 
