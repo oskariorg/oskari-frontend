@@ -25,7 +25,6 @@ jQuery(document).ready(function() {
                 },
                 instanceProps: {}
             });
-
             appSetup.startupSequence = appSetup.startupSequence.filter(function(a) {
                 return a.bundleinstancename !== 'layerselection2';
             });

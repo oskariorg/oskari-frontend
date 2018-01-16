@@ -463,7 +463,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
          * @private
          */
-    _loadAllLayerGroupsAjaxCallBack: function(pResp, callbackSuccess) {
+        _loadAllLayerGroupsAjaxCallBack: function(pResp, callbackSuccess) {
             var me = this;
             me._layerGroups = pResp;
             pResp.forEach(function(group) {
