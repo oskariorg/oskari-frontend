@@ -110,7 +110,8 @@ Oskari.registerLocalization(
                 "label": "Teemakartat",
                 "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä.",
                 "grid": "Näytä tilastotiedot taulukossa",
-                "allowClassification": "Salli luokittelu"
+                "allowClassification": "Salli luokittelu",
+                "displayDiagram" : "Näytä pylväsdiagrammi"
             },
             "layout": {
                 "label": "Ulkoasu",

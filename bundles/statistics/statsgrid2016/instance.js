@@ -25,6 +25,8 @@ Oskari.clazz.define(
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
+        this.diagramPlugin = null;
+
         this.regionsetViewer = null;
     }, {
         afterStart: function (sandbox) {
@@ -54,6 +56,7 @@ Oskari.clazz.define(
                 me.showToggleButtons(conf.grid !== false, this.state.view);
                 // Always show legend on map when embedded
                 me.showLegendOnMap(true);
+                me.showDiagramOnMap();
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
             }
@@ -367,7 +370,28 @@ Oskari.clazz.define(
             }
             return;
         },
-
+        /**
+         * @method  @public showDiagramOnMap Render published  diagram
+         * This method is also used to setup functionalities for publisher preview
+         */
+        showDiagramOnMap: function (enabled) {
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            if(!enabled) {
+                if(this.diagramPlugin) {
+                    mapModule.unregisterPlugin(me.diagramPlugin);
+                    mapModule.stopPlugin(me.diagramPlugin);
+                }
+                return;
+            }
+            if(!this.diagramPlugin) {
+                this.diagramPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.DiagramPlugin', this.getSandbox(), this.getLocalization().published);
+            }
+            mapModule.registerPlugin(me.diagramPlugin);
+            mapModule.startPlugin(me.diagramPlugin);
+            me.diagramPlugin.showPublisherDiagram();
+        },
         /**
          * @method  @public enableClassification change published map classification visibility.
          * @param  {Boolean} enabled allow user to change classification or not

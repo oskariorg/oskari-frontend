@@ -445,6 +445,16 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   overflow-x: hidden;
   overflow-y: auto; }
 
+  /** Diagram styles **/
+  div.mapplugins .statsgrid-diagram-plugin {
+    background-color: #3c3c3c;
+    float: left;
+    height: 36px;
+    width: 36px;
+    background-image: url("../images/map_dark.png");
+    cursor: pointer;
+  }
+
 /* ********************************************
  * Statsgrid tile styles
  * ********************************************/
