@@ -380,7 +380,6 @@ Oskari.clazz.define(
             }
 
             if (fragments.length) {
-                contentData.actions = {};
                 contentData.html = this._renderFragments(fragments);
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
