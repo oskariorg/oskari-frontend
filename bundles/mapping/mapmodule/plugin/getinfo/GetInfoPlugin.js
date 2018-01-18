@@ -51,8 +51,7 @@ Oskari.clazz.define(
          *
          */
         _initImpl: function () {
-            var me = this;
-            me.getSandbox().printDebug('[GetInfoPlugin] init');
+            Oskari.log('GetInfoPlugin').debug('init');
         },
 
         _destroyControlElement: function () {
@@ -76,14 +75,7 @@ Oskari.clazz.define(
                     }
 
                     // remove old popup
-                    var reqBuilder = this.getSandbox().getRequestBuilder(
-                            'InfoBox.HideInfoBoxRequest'
-                        ),
-                        request;
-                    if(reqBuilder) {
-                        request = reqBuilder(this.infoboxId);
-                        this.getSandbox().request(this, request);
-                    }
+                    this._closeGfiInfo();
 
                     this.clickLocation = {
                         lonlat: evt.getLonLat()
@@ -110,17 +102,17 @@ Oskari.clazz.define(
                 'Realtime.RefreshLayerEvent': function (evt) {
                     this._refreshGfiInfo('update', evt.getMapLayer().getId());
                 },
-                'Publisher2.ColourSchemeChangedEvent': function(evt){
+                'Publisher2.ColourSchemeChangedEvent': function (evt) {
                     this._handleColourSchemeChangedEvent(evt);
                 },
-                'Publisher.ColourSchemeChangedEvent': function(evt){
+                'Publisher.ColourSchemeChangedEvent': function (evt) {
                     this._handleColourSchemeChangedEvent(evt);
                 }
             };
         },
 
-        _handleColourSchemeChangedEvent: function(evt){
-            if(this._config) {
+        _handleColourSchemeChangedEvent: function (evt) {
+            if (this._config) {
                 this._config.colourScheme = evt.getColourScheme();
             } else {
                 this._config = {
@@ -166,9 +158,7 @@ Oskari.clazz.define(
             if (!jqhr) {
                 return;
             }
-            this.getSandbox().printDebug(
-                '[GetInfoPlugin] Abort jqhr ajax request'
-            );
+            Oskari.log('GetInfoPlugin').debug('Abort jqhr ajax request');
             jqhr.abort();
             jqhr = null;
             me._pendingAjaxQuery.busy = false;
@@ -184,9 +174,9 @@ Oskari.clazz.define(
          * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
          */
         _buildLayerIdList: function (layers) {
-            var me = this,
-                selected = layers || me.getSandbox().findAllSelectedMapLayers(),
-                layerIds = _.chain(selected)
+            var me = this;
+            var selected = layers || me.getSandbox().findAllSelectedMapLayers();
+            var layerIds = _.chain(selected)
                 .filter(function (layer) {
                     return me._isQualified(layer);
                 })
@@ -230,7 +220,6 @@ Oskari.clazz.define(
         _startAjaxRequest: function (dteMs) {
             this._pendingAjaxQuery.busy = true;
             this._pendingAjaxQuery.timestamp = dteMs;
-
         },
 
         /**
@@ -242,9 +231,7 @@ Oskari.clazz.define(
         _finishAjaxRequest: function () {
             this._pendingAjaxQuery.busy = false;
             this._pendingAjaxQuery.jqhr = null;
-            this.getSandbox().printDebug(
-                '[GetInfoPlugin] finished jqhr ajax request'
-            );
+            Oskari.log('GetInfoPlugin').debug('Finished jqhr ajax request');
         },
 
         /**
@@ -253,9 +240,7 @@ Oskari.clazz.define(
          * Prints debug about ajax call failure.
          */
         _notifyAjaxFailure: function () {
-            this.getSandbox().printDebug(
-                '[GetInfoPlugin] GetFeatureInfo AJAX failed'
-            );
+            Oskari.log('GetInfoPlugin').debug('GetFeatureInfo AJAX failed');
         },
 
         /**
@@ -294,9 +279,8 @@ Oskari.clazz.define(
             if (me._pendingAjaxQuery.busy &&
                 me._pendingAjaxQuery.timestamp &&
                 dteMs - me._pendingAjaxQuery.timestamp < 500) {
-                me.getSandbox().printDebug(
-                    '[GetInfoPlugin] GetFeatureInfo NOT SENT ' +
-                    '(time difference < 500ms)'
+                Oskari.log('GetInfoPlugin').debug(
+                    'GetFeatureInfo NOT SENT (time difference < 500ms)'
                 );
                 return;
             }
@@ -353,7 +337,7 @@ Oskari.clazz.define(
             });
         },
 
-        addInfoResultHandler: function(callback){
+        addInfoResultHandler: function (callback) {
             var me = this;
             me._showGfiInfo = callback;
         },
@@ -406,14 +390,9 @@ Oskari.clazz.define(
          * @private
          */
         _closeGfiInfo: function () {
-            var reqBuilder = this.getSandbox().getRequestBuilder(
-                    'InfoBox.HideInfoBoxRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(this.infoboxId);
-                this.getSandbox().request(this, request);
+            if (this.getSandbox().hasHandler('InfoBox.HideInfoBoxRequest')) {
+                var reqBuilder = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest');
+                this.getSandbox().request(this, reqBuilder(this.infoboxId));
             }
         },
 
@@ -428,10 +407,7 @@ Oskari.clazz.define(
          * @param {params} params for request
          */
         _showGfiInfo: function (content, data, formatters, params) {
-            var reqBuilder = this.getSandbox().getRequestBuilder(
-            'InfoBox.ShowInfoBoxRequest'
-            ),
-            request;
+            var reqBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest');
             var options = {
                 hidePrevious: params.hidePrevious === undefined ? true : params.hidePrevious,
                 colourScheme: params.colourScheme,
@@ -439,7 +415,7 @@ Oskari.clazz.define(
             };
 
             if (reqBuilder) {
-                request = reqBuilder(
+                var request = reqBuilder(
                     params.infoboxId,
                     params.title,
                     content,
@@ -506,7 +482,7 @@ Oskari.clazz.define(
                     // Otherwise, we need to actually send `MapClickedEvent`
                     // and not just call `handleGetInfo` since then
                     // we'd only get the WMS feature info.
-                    clickEventB = sandbox.getEventBuilder('MapClickedEvent');
+                    clickEventB = Oskari.eventBuilder('MapClickedEvent');
                     clickEvent = clickEventB(clickLoc.lonlat);
                     // Timeout needed since the layer plugins haven't
                     // necessarily done their job of adding the layer yet.
