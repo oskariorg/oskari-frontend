@@ -205,34 +205,6 @@ Oskari.clazz.define(
             var containerEl = me.tabsContainer.getElement();
             containerEl.parents('.oskari-flyoutcontentcontainer').css('overflow', 'hidden');
         },
-
-        /**
-         * @method layerAdded
-         * @param {Oskari.mapframework.domain.WfsLayer} layer
-         *           WFS layer that was added
-         * Adds a tab for the layer
-         */
-        layerAdded: function (layer) {
-            var me = this,
-                panel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.TabPanel'
-                );
-
-            panel.setTitle(layer.getName());
-            panel.setTooltip(layer.getName());
-            panel.getContainer().append(
-                this.instance.getLocalization('loading')
-            );
-            panel.layer = layer;
-            this.layers['' + layer.getId()] = panel;
-            this.tabsContainer.addPanel(panel);
-            if (!layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
-                panel.setTitleIcon('icon-funnel', function (event) {
-                me.addFilterFunctionality(event, layer);
-                });
-            }
-        },
-
         turnOnClickOff: function () {
             var me = this;
             me.filterDialog.popup.dialog.off('click', '.add-link');
@@ -292,7 +264,32 @@ Oskari.clazz.define(
             }
             return true;
         },
+        /**
+         * @method layerAdded
+         * @param {Oskari.mapframework.domain.WfsLayer} layer
+         *           WFS layer that was added
+         * Adds a tab for the layer
+         */
+        layerAdded: function (layer) {
+            var me = this,
+                panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.TabPanel'
+                );
 
+            panel.setTitle(layer.getName());
+            panel.setTooltip(layer.getName());
+            panel.getContainer().append(
+                this.instance.getLocalization('loading')
+            );
+            panel.layer = layer;
+            this.layers['' + layer.getId()] = panel;
+            this.tabsContainer.addPanel(panel);
+            if (!layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
+                panel.setTitleIcon('icon-funnel', function (event) {
+                me.addFilterFunctionality(event, layer);
+                });
+            }
+        },
         /**
          * @method layerRemoved
          * @param {Oskari.mapframework.domain.WfsLayer} layer
@@ -302,7 +299,6 @@ Oskari.clazz.define(
         layerRemoved: function (layer) {
             var layerId = '' + layer.getId(),
                 panel = this.layers[layerId];
-
             this.tabsContainer.removePanel(panel);
             // clean up
             if (panel) {
@@ -313,6 +309,7 @@ Oskari.clazz.define(
                 this.layers[layerId] = null;
                 delete this.layers[layerId];
             }
+            this.updateGrid();
         },
         /**
          * @method  @public selectGridValues select grid values
@@ -358,7 +355,7 @@ Oskari.clazz.define(
                 container.append(this.instance.getLocalization('errorNoFields'));
                 return;
             }
-            if(layer.getActiveFeatures().length === 0) {
+            if(layer.getActiveFeatures().length === 0 ) {
                 container.parent().children('.tab-tools').remove();
                 container.removeAttr('style');
                 container.append(this.instance.getLocalization('layer')['out-of-content-area']);
@@ -366,7 +363,7 @@ Oskari.clazz.define(
             }
             container.append(this.instance.getLocalization('loading'));
 
-            if (this.instance.__loadingStatus[layer.getId()] === 'loading' || this.instance.__loadingStatus[layer.getId()] === 'error') {
+            if (this.instance.__loadingStatus[layer.getId()] === 'error') {
                 return;
             }
 
@@ -634,7 +631,6 @@ Oskari.clazz.define(
 
                     panel.grid.setColumnSelector(true);
                     panel.grid.setResizableColumns(true);
-
                     if (conf && !conf.disableExport) {
                         panel.grid.setExcelExporter(
                             layer.getPermission('download') === 'download_permission_ok'
