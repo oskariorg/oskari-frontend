@@ -199,6 +199,79 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
           }
         },
 
+        getMeasurementResult: function(geometry){
+            var olGeom = this.getOLGeometryFromGeoJSON(geometry),
+                sum = 0;
+            if (olGeom.getType() === "LineString"){
+                return olGeom.getLength();
+            }else if (olGeom.getType() === "MultiLineString"){
+                var lineStrings = olGeom.getLineStrings();
+                for (var i = 0; i < lineStrings.length; i++){
+                    sum += lineStrings[i].getLength();
+                }
+                return sum;
+            }else if (olGeom.getType() === "Polygon" || olGeom.getType() === "MultiPolygon"){
+                return olGeom.getArea();
+            }
+        },
+
+        /**
+         * Formats the measurement to ui.
+         * Returns a string with the measurement and
+         * an appropriate unit (m/km or m²/ha/km²)
+         * or an empty string for point.
+         *
+         * @public @method formatMeasurementResult
+         *
+         * @param  {number} measurement
+         * @param  {String} drawMode
+         * @return {String}
+         *
+         */
+        //TODO: move to util
+        formatMeasurementResult: function(measurement, drawMode) {
+            var result,
+                unit,
+                decimals;
+            if (typeof measurement !== 'number'){
+                return;
+            }
+
+            if (drawMode === 'area') {
+                // 1 000 000 m² === 1 km²
+                if (measurement >= 1000000) {
+                    result = measurement / 1000000; //(Math.round(measurement) / 1000000);
+                    decimals = 3;
+                    unit = ' km²';
+                } else if (measurement < 10000){
+                    result = measurement;//(Math.round(100 * measurement) / 100);
+                    decimals = 0;
+                    unit = ' m²';
+                } else {
+                    result = measurement/10000; //(Math.round(100 * measurement) / 100);
+                    decimals = 2;
+                    unit = ' ha';
+                }
+            } else if (drawMode === 'line') {
+                // 1 000 m === 1 km
+                if (measurement >= 1000) {
+                    result =  measurement/ 1000; //(Math.round(measurement) / 1000);
+                    decimals = 3;
+                    unit = ' km';
+                } else {
+                    result = measurement; //(Math.round(100 * measurement) / 100);
+                    decimals = 1;
+                    unit = ' m';
+                }
+            } else {
+                return '';
+            }
+            return result.toFixed(decimals).replace(
+                '.',
+                Oskari.getDecimalSeparator()
+            ) + unit;
+        },
+
 /*<------------- / OL3 specific ----------------------------------- */
 
 
@@ -456,6 +529,29 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             return mapScale;
 
+        },
+        //TODO: check LayersPlugin.ol3 getGeometryCenter
+        getCentroidFromGeoJSON: function(geojson){
+            var olGeom = this.getOLGeometryFromGeoJSON(geojson);
+            var olBounds = olGeom.getExtent();
+            var x = olBounds[0] + (olBounds[2]-olBounds[0])/2;
+            var y = olBounds[1] + (olBounds[3]-olBounds[1])/2;
+            return {lon: x, lat: y};
+        },
+        getClosestPointFromGeoJSON(geojson){
+            // TODO?? getInteriorPoint() for polygon --> placeform, attention text,..
+            var olGeom = this.getOLGeometryFromGeoJSON(geojson);
+            var olBounds = olGeom.getExtent();
+            var x = olBounds[0] + (olBounds[2]-olBounds[0])/2;
+            var y = olBounds[1] + (olBounds[3]-olBounds[1])/2;
+            var coord = olGeom.getClosestPoint([x,y]);
+            return {lon: coord[0], lat: coord[1]};
+        },
+        //TODO: check LayersPlugin.ol3 getGeometryBounds
+        getBoundsFromGeoJSON: function(geojson){
+            var olGeom = this.getOLGeometryFromGeoJSON(geojson);
+            var extent = olGeom.getExtent();
+            return {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
         },
 /* --------- /Impl specific --------------------------------------> */
 
@@ -835,6 +931,41 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 urls.push(source.getImageUrl());
             }
             return urls;
+        },
+        getGeoJSONGeometryFromOL: function(feature) {
+            var olGeoJSON = new ol.format.GeoJSON(),
+                geojsonStr = olGeoJSON.writeFeature(feature),
+                geojson = JSON.parse(geojsonStr);
+            if (geojson.geometry){
+                return geojson.geometry;
+            } else {
+                return null;
+            }
+        },
+
+        getOLGeometryFromGeoJSON: function(geojson) {
+            var olGeoJSON = new ol.format.GeoJSON(),
+                olGeom,
+                olMultiGeom,
+                features,
+                olFeature;
+            //DrawTools (allowMultipleDrawing: multiGeom) returns FeatureCollection where features[0] is multigeom
+            //TODO: fix to handle common FeatureCollection
+            //TODO: FeatureCollection -> readFeatures() -> getGeometry()
+            if (geojson.type === "FeatureCollection"){
+                features = geojson.features;
+                olGeom = olGeoJSON.readGeometry(JSON.stringify(features[0].geometry));
+
+            } else if (geojson.geometry && geojson.type === "Feature"){
+                olGeom = olGeoJSON.readGeometry(JSON.stringify(geojson.geometry));
+            } else if (geojson.type && geojson.coordinates){ // geometry object
+                olGeom = olGeoJSON.readGeometry(JSON.stringify(geojson));
+            }
+            if (olGeom){
+                return olGeom;
+            } else {
+                return null;
+            }
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
