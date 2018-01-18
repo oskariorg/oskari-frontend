@@ -12,25 +12,27 @@ Oskari.clazz
 
         function () {
             this.compiledTemplates = {};
-            this.compileTemplates();
             this.ui = null;
             this.container = null;
+            this.supportedTypes = [
+                "default",
+                "success",
+                "warning",
+                "important",
+                "info",
+                "inverse",
+                "oskari",
+                "oskari-inverse"
+            ];
         }, {
             templates: {
-                "default": '<span class="oskari-badge"></span>',
-                "success": '<span class="oskari-badge oskari-badge-success"></span>',
-                "warning": '<span class="oskari-badge oskari-badge-warning"></span>',
-                "important": '<span class="oskari-badge oskari-badge-important"></span>',
-                "info": '<span class="oskari-badge oskari-badge-info"></span>',
-                "inverse": '<span class="oskari-badge oskari-badge-inverse"></span>'
+                "wrapper": jQuery('<div class="badge-wrapper"></div>')
             },
-            compileTemplates: function () {
-                var p;
-                for (p in this.templates) {
-                    if (this.templates.hasOwnProperty(p)) {
-                        this.compiledTemplates[p] = jQuery(this.templates[p]);
-                    }
+            getTemplate: function(type) {
+                if(this.supportedTypes.indexOf(type) === -1) {
+                    type = this.supportedTypes[0];
                 }
+                return jQuery('<span class="oskari-badge oskari-badge-' + type + '"></span>');
             },
             insertTo: function (container) {
                 this.container = container;
@@ -41,10 +43,21 @@ Oskari.clazz
                     this.ui = null;
                 }
 
-                var txtspan = this.compiledTemplates[status || 'default'].clone();
-                txtspan.append(pContent);
-                this.container.append(txtspan);
+                var txtspan = this.getTemplate(status);
+                var wrapper = this.templates.wrapper.clone();
+                txtspan.html(pContent);
+                wrapper.append(txtspan);
+                this.container.append(wrapper);
                 this.ui = txtspan;
+            },
+            updateContent: function (content) {
+                if( !this.ui ) {
+                    return;
+                }
+                this.ui.html(content);
+            },
+            getElement: function () {
+                return this.ui;
             },
             hide: function () {
                 if (this.ui) {

@@ -125,6 +125,8 @@ Oskari.clazz.define(
             // TODO : start draw control
             // use default style if options don't include custom style
             var me = this;
+
+            me.drawMultiGeom = options.allowMultipleDrawing === 'multiGeom';
             //disable gfi
             me.getMapModule().setDrawingMode(true);
             // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
@@ -665,10 +667,6 @@ Oskari.clazz.define(
             var optionsForDrawingEvent = {
                 isFinished: false
             };
-
-            if (options.allowMultipleDrawing === 'multiGeom') {
-                me.drawMultiGeom = true;
-            }
 
             function makeClosedPolygonCoords(coords) {
                 return coords.map(function(ring) {
