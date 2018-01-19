@@ -50,7 +50,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
                 tooltip: '',
                 sticky: true,
                 callback: function () {
-                    me.ignoreEvents = true;
                     me.sendDrawRequest({
                         drawMode: 'area',
                         shape: 'Polygon',
