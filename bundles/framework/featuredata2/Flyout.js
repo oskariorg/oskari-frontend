@@ -177,11 +177,11 @@ Oskari.clazz.define(
                     if (previousPanel) {
                         request = reqBuilder(previousPanel.layer.getId(), false);
                         sandbox.request(me.instance.getName(), request);
+                        previousPanel.getContainer().hide();
                     }
                     me.selectedTab = selectedPanel;
                     if (selectedPanel) {
-                        me.updateData(selectedPanel.layer);
-
+                        selectedPanel.getContainer().show();
                         // sendout highlight request for selected tab
                         if (me.active) {
                             var selection = [];
@@ -196,6 +196,7 @@ Oskari.clazz.define(
                             request = reqBuilder(selectedPanel.layer.getId(), true);
                             sandbox.request(me.instance.getName(), request);
                         }
+                        me.updateData(selectedPanel.layer);
                     }
                 }
             );
@@ -308,6 +309,7 @@ Oskari.clazz.define(
                 delete panel.layer;
                 this.layers[layerId] = null;
                 delete this.layers[layerId];
+                panel.getContainer().remove();
             }
             this.updateGrid();
         },
