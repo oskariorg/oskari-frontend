@@ -181,7 +181,10 @@ Oskari.clazz.define(
                     }
                     me.selectedTab = selectedPanel;
                     if (selectedPanel) {
-                        selectedPanel.getContainer().show();
+
+                        if( selectedPanel.getContainer().css('display') == 'none') {
+                            selectedPanel.getContainer().show();
+                        }
                         // sendout highlight request for selected tab
                         if (me.active) {
                             var selection = [];
@@ -361,6 +364,11 @@ Oskari.clazz.define(
                 container.parent().children('.tab-tools').remove();
                 container.removeAttr('style');
                 container.append(this.instance.getLocalization('layer')['out-of-content-area']);
+
+                if (!panel.grid) {
+                   container.parent().find('.grid-tools').remove();
+                }
+                
                 return;
             }
             container.append(this.instance.getLocalization('loading'));
