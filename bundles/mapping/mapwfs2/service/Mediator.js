@@ -614,13 +614,17 @@ Oskari.clazz.category(
          * @method addMapLayer
          * @param {Number} id
          * @param {String} style
+         * @param {boolean} isVisible default true
          *
          * sends message to /service/wfs/addMapLayer
          */
-        addMapLayer: function (id, style) {
+        addMapLayer: function (id, style, isVisible) {
+            var visible = isVisible === false ? false : true;
             this.sendMessage('/service/wfs/addMapLayer', {
                 'layerId': id,
-                'styleName': style
+                'styleName': style,
+                'visible': visible
+
             });
         },
 

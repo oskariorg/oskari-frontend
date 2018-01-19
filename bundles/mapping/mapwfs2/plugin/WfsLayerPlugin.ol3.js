@@ -641,7 +641,8 @@ Oskari.clazz.define(
 
                     me.getIO().addMapLayer(
                         layer.getId(),
-                        styleName
+                        styleName,
+                        layer.isVisible()
                     );
                     me.mapMoveHandler(); // setLocation
                 });
