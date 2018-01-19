@@ -56,6 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .range([graphHeight - graphMargin.bottom, graphMargin.top]);
 
             var area = d3.area()
+                .defined(function(d) {return d.height !== null})
                 .x(function (d) {
                     return x(d.distance);
                 })
@@ -193,7 +194,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 cursor.attr('transform', 'translate(' + x(d.distance) + ' 0)');
                 cursor.select('line').attr('y1', y(d.height));
                 focus.attr('transform', 'translate(0 ' + y(d.height) + ')');
-                var text = me.loc('legendValue', { value: d.height });
+                var text;
+                if(d.height !== null) {
+                    text = me.loc('legendValue', { value: d.height });
+                } else {
+                    text = me.loc('noValue');
+                }
                 cursor.select('text').text(text);
 
                 me.markerHandler.showAt(d.coords[0], d.coords[1], text);

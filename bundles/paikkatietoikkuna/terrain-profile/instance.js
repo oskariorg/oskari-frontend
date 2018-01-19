@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                         return;
                     }
                     var feature = { type: 'Feature', geometry: { type: 'LineString' } };
-                    feature.geometry.coordinates = sketch.geometry.coordinates.slice(sketch.geometry.coordinates.length - 1);
+                    feature.geometry.coordinates = sketch.geometry.coordinates.slice(0, sketch.geometry.coordinates.length - 1);
                     this.feature = feature;
                 }
             },
