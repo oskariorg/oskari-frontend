@@ -57,10 +57,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 }
             } else if (toolName === 'map_control_zoom_tool' && this.controlsPlugin._zoomBoxTool) {
                 this.controlsPlugin._zoomBoxTool.activate();
+                this.controlsPlugin.activeTool = 'zoombox';
             } else if (toolName === 'map_control_measure_tool' && this.controlsPlugin._measureControls) {
                 this.controlsPlugin._measureControls.line.activate();
+                this.controlsPlugin.activeTool = 'measureline';
             } else if (toolName === 'map_control_measure_area_tool' && this.controlsPlugin._measureControls) {
                 this.controlsPlugin._measureControls.area.activate();
+                this.controlsPlugin.activeTool = 'measurearea';
             }
         }
     }, {
