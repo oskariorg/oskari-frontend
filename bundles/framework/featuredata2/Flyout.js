@@ -314,7 +314,6 @@ Oskari.clazz.define(
                 delete this.layers[layerId];
                 panel.getContainer().remove();
             }
-            this.updateGrid();
         },
         /**
          * @method  @public selectGridValues select grid values
