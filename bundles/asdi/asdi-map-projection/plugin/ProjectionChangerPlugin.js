@@ -1,17 +1,16 @@
 Oskari.clazz.define( 'Oskari.mapping.projection.ProjectionChangerPlugin',
   function ( config, instance ) {
-    var me = this;
-    me._instance = instance;
-    me._config = config || {};
-    me._clazz = 'Oskari.mapping.projection.ProjectionChangerPlugin';
-    me._defaultLocation = 'top right';
-    me._index = 55;
-    me._visible = false;
-    me._templates = {
+    this._instance = instance;
+    this._config = config || {};
+    this._clazz = 'Oskari.mapping.projection.ProjectionChangerPlugin';
+    this._defaultLocation = 'top right';
+    this._index = 55;
+    this._visible = false;
+    this._templates = {
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
-    me._loc = Oskari.getLocalization('map-projection', Oskari.getLang() || Oskari.getDefaultLanguage());
-    me._mobileDefs = {
+    this._loc = Oskari.getLocalization('map-projection', Oskari.getLang() || Oskari.getDefaultLanguage());
+    this._mobileDefs = {
       buttons:  {
           'mobile-projectionchanger': {
               iconCls: 'mobile-projectionchange',
@@ -25,9 +24,9 @@ Oskari.clazz.define( 'Oskari.mapping.projection.ProjectionChangerPlugin',
       },
       buttonGroup: 'mobile-toolbar'
     };
-    me._flyout = me._instance.getFlyout();
-    me._flyout.hide();
-    me._log = Oskari.log('Oskari.mapping.projection.ProjectionChangerPlugin');
+    this._flyout = this._instance.getFlyout();
+    this._flyout.hide();
+    this._log = Oskari.log('Oskari.mapping.projection.ProjectionChangerPlugin');
   }, {
 
     _createControlElement: function () {
@@ -47,10 +46,10 @@ Oskari.clazz.define( 'Oskari.mapping.projection.ProjectionChangerPlugin',
     },
     handleEvents: function () {
         var me = this;
-        this._flyout.move(1800, 70, true);
+        this._flyout.move(1300, 120, true);
         this.getElement().on( "click", function() {
             if ( !me._visible ) {
-                me._flyout.open();
+                me._flyout.show();
                 me._visible = true;
             } else {
                 me._flyout.hide();

@@ -1,19 +1,15 @@
 /*
  * Creates a flyout with tabs for different ways of visualizing data
  */
-Oskari.clazz.define('Oskari.map.projection.view.ProjectionChange', function(title, options, instance) {
+Oskari.clazz.define('Oskari.map.projection.view.ProjectionChange', function (instance) {
+    this.instance = instance;
     this.sb = instance.getSandbox();
     this.loc = instance.getLocalization();
     this.element = null;
-    var me = this;
-    this.on('show', function() {
-        if(!me.getElement()) {
-            me.createUi();
-        }
-    });
+    this.createUi();
 }, {
     _template: {
-        container: jQuery('<div class="oskari-map-projection">asddddddd</div>')
+        container: jQuery('<div class="oskari-map-projection"></div>')
     },
     setElement: function(el) {
         this.element = el;
@@ -22,12 +18,21 @@ Oskari.clazz.define('Oskari.map.projection.view.ProjectionChange', function(titl
         return this.element;
     },
     createUi: function() {
+        var me = this;
         if (this.getElement()) {
             return;
         }
         var el = this._template.container.clone();
+        var views = this.instance.getViews();
+        views.forEach( function (view) {
+            el.append( me.createCard( view ) );
+        });
 
         this.setElement(el);
+    },
+    createCard: function (view) {
+        var card = Oskari.clazz.create('Oskari.map.projection.component.card', view.imgCls, view.name);
+        return card.getElement();
     }
 }, {
 });

@@ -16,21 +16,24 @@ Oskari.clazz.define("Oskari.map.projection", function() {
     "source" : {
         "scripts" : [
             {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/asdi/asdi-map-projection/instance.js"
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/asdi/asdi-map-projection/instance.js"
             }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/asdi/asdi-map-projection/Flyout.js"  
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/asdi/asdi-map-projection/Flyout.js"  
             }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/asdi/asdi-map-projection/view/ProjectionChange.js"
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/asdi/asdi-map-projection/view/ProjectionChange.js"
             }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/asdi/asdi-map-projection/plugin/ProjectionChangerPlugin.js"
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/asdi/asdi-map-projection/plugin/ProjectionChangerPlugin.js"
+            }, {
+                "type": "text/javascript",
+                "src" : "../../../../bundles/asdi/asdi-map-projection/component/card.js"
             }, {
                 "type": "text/css",
                 "src" : "../../../../bundles/asdi/asdi-map-projection/resources/css/style.css"
-            },
+            }
         ],
         "locales" : [
             {
