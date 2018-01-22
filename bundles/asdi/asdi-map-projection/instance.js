@@ -32,6 +32,7 @@ function() {
         this.createPlugins();
         this.createUi();
         sandbox.register(this);
+
     },
     getPlugins: function () {
         return this.plugins;
@@ -60,6 +61,20 @@ function() {
     },
     createUi: function () {
         this.plugin.createUi();
+    },
+    
+    eventHandlers: {
+        'userinterface.ExtensionUpdatedEvent': function (event) {
+            if( event.getExtension().getName !== me.getName() ) {
+                return;
+            }
+            var wasClosed = event.getViewState() === 'close';
+            if ( wasClosed ) {
+                debugger;
+            } else {
+                debugger;
+            }
+        }
     },
     hardcodedViews: function () {
         var views = [
@@ -91,6 +106,5 @@ function() {
         return views;
     }
 }, {
-        extend : ["Oskari.userinterface.extension.DefaultExtension"],
-        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+        extend : ["Oskari.userinterface.extension.DefaultExtension"]
 });
