@@ -30,9 +30,20 @@ Oskari.clazz.define('Oskari.map.projection.view.ProjectionChange', function (ins
 
         this.setElement(el);
     },
+    /**
+      * @method createCard
+      * @param { Object } view
+      */
     createCard: function (view) {
-        var card = Oskari.clazz.create('Oskari.map.projection.component.card', view.imgCls, view.name);
+        var card = Oskari.clazz.create('Oskari.map.projection.component.card', view, this.changeProjection.bind(this) );
         return card.getElement();
+    },
+    /**
+      * @method changeProjection
+      * @description reloads the page with a new uuid
+      */
+    changeProjection: function ( newProjection ) {
+        console.log("change projection to: " + newProjection + " needs implementing");
     }
 }, {
 });
