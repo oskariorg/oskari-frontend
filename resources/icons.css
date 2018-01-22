@@ -1534,7 +1534,7 @@
     background-position: -4792px 0px !important;
 }
 
-.tool-zoombox-dark {
+.tool-terrainprofile-dark {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1542,7 +1542,7 @@
     background-position: -4824px 0px !important;
 }
 
-.tool-zoombox-light {
+.tool-terrainprofile-light {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1550,12 +1550,28 @@
     background-position: -4856px 0px !important;
 }
 
+.tool-zoombox-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4888px 0px !important;
+}
+
+.tool-zoombox-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4920px 0px !important;
+}
+
 .upload-material-dark {
     width: 28px;
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4888px 0px !important;
+    background-position: -4952px 0px !important;
 }
 
 .upload-material-light {
@@ -1563,6 +1579,6 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4916px 0px !important;
+    background-position: -4980px 0px !important;
 }
 

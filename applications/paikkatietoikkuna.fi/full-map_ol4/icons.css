@@ -846,12 +846,28 @@
     background-position: -2301px 0px !important;
 }
 
+.mobile-maplegend-dark {
+    width: 33px;
+    height: 33px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2333px 0px !important;
+}
+
+.mobile-maplegend-light {
+    width: 33px;
+    height: 33px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2366px 0px !important;
+}
+
 .mobile-measure-area-dark {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2333px 0px !important;
+    background-position: -2399px 0px !important;
 }
 
 .mobile-measure-area-light {
@@ -859,7 +875,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2365px 0px !important;
+    background-position: -2431px 0px !important;
 }
 
 .mobile-measure-line-dark {
@@ -867,7 +883,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2397px 0px !important;
+    background-position: -2463px 0px !important;
 }
 
 .mobile-measure-line-light {
@@ -875,7 +891,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2429px 0px !important;
+    background-position: -2495px 0px !important;
 }
 
 .mobile-menu-dark {
@@ -883,7 +899,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2461px 0px !important;
+    background-position: -2527px 0px !important;
 }
 
 .mobile-menu-light {
@@ -891,7 +907,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2493px 0px !important;
+    background-position: -2559px 0px !important;
 }
 
 .mobile-my-location-dark {
@@ -899,7 +915,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2525px 0px !important;
+    background-position: -2591px 0px !important;
 }
 
 .mobile-my-location-light {
@@ -907,7 +923,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2557px 0px !important;
+    background-position: -2623px 0px !important;
 }
 
 .mobile-next-dark {
@@ -915,7 +931,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2589px 0px !important;
+    background-position: -2655px 0px !important;
 }
 
 .mobile-next-light {
@@ -923,7 +939,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2621px 0px !important;
+    background-position: -2687px 0px !important;
 }
 
 .mobile-north-dark {
@@ -931,7 +947,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2653px 0px !important;
+    background-position: -2719px 0px !important;
 }
 
 .mobile-north-light {
@@ -939,7 +955,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2685px 0px !important;
+    background-position: -2751px 0px !important;
 }
 
 .mobile-previous-dark {
@@ -947,7 +963,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2717px 0px !important;
+    background-position: -2783px 0px !important;
 }
 
 .mobile-previous-light {
@@ -955,7 +971,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2749px 0px !important;
+    background-position: -2815px 0px !important;
 }
 
 .mobile-refresh-dark {
@@ -963,7 +979,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2781px 0px !important;
+    background-position: -2847px 0px !important;
 }
 
 .mobile-refresh-light {
@@ -971,7 +987,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2813px 0px !important;
+    background-position: -2879px 0px !important;
 }
 
 .mobile-reset-map-state-dark {
@@ -979,7 +995,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2845px 0px !important;
+    background-position: -2911px 0px !important;
 }
 
 .mobile-reset-map-state-light {
@@ -987,7 +1003,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2877px 0px !important;
+    background-position: -2943px 0px !important;
 }
 
 .mobile-search-dark {
@@ -995,7 +1011,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2909px 0px !important;
+    background-position: -2975px 0px !important;
 }
 
 .mobile-search-light {
@@ -1003,7 +1019,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2941px 0px !important;
+    background-position: -3007px 0px !important;
 }
 
 .mobile-selection-dark {
@@ -1011,7 +1027,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2973px 0px !important;
+    background-position: -3039px 0px !important;
 }
 
 .mobile-selection-light {
@@ -1019,7 +1035,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3005px 0px !important;
+    background-position: -3071px 0px !important;
 }
 
 .mobile-statslegend-dark {
@@ -1027,7 +1043,7 @@
     height: 33px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3037px 0px !important;
+    background-position: -3103px 0px !important;
 }
 
 .mobile-statslegend-light {
@@ -1035,7 +1051,23 @@
     height: 33px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3069px 0px !important;
+    background-position: -3135px 0px !important;
+}
+
+.mobile-timeseries-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3167px 0px !important;
+}
+
+.mobile-timeseries-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3199px 0px !important;
 }
 
 .mobile-xy-dark {
@@ -1043,7 +1075,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3101px 0px !important;
+    background-position: -3231px 0px !important;
 }
 
 .mobile-xy-light {
@@ -1051,7 +1083,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3133px 0px !important;
+    background-position: -3263px 0px !important;
 }
 
 .mobile-zoom-in-dark {
@@ -1059,7 +1091,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3165px 0px !important;
+    background-position: -3295px 0px !important;
 }
 
 .mobile-zoom-in-light {
@@ -1067,7 +1099,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3197px 0px !important;
+    background-position: -3327px 0px !important;
 }
 
 .mobile-zoom-out-dark {
@@ -1075,7 +1107,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3229px 0px !important;
+    background-position: -3359px 0px !important;
 }
 
 .mobile-zoom-out-light {
@@ -1083,7 +1115,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3261px 0px !important;
+    background-position: -3391px 0px !important;
 }
 
 .mylocation-3d-dark {
@@ -1091,7 +1123,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3293px 0px !important;
+    background-position: -3423px 0px !important;
 }
 
 .mylocation-3d-light {
@@ -1099,7 +1131,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3328px 0px !important;
+    background-position: -3458px 0px !important;
 }
 
 .mylocation-rounded-dark {
@@ -1107,7 +1139,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3363px 0px !important;
+    background-position: -3493px 0px !important;
 }
 
 .mylocation-rounded-light {
@@ -1115,7 +1147,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3398px 0px !important;
+    background-position: -3528px 0px !important;
 }
 
 .mylocation-sharp-dark {
@@ -1123,7 +1155,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3433px 0px !important;
+    background-position: -3563px 0px !important;
 }
 
 .mylocation-sharp-light {
@@ -1131,7 +1163,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3468px 0px !important;
+    background-position: -3598px 0px !important;
 }
 
 .myplaces-area {
@@ -1139,7 +1171,7 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3503px 0px !important;
+    background-position: -3633px 0px !important;
 }
 
 .myplaces-draw-area-dark {
@@ -1147,7 +1179,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3531px 0px !important;
+    background-position: -3661px 0px !important;
 }
 
 .myplaces-draw-area-light {
@@ -1155,7 +1187,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3563px 0px !important;
+    background-position: -3693px 0px !important;
 }
 
 .myplaces-draw-line-dark {
@@ -1163,7 +1195,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3595px 0px !important;
+    background-position: -3725px 0px !important;
 }
 
 .myplaces-draw-line-light {
@@ -1171,7 +1203,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3627px 0px !important;
+    background-position: -3757px 0px !important;
 }
 
 .myplaces-draw-point-dark {
@@ -1179,7 +1211,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3659px 0px !important;
+    background-position: -3789px 0px !important;
 }
 
 .myplaces-draw-point-light {
@@ -1187,7 +1219,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3691px 0px !important;
+    background-position: -3821px 0px !important;
 }
 
 .myplaces-line {
@@ -1195,7 +1227,7 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3723px 0px !important;
+    background-position: -3853px 0px !important;
 }
 
 .myplaces-point {
@@ -1203,7 +1235,7 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3751px 0px !important;
+    background-position: -3881px 0px !important;
 }
 
 .refresh {
@@ -1211,7 +1243,7 @@
     height: 16px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3779px 0px !important;
+    background-position: -3909px 0px !important;
 }
 
 .refresh:hover {
@@ -1219,7 +1251,7 @@
     height: 16px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3779px -16px !important;
+    background-position: -3909px -16px !important;
 }
 
 .selection-area {
@@ -1227,7 +1259,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3795px 0px !important;
+    background-position: -3925px 0px !important;
 }
 
 .selection-area:hover {
@@ -1235,7 +1267,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3795px -32px !important;
+    background-position: -3925px -32px !important;
 }
 
 .selection-circle {
@@ -1243,7 +1275,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3827px 0px !important;
+    background-position: -3957px 0px !important;
 }
 
 .selection-circle:hover {
@@ -1251,7 +1283,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3827px -32px !important;
+    background-position: -3957px -32px !important;
 }
 
 .selection-edit {
@@ -1259,7 +1291,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3859px 0px !important;
+    background-position: -3989px 0px !important;
 }
 
 .selection-edit:hover {
@@ -1267,7 +1299,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3859px -32px !important;
+    background-position: -3989px -32px !important;
 }
 
 .selection-line {
@@ -1275,7 +1307,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3891px 0px !important;
+    background-position: -4021px 0px !important;
 }
 
 .selection-line:hover {
@@ -1283,7 +1315,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3891px -32px !important;
+    background-position: -4021px -32px !important;
 }
 
 .selection-point {
@@ -1291,7 +1323,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3923px 0px !important;
+    background-position: -4053px 0px !important;
 }
 
 .selection-point:hover {
@@ -1299,7 +1331,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3923px -32px !important;
+    background-position: -4053px -32px !important;
 }
 
 .selection-remove {
@@ -1307,7 +1339,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3955px 0px !important;
+    background-position: -4085px 0px !important;
 }
 
 .selection-remove:hover {
@@ -1315,7 +1347,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3955px -32px !important;
+    background-position: -4085px -32px !important;
 }
 
 .selection-square {
@@ -1323,7 +1355,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3987px 0px !important;
+    background-position: -4117px 0px !important;
 }
 
 .selection-square:hover {
@@ -1331,7 +1363,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3987px -32px !important;
+    background-position: -4117px -32px !important;
 }
 
 .tool-draw-cut {
@@ -1339,7 +1371,7 @@
     height: 36px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4019px 0px !important;
+    background-position: -4149px 0px !important;
 }
 
 .tool-feature-selection-dark {
@@ -1347,7 +1379,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4054px 0px !important;
+    background-position: -4184px 0px !important;
 }
 
 .tool-feature-selection-light {
@@ -1355,7 +1387,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4086px 0px !important;
+    background-position: -4216px 0px !important;
 }
 
 .tool-history-back-dark {
@@ -1363,7 +1395,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4118px 0px !important;
+    background-position: -4248px 0px !important;
 }
 
 .tool-history-back-light {
@@ -1371,7 +1403,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4150px 0px !important;
+    background-position: -4280px 0px !important;
 }
 
 .tool-history-forward-dark {
@@ -1379,7 +1411,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4182px 0px !important;
+    background-position: -4312px 0px !important;
 }
 
 .tool-history-forward-light {
@@ -1387,7 +1419,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4214px 0px !important;
+    background-position: -4344px 0px !important;
 }
 
 .tool-link-dark {
@@ -1395,7 +1427,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4246px 0px !important;
+    background-position: -4376px 0px !important;
 }
 
 .tool-link-light {
@@ -1403,7 +1435,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4278px 0px !important;
+    background-position: -4408px 0px !important;
 }
 
 .tool-measure-area-dark {
@@ -1411,7 +1443,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4310px 0px !important;
+    background-position: -4440px 0px !important;
 }
 
 .tool-measure-area-light {
@@ -1419,7 +1451,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4342px 0px !important;
+    background-position: -4472px 0px !important;
 }
 
 .tool-measure-line-dark {
@@ -1427,7 +1459,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4374px 0px !important;
+    background-position: -4504px 0px !important;
 }
 
 .tool-measure-line-light {
@@ -1435,7 +1467,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4406px 0px !important;
+    background-position: -4536px 0px !important;
 }
 
 .tool-pan-dark {
@@ -1443,7 +1475,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4438px 0px !important;
+    background-position: -4568px 0px !important;
 }
 
 .tool-pan-light {
@@ -1451,7 +1483,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4470px 0px !important;
+    background-position: -4600px 0px !important;
 }
 
 .tool-print-dark {
@@ -1459,7 +1491,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4502px 0px !important;
+    background-position: -4632px 0px !important;
 }
 
 .tool-print-light {
@@ -1467,7 +1499,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4534px 0px !important;
+    background-position: -4664px 0px !important;
 }
 
 .tool-reset-dark {
@@ -1475,7 +1507,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4566px 0px !important;
+    background-position: -4696px 0px !important;
 }
 
 .tool-reset-light {
@@ -1483,7 +1515,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4598px 0px !important;
+    background-position: -4728px 0px !important;
 }
 
 .tool-save-view-dark {
@@ -1491,7 +1523,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4630px 0px !important;
+    background-position: -4760px 0px !important;
 }
 
 .tool-save-view-light {
@@ -1499,7 +1531,23 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4662px 0px !important;
+    background-position: -4792px 0px !important;
+}
+
+.tool-terrainprofile-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4824px 0px !important;
+}
+
+.tool-terrainprofile-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4856px 0px !important;
 }
 
 .tool-zoombox-dark {
@@ -1507,7 +1555,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4694px 0px !important;
+    background-position: -4888px 0px !important;
 }
 
 .tool-zoombox-light {
@@ -1515,7 +1563,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4726px 0px !important;
+    background-position: -4920px 0px !important;
 }
 
 .upload-material-dark {
@@ -1523,7 +1571,7 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4758px 0px !important;
+    background-position: -4952px 0px !important;
 }
 
 .upload-material-light {
@@ -1531,6 +1579,6 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4786px 0px !important;
+    background-position: -4980px 0px !important;
 }
 
