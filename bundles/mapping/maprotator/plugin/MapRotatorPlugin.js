@@ -86,7 +86,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
     },
     _createUI: function() {
       this._element = this._createControlElement();
-      this.handleEvents();
+      if ( this.isSupported() ) {
+          this.handleEvents();
+      }
       this.addToPluginContainer(this._element);
     },
     _createMobileUI: function () {
