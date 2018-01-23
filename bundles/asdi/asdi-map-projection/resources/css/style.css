@@ -8,26 +8,55 @@
 .oskari-map-projection {
     width: 600px;
     display: grid;
+    display: -ms-grid;
+
+    -ms-grid-columns: 1fr 1fr 1fr;
     grid-template-columns: repeat(3, 1fr);
+
+    -ms-grid-rows: 150px 50px;
+
     grid-gap: 1em;
-    overflow-x: hidden;
+    -ms-grid-gap: 1em;
+
+    overflow: hidden;
+    margin:auto;
 }
+/*
+Card
+*/
 .projection-card {
     width: 100%;
     height: 160px;
     margin: 3px;
     cursor: pointer;
 }
+.projection-info {
+    display:inline-block;
+}
+.info-row {
+    text-align: center;
+    width: inherit;
+    display: inline-block;
+}
 .card-image {
     display: block;
     margin: auto;
 }
 .card-header {
-    text-align: center;
+    display:inline-block;
 }
+/*
+ /CARD
+*/
 .alaska {
 	content:url("../images/alaska.png");
 }
+.alaska::after {
+	content:url("../images/alaska.png");
+}
 .bering {
+    content:url("../images/bering.png");
+}
+.bering::after {
     content:url("../images/bering.png");
 }

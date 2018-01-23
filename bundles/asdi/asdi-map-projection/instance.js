@@ -10,7 +10,7 @@
         appSetup.startupSequence.push(obj);
  */
 Oskari.clazz.define("Oskari.map.projection.instance",
-function() {
+function () {
 
 }, {
     __name: 'map-projection',
