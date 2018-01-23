@@ -538,7 +538,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var y = olBounds[1] + (olBounds[3]-olBounds[1])/2;
             return {lon: x, lat: y};
         },
-        getClosestPointFromGeoJSON(geojson){
+        getClosestPointFromGeoJSON: function(geojson) {
             // TODO?? getInteriorPoint() for polygon --> placeform, attention text,..
             var olGeom = this.getOLGeometryFromGeoJSON(geojson);
             var olBounds = olGeom.getExtent();
