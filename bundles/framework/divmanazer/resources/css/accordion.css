@@ -14,6 +14,10 @@ div.accordion div.accordion_panel {
   div.accordion div.accordion_panel div.content {
     padding: 5px; }
   div.accordion div.accordion_panel div.header {
+    display: flex;
+    display: -ms-flexbox;
+    -ms-flex-align: center;
+    align-items: center;
     cursor: pointer; }
     div.accordion div.accordion_panel div.header div.headerIcon {
       display: inline-block;
@@ -21,6 +25,7 @@ div.accordion div.accordion_panel {
       vertical-align: middle; }
     div.accordion div.accordion_panel div.header div.headerText {
       /* Accordion header style, defined in styleguide */
+      position:relative;
       font-size: 16px;
       line-height: 19px;
       display: inline-block;

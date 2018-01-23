@@ -1,0 +1,40 @@
+.terrainprofile-graph {
+    display: block;
+}
+
+.terrainprofile-graph g.tick line, .terrainprofile-graph path.domain{
+    stroke: #bbb;
+    shape-rendering: crispEdges;
+}
+
+.terrainprofile-graph .y-axis g.tick line{
+    stroke: rgba(0,0,0,0.2);
+}
+.terrainprofile-graph .reset-scaling {
+    fill: #666;
+}
+.terrainprofile-graph .reset-scaling .touch-area {
+    fill: none;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+.terrainprofile-spinnerwrapper{
+    width: 600px;
+    height: 300px;
+    text-align: center;
+}
+.terrainprofile-spinnerholder{
+    display: inline-block;
+    margin-top: 150px;
+}
+
+.terrainprofile-graph .cursor line {
+    stroke: #00c3ff;
+    stroke-opacity: 0.8;
+    shape-rendering: crispEdges;
+}
+
+.terrainprofile-graph .cursor circle {
+    fill: #00c3ff;
+}

@@ -425,7 +425,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             if(event.getTriggeredBy() === 'map' && parent.length>0) {
                 scrollableElement = parent;
             }
-            me.grid.select(event.getRegion(), false, scrollableElement);
+            me.grid.select(event.getRegion(), false, {element: scrollableElement, fixTopPosition: jQuery('.oskari-flyout.statsgrid-data-flyout .oskari-flyouttoolbar').height()});
         });
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {

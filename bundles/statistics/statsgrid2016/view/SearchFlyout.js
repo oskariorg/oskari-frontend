@@ -54,43 +54,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     },
     addContent : function (el, isEmbedded) {
         var me = this;
-        var accordion = Oskari.clazz.create(
-                'Oskari.userinterface.component.Accordion'
-            );
-        var panels = me.getPanels(isEmbedded);
-        var service = me.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-        var state = service.getStateService();
-        el.append(me.getNewSearchElement(isEmbedded));
-        _.each(panels, function(p) {
-            accordion.addPanel(p.panel);
-        });
-
-        accordion.insertTo(el);
-    },
-    closePanels: function() {
-        var panels = this.__panels || [];
-        _.each(panels, function(p) {
-            p.panel.close();
-        });
-    },
-    getPanels : function(isEmbedded) {
-        var panels = [];
-        if(isEmbedded) {
-            // no panels for embedded map
-            return panels;
-        }
-
-        panels.push(this.getExtraFeaturesPanel());
-        return panels;
-    },
-    getNewSearchElement: function(isEmbedded){
-        var me = this;
         // no search for embedded map
         if(isEmbedded) {
-            return null;
+            return;
         }
+        var service = me.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+        var state = service.getStateService();
+        el.append(me.getNewSearchElement());
+        el.append(me.getExtraFeaturesElement());
+    },
+    getNewSearchElement: function(){
+        var me = this;
         var container = jQuery('<div></div>');
-
         var locale = this.instance.getLocalization();
 
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
@@ -130,15 +105,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         return container;
     },
-    getExtraFeaturesPanel: function(){
-        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-        var container = panel.getContainer();
+    getExtraFeaturesElement: function(){
+        var me = this;
+        var container = jQuery('<div class="extrafeatures"><div class="title"></div><div class="content"></div></div>');
         var locale = this.instance.getLocalization();
 
-        panel.setTitle(locale.panels.extraFeatures.title);
-        container.append(this._extraFeatures.getPanelContent());
-
-        return {id:'extraFeaturesPanel', panel:panel};
+        container.find('.title').html(locale.panels.extraFeatures.title);
+        container.find('.content').append(this._extraFeatures.getPanelContent());
+        return container;
     },
      getLegendFlyout : function() {
         if(this.__legendFlyout) {

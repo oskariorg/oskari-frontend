@@ -275,16 +275,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     if (layer && layer.isManualRefresh()) {
                         if (event.getNop()) {
                             this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
-                        } else {
-                            if (event.getRequestType() !== event.type.image || layer._activeFeatures.length > 0) {
-                                //only update grid in case of active features... (or the grid gets reset for manual refresh wfs layers)
-                                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
-                            } else if (event.getRequestType() === event.type.image || layer._activeFeatures.length === 0) {
-                                this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
-                            }
+                        } else if (event.getRequestType() === event.type.image || layer._activeFeatures.length === 0) {
+                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
                         }
-                    } else if (layer && !event.getNop()) {
-                        this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
                     }
                 }
                 if (event.getStatus() === event.status.error) {
@@ -363,7 +356,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 // update grid information [don't update the grid if not active]
                 var layer = event.getLayer();
                 this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
-                this.plugins['Oskari.userinterface.Flyout'].featureSelected(layer);
             },
 
             /**
