@@ -71,7 +71,7 @@ Parameters for options-object:
     </td>
 </tr>
 <tr>
-  <td> allowMultipleDrawing </td><td> Boolean/String </td><td> true - multiple selection is allowed.<br> false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map.<br> 'single' - selection will be removed before drawing a new selection.</td><td> true</td>
+  <td> allowMultipleDrawing </td><td> Boolean/String </td><td> true - multiple selection is allowed.<br> false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map.<br> 'single' - selection will be removed before drawing a new selection.<br> 'multiGeom' - gathers drawn shapes into a single feature with multigeometry instead of sending multiple features in DrawingEvent. </td><td> true</td>
 </tr>
 <tr>
   <td> drawControl </td><td> Boolean </td><td> true - activates draw control.<br> false - drawing will not activated.</td><td> true</td>

@@ -455,9 +455,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                     // reselect selection
                     idField = me.model.getIdField();
+                    var selections = [];
                     for (j = 0; j < selection.length; j += 1) {
-                        me.select(selection[j][idField], true);
+                        selections.push(selection[j][idField]);
                     }
+                    me.select(selections, false);
                     me.trigger('sort', {
                         column : scopedValue,
                         ascending : !descending
@@ -1032,8 +1034,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if(selected.values.length > 0) {
                 selected.values.forEach(function(selection){
                     me.table.find('tr[data-id="'+selection+'"]').addClass('selected');
-                    me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
                 });
+                me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
             }
         },
 

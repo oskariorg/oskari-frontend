@@ -58,6 +58,8 @@ Oskari.clazz.define(
                 me.sandbox.registerForEventByName(me, t);
             }
         }
+
+        this.wfsLayerService = null;
     }, {
         __templates: {
             wrapper : '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
@@ -318,15 +320,15 @@ Oskari.clazz.define(
          * @param  {Oskari.mapframework.domain.WfsLayer} layer     WFS layer that was select features
          */
         selectGridValues: function(selected, layer){
+            if(!selected) {
+                return;
+            }
             var me = this;
             var panel = me.layers['' + layer.getId()];
             if (!panel || !panel.grid) {
                 return;
             }
-            selected.forEach(function(selectedFeature, index){
-               panel.grid.select(selectedFeature, !!index);
-            });
-            panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked() === true);
+            panel.grid.select(selected, false);
         },
 
         /**
@@ -370,14 +372,24 @@ Oskari.clazz.define(
 
             // in scale, proceed
             this._prepareData(layer);
-            this.selectGridValues(layer.getClickedGeometries().map(function(val) {return val[0];}), layer);
 
             // Grid opacity
             this.setGridOpacity(layer, 1.0);
+        },
 
-            if(me.layers[layer.getId()] && me.layers[layer.getId()].showSelectedRowsFirst) {
+        moveSelectedRowsTop: function(layer) {
+            var me = this;
+            if(me.getSelectedFeatureIds() && me.layers[layer.getId()] && me.layers[layer.getId()].showSelectedRowsFirst) {
                 me.layers[layer.getId()].grid.moveSelectedRowsTop(true);
             }
+        },
+
+        getSelectedFeatureIds: function(layer) {
+            var me = this;
+            if(!me.wfsLayerService) {
+                me.wfsLayerService = me.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+            }
+            return me.wfsLayerService.getSelectedFeatureIds(layer.getId());
         },
 
         /**
@@ -771,12 +783,9 @@ Oskari.clazz.define(
                     panel.selectedFirstCheckbox.setHandler(function() {
                         panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked());
                     });
-
-
                 }
 
                 panel.selectedFirstCheckbox.setChecked(panel.selectedFirstCheckbox.isChecked() === true);
-                panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked() === true);
 
                 // Checkbox
                 var checkboxEl = jQuery(panel.selectedFirstCheckbox.getElement());
@@ -789,6 +798,11 @@ Oskari.clazz.define(
                 } else {
                     checkboxEl.css('margin-top', '7px');
                     gridToolsEl.append(checkboxEl);
+                }
+
+                var selected = me.getSelectedFeatureIds(layer);
+                if(selected && selected.length>0) {
+                    me.selectGridValues(selected, layer);
                 }
 
             }
@@ -951,9 +965,10 @@ Oskari.clazz.define(
          *
          */
         featureSelected: function (layer) {
-            var panel = this.layers['' + layer.getId()],
+            var me = this,
+                panel = this.layers['' + layer.getId()],
                 isOk = !!panel,
-                selected = layer.getClickedGeometries().map(function(val) {return val[0];});
+                selected = me.getSelectedFeatureIds(layer);
 
             if(!isOk) {
                 return;

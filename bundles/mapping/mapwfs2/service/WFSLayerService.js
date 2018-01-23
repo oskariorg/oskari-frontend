@@ -100,6 +100,7 @@ Oskari.clazz.define(
                 me.selectedWFSLayerIds.push(layer.getId());
             } else {
                 _.pull(me.selectedWFSLayerIds, layer.getId());
+                _.remove(me.WFSFeatureSelections, { layerId: layer.getId() });
             }
         },
 

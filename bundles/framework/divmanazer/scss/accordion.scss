@@ -22,7 +22,10 @@ div.accordion {
         }
 
         div.header {
-
+            display: flex;
+            display: -ms-flexbox;  
+            -ms-flex-align: center;
+            align-items: center;
             cursor: pointer;
 
             div.headerIcon {
