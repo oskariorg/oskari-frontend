@@ -93,10 +93,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             sandbox.register(me);
 
             // create the OskariEventNotifierService for handling Oskari events.
-
             var notifierService = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
             sandbox.registerService(notifierService);
             me.notifierService = notifierService;
+
+            // create the LayerlistExtenderService for extend layerlist functions.
+            var layerlistExtenderService = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
+            sandbox.registerService(layerlistExtenderService);
+            me.layerlistExtenderService = layerlistExtenderService;
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -299,7 +303,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
             },
             MapSizeChangedEvent: function(evt) {
-            this._updateAccordionHeight(evt.getHeight());
+                this._updateAccordionHeight(evt.getHeight());
                 if (evt._creator !== this.getName()) {
                     this.notifierService.notifyOskariEvent(evt);
                 }
