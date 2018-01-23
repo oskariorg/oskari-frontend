@@ -217,7 +217,6 @@ Oskari.clazz.define(
         },
         // used only for editing multigeometries (allowMultipleDrawing === 'multiGeom')
         createFeatures: function(geometries, checkIntersection){
-            debugger;
             var me = this,
                 feat,
                 feats = [];
