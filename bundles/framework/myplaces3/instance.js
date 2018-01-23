@@ -19,6 +19,7 @@ Oskari.clazz.define(
         this.featureNS = undefined;
         this.idPrefix = 'myplaces';
         this.finishedDrawing = false;
+        this.editPlaceName = 'EditMyPlaces3';
     }, {
         __name: 'MyPlaces3',
 
@@ -63,6 +64,9 @@ Oskari.clazz.define(
          */
         getName: function () {
             return this.__name;
+        },
+        getEditPlaceName: function () {
+            return this.editPlaceName;
         },
         /**
          * @method getSandbox
@@ -139,6 +143,7 @@ Oskari.clazz.define(
             // ask toolbar to select default tool
             var toolbarRequest = this.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             this.sandbox.request(this, toolbarRequest);
+            this.getMainView().cleanupDrawingVariables();
         },
 
         /**

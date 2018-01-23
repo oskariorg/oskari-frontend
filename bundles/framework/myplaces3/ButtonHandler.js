@@ -220,8 +220,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
          * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled -> clear current drawing
          */
         sendStopDrawRequest: function (isCancel) {
-            if (isCancel){                
-                this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true]);               
+            if (isCancel){
+                this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true]);
+                this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getEditPlaceName(), true]);
                 this.instance.setIsFinishedDrawing(false);
             }else{
                 this.instance.setIsFinishedDrawing(true);
@@ -349,7 +350,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
                     // do not trigger when placeform is shown 
                     this.sendStopDrawRequest(true);
                     this.instance.enableGfi(true);
-                    
                     if(this.dialog){
                         this.dialog.close();
                     }

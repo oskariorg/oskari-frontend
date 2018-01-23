@@ -19,7 +19,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.drawing;
         this.drawingData;
-        this.tempGeom; //TODO remove when edit geometry functionality is added
+        this.tempGeom; //for editPlace
     }, {
         __name: 'MyPlacesMainView',
         /**
@@ -113,11 +113,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             },
 
             'DrawingEvent': function (event) {
-                if (event.getId() !== this.instance.getName()) {
-                    return;
-                }
-                if (this.instance.isFinishedDrawing()){                  
-                    this._handleFinishedDrawingEvent (event);
+                if (event.getId() === this.instance.getName()) {
+                    if (this.instance.isFinishedDrawing()){
+                        this._handleFinishedDrawingEvent (event);
+                    }
+                } else if (event.getId() === this.instance.getEditPlaceName()){
+                    //update measurement result
+                    this.drawingData = event.getData();
+                    this._setMeasurementResult(event.getData());
+                    if (event.getIsFinished()){
+                        this.drawing = event.getGeoJson();
+                    }
                 }
             }
         },
@@ -130,9 +136,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
         _handleFinishedDrawingEvent: function (event) {
             this.drawing = event.getGeoJson();
             //TODO: closestPoint or centroid
-            var location = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').getClosestPointFromGeoJSON(this.drawing); 
+            var location = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').getClosestPointFromGeoJSON(this.drawing);
             this.drawingData = event.getData();
             this.showPlaceForm(location);
+        },
+        _setMeasurementResult: function (){
+            if (this.form && this.drawingData){
+                if (this.drawingData.shape === "LineString"){
+                    this.form.setMeasurementResult(this.drawingData.length, "line");
+                } else if (this.drawingData.shape === "Polygon"){
+                    this.form.setMeasurementResult(this.drawingData.area, "area");
+                }
+            }
         },
         /**
          * @method showPlaceForm
@@ -144,8 +159,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             var me = this,
                 layerId,
                 sandbox = this.instance.sandbox,
-                drawing = this.drawing,
-                drawingData = this.drawingData,
                 mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
                 drawMode,
                 measurement;
@@ -169,21 +182,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                     }
                 };
                 this.form.setValues(param);
-                this.tempGeom = place.getGeometry(); //TODO remove when edit geometry functionality is added
                 //set measurement result from place geometry
                 drawMode = this._getDrawModeFromGeometry(place.getGeometry());
                 measurement = mapModule.getMeasurementResult(place.getGeometry());
                 this.form.setMeasurementResult(measurement, drawMode);
+                this.tempGeom = place.getGeometry(); //store if geometry is not edited
                 layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryId());
             //set measurement result from drawing
-            } else if (drawing && drawingData) {
-                if (drawingData.shape === "LineString" || drawingData.shape === "MultiLineString"){
-                    measurement = drawingData.length;
-                    this.form.setMeasurementResult(measurement, "line");
-                } else if ((drawingData.shape === "Polygon" || drawingData.shape === "MultiPolygon")){
-                    measurement = drawingData.area;
-                    this.form.setMeasurementResult(measurement, "area");
-                }
+            } else {
+                this._setMeasurementResult();
             }            
 
             var formEl = me.form.getForm(categories),
@@ -394,8 +401,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             place.setCategoryId(values.category);
             if (drawing){
                 place.setDrawToolsMultiGeometry(drawing); 
-            } else {
-                place.setGeometry(this.tempGeom); //TODO remove when edit geometry functionality is added
+            } else if (this.tempGeom) {
+                place.setGeometry(this.tempGeom); // if not edited
             }
 
             var sandbox = this.instance.sandbox;
@@ -435,6 +442,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                 }
             };
             this.instance.getService().saveMyPlace(place, serviceCallback);
+        },
+        cleanupDrawingVariables: function () {
+            this.drawing = null;
+            this.drawingData = null;
+            this.tempGeom = null;
         },
         /**
          * @method cleanupPopup

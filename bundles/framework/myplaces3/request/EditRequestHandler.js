@@ -45,13 +45,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
                 place = service.findMyPlace(request.getId()),
                 mainMapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 geometry,
-                center;
+                center,
+                shape;
             if (place) {
                 geometry = place.getGeometry();
                 center = mainMapModule.getCentroidFromGeoJSON(geometry);
+                shape =  geometry.type.replace('Multi','');
                 this.instance.myPlaceSelected();
-                //TODO uncomment to post startdrawrequest when DrawTools handles multigeometries
-                //this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.instance.getName(), geometry.type, {geojson: JSON.stringify(geometry), drawControl: false, showMeasureOnMap: true, style: this.instance.getDrawStyle()}]);
+                this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.instance.getEditPlaceName(), shape, {allowMultipleDrawing: 'multiGeom', geojson: JSON.stringify(geometry), drawControl: false, showMeasureOnMap: true, style: this.instance.getDrawStyle()}]);
                 this.instance.getMainView().showPlaceForm(center, place);
             } else {
                 // should not happen
