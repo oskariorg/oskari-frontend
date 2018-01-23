@@ -22,7 +22,7 @@ function() {
           id: 'Oskari.mapping.maprotator.MapRotatorPlugin',
           title: 'MapRotator',
           config: {
-              instance: this.getMapRotatorInstance()
+              noUI: this.noUI
           }
       };
   },
@@ -34,50 +34,22 @@ function() {
   getMapRotatorInstance : function() {
     return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
   },
-  getPlugin: function() {
-    var maprotator = this.getMapRotatorInstance() || {};
-    return maprotator.plugin;
-  },
   //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
   bundleName: 'maprotator',
   /**
    * Initialise tool
    * @method init
    */
-  init: function(data) {
-      var me = this;
-      if ( !data || !data.configuration[me.bundleName] ) {
-          return;
-      }
+  init: function (data) {
+    var me = this;
+    me.setEnabled(true);
 
-      me.setEnabled(true);
-      var conf = data.configuration[me.bundleName].conf || {};
-      me.noUI = !!conf.noUI;
+    if ( !data || !data.configuration[me.bundleName] ) {
+        return;
+    }
 
-  },
-  /**
-  * Set enabled.
-  * @method setEnabled
-  * @public
-  *
-  * @param {Boolean} enabled is tool enabled or not
-  */
-  setEnabled : function(enabled) {
-      var me = this,
-          tool = me.getTool(),
-          request;
-
-      me.state.enabled = enabled;
-      if(tool.config.instance.plugin === null && enabled) {
-        tool.config.instance.createPlugin(true, true);
-        me.__started = true;
-      }
-      if(!enabled && me.__started){
-        if(me.getMapRotatorInstance().plugin && !me.noUI){
-            me.getMapRotatorInstance().stopPlugin();
-        }
-        me.__started = false;
-      }
+    var conf = data.configuration[me.bundleName].conf || {};
+    me.noUI = !!conf.noUI;
   },
   /**
   * Get values.
@@ -91,24 +63,23 @@ function() {
       if(me.state.enabled) {
         var pluginConfig = this.getPlugin().getConfig();
 
-          if(me.noUI) {
-              pluginConfig.noUI = me.noUI;
-          }
-          var json = {
-              configuration: {}
-          };
-          json.configuration[me.bundleName] = {
-              conf: pluginConfig,
-              state: {}
-          };
-          return json;
-        } else {
-          return null;
+        pluginConfig.noUI = me.noUI;
+
+        var json = {
+            configuration: {}
+        };
+        json.configuration[me.bundleName] = {
+            conf: pluginConfig,
+            state: {}
+        };
+        return json;
+    } else {
+        return null;
       }
   },
   /**
   * Get extra options.
-  * @method @public getExtraOptions
+  * @method @public 
   * @param {Object} jQuery element toolContainer
   * @return {Object} jQuery element template
   */
@@ -123,18 +94,19 @@ function() {
 
     input.setTitle( labelNoUI );
     input.setHandler( function( checked ) {
-        if(!me.getPlugin()){
+        if ( !me.getPlugin() ) {
             return;
         }
-        if( checked === 'on' ){
+        if ( checked === 'on' ) {
+            // TODO update here plugin ui boolean
             me.noUI = true;
             me.getPlugin().teardownUI();
         } else {
+            // TODO update here plugin ui boolean
             me.noUI = false;
             me.getPlugin().redrawUI();
         }
     });
-    input.setChecked(me.noUi);
 
     var inputEl = input.getElement();
     template.append(inputEl);

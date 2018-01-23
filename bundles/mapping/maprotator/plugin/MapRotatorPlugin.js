@@ -43,19 +43,19 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
       });
 
       this._map.on( 'pointerdrag', function( e ) {
-        degrees = me._getRotation();
-        me.updateIconRotation( degrees );
-          if ( degrees != me.getPreviousDegrees() ) {
+        degrees = me.getRotation();
+        me.rotateIcon( degrees );
+          if ( degrees != me.getDegrees() ) {
             var event = eventBuilder( degrees );
             me._sandbox.notifyAll( event );
           }
-          me.storePreviousDegreeValue( degrees );
+          me.setDegrees( degrees );
       });
     },
-    storePreviousDegreeValue: function ( degree ) {
+    setDegrees: function ( degree ) {
       this.previousDegrees = degree;
     },
-    getPreviousDegrees: function () {
+    getDegrees: function () {
       return this.previousDegrees;
     },
     /**
@@ -70,19 +70,22 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
 
         this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
 
-        if ( !this.isSupported() ) {
+        if ( !this.isSupported() && this.hasUi() ) {
           return compass;
         }
 
         compass.attr('title', this._locale.tooltip.tool);
 
-        if ( this._config.noUI ) {
+        if ( !this.hasUi() ) {
+          this.teardownUI();
             return null;
         }
       return compass;
     },
-    updateIconRotation: function ( degrees ) {
-      this.getElement().css({ transform:'rotate(' + degrees + 'deg)' });
+    rotateIcon: function ( degrees ) {
+      if ( this.getElement() ) {
+        this.getElement().css({ transform:'rotate(' + degrees + 'deg)' });
+      }
     },
     _createUI: function() {
       this._element = this._createControlElement();
@@ -100,16 +103,20 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
       this.handleEvents();  
     },
     setRotation: function ( deg ) {
+
+      if ( !this.isSupported() ) {
+        return;
+      }
       // if deg is number then transform degrees to radians otherwise use 0
       var rot = (typeof deg === 'number') ? deg / 57.3 : 0;
       // if deg is number use it for degrees otherwise use 0
       var degrees = (typeof deg === 'number') ? deg : 0;
 
-      this.updateIconRotation( degrees );
+      this.rotateIcon( degrees );
       this._map.getView().setRotation( rot );
       this.storePreviousDegreeValue( degrees );
     },
-    _getRotation: function() {
+    getRotation: function() {
       var me = this;
       var rot = this._map.getView().getRotation();
       //radians to degrees
@@ -123,7 +130,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
     _createEventHandlers: function () {
         return {
           MapSizeChangedEvent: function () {
-            this.setRotation( this.getPreviousDegrees() );
+            this.setRotation( this.getDegrees() );
           },
             /**
              * @method RPCUIEvent
@@ -144,6 +151,8 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
      * @param {Boolean} forced application has started and ui should be rendered with assets that are available
      */
     redrawUI: function() {
+      var ui = this.hasUi();
+
       var isMobile = Oskari.util.isMobile();
       if( this.getElement() ) {
           this.teardownUI(true);
@@ -156,12 +165,18 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
         this._createUI();
       }
     },
-    teardownUI : function(stopping) {
+    teardownUI : function() {
     //detach old element from screen
+      if( !this.getElement() ) {
+        return;
+      }
       var mobileDefs = this.getMobileDefs();
       this.getElement().detach();
       this.removeFromPluginContainer(this.getElement());
       this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);  
+    },
+    hasUi: function () {
+      return this._config.noUI;
     },
     /**
      * Get jQuery element.
@@ -171,7 +186,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
         return this._element;
     },
     stopPlugin: function() {
-      this.teardownUI(true);
+      this.teardownUI();
     }
   }, {
       'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
