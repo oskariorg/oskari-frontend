@@ -175,7 +175,13 @@ Oskari.clazz.define(
             if(optionalFeatureForEditing) {
                 var jsonFormat = new ol.format.GeoJSON();
                 var featuresFromJson = jsonFormat.readFeatures(optionalFeatureForEditing);
-                me.getCurrentDrawLayer().getSource().addFeatures(featuresFromJson);
+                //parse multi geometries to single geometries
+                if (me.drawMultiGeom){
+                    var parsedFeatures = me.parseMultiGeometries(featuresFromJson);
+                    me.getCurrentDrawLayer().getSource().addFeatures(parsedFeatures);
+                } else {
+                    me.getCurrentDrawLayer().getSource().addFeatures(featuresFromJson);
+                }
             }
             if(options.drawControl !== false) {
                 me.addDrawInteraction(me.getCurrentLayerId(), shape, options);
@@ -183,6 +189,50 @@ Oskari.clazz.define(
             if(options.modifyControl !== false) {
                 me.addModifyInteraction(me.getCurrentLayerId(), shape, options);
             }
+        },
+        // used only for editing multigeometries (allowMultipleDrawing === 'multiGeom')
+        parseMultiGeometries: function(features){
+            var geom,
+                geoms,
+                feat,
+                feats = [];
+            for (var i=0; i < features.length; i++) {
+                feat = features[i];
+                geom = feat.getGeometry();
+
+                if (geom.getType() === "MultiPoint"){
+                    geoms = geom.getPoints();
+                    feats = feats.concat(this.createFeatures(geoms, false));
+                } else if (geom.getType() === "MultiLineString"){
+                    geoms = geom.getLineStrings();
+                    feats = feats.concat(this.createFeatures(geoms, false));
+                }else if (geom.getType() === "MultiPolygon"){
+                    geoms = geom.getPolygons();
+                    feats = feats.concat(this.createFeatures(geoms, true));
+                } else {
+                    feats.push(feat);
+                }
+            }
+            return feats;
+        },
+        // used only for editing multigeometries (allowMultipleDrawing === 'multiGeom')
+        createFeatures: function(geometries, checkIntersection){
+            debugger;
+            var me = this,
+                feat,
+                feats = [];
+            geometries.forEach(function (geom) {
+                    feat = new ol.Feature({geometry:geom});
+                    feat.setId(me.generateNewFeatureId());
+                    feats.push(feat);
+                    if (checkIntersection){
+                        me._sketch = feat;
+                        me.checkIntersection(geom);
+                    }
+
+                });
+            me._sketch = null;
+            return feats;
         },
         /**
          * This is the shape type that is currently being drawn
@@ -439,12 +489,21 @@ Oskari.clazz.define(
             }
 
             var featuresFromLayer = me.getLayer(layerId).getSource().getFeatures();
-            featuresFromLayer.forEach(function (f) {
-                features.push(f);
-            });
+            
             if(me._sketch && layerId === me.getCurrentLayerId()) {
                 // include the unfinished (currently drawn) feature
+                var sketchFeatId = me._sketch.getId();
+                featuresFromLayer.forEach(function (f) {
+                    // when modifying drawn feature, don't add dublicate feature
+                    if (f.getId()!==sketchFeatId){
+                        features.push(f);
+                    }
+                });
                 features.push(me._sketch);
+            } else {
+                featuresFromLayer.forEach(function (f) {
+                    features.push(f);
+                });
             }
             return features;
         },
@@ -471,7 +530,6 @@ Oskari.clazz.define(
             if(!features || features.length === 0) {
                 return geoJsonObject;
             }
-
             // form multigeometry from features
             if (me.drawMultiGeom) {
                 measures = me.sumMeasurements(features);
