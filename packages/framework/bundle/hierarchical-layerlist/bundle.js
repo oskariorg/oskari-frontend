@@ -39,17 +39,26 @@ function() {
 {
     "protocol" : ["Oskari.bundle.Bundle"],
     "source" : {
-        "scripts" : [{
+        "scripts" : [
+        {
+            "type": "text/javascript",
+            "src": "../../../../libraries/jquery/jquery-1.10.2.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../libraries/jquery/jquery-ui-1.11.4.js"
+        },
+        {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/hierarchical-layerlist/instance.js"
         },
         {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/Flyout.js"
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/Flyout.js"
         },
         {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/Tile.js"
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/hierarchical-layerlist/Tile.js"
         },
         {
             "type": "text/javascript",
@@ -82,6 +91,14 @@ function() {
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectableAccordionPanel.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../libraries/jstree/dist/jstree.js"
+        },
+        {
+            "type": "text/css",
+            "src": "../../../../libraries/jstree/dist/themes/default/style.css"
         },
         {
             "type": "text/css",
