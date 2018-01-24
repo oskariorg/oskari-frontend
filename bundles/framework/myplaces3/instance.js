@@ -264,7 +264,7 @@ Oskari.clazz.define(
                 return;
             }
             var addAsFirstTab = true;
-            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest'):
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
             var req = reqBuilder(
                     this.tab.getTitle(),
                     this.tab.getContent(),
