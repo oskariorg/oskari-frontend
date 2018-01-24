@@ -8,16 +8,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
     /**
      * @method create called automatically on construction
      * @static
-     * @param {String} url
-     * @param {String} uuid current users uuid
      * @param {Oskari.Sandbox} sandbox reference to Oskari sandbox
-     * @param {Object} defaults category default values
-     * @param {Oskari.mapframework.bundle.myplaces3.MyPlacesBundleInstance} pInstance
-     *  instance to notify if problems with default category
      *
      */
 
-    function (url, uuid, sandbox, defaults, pInstance, options) {
+    function (sandbox) {
 
         // list of loaded categories & myplaces
         this._categoryList = [];
@@ -25,8 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
 
         this._sandbox = sandbox;
         this.defaultCategory = null;
-        this.defaults = defaults;
-        this._instance = pInstance;
         // skipLoading is used for published maps (value by init-method param)
         // it means we shouldn't load any features on start and also when saving
         this.skipLoading = false;
@@ -121,9 +114,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
         _addMyPlace: function (myplaceModel) {
             var categoryId = myplaceModel.getCategoryId();
             if (typeof this._placesList[categoryId] === "undefined"){
-                this._addCategoryToPlaceList(categoryId);                
+                this._addCategoryToPlaceList(categoryId);
             }
-            this._placesList[categoryId].push(myplaceModel);    
+            this._placesList[categoryId].push(myplaceModel);
         },
         /**
          * @method _removeMyPlace

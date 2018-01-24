@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
 
             if (this.initialLoad) {
                 // notify components of added layer if not suppressed
-                var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+                var event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
                 sandbox.notifyAll(event); // add the myplaces layers programmatically since normal link processing
                 // cant do this (run before the bundle adds the layers)
                 this._processStartupLinkLayers(sandbox);
@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          */
         _getMapLayerJson: function (categoryModel) {
             var baseJson = this._getMapLayerJsonBase();
-            baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + '&';
+            baseJson.wmsUrl = Oskari.urls.getRoute('MyPlacesTile') + '&myCat=' + categoryModel.getId() + '&';
             baseJson.name = categoryModel.getName();
             baseJson.id = this._getMapLayerId(categoryModel.getId());
             //  Permission is always ok for user's own data
@@ -688,7 +688,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 mapLayer.addPermission('publish', 'no_publication_permission');
             }
             // send an event to notify other bundles of updated permissions
-            var evt = sandbox.getEventBuilder('MapLayerEvent')(layerId, 'update');
+            var evt = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
             sandbox.notifyAll(evt);
         }
     }, {
