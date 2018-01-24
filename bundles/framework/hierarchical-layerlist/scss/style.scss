@@ -155,12 +155,46 @@ div.hierarchical-layerlist {
                 margin-right: -20px;
             }
 
-            .field-description {
-                padding: 3px 0;
-                color: #666;
 
-                .icon-info {
-                    display: inline-block;
+            .description-and-tools {
+
+                .field-description {
+                    max-width: 80%;
+                    float:left;
+                    padding: 3px 0;
+                    color: #666;
+
+                    .icon-info {
+                        display: inline-block;
+                    }
+                }
+
+                .main-tools {
+                    float:right;
+
+                    .main-tool {
+                        width: 26px;
+                        height:26px;
+                        float:left;
+                        margin-left:4px;
+                        margin-top: 4px;
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                        cursor: pointer;
+
+                        &:active {
+                            background-color: #ffde00;
+                        }
+
+                        &.add-group {
+                            background-image:url("../images/glyphicons/glyphicons-433-plus.png");
+                        }
+
+                    }
+                }
+
+                .clear {
+                    clear: both;
                 }
             }
 

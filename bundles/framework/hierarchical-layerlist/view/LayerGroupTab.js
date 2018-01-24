@@ -9,8 +9,9 @@ Oskari.clazz.define(
      * @method create called automatically on construction
      * @static
      */
-    function (instance, title, id) {
+    function(instance, title, id) {
         this.instance = instance;
+        this.service = this.instance.layerlistExtenderService;
         this.title = title;
         this.id = id;
         this.layerGroups = [];
@@ -18,9 +19,11 @@ Oskari.clazz.define(
         this.layerContainers = {};
         this.sb = this.instance.getSandbox();
         this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
+        // FIXME: these templates must be a jQuery objects
         this.templates = {
             spinner: '<span class="spinner-text"></span>',
-            shortDescription: '<div class="field-description"></div>',
+            descriptionAndMainTools: jQuery('<div class="description-and-tools"><div class="field-description"></div><div class="main-tools"></div><div class="clear"></div></div>'),
+            mainTool: jQuery('<div class="main-tool"></div>'),
             description: '<div>' +
                 '  <h4 class="indicator-msg-popup"></h4>' +
                 '  <p></p>' +
@@ -31,24 +34,41 @@ Oskari.clazz.define(
                 '  <span class="keyword"></span>' +
                 '</a>',
             keywordType: '<div class="type"></div>',
-            layerFilter: '<div class="layer-filter hierarchical-layerlist-layer-filter">'+
+            layerFilter: '<div class="layer-filter hierarchical-layerlist-layer-filter">' +
                 '</div><div style="clear:both;"></div>',
             layerTree: '<div class="hierarchical-layerlist-tree"></div>'
         };
         this._createUI(id);
-    },
-    {
-        getTitle: function () {
+        this._bindExtenderServiceListeners();
+    }, {
+        _bindExtenderServiceListeners: function() {
+            var me = this;
+            me.service.on('maintool.added', function(data) {
+                var tool = me.templates.mainTool.clone();
+                tool.attr('data-id', data.id);
+                tool.attr('title', data.options.tooltip);
+                tool.addClass(data.options.cls);
+
+                tool.bind('click', function(evt) {
+                    evt.stopPropagation();
+                    tool.addClass('active');
+                    data.handler(tool);
+                });
+                me.getFilterField().getField().find('.main-tools').append(tool);
+                console.log('Main tool added, data:', data);
+            });
+        },
+        getTitle: function() {
             //"use strict";
             return this.title;
         },
 
-        getTabPanel: function () {
+        getTabPanel: function() {
             //"use strict";
             return this.tabPanel;
         },
 
-        getState: function () {
+        getState: function() {
             //"use strict";
             var state = {
                 tab: this.getTitle(),
@@ -58,7 +78,7 @@ Oskari.clazz.define(
             return state;
         },
 
-        setState: function (state) {
+        setState: function(state) {
             //"use strict";
             if (!state) {
                 return;
@@ -76,7 +96,7 @@ Oskari.clazz.define(
          *
          *
          */
-        focus: function () {
+        focus: function() {
             this.getFilterField().getField().find('input').focus();
         },
 
@@ -87,7 +107,7 @@ Oskari.clazz.define(
          *      container for the icon
          * Creates info icon for given oskarifield
          */
-        _createInfoIcon: function (oskarifield) {
+        _createInfoIcon: function(oskarifield) {
             //"use strict";
             var me = this,
                 infoIcon = jQuery('<div class="icon-info"></div>'),
@@ -97,7 +117,7 @@ Oskari.clazz.define(
             // append this indicator
             indicatorCont.append(infoIcon);
             // show metadata
-            infoIcon.click(function (e) {
+            infoIcon.click(function(e) {
                 var desc = jQuery(me.templates.description),
                     dialog = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
@@ -108,7 +128,7 @@ Oskari.clazz.define(
 
                 desc.find('p').text(me._locale.filter.description);
                 okBtn.addClass('primary');
-                okBtn.setHandler(function () {
+                okBtn.setHandler(function() {
                     dialog.close(true);
                 });
                 dialog.show(me._locale.filter.text, desc, [okBtn]);
@@ -121,7 +141,7 @@ Oskari.clazz.define(
          *
          * @param  {String} oskarifieldId oskari field id
          */
-        _createUI: function (oskarifieldId) {
+        _createUI: function(oskarifieldId) {
             //"use strict";
             var me = this,
                 oskarifield,
@@ -144,15 +164,13 @@ Oskari.clazz.define(
                     jQuery(me.templates.relatedKeywords)
                 );
             }
-
-            oskarifield.append(
-                jQuery(me.templates.shortDescription)
-                .text(me._locale.filter.shortDescription)
-            );
+            var descriptionAndMainTools = me.templates.descriptionAndMainTools.clone();
+            descriptionAndMainTools.find('.field-description').text(me._locale.filter.shortDescription);
+            oskarifield.append(descriptionAndMainTools);
 
             me._createInfoIcon(oskarifield);
 
-            if(!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
+            if (!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
                 layerFilter = jQuery(me.templates.layerFilter);
                 me.tabPanel.getContainer().append(layerFilter);
             }
@@ -180,7 +198,7 @@ Oskari.clazz.define(
          *
          * @return {Oskari.userinterface.component.FormInput} field
          */
-        getFilterField: function () {
+        getFilterField: function() {
             //"use strict";
             var me = this,
                 field,
@@ -192,13 +210,13 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.FormInput');
             field.setPlaceholder(me.instance.getLocalization('filter').text);
             field.addClearButton();
-            field.bindChange(function (event) {
+            field.bindChange(function(event) {
                 event.stopPropagation(); // JUST BECAUSE TEST ENVIRONMENT FAILS
                 var evt = event;
                 if (timer) {
                     clearTimeout(timer);
                 }
-                timer = setTimeout(function () {
+                timer = setTimeout(function() {
                     me._fireFiltering(field.getValue(), evt, me);
                     timer = null;
                 }, 300);
@@ -220,7 +238,7 @@ Oskari.clazz.define(
          *      Reference to the bundle instance
          * Calls all needed functions to do the layer filtering.
          */
-        _fireFiltering: function (keyword, event, me) {
+        _fireFiltering: function(keyword, event, me) {
             //"use strict";
             // Filter by name
             me.filterLayers(keyword);
@@ -241,7 +259,7 @@ Oskari.clazz.define(
          *
          * @param  {Array} groups
          */
-        showLayerGroups: function (groups) {
+        showLayerGroups: function(groups) {
             //"use strict";
             var me = this,
                 i,
@@ -276,18 +294,18 @@ Oskari.clazz.define(
                 layersLength = layers.length;
                 //Create root group
                 var jsTreeGroup = {};
-                jsTreeGroup["id"] = "group-"+group.id;
-                jsTreeGroup["parent"] = "#";
-                jsTreeGroup["text"] = group.name;
+                jsTreeGroup.id = "group-" + group.id;
+                jsTreeGroup.parent = "#";
+                jsTreeGroup.text = group.name;
                 jsTreeData.push(jsTreeGroup);
                 //Loop through group layers
                 //TODO: Loop through subgroups aswell similarly
                 for (n = 0; n < layersLength; n += 1) {
                     layer = layers[n];
                     var jsTreeLayer = {};
-                    jsTreeLayer["id"] = "layer-"+layer.getId();
-                    jsTreeLayer["parent"] = "group-"+group.id;
-                    jsTreeLayer["text"] = layer.getName();
+                    jsTreeLayer.id = "layer-" + layer.getId();
+                    jsTreeLayer.parent = "group-" + group.id;
+                    jsTreeLayer.text = layer.getName();
                     jsTreeData.push(jsTreeLayer);
                 }
                 /*groupPanel = Oskari.clazz.create(
@@ -329,8 +347,7 @@ Oskari.clazz.define(
                 me.accordion.addPanel(groupPanel);*/
             }
             var jsTreeConf = {
-                'core' : {
-                }
+                'core': {}
             };
             var jsTreeDiv = jQuery('div.hierarchical-layerlist-tree');
             jsTreeDiv.jstree(jsTreeConf);
@@ -354,7 +371,7 @@ Oskari.clazz.define(
          * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
          * Also checks if all layers in a group is hidden and hides the group as well.
          */
-        filterLayers: function (keyword, ids) {
+        filterLayers: function(keyword, ids) {
             //"use strict";
             var me = this,
                 visibleGroupCount = 0,
@@ -426,7 +443,7 @@ Oskari.clazz.define(
          *      dom object to be cleared
          * Clears related keywords popup
          */
-        clearRelatedKeywordsPopup: function (keyword, oskarifield) {
+        clearRelatedKeywordsPopup: function(keyword, oskarifield) {
             //"use strict";
             // clear only if sent keyword has changed or it is not null
             if (this.sentKeyword && this.sentKeyword !== keyword) {
@@ -446,7 +463,7 @@ Oskari.clazz.define(
          * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
          * Also checks if all layers in a group is hidden and hides the group as well.
          */
-        _relatedKeywordsPopup: function (keyword, event, me) {
+        _relatedKeywordsPopup: function(keyword, event, me) {
             //"use strict";
             //event.preventDefault();
             var oskarifield = jQuery(event.currentTarget).parents(
@@ -474,7 +491,7 @@ Oskari.clazz.define(
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
-                beforeSend: function (x) {
+                beforeSend: function(x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType(
                             'application/j-son;charset=UTF-8');
@@ -482,12 +499,12 @@ Oskari.clazz.define(
                 },
                 url: ajaxUrl + 'action_route=SearchKeywords&keyword=' +
                     encodeURIComponent(keyword) + '&lang=' + Oskari.getLang(),
-                success: function (pResp) {
+                success: function(pResp) {
                     me.relatedKeywords = pResp;
                     me._showRelatedKeywords(keyword, pResp, oskarifield);
                     relatedKeywordsCont.hide();
                 },
-                error: function (jqXHR, textStatus) {
+                error: function(jqXHR, textStatus) {
                     var lctn = me.instance.getLocalization('errors');
                     me.accordion.showMessage(lctn.generic);
                     relatedKeywordsCont.hide();
@@ -505,7 +522,7 @@ Oskari.clazz.define(
          * FIXME IE8 isn't supported anymore, just use forEach or some
          * IE8 doesn't have Array.indexOf so we use this...
          */
-        _arrayContains: function (arr, val) {
+        _arrayContains: function(arr, val) {
             var i;
             if (arr.indexOf) {
                 return arr.indexOf(val) > -1;
@@ -527,7 +544,7 @@ Oskari.clazz.define(
          *     Array of values to be concatenated
          * Concatenates (in place) those values from arr2 to arr1 that are not present in arr1
          */
-        _concatNew: function (arr1, arr2) {
+        _concatNew: function(arr1, arr2) {
             //"use strict";
             var me = this,
                 i;
@@ -545,7 +562,7 @@ Oskari.clazz.define(
          * @param value
          * Determines if the given value... has a value.
          */
-        _isDefined: function (value) {
+        _isDefined: function(value) {
             //"use strict";
             return typeof value !== 'undefined' && value !== null && value !== '';
         },
@@ -557,7 +574,7 @@ Oskari.clazz.define(
          * @param {String} match
          * Returns true if keyword contains match (ignoring case)
          */
-        _containsIgnoreCase: function (keyword, match) {
+        _containsIgnoreCase: function(keyword, match) {
             //"use strict";
             var me = this;
             return me._isDefined(keyword) && me._isDefined(match) && keyword.toLowerCase().indexOf(match.toLowerCase()) > -1;
@@ -571,7 +588,7 @@ Oskari.clazz.define(
          * Returns true if the given types match in lower case.
          * Also returns false if one or both types are not defined
          */
-        _matchesIgnoreCase: function (type1, type2) {
+        _matchesIgnoreCase: function(type1, type2) {
             //"use strict";
             var me = this;
             return me._isDefined(type1) && me._isDefined(type2) && type1.toLowerCase() === type2.toLowerCase();
@@ -585,7 +602,7 @@ Oskari.clazz.define(
          *      related keywords to filter layers by
          * Also checks if all layers in a group is hidden and hides the group as well.
          */
-        _showRelatedKeywords: function (userInput, keywords, oskarifield) {
+        _showRelatedKeywords: function(userInput, keywords, oskarifield) {
             //"use strict";
             var me = this,
                 relatedKeywordsCont = me.getFilterField().getField().find(
@@ -637,7 +654,7 @@ Oskari.clazz.define(
             }
 
             // sort ontology suggestions by layer count
-            ontologySuggestions.sort(function (x, y) {
+            ontologySuggestions.sort(function(x, y) {
                 return x.count < y.count;
             });
 
@@ -666,7 +683,7 @@ Oskari.clazz.define(
             // when clicked -> filter layers
             relatedKeywordsCont.find('.keyword-cont').on(
                 'click',
-                function (event) {
+                function(event) {
                     var val = jQuery(event.currentTarget).attr('data-keyword');
 
                     me.getFilterField().setValue(val);
@@ -675,7 +692,7 @@ Oskari.clazz.define(
             );
         },
 
-        _showAllLayers: function () {
+        _showAllLayers: function() {
             //"use strict";
             var i,
                 group,
@@ -692,9 +709,9 @@ Oskari.clazz.define(
                 for (n = 0; n < layers.length; n += 1) {
                     layer = layers[n];
                     //if(layer) {
-                        layerId = layer.getId();
-                        layerCont = this.layerContainers[layerId];
-                        layerCont.setVisible(true);
+                    layerId = layer.getId();
+                    layerCont = this.layerContainers[layerId];
+                    layerCont.setVisible(true);
                     //}
                 }
                 group.layerListPanel.setVisible(true);
@@ -707,7 +724,7 @@ Oskari.clazz.define(
             this.accordion.removeMessage();
         },
 
-        setLayerSelected: function (layerId, isSelected) {
+        setLayerSelected: function(layerId, isSelected) {
             //"use strict";
             var layerCont = this.layerContainers[layerId];
             if (layerCont) {
@@ -715,7 +732,7 @@ Oskari.clazz.define(
             }
         },
 
-        updateLayerContent: function (layerId, layer) {
+        updateLayerContent: function(layerId, layer) {
             //"use strict";
             var layerCont = this.layerContainers[layerId];
             if (layerCont) {
