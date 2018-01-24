@@ -27,6 +27,20 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 tooltip: 'Lisää ryhmä'
             });
         },
+        /**
+         * Add layertree options
+         * @method  _addOptions
+         * @private
+         */
+        _addOptions: function() {
+            var me = this;
+
+            // Add Drag & drop plugin
+            me.service.addLayerlistOption('plugins', ['checkbox', 'changed', 'wholerow', 'types', 'search', 'dnd']);
+            me.service.addLayerlistOption('dnd', {
+                use_html5: true
+            });
+        },
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
@@ -39,6 +53,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             me.sandbox.register(this);
 
             me._addMainTools();
+            me._addOptions();
         },
 
         // module boilerplate methods

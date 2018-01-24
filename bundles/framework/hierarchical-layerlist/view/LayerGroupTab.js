@@ -188,9 +188,6 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Accordion'
             );
             me.accordion.insertTo(me.tabPanel.getContainer());
-
-            layerTree = jQuery(me.templates.layerTree);
-            me.tabPanel.getContainer().append(layerTree);
         },
         /**
          * Get filter field
@@ -253,6 +250,10 @@ Oskari.clazz.define(
                 me._relatedKeywordsPopup(keyword, event, me);
             }
         },
+
+        getJsTreeElement: function() {
+            return this.tabPanel.getContainer().find('.hierarchical-layerlist-tree');
+        },
         /**
          * Show layer groups
          * @method  @public showLayerGroups
@@ -275,6 +276,14 @@ Oskari.clazz.define(
                 layerWrapper,
                 layerContainer,
                 selectedLayers;
+
+
+            if (me.getJsTreeElement().length > 0) {
+                me.getJsTreeElement().remove();
+            }
+            var layerTree = jQuery(me.templates.layerTree);
+            me.tabPanel.getContainer().append(layerTree);
+
             me.accordion.removeAllPanels();
             me.layerContainers = {};
             me.layerGroups = groups;
@@ -286,7 +295,7 @@ Oskari.clazz.define(
                 layersLength = layers.length;
                 //Create root group
                 var jsTreeGroup = {};
-                jsTreeGroup.id = "group-"+group.id;
+                jsTreeGroup.id = "group-" + group.id;
                 jsTreeGroup.parent = "#";
                 jsTreeGroup.text = group.name;
                 jsTreeGroup.type = "group";
@@ -340,59 +349,28 @@ Oskari.clazz.define(
                 groupContainer.removeClass('oskari-hidden');
                 me.accordion.addPanel(groupPanel);*/
             }
-            var jsTreeConf = {
-                'core' : {
-                    "themes" : {
-                        "variant" : "large"
-                    }
-                },
-                "checkbox" : {
-                    "keep_selected_style" : false
-                },
-                "types" : {
-                    "group" : {
-                        "icon" : "jstree-layer-group-icon"
-                    },
-                    "layer" : {
-                        "icon" : "jstree-layer-icon"
-                    }
-                },
-                "search" : {
-                    "show_only_matches": true
-                },
-                "plugins" : [ "checkbox", "changed", "wholerow", "sort", "types", "search" ]
-            };
             var to = false;
-            $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').keyup(function () {
-            if(to) { clearTimeout(to); }
-                to = setTimeout(function () {
-                var v = $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').val();
-                jsTreeDiv.jstree(true).search(v);
+            $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').keyup(function() {
+                if (to) {
+                    clearTimeout(to);
+                }
+                to = setTimeout(function() {
+                    var v = $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').val();
+                    jsTreeDiv.jstree(true).search(v);
                 }, 250);
             });
-            var jsTreeDiv = jQuery('div.hierarchical-layerlist-tree');
-            jsTreeDiv.on("changed.jstree", function (e, data) {
-                var selected = data.changed.selected;
-                var selectedLength = selected.length;
-                var deselected = data.changed.deselected;
-                var deselectedLength = deselected.length;
-                for(var i = 0; i < selectedLength; ++i) {
-                    var sel = selected[i];
-                    var selArr = sel.split('-');
-                    if(selArr[0] === 'layer') {
-                        me.sb.postRequestByName('AddMapLayerRequest', [selArr[1]]);
-                    }
-                }
-                for(var i = 0; i < deselectedLength; ++i) {
-                    var desel = deselected[i];
-                    var deselArr = desel.split('-');
-                    if(deselArr[0] === 'layer') {
-                        me.sb.postRequestByName('RemoveMapLayerRequest', [deselArr[1]]);
-                    }
-                }
-            }).jstree(jsTreeConf);
+
+            var jsTreeDiv = me.getJsTreeElement();
+
+            me.service.getEventHandler().forEach(function(event) {
+                jsTreeDiv.on(event.name, event.handler);
+            });
+
+
+            jsTreeDiv.jstree(me.service.getLayerlistOption());
             jsTreeDiv.jstree(true).settings.core.data = jsTreeData;
             jsTreeDiv.jstree(true).refresh();
+
             /*selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
             layersLength = selectedLayers.length;
             for (i = 0; i < layersLength; i += 1) {
