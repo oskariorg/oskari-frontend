@@ -40,6 +40,7 @@ Oskari.clazz.define(
         };
         this._createUI(id);
         this._bindExtenderServiceListeners();
+        this._bindOskariEvents();
     }, {
         _bindExtenderServiceListeners: function() {
             var me = this;
@@ -378,6 +379,7 @@ Oskari.clazz.define(
             }
 
             me.filterLayers(me.filterField.getValue());*/
+            me._updateContainerHeight(jQuery('#mapdiv').height());
         },
 
         /**
@@ -756,6 +758,27 @@ Oskari.clazz.define(
             if (layerCont) {
                 layerCont.updateLayerContent(layer);
             }
+        },
+        _updateContainerHeight: function(height) {
+            var me = this;
+            me.getJsTreeElement().css('max-height', (height * 0.5) + 'px');
+        },
+        _bindOskariEvents: function() {
+            var me = this;
+            me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
+                var layer = evt.getMapLayer();
+            });
+
+            me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
+                var layer = evt.getMapLayer();
+            });
+
+
+            me._notifierService.on('MapSizeChangedEvent', function(evt) {
+                me._updateContainerHeight(evt.getHeight());
+            });
+
+
         }
     }
 );
