@@ -440,6 +440,11 @@ Oskari.clazz.define(
 
             me.filterLayers(me.filterField.getValue());*/
             me._updateContainerHeight(jQuery('#mapdiv').height());
+
+            // check selected layers
+            me.sb.findAllSelectedMapLayers().forEach(function(layer) {
+                me.getJsTreeElement().jstree().check_node('layer-' + layer.getId());
+            });
         },
 
         /**
@@ -827,10 +832,12 @@ Oskari.clazz.define(
             var me = this;
             me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
                 var layer = evt.getMapLayer();
+                me.getJsTreeElement().jstree().check_node('layer-' + layer.getId());
             });
 
             me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
                 var layer = evt.getMapLayer();
+                me.getJsTreeElement().jstree().uncheck_node('layer-' + layer.getId());
             });
 
 
