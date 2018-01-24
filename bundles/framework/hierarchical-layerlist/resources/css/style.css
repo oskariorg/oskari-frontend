@@ -284,7 +284,7 @@ div.hierarchical-layerlist ul.layerlist {
 div.hierarchical-layerlist .hierarchical-layerlist-tree {
   max-height: 500px;
   overflow-y: auto; }
-div.hierarchical-layerlist .jstree-layer-group-icon {
+div.hierarchical-layerlist .jstree-group-icon {
   background-image: url("../images/glyphicons/glyphicons-441-folder-closed.png"); }
 div.hierarchical-layerlist .jstree-layer-icon {
   background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
