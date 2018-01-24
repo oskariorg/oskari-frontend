@@ -41,11 +41,11 @@ function() {
    */
   init: function (data) {
     var me = this;
-    me.setEnabled(true);
 
     if ( !data || !data.configuration[me.bundleName] ) {
         return;
     }
+    me.setEnabled(true);
 
     var conf = data.configuration[me.bundleName].conf || {};
     me.noUiIsCheckedInModifyMode = !!conf.noUI;
