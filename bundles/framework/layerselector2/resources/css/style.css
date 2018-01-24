@@ -199,5 +199,9 @@ div.layerselector2 div.tab-content div.oskarifield .related-keywords .focus {
     background-color: #333438;
     color: white;
 }
+div.layerselector2 div.header .badge-wrapper {
+    right: 8%;
+    max-width: 50px;
+}
 
 /*# sourceMappingURL=style.css.map */

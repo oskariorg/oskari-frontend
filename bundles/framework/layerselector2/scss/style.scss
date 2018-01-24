@@ -5,6 +5,12 @@ div.layerselector2 {
         margin: 10px;
         color: #949494;
     }
+    div.header {
+        .badge-wrapper {
+            right: 8%;
+            max-width: 50px;
+        }
+    }
 
     div.filter {
         border: 1px solid $filter-border-color;

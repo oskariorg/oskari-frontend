@@ -13,7 +13,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         linkOutside: '<a target="_blank"></a>'
     },
     formatters: {
-        html: function(datumContent){
+        html: function (datumContent) {
             // html has to be put inside a container so jquery behaves
             var parsedHTML = jQuery('<div></div>').append(datumContent);
             // Remove stuff from head etc. that we don't need/want
@@ -32,11 +32,16 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
          * @param {Object} place response data to format
          * @return {jQuery} formatted html
          */
-        myplace: function(place){
-            var content = jQuery('<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>'),
-                desc = content.find('p.myplaces_desc'),
-                img = content.find('a.myplaces_imglink'),
-                link = content.find('a.myplaces_link');
+        myplace: function (place) {
+            var content = jQuery('<div class="myplaces_place">' +
+                '<h3 class="myplaces_header"></h3>' +
+                    '<p class="myplaces_desc"></p>' +
+                    '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' +
+                    '<br><a class="myplaces_link" target="_blank"></a>' +
+                '</div>');
+            var desc = content.find('p.myplaces_desc');
+            var img = content.find('a.myplaces_imglink');
+            var link = content.find('a.myplaces_link');
 
             content.find('h3.myplaces_header').html(place.name);
 
@@ -81,7 +86,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
          * @param {pValue} datum response data to format
          * @return {jQuery} formatted HMTL
          */
-        json: function(pValue){
+        json: function (pValue) {
             if (!pValue) {
                 return;
             }
@@ -132,18 +137,13 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
          * @method _isHTML
          * @private
          * @param datumContent
-         * @return true if HTML
+         * @return true if includes HTML tag
          */
-        isHTML: function(datumContent){
-            var ret = false;
-            if (datumContent && typeof datumContent === 'string') {
-                if (datumContent.indexOf('<html') >= 0) {
-                    ret = true;
-                } else if (datumContent.indexOf('<HTML') >= 0) {
-                    ret = true;
-                }
+        isHTML: function (datumContent) {
+            if (typeof datumContent === 'string') {
+                return datumContent.toLowerCase().indexOf('<html') !== -1;
             }
-            return ret;
+            return false;
         }
     },
     /**
@@ -158,17 +158,17 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         var me = this;
 
         return _.foldl(fragments, function (wrapper, fragment) {
-            var fragmentTitle = fragment.layerName,
-                fragmentMarkup = fragment.markup;
+            var fragmentTitle = fragment.layerName;
+            var fragmentMarkup = fragment.markup;
 
             if (fragment.isMyPlace) {
                 if (fragmentMarkup) {
                     wrapper.append(fragmentMarkup);
                 }
             } else {
-                var contentWrapper = me.template.wrapper.clone(),
-                    headerWrapper = me.template.header.clone(),
-                    titleWrapper = me.template.headerTitle.clone();
+                var contentWrapper = me.template.wrapper.clone();
+                var headerWrapper = me.template.header.clone();
+                var titleWrapper = me.template.headerTitle.clone();
 
                 titleWrapper.append(fragmentTitle);
                 titleWrapper.attr('title', fragmentTitle);
@@ -280,34 +280,38 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 jsonData = dataArray[i];
                 table = me.template.getinfoResultTable.clone();
                 for (attr in jsonData) {
-                    if (jsonData.hasOwnProperty(attr)) {
-                        value = me.formatters.json(jsonData[attr]);
-                        if (value) {
-                            row = me.template.tableRow.clone();
-                            // FIXME this is unnecessary, we can do this with a css selector.
-                            if (!even) {
-                                row.addClass('odd');
-                            }
-                            even = !even;
-
-                            labelCell = me.template.tableCell.clone();
-                            // Get localized name for attribute
-                            // TODO this should only apply to omat tasot?
-                            pluginLoc = this.getMapModule().getLocalization('plugin', true);
-                            myLoc = pluginLoc[this._name];
-                            localizedAttr = myLoc[attr];
-                            labelCell.append(localizedAttr || attr);
-                            row.append(labelCell);
-                            valueCell = me.template.tableCell.clone();
-                            valueCell.append(value);
-                            row.append(valueCell);
-                            table.append(row);
-                        }
-
+                    if (!jsonData.hasOwnProperty(attr)) {
+                        continue;
                     }
+                    value = me.formatters.json(jsonData[attr]);
+                    if (!value) {
+                        continue;
+                    }
+                    row = me.template.tableRow.clone();
+                    // FIXME this is unnecessary, we can do this with a css selector.
+                    if (!even) {
+                        row.addClass('odd');
+                    }
+                    even = !even;
+
+                    labelCell = me.template.tableCell.clone();
+                    // Get localized name for attribute
+                    // TODO this should only apply to omat tasot?
+                    pluginLoc = this.getMapModule().getLocalization('plugin', true);
+                    myLoc = pluginLoc[this._name];
+                    localizedAttr = myLoc[attr];
+                    labelCell.append(localizedAttr || attr);
+                    row.append(labelCell);
+                    valueCell = me.template.tableCell.clone();
+                    valueCell.append(value);
+                    row.append(valueCell);
+                    table.append(row);
                 }
                 response.append(table);
             }
+        } else if (datum.content === '') {
+            // no content
+            return null;
         } else if (me.formatters.isHTML(datum.content)) {
             var parsedHTML = me.formatters.html(datum.content);
             if (jQuery.trim(parsedHTML.html()) === '') {
@@ -317,6 +321,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         } else {
             response.append(datum.content);
         }
+        // custom "footer"
         if (datum.gfiContent) {
             var trimmed = datum.gfiContent.trim();
             if (trimmed.length) {
@@ -378,11 +383,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     if (!jQuery.isEmptyObject(feat)) {
                         markup = me._json2html(feat);
                     } else {
-                        markup = "<table><tr><td>"+me._loc.noAttributeData+"</td></tr></table>";
+                        markup = '<table><tr><td>' + me._loc.noAttributeData + '</td></tr></table>';
                     }
                 }
             } else {
-                markup = "<table><tr><td>"+me._loc.noAttributeData+"</td></tr></table>";
+                markup = '<table><tr><td>' + me._loc.noAttributeData + '</td></tr></table>';
             }
             return {
                 markup: markup,
@@ -423,83 +428,82 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             innerTable,
             i;
         for (key in node) {
-            if (node.hasOwnProperty(key)) {
-                value = node[key];
-
-                if (value === null || value === undefined ||
-                        key === null || key === undefined) {
-                    continue;
-                }
-                vType = (typeof value).toLowerCase();
-                valpres = '';
-                switch (vType) {
-                case 'string':
-                    if (value.indexOf('http://') === 0) {
-                        valpres = this.template.linkOutside.clone();
-                        valpres.attr('href', value);
-                        valpres.append(value);
-                    } else {
-                        valpres = value;
-                    }
-                    break;
-                case 'undefined':
-                    valpres = 'n/a';
-                    break;
-                case 'boolean':
-                    valpres = (value ? 'true' : 'false');
-                    break;
-                case 'number':
-                    valpres = '' + value;
-                    break;
-                case 'function':
-                    valpres = '?';
-                    break;
-                case 'object':
-                    // format array
-                    if (jQuery.isArray(value)) {
-                        valueDiv = this.template.wrapper.clone();
-                        if(value.length > 0){
-                            if ((typeof value[0]).toLowerCase() === 'object'){
-                                for (i = 0; i < value.length; i += 1) {
-                                    innerTable = this._json2html(value[i]);
-                                    valueDiv.append(innerTable);
-                                }
-                                valpres = valueDiv;
-
-                            } else {
-                                // Create object for array values
-                                for (i = 0; i < value.length; i += 1) {
-                                    arrayObject[key+'.'+i] =  value[i];
-                                }
-                                valpres = this._json2html(arrayObject);
-                            }
-                        }
-
-                    } else {
-                        valpres = this._json2html(value);
-                    }
-                    break;
-                default:
-                    valpres = '';
-                }
-                even = !even;
-
-                row = this.template.tableRow.clone();
-                // FIXME this is unnecessary, we can do this with a css selector.
-                if (!even) {
-                    row.addClass('odd');
-                }
-
-                keyColumn = this.template.tableCell.clone();
-                keyColumn.append(key);
-                row.append(keyColumn);
-
-                valColumn = this.template.tableCell.clone();
-                valColumn.append(valpres);
-                row.append(valColumn);
-
-                html.append(row);
+            if (!node.hasOwnProperty(key)) {
+                continue;
             }
+            value = node[key];
+
+            if (value === null || value === undefined ||
+                    key === null || key === undefined) {
+                continue;
+            }
+            vType = (typeof value).toLowerCase();
+            valpres = '';
+            switch (vType) {
+            case 'string':
+                if (value.indexOf('http://') === 0) {
+                    valpres = this.template.linkOutside.clone();
+                    valpres.attr('href', value);
+                    valpres.append(value);
+                } else {
+                    valpres = value;
+                }
+                break;
+            case 'undefined':
+                valpres = 'n/a';
+                break;
+            case 'boolean':
+                valpres = (value ? 'true' : 'false');
+                break;
+            case 'number':
+                valpres = '' + value;
+                break;
+            case 'function':
+                valpres = '?';
+                break;
+            case 'object':
+                // format array
+                if (jQuery.isArray(value)) {
+                    valueDiv = this.template.wrapper.clone();
+                    if (value.length > 0) {
+                        if ((typeof value[0]).toLowerCase() === 'object') {
+                            for (i = 0; i < value.length; i += 1) {
+                                innerTable = this._json2html(value[i]);
+                                valueDiv.append(innerTable);
+                            }
+                            valpres = valueDiv;
+                        } else {
+                            // Create object for array values
+                            for (i = 0; i < value.length; i += 1) {
+                                arrayObject[key + '.' + i] = value[i];
+                            }
+                            valpres = this._json2html(arrayObject);
+                        }
+                    }
+                } else {
+                    valpres = this._json2html(value);
+                }
+                break;
+            default:
+                valpres = '';
+            }
+            even = !even;
+
+            row = this.template.tableRow.clone();
+            // FIXME this is unnecessary, we can do this with a css selector.
+            if (!even) {
+                row.addClass('odd');
+            }
+
+            keyColumn = this.template.tableCell.clone();
+            keyColumn.append(key);
+            row.append(keyColumn);
+
+            valColumn = this.template.tableCell.clone();
+            valColumn.append(valpres);
+            row.append(valColumn);
+
+            html.append(row);
         }
         return html;
     }
