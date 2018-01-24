@@ -84,7 +84,7 @@ function() {
   },
   /**
   * Get extra options.
-  * @method @public 
+  * @method @public getExtraOptions
   * @param {Object} jQuery element toolContainer
   * @return {Object} jQuery element template
   */
@@ -103,11 +103,9 @@ function() {
             return;
         }
         if ( checked === 'on' ) {
-            // TODO update here plugin ui boolean
             me.noUI = true;
             me.getPlugin().teardownUI();
         } else {
-            // TODO update here plugin ui boolean
             me.noUI = false;
             me.getPlugin().redrawUI();
         }
