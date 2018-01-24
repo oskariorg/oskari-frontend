@@ -115,13 +115,16 @@
              * @method addLayerlistOption, for example allow draggin etc.
              * @param  {String}                 key     option key
              * @param  {Object|String|Boolean}  value   option value
+             * @param {Boolean}                 notTriggerEvent not trigger event when tru, defaults false
              */
-            addLayerlistOption: function(key, value) {
+            addLayerlistOption: function(key, value, notTriggerEvent) {
                 this._options[key] = value;
-                this.trigger('option.added', {
-                    key: key,
-                    value: value
-                });
+                if (!notTriggerEvent) {
+                    this.trigger('option.added', {
+                        key: key,
+                        value: value
+                    });
+                }
             },
 
             /**
