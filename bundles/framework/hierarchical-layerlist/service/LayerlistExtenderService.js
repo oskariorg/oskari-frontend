@@ -30,7 +30,8 @@
                         valid_children: ['layer']
                     },
                     layer: {
-                        icon: 'jstree-layer-icon'
+                        icon: 'jstree-layer-icon',
+                        valid_children: []
                     }
                 },
                 search: {
