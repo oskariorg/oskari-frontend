@@ -4,61 +4,43 @@
  * Hierarchical layerlist bundle for admins. This extends hierarchical-layerlist bundle.
  */
 Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstance",
+    function() {
+        this.sandbox = Oskari.getSandbox();
+        this.service = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
+    }, {
+        /*******************************************************************************************************************************
+        /* PRIVATE METHODS
+        *******************************************************************************************************************************/
+        /**
+         * Add main tools
+         * @method  _addMainTools
+         * @private
+         */
+        _addMainTools: function() {
+            var me = this;
+            // Add new tool to adding groups
+            me.service.addMainTool('add-group', function(tool) {
+                tool.removeClass('active');
+                alert('Lisää ryhmä');
+            }, {
+                cls: 'add-group',
+                tooltip: 'Lisää ryhmä'
+            });
+        },
 
-    /**
-     * @method create called automatically on construction
-     * @static
-     */
-
-    function() {}, {
+        /*******************************************************************************************************************************
+        /* PUBLIC METHODS
+        *******************************************************************************************************************************/
         getName: function() {
             return "AdminHierarchicalLayerList";
         },
         start: function() {
             var me = this;
-            var sandbox = Oskari.getSandbox();
-            sandbox.register(this);
-            /*
-            var title = 'Metrics';
-            var content = jQuery('<div></div>');
-            jQuery.ajax({
-                dataType: "json",
-                type: "GET",
-                url: sandbox.getAjaxUrl(),
-                data: {
-                    action_route: 'Metrics'
-                },
-                error: function() {
-                    content.append('Error loading metrics');
-                },
-                success: function(response) {
-                    content.tree({
-                        'data': me.formatData(response)
-                    });
-                }
-            });
-            var reqBuilder = sandbox.getRequestBuilder('Admin.AddTabRequest');
-            if (reqBuilder) {
-                var request = reqBuilder(title, content, 2, 'metrics');
-                sandbox.request(this, request);
-            }
-            */
+            me.sandbox.register(this);
+
+            me._addMainTools();
         },
-        /*
-        formatData: function(metricsData) {
-            var me = this;
-            return _.map(metricsData, function(value, key) {
-                var res = {
-                    label: key
-                };
-                if (typeof value === 'object') {
-                    res.children = me.formatData(value);
-                } else {
-                    res.label = res.label + ' : ' + value;
-                }
-                return res;
-            });
-        },*/
+
         // module boilerplate methods
         init: function() {
 

@@ -84,10 +84,8 @@
              * @param  {Function}  handler tool handler
              * @param  {Object}    options tool options:
              *                             {
-             *                                 cls: {
-             *                                     active: 'active-cls',
-             *                                     deactive: 'deactive-cls'
-             *                                 }
+             *                                 cls: 'active-cls',
+             *                                 tooltip: 'Tool tooltip'
              *                             }
              *
              */
@@ -165,10 +163,7 @@
              * @param  {Function}   hasVisible has visible function
              * @param  {Object}     options    group tool options:
              *                                 {
-             *                                     cls: {
-             *                                         active: 'active-cls',
-             *                                         deactive: 'deactive-cls'
-             *                                     }
+             *                                     cls: 'active-cls'
              *                                 }
              */
             addGroupTool: function(id, handler, hasVisible, options) {
@@ -219,10 +214,7 @@
              * @param  {Function}   handler layer tool handler
              * @param  {Object}     options layer tool options:
              *                                 {
-             *                                     cls: {
-             *                                         active: 'active-cls',
-             *                                         deactive: 'deactive-cls'
-             *                                     }
+             *                                     cls: 'active-cls'
              *                                 }
              */
             addLayerTool: function(id, handler, options) {

@@ -96,11 +96,30 @@ div.hierarchical-layerlist div.tab-content {
       width: 90%; }
     div.hierarchical-layerlist div.tab-content div.oskarifield .icon-close {
       margin-right: -20px; }
-    div.hierarchical-layerlist div.tab-content div.oskarifield .field-description {
+    div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .field-description {
+      max-width: 80%;
+      float: left;
       padding: 3px 0;
       color: #666; }
-      div.hierarchical-layerlist div.tab-content div.oskarifield .field-description .icon-info {
+      div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .field-description .icon-info {
         display: inline-block; }
+    div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools {
+      float: right; }
+      div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool {
+        width: 26px;
+        height: 26px;
+        float: left;
+        margin-left: 4px;
+        margin-top: 4px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        cursor: pointer; }
+        div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool:active {
+          background-color: #ffde00; }
+        div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool.add-group {
+          background-image: url("../images/glyphicons/glyphicons-433-plus.png"); }
+    div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .clear {
+      clear: both; }
     div.hierarchical-layerlist div.tab-content div.oskarifield .related-keywords {
       display: none;
       overflow: hidden;
