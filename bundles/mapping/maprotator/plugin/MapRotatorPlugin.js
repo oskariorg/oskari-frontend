@@ -102,7 +102,6 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
       this.handleEvents();  
     },
     setRotation: function ( deg ) {
-
       if ( !this.isSupported() ) {
         return;
       }
@@ -113,7 +112,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
 
       this.rotateIcon( degrees );
       this._map.getView().setRotation( rot );
-      this.storePreviousDegreeValue( degrees );
+      this.setDegrees( degrees );
     },
     getRotation: function() {
       var me = this;
