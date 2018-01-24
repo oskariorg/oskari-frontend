@@ -15,7 +15,6 @@ Oskari.clazz.define(
         this.id = id;
         this.layerGroups = [];
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
-        this.layerGroups = [];
         this.layerContainers = {};
         this.sb = this.instance.getSandbox();
         this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
@@ -33,7 +32,8 @@ Oskari.clazz.define(
                 '</a>',
             keywordType: '<div class="type"></div>',
             layerFilter: '<div class="layer-filter hierarchical-layerlist-layer-filter">'+
-                '</div><div style="clear:both;"></div>'
+                '</div><div style="clear:both;"></div>',
+            layerTree: '<div class="hierarchical-layerlist-tree"></div>'
         };
         this._createUI(id);
     },
@@ -170,6 +170,9 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Accordion'
             );
             me.accordion.insertTo(me.tabPanel.getContainer());
+
+            layerTree = jQuery(me.templates.layerTree);
+            me.tabPanel.getContainer().append(layerTree);
         },
         /**
          * Get filter field
@@ -258,11 +261,36 @@ Oskari.clazz.define(
             me.layerContainers = {};
             me.layerGroups = groups;
             localization = me.instance.getLocalization();
+            var jsTreeData = [];
+            /*var jstreeJSON = { 'core' : {
+                'data' : [
+                   { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+                   { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
+                   { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+                   { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+                ]
+            } }*/
             for (i = 0; i < groupsLength; i += 1) {
                 group = groups[i];
                 layers = group.getLayers();
                 layersLength = layers.length;
-                groupPanel = Oskari.clazz.create(
+                //Create root group
+                var jsTreeGroup = {};
+                jsTreeGroup["id"] = "group-"+group.id;
+                jsTreeGroup["parent"] = "#";
+                jsTreeGroup["text"] = group.name;
+                jsTreeData.push(jsTreeGroup);
+                //Loop through group layers
+                //TODO: Loop through subgroups aswell similarly
+                for (n = 0; n < layersLength; n += 1) {
+                    layer = layers[n];
+                    var jsTreeLayer = {};
+                    jsTreeLayer["id"] = "layer-"+layer.getId();
+                    jsTreeLayer["parent"] = "group-"+group.id;
+                    jsTreeLayer["text"] = layer.getName();
+                    jsTreeData.push(jsTreeLayer);
+                }
+                /*groupPanel = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.component.SelectableAccordionPanel',
                     me.instance.sandbox,
                     group,
@@ -298,16 +326,23 @@ Oskari.clazz.define(
                     //}
                 }
                 groupContainer.removeClass('oskari-hidden');
-                me.accordion.addPanel(groupPanel);
+                me.accordion.addPanel(groupPanel);*/
             }
-
-            selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
+            var jsTreeConf = {
+                'core' : {
+                }
+            };
+            var jsTreeDiv = jQuery('div.hierarchical-layerlist-tree');
+            jsTreeDiv.jstree(jsTreeConf);
+            jsTreeDiv.jstree(true).settings.core.data = jsTreeData;
+            jsTreeDiv.jstree(true).refresh();
+            /*selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
             layersLength = selectedLayers.length;
             for (i = 0; i < layersLength; i += 1) {
                 me.setLayerSelected(selectedLayers[i].getId(), true);
             }
 
-            me.filterLayers(me.filterField.getValue());
+            me.filterLayers(me.filterField.getValue());*/
         },
 
         /**
