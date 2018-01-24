@@ -10,7 +10,8 @@ function() {
   templates: {
       'toolOptions': '<div class="tool-options"></div>'
   },
-  noUI: false,
+  noUI: null,
+  noUiIsCheckedInModifyMode: false,
 /**
   * Get tool object.
   * @method getTool
@@ -21,9 +22,7 @@ function() {
       return {
           id: 'Oskari.mapping.maprotator.MapRotatorPlugin',
           title: 'MapRotator',
-          config: {
-              noUI: this.noUI
-          }
+          config: {}
       };
   },
   isDisplayed: function() {
@@ -49,7 +48,7 @@ function() {
     }
 
     var conf = data.configuration[me.bundleName].conf || {};
-    me.noUI = !!conf.noUI;
+    me.noUiIsCheckedInModifyMode = !!conf.noUI;
   },
   /**
   * Get values.
@@ -62,9 +61,15 @@ function() {
       var me = this;
       if(me.state.enabled) {
         var pluginConfig = this.getPlugin().getConfig();
-
-        pluginConfig.noUI = me.noUI;
-
+        for (var configName in pluginConfig) {
+            if (configName === 'noUI' && !me.noUI) {
+                pluginConfig[configName] = null;
+                delete pluginConfig[configName];
+            }
+        }
+        if(me.noUI) {
+            pluginConfig.noUI = me.noUI;
+        }
         var json = {
             configuration: {}
         };
@@ -107,7 +112,10 @@ function() {
             me.getPlugin().redrawUI();
         }
     });
-
+    if(me.noUiIsCheckedInModifyMode) {
+        input.setChecked(true);
+        me.noUI = true;
+    }
     var inputEl = input.getElement();
     template.append(inputEl);
     return template;

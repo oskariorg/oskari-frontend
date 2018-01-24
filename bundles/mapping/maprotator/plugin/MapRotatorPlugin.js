@@ -77,8 +77,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
         compass.attr('title', this._locale.tooltip.tool);
 
         if ( !this.hasUi() ) {
-          this.teardownUI();
-            return null;
+          return null;
         }
       return compass;
     },
@@ -176,7 +175,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
       this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);  
     },
     hasUi: function () {
-      return this._config.noUI;
+        return this._config.noUI ? false : true;
     },
     /**
      * Get jQuery element.
