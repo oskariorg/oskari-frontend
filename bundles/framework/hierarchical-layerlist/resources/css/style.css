@@ -1,5 +1,5 @@
 .hierarchical-layerlist-flyout .oskari-flyoutcontentcontainer {
-  max-height: unset; }
+  max-height: none; }
 
 div.hierarchical-layerlist div.layer-filter {
   margin: 10px;
@@ -282,11 +282,12 @@ div.hierarchical-layerlist ul.layerlist {
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-content-editor-tool {
             background-image: url("../images/glyphicons/glyphicons-31-pencil.png"); }
 div.hierarchical-layerlist .hierarchical-layerlist-tree {
-  max-height: 500px;
   overflow-y: auto; }
-div.hierarchical-layerlist .jstree-group-icon {
-  background-image: url("../images/glyphicons/glyphicons-441-folder-closed.png"); }
-div.hierarchical-layerlist .jstree-layer-icon {
-  background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-group-icon {
+    display: none; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {
+    background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl {
+    margin-right: -16px; }
 
 /*# sourceMappingURL=style.css.map */

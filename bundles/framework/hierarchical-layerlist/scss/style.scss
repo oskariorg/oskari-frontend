@@ -7,7 +7,7 @@ $selectedLayersTabLabelWidth: 50px;
 .hierarchical-layerlist-flyout
 {
     .oskari-flyoutcontentcontainer {
-        max-height:unset;
+        max-height: none;
     }
 }
 
@@ -442,14 +442,20 @@ div.hierarchical-layerlist {
             }
         }
     }
+
     .hierarchical-layerlist-tree {
-        max-height: 500px;
         overflow-y: auto;
-    }
-    .jstree-group-icon {
-        background-image: url("../images/glyphicons/glyphicons-441-folder-closed.png");
-    }
-    .jstree-layer-icon {
-        background-image: url("../images/glyphicons/glyphicons-37-file.png");
+
+        .jstree-group-icon {
+            display: none;
+        }
+        .jstree-layer-icon {
+            background-image: url("../images/glyphicons/glyphicons-37-file.png");
+        }
+        .jstree-open, .jstree-closed {
+            .jstree-ocl {
+                margin-right: -16px;
+            }
+        }
     }
 }
