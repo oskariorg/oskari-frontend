@@ -64,31 +64,37 @@ function () {
     },
     
     eventHandlers: {
-        'userinterface.ExtensionUpdatedEvent': function (event) {
-            if( event.getExtension().getName !== me.getName() ) {
-                return;
-            }
-            var wasClosed = event.getViewState() === 'close';
-            if ( wasClosed ) {
-                debugger;
-            } else {
-                debugger;
-            }
-        }
+        // 'userinterface.ExtensionUpdatedEvent': function (event) {
+        //     if( event.getExtension().getName() !== me.getName() ) {
+        //         return;
+        //     }
+        //     var wasClosed = event.getViewState() === 'close';
+        //     if ( wasClosed ) {
+        //         debugger;
+        //     } else {
+        //         debugger;
+        //     }
+        // }
     },
     hardcodedViews: function () {
         var views = [
             {
-                imgCls: 'alaska',
-                name: 'Alaska'
+                "uuid":"379e1ac2-f3d4-437a-8bca-e8755516e1e6",
+                "name":"Paikkatietoikkuna.fi",
+                "srsName":"EPSG:3067",
+                "imgCls": 'alaska'
             },
             {
-                imgCls: 'bering',
-                name: 'Bering Sea'
+                "uuid":"0364d4a4-97d0-4823-89d8-9532a8869ddb",
+                "name":"Paikkatietoikkuna.fi",
+                "srsName":"EPSG:3067",
+                "imgCls": 'bering'
             },
             {
-                imgCls: 'bering',
-                name: 'Canada'
+                "uuid":"90246d84-3958-fd8c-cb2c-2510cccca1d3",
+                "name":"Paikkatietoikkuna",
+                "srsName":"EPSG:3067",
+                "imgCls": 'bering'
             },
             {
                 imgCls: 'bering',

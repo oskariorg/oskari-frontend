@@ -9,6 +9,7 @@ function (view, callback) {
     this.element = null;
     this.callback = callback;
     this.view = view;
+    this.infoView = Oskari.clazz.create('Oskari.map.projection.view.ProjectionInformation', view);
     if ( !this.getElement() )
     {
         this.create(view);
@@ -27,11 +28,12 @@ function (view, callback) {
         card.find('p').html(view.name);
 
         card.on('click', function() {
-            me.callback( view.name );
+            me.callback( view.uuid,  view.srsName );
         });
         //infolink
         card.find('.projection-info').on('click', function( event ) {
             event.stopPropagation();
+            me.infoView.show( jQuery(this) );
             //display information about projection
         });
 

@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.map.projection.view.ProjectionChange', function (ins
     },
     createUi: function() {
         var me = this;
-        if (this.getElement()) {
+        if ( this.getElement() ) {
             return;
         }
         var el = this._template.container.clone();
@@ -42,8 +42,20 @@ Oskari.clazz.define('Oskari.map.projection.view.ProjectionChange', function (ins
       * @method changeProjection
       * @description reloads the page with a new uuid
       */
-    changeProjection: function ( newProjection ) {
-        console.log("change projection to: " + newProjection + " needs implementing");
+    changeProjection: function ( uuid, srs ) {
+       // window.open("localhost:8080?uuid="+uuid);
+        this.updateSelectedLayers(srs);
+    },
+    updateSelectedLayers: function (srs) {
+        //disable layers that are not supported in new projection
+        var layerSelection = Oskari.getSandbox().findRegisteredModuleInstance('LayerSelection');
+        var layers = Oskari.getSandbox().findAllSelectedMapLayers();
+        layers.forEach( function (layer) {
+            if (layer._srs_name !== srs) {
+                debugger;
+                //layer srs doesn't match the new projection srs
+            }
+        });
     }
 }, {
 });
