@@ -408,4 +408,14 @@ div.hierarchical-layerlist {
             }
         }
     }
+    .hierarchical-layerlist-tree {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .jstree-layer-group-icon {
+        background-image: url("../images/glyphicons/glyphicons-441-folder-closed.png");
+    }
+    .jstree-layer-icon {
+        background-image: url("../images/glyphicons/glyphicons-37-file.png");
+    }
 }

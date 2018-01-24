@@ -262,5 +262,12 @@ div.hierarchical-layerlist ul.layerlist {
             background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-content-editor-tool {
             background-image: url("../images/glyphicons/glyphicons-31-pencil.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree {
+  max-height: 500px;
+  overflow-y: auto; }
+div.hierarchical-layerlist .jstree-layer-group-icon {
+  background-image: url("../images/glyphicons/glyphicons-441-folder-closed.png"); }
+div.hierarchical-layerlist .jstree-layer-icon {
+  background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
 
 /*# sourceMappingURL=style.css.map */

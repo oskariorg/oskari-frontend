@@ -262,14 +262,6 @@ Oskari.clazz.define(
             me.layerGroups = groups;
             localization = me.instance.getLocalization();
             var jsTreeData = [];
-            /*var jstreeJSON = { 'core' : {
-                'data' : [
-                   { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
-                   { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
-                   { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
-                   { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
-                ]
-            } }*/
             for (i = 0; i < groupsLength; i += 1) {
                 group = groups[i];
                 layers = group.getLayers();
@@ -279,6 +271,7 @@ Oskari.clazz.define(
                 jsTreeGroup["id"] = "group-"+group.id;
                 jsTreeGroup["parent"] = "#";
                 jsTreeGroup["text"] = group.name;
+                jsTreeGroup["type"] = "group";
                 jsTreeData.push(jsTreeGroup);
                 //Loop through group layers
                 //TODO: Loop through subgroups aswell similarly
@@ -288,6 +281,7 @@ Oskari.clazz.define(
                     jsTreeLayer["id"] = "layer-"+layer.getId();
                     jsTreeLayer["parent"] = "group-"+group.id;
                     jsTreeLayer["text"] = layer.getName();
+                    jsTreeLayer["type"] = "layer";
                     jsTreeData.push(jsTreeLayer);
                 }
                 /*groupPanel = Oskari.clazz.create(
@@ -330,10 +324,55 @@ Oskari.clazz.define(
             }
             var jsTreeConf = {
                 'core' : {
-                }
+                    "themes" : {
+                        "variant" : "large"
+                    }
+                },
+                "checkbox" : {
+                    "keep_selected_style" : false
+                },
+                "types" : {
+                    "group" : {
+                        "icon" : "jstree-layer-group-icon"
+                    },
+                    "layer" : {
+                        "icon" : "jstree-layer-icon"
+                    }
+                },
+                "search" : {
+                    "show_only_matches": true
+                },
+                "plugins" : [ "checkbox", "changed", "wholerow", "sort", "types", "search" ]
             };
+            var to = false;
+            $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').keyup(function () {
+            if(to) { clearTimeout(to); }
+                to = setTimeout(function () {
+                var v = $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').val();
+                jsTreeDiv.jstree(true).search(v);
+                }, 250);
+            });
             var jsTreeDiv = jQuery('div.hierarchical-layerlist-tree');
-            jsTreeDiv.jstree(jsTreeConf);
+            jsTreeDiv.on("changed.jstree", function (e, data) {
+                var selected = data.changed.selected;
+                var selectedLength = selected.length;
+                var deselected = data.changed.deselected;
+                var deselectedLength = deselected.length;
+                for(var i = 0; i < selectedLength; ++i) {
+                    var sel = selected[i];
+                    var selArr = sel.split('-');
+                    if(selArr[0] === 'layer') {
+                        me.sb.postRequestByName('AddMapLayerRequest', [selArr[1]]);
+                    }
+                }
+                for(var i = 0; i < deselectedLength; ++i) {
+                    var desel = deselected[i];
+                    var deselArr = desel.split('-');
+                    if(deselArr[0] === 'layer') {
+                        me.sb.postRequestByName('RemoveMapLayerRequest', [deselArr[1]]);
+                    }
+                }
+            }).jstree(jsTreeConf);
             jsTreeDiv.jstree(true).settings.core.data = jsTreeData;
             jsTreeDiv.jstree(true).refresh();
             /*selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
