@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         var me = this;
         //"use strict";
         this.instance = instance;
+        this.service = this.instance.layerlistExtenderService;
         this.container = null;
         this.template = null;
         this.state = null;
@@ -31,8 +32,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         this.mapLayerService.on('Layerlist.Filter.Button.Add', function(button) {
             me.addFilterTool(button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
         });
+        this._bindExtenderServiceListeners();
     }, {
+        _bindExtenderServiceListeners: function() {
+            var me = this;
 
+            me.service.on('option.added', function(data) {
+                me.populateLayers();
+            });
+        },
         /**
          * @method getName
          * @return {String} the name for the component

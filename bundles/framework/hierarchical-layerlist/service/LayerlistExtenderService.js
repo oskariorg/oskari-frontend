@@ -11,8 +11,63 @@
          * @static
          */
         function() {
-            this._options = {};
-            this._events = [];
+            var me = this;
+            this.sb = Oskari.getSandbox();
+            this._options = {
+                /* Default options */
+                core: {
+                    check_callback: true,
+                    themes: {
+                        variant: 'large'
+                    }
+                },
+                checkbox: {
+                    keep_selected_style: false
+                },
+                types: {
+                    group: {
+                        icon: 'jstree-layer-group-icon',
+                        valid_children: ['layer']
+                    },
+                    layer: {
+                        icon: 'jstree-layer-icon',
+                        valid_children: []
+                    }
+                },
+                search: {
+                    show_only_matches: true
+                },
+                plugins: ['checkbox', 'changed', 'wholerow', 'types', 'search']
+            };
+            this._events = [
+                /* Default handlers */
+                {
+                    name: 'changed.jstree',
+                    handler: function(e, data) {
+                        var selected = data.changed.selected;
+                        var deselected = data.changed.deselected;
+
+                        selected.forEach(function(sel) {
+                            var selArr = sel.split('-');
+                            var type = selArr[0];
+                            var layerId = selArr[1];
+                            if (type === 'layer' && !me.sb.isLayerAlreadySelected(layerId)) {
+                                me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
+                            }
+                        });
+
+                        deselected.forEach(function(desel) {
+                            var deselArr = desel.split('-');
+                            var type = deselArr[0];
+                            var layerId = deselArr[1];
+                            if (type === 'layer' && me.sb.isLayerAlreadySelected(layerId)) {
+                                me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
+                            }
+                        });
+
+                    }
+                }
+            ];
             this._mainTools = {};
             this._groupTools = {};
             this._layerTools = {};
@@ -53,11 +108,6 @@
              * @param  {Object|String|Boolean}  value   option value
              */
             addLayerlistOption: function(key, value) {
-                if (this._options[key]) {
-                    _log.warn('Layerlist option "' + key + '" allready defined.');
-                    return;
-                }
-
                 this._options[key] = value;
                 this.trigger('option.added', {
                     key: key,

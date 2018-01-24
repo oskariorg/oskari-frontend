@@ -189,9 +189,6 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Accordion'
             );
             me.accordion.insertTo(me.tabPanel.getContainer());
-
-            layerTree = jQuery(me.templates.layerTree);
-            me.tabPanel.getContainer().append(layerTree);
         },
         /**
          * Get filter field
@@ -255,9 +252,11 @@ Oskari.clazz.define(
             }
         },
         getNodeRealId: function(node) {
+            //FIXME: COMMENTS
             return node.id.split('-')[1];
         },
         selectNodeFromTree: function(node, event) {
+            //FIXME: COMMENTS
             var me = this;
             var tree = jQuery(event.delegateTarget);
             var isChecked = tree.jstree().is_checked(node);
@@ -357,6 +356,10 @@ Oskari.clazz.define(
                 }
             }
         },
+        getJsTreeElement: function() {
+            //FIXME: COMMENTS
+            return this.tabPanel.getContainer().find('.hierarchical-layerlist-tree');
+        },
         /**
          * Show layer groups
          * @method  @public showLayerGroups
@@ -407,7 +410,13 @@ Oskari.clazz.define(
                         me.selectNodeFromTree(node, event);
                     },
                     "plugins" : [ "checkbox", "changed", "wholerow", "sort", "types", "search", "state", "conditionalselect" ]
-                };
+                }
+
+            if (me.getJsTreeElement().length > 0) {
+                me.getJsTreeElement().remove();
+            }
+            var layerTree = jQuery(me.templates.layerTree);
+            me.tabPanel.getContainer().append(layerTree);
             me.accordion.removeAllPanels();
             me.layerContainers = {};
             me.layerGroups = groups;
@@ -418,7 +427,7 @@ Oskari.clazz.define(
                 layersLength = layers.length;
                 //Create root group
                 var jsTreeGroup = {};
-                jsTreeGroup.id = "group-"+group.id;
+                jsTreeGroup.id = "group-" + group.id;
                 jsTreeGroup.parent = "#";
                 jsTreeGroup.text = group.name;
                 jsTreeGroup.type = "group";
@@ -435,25 +444,41 @@ Oskari.clazz.define(
                     jsTreeData.push(jsTreeLayer);
                 }
             }
+
             var to = false;
-            $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').keyup(function () {
-            if(to) { clearTimeout(to); }
-                to = setTimeout(function () {
+            $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').keyup(function() {
+                if (to) {
+                    clearTimeout(to);
+                }
+                to = setTimeout(function() {
                     var v = $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').val();
                     jsTreeDiv.jstree(true).search(v);
                 }, 250);
             });
+
             var jsTreeDiv = jQuery('div.hierarchical-layerlist-tree');
             jsTreeDiv.jstree(jsTreeConf);
             jsTreeDiv.jstree(true).settings.core.data = jsTreeData;
             jsTreeDiv.jstree(true).refresh();
             selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
+
+            var jsTreeDiv = me.getJsTreeElement();
+
+            me.service.getEventHandler().forEach(function(event) {
+                jsTreeDiv.on(event.name, event.handler);
+            });
+
+            jsTreeDiv.jstree(me.service.getLayerlistOption());
+            jsTreeDiv.jstree(true).settings.core.data = jsTreeData;
+            jsTreeDiv.jstree(true).refresh();
+
+            /*selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
             layersLength = selectedLayers.length;
             for (i = 0; i < layersLength; i += 1) {
                 me.setLayerSelected(selectedLayers[i].getId(), true);
             }
 
-            me.filterLayers(me.filterField.getValue());
+            me.filterLayers(me.filterField.getValue());*/
         },
 
         /**
