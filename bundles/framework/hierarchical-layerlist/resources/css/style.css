@@ -283,6 +283,8 @@ div.hierarchical-layerlist ul.layerlist {
             background-image: url("../images/glyphicons/glyphicons-31-pencil.png"); }
 div.hierarchical-layerlist .hierarchical-layerlist-tree {
   overflow-y: auto; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow-hovered {
+    background-color: #fdf8d9; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-group-icon {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {

@@ -446,6 +446,10 @@ div.hierarchical-layerlist {
     .hierarchical-layerlist-tree {
         overflow-y: auto;
 
+        .jstree-wholerow-hovered {
+            background-color: #fdf8d9;
+        }
+
         .jstree-layer-group-icon {
             display: none;
         }
