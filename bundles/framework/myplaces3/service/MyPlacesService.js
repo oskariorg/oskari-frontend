@@ -30,7 +30,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
         // skipLoading is used for published maps (value by init-method param)
         // it means we shouldn't load any features on start and also when saving
         this.skipLoading = false;
-        this.featureNS = pInstance.featureNS;
         this.srsName = sandbox.getMap().getSrsName();
         this.loadedCategories = false; //TODO remove when places is loaded when category is selected
         this.loadedPlaces = false; //TODO remove when places is loaded when category is selected

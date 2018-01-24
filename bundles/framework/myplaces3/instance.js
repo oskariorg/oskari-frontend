@@ -16,7 +16,6 @@ Oskari.clazz.define(
         this.buttons = undefined;
         this.categoryHandler = undefined;
         this.myPlacesService = undefined;
-        this.featureNS = undefined;
         this.idPrefix = 'myplaces';
         this.finishedDrawing = false;
         this.editPlaceName = 'EditMyPlaces3';
@@ -228,10 +227,6 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName);
             this.sandbox = sandbox;
 
-            this.featureNS = conf ? conf.featureNS : null;
-            if (!this.featureNS) {
-                return;
-            }
             sandbox.printDebug("Initializing my places module...");
 
             // handles toolbar buttons related to my places
