@@ -64,16 +64,22 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 "src": "../../../../bundles/framework/hierarchical-layerlist/view/SelectedLayersTab.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/service/OskariEventNotifierService.js"
+                "src": "../../../../bundles/framework/hierarchical-layerlist/service/LayerlistExtenderService.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/service/LayerlistExtenderService.js"
+                "src": "../../../../bundles/framework/hierarchical-layerlist/service/OskariEventNotifierService.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectedLayer.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectableAccordionPanel.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../libraries/jstree/jstree.js"
+            }, {
+                "type": "text/css",
+                "src": "../../../../libraries/jstree/themes/default/style.css"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/resources/css/style.css"
