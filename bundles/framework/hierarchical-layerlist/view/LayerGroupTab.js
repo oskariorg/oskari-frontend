@@ -18,6 +18,7 @@ Oskari.clazz.define(
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerContainers = {};
         this.sb = this.instance.getSandbox();
+        this.localization = this.instance.getLocalization();
         this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
         // FIXME: these templates must be a jQuery objects
         this.templates = {
@@ -57,6 +58,10 @@ Oskari.clazz.define(
                 });
                 me.getFilterField().getField().find('.main-tools').append(tool);
                 console.log('Main tool added, data:', data);
+            });
+
+            me.service.on('jstree-contionalselect', function(data) {
+                me.selectNodeFromTree(data.node, data.event);
             });
         },
         getTitle: function() {
@@ -251,8 +256,101 @@ Oskari.clazz.define(
                 me._relatedKeywordsPopup(keyword, event, me);
             }
         },
+        getNodeRealId: function(node) {
+            //FIXME: COMMENTS
+            return node.id.split('-')[1];
+        },
+        selectNodeFromTree: function(node, event) {
+            //FIXME: COMMENTS
+            var me = this;
+            var tree = jQuery(event.delegateTarget);
+            var isChecked = tree.jstree().is_checked(node);
+            var isOpen = tree.jstree().is_open(node);
+            var target = jQuery(event.target);
+            var nodeChildren = node.children;
+            var nodeChildrenLength = nodeChildren.length;
+            if (!target.hasClass('jstree-checkbox')) {
+                if (isOpen) {
+                    tree.jstree().close_node(node);
+                } else {
+                    tree.jstree().open_node(node);
+                }
+            } else {
+                if (isChecked) {
+                    tree.jstree().uncheck_node(node);
+                    if (node.type === 'group' && nodeChildrenLength > 0) {
+                        for (var i = 0; i < nodeChildrenLength; ++i) {
+                            var child = tree.jstree().get_node(nodeChildren[i]);
+                            me.sb.postRequestByName('RemoveMapLayerRequest', [me.getNodeRealId(child)]);
+                        }
+                    } else if (node.type === 'layer') {
+                        me.sb.postRequestByName('RemoveMapLayerRequest', [me.getNodeRealId(node)]);
+                    }
+                } else {
+                    var allSelectedLayers = me.sb.findAllSelectedMapLayers();
+                    var allSelectedLayersLength = allSelectedLayers.length;
+                    var desc = jQuery(me.templates.description),
+                        dialog = Oskari.clazz.create(
+                            'Oskari.userinterface.component.Popup'
+                        ),
+                        okBtn = Oskari.clazz.create(
+                            'Oskari.userinterface.component.buttons.OkButton'
+                        ),
+                        cancelBtn = Oskari.clazz.create(
+                            'Oskari.userinterface.component.buttons.CancelButton'
+                        );
+                    if (node.type === 'group' && nodeChildrenLength > 0) {
+                        //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
+                        if ((nodeChildrenLength > 10 || allSelectedLayersLength > 10)) {
 
+                            desc.find('p').text(me.localization.manyLayersWarning.text);
+                            okBtn.addClass('primary');
+                            okBtn.setHandler(function() {
+                                dialog.close(true);
+                                tree.jstree().open_node(node);
+                                tree.jstree().check_node(node);
+                                nodeChildren.forEach(function(nodechild) {
+                                    var child = tree.jstree().get_node(nodechild);
+                                    me.sb.postRequestByName('AddMapLayerRequest', [me.getNodeRealId(child)]);
+                                });
+                            });
+                            cancelBtn.addClass('secondary');
+                            cancelBtn.setHandler(function() {
+                                dialog.close(true);
+                            });
+                            dialog.show(me.localization.manyLayersWarning.title, desc, [okBtn, cancelBtn]);
+                        } else {
+                            tree.jstree().open_node(node);
+                            tree.jstree().check_node(node);
+                            nodeChildren.forEach(function(nodechild) {
+                                var child = tree.jstree().get_node(nodechild);
+                                me.sb.postRequestByName('AddMapLayerRequest', [me.getNodeRealId(child)]);
+                            });
+                        }
+                    } else if (node.type === 'layer') {
+                        if (allSelectedLayersLength > 10) {
+                            desc.find('p').text(me.localization.manyLayersWarning.text);
+                            okBtn.addClass('primary');
+                            okBtn.setHandler(function() {
+                                dialog.close(true);
+                                tree.jstree().check_node(node);
+                                me.sb.postRequestByName('AddMapLayerRequest', [me.getNodeRealId(node)]);
+                            });
+                            cancelBtn.addClass('secondary');
+                            cancelBtn.setHandler(function() {
+                                dialog.close(true);
+                            });
+                            dialog.show(me.localization.manyLayersWarning.title, desc, [okBtn, cancelBtn]);
+                        } else {
+                            tree.jstree().check_node(node);
+                            me.sb.postRequestByName('AddMapLayerRequest', [me.getNodeRealId(node)]);
+                        }
+                    }
+                }
+            }
+        },
         getJsTreeElement: function() {
+            //FIXME: COMMENTS
             return this.tabPanel.getContainer().find('.hierarchical-layerlist-tree');
         },
         /**
@@ -276,20 +374,18 @@ Oskari.clazz.define(
                 layer,
                 layerWrapper,
                 layerContainer,
-                selectedLayers;
-
+                selectedLayers,
+                jsTreeData = [];
 
             if (me.getJsTreeElement().length > 0) {
                 me.getJsTreeElement().remove();
             }
             var layerTree = jQuery(me.templates.layerTree);
             me.tabPanel.getContainer().append(layerTree);
-
             me.accordion.removeAllPanels();
             me.layerContainers = {};
             me.layerGroups = groups;
             localization = me.instance.getLocalization();
-            var jsTreeData = [];
             for (i = 0; i < groupsLength; i += 1) {
                 group = groups[i];
                 layers = group.getLayers();
@@ -312,44 +408,8 @@ Oskari.clazz.define(
                     jsTreeLayer.type = "layer";
                     jsTreeData.push(jsTreeLayer);
                 }
-                /*groupPanel = Oskari.clazz.create(
-                    'Oskari.framework.bundle.hierarchical-layerlist.component.SelectableAccordionPanel',
-                    me.instance.sandbox,
-                    group,
-                    layers,
-                    localization
-                );
-                groupPanel.setTitle(group.getTitle() + ' (' + layersLength +
-                    ')');
-                groupPanel.setId(
-                    'oskari_hierarchical-layerlist_accordionPanel_' +
-                    group.getId()
-                );
-                groupPanel.setDataId(
-                    group.getId()
-                );
-                group.layerListPanel = groupPanel;
-
-                groupContainer = groupPanel.getContainer();
-                groupContainer.addClass('oskari-hidden');
-                for (n = 0; n < layersLength; n += 1) {
-                    layer = layers[n];
-                    //if(layer) {
-                        layerWrapper =
-                            Oskari.clazz.create(
-                                'Oskari.framework.bundle.hierarchical-layerlist.view.Layer',
-                                layer,
-                                me.instance.sandbox,
-                                localization
-                            );
-                        layerContainer = layerWrapper.getContainer();
-                        groupContainer.append(layerContainer);
-                        me.layerContainers[layer.getId()] = layerWrapper;
-                    //}
-                }
-                groupContainer.removeClass('oskari-hidden');
-                me.accordion.addPanel(groupPanel);*/
             }
+
             var to = false;
             $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').keyup(function() {
                 if (to) {
@@ -362,11 +422,11 @@ Oskari.clazz.define(
             });
 
             var jsTreeDiv = me.getJsTreeElement();
+            //selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
 
             me.service.getEventHandler().forEach(function(event) {
                 jsTreeDiv.on(event.name, event.handler);
             });
-
 
             jsTreeDiv.jstree(me.service.getLayerlistOption());
             jsTreeDiv.jstree(true).settings.core.data = jsTreeData;

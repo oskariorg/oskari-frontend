@@ -285,7 +285,7 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
   overflow-y: auto; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow-hovered {
     background-color: #fdf8d9; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-group-icon {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-group-icon {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {
     background-image: url("../images/glyphicons/glyphicons-37-file.png"); }

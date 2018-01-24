@@ -26,7 +26,7 @@
                 },
                 types: {
                     group: {
-                        icon: 'jstree-layer-group-icon',
+                        icon: 'jstree-group-icon',
                         valid_children: ['layer']
                     },
                     layer: {
@@ -37,7 +37,16 @@
                 search: {
                     show_only_matches: true
                 },
-                plugins: ['checkbox', 'changed', 'wholerow', 'types', 'search']
+                state: {
+                    key: 'hierarchical-layerlist'
+                },
+                conditionalselect: function(node, event) {
+                    me.trigger('jstree-contionalselect', {
+                        node: node,
+                        event: event
+                    });
+                },
+                plugins: ['checkbox', 'changed', 'wholerow', 'types', 'search', 'state', 'conditionalselect']
             };
             this._events = [
                 /* Default handlers */
