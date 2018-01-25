@@ -119,7 +119,8 @@ Oskari.clazz.define('Oskari.mapframework.admin-publish-transfer.TransferTool',
             buttons.push(okButton);
             var heading = '<h3>' + this.loc('sure') + ' <span style="background-color:#ffbbbb;text-decoration:line-through;">' +
                 this.loc('red') + '</span>, ' + this.loc('additions') + ' <span style="background-color:#bbffbb">' + this.loc('green') + '</span>.</h3>';
-            var content = jQuery(heading + window.jsondiffpatchformatters.html.format(delta, currentData));
+            var formatters = window.jsondiffpatch.formatters || window.jsondiffpatchformatters; // prod || dev
+            var content = jQuery(heading + formatters.html.format(delta, currentData));
 
             dialog.makeModal();
             dialog.show(this.loc('review'), content, buttons);
