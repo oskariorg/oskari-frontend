@@ -340,5 +340,7 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     margin-right: -16px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor {
     width: 95%; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-checkbox {
+    margin-left: 10px; }
 
 /*# sourceMappingURL=style.css.map */
