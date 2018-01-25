@@ -58,6 +58,16 @@
 				}
 			}
 		}, {
+	        "bundlename" : "drawtools",
+	        "bundleinstancename" : "drawtools",
+	        "metadata" : {
+	            "Import-Bundle" : {
+	                "drawtools" : {
+	                    "bundlePath" : "../../../packages/mapping/ol3/"
+	                }
+	            }
+	        }
+	    }, {
 			"bundlename": "toolbar",
 			"metadata": {
 				"Import-Bundle": {
