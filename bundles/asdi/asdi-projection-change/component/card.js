@@ -10,6 +10,7 @@ function (view, callback) {
                         '<div class="info-row">'+
                             '<p class="card-header"></p>'+
                             '<div class="projection-info icon-info"></div>'+
+                            '<div class="projection-error" style="display:none"></div>'+
                         '</div>'+
                         '</div>');
     this.element = null;

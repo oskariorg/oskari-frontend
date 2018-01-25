@@ -11,13 +11,13 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
     _template: {
         container: jQuery('<div class="oskari-map-projection"></div>')
     },
-    setElement: function(el) {
+    setElement: function (el) {
         this.element = el;
     },
-    getElement: function() {
+    getElement: function () {
         return this.element;
     },
-    createUi: function() {
+    createUi: function () {
         var me = this;
         if ( this.getElement() ) {
             return;
