@@ -1,7 +1,7 @@
 /*
  * Creates a flyout with tabs for different ways of visualizing data
  */
-Oskari.clazz.define('Oskari.map.projection.view.ProjectionInformation', function (projection) {
+Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', function (projection) {
     this.projection = projection;
     this.loc = Oskari.getLocalization('projection-change');
 }, {

@@ -15,7 +15,7 @@ function (view, callback) {
     this.element = null;
     this.callback = callback;
     this.view = view;
-    this.infoView = Oskari.clazz.create('Oskari.map.projection.view.ProjectionInformation', view);
+    this.infoView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionInformation', view);
     if ( !this.getElement() )
     {
         this.create(view);
