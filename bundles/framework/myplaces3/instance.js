@@ -16,7 +16,6 @@ Oskari.clazz.define(
         this.buttons = undefined;
         this.categoryHandler = undefined;
         this.myPlacesService = undefined;
-        this.featureNS = undefined;
         this.idPrefix = 'myplaces';
         this.finishedDrawing = false;
         this.editPlaceName = 'EditMyPlaces3';
@@ -107,9 +106,7 @@ Oskari.clazz.define(
          * @param {Boolean} blnEnable true to enable, false to disable
          */
         enableGfi: function (blnEnable) {
-            var gfiReqBuilder = this.sandbox.getRequestBuilder(
-                'MapModulePlugin.GetFeatureInfoActivationRequest'
-            );
+            var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             if (gfiReqBuilder) {
                 this.sandbox.request(this.buttons, gfiReqBuilder(blnEnable));
             }
@@ -127,11 +124,7 @@ Oskari.clazz.define(
             return this.finishedDrawing;
         },
         setIsFinishedDrawing: function(bln){
-            if (bln === true){
-                this.finishedDrawing = true;
-            } else {
-                this.finishedDrawing = false;
-            }
+            this.finishedDrawing = !!bln;
         },
         /**
          * @method myPlaceSelected
@@ -141,7 +134,7 @@ Oskari.clazz.define(
         myPlaceSelected: function () {
             // cleanup
             // ask toolbar to select default tool
-            var toolbarRequest = this.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
             this.sandbox.request(this, toolbarRequest);
             this.getMainView().cleanupDrawingVariables();
         },
@@ -175,7 +168,7 @@ Oskari.clazz.define(
         /**
          * @method  @private _addEventHandlers Add event handlers
          */
-        _addRequestHandlers: function(){
+        _addRequestHandlers: function() {
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -183,11 +176,6 @@ Oskari.clazz.define(
 
             var editRequestHandler = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler',
-                sandbox,
-                me
-            );
-            var openAddLayerDialogHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDialogHandler',
                 sandbox,
                 me
             );
@@ -211,6 +199,12 @@ Oskari.clazz.define(
                 'MyPlaces.PublishCategoryRequest',
                 editRequestHandler
             );
+
+            var openAddLayerDialogHandler = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDialogHandler',
+                sandbox,
+                me
+            );
             sandbox.addRequestHandler(
                 'MyPlaces.OpenAddLayerDialogRequest',
                 openAddLayerDialogHandler
@@ -228,11 +222,7 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName);
             this.sandbox = sandbox;
 
-            this.featureNS = conf ? conf.featureNS : null;
-            if (!this.featureNS) {
-                return;
-            }
-            sandbox.printDebug("Initializing my places module...");
+            Oskari.log('MyPlaces3').debug("Initializing my places module...");
 
             // handles toolbar buttons related to my places
             this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces3.ButtonHandler", this);
@@ -249,23 +239,13 @@ Oskari.clazz.define(
             this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.CategoryHandler', this);
             this.categoryHandler.start();
 
-            var defaults = this._getCategoryDefaults(),
-                actionUrl = this.conf.queryUrl;
-            // Set max features to configured.
-            var maxFeatures = (conf ? conf.maxFeatures : undefined);
-
-
-
             // handles my places insert form etc
             this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces3.view.MainView", this);
             this.view.start();
 
             me._addRequestHandlers();
 
-            this.tab = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
-                this
-            );
+            this.tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesTab', this);
 
             this.tab.initContainer();
             // binds tab to events
@@ -274,22 +254,22 @@ Oskari.clazz.define(
             }
 
             // back end communication
-            this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService',
-                actionUrl, user.getUuid(), sandbox, defaults, this, {
-                    maxFeatures: maxFeatures
-                });
+            this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService', sandbox);
             // register service so personal data can access it
             this.sandbox.registerService(this.myPlacesService);
             // init loads the places/categories
             this.myPlacesService.init();
 
-            var title = this.tab.getTitle(),
-                content = this.tab.getContent(),
-                first = true,
-                id = me.idPrefix,
-                reqName = 'PersonalData.AddTabRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
-                req = reqBuilder(title, content, first, id);
+            if(!sandbox.hasHandler('PersonalData.AddTabRequest')) {
+                return;
+            }
+            var addAsFirstTab = true;
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
+            var req = reqBuilder(
+                    this.tab.getTitle(),
+                    this.tab.getContent(),
+                    addAsFirstTab,
+                    me.idPrefix);
             sandbox.request(this, req);
         },
         /**
@@ -338,7 +318,6 @@ Oskari.clazz.define(
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
 
-            // TODO add buttons
             var form = categoryForm.getForm();
             dialog.show(
                 me.loc('tab.addCategory'),
@@ -353,44 +332,6 @@ Oskari.clazz.define(
             // Disable rest of UI
             dialog.makeModal();
             categoryForm.start();
-        },
-
-        _getCategoryDefaults: function () {
-            var defaults = {
-                name: this.loc('category.defaultName'),
-                point: {
-                    shape: 1,
-                    color: "000000",
-                    size: 3
-                },
-                line: {
-                    style: "",
-                    cap: 0,
-                    corner: 0,
-                    width: 1,
-                    color: "3233ff"
-                },
-                area: {
-                    linestyle: "",
-                    linecorner: 0,
-                    linewidth: 1,
-                    linecolor: "000000",
-                    color: "ffde00",
-                    fill: -1
-                }
-            };
-            if (!this.conf) {
-                return defaults;
-            }
-            if (!this.conf.defaults) {
-                return defaults;
-            }
-            for (var prop in defaults) {
-                if (this.conf.defaults[prop]) {
-                    defaults[prop] = this.conf.defaults[prop];
-                }
-            }
-            return defaults;
         }
     }, {
         /**
