@@ -246,6 +246,10 @@ Oskari.clazz.define(
          * featureProperties comes from user_layer table fields column
          */
         setOrderForFeatureProperties: function(layer, fields){
+            if(layer.getFeaturePropertyIndexes().length > 0) {
+                // already set
+                return;
+            }
             var orderedFieldsIndexes = [],
                 orderedFields = layer.getFeatureProperties(),
                 unOrderedFields = fields;

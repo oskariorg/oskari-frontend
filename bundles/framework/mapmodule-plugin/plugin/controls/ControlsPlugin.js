@@ -30,6 +30,7 @@ Oskari.clazz.define(
      */
     function () {
         var me = this;
+        this.activeTool = null;
         me._clazz =
             'Oskari.mapframework.mapmodule.ControlsPlugin';
         me._name = 'ControlsPlugin';
@@ -141,18 +142,30 @@ Oskari.clazz.define(
                  */
                 'Toolbar.ToolSelectedEvent': function (event) {
                     // changed tool -> cancel any current tool
-                    if (this.getConfig().zoomBox !== false) {
-                        this._zoomBoxTool.deactivate();
-                    }
-                    if (this.getConfig().measureControls !== false) {
-                        this.getMapModule().orderLayersByZIndex();
-                        this._measureControls.line.deactivate();
-                        this._measureControls.area.deactivate();
+                    if (event.getToolId() === this.activeTool){
+                        this._deactivateControls(this.activeTool);
+                    } else {
+                        //deactivate all
+                        this._deactivateControls();
+                        this.activeTool = null;
                     }
                 }
             };
         },
-
+        _deactivateControls: function (skipTool){
+            if (this.getConfig().zoomBox !== false && skipTool !== 'zoombox') {
+                this._zoomBoxTool.deactivate();
+            }
+            if (this.getConfig().measureControls !== false) {
+                this.getMapModule().orderLayersByZIndex();
+                if(skipTool !== 'measureline') {
+                    this._measureControls.line.deactivate();
+                }
+                if (skipTool !== 'measurearea'){
+                    this._measureControls.area.deactivate();
+                }
+            }
+        },
         _createRequestHandlers: function () {
             var me = this,
                 mapMovementHandler = Oskari.clazz.create(
