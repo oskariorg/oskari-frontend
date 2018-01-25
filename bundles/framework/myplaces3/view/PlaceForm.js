@@ -187,13 +187,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
             this.initialValues = data;
         },
         setMeasurementResult: function (measurement, drawMode) {
+            if (drawMode === "point" || typeof measurement !== 'number') {
+               return;
+            }
             var measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);
-
             this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
-
-            this._getOnScreenForm().
-            find('div.measurementResult').
-            html(this.measurementResult);
+            this._getOnScreenForm().find('div.measurementResult').html(this.measurementResult);
         },
         /**
          * @method _bindCategoryChange
