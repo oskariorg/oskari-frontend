@@ -363,11 +363,8 @@ Oskari.clazz.define(
             setTimeout(function () {
                 me.getMapModule().setDrawingMode(false);
             }, 500);
-            
         },
         _cleanupInternalState: function() {
-            this._shape = null;
-            this._id = null;
             // Remove measure result from map
             if(this._sketch) {
                jQuery('div.' + this._tooltipClassForMeasure + "." + this._sketch.getId()).remove();
@@ -488,7 +485,7 @@ Oskari.clazz.define(
             }
 
             var featuresFromLayer = me.getLayer(layerId).getSource().getFeatures();
-            
+
             if(me._sketch && layerId === me.getCurrentLayerId()) {
                 // include the unfinished (currently drawn) feature
                 var sketchFeatId = me._sketch.getId();
@@ -607,7 +604,7 @@ Oskari.clazz.define(
                 jsonObject = geoJSONformatter.writeFeatureObject(feature);
 
             jsonObject.properties = {};
-            
+
             if(measures.length) {
                 jsonObject.properties.length = measures.length;
             }
@@ -784,10 +781,10 @@ Oskari.clazz.define(
                      me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                      return geometry;
                  };
-            } else if(shape === 'Circle' && ! options.buffer) {
+            } else if (shape === 'Circle' && !options.buffer) {
                 geometryType = 'Circle';
                 geometryFunction = ol.interaction.Draw.createRegularPolygon(400);
-            } else if(shape === 'Polygon') {
+            } else if (shape === 'Polygon') {
                 geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
                         geometry = new ol.geom.Polygon(null);
