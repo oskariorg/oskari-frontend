@@ -8,13 +8,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.DiagramPlugin',
      * @param {Object} config
      *      JSON config with params needed to run the plugin
      */
-    function (instance, config, locale, mapmodule, sandbox) {
+    function (conifg, locale) {
         var me = this;
         me._locale = locale || Oskari.getLocalization("StatsGrid");
         me._config = config || {};
-        me._mapmodule = mapmodule;
-        me._sandbox = sandbox || Oskari.getSandbox();
-        me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.plugin.DiagramPlugin';
         me._defaultLocation = 'bottom right';
         me._index = 9;
@@ -23,8 +20,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.DiagramPlugin',
         me._templates = {
             main: jQuery('<div class="mapplugin statsgrid-diagram-plugin"></div>')
         }
-
-        me._createControlElement();
 
         me.setLocation(me._defaultLocation);
 
@@ -56,18 +51,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.DiagramPlugin',
          */
         _createControlElement: function () {
             var me = this;
-            var sb = me._sandbox;
             var locale = me._locale;
             var config = me._config;
 
-            if(me._element !== null) {
+            if (me._element !== null) {
                 return me._element;
             }
             me._element = me._templates.main.clone();
             return me._element;
         },
         showPublisherDiagram: function () {
-            if (  !this.element ) {
+            if (  !this._element ) {
                 return;
             }
             this.addToPluginContainer(me._element);

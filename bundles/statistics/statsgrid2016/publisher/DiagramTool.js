@@ -8,12 +8,15 @@ function() {},
     righthanded: 'bottom left',
 
     allowedSiblings : [],
-    init: function (stateData) {
+    bundleName: 'statsgrid',
+    init: function (data) {
         var me = this;
-
+        if ( !data || !data.configuration[me.bundleName] ) {
+            return;
+        }
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if(stats && this.isDisplayed(stateData)) {
-            stats.showLegendOnMap(true);
+        if ( stats && this.isDisplayed(data) ) {
+            stats.showDiagramOnMap(true);
         }
     },
     getTool: function(stateData){
@@ -49,7 +52,7 @@ function() {},
         }
         return statsLayer;
     },
-    isDisplayed: function(data) {
+    isDisplayed: function (data) {
         var hasStatsLayerOnMap = this._getStatsLayer() !== null;
         if(hasStatsLayerOnMap) {
             return true;
