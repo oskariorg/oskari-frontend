@@ -12,13 +12,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.telemetry.TelemetryBundleInstanc
             }
         }
     },
-    _startImpl: function () {
+    _startImpl: function (sandbox) {
         var endpoint = this.conf.endpoint;
         if (!endpoint) {
             Oskari.log(this.getName()).warn('No "endpoint" in conf. Telemetry bundle will not start.');
+            this.stop(sandbox);
             return;
         }
         if (location.hostname === 'localhost') {
+            this.stop(sandbox);
             return;
         }
         this._initTelemetry(endpoint);
