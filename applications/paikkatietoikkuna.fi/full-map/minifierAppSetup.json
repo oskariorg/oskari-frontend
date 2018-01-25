@@ -306,6 +306,15 @@
 				}
 			}
 		}, {
+			"bundlename" : "terrain-profile",
+			"metadata" : {
+				"Import-Bundle" : {
+					"terrain-profile" : {
+						"bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+					}
+				}
+			}
+		}, {
 			"bundlename" : "heatmap",
 			"metadata" : {
 				"Import-Bundle" : {
