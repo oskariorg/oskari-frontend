@@ -535,8 +535,46 @@ div.hierarchical-layerlist {
                 margin-right: -16px;
             }
         }
+        .jstree-open {
+            .jstree-ocl {
+                background-position: -32px 5px;
+            }
+        }
+        .jstree-closed {
+            .jstree-ocl {
+                background-position: 0px 5px;
+            }
+        }
         .jstree-anchor {
             width: 95%;
+            padding: 4px;
+        }
+        .jstree-wholerow {
+            height: 40px;
+        }
+        ul.jstree-children li.jstree-node {
+            border: 1px solid #c0d0d0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        ul.jstree-children li.jstree-node div.jstree-wholerow {
+            background-color: #f3f3f3;
+        }
+        ul.jstree-children li.jstree-node.jstree-open div.jstree-wholerow {
+            background-color: #FAFAFA;
+        }
+        ul.jstree-children li.jstree-leaf {
+            border: none;
+        }
+        ul.jstree-children li.jstree-leaf span.layer-title{
+            font-size: 14px;
+            font-weight: normal;
+        }
+        ul.jstree-children li.jstree-leaf:nth-child(even) div.jstree-wholerow {
+            background-color: #f3f3f3;
+        }
+        ul.jstree-children li.jstree-leaf:nth-child(odd) div.jstree-wholerow {
+            background-color: #ffffff;
         }
         .jstree-checkbox {
             margin-left: 10px;

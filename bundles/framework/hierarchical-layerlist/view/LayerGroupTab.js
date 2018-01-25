@@ -552,7 +552,7 @@ Oskari.clazz.define(
                 var jsTreeGroup = {};
                 jsTreeGroup.id = "group-" + group.id;
                 jsTreeGroup.parent = "#";
-                jsTreeGroup.text = group.name;
+                jsTreeGroup.text = group.name + ' ('+layersLength+')';
                 jsTreeGroup.type = "group";
                 jsTreeData.push(jsTreeGroup);
                 //Loop through group layers
