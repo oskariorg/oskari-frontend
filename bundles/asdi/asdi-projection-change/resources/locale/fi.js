@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         "lang": "fi",
-        "key": "map-projection",
+        "key": "projection-change",
         "value": {
             "title": "Valitse projektio",
             "tooltip": {

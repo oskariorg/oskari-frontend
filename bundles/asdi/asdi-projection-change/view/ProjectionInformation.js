@@ -3,7 +3,7 @@
  */
 Oskari.clazz.define('Oskari.map.projection.view.ProjectionInformation', function (projection) {
     this.projection = projection;
-    this.loc = Oskari.getLocalization('map-projection');
+    this.loc = Oskari.getLocalization('projection-change');
 }, {
     _template: {
         container: jQuery('<div class="oskari-projection-information"><img class="card-image"></img></div>')

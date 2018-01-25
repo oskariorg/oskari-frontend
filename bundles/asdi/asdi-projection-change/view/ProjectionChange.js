@@ -1,7 +1,7 @@
 /*
  * Creates a flyout with tabs for different ways of visualizing data
  */
-Oskari.clazz.define('Oskari.map.projection.view.ProjectionChange', function (instance) {
+Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (instance) {
     this.instance = instance;
     this.sb = instance.getSandbox();
     this.loc = instance.getLocalization();
@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.map.projection.view.ProjectionChange', function (ins
       * @param { Object } view
       */
     createCard: function (view) {
-        var card = Oskari.clazz.create('Oskari.map.projection.component.card', view, this.changeProjection.bind(this) );
+        var card = Oskari.clazz.create('Oskari.projection.change.component.card', view, this.changeProjection.bind(this) );
         return card.getElement();
     },
     /**

@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         "lang": "sv",
-        "key": "map-projection",
+        "key": "projection-change",
         "value": {
             "title": "Välj kartprojektion",
             "tooltip": {

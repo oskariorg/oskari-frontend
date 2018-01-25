@@ -1,26 +1,26 @@
 /**
- * @class Oskari.map.projection.instance
+ * @class Oskari.projection.change.instance
  * 
  *      var obj = {
-            "bundlename":"asdi-map-projection" ,
+            "bundlename":"asdi-projection-change" ,
             "metadata": {
-                "Import-Bundle": { "asdi-map-projection": { "bundlePath": "/Oskari/packages/asdi/bundle/" } }
+                "Import-Bundle": { "asdi-projection-change": { "bundlePath": "/Oskari/packages/asdi/bundle/" } }
             }
         }
         appSetup.startupSequence.push(obj);
  */
-Oskari.clazz.define("Oskari.map.projection.instance",
+Oskari.clazz.define("Oskari.projection.change.instance",
 function () {
 
 }, {
-    __name: 'map-projection',
+    __name: 'projection-change',
     getName: function () {
         return this.__name;
     },
     afterStart: function () {
         var sandbox = this.getSandbox();
         this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.map.projection.flyout', this, {
+        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.projection.change.flyout', this, {
             width: 'auto',
             cls: 'projection-changer-flyout'
         });
@@ -44,11 +44,11 @@ function () {
         return this.hardcodedViews();
     },
     createPlugins: function( enabled, publisher ) {
-      if(typeof publisher === 'undefined'){
+      if (typeof publisher === 'undefined') {
         publisher = false;
       }
       var conf = this.conf || {};
-      var plugin = Oskari.clazz.create('Oskari.mapping.projection.ProjectionChangerPlugin', conf, this);
+      var plugin = Oskari.clazz.create('Oskari.projection.change.ProjectionChangerPlugin', conf, this);
 
       this._mapmodule.registerPlugin(plugin);
       this._mapmodule.startPlugin(plugin);
@@ -61,20 +61,6 @@ function () {
     },
     createUi: function () {
         this.plugin.createUi();
-    },
-    
-    eventHandlers: {
-        // 'userinterface.ExtensionUpdatedEvent': function (event) {
-        //     if( event.getExtension().getName() !== me.getName() ) {
-        //         return;
-        //     }
-        //     var wasClosed = event.getViewState() === 'close';
-        //     if ( wasClosed ) {
-        //         debugger;
-        //     } else {
-        //         debugger;
-        //     }
-        // }
     },
     hardcodedViews: function () {
         var views = [

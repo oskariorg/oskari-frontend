@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.map.projection.component.card',
+Oskari.clazz.define('Oskari.projection.change.component.card',
 /**
  * @class 
  * @param { Object } view - contains info about the current view passed down to card

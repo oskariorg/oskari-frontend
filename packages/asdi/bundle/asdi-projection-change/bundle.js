@@ -1,14 +1,14 @@
 /**
  * Definition for bundle. See source for details.
- * @class Oskari.map.projection.Bundle
+ * @class Oskari.projection.change.Bundle
  */
-Oskari.clazz.define("Oskari.map.projection", function() {
+Oskari.clazz.define("Oskari.projection.change", function() {
 
 }, {
     "create" : function() {
         return Oskari.clazz.create(
-            "Oskari.map.projection.instance",
-            "map-projection"
+            "Oskari.projection.change.instance",
+            "projection-change"
         );    
     }
 }, {
@@ -17,47 +17,47 @@ Oskari.clazz.define("Oskari.map.projection", function() {
         "scripts" : [
             {
                 "type" : "text/javascript",
-                "src" : "../../../../bundles/asdi/asdi-map-projection/instance.js"
+                "src" : "../../../../bundles/asdi/asdi-projection-change/instance.js"
             }, {
                 "type" : "text/javascript",
-                "src" : "../../../../bundles/asdi/asdi-map-projection/Flyout.js"  
+                "src" : "../../../../bundles/asdi/asdi-projection-change/Flyout.js"  
             }, {
                 "type" : "text/javascript",
-                "src" : "../../../../bundles/asdi/asdi-map-projection/view/ProjectionChange.js"
+                "src" : "../../../../bundles/asdi/asdi-projection-change/view/ProjectionChange.js"
             }, {
                 "type" : "text/javascript",
-                "src" : "../../../../bundles/asdi/asdi-map-projection/view/ProjectionInformation.js"
+                "src" : "../../../../bundles/asdi/asdi-projection-change/view/ProjectionInformation.js"
             }, {
                 "type" : "text/javascript",
-                "src" : "../../../../bundles/asdi/asdi-map-projection/plugin/ProjectionChangerPlugin.js"
+                "src" : "../../../../bundles/asdi/asdi-projection-change/plugin/ProjectionChangerPlugin.js"
             }, {
                 "type": "text/javascript",
-                "src" : "../../../../bundles/asdi/asdi-map-projection/component/card.js"
+                "src" : "../../../../bundles/asdi/asdi-projection-change/component/card.js"
             }, {
                 "type": "text/css",
-                "src" : "../../../../bundles/asdi/asdi-map-projection/resources/css/style.css"
+                "src" : "../../../../bundles/asdi/asdi-projection-change/resources/css/style.css"
             }
         ],
         "locales" : [
             {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/asdi/asdi-map-projection/resources/locale/en.js"
+                "src": "../../../../bundles/asdi/asdi-projection-change/resources/locale/en.js"
             }, {
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/asdi/asdi-map-projection/resources/locale/fi.js"
+                "src": "../../../../bundles/asdi/asdi-projection-change/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/asdi/asdi-map-projection/resources/locale/sv.js"
+                "src": "../../../../bundles/asdi/asdi-projection-change/resources/locale/sv.js"
             }
         ]
     },
     "bundle": {
     "manifest": {
-        "Bundle-Identifier": "map-projection",
-        "Bundle-Name": "map-projection",
+        "Bundle-Identifier": "projection-change",
+        "Bundle-Name": "projection-change",
         "Bundle-Author": [{
             "Name": "MMLDEV",
             "Organisatpation": "nls.fi",
@@ -80,4 +80,4 @@ Oskari.clazz.define("Oskari.map.projection", function() {
 "dependencies": ["jquery"]
 });
 
-Oskari.bundle_manager.installBundleClass("asdi-map-projection", "Oskari.map.projection");
+Oskari.bundle_manager.installBundleClass("asdi-projection-change", "Oskari.projection.change");

@@ -1,15 +1,15 @@
-Oskari.clazz.define( 'Oskari.mapping.projection.ProjectionChangerPlugin',
+Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
   function ( config, instance ) {
     this._instance = instance;
     this._config = config || {};
-    this._clazz = 'Oskari.mapping.projection.ProjectionChangerPlugin';
+    this._clazz = 'Oskari.projection.change.ProjectionChangerPlugin';
     this._defaultLocation = 'top right';
     this._index = 55;
     this._visible = false;
     this._templates = {
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
-    this._loc = Oskari.getLocalization('map-projection', Oskari.getLang() || Oskari.getDefaultLanguage());
+    this._loc = instance.getLocalization();
     this._mobileDefs = {
       buttons:  {
           'mobile-projectionchanger': {
@@ -26,7 +26,7 @@ Oskari.clazz.define( 'Oskari.mapping.projection.ProjectionChangerPlugin',
     };
     this._flyout = this._instance.getFlyout();
     this._flyout.hide();
-    this._log = Oskari.log('Oskari.mapping.projection.ProjectionChangerPlugin');
+    this._log = Oskari.log('Oskari.projection.change.ProjectionChangerPlugin');
   }, {
 
     _createControlElement: function () {
@@ -58,12 +58,7 @@ Oskari.clazz.define( 'Oskari.mapping.projection.ProjectionChangerPlugin',
         });
     },
     _createMobileUI: function () {
-      var me = this;
-      var mobileDefs = this.getMobileDefs();
-      var el = jQuery( me.getMapModule().getMobileDiv() ).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
-      this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-      this._element = jQuery( "." + mobileDefs.buttons["mobile-maprotatetool"].iconCls );
-      this.handleEvents();  
+
     },
     /**
      * Handle plugin UI and change it when desktop / mobile mode

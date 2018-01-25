@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         "lang": "en",
-        "key": "map-projection",
+        "key": "projection-change",
         "value": {
             "title": "Select Projection",
             "tooltip": {
