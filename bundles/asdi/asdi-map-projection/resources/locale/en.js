@@ -18,6 +18,9 @@ Oskari.registerLocalization(
             "infoPopup" : {
                 "title": "Projection Information",
                 "ok": "Ok"
+            },
+            "projectionDesc": {
+                "EPSG:3067": "Tämä projektio on epsg:3067"
             }
         }
     }

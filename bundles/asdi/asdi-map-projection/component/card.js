@@ -5,7 +5,13 @@ Oskari.clazz.define('Oskari.map.projection.component.card',
  * @param function() callback - callback function to call when element is clicked
  */
 function (view, callback) {
-    this.card = jQuery('<div class="projection-card"><img class="card-image"></img> <div class="info-row"><p class="card-header"></p> <div class="projection-info icon-info"></div> </div> </div>');
+    this.card = jQuery('<div class="projection-card">'+
+                        '<img class="card-image"></img> '+
+                        '<div class="info-row">'+
+                            '<p class="card-header"></p>'+
+                            '<div class="projection-info icon-info"></div>'+
+                        '</div>'+
+                        '</div>');
     this.element = null;
     this.callback = callback;
     this.view = view;

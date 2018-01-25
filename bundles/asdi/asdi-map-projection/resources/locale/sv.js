@@ -14,6 +14,13 @@ Oskari.registerLocalization(
                 "click": {
                     "icon": "Följande kartlager kan inte visas med den valda kartprojektionen: " 
                 }
+            },
+            "infoPopup" : {
+                "title": "Kartprojektionens information",
+                "ok": "Ok"
+            },
+            "projectionDesc": {
+                "EPSG:3067": "Tämä projektio on epsg:3067"
             }
         }
     }

@@ -14,6 +14,13 @@ Oskari.registerLocalization(
                 "click": {
                     "icon": "Seuraavat karttatasot eivät ole käytettävissä valitulla karttaprojektiolla: " 
                 }
+            },
+            "infoPopup" : {
+                "title": "Projektion tiedot",
+                "ok": "Ok"
+            },
+            "projectionDesc": {
+                "EPSG:3067": "Tämä projektio on EPSG:3067"
             }
         }
     }
