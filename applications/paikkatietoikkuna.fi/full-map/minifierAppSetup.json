@@ -14,37 +14,37 @@
             "metadata": {
                 "Import-Bundle": {
 					"mapmyplaces": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
 					"maparcgis": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
 					"mapmodule": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
 					"oskariui": {
-						"bundlePath": "/Oskari/packages/framework/bundle/"
+						"bundlePath": "../../../packages/framework/bundle/"
 					},
 					"mapwfs2": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
 					"mapstats": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
 					"mapuserlayers": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
 					"ui-components": {
-						"bundlePath": "/Oskari/packages/framework/bundle/"
+						"bundlePath": "../../../packages/framework/bundle/"
 					},
 					"mapanalysis": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
 					"mapfull": {
-						"bundlePath": "/Oskari/packages/framework/bundle/"
+						"bundlePath": "../../../packages/framework/bundle/"
 					},
 					"mapwmts": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					}
                 }
             }
