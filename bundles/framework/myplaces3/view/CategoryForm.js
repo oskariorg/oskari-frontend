@@ -13,48 +13,7 @@ Oskari.clazz.define(
      */
     function (instance) {
         this.instance = instance;
-
-        var dotMinSize = null,
-            dotMaxSize = null;
-        if (instance.conf && instance.conf.defaults) {
-            dotMinSize = instance.conf.defaults.dotMinSize;
-            dotMaxSize = instance.conf.defaults.dotMaxSize;
-        }
-        var formOptions = {
-            forms: ['dot', 'line', 'area'],
-            formValues: {
-                dot: {
-                    size: instance.myPlacesService.defaults.point.size,
-                    color: instance.myPlacesService.defaults.point.color,
-                    shape: instance.myPlacesService.defaults.point.shape,
-                    dotMinSize: dotMinSize,
-                    dotMaxSize: dotMaxSize
-                },
-                line: {
-                    style: instance.myPlacesService.defaults.line.style,
-                    cap: instance.myPlacesService.defaults.line.cap,
-                    corner: instance.myPlacesService.defaults.line.corner,
-                    width: instance.myPlacesService.defaults.line.width,
-                    color: instance.myPlacesService.defaults.line.color
-                },
-                area: {
-                    line: {
-                        style: instance.myPlacesService.defaults.area.linestyle,
-                        corner: instance.myPlacesService.defaults.area.linecorner,
-                        width: instance.myPlacesService.defaults.area.linewidth,
-                        color: instance.myPlacesService.defaults.area.linecolor
-                    },
-                    fill: {
-                        style: instance.myPlacesService.defaults.area.fill,
-                        color: instance.myPlacesService.defaults.area.color
-                    }
-                }
-            }
-        };
-        this.visualizationForm = Oskari.clazz.create(
-            'Oskari.userinterface.component.VisualizationForm',
-            formOptions
-        );
+        this.visualizationForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
 
         var loc = Oskari.getMsg.bind(null, 'MyPlaces3');
 
