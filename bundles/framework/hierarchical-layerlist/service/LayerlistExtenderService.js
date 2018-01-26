@@ -27,7 +27,7 @@
                 types: {
                     group: {
                         icon: 'jstree-group-icon',
-                        valid_children: ['layer']
+                        valid_children: ['layer', 'subgroup']
                     },
                     layer: {
                         icon: 'jstree-layer-icon',
@@ -50,7 +50,7 @@
             };
             this._events = [
                 /* Default handlers */
-                {
+                /*{
                     name: 'changed.jstree',
                     handler: function(e, data) {
                         var selected = data.changed.selected;
@@ -75,7 +75,7 @@
                         });
 
                     }
-                }
+                }*/
             ];
             this._mainTools = {};
             this._groupTools = {};
