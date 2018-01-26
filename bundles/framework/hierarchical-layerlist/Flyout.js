@@ -346,10 +346,10 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 );
                 groupList.push(groupModel);
             });
-            var sortedGroupList = jQuery.grep(groupList, function(group, index) {
+            /*var sortedGroupList = jQuery.grep(groupList, function(group, index) {
                 return group.getLayers().length > 0;
-            });
-            return sortedGroupList;
+            });*/
+            return groupList;
         },
 
         /**

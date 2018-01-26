@@ -579,5 +579,16 @@ div.hierarchical-layerlist {
         .jstree-checkbox {
             margin-left: 10px;
         }
+        .jstree-node[id^="group-"] {
+            border: 1px solid #c0d0d0 !important;
+            @extend .jstree-closed;
+        }
+        .jstree-node[id^="group-"].jstree-open {
+            border: 1px solid #c0d0d0 !important;
+            @extend .jstree-open;
+        }
+        .jstree-node[id^="group-"] > div.jstree-wholerow {
+            background-color: #f3f3f3 !important;
+        }
     }
 }
