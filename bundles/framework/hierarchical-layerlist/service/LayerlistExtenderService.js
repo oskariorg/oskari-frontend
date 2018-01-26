@@ -29,6 +29,10 @@
                         icon: 'jstree-group-icon',
                         valid_children: ['layer', 'subgroup']
                     },
+                    subgroup: {
+                        icon: 'jstree-group-icon',
+                        valid_children: ['layer']
+                    },
                     layer: {
                         icon: 'jstree-layer-icon',
                         valid_children: []
@@ -213,7 +217,7 @@
                 if (!id) {
                     return this._groupTools;
                 }
-                if (this._groupTools[id] && this._groupTools[id].hasVisible()) {
+                if (this._groupTools[id]) {
                     return this._groupTools[id];
                 }
                 return null;
@@ -223,13 +227,12 @@
              * @method addGroupTool
              * @param  {String}     id         group tool id
              * @param  {Function}   handler    tool handler
-             * @param  {Function}   hasVisible has visible function
              * @param  {Object}     options    group tool options:
              *                                 {
              *                                     cls: 'active-cls'
              *                                 }
              */
-            addGroupTool: function(id, handler, hasVisible, options) {
+            addGroupTool: function(id, handler, options) {
                 if (this._groupTools[id]) {
                     _log.warn('Group tool "' + id + '" allready defined.');
                     return;
@@ -239,23 +242,15 @@
                     return;
                 }
 
-                var visible = hasVisible;
-                if (typeof visible !== 'function') {
-                    visible = function() {
-                        return true;
-                    };
-                }
-
                 this._groupTools[id] = {
-                    handler: handler(id),
-                    options: options,
-                    hasVisible: visible
+                    handler: handler,
+                    options: options
                 };
+
                 this.trigger('grouptool.added', {
                     id: id,
-                    handler: handler(id),
-                    options: options,
-                    hasVisible: visible
+                    handler: handler,
+                    options: options
                 });
             },
             /**

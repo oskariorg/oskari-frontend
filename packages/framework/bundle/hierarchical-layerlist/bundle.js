@@ -52,13 +52,7 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 "src": "../../../../bundles/framework/hierarchical-layerlist/model/LayerGroup.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/view/Layer.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/view/LayerGroup.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/view/LayerGroupTab.js"
+            "src": "../../../../bundles/framework/hierarchical-layerlist/view/LayerGroupTab.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/view/SelectedLayersTab.js"
@@ -71,10 +65,7 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectedLayer.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/components/SelectableAccordionPanel.js"
-            }, {
+            },  {
                 "type": "text/javascript",
                 "src": "../../../../libraries/jstree/jstree.js"
             }, {

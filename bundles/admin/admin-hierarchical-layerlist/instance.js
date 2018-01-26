@@ -21,7 +21,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         _addMainTools: function() {
             var me = this;
             // Add new tool to adding groups
-            me.service.addMainTool('add-group', function(tool, id) {
+            me.service.addMainTool('add-group', function(tool) {
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, null, {
                     type: 'group'
                 });
@@ -40,6 +40,23 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             }, {
                 cls: 'add-group',
                 tooltip: me.locale.tooltips.addMainGroup
+            });
+        },
+        _addGroupTools: function() {
+            var me = this;
+            // Add new tool to adding sub-groups
+            me.service.addGroupTool('add-subgroup', function(tool, parentId) {
+                var popupConf = me.group.getGroupAddingPopupConf(tool, null, parentId, {
+                    type: 'subgroup'
+                });
+
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale.groupTitles.addSubgroup, message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'add-subgroup',
+                tooltip: me.locale.tooltips.addSubgroup
             });
         },
         /**
@@ -80,6 +97,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             // set admin configured
             me.service.setAdmin(true);
             me._addMainTools();
+            me._addGroupTools();
             me._addOptions();
             //Doesn't work.
             /*me.service.addEventHandler("dnd_stop.vakata", function(event, data){
@@ -111,6 +129,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 var newTargetId = draggedNode.parent.split("-")[1];
                 console.log("Target node: "+newTargetId);*/
             });
+
 
         },
 
