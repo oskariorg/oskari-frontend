@@ -120,7 +120,6 @@ Oskari.clazz.define(
                 type: type
             };
             jQuery.extend(true, jstreeObject, opts || {});
-            console.log(jstreeObject, opts);
             return jstreeObject;
         },
         /**
@@ -820,7 +819,6 @@ Oskari.clazz.define(
                 var layers = group.getLayers();
                 var extraOpts = {};
                 //Create root group
-                console.log(group);
                 if (!group.hasSelectable()) {
                     extraOpts.a_attr = {
                         class: 'no-checkbox'
