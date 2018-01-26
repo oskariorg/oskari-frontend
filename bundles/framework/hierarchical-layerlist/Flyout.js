@@ -359,7 +359,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 return group.getLayers().length > 0;
             });
             return sortedGroupList;
-
         },
 
         /**

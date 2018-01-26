@@ -336,13 +336,13 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {
     display: none; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
     margin-right: -16px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no-checkbox i.jstree-checkbox {
     display: none; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open .jstree-ocl {
     background-position: -32px 5px; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] .jstree-ocl {
     background-position: 0px 5px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor {
     width: 95%;
@@ -368,5 +368,11 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
       background-color: #ffffff; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-checkbox {
     margin-left: -4px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] {
+    border: 1px solid #c0d0d0 !important; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open {
+    border: 1px solid #c0d0d0 !important; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] > div.jstree-wholerow {
+    background-color: #f3f3f3 !important; }
 
 /*# sourceMappingURL=style.css.map */
