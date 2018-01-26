@@ -77,8 +77,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             var me = this;
             me.sandbox.register(this);
 
+            // set admin configured
+            me.service.setAdmin(true);
             me._addMainTools();
             me._addOptions();
+
         },
 
         // module boilerplate methods
