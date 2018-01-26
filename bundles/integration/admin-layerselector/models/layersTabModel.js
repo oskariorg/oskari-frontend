@@ -1,5 +1,5 @@
-(function () {
-    define(['_bundle/collections/layerGroupCollection'], function (LayerGroupCollection) {
+(function() {
+    define(['_bundle/collections/layerGroupCollection'], function(LayerGroupCollection) {
         return Backbone.Model.extend({
             layerGroups: [],
 
@@ -8,7 +8,7 @@
              *
              * @method initialize
              */
-            initialize: function () {
+            initialize: function() {
                 this.title = this.attributes.title;
                 this.type = this.attributes.type;
                 this.baseURL = this.attributes.baseUrl;
@@ -19,13 +19,13 @@
 
                 var me = this;
                 // bind this view to the add and remove events of the collection!
-                this.layers.on('change', function(model){
+                this.layers.on('change', function(model) {
                     me.addLayer(model);
                 });
-                this.layers.on('add', function(model){
+                this.layers.on('add', function(model) {
                     me.addLayer(model);
                 });
-                this.layers.on('remove', function(model){
+                this.layers.on('remove', function(model) {
                     me.removeLayer(model);
                 });
             },
@@ -37,7 +37,7 @@
              * @method getTitle
              * @return {String} title
              */
-            getTitle: function () {
+            getTitle: function() {
                 return this.title || this.names[Oskari.getDefaultLanguage()];
             },
 
@@ -48,7 +48,7 @@
              * @method addLayerGroups
              * @param {Array} groups
              */
-            addLayerGroups: function (groups) {
+            addLayerGroups: function(groups) {
                 this.layerGroups = groups;
             },
 
@@ -58,7 +58,7 @@
              * @method getAllLayerGroups
              * @return {Array} groups
              */
-            getAllLayerGroups: function () {
+            getAllLayerGroups: function() {
                 return this.layerGroups;
             },
             /**
@@ -67,7 +67,7 @@
              * @method getGrouptitles
              * @param {Array} names of all these groups
              */
-            getGroupTitles: function () {
+            getGroupTitles: function() {
                 var groupNames = [],
                     i,
                     name;
@@ -93,7 +93,7 @@
              * @param {String} lang
              * @return {String} localized name
              */
-            getGroupingTitle: function (index, lang) {
+            getGroupingTitle: function(index, lang) {
                 var group = this.layerGroups[index];
                 if (group.getTitle) {
                     return group.getTitle() + ' (' + group.models.length + ')';
@@ -107,25 +107,26 @@
              * @method save
              * @param {Object} item group to save
              */
-            save: function (item, callback) {
+            save: function(item, callback) {
                 var me = this;
                 var method = "POST";
-                if(!item.id) {
+                if (!item.id) {
                     // insert if no id
                     method = "PUT";
                 }
                 this.__tryRestMethods(method, {
                     dataType: 'json',
-                    data : item,
+                    data: JSON.stringify(item),
+                    contentType: 'application/json; charset=UTF-8',
                     url: me.baseURL + me.actions.save + "&iefix=" + (new Date()).getTime(),
-                    success: function (pResp) {
+                    success: function(pResp) {
                         me._saved(pResp);
-                        if(callback) {
+                        if (callback) {
                             callback();
                         }
                     },
-                    error: function (jqXHR, textStatus) {
-                        if(callback) {
+                    error: function(jqXHR, textStatus) {
+                        if (callback) {
                             callback("Error while saving group:" + textStatus);
                         }
                     }
@@ -138,29 +139,28 @@
              * @param  {String} method 'GET' | 'POST' | 'PUT'  | 'DELETE'
              * @param  {Object} config for jQuery.ajax() - method will be overridden with value of method param
              */
-            __tryRestMethods : function(method, config) {
+            __tryRestMethods: function(method, config) {
                 var me = this;
                 config.type = method;
                 var errorHandler = function(jqXHR, textStatus, errorThrown) {
                     var origType = config.type;
-                    if(errorThrown === 'Method Not Allowed' &&
+                    if (errorThrown === 'Method Not Allowed' &&
                         (origType === 'PUT' || origType === 'DELETE')) {
                         // PUT/DELETE not allowed -> try POST instead
                         var origBefore = config.beforeSend;
                         config.beforeSend = function(req) {
                             req.setRequestHeader('X-HTTP-Method-Override', origType);
-                            if(origBefore) {
+                            if (origBefore) {
                                 origBefore(req);
                             }
                         };
                         me.__tryRestMethods('POST', config);
-                    }
-                    else if(config.__oskariError) {
+                    } else if (config.__oskariError) {
                         config.__oskariError(jqXHR, textStatus, errorThrown);
                     }
                 };
 
-                if(!config.__oskariError) {
+                if (!config.__oskariError) {
                     config.__oskariError = config.error;
                     config.error = errorHandler;
                 }
@@ -173,10 +173,10 @@
              * @private
              * @param {Object} item group that was saved
              */
-            _saved : function(item) {
+            _saved: function(item) {
                 var hasChanges = this._parseObjectToGroup(item);
                 // trigger update if had changes
-                if(hasChanges) {
+                if (hasChanges) {
                     // refresh layerGroups - is this really necessary?
                     this.set('layerGroups', this.layerGroups);
                     // trigger change event so that DOM will be re-rendered
@@ -191,19 +191,18 @@
              * @param {String} baseUrl
              * @param {String} action_route
              */
-            getClasses: function (groupingMethod) {
+            getClasses: function(groupingMethod) {
                 var me = this;
                 jQuery.ajax({
                     type: "GET",
                     dataType: 'json',
                     url: me.baseURL + me.actions.load + "&iefix=" + (new Date()).getTime(),
-                    success: function (pResp) {
+                    success: function(pResp) {
                         // cleanup old layer Groups since we always refresh from server for now
                         me.layerGroups = [];
                         me.loadGroups(pResp, groupingMethod);
                     },
-                    error: function () {
-                    }
+                    error: function() {}
                 });
             },
 
@@ -213,19 +212,19 @@
              * @method loadClasses
              * @param {Array} classes
              */
-            loadGroups: function (classes, groupingMethod) {
+            loadGroups: function(classes, groupingMethod) {
                 var me = this;
                 var groups = me.layerGroups;
                 var results = classes[this.type];
                 var hasChanges = false;
                 _.each(results, function(item) {
                     var changes = me._parseObjectToGroup(item, groupingMethod);
-                    if(!hasChanges) {
+                    if (!hasChanges) {
                         hasChanges = changes;
                     }
                 });
                 // trigger update if had changes
-                if(hasChanges) {
+                if (hasChanges) {
                     // refresh layerGroups - is this really necessary?
                     me.set('layerGroups', groups);
                     // trigger change event so that DOM will be re-rendered
@@ -240,13 +239,13 @@
              * @param {Object} item group to parse
              * @return {Boolean} true if changes
              */
-            _parseObjectToGroup : function(item, groupingMethod) {
+            _parseObjectToGroup: function(item, groupingMethod) {
                 var me = this;
                 var groups = me.layerGroups;
                 var defaultLanguage = Oskari.getLang();
                 var loadedGroup = me.getGroup(item.id);
                 var hasChanges = false;
-                if(!loadedGroup) {
+                if (!loadedGroup) {
                     // create a new group if not found
                     hasChanges = true;
                     // first param is null because Backbone just works that way
@@ -258,7 +257,7 @@
                 // copy names
                 for (var lang in item.name) {
                     if (item.name.hasOwnProperty(lang)) {
-                        if(!hasChanges) {
+                        if (!hasChanges) {
                             // flag changed if not flagged before and name has changed
                             hasChanges = (loadedGroup.names[lang] !== item.name[lang]);
                         }
@@ -267,27 +266,27 @@
                 }
                 // update default name
                 loadedGroup.name = loadedGroup.names[Oskari.getLang()] || '';
-                if(groupingMethod) {
+                if (groupingMethod) {
                     me._mapLayersForGroup(loadedGroup, groupingMethod);
                 }
                 this.sortByName();
                 return hasChanges;
             },
 
-            sortByName : function() {
-                this.layerGroups.sort(function(a,b){
+            sortByName: function() {
+                this.layerGroups.sort(function(a, b) {
                     var name_a = a.name;
-                    if(name_a) {
+                    if (name_a) {
                         name_a = name_a.toLowerCase();
                     }
                     var name_b = b.name;
-                    if(name_b) {
+                    if (name_b) {
                         name_b = name_b.toLowerCase();
                     }
-                    if(name_a > name_b) {
+                    if (name_a > name_b) {
                         return 1;
                     }
-                    if(name_a < name_b) {
+                    if (name_a < name_b) {
                         return -1;
                     }
                     return 0;
@@ -297,7 +296,7 @@
              * Returns a template group for adding new organization.
              * @return {Object} object for form template
              */
-            getTemplateGroup : function() {
+            getTemplateGroup: function() {
 
                 var supportedLanguages = Oskari.getSupportedLanguages();
                 supportedLanguages.sort();
@@ -305,13 +304,13 @@
                 var names = [];
                 for (var i = 0; i < supportedLanguages.length; i++) {
                     names.push({
-                        "lang" : supportedLanguages[i],
-                        "name" : ""
+                        "lang": supportedLanguages[i],
+                        "name": ""
                     });
                 }
 
                 return {
-                    "getNamesAsList" : function() {
+                    "getNamesAsList": function() {
                         return names;
                     }
                 };
@@ -322,17 +321,17 @@
              * @method getLayerGroups
              * @private
              */
-            _mapLayersForGroup: function (group, groupingMethod) {
+            _mapLayersForGroup: function(group, groupingMethod) {
                 _.each(this.layers.models, function(layer) {
                     if (layer.getMetaType &&
                         (layer.getMetaType() === 'published' ||
-                        layer.getMetaType() === 'myplaces')) {
+                            layer.getMetaType() === 'myplaces')) {
                         // skip published layers
                         return;
                     }
-                    if(layer[groupingMethod]) {
+                    if (layer[groupingMethod]) {
                         var groupAttr = layer[groupingMethod]();
-                        if(group.name === groupAttr) {
+                        if (group.name === groupAttr) {
                             group.add(layer);
                         }
                     }
@@ -345,10 +344,10 @@
              * @method remove
              * @param {Number} id for the group to remove
              */
-            remove: function (id, callback) {
+            remove: function(id, callback) {
                 var me = this;
-                if(!id) {
-                    if(callback) {
+                if (!id) {
+                    if (callback) {
                         callback('Id missing');
                     }
                     return;
@@ -356,14 +355,14 @@
                 this.__tryRestMethods("DELETE", {
                     dataType: 'json',
                     url: me.baseURL + me.actions.remove + "&id=" + id + "&iefix=" + (new Date()).getTime(),
-                    success: function () {
+                    success: function() {
                         me._removeClass(id);
-                        if(callback) {
+                        if (callback) {
                             callback();
                         }
                     },
-                    error: function (jqXHR, textStatus) {
-                        if(callback) {
+                    error: function(jqXHR, textStatus) {
+                        if (callback) {
                             callback("Error while removing group: " + textStatus, jqXHR);
                         }
                     }
@@ -376,7 +375,7 @@
              * @param {integer} id of class/organization that needs to be removed
              * @private
              */
-            _removeClass: function (id) {
+            _removeClass: function(id) {
                 var groups = this.layerGroups;
                 var foundIndex = -1;
                 for (var i = groups.length - 1; i >= 0; i -= 1) {
@@ -386,12 +385,12 @@
                         break;
                     }
                 }
-                if(foundIndex !== -1) {
+                if (foundIndex !== -1) {
                     var me = this;
                     var group = groups.splice(foundIndex, 1)[0];
                     // remove layers so they are removed from the other tab as well
                     var layers = group.getLayers();
-                    _.each(layers, function(layer){
+                    _.each(layers, function(layer) {
                         // this will trigger removal of layer which updates both tabs
                         me.trigger('adminAction', {
                             type: "adminAction",
@@ -399,7 +398,7 @@
                             modelId: layer.getId()
                         });
                     });
-                    if(layers.length === 0) {
+                    if (layers.length === 0) {
                         // trigger change event so that DOM will be re-rendered
                         // if there was no layers
                         this.trigger('change:layerGroups');
@@ -410,8 +409,8 @@
              * Removes layer from all layer groups found on this tab
              * @param  {LayerModel} layermodel backbone layer model
              */
-            removeLayer : function(layermodel) {
-                _.each(this.layerGroups, function(group){
+            removeLayer: function(layermodel) {
+                _.each(this.layerGroups, function(group) {
                     group.remove(layermodel);
                 });
                 // trigger change event so that DOM will be re-rendered
@@ -421,22 +420,23 @@
              * Removes layer from all layer groups found on this tab
              * @param  {LayerModel} layermodel backbone layer model
              */
-            addLayer : function(layermodel) {
-                if(!layermodel) {
+            addLayer: function(layermodel) {
+                if (!layermodel) {
                     return;
                 }
                 var modelGroupId = layermodel.getGroupId(this.type);
                 var me = this;
-                _.each(this.layerGroups, function(group){
+                _.each(this.layerGroups, function(group) {
                     var tmp = group.get(layermodel);
-                    if(modelGroupId === group.id) {
-                        group.add(layermodel, {merge: true});
-                        if(!tmp) {
+                    if (modelGroupId === group.id) {
+                        group.add(layermodel, {
+                            merge: true
+                        });
+                        if (!tmp) {
                             // new layer - trigger change
                             me.trigger('change:layerGroups');
                         }
-                    }
-                    else if(tmp) {
+                    } else if (tmp) {
                         // layer removed from group/group changed
                         group.remove(tmp);
                         // trigger change
@@ -446,9 +446,9 @@
             },
 
 
-            getGroup: function (groupId) {
+            getGroup: function(groupId) {
                 var groups = this.layerGroups;
-                for (var i = 0; i <  groups.length; ++i) {
+                for (var i = 0; i < groups.length; ++i) {
                     if (('' + groups[i].id) === ('' + groupId)) {
                         return groups[i];
                     }

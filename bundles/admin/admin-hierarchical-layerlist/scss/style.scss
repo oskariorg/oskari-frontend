@@ -1,0 +1,72 @@
+$deleteColorStart: #f62b2b;
+$deleteColorEnd: darken($deleteColorStart, 20%);
+$deleteTextColor: #fff;
+
+$addColorStart: #217ad4;
+$addColorEnd: darken($addColorStart, 20%);
+$addTextColor: #fff;
+
+$cancelColorStart: #e6e6e6;
+$cancelColorEnd: darken($cancelColorStart, 20%);
+$cancelTextColor: #000;
+
+$errorColor: lighten(#ff0000, 20%);
+
+@mixin gradient-button($startColor, $endColor, $textColor)
+{
+    background-color: $startColor;
+    background-image: -webkit-gradient(linear, left top, left bottom, from($startColor), to($endColor));
+    background-image: -webkit-linear-gradient(top, $startColor, $endColor);
+    background-image: -moz-linear-gradient(top, $startColor, $endColor);
+    background-image: -ms-linear-gradient(top, $startColor, $endColor);
+    background-image: -o-linear-gradient(top, $startColor, $endColor);
+    background-image: linear-gradient(to bottom, $startColor, $endColor);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=$startColor, endColorstr=$endColor);
+    color: $textColor;
+    border-color: darken($startColor, 10%) lighten($startColor, 10%) lighten($startColor, 10%) darken($startColor, 10%);
+
+    &:hover {
+        background-color: lighten($startColor, 10%);
+        background-image: -webkit-gradient(linear, left top, left bottom, from(lighten($startColor, 10%)), to(lighten($endColor, 10%)));
+        background-image: -webkit-linear-gradient(top, lighten($startColor, 10%), lighten($endColor, 10%));
+        background-image: -moz-linear-gradient(top, lighten($startColor, 10%), lighten($endColor, 10%));
+        background-image: -ms-linear-gradient(top, lighten($startColor, 10%), lighten($endColor, 10%));
+        background-image: -o-linear-gradient(top, lighten($startColor, 10%), lighten($endColor, 10%));
+        background-image: linear-gradient(to bottom, lighten($startColor, 10%), lighten($endColor, 10%));
+        filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%));
+    }
+}
+
+.divmanazerpopup {
+    &.admin-hierarchical-layerlist-group {
+        .popup-body {
+            .content {
+                .group-names {
+                    label {
+                        input {
+                            &.error {
+                                background-color: $errorColor;
+                            }
+                        }
+                    }
+                }
+            }
+            .actions {
+                .oskari-button {
+                    text-shadow:none;
+                    &.delete {
+                        @include gradient-button($deleteColorStart, $deleteColorEnd, $deleteTextColor);
+                    }
+
+                    &.add {
+                        @include gradient-button($addColorStart, $addColorEnd, $addTextColor);
+                    }
+
+                    &.cancel {
+                        @include gradient-button($cancelColorStart, $cancelColorEnd, $cancelTextColor);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -161,7 +161,7 @@ div.hierarchical-layerlist div.tab-content {
         background-repeat: no-repeat;
         background-position: center center;
         cursor: pointer; }
-        div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool:active {
+        div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool.active {
           background-color: #ffde00; }
         div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool.add-group {
           background-image: url("../images/glyphicons/glyphicons-433-plus.png"); }
@@ -336,8 +336,10 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {
     display: none; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] .jstree-ocl {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
     margin-right: -16px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no_checkbox i.jstree-checkbox {
+    display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open .jstree-ocl {
     background-position: -32px 5px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] .jstree-ocl {
@@ -351,21 +353,21 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     border: 1px solid #c0d0d0;
     font-size: 16px;
     font-weight: bold; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node div.jstree-wholerow {
-    background-color: #f3f3f3; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node.jstree-open div.jstree-wholerow {
-    background-color: #FAFAFA; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node div.jstree-wholerow {
+      background-color: #f3f3f3; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node.jstree-open div.jstree-wholerow {
+      background-color: #FAFAFA; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf {
     border: none; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf span.layer-title {
-    font-size: 14px;
-    font-weight: normal; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf:nth-child(even) div.jstree-wholerow {
-    background-color: #f3f3f3; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf:nth-child(odd) div.jstree-wholerow {
-    background-color: #ffffff; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf span.layer-title {
+      font-size: 14px;
+      font-weight: normal; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf:nth-child(even) div.jstree-wholerow {
+      background-color: #f3f3f3; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf:nth-child(odd) div.jstree-wholerow {
+      background-color: #ffffff; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-checkbox {
-    margin-left: 10px; }
+    margin-left: -4px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] {
     border: 1px solid #c0d0d0 !important; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open {

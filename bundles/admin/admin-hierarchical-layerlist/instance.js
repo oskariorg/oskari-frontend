@@ -5,8 +5,10 @@
  */
 Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstance",
     function() {
+        this.locale = this.getLocalization();
         this.sandbox = Oskari.getSandbox();
         this.service = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
+        this.group = Oskari.clazz.create('Oskari.admin.hierarchical-layerlist.Group', this.sandbox, this.locale);
     }, {
         /*******************************************************************************************************************************
         /* PRIVATE METHODS
@@ -19,12 +21,25 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         _addMainTools: function() {
             var me = this;
             // Add new tool to adding groups
-            me.service.addMainTool('add-group', function(tool) {
-                tool.removeClass('active');
-                alert('Lisää ryhmä');
+            me.service.addMainTool('add-group', function(tool, id) {
+                var popupConf = me.group.getGroupAddingPopupConf(tool, null, null, {
+                    type: 'group'
+                });
+                /*var popupConf = me.group.getGroupAddingPopupConf(tool, -1, {
+                    locale: {
+                        fi: 'testi fi',
+                        en: 'testi en',
+                        sv: 'testi sv'
+                    },
+                    selectable: true
+                });*/
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale.groupTitles.addMainGroup, message, popupConf.buttons);
+                popupConf.popup.makeModal();
             }, {
                 cls: 'add-group',
-                tooltip: 'Lisää ryhmä'
+                tooltip: me.locale.tooltips.addMainGroup
             });
         },
         /**
@@ -42,9 +57,19 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             });
         },
 
+
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
         *******************************************************************************************************************************/
+        getLocalization: function(key) {
+            if (!this.locale) {
+                this.locale = Oskari.getLocalization(this.getName());
+            }
+            if (key) {
+                return this.locale[key];
+            }
+            return this.locale;
+        },
         getName: function() {
             return "AdminHierarchicalLayerList";
         },

@@ -52,6 +52,11 @@ Oskari.clazz.define(
         this._bindExtenderServiceListeners();
         this._bindOskariEvents();
     }, {
+        /**
+         * Bind extender service event listeners
+         * @method  _bindExtenderServiceListeners
+         * @private
+         */
         _bindExtenderServiceListeners: function() {
             var me = this;
             me.service.on('maintool.added', function(data) {
@@ -63,14 +68,31 @@ Oskari.clazz.define(
                 tool.bind('click', function(evt) {
                     evt.stopPropagation();
                     tool.addClass('active');
-                    data.handler(tool);
+                    data.handler(tool, data.id);
                 });
                 me.getFilterField().getField().find('.main-tools').append(tool);
-                console.log('Main tool added, data:', data);
             });
 
             me.service.on('jstree-contionalselect', function(data) {
                 me.selectNodeFromTree(data.node, data.event);
+            });
+
+            me.service.on('group-added', function(data) {
+                if (data.method === 'add') {
+                    var parent = '#';
+                    var clsCb = '';
+                    if (!data.selectable) {
+                        clsCb = 'no-checkbox';
+                    }
+                    me.getJsTreeElement().jstree().create_node(parent, {
+                        id: data.type + '-' + data.id,
+                        text: me.sb.getLocalizedProperty(data.name),
+                        a_attr: {
+                            class: clsCb
+                        },
+                        type: data.type
+                    });
+                }
             });
         },
         getTitle: function() {
@@ -554,6 +576,13 @@ Oskari.clazz.define(
                 jsTreeGroup.parent = "#";
                 jsTreeGroup.text = group.name + ' ('+layersLength+')';
                 jsTreeGroup.type = "group";
+
+                if (!group.selectable) {
+                    jsTreeGroup.a_attr = {
+                        class: 'no-checkbox'
+                    };
+                }
+
                 jsTreeData.push(jsTreeGroup);
                 //Loop through group layers
                 //TODO: Loop through subgroups aswell similarly

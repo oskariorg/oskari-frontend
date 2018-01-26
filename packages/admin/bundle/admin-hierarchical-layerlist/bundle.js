@@ -30,6 +30,25 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundle",
             "scripts": [{
                 "type": "text/javascript",
                 "src": "../../../../bundles/admin/admin-hierarchical-layerlist/instance.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/components/Group.js"
+            }, {
+                "type": "text/css",
+                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/css/style.css"
+            }],
+            "locales": [{
+                "lang": "fi",
+                "type": "text/javascript",
+                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/fi.js"
+            }, {
+                "lang": "sv",
+                "type": "text/javascript",
+                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/sv.js"
+            }, {
+                "lang": "en",
+                "type": "text/javascript",
+                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/en.js"
             }]
         },
         "bundle": {
