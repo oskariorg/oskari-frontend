@@ -23,12 +23,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me._selectInstances = { input: null, target: null };
         me._userSelections = { import: null, export: null };
         me._template = {
-            wrapper: jQuery('<div class="conversionwrapper"></div>'),
+            wrapper: jQuery('<div class="transformation-wrapper"></div>'),
             title: _.template('<h4 class="header"><%= title %></h4>'),
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
             conversionbutton: _.template(
-                '<div class="conversionbtn" style="display:inline-block;">' +
-                    '<input id="convert" type="button" value="<%= convert %> >>">' +
+                '<div class="transformation-button" style="display:inline-block;">' +
+                    '<input id="transform" type="button" value="<%= convert %> >>">' +
                 '</div>'
             ),
             utilbuttons: _.template(
@@ -306,7 +306,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 var exportfile = me.file.getElement().export;
                 me.showDialogue( exportfile, true );
             });
-            container.find('#convert').on("click", function () {
+            container.find('#transform').on("click", function () {
                 var crs = me.getCrsOptions();
                 var rows = me.inputTable.getElements().rows;
                 var coordinateArray = [];
