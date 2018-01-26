@@ -114,7 +114,7 @@ div.hierarchical-layerlist div.tab-content {
         background-repeat: no-repeat;
         background-position: center center;
         cursor: pointer; }
-        div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool:active {
+        div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool.active {
           background-color: #ffde00; }
         div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool.add-group {
           background-image: url("../images/glyphicons/glyphicons-433-plus.png"); }
@@ -289,7 +289,9 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {
     background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
     margin-right: -16px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no_checkbox i.jstree-checkbox {
+    display: none; }
 
 /*# sourceMappingURL=style.css.map */

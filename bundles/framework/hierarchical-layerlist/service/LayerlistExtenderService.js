@@ -162,8 +162,8 @@
                 }
 
                 this._mainTools[id] = {
-                    handler: function() {
-                        handler(id);
+                    handler: function(tool) {
+                        handler(tool, id);
                     },
                     options: options
                 };

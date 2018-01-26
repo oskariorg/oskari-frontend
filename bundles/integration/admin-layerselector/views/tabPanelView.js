@@ -9,7 +9,7 @@ define([
         '_bundle/views/adminLayerSettingsView',
         '_bundle/views/layerView'
     ],
-    function (FilterLayersTemplate,
+    function(FilterLayersTemplate,
         AddGroupingButtonTemplate,
         AddGroupingTemplate,
         AdminAddLayerBtnTemplate,
@@ -48,7 +48,7 @@ define([
              *
              * @method initialize
              */
-            initialize: function () {
+            initialize: function() {
                 this.layerGroupingModel = this.options.layerGroupingModel;
                 this.instance = this.options.instance;
                 this.allowDeleteWhenNotEmpty = (this.options.tabId === 'inspire');
@@ -83,24 +83,35 @@ define([
              * They are used by AdminLayerSettingsView directly from this View for new layers and passed through LayerView
              * for existing layers
              */
-            __setupSupportedLayerTypes : function() {
+            __setupSupportedLayerTypes: function() {
                 // generic list of layertypes supported
-                this.supportedTypes = [
-                    {id : "wfslayer", localeKey : "wfs"},
-                    {id : "wmslayer", localeKey : "wms"},
-                    {id : "wmtslayer", localeKey : "wmts"},
-                    {id : "arcgislayer", localeKey : "arcgis", footer : false},
-                    {id : "arcgis93layer", localeKey : "arcgis93", footer : false}
-                ];
+                this.supportedTypes = [{
+                    id: "wfslayer",
+                    localeKey: "wfs"
+                }, {
+                    id: "wmslayer",
+                    localeKey: "wms"
+                }, {
+                    id: "wmtslayer",
+                    localeKey: "wmts"
+                }, {
+                    id: "arcgislayer",
+                    localeKey: "arcgis",
+                    footer: false
+                }, {
+                    id: "arcgis93layer",
+                    localeKey: "arcgis93",
+                    footer: false
+                }];
                 // filter out ones that are not registered in current appsetup
                 var sandbox = this.instance.sandbox,
                     mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                this.supportedTypes = _.filter(this.supportedTypes, function(type){
+                this.supportedTypes = _.filter(this.supportedTypes, function(type) {
                     return mapLayerService.hasSupportForLayerType(type.id);
                 });
                 // setup templates for layer types/require only ones supported
                 _.each(this.supportedTypes, function(type) {
-                    if(type.header === false) {
+                    if (type.header === false) {
                         return;
                     }
                     var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateHeader.html';
@@ -111,7 +122,7 @@ define([
                     });
                 });
                 _.each(this.supportedTypes, function(type) {
-                    if(type.footer === false) {
+                    if (type.footer === false) {
                         return;
                     }
                     var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateFooter.html';
@@ -128,7 +139,7 @@ define([
              *
              * @method render
              */
-            render: function () {
+            render: function() {
                 this.$el.addClass(this.options.tabId);
                 this.$el.empty();
                 var me = this;
@@ -155,7 +166,7 @@ define([
                                 // create a new layerView with layer model.
                                 var layerView = new LayerView({
                                     model: layer,
-                                    supportedTypes : me.supportedTypes,
+                                    supportedTypes: me.supportedTypes,
                                     instance: this.options.instance
                                 });
 
@@ -175,7 +186,7 @@ define([
                         }
                         // add grouping template to group panel
                         var tab = this.tabTemplate({
-                            "lcId" : group.id
+                            "lcId": group.id
                         });
 
                         // grouping edit panels
@@ -196,14 +207,15 @@ define([
                     if (this.options.tabId === 'inspire') {
                         btnConfig.title = this.options.instance.getLocalization('admin').addInspire;
                         btnConfig.desc = this.options.instance.getLocalization('admin').addInspireDesc;
-                    }
-                    else {
+                    } else {
                         btnConfig.title = this.options.instance.getLocalization('admin').addOrganization;
                         btnConfig.desc = this.options.instance.getLocalization('admin').addOrganizationDesc;
 
                     }
                     var groupingPanelContainer = this.$el.find('.oskarifield');
-                    groupingPanelContainer.append(this.addGroupingButtonTemplate({ loc: btnConfig }));
+                    groupingPanelContainer.append(this.addGroupingButtonTemplate({
+                        loc: btnConfig
+                    }));
 
                     groupingPanelContainer.append(this.__createGroupingPanel(this.options.tabId, newGroup));
 
@@ -217,34 +229,34 @@ define([
              * @param  {Object} model data to populate the form with
              * @return {DOMElement}  element ready to be added to UI
              */
-            __createGroupingPanel : function(tabId, model) {
+            __createGroupingPanel: function(tabId, model) {
                 var instance = this.options.instance,
                     adminLoc = instance.getLocalization('admin'),
                     groupingConfig = {
                         "data": model,
                         // localizations
                         "title": adminLoc.addOrganizationName,
-                        "desc" : adminLoc.addOrganizationNameTitle,
-                        "localeInput" : adminLoc,
-                        "btnLoc" : {
-                            "add" : {
-                                "title" : instance.getLocalization('add'),
-                                "desc" : adminLoc.addNewOrganization
+                        "desc": adminLoc.addOrganizationNameTitle,
+                        "localeInput": adminLoc,
+                        "btnLoc": {
+                            "add": {
+                                "title": instance.getLocalization('add'),
+                                "desc": adminLoc.addNewOrganization
                             },
-                            "save" : {
-                                "title" : instance.getLocalization('save')
+                            "save": {
+                                "title": instance.getLocalization('save')
                             },
-                            "delete" : {
-                                "title" : instance.getLocalization('delete')
+                            "delete": {
+                                "title": instance.getLocalization('delete')
                             },
-                            "cancel" : {
-                                "title" : instance.getLocalization('cancel')
+                            "cancel": {
+                                "title": instance.getLocalization('cancel')
                             }
                         }
-                };
+                    };
 
                 // override some UI texts for inspire theme form
-                if(tabId === 'inspire') {
+                if (tabId === 'inspire') {
                     groupingConfig.title = adminLoc.addInspireName;
                     groupingConfig.desc = adminLoc.addInspireNameTitle;
                     groupingConfig.btnLoc.add.desc = adminLoc.addNewClass;
@@ -257,7 +269,7 @@ define([
              *
              * @method filterLayers
              */
-            filterLayers: function (e) {
+            filterLayers: function(e) {
                 e.stopPropagation();
             },
             /**
@@ -266,7 +278,7 @@ define([
              *
              * @method toggleGroupingSettings
              */
-            toggleGroupingSettings: function (e) {
+            toggleGroupingSettings: function(e) {
                 //show grouping settings
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
@@ -293,7 +305,7 @@ define([
              *
              * @method hideGroupingSettings
              */
-            hideGroupingSettings: function () {
+            hideGroupingSettings: function() {
                 jQuery('.admin-add-class').removeClass('show-add-class');
             },
 
@@ -303,7 +315,7 @@ define([
              *
              * @method toggleAddLayerGrouping
              */
-            toggleAddLayerGrouping: function (e) {
+            toggleAddLayerGrouping: function(e) {
                 var elem = jQuery(e.currentTarget).parent().find('.admin-add-class');
                 if (elem.hasClass('show-add-class')) {
                     elem.removeClass('show-add-class');
@@ -317,7 +329,7 @@ define([
              *
              * @method toggleAddLayer
              */
-            toggleAddLayer: function (e) {
+            toggleAddLayer: function(e) {
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
                     layer = element.parent(),
@@ -327,7 +339,7 @@ define([
                     // create layer settings view for adding or editing layer
                     var settings = new AdminLayerSettingsView({
                         model: null,
-                        supportedTypes : me.supportedTypes,
+                        supportedTypes: me.supportedTypes,
                         instance: this.options.instance
                     });
 
@@ -337,20 +349,20 @@ define([
                         min: 0,
                         max: 100,
                         value: 100,
-                        slide: function (event, ui) {
+                        slide: function(event, ui) {
                             jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
                         }
                     });
                     // change the title of the button
                     element.html(this.options.instance.getLocalization('cancel'));
-                    element.attr('title',this.options.instance.getLocalization('cancel'));
-                    setTimeout(function () {
+                    element.attr('title', this.options.instance.getLocalization('cancel'));
+                    setTimeout(function() {
                         layer.find('.admin-add-layer').addClass('show-add-layer');
                     }, 30);
                 } else {
                     layer.find('.admin-add-layer').removeClass('show-add-layer');
                     element.html(this.options.instance.getLocalization('admin').addLayer);
-                    element.attr('title',this.options.instance.getLocalization('admin').addLayerDesc);
+                    element.attr('title', this.options.instance.getLocalization('admin').addLayerDesc);
                     layer.find('.admin-add-layer').remove();
                 }
             },
@@ -359,7 +371,7 @@ define([
              *
              * @method hideAddLayer
              */
-            hideAddLayer: function (e) {
+            hideAddLayer: function(e) {
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget);
                 if (element.parents('.admin-add-layer').hasClass('show-add-layer')) {
@@ -373,7 +385,7 @@ define([
              *
              * @method toggleLayerGroup
              */
-            toggleLayerGroup: function (e) {
+            toggleLayerGroup: function(e) {
                 var element = jQuery(e.currentTarget),
                     panel = element.parents('.accordion:first'),
                     headerIcon = panel.find('.headerIcon');
@@ -395,22 +407,23 @@ define([
              *
              * @method saveLayerGrouping
              */
-            saveLayerGrouping: function (e) {
+            saveLayerGrouping: function(e) {
                 var me = this,
                     element = jQuery(e.currentTarget),
                     addClass = element.parents('.admin-add-class');
 
                 var data = {
-                    id : element.parents('.accordion').attr('lcid')
+                    id: element.parents('.accordion').attr('lcid'),
+                    locales: {}
                 };
 
-                addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function () {
+                addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function() {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
-                    data["name_" + lang] = this.value;
+                    data.locales[lang] = this.value;
                 });
 
                 this.layerGroupingModel.save(data, function(err) {
-                    if(err) {
+                    if (err) {
                         // TODO: handle error
                         me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
                         return;
@@ -423,7 +436,7 @@ define([
              *
              * @method removeLayerGrouping
              */
-            removeLayerGrouping: function (e) {
+            removeLayerGrouping: function(e) {
                 var me = this,
                     element = jQuery(e.currentTarget),
                     groupId = element.attr('data-id'),
@@ -443,16 +456,16 @@ define([
                 btn.addClass('primary');
                 cancelBtn.setTitle(loc.cancel);
                 btn.setHandler(function() {
-                   dialog.close();
-                   me.layerGroupingModel.remove(groupId, function(err, info) {
-                        if(info && info.responseText) {
+                    dialog.close();
+                    me.layerGroupingModel.remove(groupId, function(err, info) {
+                        if (info && info.responseText) {
                             var obj = JSON.parse(info.responseText);
-                            if(obj.info && obj.info.code && loc.errors[obj.info.code]) {
+                            if (obj.info && obj.info.code && loc.errors[obj.info.code]) {
                                 me.__showDialog(loc.errors.title, loc.errors[obj.info.code], element);
                             }
                             return;
                         }
-                        if(err) {
+                        if (err) {
                             me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
                             return;
                         }
@@ -460,26 +473,26 @@ define([
                 });
 
                 cancelBtn.setHandler(function() {
-                   dialog.close();
+                    dialog.close();
                 });
 
                 dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
                 dialog.makeModal();
             },
             /**
-            * @method _showDialog
-            * @private
-            * @param title the dialog title
-            * @param message the dialog message
-            */
-            _showDialog: function(title, message){
+             * @method _showDialog
+             * @private
+             * @param title the dialog title
+             * @param message the dialog message
+             */
+            _showDialog: function(title, message) {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 dialog.show(title, message);
                 dialog.fadeout(5000);
             },
-            __showDialog : function(title, content, elRef, alignment) {
+            __showDialog: function(title, content, elRef, alignment) {
                 var me = this;
-                if(this.__dialog) {
+                if (this.__dialog) {
                     // close previous one if any
                     this.__dialog.close(true);
                     // TODO: or maybe reuse?
@@ -487,7 +500,7 @@ define([
                 }
                 this.__dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 this.__dialog.show(title, content);
-                if(elRef) {
+                if (elRef) {
                     this.__dialog.moveTo(elRef, alignment);
                 }
                 // clear reference this.__dialog on close
@@ -500,7 +513,7 @@ define([
              *
              * @method catchClicks
              */
-            catchClicks: function (e) {
+            catchClicks: function(e) {
                 e.stopPropagation();
             }
 

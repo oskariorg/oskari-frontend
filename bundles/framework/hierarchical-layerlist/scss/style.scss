@@ -182,7 +182,7 @@ div.hierarchical-layerlist {
                         background-position: center center;
                         cursor: pointer;
 
-                        &:active {
+                        &.active {
                             background-color: #ffde00;
                         }
 
@@ -456,9 +456,17 @@ div.hierarchical-layerlist {
         .jstree-layer-icon {
             background-image: url("../images/glyphicons/glyphicons-37-file.png");
         }
-        .jstree-open, .jstree-closed {
+        .jstree-open, .jstree-closed, .jstree-last {
             .jstree-ocl {
                 margin-right: -16px;
+            }
+        }
+
+        li {
+            a.no_checkbox {
+                i.jstree-checkbox {
+                    display:none;
+                }
             }
         }
     }
