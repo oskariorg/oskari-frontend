@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
+Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
     function (instance) {
         var me = this;
         me.instance = instance;
@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         }
     }, {
         getName: function() {
-            return 'Oskari.coordinatetransformation.view.conversion';
+            return 'Oskari.coordinatetransformation.view.transformation';
         },
         getContainer: function () {
             return jQuery(this.conversionContainer);

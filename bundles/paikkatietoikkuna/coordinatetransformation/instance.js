@@ -56,7 +56,7 @@ function () {
     },
     instantiateViews: function () {
         this.views = {
-            conversion: Oskari.clazz.create('Oskari.coordinatetransformation.view.conversion', this),
+            transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this),
             mapselect: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapselect', this),
             mapmarkers: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapmarkers', this)
         }
@@ -75,7 +75,7 @@ function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
     },
     isMapSelectMode: function () {
-        return this.views["conversion"].isMapSelect;
+        return this.views["transformation"].isMapSelect;
     },
     /**
      * Creates the coordinatetransformation service and registers it to the sandbox.
