@@ -10,50 +10,34 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         me.startingSystem = false;
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
         me.file = Oskari.clazz.create('Oskari.coordinatetransformation.view.filesettings', me.instance, me.loc);
+
         me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
-        me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );       
-        me.inputSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', this );
-        me.targetSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', this );
+        me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
+
+        me.inputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this);
+        me.outputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this);
+
+        me.sourceSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.SourceSelect', me.loc );
+
         me.file.create();
         me._selectInstances = { input: null, target: null };
         me._userSelections = { import: null, export: null };
         me._template = {
             wrapper: jQuery('<div class="conversionwrapper"></div>'),
             title: _.template('<h4 class="header"><%= title %></h4>'),
-            coordinatesystem: _.template(' <div class="coordinateconversion-csystem">' +
-                                    '<h5><%= title %></h5>'+
-                                    '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
-                                    '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div>  </div> </br> ' +
-                                    '<div class="map-projection" style="display:none;"> <%= map_projection %> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br>' +
-                                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> *</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
-                                    '<div class="height-system"><b class="dropdown_title"><%= height_system %></b></div> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div>'
-                                ),
-            coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
-                                            '<h4><%= title %></h4>'+
-                                            '<form>'+
-                                                '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
-                                                '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
-                                                '<input type="button" class="mapselect" name="load" value="<%= map %>">'+
-                                            '</form>'+
-                                            '</div>'),
-            datasourceinfo: _.template('<div class="datasource-info">' +
-                                            '<div class="coordinateconversion-clipboardinfo" style=display:none;">'+
-                                                '<div class="clipboardinfo"> <i><%= clipboardupload %><i> </div>'+
-                                            '</div>' +
-                                            '<div class="coordinateconversion-mapinfo" style=display:none;">'+
-                                                '<div class="mapinfo"> <i><%= mapinfo %><i> </div>'+
-                                            '</div>' +
-                                    '</div>'
-                                    ),  
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
-            conversionbutton: _.template('<div class="conversionbtn" style="display:inline-block;">' +
-                                            '<input id="convert" type="button" value="<%= convert %> >>">' +
-                                         '</div>'),
-            utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
-                                        '<input class="clear" type="button" value="<%= clear %> ">' +
-                                        '<input class="show" type="button" value="<%= show %> ">' +
-                                        // '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %> ">' +
-                                        '</div>')
+            conversionbutton: _.template(
+                '<div class="conversionbtn" style="display:inline-block;">' +
+                    '<input id="convert" type="button" value="<%= convert %> >>">' +
+                '</div>'
+            ),
+            utilbuttons: _.template(
+                '<div class="coordinateconversion-buttons">' +
+                    '<input class="clear" type="button" value="<%= clear %> ">' +
+                    '<input class="show" type="button" value="<%= show %> ">' +
+                    // '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %> ">' +
+                '</div>'
+            )
         }
     }, {
         getName: function() {
@@ -62,49 +46,39 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
         getContainer: function () {
             return jQuery(this.conversionContainer);
         },
-        getSelectInstances: function () {
-            return this._selectInstances;
-        },
         createUI: function( container ) {
-           this.conversionContainer = container;
+            this.conversionContainer = container;
 
-           var inputTitle = this._template.title( { title: this.loc.title.input } );
-           var resultTitle = this._template.title( { title: this.loc.title.result } ); 
-            var coordinatesystem = this._template.coordinatesystem({ title: this.loc.coordinatesystem.title,
-                                                          geodetic_datum: this.loc.coordinatesystem.geodetic_datum,
-                                                          coordinate_system: this.loc.coordinatesystem.coordinate_system,
-                                                          map_projection: this.loc.coordinatesystem.map_projection,
-                                                          geodetic_coordinate_system:this.loc.coordinatesystem.geodetic_coordinatesystem,
-                                                          height_system:this.loc.coordinatesystem.heigth_system });
+            var inputTitle = this._template.title( { title: this.loc.title.input } );
+            var resultTitle = this._template.title( { title: this.loc.title.result } ); 
 
-            var coordinatedatasource = this._template.coordinatedatasource({ title: this.loc.datasource.title, 
-                                                                             file: this.loc.datasource.file,
-                                                                             clipboard: this.loc.datasource.clipboard,
-                                                                             map: this.loc.datasource.map,
-                                                                             choose: this.loc.datasource.choose });
+            var inputTable = this.inputTable.create();
+            var targetTable = this.outputTable.create();
 
             var conversionbutton = this._template.conversionbutton({ convert: this.loc.coordinatefield.convert });
 
-            var datasourceinfo = this._template.datasourceinfo({ clipboardupload: this.loc.datasourceinfo.clipboardupload,
-                                                            mapinfo: this.loc.datasourceinfo.mapinfo,});
-
-            var utilbuttons = this._template.utilbuttons({ clear: this.loc.utils.clear,
-                                                            show: this.loc.utils.show,
-                                                            fileexport: this.loc.utils.export });
+            var utilbuttons = this._template.utilbuttons({
+                clear: this.loc.utils.clear,
+                show: this.loc.utils.show,
+                fileexport: this.loc.utils.export
+                });
                                                             
             var wrapper = this._template.wrapper.clone();
-            wrapper.append( coordinatesystem );
-            wrapper.find( '.coordinateconversion-csystem' ).attr( 'id','inputcoordsystem' );
-            wrapper.find( '#inputcoordsystem' ).prepend( inputTitle );
-            wrapper.append( coordinatesystem );
-            wrapper.find( '.coordinateconversion-csystem' ).not( '#inputcoordsystem' ).attr( 'id','targetcoordsystem' );
-            wrapper.find( '#targetcoordsystem' ).prepend( resultTitle );
-            wrapper.append( coordinatedatasource );
-            wrapper.append( datasourceinfo );
+            if ( this.sourceSelect.getElement() ) {
+                wrapper.append( this.sourceSelect.getElement() );
+            }
+            if ( this.inputSystem.getElement() ) {
+                wrapper.append( this.inputSystem.getElement() );
+                wrapper.find( '.transformation-system' ).attr( 'id','inputcoordsystem' );
+                wrapper.find( '#inputcoordsystem' ).prepend( inputTitle );
+            }
+            if ( this.outputSystem.getElement() ) {
+                wrapper.append( this.outputSystem.getElement() );
+                wrapper.find( '.transformation-system' ).not( '#inputcoordsystem' ).attr( 'id','targetcoordsystem' );
+                wrapper.find( '#targetcoordsystem' ).prepend( resultTitle );
+            }
 
             this.fileinput.create();
-            var inputTable = this.inputTable.create();
-            var targetTable = this.outputTable.create();
             this.outputTable.getContainer().find( ".coordinatefield-table" ).addClass( 'target' );
 
             if ( this.fileinput.canUseAdvancedUpload() ) {
@@ -117,28 +91,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
             wrapper.append( targetTable );
             wrapper.append( utilbuttons );
 
-            this.inputSelect.create();
-            this._selectInstances.input = this.inputSelect.getSelectInstances();
-            var inp_dropdowns = this.inputSelect.getDropdowns();
-            var i = 0;
-            Object.keys( inp_dropdowns ).forEach( function( key ) {
-                jQuery( wrapper.find( '#inputcoordsystem' ).find( '.select' )[i] ).append( inp_dropdowns[key] );
-                i++;
-            });
-            this.targetSelect.create();
-            this._selectInstances.target = this.targetSelect.getSelectInstances();
-            var out_dropdowns = this.targetSelect.getDropdowns();
-            var j = 0;
-            Object.keys( out_dropdowns ).forEach( function( key ) {
-                jQuery( wrapper.find( '#targetcoordsystem' ).find( '.select' )[j] ).append( out_dropdowns[key] );
-                j++;
-            });
 
             jQuery(container).append(wrapper);
-            var input = wrapper.find( '#inputcoordsystem' );
-            var target = wrapper.find( '#targetcoordsystem' );
-            this.inputSelect.handleSelectionChanged( input );
-            this.targetSelect.handleSelectionChanged( target );
+
             this.handleClipboard();
             this.handleButtons();
             this.handleRadioButtons();
@@ -201,11 +156,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
             selectInstance.setValue( value );
         },
         getCrsOptions: function () {
-            var instances = this.getSelectInstances();
-            var sourceSelection = this.getSelectionValue( instances.input.coordinatesystem );
-            var targetSelection = this.getSelectionValue( instances.target.coordinatesystem );
-            var sourceHeightSelection = this.getSelectionValue( instances.input.heigthsystem );
-            var targetHeightSelection = this.getSelectionValue( instances.target.heigthsystem );
+            var input = this.inputSystem.getSelectInstance();
+            var target = this.outputSystem.getSelectInstance();
+
+            var sourceSelection = this.getSelectionValue( input.coordinatesystem );
+            var targetSelection = this.getSelectionValue( target.coordinatesystem );
+            var sourceHeightSelection = this.getSelectionValue( input.heigthsystem );
+            var targetHeightSelection = this.getSelectionValue( target.heigthsystem );
 
             var source = this.helper.getMappedEPSG( sourceSelection );
             var target = this.helper.getMappedEPSG( targetSelection );
@@ -280,39 +237,46 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.conversion',
             var me = this;
             var container = me.getContainer();
             var clipboardInfo = container.find('.coordinateconversion-clipboardinfo');
-            var mapInfo = container.find('.coordinateconversion-mapinfo');
+            var mapSelectInfo = container.find('.coordinateconversion-mapinfo')
             var fileInput = container.find('.oskari-fileinput');
             var importfile = me.file.getElement().import;
             jQuery('input[type=radio][name=load]').change(function() {
                 if (this.value == '1') {
                     // me.showDialogue( importfile, false );
                     clipboardInfo.hide();
+                    mapSelectInfo.hide();
                     fileInput.show();
                     me.isMapSelect = false;
                     me.clipboardInsert = false;
                 }
                 else if (this.value == '2') {
                     fileInput.hide();
+                    mapSelectInfo.hide();
                     me.clipboardInsert = true;
                     clipboardInfo.show();
                     me.isMapSelect = false;
                 }
+                else if (this.value == '3') {
+                    clipboardInfo.hide();
+                    fileInput.hide();
+                    mapSelectInfo.show(); 
+                    me.isMapSelect = true;    
+                }
                 me.inputTable.isEditable( me.clipboardInsert );
             });
-                jQuery('.mapselect').on("click", function() {
-                    me.isMapSelect = true;    
+                jQuery('.selelctFromMap').on("click", function() {
                     me.instance.toggleViews("mapselect");
                     me.clipboardInsert = false;
                     me.selectEPSG3067();
                 });
          },
         selectEPSG3067: function () {
-            var instances = this.getSelectInstances();
+            var input = this.inputSystem.getSelectInstance();
             // EPSG-3067 settings
-            var sourceSelection = this.setSelectionValue( instances.input.datum, "DATUM_EUREF-FIN" );
-            var sourceHeightSelection = this.setSelectionValue( instances.input.dimension, "KOORDINAATISTO_SUORAK_2D" );
-            var sourceSelection = this.setSelectionValue( instances.input.projection, "TM" );
-            var sourceHeightSelection = this.setSelectionValue( instances.input.coordinatesystem, "COORDSYS_ETRS-TM35FIN" );
+            var sourceSelection = this.setSelectionValue( input.datum, "DATUM_EUREF-FIN" );
+            var sourceHeightSelection = this.setSelectionValue( input.dimension, "KOORDINAATISTO_SUORAK_2D" );
+            var sourceSelection = this.setSelectionValue( input.projection, "TM" );
+            var sourceHeightSelection = this.setSelectionValue( input.coordinatesystem, "COORDSYS_ETRS-TM35FIN" );
         },
         /**
          * @method handleRadioButtons
