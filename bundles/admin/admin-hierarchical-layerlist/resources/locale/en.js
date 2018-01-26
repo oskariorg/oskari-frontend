@@ -9,10 +9,12 @@ Oskari.registerLocalization({
             "delete": "Delete"
         },
         "tooltips": {
-            "addMainGroup": "Add main group"
+            "addMainGroup": "Add main group",
+            "addSubgroup": "Add subgroup"
         },
         "groupTitles": {
-            "addMainGroup": "Nain group name",
+            "addMainGroup": "Main group name",
+            "addSubgroup": "Subgroup name",
             "localePrefix": "Name in"
         },
         "selectableGroup": "Selection group",

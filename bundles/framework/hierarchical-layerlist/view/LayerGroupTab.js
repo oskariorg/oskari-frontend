@@ -26,6 +26,7 @@ Oskari.clazz.define(
             spinner: '<span class="spinner-text"></span>',
             descriptionAndMainTools: jQuery('<div class="description-and-tools"><div class="field-description"></div><div class="main-tools"></div><div class="clear"></div></div>'),
             mainTool: jQuery('<div class="main-tool"></div>'),
+            groupTool: jQuery('<div class="group-tool"></div>'),
             description: '<div>' +
                 '  <h4 class="indicator-msg-popup"></h4>' +
                 '  <p></p>' +
@@ -63,6 +64,8 @@ Oskari.clazz.define(
          */
         _bindExtenderServiceListeners: function() {
             var me = this;
+
+            // Main tool added
             me.service.on('maintool.added', function(data) {
                 var tool = me.templates.mainTool.clone();
                 tool.attr('data-id', data.id);
@@ -72,9 +75,14 @@ Oskari.clazz.define(
                 tool.bind('click', function(evt) {
                     evt.stopPropagation();
                     tool.addClass('active');
-                    data.handler(tool, data.id);
+                    data.handler(tool);
                 });
                 me.getFilterField().getField().find('.main-tools').append(tool);
+            });
+
+            // Group tool added
+            me.service.on('grouptool.added', function(data) {
+                me._addGroupTools();
             });
 
             me.service.on('jstree-contionalselect', function(data) {
@@ -82,23 +90,56 @@ Oskari.clazz.define(
             });
 
             me.service.on('group-added', function(data) {
+                var parent = '#';
+                if (data.type === 'subgroup') {
+                    parent = 'group-' + data.parentId;
+                }
                 if (data.method === 'add') {
                     var opts = {};
                     if (!data.selectable) {
                         opts = {
                             a_attr: {
-                                class: 'no-checkbox'
+                                class: 'no-checkbox',
+                                'data-group-id': data.id
                             }
                         };
                     }
                     var obj = me._getJsTreeObject(data.type + '-' + data.id,
-                        '#',
+                        parent,
                         me.sb.getLocalizedProperty(data.name) + ' (0)',
                         data.type,
                         opts
                     );
                     me.getJsTreeElement().jstree().create_node(obj.parent, obj);
+                    me._addGroupTools();
                 }
+            });
+        },
+        /**
+         * Add group tools
+         * @method  _addGroupTools
+         * @private
+         */
+        _addGroupTools: function() {
+            var me = this;
+            var groupTools = me.getJsTreeElement().find('.group-tools');
+            groupTools.empty();
+            Object.keys(me.service.getGroupTool()).forEach(function(key) {
+                var grouptool = me.service.getGroupTool(key);
+                var tool = me.templates.groupTool.clone();
+                tool.attr('data-id', key);
+                tool.attr('title', grouptool.options.tooltip);
+                tool.addClass(grouptool.options.cls);
+
+                tool.bind('click', function(evt) {
+                    evt.stopPropagation();
+                    jQuery(this).addClass('active');
+                    var parent = jQuery(this).parents('a.jstree-anchor');
+                    var parentId = parent.attr('data-group-id');
+                    grouptool.handler(jQuery(this), parentId);
+                });
+                groupTools.append(tool);
+
             });
         },
         /**
@@ -116,9 +157,10 @@ Oskari.clazz.define(
             var jstreeObject = {
                 id: id,
                 parent: parent,
-                text: text,
+                text: text + '<div class="' + type + '-tools"></div>',
                 type: type
             };
+
             jQuery.extend(true, jstreeObject, opts || {});
             return jstreeObject;
         },
@@ -817,12 +859,14 @@ Oskari.clazz.define(
             me.layerGroups = groups;
             groups.forEach(function(group) {
                 var layers = group.getLayers();
-                var extraOpts = {};
+                var extraOpts = {
+                    a_attr: {
+                        'data-group-id': group.getId()
+                    }
+                };
                 //Create root group
                 if (!group.hasSelectable()) {
-                    extraOpts.a_attr = {
-                        class: 'no-checkbox'
-                    };
+                    extraOpts.a_attr.class = 'no-checkbox';
                 }
                 jsTreeData.push(me._getJsTreeObject('group-' + group.getId(),
                     '#',
@@ -865,6 +909,11 @@ Oskari.clazz.define(
             // check selected layers
             me.sb.findAllSelectedMapLayers().forEach(function(layer) {
                 me.getJsTreeElement().jstree().check_node('layer-' + layer.getId());
+            });
+
+            // Add group tools
+            me.getJsTreeElement().on('ready.jstree', function() {
+                me._addGroupTools();
             });
         },
 

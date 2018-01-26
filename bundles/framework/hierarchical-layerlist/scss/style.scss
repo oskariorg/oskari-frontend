@@ -524,6 +524,10 @@ div.hierarchical-layerlist {
             background-color: #fdf8d9;
         }
 
+        .jstree-subgroup-icon {
+            display: none;
+        }
+
         .jstree-group-icon {
             display: none;
         }
@@ -557,6 +561,31 @@ div.hierarchical-layerlist {
         .jstree-anchor {
             width: 95%;
             padding: 4px;
+
+            /* Group tools */
+            div.group-tools {
+                float: right;
+
+                .group-tool {
+                    width: 26px;
+                    height:26px;
+                    float:left;
+                    margin-left:4px;
+                    margin-top: 4px;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    cursor: pointer;
+
+                    &.active {
+                        background-color: #ffde00;
+                    }
+
+                    &.add-subgroup {
+                        background-image:url("../images/glyphicons/glyphicons-433-plus.png");
+                    }
+
+                }
+            }
         }
         .jstree-wholerow {
             height: 40px;

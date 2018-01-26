@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
         selectableGroup.setChecked(!!opts.selectable);
 
         btnOk.addClass('add');
-        var btnOkLocale = (parentId) ? me.locale.buttons.update : me.locale.buttons.add;
+        var btnOkLocale = (id) ? me.locale.buttons.update : me.locale.buttons.add;
         btnOk.setTitle(btnOkLocale);
         btnOk.setHandler(function() {
             // TODO do saving
