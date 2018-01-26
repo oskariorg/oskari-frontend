@@ -9,7 +9,7 @@
     display: flex;
     flex-flow: row wrap;
 }
-.coordinateconversion-csystem {
+.transformation-system {
     display: inline-block;
     font-size: 12px;
     padding-left: 3px;
@@ -57,6 +57,9 @@
 }
 .coordinateconversion-datasource {
     width: 100%;
+}
+.sourceWrapper {
+    padding-bottom: 2em;
 }
 .coordinatetransformation-flyout .export, .rowcount {
     float:right;
