@@ -37,7 +37,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         _bindExtenderServiceListeners: function() {
             var me = this;
 
-            me.service.on('option.added', function(data) {
+            me.service.on('option.added', function() {
+                me.populateLayers();
+            });
+
+            me.service.on('admin.changed', function() {
                 me.populateLayers();
             });
         },
@@ -346,10 +350,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 );
                 groupList.push(groupModel);
             });
-            /*var sortedGroupList = jQuery.grep(groupList, function(group, index) {
+
+            if (me.service.hasAdmin()) {
+                return groupList;
+            }
+
+            var sortedGroupList = jQuery.grep(groupList, function(group, index) {
                 return group.getLayers().length > 0;
-            });*/
-            return groupList;
+            });
+            return sortedGroupList;
         },
 
         /**

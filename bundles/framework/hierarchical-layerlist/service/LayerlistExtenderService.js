@@ -80,6 +80,7 @@
             this._mainTools = {};
             this._groupTools = {};
             this._layerTools = {};
+            this._hasAdmin = false;
 
             // attach on, off, trigger functions
             Oskari.makeObservable(this);
@@ -298,6 +299,23 @@
                     handler: handler(id),
                     options: options
                 });
+            },
+            /**
+             * Sets admin role
+             * @method setAdmin
+             * @param  {Boolean} isAdmin is admin
+             */
+            setAdmin: function(isAdmin) {
+                this._hasAdmin = isAdmin;
+                this.trigger('admin.changed', this._hasAdmin);
+            },
+            /**
+             * Has admin
+             * @method hasAdmin
+             * @return {Boolean} is admin-hierarchical-layerlist configured
+             */
+            hasAdmin: function() {
+                return this._hasAdmin;
             }
 
         }, {
