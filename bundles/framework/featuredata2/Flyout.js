@@ -618,8 +618,8 @@ Oskari.clazz.define(
                         );
 
                     // set selection handler
-                    panel.grid.addSelectionListener(function (pGrid, dataId) {
-                        me._handleGridSelect(layer, dataId);
+                    panel.grid.addSelectionListener(function (pGrid, dataId, isCtrlKey) {
+                        me._handleGridSelect(layer, dataId, isCtrlKey);
                     });
 
                     // set popup handler for inner data
@@ -950,9 +950,6 @@ Oskari.clazz.define(
 
             if(!isOk) {
                 return;
-            }
-            if (keepCollection === undefined) {
-                keepCollection = sandbox.isCtrlKeyDown();
             }
             if (!keepCollection) {
                 this.WFSLayerService.emptyWFSFeatureSelections(layer);
