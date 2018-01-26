@@ -26,13 +26,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             wrapper: jQuery('<div class="transformation-wrapper"></div>'),
             title: _.template('<h4 class="header"><%= title %></h4>'),
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
-            conversionbutton: _.template(
+            transformButton: _.template(
                 '<div class="transformation-button" style="display:inline-block;">' +
                     '<input id="transform" type="button" value="<%= convert %> >>">' +
                 '</div>'
             ),
-            utilbuttons: _.template(
-                '<div class="coordinateconversion-buttons">' +
+            utilRow: _.template(
+                '<div class="util-row">' +
                     '<input class="clear" type="button" value="<%= clear %> ">' +
                     '<input class="show" type="button" value="<%= show %> ">' +
                     // '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %> ">' +
@@ -55,9 +55,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var inputTable = this.inputTable.create();
             var targetTable = this.outputTable.create();
 
-            var conversionbutton = this._template.conversionbutton({ convert: this.loc.coordinatefield.convert });
+            var transformButton = this._template.transformButton({ convert: this.loc.coordinatefield.convert });
 
-            var utilbuttons = this._template.utilbuttons({
+            var utilRow = this._template.utilRow({
                 clear: this.loc.utils.clear,
                 show: this.loc.utils.show,
                 fileexport: this.loc.utils.export
@@ -87,9 +87,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             wrapper.find( '.datasource-info' ).append( fileInputElement );
 
             wrapper.append( inputTable );
-            wrapper.append( conversionbutton );
+            wrapper.append( transformButton );
             wrapper.append( targetTable );
-            wrapper.append( utilbuttons );
+            wrapper.append( utilRow );
 
 
             jQuery(container).append(wrapper);

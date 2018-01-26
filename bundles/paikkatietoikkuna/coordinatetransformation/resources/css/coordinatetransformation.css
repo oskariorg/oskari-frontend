@@ -44,12 +44,12 @@
     float:left;
     margin-top: 6.25rem;
 }
-.coordinateconversion-buttons{
+.util-row{
     clear: left;
     width: 100%;
     padding-top: 1em;
 }
-.coordinateconversion-buttons.show.clear{
+.util-row.show.clear{
     float:left;
 }
 .coordinate-datasource {
@@ -65,7 +65,7 @@
 .coordinatetransformation-flyout .heightsystem {
     background-color: lightgray;
 }
-.coordinatetransformation-flyout #convert {
+.coordinatetransformation-flyout #transform {
     font-size:80%;
     vertical-align: middle;
 }
@@ -259,7 +259,7 @@
     .coordinate-datasource {
         order:1;
     }
-    .coordinateconversion-buttons {
+    .util-row {
         order: 7;
     }
 }
@@ -289,7 +289,7 @@
     .coordinate-datasource {
         order:1;
     }
-    .coordinateconversion-buttons {
+    .util-row {
         order: 7;
     }
 
