@@ -93,7 +93,7 @@ Oskari.clazz.define(
                     }
                     var obj = me._getJsTreeObject(data.type + '-' + data.id,
                         '#',
-                        me.sb.getLocalizedProperty(data.name),
+                        me.sb.getLocalizedProperty(data.name) + ' (0)',
                         data.type,
                         opts
                     );
