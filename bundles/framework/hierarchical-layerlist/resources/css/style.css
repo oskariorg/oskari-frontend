@@ -338,7 +338,7 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
     margin-right: -16px; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no_checkbox i.jstree-checkbox {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no-checkbox i.jstree-checkbox {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl {
     background-position: -32px 5px; }
