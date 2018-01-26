@@ -3,6 +3,7 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "coordinatetransformation",
     "value": {
+        "title": "Coordinateconversion",
         "tile": {
             "title": "Coordinateconversion"
         },

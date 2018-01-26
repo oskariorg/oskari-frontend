@@ -4,6 +4,9 @@ Oskari.registerLocalization(
     "key": "coordinatetransformation",
     "value": {
         "title": "Koordinattransformation",
+        "tile": {
+            "title": "Coordinateconversion"
+        },
         "flyout": {
         "title": {
             "input": "Från-system",
