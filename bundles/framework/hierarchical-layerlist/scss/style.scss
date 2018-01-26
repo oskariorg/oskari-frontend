@@ -32,6 +32,80 @@ div.hierarchical-layerlist {
         }
     }
 
+    span.layer {
+
+        input {
+            float: left;
+            margin-right: 5px;
+        }
+
+        input[type=checkbox] {
+            margin-top: -2px;
+        }
+
+        label.layer-title {
+            /* Let's just imagine this is tabular data... */
+            font-size: 12px;
+        }
+
+        span.layer-tools {
+            float: right;
+        }
+
+        span.layer-icon {
+            float: left;
+            width: 16px;
+            height: 16px;
+            background-repeat: no-repeat;
+            margin-top: 5px;
+        }
+
+        span.layer-info {
+            width: 16px;
+            height: 16px;
+            margin-left: 5px;
+            margin-top: 5px;
+            float: right;
+        }
+
+        span.layer-backendstatus-icon {
+            float: left;
+            width: 20px;
+            height: 16px;
+            margin-right: 4px;
+            margin-top: 5px;
+            background-repeat: no-repeat;
+        }
+
+        span.backendstatus-down {
+            height: 20px !important;
+            margin-bottom: 2px;
+            cursor: pointer;
+        }
+
+        span.backendstatus-maintenance {
+            height: 20px !important;
+            margin-bottom: 2px;
+            cursor: pointer;
+        }
+
+        span.backendstatus-ok {
+            height: 20px !important;
+            margin-bottom: 2px;
+            cursor: pointer;
+        }
+
+        span.backendstatus-unknown {
+            height: 20px !important;
+            margin-bottom: 2px;
+        }
+
+        span.backendstatus-unstable {
+            height: 20px !important;
+            margin-bottom: 2px;
+        }
+    }
+
     div.layer {
         padding: 6px 10px 6px 40px;
         background-color: #ffffff;
@@ -454,7 +528,7 @@ div.hierarchical-layerlist {
             display: none;
         }
         .jstree-layer-icon {
-            background-image: url("../images/glyphicons/glyphicons-37-file.png");
+            display: none;
         }
         .jstree-open, .jstree-closed, .jstree-last {
             .jstree-ocl {
@@ -469,5 +543,55 @@ div.hierarchical-layerlist {
                 }
             }
         }
+
+        .jstree-open {
+            .jstree-ocl {
+                background-position: -32px 5px;
+            }
+        }
+        .jstree-closed {
+            .jstree-ocl {
+                background-position: 0px 5px;
+            }
+        }
+        .jstree-anchor {
+            width: 95%;
+            padding: 4px;
+        }
+        .jstree-wholerow {
+            height: 40px;
+        }
+        ul.jstree-children {
+            li.jstree-node {
+                border: 1px solid #c0d0d0;
+                font-size: 16px;
+                font-weight: bold;
+
+                div.jstree-wholerow {
+                    background-color: #f3f3f3;
+                }
+                &.jstree-open div.jstree-wholerow {
+                    background-color: #FAFAFA;
+                }
+            }
+            li.jstree-leaf {
+                border: none;
+
+                span.layer-title{
+                    font-size: 14px;
+                    font-weight: normal;
+                }
+                &:nth-child(even) div.jstree-wholerow {
+                    background-color: #f3f3f3;
+                }
+                &:nth-child(odd) div.jstree-wholerow {
+                    background-color: #ffffff;
+                }
+            }
+        }
+        .jstree-checkbox {
+            margin-left: -4px;
+        }
+
     }
 }

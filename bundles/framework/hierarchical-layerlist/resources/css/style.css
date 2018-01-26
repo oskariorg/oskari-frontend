@@ -15,6 +15,53 @@ div.hierarchical-layerlist div.accordion {
   overflow: auto; }
   div.hierarchical-layerlist div.accordion div.accordion_panel div.content {
     padding: 0; }
+div.hierarchical-layerlist span.layer input {
+  float: left;
+  margin-right: 5px; }
+div.hierarchical-layerlist span.layer input[type=checkbox] {
+  margin-top: -2px; }
+div.hierarchical-layerlist span.layer label.layer-title {
+  /* Let's just imagine this is tabular data... */
+  font-size: 12px; }
+div.hierarchical-layerlist span.layer span.layer-tools {
+  float: right; }
+div.hierarchical-layerlist span.layer span.layer-icon {
+  float: left;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  margin-top: 5px; }
+div.hierarchical-layerlist span.layer span.layer-info {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  margin-top: 5px;
+  float: right; }
+div.hierarchical-layerlist span.layer span.layer-backendstatus-icon {
+  float: left;
+  width: 20px;
+  height: 16px;
+  margin-right: 4px;
+  margin-top: 5px;
+  background-repeat: no-repeat; }
+div.hierarchical-layerlist span.layer span.backendstatus-down {
+  height: 20px !important;
+  margin-bottom: 2px;
+  cursor: pointer; }
+div.hierarchical-layerlist span.layer span.backendstatus-maintenance {
+  height: 20px !important;
+  margin-bottom: 2px;
+  cursor: pointer; }
+div.hierarchical-layerlist span.layer span.backendstatus-ok {
+  height: 20px !important;
+  margin-bottom: 2px;
+  cursor: pointer; }
+div.hierarchical-layerlist span.layer span.backendstatus-unknown {
+  height: 20px !important;
+  margin-bottom: 2px; }
+div.hierarchical-layerlist span.layer span.backendstatus-unstable {
+  height: 20px !important;
+  margin-bottom: 2px; }
 div.hierarchical-layerlist div.layer {
   padding: 6px 10px 6px 40px;
   background-color: #ffffff;
@@ -288,10 +335,38 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-group-icon {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {
-    background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
+    display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
     margin-right: -16px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no_checkbox i.jstree-checkbox {
     display: none; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl {
+    background-position: -32px 5px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl {
+    background-position: 0px 5px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor {
+    width: 95%;
+    padding: 4px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow {
+    height: 40px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node {
+    border: 1px solid #c0d0d0;
+    font-size: 16px;
+    font-weight: bold; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node div.jstree-wholerow {
+      background-color: #f3f3f3; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node.jstree-open div.jstree-wholerow {
+      background-color: #FAFAFA; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf {
+    border: none; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf span.layer-title {
+      font-size: 14px;
+      font-weight: normal; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf:nth-child(even) div.jstree-wholerow {
+      background-color: #f3f3f3; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf:nth-child(odd) div.jstree-wholerow {
+      background-color: #ffffff; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-checkbox {
+    margin-left: -4px; }
 
 /*# sourceMappingURL=style.css.map */

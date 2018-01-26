@@ -20,6 +20,7 @@ Oskari.clazz.define(
         this.sb = this.instance.getSandbox();
         this.localization = this.instance.getLocalization();
         this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
+        this._mapLayerService = this.sb.getService('Oskari.mapframework.service.MapLayerService');
         // FIXME: these templates must be a jQuery objects
         this.templates = {
             spinner: '<span class="spinner-text"></span>',
@@ -37,7 +38,15 @@ Oskari.clazz.define(
             keywordType: '<div class="type"></div>',
             layerFilter: '<div class="layer-filter hierarchical-layerlist-layer-filter">' +
                 '</div><div style="clear:both;"></div>',
-            layerTree: '<div class="hierarchical-layerlist-tree"></div>'
+            layerTree: '<div class="hierarchical-layerlist-tree"></div>',
+            layerContainer: '<span class="layer">' +
+                    '<span class="layer-tools">'+
+                    '   <span class="layer-backendstatus-icon backendstatus-unknown" title=""></span>' +
+                    '   <span class="layer-icon"></span>'+
+                    '   <span class="layer-info"></span>'+
+                    '</span>' +
+                    '<span class="layer-title"></span>' +
+                '</span>'
         };
         this._createUI(id);
         this._bindExtenderServiceListeners();
@@ -278,7 +287,41 @@ Oskari.clazz.define(
                 me._relatedKeywordsPopup(keyword, event, me);
             }
         },
-        getNodeRealId: function(node) {
+        _showLayerMetaData: function(layer) {
+            //FIXME: COMMENTS
+            var me = this,
+                rn = 'catalogue.ShowMetadataRequest',
+                uuid = layer.getMetadataIdentifier(),
+                additionalUuids = [],
+                additionalUuidsCheck = {},
+                subLayers = layer.getSubLayers();
+            additionalUuidsCheck[uuid] = true;
+            if (subLayers && subLayers.length > 0) {
+                for (s = 0; s < subLayers.length; s += 1) {
+                    subUuid = subLayers[s].getMetadataIdentifier();
+                    if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
+                        additionalUuidsCheck[subUuid] = true;
+                        additionalUuids.push({
+                            uuid: subUuid
+                        });
+                    }
+                }
+            }
+            me.sb.postRequestByName(rn, [{
+                    uuid: uuid
+                },
+                additionalUuids
+            ]);
+        },
+        _showMapLayerInfo: function(layer) {
+            //FIXME: COMMENTS
+            var me = this,
+                mapLayerId = layer.getId();
+            me.sb.postRequestByName('ShowMapLayerInfoRequest', [
+                mapLayerId
+            ]);
+        },
+        _getNodeRealId: function(node) {
             //FIXME: COMMENTS
             return node.id.split('-')[1];
         },
@@ -291,22 +334,34 @@ Oskari.clazz.define(
             var target = jQuery(event.target);
             var nodeChildren = node.children;
             var nodeChildrenLength = nodeChildren.length;
-            if (!target.hasClass('jstree-checkbox')) {
+            if (!target.hasClass('jstree-checkbox')
+                && !target.hasClass('layer-backendstatus-icon')
+                && !target.hasClass('layer-info')) {
                 if (isOpen) {
                     tree.jstree().close_node(node);
                 } else {
                     tree.jstree().open_node(node);
                 }
+            } else if(target.hasClass('layer-backendstatus-icon') && node.type === 'layer') {
+                me._showMapLayerInfo(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
+            } else if(target.hasClass('layer-info') && node.type === 'layer') {
+                me._showLayerMetaData(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
             } else {
                 if (isChecked) {
                     tree.jstree().uncheck_node(node);
                     if (node.type === 'group' && nodeChildrenLength > 0) {
                         for (var i = 0; i < nodeChildrenLength; ++i) {
                             var child = tree.jstree().get_node(nodeChildren[i]);
-                            me.sb.postRequestByName('RemoveMapLayerRequest', [me.getNodeRealId(child)]);
+                            var layerId = me._getNodeRealId(child);
+                            if(me.sb.isLayerAlreadySelected(layerId)) {
+                                me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
+                            }
                         }
                     } else if (node.type === 'layer') {
-                        me.sb.postRequestByName('RemoveMapLayerRequest', [me.getNodeRealId(node)]);
+                        var layerId = me._getNodeRealId(node);
+                        if(me.sb.isLayerAlreadySelected(layerId)) {
+                            me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
+                        }
                     }
                 } else {
                     var allSelectedLayers = me.sb.findAllSelectedMapLayers();
@@ -333,7 +388,10 @@ Oskari.clazz.define(
                                 tree.jstree().check_node(node);
                                 nodeChildren.forEach(function(nodechild) {
                                     var child = tree.jstree().get_node(nodechild);
-                                    me.sb.postRequestByName('AddMapLayerRequest', [me.getNodeRealId(child)]);
+                                    var layerId = me._getNodeRealId(child);
+                                    if(!me.sb.isLayerAlreadySelected(layerId)) {
+                                        me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
+                                    }
                                 });
                             });
                             cancelBtn.addClass('secondary');
@@ -346,7 +404,10 @@ Oskari.clazz.define(
                             tree.jstree().check_node(node);
                             nodeChildren.forEach(function(nodechild) {
                                 var child = tree.jstree().get_node(nodechild);
-                                me.sb.postRequestByName('AddMapLayerRequest', [me.getNodeRealId(child)]);
+                                var layerId = me._getNodeRealId(child);
+                                if(!me.sb.isLayerAlreadySelected(layerId)) {
+                                    me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
+                                }
                             });
                         }
                     } else if (node.type === 'layer') {
@@ -356,7 +417,10 @@ Oskari.clazz.define(
                             okBtn.setHandler(function() {
                                 dialog.close(true);
                                 tree.jstree().check_node(node);
-                                me.sb.postRequestByName('AddMapLayerRequest', [me.getNodeRealId(node)]);
+                                var layerId = me._getNodeRealId(node);
+                                if(!me.sb.isLayerAlreadySelected(layerId)) {
+                                    me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
+                                }
                             });
                             cancelBtn.addClass('secondary');
                             cancelBtn.setHandler(function() {
@@ -365,7 +429,10 @@ Oskari.clazz.define(
                             dialog.show(me.localization.manyLayersWarning.title, desc, [okBtn, cancelBtn]);
                         } else {
                             tree.jstree().check_node(node);
-                            me.sb.postRequestByName('AddMapLayerRequest', [me.getNodeRealId(node)]);
+                            var layerId = me._getNodeRealId(node);
+                            if(!me.sb.isLayerAlreadySelected(layerId)) {
+                                me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
+                            }
                         }
                     }
                 }
@@ -374,6 +441,97 @@ Oskari.clazz.define(
         getJsTreeElement: function() {
             //FIXME: COMMENTS
             return this.tabPanel.getContainer().find('.hierarchical-layerlist-tree');
+        },
+        /**
+         * @method _createLayerContainer
+         * @private
+         * Creates the layer containers
+         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
+         */
+        _createLayerContainer: function (layer) {
+            //"use strict";
+            var me = this,
+                sandbox = me.sb,
+                // create from layer template
+                // (was clone-from-template but template was only used once so there was some overhead)
+                layerDiv = jQuery(this.templates.layerContainer),
+                tooltips = this.localization.tooltip,
+                tools = jQuery(layerDiv).find('span.layer-tools'),
+                icon = tools.find('span.layer-icon'),
+                rn,
+                uuid,
+                additionalUuids,
+                additionalUuidsCheck,
+                subLayers,
+                s,
+                subUuid,
+                elBackendStatus,
+                mapLayerId,
+                layerInfo;
+
+            icon.addClass(layer.getIconClassname());
+
+            if (layer.isBaseLayer()) {
+                icon.attr('title', tooltips['type-base']);
+            } else if (layer.isLayerOfType('WMS')) {
+                icon.attr('title', tooltips['type-wms']);
+            } else if (layer.isLayerOfType('WMTS')) {
+                // FIXME: WMTS is an addition done by an outside bundle so this shouldn't be here
+                // but since it would require some refactoring to make this general
+                // I'll just leave this like it was on old implementation
+                icon.attr('title', tooltips['type-wms']);
+            } else if (layer.isLayerOfType('WFS')) {
+                if(layer.isManualRefresh()) {
+                    icon.attr('title', tooltips['type-wfs-manual']);
+                }
+                else {
+                    icon.attr('title', tooltips['type-wfs']);
+                }
+            } else if (layer.isLayerOfType('VECTOR')) {
+                icon.attr('title', tooltips['type-wms']);
+            }
+
+
+            if (!layer.getMetadataIdentifier()) {
+                subLayers = layer.getSubLayers();
+                subLmeta = false;
+                if (subLayers && subLayers.length > 0) {
+                    subLmeta = true;
+                    for (s = 0; s < subLayers.length; s += 1) {
+                        subUuid = subLayers[s].getMetadataIdentifier();
+                        if (!subUuid || subUuid === "") {
+                            subLmeta = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (layer.getMetadataIdentifier() || subLmeta) {
+                layerInfo = tools.find('span.layer-info');
+                layerInfo.addClass('icon-info');
+            }
+
+            // setup id
+            layerDiv.attr('layer_id', layer.getId());
+            layerDiv.find('.layer-title').append(layer.getName());
+
+            /*
+             * backend status
+             */
+            elBackendStatus = tools.find('.layer-backendstatus-icon');
+
+            var backendStatus = layer.getBackendStatus();
+            if (backendStatus) {
+                var iconClass = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].iconClass : null;
+                var tooltip = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].tooltip : null;
+                if (iconClass) {
+                    elBackendStatus.removeClass('backendstatus-unknown');
+                    elBackendStatus.addClass(iconClass);
+                    elBackendStatus.attr('title', tooltip);
+                }
+            }
+
+            return layerDiv;
         },
         /**
          * Show layer groups
@@ -416,7 +574,7 @@ Oskari.clazz.define(
                 var jsTreeGroup = {};
                 jsTreeGroup.id = "group-" + group.id;
                 jsTreeGroup.parent = "#";
-                jsTreeGroup.text = group.name;
+                jsTreeGroup.text = group.name + ' ('+layersLength+')';
                 jsTreeGroup.type = "group";
 
                 if (!group.selectable) {
@@ -430,10 +588,11 @@ Oskari.clazz.define(
                 //TODO: Loop through subgroups aswell similarly
                 for (n = 0; n < layersLength; n += 1) {
                     layer = layers[n];
+                    me._createLayerContainer(layer);
                     var jsTreeLayer = {};
                     jsTreeLayer.id = "layer-" + layer.getId();
                     jsTreeLayer.parent = "group-" + group.id;
-                    jsTreeLayer.text = layer.getName();
+                    jsTreeLayer.text = jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html();
                     jsTreeLayer.type = "layer";
                     jsTreeData.push(jsTreeLayer);
                 }
