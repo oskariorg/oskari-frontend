@@ -219,6 +219,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // first return all needed plugins before adding the layers back
                 map.removeClass('mapPublishMode');
                 map.removeClass('published');
+                // mapdiv is by default width 100%, if it has width in pixels it has been modified
+                var mapdiv = jQuery("#mapdiv");
+                var widthCSS = mapdiv.get(0).style.width
+                var hasPx = widthCSS.indexOf('px') >= 0;
+                if (hasPx) {
+                    mapdiv.width("");
+                }
                 // FIXME: not like this! see setter...
                 if (me.sandbox.mapMode === 'mapPublishMode') {
                     delete me.sandbox.mapMode;
