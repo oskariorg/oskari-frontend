@@ -143,6 +143,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 } else if (draggedNode.type === 'subgroup') {
                     //console.log("ALIRYHMÄÄ "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
                 }
+                var data = {};
+                data.nodeId = draggedNodeId;
+                data.nodeIndex = draggedNodeNewIndex;
+                data.targetGroupId = draggedNodeNewParentId;
+                me._saveOrder(data);
                 /*var nodeItemId = draggedNode.id.split("-")[1];
                 console.log("Dragged node: "+nodeItemId);
                 var newTargetId = draggedNode.parent.split("-")[1];
@@ -152,6 +157,44 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
 
         },
 
+        /**
+         * Save group
+         * @method  _saveGroup
+         * @param   {Object}   data  data fo saving
+         * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
+         * @param   {String}   type  jstree type
+         * @private
+         */
+        _saveOrder: function(data) {
+            var me = this;
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=UTF-8',
+                url: me.sandbox.getAjaxUrl('LayerAndGroupOrder'),
+                data: JSON.stringify(data),
+                error: function() {
+                    /*var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    errorDialog.show(me.locale.errors.groupnameSave.title, me.locale.errors.groupnameSave.message);
+                    errorDialog.fadeout();*/
+                },
+                success: function(response) {
+                    console.log(response);
+                    /*popup.close();
+                    var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    successDialog.show(me.locale.succeeses.groupnameSave.title, me.locale.succeeses.groupnameSave.message);
+                    successDialog.fadeout();
+
+                    response.type = type;
+                    response.method = 'add';
+                    if (data.id) {
+                        response.method = 'update';
+                    }
+
+                    me.service.trigger('group-added', response);*/
+                }
+            });
+        },
         // module boilerplate methods
         init: function() {
 
