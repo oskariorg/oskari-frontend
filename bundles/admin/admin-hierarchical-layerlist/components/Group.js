@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
         // then also add delete button
         if (id) {
             var btnDelete = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            btnDelete.setTitle(me.locale.buttons.delete);
+            btnDelete.setTitle(me.locale('buttons.delete'));
             btnDelete.addClass('delete');
             btnDelete.setHandler(function() {
                 // check at group has no layers or subgroups
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
                 var isLayersOrGroups = (group && (group.layers.length > 0 || group.groups.length > 0)) ? true : false;
                 if (isLayersOrGroups) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    dialog.show(me.locale.errors.groupnameDeleteCheckLayers.title, me.locale.errors.groupnameDeleteCheckLayers.message);
+                    dialog.show(me.locale('errors.groupnameDeleteCheckLayers.title'), me.locale('errors.groupnameDeleteCheckLayers.message'));
                     dialog.fadeout(5000);
                 } else {
                     var data = {
@@ -65,20 +65,20 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
                     var confirmBtnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
                     confirmBtnOk.addClass('primary');
-                    confirmBtnOk.setTitle(me.locale.buttons.ok);
+                    confirmBtnOk.setTitle(me.locale('buttons.ok'));
                     confirmBtnOk.setHandler(function() {
                         confirmDialog.close();
                         me._deleteGroup(data, popup, opts.type, tool);
                     });
 
-                    confirmBtnCancel.setTitle(me.locale.buttons.cancel);
+                    confirmBtnCancel.setTitle(me.locale('buttons.cancel'));
                     confirmBtnCancel.setHandler(function() {
                         confirmDialog.close();
                     });
 
                     var groupName = me.sandbox.getLocalizedProperty(group.name);
 
-                    confirmDialog.show(me.locale.confirms.groupDelete.title, Oskari.getMsg('AdminHierarchicalLayerList', 'confirms.groupDelete.message', {
+                    confirmDialog.show(me.locale('confirms.groupDelete.title'), me.locale('confirms.groupDelete.message', {
                         groupname: groupName
                     }), [confirmBtnCancel, confirmBtnOk]);
                     confirmDialog.makeModal();
@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
         }
 
         var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        btnCancel.setTitle(me.locale.buttons.cancel);
+        btnCancel.setTitle(me.locale('buttons.cancel'));
         btnCancel.addClass('cancel');
         btnCancel.setHandler(function() {
             popup.close();
@@ -105,11 +105,11 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
 
         var selectableGroup = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
         selectableGroup.addClass('selectable-group');
-        selectableGroup.setTitle(me.locale.selectableGroup);
+        selectableGroup.setTitle(me.locale('selectableGroup'));
         selectableGroup.setChecked(!!opts.selectable);
 
         btnOk.addClass('add');
-        var btnOkLocale = (id) ? me.locale.buttons.update : me.locale.buttons.add;
+        var btnOkLocale = (id) ? me.locale('buttons.update') : me.locale('buttons.add');
         btnOk.setTitle(btnOkLocale);
         btnOk.setHandler(function() {
             var data = {
@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             if (Object.keys(data.locales).length === Oskari.getSupportedLanguages().length && hasValidLocales) {
                 me._saveGroup(data, popup, opts.type, tool);
             } else {
-                errorDialog.show(me.locale.errors.groupname.title, me.locale.errors.groupname.message);
+                errorDialog.show(me.locale('errors.groupname.title'), me.locale('errors.groupname.message'));
                 errorDialog.fadeout();
             }
 
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
         var supportedLocales = Oskari.getSupportedLanguages();
         supportedLocales.forEach(function(locale) {
             var input = Oskari.clazz.create('Oskari.userinterface.component.TextInput');
-            input.setTitle(me.locale.groupTitles.localePrefix + ' ' + (loc[locale] || locale));
+            input.setTitle(me.locale('groupTitles.localePrefix') + ' ' + (loc[locale] || locale));
             var value = (opts.locale && opts.locale[locale]) ? opts.locale[locale] : null;
             if (value) {
                 input.setValue(value);
@@ -198,13 +198,13 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             data: JSON.stringify(data),
             error: function() {
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                errorDialog.show(me.locale.errors.groupnameSave.title, me.locale.errors.groupnameSave.message);
+                errorDialog.show(me.locale('errors.groupnameSave.title'), me.locale('errors.groupnameSave.message'));
                 errorDialog.fadeout();
             },
             success: function(response) {
                 popup.close();
                 var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                successDialog.show(me.locale.succeeses.groupnameSave.title, me.locale.succeeses.groupnameSave.message);
+                successDialog.show(me.locale('succeeses.groupnameSave.title'), me.locale('succeeses.groupnameSave.message'));
                 successDialog.fadeout();
 
                 response.type = type;
@@ -238,13 +238,13 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             data: JSON.stringify(data),
             error: function() {
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                errorDialog.show(me.locale.errors.groupnameDelete.title, me.locale.errors.groupnameDelete.message);
+                errorDialog.show(me.locale('errors.groupnameDelete.title'), me.locale('errors.groupnameDelete.message'));
                 errorDialog.fadeout();
             },
             success: function(response) {
                 popup.close();
                 var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                successDialog.show(me.locale.succeeses.groupnameDelete.title, me.locale.succeeses.groupnameDelete.message);
+                successDialog.show(me.locale('succeeses.groupnameDelete.title'), me.locale('succeeses.groupnameDelete.message'));
                 successDialog.fadeout();
 
                 response.type = type;

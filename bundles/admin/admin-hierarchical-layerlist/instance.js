@@ -28,11 +28,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 });
                 var popup = popupConf.popup;
                 var message = popupConf.message;
-                popupConf.popup.show(me.locale.groupTitles.addMainGroup, message, popupConf.buttons);
+                popupConf.popup.show(me.locale('groupTitles.addMainGroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
             }, {
                 cls: 'add-group',
-                tooltip: me.locale.tooltips.addMainGroup
+                tooltip: me.locale('tooltips.addMainGroup')
             });
         },
         /**
@@ -54,11 +54,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, null, options);
                 var popup = popupConf.popup;
                 var message = popupConf.message;
-                popupConf.popup.show(me.locale.groupTitles.editMainGroup, message, popupConf.buttons);
+                popupConf.popup.show(me.locale('groupTitles.editMainGroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
             }, {
                 cls: 'edit-group',
-                tooltip: me.locale.tooltips.editMainGroup
+                tooltip: me.locale('tooltips.editMainGroup')
             });
 
             // Add new tool to adding sub-groups
@@ -69,11 +69,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
 
                 var popup = popupConf.popup;
                 var message = popupConf.message;
-                popupConf.popup.show(me.locale.groupTitles.addSubgroup, message, popupConf.buttons);
+                popupConf.popup.show(me.locale('groupTitles.addSubgroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
             }, {
                 cls: 'add-subgroup',
-                tooltip: me.locale.tooltips.addSubgroup
+                tooltip: me.locale('tooltips.addSubgroup')
             });
 
 
@@ -99,10 +99,10 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         *******************************************************************************************************************************/
         getLocalization: function(key) {
             if (!this.locale) {
-                this.locale = Oskari.getLocalization(this.getName());
+                this.locale = Oskari.getMsg.bind(null, this.getName());
             }
             if (key) {
-                return this.locale[key];
+                return this.locale(key);
             }
             return this.locale;
         },
@@ -143,7 +143,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 } else if (draggedNode.type === 'subgroup') {
                     //console.log("ALIRYHMÄÄ "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
                 }
-                var data = {};
+            var data = {};
                 data.nodeId = draggedNodeId;
                 data.nodeIndex = draggedNodeNewIndex;
                 data.targetGroupId = draggedNodeNewParentId;
