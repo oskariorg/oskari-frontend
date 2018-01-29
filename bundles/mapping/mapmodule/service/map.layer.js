@@ -468,7 +468,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             me._layerGroups = pResp;
             pResp.forEach(function(group) {
                 group.layers.forEach(function(layer) {
-                    mapLayer = me.createMapLayer(layer);
+                    var mapLayer = me.createMapLayer(layer);
                     if (!mapLayer) {
                         // unsupported map type, skip
                         // continue with next layer
@@ -478,6 +478,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     if (me._reservedLayerIds[mapLayer.getId()] !== true) {
                         me.addLayer(mapLayer, true);
                     }
+                });
+
+                group.groups.forEach(function(subgroup) {
+                    subgroup.layers.forEach(function(layer) {
+                        var mapLayer = me.createMapLayer(layer);
+                        if (!mapLayer) {
+                            // unsupported map type, skip
+                            // continue with next layer
+                            return;
+                        }
+
+                        if (me._reservedLayerIds[mapLayer.getId()] !== true) {
+                            me.addLayer(mapLayer, true);
+                        }
+                    });
                 });
             });
             me._allLayersAjaxLoaded = true;
