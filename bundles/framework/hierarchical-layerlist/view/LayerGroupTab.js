@@ -966,6 +966,27 @@ Oskari.clazz.define(
                 });
             };
 
+            var addSubgroupSubgroups = function(subgroupId, subGroups) {
+                subGroups.forEach(function(subgroup) {
+                    var opts = {
+                        a_attr: {
+                            class: (!subgroup.selectable) ? 'no-checkbox' : '',
+                            'data-group-id': subgroup.id,
+                            'data-parent-group-id': subgroupId
+                        }
+                    };
+
+                    var jstreeObject = me._getJsTreeObject('subgroup-subgroup-' + subgroup.id,
+                        'subgroup-' + subgroupId,
+                        me.sb.getLocalizedProperty(subgroup.name) + ' (' + subgroup.layers.length + ')',
+                        'subgroup-subgroup',
+                        opts);
+
+                    jsTreeData.push(jstreeObject);
+                    addLayers('subgroup-' + subgroup.id, subgroup.layers);
+                });
+            };
+
             me.tabPanel.getContainer().append(layerTree);
             me.accordion.removeAllPanels();
             me.layerContainers = {};
@@ -993,6 +1014,10 @@ Oskari.clazz.define(
 
                 if (group.getGroups().length > 0) {
                     addSubgroups(group.getId(), group.getGroups());
+
+                    group.getGroups().forEach(function(subgroup) {
+                        addSubgroupSubgroups(subgroup.id, subgroup.groups);
+                    });
                 }
             });
 

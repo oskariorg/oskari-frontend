@@ -493,6 +493,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                             me.addLayer(mapLayer, true);
                         }
                     });
+
+                    subgroup.groups.forEach(function(subgroupSubgroup) {
+                        subgroupSubgroup.layers.forEach(function(layer) {
+                            var mapLayer = me.createMapLayer(layer);
+                            if (!mapLayer) {
+                                // unsupported map type, skip
+                                // continue with next layer
+                                return;
+                            }
+
+                            if (me._reservedLayerIds[mapLayer.getId()] !== true) {
+                                me.addLayer(mapLayer, true);
+                            }
+                        });
+                    });
                 });
             });
             me._allLayersAjaxLoaded = true;
@@ -540,7 +555,17 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         if (subgroup) {
                             return subgroup;
                         }
+
+                        // Try to get subgroup subgroup
+                        for (var j = 0; j < g.groups.length; i++) {
+                            var a = g.groups[j];
+                            var subgroupSubgroup = a.groups.filter(filterFunction)[0];
+                            if (subgroupSubgroup) {
+                                return subgroupSubgroup;
+                            }
+                        }
                     }
+
                 }
                 return group;
             }
