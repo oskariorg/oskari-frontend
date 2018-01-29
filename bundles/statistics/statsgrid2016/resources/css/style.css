@@ -446,14 +446,23 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   overflow-y: auto; }
 
   /** Diagram styles **/
-  div.mapplugins .statsgrid-diagram-plugin {
+  div.mapplugins .statsgrid-published-diagram {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      float: right;
+      margin: 10px !important; }
+  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .diagram {
     background-color: #3c3c3c;
     float: left;
     height: 36px;
     width: 36px;
-    background-image: url("../images/map_dark.png");
+    background-image: url("../images/tile-diagram-dark.png");
     cursor: pointer;
+    background-repeat: no-repeat;
   }
+  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .active {
+      background-color: #ffffff;
+      background-image: url("../images/tile-diagram-light.png");
+      background-repeat: no-repeat; }
 
 /* ********************************************
  * Statsgrid tile styles

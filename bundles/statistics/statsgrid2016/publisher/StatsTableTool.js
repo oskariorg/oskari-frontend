@@ -8,6 +8,7 @@ function() {
 
     groupedSiblings : false,
     templates: {},
+    id: "table",
     /**
      * Initialize tool
      * @params {} state data
@@ -85,7 +86,7 @@ function() {
         if(!stats) {
             return;
         }
-        stats.showToggleButtons(enabled);
+        stats.showPublisherTools(this.id, enabled);
     },
     /**
     * Is displayed.
@@ -142,7 +143,7 @@ function() {
     stop : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
-            stats.showToggleButtons(false);
+            stats.showPublisherTools(this.id, false);
         }
     }
 }, {

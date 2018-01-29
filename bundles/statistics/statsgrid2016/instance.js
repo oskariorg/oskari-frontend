@@ -28,6 +28,7 @@ Oskari.clazz.define(
         this.diagramPlugin = null;
 
         this.regionsetViewer = null;
+        this.enabledInPublisher = [];
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -52,11 +53,9 @@ Oskari.clazz.define(
 
             if(this.isEmbedded()) {
                 // Start in an embedded map mode
-                // Embedded map might not have the grid. If enabled show toggle buttons so user can access it
-                me.showToggleButtons(conf.grid !== false, this.state.view);
+
                 // Always show legend on map when embedded
                 me.showLegendOnMap(true);
-                me.showDiagramOnMap();
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
             }
@@ -321,23 +320,38 @@ Oskari.clazz.define(
             }
             return state;
         },
-        showToggleButtons: function(enabled, visible) {
-            var me = this;
-            var sandbox = me.getSandbox();
+        getPublisherEnabledTools: function () {
+            return this.enabledInPublisher;
+        },
+        togglePublisherTools: function (tool) {
+            if ( this.enabledInPublisher.indexOf(tool) > -1 ) {
+                this.getTile().toggleFlyout( tool );
+            }
+        },
+        showPublisherTools: function (tool, enabled) {
+            var sandbox = this.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            if(!enabled) {
-                if(this.togglePlugin) {
-                    mapModule.unregisterPlugin(me.togglePlugin);
-                    mapModule.stopPlugin(me.togglePlugin);
+
+            this.getTile().getFlyoutManager().init();
+
+            if ( !this.togglePlugin ) {
+                this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
+                mapModule.registerPlugin(this.togglePlugin);
+                mapModule.startPlugin(this.togglePlugin);
+            }
+            if ( !enabled ) {
+                this.enabledInPublisher.splice( this.enabledInPublisher[tool], 1 );
+                this.getTile().toggleFlyout( tool );
+                if ( this.togglePlugin && this.enabledInPublisher.length === 0 ) {
+                    mapModule.unregisterPlugin(this.togglePlugin);
+                    mapModule.stopPlugin(this.togglePlugin);
+                    this.togglePlugin = null;
                 }
                 return;
+            } else {
+                this.enabledInPublisher.push(tool);
             }
-            if(!this.togglePlugin) {
-                this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
-            }
-            mapModule.registerPlugin(me.togglePlugin);
-            mapModule.startPlugin(me.togglePlugin);
-            me.togglePlugin.showTable(visible || me.visible);
+            this.togglePlugin.showTool(tool, enabled);
         },
         /**
          * @method  @public showLegendOnMap Render published  legend
@@ -369,28 +383,6 @@ Oskari.clazz.define(
                 mapModule.redrawPluginUIs(true);
             }
             return;
-        },
-        /**
-         * @method  @public showDiagramOnMap Render published  diagram
-         * This method is also used to setup functionalities for publisher preview
-         */
-        showDiagramOnMap: function (enabled) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            if(!enabled) {
-                if(this.diagramPlugin) {
-                    mapModule.unregisterPlugin(me.diagramPlugin);
-                    mapModule.stopPlugin(me.diagramPlugin);
-                }
-                return;
-            }
-            if(!this.diagramPlugin) {
-                this.diagramPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.DiagramPlugin', this.getSandbox(), this.getLocalization().published);
-            }
-            mapModule.registerPlugin(me.diagramPlugin);
-            mapModule.startPlugin(me.diagramPlugin);
-            me.diagramPlugin.showPublisherDiagram();
         },
         /**
          * @method  @public enableClassification change published map classification visibility.

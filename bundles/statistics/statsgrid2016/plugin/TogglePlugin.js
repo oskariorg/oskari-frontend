@@ -6,14 +6,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
     this._index = 4;
     this._defaultLocation = 'bottom right';
 }, {
-    showTable : function(tableShown) {
-        if(!this.element) {
+    showTool: function (tool, shown) {
+        if (!this.element) {
             return;
         }
+        var stats = this.sb.findRegisteredModuleInstance('StatsGrid');
+        var toolElement = this.element.find('.' + tool);
+        // stats.togglePublisherTools(tool);
+        if ( !shown ) {
+            toolElement.hide();
+            return;
+        }
+        toolElement.show();
         var map = this.element.find('.map');
-        var table = this.element.find('.table');
-        if(tableShown) {
-            table.trigger('click');
+        if(shown) {
+            toolElement.trigger('click');
         } else {
             map.trigger('click');
         }
@@ -30,27 +37,42 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
             return this.element;
         }
         var me = this;
-        var toggleButtons = jQuery('<div class="statsgrid-published-toggle-buttons mapplugin"><div class="map"></div><div class="table"></div>');
+        var toggleButtons = jQuery('<div class="statsgrid-published-toggle-buttons mapplugin"><div class="map"></div><div class="table" style="display:none"></div><div class="diagram" style="display:none"></div>');
         var map = toggleButtons.find('.map');
         var table = toggleButtons.find('.table');
+        var diagram = toggleButtons.find('.diagram');
+        var stats = this.sb.findRegisteredModuleInstance('StatsGrid');
 
         map.attr('title', me.locale.showMap);
         table.attr('title', me.locale.showTable);
 
         map.bind('click', function() {
             if(!map.hasClass('active')) {
-                table.removeClass('active');
                 map.addClass('active');
-                me.sb.postRequestByName('userinterface.UpdateExtensionRequest',[null, 'close', 'StatsGrid']);
+                stats.getPublisherEnabledTools().forEach( function (tool) {
+                    me.element.find('.' + tool).removeClass('active');
+                    stats.togglePublisherTools(tool);
+                });
             }
         });
 
-        table.bind('click', function(){
+        table.bind('click', function () {
             if(!table.hasClass('active')) {
                 map.removeClass('active');
                 table.addClass('active');
-                me.sb.postRequestByName('userinterface.UpdateExtensionRequest',[null, 'detach', 'StatsGrid']);
+            } else {
+                table.removeClass('active');
             }
+            stats.togglePublisherTools("table");
+        });
+        diagram.bind('click', function () {
+            if (!diagram.hasClass('active') ) {
+                map.removeClass('active');
+                diagram.addClass('active');
+            } else {
+                diagram.removeClass('active');
+            }
+            stats.togglePublisherTools("diagram");  
         });
         this.element = toggleButtons;
         return this.element;

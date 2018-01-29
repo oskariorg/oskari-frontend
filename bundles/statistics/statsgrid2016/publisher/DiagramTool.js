@@ -3,12 +3,10 @@ function() {},
 {
     index : 1,
     group: 'data',
-    allowedLocations : ['bottom left', 'bottom right'],
-    lefthanded: 'bottom right',
-    righthanded: 'bottom left',
-
+    allowedLocations : [],
     allowedSiblings : [],
-    bundleName: 'statsgrid',
+    id: "diagram",
+
     init: function (data) {
         var me = this;
         if ( !data || !data.configuration[me.bundleName] ) {
@@ -16,14 +14,14 @@ function() {},
         }
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if ( stats && this.isDisplayed(data) ) {
-            stats.showDiagramOnMap(true);
+            me.setEnabled(true);
         }
     },
     getTool: function(stateData){
         var me = this;
         if(!me.__tool) {
             me.__tool = {
-                id: 'Oskari.statistics.statsgrid.plugin.DiagramPlugin',
+                id: 'Oskari.statistics.statsgrid.StatsGridBundleInstance',
                 title: 'displayDiagram',
                 config: {
                     displayDiagram: true
@@ -31,6 +29,18 @@ function() {},
             };
          }
         return me.__tool;
+    },
+    setEnabled : function(enabled) {
+        var me = this;
+
+        me.state.enabled = enabled;
+
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(!stats) {
+            return;
+        }
+        stats.showPublisherTools(this.id, enabled);
+
     },
     /**
     * Get stats layer.
@@ -69,7 +79,32 @@ function() {},
         }
         return true;
     },
+    getValues: function() {
+        var me = this,
+            config  = me.__sandbox.getStatefulComponents().statsgrid.getConfiguration(),
+            statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
 
+        var statslayerOnMap = this._getStatsLayer();
+        if(!statslayerOnMap || !statsGridState) {
+            return null;
+        }
+        return {
+            configuration: {
+                statsgrid: {
+                    state: statsGridState,
+                    conf : {
+                        diagram: me.state.enabled,
+                    }
+                }
+            }
+        };
+    },
+    stop : function() {
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(stats) {
+            stats.showPublisherTools(this.id, false);
+        }
+    }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']
