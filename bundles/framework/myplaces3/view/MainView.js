@@ -205,6 +205,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
 
             var actions = [
                 {
+                    name: me.loc('placeform.category.newLayer'),
+                    type: "link",
+                    group: 0,
+                    selector: '#newLayerForm > label',
+                    action: function () {
+                        me.form.createCategoryForm();
+                    }
+                }, {
                     name: me.loc('buttons.cancel'),
                     type: "button",
                     group: 1,
