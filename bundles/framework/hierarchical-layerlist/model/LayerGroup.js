@@ -10,6 +10,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
         this._id = group.id;
         this._selectable = group.selectable;
         this._layers = [];
+        this._groups = group.groups || [];
         var me = this;
         this.searchIndex = {};
         group.layers.forEach(function(layer) {
@@ -77,5 +78,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
         },
         hasSelectable: function() {
             return this._selectable;
+        },
+        getGroups: function() {
+            return this._groups;
         }
     });

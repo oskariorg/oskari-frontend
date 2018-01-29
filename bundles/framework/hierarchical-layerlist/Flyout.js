@@ -341,7 +341,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 groupAttr;
 
             var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();
-
             allGroups.forEach(function(group) {
                 groupModel = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup',

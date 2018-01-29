@@ -853,6 +853,42 @@ Oskari.clazz.define(
                 me.getJsTreeElement().remove();
             }
             var layerTree = jQuery(me.templates.layerTree);
+
+            var addLayers = function(groupId, layers) {
+
+                layers.forEach(function(l) {
+                    var layer = l;
+                    if (l.id) {
+                        layer = me.sb.findMapLayerFromAllAvailable(l.id);
+                    }
+                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId(),
+                        groupId,
+                        jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
+                        'layer'));
+
+                });
+            };
+
+            var addSubgroups = function(groupId, subGroups) {
+                subGroups.forEach(function(subgroup) {
+                    var opts = {
+                        a_attr: {
+                            class: (!subgroup.selectable) ? 'no-checkbox' : '',
+                            'data-group-id': subgroup.id
+                        }
+                    };
+
+                    var jstreeObject = me._getJsTreeObject('subgroup-' + subgroup.id,
+                        'group-' + groupId,
+                        me.sb.getLocalizedProperty(subgroup.name) + ' (' + subgroup.layers.length + ')',
+                        'subgroup',
+                        opts);
+
+                    jsTreeData.push(jstreeObject);
+                    addLayers('subgroup-' + subgroup.id, subgroup.layers);
+                });
+            };
+
             me.tabPanel.getContainer().append(layerTree);
             me.accordion.removeAllPanels();
             me.layerContainers = {};
@@ -875,12 +911,12 @@ Oskari.clazz.define(
 
                 //Loop through group layers
                 //TODO: Loop through subgroups aswell similarly
-                layers.forEach(function(layer) {
-                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId(),
-                        'group-' + group.getId(),
-                        jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
-                        'layer'));
-                });
+                addLayers('group-' + group.getId(), layers);
+
+
+                if (group.getGroups().length > 0) {
+                    addSubgroups(group.getId(), group.getGroups());
+                }
             });
 
             var to = false;
