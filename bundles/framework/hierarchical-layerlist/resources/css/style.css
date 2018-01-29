@@ -368,6 +368,10 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
           background-color: #ffde00; }
         div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools .group-tool.add-subgroup {
           background-image: url("../images/glyphicons/glyphicons-433-plus.png"); }
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools .group-tool.edit-group {
+          background-image: url("../images/glyphicons/glyphicons-151-edit.png"); }
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools .group-tool.edit-subgroup {
+          background-image: url("../images/glyphicons/glyphicons-151-edit.png"); }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow {
     height: 40px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node {

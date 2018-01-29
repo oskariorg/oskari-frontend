@@ -585,6 +585,14 @@ div.hierarchical-layerlist {
                         background-image:url("../images/glyphicons/glyphicons-433-plus.png");
                     }
 
+                    &.edit-group {
+                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                    }
+
+                    &.edit-subgroup {
+                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                    }
+
                 }
             }
         }

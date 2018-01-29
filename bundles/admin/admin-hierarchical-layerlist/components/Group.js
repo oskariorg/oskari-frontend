@@ -9,7 +9,15 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
      * @param  {Object}                tool     jQuery object
      * @param  {String}                id       group id, if defined then also show delete button
      * @param  {Integer}               parentId parent group id
-     * @param  {Object}                opts     options
+     * @param  {Object}                opts     options:
+     *                                          {
+     *                                              selectable: true,
+     *                                              locale: {
+     *                                                  fi: '',
+     *                                                  en: '',
+     *                                                  sv: ''
+     *                                              }
+     *                                          }
      * @return {Object}                         popup configuration:
      *                                          {
      *                                              popup: null,
@@ -139,14 +147,16 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
     _saveGroup: function(data, popup, type) {
         var me = this;
         var method = 'PUT';
+        var params = '';
         if (data.id) {
             method = 'POST';
+            params = '&id=' + data.id;
         }
         jQuery.ajax({
             type: method,
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
-            url: me.sandbox.getAjaxUrl('MapLayerGroups'),
+            url: me.sandbox.getAjaxUrl('MapLayerGroups') + params,
             data: JSON.stringify(data),
             error: function() {
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');

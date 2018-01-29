@@ -8,6 +8,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         this.locale = this.getLocalization();
         this.sandbox = Oskari.getSandbox();
         this.service = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
+        this.layerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.group = Oskari.clazz.create('Oskari.admin.hierarchical-layerlist.Group', this.sandbox, this.locale);
     }, {
         /*******************************************************************************************************************************
@@ -25,14 +26,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, null, {
                     type: 'group'
                 });
-                /*var popupConf = me.group.getGroupAddingPopupConf(tool, -1, {
-                    locale: {
-                        fi: 'testi fi',
-                        en: 'testi en',
-                        sv: 'testi sv'
-                    },
-                    selectable: true
-                });*/
                 var popup = popupConf.popup;
                 var message = popupConf.message;
                 popupConf.popup.show(me.locale.groupTitles.addMainGroup, message, popupConf.buttons);
@@ -42,8 +35,32 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 tooltip: me.locale.tooltips.addMainGroup
             });
         },
+        /**
+         * Add group tools
+         * @method  _addGroupTools
+         * @private
+         */
         _addGroupTools: function() {
             var me = this;
+            // Add edit tool to adding groups
+            me.service.addGroupTool('edit-group', function(tool, groupId) {
+                var group = me.layerService.getAllLayerGroups(groupId);
+                var options = {
+                    locale: group.name,
+                    selectable: group.selectable
+                };
+                options.type = 'group';
+
+                var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, null, options);
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale.groupTitles.editMainGroup, message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'edit-group',
+                tooltip: me.locale.tooltips.editMainGroup
+            });
+
             // Add new tool to adding sub-groups
             me.service.addGroupTool('add-subgroup', function(tool, parentId) {
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, parentId, {
@@ -58,6 +75,8 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 cls: 'add-subgroup',
                 tooltip: me.locale.tooltips.addSubgroup
             });
+
+
         },
         /**
          * Add layertree options
@@ -104,11 +123,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 console.log(event);
                 console.log(data);
             });*/
-            jQuery(document).on("dnd_stop.vakata", function(event, data){
+            jQuery(document).on("dnd_stop.vakata", function(event, data) {
                 //If the drag target group is not open, we have to open it.
                 //Otherwise we can't get the necessary information of the drag operation.
                 var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop("id").split("_")[0]);
-                if(!data.data.origin.is_open(targetGroup)) {
+                if (!data.data.origin.is_open(targetGroup)) {
                     data.data.origin.open_node(targetGroup);
                 }
                 var draggedNode = data.data.origin.get_node(data.element);
@@ -119,9 +138,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 var draggedNodeNewParentId = parentNode.id.split("-")[1];
                 //Get the new index inside the group's children
                 var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
-                if(draggedNode.type === 'layer') {
+                if (draggedNode.type === 'layer') {
                     //console.log("TASOA "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
-                } else if(draggedNode.type === 'subgroup') {
+                } else if (draggedNode.type === 'subgroup') {
                     //console.log("ALIRYHMÄÄ "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
                 }
                 /*var nodeItemId = draggedNode.id.split("-")[1];

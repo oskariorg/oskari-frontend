@@ -224,7 +224,9 @@ Oskari.clazz.define(
 
             me._notifierService.on('MapLayerVisibilityChangedEvent', function(evt) {
                 var layer = evt.getMapLayer();
-                me._layers[layer.getId()].setLayer(layer);
+                if (me._layers[layer.getId()]) {
+                    me._layers[layer.getId()].setLayer(layer);
+                }
             });
 
             me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function(evt) {

@@ -15,7 +15,8 @@ Oskari.registerLocalization({
         "groupTitles": {
             "addMainGroup": "Main group name",
             "addSubgroup": "Subgroup name",
-            "localePrefix": "Name in"
+            "localePrefix": "Name in",
+            "editMainGroup": "Edit main group"
         },
         "selectableGroup": "Selection group",
         "errors": {

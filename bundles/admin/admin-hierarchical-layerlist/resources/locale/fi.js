@@ -15,7 +15,8 @@ Oskari.registerLocalization({
         "groupTitles": {
             "addMainGroup": "Anna pääryhmän nimi",
             "addSubgroup": "Anna aliryhmän nimi",
-            "localePrefix": "Nimi kielellä"
+            "localePrefix": "Nimi kielellä",
+            "editMainGroup": "Muokkaa pääryhmää"
         },
         "selectableGroup": "Valintaryhmä",
         "errors": {

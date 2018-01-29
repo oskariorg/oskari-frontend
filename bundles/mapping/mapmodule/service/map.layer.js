@@ -522,9 +522,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /**
          * @method getAllLayerGroups
          * Returns an array of layer groups added to the service
+         * @param {String|Integer} id if defined return only wanted group
          * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
-        getAllLayerGroups: function() {
+        getAllLayerGroups: function(id) {
+            if (id) {
+                return this._layerGroups.filter(function(group) {
+                    return group.id == id;
+                })[0];
+            }
             return this._layerGroups;
         },
 

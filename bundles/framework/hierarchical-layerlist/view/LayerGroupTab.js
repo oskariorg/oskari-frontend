@@ -112,17 +112,23 @@ Oskari.clazz.define(
                     );
                     me.getJsTreeElement().jstree().create_node(obj.parent, obj);
                     me._addGroupTools();
+                } else {
+                    var layerCount = me._mapLayerService.getAllLayerGroups(data.id).layers.length;
+                    me.getJsTreeElement().jstree().rename_node('group-' + data.id, me.sb.getLocalizedProperty(data.name) + ' (' + layerCount + ')' + '<div class="group-tools"></div>');
+                    me._addGroupTools(me.getJsTreeElement().find('#group-' + data.id));
                 }
             });
         },
         /**
          * Add group tools
          * @method  _addGroupTools
+         * @param {Object} element jquery element, if not defined find all group-tools
          * @private
          */
-        _addGroupTools: function() {
+        _addGroupTools: function(element) {
             var me = this;
-            var groupTools = me.getJsTreeElement().find('.group-tools');
+            var el = element || me.getJsTreeElement();
+            var groupTools = el.find('.group-tools');
             groupTools.empty();
             Object.keys(me.service.getGroupTool()).forEach(function(key) {
                 var grouptool = me.service.getGroupTool(key);
@@ -135,8 +141,8 @@ Oskari.clazz.define(
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
-                    var parentId = parent.attr('data-group-id');
-                    grouptool.handler(jQuery(this), parentId);
+                    var groupId = parent.attr('data-group-id');
+                    grouptool.handler(jQuery(this), groupId);
                 });
                 groupTools.append(tool);
 
