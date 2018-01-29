@@ -18,7 +18,7 @@ Oskari.clazz.define(
         this.myPlacesService = undefined;
         this.idPrefix = 'myplaces';
         this.finishedDrawing = false;
-        this.editPlaceName = 'EditMyPlaces3';
+        this.editPlace = false;
     }, {
         __name: 'MyPlaces3',
 
@@ -126,6 +126,13 @@ Oskari.clazz.define(
         setIsFinishedDrawing: function(bln){
             this.finishedDrawing = !!bln;
         },
+        isEditPlace: function(){
+            return this.editPlace;
+        },
+        setIsEditPlace: function(bln){
+            this.editPlace = !!bln;
+        },
+
         /**
          * @method myPlaceSelected
          * Place was selected
@@ -136,6 +143,7 @@ Oskari.clazz.define(
             // ask toolbar to select default tool
             var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
             this.sandbox.request(this, toolbarRequest);
+            this.editPlace = false;
             this.getMainView().cleanupDrawingVariables();
         },
 

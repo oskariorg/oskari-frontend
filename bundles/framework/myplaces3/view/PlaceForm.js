@@ -43,7 +43,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
             '  </div>' +
             '  <div class="field" id="newLayerForm">' +
             '    <label for="category">' +
-            '      <a href="#" class="newLayerLink functional">' + this.loc('placeform.category.newLayer') + '</a>' + " " + this.loc('placeform.category.choose') +
+            '      <span>' + this.loc('placeform.category.choose') + '</span>' +
             '    </label>' +
             '    <br clear="all" />' +
             '    <select data-name="category"></select>' +
@@ -88,9 +88,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
             if (isPublished) {
                 // remove the layer selections if in a publised map
                 ui.find('div#newLayerForm').remove();
-            } else {
-                // otherwise bind an event when selecting to create a new layer
-                this._bindCreateNewLayer();
             }
 
             // Hide the image preview at first
@@ -142,6 +139,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
                 }
                 var imageLink = onScreenForm.find('input[data-name=imagelink]').val(),
                     categorySelection = onScreenForm.find('select[data-name=category]').val();
+                if(typeof categorySelection === "string"){
+                    categorySelection = parseInt(categorySelection);
+                }
                 values.place = {
                     name: placeName,
                     desc: placeDesc,
@@ -247,25 +247,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
             }
         },
 
-        /**
-         * Binds the link for creating a new category.
-         *
-         * @method _bindCreateNewLayer
-         * @private
-         */
-        _bindCreateNewLayer: function () {
-            var me = this,
-                onScreenForm = me._getOnScreenForm();
-            onScreenForm.find('a.newLayerLink').live('click', function (evt) {
-                var form = me._getOnScreenForm();
-                evt.preventDefault();
-                me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
-                form.find('div#newLayerForm').html(me.categoryForm.getForm());
-                //add listeners etc.
-                me.categoryForm.start();
-            });
+        createCategoryForm: function (){
+            var onScreenForm = this._getOnScreenForm();
+            this.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', this.instance);
+            onScreenForm.find('div#newLayerForm').html(this.categoryForm.getForm());
+            this.categoryForm.start();
         },
-
         /**
          * @method destroy
          * Removes eventlisteners

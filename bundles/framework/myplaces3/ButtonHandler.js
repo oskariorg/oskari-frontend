@@ -158,20 +158,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
             // clear drawing before start
             this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true]);  
             this.instance.getSandbox().postRequestByName('DrawTools.StartDrawingRequest', [this.instance.getName(), conf.shape, conf.drawOptions]);
-            if (!conf.geojson) {
-                // show only when drawing new place
-                this._showDrawHelper(config.drawMode);
-            }
+            this.instance.setIsEditPlace(false);
+            this._showDrawHelper(config.drawMode);
         },
         /**
          * @method sendStopDrawRequest
          * Sends a StopDrawingingRequest.
          * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled -> clear current drawing
+         * @param {Boolean} supressEvent boolean param for StopDrawingRequest, true to not send drawing event
          */
-        sendStopDrawRequest: function (isCancel) {
+        sendStopDrawRequest: function (isCancel, supressEvent) {
             if (isCancel) {
-                this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true]);
-                this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getEditPlaceName(), true]);
+                this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true, supressEvent]);
                 this.instance.setIsFinishedDrawing(false);
             } else {
                 this.instance.setIsFinishedDrawing(true);
@@ -297,7 +295,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
                 if (this.drawMode !== event.getToolId() && !this.ignoreEvents) {
                     // changed tool -> cancel any drawing
                     // do not trigger when placeform is shown 
-                    this.sendStopDrawRequest(true);
+                    this.sendStopDrawRequest(true, true);
                     this.instance.enableGfi(true);
                     if(this.dialog){
                         this.dialog.close();
@@ -311,7 +309,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
              * @param {Oskari.mapping.drawtools.event.DrawingEvent} event
              */
             'DrawingEvent': function (event) {
-                if (event.getId() !== this.instance.getName()){
+                if (event.getId() !== this.instance.getName() || this.instance.isEditPlace()){
                     return;
                 }
                 if (event.getIsFinished()){
@@ -344,7 +342,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
                     keyBoardRequest;
                 if (event.getId() == popupId){
                     this.instance.enableGfi(true);
-                    this.sendStopDrawRequest(true);
+                    this.sendStopDrawRequest(true, true);
                     if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
                         keyBoardRequest = Oskari.requestBuilder('EnableMapKeyboardMovementRequest')();
                         sandbox.request(this, keyBoardRequest);
