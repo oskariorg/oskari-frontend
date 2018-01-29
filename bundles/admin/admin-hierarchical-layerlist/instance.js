@@ -99,6 +99,36 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             me._addMainTools();
             me._addGroupTools();
             me._addOptions();
+            //Doesn't work.
+            /*me.service.addEventHandler("dnd_stop.vakata", function(event, data){
+                console.log(event);
+                console.log(data);
+            });*/
+            jQuery(document).on("dnd_stop.vakata", function(event, data){
+                //If the drag target group is not open, we have to open it.
+                //Otherwise we can't get the necessary information of the drag operation.
+                var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop("id").split("_")[0]);
+                if(!data.data.origin.is_open(targetGroup)) {
+                    data.data.origin.open_node(targetGroup);
+                }
+                var draggedNode = data.data.origin.get_node(data.element);
+                //console.log(draggedNode);
+                var parentNode = data.data.origin.get_node(draggedNode.parent);
+                //console.log(parentNode);
+                var draggedNodeId = draggedNode.id.split("-")[1];
+                var draggedNodeNewParentId = parentNode.id.split("-")[1];
+                //Get the new index inside the group's children
+                var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
+                if(draggedNode.type === 'layer') {
+                    //console.log("TASOA "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
+                } else if(draggedNode.type === 'subgroup') {
+                    //console.log("ALIRYHMÄÄ "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
+                }
+                /*var nodeItemId = draggedNode.id.split("-")[1];
+                console.log("Dragged node: "+nodeItemId);
+                var newTargetId = draggedNode.parent.split("-")[1];
+                console.log("Target node: "+newTargetId);*/
+            });
 
 
         },

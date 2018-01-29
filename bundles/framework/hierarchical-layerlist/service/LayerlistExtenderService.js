@@ -54,7 +54,7 @@
             };
             this._events = [
                 /* Default handlers */
-                {
+                /*{
                     name: 'changed.jstree',
                     handler: function(e, data) {
                         var selected = data.changed.selected;
@@ -79,7 +79,7 @@
                         });
 
                     }
-                }
+                }*/
             ];
             this._mainTools = {};
             this._groupTools = {};
