@@ -347,8 +347,9 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] .jstree-ocl {
     background-position: 0px 5px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor {
-    width: 95%;
+    width: 90%;
     padding: 4px;
+    margin-left: 10px;
     /* Group tools */ }
     div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools {
       float: right; }
