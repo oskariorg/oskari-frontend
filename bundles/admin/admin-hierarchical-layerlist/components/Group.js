@@ -2,6 +2,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
     this.sandbox = sandbox;
     this.locale = locale;
     this.service = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
+    this.layerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 }, {
     /**
      * Gets popup configuration obhject
@@ -44,8 +45,46 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             btnDelete.setTitle(me.locale.buttons.delete);
             btnDelete.addClass('delete');
             btnDelete.setHandler(function() {
-                // TODO do remove
-                tool.removeClass('active');
+                // check at group has no layers or subgroups
+                var group = me.layerService.getAllLayerGroups(id);
+                var isLayersOrGroups = (group && (group.layers.length > 0 || group.groups.length > 0)) ? true : false;
+                if (isLayersOrGroups) {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    dialog.show(me.locale.errors.groupnameDeleteCheckLayers.title, me.locale.errors.groupnameDeleteCheckLayers.message);
+                    dialog.fadeout(5000);
+                } else {
+                    var data = {
+                        id: id
+                    };
+
+                    // ned be confirm deleteing ?
+                    //
+                    // Confirm dialog
+                    var confirmDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    var confirmBtnOk = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                    var confirmBtnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+                    confirmBtnOk.addClass('primary');
+                    confirmBtnOk.setTitle(me.locale.buttons.ok);
+                    confirmBtnOk.setHandler(function() {
+                        confirmDialog.close();
+                        me._deleteGroup(data, popup, opts.type, tool);
+                    });
+
+                    confirmBtnCancel.setTitle(me.locale.buttons.cancel);
+                    confirmBtnCancel.setHandler(function() {
+                        confirmDialog.close();
+                    });
+
+                    var groupName = me.sandbox.getLocalizedProperty(group.name);
+
+                    confirmDialog.show(me.locale.confirms.groupDelete.title, Oskari.getMsg('AdminHierarchicalLayerList', 'confirms.groupDelete.message', {
+                        groupname: groupName
+                    }), [confirmBtnCancel, confirmBtnOk]);
+                    confirmDialog.makeModal();
+
+
+                }
             });
             returnObject.buttons.push(btnDelete);
         }
@@ -73,7 +112,6 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
         var btnOkLocale = (id) ? me.locale.buttons.update : me.locale.buttons.add;
         btnOk.setTitle(btnOkLocale);
         btnOk.setHandler(function() {
-            // TODO do saving
             var data = {
                 locales: {},
                 selectable: selectableGroup.isChecked(),
@@ -93,10 +131,9 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
                     el.find('input').removeClass('error');
                 }
             });
-            tool.removeClass('active');
 
             if (Object.keys(data.locales).length === Oskari.getSupportedLanguages().length && hasValidLocales) {
-                me._saveGroup(data, popup, opts.type);
+                me._saveGroup(data, popup, opts.type, tool);
             } else {
                 errorDialog.show(me.locale.errors.groupname.title, me.locale.errors.groupname.message);
                 errorDialog.fadeout();
@@ -142,9 +179,10 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
      * @param   {Object}   data  data fo saving
      * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
      * @param   {String}   type  jstree type
+     * @param {Object} tool tool
      * @private
      */
-    _saveGroup: function(data, popup, type) {
+    _saveGroup: function(data, popup, type, tool) {
         var me = this;
         var method = 'PUT';
         var params = '';
@@ -174,8 +212,44 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
                 if (data.id) {
                     response.method = 'update';
                 }
-
+                tool.removeClass('active');
                 me.service.trigger('group-added', response);
+            }
+        });
+    },
+    /**
+     * Delete group
+     * @method  _deleteGroup
+     * @param   {Object}   data  data for deleting
+     * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
+     * @param   {String}   type  jstree type
+     * @param {Object} tool tool
+     * @private
+     */
+    _deleteGroup: function(data, popup, type, tool) {
+        var me = this;
+        var method = 'DELETE';
+        var params = '&id=' + data.id;
+        jQuery.ajax({
+            type: method,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            url: me.sandbox.getAjaxUrl('MapLayerGroups') + params,
+            data: JSON.stringify(data),
+            error: function() {
+                var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                errorDialog.show(me.locale.errors.groupnameDelete.title, me.locale.errors.groupnameDelete.message);
+                errorDialog.fadeout();
+            },
+            success: function(response) {
+                popup.close();
+                var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                successDialog.show(me.locale.succeeses.groupnameDelete.title, me.locale.succeeses.groupnameDelete.message);
+                successDialog.fadeout();
+
+                response.type = type;
+                tool.removeClass('active');
+                me.service.trigger('group-deleted', response);
             }
         });
     },

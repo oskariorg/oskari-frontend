@@ -6,11 +6,13 @@ Oskari.registerLocalization({
             "add": "Add",
             "cancel": "Cancel",
             "update": "Update",
-            "delete": "Delete"
+            "delete": "Delete",
+            "ok": "Ok"
         },
         "tooltips": {
             "addMainGroup": "Add main group",
-            "addSubgroup": "Add subgroup"
+            "addSubgroup": "Add subgroup",
+            "editMainGroup": "Edit main group"
         },
         "groupTitles": {
             "addMainGroup": "Main group name",
@@ -27,12 +29,30 @@ Oskari.registerLocalization({
             "groupnameSave": {
                 "title": "Group saving failed",
                 "message": "Group saving failed, try again later"
+            },
+            "groupnameDeleteCheckLayers": {
+                "title": "Check the group layers",
+                "message": "The group has layers or sub-groups, move them under the other group and then remove the group."
+            },
+            "groupnameDelete": {
+                "title": "Group deleting failed",
+                "message": "Group deleting failed, try again later"
             }
         },
         "succeeses": {
             "groupnameSave": {
                 "title": "Group saving was successful",
                 "message": "Group saving was successful"
+            },
+            "groupnameDelete": {
+                "title": "Group deleting was successfull",
+                "message": "Group deleting was successfull"
+            }
+        },
+        "confirms": {
+            "groupDelete": {
+                "title": "Do you want to delete",
+                "message": "Do you want to delete {groupname} group ?"
             }
         }
     }

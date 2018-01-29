@@ -94,16 +94,24 @@ Oskari.clazz.define(
                 if (data.type === 'subgroup') {
                     parent = 'group-' + data.parentId;
                 }
+
+                var opts = {};
+                if (!data.selectable) {
+                    opts = {
+                        a_attr: {
+                            class: 'no-checkbox',
+                            'data-group-id': data.id
+                        }
+                    };
+                } else {
+                    opts = {
+                        a_attr: {
+                            'data-group-id': data.id
+                        }
+                    };
+                }
+
                 if (data.method === 'add') {
-                    var opts = {};
-                    if (!data.selectable) {
-                        opts = {
-                            a_attr: {
-                                class: 'no-checkbox',
-                                'data-group-id': data.id
-                            }
-                        };
-                    }
                     var obj = me._getJsTreeObject(data.type + '-' + data.id,
                         parent,
                         me.sb.getLocalizedProperty(data.name) + ' (0)',
@@ -114,9 +122,18 @@ Oskari.clazz.define(
                     me._addGroupTools();
                 } else {
                     var layerCount = me._mapLayerService.getAllLayerGroups(data.id).layers.length;
+                    me._mapLayerService.getAllLayerGroups(data.id).selectable = data.selectable;
+                    var node = me.getJsTreeElement().jstree().get_node('group-' + data.id);
+                    node.a_attr = opts.a_attr;
+
                     me.getJsTreeElement().jstree().rename_node('group-' + data.id, me.sb.getLocalizedProperty(data.name) + ' (' + layerCount + ')' + '<div class="group-tools"></div>');
                     me._addGroupTools(me.getJsTreeElement().find('#group-' + data.id));
                 }
+            });
+
+            me.service.on('group-deleted', function(data) {
+                me.getJsTreeElement().jstree().delete_node(data.type + '-' + data.id);
+                me._addGroupTools();
             });
         },
         /**
