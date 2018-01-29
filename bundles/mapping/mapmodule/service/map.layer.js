@@ -528,6 +528,52 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return this._layerGroups;
         },
 
+        getLayerGroupBreadcrumb: function(layerId) {
+            var me = this;
+            var allGroups = me.getAllLayerGroups();
+            var groups = [];
+            var isLayerInGroup = function(groupLayers) {
+                var founded = false;
+                for (var i = 0; i < groupLayers.length; i++) {
+                    var layer = groupLayers[i];
+                    if (layer.id === layerId) {
+                        founded = true;
+                        break;
+                    }
+                }
+                return founded;
+            };
+            for (var i = 0; i < allGroups.length; i++) {
+                var group = allGroups[i];
+                var foundedInSubgroups = false;
+                // Check if layer is in main groups
+                var isInMainGroup = isLayerInGroup(group.layers);
+                if (isInMainGroup) {
+                    groups.push(Oskari.getSandbox().getLocalizedProperty(group.name));
+                    break;
+                }
+
+                // check subgroups
+                for (var j = 0; group.groups.length; j++) {
+                    var subgroup = group.groups[j];
+                    var isInSubGroup = isLayerInGroup(subgroup.layers);
+                    if (isInSubGroup) {
+                        groups.push(Oskari.getSandbox().getLocalizedProperty(group.name));
+                        groups.push(Oskari.getSandbox().getLocalizedProperty(subgroup.name));
+                        foundedInSubgroups = true;
+                        break;
+                    }
+                }
+
+                if (foundedInSubgroups) {
+                    break;
+                }
+
+            }
+
+            return groups.join(' > ');
+        },
+
         /**
          * @method getAllLayersByMetaType
          * Returns an array of layers added to the service that have the given metatype (layer.getMetaType() === type).

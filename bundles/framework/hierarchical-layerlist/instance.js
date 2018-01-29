@@ -129,6 +129,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 // massive update so just recreate the whole ui
                 //me.plugins['Oskari.userinterface.Flyout'].populateLayers();
                 // added through maplayerevent
+                //
+                me.plugins['Oskari.userinterface.Flyout'].updateSelectedLayers();
             };
             failureCB = function() {
                 alert(me.getLocalization('errors').loadFailed);

@@ -36,7 +36,11 @@ Oskari.clazz.define(
         getTabPanel: function() {
             return this.tabPanel;
         },
-
+        updateSelectedLayers: function() {
+            var me = this;
+            me._setSelectedLayers();
+            me._updateLayerCount();
+        },
         /**
          * @return {[type]}
          */
@@ -77,8 +81,6 @@ Oskari.clazz.define(
 
             me.tabPanel.setContent(layerContainer);
 
-            me._setSelectedLayers();
-            me._updateLayerCount();
 
             me._updateContainerHeight(jQuery('#mapdiv').height());
         },

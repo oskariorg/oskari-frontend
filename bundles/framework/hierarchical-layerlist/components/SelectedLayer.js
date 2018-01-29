@@ -1,6 +1,7 @@
 Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', function(layer, sandbox, locale) {
     this.locale = locale;
     this.sb = sandbox;
+    this.service = this.sb.getService('Oskari.mapframework.service.MapLayerService');
     this._template = jQuery('<li class="layer selected">' +
         '   <div class="layer-info">' +
         '       <div class="visible"><a></a></div>' +
@@ -137,10 +138,10 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
      * @private
      */
     _setBreadcrumb: function() {
-        // FIXME: need to be getGroup ?
-        if (this._layer.getGroups().length > 0) {
-            this._el.find('.breadcrumb').html(this._layer.getGroups()[0].name);
-        }
+        var me = this;
+        var breakcrumb = me.service.getLayerGroupBreadcrumb(me._layer.getId());
+        this._el.find('.breadcrumb').html(breakcrumb);
+
     },
     /**
      * Set title
