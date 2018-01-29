@@ -750,8 +750,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param {Function} callback function to call when done, receives boolean as
          *      first argument(true == successful), myplaceModel as second parameter and boolean as third parameter (true if the category was new)
          */
-        saveMyPlace: function (myplaceModel, callback) {
-            this.commitMyPlaces([myplaceModel], callback);
+        saveMyPlace: function (myplaceModel, callback, isMovePlace) {
+            this.commitMyPlaces([myplaceModel], callback, isMovePlace);
         },
 
         /**
@@ -862,6 +862,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 place.setUpdateDate(feature.properties.updated);
                 place.setGeometry(feature.geometry);
                 if(isNew || isMovePlaces){
+                    this._removeMyPlace(place.getId());
                     this._addMyPlace(place);
                 }
             }

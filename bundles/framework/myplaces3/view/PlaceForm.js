@@ -139,7 +139,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
                 }
                 var imageLink = onScreenForm.find('input[data-name=imagelink]').val(),
                     categorySelection = onScreenForm.find('select[data-name=category]').val();
-
+                if(typeof categorySelection === "string"){
+                    categorySelection = parseInt(categorySelection);
+                }
                 values.place = {
                     name: placeName,
                     desc: placeDesc,

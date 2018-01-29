@@ -389,7 +389,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
          */
         __savePlace: function (values) {
             var me = this,
-                drawing = this.drawing;
+                drawing = this.drawing,
+                isMovePlace = false;
             // form not open, nothing to do
             if (!values) {
                 // should not happen
@@ -413,6 +414,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                 place.setDrawToolsMultiGeometry(drawing); 
             } else if (this.tempGeom) {
                 place.setGeometry(this.tempGeom); // if not edited
+            }
+            if (values.category !== oldCategory){
+                isMovePlace = true;
             }
 
             var sandbox = this.instance.sandbox;
@@ -451,7 +455,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                     me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.savePlace'));
                 }
             };
-            this.instance.getService().saveMyPlace(place, serviceCallback);
+            this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
         },
         cleanupDrawingVariables: function () {
             this.drawing = null;
