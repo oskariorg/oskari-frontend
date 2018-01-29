@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
         returnObject.buttons.push(btnOk);
         popup.addClass('admin-hierarchical-layerlist-group');
 
-        var loc = (Oskari.getLocalization('DivManazer').LanguageSelect && Oskari.getLocalization('DivManazer').LanguageSelect.languages) ? Oskari.getLocalization('DivManazer').LanguageSelect.languages : {};
+        var loc = (Oskari.getMsg('DivManazer', 'LanguageSelect').languages) ? Oskari.getMsg('DivManazer', 'LanguageSelect').languages : {};
 
         var selectableGroup = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
         selectableGroup.addClass('selectable-group');
