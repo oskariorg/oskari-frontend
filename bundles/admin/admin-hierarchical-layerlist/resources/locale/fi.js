@@ -12,13 +12,15 @@ Oskari.registerLocalization({
         "tooltips": {
             "addMainGroup": "Lisää pääryhmä",
             "addSubgroup": "Lisää aliryhmä",
-            "editMainGroup": "Muokkaa pääryhmää"
+            "editMainGroup": "Muokkaa pääryhmää",
+            "editSubgroup": "Muokkaa aliryhmää"
         },
         "groupTitles": {
             "addMainGroup": "Anna pääryhmän nimi",
             "addSubgroup": "Anna aliryhmän nimi",
             "localePrefix": "Nimi kielellä",
-            "editMainGroup": "Muokkaa pääryhmää"
+            "editMainGroup": "Muokkaa pääryhmää",
+            "editSubgroup": "Muokkaa aliryhmää"
         },
         "selectableGroup": "Valintaryhmä",
         "errors": {

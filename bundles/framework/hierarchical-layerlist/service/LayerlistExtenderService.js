@@ -31,6 +31,10 @@
                     },
                     subgroup: {
                         icon: 'jstree-group-icon',
+                        valid_children: ['layer', 'subgroup-subgroup']
+                    },
+                    'subgroup-subgroup': {
+                        icon: 'jstree-group-icon',
                         valid_children: ['layer']
                     },
                     layer: {
@@ -83,6 +87,7 @@
             ];
             this._mainTools = {};
             this._groupTools = {};
+            this._subgroupTools = {};
             this._layerTools = {};
             this._hasAdmin = false;
 
@@ -211,7 +216,7 @@
              * Get group tool(s)
              * @method getGroupTool
              * @param  {String}     id group tool id
-             * @return {Object}     wanted group tool (also check visibleChecker)
+             * @return {Object}     wanted group tool
              */
             getGroupTool: function(id) {
                 if (!id) {
@@ -248,6 +253,52 @@
                 };
 
                 this.trigger('grouptool.added', {
+                    id: id,
+                    handler: handler,
+                    options: options
+                });
+            },
+            /**
+             * Get subgroup tool(s)
+             * @method getSubgroupTool
+             * @param  {String}     id subgroup tool id
+             * @return {Object}     wanted subgroup tool
+             */
+            getSubgroupTool: function(id) {
+                if (!id) {
+                    return this._subgroupTools;
+                }
+                if (this._subgroupTools[id]) {
+                    return this._subgroupTools[id];
+                }
+                return null;
+            },
+            /**
+             * Add subgroup tool
+             * @method addSubgroupTool
+             * @param  {String}     id         subgroup tool id
+             * @param  {Function}   handler    tool handler
+             * @param  {Object}     options    subgroup tool options:
+             *                                 {
+             *                                     cls: 'active-cls'
+             *                                 }
+             */
+            addSubgroupTool: function(id, handler, options) {
+                if (this._subgroupTools[id]) {
+                    _log.warn('Subgroup tool "' + id + '" allready defined.');
+                    return;
+                }
+                if (typeof handler !== 'function') {
+                    _log.warn('Subgroup tool "' + id + '" has no any handler, not added.');
+                    return;
+                }
+
+                this._subgroupTools[id] = {
+                    handler: handler,
+                    options: options
+                };
+
+                this.trigger('subgrouptool.added', {
                     id: id,
                     handler: handler,
                     options: options

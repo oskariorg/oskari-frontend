@@ -27,6 +27,7 @@ Oskari.clazz.define(
             descriptionAndMainTools: jQuery('<div class="description-and-tools"><div class="field-description"></div><div class="main-tools"></div><div class="clear"></div></div>'),
             mainTool: jQuery('<div class="main-tool"></div>'),
             groupTool: jQuery('<div class="group-tool"></div>'),
+            subgroupTool: jQuery('<div class="subgroup-tool"></div>'),
             description: '<div>' +
                 '  <h4 class="indicator-msg-popup"></h4>' +
                 '  <p></p>' +
@@ -85,6 +86,11 @@ Oskari.clazz.define(
                 me._addGroupTools();
             });
 
+            // Subgroup tool added
+            me.service.on('subgrouptool.added', function(data) {
+                me._addSubgroupTools();
+            });
+
             me.service.on('jstree-contionalselect', function(data) {
                 me.selectNodeFromTree(data.node, data.event);
             });
@@ -94,19 +100,24 @@ Oskari.clazz.define(
                 if (data.type === 'subgroup') {
                     parent = 'group-' + data.parentId;
                 }
+                if (data.type === 'subgroup-subgroup') {
+                    parent = 'subgroup-' + data.parentId;
+                }
 
                 var opts = {};
                 if (!data.selectable) {
                     opts = {
                         a_attr: {
                             class: 'no-checkbox',
-                            'data-group-id': data.id
+                            'data-group-id': data.id,
+                            'data-parent-group-id': data.parentId
                         }
                     };
                 } else {
                     opts = {
                         a_attr: {
-                            'data-group-id': data.id
+                            'data-group-id': data.id,
+                            'data-parent-group-id': data.parentId
                         }
                     };
                 }
@@ -119,21 +130,33 @@ Oskari.clazz.define(
                         opts
                     );
                     me.getJsTreeElement().jstree().create_node(obj.parent, obj);
-                    me._addGroupTools();
+                    if (data.type === 'group') {
+                        me._addGroupTools();
+                    } else if (data.type === 'subgroup') {
+                        me._addSubgroupTools();
+                    }
                 } else {
                     var layerCount = me._mapLayerService.getAllLayerGroups(data.id).layers.length;
                     me._mapLayerService.getAllLayerGroups(data.id).selectable = data.selectable;
-                    var node = me.getJsTreeElement().jstree().get_node('group-' + data.id);
+                    var node = me.getJsTreeElement().jstree().get_node(data.type + '-' + data.id);
                     node.a_attr = opts.a_attr;
 
-                    me.getJsTreeElement().jstree().rename_node('group-' + data.id, me.sb.getLocalizedProperty(data.name) + ' (' + layerCount + ')' + '<div class="group-tools"></div>');
-                    me._addGroupTools(me.getJsTreeElement().find('#group-' + data.id));
+                    me.getJsTreeElement().jstree().rename_node(data.type + '-' + data.id, me.sb.getLocalizedProperty(data.name) + ' (' + layerCount + ')' + '<div class="' + data.type + '-tools"></div>');
+                    if (data.type === 'group') {
+                        me._addGroupTools(me.getJsTreeElement().find('#' + data.type + '-' + data.id));
+                    } else {
+                        me._addSubgroupTools(me.getJsTreeElement().find('#' + data.type + '-' + data.id));
+                    }
                 }
             });
 
             me.service.on('group-deleted', function(data) {
                 me.getJsTreeElement().jstree().delete_node(data.type + '-' + data.id);
-                me._addGroupTools();
+                if (data.type === 'group') {
+                    me._addGroupTools();
+                } else if (data.type === 'subgroup') {
+                    me._addSubgroupTools();
+                }
             });
         },
         /**
@@ -162,6 +185,36 @@ Oskari.clazz.define(
                     grouptool.handler(jQuery(this), groupId);
                 });
                 groupTools.append(tool);
+
+            });
+        },
+        /**
+         * Add subgroup tools
+         * @method  _addSubgroupTools
+         * @param {Object} element jquery element, if not defined find all subgroup-tools
+         * @private
+         */
+        _addSubgroupTools: function(element) {
+            var me = this;
+            var el = element || me.getJsTreeElement();
+            var subgroupTools = el.find('.subgroup-tools');
+            subgroupTools.empty();
+            Object.keys(me.service.getSubgroupTool()).forEach(function(key) {
+                var subgrouptool = me.service.getSubgroupTool(key);
+                var tool = me.templates.subgroupTool.clone();
+                tool.attr('data-id', key);
+                tool.attr('title', subgrouptool.options.tooltip);
+                tool.addClass(subgrouptool.options.cls);
+
+                tool.bind('click', function(evt) {
+                    evt.stopPropagation();
+                    jQuery(this).addClass('active');
+                    var parent = jQuery(this).parents('a.jstree-anchor');
+                    var groupId = parent.attr('data-group-id');
+                    var parentGroupId = parent.attr('data-parent-group-id');
+                    subgrouptool.handler(jQuery(this), groupId, parentGroupId);
+                });
+                subgroupTools.append(tool);
 
             });
         },
@@ -897,7 +950,8 @@ Oskari.clazz.define(
                     var opts = {
                         a_attr: {
                             class: (!subgroup.selectable) ? 'no-checkbox' : '',
-                            'data-group-id': subgroup.id
+                            'data-group-id': subgroup.id,
+                            'data-parent-group-id': groupId
                         }
                     };
 
@@ -973,6 +1027,13 @@ Oskari.clazz.define(
             // Add group tools
             me.getJsTreeElement().on('ready.jstree', function() {
                 me._addGroupTools();
+                me._addSubgroupTools();
+            });
+
+            me.getJsTreeElement().on('open_node.jstree', function(node) {
+                console.log(node);
+
+                me._addSubgroupTools();
             });
         },
 

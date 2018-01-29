@@ -12,13 +12,15 @@ Oskari.registerLocalization({
         "tooltips": {
             "addMainGroup": "Lägg till huvudgrupp",
             "addSubgroup": "Lägg till undergrupp",
-            "editMainGroup": "Huvudgruppsnamn"
+            "editMainGroup": "Huvudgruppsnamn",
+            "editSubgroup": "Redigera undergrupp"
         },
         "groupTitles": {
             "addMainGroup": "Huvudgruppsnamn",
             "addSubgroup": "Lägg till undergrupp",
             "localePrefix": "Namnet på",
-            "editMainGroup": "Huvudgruppsnamn"
+            "editMainGroup": "Huvudgruppsnamn",
+            "editSubgroup": "Redigera undergrupp"
         },
         "selectableGroup": "selektionsgrupp",
         "errors": {

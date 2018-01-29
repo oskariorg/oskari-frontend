@@ -47,7 +47,10 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             btnDelete.setHandler(function() {
                 // check at group has no layers or subgroups
                 var group = me.layerService.getAllLayerGroups(id);
-                var isLayersOrGroups = (group && (group.layers.length > 0 || group.groups.length > 0)) ? true : false;
+                var isLayersOrGroups = (group && group.layers && group.layers.length > 0) ? true : false;
+                if (group.groups && group.groups.length > 0) {
+                    isLayersOrGroups = true;
+                }
                 if (isLayersOrGroups) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     dialog.show(me.locale('errors.groupnameDeleteCheckLayers.title'), me.locale('errors.groupnameDeleteCheckLayers.message'));

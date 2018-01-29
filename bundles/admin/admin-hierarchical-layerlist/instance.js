@@ -75,8 +75,47 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 cls: 'add-subgroup',
                 tooltip: me.locale('tooltips.addSubgroup')
             });
+        },
+        /**
+         * Add subgroup tools
+         * @method  _addSubgroupTools
+         * @private
+         */
+        _addSubgroupTools: function() {
+            var me = this;
+            // Add edit tool to adding groups
+            me.service.addSubgroupTool('edit-subgroup', function(tool, groupId, parentId) {
+                var group = me.layerService.getAllLayerGroups(groupId);
+                var options = {
+                    locale: group.name,
+                    selectable: group.selectable
+                };
+                options.type = 'subgroup';
 
+                var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, parentId, options);
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale('groupTitles.editSubgroup'), message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'edit-subgroup',
+                tooltip: me.locale('tooltips.editSubgroup')
+            });
 
+            // Add new tool to adding sub-groups
+            me.service.addSubgroupTool('add-subgroup-subgroup', function(tool, parentId) {
+                var popupConf = me.group.getGroupAddingPopupConf(tool, null, parentId, {
+                    type: 'subgroup-subgroup'
+                });
+
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale('groupTitles.addSubgroup'), message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'add-subgroup-subgroup',
+                tooltip: me.locale('tooltips.addSubgroup')
+            });
         },
         /**
          * Add layertree options
@@ -117,6 +156,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             me.service.setAdmin(true);
             me._addMainTools();
             me._addGroupTools();
+            me._addSubgroupTools();
             me._addOptions();
             //Doesn't work.
             /*me.service.addEventHandler("dnd_stop.vakata", function(event, data){
@@ -143,7 +183,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 } else if (draggedNode.type === 'subgroup') {
                     //console.log("ALIRYHMÄÄ "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
                 }
-            var data = {};
+                var data = {};
                 data.nodeId = draggedNodeId;
                 data.nodeIndex = draggedNodeNewIndex;
                 data.targetGroupId = draggedNodeNewParentId;

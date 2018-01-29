@@ -527,9 +527,22 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         getAllLayerGroups: function(id) {
             if (id) {
-                return this._layerGroups.filter(function(group) {
+                var filterFunction = function(group) {
                     return group.id == id;
-                })[0];
+                };
+                var group = this._layerGroups.filter(filterFunction)[0];
+                // group not found
+                // try to get subgroup
+                if (!group) {
+                    for (var i = 0; i < this._layerGroups.length; i++) {
+                        var g = this._layerGroups[i];
+                        var subgroup = g.groups.filter(filterFunction)[0];
+                        if (subgroup) {
+                            return subgroup;
+                        }
+                    }
+                }
+                return group;
             }
             return this._layerGroups;
         },
