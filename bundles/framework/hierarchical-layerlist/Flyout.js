@@ -268,8 +268,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
 
             // Add other tabs
-            var selectedTab = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.view.SelectedLayersTab', me.instance);
-            me.tabContainer.addPanel(selectedTab.getTabPanel());
+            me.selectedTab = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.view.SelectedLayersTab', me.instance);
+            me.tabContainer.addPanel(me.selectedTab.getTabPanel());
 
             me.tabContainer.addTabChangeListener(
                 function(previousTab, newTab) {
@@ -286,6 +286,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             // Create default filters
             me.addDefaultFilters();
             me.populateLayers();
+        },
+
+        updateSelectedLayers: function() {
+            var me = this;
+            me.selectedTab.updateSelectedLayers();
         },
 
         /**
