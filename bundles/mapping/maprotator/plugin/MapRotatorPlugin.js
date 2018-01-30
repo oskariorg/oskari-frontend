@@ -5,7 +5,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.MapRotatorPlugin',
     me._clazz = 'Oskari.mapping.maprotator.MapRotatorPlugin';
     me._defaultLocation = 'top right';
     me._toolOpen = false;
-    me._index = 90;
+    me._index = 80;
     me._currentRot = null;
     me.previousDegrees = null;
     me._templates = {
