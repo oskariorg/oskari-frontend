@@ -188,7 +188,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             me._addOptions();
             me._addEventHandlers();
         },
-
+        /**
+         * Assigns event handlers to the admin hierarchical layer list.
+         */
         _addEventHandlers: function() {
             var me = this;
             jQuery(document).on("dnd_stop.vakata", function(event, data) {
@@ -207,7 +209,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 //Get the new index inside the group's children
                 var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
                 var ajaxData = {};
-                ajaxData.type = draggedNode.type;
+                ajaxData.type = me._findJSTreeNodeActualType(draggedNode.type);
                 ajaxData.nodeId = draggedNodeId;
                 ajaxData.nodeIndex = draggedNodeNewIndex;
                 ajaxData.oldGroupId = draggedNodeOldParentId;
@@ -215,15 +217,33 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 me._saveOrder(ajaxData);
             });
         },
-
+        /**
+         * Find the nodes actual type which can be either layer or group (includes subgroups and subgroup-subgroups)
+         * @param  {String} type The node type in the tree
+         * @return {String}      The node actual type - layer or group.
+         */
+        _findJSTreeNodeActualType: function(type) {
+            var actualType;
+            if(type.indexOf('group') >= 0) {
+                actualType = 'group';
+            } else {
+                actualType = 'layer';
+            }
+            return actualType;
+        },
+        /**
+         * Find the nodes actual id which we are interested in.
+         * @param  {String} nodeId The node id string
+         * @return {Integer}        The node id integer
+         */
         _findJSTreeNodeActualId: function(nodeId) {
-            return nodeId.split("-")[1];
+            return nodeId.replace(/[^0-9]/g, '');
         },
 
         /**
-         * Save group
-         * @method  _saveGroup
-         * @param   {Object}   data  data fo saving
+         * Save group or list ordering and grouping.
+         * @method  _saveOrder
+         * @param   {Object}   data  data for saving
          * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
          * @param   {String}   type  jstree type
          * @private
@@ -242,7 +262,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     errorDialog.fadeout();*/
                 },
                 success: function(response) {
-                    console.log(response);
                     /*popup.close();
                     var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     successDialog.show(me.locale.succeeses.groupnameSave.title, me.locale.succeeses.groupnameSave.message);
