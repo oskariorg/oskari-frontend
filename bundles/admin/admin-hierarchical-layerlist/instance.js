@@ -117,6 +117,33 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 tooltip: me.locale('tooltips.addSubgroup')
             });
         },
+
+        /**
+         * Add subgroup  subgroup tools
+         * @method  _addSubgroupSubgroupTools
+         * @private
+         */
+        _addSubgroupSubgroupTools: function() {
+            var me = this;
+            // Add edit tool to adding groups
+            me.service.addSubgroupSubgroupTool('edit-subgroup-subgroup', function(tool, groupId, parentId) {
+                var group = me.layerService.getAllLayerGroups(groupId);
+                var options = {
+                    locale: group.name,
+                    selectable: group.selectable
+                };
+                options.type = 'subgroup-subgroup';
+
+                var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, parentId, options);
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale('groupTitles.editSubgroup'), message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'edit-subgroup-subgroup',
+                tooltip: me.locale('tooltips.editSubgroup')
+            });
+        },
         /**
          * Add layertree options
          * @method  _addOptions
@@ -157,6 +184,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             me._addMainTools();
             me._addGroupTools();
             me._addSubgroupTools();
+            me._addSubgroupSubgroupTools();
             me._addOptions();
             //Doesn't work.
             /*me.service.addEventHandler("dnd_stop.vakata", function(event, data){

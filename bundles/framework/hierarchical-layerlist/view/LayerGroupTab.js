@@ -28,6 +28,7 @@ Oskari.clazz.define(
             mainTool: jQuery('<div class="main-tool"></div>'),
             groupTool: jQuery('<div class="group-tool"></div>'),
             subgroupTool: jQuery('<div class="subgroup-tool"></div>'),
+            subgroupSubgroupTool: jQuery('<div class="subgroup-subgroup-tool"></div>'),
             description: '<div>' +
                 '  <h4 class="indicator-msg-popup"></h4>' +
                 '  <p></p>' +
@@ -91,6 +92,11 @@ Oskari.clazz.define(
                 me._addSubgroupTools();
             });
 
+            // Subgroup tool added
+            me.service.on('subgroupsubgrouptool.added', function(data) {
+                me._addSubgroupSubgroupTools();
+            });
+
             me.service.on('jstree-contionalselect', function(data) {
                 me.selectNodeFromTree(data.node, data.event);
             });
@@ -134,18 +140,24 @@ Oskari.clazz.define(
                         me._addGroupTools();
                     } else if (data.type === 'subgroup') {
                         me._addSubgroupTools();
+                    } else {
+                        me._addSubgroupSubgroupTools();
                     }
                 } else {
                     var layerCount = me._mapLayerService.getAllLayerGroups(data.id).layers.length;
-                    me._mapLayerService.getAllLayerGroups(data.id).selectable = data.selectable;
+                    var group = me._mapLayerService.getAllLayerGroups(data.id);
+                    group.selectable = data.selectable;
+                    group.name = data.name;
                     var node = me.getJsTreeElement().jstree().get_node(data.type + '-' + data.id);
                     node.a_attr = opts.a_attr;
 
                     me.getJsTreeElement().jstree().rename_node(data.type + '-' + data.id, me.sb.getLocalizedProperty(data.name) + ' (' + layerCount + ')' + '<div class="' + data.type + '-tools"></div>');
                     if (data.type === 'group') {
                         me._addGroupTools(me.getJsTreeElement().find('#' + data.type + '-' + data.id));
-                    } else {
+                    } else if (data.type === 'subgroup') {
                         me._addSubgroupTools(me.getJsTreeElement().find('#' + data.type + '-' + data.id));
+                    } else {
+                        me._addSubgroupSubgroupTools(me.getJsTreeElement().find('#' + data.type + '-' + data.id));
                     }
                 }
             });
@@ -156,6 +168,8 @@ Oskari.clazz.define(
                     me._addGroupTools();
                 } else if (data.type === 'subgroup') {
                     me._addSubgroupTools();
+                } else {
+                    me._addSubgroupSubgroupTools();
                 }
             });
         },
@@ -215,6 +229,36 @@ Oskari.clazz.define(
                     subgrouptool.handler(jQuery(this), groupId, parentGroupId);
                 });
                 subgroupTools.append(tool);
+
+            });
+        },
+        /**
+         * Add subgroup subgroup tools
+         * @method  _addSubgroupSubgroupTools
+         * @param {Object} element jquery element, if not defined find all subgroup-tools
+         * @private
+         */
+        _addSubgroupSubgroupTools: function(element) {
+            var me = this;
+            var el = element || me.getJsTreeElement();
+            var subgroupSubgroupTools = el.find('.subgroup-subgroup-tools');
+            subgroupSubgroupTools.empty();
+            Object.keys(me.service.getSubgroupSubgroupTool()).forEach(function(key) {
+                var subgrouptool = me.service.getSubgroupSubgroupTool(key);
+                var tool = me.templates.subgroupSubgroupTool.clone();
+                tool.attr('data-id', key);
+                tool.attr('title', subgrouptool.options.tooltip);
+                tool.addClass(subgrouptool.options.cls);
+
+                tool.bind('click', function(evt) {
+                    evt.stopPropagation();
+                    jQuery(this).addClass('active');
+                    var parent = jQuery(this).parents('a.jstree-anchor');
+                    var groupId = parent.attr('data-group-id');
+                    var parentGroupId = parent.attr('data-parent-group-id');
+                    subgrouptool.handler(jQuery(this), groupId, parentGroupId);
+                });
+                subgroupSubgroupTools.append(tool);
 
             });
         },
@@ -983,7 +1027,7 @@ Oskari.clazz.define(
                         opts);
 
                     jsTreeData.push(jstreeObject);
-                    addLayers('subgroup-' + subgroup.id, subgroup.layers);
+                    addLayers('subgroup-subgroup-' + subgroup.id, subgroup.layers);
                 });
             };
 
@@ -1056,9 +1100,8 @@ Oskari.clazz.define(
             });
 
             me.getJsTreeElement().on('open_node.jstree', function(node) {
-                console.log(node);
-
                 me._addSubgroupTools();
+                me._addSubgroupSubgroupTools();
             });
         },
 

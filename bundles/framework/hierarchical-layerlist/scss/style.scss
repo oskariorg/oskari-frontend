@@ -620,6 +620,31 @@ div.hierarchical-layerlist {
 
                 }
             }
+
+            /* Subgroup subgroup tools */
+            div.subgroup-subgroup-tools {
+                float: right;
+
+                .subgroup-subgroup-tool {
+                    width: 26px;
+                    height:26px;
+                    float:left;
+                    margin-left:4px;
+                    margin-top: 4px;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    cursor: pointer;
+
+                    &.active {
+                        background-color: #ffde00;
+                    }
+
+                    &.edit-subgroup-subgroup {
+                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                    }
+
+                }
+            }
         }
         .jstree-wholerow {
             height: 40px;

@@ -557,7 +557,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         }
 
                         // Try to get subgroup subgroup
-                        for (var j = 0; j < g.groups.length; i++) {
+                        for (var j = 0; j < g.groups.length; j++) {
                             var a = g.groups[j];
                             var subgroupSubgroup = a.groups.filter(filterFunction)[0];
                             if (subgroupSubgroup) {
@@ -590,6 +590,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             for (var i = 0; i < allGroups.length; i++) {
                 var group = allGroups[i];
                 var foundedInSubgroups = false;
+                var foundedInSubgroupSubgroups = false;
                 // Check if layer is in main groups
                 var isInMainGroup = isLayerInGroup(group.layers);
                 if (isInMainGroup) {
@@ -598,18 +599,37 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
 
                 // check subgroups
-                for (var j = 0; group.groups.length; j++) {
+                for (var j = 0; j < group.groups.length; j++) {
                     var subgroup = group.groups[j];
-                    var isInSubGroup = isLayerInGroup(subgroup.layers);
-                    if (isInSubGroup) {
+
+                    var isInSubgroup = isLayerInGroup(subgroup.layers);
+                    if (isInSubgroup) {
                         groups.push(Oskari.getSandbox().getLocalizedProperty(group.name));
                         groups.push(Oskari.getSandbox().getLocalizedProperty(subgroup.name));
                         foundedInSubgroups = true;
                         break;
                     }
+                    // check subgroup subgroups
+                    if (subgroup.groups) {
+                        for (var k = 0; k < subgroup.groups.length; k++) {
+                            var subgroupSubgroup = subgroup.groups[k];
+                            var isInSubgroupSubgroup = isLayerInGroup(subgroupSubgroup.layers);
+                            if (isInSubgroupSubgroup) {
+                                groups.push(Oskari.getSandbox().getLocalizedProperty(group.name));
+                                groups.push(Oskari.getSandbox().getLocalizedProperty(subgroup.name));
+                                groups.push(Oskari.getSandbox().getLocalizedProperty(subgroupSubgroup.name));
+                                foundedInSubgroupSubgroups = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (foundedInSubgroupSubgroups) {
+                        break;
+                    }
                 }
 
-                if (foundedInSubgroups) {
+                if (foundedInSubgroups || foundedInSubgroupSubgroups) {
                     break;
                 }
 

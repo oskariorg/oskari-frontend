@@ -49,7 +49,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
 
     this.setLayer(layer);
 }, {
-    /** PUBLIC METHODS ******************************************************************************************************************/
+    /*******************************************************************************************************************************
+    /* PUBLIC METHODS
+    *******************************************************************************************************************************/
     /**
      * Get jQuery element
      * @method getElement
@@ -81,6 +83,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         me._binded = true;
     },
     /**
+     * Update breadcrumb
+     * @method updateBreadcrumb
+     */
+    updateBreadcrumb: function() {
+        this._setBreadcrumb();
+    },
+    /**
      * Add layer tool
      * @method addTool
      * @param  {String} toolId  tool identifier
@@ -109,7 +118,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         me._tools[toolId] = tool;
     },
 
-    /** PRIVATE METHODS ******************************************************************************************************************/
+    /*******************************************************************************************************************************
+    /* PRIVATE METHODS
+    *******************************************************************************************************************************/
 
     /**
      * Set visibility texts and handler
