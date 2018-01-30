@@ -19,7 +19,7 @@ function(instance, service) {
     this._tileExtensions = {};
     this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
     this._templates = {
-        extraSelection : _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div><div class="clear"></div></div>')
+        extraSelection : _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div></div>')
     };
 }, {
     /**
