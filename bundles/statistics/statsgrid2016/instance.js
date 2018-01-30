@@ -323,25 +323,45 @@ Oskari.clazz.define(
         getPublisherEnabledTools: function () {
             return this.enabledInPublisher;
         },
+        /**
+         * Check if the tool has been added to the array containing tool names opened in publisher
+         * @method publisherHasTool
+         * @param {String} tool tool name as string
+         */
+        publisherHasTool: function (tool) {
+            return this.enabledInPublisher.indexOf(tool) > -1;
+        },
+        /**
+         * toggles the specified flyout from publisher
+         * @method togglePublisherTools
+         * @param {String} tool tool name as string
+         */
         togglePublisherTools: function (tool) {
-            if ( this.enabledInPublisher.indexOf(tool) > -1 ) {
+            if ( this.publisherHasTool(tool) ) {
                 this.getTile().toggleFlyout( tool );
             }
         },
+        /**
+         * toggles the specified flyout from publisher
+         * @method showPublisherTools
+         * @param {String} tool tool name as string
+         * @param {boolean} enabled is the tool enabled or not
+         */
         showPublisherTools: function (tool, enabled) {
             var sandbox = this.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             this.getTile().getFlyoutManager().init();
 
-            if ( !this.togglePlugin ) {
-                this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
-                mapModule.registerPlugin(this.togglePlugin);
-                mapModule.startPlugin(this.togglePlugin);
-            }
             if ( !enabled ) {
-                this.enabledInPublisher.splice( this.enabledInPublisher[tool], 1 );
-                this.getTile().toggleFlyout( tool );
+                if ( !this.publisherHasTool(tool) ) {
+                    return;
+                } else {
+                    this.togglePlugin.showTool(tool, enabled);
+                }
+                if ( this.enabledInPublisher.length !== 0 ) {
+                    this.enabledInPublisher.splice( this.enabledInPublisher.indexOf(tool), 1 );
+                }
                 if ( this.togglePlugin && this.enabledInPublisher.length === 0 ) {
                     mapModule.unregisterPlugin(this.togglePlugin);
                     mapModule.stopPlugin(this.togglePlugin);
@@ -349,6 +369,11 @@ Oskari.clazz.define(
                 }
                 return;
             } else {
+                if ( !this.togglePlugin ) {
+                    this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
+                    mapModule.registerPlugin(this.togglePlugin);
+                    mapModule.startPlugin(this.togglePlugin);
+                }
                 this.enabledInPublisher.push(tool);
             }
             this.togglePlugin.showTool(tool, enabled);

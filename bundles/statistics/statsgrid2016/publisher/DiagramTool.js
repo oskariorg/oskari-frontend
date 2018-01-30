@@ -9,22 +9,21 @@ function() {},
 
     init: function (data) {
         var me = this;
-        if ( !data || !data.configuration[me.bundleName] ) {
-            return;
-        }
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if ( stats && this.isDisplayed(data) ) {
+        if (data && Oskari.util.keyExists(data, 'configuration.statsgrid.conf') && data.configuration.statsgrid.conf.diagram !== false) {
             me.setEnabled(true);
+        } else {
+            me.setEnabled(false);
         }
     },
     getTool: function(stateData){
         var me = this;
         if(!me.__tool) {
             me.__tool = {
-                id: 'Oskari.statistics.statsgrid.StatsGridBundleInstance',
+                id: 'Oskari.statistics.statsgrid.TogglePlugin',
                 title: 'displayDiagram',
                 config: {
-                    displayDiagram: true
+                    diagram: true
                 }
             };
          }
@@ -40,7 +39,6 @@ function() {},
             return;
         }
         stats.showPublisherTools(this.id, enabled);
-
     },
     /**
     * Get stats layer.
@@ -88,6 +86,9 @@ function() {},
         if(!statslayerOnMap || !statsGridState) {
             return null;
         }
+        if(!me.state.enabled) {
+            return null;
+        }
         return {
             configuration: {
                 statsgrid: {
@@ -102,7 +103,9 @@ function() {},
     stop : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
-            stats.showPublisherTools(this.id, false);
+            if ( stats.publisherHasTool(this.id) ) {
+                stats.showPublisherTools(this.id, false);
+            }
         }
     }
 }, {

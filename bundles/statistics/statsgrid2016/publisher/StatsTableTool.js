@@ -52,7 +52,7 @@ function() {
     *
     * @return founded stats layer, if not found then null
     */
-    _getStatsLayer: function(){
+    _getStatsLayer: function() {
         var me = this,
             selectedLayers = me.__sandbox.findAllSelectedMapLayers(),
             statsLayer = null,
@@ -143,7 +143,9 @@ function() {
     stop : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
-            stats.showPublisherTools(this.id, false);
+            if ( stats.publisherHasTool(this.id) ) {
+                stats.showPublisherTools(this.id, false);
+            }
         }
     }
 }, {
