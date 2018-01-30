@@ -90,7 +90,10 @@ Oskari.registerLocalization({
         },
         "manyLayersWarning": {
             "title": "Attention!",
-            "text": "The map currently has 10 or more map levels. If you continue, increasing the map level will cause performance problems!"
+            "text": "You are adding 10 or more layers to the map. If you continue, increasing the map layers will cause performance problems!"
+        },
+        "manyLayersWarningAlready": {
+            "text": "The map currently has 10 or more map layers. If you continue, increasing the map layers will cause performance problems!"
         }
     }
 });

@@ -749,6 +749,22 @@ Oskari.clazz.define(
 
             this.accordion.removeMessage();
         },
+        /**
+         * Has any classes
+         * @method  _hasAnyClass
+         * @param   {Object}     el      jQuery element
+         * @param   {Array}      classes checked classes
+         * @return  {Boolean}    true if el has any wanted classes
+         * @private
+         */
+        _hasAnyClass: function(el, classes) {
+            for (var i = 0; i < classes.length; i++) {
+                if (el.hasClass(classes[i])) {
+                    return true;
+                }
+            }
+            return false;
+        },
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
@@ -843,55 +859,79 @@ Oskari.clazz.define(
             var isOpen = tree.jstree().is_open(node);
             var target = jQuery(event.target);
             var nodeChildren = node.children;
-            var nodeChildrenLength = nodeChildren.length;
+            //var nodeChildrenLength = nodeChildren.length;
             var layerId = null;
-            if (!target.hasClass('jstree-checkbox') &&
-                !target.hasClass('layer-backendstatus-icon') &&
-                !target.hasClass('layer-info')) {
-                if (isOpen) {
-                    tree.jstree().close_node(node);
-                } else {
-                    tree.jstree().open_node(node);
-                }
-            } else if (target.hasClass('layer-backendstatus-icon') && node.type === 'layer') {
-                me._showMapLayerBackendStatus(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
-            } else if (target.hasClass('layer-info') && node.type === 'layer') {
-                me._showLayerMetaData(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
-            } else {
-                if (isChecked) {
-                    tree.jstree().uncheck_node(node);
-                    if (node.type === 'group' && nodeChildrenLength > 0) {
-                        for (var i = 0; i < nodeChildrenLength; ++i) {
-                            var child = tree.jstree().get_node(nodeChildren[i]);
-                            layerId = me._getNodeRealId(child);
-                            if (me.sb.isLayerAlreadySelected(layerId)) {
-                                me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
-                            }
-                        }
-                    } else if (node.type === 'layer') {
+
+            var allSelectedLayers = me.sb.findAllSelectedMapLayers();
+            var allSelectedLayersLength = allSelectedLayers.length;
+            var desc = jQuery(me.templates.description);
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+
+            switch (node.type) {
+                case 'layer':
+                    // Need open backend status
+                    if (target.hasClass('layer-backendstatus-icon')) {
+                        me._showMapLayerBackendStatus(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
+                    }
+                    // Need open metadata
+                    else if (target.hasClass('layer-info')) {
+                        me._showLayerMetaData(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
+                    } else if (isChecked) {
+                        tree.jstree().uncheck_node(node);
                         layerId = me._getNodeRealId(node);
                         if (me.sb.isLayerAlreadySelected(layerId)) {
                             me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
                         }
-                    }
-                } else {
-                    var allSelectedLayers = me.sb.findAllSelectedMapLayers();
-                    var allSelectedLayersLength = allSelectedLayers.length;
-                    var desc = jQuery(me.templates.description),
-                        dialog = Oskari.clazz.create(
-                            'Oskari.userinterface.component.Popup'
-                        ),
-                        okBtn = Oskari.clazz.create(
-                            'Oskari.userinterface.component.buttons.OkButton'
-                        ),
-                        cancelBtn = Oskari.clazz.create(
-                            'Oskari.userinterface.component.buttons.CancelButton'
-                        );
-                    if (node.type === 'group' && nodeChildrenLength > 0) {
-                        //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
-                        if ((nodeChildrenLength > 10 || allSelectedLayersLength > 10)) {
-
+                    } else {
+                        if (allSelectedLayersLength > 10) {
                             desc.find('p').text(me.localization.manyLayersWarning.text);
+                            okBtn.addClass('primary');
+                            okBtn.setHandler(function() {
+                                dialog.close(true);
+                                tree.jstree().check_node(node);
+                                var layerId = me._getNodeRealId(node);
+                                if (!me.sb.isLayerAlreadySelected(layerId)) {
+                                    me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
+                                }
+                            });
+                            cancelBtn.addClass('secondary');
+                            cancelBtn.setHandler(function() {
+                                dialog.close(true);
+                            });
+                            dialog.show(me.localization.manyLayersWarning.title, desc, [okBtn, cancelBtn]);
+                        } else {
+                            tree.jstree().check_node(node);
+                            layerId = me._getNodeRealId(node);
+                            if (!me.sb.isLayerAlreadySelected(layerId)) {
+                                me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
+                            }
+                        }
+                    }
+                    break;
+                case 'subgroup-subgroup':
+                case 'subgroup':
+                case 'group':
+                    if (isChecked) {
+                        tree.jstree().uncheck_node(node);
+                        nodeChildren.forEach(function(node) {
+                            var child = tree.jstree().get_node(node);
+                            layerId = me._getNodeRealId(child);
+                            if (me.sb.isLayerAlreadySelected(layerId)) {
+                                me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
+                            }
+                        });
+                    } else {
+                        //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
+                        if ((nodeChildren.length > 10 || allSelectedLayersLength >= 10)) {
+
+                            var text = me.localization.manyLayersWarning.text;
+                            if (allSelectedLayersLength >= 10) {
+                                text = me.localization.manyLayersWarningAlready.text;
+                            }
+
+                            desc.find('p').text(text);
                             okBtn.addClass('primary');
                             okBtn.setHandler(function() {
                                 dialog.close(true);
@@ -921,32 +961,8 @@ Oskari.clazz.define(
                                 }
                             });
                         }
-                    } else if (node.type === 'layer') {
-                        if (allSelectedLayersLength > 10) {
-                            desc.find('p').text(me.localization.manyLayersWarning.text);
-                            okBtn.addClass('primary');
-                            okBtn.setHandler(function() {
-                                dialog.close(true);
-                                tree.jstree().check_node(node);
-                                var layerId = me._getNodeRealId(node);
-                                if (!me.sb.isLayerAlreadySelected(layerId)) {
-                                    me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
-                                }
-                            });
-                            cancelBtn.addClass('secondary');
-                            cancelBtn.setHandler(function() {
-                                dialog.close(true);
-                            });
-                            dialog.show(me.localization.manyLayersWarning.title, desc, [okBtn, cancelBtn]);
-                        } else {
-                            tree.jstree().check_node(node);
-                            layerId = me._getNodeRealId(node);
-                            if (!me.sb.isLayerAlreadySelected(layerId)) {
-                                me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
-                            }
-                        }
                     }
-                }
+                    break;
             }
         },
         /**

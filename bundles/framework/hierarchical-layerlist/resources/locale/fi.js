@@ -90,7 +90,10 @@ Oskari.registerLocalization({
         },
         "manyLayersWarning": {
             "title": "Huomio!",
-            "text": "Kartalla tällä hetkellä 10 tai enemmän karttasoa. Jos jatkat, saattaa karttatason lisääminen aiheuttaa suorituskykyongelmia!"
+            "text": "Olet lisäämässä kartalle 10 tai enemmän karttasoa. Jos jatkat, saattaa karttatason lisääminen aiheuttaa suorituskykyongelmia!"
+        },
+        "manyLayersWarningAlready": {
+            "text": "Kartalla on tällä hetkellä 10 tai enemmän karttasoa. Jos jatkat, saattaa karttatason lisääminen aiheuttaa suorituskykyongelmia!"
         }
     }
 });
