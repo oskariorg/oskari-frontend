@@ -448,9 +448,6 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
 /* ********************************************
  * Statsgrid tile styles
  * ********************************************/
- .oskari-tile statsgrid oskari-tile-closed .statsgrid-functionality{
-   display: none !important;
-  }
 .oskari-tile.statsgrid .statsgrid-functionality {
   width: 95%;
   display: inline-flex;
