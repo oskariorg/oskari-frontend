@@ -8,6 +8,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         this.locale = this.getLocalization();
         this.sandbox = Oskari.getSandbox();
         this.service = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
+        this.layerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.group = Oskari.clazz.create('Oskari.admin.hierarchical-layerlist.Group', this.sandbox, this.locale);
     }, {
         /*******************************************************************************************************************************
@@ -25,25 +26,41 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, null, {
                     type: 'group'
                 });
-                /*var popupConf = me.group.getGroupAddingPopupConf(tool, -1, {
-                    locale: {
-                        fi: 'testi fi',
-                        en: 'testi en',
-                        sv: 'testi sv'
-                    },
-                    selectable: true
-                });*/
                 var popup = popupConf.popup;
                 var message = popupConf.message;
-                popupConf.popup.show(me.locale.groupTitles.addMainGroup, message, popupConf.buttons);
+                popupConf.popup.show(me.locale('groupTitles.addMainGroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
             }, {
                 cls: 'add-group',
-                tooltip: me.locale.tooltips.addMainGroup
+                tooltip: me.locale('tooltips.addMainGroup')
             });
         },
+        /**
+         * Add group tools
+         * @method  _addGroupTools
+         * @private
+         */
         _addGroupTools: function() {
             var me = this;
+            // Add edit tool to adding groups
+            me.service.addGroupTool('edit-group', function(tool, groupId) {
+                var group = me.layerService.getAllLayerGroups(groupId);
+                var options = {
+                    locale: group.name,
+                    selectable: group.selectable
+                };
+                options.type = 'group';
+
+                var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, null, options);
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale('groupTitles.editMainGroup'), message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'edit-group',
+                tooltip: me.locale('tooltips.editMainGroup')
+            });
+
             // Add new tool to adding sub-groups
             me.service.addGroupTool('add-subgroup', function(tool, parentId) {
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, parentId, {
@@ -52,11 +69,79 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
 
                 var popup = popupConf.popup;
                 var message = popupConf.message;
-                popupConf.popup.show(me.locale.groupTitles.addSubgroup, message, popupConf.buttons);
+                popupConf.popup.show(me.locale('groupTitles.addSubgroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
             }, {
                 cls: 'add-subgroup',
-                tooltip: me.locale.tooltips.addSubgroup
+                tooltip: me.locale('tooltips.addSubgroup')
+            });
+        },
+        /**
+         * Add subgroup tools
+         * @method  _addSubgroupTools
+         * @private
+         */
+        _addSubgroupTools: function() {
+            var me = this;
+            // Add edit tool to adding groups
+            me.service.addSubgroupTool('edit-subgroup', function(tool, groupId, parentId) {
+                var group = me.layerService.getAllLayerGroups(groupId);
+                var options = {
+                    locale: group.name,
+                    selectable: group.selectable
+                };
+                options.type = 'subgroup';
+
+                var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, parentId, options);
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale('groupTitles.editSubgroup'), message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'edit-subgroup',
+                tooltip: me.locale('tooltips.editSubgroup')
+            });
+
+            // Add new tool to adding sub-groups
+            me.service.addSubgroupTool('add-subgroup-subgroup', function(tool, parentId) {
+                var popupConf = me.group.getGroupAddingPopupConf(tool, null, parentId, {
+                    type: 'subgroup-subgroup'
+                });
+
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale('groupTitles.addSubgroup'), message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'add-subgroup-subgroup',
+                tooltip: me.locale('tooltips.addSubgroup')
+            });
+        },
+
+        /**
+         * Add subgroup  subgroup tools
+         * @method  _addSubgroupSubgroupTools
+         * @private
+         */
+        _addSubgroupSubgroupTools: function() {
+            var me = this;
+            // Add edit tool to adding groups
+            me.service.addSubgroupSubgroupTool('edit-subgroup-subgroup', function(tool, groupId, parentId) {
+                var group = me.layerService.getAllLayerGroups(groupId);
+                var options = {
+                    locale: group.name,
+                    selectable: group.selectable
+                };
+                options.type = 'subgroup-subgroup';
+
+                var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, parentId, options);
+                var popup = popupConf.popup;
+                var message = popupConf.message;
+                popupConf.popup.show(me.locale('groupTitles.editSubgroup'), message, popupConf.buttons);
+                popupConf.popup.makeModal();
+            }, {
+                cls: 'edit-subgroup-subgroup',
+                tooltip: me.locale('tooltips.editSubgroup')
             });
         },
         /**
@@ -81,10 +166,10 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         *******************************************************************************************************************************/
         getLocalization: function(key) {
             if (!this.locale) {
-                this.locale = Oskari.getLocalization(this.getName());
+                this.locale = Oskari.getMsg.bind(null, this.getName());
             }
             if (key) {
-                return this.locale[key];
+                return this.locale(key);
             }
             return this.locale;
         },
@@ -98,24 +183,24 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             me.service.setAdmin(true);
             me._addMainTools();
             me._addGroupTools();
+            me._addSubgroupTools();
+            me._addSubgroupSubgroupTools();
             me._addOptions();
             me._addEventHandlers();
         },
 
         _addEventHandlers: function() {
             var me = this;
-            jQuery(document).on("dnd_stop.vakata", function(event, data){
+            jQuery(document).on("dnd_stop.vakata", function(event, data) {
                 //If the drag target group is not open, we have to open it.
                 //Otherwise we can't get the necessary information of the drag operation.
                 var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop("id").split("_")[0]);
-                if(!data.data.origin.is_open(targetGroup)) {
+                if (!data.data.origin.is_open(targetGroup)) {
                     data.data.origin.open_node(targetGroup);
                 }
                 var draggedNode = data.data.origin.get_node(data.element);
-                //console.log(draggedNode);
                 var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
                 var parentNode = data.data.origin.get_node(draggedNode.parent);
-                //console.log(parentNode);
                 var draggedNodeId = me._findJSTreeNodeActualId(draggedNode.id);
                 var draggedNodeNewParentId = me._findJSTreeNodeActualId(parentNode.id);
                 var draggedNodeOldParentId = me._findJSTreeNodeActualId(originalParentNode.id);
@@ -127,7 +212,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 ajaxData.nodeIndex = draggedNodeNewIndex;
                 ajaxData.oldGroupId = draggedNodeOldParentId;
                 ajaxData.targetGroupId = draggedNodeNewParentId;
-                console.dir(ajaxData);
                 me._saveOrder(ajaxData);
             });
         },

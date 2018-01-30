@@ -14,10 +14,12 @@ Oskari.clazz.define(
     function(instance) {
         this.instance = instance;
         this.locale = this.instance.getLocalization('SelectedLayersTab');
+        this.service = this.instance.layerlistExtenderService;
         this.sb = this.instance.getSandbox();
         this.id = 'hierarchical-layerlist-selected-layers-tab';
 
         this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
+        this._layerService = this.sb.getService('Oskari.mapframework.service.MapLayerService');
 
         this._templates = {
             layerlist: jQuery('<ul class="layerlist sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>')
@@ -28,21 +30,33 @@ Oskari.clazz.define(
 
         this._createUI();
         this._bindOskariEvents();
+        this._bindExtenderServiceListeners();
     }, {
+        /*******************************************************************************************************************************
+        /* PRIVATE METHODS
+        *******************************************************************************************************************************/
+
         /**
-         * @method @public getTabPanel Gets tab panel
-         * @return {Oskari.userinterface.component.TabPanel} selected layer tab panel
+         * Bind extender service event listeners
+         * @method  _bindExtenderServiceListeners
+         * @private
          */
-        getTabPanel: function() {
-            return this.tabPanel;
-        },
-        updateSelectedLayers: function() {
+        _bindExtenderServiceListeners: function() {
             var me = this;
-            me._setSelectedLayers();
-            me._updateLayerCount();
+            me.service.on('group-added', function(data) {
+                var groupLayers = me._layerService.getAllLayerGroups(data.id).layers;
+                if (data.method === 'update') {
+                    Object.keys(me._layers).forEach(function(key) {
+                        me._layers[key].updateBreadcrumb();
+                    });
+                }
+            });
         },
+
         /**
-         * @return {[type]}
+         * Updata selected layers count
+         * @method  _updateLayerCount
+         * @private
          */
         _updateLayerCount: function() {
             var me = this;
@@ -84,7 +98,11 @@ Oskari.clazz.define(
 
             me._updateContainerHeight(jQuery('#mapdiv').height());
         },
-
+        /**
+         * Set selected layers
+         * @method  _setSelectedLayers
+         * @private
+         */
         _setSelectedLayers: function() {
             var me = this;
             var selectedLayers = me.sb.findAllSelectedMapLayers();
@@ -95,6 +113,12 @@ Oskari.clazz.define(
 
         },
 
+        /**
+         * Calculate container height during sort
+         * @method  _calculateContainerHeightDuringSort
+         * @param   {Integer}                            height heigt
+         * @private
+         */
         _calculateContainerHeightDuringSort: function(height) {
             var me = this;
             var container = me.tabPanel.getContainer();
@@ -109,6 +133,14 @@ Oskari.clazz.define(
             });
         },
 
+        /**
+         * Add layer to selected
+         * @method  _addLayer
+         * @param   {Object}  layer           Oskari layer
+         * @param   {Boolean} keepLayersOrder keep layers order
+         * @param   {Boolean} forceAdd        force adding
+         * @private
+         */
         _addLayer: function(layer, keepLayersOrder, forceAdd) {
             var me = this;
             if (me._layers[layer.getId()]) {
@@ -201,11 +233,22 @@ Oskari.clazz.define(
             }
         },
 
+        /**
+         * Update container height when wmap size is changed
+         * @method  _updateContainerHeight
+         * @param   {Integer}               height map height
+         * @private
+         */
         _updateContainerHeight: function(height) {
             var me = this;
             jQuery(me.tabPanel.getContainer()).css('max-height', (height * 0.7) + 'px');
         },
 
+        /**
+         * Bind oskari event
+         * @method  _bindOskariEvents
+         * @private
+         */
         _bindOskariEvents: function() {
             var me = this;
             me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
@@ -224,7 +267,9 @@ Oskari.clazz.define(
 
             me._notifierService.on('MapLayerVisibilityChangedEvent', function(evt) {
                 var layer = evt.getMapLayer();
-                me._layers[layer.getId()].setLayer(layer);
+                if (me._layers[layer.getId()]) {
+                    me._layers[layer.getId()].setLayer(layer);
+                }
             });
 
             me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function(evt) {
@@ -242,6 +287,13 @@ Oskari.clazz.define(
 
 
         },
+        /**
+         * Blink wanted element
+         * @method  _blink
+         * @param   {Object} element jQuery object
+         * @param   {Integer} count   how many times blinked
+         * @private
+         */
         _blink: function(element, count) {
             var me = this;
             if (!element) {
@@ -265,6 +317,23 @@ Oskari.clazz.define(
                     }
                 });
             });
+        },
+
+        /*******************************************************************************************************************************
+        /* PUBLIC METHODS
+        *******************************************************************************************************************************/
+
+        /**
+         * @method @public getTabPanel Gets tab panel
+         * @return {Oskari.userinterface.component.TabPanel} selected layer tab panel
+         */
+        getTabPanel: function() {
+            return this.tabPanel;
+        },
+        updateSelectedLayers: function() {
+            var me = this;
+            me._setSelectedLayers();
+            me._updateLayerCount();
         }
     }
 );

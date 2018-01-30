@@ -585,6 +585,64 @@ div.hierarchical-layerlist {
                         background-image:url("../images/glyphicons/glyphicons-433-plus.png");
                     }
 
+                    &.edit-group {
+                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                    }
+
+                }
+            }
+
+            /* Subgroup tools */
+            div.subgroup-tools {
+                float: right;
+
+                .subgroup-tool {
+                    width: 26px;
+                    height:26px;
+                    float:left;
+                    margin-left:4px;
+                    margin-top: 4px;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    cursor: pointer;
+
+                    &.active {
+                        background-color: #ffde00;
+                    }
+
+                    &.add-subgroup-subgroup {
+                        background-image:url("../images/glyphicons/glyphicons-433-plus.png");
+                    }
+
+                    &.edit-subgroup {
+                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                    }
+
+                }
+            }
+
+            /* Subgroup subgroup tools */
+            div.subgroup-subgroup-tools {
+                float: right;
+
+                .subgroup-subgroup-tool {
+                    width: 26px;
+                    height:26px;
+                    float:left;
+                    margin-left:4px;
+                    margin-top: 4px;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    cursor: pointer;
+
+                    &.active {
+                        background-color: #ffde00;
+                    }
+
+                    &.edit-subgroup-subgroup {
+                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                    }
+
                 }
             }
         }

@@ -493,6 +493,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                             me.addLayer(mapLayer, true);
                         }
                     });
+
+                    subgroup.groups.forEach(function(subgroupSubgroup) {
+                        subgroupSubgroup.layers.forEach(function(layer) {
+                            var mapLayer = me.createMapLayer(layer);
+                            if (!mapLayer) {
+                                // unsupported map type, skip
+                                // continue with next layer
+                                return;
+                            }
+
+                            if (me._reservedLayerIds[mapLayer.getId()] !== true) {
+                                me.addLayer(mapLayer, true);
+                            }
+                        });
+                    });
                 });
             });
             me._allLayersAjaxLoaded = true;
@@ -522,9 +537,38 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /**
          * @method getAllLayerGroups
          * Returns an array of layer groups added to the service
+         * @param {String|Integer} id if defined return only wanted group
          * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
-        getAllLayerGroups: function() {
+        getAllLayerGroups: function(id) {
+            if (id) {
+                var filterFunction = function(group) {
+                    return group.id == id;
+                };
+                var group = this._layerGroups.filter(filterFunction)[0];
+                // group not found
+                // try to get subgroup
+                if (!group) {
+                    for (var i = 0; i < this._layerGroups.length; i++) {
+                        var g = this._layerGroups[i];
+                        var subgroup = g.groups.filter(filterFunction)[0];
+                        if (subgroup) {
+                            return subgroup;
+                        }
+
+                        // Try to get subgroup subgroup
+                        for (var j = 0; j < g.groups.length; j++) {
+                            var a = g.groups[j];
+                            var subgroupSubgroup = a.groups.filter(filterFunction)[0];
+                            if (subgroupSubgroup) {
+                                return subgroupSubgroup;
+                            }
+                        }
+                    }
+
+                }
+                return group;
+            }
             return this._layerGroups;
         },
 
@@ -546,6 +590,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             for (var i = 0; i < allGroups.length; i++) {
                 var group = allGroups[i];
                 var foundedInSubgroups = false;
+                var foundedInSubgroupSubgroups = false;
                 // Check if layer is in main groups
                 var isInMainGroup = isLayerInGroup(group.layers);
                 if (isInMainGroup) {
@@ -554,18 +599,37 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
 
                 // check subgroups
-                for (var j = 0; group.groups.length; j++) {
+                for (var j = 0; j < group.groups.length; j++) {
                     var subgroup = group.groups[j];
-                    var isInSubGroup = isLayerInGroup(subgroup.layers);
-                    if (isInSubGroup) {
+
+                    var isInSubgroup = isLayerInGroup(subgroup.layers);
+                    if (isInSubgroup) {
                         groups.push(Oskari.getSandbox().getLocalizedProperty(group.name));
                         groups.push(Oskari.getSandbox().getLocalizedProperty(subgroup.name));
                         foundedInSubgroups = true;
                         break;
                     }
+                    // check subgroup subgroups
+                    if (subgroup.groups) {
+                        for (var k = 0; k < subgroup.groups.length; k++) {
+                            var subgroupSubgroup = subgroup.groups[k];
+                            var isInSubgroupSubgroup = isLayerInGroup(subgroupSubgroup.layers);
+                            if (isInSubgroupSubgroup) {
+                                groups.push(Oskari.getSandbox().getLocalizedProperty(group.name));
+                                groups.push(Oskari.getSandbox().getLocalizedProperty(subgroup.name));
+                                groups.push(Oskari.getSandbox().getLocalizedProperty(subgroupSubgroup.name));
+                                foundedInSubgroupSubgroups = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (foundedInSubgroupSubgroups) {
+                        break;
+                    }
                 }
 
-                if (foundedInSubgroups) {
+                if (foundedInSubgroups || foundedInSubgroupSubgroups) {
                     break;
                 }
 

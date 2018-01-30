@@ -6,16 +6,21 @@ Oskari.registerLocalization({
             "add": "Tillägg",
             "cancel": "Tillbaka",
             "update": "Uppdatera",
-            "delete": "Ta bort"
+            "delete": "Ta bort",
+            "ok": "Ok"
         },
         "tooltips": {
             "addMainGroup": "Lägg till huvudgrupp",
-            "addSubgroup": "Lägg till undergrupp"
+            "addSubgroup": "Lägg till undergrupp",
+            "editMainGroup": "Huvudgruppsnamn",
+            "editSubgroup": "Redigera undergrupp"
         },
         "groupTitles": {
             "addMainGroup": "Huvudgruppsnamn",
             "addSubgroup": "Lägg till undergrupp",
-            "localePrefix": "Namnet på"
+            "localePrefix": "Namnet på",
+            "editMainGroup": "Huvudgruppsnamn",
+            "editSubgroup": "Redigera undergrupp"
         },
         "selectableGroup": "selektionsgrupp",
         "errors": {
@@ -26,12 +31,30 @@ Oskari.registerLocalization({
             "groupnameSave": {
                 "title": "Gruppbesparing misslyckades",
                 "message": "Gruppbesparing misslyckades, försök igen senare"
-            }
+            },
+            "groupnameDeleteCheckLayers": {
+                "title": "Kontrollera grupplagren",
+                "message": "Gruppen har lager eller undergrupper, flyttar dem under den andra gruppen och tar sedan bort gruppen."
+            },
+            "groupnameDelete": {
+                "title": "Gruppens borttagning misslyckades",
+                "message": "Gruppens borttagning misslyckades, försök igen senare"
+            },
         },
         "succeeses": {
             "groupnameSave": {
                 "title": "Gruppbesparingar var framgångsrika",
                 "message": "Gruppbesparingar var framgångsrika"
+            },
+            "groupnameDelete": {
+                "title": "Gruppborttagning lyckades",
+                "message": "Gruppborttagning lyckades"
+            }
+        },
+        "confirms": {
+            "groupDelete": {
+                "title": "Vill du ta bort",
+                "message": "Vill du ta bort {groupname} grupp ?"
             }
         }
     }
