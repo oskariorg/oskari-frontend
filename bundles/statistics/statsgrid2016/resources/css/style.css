@@ -448,12 +448,18 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
 /* ********************************************
  * Statsgrid tile styles
  * ********************************************/
+ .oskari-tile statsgrid oskari-tile-closed .statsgrid-functionality{
+   display: none !important;
+  }
 .oskari-tile.statsgrid .statsgrid-functionality {
   width: 95%;
   display: inline-flex;
   display: -ms-inline-flexbox;
   align-items: center;
   margin-left: 6px; }
+  .oskari-tile.statsgrid .statsgrid-functionality.hidden {
+    display: none;
+  }
   .oskari-tile.statsgrid .statsgrid-functionality .icon {
     width: 30px;
     height: 30px;
@@ -464,8 +470,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   .oskari-tile.statsgrid .statsgrid-functionality .text {
     margin-left: 4px;
     font-weight: bold;
-    font-size: 12px;
-    vertical-align: middle; }
+    font-size: 12px; }
   .oskari-tile.statsgrid .statsgrid-functionality.material-selected .icon {
     background-color: #ffd400; }
   .oskari-tile.statsgrid .statsgrid-functionality.table .icon {
