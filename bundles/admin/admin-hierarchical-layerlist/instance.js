@@ -155,7 +155,8 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             // Add Drag & drop plugin
             me.service.addLayerlistOption('plugins', ['checkbox', 'changed', 'wholerow', 'types', 'search', 'state', 'conditionalselect', 'dnd'], false);
             me.service.addLayerlistOption('dnd', {
-                use_html5: true
+                use_html5: true,
+                inside_pos: 'last'
             });
         },
 
@@ -178,7 +179,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         start: function() {
             var me = this;
             me.sandbox.register(this);
-
             // set admin configured
             me.service.setAdmin(true);
             me._addMainTools();
@@ -186,11 +186,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             me._addSubgroupTools();
             me._addSubgroupSubgroupTools();
             me._addOptions();
-            //Doesn't work.
-            /*me.service.addEventHandler("dnd_stop.vakata", function(event, data){
-                console.log(event);
-                console.log(data);
-            });*/
+            me._addEventHandlers();
+        },
+
+        _addEventHandlers: function() {
+            var me = this;
             jQuery(document).on("dnd_stop.vakata", function(event, data) {
                 //If the drag target group is not open, we have to open it.
                 //Otherwise we can't get the necessary information of the drag operation.
@@ -199,30 +199,25 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     data.data.origin.open_node(targetGroup);
                 }
                 var draggedNode = data.data.origin.get_node(data.element);
-                //console.log(draggedNode);
+                var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
                 var parentNode = data.data.origin.get_node(draggedNode.parent);
-                //console.log(parentNode);
-                var draggedNodeId = draggedNode.id.split("-")[1];
-                var draggedNodeNewParentId = parentNode.id.split("-")[1];
+                var draggedNodeId = me._findJSTreeNodeActualId(draggedNode.id);
+                var draggedNodeNewParentId = me._findJSTreeNodeActualId(parentNode.id);
+                var draggedNodeOldParentId = me._findJSTreeNodeActualId(originalParentNode.id);
                 //Get the new index inside the group's children
                 var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
-                if (draggedNode.type === 'layer') {
-                    //console.log("TASOA "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
-                } else if (draggedNode.type === 'subgroup') {
-                    //console.log("ALIRYHMÄÄ "+draggedNodeId+" RAAHATTU RYHMÄN "+draggedNodeNewParentId+" ALLE SIJAINTIIN "+draggedNodeNewIndex);
-                }
-                var data = {};
-                data.nodeId = draggedNodeId;
-                data.nodeIndex = draggedNodeNewIndex;
-                data.targetGroupId = draggedNodeNewParentId;
-                me._saveOrder(data);
-                /*var nodeItemId = draggedNode.id.split("-")[1];
-                console.log("Dragged node: "+nodeItemId);
-                var newTargetId = draggedNode.parent.split("-")[1];
-                console.log("Target node: "+newTargetId);*/
+                var ajaxData = {};
+                ajaxData.type = draggedNode.type;
+                ajaxData.nodeId = draggedNodeId;
+                ajaxData.nodeIndex = draggedNodeNewIndex;
+                ajaxData.oldGroupId = draggedNodeOldParentId;
+                ajaxData.targetGroupId = draggedNodeNewParentId;
+                me._saveOrder(ajaxData);
             });
+        },
 
-
+        _findJSTreeNodeActualId: function(nodeId) {
+            return nodeId.split("-")[1];
         },
 
         /**
