@@ -749,22 +749,6 @@ Oskari.clazz.define(
 
             this.accordion.removeMessage();
         },
-        /**
-         * Has any classes
-         * @method  _hasAnyClass
-         * @param   {Object}     el      jQuery element
-         * @param   {Array}      classes checked classes
-         * @return  {Boolean}    true if el has any wanted classes
-         * @private
-         */
-        _hasAnyClass: function(el, classes) {
-            for (var i = 0; i < classes.length; i++) {
-                if (el.hasClass(classes[i])) {
-                    return true;
-                }
-            }
-            return false;
-        },
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
