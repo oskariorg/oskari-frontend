@@ -17,6 +17,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
         this.notifierService = null;
         this.layerlistExtenderService = null;
     }, {
+        _bindExtenderServiceListeners: function() {
+            var me = this;
+            me.layerlistExtenderService.on('admin-layer', function(data) {
+                me._loadLayers();
+            });
+        },
         /**
          * @static
          * @property __name
@@ -80,9 +86,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 sandboxName = conf ? conf.sandbox : 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 request,
-                mapLayerService,
-                successCB,
-                failureCB,
                 p;
 
             if (me.started) {
@@ -117,28 +120,36 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             // draw ui
             me.createUi();
 
-            mapLayerService = me.sandbox.getService(
-                'Oskari.mapframework.service.MapLayerService'
-            );
+
             /*mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox, sandbox.getAjaxUrl('GetHierarchicalMapLayerGroups') + '&lang=' + Oskari.getLang());
             sandbox.registerService(mapLayerService);*/
 
             sandbox.registerAsStateful(me.mediator.bundleId, me);
 
-            successCB = function() {
+
+
+            this._updateAccordionHeight(jQuery('#mapdiv').height());
+            this._registerForGuidedTour();
+
+            this._bindExtenderServiceListeners();
+            this._loadLayers();
+        },
+        _loadLayers: function() {
+            var me = this;
+            var mapLayerService = me.sandbox.getService(
+                'Oskari.mapframework.service.MapLayerService'
+            );
+            var successCB = function() {
                 // massive update so just recreate the whole ui
                 //me.plugins['Oskari.userinterface.Flyout'].populateLayers();
                 // added through maplayerevent
                 //
                 me.plugins['Oskari.userinterface.Flyout'].updateSelectedLayers();
             };
-            failureCB = function() {
+            var failureCB = function() {
                 alert(me.getLocalization('errors').loadFailed);
             };
             mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB);
-
-            this._updateAccordionHeight(jQuery('#mapdiv').height());
-            this._registerForGuidedTour();
         },
         /**
          * @method init

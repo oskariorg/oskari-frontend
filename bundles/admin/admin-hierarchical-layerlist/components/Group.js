@@ -4,6 +4,13 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
     this.service = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
     this.layerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 }, {
+    /*******************************************************************************************************************************
+    /* PRIVATE METHODS
+    *******************************************************************************************************************************/
+
+    /*******************************************************************************************************************************
+    /* PUBLIC METHODS
+    *******************************************************************************************************************************/
     /**
      * Gets popup configuration obhject
      * @method getGroupAddingPopupConf
@@ -255,5 +262,5 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
                 me.service.trigger('group-deleted', response);
             }
         });
-    },
+    }
 });

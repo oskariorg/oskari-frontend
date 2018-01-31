@@ -34,6 +34,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundle",
                 "type": "text/javascript",
                 "src": "../../../../bundles/admin/admin-hierarchical-layerlist/components/Group.js"
             }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/components/Layer.js"
+            }, {
                 "type": "text/css",
                 "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/css/style.css"
             }],

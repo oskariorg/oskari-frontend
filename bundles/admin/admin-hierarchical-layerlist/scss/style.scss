@@ -70,3 +70,205 @@ $errorColor: lighten(#ff0000, 20%);
         }
     }
 }
+
+.oskari-flyout {
+    &.admin-hierarchical-layerlist-add-layer {
+        width: 50%;
+        max-height: 80%;
+
+
+        div.oskari-flyoutcontentcontainer {
+            .icon-close {
+                display: inline-block;
+                opacity: 0;
+                position: absolute;
+                top: 9px;
+                right: 10px;
+                margin-left: 0;
+                cursor: pointer;
+            }
+
+            div.admin-add-layer {
+                float: left;
+                margin-right: 5px;
+                margin-top: 3px;
+                margin-left:10px;
+
+                .add-class-grouping {
+                    font-weight: bold;
+                    font-size: 130%;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                }
+
+                input[type=checkbox] {
+                    margin-top:0;
+                }
+
+                .input-controls {
+                    position: relative;
+                    margin-right: 5px;
+                }
+
+                .opacity-slider-tool {
+                    width: 215px;
+                }
+                .layout-slider {
+                    width: 140px;
+                    float: left;
+                    margin-top: 6px;
+                }
+                .opacity-slider {
+                    float: right;
+                    line-height: 25px;
+
+                    input {
+                        float: left;
+                        margin-right: 5px;
+                        margin-top: 0;
+                    }
+                }
+                .left-tools {
+                    .layer-opacity {
+                        display: inline-block;
+                        background-image: url(../images/opacity_slider.png);
+                        background-repeat: no-repeat;
+                        background-position-y: 3px;
+                    }
+                }
+
+                div.add-layer-grouping {
+                    font-weight: bold;
+                    font-size: 130%;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                }
+
+                div.add-style-send {
+                    div.add-layer-button-area {
+                        margin-left: 9em;
+                        min-width: 220px;
+                        div.input-controls {
+                            width:100%;
+                        }
+                    }
+                }
+
+                div.add-layer-style-import-block {
+                    display: none;
+                    margin: 8px;
+                    border: 1pt solid #c0d0d0;
+                    padding: 10px;
+                }
+
+                div.add-group-record,div.add-layer-record,div.add-class-record {
+                    width: 100%;
+                    margin-bottom: 8px;
+                    overflow: hidden;
+                    position: relative;
+
+                    div.add-class-label-area {
+                        display: table;
+                        float: left;
+
+                        .add-class-label {
+                            font-weight: bold;
+                            width: 75px;
+                            display: table-cell;
+                            vertical-align: middle;
+                        }
+                    }
+
+                    input {
+                        float: left;
+                        margin-right: 5px;
+                        margin-top: 3px;
+                    }
+
+                    &.capabilities {
+                        div.add-layer-input-area {
+                            max-height: 250px;
+                            overflow: auto;
+                        }
+                        ul {
+                            margin: 0 20px 5px 20px;
+                            li {
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    div.add-class-input-area {
+                        margin-left: 9em;
+                        min-width: 220px;
+                    }
+
+                    div.add-layer-label-area {
+                        display: table;
+                        float: left;
+
+                        label.add-layer-label {
+                            font-weight: bold;
+                            width: 75px;
+                            display: table-cell;
+                            vertical-align: middle;
+                        }
+
+                        label.add-class-label {
+                            font-weight: bold;
+                            width: 75px;
+                            display: table-cell;
+                            vertical-align: middle;
+                        }
+                    }
+
+                    div.add-layer-input-area, div.add-class-input-area {
+
+
+
+                        div.add-class-input-area {
+                            margin-left: 9em;
+                            min-width: 220px;
+                        }
+
+
+                        margin-left: 9em;
+                        min-width: 220px;
+
+                        div.add-layer-text {
+                            height:30px;
+                        }
+
+                        &.adjacent {
+                            .input-controls {
+                                float: left;
+                            }
+                        }
+                        .input-controls {
+                            .add-layer-input {
+
+                                &.mid {
+                                    width: 217px;
+                                    float: left;
+                                }
+                                &.long {
+                                    width: 297px;
+                                }
+                            }
+                        }
+
+                        select {
+                            width: 309px;
+                            padding: 8px 10px 8px 10px;
+                            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+                            -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+                            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+                            display: block;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}

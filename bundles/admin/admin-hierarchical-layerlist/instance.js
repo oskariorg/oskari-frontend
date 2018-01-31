@@ -10,6 +10,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         this.service = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
         this.layerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.group = Oskari.clazz.create('Oskari.admin.hierarchical-layerlist.Group', this.sandbox, this.locale);
+        this.layer = Oskari.clazz.create('Oskari.admin.hierarchical-layerlist.Layer', this, this.sandbox, this.locale);
     }, {
         /*******************************************************************************************************************************
         /* PRIVATE METHODS
@@ -42,6 +43,16 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          */
         _addGroupTools: function() {
             var me = this;
+
+            // Add layer add tools
+            me.service.addGroupTool('add-layer', function(tool, groupId, layerId) {
+                var options = {};
+                me.layer.showLayerAddPopup(tool, layerId, groupId, options);
+            }, {
+                cls: 'add-layer',
+                tooltip: me.locale('tooltips.addLayer')
+            });
+
             // Add edit tool to adding groups
             me.service.addGroupTool('edit-group', function(tool, groupId) {
                 var group = me.layerService.getAllLayerGroups(groupId);
@@ -75,6 +86,8 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 cls: 'add-subgroup',
                 tooltip: me.locale('tooltips.addSubgroup')
             });
+
+
         },
         /**
          * Add subgroup tools
@@ -178,6 +191,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         },
         start: function() {
             var me = this;
+            if (!me.service) {
+                return;
+            }
             me.sandbox.register(this);
             // set admin configured
             me.service.setAdmin(true);

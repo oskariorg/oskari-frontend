@@ -589,6 +589,10 @@ div.hierarchical-layerlist {
                         background-image:url("../images/glyphicons/glyphicons-151-edit.png");
                     }
 
+                    &.add-layer {
+                        background-image:url("../images/glyphicons/glyphicons-191-plus-sign.png");
+                    }
+
                 }
             }
 
@@ -618,6 +622,10 @@ div.hierarchical-layerlist {
                         background-image:url("../images/glyphicons/glyphicons-151-edit.png");
                     }
 
+                    &.add-layer {
+                        background-image:url("../images/glyphicons/glyphicons-191-plus-sign.png");
+                    }
+
                 }
             }
 
@@ -641,6 +649,10 @@ div.hierarchical-layerlist {
 
                     &.edit-subgroup-subgroup {
                         background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                    }
+
+                    &.add-layer {
+                        background-image:url("../images/glyphicons/glyphicons-191-plus-sign.png");
                     }
 
                 }
