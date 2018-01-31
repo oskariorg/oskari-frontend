@@ -25,6 +25,9 @@ div.hierarchical-layerlist span.layer label.layer-title {
   font-size: 12px; }
 div.hierarchical-layerlist span.layer span.layer-tools {
   float: right; }
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist span.layer span.layer-tools {
+    margin-top: -30px; } }
 div.hierarchical-layerlist span.layer span.layer-icon {
   float: left;
   width: 16px;
@@ -62,64 +65,6 @@ div.hierarchical-layerlist span.layer span.backendstatus-unknown {
 div.hierarchical-layerlist span.layer span.backendstatus-unstable {
   height: 20px !important;
   margin-bottom: 2px; }
-div.hierarchical-layerlist div.layer {
-  padding: 6px 10px 6px 40px;
-  background-color: #ffffff;
-  clear: both;
-  /* Default line height is too high, make it so the text just fits */
-  min-height: 14px;
-  line-height: 14px; }
-  div.hierarchical-layerlist div.layer:nth-child(even) {
-    background-color: #f3f3f3; }
-  div.hierarchical-layerlist div.layer input {
-    float: left;
-    margin-right: 5px; }
-  div.hierarchical-layerlist div.layer input[type=checkbox] {
-    margin-top: -2px; }
-  div.hierarchical-layerlist div.layer label.layer-title {
-    /* Let's just imagine this is tabular data... */
-    font-size: 12px; }
-  div.hierarchical-layerlist div.layer div.layer-tools {
-    float: right; }
-  div.hierarchical-layerlist div.layer div.layer-icon {
-    float: left;
-    width: 16px;
-    height: 16px;
-    background-repeat: no-repeat; }
-  div.hierarchical-layerlist div.layer div.layer-info {
-    width: 16px;
-    height: 16px;
-    margin-left: 5px;
-    float: right; }
-  div.hierarchical-layerlist div.layer div.layer-backendstatus-icon {
-    float: left;
-    width: 20px;
-    height: 16px;
-    margin-right: 4px;
-    background-repeat: no-repeat; }
-  div.hierarchical-layerlist div.layer div.backendstatus-down {
-    height: 20px !important;
-    margin-bottom: 2px;
-    margin-top: -2px;
-    cursor: pointer; }
-  div.hierarchical-layerlist div.layer div.backendstatus-maintenance {
-    height: 20px !important;
-    margin-bottom: 2px;
-    margin-top: -2px;
-    cursor: pointer; }
-  div.hierarchical-layerlist div.layer div.backendstatus-ok {
-    height: 20px !important;
-    margin-bottom: 2px;
-    margin-top: -2px;
-    cursor: pointer; }
-  div.hierarchical-layerlist div.layer div.backendstatus-unknown {
-    height: 20px !important;
-    margin-bottom: 2px;
-    margin-top: -2px; }
-  div.hierarchical-layerlist div.layer div.backendstatus-unstable {
-    height: 20px !important;
-    margin-bottom: 2px;
-    margin-top: -2px; }
 div.hierarchical-layerlist div.layerGroup {
   background-color: #f3f3f3;
   border: 1px solid #c0d0d0;
@@ -355,9 +300,12 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     /* Group tools */
     /* Subgroup tools */
     /* Subgroup subgroup tools */ }
-    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools {
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools {
+    margin-top: -30px; } }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools {
       float: right; }
-      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools .group-tool {
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool {
         width: 26px;
         height: 26px;
         float: left;
@@ -366,15 +314,19 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
         background-repeat: no-repeat;
         background-position: center center;
         cursor: pointer; }
-        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools .group-tool.active {
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.active {
           background-color: #ffde00; }
-        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools .group-tool.add-subgroup {
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.add-subgroup {
           background-image: url("../images/glyphicons/glyphicons-433-plus.png"); }
-        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.group-tools .group-tool.edit-group {
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.edit-group {
           background-image: url("../images/glyphicons/glyphicons-151-edit.png"); }
-    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-tools {
-      float: right; }
-      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-tools .subgroup-tool {
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools {
+    margin-top: -30px; } }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools {
+      float: right;
+      display: inline; }
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool {
         width: 26px;
         height: 26px;
         float: left;
@@ -383,15 +335,19 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
         background-repeat: no-repeat;
         background-position: center center;
         cursor: pointer; }
-        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-tools .subgroup-tool.active {
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.active {
           background-color: #ffde00; }
-        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-tools .subgroup-tool.add-subgroup-subgroup {
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.add-subgroup-subgroup {
           background-image: url("../images/glyphicons/glyphicons-433-plus.png"); }
-        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-tools .subgroup-tool.edit-subgroup {
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.edit-subgroup {
           background-image: url("../images/glyphicons/glyphicons-151-edit.png"); }
-    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-subgroup-tools {
-      float: right; }
-      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-subgroup-tools .subgroup-subgroup-tool {
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools {
+    margin-top: -30px; } }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools {
+      float: right;
+      display: inline; }
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool {
         width: 26px;
         height: 26px;
         float: left;
@@ -400,9 +356,9 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
         background-repeat: no-repeat;
         background-position: center center;
         cursor: pointer; }
-        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-subgroup-tools .subgroup-subgroup-tool.active {
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool.active {
           background-color: #ffde00; }
-        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor div.subgroup-subgroup-tools .subgroup-subgroup-tool.edit-subgroup-subgroup {
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool.edit-subgroup-subgroup {
           background-image: url("../images/glyphicons/glyphicons-151-edit.png"); }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow {
     height: 40px; }
