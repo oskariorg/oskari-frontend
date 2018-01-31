@@ -194,43 +194,27 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         _addEventHandlers: function() {
             var me = this;
             jQuery(document).on("dnd_stop.vakata", function(event, data) {
-                 var confirmDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var confirmBtnOk = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                var confirmBtnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-                confirmBtnOk.addClass('primary');
-                confirmBtnOk.setTitle(me.locale('buttons.ok'));
-                confirmBtnOk.setHandler(function() {
-                    confirmDialog.close();
-                    //If the drag target group is not open, we have to open it.
-                    //Otherwise we can't get the necessary information of the drag operation.
-                    var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop("id").split("_")[0]);
-                    if (!data.data.origin.is_open(targetGroup)) {
-                        data.data.origin.open_node(targetGroup);
-                    }
-                    var draggedNode = data.data.origin.get_node(data.element);
-                    var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
-                    var parentNode = data.data.origin.get_node(draggedNode.parent);
-                    var draggedNodeId = me._findJSTreeNodeActualId(draggedNode.id);
-                    var draggedNodeNewParentId = me._findJSTreeNodeActualId(parentNode.id);
-                    var draggedNodeOldParentId = me._findJSTreeNodeActualId(originalParentNode.id);
-                    //Get the new index inside the group's children
-                    var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
-                    var ajaxData = {};
-                    ajaxData.type = me._findJSTreeNodeActualType(draggedNode.type);
-                    ajaxData.nodeId = draggedNodeId;
-                    ajaxData.nodeIndex = draggedNodeNewIndex;
-                    ajaxData.oldGroupId = draggedNodeOldParentId;
-                    ajaxData.targetGroupId = draggedNodeNewParentId;
-                    me._saveOrder(ajaxData);
-                });
-
-                confirmBtnCancel.setTitle(me.locale('buttons.cancel'));
-                confirmBtnCancel.setHandler(function() {
-                    confirmDialog.close();
-                });
-                confirmDialog.show(me.locale('confirms.nodeDropSave.title'), me.locale('confirms.nodeDropSave.message'), [confirmBtnCancel, confirmBtnOk]);
-                confirmDialog.makeModal();
+                //If the drag target group is not open, we have to open it.
+                //Otherwise we can't get the necessary information of the drag operation.
+                var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop("id").split("_")[0]);
+                if (!data.data.origin.is_open(targetGroup)) {
+                    data.data.origin.open_node(targetGroup);
+                }
+                var draggedNode = data.data.origin.get_node(data.element);
+                var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
+                var parentNode = data.data.origin.get_node(draggedNode.parent);
+                var draggedNodeId = me._findJSTreeNodeActualId(draggedNode.id);
+                var draggedNodeNewParentId = me._findJSTreeNodeActualId(parentNode.id);
+                var draggedNodeOldParentId = me._findJSTreeNodeActualId(originalParentNode.id);
+                //Get the new index inside the group's children
+                var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
+                var ajaxData = {};
+                ajaxData.type = me._findJSTreeNodeActualType(draggedNode.type);
+                ajaxData.nodeId = draggedNodeId;
+                ajaxData.nodeIndex = draggedNodeNewIndex;
+                ajaxData.oldGroupId = draggedNodeOldParentId;
+                ajaxData.targetGroupId = draggedNodeNewParentId;
+                me._saveOrder(ajaxData);
             });
         },
         /**
