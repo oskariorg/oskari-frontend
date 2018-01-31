@@ -43,8 +43,41 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
       * @description reloads the page with a new uuid
       */
     changeProjection: function ( uuid, srs ) {
-       // window.open("localhost:8080?uuid="+uuid);
+        if (!uuid) {
+            return;
+        }
+        var me = this,
+            url = window.location.origin;
+        if (window.location.pathname && window.location.pathname.length) {
+            url += window.location.pathname;
+        }
+        url += "?uuid="+uuid;
+        url += this.getSelectedMapLayersUrlParam();
+
+        window.location.href = url;
+
         this.updateSelectedLayers(srs);
+    },
+    getSelectedMapLayersUrlParam: function () {
+        var maplayerUrlString = "&mapLayers="
+        var layerString = '';
+        var layers = this.sb.getStatefulComponents().mapfull.getState().selectedLayers;
+        
+        layers.forEach( function (layer) {
+            if ( !layer.hidden ) {
+                if (layerString !== '') {
+                        layerString += ',';
+                }
+                layerString +=  layer.id + '+' + layer.opacity ;
+                if ( layer.style ) {
+                    layerString += '+' + layer.style;
+                } else {
+                    layerString += '+';
+                }
+                maplayerUrlString += layerString;
+            }
+        });
+        return maplayerUrlString;
     },
     updateSelectedLayers: function (srs) {
         //disable layers that are not supported in new projection
@@ -52,7 +85,6 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
         var layers = Oskari.getSandbox().findAllSelectedMapLayers();
         layers.forEach( function (layer) {
             if (layer._srs_name !== srs) {
-                debugger;
                 //layer srs doesn't match the new projection srs
             }
         });
