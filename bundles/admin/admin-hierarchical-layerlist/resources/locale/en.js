@@ -39,6 +39,10 @@ Oskari.registerLocalization({
             "groupnameDelete": {
                 "title": "Group deleting failed",
                 "message": "Group deleting failed, try again later"
+            },
+            "nodeDropSave": {
+                "title": "Tason/ryhmän siirto ei onnistunut -en",
+                "message": "Virhe tason/ryhmän siirrossa, kokeile myöhemmin uudelleen -en"
             }
         },
         "succeeses": {
@@ -49,12 +53,20 @@ Oskari.registerLocalization({
             "groupnameDelete": {
                 "title": "Group deleting was successfull",
                 "message": "Group deleting was successfull"
+            },
+            "nodeDropSave": {
+                "title": "Tason/ryhmän siirto onnistui -en",
+                "message": "Tason/ryhmän siirto onnistui -en"
             }
         },
         "confirms": {
             "groupDelete": {
                 "title": "Do you want to delete",
                 "message": "Do you want to delete {groupname} group ?"
+            },
+            "nodeDropSave": {
+                "title": "Haluatko siirtää tason/ryhmän -en",
+                "message": "Haluatko siirtää tason/ryhmän? -en"
             }
         }
     }

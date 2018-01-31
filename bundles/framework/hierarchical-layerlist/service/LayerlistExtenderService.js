@@ -31,7 +31,7 @@
                     },
                     subgroup: {
                         icon: 'jstree-group-icon',
-                        valid_children: ['layer', 'subgroup-subgroup']
+                        valid_children: ['layer', 'subgroup', 'subgroup-subgroup']
                     },
                     'subgroup-subgroup': {
                         icon: 'jstree-group-icon',
