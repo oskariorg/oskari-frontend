@@ -8,12 +8,11 @@ Oskari.registerLocalization(
                 "tool": "Byt kartprojektion"
             },
             "error": {
+                "title": "Map Layer Warning",
                 "hover": {
                     "icon": "Vissa av de valda kartlagren kan inte visas - klicka för mer information"
                 },
-                "click": {
-                    "icon": "Följande kartlager kan inte visas med den valda kartprojektionen: " 
-                }
+                "desc": "Följande kartlager kan inte visas med den valda kartprojektionen: "
             },
             "infoPopup" : {
                 "title": "Kartprojektionens information",

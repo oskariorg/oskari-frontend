@@ -8,12 +8,11 @@ Oskari.registerLocalization(
                 "tool": "Change map projection"
             },
             "error": {
+                "title": "Map Layer Warning",
                 "hover": {
                     "icon": "Some of the selected map layers cannot be displayed - click for more information"
                 },
-                "click": {
-                    "icon": "These map layers cannot be displayed using this projection: " 
-                }
+                "desc": "These map layers cannot be displayed using this projection: " 
             },
             "infoPopup" : {
                 "title": "Projection Information",
