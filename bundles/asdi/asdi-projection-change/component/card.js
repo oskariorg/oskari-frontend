@@ -10,10 +10,11 @@ function (view, callback) {
                         '<div class="info-row">'+
                             '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+
-                            '<div class="projection-warning"></div>'+
+                            '<div class="projection-warning" title="${tooltip}"></div>'+
                         '</div>'+
                         '</div>');
     this.element = null;
+    this.loc = Oskari.getLocalization('projection-change');
     this.callback = callback;
     this.view = view;
     this.infoView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionInformation', view);
@@ -37,7 +38,8 @@ function (view, callback) {
         var card = jQuery( tpl ({
             srs: view.srsName,
             imgCls: view.imgCls,
-            projectionName: view.name
+            projectionName: view.name,
+            tooltip: me.loc.error.hover.icon
         }));
 
         card.on('click', function () {
