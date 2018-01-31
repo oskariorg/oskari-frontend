@@ -33,6 +33,12 @@ Card
 .projection-info {
     display:inline-block;
 }
+.projection-error {
+    display:none;
+}
+.projection-error:hover {
+    
+}
 .info-row {
     text-align: center;
     width: inherit;

@@ -5,12 +5,12 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
  * @param function() callback - callback function to call when element is clicked
  */
 function (view, callback) {
-    this.card = jQuery('<div class="projection-card">'+
-                        '<img class="card-image"></img> '+
+    this.card = _.template('<div class="projection-card" data-srs="${srs}">'+
+                        '<img class="card-image ${imgCls}"></img> '+
                         '<div class="info-row">'+
-                            '<p class="card-header"></p>'+
+                            '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+
-                            '<div class="projection-error" style="display:none"></div>'+
+                            '<div class="projection-error"></div>'+
                         '</div>'+
                         '</div>');
     this.element = null;
@@ -30,18 +30,22 @@ function (view, callback) {
     },
     create: function (view) {
         var me = this;
-        var card = this.card.clone();
-        card.find('img').addClass(view.imgCls);
-        card.find('p').html(view.name);
 
-        card.on('click', function() {
+        var tpl = this.card;
+
+        var card = jQuery( tpl ({
+            srs: view.srsName,
+            imgCls: view.imgCls,
+            projectionName: view.name
+        }));
+
+        card.on('click', function () {
             me.callback( view.uuid,  view.srsName );
         });
         //infolink
-        card.find('.projection-info').on('click', function( event ) {
+        card.find('.projection-info').on('click', function ( event ) {
             event.stopPropagation();
             me.infoView.show( jQuery(this) );
-            //display information about projection
         });
 
         this.setElement(card);
