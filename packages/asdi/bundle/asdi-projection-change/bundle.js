@@ -26,6 +26,9 @@ Oskari.clazz.define("Oskari.projection.change", function() {
                 "src" : "../../../../bundles/asdi/asdi-projection-change/view/ProjectionChange.js"
             }, {
                 "type" : "text/javascript",
+                "src" : "../../../../bundles/asdi/asdi-projection-change/view/ErrorListing.js"
+            }, {
+                "type" : "text/javascript",
                 "src" : "../../../../bundles/asdi/asdi-projection-change/view/ProjectionInformation.js"
             }, {
                 "type" : "text/javascript",

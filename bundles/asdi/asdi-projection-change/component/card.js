@@ -10,13 +10,14 @@ function (view, callback) {
                         '<div class="info-row">'+
                             '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+
-                            '<div class="projection-error"></div>'+
+                            '<div class="projection-warning"></div>'+
                         '</div>'+
                         '</div>');
     this.element = null;
     this.callback = callback;
     this.view = view;
     this.infoView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionInformation', view);
+    this.errorListing = Oskari.clazz.create('Oskari.projection.change.view.ErrorListing');
     if ( !this.getElement() )
     {
         this.create(view);
@@ -46,6 +47,11 @@ function (view, callback) {
         card.find('.projection-info').on('click', function ( event ) {
             event.stopPropagation();
             me.infoView.show( jQuery(this) );
+        });
+        //warningLink
+        card.find('.projection-warning').on('click', function ( event ) {
+            event.stopPropagation();
+            me.errorListing.show( jQuery(this) );
         });
 
         this.setElement(card);

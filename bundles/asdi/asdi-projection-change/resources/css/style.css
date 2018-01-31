@@ -33,10 +33,14 @@ Card
 .projection-info {
     display:inline-block;
 }
-.projection-error {
-    display:none;
+.projection-warning {
+    display:inline-block;
+    height:10px;
+    width: 10px;
+    background-color: green;
+    cursor: pointer;
 }
-.projection-error:hover {
+.projection-warning:hover {
     
 }
 .info-row {
