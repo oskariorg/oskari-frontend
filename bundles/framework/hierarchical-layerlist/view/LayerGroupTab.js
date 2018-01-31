@@ -277,7 +277,7 @@ Oskari.clazz.define(
             var jstreeObject = {
                 id: id,
                 parent: parent,
-                text: text + '<div class="' + type + '-tools"></div>',
+                text: text + '<span class="' + type + '-tools"></span>',
                 type: type
             };
 
