@@ -74,9 +74,9 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
                 } else {
                     layerString += '+';
                 }
-                maplayerUrlString += layerString;
             }
         });
+        maplayerUrlString += layerString;
         return maplayerUrlString;
     },
     updateSelectedLayers: function (srs) {
