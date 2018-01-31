@@ -26,9 +26,9 @@ Oskari.clazz.define(
             spinner: '<span class="spinner-text"></span>',
             descriptionAndMainTools: jQuery('<div class="description-and-tools"><div class="field-description"></div><div class="main-tools"></div><div class="clear"></div></div>'),
             mainTool: jQuery('<div class="main-tool"></div>'),
-            groupTool: jQuery('<span class="group-tool"></span>'),
-            subgroupTool: jQuery('<span class="subgroup-tool"></span>'),
-            subgroupSubgroupTool: jQuery('<span class="subgroup-subgroup-tool"></span>'),
+            groupTool: jQuery('<div class="group-tool"></div>'),
+            subgroupTool: jQuery('<div class="subgroup-tool"></div>'),
+            subgroupSubgroupTool: jQuery('<div class="subgroup-subgroup-tool"></div>'),
             description: '<div>' +
                 '  <h4 class="indicator-msg-popup"></h4>' +
                 '  <p></p>' +
@@ -277,7 +277,7 @@ Oskari.clazz.define(
             var jstreeObject = {
                 id: id,
                 parent: parent,
-                text: text + '<span class="' + type + '-tools"></span>',
+                text: text + '<div class="' + type + '-tools"></div>',
                 type: type
             };
 
