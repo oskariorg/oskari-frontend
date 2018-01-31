@@ -33,7 +33,6 @@ div.hierarchical-layerlist {
     }
 
     span.layer {
-
         input {
             float: left;
             margin-right: 5px;
@@ -51,7 +50,11 @@ div.hierarchical-layerlist {
         span.layer-tools {
             float: right;
         }
-
+        @-moz-document url-prefix() {
+            span.layer-tools {
+                margin-top: -30px;
+            }
+        }
         span.layer-icon {
             float: left;
             width: 16px;
@@ -103,92 +106,6 @@ div.hierarchical-layerlist {
         span.backendstatus-unstable {
             height: 20px !important;
             margin-bottom: 2px;
-        }
-    }
-
-    div.layer {
-        padding: 6px 10px 6px 40px;
-        background-color: #ffffff;
-        clear: both;
-
-        /* Default line height is too high, make it so the text just fits */
-        min-height: 14px;
-        line-height: 14px;
-        &:nth-child(even) {
-            background-color: #f3f3f3;
-        }
-
-        input {
-            float: left;
-            margin-right: 5px;
-        }
-
-        input[type=checkbox] {
-            margin-top: -2px;
-        }
-
-        label.layer-title {
-            /* Let's just imagine this is tabular data... */
-            font-size: 12px;
-        }
-
-        div.layer-tools {
-            float: right;
-        }
-
-        div.layer-icon {
-            float: left;
-            width: 16px;
-            height: 16px;
-            background-repeat: no-repeat;
-        }
-
-        div.layer-info {
-            width: 16px;
-            height: 16px;
-            margin-left: 5px;
-            float: right;
-        }
-
-        div.layer-backendstatus-icon {
-            float: left;
-            width: 20px;
-            height: 16px;
-            margin-right: 4px;
-            background-repeat: no-repeat;
-        }
-
-        div.backendstatus-down {
-            height: 20px !important;
-            margin-bottom: 2px;
-            margin-top: -2px;
-            cursor: pointer;
-        }
-
-        div.backendstatus-maintenance {
-            height: 20px !important;
-            margin-bottom: 2px;
-            margin-top: -2px;
-            cursor: pointer;
-        }
-
-        div.backendstatus-ok {
-            height: 20px !important;
-            margin-bottom: 2px;
-            margin-top: -2px;
-            cursor: pointer;
-        }
-
-        div.backendstatus-unknown {
-            height: 20px !important;
-            margin-bottom: 2px;
-            margin-top: -2px;
-        }
-
-        div.backendstatus-unstable {
-            height: 20px !important;
-            margin-bottom: 2px;
-            margin-top: -2px;
         }
     }
 
@@ -564,9 +481,13 @@ div.hierarchical-layerlist {
             padding: 4px;
             margin-left: 10px;
             /* Group tools */
-            div.group-tools {
+            @-moz-document url-prefix() {
+                .group-tools {
+                    margin-top: -30px;
+                }
+            }
+            .group-tools {
                 float: right;
-
                 .group-tool {
                     width: 26px;
                     height:26px;
@@ -597,9 +518,14 @@ div.hierarchical-layerlist {
             }
 
             /* Subgroup tools */
-            div.subgroup-tools {
+            @-moz-document url-prefix() {
+                .subgroup-tools {
+                    margin-top: -30px;
+                }
+            }
+            .subgroup-tools {
                 float: right;
-
+                display: inline;
                 .subgroup-tool {
                     width: 26px;
                     height:26px;
@@ -630,9 +556,14 @@ div.hierarchical-layerlist {
             }
 
             /* Subgroup subgroup tools */
-            div.subgroup-subgroup-tools {
+            @-moz-document url-prefix() {
+                .subgroup-subgroup-tools {
+                    margin-top: -30px;
+                }
+            }
+            .subgroup-subgroup-tools {
                 float: right;
-
+                display: inline;
                 .subgroup-subgroup-tool {
                     width: 26px;
                     height:26px;

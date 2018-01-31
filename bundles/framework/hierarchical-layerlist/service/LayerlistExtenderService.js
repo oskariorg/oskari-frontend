@@ -31,7 +31,7 @@
                     },
                     subgroup: {
                         icon: 'jstree-group-icon',
-                        valid_children: ['layer', 'subgroup-subgroup']
+                        valid_children: ['layer', 'subgroup', 'subgroup-subgroup']
                     },
                     'subgroup-subgroup': {
                         icon: 'jstree-group-icon',
@@ -56,35 +56,7 @@
                 },
                 plugins: ['checkbox', 'changed', 'wholerow', 'types', 'search', 'state', 'conditionalselect']
             };
-            this._events = [
-                /* Default handlers */
-                /*{
-                    name: 'changed.jstree',
-                    handler: function(e, data) {
-                        var selected = data.changed.selected;
-                        var deselected = data.changed.deselected;
-
-                        selected.forEach(function(sel) {
-                            var selArr = sel.split('-');
-                            var type = selArr[0];
-                            var layerId = selArr[1];
-                            if (type === 'layer' && !me.sb.isLayerAlreadySelected(layerId)) {
-                                me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
-                            }
-                        });
-
-                        deselected.forEach(function(desel) {
-                            var deselArr = desel.split('-');
-                            var type = deselArr[0];
-                            var layerId = deselArr[1];
-                            if (type === 'layer' && me.sb.isLayerAlreadySelected(layerId)) {
-                                me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
-                            }
-                        });
-
-                    }
-                }*/
-            ];
+            this._events = [];
             this._mainTools = {};
             this._groupTools = {};
             this._subgroupTools = {};
