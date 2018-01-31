@@ -63,6 +63,9 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
         var layerString = '';
         var layers = this.sb.getStatefulComponents().mapfull.getState().selectedLayers;
         
+        if ( layers.length === 0 ) {
+            return;
+        }
         layers.forEach( function (layer) {
             if ( !layer.hidden ) {
                 if (layerString !== '') {
