@@ -7,19 +7,12 @@
 }
 .oskari-map-projection {
     width: 600px;
-    display: grid;
-    display: -ms-grid;
-
-    -ms-grid-columns: 1fr 1fr 1fr;
-    grid-template-columns: repeat(3, 1fr);
-
-    -ms-grid-rows: 150px 50px;
-
-    grid-gap: 1em;
-    -ms-grid-gap: 1em;
-
+    display: flex;
+    display: -ms-flex;
+    flex-wrap: wrap;
     overflow: hidden;
-    margin:auto;
+    align-items: center;
+    justify-content: center;
 }
 /*
 Card
@@ -29,10 +22,13 @@ Card
     height: 160px;
     margin: 3px;
     cursor: pointer;
+    flex: 30%;
+    -ms-flex: 30%;
 }
 .projection-info {
 }
 .projection-warning {
+    display: none;
     height:10px;
     width: 10px;
     background-color: green;
@@ -45,23 +41,23 @@ Card
     align-items: center;
 }
 .card-image {
-    display: block;
-    margin: auto;
+    display: flex;
+    justify-content: center;
 }
 .card-header {
 }
 /*
  /CARD
 */
-.alaska {
-	content:url("../images/alaska.png");
-}
+ /* .alaska {
+	background-image: url("../images/alaska.png");
+}  */
 .alaska::after {
-	content:url("../images/alaska.png");
+	content: url("../images/alaska.png");
 }
-.bering {
-    content:url("../images/bering.png");
-}
+ /* .bering {
+    background-image: url("../images/bering.png");
+}  */
 .bering::after {
-    content:url("../images/bering.png");
+    content: url("../images/bering.png");
 }

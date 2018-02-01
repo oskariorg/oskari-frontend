@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
  */
 function (view, callback) {
     this.card = _.template('<div class="projection-card" data-srs="${srs}">'+
-                        '<img class="card-image ${imgCls}"></img> '+
+                        '<div class="card-image ${imgCls}"></div> '+
                         '<div class="info-row">'+
                             '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+

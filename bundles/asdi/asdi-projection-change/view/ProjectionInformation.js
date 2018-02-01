@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', funct
     this.loc = Oskari.getLocalization('projection-change');
 }, {
     _template: {
-        container: jQuery('<div class="oskari-projection-information"><img class="card-image"></img></div>')
+        container: jQuery('<div class="oskari-projection-information"><div class="card-image"></div></div>')
     },
     setElement: function(el) {
         this.element = el;
