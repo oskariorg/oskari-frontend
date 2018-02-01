@@ -325,10 +325,95 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this._populateWmsMapLayerAdditionalData(layer, newLayerConf);
             }
 
+            // Also update layer to me._layerGroups
+            this.updateLayerGroups(layerId, newLayerConf);
+
             // notify components of layer update
             var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
+
+
             this._sandbox.notifyAll(evt);
         },
+
+        /**
+         * Update layer groups
+         * @method updateLayerGroups
+         * @param  {String}          layerId      layerid
+         * @param  {Object}          newLayerConf new layer conf
+         * @param  {Boolean}         deleteLayer delete layer
+         */
+        updateLayerGroups: function(layerId, newLayerConf, deleteLayer) {
+            var me = this;
+            var groups = [];
+            var isLayerInGroup = function(groupLayers) {
+                var founded = -1;
+                for (var i = 0; i < groupLayers.length; i++) {
+                    var layer = groupLayers[i];
+                    if (layer.id === layerId) {
+                        founded = i;
+                        break;
+                    }
+                }
+                return founded;
+            };
+            var layerIndex = null;
+            for (var i = 0; i < me._layerGroups.length; i++) {
+                var group = me._layerGroups[i];
+
+                // Check if layer is in main groups
+                layerIndex = isLayerInGroup(group.layers);
+                if (layerIndex >= 0) {
+                    if (deleteLayer) {
+                        group.layers.splice(layerIndex, 1);
+                    } else {
+                        group.layers[layerIndex] = newLayerConf;
+                    }
+                    break;
+                }
+
+                // check subgroups
+                for (var j = 0; j < group.groups.length; j++) {
+                    var subgroup = group.groups[j];
+
+                    layerIndex = isLayerInGroup(subgroup.layers);
+                    if (layerIndex >= 0) {
+                        if (deleteLayer) {
+                            group.groups[j].layers.splice(layerIndex, 1);
+                        } else {
+                            group.groups[j].layers[layerIndex] = newLayerConf;
+                        }
+                        break;
+                    }
+                    // check subgroup subgroups
+                    if (subgroup.groups) {
+                        for (var k = 0; k < subgroup.groups.length; k++) {
+                            var subgroupSubgroup = subgroup.groups[k];
+                            layerIndex = isLayerInGroup(subgroupSubgroup.layers);
+                            if (layerIndex >= 0) {
+                                if (deleteLayer) {
+                                    group.groups[j].groups[k].layers.splice(layerIndex, 1);
+                                } else {
+                                    group.groups[j].groups[k].layers[layerIndex] = newLayerConf;
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    if (layer) {
+                        break;
+                    }
+                }
+
+                if (layer) {
+                    break;
+                }
+
+            }
+
+            return groups.join(' > ');
+        },
+
         /**
          * @method makeLayerSticky
          * Set layer visibility switch off disable
@@ -465,6 +550,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _loadAllLayerGroupsAjaxCallBack: function(pResp, callbackSuccess) {
             var me = this;
+
             me._layerGroups = pResp;
             pResp.forEach(function(group) {
                 group.layers.forEach(function(layer) {
@@ -572,6 +658,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return this._layerGroups;
         },
 
+        /**
+         * Get layer breadcrum
+         * @method getLayerGroupBreadcrumb
+         * @param  {String}                layerId layer id
+         * @return {String}                breadcrump
+         */
         getLayerGroupBreadcrumb: function(layerId) {
             var me = this;
             var allGroups = me.getAllLayerGroups();

@@ -44,6 +44,20 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             me.service.on('admin.changed', function() {
                 me.populateLayers();
             });
+
+            me.service.on('admin-layer', function(data) {
+                var mode = data.mode;
+                var mapLayerService = me.instance.sandbox.getService(
+                    'Oskari.mapframework.service.MapLayerService'
+                );
+                if (mode === 'delete') {
+                    mapLayerService.removeLayer(data.id);
+                } else {
+                    mapLayerService.updateLayer(data.layerData.id, data.layerData);
+                }
+
+                me.populateLayers();
+            });
         },
         /**
          * @method getName
@@ -323,7 +337,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 tab = this.layerTabs[i];
                 // populate tab if it has grouping method
                 if (tab.groupingMethod) {
-                    //layersCopy = layers.slice(0);
                     groups = this._getLayerGroups(
                         tab.groupingMethod
                     );

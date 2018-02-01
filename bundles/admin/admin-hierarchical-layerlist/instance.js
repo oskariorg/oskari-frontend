@@ -149,8 +149,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             var me = this;
             // Add layer add tools
             me.service.addSubgroupSubgroupTool('add-layer', function(tool, groupId, parentId) {
-                var options = {};
-                me.layer.showLayerAddPopup(tool, null, groupId, options);
+                me.layer.showLayerAddPopup(tool, null, groupId);
             }, {
                 cls: 'add-layer',
                 tooltip: me.locale('tooltips.addLayer')
@@ -191,37 +190,23 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             });
         },
 
-
-        /*******************************************************************************************************************************
-        /* PUBLIC METHODS
-        *******************************************************************************************************************************/
-        getLocalization: function(key) {
-            if (!this.locale) {
-                this.locale = Oskari.getMsg.bind(null, this.getName());
-            }
-            if (key) {
-                return this.locale(key);
-            }
-            return this.locale;
-        },
-        getName: function() {
-            return "AdminHierarchicalLayerList";
-        },
-        start: function() {
+        /**
+         * Add layer tools
+         * @method  _addLayerTools
+         * @private
+         */
+        _addLayerTools: function() {
             var me = this;
-            if (!me.service) {
-                return;
-            }
-            me.sandbox.register(this);
-            // set admin configured
-            me.service.setAdmin(true);
-            me._addMainTools();
-            me._addGroupTools();
-            me._addSubgroupTools();
-            me._addSubgroupSubgroupTools();
-            me._addOptions();
-            me._addEventHandlers();
+            // Add edit tool for layers
+            me.service.addLayerTool('edit-layer', function(tool, groupId, layerId) {
+
+                me.layer.showLayerAddPopup(tool, layerId, groupId);
+            }, {
+                cls: 'edit-layer',
+                tooltip: me.locale('tooltips.editLayer')
+            });
         },
+
         /**
          * Assigns event handlers to the admin hierarchical layer list.
          */
@@ -302,6 +287,40 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 }
             });
         },
+
+
+        /*******************************************************************************************************************************
+        /* PUBLIC METHODS
+        *******************************************************************************************************************************/
+        getLocalization: function(key) {
+            if (!this.locale) {
+                this.locale = Oskari.getMsg.bind(null, this.getName());
+            }
+            if (key) {
+                return this.locale(key);
+            }
+            return this.locale;
+        },
+        getName: function() {
+            return "AdminHierarchicalLayerList";
+        },
+        start: function() {
+            var me = this;
+            if (!me.service) {
+                return;
+            }
+            me.sandbox.register(this);
+            // set admin configured
+            me.service.setAdmin(true);
+            me._addMainTools();
+            me._addGroupTools();
+            me._addSubgroupTools();
+            me._addSubgroupSubgroupTools();
+            me._addLayerTools();
+            me._addOptions();
+            me._addEventHandlers();
+        },
+
         // module boilerplate methods
         init: function() {
 

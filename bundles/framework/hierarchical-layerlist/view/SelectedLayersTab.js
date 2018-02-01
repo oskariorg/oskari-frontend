@@ -51,6 +51,13 @@ Oskari.clazz.define(
                     });
                 }
             });
+
+            me.service.on('admin-layer', function(data) {
+                if (data.mode !== 'delete' && me._layers[data.layerData.id]) {
+                    var layer = me.sb.findMapLayerFromAllAvailable(data.layerData.id);
+                    me._layers[data.layerData.id].updateLayer(layer);
+                }
+            });
         },
 
         /**

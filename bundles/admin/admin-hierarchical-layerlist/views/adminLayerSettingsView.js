@@ -529,13 +529,8 @@ define([
                 var me = this;
 
                 this.instance = this.options.instance;
-                // for new layers/sublayers, model is always null at this point
-                // if we get baseLayerId -> this is a sublayer
-                if (this.options.baseLayerId && this.options.model) {
-                    // wrap existing sublayers with model
+                if (this.options.model) {
                     this.model = new layerModel(this.options.model);
-                } else {
-                    this.model = this.options.model;
                 }
                 // model to use when creating a new layer
                 this.modelObj = layerModel;
@@ -945,30 +940,16 @@ define([
 
                     jQuery.ajax({
                         type: 'GET',
-                        dataType: 'json',
                         data: {
                             layer_id: me.model.getId()
                         },
                         url: me.instance.sandbox.getAjaxUrl('DeleteLayer'),
                         success: function(resp) {
-                            if (!resp) {
-                                if (addLayerDiv.hasClass('show-edit-layer')) {
-                                    addLayerDiv.removeClass('show-edit-layer');
-                                    // FIXME this re-renders the layer view but doesn't update the model...
-                                    // bubble this action to the View
-                                    // = outside of backbone implementation
-                                    element.trigger({
-                                        type: 'adminAction',
-                                        command: 'removeLayer',
-                                        modelId: me.model.getId(),
-                                        baseLayerId: me.options.baseLayerId
-                                    });
-                                    addLayerDiv.remove();
-                                }
-                                if (callback) {
-                                    callback();
-                                }
-                            }
+                            me.options.flyout.hide();
+                            me.options.instance.service.trigger('admin-layer', {
+                                mode: 'delete',
+                                id: me.model.getId()
+                            });
                         },
                         error: function(jqXHR) {
                             if (jqXHR.status !== 0) {
@@ -1222,13 +1203,16 @@ define([
                 // make AJAX call
                 jQuery.ajax({
                     type: 'GET',
-                    dataType: 'json',
                     data: {
                         layer_id: me.model.getId()
                     },
                     url: me.instance.sandbox.getAjaxUrl('DeleteLayer'),
                     success: function(resp) {
-                        // FIXME do handling
+                        me.options.flyout.hide();
+                        me.options.instance.service.trigger('admin-layer', {
+                            mode: 'delete',
+                            id: me.model.getId()
+                        });
                     },
                     error: function() {
                         me._showDialog(me.instance.locale('admin.errorTitle'), me.instance.locale('admin.errorRemoveGroupLayer'));

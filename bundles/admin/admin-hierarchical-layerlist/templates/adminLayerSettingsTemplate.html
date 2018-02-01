@@ -351,17 +351,20 @@
 
     <div class="add-layer-send">
         <div class="add-layer-button-area">
-            <div class="input-controls">
+            <div class="input-controls buttons">
                 <% if(!model.getId()) { %>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
+                    title="<%= instance.locale('cancel') %>"><%= instance.locale('cancel') %></button>
                     <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"
                         title="<%= instance.locale('admin.addNewLayer') %>" ><%= instance.locale('add') %></button>
                 <% } else { %>
-                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"><%= instance.locale('save') %></button>
                     <button class="add-layer-btn <%= isSubLayer ? 'admin-remove-sublayer' : 'admin-remove-layer' %>"
                         title="<%= instance.locale('delete') %>"><%= instance.locale('delete') %></button>
-                <% } %>
-                <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
                     title="<%= instance.locale('cancel') %>"><%= instance.locale('cancel') %></button>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"><%= instance.locale('save') %></button>
+                <% } %>
+
             </div>
         </div>
     </div>

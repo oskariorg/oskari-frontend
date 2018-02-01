@@ -299,7 +299,8 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     margin-left: 10px;
     /* Group tools */
     /* Subgroup tools */
-    /* Subgroup subgroup tools */ }
+    /* Subgroup subgroup tools */
+    /*Layer tools */ }
 @-moz-document url-prefix() {
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools {
     margin-top: -30px; } }
@@ -366,6 +367,22 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
           background-image: url("../images/glyphicons/glyphicons-151-edit.png"); }
         div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool.add-layer {
           background-image: url("../images/glyphicons/glyphicons-191-plus-sign.png"); }
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool {
+    margin-top: -30px; } }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool {
+      width: 26px;
+      height: 26px;
+      float: left;
+      margin-left: 4px;
+      margin-top: 4px;
+      background-repeat: no-repeat;
+      background-position: center center;
+      cursor: pointer; }
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool.active {
+        background-color: #ffde00; }
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool.edit-layer {
+        background-image: url("../images/glyphicons/glyphicons-151-edit.png"); }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow {
     height: 40px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node {

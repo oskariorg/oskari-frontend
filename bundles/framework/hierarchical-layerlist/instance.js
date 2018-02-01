@@ -17,12 +17,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
         this.notifierService = null;
         this.layerlistExtenderService = null;
     }, {
-        _bindExtenderServiceListeners: function() {
-            var me = this;
-            me.layerlistExtenderService.on('admin-layer', function(data) {
-                me._loadLayers();
-            });
-        },
         /**
          * @static
          * @property __name
@@ -131,9 +125,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             this._updateAccordionHeight(jQuery('#mapdiv').height());
             this._registerForGuidedTour();
 
-            this._bindExtenderServiceListeners();
             this._loadLayers();
         },
+        /**
+         * Load layers
+         * @method  _loadLayers
+         * @private
+         */
         _loadLayers: function() {
             var me = this;
             var mapLayerService = me.sandbox.getService(

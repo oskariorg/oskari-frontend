@@ -112,6 +112,23 @@ $errorColor: lighten(#ff0000, 20%);
                 .input-controls {
                     position: relative;
                     margin-right: 5px;
+                    &.buttons {
+                        text-align: center;
+                        button {
+                            margin:10px;
+                            text-shadow: none;
+
+                            &.admin-add-layer-ok, &.admin-add-group-ok {
+                                @include gradient-button($addColorStart, $addColorEnd, $addTextColor);
+                            }
+                            &.admin-remove-layer, &.admin-remove-group {
+                                @include gradient-button($deleteColorStart, $deleteColorEnd, $deleteTextColor);
+                            }
+                            &.admin-add-layer-cancel, &.admin-add-group-cancel {
+                                @include gradient-button($cancelColorStart, $cancelColorEnd, $cancelTextColor);
+                            }
+                        }
+                    }
                 }
 
                 .opacity-slider-tool {

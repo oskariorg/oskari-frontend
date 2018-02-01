@@ -3,6 +3,9 @@ $selectedLayersTabTextColor: #fff;
 $selectedLayersTabLayerPadding: 6px;
 $selectedLayersTabLayerFontSize: 12px;
 $selectedLayersTabLabelWidth: 50px;
+$editIcon: url("../images/glyphicons/glyphicons-151-edit.png");
+$addLayerIcon: url("../images/glyphicons/glyphicons-191-plus-sign.png");
+$addGroupIcon: url("../images/glyphicons/glyphicons-433-plus.png");
 
 .hierarchical-layerlist-flyout
 {
@@ -178,7 +181,7 @@ div.hierarchical-layerlist {
                         }
 
                         &.add-group {
-                            background-image:url("../images/glyphicons/glyphicons-433-plus.png");
+                            background-image:$addGroupIcon;
                         }
 
                     }
@@ -503,15 +506,15 @@ div.hierarchical-layerlist {
                     }
 
                     &.add-subgroup {
-                        background-image:url("../images/glyphicons/glyphicons-433-plus.png");
+                        background-image:$addGroupIcon;
                     }
 
                     &.edit-group {
-                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                        background-image: $editIcon;
                     }
 
                     &.add-layer {
-                        background-image:url("../images/glyphicons/glyphicons-191-plus-sign.png");
+                        background-image:$addLayerIcon;
                     }
 
                 }
@@ -541,15 +544,15 @@ div.hierarchical-layerlist {
                     }
 
                     &.add-subgroup-subgroup {
-                        background-image:url("../images/glyphicons/glyphicons-433-plus.png");
+                        background-image:$addGroupIcon;
                     }
 
                     &.edit-subgroup {
-                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                        background-image: $editIcon;
                     }
 
                     &.add-layer {
-                        background-image:url("../images/glyphicons/glyphicons-191-plus-sign.png");
+                        background-image:$addLayerIcon;
                     }
 
                 }
@@ -579,13 +582,42 @@ div.hierarchical-layerlist {
                     }
 
                     &.edit-subgroup-subgroup {
-                        background-image:url("../images/glyphicons/glyphicons-151-edit.png");
+                        background-image: $editIcon;
                     }
 
                     &.add-layer {
-                        background-image:url("../images/glyphicons/glyphicons-191-plus-sign.png");
+                        background-image:$addLayerIcon;
                     }
 
+                }
+            }
+
+            /*Layer tools */
+            @-moz-document url-prefix() {
+                .layer-tools {
+                    .layer-tool {
+                        margin-top: -30px;
+                    }
+                }
+            }
+            .layer-tools {
+                .layer-tool {
+                    width: 26px;
+                    height:26px;
+                    float:left;
+                    margin-left:4px;
+                    margin-top: 4px;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    cursor: pointer;
+
+                    &.active {
+                        background-color: #ffde00;
+                    }
+
+                    &.edit-layer {
+                        background-image: $editIcon;
+                    }
                 }
             }
         }

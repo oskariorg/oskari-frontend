@@ -141,7 +141,14 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         }
         callback();
     },
-    showLayerAddPopup: function(tool, layerId, groupId, opts) {
+    /**
+     * Shows layer popu
+     * @method showLayerAddPopup
+     * @param  {String}          tool    tool identifier
+     * @param  {String}          layerId layerId
+     * @param  {String}          groupId groupId
+     */
+    showLayerAddPopup: function(tool, layerId, groupId) {
         var me = this;
         me.getDataproviders(false, function() {
             me._extraFlyout.move(100, 100, true);
@@ -156,16 +163,21 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                 tool.removeClass('active');
             });
 
+            var layerModel = null;
+            if (layerId) {
+                layerModel = me.sandbox.findMapLayerFromAllAvailable(layerId);
+            }
             require(['_bundle/views/adminLayerSettingsView'], function(adminLayerSettingsView) {
                 // create layer settings view for adding or editing layer
                 var settings = new adminLayerSettingsView({
-                    model: null,
+                    model: layerModel,
                     supportedTypes: me.supportedTypes,
                     instance: me.instance,
                     spinnerContainer: content,
                     groupId: groupId,
                     dataProviders: me.dataProviders,
-                    flyout: me._extraFlyout
+                    flyout: me._extraFlyout,
+                    baseLayerId: null // FIXME add sublayer its parentid
                 });
                 var content = settings.$el;
 

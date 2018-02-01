@@ -14,7 +14,8 @@ Oskari.registerLocalization({
             "addSubgroup": "Lisää aliryhmä",
             "editMainGroup": "Muokkaa pääryhmää",
             "editSubgroup": "Muokkaa aliryhmää",
-            "addLayer": "Lisää karttataso"
+            "addLayer": "Lisää karttataso",
+            "editLayer": "Muokkaa karttatasoa"
         },
         "groupTitles": {
             "addMainGroup": "Anna pääryhmän nimi",

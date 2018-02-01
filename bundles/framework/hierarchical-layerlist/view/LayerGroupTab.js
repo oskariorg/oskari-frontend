@@ -29,6 +29,7 @@ Oskari.clazz.define(
             groupTool: jQuery('<div class="group-tool"></div>'),
             subgroupTool: jQuery('<div class="subgroup-tool"></div>'),
             subgroupSubgroupTool: jQuery('<div class="subgroup-subgroup-tool"></div>'),
+            layerTool: jQuery('<span class="layer-tool"></div>'),
             description: '<div>' +
                 '  <h4 class="indicator-msg-popup"></h4>' +
                 '  <p></p>' +
@@ -97,10 +98,17 @@ Oskari.clazz.define(
                 me._addSubgroupSubgroupTools();
             });
 
+            // Layer tool added
+            me.service.on('layertool.added', function(data) {
+                me._addLayerTools();
+            });
+
+            // jstree conditional select changed
             me.service.on('jstree-contionalselect', function(data) {
                 me.selectNodeFromTree(data.node, data.event);
             });
 
+            // group added
             me.service.on('group-added', function(data) {
                 var parent = '#';
                 if (data.type === 'subgroup') {
@@ -162,6 +170,7 @@ Oskari.clazz.define(
                 }
             });
 
+            // group deleted
             me.service.on('group-deleted', function(data) {
                 me.getJsTreeElement().jstree().delete_node(data.type + '-' + data.id);
                 if (data.type === 'group') {
@@ -259,6 +268,36 @@ Oskari.clazz.define(
                     subgrouptool.handler(jQuery(this), groupId, parentGroupId);
                 });
                 subgroupSubgroupTools.append(tool);
+
+            });
+        },
+        /**
+         * Add layer tools
+         * @method  _addLayerTools
+         * @param {Object} element jquery element, if not defined find all layer-tools
+         * @private
+         */
+        _addLayerTools: function(element) {
+            var me = this;
+            var el = element || me.getJsTreeElement();
+            var layerTools = el.find('.layer-tools');
+            layerTools.find('.layer-tool').remove();
+            Object.keys(me.service.getLayerTool()).forEach(function(key) {
+                var layertool = me.service.getLayerTool(key);
+                var tool = me.templates.layerTool.clone();
+                tool.attr('data-id', key);
+                tool.attr('title', layertool.options.tooltip);
+                tool.addClass(layertool.options.cls);
+
+                tool.bind('click', function(evt) {
+                    evt.stopPropagation();
+                    jQuery(this).addClass('active');
+                    var parent = jQuery(this).parents('a.jstree-anchor');
+                    var groupId = parent.attr('data-group-id');
+                    var layerId = parent.attr('data-layer-id');
+                    layertool.handler(jQuery(this), groupId, layerId);
+                });
+                layerTools.append(tool);
 
             });
         },
@@ -975,16 +1014,22 @@ Oskari.clazz.define(
             var layerTree = jQuery(me.templates.layerTree);
 
             var addLayers = function(groupId, layers) {
-
                 layers.forEach(function(l) {
                     var layer = l;
                     if (l.id) {
                         layer = me.sb.findMapLayerFromAllAvailable(l.id);
                     }
+                    var opts = {
+                        a_attr: {
+                            'data-group-id': groupId,
+                            'data-layer-id': layer.getId()
+                        }
+                    };
                     jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId(),
                         groupId,
                         jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
-                        'layer'));
+                        'layer',
+                        opts));
 
                 });
             };
@@ -1052,9 +1097,7 @@ Oskari.clazz.define(
                     'group', extraOpts));
 
                 //Loop through group layers
-                //TODO: Loop through subgroups aswell similarly
                 addLayers('group-' + group.getId(), layers);
-
 
                 if (group.getGroups().length > 0) {
                     addSubgroups(group.getId(), group.getGroups());
@@ -1102,6 +1145,7 @@ Oskari.clazz.define(
             me.getJsTreeElement().on('open_node.jstree', function(node) {
                 me._addSubgroupTools();
                 me._addSubgroupSubgroupTools();
+                me._addLayerTools();
             });
         },
 
@@ -1290,8 +1334,6 @@ Oskari.clazz.define(
             me._notifierService.on('MapSizeChangedEvent', function(evt) {
                 me._updateContainerHeight(evt.getHeight());
             });
-
-
         }
     }
 );

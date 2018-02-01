@@ -14,7 +14,8 @@ Oskari.registerLocalization({
             "addSubgroup": "Lägg till undergrupp",
             "editMainGroup": "Huvudgruppsnamn",
             "editSubgroup": "Redigera undergrupp",
-            "addLayer": "Lägg till maplayer"
+            "addLayer": "Lägg till maplayer",
+            "editLayer": "Redigera maplayer"
         },
         "groupTitles": {
             "addMainGroup": "Huvudgruppsnamn",

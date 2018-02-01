@@ -52,14 +52,17 @@
         <% } %>
         <div class="add-group-send">
             <div class="add-class-button-area">
-                <div class="input-controls">
+                <div class="input-controls buttons">
                     <% if(!model.getId()) { %>
                     <button class="add-class-btn admin-add-group-ok" title="<%= groupTitle === 'baseName' ? instance.locale('admin.addNewBaseLayer') : instance.locale('admin.addNewGroupLayer') %>"><%= instance.locale('add') %></button>
-                    <% } else { %>
-                    <button class="add-class-btn admin-add-group-ok" title="<%= groupTitle === 'baseName' ? instance.locale('admin.addNewBaseLayer') : instance.locale('admin.addNewGroupLayer') %>"><%= instance.locale('save') %></button>
-                    <button class="add-class-btn admin-remove-group" data-id="<%= model.getId() %>" title="<%= instance.locale('delete') %>"><%= instance.locale('delete') %></button
-                    ><% } %>
                     <button class="add-class-btn admin-add-group-cancel" title="<%= instance.locale('cancel') %>"><%= instance.locale('cancel') %></button>
+                    <% } else { %>
+                    <button class="add-class-btn admin-remove-group" data-id="<%= model.getId() %>" title="<%= instance.locale('delete') %>"><%= instance.locale('delete') %></button
+                    >
+                    <button class="add-class-btn admin-add-group-cancel" title="<%= instance.locale('cancel') %>"><%= instance.locale('cancel') %></button>
+                    <button class="add-class-btn admin-add-group-ok" title="<%= groupTitle === 'baseName' ? instance.locale('admin.addNewBaseLayer') : instance.locale('admin.addNewGroupLayer') %>"><%= instance.locale('save') %></button>
+                    <% } %>
+
                 </div>
             </div>
         </div>

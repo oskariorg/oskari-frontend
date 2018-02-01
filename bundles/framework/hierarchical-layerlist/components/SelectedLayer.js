@@ -83,6 +83,21 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         me._binded = true;
     },
     /**
+     * Update layer
+     * @method updateLayer
+     * @param  {Object}    layer Oskari layer
+     */
+    updateLayer: function(layer) {
+        var me = this;
+        me._layer = layer;
+        me._setTitle();
+        me._setBreadcrumb();
+        me._setDescription();
+        me._updateStyles();
+        me._addOpacitySlider();
+        me._addPublishableInformation();
+    },
+    /**
      * Update breadcrumb
      * @method updateBreadcrumb
      */

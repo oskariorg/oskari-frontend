@@ -358,12 +358,12 @@
                 }
 
                 this._layerTools[id] = {
-                    handler: handler(id),
+                    handler: handler,
                     options: options
                 };
                 this.trigger('layertool.added', {
                     id: id,
-                    handler: handler(id),
+                    handler: handler,
                     options: options
                 });
             },
