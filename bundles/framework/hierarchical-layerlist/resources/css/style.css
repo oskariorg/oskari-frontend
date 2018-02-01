@@ -39,7 +39,7 @@ div.hierarchical-layerlist span.layer span.layer-info {
   height: 16px;
   margin-left: 5px;
   margin-top: 5px;
-  float: right; }
+  float: left; }
 div.hierarchical-layerlist span.layer span.layer-backendstatus-icon {
   float: left;
   width: 20px;
