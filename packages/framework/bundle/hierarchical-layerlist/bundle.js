@@ -41,14 +41,6 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             "scripts": [
             {
                 "type": "text/javascript",
-                "src": "../../../../libraries/jquery/jquery-1.10.2.js"
-            },
-            {
-                "type": "text/javascript",
-                "src": "../../../../libraries/jquery/jquery-ui-1.11.4.js"
-            },
-            {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/instance.js"
             }, {
                 "type": "text/javascript",
