@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
         }
         var stats = this.sb.findRegisteredModuleInstance('StatsGrid');
         var toolElement = this.element.find('.' + tool);
-        // stats.togglePublisherTools(tool);
         if ( !shown ) {
             toolElement.hide();
             return;
@@ -49,9 +48,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
         map.bind('click', function() {
             if(!map.hasClass('active')) {
                 map.addClass('active');
-                stats.getPublisherEnabledTools().forEach( function (tool) {
+                stats.getEmbeddedTools().forEach( function (tool) {
                     me.element.find('.' + tool).removeClass('active');
-                    stats.togglePublisherTools(tool);
+                    stats.toggleEmbeddedTools(tool);
                 });
             }
         });
@@ -63,7 +62,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
             } else {
                 table.removeClass('active');
             }
-            stats.togglePublisherTools("table");
+            stats.toggleEmbeddedTools("table");
         });
         diagram.bind('click', function () {
             if (!diagram.hasClass('active') ) {
@@ -72,7 +71,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
             } else {
                 diagram.removeClass('active');
             }
-            stats.togglePublisherTools("diagram");  
+            stats.toggleEmbeddedTools("diagram");  
         });
         this.element = toggleButtons;
         return this.element;

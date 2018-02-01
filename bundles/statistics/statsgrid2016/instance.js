@@ -340,10 +340,10 @@ Oskari.clazz.define(
         },
         /**
          * toggles the specified flyout from publisher
-         * @method togglePublisherTools
+         * @method toggleEmbeddedTools
          * @param {String} tool tool name as string
          */
-        togglePublisherTools: function (tool) {
+        toggleEmbeddedTools: function (tool) {
             if ( this.publisherHasTool(tool) ) {
                 this.getTile().toggleFlyout( tool );
             }
