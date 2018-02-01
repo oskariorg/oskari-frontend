@@ -27,7 +27,16 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundle",
 
         "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
         "source": {
-            "scripts": [{
+            "scripts": [
+            {
+                "type": "text/javascript",
+                "src": "../../../../libraries/jquery/jquery-1.10.2.js"
+            },
+            {
+                "type": "text/javascript",
+                "src": "../../../../libraries/jquery/jquery-ui-1.11.4.js"
+            },
+            {
                 "type": "text/javascript",
                 "src": "../../../../bundles/admin/admin-hierarchical-layerlist/instance.js"
             }, {
