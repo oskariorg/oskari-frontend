@@ -230,6 +230,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
                 this._sandbox.notifyAll(evt);
             }
+
+            // also update layer groups
+            updateLayerGroups(layerId, null, true);
         },
 
         /**
@@ -341,10 +344,66 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param  {String}          layerId      layerid
          * @param  {Object}          newLayerConf new layer conf
          * @param  {Boolean}         deleteLayer delete layer
+         * @param  {Boolean}         newLayer is new layer
          */
-        updateLayerGroups: function(layerId, newLayerConf, deleteLayer) {
+        updateLayerGroups: function(layerId, newLayerConf, deleteLayer, newLayer) {
             var me = this;
             var groups = [];
+            var group = null;
+
+            if (newLayer) {
+                if (!newLayerConf.groups) {
+                    return;
+                }
+                newLayerConf.groups.forEach(function(g) {
+                    for (var i = 0; i < me._layerGroups.length; i++) {
+                        group = me._layerGroups[i];
+
+                        if (group.id === g.id) {
+                            me._layerGroups[i].layers.push(newLayerConf);
+                            break;
+                        }
+
+                        var founded = false;
+
+                        // check subgroups
+                        for (var j = 0; j < group.groups.length; j++) {
+                            var subgroup = group.groups[j];
+
+                            if (subgroup.id === g.id) {
+                                me._layerGroups[i].groups[j].layers.push(newLayerConf);
+                                founded = true;
+                                break;
+                            }
+                            // check subgroup subgroups
+                            if (subgroup.groups) {
+                                for (var k = 0; k < subgroup.groups.length; k++) {
+                                    var subgroupSubgroup = subgroup.groups[k];
+
+                                    if (subgroupSubgroup.id === g.id) {
+                                        me._layerGroups[i].groups[j].groups[k].layers.push(newLayerConf);
+                                        founded = true;
+                                        break;
+
+                                    }
+                                }
+                            }
+
+                            if (founded) {
+                                break;
+                            }
+                        }
+
+                        if (founded) {
+                            break;
+                        }
+
+                    }
+
+                });
+                return;
+            }
+
             var isLayerInGroup = function(groupLayers) {
                 var founded = -1;
                 for (var i = 0; i < groupLayers.length; i++) {
@@ -357,8 +416,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return founded;
             };
             var layerIndex = null;
+
             for (var i = 0; i < me._layerGroups.length; i++) {
-                var group = me._layerGroups[i];
+                group = me._layerGroups[i];
 
                 // Check if layer is in main groups
                 layerIndex = isLayerInGroup(group.layers);
@@ -400,18 +460,16 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         }
                     }
 
-                    if (layer) {
+                    if (layerIndex >= 0) {
                         break;
                     }
                 }
 
-                if (layer) {
+                if (layerIndex >= 0) {
                     break;
                 }
 
             }
-
-            return groups.join(' > ');
         },
 
         /**

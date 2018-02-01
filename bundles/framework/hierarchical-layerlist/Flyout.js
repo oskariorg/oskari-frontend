@@ -52,9 +52,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 );
                 if (mode === 'delete') {
                     mapLayerService.removeLayer(data.id);
+                } else if (mode === 'add') {
+                    var layer = mapLayerService.createMapLayer(data.layerData);
+                    mapLayerService.addLayer(layer);
+                    mapLayerService.updateLayerGroups(data.layerData.id, data.layerData, false, true);
                 } else {
                     mapLayerService.updateLayer(data.layerData.id, data.layerData);
                 }
+
 
                 me.populateLayers();
             });

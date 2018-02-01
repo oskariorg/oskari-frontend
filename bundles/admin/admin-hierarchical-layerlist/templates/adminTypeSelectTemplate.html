@@ -9,8 +9,10 @@
         <%  _.each(supportedTypes, function(type) { %>
                 <option value="<%= type.id %>"><%= localization('admin.layertypes.'+type.localeKey) %></option>
         <% }); %>
+        <!--
                 <option value="base"><%= localization('admin.baseLayer') %></option>
                 <option value="groupMap"><%= localization('admin.groupLayer') %></option>
+            -->
             </select>
         </div>
     </div>

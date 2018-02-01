@@ -50,7 +50,8 @@ define([
                 'change .admin-interface-version': 'handleInterfaceVersionChange',
                 'change .admin-sld-styles': 'handleSldStylesChange',
                 'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
-                'click .layer-capabilities.icon-info': 'showCapabilitiesPopup'
+                'click .layer-capabilities.icon-info': 'showCapabilitiesPopup',
+                "click .admin-add-sublayer": "toggleSubLayerSettings"
             },
             /*******************************************************************************************************************************
             /* PRIVATE METHODS
@@ -144,6 +145,9 @@ define([
                         type = 'wmslayer';
                     }
                     layer = mapLayerService.createLayerTypeInstance(type);
+                    if (this.options.dataProvider) {
+                        layer.setOrganizationName(this.options.dataProvider);
+                    }
                 }
                 return new this.modelObj(layer);
             },
@@ -245,8 +249,9 @@ define([
                             if (typeof callback === 'function') {
                                 callback();
                             }
-
-                            me.options.flyout.hide();
+                            if (me.options.flyout) {
+                                me.options.flyout.hide();
+                            }
                             if (me.model.getId() !== null && me.model.getId() !== undefined) {
                                 me.options.instance.service.trigger('admin-layer', {
                                     mode: 'edit',
@@ -684,7 +689,8 @@ define([
                     capabilities: me.model.get('capabilities'),
                     capabilitiesTemplate: me.capabilitiesTemplate,
                     // ^ /capabilities related
-                    roles: me.roles
+                    roles: me.roles,
+                    dataProvider: me.options.dataProvider
                 }));
                 // if settings are hidden, we need to populate template and
                 // add it to the DOM
@@ -1348,6 +1354,101 @@ define([
              */
             clickLayerSettings: function(e) {
                 e.stopPropagation();
+            },
+
+
+
+            toggleSubLayerSettings: function(e) {
+
+                var me = this,
+                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    element = jQuery(e.currentTarget).parents('.add-sublayer-wrapper');
+
+                e.stopPropagation();
+
+                var subLayerId = element.attr('sublayer-id'),
+                    subLayer = this._getSubLayerById(subLayerId),
+                    parentId = this.model.getId(),
+                    isEdit = subLayerId !== null && subLayerId !== undefined;
+
+                // create AdminLayerSettingsView
+                var settings = new me.options.sublayerView({
+                    model: subLayer,
+                    supportedTypes: me.supportedTypes,
+                    instance: this.options.instance,
+                    layerTabModel: this.options.layerTabModel,
+                    baseLayerId: parentId,
+                    groupId: this.options.groupId,
+                    dataProviders: this.options.dataProviders,
+                    dataProvider: this.model.getOrganizationName()
+                });
+
+                // Create buttons for the popup and hide the form buttons...
+                var container = jQuery('<div class="admin-layerselector"><div class="layer"></div></div>'),
+                    buttons = [],
+                    saveButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    exitPopup = function() {
+                        settings.undelegateEvents();
+                        settings.$el.removeData().unbind();
+                        settings.remove();
+                        Backbone.View.prototype.remove.call(settings);
+                        dialog.close();
+                        // TODO refresh parent layer view
+                        // call trigger on parent element's dom...
+                        // see adminAction
+                    };
+                if (subLayer && subLayer.getId && subLayer.getId()) {
+                    saveButton.setTitle(this.instance.getLocalization('save'));
+                } else {
+                    saveButton.setTitle(this.instance.getLocalization('add'));
+                }
+                saveButton.addClass('primary');
+                saveButton.setHandler(function() {
+                    var el = {
+                        currentTarget: settings.$el.find('.admin-add-sublayer-ok')
+                    };
+                    settings.addLayer(el, exitPopup);
+                    // update the UI on parent level
+                    me.model.trigger('change', me.model);
+                });
+                cancelButton.setHandler(function() {
+                    exitPopup();
+                });
+                cancelButton.setTitle(this.instance.getLocalization('cancel'));
+                buttons.push(saveButton);
+                if (isEdit) {
+                    var deleteButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                    deleteButton.setTitle(this.instance.getLocalization('delete'));
+                    deleteButton.setHandler(function() {
+                        var el = {
+                            currentTarget: settings.$el.find('.admin-remove-sublayer')
+                        };
+                        settings.removeLayer(el, function() {
+                            // we need to trigger this manually for sublayers to work...
+                            me.$el.trigger({
+                                type: 'adminAction',
+                                command: 'removeLayer',
+                                modelId: subLayerId,
+                                baseLayerId: parentId
+                            });
+                            exitPopup();
+                        });
+                    });
+                    buttons.push(deleteButton);
+                }
+                buttons.push(cancelButton);
+                container.find('.layer').append(settings.$el);
+                // show the dialog
+                var titleKey = isEdit ? 'editSubLayer' : 'addSubLayer';
+                dialog.show(this.instance.getLocalization('admin')[titleKey], container, buttons);
+                // Move layer next to whatever opened it
+                dialog.moveTo(e.currentTarget, 'right');
+                dialog.makeModal();
+            },
+            _getSubLayerById: function(subLayerId) {
+                var mapLayerService = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                return mapLayerService.findMapLayer(subLayerId, this.model.getSubLayers());
             }
         });
     });

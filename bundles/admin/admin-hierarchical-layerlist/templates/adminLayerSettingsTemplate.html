@@ -141,7 +141,6 @@
         </div>
     </div>
 
-    <% if(!isSubLayer) { %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="select-dataprovider" class="add-layer-label"  title="<%= instance.locale('admin.addDataproviderDesc') %>"><%= instance.locale('admin.addDataprovider') %></label>
@@ -150,14 +149,14 @@
             <div class="input-controls">
             <select id="select-dataprovider" class="add-layer-input mid">
                 <% for(var i = 0; dataProviders != null && i < dataProviders.length; i++) { %>
-                <option value="<%= dataProviders[i].id %>" <% if(model.getOrganizationName() == dataProviders[i].name ) { %>selected<% } %> ><%= dataProviders[i].name %></option>
+                <option value="<%= dataProviders[i].id %>" <% if(model.getOrganizationName() === dataProviders[i].name ) { %>selected<% } %> ><%= dataProviders[i].name %></option>
                 <% } %>
             </select>
             </div>
             <button id="add-dataprovider-button" class="add-dataprovider-button"><%= instance.locale('admin.addDataproviderButton') %></button>
         </div>
     </div>
-    <% } %>
+
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">

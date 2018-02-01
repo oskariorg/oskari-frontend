@@ -167,7 +167,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             if (layerId) {
                 layerModel = me.sandbox.findMapLayerFromAllAvailable(layerId);
             }
-            require(['_bundle/views/adminLayerSettingsView'], function(adminLayerSettingsView) {
+            require(['_bundle/views/adminLayerSettingsView', '_bundle/views/adminLayerSettingsView'], function(adminLayerSettingsView, sublayerView) {
                 // create layer settings view for adding or editing layer
                 var settings = new adminLayerSettingsView({
                     model: layerModel,
@@ -177,7 +177,8 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                     groupId: groupId,
                     dataProviders: me.dataProviders,
                     flyout: me._extraFlyout,
-                    baseLayerId: null // FIXME add sublayer its parentid
+                    baseLayerId: null, // FIXME add sublayer its parentid,
+                    sublayerView: sublayerView
                 });
                 var content = settings.$el;
 
