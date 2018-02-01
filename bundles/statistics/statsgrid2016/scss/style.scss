@@ -737,6 +737,21 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
             background-image: url('../images/table_light.png');
         }
     }
+     .diagram {
+        background-color: $darkColor;
+        float: left;
+        height: 36px;
+        width: 36px;
+        background-image: url("../images/tile-diagram-dark.png");
+        cursor: pointer;
+        background-repeat: no-repeat;
+        &.active {
+            background-color: $lightColor;
+            background-image: url("../images/tile-diagram-light.png");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
 
     .clear {
         clear: both;
