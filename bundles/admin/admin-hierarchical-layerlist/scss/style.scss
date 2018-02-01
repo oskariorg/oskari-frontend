@@ -94,6 +94,10 @@ $errorColor: lighten(#ff0000, 20%);
                 margin-top: 3px;
                 margin-left:10px;
 
+                div.add-group-wrapper {
+                    width:500px;
+                }
+
                 .add-class-grouping {
                     font-weight: bold;
                     font-size: 130%;
@@ -224,13 +228,10 @@ $errorColor: lighten(#ff0000, 20%);
 
                     div.add-layer-input-area, div.add-class-input-area {
 
-
-
                         div.add-class-input-area {
                             margin-left: 9em;
                             min-width: 220px;
                         }
-
 
                         margin-left: 9em;
                         min-width: 220px;
@@ -255,6 +256,10 @@ $errorColor: lighten(#ff0000, 20%);
                                     width: 297px;
                                 }
                             }
+                        }
+
+                        .add-dataprovider-button {
+                            margin-left:6px;
                         }
 
                         select {

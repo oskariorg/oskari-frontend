@@ -22,7 +22,8 @@ Oskari.registerLocalization({
             "localePrefix": "Namnet på",
             "editMainGroup": "Huvudgruppsnamn",
             "editSubgroup": "Redigera undergrupp",
-            "addLayer": "Lägg till maplayerr"
+            "addLayer": "Lägg till maplayerr",
+            "addDataprovider": "Lägg till dataprovider"
         },
         "selectableGroup": "selektionsgrupp",
         "errors": {
@@ -45,6 +46,14 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Tason/ryhmän siirto ei onnistunut",
                 "message": "Virhe tason/ryhmän siirrossa, kokeile myöhemmin uudelleen"
+            },
+            "dataprovider": {
+                "title": "Kontrollera dataprovider",
+                "message": "Dataprovider ska vara över 3 tecken långt"
+            },
+            "dataproviderSave": {
+                "title": "Dataprovider misslyckades",
+                "message": "Dataprovider misslyckades, försök igen senare"
             }
         },
         "succeeses": {
@@ -59,6 +68,10 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Tason/ryhmän siirto onnistui",
                 "message": "Tason/ryhmän siirto onnistui"
+            },
+            "dataproviderSave": {
+                "title": "Dataprovider var framgångsrika",
+                "message": "Dataprovider var framgångsrika"
             }
         },
         "confirms": {

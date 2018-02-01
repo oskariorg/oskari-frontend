@@ -37,7 +37,7 @@ define([
                 'click .admin-remove-sublayer': 'removeLayer',
                 'click .show-edit-layer': 'clickLayerSettings',
                 'click .fetch-ws-button': 'fetchCapabilities',
-                //'click .edit-wfs-button': 'editWfsLayerConfiguration',
+                'click .add-dataprovider-button': 'addDataprovider',
                 'click .import-wfs-style-button': 'importSldStyle',
                 'click .save-wfs-style-button': 'saveSldStyle',
                 'click .cancel-wfs-style-button': 'cancelSldStyle',
@@ -52,6 +52,114 @@ define([
                 'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
                 'click .layer-capabilities.icon-info': 'showCapabilitiesPopup'
             },
+
+            /**
+             * Add dataprovider
+             * @method addDataprovider
+             */
+            addDataprovider: function() {
+                var me = this;
+                var buttons = [];
+
+                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                errorDialog.setId('admin-hierarchical-layerlist-group-error-popup');
+                var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                btnCancel.setTitle(me.instance.locale('buttons.cancel'));
+                btnCancel.addClass('cancel');
+                btnCancel.setHandler(function() {
+                    popup.close();
+                    tool.removeClass('active');
+                });
+                buttons.push(btnCancel);
+                var btnOk = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                buttons.push(btnOk);
+                popup.addClass('admin-hierarchical-layerlist-group');
+
+                var loc = (Oskari.getMsg('DivManazer', 'LanguageSelect').languages) ? Oskari.getMsg('DivManazer', 'LanguageSelect').languages : {};
+                btnOk.addClass('add');
+                btnOk.setTitle(me.instance.locale('buttons.add'));
+                btnOk.setHandler(function() {
+                    var data = {};
+                    var hasValidLocales = true;
+                    var localesCount = 0;
+                    popup.getJqueryContent().find('.oskari-textinput.group-name').each(function() {
+                        var el = jQuery(this);
+                        localesCount++;
+                        var value = el.find('input').val().trim();
+                        data['name_' + el.attr('data-locale')] = value;
+                        if (value.length < 4) {
+                            hasValidLocales = false;
+                            el.find('input').addClass('error');
+                        } else {
+                            el.find('input').removeClass('error');
+                        }
+                    });
+
+                    if (localesCount === Oskari.getSupportedLanguages().length && hasValidLocales) {
+                        me._saveDataprovider(data, popup);
+                    } else {
+                        errorDialog.show(me.instance.locale('errors.dataprovider.title'), me.instance.locale('errors.dataprovider.message'));
+                        errorDialog.fadeout();
+                    }
+
+                });
+
+                var message = jQuery('<div class="group-names"></div>');
+                // locale inputs
+                var supportedLocales = Oskari.getSupportedLanguages();
+                supportedLocales.forEach(function(locale) {
+                    var input = Oskari.clazz.create('Oskari.userinterface.component.TextInput');
+                    input.setTitle(me.instance.locale('groupTitles.localePrefix') + ' ' + (loc[locale] || locale));
+                    input.addClass('group-name');
+                    var el = jQuery(input.getElement());
+                    el.find('input').bind('keyup', function() {
+                        var inputEl = jQuery(this);
+                        var value = inputEl.val().trim();
+                        if (value.length < 4) {
+                            inputEl.addClass('error');
+                        } else {
+                            inputEl.removeClass('error');
+                        }
+                    });
+                    el.attr('data-locale', locale);
+                    message.append(el);
+                });
+
+                popup.show(me.instance.locale('groupTitles.addDataprovider'), message, buttons);
+                popup.makeModal();
+            },
+            /**
+             * Save dataprovider
+             * @method  _saveDataprovider
+             * @param   {Object}   data  data fo saving
+             * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
+             * @private
+             */
+            _saveDataprovider: function(data, popup) {
+                var me = this;
+
+                jQuery.ajax({
+                    type: 'PUT',
+                    url: me.instance.sandbox.getAjaxUrl('SaveOrganization'),
+                    data: data,
+                    error: function() {
+                        var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        errorDialog.show(me.instance.locale('errors.dataproviderSave.title'), me.instance.locale('errors.dataproviderSave.message'));
+                        errorDialog.fadeout();
+                    },
+                    success: function(response) {
+                        popup.close();
+                        var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        successDialog.show(me.instance.locale('succeeses.dataproviderSave.title'), me.instance.locale('succeeses.dataproviderSave.message'));
+                        successDialog.fadeout();
+
+                        jQuery('#select-dataprovider').append('<option value="' + response.id + '">' + Oskari.getLocalized(response.name) + '</option>');
+                        jQuery('#select-dataprovider').val(response.id);
+                    }
+                });
+            },
+
             showCapabilitiesPopup: function() {
                 var caps = this.model.getCapabilities();
                 if (!caps) {

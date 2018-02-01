@@ -148,12 +148,13 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-            <select id="select-dataprovider">
+            <select id="select-dataprovider" class="add-layer-input mid">
                 <% for(var i = 0; dataProviders != null && i < dataProviders.length; i++) { %>
                 <option value="<%= dataProviders[i].id %>" <% if(model.getOrganizationName() == dataProviders[i].name ) { %>selected<% } %> ><%= dataProviders[i].name %></option>
                 <% } %>
             </select>
             </div>
+            <button id="add-dataprovider-button" class="add-dataprovider-button"><%= instance.locale('admin.addDataproviderButton') %></button>
         </div>
     </div>
     <% } %>

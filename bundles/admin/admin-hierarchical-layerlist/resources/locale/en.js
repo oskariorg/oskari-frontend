@@ -22,7 +22,8 @@ Oskari.registerLocalization({
             "localePrefix": "Name in",
             "editMainGroup": "Edit main group",
             "editSubgroup": "Edit subgroup",
-            "addLayer": "Add maplayer"
+            "addLayer": "Add maplayer",
+            "addDataprovider": "Add dataprovider"
         },
         "selectableGroup": "Selection group",
         "errors": {
@@ -45,6 +46,14 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Tason/ryhmän siirto ei onnistunut -en",
                 "message": "Virhe tason/ryhmän siirrossa, kokeile myöhemmin uudelleen -en"
+            },
+            "dataprovider": {
+                "title": "Check dataprovider name",
+                "message": "The dataprovider name should be over 3 characters long"
+            },
+            "dataproviderSave": {
+                "title": "Dataprovider saving failed",
+                "message": "Dataprovider saving failed, try again later"
             }
         },
         "succeeses": {
@@ -59,6 +68,10 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Tason/ryhmän siirto onnistui -en",
                 "message": "Tason/ryhmän siirto onnistui -en"
+            },
+            "dataproviderSave": {
+                "title": "Dataprovider saving was successful",
+                "message": "Dataprovider saving was successful"
             }
         },
         "confirms": {
