@@ -38,7 +38,8 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
     {
         "protocol": ["Oskari.bundle.Bundle"],
         "source": {
-            "scripts": [{
+            "scripts": [
+            {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/instance.js"
             }, {
