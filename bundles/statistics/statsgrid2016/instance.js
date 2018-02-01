@@ -58,6 +58,13 @@ Oskari.clazz.define(
                 me.showLegendOnMap(true);
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
+                // TODO? better way to call than strings
+                if( me.conf.diagram ) {
+                    me.showPublisherTools('diagram', true);
+                }
+                if( me.conf.grid ) {
+                    me.showPublisherTools('table', true);
+                }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
             this.__setupLayerTools();
