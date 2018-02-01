@@ -14,11 +14,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         layerTypeSelection: jQuery('<div><div class="layers-type-selection"><p></p></div></div>')
     };
 
-    //this._getLayerTypes();
-
     this._extraFlyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout');
-
-    //this._step = 0;
 
     this.supportedTypes = [{
         id: "wfslayer",
