@@ -85,7 +85,6 @@ Oskari.registerLocalization({
             }
         },
 
-
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "capabilitiesRemarks": "(*)  Nykyisen kartan koordinaatisto ei ole tuettuna palvelun capabilities tiedoissa",
@@ -239,8 +238,6 @@ Oskari.registerLocalization({
             "warningTitle": "Varoitus",
             "successTitle": "Tallennettu",
             "warning_some_of_the_layers_could_not_be_parsed": "Osaa tasoista ei voitu käsitellä.",
-
-
             "addDataprovider": "Tiedontuottaja",
             "groupTitle": "Taustakarttatason nimi",
             "addDataproviderButton": "Lisää"
