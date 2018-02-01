@@ -14,11 +14,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         layerTypeSelection: jQuery('<div><div class="layers-type-selection"><p></p></div></div>')
     };
 
-    //this._getLayerTypes();
-
     this._extraFlyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout');
-
-    //this._step = 0;
 
     this.supportedTypes = [{
         id: "wfslayer",
@@ -44,6 +40,15 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
     this.dataProviders = null;
 
 }, {
+
+    /*******************************************************************************************************************************
+    /* PRIVATE METHODS
+    *******************************************************************************************************************************/
+    /**
+     * Init/configure require
+     * @method  _init
+     * @private
+     */
     _init: function() {
         var requirementsConfig = {
             waitSeconds: 15,
@@ -52,40 +57,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             }
         };
         require.config(requirementsConfig);
-
-
-
     },
-
-    getDataproviders: function(emptyCache, callback) {
-        var me = this;
-        if (me.dataProviders === null || emptyCache === true) {
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                contentType: 'application/json; charset=UTF-8',
-                url: me.sandbox.getAjaxUrl('GetMapLayerGroups'),
-                error: function() {
-                    var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
-                    errorDialog.fadeout();
-                },
-                success: function(response) {
-                    me.dataProviders = [];
-                    response.organization.forEach(function(org) {
-                        me.dataProviders.push({
-                            id: org.id,
-                            name: Oskari.getLocalized(org.name)
-                        });
-                    });
-                    callback();
-
-                }
-            });
-        }
-        callback();
-    },
-
 
     /**
      * Setup supported layer types based on what this bundle can handle and
@@ -128,17 +100,47 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         });
     },
 
-
-
-    ///// OLD STUFF
-    /*******************************************************************************************************************************
-    /* PRIVATE METHODS
-    *******************************************************************************************************************************/
-
-
     /*******************************************************************************************************************************
     /* PUBLIC METHODS
     *******************************************************************************************************************************/
+    /**
+     * Get dataproviders
+     * @method getDataproviders
+     * @param  {Boolean}        emptyCache empty cache
+     * @param  {Function}       callback   callback function
+     */
+    getDataproviders: function(emptyCache, callback) {
+        var me = this;
+        if (me.dataProviders === null || emptyCache === true) {
+            jQuery.ajax({
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=UTF-8',
+                url: me.sandbox.getAjaxUrl('GetMapLayerGroups'),
+                error: function() {
+                    var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
+                    errorDialog.fadeout();
+                },
+                success: function(response) {
+                    me.dataProviders = [];
+                    response.organization.forEach(function(org) {
+                        me.dataProviders.push({
+                            id: org.id,
+                            name: Oskari.getLocalized(org.name)
+                        });
+                    });
+
+                    me.dataProviders.sort(function(a, b) {
+                        return Oskari.util.naturalSort(a.name, b.name);
+                    });
+                    callback();
+
+                }
+            });
+        }
+        callback();
+    },
     showLayerAddPopup: function(tool, layerId, groupId, opts) {
         var me = this;
         me.getDataproviders(false, function() {
@@ -176,75 +178,11 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                         jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
                     }
                 });
-                /*
-                // change the title of the button
-                element.html(this.options.instance.getLocalization('cancel'));
-                element.attr('title', this.options.instance.getLocalization('cancel'));
-                setTimeout(function() {
-                    layer.find('.admin-add-layer').addClass('show-add-layer');
-                }, 30);*/
 
                 me._extraFlyout.setContent(content);
                 me._extraFlyout.show();
             });
 
         });
-
-
-        return;
-        var me = this;
-        var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        popup.addClass('admin-hierarchical-layerlist-layer');
-
-        var content = me._templates.layerTypeSelection.clone();
-        content.find('p').html(me.locale('layer.popup.selectLayerType'));
-
-        Object.keys(me._types).forEach(function(type) {
-            var layerType = me._types[type];
-            var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            btn.setTitle(layerType.getLocalizedType());
-            btn.addClass('layer-type');
-            btn.addClass(type);
-            btn.setHandler(function() {
-                me._extraFlyout.move(100, 100, true);
-                me._extraFlyout.makeDraggable({
-                    handle: '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
-                    scroll: false
-                });
-                me._extraFlyout.addClass('admin-hierarchical-layerlist-add-layer');
-                me._extraFlyout.bringToTop();
-                me._extraFlyout.setTitle(me.locale('layer.add') + ' ' + layerType.getLocalizedType());
-                me._extraFlyout.setContent(layerType.getElement());
-                me._extraFlyout.show();
-                popup.close();
-                me._extraFlyout.on('hide', function() {
-                    showPopup();
-                });
-            });
-            content.find('.layers-type-selection').append(jQuery(btn.getElement()));
-            layerType.btn = btn;
-        });
-
-        var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        btnCancel.setTitle(me.locale('buttons.cancel'));
-        btnCancel.addClass('cancel');
-        btnCancel.setHandler(function() {
-            popup.close();
-            tool.removeClass('active');
-        });
-        var popupTitle = me.locale('layer.popup.title.add');
-        if (layerId) {
-            popupTitle = me.locale('layer.popup.title.edit');
-        }
-        var showPopup = function() {
-            popup.show(popupTitle, content, [btnCancel]);
-            popup.makeModal();
-        };
-        showPopup();
-
-
-        if (layerId && opts.type) {
-            // Trigger click
-        }
     }
 });

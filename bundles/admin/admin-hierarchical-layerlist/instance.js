@@ -45,9 +45,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             var me = this;
 
             // Add layer add tools
-            me.service.addGroupTool('add-layer', function(tool, groupId, layerId) {
+            me.service.addGroupTool('add-layer', function(tool, groupId) {
                 var options = {};
-                me.layer.showLayerAddPopup(tool, layerId, groupId, options);
+                me.layer.showLayerAddPopup(tool, null, groupId, options);
             }, {
                 cls: 'add-layer',
                 tooltip: me.locale('tooltips.addLayer')
@@ -96,6 +96,15 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          */
         _addSubgroupTools: function() {
             var me = this;
+            // Add layer add tools
+            me.service.addSubgroupTool('add-layer', function(tool, groupId, parentId) {
+                var options = {};
+                me.layer.showLayerAddPopup(tool, null, groupId, options);
+            }, {
+                cls: 'add-layer',
+                tooltip: me.locale('tooltips.addLayer')
+            });
+
             // Add edit tool to adding groups
             me.service.addSubgroupTool('edit-subgroup', function(tool, groupId, parentId) {
                 var group = me.layerService.getAllLayerGroups(groupId);
@@ -138,6 +147,15 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          */
         _addSubgroupSubgroupTools: function() {
             var me = this;
+            // Add layer add tools
+            me.service.addSubgroupSubgroupTool('add-layer', function(tool, groupId, parentId) {
+                var options = {};
+                me.layer.showLayerAddPopup(tool, null, groupId, options);
+            }, {
+                cls: 'add-layer',
+                tooltip: me.locale('tooltips.addLayer')
+            });
+
             // Add edit tool to adding groups
             me.service.addSubgroupSubgroupTool('edit-subgroup-subgroup', function(tool, groupId, parentId) {
                 var group = me.layerService.getAllLayerGroups(groupId);
@@ -240,7 +258,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          */
         _findJSTreeNodeActualType: function(type) {
             var actualType;
-            if(type.indexOf('group') >= 0) {
+            if (type.indexOf('group') >= 0) {
                 actualType = 'group';
             } else {
                 actualType = 'layer';

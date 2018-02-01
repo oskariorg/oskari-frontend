@@ -22,7 +22,8 @@ Oskari.registerLocalization({
             "localePrefix": "Nimi kielellä",
             "editMainGroup": "Muokkaa pääryhmää",
             "editSubgroup": "Muokkaa aliryhmää",
-            "addLayer": "Lisää karttataso"
+            "addLayer": "Lisää karttataso",
+            "addDataprovider": "Lisää tiedontuottaja"
         },
         "selectableGroup": "Valintaryhmä",
         "errors": {
@@ -45,6 +46,14 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Tason/ryhmän siirto ei onnistunut",
                 "message": "Virhe tason/ryhmän siirrossa, kokeile myöhemmin uudelleen"
+            },
+            "dataprovider": {
+                "title": "Tarkista tiedontuottajan nimi",
+                "message": "Tiedontuottajan nimen tulee olla yli 3 merkkiä pitkä"
+            },
+            "dataproviderSave": {
+                "title": "Tiedontuottajan tallennus ei onnistunut",
+                "message": "Tiedontuottajan tallennus ei onnistunut, kokeile myöhemin uudelleen"
             }
         },
         "succeeses": {
@@ -59,6 +68,10 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Tason/ryhmän siirto onnistui",
                 "message": "Tason/ryhmän siirto onnistui"
+            },
+            "dataproviderSave": {
+                "title": "Tiedontuottajan tallennus onnistui",
+                "message": "Tiedontuottajan tallennus onnistui"
             }
         },
         "confirms": {
@@ -71,7 +84,6 @@ Oskari.registerLocalization({
                 "message": "Haluatko siirtää tason/ryhmän?"
             }
         },
-
 
         "admin": {
             "capabilitiesLabel": "Capabilities",
@@ -226,10 +238,9 @@ Oskari.registerLocalization({
             "warningTitle": "Varoitus",
             "successTitle": "Tallennettu",
             "warning_some_of_the_layers_could_not_be_parsed": "Osaa tasoista ei voitu käsitellä.",
-
-
             "addDataprovider": "Tiedontuottaja",
-            "groupTitle": "Taustakarttatason nimi"
+            "groupTitle": "Taustakarttatason nimi",
+            "addDataproviderButton": "Lisää"
         },
         "cancel": "Peruuta",
         "add": "Lisää",
