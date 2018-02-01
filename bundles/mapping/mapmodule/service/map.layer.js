@@ -232,7 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // also update layer groups
-            updateLayerGroups(layerId, null, true);
+            this.updateLayerGroups(layerId, null, true);
         },
 
         /**
