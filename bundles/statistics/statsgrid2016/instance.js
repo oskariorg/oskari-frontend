@@ -28,7 +28,7 @@ Oskari.clazz.define(
         this.diagramPlugin = null;
 
         this.regionsetViewer = null;
-        this.enabledInPublisher = [];
+        this.embeddedTools = [];
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -59,11 +59,11 @@ Oskari.clazz.define(
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
                 // TODO? better way to call than strings
-                if( me.conf.diagram ) {
-                    me.showPublisherTools('diagram', true);
-                }
                 if( me.conf.grid ) {
-                    me.showPublisherTools('table', true);
+                    me.showEmbeddedTools('table', true);
+                }
+                if( me.conf.diagram ) {
+                    me.showEmbeddedTools('diagram', true);
                 }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
@@ -327,8 +327,8 @@ Oskari.clazz.define(
             }
             return state;
         },
-        getPublisherEnabledTools: function () {
-            return this.enabledInPublisher;
+        getEmbeddedTools: function () {
+            return this.embeddedTools;
         },
         /**
          * Check if the tool has been added to the array containing tool names opened in publisher
@@ -336,7 +336,7 @@ Oskari.clazz.define(
          * @param {String} tool tool name as string
          */
         publisherHasTool: function (tool) {
-            return this.enabledInPublisher.indexOf(tool) > -1;
+            return this.embeddedTools.indexOf(tool) > -1;
         },
         /**
          * toggles the specified flyout from publisher
@@ -350,11 +350,11 @@ Oskari.clazz.define(
         },
         /**
          * toggles the specified flyout from publisher
-         * @method showPublisherTools
+         * @method showEmbeddedTools
          * @param {String} tool tool name as string
          * @param {boolean} enabled is the tool enabled or not
          */
-        showPublisherTools: function (tool, enabled) {
+        showEmbeddedTools: function (tool, enabled) {
             var sandbox = this.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
@@ -366,10 +366,10 @@ Oskari.clazz.define(
                 } else {
                     this.togglePlugin.showTool(tool, enabled);
                 }
-                if ( this.enabledInPublisher.length !== 0 ) {
-                    this.enabledInPublisher.splice( this.enabledInPublisher.indexOf(tool), 1 );
+                if ( this.embeddedTools.length !== 0 ) {
+                    this.embeddedTools.splice( this.embeddedTools.indexOf(tool), 1 );
                 }
-                if ( this.togglePlugin && this.enabledInPublisher.length === 0 ) {
+                if ( this.togglePlugin && this.embeddedTools.length === 0 ) {
                     mapModule.unregisterPlugin(this.togglePlugin);
                     mapModule.stopPlugin(this.togglePlugin);
                     this.togglePlugin = null;
@@ -381,7 +381,7 @@ Oskari.clazz.define(
                     mapModule.registerPlugin(this.togglePlugin);
                     mapModule.startPlugin(this.togglePlugin);
                 }
-                this.enabledInPublisher.push(tool);
+                this.embeddedTools.push(tool);
             }
             this.togglePlugin.showTool(tool, enabled);
         },

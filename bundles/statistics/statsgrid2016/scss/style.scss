@@ -745,11 +745,11 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         background-image: url("../images/tile-diagram-dark.png");
         cursor: pointer;
         background-repeat: no-repeat;
+        background-position: center;    
         &.active {
             background-color: $lightColor;
             background-image: url("../images/tile-diagram-light.png");
             background-repeat: no-repeat;
-            background-position: center;
         }
     }
 

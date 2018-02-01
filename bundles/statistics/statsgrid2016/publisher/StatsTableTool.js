@@ -86,7 +86,7 @@ function() {
         if(!stats) {
             return;
         }
-        stats.showPublisherTools(this.id, enabled);
+        stats.showEmbeddedTools(this.id, enabled);
     },
     /**
     * Is displayed.
@@ -144,7 +144,7 @@ function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
             if ( stats.publisherHasTool(this.id) ) {
-                stats.showPublisherTools(this.id, false);
+                stats.showEmbeddedTools(this.id, false);
             }
         }
     }
