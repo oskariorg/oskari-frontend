@@ -373,13 +373,81 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 groupList.push(groupModel);
             });
 
+
             if (me.service.hasAdmin()) {
                 return groupList;
             }
 
-            var sortedGroupList = jQuery.grep(groupList, function(group, index) {
-                return group.getLayers().length > 0;
+            var isGroupLayers = function(group) {
+                if (typeof group.getLayers === 'function') {
+                    return group.getLayers().length > 0;
+                } else {
+                    return group.layers.length > 0;
+                }
+            };
+
+            var removeGroupWhereNoLayers = function(group) {
+                var filtered = [];
+                if (group.getGroups().length > 0) {
+                    var groups = group.getGroups();
+
+                    var subgroups = groups.filter(function(subgroup) {
+
+
+                        if (subgroup.groups) {
+                            var subgroupsubgroups = subgroup.groups || [];
+                            var subsubFilter = subgroupsubgroups.filter(function(subgroupsubgroup) {
+                                return subgroupsubgroup.layers.length > 0;
+                            });
+                            if (subsubFilter.length > 0) {
+                                return true;
+                            }
+                        } else if (subgroup.layers.length > 0) {
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    group._groups = subgroups;
+                    return group;
+                }
+                return group;
+            };
+
+            var sortedGroupList = [];
+            groupList.forEach(function(group) {
+                var i = null;
+                var subgroup = null;
+                if (isGroupLayers(group)) {
+                    sortedGroupList.push(removeGroupWhereNoLayers(group));
+                    return;
+                }
+                // check subgroup
+                else if (group.groups || group.getGroups()) {
+                    var groups = group.groups || group.getGroups();
+                    for (i = 0; i < groups.length; i++) {
+                        subgroup = groups[i];
+                        if (isGroupLayers(groups[i])) {
+                            sortedGroupList.push(removeGroupWhereNoLayers(group));
+                            return;
+                        }
+                    }
+
+                    // check subgroup subgroups
+                    for (i = 0; i < groups.length; i++) {
+                        subgroup = groups[i].groups || groups[i].getGroups();
+                        if (subgroup.groups) {
+                            for (var j = 0; j < subgroup.groups.length; j++) {
+                                if (isGroupLayers(subgroup.groups[j])) {
+                                    sortedGroupList.push(group);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
             });
+
             return sortedGroupList;
         },
 
