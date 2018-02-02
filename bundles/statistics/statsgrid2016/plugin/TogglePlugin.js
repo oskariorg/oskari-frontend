@@ -50,8 +50,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
             if(!map.hasClass('active')) {
                 map.addClass('active');
                 stats.getEmbeddedTools().forEach( function (tool) {
-                    me.element.find('.' + tool).removeClass('active');
-                    stats.toggleEmbeddedTools(tool);
+                    var toolEl = me.element.find('.' + tool);
+                    if ( toolEl.hasClass('active') ) {
+                        toolEl.removeClass('active');
+                    }
+                    stats.getTile().hideExtensions();
                 });
             }
         });
@@ -59,7 +62,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
         table.bind('click', function () {
             stats.toggleEmbeddedTools("table");
             var flyout = flyoutManager.getFlyout("table");
-            
+
             if( flyout.isVisible() ) {
                 map.removeClass('active');
                 table.addClass('active');
