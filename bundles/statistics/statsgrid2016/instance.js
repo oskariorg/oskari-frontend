@@ -184,7 +184,6 @@ Oskari.clazz.define(
                 } else {
                     me.getTile().showExtensions();
                 }
-            }
             },
             /**
              * @method MapLayerEvent
