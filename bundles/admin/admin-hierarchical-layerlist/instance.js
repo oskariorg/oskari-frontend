@@ -234,6 +234,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 ajaxData.oldGroupId = draggedNodeOldParentId;
                 ajaxData.targetGroupId = draggedNodeNewParentId;
                 me._saveOrder(ajaxData);
+                me.service.trigger('jstree-order-changed', data);
             });
         },
         /**

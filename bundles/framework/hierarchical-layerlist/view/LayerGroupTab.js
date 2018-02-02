@@ -185,6 +185,15 @@ Oskari.clazz.define(
                 }
             });
 
+            me.service.on('jstree-order-changed', function() {
+                setTimeout(function() {
+                    me._addGroupTools();
+                    me._addSubgroupTools();
+                    me._addSubgroupSubgroupTools();
+                    me._addLayerTools();
+                }, 200);
+            });
+
             me.service.on('jstree-search', function(nodes, str, res) {
                 setTimeout(function() {
                     me._addGroupTools();
