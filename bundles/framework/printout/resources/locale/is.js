@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Kortaskýringar",
-                "tooltip": "Veldu staðsetningu fyrir kortaskýringar. Ef enginn staður er valinn verða engar skýringar í útprentuninni.",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "Engar kortaskýringar",
-                        "tooltip": "Kortaskýringar eru ekki sýndar í útprentuninni.",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Neðra horn vinstra megin.",
-                        "tooltip": "Kortaskýringar eru í neðra horni vinstra megin á útprentun."
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Efra horn vinstra megin.",
-                        "tooltip": "Kortaskýringar eru í efra horni vinstra megin á útprentun."
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Efra horn hægra megin.",
-                        "tooltip": "Kortaskýringar eru í efra horni hægra megin á útprentun."
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Neðra horn hægra megin.",
-                        "tooltip": "Kortaskýringar eru í neðra horni hægra megin á útprentun."
-                    }
-                ]
-            },
             "help": "Hjálp",
             "error": {
                 "title": "Villa",

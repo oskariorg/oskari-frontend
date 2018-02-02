@@ -4,7 +4,10 @@ Oskari.registerLocalization(
     "key": "StatsGrid",
     "value": {
         "tile": {
-            "title": "Teemakartat"
+            "title": "Teemakartat",
+            "search": "Aineistohaku",
+            "table": "Taulukko",
+            "diagram": "Pylväsdiagrammi"
         },
         "flyout": {
             "title": "Teemakartat"
@@ -54,8 +57,10 @@ Oskari.registerLocalization(
                 "noRegionset": "Ei aluevalintaa"
             },
             "extraFeatures": {
-                "title": "LISÄEHDOT JA -OMINAISUUDET",
-                "showMapLayers": "Näytä karttatasot"
+                "title": "Lisäominaisuudet",
+                "hideMapLayers": "Piilota muut karttatasot",
+                "openTableCheckbox": "Avaa taulukko",
+                "openDiagramCheckbox": "Avaa pylväsdiagrammiesitys"
             }
         },
         "statsgrid": {
@@ -141,6 +146,37 @@ Oskari.registerLocalization(
             "regionsetsIsEmpty": "Aluevalintoja ei saatu valitulle aineistolle.",
             "regionsDataError": "Alueen arvojen haussa tapahtui virhe.",
             "regionsDataIsEmpty": "Valitulle aineistolle ei saatu alueiden arvoja."
+        },
+        "datacharts": {
+          "flyout": "Haettu aineisto",
+          "barchart": "Pylväskuvio",
+          "linechart": "Viivakuvio",
+          "table": "Taulukko",
+          "desc": "Taulukko ja kuvaajat",
+          "nodata": "Ei valittuja indikaattoreita",
+          "indicatorVar": "Kuvaajassa esitettävä muuttuja",
+          "descColor": "Kuvaajan väri",
+          "selectClr": "Valittu väri",
+          "clrFromMap": "Värit kartalla olevan luokittelun mukaan",
+          "chooseColor": "Valitse väri"
+        },
+        "filter": {
+            "title": "Suodatus",
+            "indicatorToFilter": "Suodatettava muuttuja",
+            "condition": "Ehto",
+            "value": "Arvo",
+            "variable": "Muuttuja",
+            "conditionPlaceholder": "Valitse ehto",
+            "greater": "Suurempi kuin (>)",
+            "greaterEqual": "Suurempi tai yhtäsuuri kuin (>=)",
+            "equal": "Yhtäsuuri kuin (=)",
+            "lessEqual": "Pienempi tai yhtäsuuri kuin (<=)",
+            "lessThan": "Pienempi kuin (<)",
+            "between": "Välillä (poissulkeva)",
+            "filter": "Suodata arvot",
+            "desc": "Suodata arvoilla",
+            "filtered": "Suodatetut arvot",
+            "area": "Suodata alueilla"
         },
         "layer": {
             "name": "Teemakartan aluejako",

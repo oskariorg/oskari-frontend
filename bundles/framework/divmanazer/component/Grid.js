@@ -64,6 +64,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         /** Grouping headers */
         this._groupingHeaders = null;
 
+        this._columnClsPrefix = 'statsgrid-header-';
+
         Oskari.makeObservable(this);
     }, {
         /**
@@ -453,9 +455,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                     // reselect selection
                     idField = me.model.getIdField();
+                    var selections = [];
                     for (j = 0; j < selection.length; j += 1) {
-                        me.select(selection[j][idField], true);
+                        selections.push(selection[j][idField]);
                     }
+                    me.select(selections, false);
                     me.trigger('sort', {
                         column : scopedValue,
                         ascending : !descending
@@ -468,13 +472,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (dataArray.length === 0) {
                 return;
             }
-            fullFieldNames = [];
+            me._fullFieldNames = [];
             data = dataArray[0];
             for (i = 0; i < fieldNames.length; i += 1) {
                 key = fieldNames[i];
                 value = data[key];
                 if (typeof value === 'object') {
-                    fullFieldNames.push(
+                    me._fullFieldNames.push(
                         {
                             key: key,
                             baseKey: key,
@@ -486,7 +490,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     for (field in value) {
                         if (value.hasOwnProperty(field)) {
                             if (dataArray.length > 2) {
-                                fullFieldNames.push(
+                                me._fullFieldNames.push(
                                     {
                                         key: key + '.' + field,
                                         baseKey: key,
@@ -496,7 +500,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                                     }
                                 );
                             } else {
-                                fullFieldNames.push(
+                                me._fullFieldNames.push(
                                     {
                                         key: key + '.' + field,
                                         baseKey: key,
@@ -509,7 +513,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         }
                     }
                 } else {
-                    fullFieldNames.push(
+                    me._fullFieldNames.push(
                         {
                             key: key,
                             baseKey: key,
@@ -559,8 +563,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
 
                     // Check last grouping header cell
-                    if(i === me._groupingHeaders.length-1 && cols < fullFieldNames.length && !h.colspan) {
-                        var lastColspan = (fullFieldNames.length - cols) + 1;
+                    if(i === me._groupingHeaders.length-1 && cols < me._fullFieldNames.length && !h.colspan) {
+                        var lastColspan = (me._fullFieldNames.length - cols) + 1;
                         groupHeader.attr('colspan', lastColspan);
                     }
 
@@ -576,11 +580,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
 
-            for (i = 0; i < fullFieldNames.length; i += 1) {
+            for (i = 0; i < me._fullFieldNames.length; i += 1) {
                 header = me.templateTableHeader.clone();
                 link = header.find('a');
-                fieldName = fullFieldNames[i].key;
-                baseKey = fullFieldNames[i].baseKey;
+                fieldName = me._fullFieldNames[i].key;
+                baseKey = me._fullFieldNames[i].baseKey;
                 uiName = me.uiNames[baseKey];
 
                 if(typeof uiName === 'function') {
@@ -590,7 +594,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     var tools = this.columnTools[baseKey] || [];
                     if (!uiName) {
                         uiName = fieldName;
-                    } else if (fieldName !== fullFieldNames[i][key]) {
+                    } else if (fieldName !== me._fullFieldNames[i][key]) {
                         uiName = fieldName.replace(baseKey, uiName);
                     }
                     link.append(uiName);
@@ -602,10 +606,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             header.addClass('asc');
                         }
                     }
-                    if (fullFieldNames[i].type === 'default') {
-                        link.bind('click', headerClosureMagic(fullFieldNames[i].key));
-                        me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
-                    } else if (fullFieldNames[i].type === 'object') {
+                    if (me._fullFieldNames[i].type === 'default') {
+                        link.bind('click', headerClosureMagic(me._fullFieldNames[i].key));
+                        me.__attachHeaderTools(header, tools, me._fullFieldNames[i].key);
+                    } else if (me._fullFieldNames[i].type === 'object') {
                         if (dataArray.length > 2) {
                             header.addClass('closedSubTable');
                             header.addClass('base');
@@ -617,16 +621,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         link.bind('click', headerLinkClosureMagic);
                     }
 
-                    if (fullFieldNames[i].visibility === 'hidden') {
+                    if (me._fullFieldNames[i].visibility === 'hidden') {
                         header.addClass('hidden');
                     }
                 }
 
-                header.data('key', fullFieldNames[i].baseKey);
-                header.data('value', fullFieldNames[i].subKey);
+                header.data('key', me._fullFieldNames[i].baseKey);
+                header.data('value', me._fullFieldNames[i].subKey);
 
-                header.addClass(this.__getHeaderClass(fullFieldNames[i].baseKey));
-                if(me.__selectedColumn === fullFieldNames[i].baseKey) {
+                header.addClass(me._columnClsPrefix+i);
+                if(me.__selectedColumn === me._fullFieldNames[i].baseKey) {
                     header.addClass('selected');
                 }
                 headerContainer.append(header);
@@ -680,7 +684,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _renderBody: function (table, fieldNames) {
             var me = this,
                 // print data
-                body = table.find('tbody'),
+                body = table.find('tbody').last(),
                 dataArray = me.model.getData(),
                 row,
                 data,
@@ -721,15 +725,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 body.append(row);
             });
             rows = table.find('tbody tr');
-            rowClicked = function () {
-                me._dataSelected(jQuery(this).attr('data-id'));
+            rowClicked = function (e) {
+                me._dataSelected(jQuery(this).attr('data-id'), e.ctrlKey);
             };
-            rows.bind('click', rowClicked);
+            rows.on('click', rowClicked);
             // enable links to work normally (unbind row click on hover and rebind when mouse exits)
             rows.find('a').hover(function () {
-                jQuery(this).parents('tr').unbind('click');
+                jQuery(this).parents('tr').off('click');
             }, function () {
-                jQuery(this).parents('tr').bind('click', rowClicked);
+                jQuery(this).parents('tr').on('click', rowClicked);
             });
 
             me._checkPaging(table);
@@ -1020,21 +1024,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             container.append(table);
 
-            // autosize header
-            if(typeof me.autoHeightHeader === 'number') {
-                var maxHeight = 0;
-                var thead = table.find('thead');
-                var theadRow = table.find('thead tr:not(.grouping)');
-
-                theadRow.find('th').each(function(){
-                    var el = jQuery(this);
-                    if(el.prop('scrollHeight')>maxHeight) {
-                        maxHeight = el.prop('scrollHeight');
-                    }
-                });
-
-                theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
-            }
+            me.updateHeaderHeight();
 
             if (me.resizableColumns) {
                 me._enableColumnResizer();
@@ -1044,8 +1034,28 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if(selected.values.length > 0) {
                 selected.values.forEach(function(selection){
                     me.table.find('tr[data-id="'+selection+'"]').addClass('selected');
-                    me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
                 });
+                me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
+            }
+        },
+
+        updateHeaderHeight: function(){
+            var me = this;
+            // autosize header
+            if(typeof me.autoHeightHeader === 'number' && me.table) {
+                var maxHeight = 0;
+                var thead = me.table.find('thead');
+                var theadRow = me.table.find('thead tr:not(.grouping)');
+                theadRow.height(me.autoHeightHeader || 30);
+
+                theadRow.find('th').each(function(){
+                    var el = jQuery(this);
+                    if(el.prop('scrollHeight')>maxHeight) {
+                        maxHeight = el.prop('scrollHeight');
+                    }
+                });
+
+                theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
             }
         },
 

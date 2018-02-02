@@ -4,7 +4,10 @@ Oskari.registerLocalization(
     "key": "StatsGrid",
     "value": {
         "tile": {
-            "title": "Tematiska kartor"
+            "title": "Tematiska kartor",
+            "search": "Sök data",
+            "table": "Tabell",
+            "diagram": "Stapeldiagram"
         },
         "flyout": {
             "title": "Tematiska kartor"
@@ -12,28 +15,28 @@ Oskari.registerLocalization(
         "dataProviderInfoTitle": "Indikatorer",
         "layertools": {
             "table_icon": {
-                "tooltip": "Gå till temakartor",
-                "title": "Temakartor"
+                "tooltip": "gå till tematiska kartor",
+                "title": "Tematiska kartor"
             },
             "diagram_icon": {
-                "tooltip": "Visa diagram",
+                "tooltip": "Visa uppgifter i diagram",
                 "title": "Diagram"
             },
             "statistics": {
-                "tooltip": "går till temakartor",
+                "tooltip": "gå till tematiska kartor",
                 "title": "Statistik"
             }
         },
         "panels": {
             "newSearch": {
-                "title": "DATASÖKNING",
-                "datasourceTitle": "Dataproducent",
+                "title": "SÖK DATA",
+                "datasourceTitle": "Dataleverantör",
                 "indicatorTitle": "Datamängd",
                 "selectDatasourcePlaceholder": "Välj datakälla",
                 "selectIndicatorPlaceholder": "Välj datamängd",
-                "noResults": "Inga sökresultat hittades med sökorden",
-                "refineSearchLabel": "Förfina innehållet av den valda datamängen",
-                "refineSearchTooltip1": "Du får fram fler alternativ efter att du har valt datakällan och datamändgen.",
+                "noResults": "Inga sökresultat hittades med",
+                "refineSearchLabel": "Precisera innehållet av datamängden du önskar att granska",
+                "refineSearchTooltip1": "Du får mera alternativ när du har först valt dataleverantören och datamängden.",
                 "refineSearchTooltip2": "",
                 "addButtonTitle": "Hämta datamängdens uppgifter",
                 "defaultPlaceholder": "Välj värde",
@@ -48,104 +51,137 @@ Oskari.registerLocalization(
                         "placeholder": "Välj år"
                     },
                     "regionset": {
-                        "placeholder": "Välj regionindelning"
+                        "placeholder": "Välj områdesindelning"
                     }
                 },
-                "noRegionset": "Ingen vald regionindelning"
+                "noRegionset": "Ingen områdesindelning"
             },
             "extraFeatures": {
-                "title": "YTTERLIGA VILLKOR OCH FUNKTIONER",
-                "showMapLayers": "Visa kartlager"
+                "title": "Ytterligare egenskaper",
+                "hideMapLayers": "Gömma andra kartlager",
+                "openTableCheckbox": "Öppna tabell",
+                "openDiagramCheckbox": "Öppna diagram"
             }
         },
         "statsgrid": {
-            "title": "SÖKTA DATAMÄNGDER",
-            "noResults": "Inga valda datamändger",
+            "title": "HÄMTADE DATAMÄNGDER",
+            "noResults": "Inga valda datamängder",
             "areaSelection": {
-                "title": "REGIONINDELNING",
-                "info": "Omdefiniera de områden där du vill granska datamängder genom att välja från rullgardinsmenyn"
+                "title": "OMRÅDESINDELNING",
+                "info": "Omdefiniera den önskade områdesindelningen från rullgardinsmenyn."
             },
             "source": "Datamängd",
             "orderBy": "Sortera",
             "orderByAscending": "Sortera stigande",
-            "orderByDescending": "Sortera fallande",
-            "removeSource": "Avlägsna datamängd"
+            "orderByDescending": "Sortera sjunkande",
+            "removeSource": "Radera datamängd"
         },
         "legend": {
             "title": "Klassificering",
-            "noActive": "Ingen vald datamängd, välj en datamängd för att visa kartans klassificering.",
-            "noEnough": "Dataset is too small for classification. Try another dataset or edit search options.",
-            "cannotCreateLegend": "Cannot create legend. Try another classification options."
+            "noActive": "Inga valda datamängder, välj datamängd för att se kartans klassificering.",
+            "noEnough": "Datamängden är för liten för att klassificeras, försök en annan datamängd eller avgränsning.",
+            "cannotCreateLegend": "Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden."
         },
         "parameters": {
             "sex": "Kön",
             "year": "År",
-            "regionset": "Regionindelning"
+            "regionset": "Områdesindelning"
         },
         "datatable": "Tabell",
         "published": {
             "showMap": "Visa karta",
-            "showTable": "Show tabell"
+            "showTable": "Visa tabell"
         },
         "classify": {
             "classify": "Klassificering",
             "classifymethod": "Klassificeringsmetod",
-            "classes": "Klasser",
+            "classes": "Klassfördelning",
             "methods" : {
-                "jenks": "Jenks intervall",
+                "jenks": "Naturliga brytpunkter",
                 "quantile": "Kvantiler",
                 "equal": "Lika intervall"
             },
-            "manual": "Egna klasser",
-            "manualPlaceholder": "Ange siffrorna, separerade med kommatecken.",
-            "manualRangeError": "Klass intervallen bör vara nummer mellan {min} och {max}. Ingångs siffror separerade med kommatecken. Decimal separeras med en punkt.",
-            "nanError": "Det angivna värdet är inte ett nummer. Ange ingångsklass intervall igen som siffror separerade med kommatecken. Decimal separeras med en punkt.",
-            "infoTitle": "Egna klasser",
-            "info": "Ange siffrorna igen separerade med kommatecken. Decimal separeras med en punkt. Till exempel genom att mata in \"\" 0, 10,5, 24, 30,2, 57, 73,1 \" får du fem klasser som har värden mellan\" 0-10,5 \",\" 10,5-24 \",\" 24-30,2 \", \"30,2-57\" ja \"57-73,1\". Om indikatorns värde är mindre än minimivärdet (0) eller större än det maximala värdet (73,1) visas det inte på kartan. Klass intervallen bör vara nummer mellan {min} och {max}.",
-            "mode": "Klass intervall",
+            "manual": "Klassificering för hand",
+            "manualPlaceholder": "Avgränsa tal med kommatecken.",
+            "manualRangeError": "Klassgränserna är felaktiga. Klassgränserna bör vara mellan {min} - {max}. Avgränsa tal med kommatecken. Använd punkt som decimaltecken. Rätta till klassgränserna och försök igen.",
+            "nanError": "Det givna värdet är ej ett tal. Rätta till värdet och försök igen. Använd punkt som decimaltecken.",
+            "infoTitle": "Klassificering för hand",
+            "info": "Ange klassgränserna som tal avgränsade med kommatecken. Använd punkt som decimaltecken. Till exempel genom att mata in \"0, 10.5, 24, 30.2, 57, 73.1\" skapas fem klasser med värden mellan \"0-10,5\", \"10,5-24\", \"24-30,2\", \"30,2-57\" och \"57-73,1\". Indikatorvärden, som är mindre än den lägsta klassgränsen (0 i exemplet) eller större än den högsta klassgränsen (73,1), visas inte på kartan. Klassgränserna bör vara mellan det minsta och största värdet.",
+            "mode": "Klassgränser",
             "modes": {
                 "distinct": "Kontinuerlig",
-                "discontinuous": "Separat"
+                "discontinuous": "Diskontinuerlig"
             },
-            "editClassifyTitle": "Edit classification",
-            "classifyFieldsTitle": "Classification values",
+            "editClassifyTitle": "Redigera klassificeringen",
+            "classifyFieldsTitle": "Klassificeringsvärden",
             "map": {
                 "mapStyle": "Kartans stil",
                 "choropleth": "Koropletkarta",
-                "points": "Punkterna",
+                "points": "Karta med punktsymboler",
                 "pointSize": "Punktens storlek",
                 "min": "Minimum",
                 "max": "Maximum",
                 "color": "Färg",
                 "transparency": "Genomskinlighet",
-                "showValues": "Visa värdena"
+                "showValues": "Visa värden"
             }
         },
         "colorset": {
-            "button": "Färger",
-            "flipButton": "Vänd färger",
-            "themeselection": "Färgvalstema",
-            "setselection": "Färgset urval",
+            "button": "Färg",
+            "flipButton": "Kasta om färgerna",
+            "themeselection": "Välj klassernas färger",
+            "setselection": "Fördelning",
             "seq": "Kvantitativ",
             "qual": "Kvalitativ",
-            "div": "Delbar",
-            "info2": "Välj färgerna genom att klicka på färggruppen",
+            "div": "Uppdelad",
+            "info2": "Välj färgsättning genom att klicka på den önskade färggruppen.",
             "cancel": "Avbryt"
         },
         "errors": {
             "title": "Fel",
-            "indicatorListError": "Ett fel uppstod vid hämtningen av listan av de valda datakällorna.",
-            "indicatorListIsEmpty": "Listan av datamängder är tom.",
-            "indicatorMetadataError": "Ett fel uppstod vid hämtningen av datamängdens attributlista.",
-            "indicatorMetadataIsEmpty": "Datamängdens attributlista är tom.",
-            "regionsetsIsEmpty": "Ett fel uppstod vid hämtningen av lämpliga regioner för datamängden.",
-            "regionsDataError": "Ett fel uppstod vid hämtningen av regionernas värden.",
-            "regionsDataIsEmpty": "Listan av lämpliga regioner är tom. Regionernas värden kunde inte ges åt den valda datamängden."
+            "indicatorListError": "Ett fel uppstod vid sökningen av dataleverantören.",
+            "indicatorListIsEmpty": "Dataleverantörens lista av datamängder är tom.",
+            "indicatorMetadataError": "Ett fel uppstod vid sökningen av datamängder.",
+            "indicatorMetadataIsEmpty": "Inga datamängder har valts.",
+            "regionsetsIsEmpty": "Områdesindelningarna kunde inte hämtas för den valda datamängden.",
+            "regionsDataError": "Ett fel uppstod vid sökningen av områdets värden.",
+            "regionsDataIsEmpty": "Områdenas värden kunde inte ges till de valda datamängderna."
+        },
+        "datacharts": {
+          "flyout": "Sökta datamängden",
+          "barchart": "Stapeldiagram",
+          "linechart": "Linjediagram",
+          "table": "Tabell",
+          "desc": "Tabell och figurer",
+          "nodata": "Inga valda indikatorer",
+          "indicatorVar": "Variabeln som ska visas i figuren",
+          "descColor": "Figurens färg",
+          "selectClr": "Vald färg",
+          "clrFromMap": "Färgsättning enligt kartas klassificering",
+          "chooseColor": "Välj färg"
+        },
+        "filter": {
+            "title": "Filtrering",
+            "indicatorToFilter": "Variabel som ska filtreras",
+            "condition": "Villkor",
+            "value": "Värde",
+            "variable": "Variabel",
+            "conditionPlaceholder": "Välj villkor",
+            "greater": "Större än (>)",
+            "greaterEqual": "Större än eller lika med (>=)",
+            "equal": "Lika med (=)",
+            "lessEqual": "Mindre än eller lika med (<=)",
+            "lessThan": "Mindre än (<)",
+            "between": "Mellan (uteslutande)",
+            "filter": "Filtrera värden",
+            "desc": "Filtrera med värden",
+            "filtered": "Filtrerade värden",
+            "area": "Filtrera med områden"
         },
         "layer": {
-            "name": "Tematiska kart region",
-            "inspireName": "Tematiska kart",
-            "organizationName": "Tematiska kart"
+            "name": "Områdesindelning av tematiska kartan",
+            "inspireName": "Tematisk karta",
+            "organizationName": "Tematisk karta"
         }
     }
 });

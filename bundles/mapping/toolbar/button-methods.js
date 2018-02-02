@@ -241,10 +241,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             //only need to deactivate tools when sticky button
             this._deactiveTools(pId,pGroup);
 
-            // notify components that tool has changed
-            e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
-            this.sandbox.notifyAll(e);
-
             // button stays on (==sticky) -> remove previous "sticky"
             this._removeToolSelections(pGroup);
             this.selectedButton = {
@@ -284,6 +280,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);
             me._addHoverIcon(btn,toolbarConfig,button);
         }
+        // notify components that tool has changed
+        e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+        this.sandbox.notifyAll(e);
     },
     _addHoverIcon: function(btnConfig,toolbarConfig,buttonEl){
         var me = this;

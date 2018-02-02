@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Karttaselitteen sijainti",
-                "tooltip": "Valitse karttaselitteelle sijainti tulosteessa. Jos sijaintia ei ole valittuna, karttaselitettä ei näytetä tulosteessa.",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "Ei karttaselitettä",
-                        "tooltip": "Karttaselitettä ei näytetä tulosteessa.",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Vasemmassa alanurkassa",
-                        "tooltip": "Karttaselite näytetään tulosteen vasemmassa alanurkassa."
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Vasemmassa ylänurkassa",
-                        "tooltip": "Karttaselite näytetään tulosteen vasemmassa ylänurkassa."
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Oikeassa ylänurkassa",
-                        "tooltip": "Karttaselite näytetään tulosteen oikeassa ylänurkassa."
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Oikeassa alanurkassa",
-                        "tooltip": "Karttaselite näytetään tulosteen oikeassa alanurkassa."
-                    }
-                ]
-            },
             "help": "Ohje",
             "error": {
                 "title": "Virhe",

@@ -9,13 +9,14 @@
  */
 /* Mixins */
 .oskari-badge {
+  position: relative;
+  left: 50%;
   font-weight: bold;
   color: #ffffff;
-  vertical-align: baseline;
   white-space: nowrap;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #999999;
-  padding: 1px 9px 2px;
+  padding: 1px 7px 2px;
   -webkit-border-radius: 9px;
   -moz-border-radius: 9px;
   -o-border-radius: 9px;
@@ -23,13 +24,20 @@
   border-radius: 9px;
   -webkit-background-clip: padding-box;
   -moz-background-clip: padding-box;
-  background-clip: padding-box; }
+  background-clip: padding-box;
+  top: 50%;
+  transform: translate(0,-50%);
+}
 
 a.oskari-badge:hover {
   color: #ffffff;
   text-decoration: none;
   cursor: pointer; }
-
+.badge-wrapper {
+    display: inline-block;
+    position: absolute;
+    height: inherit;
+}
 .oskari-badge-important {
   background-color: #b94a48; }
   .oskari-badge-important[href] {
@@ -46,7 +54,7 @@ a.oskari-badge:hover {
     background-color: #356635; }
 
 .oskari-badge-info {
-  background-color: #3a87ad; }
+  background-color: #2a6dbb; }
   .oskari-badge-info[href] {
     background-color: #2d6987; }
 
@@ -54,3 +62,9 @@ a.oskari-badge:hover {
   background-color: #333333; }
   .oskari-badge-inverse[href] {
     background-color: #1a1a1a; }
+.oskari-badge-oskari {
+  background-color:#FFDE00;
+  color: #333438; }
+  .oskari-badge-oskari-inverse {
+  background-color:#333438;
+  color: #FFDE00; }

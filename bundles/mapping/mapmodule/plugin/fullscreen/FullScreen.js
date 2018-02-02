@@ -7,7 +7,6 @@ Oskari.clazz.define(
     /**
      * @static @method create called automatically on construction
      *
-     *
      */
     function () {
         var me = this;
@@ -16,69 +15,53 @@ Oskari.clazz.define(
         me._defaultLocation = 'top left';
         me._index = 1;
         me._name = 'FullScreenPlugin';
-        me._el = null;
-        me.state = null;
+        me._element = null;
+        me.state = {};
         me._sandbox = null;
     },
     {
         /**
-         * @method startPlugin
+         * @method _createControlElement
          *
-         * Interface method for the plugin protocol. Should registers requesthandlers and
-         * eventlisteners.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         * @return {jQuery}
+         * Plugin jQuery element
          */
-        startPlugin : function(sandbox) {
-            var me = this,
-                fsimg = this.getMapModule().getImageUrl() +
-                '/mapping/mapmodule/resources/images/',
-                el = jQuery(
-                    '<div class="fullscreenDiv">' +
-                    '<img class="fullscreenDivImg" src="' + me._getImagePath('hide-navigation.png') + '"></img>' +
-                    '</div>'
-                );
-
+        _createControlElement: function() {
+            var me = this;
+            el = jQuery(
+                '<div class="mapplugin fullscreenDiv">' +
+                '<img class="fullscreenDivImg" src="' + me._getImagePath('hide-navigation.png') + '"></img>' +
+                '</div>'
+            );
             el.find('.fullscreenDivImg').bind('click', function (event) {
                 event.preventDefault();
-
-                if (jQuery(this).attr('src').match(/hide-navigation/)) {
-                    me._hideNavigation();
-                } else {
+                if (me.state.fullscreen) {
                     me._showNavigation();
+                } else {
+                    me._hideNavigation();
                 }
             });
-            me._el = el;
-            this.getMapModule().getMapEl().append(el);
-            me._sandbox = sandbox;
-
-            me._requestHandlers = me._createRequestHandlers();
-            Object.keys(me._requestHandlers).forEach(function(key) {
-                sandbox.requestHandler(key, me._requestHandlers[key]);
-            });
-
-            sandbox.registerAsStateful(me._clazz, me);
+            return el;
         },
         /**
-         * @method stopPlugin
-         *
-         * Interface method for the plugin protocol. Should unregisters requesthandlers and
-         * eventlisteners.
+         * @method _startPluginImpl
          *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        stopPlugin : function(sandbox) {
+        _startPluginImpl : function(sandbox) {
             var me = this;
-            sandbox = sandbox || me._sandbox;
-            if(me._el) {
-                me._el.remove();
-            }
-            Object.keys(me._requestHandlers).forEach(function(key) {
-                sandbox.requestHandler(key, null);
-            });
-            sandbox.unregisterStateful(me._clazz);
+            me.setEnabled(me._enabled);
+            return me.setVisible(me._visible);
+        },
+        /**
+         * @method _stopPluginImpl
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        _stopPluginImpl : function(sandbox) {
+            this.removeFromPluginContainer(this.getElement());
         },
 
         _getImagePath: function(image) {
@@ -86,12 +69,11 @@ Oskari.clazz.define(
         },
 
         /**
-         * @private @method  _createRequestHandlers
-         *
+         * @private @method  createRequestHandlers
          *
          * @return {Object} Request handler map
          */
-        _createRequestHandlers: function () {
+        createRequestHandlers: function () {
             return {
                 'MapModulePlugin.ToggleFullScreenControlRequest':
                     Oskari.clazz.create(
@@ -116,10 +98,10 @@ Oskari.clazz.define(
         },
         _showNavigation: function(){
             var me = this;
-            if(!me._el) {
+            if(!me._element) {
                 return;
             }
-            me._el.find('.fullscreenDivImg').attr('src', me._getImagePath('hide-navigation.png'));
+            me._element.find('.fullscreenDivImg').attr('src', me._getImagePath('hide-navigation.png'));
             me.state = {
                 fullscreen: false
             };
@@ -129,17 +111,16 @@ Oskari.clazz.define(
         },
         _hideNavigation: function(){
             var me = this;
-            if(!me._el) {
+            if(!me._element) {
                 return;
             }
-            me._el.find('.fullscreenDivImg').attr('src', me._getImagePath('show-navigation.png'));
+            me._element.find('.fullscreenDivImg').attr('src', me._getImagePath('show-navigation.png'));
             me.state = {
                 fullscreen: true
             };
             me.getMapModule().getMapEl().parents('#contentMap').addClass('oskari-map-window-fullscreen');
             me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
         }
-
     },
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

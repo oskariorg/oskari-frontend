@@ -26,37 +26,16 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
     getName: function () {
         return this.__name;
     },
-    /**
-     * Needed by sandbox.register()
-     */
     init : function() {},
-    /**
-     * @method setSandbox
-     * @param {Oskari.Sandbox} sandbox
-     * Sets the sandbox reference to this component
-     */
     setSandbox: function (sbx) {
         this.sandbox = sbx;
     },
-    /**
-     * @method getSandbox
-     * @return {Oskari.Sandbox}
-     */
     getSandbox: function () {
         return this.sandbox;
     },
-
     handleRequest: function (core, request) {
       this.plugin.setRotation(request.getDegrees());
     },
-    /**
-     * @method start
-     *
-     * implements BundleInstance start methdod
-     *
-     * creates and registers request handlers
-     *
-     */
     start: function(sandbox) {
         var me = this;
         if(me._started){
@@ -66,18 +45,18 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
         sandbox = sandbox || Oskari.getSandbox();
         me.setSandbox(sandbox);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        me.createPlugin(true);
-
+        me.createPlugin();
         sandbox.register(me);
         sandbox.requestHandler('rotate.map', this);
     },
-    createPlugin: function( enabled, publisher ) {
-      if(typeof publisher === 'undefined'){
-        publisher = false;
+    createPlugin: function( ) {
+      if (this.plugin) {
+        return;
       }
       var conf = this.conf || {};
-      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin', conf);
-      if(!plugin.isSupported() && !publisher){
+      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.MapRotatorPlugin', conf);
+      if ( !plugin.isSupported() ) {
+        // don't create plugin if ol4 is not supported
         return;
       }
       this._mapmodule.registerPlugin(plugin);
@@ -96,9 +75,5 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
       this.started = false;
     }
   }, {
-      /**
-       * @property {String[]} protocol
-       * @static
-       */
       protocol: ['Oskari.bundle.BundleInstance']
   });

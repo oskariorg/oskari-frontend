@@ -68,11 +68,11 @@ a:focus {
 
 /* Selection colours */
 ::selection {
-  background: #fdf8d9;
+  background: #ffd400;
 }
 
 ::-moz-selection {
-  background: #fdf8d9;
+  background: #ffd400;
 }
 
 img::selection {

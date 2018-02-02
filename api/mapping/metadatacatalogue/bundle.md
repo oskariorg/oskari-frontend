@@ -47,7 +47,10 @@ Setting hideMetaDataPrintLink to true will hide print link.
     <td>'userinterface.RemoveExtensionRequest'</td><td>Unregister from UI in stop()-method</td>
   </tr>
   <tr>
-    <td>'MapModulePlugin.AddFeaturesToMapRequest'</td><td>Sends out when user clicks 'Show data coverage' link on a search results.</td>
+    <td>'DrawTools.StartDrawingRequest'</td><td>Sends out when user clicks 'Show data coverage' link on a search results to draw a rectangle.</td>
+  </tr>
+  <tr>
+    <td>'DrawTools.StopDrawingRequest'</td><td>Sends out when user stops data coverage rectangle drawing.</td>
   </tr>
 </table>
 

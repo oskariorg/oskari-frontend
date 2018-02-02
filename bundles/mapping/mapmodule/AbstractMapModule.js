@@ -105,6 +105,8 @@ Oskari.clazz.define(
         this._cursorStyle = '';
         this.log = Oskari.log('AbstractMapModule');
 
+        this.isDrawing = false;
+
 
         this.templates = {
             'crosshair': jQuery(
@@ -113,6 +115,7 @@ Oskari.clazz.define(
                     '<div class="oskari-crosshair-horizontal-bar"></div>'+
                 '</div>')
         };
+
     }, {
         /**
          * Moved from core, to be removed
@@ -476,6 +479,14 @@ Oskari.clazz.define(
          */
         getProjection: function () {
             return this._projectionCode;
+        },
+
+        setDrawingMode: function (mode) {
+            this.isDrawing = !!mode;
+        },
+
+        getDrawingMode: function () {
+            return this.isDrawing;
         },
 /* --------------- MAP LOCATION ------------------------ */
         /**
@@ -880,32 +891,32 @@ Oskari.clazz.define(
          * @param {Number} layerid, the id number of the abstract layer in loading
          * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
          */
-        loadingState: function( layerId, started, errors ) {
-          if(typeof errors === 'undefined') {
+        loadingState: function ( layerId, started, errors ) {
+          if ( typeof errors === 'undefined' ) {
             errors = false;
           }
           var done = false;
           var me = this;
           var layers = this.getSandbox().findAllSelectedMapLayers();
           var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
-          if( !oskariLayer ) {
+          if ( !oskariLayer ) {
             return;
           }
 
-          if( !this.progBar ) {
+          if ( !this.progBar ) {
             this.progBar = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
             this.progBar.create(jQuery('#' + this.getMapElementId()));
           }
 
-          if( this.loadtimer ) {
+          if ( this.loadtimer ) {
             clearTimeout( this.loadtimer );
           }
 
-          if( started ) {
+          if ( started ) {
             var wasFirstTile = oskariLayer.loadingStarted();
             if( wasFirstTile ) {
                 this.progBar.show();
-                layers.forEach( function( layer ) {
+                layers.forEach( function ( layer ) {
                   oskariLayer.resetLoadingState();
                 });
             }
@@ -913,8 +924,8 @@ Oskari.clazz.define(
           else {
             var tilesLoaded = 0;
             var pendingTiles = 0;
-            if(!errors) {
-              layers.forEach( function( layer ) {
+            if ( !errors ) {
+              layers.forEach( function ( layer ) {
                 tilesLoaded += layer.loaded;
                 pendingTiles += layer.tilesToLoad;
               });
@@ -926,26 +937,22 @@ Oskari.clazz.define(
                 errors = oskariLayer.getLoadingState().errors;
                 oskariLayer.loadingDone(0);
 
-                setTimeout(function(){
+                setTimeout( function () {
                   me.progBar.hide();
-                },2000);
+                }, 2000 );
                 tilesLoaded = 0;
                 pendingTiles = 0;
-                this.notifyErrors( errors );
+                this.notifyErrors( errors, oskariLayer );
             }
           }
-          if( done && !oskariLayer.getLoadingState().errors ) {
-            Oskari.log( this.getName() ).info( oskariLayer._layerName + " done" );
-          }
-
           this.loadtimer = setTimeout( function() {
             var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
-            var event = eventBuilder(done, layerId);
+            var event = eventBuilder( done, layerId );
             me._sandbox.notifyAll( event );
           }, 50 );
         },
-        notifyErrors: function( errors ) {
-              Oskari.log( this.getName() ).warn( "error: "+errors );
+        notifyErrors: function( errors, oskariLayer ) {
+              Oskari.log( this.getName() ).warn( "error loading layer: " + oskariLayer._name );
         },
         /**
          * Returns state for mapmodule including plugins that have getState() function
@@ -1146,8 +1153,7 @@ Oskari.clazz.define(
         },
 
         _adjustMobileMapSize: function() {
-            // TODO: should use mapdiv height, not window since publisher can force the size to smaller than fullscreen
-            var mapDivHeight = jQuery(window).height();
+            var mapDivHeight = this.getMapEl().height();
             var mobileDiv = this.getMobileDiv();
             var toolbar = mobileDiv.find('.mobileToolbarContent');
 
@@ -1173,8 +1179,11 @@ Oskari.clazz.define(
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
             // only reduce size if div is visible, otherwise padding will make the map smaller than it should be
             if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
-                mapDivHeight -= mobileDiv.outerHeight();
-                if((mobileDiv.attr('data-height') + '') !== mapDivHeight) {
+                var totalHeight = jQuery('#contentMap').height();
+                if(totalHeight < mapDivHeight + mobileDiv.outerHeight()) {
+                    mapDivHeight -= mobileDiv.outerHeight();
+                }
+                if((mobileDiv.attr('data-height')) !== mapDivHeight.toString()) {
                     jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
                     this.updateDomain();
                     mobileDiv.attr('data-height', mapDivHeight);
@@ -2137,7 +2146,6 @@ Oskari.clazz.define(
             // Get the container
             var container = this._getMapControlPluginContainer(containerClasses),
                 content = container.find('.mappluginsContainer .mappluginsContent'),
-                pos = position + '',
                 inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
                 precedingPlugin = null,
                 curr;
@@ -2164,8 +2172,8 @@ Oskari.clazz.define(
                 content.find('.mapplugin').each(function () {
                     curr = jQuery(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
-                    if ((!inverted && curr.attr('data-position') <= pos) ||
-                        (inverted && curr.attr('data-position') > pos)) {
+                    if ((!inverted && parseInt(curr.attr('data-position')) <= position) ||
+                        (inverted && parseInt(curr.attr('data-position')) > position)) {
                         precedingPlugin = curr;
                     }
                 });
@@ -2379,7 +2387,15 @@ Oskari.clazz.define(
             },
             positionAlign: 'left'
         }],
-
+        /**
+         * @method getLayerTileUrls
+         * @param layerId id of the layer
+         * @return {String[]}
+         * Get urls of tile layer tiles. Override in implementation
+         */
+        getLayerTileUrls: function(layerId) {
+            return [];
+        },
         /**
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found

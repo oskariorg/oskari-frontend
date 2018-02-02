@@ -20,6 +20,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         var conf = this.getConfiguration();
         conf.name = 'Publisher2';
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
+        if( !!this.configurationHasCustomElement() ) {
+            conf.tileClazz = null;
+            this.customElementClickHandler();
+        }
         this.defaultConf = conf;
         this.publisher = null;
     }, {
@@ -72,7 +76,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
                 okBtn.addClass('primary');
                 url = event.getUrl();
-                //url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
                 iframeCode = '<div class="codesnippet"><code>&lt;iframe src="' + url + '" style="border: none;';
                 if (width !== null && width !== undefined) {
                     iframeCode += ' width: ' + width + ';';
@@ -94,14 +97,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @method afterStart
          */
         afterStart: function () {
+            var me = this;
             var sandbox = this.getSandbox();
             var loc = this.getLocalization();
-
+            
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
             // create and register request handler
             var reqHandler = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
-                    this);
+                'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
+                function(data) {
+                    me.setPublishMode(true, data);
+                });
             sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             // Let's add publishable filter to layerlist if user is logged in
@@ -128,7 +134,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         getService : function() {
             return this.__service;
         },
-
+        /**
+         * @return {String} reference to element-id to use instead of tile as bundle ui-element
+         */
+        configurationHasCustomElement: function () {
+             return this.getConfiguration().tileElement;
+        },
+        customElementClickHandler: function () {
+            var me = this;
+            jQuery( this.configurationHasCustomElement() ).on("click", function () {
+                me.getSandbox().postRequestByName(
+                    'userinterface.UpdateExtensionRequest', [me, 'toggle']
+                );
+            });
+        },
         /**
          * @method setPublishMode
          * Transform the map view to publisher mode if parameter is true and back to normal if false.
@@ -136,18 +155,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * returns them when exiting the publish mode.
          *
          * @param {Boolean} blnEnabled true to enable, false to disable/return to normal mode
-         * @param {Layer[]} deniedLayers layers that the user can't publish
          * @param {Object} data View data that is used to prepopulate publisher (optional)
+         * @param {Layer[]} deniedLayers layers that the user can't publish (optional)
          */
-        setPublishMode: function (blnEnabled, deniedLayers, data) {
-            var me = this,
-                map = jQuery('#contentMap');
+        setPublishMode: function (blnEnabled, data, deniedLayers) {
+            var me = this;
+            var map = jQuery('#contentMap');
+            data = data || this.getDefaultData();
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
-
+            if ( !!this.configurationHasCustomElement() ) {
+                 blnEnabled ? jQuery( this.configurationHasCustomElement() ).addClass('activePublish') : jQuery( this.configurationHasCustomElement() ).removeClass('activePublish');
+            }
             if (blnEnabled) {
-                me.getService().setNonPublisherLayers(deniedLayers);
+                var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
+                this.getSandbox().request(this, stateRB(data.configuration));
+                if(data.uuid) {
+                    this._showEditNotification();
+                }
+
+                me.getService().setNonPublisherLayers(deniedLayers || this.getLayersWithoutPublishRights());
                 me.getService().removeLayers();
                 me.oskariLang = Oskari.getLang();
 
@@ -199,6 +227,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.getService().addLayers();
                 me.getFlyout().close();
             }
+        },
+        /**
+         * Initial data for publisher to preselect certain tools by default and assume current map state as starting point
+         * @return {Object}
+         */
+        getDefaultData: function() {
+            var config = {
+                mapfull: {
+                    conf: {
+                        plugins: [
+                            {id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'},
+                            {id: 'Oskari.mapframework.mapmodule.ControlsPlugin'},
+                            {id: 'Oskari.mapframework.mapmodule.GetInfoPlugin'}
+                        ]
+                    }
+                },
+                "featuredata2": {
+                    conf: {}
+                }
+            };
+            // setup current mapstate so layers are not removed
+            var state = this.getSandbox().getCurrentState();
+            // merge state to initial config
+            return { configuration: jQuery.extend(true, config, state) };
+        },
+        /**
+         * @method _showEditNotification
+         * Shows notification that the user starts editing an existing published map
+         * @private
+         */
+        _showEditNotification: function () {
+            var loc = this.getLocalization('edit'),
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.show(loc.popup.title, loc.popup.msg);
+            dialog.fadeout();
         },
         /**
          * @method hasPublishRight

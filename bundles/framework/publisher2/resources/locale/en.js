@@ -22,6 +22,10 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Create Embedded Map",
             "titleEdit": "Update Embedded Map",
+            "transfer": {
+                "label": "Transfer configuration",
+                "PublishTransfer": "Enable transfer"
+            },
             "domain": {
                 "title": "Basic settings",
                 "label": "Website address (without http and www prefixes)",

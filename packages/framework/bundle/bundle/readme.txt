@@ -1,1 +1,0 @@
-placeholder for compiled Oskari core bundle.js 

@@ -244,6 +244,7 @@ Oskari.clazz.define(
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
+                        this._removeFeaturesByAttribute(olLayer);
                         this._map.removeLayer(olLayer);
                         delete this._olLayers[layerId];
                         delete this._features[layerId];
@@ -452,7 +453,7 @@ Oskari.clazz.define(
                 features[0].setProperties(options.attributes);
             }
             _.forEach(features, function(feature) {
-                if (!feature.getId() && !feature.get('id')) {
+                if (typeof feature.getId() === 'undefined' && typeof feature.get('id') === 'undefined') {
                     var id = 'F' + me._nextFeatureId++;
                     feature.setId(id);
                     //setting id using set(key, value) to make id-property asking by get('id') possible

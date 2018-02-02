@@ -211,7 +211,7 @@ Oskari.clazz.define(
                 },
                 type : 'POST',
                 dataType : 'json',
-                url : ajaxUrl + 'action_route=DownloadAll'
+                url : ajaxUrl + 'action_route=DownloadInfo'
             });
 
         },

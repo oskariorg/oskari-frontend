@@ -1,5 +1,79 @@
 # Release Notes
 
+## 1.45.0
+
+For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/4?closed=1
+
+### Mapmodule
+
+- Numerous issues fixed regarding map rotation.
+- WMS singletile layers in OpenLayers 3 implementation now send progress events like tiled layers.
+- Empty results for GetFeatureInfo (map click on layer) functionality is no longer shown as empty infobox.
+- Reseting the map having hidden WFS-layers now works as expected. Previously hidden WFS-layers became visible on reset.
+- Plugin ordering fix.
+
+#### OpenLayers update (4.4.2)
+
+- Bundled Openlayers 3+ version updated (currently used for embedded maps).
+- Most of the bundles for the sample application now have a parallel implementation usable with OpenLayers 4. This is in preparation for migrating all of Oskari to use Openlayers 3+ version not just for embedded maps but also for GeoPortal appsetups.
+
+#### Embedded maps
+
+- Embedded maps including maplegends can now be reset as normal. Previously maplegends caused problems on reset.
+
+#### Drawing functionality (drawtools)
+
+- Mapclicks are no longer propagated while drawing on Openlayers 3+ mapmodule.
+- Polygons now include the closing point for linear rings (https://github.com/oskariorg/oskari-frontend/pull/177).
+- It's now possible to get drawn geometries as a feature with MultiGeometry instead of having multiple features with "simple" geometries (https://github.com/oskariorg/oskari-frontend/pull/).
+- It's also possible to edit MultiGeometries on drawtools.
+- Other bugfixes.
+
+### Timeseries functionality
+
+- Adds generalized timeseries UI that any other bundle can use with TimeseriesService.
+- Adds support for registering layer animation implementations with TimeseriesLayerService (via TimeseriesService).
+- Adds implementation for animating WMS layers (via TimeseriesLayerService).
+
+https://github.com/oskariorg/oskari-frontend/pull/152
+https://github.com/oskariorg/oskari-frontend/pull/170
+
+### Publisher
+
+- Map size handling fixes.
+- Publisher can now be configured to skip creating tile on the menubar and bind the functionality to open from configured element (https://github.com/oskariorg/oskari-frontend/pull/216).
+- New (admin) bundle for creating embedded maps by a JSON configuration. Adds options to import/export configuration in publisher. Usable for replicating embedded map configs from one user to another within an instance (https://github.com/oskariorg/oskari-frontend/pull/204)
+
+### Statistical maps functionality
+
+- Diagram is now available as a visualization in addition to map and table data.
+- The basic userinterface has been changed and every visualization now has it's own flyout.
+- Legend now adds a scrollbar when needed (on small screens).
+
+### Misc
+
+- Printing no longer supports any statistical maps related overlays like the legend. This is a quick fix for allowing Openlayers 4 based printing. A new printing frontend is "under construction" and it will allow functionalities to "hook into" the printing interface in the same way that they can to publisher. This means printing no longer has references to other functionalities. Instead other functionalities can add additional options for printing.
+
+#### Internals
+
+- Updated bundled jsts.js to 0.16.0
+- A lot of unused libraries have been removed from the libraries folder.
+- Sandbox now has errorhandling for Oskari events minimizing the impact of one eventhandler failing for the app as a whole:
+
+    Sandbox: Error notifying FeatureData2 about DrawingEvent
+
+- Oskari loader now announces (in developer console) any exposed libraries bundles have and possible overrides from other bundles.
+- Added more tests for RPC-functionalities
+- Added Oskari.BasicBundle to the core that manages most of the boilerplate code for bundles without the basic tile/flyout setup (https://github.com/oskariorg/oskari-frontend/pull/226)
+- Added Oskari.urls.getLocation([key]) where key can be "login", "register" etc that enables bundle-specific url configurations to be removed in the future. Urls are provided in GetAppSetup XHR response under "env" key.
+
+#### Deprecated:
+
+- sandbox.getLocalizedProperty() in favor of Oskari.getLocalized(). They were duplicate implementations for the same thing.
+- Oskari.app.setApplicationSetup() with identical Oskari.app.init() just to have a shorter name.
+- Oskari.getSandbox().getAjaxUrl() with Oskari.urls.getRoute(); since URLs are not sandbox specific, but global to the application
+- Oskari.getSandbox().setAjaxUrl(url) with Oskari.urls.set("api", [url]);
+
 ## 1.44.3
 
 ### VectorLayerPlugin / AddFeaturesToMapRequest

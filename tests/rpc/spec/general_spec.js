@@ -7,7 +7,7 @@ describe("General", function() {
         });
     });
 
-    it("is supported", function(done) {
+   it("is supported", function(done) {
         channel.isSupported(function(blnSupported) {
             expect(blnSupported).toBe(general.IsSupported);
             channel.log('Client is supported.')
@@ -34,7 +34,7 @@ describe("General", function() {
     it("has expected SRS", function(done) {
         channel.getInfo(function(oskariInfo) {
             expect(oskariInfo.srs).toBe(general.srsName);
-            channel.log('SRS: ', oskariInfo.srs, '/', general.srsName);
+            channel.log('SRS: ', oskariInfo.srs, '/', general.srsName, oskariInfo);
             done();
         });
     });

@@ -1,0 +1,41 @@
+.oskari-fileinput .box__file {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.oskari-fileinput .box__file + label {
+    margin-top:2%;
+    margin-left:3%;
+    font-size: 1em;
+    font-weight: 700;
+    display: inline-block;
+}
+.oskari-fileinput .box__input {
+    height:4em;
+}
+
+.oskari-fileinput.box__file:focus + label,
+.box__dragndrop,
+.box__uploading,
+.box__success,
+.box__error {
+  display: none;
+}
+
+.box.has-advanced-upload {
+  background-color: white;
+   outline: 1px dashed lavender; 
+   outline-offset: -10px; 
+}
+.box.has-advanced-upload .box__dragndrop {
+  display: inline;
+}
+.box.is-uploading .box__input {
+  visibility: none;
+}
+.box.is-uploading .box__uploading {
+  display: block;
+}

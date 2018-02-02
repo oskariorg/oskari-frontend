@@ -1,13 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.event.RotationDegreesEvent
- *
- * Event is sent when decides to
+ * @class Oskari.mapping.event.map.rotated'
+ *  When map is rotated with ALT + SHIFT + MOUSE an event is sent out with how many degrees the map rotated
  */
-Oskari.clazz.define('Oskari.mapframework.framework.event.map.rotated',
-/**
- * @method create called automatically on construction
- * @static
- */
+Oskari.clazz.define('Oskari.mapping.event.map.rotated',
+
 function( degrees ) {
     this.degrees = degrees;
 }, {
@@ -22,9 +18,6 @@ function( degrees ) {
     },
     getRotationDegrees: function(){
       return this.degrees;
-    },
-    getStatus: function(){
-      return this._status;
     }
 }, {
     /**

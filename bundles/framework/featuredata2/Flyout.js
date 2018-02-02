@@ -58,6 +58,8 @@ Oskari.clazz.define(
                 me.sandbox.registerForEventByName(me, t);
             }
         }
+
+        this.wfsLayerService = null;
     }, {
         __templates: {
             wrapper : '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
@@ -175,11 +177,14 @@ Oskari.clazz.define(
                     if (previousPanel) {
                         request = reqBuilder(previousPanel.layer.getId(), false);
                         sandbox.request(me.instance.getName(), request);
+                        previousPanel.getContainer().hide();
                     }
                     me.selectedTab = selectedPanel;
                     if (selectedPanel) {
-                        me.updateData(selectedPanel.layer);
 
+                        if( selectedPanel.getContainer().css('display') == 'none') {
+                            selectedPanel.getContainer().show();
+                        }
                         // sendout highlight request for selected tab
                         if (me.active) {
                             var selection = [];
@@ -194,6 +199,7 @@ Oskari.clazz.define(
                             request = reqBuilder(selectedPanel.layer.getId(), true);
                             sandbox.request(me.instance.getName(), request);
                         }
+                        me.updateData(selectedPanel.layer);
                     }
                 }
             );
@@ -203,34 +209,6 @@ Oskari.clazz.define(
             var containerEl = me.tabsContainer.getElement();
             containerEl.parents('.oskari-flyoutcontentcontainer').css('overflow', 'hidden');
         },
-
-        /**
-         * @method layerAdded
-         * @param {Oskari.mapframework.domain.WfsLayer} layer
-         *           WFS layer that was added
-         * Adds a tab for the layer
-         */
-        layerAdded: function (layer) {
-            var me = this,
-                panel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.TabPanel'
-                );
-
-            panel.setTitle(layer.getName());
-            panel.setTooltip(layer.getName());
-            panel.getContainer().append(
-                this.instance.getLocalization('loading')
-            );
-            panel.layer = layer;
-            this.layers['' + layer.getId()] = panel;
-            this.tabsContainer.addPanel(panel);
-            if (!layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
-                panel.setTitleIcon('icon-funnel', function (event) {
-                me.addFilterFunctionality(event, layer);
-                });
-            }
-        },
-
         turnOnClickOff: function () {
             var me = this;
             me.filterDialog.popup.dialog.off('click', '.add-link');
@@ -290,7 +268,32 @@ Oskari.clazz.define(
             }
             return true;
         },
+        /**
+         * @method layerAdded
+         * @param {Oskari.mapframework.domain.WfsLayer} layer
+         *           WFS layer that was added
+         * Adds a tab for the layer
+         */
+        layerAdded: function (layer) {
+            var me = this,
+                panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.TabPanel'
+                );
 
+            panel.setTitle(layer.getName());
+            panel.setTooltip(layer.getName());
+            panel.getContainer().append(
+                this.instance.getLocalization('loading')
+            );
+            panel.layer = layer;
+            this.layers['' + layer.getId()] = panel;
+            this.tabsContainer.addPanel(panel);
+            if (!layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
+                panel.setTitleIcon('icon-funnel', function (event) {
+                me.addFilterFunctionality(event, layer);
+                });
+            }
+        },
         /**
          * @method layerRemoved
          * @param {Oskari.mapframework.domain.WfsLayer} layer
@@ -300,7 +303,6 @@ Oskari.clazz.define(
         layerRemoved: function (layer) {
             var layerId = '' + layer.getId(),
                 panel = this.layers[layerId];
-
             this.tabsContainer.removePanel(panel);
             // clean up
             if (panel) {
@@ -310,7 +312,24 @@ Oskari.clazz.define(
                 delete panel.layer;
                 this.layers[layerId] = null;
                 delete this.layers[layerId];
+                panel.getContainer().remove();
             }
+        },
+        /**
+         * @method  @public selectGridValues select grid values
+         * @param  {Array} selected     selected values
+         * @param  {Oskari.mapframework.domain.WfsLayer} layer     WFS layer that was select features
+         */
+        selectGridValues: function(selected, layer){
+            if(!selected) {
+                return;
+            }
+            var me = this;
+            var panel = me.layers['' + layer.getId()];
+            if (!panel || !panel.grid) {
+                return;
+            }
+            panel.grid.select(selected, false);
         },
 
         /**
@@ -323,19 +342,14 @@ Oskari.clazz.define(
             var me = this;
             var panel = this.layers['' + layer.getId()];
             var isOk = this.tabsContainer.isSelected(panel);
-            if (!this.active || !layer || !isOk) {
+            if (!layer || !isOk) {
                 return;
             }
 
             var map = this.instance.sandbox.getMap(),
                 container = panel.getContainer(),
-                selection = null,
-                i,
-                selectedFeatures;
+                i;
 
-            if (panel.grid) {
-                selection = panel.grid._getSelectedRows();
-            }
             container.empty();
             if (!layer.isInScale(map.getScale())) {
                 container.append(this.instance.getLocalization('errorscale'));
@@ -345,33 +359,43 @@ Oskari.clazz.define(
                 container.append(this.instance.getLocalization('errorNoFields'));
                 return;
             }
-            if(layer.getActiveFeatures().length === 0) {
+            if(layer.getActiveFeatures().length === 0 ) {
                 container.parent().children('.tab-tools').remove();
                 container.removeAttr('style');
                 container.append(this.instance.getLocalization('layer')['out-of-content-area']);
+
+                if (!panel.grid) {
+                   container.parent().find('.grid-tools').remove();
+                }
+                
                 return;
             }
             container.append(this.instance.getLocalization('loading'));
 
-            if (this.instance.__loadingStatus[layer.getId()] === 'loading' || this.instance.__loadingStatus[layer.getId()] === 'error') {
+            if (this.instance.__loadingStatus[layer.getId()] === 'error') {
                 return;
             }
 
             // in scale, proceed
             this._prepareData(layer);
-            if (selection && selection.values.length > 0) {
-                selection.values.forEach(function(selectedFeature){
-                    // update map
-                   panel.grid.select(selectedFeature, true);
-                });
-            }
 
             // Grid opacity
             this.setGridOpacity(layer, 1.0);
+        },
 
-            if(me.layers[layer.getId()] && me.layers[layer.getId()].showSelectedRowsFirst) {
+        moveSelectedRowsTop: function(layer) {
+            var me = this;
+            if(me.getSelectedFeatureIds() && me.layers[layer.getId()] && me.layers[layer.getId()].showSelectedRowsFirst) {
                 me.layers[layer.getId()].grid.moveSelectedRowsTop(true);
             }
+        },
+
+        getSelectedFeatureIds: function(layer) {
+            var me = this;
+            if(!me.wfsLayerService) {
+                me.wfsLayerService = me.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+            }
+            return me.wfsLayerService.getSelectedFeatureIds(layer.getId());
         },
 
         /**
@@ -546,8 +570,6 @@ Oskari.clazz.define(
                 isManualRefresh = layer.isManualRefresh(),
                 allowLocateOnMap = isManualRefresh && this.instance && this.instance.conf && this.instance.conf.allowLocateOnMap;
 
-
-
             if (isOk) {
                 panel.getContainer().parent().find('.featuredata2-show-selected-first').remove();
                 panel.getContainer().empty();
@@ -596,8 +618,8 @@ Oskari.clazz.define(
                         );
 
                     // set selection handler
-                    panel.grid.addSelectionListener(function (pGrid, dataId) {
-                        me._handleGridSelect(layer, dataId);
+                    panel.grid.addSelectionListener(function (pGrid, dataId, isCtrlKey) {
+                        me._handleGridSelect(layer, dataId, isCtrlKey);
                     });
 
                     // set popup handler for inner data
@@ -618,7 +640,6 @@ Oskari.clazz.define(
 
                     panel.grid.setColumnSelector(true);
                     panel.grid.setResizableColumns(true);
-
                     if (conf && !conf.disableExport) {
                         panel.grid.setExcelExporter(
                             layer.getPermission('download') === 'download_permission_ok'
@@ -767,12 +788,9 @@ Oskari.clazz.define(
                     panel.selectedFirstCheckbox.setHandler(function() {
                         panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked());
                     });
-
-
                 }
 
                 panel.selectedFirstCheckbox.setChecked(panel.selectedFirstCheckbox.isChecked() === true);
-                panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked() === true);
 
                 // Checkbox
                 var checkboxEl = jQuery(panel.selectedFirstCheckbox.getElement());
@@ -785,6 +803,11 @@ Oskari.clazz.define(
                 } else {
                     checkboxEl.css('margin-top', '7px');
                     gridToolsEl.append(checkboxEl);
+                }
+
+                var selected = me.getSelectedFeatureIds(layer);
+                if(selected && selected.length>0) {
+                    me.selectGridValues(selected, layer);
                 }
 
             }
@@ -928,9 +951,6 @@ Oskari.clazz.define(
             if(!isOk) {
                 return;
             }
-            if (keepCollection === undefined) {
-                keepCollection = sandbox.isCtrlKeyDown();
-            }
             if (!keepCollection) {
                 this.WFSLayerService.emptyWFSFeatureSelections(layer);
             }
@@ -946,32 +966,20 @@ Oskari.clazz.define(
          * Handles changes on the UI when a feature has been selected (highlights grid row)
          *
          */
-        featureSelected: function (event) {
-            if (!this.active) {
-                return;
-            }
-
-            var layer = event.getMapLayer(),
+        featureSelected: function (layer) {
+            var me = this,
                 panel = this.layers['' + layer.getId()],
-                fids = event.getWfsFeatureIds(),
-                isOk = this.tabsContainer.isSelected(panel),
-                i;
+                isOk = !!panel,
+                selected = me.getSelectedFeatureIds(layer);
 
             if(!isOk) {
                 return;
             }
 
-            if (fids !== null && fids !== undefined && fids.length > 0) {
-                panel.grid.select(fids[0], event.isKeepSelection());
-                if (fids.length > 1) {
-                    for (i = 1; i < fids.length; i += 1) {
-                        panel.grid.select(fids[i], event.isKeepSelection());
-                    }
-                }
-            } else {
-                if (panel && panel.grid && isOk) {
-                    panel.grid.removeSelections();
-                }
+            if (selected && selected.length > 0) {
+                this.selectGridValues(selected, layer);
+            } else if (panel && panel.grid && isOk) {
+                panel.grid.removeSelections();
             }
         },
 

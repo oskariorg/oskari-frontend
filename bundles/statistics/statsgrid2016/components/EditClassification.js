@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     for(var i=100;i>=30;i-=10) {
         transparencyEl.append('<option value="'+i+'">'+ i +' %</option>');
     }
-    this.__templates.classification.find('select.transparency-value option[value=80]').attr('selected', 'selected');
+    this.__templates.classification.find('select.transparency-value option[value=100]').attr('selected', 'selected');
 
     this.log = Oskari.log('Oskari.statistics.statsgrid.EditClassification');
 

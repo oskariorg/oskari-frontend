@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "",
-                "tooltip": "",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
-                    }
-                ]
-            },
             "help": "Βοήθεια",
             "error": {
                 "title": "Σφάλμα",

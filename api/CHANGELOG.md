@@ -9,6 +9,45 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.45.0
+
+### [mod] [rpc] FeatureEvent
+
+is now triggered correctly on published maps/ol3 implementation when layer is cleared with MapModulePlugin.RemoveFeaturesFromMapRequest without parameters.
+
+### [mod] [rpc] DrawTools.StopDrawingRequest
+
+A new optional third parameter suppressEvent (boolean).
+If true the request doesn't trigger a DrawingEvent. Defaults to false.
+
+### [rem] MetaData.FinishedDrawingEvent
+
+Event removed from Metadatacatalogue bundle. New parallel version uses DrawTools.StartDrawingRequest and DrawTools.StopDrawingRequest instead to draw search coverage area on map.
+
+### [mod] MapMoveByLayerContentRequest
+
+MapMoveByLayerContentRequest now has a new optional param to zoom to layer extent (requires layer coverage data to be available).
+
+### [mod] PublishMapEditorRequest
+
+Now sets the publisher state as a whole for editing an embedded map instead of assuming for example layers to be adjusted prior to sending the request.
+
+### [add] new bundle: GeometryCutter
+
+Geometrycutter is a more bare bones replacement for the "geometryeditor" bundle. Geometrycutter has only two editing modes:
+
+- splitting a feature by a user drawn linestring as if it was a cutting "blade"
+- removing a part of a feature that overlaps a user drawn polygon (difference)
+
+### [rem] [breaking] TimeseriesAnimationEvent, AnimateLayerRequest
+
+Timeseries functionality rewrite. Old event & request removed.
+
+### [rem] [breaking] mapfull configuration
+
+Mapfull no longer receives or handles "globalMapAjaxUrl" and "user" in bundle configuration. Handling has been moved to Oskari.app.init().
+If you haven't implemented a custom version of "mapfull" bundle or the Oskari-global this has no effect.
+
 ## 1.44.1
 
 ### [mod] [rpc] DrawingEvent
@@ -51,6 +90,10 @@ Notes:
 - If you have just one feature ever this works like before.
 - Only lines and polygons are counted for the area/length (circles/points with buffers are not).
 - The measurements are for non-buffered features.
+
+### metadatacatalogue [add]
+
+Added new OpenLayers independent version of metadatacatalogue. New bundle.js is under packages/catalogue/metadatacatalogue/. In the new version `MetaData.FinishedDrawingEvent` is removed. Instead you can listen to `DrawingEvent` where id "catalogue.bundle.metadatacatalogue" and isFinished is true.
 
 ## 1.44
 

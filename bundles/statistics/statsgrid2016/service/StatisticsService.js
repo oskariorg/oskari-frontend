@@ -1,7 +1,7 @@
 /**
  * @class Oskari.statistics.statsgrid.StatisticsService
  */
-(function(Oskari) {
+(function (Oskari) {
     var _log = Oskari.log('StatsGrid.StatisticsService');
 
     Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
@@ -36,19 +36,21 @@
         getName: function () {
             return this.__name;
         },
-        setMapModes: function(mapModes){
+        getSandbox: function () {
+            return this.sandbox;
+        },
+        setMapModes: function (mapModes) {
             this._mapModes = mapModes;
         },
-        getMapModes: function(){
+        getMapModes: function () {
             return this._mapModes;
         },
-        hasMapMode: function(mode){
+        hasMapMode: function (mode) {
             var me = this;
             var hasMode = false;
-            me._mapModes.forEach(function(mapmode){
-                if(mapmode === mode){
+            me._mapModes.forEach(function (mapmode) {
+                if (mapmode === mode) {
                     hasMode = true;
-                    return;
                 }
             });
             return hasMode;
@@ -60,30 +62,30 @@
          * statsgrid/instance.js registers eventhandlers and calls this to let components know about events.
          * @param  {Oskari.mapframework.event.Event} event event that needs to be propagated to components
          */
-        notifyOskariEvent : function(event) {
+        notifyOskariEvent: function (event) {
             this.trigger(event.getName(), event);
         },
-        getStateService : function() {
+        getStateService: function () {
             return this.state;
         },
-        getClassificationService : function() {
+        getClassificationService: function () {
             return this.classification;
         },
-        getColorService : function() {
+        getColorService: function () {
             return this.colors;
         },
-        getErrorService : function() {
+        getErrorService: function () {
             return this.error;
         },
-        addDatasource : function(ds) {
-            if(!ds) {
+        addDatasource: function (ds) {
+            if (!ds) {
                 // log error message
                 return;
             }
             var me = this;
             if (_.isArray(ds)) {
-                //if(typeof ds === 'array') -> loop and add all
-                ds.forEach(function(item) {
+                // if(typeof ds === 'array') -> loop and add all
+                ds.forEach(function (item) {
                     me.addDatasource(item);
                 });
                 return;
@@ -93,47 +95,47 @@
             this.datasources.push(ds);
         },
 
-        getUILabels: function(indicator, callback) {
+        getUILabels: function (indicator, callback) {
             var me = this;
             var locale = this.locale;
-            if(typeof callback !== 'function') {
+            if (typeof callback !== 'function') {
                 // log error message
                 return;
             }
 
-            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind) {
-                if(err) {
+            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function (err, ind) {
+                if (err) {
                     callback({
-                        error : true,
-                        indicator : '',
-                        params : '',
-                        full : '',
-                        paramsAsObject : {}
+                        error: true,
+                        indicator: '',
+                        params: '',
+                        full: '',
+                        paramsAsObject: {}
                     });
                     return;
                 }
 
                 var uiLabels = [];
                 var preferredFormatting = [];
-                for(var sel in indicator.selections){
+                for (var sel in indicator.selections) {
                     var val = indicator.selections[sel];
 
-                    ind.selectors.forEach(function(selector) {
-                        selector.allowedValues.forEach(function(value) {
-                            if(val !== (value.id || value)) {
+                    ind.selectors.forEach(function (selector) {
+                        selector.allowedValues.forEach(function (value) {
+                            if (val !== (value.id || value)) {
                                 return;
                             }
                             var name = value.name;
-                            if(!name) {
+                            if (!name) {
                                 name = value.id || value;
                                 // try finding localization for the param
                                 // FIXME: get rid of this -> have server give ui labels
                                 name = (locale[selector.id] && locale[selector.id][name]) ? locale[selector.id][name] : name;
                             }
-                            uiLabels.push( {
-                                selector : selector.id,
-                                id : value.id || value,
-                                label : name
+                            uiLabels.push({
+                                selector: selector.id,
+                                id: value.id || value,
+                                label: name
                             });
 
                             preferredFormatting.push(name);
@@ -142,13 +144,13 @@
                 }
 
                 var name = Oskari.getLocalized(ind.name);
-                var selectorsFormatted = '(' +  preferredFormatting.join(' / ') + ')';
+                var selectorsFormatted = '(' + preferredFormatting.join(' / ') + ')';
                 callback({
-                    indicator : name,
-                    source : Oskari.getLocalized(ind.source),
-                    params : selectorsFormatted,
-                    full : name + ' ' + selectorsFormatted,
-                    paramsAsObject : uiLabels
+                    indicator: name,
+                    source: Oskari.getLocalized(ind.source),
+                    params: selectorsFormatted,
+                    full: name + ' ' + selectorsFormatted,
+                    paramsAsObject: uiLabels
                 });
             });
         },
@@ -159,13 +161,13 @@
          * @param  {Number} id datasource id
          * @return {Object[]|Object|Null} datasource information or null if not found
          */
-        getDatasource : function(id) {
-            if(!id) {
+        getDatasource: function (id) {
+            if (!id) {
                 return this.datasources;
             }
             var found = null;
-            this.datasources.forEach(function(ds) {
-                if(ds.id === id) {
+            this.datasources.forEach(function (ds) {
+                if (ds.id === id) {
                     found = ds;
                 }
             });
@@ -175,29 +177,29 @@
          * Returns regionsets that are available to user.
          * Based on maplayers of type STATS.
          */
-        getRegionsets : function(includeOnlyIds) {
+        getRegionsets: function (includeOnlyIds) {
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var layers = service.getLayersOfType('STATS');
-            if(!layers) {
+            if (!layers) {
                 return [];
             }
             var list = [];
-            layers.forEach(function(regionset) {
+            layers.forEach(function (regionset) {
                 list.push({
-                    id : regionset.getId(),
-                    name : regionset.getName()
+                    id: regionset.getId(),
+                    name: regionset.getName()
                 });
             });
             var singleValue = typeof includeOnlyIds === 'number' || typeof includeOnlyIds === 'string';
-            if(singleValue) {
+            if (singleValue) {
                 // wrap to an array
                 includeOnlyIds = [includeOnlyIds];
             }
-            if(_.isArray(includeOnlyIds)) {
-                var result = _.filter(list, function(reg) {
+            if (_.isArray(includeOnlyIds)) {
+                var result = _.filter(list, function (reg) {
                     return includeOnlyIds.indexOf(reg.id) !== -1;
                 });
-                if(singleValue) {
+                if (singleValue) {
                     // if requested with single value, unwrap result from array
                     return result.length ? result[0] : null;
                 }
@@ -210,38 +212,41 @@
          * @param  {Number}   regionset regionset id
          * @param  {Function} callback  function to call with error or results
          */
-        getRegions : function(regionset, callback) {
-            if(typeof callback !== 'function') {
+        getRegions: function (regionset, callback) {
+            if (typeof callback !== 'function') {
                 // log error message
                 return;
             }
-            if(!regionset || typeof callback !== 'function') {
+            if (!regionset) {
                 // log error message
                 callback('Regionset missing');
                 return;
             }
             var me = this;
             var cacheKey = 'GetRegions_' + regionset;
-            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+            if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
             }
-            if(this.cache.addToQueue(cacheKey, callback)) {
+            if (this.cache.addToQueue(cacheKey, callback)) {
                 // request already in progress
                 return;
             }
             // call GetRegions with parameter regionset=regionset
             // use first param as error indicator - null == no error
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 dataType: 'json',
-                data : {
-                    regionset : regionset,
-                    srs : this.sandbox.getMap().getSrsName()
+                data: {
+                    regionset: regionset,
+                    srs: this.sandbox.getMap().getSrsName()
                 },
                 url: this.sandbox.getAjaxUrl('GetRegions'),
                 success: function (pResp) {
-                    me.cache.respondToQueue(cacheKey, null, pResp.regions);
+                    var onlyWithNames = pResp.regions.filter(function (region) {
+                        return !!region.name;
+                    });
+                    me.cache.respondToQueue(cacheKey, null, onlyWithNames);
                 },
                 error: function (jqXHR, textStatus) {
                     me.cache.respondToQueue(cacheKey, 'Error loading regions');
@@ -253,34 +258,39 @@
          * @param  {Number}   ds       datasource id
          * @param  {Function} callback function to call with error or results
          */
-        getIndicatorList : function(ds, callback) {
-            if(typeof callback !== 'function') {
+        getIndicatorList: function (ds, callback) {
+            if (typeof callback !== 'function') {
                 // log error message
                 return;
             }
-            if(!ds || typeof callback !== 'function') {
+            if (!ds) {
                 // log error message
                 callback('Datasource missing');
                 return;
             }
             var cacheKey = 'GetIndicatorList_' + ds;
-            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+            if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
             }
-            if(this.cache.addToQueue(cacheKey, callback)) {
+            if (this.cache.addToQueue(cacheKey, callback)) {
                 // request already in progress
                 return;
             }
 
             var me = this;
-            var updateIncompleteIndicatorList = function(previousList) {
+            var updateIncompleteIndicatorList = function (previousList) {
                 _log.info('Indicator listing was not complete. Refreshing in 10 seconds');
-                setTimeout(function() {
+                setTimeout(function () {
                     me.cache.remove(cacheKey);
                     // try again after 10 seconds
-                    me.getIndicatorList(ds, function(err, newList) {
-                        if(newList.indicators.length === previousList.length) {
+                    me.getIndicatorList(ds, function (err, newList) {
+                        if (err) {
+                            // Don't call callback with err as we will be trying again.
+                            _log.warn('Error updating indicator list.');
+                            return;
+                        }
+                        if (newList.indicators.length === previousList.length) {
                             // same list size??? somethings propably wrong
                             _log.warn('Same indicator list as in previous try. There might be some problems with the service');
                             return;
@@ -295,19 +305,18 @@
             // call GetIndicatorList with parameter datasource=ds
             // use first param as error indicator - null == no error
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 dataType: 'json',
-                data : {
-                    datasource : ds
+                data: {
+                    datasource: ds
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorList'),
                 success: function (pResp) {
                     me.cache.respondToQueue(cacheKey, null, pResp);
-                    if(!pResp.complete) {
+                    if (!pResp.complete) {
                         // wasn't complete dataset - remove from cache and poll for more
                         updateIncompleteIndicatorList(pResp.indicators);
                     }
-
                 },
                 error: function (jqXHR, textStatus) {
                     me.cache.respondToQueue(cacheKey, 'Error loading indicators');
@@ -320,34 +329,34 @@
          * @param  {Number}   indicator indicator id
          * @param  {Function} callback  function to call with error or results
          */
-        getIndicatorMetadata : function(ds, indicator, callback) {
-            if(typeof callback !== 'function') {
+        getIndicatorMetadata: function (ds, indicator, callback) {
+            if (typeof callback !== 'function') {
                 // log error message
                 return;
             }
-            if(!ds || !indicator) {
+            if (!ds || !indicator) {
                 // log error message
                 callback('Datasource or indicator missing');
                 return;
             }
             var me = this;
             var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + indicator;
-            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+            if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
             }
-            if(this.cache.addToQueue(cacheKey, callback)) {
+            if (this.cache.addToQueue(cacheKey, callback)) {
                 // request already in progress
                 return;
             }
             // call GetIndicatorMetadata with parameter datasource=ds and indicator=indicator
             // use first param as error indicator - null == no error
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 dataType: 'json',
-                data : {
-                    datasource : ds,
-                    indicator : indicator
+                data: {
+                    datasource: ds,
+                    indicator: indicator
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorMetadata'),
                 success: function (pResp) {
@@ -364,29 +373,35 @@
          * @param  {Number}   indicator indicator id
          * @param  {Function} callback  function to call with error or results
          */
-        getIndicatorData : function(ds, indicator, params, regionset, callback) {
-            if(typeof callback !== 'function') {
+        getIndicatorData: function (ds, indicator, params, regionset, callback) {
+            if (typeof callback !== 'function') {
                 // log error message
                 return;
             }
-            if(!ds ||!indicator || !regionset) {
+            if (!ds || !indicator || !regionset) {
                 // log error message
                 callback('Datasource, regionset or indicator missing');
                 return;
             }
             var me = this;
             var data = {
-                datasource : ds,
-                indicator : indicator,
-                regionset : regionset,
-                selectors : JSON.stringify(params || {})
+                datasource: ds,
+                indicator: indicator,
+                regionset: regionset,
+                selectors: JSON.stringify(params || {})
             };
-            var cacheKey = 'GetIndicatorData_' + JSON.stringify(data);
-            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+            var serialized = '';
+            if (typeof params === 'object') {
+                serialized = '_' + Object.keys(params).sort().map(function (key) {
+                    return key + '=' + JSON.stringify(params[key]);
+                }).join(':');
+            }
+            var cacheKey = 'GetIndicatorData_' + ds + '_' + indicator + '_' + regionset + serialized;
+            if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
             }
-            if(this.cache.addToQueue(cacheKey, callback)) {
+            if (this.cache.addToQueue(cacheKey, callback)) {
                 // request already in progress
                 return;
             }
@@ -397,20 +412,20 @@
             // - regionset = regionset
             // use first param as error indicator - null == no error
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 dataType: 'json',
-                data : data,
+                data: data,
                 url: this.sandbox.getAjaxUrl('GetIndicatorData'),
                 success: function (pResp) {
-                    me.getRegions(regionset, function(err, regions) {
-                        if(err) {
+                    me.getRegions(regionset, function (err, regions) {
+                        if (err) {
                             me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
                             return;
                         }
                         // filter out data for regions that are not part of the regionset since some adapters return additional data!
                         // any additional data will result in broken classification
                         var filteredResponse = {};
-                        regions.forEach(function(reg) {
+                        regions.forEach(function (reg) {
                             filteredResponse[reg.id] = pResp[reg.id];
                         });
                         me.cache.respondToQueue(cacheKey, null, filteredResponse);
@@ -422,61 +437,61 @@
                 }
             });
         },
-        getSelectedIndicatorsRegions: function() {
+        getSelectedIndicatorsRegions: function () {
             var me = this;
             var indicators = me.getStateService().getIndicators();
             var regionsets = [];
-            var addRegions = function(regions){
-                for(var i=0;i<regions.length;i++) {
-                    if(jQuery.inArray(regions[i], regionsets) === -1){
+            var addRegions = function (regions) {
+                for (var i = 0; i < regions.length; i++) {
+                    if (jQuery.inArray(regions[i], regionsets) === -1) {
                         regionsets.push(regions[i]);
                     }
                 }
             };
-            for(var i = 0;i<indicators.length; i++) {
+            for (var i = 0; i < indicators.length; i++) {
                 var ind = indicators[i];
-                me.getIndicatorMetadata(ind.datasource, ind.indicator, function(err,indicator){
-                    if(!err){
+                me.getIndicatorMetadata(ind.datasource, ind.indicator, function (err, indicator) {
+                    if (!err) {
                         addRegions(indicator.regionsets);
                     }
                 });
             }
             return regionsets;
         },
-        getCurrentDataset : function(callback) {
+        getCurrentDataset: function (callback) {
             var me = this;
-            if(typeof callback !== 'function') {
+            if (typeof callback !== 'function') {
                 return;
             }
             var setId = this.getStateService().getRegionset();
-            if(!setId) {
+            if (!setId) {
                 callback("No regionset selected");
                 return;
             }
             var regionset = this.getRegionsets(setId);
             var response = {
-                regionset : {
-                    id : setId,
-                    name : regionset.name
+                regionset: {
+                    id: setId,
+                    name: regionset.name
                 },
-                indicators : [],
-                data : []
+                indicators: [],
+                data: []
             };
             var indicators = this.getStateService().getIndicators();
-            this.getRegions(setId, function(err, regions) {
-                if(err) {
+            this.getRegions(setId, function (err, regions) {
+                if (err) {
                     callback(err, response);
                     return;
                 }
 
-                regions.forEach(function(reg) {
+                regions.forEach(function (reg) {
                     response.data.push({
-                        id : reg.id,
-                        name : reg.name,
-                        values : {}
+                        id: reg.id,
+                        name: reg.name,
+                        values: {}
                     });
                 });
-                if(!indicators.length) {
+                if (!indicators.length) {
                     // no indicators, just respond with regions
                     callback(null, response);
                     return;
@@ -484,58 +499,48 @@
                 // figure out ui names and data for indicators
                 var count = 0;
                 var errors = 0;
-                var done = function() {
-                    if(errors) {
+                var done = function () {
+                    if (errors) {
                         callback('Error populating indicators', response);
                         return;
                     }
                     callback(null, response);
                 };
-                indicators.forEach(function(ind) {
+                indicators.forEach(function (ind) {
                     var metadata = {
-                        datasource : {
-                            id : ind.datasource,
-                            name : me.getDatasource(ind.datasource).name
+                        datasource: {
+                            id: ind.datasource,
+                            name: me.getDatasource(ind.datasource).name
                         },
-                        id : ind.indicator,
-                        name : "N/A",
-                        selections : ind.selections,
-                        hash : ind.hash
+                        id: ind.indicator,
+                        name: 'N/A',
+                        selections: ind.selections,
+                        hash: ind.hash
                     };
                     response.indicators.push(metadata);
-                    // inProgress is a flag for detecting if both async ops have completed
-                    var inProgress = true;
-                    count++;
-                    me.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
-                        if(err) {
+                    me.getIndicatorMetadata(ind.datasource, ind.indicator, function (err, indicator) {
+                        count++;
+                        if (err) {
                             errors++;
                             return;
                         }
                         metadata.name = Oskari.getLocalized(indicator.name);
-                        // detect if this indicator is fully populated
-                        if(!inProgress) {
-                            count--;
-                        }
-                        inProgress = false;
-                        if(count === 0) {
+                        if (count === indicators.length * 2) {
+                            // if count is 2 x indicators length both metadata and indicator data has been loaded for all indicators
                             done();
                         }
                     });
 
-                    me.getIndicatorData(ind.datasource, ind.indicator, ind.selections, setId, function(err, indicatorData) {
-                        if(err) {
+                    me.getIndicatorData(ind.datasource, ind.indicator, ind.selections, setId, function (err, indicatorData) {
+                        count++;
+                        if (err) {
                             errors++;
                             return;
                         }
-                        response.data.forEach(function(item) {
+                        response.data.forEach(function (item) {
                             item.values[ind.hash] = indicatorData[item.id];
                         });
-                        // detect if this indicator is fully populated
-                        if(!inProgress) {
-                            count--;
-                        }
-                        inProgress = false;
-                        if(count === 0) {
+                        if (count === indicators.length * 2) {
                             done();
                         }
                     });

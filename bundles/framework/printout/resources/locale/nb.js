@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Tegnforklaring",
-                "tooltip": "Velg posisjon for tegnforklaringen. Hvis posisjon ikke er valgt, vises ikke tegnforklaringen",
-                "options": [
-                    {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "Ingen tegnforklaring",
-                        "tooltip": "Tegnforklaringen vises ikke på utskriften",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Nedre venstre hjørne",
-                        "tooltip": "Tegnforklaringen vises i nedre venstre hjørne av utskriften"
-                    },
-                    {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Øvre venstre hjørne",
-                        "tooltip": "Tegnforklaringen vises i øvre venstre hjørne av utskriften"
-                    },
-                    {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Øvre høyre hjørne",
-                        "tooltip": "Tegnforklaringen vises i øvre høyre hjørne av utskriften"
-                    },
-                    {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Nedre høyre hjørne",
-                        "tooltip": "Tegnforklaringen vises i nedre høyre hjørne av utskriften"
-                    }
-                ]
-            },
             "help": "Hjelp",
             "error": {
                 "title": "Feil",
