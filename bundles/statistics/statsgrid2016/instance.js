@@ -58,6 +58,8 @@ Oskari.clazz.define(
                 me.showLegendOnMap(true);
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
+
+                me.getTile().getFlyoutManager().init();
                 // TODO? better way to call than strings
                 if( me.conf.grid ) {
                     me.showEmbeddedTools('table', true);
@@ -179,15 +181,10 @@ Oskari.clazz.define(
                 if( wasClosed ) {
                     me.getTile().hideExtensions();
                     return;
-                }
-                if( this.isEmbedded() && !wasClosed ) {
-                    // open table on embedded map
-                    // TODO: is wasClosed check unnecessary?
-                    me.getTile().getFlyoutManager().init();
-                    me.getTile().toggleFlyout( 'table' );
                 } else {
                     me.getTile().showExtensions();
                 }
+            }
             },
             /**
              * @method MapLayerEvent
@@ -357,8 +354,6 @@ Oskari.clazz.define(
         showEmbeddedTools: function (tool, enabled) {
             var sandbox = this.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
-            this.getTile().getFlyoutManager().init();
 
             if ( !enabled ) {
                 if ( !this.publisherHasTool(tool) ) {
