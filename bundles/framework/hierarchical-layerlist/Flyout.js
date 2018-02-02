@@ -479,58 +479,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         },
 
         /**
-         * @method handleLayerSelectionChanged
-         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
-         *           layer that was changed
-         * @param {Boolean} isSelected
-         *           true if layer is selected, false if removed from selection
-         * let's refresh ui to match current layer selection
-         */
-        handleLayerSelectionChanged: function(layer, isSelected) {
-            //"use strict";
-            var i,
-                tab;
-            for (i = 0; i < this.layerTabs.length; i += 1) {
-                tab = this.layerTabs[i];
-                tab.setLayerSelected(layer.getId(), isSelected);
-            }
-        },
-
-        /**
-         * @method handleLayerModified
-         * @param {Oskari.mapframework.domain.AbstractLayer} layer
-         *           layer that was modified
-         * let's refresh ui to match current layers
-         */
-        handleLayerModified: function(layer) {
-            //"use strict";
-            var me = this,
-                i,
-                tab;
-            for (i = 0; i < me.layerTabs.length; i += 1) {
-                tab = me.layerTabs[i];
-                tab.updateLayerContent(layer.getId(), layer);
-            }
-        },
-
-        /**
-         * @method handleLayerSticky
-         * @param {Oskari.mapframework.domain.AbstractLayer} layer
-         *           layer thats switch off diasable/enable is changed
-         * let's refresh ui to match current layers
-         */
-        handleLayerSticky: function(layer) {
-            //"use strict";
-            var me = this,
-                i,
-                tab;
-            for (i = 0; i < me.layerTabs.length; i += 1) {
-                tab = me.layerTabs[i];
-                tab.updateLayerContent(layer.getId(), layer);
-            }
-        },
-
-        /**
          * @method handleLayerAdded
          * @param {Oskari.mapframework.domain.AbstractLayer} layer
          *           layer that was added

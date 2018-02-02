@@ -187,24 +187,16 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             /**
              * @method AfterMapLayerRemoveEvent
              * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-             *
-             * Calls flyouts handleLayerSelectionChanged() method
              */
             AfterMapLayerRemoveEvent: function(event) {
-                //"use strict";
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
                 this.notifierService.notifyOskariEvent(event);
             },
 
             /**
              * @method AfterMapLayerAddEvent
              * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-             *
-             * Calls flyouts handleLayerSelectionChanged() method
              */
             AfterMapLayerAddEvent: function(event) {
-                //"use strict";
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true);
                 this.notifierService.notifyOskariEvent(event);
             },
 
@@ -223,21 +215,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                     layerId = event.getLayerId(),
                     layer;
 
-                if (event.getOperation() === 'update') {
-                    layer = mapLayerService.findMapLayer(layerId);
-                    flyout.handleLayerModified(layer);
-                } else if (event.getOperation() === 'add') {
+                if (event.getOperation() === 'add') {
                     layer = mapLayerService.findMapLayer(layerId);
                     flyout.handleLayerAdded(layer);
                     // refresh layer count
                     tile.refresh();
                 } else if (event.getOperation() === 'remove') {
                     flyout.handleLayerRemoved(layerId);
-                    // refresh layer count
-                    tile.refresh();
-                } else if (event.getOperation() === 'sticky') {
-                    layer = mapLayerService.findMapLayer(layerId);
-                    flyout.handleLayerSticky(layer);
                     // refresh layer count
                     tile.refresh();
                 }
@@ -259,9 +243,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                     // Massive update so just recreate the whole ui
                     flyout.populateLayers();
 
-                } else {
-                    layer = mapLayerService.findMapLayer(layerId);
-                    flyout.handleLayerModified(layer);
                 }
             },
 

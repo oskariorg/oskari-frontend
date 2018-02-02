@@ -16,7 +16,6 @@ Oskari.clazz.define(
         this.id = id;
         this.layerGroups = [];
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
-        this.layerContainers = {};
         this.sb = this.instance.getSandbox();
         this.localization = this.instance.getLocalization();
         this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
@@ -413,32 +412,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _fireFiltering
-         * @private
-         * @param {String} keyword
-         *      User input
-         * @param {Object} event
-         *      Event that caused the action to fire
-         * @param {Object} me
-         *      Reference to the bundle instance
-         * Calls all needed functions to do the layer filtering.
-         */
-        _fireFiltering: function(keyword, event, me) {
-            //"use strict";
-            // Filter by name
-            me.filterLayers(keyword);
-
-            if (me.showSearchSuggestions) {
-                // User input has changed, clear suggestions
-                me.clearRelatedKeywordsPopup(
-                    keyword,
-                    jQuery(event.currentTarget).parents('.oskarifield')
-                );
-                // get new suggestions if user input is long enough
-                me._relatedKeywordsPopup(keyword, event, me);
-            }
-        },
-        /**
          * Show layer metadata
          * @method  _showLayerMetaData
          * @param   {Object}           layer oskari layer
@@ -661,133 +634,6 @@ Oskari.clazz.define(
             return me._isDefined(type1) && me._isDefined(type2) && type1.toLowerCase() === type2.toLowerCase();
         },
 
-        /**
-         * @method _showRelatedKeywords
-         * @private
-         * @param {String} userInput User input
-         * @param {Object} keywords
-         *      related keywords to filter layers by
-         * Also checks if all layers in a group is hidden and hides the group as well.
-         */
-        _showRelatedKeywords: function(userInput, keywords, oskarifield) {
-            //"use strict";
-            var me = this,
-                relatedKeywordsCont = me.getFilterField().getField().find(
-                    '.related-keywords'
-                ),
-                i,
-                keyword,
-                keywordTmpl,
-                ontologySuggestions = [],
-                ontologyLayers = [];
-
-            me.clearRelatedKeywordsPopup(null, oskarifield);
-
-            // Go through related keywords, get top 3, show only them
-            if (keywords && keywords.length > 0) {
-                for (i = 0; i < keywords.length; i += 1) {
-                    keyword = keywords[i];
-                    if (keyword.layers.length > 0) {
-                        // check if we want to show matching layers instead of a suggestion
-                        if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
-                                keyword.type) && me._containsIgnoreCase(
-                                keyword.keyword, userInput))) {
-                            // copy keyword layerids to ontologyLayers, avoid duplicates just because
-                            if (ontologyLayers.size === 0) {
-                                ontologyLayers.concat(keyword.layers);
-                            } else {
-                                me._concatNew(ontologyLayers, keyword.layers);
-                            }
-                        } else {
-                            ontologySuggestions.push({
-                                idx: i,
-                                count: keyword.layers.length
-                            });
-                        }
-                    }
-                }
-            }
-
-
-            if (ontologySuggestions.length > 0) {
-                relatedKeywordsCont.prepend(
-                    jQuery(me.templates.keywordsTitle).text(
-                        me._locale.filter.didYouMean
-                    )
-                );
-            }
-
-            // sort ontology suggestions by layer count
-            ontologySuggestions.sort(function(x, y) {
-                return x.count < y.count;
-            });
-
-            // show three top suggestions
-            for (i = 0; i < ontologySuggestions.length && i < 3; i += 1) {
-                keyword = keywords[ontologySuggestions[i].idx];
-                keywordTmpl = jQuery(me.templates.keywordContainer);
-                keywordTmpl
-                    .attr('data-id', keyword.id)
-                    .attr('data-keyword', keyword.keyword)
-                    .find('.keyword').text(
-                        keyword.keyword.toLowerCase() + ' (' +
-                        keyword.layers.length + ')'
-                    );
-
-                relatedKeywordsCont.append(keywordTmpl);
-            }
-            if (ontologySuggestions.length) {
-                relatedKeywordsCont.show();
-            }
-
-            me.ontologyLayers = ontologyLayers;
-            // Show ontologyLayers in accordion
-            me.filterLayers(userInput, ontologyLayers);
-
-            // when clicked -> filter layers
-            relatedKeywordsCont.find('.keyword-cont').on(
-                'click',
-                function(event) {
-                    var val = jQuery(event.currentTarget).attr('data-keyword');
-
-                    me.getFilterField().setValue(val);
-                    me._fireFiltering(val, event, me);
-                }
-            );
-        },
-        /**
-         * Shows all layers
-         * @method  _showAllLayers
-         * @private
-         */
-        _showAllLayers: function() {
-            var i,
-                group,
-                layers,
-                n,
-                layer,
-                layerId,
-                layerCont;
-
-            for (i = 0; i < this.layerGroups.length; i += 1) {
-                group = this.layerGroups[i];
-                layers = group.getLayers();
-
-                for (n = 0; n < layers.length; n += 1) {
-                    layer = layers[n];
-                    layerId = layer.getId();
-                    layerCont = this.layerContainers[layerId];
-                    layerCont.setVisible(true);
-                }
-                group.layerListPanel.setVisible(true);
-                group.layerListPanel.close();
-                group.layerListPanel.setTitle(
-                    group.getTitle() + ' (' + layers.length + ')'
-                );
-            }
-
-            this.accordion.removeMessage();
-        },
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
@@ -820,7 +666,6 @@ Oskari.clazz.define(
 
             if (!state.filter) {
                 this.filterField.setValue(state.filter);
-                this.filterLayers(state.filter);
             }
         },
 
@@ -852,6 +697,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.FormInput');
             field.setPlaceholder(me.instance.getLocalization('filter').text);
             field.addClearButton();
+
             field.bindChange(function(event) {
                 event.stopPropagation(); // JUST BECAUSE TEST ENVIRONMENT FAILS
                 var evt = event;
@@ -859,7 +705,7 @@ Oskari.clazz.define(
                     clearTimeout(timer);
                 }
                 timer = setTimeout(function() {
-                    me._fireFiltering(field.getValue(), evt, me);
+                    me.getJsTreeElement().jstree(true).search(field.getValue());
                     timer = null;
                 }, 300);
 
@@ -1078,7 +924,6 @@ Oskari.clazz.define(
 
             me.tabPanel.getContainer().append(layerTree);
             me.accordion.removeAllPanels();
-            me.layerContainers = {};
             me.layerGroups = groups;
             groups.forEach(function(group) {
                 var layers = group.getLayers();
@@ -1106,17 +951,6 @@ Oskari.clazz.define(
                         addSubgroupSubgroups(subgroup.id, subgroup.groups);
                     });
                 }
-            });
-
-            var to = false;
-            $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').keyup(function() {
-                if (to) {
-                    clearTimeout(to);
-                }
-                to = setTimeout(function() {
-                    var v = $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').val();
-                    jsTreeDiv.jstree(true).search(v);
-                }, 250);
             });
 
             var jsTreeDiv = me.getJsTreeElement();
@@ -1150,78 +984,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method filterLayers
-         * @private
-         * @param {String} keyword
-         *      keyword to filter layers by
-         * @param {Array} ids optional list of layer IDs to be shown
-         * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
-         * Also checks if all layers in a group is hidden and hides the group as well.
-         */
-        filterLayers: function(keyword, ids) {
-            //"use strict";
-            var me = this,
-                visibleGroupCount = 0,
-                visibleLayerCount,
-                i,
-                n,
-                group,
-                layer,
-                layers,
-                layerId,
-                layerCont,
-                bln,
-                loc;
-            if (!ids && me.sentKeyword === keyword) {
-                ids = me.ontologyLayers;
-            }
-            // show all groups
-            me.accordion.showPanels();
-            if (!keyword || keyword.length === 0) {
-                me._showAllLayers();
-                return;
-            }
-            // filter
-            for (i = 0; i < me.layerGroups.length; i += 1) {
-                group = me.layerGroups[i];
-                layers = group.getLayers();
-                visibleLayerCount = 0;
-                for (n = 0; n < layers.length; n += 1) {
-                    layer = layers[n];
-                    layerId = layer.getId();
-                    layerCont = me.layerContainers[layerId];
-                    bln = group.matchesKeyword(layerId, keyword) || (me.showSearchSuggestions && ids && me._arrayContains(ids, layerId));
-                    layerCont.setVisible(bln);
-                    if (bln) {
-                        visibleLayerCount += 1;
-                        // open the panel if matching layers
-                        group.layerListPanel.open();
-                    }
-                }
-                group.layerListPanel.setVisible(visibleLayerCount > 0);
-                if (group.layerListPanel.isVisible()) {
-                    visibleGroupCount += 1;
-                }
-                group.layerListPanel.setTitle(group.getTitle() + ' (' +
-                    visibleLayerCount + '/' + layers.length + ')');
-            }
-
-            // check if there are no groups visible -> show 'no matches' notification
-            // else clear any previous message
-            if (visibleGroupCount === 0) {
-                // empty result
-                loc = me.instance.getLocalization('errors');
-                me.accordion.showMessage(loc.noResults);
-                jQuery(me.accordion.ui).find('.accordionmsg').attr(
-                    'id',
-                    'oskari_hierarchical-layerlist_inspiretab_search_no-result'
-                );
-            } else {
-                me.accordion.removeMessage();
-            }
-        },
-
-        /**
          * @method clearRelatedKeywordsPopup
          * @private
          * @param {String} keyword
@@ -1238,82 +1000,6 @@ Oskari.clazz.define(
             }
         },
 
-        /**
-         * @method _relatedKeywordsPopup
-         * @private
-         * @param {String} keyword
-         *      keyword to filter layers by
-         * @param {Object} event
-         *      event hat caused the function to fire
-         * @param {Object} me
-         *      reference to the bundle instance
-         * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
-         * Also checks if all layers in a group is hidden and hides the group as well.
-         */
-        _relatedKeywordsPopup: function(keyword, event, me) {
-            //"use strict";
-            //event.preventDefault();
-            var oskarifield = jQuery(event.currentTarget).parents(
-                    '.oskarifield'
-                ),
-                loc,
-                relatedKeywordsCont,
-                ajaxUrl;
-
-            if (!keyword || keyword.length === 0) {
-                this._showAllLayers();
-                return;
-            }
-            if (keyword.length < 4) {
-                // empty result
-                oskarifield.find('.related-keywords').hide();
-                return;
-            }
-
-            relatedKeywordsCont = oskarifield.find('.spinner-text').show();
-
-            me.sentKeyword = keyword;
-
-            ajaxUrl = this.instance.sandbox.getAjaxUrl();
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                beforeSend: function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType(
-                            'application/j-son;charset=UTF-8');
-                    }
-                },
-                url: ajaxUrl + 'action_route=SearchKeywords&keyword=' +
-                    encodeURIComponent(keyword) + '&lang=' + Oskari.getLang(),
-                success: function(pResp) {
-                    me.relatedKeywords = pResp;
-                    me._showRelatedKeywords(keyword, pResp, oskarifield);
-                    relatedKeywordsCont.hide();
-                },
-                error: function(jqXHR, textStatus) {
-                    var lctn = me.instance.getLocalization('errors');
-                    me.accordion.showMessage(lctn.generic);
-                    relatedKeywordsCont.hide();
-                }
-            });
-        },
-
-        setLayerSelected: function(layerId, isSelected) {
-            //"use strict";
-            var layerCont = this.layerContainers[layerId];
-            if (layerCont) {
-                layerCont.setSelected(isSelected);
-            }
-        },
-
-        updateLayerContent: function(layerId, layer) {
-            //"use strict";
-            var layerCont = this.layerContainers[layerId];
-            if (layerCont) {
-                layerCont.updateLayerContent(layer);
-            }
-        },
         _updateContainerHeight: function(height) {
             var me = this;
             me.getJsTreeElement().css('max-height', (height * 0.5) + 'px');
