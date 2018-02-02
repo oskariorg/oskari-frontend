@@ -180,6 +180,26 @@ Oskari.clazz.define(
                     me._addSubgroupSubgroupTools();
                 }
             });
+
+            me.service.on('jstree-search', function(nodes, str, res) {
+                setTimeout(function() {
+                    me._addGroupTools();
+                    me._addSubgroupTools();
+                    me._addSubgroupSubgroupTools();
+                    me._addLayerTools();
+                }, 200);
+            });
+
+            me.service.on('jstree-search-clear', function(nodes, str, res) {
+                setTimeout(function() {
+                    me._addGroupTools();
+                    me._addSubgroupTools();
+                    me._addSubgroupSubgroupTools();
+                    me._addLayerTools();
+                }, 200);
+            });
+
+
         },
         /**
          * Add group tools
