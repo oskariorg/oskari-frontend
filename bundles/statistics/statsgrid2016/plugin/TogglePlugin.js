@@ -41,6 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
         var table = toggleButtons.find('.table');
         var diagram = toggleButtons.find('.diagram');
         var stats = this.sb.findRegisteredModuleInstance('StatsGrid');
+        var flyoutManager =  stats.getTile().getFlyoutManager();
 
         map.attr('title', me.locale.showMap);
         table.attr('title', me.locale.showTable);
@@ -56,22 +57,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
         });
 
         table.bind('click', function () {
-            if(!table.hasClass('active')) {
+            stats.toggleEmbeddedTools("table");
+            var flyout = flyoutManager.getFlyout("table");
+            
+            if( flyout.isVisible() ) {
                 map.removeClass('active');
                 table.addClass('active');
             } else {
                 table.removeClass('active');
             }
-            stats.toggleEmbeddedTools("table");
         });
         diagram.bind('click', function () {
-            if (!diagram.hasClass('active') ) {
+            stats.toggleEmbeddedTools("diagram");  
+            var flyout = flyoutManager.getFlyout("diagram");
+
+            if ( flyout.isVisible() ) {
                 map.removeClass('active');
                 diagram.addClass('active');
             } else {
                 diagram.removeClass('active');
             }
-            stats.toggleEmbeddedTools("diagram");  
         });
         this.element = toggleButtons;
         return this.element;
