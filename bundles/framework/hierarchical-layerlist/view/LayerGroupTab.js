@@ -117,6 +117,10 @@ Oskari.clazz.define(
                     parent = 'subgroup-' + data.parentId;
                 }
 
+                // update service groups
+                me._mapLayerService.updateLayerGroups(data);
+
+
                 var opts = {};
                 if (!data.selectable) {
                     opts = {

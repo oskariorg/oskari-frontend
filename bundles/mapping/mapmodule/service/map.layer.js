@@ -232,7 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // also update layer groups
-            this.updateLayerGroups(layerId, null, true);
+            this.updateGroupsLayers(layerId, null, true);
         },
 
         /**
@@ -329,7 +329,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // Also update layer to me._layerGroups
-            this.updateLayerGroups(layerId, newLayerConf);
+            this.updateGroupsLayers(layerId, newLayerConf);
 
             // notify components of layer update
             var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
@@ -339,14 +339,42 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         /**
-         * Update layer groups
+         * Updata layer groups
          * @method updateLayerGroups
+         * @param  {Object}          data data
+         */
+        updateLayerGroups: function(data) {
+            var me = this;
+            if (data.parentId === -1) {
+                me.getAllLayerGroups().push({
+                    groups: [],
+                    id: data.id,
+                    name: data.name,
+                    layers: [],
+                    parentId: data.parentId,
+                    selectable: data.selectable
+                });
+            } else {
+                me.getAllLayerGroups(data.parentId).groups.push({
+                    groups: [],
+                    id: data.id,
+                    name: data.name,
+                    layers: [],
+                    parentId: data.parentId,
+                    selectable: data.selectable
+                });
+            }
+        },
+
+        /**
+         * Update layer groups
+         * @method updateGroupsLayers
          * @param  {String}          layerId      layerid
          * @param  {Object}          newLayerConf new layer conf
          * @param  {Boolean}         deleteLayer delete layer
          * @param  {Boolean}         newLayer is new layer
          */
-        updateLayerGroups: function(layerId, newLayerConf, deleteLayer, newLayer) {
+        updateGroupsLayers: function(layerId, newLayerConf, deleteLayer, newLayer) {
             var me = this;
             var groups = [];
             var group = null;
