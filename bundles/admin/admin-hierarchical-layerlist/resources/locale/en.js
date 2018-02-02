@@ -199,8 +199,8 @@ Oskari.registerLocalization({
                 "fe": "Feature engine"
             },
             "generic": {
-                "placeholder": "Name in {0}",
-                "descplaceholder": "Description in {0}"
+                "placeholder": "Name in {lang}",
+                "descplaceholder": "Description in {lang}"
             },
             "en": {
                 "title": "En",
