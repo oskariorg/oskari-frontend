@@ -50,6 +50,8 @@ Oskari.clazz.define(
             // disable tile if we don't have anything to show or enable if we do
             // setup initial state
             this.setState();
+            
+            me.getTile().getFlyoutManager().init();
 
             if(this.isEmbedded()) {
                 // Start in an embedded map mode
@@ -59,7 +61,6 @@ Oskari.clazz.define(
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
 
-                me.getTile().getFlyoutManager().init();
                 // TODO? better way to call than strings
                 if( me.conf.grid ) {
                     me.showEmbeddedTools('table', true);
