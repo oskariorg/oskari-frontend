@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     svgAppendElements: function () {
         var gx = this.svg.append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + this.dimensions.height() + ")")
+            .attr("transform", "translate(0," + this.dimensions.xAxisOffset + ")")
             .call(this.xAxis);
 
         var gy = this.svg.append("g")
