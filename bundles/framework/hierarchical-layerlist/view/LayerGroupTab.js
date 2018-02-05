@@ -904,7 +904,7 @@ Oskari.clazz.define(
                             'data-layer-id': layer.getId()
                         }
                     };
-                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId(),
+                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId() + '-group-' + groupId,
                         groupId,
                         jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
                         'layer',

@@ -320,6 +320,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setParams(newLayerConf.params);
             }
 
+            if (newLayerConf.groups) {
+                layer.setGroups(newLayerConf.groups);
+            }
+
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
@@ -379,125 +383,142 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var groups = [];
             var group = null;
 
-            if (newLayer) {
-                if (!newLayerConf.groups) {
-                    return;
-                }
-                newLayerConf.groups.forEach(function(g) {
-                    for (var i = 0; i < me._layerGroups.length; i++) {
-                        group = me._layerGroups[i];
 
-                        if (group.id === g.id) {
-                            me._layerGroups[i].layers.push(newLayerConf);
+            if (!newLayer) {
+                var isLayerInGroup = function(groupLayers) {
+                    var founded = -1;
+                    for (var i = 0; i < groupLayers.length; i++) {
+                        var layer = groupLayers[i];
+                        if (layer.id === layerId) {
+                            founded = i;
                             break;
                         }
+                    }
+                    return founded;
+                };
 
-                        var founded = false;
 
-                        // check subgroups
-                        for (var j = 0; j < group.groups.length; j++) {
-                            var subgroup = group.groups[j];
+                var isGroup = function(groupId) {
+                    var isInGroup = jQuery.grep(newLayerConf.groups, function(group) {
+                        return group.id === groupId;
+                    });
+                    return isInGroup.length > 0;
+                };
+                var layerIndex = null;
 
-                            if (subgroup.id === g.id) {
-                                me._layerGroups[i].groups[j].layers.push(newLayerConf);
-                                founded = true;
-                                break;
+                for (var i = 0; i < me._layerGroups.length; i++) {
+                    group = me._layerGroups[i];
+
+                    // Check if layer is in main groups
+                    layerIndex = isLayerInGroup(group.layers);
+                    if (layerIndex >= 0) {
+                        if (deleteLayer) {
+                            group.layers.splice(layerIndex, 1);
+                        } else {
+                            group.layers[layerIndex] = newLayerConf;
+                        }
+                    }
+
+                    // check subgroups
+                    for (var j = 0; j < group.groups.length; j++) {
+                        var subgroup = group.groups[j];
+
+                        layerIndex = isLayerInGroup(subgroup.layers);
+                        if (layerIndex >= 0) {
+                            if (deleteLayer) {
+                                group.groups[j].layers.splice(layerIndex, 1);
+                            } else {
+                                group.groups[j].layers[layerIndex] = newLayerConf;
                             }
-                            // check subgroup subgroups
-                            if (subgroup.groups) {
-                                for (var k = 0; k < subgroup.groups.length; k++) {
-                                    var subgroupSubgroup = subgroup.groups[k];
-
-                                    if (subgroupSubgroup.id === g.id) {
-                                        me._layerGroups[i].groups[j].groups[k].layers.push(newLayerConf);
-                                        founded = true;
-                                        break;
-
+                        }
+                        // check subgroup subgroups
+                        if (subgroup.groups) {
+                            for (var k = 0; k < subgroup.groups.length; k++) {
+                                var subgroupSubgroup = subgroup.groups[k];
+                                layerIndex = isLayerInGroup(subgroupSubgroup.layers);
+                                if (layerIndex >= 0) {
+                                    if (deleteLayer) {
+                                        group.groups[j].groups[k].layers.splice(layerIndex, 1);
+                                    } else {
+                                        group.groups[j].groups[k].layers[layerIndex] = newLayerConf;
                                     }
                                 }
                             }
-
-                            if (founded) {
-                                break;
-                            }
                         }
 
-                        if (founded) {
+                        if (layerIndex >= 0) {
                             break;
                         }
-
                     }
 
-                });
-                return;
-            }
-
-            var isLayerInGroup = function(groupLayers) {
-                var founded = -1;
-                for (var i = 0; i < groupLayers.length; i++) {
-                    var layer = groupLayers[i];
-                    if (layer.id === layerId) {
-                        founded = i;
+                    if (layerIndex >= 0) {
                         break;
                     }
+
                 }
-                return founded;
+            }
+
+
+
+            // Finally check at layer has all groups in dom
+            newLayerConf.groups.forEach(function(group) {
+                var groupConf = me.getAllLayerGroups(group.id);
+                var isInGroup = jQuery.grep(me.getAllLayerGroups(group.id).layers, function(layer) {
+                    return layer.id === newLayerConf.id;
+                });
+
+                if (isInGroup.length === 0) {
+                    me.getAllLayerGroups(group.id).layers.push(newLayerConf);
+                }
+            });
+
+            // Also check if layer has removed from groups
+            // find all groups where layer is
+            // check main groups
+            var hasInGroupLayers = function(group) {
+                var layers = jQuery.grep(group.layers, function(layer) {
+                    return layer.id === newLayerConf.id;
+                });
+                return layers.length > 0;
             };
-            var layerIndex = null;
+            var hasNewLayerInGroup = function(groupId) {
+                var groups = jQuery.grep(newLayerConf.groups, function(g) {
+                    return g.id === groupId;
+                });
+                return groups.length > 0;
+            };
 
-            for (var i = 0; i < me._layerGroups.length; i++) {
-                group = me._layerGroups[i];
-
-                // Check if layer is in main groups
-                layerIndex = isLayerInGroup(group.layers);
-                if (layerIndex >= 0) {
-                    if (deleteLayer) {
-                        group.layers.splice(layerIndex, 1);
-                    } else {
-                        group.layers[layerIndex] = newLayerConf;
+            var getLayerIndex = function(layers) {
+                var returnIndex = -1;
+                layers.forEach(function(layer, index) {
+                    if (layer.id === newLayerConf.id) {
+                        returnIndex = index;
                     }
-                    break;
+                });
+                return returnIndex;
+            };
+            me._layerGroups.forEach(function(group, index) {
+                // new layer is not in main groups so remove it
+                if (hasInGroupLayers(group) && !hasNewLayerInGroup(group.id)) {
+                    group.layers.splice(getLayerIndex(group.layers), 1);
                 }
 
                 // check subgroups
-                for (var j = 0; j < group.groups.length; j++) {
-                    var subgroup = group.groups[j];
-
-                    layerIndex = isLayerInGroup(subgroup.layers);
-                    if (layerIndex >= 0) {
-                        if (deleteLayer) {
-                            group.groups[j].layers.splice(layerIndex, 1);
-                        } else {
-                            group.groups[j].layers[layerIndex] = newLayerConf;
-                        }
-                        break;
+                group.groups.forEach(function(subgroup, subgroupIndex) {
+                    // new layer is not in subgroups so remove it
+                    if (hasInGroupLayers(subgroup) && !hasNewLayerInGroup(subgroup.id)) {
+                        subgroup.layers.splice(getLayerIndex(subgroup.layers), 1);
                     }
+
                     // check subgroup subgroups
-                    if (subgroup.groups) {
-                        for (var k = 0; k < subgroup.groups.length; k++) {
-                            var subgroupSubgroup = subgroup.groups[k];
-                            layerIndex = isLayerInGroup(subgroupSubgroup.layers);
-                            if (layerIndex >= 0) {
-                                if (deleteLayer) {
-                                    group.groups[j].groups[k].layers.splice(layerIndex, 1);
-                                } else {
-                                    group.groups[j].groups[k].layers[layerIndex] = newLayerConf;
-                                }
-                                break;
-                            }
+                    subgroup.groups.forEach(function(subgroupSubgroup, subgroupSubgroupIndex) {
+                        // new layer is not in subgroups so remove it
+                        if (hasInGroupLayers(subgroupSubgroup) && !hasNewLayerInGroup(subgroupSubgroup.id)) {
+                            subgroupSubgroup.layers.splice(getLayerIndex(subgroupSubgroup.layers), 1);
                         }
-                    }
-
-                    if (layerIndex >= 0) {
-                        break;
-                    }
-                }
-
-                if (layerIndex >= 0) {
-                    break;
-                }
-
-            }
+                    });
+                });
+            });
         },
 
         /**

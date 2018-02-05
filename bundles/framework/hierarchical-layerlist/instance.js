@@ -114,10 +114,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             // draw ui
             me.createUi();
 
-
-            /*mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox, sandbox.getAjaxUrl('GetHierarchicalMapLayerGroups') + '&lang=' + Oskari.getLang());
-            sandbox.registerService(mapLayerService);*/
-
             sandbox.registerAsStateful(me.mediator.bundleId, me);
 
 

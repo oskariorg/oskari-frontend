@@ -51,7 +51,8 @@ define([
                 'change .admin-sld-styles': 'handleSldStylesChange',
                 'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
                 'click .layer-capabilities.icon-info': 'showCapabilitiesPopup',
-                "click .admin-add-sublayer": "toggleSubLayerSettings"
+                "click .admin-add-sublayer": "toggleSubLayerSettings",
+                "click .select-maplayer-groups-button": "selectMaplayerGroups"
             },
             /*******************************************************************************************************************************
             /* PRIVATE METHODS
@@ -429,6 +430,91 @@ define([
             /*******************************************************************************************************************************
             /* PUBLIC METHODS
             *******************************************************************************************************************************/
+            selectMaplayerGroups: function() {
+                var me = this;
+                var buttons = [];
+                var selectedGroups = {};
+
+                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                errorDialog.setId('admin-hierarchical-layerlist-group-error-popup');
+                var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                btnCancel.setTitle(me.instance.locale('buttons.cancel'));
+                btnCancel.addClass('cancel');
+                btnCancel.setHandler(function() {
+                    popup.close();
+                });
+                buttons.push(btnCancel);
+                var btnOk = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                buttons.push(btnOk);
+                popup.addClass('admin-hierarchical-layerlist-group');
+
+                btnOk.addClass('add');
+                btnOk.setTitle(me.instance.locale('buttons.select'));
+                btnOk.setHandler(function() {
+                    var selected = [];
+                    var ids = [];
+                    popup.getJqueryContent().find('.admin-maplayer-group input:checked').each(function() {
+                        var el = jQuery(this).parents('label');
+                        var name = el.attr('data-name');
+                        var id = el.attr('data-id');
+                        selected.push({
+                            id: parseFloat(id),
+                            name: name
+                        });
+                        ids.push(id);
+
+                        var list = jQuery('.admin-hierarchical-layerlist-add-layer .admin-maplayer-groups-list');
+                        list.empty();
+                    });
+                    if (selected.length === 0) {
+                        errorDialog.show(me.instance.locale('errors.maplayerGroups.title'), me.instance.locale('errors.maplayerGroups.message'));
+                        errorDialog.fadeout();
+                    } else {
+                        var list = jQuery('.admin-hierarchical-layerlist-add-layer .admin-maplayer-groups-list');
+                        list.empty();
+                        var template = jQuery('<div class="admin-maplayer-group"></div>');
+                        selected.forEach(function(sel) {
+                            var selected = template.clone();
+                            selected.html(sel.name);
+                            list.append(selected);
+                        });
+                        me.options.groupId = ids.join(',');
+                        me.options.maplayerGroups = selected;
+                        popup.close();
+                    }
+
+                });
+
+                var message = jQuery('<div class="maplayer-groups"></div>');
+
+                var isInGroup = function(groupId) {
+                    var grepped = jQuery.grep(me.options.maplayerGroups, function(g) {
+                        return g.id === groupId;
+                    });
+                    return grepped.length > 0;
+                };
+
+                // groups
+                me.options.allMaplayerGroups.forEach(function(group) {
+                    var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+                    checkbox.setTitle(group.name);
+                    checkbox.setChecked(isInGroup(group.id));
+                    checkbox.addClass('admin-maplayer-group');
+                    checkbox.addClass(group.cls);
+
+                    var el = jQuery(checkbox.getElement());
+
+                    el.attr('data-id', group.id);
+                    el.attr('data-name', group.name);
+                    message.append(el);
+                });
+
+                popup.show(me.instance.locale('groupTitles.selectLayerGroups'), message, buttons);
+                popup.makeModal();
+
+            },
+
             /**
              * Add dataprovider
              * @method addDataprovider
@@ -682,15 +768,14 @@ define([
                     header: layerTypeData.headerTemplate,
                     footer: layerTypeData.footerTemplate,
                     instance: me.options.instance,
-                    //inspireThemes: groupTitles,
                     dataProviders: me.getDataProviders(),
                     isSubLayer: me.options.baseLayerId,
-                    // capabilities template related
                     capabilities: me.model.get('capabilities'),
                     capabilitiesTemplate: me.capabilitiesTemplate,
-                    // ^ /capabilities related
                     roles: me.roles,
-                    dataProvider: me.options.dataProvider
+                    dataProvider: me.options.dataProvider,
+                    allMaplayerGroups: me.options.allMaplayerGroups,
+                    maplayerGroups: me.options.maplayerGroups
                 }));
                 // if settings are hidden, we need to populate template and
                 // add it to the DOM
