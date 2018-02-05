@@ -57,16 +57,24 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         // from zero to max value. This could also be from min to max value, but it causes problems if
         // some values are missing -> resulting to negative widths for bars.
         // TODO: we need some proper handling for missing values AND negative values.
-        this.x = d3.scaleLinear()
-        .domain([ 0, d3.max( this.data, function ( d ) {
-                return d.value;
-            })
-        ]);
+        var dataset = this.getDatasetMinMax();
+        var nonNegativeAxis =  dataset.min >= 0 && dataset.max >= 0;
+        var positiveAndNegativeAxis = dataset.min < 0 && dataset.max > 0;
 
-        this.y = d3.scaleBand()
-        .domain( this.data.map ( function ( d ) {
+        this.x = d3.scaleLinear();
+        this.y = d3.scaleBand();
+
+        var xScaleDomain;
+        if ( nonNegativeAxis ) {
+            xScaleDomain = [ 0, dataset.max]
+        } else {
+            xScaleDomain = d3.extent(data, (d) => {return d.value;});
+        }
+        var yScaleDomain = this.data.map ( function ( d ) {
             return d.name;
-        }));
+        });
+        this.x.domain( xScaleDomain );
+        this.y.domain( yScaleDomain );
     },
     getSVGTemplate: function () {
         var svg = d3.select( this.graph.get(0) ).append("svg")
@@ -75,6 +83,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .append( "g" )
             .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" );
         return svg;
+    },
+    getDatasetMinMax: function () {
+        var min = d3.min(this.data, function ( d ) { return d.value; });
+        var max = d3.max(this.data, function ( d ) { return d.value; });
+        return {
+            min: min,
+            max: max
+        }
     },
     /**
      * d3 axis are functions that generate svg-elements based on the scale given
