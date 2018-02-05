@@ -198,6 +198,8 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             if (layerId) {
                 layerModel = me.sandbox.findMapLayerFromAllAvailable(layerId);
             }
+
+            var groupDetails = me.layerService.getAllLayerGroups(groupId);
             require(['_bundle/views/adminLayerSettingsView', '_bundle/views/adminLayerSettingsView'], function(adminLayerSettingsView, sublayerView) {
                 // create layer settings view for adding or editing layer
                 var settings = new adminLayerSettingsView({
@@ -211,8 +213,10 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                     baseLayerId: null,
                     sublayerView: sublayerView,
                     allMaplayerGroups: me._getMaplayerGroups(),
-                    maplayerGroups: layerModel.getGroups()
-
+                    maplayerGroups: (layerModel) ? layerModel.getGroups() : [{
+                        id: groupDetails.id,
+                        name: Oskari.getLocalized(groupDetails.name)
+                    }]
                 });
                 var content = settings.$el;
 
