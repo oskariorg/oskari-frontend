@@ -152,23 +152,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     },
     /**
      *
-     * @method callGroups
+     * @method svgAppendElements
      */
-    callGroups: function () {
-        //groups
-        var gx = this.svg.append( "g" )
-            .attr("class", "x axis" )
-            .attr("transform", "translate(0 " + this.dimensions.xAxisOffset + ")")
-            .call( this.xAxis );
+    svgAppendElements: function () {
+        var gx = this.svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + this.dimensions.height() + ")")
+            .call(this.xAxis);
 
+        var gy = this.svg.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(" + this.x(0) + ",0)")
+            .call(this.yAxis);
+    
         gx.select('.domain').remove();
+
         gx.selectAll('line, path')
             .attr('stroke', '#aaa')
             .attr('shape-rendering', 'crispEdges');
             
-        var gy = this.svg.append( "g" )
-            .attr( "class", "y axis" )
-            .call( this.yAxis );
         gy.selectAll('line, path')
             .attr('stroke', '#aaa')
             .attr('shape-rendering', 'crispEdges');
@@ -283,7 +285,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         selection.each( function ( data ) {
             // this._g = me.svg.select(this).append('g');
             me.initAxis();
-            me.callGroups();
+            me.svgAppendElements();
         });
     },
     clear: function () {
