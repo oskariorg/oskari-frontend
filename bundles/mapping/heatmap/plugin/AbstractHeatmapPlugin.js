@@ -59,7 +59,7 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         _updateLayer: function(layer) {
-            if ( layer.getId() !== this.getLayerTypeSelector() ) {
+            if ( layer.isLayerOfType( this.getLayerTypeSelector() ) ) {
                 return
             }
             var oLayers = this.getOLMapLayers(layer),
