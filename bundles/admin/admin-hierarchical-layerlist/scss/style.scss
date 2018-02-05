@@ -94,6 +94,12 @@ $errorColor: lighten(#ff0000, 20%);
                 margin-top: 3px;
                 margin-left:10px;
 
+                .admin-maplayer-groups-list {
+                    max-height: 90px;
+                    overflow-y: auto;
+                    margin: 10px
+                }
+
                 div.add-group-wrapper {
                     width:500px;
                 }
@@ -227,6 +233,7 @@ $errorColor: lighten(#ff0000, 20%);
                     div.add-layer-label-area {
                         display: table;
                         float: left;
+                        font-weight: bold;
 
                         label.add-layer-label {
                             font-weight: bold;
@@ -290,6 +297,40 @@ $errorColor: lighten(#ff0000, 20%);
                     }
                 }
 
+            }
+        }
+    }
+}
+
+.divmanazerpopup {
+    &.admin-hierarchical-layerlist-group {
+
+        label {
+            &.group {
+                &::before {
+                    content: "\25B6";
+                    width: 25px;
+                    margin-right: 8px;
+                    color: #555;
+                }
+            }
+            &.subgroup {
+                &::before {
+                    content: "\25B6";
+                    width: 25px;
+                    margin-left: 32px;
+                    margin-right: 8px;
+                    color: #555;
+                }
+            }
+            &.subgroupsubgroup {
+                &::before {
+                    content: "\25B6";
+                    width: 25px;
+                    margin-left: 64px;
+                    margin-right: 8px;
+                    color: #555;
+                }
             }
         }
     }
