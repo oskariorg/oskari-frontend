@@ -66,7 +66,7 @@ Oskari.clazz.define(
                 subs = layer.getSubLayers(),
                 layerList = subs.length ? subs : [layer],
                 llen = layerList.length,
-                scale = this.getMapModule().getMap().getScale(),
+                scale = this.getSandbox().getMap().getScale(),
                 i,
                 newRes,
                 isInScale;
