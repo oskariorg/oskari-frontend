@@ -7,7 +7,8 @@ Oskari.registerLocalization({
             "cancel": "Tillbaka",
             "update": "Uppdatera",
             "delete": "Ta bort",
-            "ok": "Ok"
+            "ok": "Ok",
+            "select": "Välj"
         },
         "tooltips": {
             "addMainGroup": "Lägg till huvudgrupp",
@@ -24,7 +25,8 @@ Oskari.registerLocalization({
             "editMainGroup": "Huvudgruppsnamn",
             "editSubgroup": "Redigera undergrupp",
             "addLayer": "Lägg till maplayerr",
-            "addDataprovider": "Lägg till dataprovider"
+            "addDataprovider": "Lägg till dataprovider",
+            "selectLayerGroups": "Välj lagergrupper"
         },
         "selectableGroup": "selektionsgrupp",
         "errors": {
@@ -55,6 +57,10 @@ Oskari.registerLocalization({
             "dataproviderSave": {
                 "title": "Dataprovider misslyckades",
                 "message": "Dataprovider misslyckades, försök igen senare"
+            },
+            "maplayerGroups": {
+                "title": "Kontrollera kartlagrupper",
+                "message": "Maplayer måste ha minst en grupp"
             }
         },
         "succeeses": {
@@ -237,7 +243,9 @@ Oskari.registerLocalization({
             "warning_some_of_the_layers_could_not_be_parsed": "Nägra kartlager kunde inte bearbetas.",
             "addDataprovider": "Dataprovider",
             "groupTitle": "Gruppnivå namn",
-            "addDataproviderButton": "Tillägg"
+            "addDataproviderButton": "Tillägg",
+            "maplayerGroups": "Maplayer-grupper",
+            "selectMaplayerGroupsButton": "Välj grupper"
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
