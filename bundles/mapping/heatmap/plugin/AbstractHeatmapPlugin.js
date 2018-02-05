@@ -59,11 +59,14 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         _updateLayer: function(layer) {
+            if ( layer.isLayerOfType( this.getLayerTypeSelector() ) ) {
+                return
+            }
             var oLayers = this.getOLMapLayers(layer),
                 subs = layer.getSubLayers(),
                 layerList = subs.length ? subs : [layer],
                 llen = layerList.length,
-                scale = this.getMapModule().getMap().getScale(),
+                scale = this.getSandbox().getMap().getScale(),
                 i,
                 newRes,
                 isInScale;
