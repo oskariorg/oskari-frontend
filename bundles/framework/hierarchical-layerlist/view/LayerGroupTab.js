@@ -496,7 +496,7 @@ Oskari.clazz.define(
          * @private
          */
         _getNodeRealId: function(node) {
-            return node.id.split('-')[1];
+            return node.a_attr['data-layer-id'];
         },
         /**
          * @method _createLayerContainer
@@ -667,30 +667,108 @@ Oskari.clazz.define(
             return me._isDefined(type1) && me._isDefined(type2) && type1.toLowerCase() === type2.toLowerCase();
         },
 
+        /**
+         * Update container height
+         * @method  _updateContainerHeight
+         * @param   {Integer}               height map heigt
+         * @private
+         */
+        _updateContainerHeight: function(height) {
+            var me = this;
+            me.getJsTreeElement().css('max-height', (height * 0.5) + 'px');
+        },
+
+        /**
+         * Bind Oskari events
+         * @method  _bindOskariEvents
+         * @private
+         */
+        _bindOskariEvents: function() {
+            var me = this;
+
+            me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
+                var layer = evt.getMapLayer();
+                me._toggleLayerCheckboxes(layer.getId(), true);
+            });
+
+
+            me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
+                var layer = evt.getMapLayer();
+                me._toggleLayerCheckboxes(layer.getId(), false);
+            });
+
+
+            me._notifierService.on('MapSizeChangedEvent', function(evt) {
+                me._updateContainerHeight(evt.getHeight());
+            });
+        },
+
+        /**
+         * Toggle layer checkboxes
+         * @method  _toggleLayerCheckboxes
+         * @param   {String}         layerId layer id
+         * @param   {Boolean}         checked need layer checked
+         * @private
+         */
+        _toggleLayerCheckboxes: function(layerId, checked) {
+            var me = this;
+            var nodes = [];
+
+            var layers = [];
+            var modelData = me.getJsTreeElement().jstree(true)._model.data;
+            Object.keys(modelData).forEach(function(key) {
+                var node = modelData[key];
+                if (node.type === 'layer' && node.a_attr['data-layer-id'] === layerId) {
+                    layers.push(node.id);
+                }
+            });
+            if (checked) {
+                me.getJsTreeElement().jstree().check_node(layers);
+            } else {
+                me.getJsTreeElement().jstree().uncheck_node(layers);
+            }
+        },
+
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
         *******************************************************************************************************************************/
+        /**
+         * Get title
+         * @method getTitle
+         * @return {Strin} title
+         */
         getTitle: function() {
-            //"use strict";
             return this.title;
         },
 
+        /**
+         * Get tab panel
+         * @method getTabPanel
+         * @return {Object}    tab panel
+         */
         getTabPanel: function() {
-            //"use strict";
             return this.tabPanel;
         },
 
+        /**
+         * Get state
+         * @method getState
+         * @return {Object} state
+         */
         getState: function() {
-            //"use strict";
             var state = {
                 tab: this.getTitle(),
-                filter: this.filterField.getValue(),
-                groups: []
+                filter: this.filterField.getValue()
             };
             return state;
         },
 
+        /**
+         * Set state
+         * @method setState
+         * @param  {Object} state state
+         */
         setState: function(state) {
             //"use strict";
             if (!state) {
@@ -770,6 +848,7 @@ Oskari.clazz.define(
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+            var nodes = [];
 
             switch (node.type) {
                 case 'layer':
@@ -780,13 +859,23 @@ Oskari.clazz.define(
                     // Need open metadata
                     else if (target.hasClass('layer-info')) {
                         me._showLayerMetaData(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
-                    } else if (isChecked) {
+                    }
+                    // uncheck nodes
+                    else if (isChecked) {
+
                         tree.jstree().uncheck_node(node);
+
                         layerId = me._getNodeRealId(node);
                         if (me.sb.isLayerAlreadySelected(layerId)) {
                             me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
                         }
-                    } else {
+
+                        if (me.instance._selectedLayerGroupId[layerId]) {
+                            delete me.instance._selectedLayerGroupId[layerId];
+                        }
+                    }
+                    // check nodes
+                    else {
                         if (allSelectedLayersLength > 10) {
                             desc.find('p').text(me.localization.manyLayersWarning.text);
                             okBtn.addClass('primary');
@@ -809,6 +898,10 @@ Oskari.clazz.define(
                             if (!me.sb.isLayerAlreadySelected(layerId)) {
                                 me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                             }
+                        }
+
+                        if (!me.instance._selectedLayerGroupId[layerId]) {
+                            me.instance._selectedLayerGroupId[layerId] = node.a_attr['data-group-id'];
                         }
                     }
                     break;
@@ -892,7 +985,7 @@ Oskari.clazz.define(
             }
             var layerTree = jQuery(me.templates.layerTree);
 
-            var addLayers = function(groupId, layers) {
+            var addLayers = function(groupElId, layers, groupId) {
                 layers.forEach(function(l) {
                     var layer = l;
                     if (l.id) {
@@ -904,8 +997,8 @@ Oskari.clazz.define(
                             'data-layer-id': layer.getId()
                         }
                     };
-                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId() + '-group-' + groupId,
-                        groupId,
+                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId() + '-' + groupId,
+                        groupElId,
                         jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
                         'layer',
                         opts));
@@ -930,7 +1023,7 @@ Oskari.clazz.define(
                         opts);
 
                     jsTreeData.push(jstreeObject);
-                    addLayers('subgroup-' + subgroup.id, subgroup.layers);
+                    addLayers('subgroup-' + subgroup.id, subgroup.layers, subgroup.id);
                 });
             };
 
@@ -951,7 +1044,7 @@ Oskari.clazz.define(
                         opts);
 
                     jsTreeData.push(jstreeObject);
-                    addLayers('subgroup-subgroup-' + subgroup.id, subgroup.layers);
+                    addLayers('subgroup-subgroup-' + subgroup.id, subgroup.layers, subgroup.id);
                 });
             };
 
@@ -975,7 +1068,7 @@ Oskari.clazz.define(
                     'group', extraOpts));
 
                 //Loop through group layers
-                addLayers('group-' + group.getId(), layers);
+                addLayers('group-' + group.getId(), layers, group.getId());
 
                 if (group.getGroups().length > 0) {
                     addSubgroups(group.getId(), group.getGroups());
@@ -1000,7 +1093,7 @@ Oskari.clazz.define(
 
             // check selected layers
             me.sb.findAllSelectedMapLayers().forEach(function(layer) {
-                me.getJsTreeElement().jstree().check_node('layer-' + layer.getId());
+                me._toggleLayerCheckboxes(layer.getId(), true);
             });
 
             // Add group tools
@@ -1009,10 +1102,16 @@ Oskari.clazz.define(
                 me._addSubgroupTools();
             });
 
+            // When open node then updata tools also
             me.getJsTreeElement().on('open_node.jstree', function(node) {
                 me._addSubgroupTools();
                 me._addSubgroupSubgroupTools();
                 me._addLayerTools();
+
+                // check selected layers
+                me.sb.findAllSelectedMapLayers().forEach(function(layer) {
+                    me._toggleLayerCheckboxes(layer.getId(), true);
+                });
             });
         },
 
@@ -1031,28 +1130,6 @@ Oskari.clazz.define(
             if (this.sentKeyword && this.sentKeyword !== keyword) {
                 oskarifield.find('.related-keywords').html('').hide();
             }
-        },
-
-        _updateContainerHeight: function(height) {
-            var me = this;
-            me.getJsTreeElement().css('max-height', (height * 0.5) + 'px');
-        },
-        _bindOskariEvents: function() {
-            var me = this;
-            me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
-                var layer = evt.getMapLayer();
-                me.getJsTreeElement().jstree().check_node('layer-' + layer.getId());
-            });
-
-            me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
-                var layer = evt.getMapLayer();
-                me.getJsTreeElement().jstree().uncheck_node('layer-' + layer.getId());
-            });
-
-
-            me._notifierService.on('MapSizeChangedEvent', function(evt) {
-                me._updateContainerHeight(evt.getHeight());
-            });
         }
     }
 );

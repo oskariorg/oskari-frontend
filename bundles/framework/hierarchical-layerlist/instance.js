@@ -16,6 +16,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
         this.localization = null;
         this.notifierService = null;
         this.layerlistExtenderService = null;
+
+        this._selectedLayerGroupId = {};
     }, {
         /**
          * @static

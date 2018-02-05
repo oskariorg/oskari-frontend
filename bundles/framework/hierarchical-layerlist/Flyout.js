@@ -58,11 +58,28 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                     mapLayerService.updateGroupsLayers(data.layerData.id, data.layerData, false, true);
                 } else {
                     mapLayerService.updateLayer(data.layerData.id, data.layerData);
+
+                    // also update breadcrump information
+                    me._updateBreadcrumbGroups(data.layerData);
                 }
 
 
                 me.populateLayers();
             });
+        },
+        _updateBreadcrumbGroups: function(layerData) {
+            var me = this;
+            if (me.instance._selectedLayerGroupId[layerData.id]) {
+                var currentGroupId = me.instance._selectedLayerGroupId[layerData.id];
+                var founded = jQuery.grep(layerData.groups, function(group) {
+                    return group.id === currentGroupId;
+                });
+
+                if (founded.length === 0) {
+                    // update groups to first
+                    me.instance._selectedLayerGroupId[layerData.id] = layerData.groups[0].id;
+                }
+            }
         },
         /**
          * @method getName

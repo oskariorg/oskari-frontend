@@ -1,4 +1,5 @@
-Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', function(layer, sandbox, locale) {
+Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', function(instance, layer, sandbox, locale) {
+    this.instance = instance;
     this.locale = locale;
     this.sb = sandbox;
     this.service = this.sb.getService('Oskari.mapframework.service.MapLayerService');
@@ -165,8 +166,38 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
      */
     _setBreadcrumb: function() {
         var me = this;
-        var breakcrumb = me.service.getLayerGroupBreadcrumb(me._layer.getId());
+        var breakcrumb = me._getBreadcrump();
         this._el.find('.breadcrumb').html(breakcrumb);
+
+    },
+
+    _getBreadcrump: function() {
+        var me = this;
+        var groups = [];
+        var groupId = me.instance._selectedLayerGroupId[me._layer.getId()] || me.sb.findMapLayerFromAllAvailable(me._layer.getId()).getGroups()[0].id;
+
+        // get breadcrump
+        var getGroupName = function(group) {
+            return Oskari.getLocalized(me.service.getAllLayerGroups(group.id).name);
+        };
+
+        // Get layer parent group
+        var parentGroup = me.service.getAllLayerGroups(groupId);
+        groups.push(getGroupName(parentGroup));
+        if (parentGroup.parentId > 0) {
+            // check also group parent group
+            var parentGroup1 = me.service.getAllLayerGroups(parentGroup.parentId);
+            groups.push(getGroupName(parentGroup1));
+
+            if (parentGroup1.parentId > 0) {
+                // check also group parent group
+                var parentGroup2 = me.service.getAllLayerGroups(parentGroup1.parentId);
+                groups.push(getGroupName(parentGroup2));
+            }
+        }
+
+        groups.reverse();
+        return groups.join(' > ');
 
     },
     /**
