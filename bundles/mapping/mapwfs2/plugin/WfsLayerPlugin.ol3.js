@@ -1527,12 +1527,13 @@ Oskari.clazz.define(
                     map.setLayerIndex(wfsMapImageLayer, layerIndex);
                 }
 
-                // highlight picture on top of normal layer images
-                var layerToMove = me.getOLMapLayer(layer, me.__typeHighlight);
-                var higlightLayerIndex = mapmodule.getLayerIndex(layerToMove);
-                highlightLayer = map.getLayers().removeAt(higlightLayerIndex);
-
+                // highlight picture on top of normal layer images (if both are available)
+                // for example postprocessor bundle can highlight without the "normal layer"
                 if (normalLayer && highlightLayer) {
+                    var layerToMove = me.getOLMapLayer(layer, me.__typeHighlight);
+                    var higlightLayerIndex = mapmodule.getLayerIndex(layerToMove);
+                    highlightLayer = map.getLayers().removeAt(higlightLayerIndex);
+
                     normalLayerIndex = mapmodule.getLayerIndex(normalLayer);
                     map.getLayers().insertAt(normalLayerIndex, highlightLayer);
                 }
