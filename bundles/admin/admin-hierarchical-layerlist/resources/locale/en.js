@@ -47,8 +47,8 @@ Oskari.registerLocalization({
                 "message": "Group deleting failed, try again later"
             },
             "nodeDropSave": {
-                "title": "Tason/ryhmän siirto ei onnistunut -en",
-                "message": "Virhe tason/ryhmän siirrossa, kokeile myöhemmin uudelleen -en"
+                "title": "Moving layer/group not successful",
+                "message": "Moving layer/group not successful"
             },
             "dataprovider": {
                 "title": "Check dataprovider name",
@@ -73,8 +73,8 @@ Oskari.registerLocalization({
                 "message": "Group deleting was successfull"
             },
             "nodeDropSave": {
-                "title": "Maplayer/group transfer succeeded",
-                "message": "Maplayer/group transfer succeeded"
+                "title": "Moving layer/group successful",
+                "message": "Moving layer/group successful"
             },
             "dataproviderSave": {
                 "title": "Dataprovider saving was successful",
@@ -87,8 +87,8 @@ Oskari.registerLocalization({
                 "message": "Do you want to delete {groupname} group ?"
             },
             "nodeDropSave": {
-                "title": "Do you want to move the maplayer/group",
-                "message": "Do you want to move the maplayer/group ?"
+                "title": "Do you want to move layer/group",
+                "message": "Do you want to move layer/group?"
             }
         },
         "admin": {

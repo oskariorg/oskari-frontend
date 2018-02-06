@@ -218,23 +218,10 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop("id").split("_")[0]);
                 if (!data.data.origin.is_open(targetGroup)) {
                     data.data.origin.open_node(targetGroup);
+                    me._saveOrder(event, data);
+                } else {
+                    me._saveOrder(event, data);
                 }
-                var draggedNode = data.data.origin.get_node(data.element);
-                var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
-                var parentNode = data.data.origin.get_node(draggedNode.parent);
-                var draggedNodeId = me._findJSTreeNodeActualId(draggedNode.id);
-                var draggedNodeNewParentId = me._findJSTreeNodeActualId(parentNode.id);
-                var draggedNodeOldParentId = me._findJSTreeNodeActualId(originalParentNode.id);
-                //Get the new index inside the group's children
-                var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
-                var ajaxData = {};
-                ajaxData.type = me._findJSTreeNodeActualType(draggedNode.type);
-                ajaxData.nodeId = draggedNodeId;
-                ajaxData.nodeIndex = draggedNodeNewIndex;
-                ajaxData.oldGroupId = draggedNodeOldParentId;
-                ajaxData.targetGroupId = draggedNodeNewParentId;
-                me._saveOrder(ajaxData);
-                me.service.trigger('jstree-order-changed', data);
             });
         },
         /**
@@ -257,7 +244,11 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @return {Integer}        The node id integer
          */
         _findJSTreeNodeActualId: function(nodeId) {
-            return nodeId.replace(/[^0-9]/g, '');
+            if(nodeId === '#') {
+                return -1;
+            } else {
+                return nodeId.replace(/[^0-9]/g, '');
+            }
         },
 
         /**
@@ -268,14 +259,28 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @param   {String}   type  jstree type
          * @private
          */
-        _saveOrder: function(data) {
+        _saveOrder: function(event, data) {
             var me = this;
+            var draggedNode = data.data.origin.get_node(data.element);
+            var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
+            var parentNode = data.data.origin.get_node(draggedNode.parent);
+            var draggedNodeId = me._findJSTreeNodeActualId(draggedNode.id);
+            var draggedNodeNewParentId = me._findJSTreeNodeActualId(parentNode.id);
+            var draggedNodeOldParentId = me._findJSTreeNodeActualId(originalParentNode.id);
+            //Get the new index inside the group's children
+            var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
+            var ajaxData = {};
+            ajaxData.type = me._findJSTreeNodeActualType(draggedNode.type);
+            ajaxData.nodeId = draggedNodeId;
+            ajaxData.nodeIndex = draggedNodeNewIndex;
+            ajaxData.oldGroupId = draggedNodeOldParentId;
+            ajaxData.targetGroupId = draggedNodeNewParentId;
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
                 contentType: 'application/json; charset=UTF-8',
                 url: me.sandbox.getAjaxUrl('LayerAndGroupOrder'),
-                data: JSON.stringify(data),
+                data: JSON.stringify(ajaxData),
                 error: function(response) {
                     var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     errorDialog.show(me.locale('errors.nodeDropSave.title'), me.locale('errors.nodeDropSave.message'));
@@ -287,6 +292,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     successDialog.fadeout();
                 }
             });
+            me.service.trigger('jstree-order-changed', data);
         },
 
 

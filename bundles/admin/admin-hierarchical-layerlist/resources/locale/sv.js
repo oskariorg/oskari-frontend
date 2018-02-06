@@ -47,8 +47,8 @@ Oskari.registerLocalization({
                 "message": "Gruppens borttagning misslyckades, försök igen senare"
             },
             "nodeDropSave": {
-                "title": "Tason/ryhmän siirto ei onnistunut",
-                "message": "Virhe tason/ryhmän siirrossa, kokeile myöhemmin uudelleen"
+                "title": "Flyttning av maplayer/grupp misslyckades",
+                "message": "Flyttning av maplayer/grupp misslyckades"
             },
             "dataprovider": {
                 "title": "Kontrollera dataprovider",
@@ -73,8 +73,8 @@ Oskari.registerLocalization({
                 "message": "Gruppborttagning lyckades"
             },
             "nodeDropSave": {
-                "title": "Maplayer/gruppöverföring lyckades",
-                "message": "Maplayer/gruppöverföring lyckades"
+                "title": "Flyttning av maplayer/grupp lyckades",
+                "message": "Flyttning av maplayer/grupp lyckades"
             },
             "dataproviderSave": {
                 "title": "Dataprovider var framgångsrika",
@@ -84,11 +84,11 @@ Oskari.registerLocalization({
         "confirms": {
             "groupDelete": {
                 "title": "Vill du ta bort",
-                "message": "Vill du ta bort {groupname} grupp ?"
+                "message": "Vill du ta bort {groupname} grupp?"
             },
             "nodeDropSave": {
-                "title": "Vill du flytta kartläggaren / gruppen",
-                "message": "Vill du flytta kartläggaren / gruppen"
+                "title": "Vill du flytta maplayer/grupp",
+                "message": "Vill du flytta maplayer/grupp?"
             }
         },
         "admin": {
