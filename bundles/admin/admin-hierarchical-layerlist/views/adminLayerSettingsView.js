@@ -218,6 +218,7 @@ define([
                     //accordion = element.parents('.accordion'),
                     createLayer;
                 // Progress spinner
+                me.progressSpinner.insertTo(jQuery('.admin-hierarchical-layerlist-add-layer .oskari-flyoutcontentcontainer'));
                 me.progressSpinner.start();
 
                 jQuery.ajax({
@@ -1324,6 +1325,7 @@ define([
                 e.stopPropagation();
 
                 // Progress spinner
+                me.progressSpinner.insertTo(jQuery('.admin-hierarchical-layerlist-add-layer .oskari-flyoutcontentcontainer'));
                 me.progressSpinner.start();
 
                 var serviceURL = form.find('#add-layer-interface').val(),

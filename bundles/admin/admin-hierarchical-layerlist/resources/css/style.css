@@ -66,6 +66,8 @@
 .oskari-flyout.admin-hierarchical-layerlist-add-layer {
   width: 50%;
   max-height: 80%; }
+  .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer .spinner {
+    position: absolute !important; }
   .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer .icon-close {
     display: inline-block;
     opacity: 0;

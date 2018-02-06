@@ -78,6 +78,10 @@ $errorColor: lighten(#ff0000, 20%);
 
 
         div.oskari-flyoutcontentcontainer {
+            .spinner {
+                position: absolute !important;
+            }
+
             .icon-close {
                 display: inline-block;
                 opacity: 0;

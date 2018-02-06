@@ -141,6 +141,12 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         }
         callback();
     },
+    /**
+     * Get mapl layer groups for layer group selection
+     * @method  _getMaplayerGroups
+     * @return  {Array}           groups
+     * @private
+     */
     _getMaplayerGroups: function() {
         var me = this;
         var groups = [];
@@ -173,7 +179,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         return groups;
     },
     /**
-     * Shows layer popu
+     * Shows layer popup
      * @method showLayerAddPopup
      * @param  {String}          tool    tool identifier
      * @param  {String}          layerId layerId
