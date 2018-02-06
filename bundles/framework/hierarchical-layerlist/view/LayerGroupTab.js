@@ -576,8 +576,8 @@ Oskari.clazz.define(
 
             var backendStatus = layer.getBackendStatus();
             if (backendStatus) {
-                var iconClass = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].iconClass : null;
-                var tooltip = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].tooltip : null;
+                var iconClass = me.instance.getLocalization('backendStatus')[backendStatus] ? me.instance.getLocalization('backendStatus')[backendStatus].iconClass : null;
+                var tooltip = me.instance.getLocalization('backendStatus')[backendStatus] ? me.instance.getLocalization('backendStatus')[backendStatus].tooltip : null;
                 if (iconClass) {
                     elBackendStatus.removeClass('backendstatus-unknown');
                     elBackendStatus.addClass(iconClass);
@@ -880,7 +880,7 @@ Oskari.clazz.define(
                     // check nodes
                     else {
                         if (allSelectedLayersLength > 10) {
-                            desc.find('p').text(me.localization.manyLayersWarning.text);
+                            desc.find('p').text(me.instance.getLocalization('manyLayersWarning').text);
                             okBtn.addClass('primary');
                             okBtn.setHandler(function() {
                                 dialog.close(true);
@@ -894,7 +894,7 @@ Oskari.clazz.define(
                             cancelBtn.setHandler(function() {
                                 dialog.close(true);
                             });
-                            dialog.show(me.localization.manyLayersWarning.title, desc, [okBtn, cancelBtn]);
+                            dialog.show(me.instance.getLocalization('manyLayersWarning').title, desc, [okBtn, cancelBtn]);
                         } else {
                             tree.jstree().check_node(node);
                             layerId = me._getNodeRealId(node);
@@ -924,9 +924,9 @@ Oskari.clazz.define(
                         //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
                         if ((nodeChildren.length > 10 || allSelectedLayersLength >= 10)) {
 
-                            var text = me.localization.manyLayersWarning.text;
+                            var text = me.instance.getLocalization('manyLayersWarning').text;
                             if (allSelectedLayersLength >= 10) {
-                                text = me.localization.manyLayersWarningAlready.text;
+                                text = me.instance.getLocalization('manyLayersWarningAlready').text;
                             }
 
                             desc.find('p').text(text);
@@ -947,7 +947,7 @@ Oskari.clazz.define(
                             cancelBtn.setHandler(function() {
                                 dialog.close(true);
                             });
-                            dialog.show(me.localization.manyLayersWarning.title, desc, [okBtn, cancelBtn]);
+                            dialog.show(me.instance.getLocalization('manyLayersWarning').title, desc, [okBtn, cancelBtn]);
                         } else {
                             tree.jstree().open_node(node);
                             tree.jstree().check_node(node);
@@ -1065,6 +1065,8 @@ Oskari.clazz.define(
                 if (!group.hasSelectable()) {
                     extraOpts.a_attr.class = 'no-checkbox';
                 }
+
+
                 jsTreeData.push(me._getJsTreeObject('group-' + group.getId(),
                     '#',
                     group.getTitle() + ' (' + layers.length + ')',
