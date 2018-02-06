@@ -28,7 +28,7 @@ Oskari.clazz.define(
             groupTool: jQuery('<div class="group-tool"></div>'),
             subgroupTool: jQuery('<div class="subgroup-tool"></div>'),
             subgroupSubgroupTool: jQuery('<div class="subgroup-subgroup-tool"></div>'),
-            layerTool: jQuery('<span class="layer-tool"></div>'),
+            layerTool: jQuery('<div class="layer-tool"></div>'),
             description: '<div>' +
                 '  <h4 class="indicator-msg-popup"></h4>' +
                 '  <p></p>' +
@@ -312,7 +312,7 @@ Oskari.clazz.define(
         _addLayerTools: function(element) {
             var me = this;
             var el = element || me.getJsTreeElement();
-            var layerTools = el.find('.layer-tools');
+            var layerTools = el.find('span.layer-tools');
             layerTools.find('.layer-tool').remove();
             Object.keys(me.service.getLayerTool()).forEach(function(key) {
                 var layertool = me.service.getLayerTool(key);
@@ -351,6 +351,11 @@ Oskari.clazz.define(
                 text: text + '<div class="' + type + '-tools"></div>',
                 type: type
             };
+
+            // layer has already defined tools, so remove extra div
+            if (type === 'layer') {
+                jstreeObject.text = text;
+            }
 
             jQuery.extend(true, jstreeObject, opts || {});
             return jstreeObject;
