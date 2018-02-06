@@ -57,20 +57,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         // from zero to max value. This could also be from min to max value, but it causes problems if
         // some values are missing -> resulting to negative widths for bars.
         // TODO: we need some proper handling for missing values AND negative values.
-        var dataset = this.getDatasetMinMax();
-        var nonNegativeAxis =  dataset.min >= 0 && dataset.max >= 0;
-        var positiveAndNegativeAxis = dataset.min < 0 && dataset.max > 0;
 
         this.x = d3.scaleLinear();
         this.y = d3.scaleBand();
-
+        var dataset = this.getDatasetMinMax();
         var xScaleDomain;
-        if ( nonNegativeAxis ) {
+
+        if ( !this.dataHasNegativeValues() ) {
             xScaleDomain = [ 0, dataset.max]
         } else {
             xScaleDomain = d3.extent(this.data, function ( d ) {return d.value; } );
         }
-        var yScaleDomain = this.data.map ( function ( d ) {
+        var yScaleDomain = this.data.map( function ( d ) {
             return d.name;
         });
         this.x.domain( xScaleDomain );
@@ -150,11 +148,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             this.containerWidth = options.width;
         }
     },
+    dataHasNegativeValues: function () {
+        var dataset = this.getDatasetMinMax();
+        return dataset.min <= 0;
+    },
     /**
      *
      * @method svgAppendElements
      */
     svgAppendElements: function () {
+        var me = this;
+
+        if( this.dataHasNegativeValues() ) {
+            var negatives = [];
+            this.data.forEach( function (d) {
+                if(d.value < 0) {
+                    negatives.push( d.name );
+                }
+            });
+        }
+
         var gx = this.svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + this.dimensions.xAxisOffset + ")")
@@ -162,7 +175,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
 
         var gy = this.svg.append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(" + this.x(0) + ",0)")
+            .attr("transform", "translate(" + this.x(0) + ", 0)")
             .call(this.yAxis);
     
         gx.select('.domain').remove();
@@ -172,9 +185,45 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr('shape-rendering', 'crispEdges');
             
         gy.selectAll('line, path')
+            .attr('x2', function ( d ) {
+                if ( d === null ) {
+                    return;
+                }
+                if ( negatives !== undefined ) {
+                    if ( negatives.indexOf( d ) !== -1 && negatives !== undefined ) {
+                        return 5;
+                    } else {
+                        return -5;
+                    }
+                }
+            })
             .attr('stroke', '#aaa')
             .attr('shape-rendering', 'crispEdges');
-    },
+
+        gy.selectAll('text')
+            .attr("text-anchor", function (d) {
+                if ( d === null ) {
+                    return;
+                }
+                if ( negatives !== undefined ) {
+                    if ( negatives.indexOf(d) !== -1 ) {
+                        return "start";
+                    }
+                }
+            })
+            .attr('x', function ( d ) {
+                if ( d === null ) {
+                    return;
+                }
+                if ( negatives !== undefined ) {
+                    if ( negatives.indexOf(d) !== -1 && negatives !== undefined ) {
+                        return 8;
+                    } else {
+                        return -8;
+                    }
+                }
+            })
+        },
     /**
      * @method setColorScale
      */
@@ -208,17 +257,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .data(this.data)
             .enter()
             .append("g")
-            .attr('transform', function (d) {
-                return 'translate(0 ' + ( me.y( d.name ) + me.y.bandwidth() / 2 ) + ')'; 
+            .attr("class", function ( d ) { return d.value < 0 ? "negative" : "positive" } )
+            .attr('transform', function ( d ) {
+                return 'translate(0,' + ( me.y( d.name ) + me.y.bandwidth() / 2 ) + ')'; 
             });
-
+            
         //append rects
         bars.append("rect")
             .attr("class", "bar")
             .attr("text-anchor", "middle")
             .style('fill', function( d,i ){ return me.colorScale(i); }) 
             .attr("y", -7) // 7 is half of 15 height (pixel aligned)
-            .attr("x", function(d) { return me.x( Math.min( 0, d.value ) ); })
+            .attr("x", function ( d ) { return me.x( Math.min( 0, d.value ) ); })
             .attr("height", 15)
             .attr("width", function( d ) {
                  return Math.abs( me.x( d.value ) - me.x( 0 ) ); 
@@ -279,12 +329,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      */
     chart: function ( selection ) {
         var me = this;
-        //update x & y scales
+        // //update x & y scales
         this.y.range( [ this.dimensions.height(), 0 ] );
         this.x.range( [ 0, this.dimensions.width() ] );
 
         selection.each( function ( data ) {
-            // this._g = me.svg.select(this).append('g');
             me.initAxis();
             me.svgAppendElements();
         });
