@@ -24,12 +24,127 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @property __name
          */
         __name: 'hierarchical-layerlist',
+
+        /*******************************************************************************************************************************
+        /* PRIVATE METHODS
+        *******************************************************************************************************************************/
+        /**
+         * Load layers
+         * @method  _loadLayers
+         * @private
+         */
+        _loadLayers: function() {
+            var me = this;
+            var mapLayerService = me.sandbox.getService(
+                'Oskari.mapframework.service.MapLayerService'
+            );
+            var successCB = function() {
+                // massive update so just recreate the whole ui
+                //me.plugins['Oskari.userinterface.Flyout'].populateLayers();
+                // added through maplayerevent
+                //
+                me.plugins['Oskari.userinterface.Flyout'].updateSelectedLayers();
+            };
+            var failureCB = function() {
+                alert(me.getLocalization('errors').loadFailed);
+            };
+            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB);
+        },
+
+        /**
+         * @static
+         * @property _guidedTourDelegateTemplate
+         * Delegate object given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        _guidedTourDelegateTemplate: {
+            priority: 20,
+            show: function() {
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'hierarchical-layerlist']);
+            },
+            hide: function() {
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'hierarchical-layerlist']);
+            },
+            getTitle: function() {
+                return this.getLocalization('guidedTour').title;
+            },
+            getContent: function() {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization('guidedTour').message);
+                return content;
+            },
+            getLinks: function() {
+                var me = this;
+                var loc = this.getLocalization('guidedTour');
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.bind('click',
+                    function() {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'hierarchical-layerlist']);
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.bind('click',
+                    function() {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'hierarchical-layerlist']);
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                closeLink.show();
+                openLink.hide();
+                return [openLink, closeLink];
+            }
+        },
+
+        /**
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
+         */
+        _registerForGuidedTour: function() {
+            var me = this;
+
+            function sendRegister() {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if (requestBuilder) {
+                    var delegate = {
+                        bundleName: me.getName()
+                    };
+                    for (var prop in me._guidedTourDelegateTemplate) {
+                        if (typeof me._guidedTourDelegateTemplate[prop] === 'function') {
+                            delegate[prop] = me._guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
+                        } else {
+                            delegate[prop] = me._guidedTourDelegateTemplate[prop]; // assign values
+                        }
+                    }
+                    me.sandbox.request(me, requestBuilder(delegate));
+                }
+            }
+
+            function handler(msg) {
+                if (msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            if (tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
+        },
+
+        /*******************************************************************************************************************************
+        /* PUBLIC METHODS
+        *******************************************************************************************************************************/
         /**
          * @method getName
          * @return {String} the name for the component
          */
         getName: function() {
-            //"use strict";
             return this.__name;
         },
         /**
@@ -38,7 +153,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * Sets the sandbox reference to this component
          */
         setSandbox: function(sandbox) {
-            //"use strict";
             this.sandbox = sandbox;
         },
         /**
@@ -46,7 +160,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @return {Oskari.Sandbox}
          */
         getSandbox: function() {
-            //"use strict";
             return this.sandbox;
         },
 
@@ -61,7 +174,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          *     structure and if parameter key is given
          */
         getLocalization: function(key) {
-            //"use strict";
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -76,7 +188,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * implements BundleInstance protocol start method
          */
         start: function() {
-            //"use strict";
             var me = this,
                 conf = me.conf,
                 sandboxName = conf ? conf.sandbox : 'sandbox',
@@ -118,35 +229,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
 
             sandbox.registerAsStateful(me.mediator.bundleId, me);
 
-
-
-            this._updateAccordionHeight(jQuery('#mapdiv').height());
             this._registerForGuidedTour();
 
             this._loadLayers();
         },
-        /**
-         * Load layers
-         * @method  _loadLayers
-         * @private
-         */
-        _loadLayers: function() {
-            var me = this;
-            var mapLayerService = me.sandbox.getService(
-                'Oskari.mapframework.service.MapLayerService'
-            );
-            var successCB = function() {
-                // massive update so just recreate the whole ui
-                //me.plugins['Oskari.userinterface.Flyout'].populateLayers();
-                // added through maplayerevent
-                //
-                me.plugins['Oskari.userinterface.Flyout'].updateSelectedLayers();
-            };
-            var failureCB = function() {
-                alert(me.getLocalization('errors').loadFailed);
-            };
-            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB);
-        },
+
+
         /**
          * @method init
          * implements Module protocol init method - does nothing atm
@@ -295,15 +383,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
             },
             MapSizeChangedEvent: function(evt) {
-                this._updateAccordionHeight(evt.getHeight());
                 if (evt._creator !== this.getName()) {
                     this.notifierService.notifyOskariEvent(evt);
                 }
             }
-        },
 
-        _updateAccordionHeight: function(mapHeight) {
-            jQuery('.hierarchical-layerlist .accordion').css('max-height', (mapHeight * 0.3) + 'px');
         },
 
         /**
@@ -311,7 +395,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * implements BundleInstance protocol stop method
          */
         stop: function() {
-            //"use strict";
             var me = this,
                 sandbox = me.sandbox(),
                 request,
@@ -339,7 +422,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * Oskari.framework.bundle.hierarchical-layerlist.Tile
          */
         startExtension: function() {
-            //"use strict";
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
                 'Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 this
@@ -355,7 +437,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * Clears references to flyout and tile
          */
         stopExtension: function() {
-            //"use strict";
             this.plugins['Oskari.userinterface.Flyout'] = null;
             this.plugins['Oskari.userinterface.Tile'] = null;
         },
@@ -365,7 +446,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @return {Object} references to flyout and tile
          */
         getPlugins: function() {
-            //"use strict";
             return this.plugins;
         },
         /**
@@ -373,7 +453,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @return {String} localized text for the title of the component
          */
         getTitle: function() {
-            //"use strict";
             return this.getLocalization('title');
         },
         /**
@@ -381,7 +460,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @return {String} localized text for the description of the component
          */
         getDescription: function() {
-            //"use strict";
             return this.getLocalization('desc');
         },
         /**
@@ -389,7 +467,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * (re)creates the UI for "all layers" functionality
          */
         createUi: function() {
-            //"use strict";
             var me = this;
             me.plugins['Oskari.userinterface.Flyout'].createUi();
             me.plugins['Oskari.userinterface.Tile'].refresh();
@@ -400,7 +477,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @param {Object} state bundle state as JSON
          */
         setState: function(state) {
-            //"use strict";
             this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
         },
 
@@ -409,94 +485,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @return {Object} bundle state as JSON
          */
         getState: function() {
-            //"use strict";
             return this.plugins['Oskari.userinterface.Flyout'].getContentState();
-        },
-
-        /**
-         * @static
-         * @property __guidedTourDelegateTemplate
-         * Delegate object given to guided tour bundle instance. Handles content & actions of guided tour popup.
-         * Function "this" context is bound to bundle instance
-         */
-        __guidedTourDelegateTemplate: {
-            priority: 20,
-            show: function() {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'HierarchicalLayerlist']);
-            },
-            hide: function() {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'HierarchicalLayerlist']);
-            },
-            getTitle: function() {
-                return this.getLocalization('guidedTour').title;
-            },
-            getContent: function() {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization('guidedTour').message);
-                return content;
-            },
-            getLinks: function() {
-                var me = this;
-                var loc = this.getLocalization('guidedTour');
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function() {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'HierarchicalLayerlist']);
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function() {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'HierarchicalLayerlist']);
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                closeLink.show();
-                openLink.hide();
-                return [openLink, closeLink];
-            }
-        },
-
-        /**
-         * @method _registerForGuidedTour
-         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
-         */
-        _registerForGuidedTour: function() {
-            var me = this;
-
-            function sendRegister() {
-                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if (requestBuilder) {
-                    var delegate = {
-                        bundleName: me.getName()
-                    };
-                    for (var prop in me.__guidedTourDelegateTemplate) {
-                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
-                            delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
-                        } else {
-                            delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
-                        }
-                    }
-                    me.sandbox.request(me, requestBuilder(delegate));
-                }
-            }
-
-            function handler(msg) {
-                if (msg.id === 'guidedtour') {
-                    sendRegister();
-                }
-            }
-
-            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
-            if (tourInstance) {
-                sendRegister();
-            } else {
-                Oskari.on('bundle.start', handler);
-            }
         }
     }, {
         /**

@@ -67,7 +67,7 @@ Oskari.registerLocalization({
         },
         "guidedTour": {
             "title": "Map layers",
-            "message": "In the Map Layers menu you can find all the map layers in the map service. <br/><br/> Sort map layers by theme or data provider. <br/><br/> Search map layers by a map layer name, a data provider name or a keyword. Newest map layers, vector layers and publishable layers you can find in pre-defined lists.<br/><br/> Open map layers you can check in the Selected Layers menu.",
+            "message": "In the Map Layers menu you can find all the map layers in the map service. <br/><br/> Search map layers by a map layer name, a data provider name or a keyword. Newest map layers, vector layers and publishable layers you can find in pre-defined lists.<br/><br/> Open map layers you can check in the Selected Layers tab.",
             "openLink": "Show Map Layers",
             "closeLink": "Hide Map Layers",
             "tileText": "Map layers"

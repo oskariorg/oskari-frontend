@@ -100,6 +100,44 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         });
     },
 
+    /**
+     * Get mapl layer groups for layer group selection
+     * @method  _getMaplayerGroups
+     * @return  {Array}           groups
+     * @private
+     */
+    _getMaplayerGroups: function() {
+        var me = this;
+        var groups = [];
+        me.layerService.getAllLayerGroups().forEach(function(group) {
+            groups.push({
+                id: group.id,
+                cls: 'group',
+                name: Oskari.getLocalized(group.name)
+            });
+
+            // subgroups
+            group.groups.forEach(function(subgroup) {
+                groups.push({
+                    id: subgroup.id,
+                    cls: 'subgroup',
+                    name: Oskari.getLocalized(subgroup.name)
+                });
+
+                // subgroup subgroups
+                subgroup.groups.forEach(function(subgroupsubgroup) {
+                    groups.push({
+                        id: subgroupsubgroup.id,
+                        cls: 'subgroupsubgroup',
+                        name: Oskari.getLocalized(subgroupsubgroup.name)
+                    });
+                });
+            });
+        });
+
+        return groups;
+    },
+
     /*******************************************************************************************************************************
     /* PUBLIC METHODS
     *******************************************************************************************************************************/
@@ -140,43 +178,6 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             });
         }
         callback();
-    },
-    /**
-     * Get mapl layer groups for layer group selection
-     * @method  _getMaplayerGroups
-     * @return  {Array}           groups
-     * @private
-     */
-    _getMaplayerGroups: function() {
-        var me = this;
-        var groups = [];
-        me.layerService.getAllLayerGroups().forEach(function(group) {
-            groups.push({
-                id: group.id,
-                cls: 'group',
-                name: Oskari.getLocalized(group.name)
-            });
-
-            // subgroups
-            group.groups.forEach(function(subgroup) {
-                groups.push({
-                    id: subgroup.id,
-                    cls: 'subgroup',
-                    name: Oskari.getLocalized(subgroup.name)
-                });
-
-                // subgroup subgroups
-                subgroup.groups.forEach(function(subgroupsubgroup) {
-                    groups.push({
-                        id: subgroupsubgroup.id,
-                        cls: 'subgroupsubgroup',
-                        name: Oskari.getLocalized(subgroupsubgroup.name)
-                    });
-                });
-            });
-        });
-
-        return groups;
     },
     /**
      * Shows layer popup

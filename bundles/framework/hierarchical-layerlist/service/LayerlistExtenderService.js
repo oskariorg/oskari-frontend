@@ -90,6 +90,10 @@
             __name: "HierarchicalLayerlist.LayerlistExtenderService",
             __qname: "Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService",
 
+            /*******************************************************************************************************************************
+            /* PUBLIC METHODS
+            *******************************************************************************************************************************/
+
             getQName: function() {
                 return this.__qname;
             },

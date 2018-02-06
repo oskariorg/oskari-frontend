@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
     function(instance) {
         var me = this;
-        //"use strict";
         this.instance = instance;
         this.service = this.instance.layerlistExtenderService;
         this.container = null;
@@ -34,6 +33,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         });
         this._bindExtenderServiceListeners();
     }, {
+
+        /*******************************************************************************************************************************
+        /* PRIVATE METHODS
+        *******************************************************************************************************************************/
+        /**
+         * Bind extender service listeners
+         * @method  _bindExtenderServiceListeners
+         * @private
+         */
         _bindExtenderServiceListeners: function() {
             var me = this;
 
@@ -67,6 +75,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 me.populateLayers();
             });
         },
+        /**
+         * Update breadcrumbs
+         * @method  _updateBreadcrumbGroups
+         * @param   {Object}                layerData layer data
+         * @private
+         */
         _updateBreadcrumbGroups: function(layerData) {
             var me = this;
             if (me.instance._selectedLayerGroupId[layerData.id]) {
@@ -81,298 +95,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 }
             }
         },
-        /**
-         * @method getName
-         * @return {String} the name for the component
-         */
-        getName: function() {
-            //"use strict";
-            return 'Oskari.framework.bundle.hierarchical-layerlist.Flyout';
-        },
 
         /**
-         * @method setEl
-         * @param {Object} el
-         *     reference to the container in browser
-         * @param {Number} width
-         *     container size(?) - not used
-         * @param {Number} height
-         *     container size(?) - not used
-         *
-         * Interface method implementation
-         */
-        setEl: function(el, width, height) {
-            //"use strict";
-            this.container = el[0];
-            if (!jQuery(this.container).hasClass('hierarchical-layerlist')) {
-                jQuery(this.container).addClass('hierarchical-layerlist');
-            }
-            jQuery(this.container).parents('.oskari-flyout').addClass('hierarchical-layerlist-flyout');
-        },
-
-        /**
-         * @method startPlugin
-         *
-         * Interface method implementation, assigns the HTML templates that will be used to create the UI
-         */
-        startPlugin: function() {
-            //"use strict";
-            var me = this,
-                layerGroupTab = Oskari.clazz.create(
-                    'Oskari.framework.bundle.hierarchical-layerlist.view.LayerGroupTab',
-                    me.instance,
-                    me.instance.getLocalization('filter').allLayers,
-                    'oskari_hierarchical-layerlist_tabpanel_layergrouptab'
-                ),
-                elParent,
-                elId;
-
-            me.template = jQuery('<div class="allLayersTabContent"></div>');
-            layerGroupTab.groupingMethod = 'getInspireName';
-            me.layerTabs.push(layerGroupTab);
-
-            elParent = this.container.parentElement.parentElement;
-            elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
-            elId.attr('id', 'oskari_hierarchical-layerlist_flyout_oskari_flyouttool_close');
-
-            var buttons = me.mapLayerService.getLayerlistFilterButton();
-            Object.keys(buttons).forEach(function(key) {
-                var button = buttons[key];
-                me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
-            });
-        },
-
-        /**
-         * Adds default filter buttons.
-         * @method  @private addDefaultFilters
-         */
-        addDefaultFilters: function() {
-            var me = this;
-
-            // Add newest filter
-            me.addNewestFilter();
-
-            // Add featuredata filter
-            me.addFeaturedataFilter();
-        },
-
-        /**
-         * Add newest filter.
-         * @method  @public addNewestFilter
-         */
-        addNewestFilter: function() {
-            var me = this,
-                loc = me.instance.getLocalization('layerFilter');
-
-            me.mapLayerService.registerLayerlistFilterButton(loc.buttons.newest,
-                loc.tooltips.newest.replace('##', me._filterNewestCount), {
-                    active: 'layer-newest',
-                    deactive: 'layer-newest-disabled'
-                },
-                'newest');
-        },
-
-        /**
-         * Add featuredata filter.
-         * @method  @public addFeaturedataFilter
-         */
-        addFeaturedataFilter: function() {
-            var me = this,
-                loc = me.instance.getLocalization('layerFilter');
-
-            me.mapLayerService.registerLayerlistFilterButton(loc.buttons.featuredata,
-                loc.tooltips.featuredata, {
-                    active: 'layer-stats',
-                    deactive: 'layer-stats-disabled'
-                },
-                'featuredata');
-        },
-
-        /**
-         * @method stopPlugin
-         *
-         * Interface method implementation, does nothing atm
-         */
-        stopPlugin: function() {
-            //"use strict";
-        },
-
-        /**
-         * @method getTitle
-         * @return {String} localized text for the title of the flyout
-         */
-        getTitle: function() {
-            //"use strict";
-            return this.instance.getLocalization('title');
-        },
-
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the flyout
-         */
-        getDescription: function() {
-            //"use strict";
-            return this.instance.getLocalization('desc');
-        },
-
-        /**
-         * @method getOptions
-         * Interface method implementation, does nothing atm
-         */
-        getOptions: function() {
-            //"use strict";
-        },
-
-        /**
-         * @method setState
-         * @param {String} state
-         *     close/minimize/maximize etc
-         * Interface method implementation, does nothing atm
-         */
-        setState: function(state) {
-            //"use strict";
-            this.state = state;
-        },
-
-        /**
-         * Set content state
-         * @method  @public setContentState
-         * @param {Object} state a content state
-         */
-        setContentState: function(state) {
-            //"use strict";
-            var i,
-                tab;
-            // prepare for complete state reset
-            if (!state) {
-                state = {};
-            }
-
-            for (i = 0; i < this.layerTabs.length; i += 1) {
-                tab = this.layerTabs[i];
-                if (tab.getTitle() === state.tab) {
-                    this.tabContainer.select(tab.getTabPanel());
-                    tab.setState(state);
-                }
-            }
-        },
-
-        getContentState: function() {
-            //"use strict";
-            var state = {},
-                i,
-                tab;
-            for (i = 0; i < this.layerTabs.length; i += 1) {
-                tab = this.layerTabs[i];
-                if (this.tabContainer.isSelected(tab.getTabPanel())) {
-                    state = tab.getState();
-                    break;
-                }
-            }
-            return state;
-        },
-
-        /**
-         * @method createUi
-         * Creates the UI for a fresh start
-         */
-        createUi: function() {
-            //"use strict";
-            var me = this,
-                // clear container
-                cel = jQuery(this.container),
-                i,
-                tab;
-
-            cel.empty();
-
-            me.tabContainer = Oskari.clazz.create(
-                'Oskari.userinterface.component.TabContainer'
-            );
-
-            // Add filter tab change listener
-            me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
-                if (me._currentFilter) {
-                    me.activateFilter(me._currentFilter);
-                }
-            });
-            me.tabContainer.insertTo(cel);
-            for (i = 0; i < me.layerTabs.length; i += 1) {
-                tab = me.layerTabs[i];
-                me.tabContainer.addPanel(tab.getTabPanel());
-            }
-
-
-            // Add other tabs
-            me.selectedTab = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.view.SelectedLayersTab', me.instance);
-            me.tabContainer.addPanel(me.selectedTab.getTabPanel());
-
-            me.tabContainer.addTabChangeListener(
-                function(previousTab, newTab) {
-                    // Make sure this fires only when the flyout is open
-                    if (!cel.parents('.oskari-flyout.oskari-closed').length) {
-                        var searchInput = newTab.getContainer().find('input[type=text]');
-                        if (searchInput) {
-                            searchInput.focus();
-                        }
-                    }
-                }
-            );
-
-            // Create default filters
-            me.addDefaultFilters();
-            me.populateLayers();
-        },
-
-        updateSelectedLayers: function() {
-            var me = this;
-            me.selectedTab.updateSelectedLayers();
-        },
-
-        /**
-         * @public @method focus
-         * Focuses the first panel's search field (if available)
-         *
-         *
-         */
-        focus: function() {
-            if (this.layerTabs) {
-                this.layerTabs[0].focus();
-            }
-        },
-
-        /**
-         * Populate layer lists.
-         * @method  @public populateLayers
-         */
-        populateLayers: function() {
-            //"use strict";
-            var me = this;
-            var sandbox = this.instance.getSandbox(),
-                // populate layer list
-                layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers(),
-                i,
-                tab,
-                layersCopy,
-                groups;
-            for (i = 0; i < this.layerTabs.length; i += 1) {
-                tab = this.layerTabs[i];
-                // populate tab if it has grouping method
-                if (tab.groupingMethod) {
-                    groups = this._getLayerGroups(
-                        tab.groupingMethod
-                    );
-                    tab.showLayerGroups(groups);
-                }
-            }
-        },
-
-        /**
+         * Get layer groups
          * @method _getLayerGroups
          * @private
          */
         _getLayerGroups: function(groupingMethod) {
-            //"use strict";
             var me = this,
                 groupList = [],
                 groupModel = null,
@@ -496,17 +225,345 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         },
 
         /**
+         * Set filter button tooltip
+         * @method  @private _setFilterTooltip
+         * @param {String} filterName filter name
+         * @param {String} tooltip    tooltip
+         */
+        _setFilterTooltip: function(filterName, tooltip) {
+            var me = this;
+            me.layerTabs.forEach(function(tab) {
+                var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
+                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
+                filterIcon.parents('.filter').attr('title', tooltip);
+            });
+        },
+        /**
+         * Set filter icon classes
+         * @method  @private _setFilterIconClasses
+         * @param {String} filterName filter name
+         */
+        _setFilterIconClasses: function(filterName) {
+            var me = this;
+            me.layerTabs.forEach(function(tab) {
+                var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
+                var filters = me.mapLayerService.getLayerlistFilterButton();
+                Object.keys(filters).forEach(function(key) {
+                    var filter = filters[key];
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
+                    // First remove all active classes
+                    filterIcon.removeClass(filter.cls.active);
+                    filterIcon.removeClass(filter.cls.deactive);
+                    filterIcon.removeClass('active');
+                    // If filter has same than currently selected then activate icon
+                    if (filter.id === filterName) {
+                        filterIcon.addClass(filter.cls.active);
+                        filterIcon.addClass('active');
+                    }
+                    // Otherwise use deactive icon
+                    else {
+                        filterIcon.addClass(filter.cls.deactive);
+                    }
+                });
+            });
+        },
+
+
+        /*******************************************************************************************************************************
+        /* PUBLIC METHODS
+        *******************************************************************************************************************************/
+
+        /**
+         * @method getName
+         * @return {String} the name for the component
+         */
+        getName: function() {
+            //"use strict";
+            return 'Oskari.framework.bundle.hierarchical-layerlist.Flyout';
+        },
+
+        /**
+         * @method setEl
+         * @param {Object} el
+         *     reference to the container in browser
+         * @param {Number} width
+         *     container size(?) - not used
+         * @param {Number} height
+         *     container size(?) - not used
+         *
+         * Interface method implementation
+         */
+        setEl: function(el, width, height) {
+            this.container = el[0];
+            if (!jQuery(this.container).hasClass('hierarchical-layerlist')) {
+                jQuery(this.container).addClass('hierarchical-layerlist');
+            }
+            jQuery(this.container).parents('.oskari-flyout').addClass('hierarchical-layerlist-flyout');
+        },
+
+        /**
+         * @method startPlugin
+         *
+         * Interface method implementation, assigns the HTML templates that will be used to create the UI
+         */
+        startPlugin: function() {
+            var me = this,
+                layerGroupTab = Oskari.clazz.create(
+                    'Oskari.framework.bundle.hierarchical-layerlist.view.LayerGroupTab',
+                    me.instance,
+                    me.instance.getLocalization('filter').allLayers,
+                    'oskari_hierarchical-layerlist_tabpanel_layergrouptab'
+                ),
+                elParent,
+                elId;
+
+            me.template = jQuery('<div class="allLayersTabContent"></div>');
+            layerGroupTab.groupingMethod = 'getInspireName';
+            me.layerTabs.push(layerGroupTab);
+
+            elParent = this.container.parentElement.parentElement;
+            elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
+            elId.attr('id', 'oskari_hierarchical-layerlist_flyout_oskari_flyouttool_close');
+
+            var buttons = me.mapLayerService.getLayerlistFilterButton();
+            Object.keys(buttons).forEach(function(key) {
+                var button = buttons[key];
+                me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
+            });
+        },
+
+        /**
+         * Adds default filter buttons.
+         * @method  @private addDefaultFilters
+         */
+        addDefaultFilters: function() {
+            var me = this;
+
+            // Add newest filter
+            me.addNewestFilter();
+
+            // Add featuredata filter
+            me.addFeaturedataFilter();
+        },
+
+        /**
+         * Add newest filter.
+         * @method  @public addNewestFilter
+         */
+        addNewestFilter: function() {
+            var me = this,
+                loc = me.instance.getLocalization('layerFilter');
+
+            me.mapLayerService.registerLayerlistFilterButton(loc.buttons.newest,
+                loc.tooltips.newest.replace('##', me._filterNewestCount), {
+                    active: 'layer-newest',
+                    deactive: 'layer-newest-disabled'
+                },
+                'newest');
+        },
+
+        /**
+         * Add featuredata filter.
+         * @method  @public addFeaturedataFilter
+         */
+        addFeaturedataFilter: function() {
+            var me = this,
+                loc = me.instance.getLocalization('layerFilter');
+
+            me.mapLayerService.registerLayerlistFilterButton(loc.buttons.featuredata,
+                loc.tooltips.featuredata, {
+                    active: 'layer-stats',
+                    deactive: 'layer-stats-disabled'
+                },
+                'featuredata');
+        },
+
+        /**
+         * @method stopPlugin
+         *
+         * Interface method implementation, does nothing atm
+         */
+        stopPlugin: function() {},
+
+        /**
+         * @method getTitle
+         * @return {String} localized text for the title of the flyout
+         */
+        getTitle: function() {
+            return this.instance.getLocalization('title');
+        },
+
+        /**
+         * @method getDescription
+         * @return {String} localized text for the description of the flyout
+         */
+        getDescription: function() {
+            return this.instance.getLocalization('desc');
+        },
+
+        /**
+         * @method getOptions
+         * Interface method implementation, does nothing atm
+         */
+        getOptions: function() {},
+
+        /**
+         * @method setState
+         * @param {String} state
+         *     close/minimize/maximize etc
+         * Interface method implementation, does nothing atm
+         */
+        setState: function(state) {
+            this.state = state;
+        },
+
+        /**
+         * Set content state
+         * @method  @public setContentState
+         * @param {Object} state a content state
+         */
+        setContentState: function(state) {
+            var i,
+                tab;
+            // prepare for complete state reset
+            if (!state) {
+                state = {};
+            }
+
+            for (i = 0; i < this.layerTabs.length; i += 1) {
+                tab = this.layerTabs[i];
+                if (tab.getTitle() === state.tab) {
+                    this.tabContainer.select(tab.getTabPanel());
+                    tab.setState(state);
+                }
+            }
+        },
+
+        /**
+         * Get content state
+         * @method getContentState
+         * @return {Object}        state object
+         */
+        getContentState: function() {
+            var state = {},
+                i,
+                tab;
+            for (i = 0; i < this.layerTabs.length; i += 1) {
+                tab = this.layerTabs[i];
+                if (this.tabContainer.isSelected(tab.getTabPanel())) {
+                    state = tab.getState();
+                    break;
+                }
+            }
+            return state;
+        },
+
+        /**
+         * @method createUi
+         * Creates the UI for a fresh start
+         */
+        createUi: function() {
+            var me = this,
+                cel = jQuery(this.container),
+                i,
+                tab;
+
+            cel.empty();
+
+            me.tabContainer = Oskari.clazz.create(
+                'Oskari.userinterface.component.TabContainer'
+            );
+
+            // Add filter tab change listener
+            me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                if (me._currentFilter) {
+                    me.activateFilter(me._currentFilter);
+                }
+            });
+            me.tabContainer.insertTo(cel);
+            for (i = 0; i < me.layerTabs.length; i += 1) {
+                tab = me.layerTabs[i];
+                me.tabContainer.addPanel(tab.getTabPanel());
+            }
+
+
+            // Add other tabs
+            me.selectedTab = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.view.SelectedLayersTab', me.instance);
+            me.tabContainer.addPanel(me.selectedTab.getTabPanel());
+
+            me.tabContainer.addTabChangeListener(
+                function(previousTab, newTab) {
+                    // Make sure this fires only when the flyout is open
+                    if (!cel.parents('.oskari-flyout.oskari-closed').length) {
+                        var searchInput = newTab.getContainer().find('input[type=text]');
+                        if (searchInput) {
+                            searchInput.focus();
+                        }
+                    }
+                }
+            );
+
+            // Create default filters
+            me.addDefaultFilters();
+            me.populateLayers();
+        },
+
+        /**
+         * Update selected tab
+         * @method updateSelectedLayers
+         */
+        updateSelectedLayers: function() {
+            var me = this;
+            me.selectedTab.updateSelectedLayers();
+        },
+
+        /**
+         * @public @method focus
+         * Focuses the first panel's search field (if available)
+         *
+         *
+         */
+        focus: function() {
+            if (this.layerTabs) {
+                this.layerTabs[0].focus();
+            }
+        },
+
+        /**
+         * Populate layer lists.
+         * @method  @public populateLayers
+         */
+        populateLayers: function() {
+            //"use strict";
+            var me = this;
+            var sandbox = this.instance.getSandbox(),
+                // populate layer list
+                layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers(),
+                i,
+                tab,
+                layersCopy,
+                groups;
+            for (i = 0; i < this.layerTabs.length; i += 1) {
+                tab = this.layerTabs[i];
+                // populate tab if it has grouping method
+                if (tab.groupingMethod) {
+                    groups = this._getLayerGroups(
+                        tab.groupingMethod
+                    );
+                    tab.showLayerGroups(groups);
+                }
+            }
+        },
+
+        /**
          * @method handleLayerAdded
          * @param {Oskari.mapframework.domain.AbstractLayer} layer
          *           layer that was added
          * let's refresh ui to match current layers
          */
         handleLayerAdded: function(layer) {
-            //"use strict";
             var me = this;
             me.populateLayers();
-            // we could just add the layer to correct group and update the layer count for the group
-            // but saving time to do other finishing touches
         },
 
         /**
@@ -519,8 +576,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             //"use strict";
             var me = this;
             me.populateLayers();
-            // we could  just remove the layer and update the layer count for the group
-            // but saving time to do other finishing touches
         },
 
         /**
@@ -575,50 +630,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 filterContainer.append(filterButton);
             });
             me.addedButtons[filterName] = true;
-        },
-
-        /**
-         * Set filter button tooltip
-         * @method  @private _setFilterTooltip
-         * @param {String} filterName filter name
-         * @param {String} tooltip    tooltip
-         */
-        _setFilterTooltip: function(filterName, tooltip) {
-            var me = this;
-            me.layerTabs.forEach(function(tab) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
-                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
-                filterIcon.parents('.filter').attr('title', tooltip);
-            });
-        },
-        /**
-         * Set filter icon classes
-         * @method  @private _setFilterIconClasses
-         * @param {String} filterName filter name
-         */
-        _setFilterIconClasses: function(filterName) {
-            var me = this;
-            me.layerTabs.forEach(function(tab) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
-                var filters = me.mapLayerService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
-                    var filter = filters[key];
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
-                    // First remove all active classes
-                    filterIcon.removeClass(filter.cls.active);
-                    filterIcon.removeClass(filter.cls.deactive);
-                    filterIcon.removeClass('active');
-                    // If filter has same than currently selected then activate icon
-                    if (filter.id === filterName) {
-                        filterIcon.addClass(filter.cls.active);
-                        filterIcon.addClass('active');
-                    }
-                    // Otherwise use deactive icon
-                    else {
-                        filterIcon.addClass(filter.cls.deactive);
-                    }
-                });
-            });
         },
 
         /**
