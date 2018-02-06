@@ -43,7 +43,17 @@
                     }
                 },
                 search: {
-                    show_only_matches: true
+                    show_only_matches: true,
+                    search_callback: function(text, node) {
+                        if (node.type == 'layer') {
+                            var nodeText = jQuery(node.text).find('.layer-title').text();
+
+                            var layerId = node.a_attr['data-layer-id'];
+                            var dataProvider = me.sb.findMapLayerFromAllAvailable(layerId).getOrganizationName();
+                            // check also dataprovider name
+                            return (nodeText.indexOf(text) !== -1 || dataProvider.indexOf(text) !== -1);
+                        }
+                    }
                 },
                 state: {
                     key: 'hierarchical-layerlist'
