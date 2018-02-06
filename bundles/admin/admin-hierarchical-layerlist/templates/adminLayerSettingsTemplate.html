@@ -165,7 +165,7 @@
             <div class="input-controls">
                 <div class="admin-maplayer-groups-list">
                     <% for(var i = 0; maplayerGroups != null && i < maplayerGroups.length; i++) { %>
-                       <div class="admin-maplayer-group"><%= maplayerGroups[i].name %></div>
+                       <div class="admin-maplayer-group" data-group-id="<%= maplayerGroups[i].id %>"><%= maplayerGroups[i].name %></div>
                     <% } %>
 
                 </div>

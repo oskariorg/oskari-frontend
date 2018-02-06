@@ -477,6 +477,7 @@ define([
                         var template = jQuery('<div class="admin-maplayer-group"></div>');
                         selected.forEach(function(sel) {
                             var selected = template.clone();
+                            selected.attr('data-group-id', sel.id);
                             selected.html(sel.name);
                             list.append(selected);
                         });
@@ -532,7 +533,6 @@ define([
                 btnCancel.addClass('cancel');
                 btnCancel.setHandler(function() {
                     popup.close();
-                    tool.removeClass('active');
                 });
                 buttons.push(btnCancel);
                 var btnOk = Oskari.clazz.create('Oskari.userinterface.component.Button');

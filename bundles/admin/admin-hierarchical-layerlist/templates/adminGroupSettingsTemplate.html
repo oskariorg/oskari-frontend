@@ -35,6 +35,23 @@
             </div>
         </div>
 
+        <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <%= instance.locale('admin.maplayerGroups') %>
+        </div>
+        <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <div class="admin-maplayer-groups-list">
+                        <% for(var i = 0; maplayerGroups != null && i < maplayerGroups.length; i++) { %>
+                           <div class="admin-maplayer-group" data-group-id="<%= maplayerGroups[i].id %>"><%= maplayerGroups[i].name %></div>
+                        <% } %>
+
+                    </div>
+                </div>
+                <button id="select-maplayer-groups-button" class="select-maplayer-groups-button"><%= instance.locale('admin.selectMaplayerGroupsButton') %></button>
+            </div>
+        </div>
+
         <% if(model != null && !model.getId()) { %>
         <!-- roles -->
         <div class="add-class-record">
