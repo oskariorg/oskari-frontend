@@ -292,6 +292,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     successDialog.fadeout();
                 }
             });
+            me.service.trigger('jstree-order-changed', data);
         },
 
 

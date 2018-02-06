@@ -7,7 +7,8 @@ Oskari.registerLocalization({
             "cancel": "Cancel",
             "update": "Update",
             "delete": "Delete",
-            "ok": "Ok"
+            "ok": "Ok",
+            "select": "Select"
         },
         "tooltips": {
             "addMainGroup": "Add main group",
@@ -24,7 +25,8 @@ Oskari.registerLocalization({
             "editMainGroup": "Edit main group",
             "editSubgroup": "Edit subgroup",
             "addLayer": "Add maplayer",
-            "addDataprovider": "Add dataprovider"
+            "addDataprovider": "Add dataprovider",
+            "selectLayerGroups": "Select layer groups"
         },
         "selectableGroup": "Selection group",
         "errors": {
@@ -55,6 +57,10 @@ Oskari.registerLocalization({
             "dataproviderSave": {
                 "title": "Dataprovider saving failed",
                 "message": "Dataprovider saving failed, try again later"
+            },
+            "maplayerGroups": {
+                "title": "Check maplayer groups",
+                "message": "Maplayer must have least one group"
             }
         },
         "succeeses": {
@@ -199,8 +205,8 @@ Oskari.registerLocalization({
                 "fe": "Feature engine"
             },
             "generic": {
-                "placeholder": "Name in {0}",
-                "descplaceholder": "Description in {0}"
+                "placeholder": "Name in {lang}",
+                "descplaceholder": "Description in {lang}"
             },
             "en": {
                 "title": "En",
@@ -237,7 +243,9 @@ Oskari.registerLocalization({
             "warning_some_of_the_layers_could_not_be_parsed": "Some of the map layers could not be parsed.",
             "addDataprovider": "Dataprovider",
             "groupTitle": "Map layer group name",
-            "addDataproviderButton": "Add"
+            "addDataproviderButton": "Add",
+            "maplayerGroups": "Maplayer groups",
+            "selectMaplayerGroupsButton": "Select groups"
         },
         "cancel": "Cancel",
         "add": "Add",

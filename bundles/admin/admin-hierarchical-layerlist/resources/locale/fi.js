@@ -7,7 +7,8 @@ Oskari.registerLocalization({
             "cancel": "Peruuta",
             "update": "Päivitä",
             "delete": "Poista",
-            "ok": "Ok"
+            "ok": "Ok",
+            "select": "Valitse"
         },
         "tooltips": {
             "addMainGroup": "Lisää pääryhmä",
@@ -24,7 +25,8 @@ Oskari.registerLocalization({
             "editMainGroup": "Muokkaa pääryhmää",
             "editSubgroup": "Muokkaa aliryhmää",
             "addLayer": "Lisää karttataso",
-            "addDataprovider": "Lisää tiedontuottaja"
+            "addDataprovider": "Lisää tiedontuottaja",
+            "selectLayerGroups": "Valitse karttatason ryhmät"
         },
         "selectableGroup": "Valintaryhmä",
         "errors": {
@@ -55,6 +57,10 @@ Oskari.registerLocalization({
             "dataproviderSave": {
                 "title": "Tiedontuottajan tallennus ei onnistunut",
                 "message": "Tiedontuottajan tallennus ei onnistunut, kokeile myöhemin uudelleen"
+            },
+            "maplayerGroups": {
+                "title": "Tarkista karttatason ryhmät",
+                "message": "Karttatasolla pitää olla vähintään yksi ryhmä"
             }
         },
         "succeeses": {
@@ -241,7 +247,10 @@ Oskari.registerLocalization({
             "warning_some_of_the_layers_could_not_be_parsed": "Osaa tasoista ei voitu käsitellä.",
             "addDataprovider": "Tiedontuottaja",
             "groupTitle": "Taustakarttatason nimi",
-            "addDataproviderButton": "Lisää"
+            "addDataproviderButton": "Lisää",
+            "maplayerGroups": "Tason ryhmät",
+            "selectMaplayerGroupsButton": "Valitse ryhmät"
+
         },
         "cancel": "Peruuta",
         "add": "Lisää",

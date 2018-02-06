@@ -44,7 +44,6 @@ Oskari.clazz.define(
         _bindExtenderServiceListeners: function() {
             var me = this;
             me.service.on('group-added', function(data) {
-                var groupLayers = me._layerService.getAllLayerGroups(data.id).layers;
                 if (data.method === 'update') {
                     Object.keys(me._layers).forEach(function(key) {
                         me._layers[key].updateBreadcrumb();
@@ -154,7 +153,7 @@ Oskari.clazz.define(
                 return;
             }
             var list = me.tabPanel.getContainer().find('.layerlist');
-            var layerComponent = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', layer, me.sb, me.locale);
+            var layerComponent = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', me.instance, layer, me.sb, me.locale);
             var previousLayers = list.find('li.layer');
             if (layer.isBaseLayer() && !keepLayersOrder && !forceAdd) {
                 previousLayers = list.find('li.layer[data-layerid^=base_]');

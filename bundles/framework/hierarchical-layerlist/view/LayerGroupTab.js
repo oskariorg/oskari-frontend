@@ -16,7 +16,6 @@ Oskari.clazz.define(
         this.id = id;
         this.layerGroups = [];
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
-        this.layerContainers = {};
         this.sb = this.instance.getSandbox();
         this.localization = this.instance.getLocalization();
         this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
@@ -118,6 +117,10 @@ Oskari.clazz.define(
                     parent = 'subgroup-' + data.parentId;
                 }
 
+                // update service groups
+                me._mapLayerService.updateLayerGroups(data);
+
+
                 var opts = {};
                 if (!data.selectable) {
                     opts = {
@@ -181,6 +184,35 @@ Oskari.clazz.define(
                     me._addSubgroupSubgroupTools();
                 }
             });
+
+            me.service.on('jstree-order-changed', function() {
+                setTimeout(function() {
+                    me._addGroupTools();
+                    me._addSubgroupTools();
+                    me._addSubgroupSubgroupTools();
+                    me._addLayerTools();
+                }, 200);
+            });
+
+            me.service.on('jstree-search', function(nodes, str, res) {
+                setTimeout(function() {
+                    me._addGroupTools();
+                    me._addSubgroupTools();
+                    me._addSubgroupSubgroupTools();
+                    me._addLayerTools();
+                }, 200);
+            });
+
+            me.service.on('jstree-search-clear', function(nodes, str, res) {
+                setTimeout(function() {
+                    me._addGroupTools();
+                    me._addSubgroupTools();
+                    me._addSubgroupSubgroupTools();
+                    me._addLayerTools();
+                }, 200);
+            });
+
+
         },
         /**
          * Add group tools
@@ -413,32 +445,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _fireFiltering
-         * @private
-         * @param {String} keyword
-         *      User input
-         * @param {Object} event
-         *      Event that caused the action to fire
-         * @param {Object} me
-         *      Reference to the bundle instance
-         * Calls all needed functions to do the layer filtering.
-         */
-        _fireFiltering: function(keyword, event, me) {
-            //"use strict";
-            // Filter by name
-            me.filterLayers(keyword);
-
-            if (me.showSearchSuggestions) {
-                // User input has changed, clear suggestions
-                me.clearRelatedKeywordsPopup(
-                    keyword,
-                    jQuery(event.currentTarget).parents('.oskarifield')
-                );
-                // get new suggestions if user input is long enough
-                me._relatedKeywordsPopup(keyword, event, me);
-            }
-        },
-        /**
          * Show layer metadata
          * @method  _showLayerMetaData
          * @param   {Object}           layer oskari layer
@@ -490,7 +496,7 @@ Oskari.clazz.define(
          * @private
          */
         _getNodeRealId: function(node) {
-            return node.id.split('-')[1];
+            return node.a_attr['data-layer-id'];
         },
         /**
          * @method _createLayerContainer
@@ -662,156 +668,107 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _showRelatedKeywords
+         * Update container height
+         * @method  _updateContainerHeight
+         * @param   {Integer}               height map heigt
          * @private
-         * @param {String} userInput User input
-         * @param {Object} keywords
-         *      related keywords to filter layers by
-         * Also checks if all layers in a group is hidden and hides the group as well.
          */
-        _showRelatedKeywords: function(userInput, keywords, oskarifield) {
-            //"use strict";
-            var me = this,
-                relatedKeywordsCont = me.getFilterField().getField().find(
-                    '.related-keywords'
-                ),
-                i,
-                keyword,
-                keywordTmpl,
-                ontologySuggestions = [],
-                ontologyLayers = [];
+        _updateContainerHeight: function(height) {
+            var me = this;
+            me.getJsTreeElement().css('max-height', (height * 0.5) + 'px');
+        },
 
-            me.clearRelatedKeywordsPopup(null, oskarifield);
+        /**
+         * Bind Oskari events
+         * @method  _bindOskariEvents
+         * @private
+         */
+        _bindOskariEvents: function() {
+            var me = this;
 
-            // Go through related keywords, get top 3, show only them
-            if (keywords && keywords.length > 0) {
-                for (i = 0; i < keywords.length; i += 1) {
-                    keyword = keywords[i];
-                    if (keyword.layers.length > 0) {
-                        // check if we want to show matching layers instead of a suggestion
-                        if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
-                                keyword.type) && me._containsIgnoreCase(
-                                keyword.keyword, userInput))) {
-                            // copy keyword layerids to ontologyLayers, avoid duplicates just because
-                            if (ontologyLayers.size === 0) {
-                                ontologyLayers.concat(keyword.layers);
-                            } else {
-                                me._concatNew(ontologyLayers, keyword.layers);
-                            }
-                        } else {
-                            ontologySuggestions.push({
-                                idx: i,
-                                count: keyword.layers.length
-                            });
-                        }
-                    }
-                }
-            }
-
-
-            if (ontologySuggestions.length > 0) {
-                relatedKeywordsCont.prepend(
-                    jQuery(me.templates.keywordsTitle).text(
-                        me._locale.filter.didYouMean
-                    )
-                );
-            }
-
-            // sort ontology suggestions by layer count
-            ontologySuggestions.sort(function(x, y) {
-                return x.count < y.count;
+            me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
+                var layer = evt.getMapLayer();
+                me._toggleLayerCheckboxes(layer.getId(), true);
             });
 
-            // show three top suggestions
-            for (i = 0; i < ontologySuggestions.length && i < 3; i += 1) {
-                keyword = keywords[ontologySuggestions[i].idx];
-                keywordTmpl = jQuery(me.templates.keywordContainer);
-                keywordTmpl
-                    .attr('data-id', keyword.id)
-                    .attr('data-keyword', keyword.keyword)
-                    .find('.keyword').text(
-                        keyword.keyword.toLowerCase() + ' (' +
-                        keyword.layers.length + ')'
-                    );
 
-                relatedKeywordsCont.append(keywordTmpl);
-            }
-            if (ontologySuggestions.length) {
-                relatedKeywordsCont.show();
-            }
+            me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
+                var layer = evt.getMapLayer();
+                me._toggleLayerCheckboxes(layer.getId(), false);
+            });
 
-            me.ontologyLayers = ontologyLayers;
-            // Show ontologyLayers in accordion
-            me.filterLayers(userInput, ontologyLayers);
 
-            // when clicked -> filter layers
-            relatedKeywordsCont.find('.keyword-cont').on(
-                'click',
-                function(event) {
-                    var val = jQuery(event.currentTarget).attr('data-keyword');
-
-                    me.getFilterField().setValue(val);
-                    me._fireFiltering(val, event, me);
-                }
-            );
+            me._notifierService.on('MapSizeChangedEvent', function(evt) {
+                me._updateContainerHeight(evt.getHeight());
+            });
         },
+
         /**
-         * Shows all layers
-         * @method  _showAllLayers
+         * Toggle layer checkboxes
+         * @method  _toggleLayerCheckboxes
+         * @param   {String}         layerId layer id
+         * @param   {Boolean}         checked need layer checked
          * @private
          */
-        _showAllLayers: function() {
-            var i,
-                group,
-                layers,
-                n,
-                layer,
-                layerId,
-                layerCont;
+        _toggleLayerCheckboxes: function(layerId, checked) {
+            var me = this;
+            var nodes = [];
 
-            for (i = 0; i < this.layerGroups.length; i += 1) {
-                group = this.layerGroups[i];
-                layers = group.getLayers();
-
-                for (n = 0; n < layers.length; n += 1) {
-                    layer = layers[n];
-                    layerId = layer.getId();
-                    layerCont = this.layerContainers[layerId];
-                    layerCont.setVisible(true);
+            var layers = [];
+            var modelData = me.getJsTreeElement().jstree(true)._model.data;
+            Object.keys(modelData).forEach(function(key) {
+                var node = modelData[key];
+                if (node.type === 'layer' && node.a_attr['data-layer-id'] === layerId) {
+                    layers.push(node.id);
                 }
-                group.layerListPanel.setVisible(true);
-                group.layerListPanel.close();
-                group.layerListPanel.setTitle(
-                    group.getTitle() + ' (' + layers.length + ')'
-                );
+            });
+            if (checked) {
+                me.getJsTreeElement().jstree().check_node(layers);
+            } else {
+                me.getJsTreeElement().jstree().uncheck_node(layers);
             }
-
-            this.accordion.removeMessage();
         },
+
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
         *******************************************************************************************************************************/
+        /**
+         * Get title
+         * @method getTitle
+         * @return {Strin} title
+         */
         getTitle: function() {
-            //"use strict";
             return this.title;
         },
 
+        /**
+         * Get tab panel
+         * @method getTabPanel
+         * @return {Object}    tab panel
+         */
         getTabPanel: function() {
-            //"use strict";
             return this.tabPanel;
         },
 
+        /**
+         * Get state
+         * @method getState
+         * @return {Object} state
+         */
         getState: function() {
-            //"use strict";
             var state = {
                 tab: this.getTitle(),
-                filter: this.filterField.getValue(),
-                groups: []
+                filter: this.filterField.getValue()
             };
             return state;
         },
 
+        /**
+         * Set state
+         * @method setState
+         * @param  {Object} state state
+         */
         setState: function(state) {
             //"use strict";
             if (!state) {
@@ -820,7 +777,6 @@ Oskari.clazz.define(
 
             if (!state.filter) {
                 this.filterField.setValue(state.filter);
-                this.filterLayers(state.filter);
             }
         },
 
@@ -852,6 +808,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.FormInput');
             field.setPlaceholder(me.instance.getLocalization('filter').text);
             field.addClearButton();
+
             field.bindChange(function(event) {
                 event.stopPropagation(); // JUST BECAUSE TEST ENVIRONMENT FAILS
                 var evt = event;
@@ -859,7 +816,7 @@ Oskari.clazz.define(
                     clearTimeout(timer);
                 }
                 timer = setTimeout(function() {
-                    me._fireFiltering(field.getValue(), evt, me);
+                    me.getJsTreeElement().jstree(true).search(field.getValue());
                     timer = null;
                 }, 300);
 
@@ -891,6 +848,7 @@ Oskari.clazz.define(
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+            var nodes = [];
 
             switch (node.type) {
                 case 'layer':
@@ -901,13 +859,23 @@ Oskari.clazz.define(
                     // Need open metadata
                     else if (target.hasClass('layer-info')) {
                         me._showLayerMetaData(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
-                    } else if (isChecked) {
+                    }
+                    // uncheck nodes
+                    else if (isChecked) {
+
                         tree.jstree().uncheck_node(node);
+
                         layerId = me._getNodeRealId(node);
                         if (me.sb.isLayerAlreadySelected(layerId)) {
                             me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
                         }
-                    } else {
+
+                        if (me.instance._selectedLayerGroupId[layerId]) {
+                            delete me.instance._selectedLayerGroupId[layerId];
+                        }
+                    }
+                    // check nodes
+                    else {
                         if (allSelectedLayersLength > 10) {
                             desc.find('p').text(me.localization.manyLayersWarning.text);
                             okBtn.addClass('primary');
@@ -930,6 +898,10 @@ Oskari.clazz.define(
                             if (!me.sb.isLayerAlreadySelected(layerId)) {
                                 me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                             }
+                        }
+
+                        if (!me.instance._selectedLayerGroupId[layerId]) {
+                            me.instance._selectedLayerGroupId[layerId] = node.a_attr['data-group-id'];
                         }
                     }
                     break;
@@ -1013,7 +985,7 @@ Oskari.clazz.define(
             }
             var layerTree = jQuery(me.templates.layerTree);
 
-            var addLayers = function(groupId, layers) {
+            var addLayers = function(groupElId, layers, groupId) {
                 layers.forEach(function(l) {
                     var layer = l;
                     if (l.id) {
@@ -1025,8 +997,8 @@ Oskari.clazz.define(
                             'data-layer-id': layer.getId()
                         }
                     };
-                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId(),
-                        groupId,
+                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId() + '-' + groupId,
+                        groupElId,
                         jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
                         'layer',
                         opts));
@@ -1051,7 +1023,7 @@ Oskari.clazz.define(
                         opts);
 
                     jsTreeData.push(jstreeObject);
-                    addLayers('subgroup-' + subgroup.id, subgroup.layers);
+                    addLayers('subgroup-' + subgroup.id, subgroup.layers, subgroup.id);
                 });
             };
 
@@ -1072,13 +1044,12 @@ Oskari.clazz.define(
                         opts);
 
                     jsTreeData.push(jstreeObject);
-                    addLayers('subgroup-subgroup-' + subgroup.id, subgroup.layers);
+                    addLayers('subgroup-subgroup-' + subgroup.id, subgroup.layers, subgroup.id);
                 });
             };
 
             me.tabPanel.getContainer().append(layerTree);
             me.accordion.removeAllPanels();
-            me.layerContainers = {};
             me.layerGroups = groups;
             groups.forEach(function(group) {
                 var layers = group.getLayers();
@@ -1097,7 +1068,7 @@ Oskari.clazz.define(
                     'group', extraOpts));
 
                 //Loop through group layers
-                addLayers('group-' + group.getId(), layers);
+                addLayers('group-' + group.getId(), layers, group.getId());
 
                 if (group.getGroups().length > 0) {
                     addSubgroups(group.getId(), group.getGroups());
@@ -1106,17 +1077,6 @@ Oskari.clazz.define(
                         addSubgroupSubgroups(subgroup.id, subgroup.groups);
                     });
                 }
-            });
-
-            var to = false;
-            $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').keyup(function() {
-                if (to) {
-                    clearTimeout(to);
-                }
-                to = setTimeout(function() {
-                    var v = $('#oskari_hierarchical-layerlist_search_input_tab_oskari_hierarchical-layerlist_tabpanel_layergrouptab').val();
-                    jsTreeDiv.jstree(true).search(v);
-                }, 250);
             });
 
             var jsTreeDiv = me.getJsTreeElement();
@@ -1133,7 +1093,7 @@ Oskari.clazz.define(
 
             // check selected layers
             me.sb.findAllSelectedMapLayers().forEach(function(layer) {
-                me.getJsTreeElement().jstree().check_node('layer-' + layer.getId());
+                me._toggleLayerCheckboxes(layer.getId(), true);
             });
 
             // Add group tools
@@ -1142,83 +1102,17 @@ Oskari.clazz.define(
                 me._addSubgroupTools();
             });
 
+            // When open node then updata tools also
             me.getJsTreeElement().on('open_node.jstree', function(node) {
                 me._addSubgroupTools();
                 me._addSubgroupSubgroupTools();
                 me._addLayerTools();
+
+                // check selected layers
+                me.sb.findAllSelectedMapLayers().forEach(function(layer) {
+                    me._toggleLayerCheckboxes(layer.getId(), true);
+                });
             });
-        },
-
-        /**
-         * @method filterLayers
-         * @private
-         * @param {String} keyword
-         *      keyword to filter layers by
-         * @param {Array} ids optional list of layer IDs to be shown
-         * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
-         * Also checks if all layers in a group is hidden and hides the group as well.
-         */
-        filterLayers: function(keyword, ids) {
-            //"use strict";
-            var me = this,
-                visibleGroupCount = 0,
-                visibleLayerCount,
-                i,
-                n,
-                group,
-                layer,
-                layers,
-                layerId,
-                layerCont,
-                bln,
-                loc;
-            if (!ids && me.sentKeyword === keyword) {
-                ids = me.ontologyLayers;
-            }
-            // show all groups
-            me.accordion.showPanels();
-            if (!keyword || keyword.length === 0) {
-                me._showAllLayers();
-                return;
-            }
-            // filter
-            for (i = 0; i < me.layerGroups.length; i += 1) {
-                group = me.layerGroups[i];
-                layers = group.getLayers();
-                visibleLayerCount = 0;
-                for (n = 0; n < layers.length; n += 1) {
-                    layer = layers[n];
-                    layerId = layer.getId();
-                    layerCont = me.layerContainers[layerId];
-                    bln = group.matchesKeyword(layerId, keyword) || (me.showSearchSuggestions && ids && me._arrayContains(ids, layerId));
-                    layerCont.setVisible(bln);
-                    if (bln) {
-                        visibleLayerCount += 1;
-                        // open the panel if matching layers
-                        group.layerListPanel.open();
-                    }
-                }
-                group.layerListPanel.setVisible(visibleLayerCount > 0);
-                if (group.layerListPanel.isVisible()) {
-                    visibleGroupCount += 1;
-                }
-                group.layerListPanel.setTitle(group.getTitle() + ' (' +
-                    visibleLayerCount + '/' + layers.length + ')');
-            }
-
-            // check if there are no groups visible -> show 'no matches' notification
-            // else clear any previous message
-            if (visibleGroupCount === 0) {
-                // empty result
-                loc = me.instance.getLocalization('errors');
-                me.accordion.showMessage(loc.noResults);
-                jQuery(me.accordion.ui).find('.accordionmsg').attr(
-                    'id',
-                    'oskari_hierarchical-layerlist_inspiretab_search_no-result'
-                );
-            } else {
-                me.accordion.removeMessage();
-            }
         },
 
         /**
@@ -1236,104 +1130,6 @@ Oskari.clazz.define(
             if (this.sentKeyword && this.sentKeyword !== keyword) {
                 oskarifield.find('.related-keywords').html('').hide();
             }
-        },
-
-        /**
-         * @method _relatedKeywordsPopup
-         * @private
-         * @param {String} keyword
-         *      keyword to filter layers by
-         * @param {Object} event
-         *      event hat caused the function to fire
-         * @param {Object} me
-         *      reference to the bundle instance
-         * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
-         * Also checks if all layers in a group is hidden and hides the group as well.
-         */
-        _relatedKeywordsPopup: function(keyword, event, me) {
-            //"use strict";
-            //event.preventDefault();
-            var oskarifield = jQuery(event.currentTarget).parents(
-                    '.oskarifield'
-                ),
-                loc,
-                relatedKeywordsCont,
-                ajaxUrl;
-
-            if (!keyword || keyword.length === 0) {
-                this._showAllLayers();
-                return;
-            }
-            if (keyword.length < 4) {
-                // empty result
-                oskarifield.find('.related-keywords').hide();
-                return;
-            }
-
-            relatedKeywordsCont = oskarifield.find('.spinner-text').show();
-
-            me.sentKeyword = keyword;
-
-            ajaxUrl = this.instance.sandbox.getAjaxUrl();
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                beforeSend: function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType(
-                            'application/j-son;charset=UTF-8');
-                    }
-                },
-                url: ajaxUrl + 'action_route=SearchKeywords&keyword=' +
-                    encodeURIComponent(keyword) + '&lang=' + Oskari.getLang(),
-                success: function(pResp) {
-                    me.relatedKeywords = pResp;
-                    me._showRelatedKeywords(keyword, pResp, oskarifield);
-                    relatedKeywordsCont.hide();
-                },
-                error: function(jqXHR, textStatus) {
-                    var lctn = me.instance.getLocalization('errors');
-                    me.accordion.showMessage(lctn.generic);
-                    relatedKeywordsCont.hide();
-                }
-            });
-        },
-
-        setLayerSelected: function(layerId, isSelected) {
-            //"use strict";
-            var layerCont = this.layerContainers[layerId];
-            if (layerCont) {
-                layerCont.setSelected(isSelected);
-            }
-        },
-
-        updateLayerContent: function(layerId, layer) {
-            //"use strict";
-            var layerCont = this.layerContainers[layerId];
-            if (layerCont) {
-                layerCont.updateLayerContent(layer);
-            }
-        },
-        _updateContainerHeight: function(height) {
-            var me = this;
-            me.getJsTreeElement().css('max-height', (height * 0.5) + 'px');
-        },
-        _bindOskariEvents: function() {
-            var me = this;
-            me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
-                var layer = evt.getMapLayer();
-                me.getJsTreeElement().jstree().check_node('layer-' + layer.getId());
-            });
-
-            me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
-                var layer = evt.getMapLayer();
-                me.getJsTreeElement().jstree().uncheck_node('layer-' + layer.getId());
-            });
-
-
-            me._notifierService.on('MapSizeChangedEvent', function(evt) {
-                me._updateContainerHeight(evt.getHeight());
-            });
         }
     }
 );

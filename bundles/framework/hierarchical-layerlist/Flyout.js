@@ -55,14 +55,31 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 } else if (mode === 'add') {
                     var layer = mapLayerService.createMapLayer(data.layerData);
                     mapLayerService.addLayer(layer);
-                    mapLayerService.updateLayerGroups(data.layerData.id, data.layerData, false, true);
+                    mapLayerService.updateGroupsLayers(data.layerData.id, data.layerData, false, true);
                 } else {
                     mapLayerService.updateLayer(data.layerData.id, data.layerData);
+
+                    // also update breadcrump information
+                    me._updateBreadcrumbGroups(data.layerData);
                 }
 
 
                 me.populateLayers();
             });
+        },
+        _updateBreadcrumbGroups: function(layerData) {
+            var me = this;
+            if (me.instance._selectedLayerGroupId[layerData.id]) {
+                var currentGroupId = me.instance._selectedLayerGroupId[layerData.id];
+                var founded = jQuery.grep(layerData.groups, function(group) {
+                    return group.id === currentGroupId;
+                });
+
+                if (founded.length === 0) {
+                    // update groups to first
+                    me.instance._selectedLayerGroupId[layerData.id] = layerData.groups[0].id;
+                }
+            }
         },
         /**
          * @method getName
@@ -373,13 +390,81 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 groupList.push(groupModel);
             });
 
+
             if (me.service.hasAdmin()) {
                 return groupList;
             }
 
-            var sortedGroupList = jQuery.grep(groupList, function(group, index) {
-                return group.getLayers().length > 0;
+            var isGroupLayers = function(group) {
+                if (typeof group.getLayers === 'function') {
+                    return group.getLayers().length > 0;
+                } else {
+                    return group.layers.length > 0;
+                }
+            };
+
+            var removeGroupWhereNoLayers = function(group) {
+                var filtered = [];
+                if (group.getGroups().length > 0) {
+                    var groups = group.getGroups();
+
+                    var subgroups = groups.filter(function(subgroup) {
+
+
+                        if (subgroup.groups) {
+                            var subgroupsubgroups = subgroup.groups || [];
+                            var subsubFilter = subgroupsubgroups.filter(function(subgroupsubgroup) {
+                                return subgroupsubgroup.layers.length > 0;
+                            });
+                            if (subsubFilter.length > 0) {
+                                return true;
+                            }
+                        } else if (subgroup.layers.length > 0) {
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    group._groups = subgroups;
+                    return group;
+                }
+                return group;
+            };
+
+            var sortedGroupList = [];
+            groupList.forEach(function(group) {
+                var i = null;
+                var subgroup = null;
+                if (isGroupLayers(group)) {
+                    sortedGroupList.push(removeGroupWhereNoLayers(group));
+                    return;
+                }
+                // check subgroup
+                else if (group.groups || group.getGroups()) {
+                    var groups = group.groups || group.getGroups();
+                    for (i = 0; i < groups.length; i++) {
+                        subgroup = groups[i];
+                        if (isGroupLayers(groups[i])) {
+                            sortedGroupList.push(removeGroupWhereNoLayers(group));
+                            return;
+                        }
+                    }
+
+                    // check subgroup subgroups
+                    for (i = 0; i < groups.length; i++) {
+                        subgroup = groups[i].groups || groups[i].getGroups();
+                        if (subgroup.groups) {
+                            for (var j = 0; j < subgroup.groups.length; j++) {
+                                if (isGroupLayers(subgroup.groups[j])) {
+                                    sortedGroupList.push(group);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
             });
+
             return sortedGroupList;
         },
 
@@ -408,58 +493,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 return 1;
             }
             return 0;
-        },
-
-        /**
-         * @method handleLayerSelectionChanged
-         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
-         *           layer that was changed
-         * @param {Boolean} isSelected
-         *           true if layer is selected, false if removed from selection
-         * let's refresh ui to match current layer selection
-         */
-        handleLayerSelectionChanged: function(layer, isSelected) {
-            //"use strict";
-            var i,
-                tab;
-            for (i = 0; i < this.layerTabs.length; i += 1) {
-                tab = this.layerTabs[i];
-                tab.setLayerSelected(layer.getId(), isSelected);
-            }
-        },
-
-        /**
-         * @method handleLayerModified
-         * @param {Oskari.mapframework.domain.AbstractLayer} layer
-         *           layer that was modified
-         * let's refresh ui to match current layers
-         */
-        handleLayerModified: function(layer) {
-            //"use strict";
-            var me = this,
-                i,
-                tab;
-            for (i = 0; i < me.layerTabs.length; i += 1) {
-                tab = me.layerTabs[i];
-                tab.updateLayerContent(layer.getId(), layer);
-            }
-        },
-
-        /**
-         * @method handleLayerSticky
-         * @param {Oskari.mapframework.domain.AbstractLayer} layer
-         *           layer thats switch off diasable/enable is changed
-         * let's refresh ui to match current layers
-         */
-        handleLayerSticky: function(layer) {
-            //"use strict";
-            var me = this,
-                i,
-                tab;
-            for (i = 0; i < me.layerTabs.length; i += 1) {
-                tab = me.layerTabs[i];
-                tab.updateLayerContent(layer.getId(), layer);
-            }
         },
 
         /**

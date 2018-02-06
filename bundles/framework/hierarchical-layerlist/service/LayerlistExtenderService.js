@@ -56,7 +56,25 @@
                 },
                 plugins: ['checkbox', 'changed', 'wholerow', 'types', 'search', 'state', 'conditionalselect']
             };
-            this._events = [];
+            this._events = [{
+                name: 'search.jstree',
+                handler: function(nodes, str, res) {
+                    me.trigger('jstree-search', {
+                        nodes: nodes,
+                        str: str,
+                        res: res
+                    });
+                }
+            }, {
+                name: 'clear_search.jstree',
+                handler: function(nodes, str, res) {
+                    me.trigger('jstree-search-clear', {
+                        nodes: nodes,
+                        str: str,
+                        res: res
+                    });
+                }
+            }];
             this._mainTools = {};
             this._groupTools = {};
             this._subgroupTools = {};

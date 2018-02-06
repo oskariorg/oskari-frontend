@@ -141,6 +141,37 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         }
         callback();
     },
+    _getMaplayerGroups: function() {
+        var me = this;
+        var groups = [];
+        me.layerService.getAllLayerGroups().forEach(function(group) {
+            groups.push({
+                id: group.id,
+                cls: 'group',
+                name: Oskari.getLocalized(group.name)
+            });
+
+            // subgroups
+            group.groups.forEach(function(subgroup) {
+                groups.push({
+                    id: subgroup.id,
+                    cls: 'subgroup',
+                    name: Oskari.getLocalized(subgroup.name)
+                });
+
+                // subgroup subgroups
+                subgroup.groups.forEach(function(subgroupsubgroup) {
+                    groups.push({
+                        id: subgroupsubgroup.id,
+                        cls: 'subgroupsubgroup',
+                        name: Oskari.getLocalized(subgroupsubgroup.name)
+                    });
+                });
+            });
+        });
+
+        return groups;
+    },
     /**
      * Shows layer popu
      * @method showLayerAddPopup
@@ -167,6 +198,8 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             if (layerId) {
                 layerModel = me.sandbox.findMapLayerFromAllAvailable(layerId);
             }
+
+            var groupDetails = me.layerService.getAllLayerGroups(groupId);
             require(['_bundle/views/adminLayerSettingsView', '_bundle/views/adminLayerSettingsView'], function(adminLayerSettingsView, sublayerView) {
                 // create layer settings view for adding or editing layer
                 var settings = new adminLayerSettingsView({
@@ -177,8 +210,13 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                     groupId: groupId,
                     dataProviders: me.dataProviders,
                     flyout: me._extraFlyout,
-                    baseLayerId: null, // FIXME add sublayer its parentid,
-                    sublayerView: sublayerView
+                    baseLayerId: null,
+                    sublayerView: sublayerView,
+                    allMaplayerGroups: me._getMaplayerGroups(),
+                    maplayerGroups: (layerModel) ? layerModel.getGroups() : [{
+                        id: groupDetails.id,
+                        name: Oskari.getLocalized(groupDetails.name)
+                    }]
                 });
                 var content = settings.$el;
 

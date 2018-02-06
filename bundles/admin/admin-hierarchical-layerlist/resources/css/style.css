@@ -79,6 +79,10 @@
     margin-right: 5px;
     margin-top: 3px;
     margin-left: 10px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .admin-maplayer-groups-list {
+      max-height: 90px;
+      overflow-y: auto;
+      margin: 10px; }
     .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-wrapper {
       width: 500px; }
     .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .add-class-grouping {
@@ -218,7 +222,8 @@
         min-width: 220px; }
       .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-label-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-label-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-label-area {
         display: table;
-        float: left; }
+        float: left;
+        font-weight: bold; }
         .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-label-area label.add-layer-label, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-label-area label.add-layer-label, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-label-area label.add-layer-label {
           font-weight: bold;
           width: 75px;
@@ -253,5 +258,23 @@
           -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
           box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
           display: block; }
+
+.divmanazerpopup.admin-hierarchical-layerlist-group label.group::before {
+  content: "\25B6";
+  width: 25px;
+  margin-right: 8px;
+  color: #555; }
+.divmanazerpopup.admin-hierarchical-layerlist-group label.subgroup::before {
+  content: "\25B6";
+  width: 25px;
+  margin-left: 32px;
+  margin-right: 8px;
+  color: #555; }
+.divmanazerpopup.admin-hierarchical-layerlist-group label.subgroupsubgroup::before {
+  content: "\25B6";
+  width: 25px;
+  margin-left: 64px;
+  margin-right: 8px;
+  color: #555; }
 
 /*# sourceMappingURL=style.css.map */
