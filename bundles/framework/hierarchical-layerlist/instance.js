@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
      * @static
      */
     function() {
-        //"use strict";
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
@@ -39,10 +38,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 'Oskari.mapframework.service.MapLayerService'
             );
             var successCB = function() {
-                // massive update so just recreate the whole ui
-                //me.plugins['Oskari.userinterface.Flyout'].populateLayers();
-                // added through maplayerevent
-                //
                 me.plugins['Oskari.userinterface.Flyout'].updateSelectedLayers();
             };
             var failureCB = function() {
@@ -175,10 +170,10 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          */
         getLocalization: function(key) {
             if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
+                this._localization = Oskari.getMsg.bind(null, this.getName());
             }
             if (key) {
-                return this._localization[key];
+                return this._localization(key);
             }
             return this._localization;
         },

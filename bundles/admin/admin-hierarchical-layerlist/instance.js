@@ -244,7 +244,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @return {Integer}        The node id integer
          */
         _findJSTreeNodeActualId: function(nodeId) {
-            if(nodeId === '#') {
+            if (nodeId === '#') {
                 return -1;
             } else {
                 return nodeId.replace(/[^0-9]/g, '');

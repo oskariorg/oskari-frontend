@@ -386,12 +386,12 @@ Oskari.clazz.define(
                         'Oskari.userinterface.component.buttons.OkButton'
                     );
 
-                desc.find('p').text(me._locale.filter.description);
+                desc.find('p').text(me.instance.getLocalization('filter').description);
                 okBtn.addClass('primary');
                 okBtn.setHandler(function() {
                     dialog.close(true);
                 });
-                dialog.show(me._locale.filter.text, desc, [okBtn]);
+                dialog.show(me.instance.getLocalization('filter').text, desc, [okBtn]);
 
             });
         },
@@ -406,7 +406,6 @@ Oskari.clazz.define(
                 oskarifield,
                 layerFilter;
 
-            me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
                 'Oskari.userinterface.component.TabPanel');
             me.tabPanel.setTitle(me.title, me.id);
@@ -416,7 +415,7 @@ Oskari.clazz.define(
             if (me.showSearchSuggestions) {
                 oskarifield.append(
                     jQuery(me.templates.spinner)
-                    .text(me._locale.loading)
+                    .text(me.instance.getLocalization('loading'))
                 );
 
                 oskarifield.append(
@@ -424,7 +423,7 @@ Oskari.clazz.define(
                 );
             }
             var descriptionAndMainTools = me.templates.descriptionAndMainTools.clone();
-            descriptionAndMainTools.find('.field-description').text(me._locale.filter.shortDescription);
+            descriptionAndMainTools.find('.field-description').text(me.instance.getLocalization('filter').shortDescription);
             oskarifield.append(descriptionAndMainTools);
 
             me._createInfoIcon(oskarifield);
@@ -515,7 +514,7 @@ Oskari.clazz.define(
                 // create from layer template
                 // (was clone-from-template but template was only used once so there was some overhead)
                 layerDiv = jQuery(this.templates.layerContainer),
-                tooltips = this.localization.tooltip,
+                tooltips = me.instance.getLocalization('tooltip'),
                 tools = jQuery(layerDiv).find('span.layer-tools'),
                 icon = tools.find('span.layer-icon'),
                 rn,
