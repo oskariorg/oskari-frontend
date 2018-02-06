@@ -28,6 +28,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
         this._stickyLayerIds = {};
 
+        this.loc = Oskari.getMsg.bind(null, 'MapModule');
+
         /**
          * @property typeMapping
          * Mapping from map-layer json "type" parameter to a class in Oskari
@@ -48,6 +50,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
         // used for cache newest layers
         this._newestLayers = null;
+
+        this._popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
+        this.popupCoolOff = false;
 
         /*
         * Layer filters
@@ -299,6 +304,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.srs_name) {
                 layer.setSrs_name(newLayerConf.srs_name);
             }
+            if (newLayerConf.srs) {
+                layer.setSrsList(newLayerConf.srs);
+            }
 
             if (newLayerConf.admin) {
                 layer.setAdmin(newLayerConf.admin);
@@ -345,6 +353,20 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this._sandbox.notifyAll(evt);
             }
             // TODO: notify if layer not found?
+        },
+        showUnsupportedPopup(){
+            if(this.popupCoolOff) {
+                return;
+            }
+            var popup = this._popupService.createPopup();
+
+            var buttons = [popup.createCloseButton('OK')];
+            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj').replace(/[\n]/g, '<br>'), buttons);
+
+            this.popupCoolOff = true;
+            setTimeout(function() {
+                this.popupCoolOff = false;
+            }.bind(this), 500);
         },
         /**
          * @method loadAllLayersAjax
@@ -863,6 +885,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             layer.setVersion(mapLayerJson.version);
             layer.setSrs_name(mapLayerJson.srs_name);
+            layer.setSrsList(mapLayerJson.srs);
 
             // metadata
             layer.setDataUrl(mapLayerJson.dataUrl);

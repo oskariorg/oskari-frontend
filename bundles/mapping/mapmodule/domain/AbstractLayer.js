@@ -128,6 +128,8 @@ Oskari.clazz.define(
         // Spatial reference system
         me._srs_name = null;
 
+        me._srsList = null;
+
         // Admin params, applicable only for admin users
         me._admin = null;
 
@@ -1269,6 +1271,31 @@ Oskari.clazz.define(
          */
         getSrs_name: function () {
             return this._srs_name;
+        },
+        /**
+         * @method isSupported does the layer support given projection?
+         * @param {String} projection
+         * @return {Boolean}
+         */
+        isSupported: function(projection) {
+            if(!this._srsList) {
+                return false;
+            }
+            return this._srsList.includes(projection);
+        },
+        /**
+         * @method setSrsList
+         * @param {String[]} list of projections
+         */
+        setSrsList: function(list) {
+            this._srsList = list;
+        },
+        /**
+         * @method setSrsList
+         * @return {String[]} list of projections
+         */
+        getSrsList: function() {
+            return this._srsList;
         },
         /**
          * @method setGfiContent
