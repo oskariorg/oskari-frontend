@@ -1,4 +1,4 @@
-# Admin WFS Search Channel
+# Download basket
 
 <table class="table">
   <tr>

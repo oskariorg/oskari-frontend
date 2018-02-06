@@ -153,12 +153,13 @@ Oskari.clazz.category(
          * Notifies all selection listeners about selected data.
          *
          * @param {String} dataId id for the selected data
+         * @param {Boolean} isCtrlKey was control key down when clicked?
          */
-        _dataSelected: function (dataId) {
+        _dataSelected: function (dataId, isCtrlKey) {
             var i;
 
             for (i = 0; i < this.selectionListeners.length; i += 1) {
-                this.selectionListeners[i](this, dataId);
+                this.selectionListeners[i](this, dataId, isCtrlKey);
             }
         },
 

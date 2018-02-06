@@ -520,21 +520,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         * @method stop
         * @public
         **/
-        stop: function(){
-            var me = this,
-                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                mapElement = jQuery(mapModule.getMap().div),
-                reqBuilder = me.sandbox.getRequestBuilder(
-                    'MapFull.MapSizeUpdateRequest'
-                );
-
+        stop: function() {
+            var me = this;
+            var mapElement = me.mapmodule.getMapEl();
+            // reset size as it's always set on init
             mapElement.width('');
             mapElement.height(jQuery(window).height());
 
             me._unregisterEventHandlers();
 
             // FIXME: timing issue?
-            window.setTimeout(function(){
+            window.setTimeout(function() {
+                var reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
                 // notify openlayers that size has changed
                 if (reqBuilder) {
                     me.sandbox.request(me.instance, reqBuilder());
