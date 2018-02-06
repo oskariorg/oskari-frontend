@@ -171,6 +171,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
 
     },
 
+    /**
+     * Get breadcrump
+     * @method  _getBreadcrump
+     * @return  {String}       bread crump
+     * @private
+     */
     _getBreadcrump: function() {
         var me = this;
         var groups = [];
@@ -346,7 +352,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
                     layerId: 'hierarchical-layerlist-layer-extent',
                     clearPrevious: true,
                     layerOptions: null,
-                    centerTo: true,
+                    centerTo: true
                 }]);
 
                 me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'hierarchical-layerlist-layer-extent']);

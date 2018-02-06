@@ -1185,7 +1185,7 @@ define([
                 }
 
                 // Layer class id aka. orgName id aka groupId
-                data.inspireTheme = me.options.groupId;
+                data.maplayerGroups = me.options.groupId;
                 data.groupId = form.find('#select-dataprovider').val();
 
                 if ((data.layerUrl !== me.model.getInterfaceUrl() && me.model.getInterfaceUrl()) ||
@@ -1228,7 +1228,7 @@ define([
                     groupId: groupElement.find('#select-dataprovider').val(),
                     layerType: 'collection',
                     isBase: me.model.isBaseLayer(),
-                    inspireTheme: me.options.groupId
+                    maplayerGroups: me.options.groupId
                 };
 
 
