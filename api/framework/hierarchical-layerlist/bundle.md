@@ -4,72 +4,117 @@ A hierarchical layerlist for handling deeper hierarchy with layers. Combines the
 
 ## Description
 
-[More detailed/technical info about bundle. For example: Defines a plugin for mapmodule that handles the infobox as an Openlayers popup with customized UI. Also extends jQuery by an outerHtml method. Templates are created with jQuery but Openlayers popup needs the actual HTML, this is where we need outerHtml.]
+This bundle combines the functionality of layerselector2 and layerselection2 bundles. Also service can add more tools for grousp (and subgroups) and also layers.
 
 ## Screenshot
 
-[Screenshot if possible]
+![screenshot](hierarchical-layerlist.png)
 
 ## Bundle configuration
 
-[Configuration and information which configurations are needed. For example:]
-
-No configuration is required, but it can be used to adapt infobox size according to its content. If not set, infobox size will be 300px x 400px.
-
-```javascript
-{
-  "adaptable" : true
-}
-```
+No configuration is required.
 
 ## Bundle state
 
-[Example:]
-```javascript
-state : {
-  popups : [
-    {
-      id : <popup id>,
-      title :  <popup title>,
-      data :  <data as given in Oskari.mapframework.bundle.infobox.request.ShowInfoBoxRequest.getContent()>,
-      lonlat : <OpenLayers.LonLat as location for the popup>
-    }
-  ]
-}
-```
+No state is required.
 
 ## Requests the bundle sends out
 
-[Example:]
 <table class="table">
 <tr>
   <th> Request </th>
   <th> Where/why it's used</th>
 </tr>
 <tr>
-  <td> `Publisher.PublishMapEditorRequest` </td>
-  <td> When an embedded maps 'Edit' link is clicked to activate the publisher bundle </td>
+  <td> `MapModulePlugin.MapLayerVisibilityRequest` </td>
+  <td>Sends out when user clicks the 'Show/Hide' link on a layer</td>
+</tr>
+<tr>
+  <td> `RemoveMapLayerRequest` </td>
+  <td>Sends out when user clicks the 'remove map layer' button</td>
+</tr>
+<tr>
+  <td> `ChangeMapLayerStyleRequest` </td>
+  <td>Sent when a layer style is selected from the dropdown.</td>
+</tr>
+<tr>
+  <td> `ChangeMapLayerOpacityRequest` </td>
+  <td>Sends out when user changes the opacity for a layer</td>
+</tr>
+<tr>
+  <td> `MapModulePlugin.AddFeaturesToMapRequest` </td>
+  <td> Adds layer extent feature to map and zoomed in it's extent</td>
+</tr>
+<tr>
+  <td> `MapModulePlugin.RemoveFeaturesFromMapRequest` </td>
+  <td> Removes layer extent from map </td>
 </tr>
 <tr>
   <td> `userinterface.UpdateExtensionRequest` </td>
-  <td> When an embedded maps 'Edit' link is clicked to close the personaldata flyout </td>
+  <td> Handles flyout hide/show </td>
 </tr>
+<tr>
+  <td> `userinterface.AddExtensionRequest` </td>
+  <td>Register as part of the UI in start()-method</td>td>
+</tr>
+<tr>
+  <td> `userinterface.RemoveExtensionRequest` </td>
+  <td>Unregister from the UI in stop()-method</td>
+</tr>
+<tr>
+  <td> `Guidedtour.AddToGuidedTourRequest` </td>
+  <td> Register layerlist to guided tour </td>
+</tr>
+<tr>
+  <td> `catalogue.ShowMetadataRequest` </td>
+  <td>Sent when the the info icon is clicked</td>
+</tr>
+<tr>
+  <td> `ShowMapLayerInfoRequest` </td>
+  <td>Sent when the the backend status icon is clicked<td>
+</tr>
+<tr>
+  <td> `RearrangeSelectedMapLayerRequest` </td>
+  <td>Sends out when user changes the order of layers in the list</td>
+</tr>
+
 </table>
 
 ## Events the bundle listens to
 
-[Example:]
 <table class="table">
   <tr>
     <th>Event</th><th>Why/when</th>
   </tr>
   <tr>
-    <td> MapLayerEvent </td><td> Adds heatmap tool to layer</td>
+    <td> `AfterMapLayerRemoveEvent` </td><td> Removes layer from selected tab and also unchecks layer checkboxes</td>
   </tr>
   <tr>
-    <td> AfterMapLayerRemoveEvent </td><td>Removes layer from the map</td>
+    <td> `AfterMapLayerAddEvent` </td><td>Add layer to selected tab and also checks layer checkboxes</td>
   </tr>
   <tr>
-    <td> AfterChangeMapLayerOpacityEvent </td><td>Changes map layer opacity</td>
+    <td> `MapLayerEvent` </td><td>Only listens to 'update' operation and updates the name of the layer in UI</td>
   </tr>
+  <tr>
+    <td> `BackendStatus.BackendStatusChangedEvent` </td><td>Changes layer backend status icons</td>
+  </tr>
+  <tr>
+    <td> `userinterface.ExtensionUpdatedEvent` </td><td>React flyout updates</td>
+  </tr>
+  <tr>
+    <td> `MapLayerVisibilityChangedEvent` </td><td>Changes the UI for the layer</td>
+  </tr>
+  <tr>
+    <td> `AfterChangeMapLayerOpacityEvent` </td><td>Changes map layer opacity slider values</td>
+  </tr>
+  <tr>
+    <td> `AfterChangeMapLayerStyleEvent` </td><td>Changes map layer style</td>
+  </tr>
+  <tr>
+    <td> `AfterRearrangeSelectedMapLayerEvent` </td><td>Changes map layer arrange</td>
+  </tr>
+  <tr>
+    <td> `MapSizeChangedEvent` </td><td>Handles flyout max height</td>
+  </tr>
+
 </table>
