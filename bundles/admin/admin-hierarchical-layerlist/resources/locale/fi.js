@@ -46,7 +46,7 @@ Oskari.registerLocalization({
             },
             "nodeDropSave": {
                 "title": "Tason/ryhmän siirto ei onnistunut",
-                "message": "Virhe tason/ryhmän siirrossa, kokeile myöhemmin uudelleen"
+                "message": "Tason/ryhmän siirto ei onnistunut"
             },
             "dataprovider": {
                 "title": "Tarkista tiedontuottajan nimi",
