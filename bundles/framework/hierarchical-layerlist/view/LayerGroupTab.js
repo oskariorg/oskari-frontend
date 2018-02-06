@@ -20,36 +20,35 @@ Oskari.clazz.define(
         this.localization = this.instance.getLocalization();
         this._notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
         this._mapLayerService = this.sb.getService('Oskari.mapframework.service.MapLayerService');
-        // FIXME: these templates must be a jQuery objects
         this.templates = {
-            spinner: '<span class="spinner-text"></span>',
+            spinner: jQuery('<span class="spinner-text"></span>'),
             descriptionAndMainTools: jQuery('<div class="description-and-tools"><div class="field-description"></div><div class="main-tools"></div><div class="clear"></div></div>'),
             mainTool: jQuery('<div class="main-tool"></div>'),
             groupTool: jQuery('<div class="group-tool"></div>'),
             subgroupTool: jQuery('<div class="subgroup-tool"></div>'),
             subgroupSubgroupTool: jQuery('<div class="subgroup-subgroup-tool"></div>'),
             layerTool: jQuery('<div class="layer-tool"></div>'),
-            description: '<div>' +
+            description: jQuery('<div>' +
                 '  <h4 class="indicator-msg-popup"></h4>' +
                 '  <p></p>' +
-                '</div>',
-            relatedKeywords: '<div class="related-keywords"></div>',
-            keywordsTitle: '<div class="keywords-title"></div>',
-            keywordContainer: '<a href="#"class="keyword-cont">' +
+                '</div>'),
+            relatedKeywords: jQuery('<div class="related-keywords"></div>'),
+            keywordsTitle: jQuery('<div class="keywords-title"></div>'),
+            keywordContainer: jQuery('<a href="#"class="keyword-cont">' +
                 '  <span class="keyword"></span>' +
-                '</a>',
-            keywordType: '<div class="type"></div>',
-            layerFilter: '<div class="layer-filter hierarchical-layerlist-layer-filter">' +
-                '</div><div style="clear:both;"></div>',
-            layerTree: '<div class="hierarchical-layerlist-tree"></div>',
-            layerContainer: '<span class="layer">' +
+                '</a>'),
+            keywordType: jQuery('<div class="type"></div>'),
+            layerFilter: jQuery('<div class="layer-filter hierarchical-layerlist-layer-filter">' +
+                '</div><div style="clear:both;"></div>'),
+            layerTree: jQuery('<div class="hierarchical-layerlist-tree"></div>'),
+            layerContainer: jQuery('<span class="layer">' +
                 '<span class="layer-tools">' +
                 '   <span class="layer-backendstatus-icon backendstatus-unknown" title=""></span>' +
                 '   <span class="layer-icon"></span>' +
                 '   <span class="layer-info"></span>' +
                 '</span>' +
                 '<span class="layer-title"></span>' +
-                '</span>'
+                '</span>')
         };
         this._createUI(id);
         this._bindExtenderServiceListeners();
@@ -378,7 +377,7 @@ Oskari.clazz.define(
             indicatorCont.append(infoIcon);
             // show metadata
             infoIcon.click(function(e) {
-                var desc = jQuery(me.templates.description),
+                var desc = me.templates.description.clone(),
                     dialog = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
                     ),
@@ -414,12 +413,12 @@ Oskari.clazz.define(
 
             if (me.showSearchSuggestions) {
                 oskarifield.append(
-                    jQuery(me.templates.spinner)
+                    me.templates.spinner.clone()
                     .text(me.instance.getLocalization('loading'))
                 );
 
                 oskarifield.append(
-                    jQuery(me.templates.relatedKeywords)
+                    me.templates.relatedKeywords.clone()
                 );
             }
             var descriptionAndMainTools = me.templates.descriptionAndMainTools.clone();
@@ -429,7 +428,7 @@ Oskari.clazz.define(
             me._createInfoIcon(oskarifield);
 
             if (!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
-                layerFilter = jQuery(me.templates.layerFilter);
+                layerFilter = me.templates.layerFilter.clone();
                 me.tabPanel.getContainer().append(layerFilter);
             }
 
@@ -513,7 +512,7 @@ Oskari.clazz.define(
                 sandbox = me.sb,
                 // create from layer template
                 // (was clone-from-template but template was only used once so there was some overhead)
-                layerDiv = jQuery(this.templates.layerContainer),
+                layerDiv = this.templates.layerContainer.clone(),
                 tooltips = me.instance.getLocalization('tooltip'),
                 tools = jQuery(layerDiv).find('span.layer-tools'),
                 icon = tools.find('span.layer-icon'),
@@ -848,7 +847,7 @@ Oskari.clazz.define(
 
             var allSelectedLayers = me.sb.findAllSelectedMapLayers();
             var allSelectedLayersLength = allSelectedLayers.length;
-            var desc = jQuery(me.templates.description);
+            var desc = me.templates.description.clone();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
@@ -987,7 +986,7 @@ Oskari.clazz.define(
             if (me.getJsTreeElement().length > 0) {
                 me.getJsTreeElement().remove();
             }
-            var layerTree = jQuery(me.templates.layerTree);
+            var layerTree = me.templates.layerTree.clone();
 
             var addLayers = function(groupElId, layers, groupId) {
                 layers.forEach(function(l) {
