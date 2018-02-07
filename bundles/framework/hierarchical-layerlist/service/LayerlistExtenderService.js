@@ -46,10 +46,10 @@
                     show_only_matches: true,
                     search_callback: function(text, node) {
                         if (node.type == 'layer') {
-                            var nodeText = jQuery(node.text).find('.layer-title').text();
+                            var nodeText = jQuery(node.text).find('.layer-title').text().toLowerCase();
 
                             var layerId = node.a_attr['data-layer-id'];
-                            var dataProvider = me.sb.findMapLayerFromAllAvailable(layerId).getOrganizationName();
+                            var dataProvider = me.sb.findMapLayerFromAllAvailable(layerId).getOrganizationName().toLowerCase();
                             // check also dataprovider name
                             return (nodeText.indexOf(text) !== -1 || dataProvider.indexOf(text) !== -1);
                         }
