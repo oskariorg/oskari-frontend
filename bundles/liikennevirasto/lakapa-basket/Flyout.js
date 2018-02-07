@@ -484,7 +484,7 @@ function(instance) {
             },
             type : 'POST',
             dataType : 'json',
-            url : ajaxUrl + 'action_route=DownloadInfo'
+            url : ajaxUrl + 'action_route=DownloadAll'
         });
 
 
