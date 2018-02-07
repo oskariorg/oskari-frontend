@@ -75,7 +75,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var systems = element.find('.system');
             var me = this;
             systems.each(function (idx, system) {
-                var self = me;
                 jQuery( this ).on('change', function ( e ) {
                     me.handleSystemChange(e);
                 });
@@ -109,10 +108,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var dropdowns = this.dropdowns;
             var instances = this.selectInstance;
             var datum = instances.datum.getValue();
-            var coordinate = instances.coordinate.getValue();
-            var projection = instances.projection.getValue();
-            var geodeticCoordinate = instances["geodetic-coordinate"].getValue();
-            var elevation = instances.elevation.getValue();
             var clsSelector = this.makeClassSelector;
 
             // weird
