@@ -63,6 +63,12 @@
       background-image: linear-gradient(to bottom, white, #cdcdcd);
       filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
 
+@media only screen and (max-height: 999px) and (min-height: 800px) {
+  .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer {
+    max-height: 650px; } }
+@media only screen and (max-height: 1199px) and (min-height: 1000px) {
+  .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer {
+    max-height: 7000px; } }
 .oskari-flyout.admin-hierarchical-layerlist-add-layer {
   width: 50%;
   max-height: 80%; }
