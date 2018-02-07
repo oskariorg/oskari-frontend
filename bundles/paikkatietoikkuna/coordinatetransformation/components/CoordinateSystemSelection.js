@@ -108,6 +108,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var dropdowns = this.dropdowns;
             var instances = this.selectInstance;
             var datum = instances.datum.getValue();
+            var coordinate = instances.coordinate.getValue();
             var clsSelector = this.makeClassSelector;
 
             // weird
@@ -184,6 +185,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 default:
                     break;
             }
+            var datum = clsSelector(datum) + clsSelector(coordinate);
+            dropdowns["geodetic-coordinate"].find(datum).show();
             Object.keys( instances ).forEach( function ( key ) {
                 instances[key].update();
             });
