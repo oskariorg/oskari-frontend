@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this.loc = view.loc;
         this.element = null;
         this.select = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', view );
+        this.systemInfo = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
         this.selectInstance = null;
         this.dropdowns = null;
         this._template = {
@@ -11,11 +12,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             coordinatSystemSelection: _.template(
                 '<div class="transformation-system">' +
                     '<h5><%= title %></h5>'+
-                    '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
-                    '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div>  </div> </br> ' +
-                    '<div class="map-projection" style="display:none;"> <%= map_projection %> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br>' +
-                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> *</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
-                    '<div class="height-system"><b class="dropdown_title"><%= height_system %></b></div> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> '+
+                    '<div class="geodetic-datum" data-system="geodetic"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
+                    '<div class="coordinate-system" data-system="coordinate"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div>  </div> </br> ' +
+                    '<div class="projection-system" style="display:none;" data-system="projection"> <%= map_projection %> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br>' +
+                    '<div class="geodetic-coordinatesystem" data-system="geodetic-coordinate"><b class="dropdown_title"><%= geodetic_coordinate_system %> *</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
+                    '<div class="elevation-system" data-system="elevation"><b class="dropdown_title"><%= elevation_system %></b></div> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> '+
                 '</div>'
             ),
         }
@@ -41,11 +42,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 coordinate_system: this.loc.coordinatesystem.coordinate_system,
                 map_projection: this.loc.coordinatesystem.map_projection,
                 geodetic_coordinate_system:this.loc.coordinatesystem.geodetic_coordinatesystem,
-                height_system:this.loc.coordinatesystem.heigth_system 
+                elevation_system:this.loc.coordinatesystem.heigth_system 
             });
             wrapper.append(coordinatSystemSelection);
             this.setElement(wrapper);
             this.populateSelect();
+            this.handleInfoLink();
         },
         populateSelect: function () {
             var me = this;
@@ -59,6 +61,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 i++;
             });
             this.select.handleSelectionChanged(wrapper);
+        },
+        handleInfoLink: function () {
+            var me = this;
+            this.getElement().find('.infolink').on('click', function ( event ) {
+                event.stopPropagation();
+                var key = this.parentElement.parentElement.dataset.system;
+                me.systemInfo.show( jQuery( this ), key );
+            });
         },
         getSelectInstance: function () {
             return this.selectInstance;
