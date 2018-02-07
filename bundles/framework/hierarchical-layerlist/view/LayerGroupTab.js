@@ -828,7 +828,7 @@ Oskari.clazz.define(
             var isChecked = tree.jstree().is_checked(node);
             var isOpen = tree.jstree().is_open(node);
             var target = jQuery(event.target);
-            var nodeChildren = node.children;
+            var nodeChildren = node.children_d;
             //var nodeChildrenLength = nodeChildren.length;
             var layerId = null;
 
@@ -909,7 +909,11 @@ Oskari.clazz.define(
                         });
                     } else {
                         //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
-                        if ((nodeChildren.length > 10 || allSelectedLayersLength >= 10)) {
+                        // selected layers
+                        var layersChecked = nodeChildren.filter(function(n) {
+                            return n.indexOf('layer') >= 0;
+                        });
+                        if ((layersChecked.length > 10 || allSelectedLayersLength >= 10)) {
 
                             var text = me.instance.getLocalization('manyLayersWarning').text;
                             if (allSelectedLayersLength >= 10) {
@@ -938,7 +942,7 @@ Oskari.clazz.define(
                         } else {
                             tree.jstree().open_node(node);
                             tree.jstree().check_node(node);
-                            nodeChildren.forEach(function(nodechild) {
+                            layersChecked.forEach(function(nodechild) {
                                 var child = tree.jstree().get_node(nodechild);
                                 var layerId = me._getNodeRealId(child);
                                 if (!me.sb.isLayerAlreadySelected(layerId)) {

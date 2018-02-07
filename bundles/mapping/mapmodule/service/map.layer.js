@@ -385,6 +385,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var groups = [];
             var group = null;
 
+            if (me._layerGroups.length === 0) {
+                return;
+            }
+
             // update or insert
             if (!deleteLayer) {
                 var isLayerInGroup = function(groupLayers) {
