@@ -14,7 +14,7 @@
     font-size: 12px;
     padding-left: 3px;
 }
- .geodetic-datum, .coordinate-system, .projection-system, .geodetic-coordinatesystem, .elevation-system {
+ .system {
     clear: left;
     padding-top: 0.875em; 
 }

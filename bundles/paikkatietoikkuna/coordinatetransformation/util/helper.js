@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
                 1: { "id":"DATUM_KKJ", "title":"KKJ", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 2: { "id":"DATUM_EUREF-FIN", "title":"EUREF-FIN", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"}
                 },
-            "dimension": {
+            "coordinate": {
                 0: { "id":"KOORDINAATISTO_DEFAULT", "title":"Mikä tahansa" },
                 1: { "id":"KOORDINAATISTO_SUORAK_2D", "title":"Suorakulmainen 2D (Taso)", "cls":"DATUM_KKJ DATUM_EUREF-FIN" },
                 2: { "id":"KOORDINAATISTO_SUORAK_3D", "title":"Suorakulmainen 3D", "cls":"DATUM_EUREF-FIN" },
@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
                 2: { "id":"TM", "title":"ETRS-TM",  "cls":"DATUM_EUREF-FIN"},
                 3: { "id":"GK", "title":"ETRS-GK",  "cls":"DATUM_EUREF-FIN"}
                 },
-            "coordinatesystem": {
+            "geodetic-coordinate": {
                 0: { "id":"COORDSYS_DEFAULT", "title":"Valitse" },
                 1: { "id":"COORDSYS_ETRS-GK19", "title":"ETRS-GK19", "cls":"DATUM_EUREF-FIN GK" },
                 2: { "id":"COORDSYS_ETRS-GK20", "title":"ETRS-GK20", "cls":"DATUM_EUREF-FIN GK" },
@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
                 28: { "id":"COORDSYS_KKJ5", "title":"KKJ kaista 5", "cls":"DATUM_KKJ KKJ_KAISTA" },
                 29: { "id":"COORDSYS_KKJ_GEO", "title":"KKJ-Hayford", "cls":"DATUM_KKJ KOORDINAATISTO_MAANT_2D" }
                 },
-            "heigthsystem": {
+            "elevation": {
                 0: { "id":"KORKEUSJ_DEFAULT", "title":"Ei mitään","cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 1: { "id":"KORKEUSJ_N2000", "title":"N2000", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 2: { "id":"KORKEUSJ_N60", "title":"N60", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
