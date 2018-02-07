@@ -129,24 +129,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     var valueClass = clsSelector( datum ) + clsSelector( currentValue );
                     this.loopDropdowns( valueClass, "geodetic-coordinate" );
                     break;
-                case "KOORDINAATISTO_MAANT_3D":
-                    this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
-                    break;
                 case "KOORDINAATISTO_SUORAK_2D":
                     this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
                     dropdowns.projection.parent().parent().show();
                     break;
+                case "KOORDINAATISTO_MAANT_3D":
                 case "KOORDINAATISTO_SUORAK_3D":
-                    this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
-                    break;
                 case "KKJ_KAISTA":
-                    this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
-                    break;
                 case "TM":
-                    this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
-                    break;
-                    this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
                 case "GK":
+                    this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
                     break;
                 case "COORDSYS_DEFAULT":
                     me.instance.startingSystem = true;
@@ -185,8 +177,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 default:
                     break;
             }
-            var datum = clsSelector(datum) + clsSelector(coordinate);
-            dropdowns["geodetic-coordinate"].find(datum).show();
+            var classesToShow = clsSelector(datum) + clsSelector(coordinate);
+            dropdowns["geodetic-coordinate"].find(classesToShow).show();
             Object.keys( instances ).forEach( function ( key ) {
                 instances[key].update();
             });
