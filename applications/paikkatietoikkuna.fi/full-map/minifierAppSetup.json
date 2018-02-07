@@ -397,6 +397,15 @@
 	            }
 	        }
 	    }, {
+			"bundlename" : "telemetry",
+			"metadata" : {
+				"Import-Bundle" : {
+					"telemetry" : {
+						"bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+					}
+				}
+			}
+		}, {
 		    "bundlename" : "appsetup",
 		    "metadata" : {
 		        "Import-Bundle" : {
