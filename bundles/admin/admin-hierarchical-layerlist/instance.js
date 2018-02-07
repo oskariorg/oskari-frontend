@@ -238,18 +238,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             }
             return actualType;
         },
-        /**
-         * Find the nodes actual id which we are interested in.
-         * @param  {String} nodeId The node id string
-         * @return {Integer}        The node id integer
-         */
-        _findJSTreeNodeActualId: function(nodeId) {
-            if (nodeId === '#') {
-                return -1;
-            } else {
-                return nodeId.replace(/[^0-9]/g, '');
-            }
-        },
 
         /**
          * Save group or list ordering and grouping.
@@ -261,12 +249,13 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          */
         _saveOrder: function(event, data) {
             var me = this;
+            var draggedNodeData = jQuery(data.element).data();
             var draggedNode = data.data.origin.get_node(data.element);
             var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
             var parentNode = data.data.origin.get_node(draggedNode.parent);
-            var draggedNodeId = me._findJSTreeNodeActualId(draggedNode.id);
-            var draggedNodeNewParentId = me._findJSTreeNodeActualId(parentNode.id);
-            var draggedNodeOldParentId = me._findJSTreeNodeActualId(originalParentNode.id);
+            var draggedNodeId = draggedNodeData.layerId;
+            var draggedNodeNewParentId = parentNode.a_attr["data-group-id"];
+            var draggedNodeOldParentId = originalParentNode.a_attr["data-group-id"];
             //Get the new index inside the group's children
             var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
             var ajaxData = {};
