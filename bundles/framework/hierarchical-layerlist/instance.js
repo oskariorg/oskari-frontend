@@ -299,12 +299,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 if (event.getOperation() === 'add') {
                     layer = mapLayerService.findMapLayer(layerId);
                     flyout.handleLayerAdded(layer);
-                    // refresh layer count
-                    tile.refresh();
                 } else if (event.getOperation() === 'remove') {
-                    flyout.handleLayerRemoved(layerId);
-                    // refresh layer count
-                    tile.refresh();
+                flyout.handleLayerRemoved(layerId);
                 }
 
                 this.notifierService.notifyOskariEvent(event);

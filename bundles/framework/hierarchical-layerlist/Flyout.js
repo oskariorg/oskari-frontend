@@ -534,7 +534,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method  @public populateLayers
          */
         populateLayers: function() {
-            //"use strict";
             var me = this;
             var sandbox = this.instance.getSandbox(),
                 // populate layer list
@@ -573,7 +572,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * let's refresh ui to match current layers
          */
         handleLayerRemoved: function(layerId) {
-            //"use strict";
             var me = this;
             me.populateLayers();
         },
