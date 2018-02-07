@@ -285,11 +285,19 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     errorDialog.show(me.locale('errors.nodeDropSave.title'), me.locale('errors.nodeDropSave.message'));
                     errorDialog.fadeout();
+                    me.service.trigger('jstree-order-changed', {
+                        ajax: true,
+                        success: true
+                    });
                 },
                 success: function(response) {
                     var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     successDialog.show(me.locale('succeeses.nodeDropSave.title'), me.locale('succeeses.nodeDropSave.message'));
                     successDialog.fadeout();
+                    me.service.trigger('jstree-order-changed', {
+                        ajax: true,
+                        success: false
+                    });
                 }
             });
             me.service.trigger('jstree-order-changed', data);

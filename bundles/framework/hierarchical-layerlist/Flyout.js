@@ -74,6 +74,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
                 me.populateLayers();
             });
+
+            me.service.on('jstree-order-changed', function(data) {
+                // order not changed, need reload tree
+                if (data.ajax && data.success === false) {
+                    me.populateLayers();
+                }
+            });
         },
         /**
          * Update breadcrumbs

@@ -167,10 +167,12 @@ Oskari.clazz.define(
                 me._updateAllTools();
             });
 
-            me.service.on('jstree-order-changed', function() {
-                setTimeout(function() {
-                    me._updateAllTools();
-                }, 200);
+            me.service.on('jstree-order-changed', function(data) {
+                if (!data.ajax) {
+                    setTimeout(function() {
+                        me._updateAllTools();
+                    }, 200);
+                }
             });
 
             me.service.on('jstree-search', function(nodes, str, res) {
