@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
         'MapClickedEvent': function ( event, cb ) {
             this.clickCoordinates = event._lonlat;
             this.addMarkerForCoords( this.clickCoordinates );
-            this.instance.getViews().mapselect.getCoords( this.clickCoordinates )
+            this.instance.getViews().MapSelection.getCoords( this.clickCoordinates )
         }
     },
     getClickCoordinates: function() {
@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
     },
     addMarkerForCoords: function (coords, startingSystem) {
         // TODO: disable gfi when selecting markers
-        if ( !this.instance.isMapSelectMode()  ) {
+        if ( !this.instance.isMapSelectionMode()  ) {
             return;
         }
         if ( this.addMarkerReq ) {

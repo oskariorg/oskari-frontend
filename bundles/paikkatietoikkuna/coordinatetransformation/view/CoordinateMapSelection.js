@@ -1,15 +1,15 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.view.mapselect',
+Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection',
     function (instance) {
         var me = this;
         me.instance = instance;
         me.loc = me.instance.getLocalization("flyout");
         me.helper = me.instance.helper;
-        me.mapselectContainer = null;
+        me.mapSelectionContainer = null;
         me.mapcoords = [];
         me.dialog = null;
     }, {
         getName: function() {
-            return 'Oskari.coordinatetransformation.view.mapselect';
+            return 'Oskari.coordinatetransformation.view.CoordinateMapSelection';
         },
         setVisible: function ( visible ) {
             if(this.dialog === null && !visible) {
@@ -35,13 +35,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapselect',
                 me.helper.removeMarkers();
                 dialog.close();
                 me.instance.toggleViews("transformation");
-                me.instance.getViews().transformation.isMapSelect = false;
+                me.instance.getViews().transformation.isMapSelection = false;
                 me.mapcoords = [];
             });
 
             btn.setHandler(function() {
                 me.instance.getViews().transformation.inputTable.addRows( me.mapcoords );
-                me.instance.getViews().transformation.isMapSelect = false;
+                me.instance.getViews().transformation.isMapSelection = false;
                 me.instance.toggleViews("transformation");
                 me.mapcoords = [];
             });
@@ -51,13 +51,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapselect',
             this.mapClicksListener();
         },
         getCoords: function ( coords ) {
+            Object.keys( coords ).forEach( function ( key ) {
+                coords[key] = Math.round( coords[key] );
+            });
             if( coords != null ) {
-                this.mapcoords.push(coords);
+                this.mapcoords.push( coords );
             }
         },
         mapClicksListener: function() {
             var me = this;
-            if( me.instance.getViews().transformation.mapselect ) {
+            if( me.instance.getViews().transformation.MapSelection ) {
                 jQuery('#mapdiv').on("click", function () {});
             } else {
                 return;

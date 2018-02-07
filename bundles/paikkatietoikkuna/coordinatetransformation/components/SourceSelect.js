@@ -11,8 +11,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 '<form>'+
                     '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
                     '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
-                    '<input type="radio" id="mapselect" name="load" value="3"><label for="mapselect"> <span></span> <%= map %> </label>'+
-                    // '<input type="radio" class="mapselect" name="load" value="<%= map %>">'+
+                    '<input type="radio" id="mapselection" name="load" value="3"><label for="mapselection"> <span></span> <%= map %> </label>'+
                 '</form>'+
                 '</div>'
             ),

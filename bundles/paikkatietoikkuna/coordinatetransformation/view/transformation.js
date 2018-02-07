@@ -4,7 +4,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.instance = instance;
         me.loc = me.instance.getLocalization("flyout");
         me.helper = me.instance.helper;
-        me.isMapSelect = false;
+        me.isMapSelection = false;
         me.clipboardInsert = false;
         me.conversionContainer = null
         me.startingSystem = false;
@@ -246,7 +246,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     clipboardInfo.hide();
                     mapSelectInfo.hide();
                     fileInput.show();
-                    me.isMapSelect = false;
+                    me.isMapSelection = false;
                     me.clipboardInsert = false;
                 }
                 else if (this.value == '2') {
@@ -254,18 +254,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     mapSelectInfo.hide();
                     me.clipboardInsert = true;
                     clipboardInfo.show();
-                    me.isMapSelect = false;
+                    me.isMapSelection = false;
                 }
                 else if (this.value == '3') {
                     clipboardInfo.hide();
                     fileInput.hide();
                     mapSelectInfo.show(); 
-                    me.isMapSelect = true;    
+                    me.isMapSelection = true;    
                 }
                 me.inputTable.isEditable( me.clipboardInsert );
             });
                 jQuery('.selelctFromMap').on("click", function() {
-                    me.instance.toggleViews("mapselect");
+                    me.instance.toggleViews("MapSelection");
                     me.clipboardInsert = false;
                     me.selectEPSG3067();
                 });
