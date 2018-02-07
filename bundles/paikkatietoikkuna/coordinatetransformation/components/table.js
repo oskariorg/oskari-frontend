@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             row: _.template('<tr>' +
                                     '<td class="cell lon" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
                                     '<td class="cell lat" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td class="cell elevation" headers="ellipse_elevation" style=" border: 1px solid black;"></td>'+
+                                    '<td class="cell elevation oskari-hidden" headers="ellipse_elevation" style=" border: 1px solid black;"></td>'+
                                     '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
             table:_.template('<div class="coordinatefield-table" style="display:inline-block;">' +
@@ -50,14 +50,24 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         setElement: function ( el ) {
             this.container = el;
         },
+        toggleElevationRows: function () {
+            var elevationRows = this.getElements().rows.find('.elevation');
+            if ( elevationRows.hasClass('oskari-hidden') ) {
+                elevationRows.removeClass('oskari-hidden');
+            } else {
+                elevationRows.addClass('oskari-hidden');
+            }
+        },
         create: function () {
             var me = this;
                 var rowcounter = this.template.rowcounter({ rows: this.loc.utils.rows })
                                                                                 
-                var coordinatefield = this.template.table({  input: this.loc.coordinatefield.input,
-                                                                north:this.loc.coordinatefield.north,
-                                                                east:this.loc.coordinatefield.east,
-                                                                ellipse_elevation: "" });
+                var coordinatefield = this.template.table({
+                    input: this.loc.coordinatefield.input,
+                    north:this.loc.coordinatefield.north,
+                    east:this.loc.coordinatefield.east,
+                    ellipse_elevation: "" 
+                });
 
                 var table = this.template.tableWrapper();
                 table = jQuery(table);
@@ -136,7 +146,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             var table = this.getElements().table;
             table.bind('rowCountChanged', function (evt) {
                 var rows = me.getElements().rows;
-
             });
         },
         updateTitle: function (values) {

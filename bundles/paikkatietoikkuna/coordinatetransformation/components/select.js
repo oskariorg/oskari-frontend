@@ -53,8 +53,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                      }
                 });
             });
-                this.dropdowns = dropdowns;
-                this.selectInstances = selects;
+            this.dropdowns = dropdowns;
+            this.selectInstances = selects;
         },
         /**
          * @method handleSelectionChanged
@@ -65,92 +65,106 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
             var instances = this.getSelectInstances();
             var dropdowns = this.getDropdowns();
             var rows = me.instance.inputTable.getElements().rows;
-                element.on( "change", function() {
-                    var self = this;
-                    Object.keys( instances ).forEach( function ( key ) {
-                        var instanceLength = Object.keys(instances).length;
-                        dropdowns[key].find( 'option' ).hide();
-                        dropdowns[key].find( '.' + instances.datum.getValue() ).show();
 
-                        if ( instances.dimension.getValue() === "KOORDINAATISTO_MAANT_2D" ) {
-                            dropdowns.coordinatesystem.find('option').hide();
-                            dropdowns[key].find( '.' + instances.datum.getValue()+'.'+ instances.dimension.getValue() ).show();
-                        }
-                        if ( instances.dimension.getValue() === "KOORDINAATISTO_MAANT_3D" ) {
-                            dropdowns.coordinatesystem.find('option').hide();
-                            dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
-                        }
-                        if ( instances.dimension.getValue() === "KOORDINAATISTO_SUORAK_2D" ) {
-                            dropdowns.coordinatesystem.find('option').hide();
-                            dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
-                        }
-                        if ( instances.dimension.getValue() === "KOORDINAATISTO_SUORAK_3D" ) {
-                            dropdowns.coordinatesystem.find('option').hide();
-                            dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
-                        }
-                        // Karttaprojektiojärjestelmä special cases
-                        if ( instances.projection.getValue() === "KKJ_KAISTA" ) {
-                            dropdowns.coordinatesystem.find('option').hide();
-                            dropdowns[key].find('.'+ instances.projection.getValue()).show();
-                        }
-                        if ( instances.projection.getValue() === "TM" ) {
-                            dropdowns.coordinatesystem.find('option').hide();
-                            dropdowns[key].find('.'+ instances.projection.getValue()).show();
-                        } 
-                        if ( instances.projection.getValue() === "GK" ) {
-                            dropdowns.coordinatesystem.find('option').hide();
-                            dropdowns[key].find('.'+ instances.projection.getValue()).show();
-                        }
-                        if ( instances.coordinatesystem.getValue() !== "COORDSYS_DEFAULT" ) {
-                            me.instance.startingSystem = true;
-                        } else {
-                            me.instance.startingSystem = true;
-                        }
+            element.on( "change", function() {
+                var self = this;
+                Object.keys( instances ).forEach( function ( key ) {
+                    var instanceLength = Object.keys(instances).length;
+                    dropdowns[key].find( 'option' ).hide();
+                    dropdowns[key].find( '.' + instances.datum.getValue() ).show();
 
-                        if ( instances.heigthsystem.getValue() === "KORKEUSJ_DEFAULT") {
-                            rows.each( function ( idx, row ) {
-                                var lastCell = jQuery(this).find('td:nth-last-child(2)');
-                                if( !lastCell.hasClass( 'elevationsystem' ) ) {
-                                    lastCell.addClass( 'elevationsystem');
-                                }
-                            });
-                        } else {
-                            rows.each( function ( idx, row ) {
-                                var lastCell = jQuery(this).find('td:nth-last-child(2)');
-                                lastCell.attr("contenteditable", false);
-                                lastCell.removeClass('elevationsystem');
-                            })
-                        }
-                        // show the hidden select
-                        if ( instances.dimension.getValue() === 'KOORDINAATISTO_SUORAK_2D' ) {
-                            dropdowns.projection.parent().parent().show();
-                        } else {
-                            dropdowns.projection.parent().parent().hide();
-                            instances.projection.resetToPlaceholder();
-                        }
-
-                        if ( instances.datum.getValue() !== me.instance.currentDatum || me.instance.currentDatum === undefined ) {
-                            if ( key !== 'datum' ) {
-                                instances[key].resetToPlaceholder();
+                    if ( instances.dimension.getValue() === "KOORDINAATISTO_MAANT_2D" ) {
+                        dropdowns.coordinatesystem.find('option').hide();
+                        dropdowns[key].find( '.' + instances.datum.getValue()+'.'+ instances.dimension.getValue() ).show();
+                    }
+                    if ( instances.dimension.getValue() === "KOORDINAATISTO_MAANT_3D" ) {
+                        dropdowns.coordinatesystem.find('option').hide();
+                        dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
+                    }
+                    if ( instances.dimension.getValue() === "KOORDINAATISTO_SUORAK_2D" ) {
+                        dropdowns.coordinatesystem.find('option').hide();
+                        dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
+                    }
+                    if ( instances.dimension.getValue() === "KOORDINAATISTO_SUORAK_3D" ) {
+                        dropdowns.coordinatesystem.find('option').hide();
+                        dropdowns[key].find( '.' + instances.dimension.getValue() ).show();
+                    }
+                    // Karttaprojektiojärjestelmä special cases
+                    if ( instances.projection.getValue() === "KKJ_KAISTA" ) {
+                        dropdowns.coordinatesystem.find('option').hide();
+                        dropdowns[key].find('.'+ instances.projection.getValue()).show();
+                    }
+                    if ( instances.projection.getValue() === "TM" ) {
+                        dropdowns.coordinatesystem.find('option').hide();
+                        dropdowns[key].find('.'+ instances.projection.getValue()).show();
+                    } 
+                    if ( instances.projection.getValue() === "GK" ) {
+                        dropdowns.coordinatesystem.find('option').hide();
+                        dropdowns[key].find('.'+ instances.projection.getValue()).show();
+                    }
+                    if ( instances.coordinatesystem.getValue() !== "COORDSYS_DEFAULT" ) {
+                        me.instance.startingSystem = true;
+                    } else {
+                        me.instance.startingSystem = true;
+                    }
+                    if ( instances.heigthsystem.getValue() === "KORKEUSJ_DEFAULT") {
+                        var isEmpty = true;
+                        var elevationCells = me.instance.inputTable.getElements().rows.find('.elevation');
+                        elevationCells.attr("contenteditable", false);
+                        //check if elevationcells have value, if true don't hide but grey out
+                        jQuery.each( elevationCells, function (key, val) {
+                            jQuery(val).html().trim();
+                            if ( !jQuery( val ).is(':empty') ) {
+                                isEmpty = false;
                             }
+                        });
+                        if ( !isEmpty ) {
+                            elevationCells.addClass('disabled');
+                        } else {
+                            me.instance.inputTable.toggleElevationRows();
                         }
-                        values = {};
-                        instances[key].update();
-                        // get value of each select
-                        for ( var j = 0; j < instanceLength; j++ ) {
-                            var vl = instances[ Object.keys( instances) [j] ].getValue();
-                            values[ Object.keys( instances) [j] ] = vl;
+                    } else {
+                        var elevationCells = me.instance.inputTable.getElements().rows.find('.elevation');
+                        elevationCells.attr("contenteditable", true);
+
+                        if ( elevationCells.hasClass('disabled') ) {
+                            elevationCells.removeClass('disabled');
+                        } else if( !elevationCells.hasClass('oskari-hidden') ) {
+                            return;
+                        } else {
+                            me.instance.inputTable.toggleElevationRows();   
+                        }             
+                    }
+                    // show the hidden select
+                    if ( instances.dimension.getValue() === 'KOORDINAATISTO_SUORAK_2D' ) {
+                        dropdowns.projection.parent().parent().show();
+                    } else {
+                        dropdowns.projection.parent().parent().hide();
+                        instances.projection.resetToPlaceholder();
+                    }
+
+                    if ( instances.datum.getValue() !== me.instance.currentDatum || me.instance.currentDatum === undefined ) {
+                        if ( key !== 'datum' ) {
+                            instances[key].resetToPlaceholder();
                         }
-                        // last key update stuff
-                            if( self.id === 'inputcoordsystem' ) {
-                                me.instance.inputTable.updateTitle( values );
-                                me.instance.inputTable.isEditable( me.instance.clipboardInsert );
-                            } else if( self.id === 'targetcoordsystem' ) {
-                                me.instance.outputTable.updateTitle( values );
-                            }
-                            me.instance.currentDatum = instances.datum.getValue();
-                    });
+                    }
+                    values = {};
+                    instances[key].update();
+                    // get value of each select
+                    for ( var j = 0; j < instanceLength; j++ ) {
+                        var vl = instances[ Object.keys( instances) [j] ].getValue();
+                        values[ Object.keys( instances) [j] ] = vl;
+                    }
+                    // last key update stuff
+                        if( self.id === 'inputcoordsystem' ) {
+                            me.instance.inputTable.updateTitle( values );
+                            me.instance.inputTable.isEditable( me.instance.clipboardInsert );
+                        } else if( self.id === 'targetcoordsystem' ) {
+                            me.instance.outputTable.updateTitle( values );
+                        }
+                        me.instance.currentDatum = instances.datum.getValue();
                 });
+            });
             
             return values;
         }

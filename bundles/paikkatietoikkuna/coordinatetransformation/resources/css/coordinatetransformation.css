@@ -25,6 +25,9 @@
 #rowwidth {
     max-width: 100px !important;
 }
+.disabled {
+    background-color: grey !important;
+}
 .coordinatetransformation-flyout .header {
     font-size: 15px;
     line-height: 22px;
