@@ -146,13 +146,8 @@ Oskari.clazz.define(
                         opts
                     );
                     me.getJsTreeElement().jstree().create_node(obj.parent, obj);
-                    if (data.type === 'group') {
-                        me._addGroupTools();
-                    } else if (data.type === 'subgroup') {
-                        me._addSubgroupTools();
-                    } else {
-                        me._addSubgroupSubgroupTools();
-                    }
+                    me._updateAllTools();
+
                 } else {
                     var layerCount = me._mapLayerService.getAllLayerGroups(data.id).layers.length;
                     var group = me._mapLayerService.getAllLayerGroups(data.id);
@@ -162,56 +157,48 @@ Oskari.clazz.define(
                     node.a_attr = opts.a_attr;
 
                     me.getJsTreeElement().jstree().rename_node(data.type + '-' + data.id, me.sb.getLocalizedProperty(data.name) + ' (' + layerCount + ')' + '<div class="' + data.type + '-tools"></div>');
-                    if (data.type === 'group') {
-                        me._addGroupTools(me.getJsTreeElement().find('#' + data.type + '-' + data.id));
-                    } else if (data.type === 'subgroup') {
-                        me._addSubgroupTools(me.getJsTreeElement().find('#' + data.type + '-' + data.id));
-                    } else {
-                        me._addSubgroupSubgroupTools(me.getJsTreeElement().find('#' + data.type + '-' + data.id));
-                    }
+                    me._updateAllTools();
                 }
             });
 
             // group deleted
             me.service.on('group-deleted', function(data) {
                 me.getJsTreeElement().jstree().delete_node(data.type + '-' + data.id);
-                if (data.type === 'group') {
-                    me._addGroupTools();
-                } else if (data.type === 'subgroup') {
-                    me._addSubgroupTools();
-                } else {
-                    me._addSubgroupSubgroupTools();
-                }
+                me._updateAllTools();
             });
 
             me.service.on('jstree-order-changed', function() {
                 setTimeout(function() {
-                    me._addGroupTools();
-                    me._addSubgroupTools();
-                    me._addSubgroupSubgroupTools();
-                    me._addLayerTools();
+                    me._updateAllTools();
                 }, 200);
             });
 
             me.service.on('jstree-search', function(nodes, str, res) {
                 setTimeout(function() {
-                    me._addGroupTools();
-                    me._addSubgroupTools();
-                    me._addSubgroupSubgroupTools();
-                    me._addLayerTools();
+                    me._updateAllTools();
                 }, 200);
             });
 
             me.service.on('jstree-search-clear', function(nodes, str, res) {
                 setTimeout(function() {
-                    me._addGroupTools();
-                    me._addSubgroupTools();
-                    me._addSubgroupSubgroupTools();
-                    me._addLayerTools();
+                    me._updateAllTools();
                 }, 200);
             });
 
 
+        },
+
+        /**
+         * Update all tools
+         * @method  _updateAllTools
+         * @private
+         */
+        _updateAllTools: function() {
+            var me = this;
+            me._addGroupTools();
+            me._addSubgroupTools();
+            me._addSubgroupSubgroupTools();
+            me._addLayerTools();
         },
         /**
          * Add group tools
