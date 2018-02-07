@@ -3,15 +3,15 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "coordinatetransformation",
     "value": {
-        "title": "Coordinateconversion",
+        "title": "Coordinate Transformation",
         "tile": {
-            "title": "Coordinateconversion"
+            "title": "Coordinate Transformation"
         },
         "flyout": {
-        "title": {
-            "input": "Lähtötiedot",
-            "result": "Tulostiedot"
-        },
+            "title": {
+                "input": "Lähtötiedot",
+                "result": "Tulostiedot"
+            },
             "coordinatesystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "geodetic_datum": "Geodeettinen datumi",
@@ -52,7 +52,7 @@ Oskari.registerLocalization(
                 "geox":"Geosentrinen X [m]",
                 "geoy":"Geosentrinen Y [m]",
                 "geoz":"Geosentrinen Z [m]",
-                "ellipse_height":"Ellipsoidinen korkeus [m]"
+                "ellipse_elevation":"Ellipsoidinen korkeus [m]"
             },
             "utils": {
                 "clear": "Tyhjennä taulukot",
@@ -83,6 +83,18 @@ Oskari.registerLocalization(
                     "title": "Lähtöaineiston ominaisuudet",
                 }
             }
+        },
+        "coordinate-system-info" : {
+            "geodetic": "geodetic",
+            "coordinate": "coordinate",
+            "projection": "projection",
+            "geodetic-coordinate": "geodetic-coordinate",
+            "elevation": "elevation",
+
+        },
+        "infoPopup" : {
+            "title": "Coordinate System Info",
+            "ok": "Ok"
         }
     }
 });

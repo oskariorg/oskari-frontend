@@ -66,6 +66,9 @@ Oskari.clazz.define("Oskari.coordinatetransformation.bundle", function () {
             "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/view/CoordinateMapSelection.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/view/CoordinateSystemInformation.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/view/mapmarkers.js"
         }, {
             "type": "text/javascript",

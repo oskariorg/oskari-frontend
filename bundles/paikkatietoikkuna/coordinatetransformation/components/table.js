@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                                                 '<tr>' +
                                                     '<th id="nort"><%= north %></th>'+
                                                     '<th id="east"><%= east %></th>'+
-                                                    '<th id="ellipse_height" ><%= ellipse_height %></th>'+
+                                                    '<th id="ellipse_elevation" ><%= ellipse_elevation %></th>'+
                                                 '</tr>'+
                                              '</thead>'+
                                         ' </table>'+
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             row: _.template('<tr>' +
                                     '<td class="cell lon" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
                                     '<td class="cell lat" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td class="cell height" headers="ellipse_height" style=" border: 1px solid black;"></td>'+
+                                    '<td class="cell elevation" headers="ellipse_elevation" style=" border: 1px solid black;"></td>'+
                                     '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
             table:_.template('<div class="coordinatefield-table" style="display:inline-block;">' +
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 var coordinatefield = this.template.table({  input: this.loc.coordinatefield.input,
                                                                 north:this.loc.coordinatefield.north,
                                                                 east:this.loc.coordinatefield.east,
-                                                                ellipse_height: "" });
+                                                                ellipse_elevation: "" });
 
                 var table = this.template.tableWrapper();
                 table = jQuery(table);
@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             } else if ( values.dimension === "KOORDINAATISTO_MAANT_3D" ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
-                z = this.loc.coordinatefield.ellipse_height
+                z = this.loc.coordinatefield.ellipse_elevation
             }
             if ( values.dimension === "KOORDINAATISTO_SUORAK_3D" ) {
                     x = this.loc.coordinatefield.geox
@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
 
                 var header = this.template.header({  north: x,
                                                      east: y,
-                                                     ellipse_height: z });
+                                                     ellipse_elevation: z });
 
                 jQuery( header ).insertBefore( jQuery( this.getContainer() ).find(".oskari-table-content") );
             }

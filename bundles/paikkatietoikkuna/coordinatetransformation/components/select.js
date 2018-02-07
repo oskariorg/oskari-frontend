@@ -110,15 +110,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                         if ( instances.heigthsystem.getValue() === "KORKEUSJ_DEFAULT") {
                             rows.each( function ( idx, row ) {
                                 var lastCell = jQuery(this).find('td:nth-last-child(2)');
-                                if( !lastCell.hasClass( 'heightsystem' ) ) {
-                                    lastCell.addClass( 'heightsystem');
+                                if( !lastCell.hasClass( 'elevationsystem' ) ) {
+                                    lastCell.addClass( 'elevationsystem');
                                 }
                             });
                         } else {
                             rows.each( function ( idx, row ) {
                                 var lastCell = jQuery(this).find('td:nth-last-child(2)');
                                 lastCell.attr("contenteditable", false);
-                                lastCell.removeClass('heightsystem');
+                                lastCell.removeClass('elevationsystem');
                             })
                         }
                         // show the hidden select

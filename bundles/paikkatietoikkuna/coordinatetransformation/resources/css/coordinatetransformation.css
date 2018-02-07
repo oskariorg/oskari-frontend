@@ -1,6 +1,9 @@
 .coordinatetransformation-flyout > .oskari-flyoutcontentcontainer{
     max-height: 875px !important;
 }
+.coordinatetransformation-flyout {
+    top:0 !important;
+}
 .transformation-wrapper {
     max-width: 50em !important;
     display: flex;
@@ -11,7 +14,7 @@
     font-size: 12px;
     padding-left: 3px;
 }
- .geodetic-datum, .coordinate-system, .map-projection, .geodetic-coordinatesystem, .height-system {
+ .geodetic-datum, .coordinate-system, .projection-system, .geodetic-coordinatesystem, .elevation-system {
     clear: left;
     padding-top: 0.875em; 
 }
