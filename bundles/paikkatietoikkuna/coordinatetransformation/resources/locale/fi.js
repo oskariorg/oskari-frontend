@@ -3,6 +3,7 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "coordinatetransformation",
     "value": {
+        "title": "Koordinaattimuunnos",
         "tile": {
             "title": "Koordinaattimuunnos"
         },
@@ -31,6 +32,7 @@ Oskari.registerLocalization(
                 "link":"valitse selaamalla",
                 "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
                 "mapinfo":"Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
+                "select": "Valitse",
                 "uploading":"Ladataan",
                 "success":"Valmis",
                 "error":"Virhe!",

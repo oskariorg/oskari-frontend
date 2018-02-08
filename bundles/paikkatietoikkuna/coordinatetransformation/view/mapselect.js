@@ -34,15 +34,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapselect',
             cancelBtn.setHandler(function() {
                 me.helper.removeMarkers();
                 dialog.close();
-                me.instance.toggleViews("conversion");
-                me.instance.getViews().conversion.isMapSelect = false;
+                me.instance.toggleViews("transformation");
+                me.instance.getViews().transformation.isMapSelect = false;
                 me.mapcoords = [];
             });
 
             btn.setHandler(function() {
-                me.instance.getViews().conversion.inputTable.addRows( me.mapcoords );
-                me.instance.getViews().conversion.isMapSelect = false;
-                me.instance.toggleViews("conversion");
+                me.instance.getViews().transformation.inputTable.addRows( me.mapcoords );
+                me.instance.getViews().transformation.isMapSelect = false;
+                me.instance.toggleViews("transformation");
                 me.mapcoords = [];
             });
 
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapselect',
         },
         mapClicksListener: function() {
             var me = this;
-            if( me.instance.getViews().conversion.mapselect ) {
+            if( me.instance.getViews().transformation.mapselect ) {
                 jQuery('#mapdiv').on("click", function () {});
             } else {
                 return;

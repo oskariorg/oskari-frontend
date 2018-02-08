@@ -1,15 +1,12 @@
 .coordinatetransformation-flyout > .oskari-flyoutcontentcontainer{
     max-height: 875px !important;
 }
-.coordinatetransformation-flyout {
-    top: 0 !important;
-}
-.conversionwrapper {
+.transformation-wrapper {
     max-width: 50em !important;
     display: flex;
     flex-flow: row wrap;
 }
-.coordinateconversion-csystem {
+.transformation-system {
     display: inline-block;
     font-size: 12px;
     padding-left: 3px;
@@ -42,21 +39,24 @@
     float:left;
     width: 20em !important;
 }
-.coordinatetransformation-flyout .conversionbtn {
+.coordinatetransformation-flyout .transformation-button {
     padding-left: 1.5em;
     float:left;
     margin-top: 6.25rem;
 }
-.coordinateconversion-buttons{
+.util-row{
     clear: left;
     width: 100%;
     padding-top: 1em;
 }
-.coordinateconversion-buttons.show.clear{
+.util-row.show.clear{
     float:left;
 }
-.coordinateconversion-datasource {
+.coordinate-datasource {
     width: 100%;
+}
+.sourceWrapper {
+    padding-bottom: 2em;
 }
 .coordinatetransformation-flyout .export, .rowcount {
     float:right;
@@ -65,7 +65,7 @@
 .coordinatetransformation-flyout .heightsystem {
     background-color: lightgray;
 }
-.coordinatetransformation-flyout #convert {
+.coordinatetransformation-flyout #transform {
     font-size:80%;
     vertical-align: middle;
 }
@@ -233,7 +233,7 @@
 }
 
 @media screen and (max-width: 640px) {
-    .conversionwrapper {
+    .transformation-wrapper {
         max-width: 27em !important;
     }
 
@@ -251,20 +251,20 @@
     .coordinatefield-result {
         order:6;
     }
-    .conversionbtn {
+    .transformation-button {
         order:5;
         clear:both;
         /* margin-top: 6.25rem; */
     }
-    .coordinateconversion-datasource {
+    .coordinate-datasource {
         order:1;
     }
-    .coordinateconversion-buttons {
+    .util-row {
         order: 7;
     }
 }
 @media screen and (max-width: 785px) {
-    .conversionwrapper {
+    .transformation-wrapper {
         max-width: 27em !important;
     }
     #targetcoordsystem {
@@ -281,15 +281,15 @@
     .coordinatefield-result {
         order:6;
     }
-    .conversionbtn {
+    .transformation-button {
         order:5;
         clear:both;
         /* margin-top: 6.25rem; */
     }
-    .coordinateconversion-datasource {
+    .coordinate-datasource {
         order:1;
     }
-    .coordinateconversion-buttons {
+    .util-row {
         order: 7;
     }
 

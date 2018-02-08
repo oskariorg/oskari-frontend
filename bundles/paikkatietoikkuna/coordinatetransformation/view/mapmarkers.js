@@ -26,9 +26,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapmarkers',
 
             btn.addClass('primary');
 
-
             btn.setHandler(function() {
-                me.instance.toggleViews("conversion");
+                me.instance.toggleViews("transformation");
             });
 
             dialog.show('View', this.loc.datasourceinfo.mapmarkers, [btn]);
