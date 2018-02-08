@@ -42,6 +42,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             btn.setHandler(function() {
                 me.instance.getViews().transformation.inputTable.addRows( me.mapcoords );
                 me.instance.getViews().transformation.isMapSelection = false;
+                me.instance.getViews().transformation.selectMapProjectionValues();
                 me.instance.toggleViews("transformation");
                 me.mapcoords = [];
             });

@@ -267,10 +267,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 jQuery('.selelctFromMap').on("click", function() {
                     me.instance.toggleViews("MapSelection");
                     me.clipboardInsert = false;
-                    me.selectEPSG3067();
                 });
          },
-        selectEPSG3067: function () {
+        /**
+         * @method selectMapProjectionValues
+         * Inits the on change listeners for the radio buttons
+         */
+        selectMapProjectionValues: function () {
             var input = this.inputSystem.getSelectInstance();
             // EPSG-3067 settings
             var sourceSelection = this.setSelectionValue( input.datum, "DATUM_EUREF-FIN" );
