@@ -159,10 +159,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var input = this.inputSystem.getSelectInstance();
             var target = this.outputSystem.getSelectInstance();
 
-            var sourceSelection = this.getSelectionValue( input.coordinatesystem );
-            var targetSelection = this.getSelectionValue( target.coordinatesystem );
-            var sourceElevationSelection = this.getSelectionValue( input.heigthsystem );
-            var targetElevationSelection = this.getSelectionValue( target.heigthsystem );
+            var sourceSelection = this.getSelectionValue( input["geodetic-coordinate"] );
+            var targetSelection = this.getSelectionValue( target["geodetic-coordinate"] );
+            var sourceElevationSelection = this.getSelectionValue( input.elevation );
+            var targetElevationSelection = this.getSelectionValue( target.elevation );
 
             var source = this.helper.getMappedEPSG( sourceSelection );
             var target = this.helper.getMappedEPSG( targetSelection );
@@ -274,9 +274,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var input = this.inputSystem.getSelectInstance();
             // EPSG-3067 settings
             var sourceSelection = this.setSelectionValue( input.datum, "DATUM_EUREF-FIN" );
-            var sourceelevationSelection = this.setSelectionValue( input.dimension, "KOORDINAATISTO_SUORAK_2D" );
+            var sourceelevationSelection = this.setSelectionValue( input.coordinate, "KOORDINAATISTO_SUORAK_2D" );
             var sourceSelection = this.setSelectionValue( input.projection, "TM" );
-            var sourceelevationSelection = this.setSelectionValue( input.coordinatesystem, "COORDSYS_ETRS-TM35FIN" );
+            var sourceelevationSelection = this.setSelectionValue( input["geodetic-coordinate"], "ETRS-TM35FIN" );
         },
         /**
          * @method handleRadioButtons
