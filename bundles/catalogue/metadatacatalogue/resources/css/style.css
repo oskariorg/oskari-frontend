@@ -6,6 +6,9 @@ div.metadataCatalogueContainer {
   div.metadataCatalogueContainer div.main {
     width: 100%;
     height: 100%; }
+
+  div.metadataCatalogueContainer div.main div.metadataSearching {
+      overflow-y: hidden; }
   div.metadataCatalogueContainer div.moreLess {
     padding: 10px 0; }
   div.metadataCatalogueContainer th.name, div.metadataCatalogueContainer td.name {

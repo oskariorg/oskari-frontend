@@ -9,6 +9,10 @@ div.metadataCatalogueContainer {
     div.main {
         width: 100%;
         height: 100%;
+        
+        div.metadataSearching {
+            overflow-y: hidden;
+        }
     }
 
     div.moreLess {
