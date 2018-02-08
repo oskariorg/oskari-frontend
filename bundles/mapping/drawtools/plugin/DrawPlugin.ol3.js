@@ -127,6 +127,9 @@ Oskari.clazz.define(
             var me = this;
 
             me.drawMultiGeom = options.allowMultipleDrawing === 'multiGeom';
+            if(me._gfiTimeout){
+                clearTimeout(me._gfiTimeout);
+            }
             //disable gfi
             me.getMapModule().setDrawingMode(true);
             // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
@@ -348,9 +351,15 @@ Oskari.clazz.define(
                 // layer not found for functionality id, nothing to do?
                 return;
             }
-
             if(supressEvent === true) {
                 me.clearDrawing(id);
+                //another bundle sends StopDrawingRequest to clear own drawing (e.g. toolselected)
+                //skip deactivate draw and modify controls
+                //should be also with suppressEvent !== true ??
+                //TODO: remove this hack, when stopdrawing, startdrawing, cleardrawing,. methods and requests are handled more properly
+                if (me._id !== id){
+                    return;
+                }
             } else {
                 me.sendDrawingEvent(id, options);
             }
@@ -360,7 +369,7 @@ Oskari.clazz.define(
             me._cleanupInternalState();
             me.getMap().un('pointermove', me.pointerMoveHandler, me);
             //enable gfi
-            setTimeout(function () {
+            me._gfiTimeout = setTimeout(function () {
                 me.getMapModule().setDrawingMode(false);
             }, 500);
         },
