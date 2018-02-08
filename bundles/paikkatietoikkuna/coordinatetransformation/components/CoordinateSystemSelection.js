@@ -10,20 +10,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this.projectionSelected = false;
         this._template = {
             systemWrapper: jQuery('<div class="coordinateSystemWrapper"></div>'),
-            coordinatSystemSelection: _.template(
+            coordinateSystemSelection: _.template(
                 '<div class="transformation-system">' +
-                    '<h5><%= title %></h5>'+
-                    '<div class="system geodetic-datum" data-system="datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
-                    '<div class="system coordinate" data-system="coordinate"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div>  </div> </br> ' +
-                    '<div class="system projection" style="display:none;" data-system="projection"> <%= map_projection %> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br>' +
-                    '<div class="system geodetic-coordinate" data-system="geodetic-coordinate"><b class="dropdown_title"><%= geodetic_coordinate_system %> *</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
-                    '<div class="system elevation" data-system="elevation"><b class="dropdown_title"><%= elevation_system %></b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> '+
+                    '<h5> ${ title }</h5>'+
+                    '<div class="system geodetic-datum" data-system="datum"><b class="dropdown_title"> ${ geodetic_datum }</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
+                    '<div class="system coordinate" data-system="coordinate"><b class="dropdown_title"> ${ coordinate_system }</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div>  </div> </br> ' +
+                    '<div class="system projection" style="display:none;" data-system="projection"> ${ map_projection } <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br>' +
+                    '<div class="system geodetic-coordinate" data-system="geodetic-coordinate"><b class="dropdown_title"> ${ geodetic_coordinate_system } *</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
+                    '<div class="system elevation" data-system="elevation"><b class="dropdown_title"> ${ elevation_system } </b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> '+
                 '</div>'
             ),
         }
-        if (this.element === null) {
-            this.createUi();
-        }
+        this.createUi();
     }, {
         getName: function() {
             return 'Oskari.coordinatetransformation.view.SourceSelect';
@@ -37,7 +35,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         createUi: function () {
             var wrapper = this._template.systemWrapper.clone();
 
-            var coordinatSystemSelection = this._template.coordinatSystemSelection({
+            var coordinateSystemSelection = this._template.coordinateSystemSelection({
                 title: this.loc.coordinatesystem.title,
                 geodetic_datum: this.loc.coordinatesystem.geodetic_datum,
                 coordinate_system: this.loc.coordinatesystem.coordinate_system,
@@ -45,7 +43,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 geodetic_coordinate_system:this.loc.coordinatesystem.geodetic_coordinatesystem,
                 elevation_system:this.loc.coordinatesystem.heigth_system 
             });
-            wrapper.append(coordinatSystemSelection);
+            wrapper.append(coordinateSystemSelection);
             this.setElement(wrapper);
             this.populateSelect();
             this.handleInfoLink();
@@ -130,7 +128,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var clsSelector = this.makeClassSelector;
 
             me.instance.startingSystem = true;
-
+            
             switch ( currentValue ) {
                 case "DATUM_DEFAULT":
                 case "DATUM_KKJ":
