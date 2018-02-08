@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this.systemInfo = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
         this.selectInstance = null;
         this.dropdowns = null;
+        this.projectionSelected = false;
         this._template = {
             systemWrapper: jQuery('<div class="coordinateSystemWrapper"></div>'),
             coordinatSystemSelection: _.template(
@@ -70,7 +71,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 me.systemInfo.show( jQuery( this ), key );
             });
         },
-        handleSelectionChanged:function () {
+        handleSelectionChanged: function () {
             var element = this.getElement();
             var systems = element.find('.system');
             var me = this;
@@ -83,10 +84,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         handleSystemChange: function (e) {
             var current = this.selectInstance[e.currentTarget.dataset.system];
             var currentValue = current.getValue();
-            this.checkValueAgainstRules(currentValue);
+            this.handleSelectValueChange(currentValue);
         },
-        loopDropdowns: function (valueClass, keyToEmpty) {
+        /**
+         * @method handleDropdownOptions
+         * @param {string} valueClass - class selector to show options for 
+         * @param {string} keyToEmpty - optional param to empty only one specific key in the dropdown 
+         */
+        handleDropdownOptions: function (valueClass, keyToEmpty) {
             var dropdowns = this.dropdowns;
+            if ( valueClass.indexOf("DATUM_DEFAULT") !== -1 ) {
+                //show all options
+                Object.keys( dropdowns ).forEach( function ( key ) {
+                    dropdowns[key].find( 'option' ).show();
+                });
+                return;
+            }
             if ( typeof keyToEmpty === 'undefined') {
                 Object.keys( dropdowns ).forEach( function ( key ) {
                     dropdowns[key].find( 'option' ).hide();
@@ -102,43 +115,47 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         makeClassSelector: function (variable) {
             return "." + variable;
         },
-        checkValueAgainstRules: function (currentValue) {
-            //we want to hide dropdown selections based on the value we receive
+        /**
+         * @method handleSelectValueChange
+         * @param {string} currentValue - value of the dropdown we changed
+         * @desc handle hiding and showing dropdown options based on user selection 
+         */
+        handleSelectValueChange: function (currentValue) {
             var me = this;
             var dropdowns = this.dropdowns;
             var instances = this.selectInstance;
             var datum = instances.datum.getValue();
             var coordinate = instances.coordinate.getValue();
+            var projection = instances.projection.getValue();
             var clsSelector = this.makeClassSelector;
 
-            // weird
-            dropdowns.projection.parent().parent().hide();
-            instances.projection.resetToPlaceholder();
             me.instance.startingSystem = true;
 
             switch ( currentValue ) {
                 case "DATUM_DEFAULT":
-                    break;
                 case "DATUM_KKJ":
-                    this.loopDropdowns( clsSelector( currentValue) );
-                    break;
                 case "DATUM_EUREF-FIN":
-                    this.loopDropdowns( clsSelector( currentValue) );
+                    this.projectionSelected = false;
+                    this.resetSelectToPlaceholder();
+                    this.handleDropdownOptions( clsSelector( currentValue) );
                     break;
                 case "KOORDINAATISTO_MAANT_2D":
+                    this.projectionSelected = false;
                     var valueClass = clsSelector( datum ) + clsSelector( currentValue );
-                    this.loopDropdowns( valueClass, "geodetic-coordinate" );
-                    break;
-                case "KOORDINAATISTO_SUORAK_2D":
-                    this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
-                    dropdowns.projection.parent().parent().show();
+                    this.handleDropdownOptions( valueClass, "geodetic-coordinate" );
                     break;
                 case "KOORDINAATISTO_MAANT_3D":
                 case "KOORDINAATISTO_SUORAK_3D":
+                    this.projectionSelected = false;
+                    this.handleDropdownOptions( clsSelector( currentValue ), "geodetic-coordinate" );
+                    instances["geodetic-coordinate"].resetToPlaceholder();
+                    break;
+                case "KOORDINAATISTO_SUORAK_2D":
                 case "KKJ_KAISTA":
                 case "TM":
                 case "GK":
-                    this.loopDropdowns( clsSelector( currentValue ), "geodetic-coordinate" );
+                    this.projectionSelected = true;
+                    this.handleDropdownOptions( clsSelector( currentValue ), "geodetic-coordinate" );
                     break;
                 case "COORDSYS_DEFAULT":
                     me.instance.startingSystem = true;
@@ -177,8 +194,27 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 default:
                     break;
             }
-            var classesToShow = clsSelector(datum) + clsSelector(coordinate);
+
+            var classesToShow;
+            if ( this.projectionSelected ) {
+                dropdowns.projection.parent().parent().show();
+                classesToShow = clsSelector(datum) + clsSelector(projection);
+            } else {
+                dropdowns.projection.parent().parent().hide();
+                instances.projection.resetToPlaceholder();
+                classesToShow = clsSelector(datum) + clsSelector(coordinate);
+            }
             dropdowns["geodetic-coordinate"].find(classesToShow).show();
+            this.updateSelectValues( instances );
+        },
+        resetSelectToPlaceholder: function () {
+            //reset all but the datum
+            this.selectInstance.coordinate.resetToPlaceholder();
+            this.selectInstance.projection.resetToPlaceholder();
+            this.selectInstance["geodetic-coordinate"].resetToPlaceholder();
+            this.selectInstance.elevation.resetToPlaceholder();
+        },
+        updateSelectValues: function ( instances ) {
             Object.keys( instances ).forEach( function ( key ) {
                 instances[key].update();
             });
