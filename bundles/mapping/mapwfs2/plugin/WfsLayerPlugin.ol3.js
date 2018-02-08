@@ -782,7 +782,9 @@ Oskari.clazz.define(
                 var OLLayer = this.getOLMapLayer(
                     event.getMapLayer()
                 );
-                //OLLayer.redraw();
+                if (typeof OLLayer.getSource().refresh ==='function'){
+                    OLLayer.getSource().refresh();
+                }
 
                 this.getIO().setMapLayerStyle(
                     event.getMapLayer().getId(),
@@ -1560,6 +1562,7 @@ Oskari.clazz.define(
          */
         deleteTileCache: function (layerId, styleName) {
             // TODO: force reload of tiles - required for custom style change
+            // now layer's source is refreshed in changeMapLayerStyleHandler
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
