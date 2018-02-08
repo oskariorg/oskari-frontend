@@ -115,6 +115,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
                 sandbox.notifyAll(mapClickedEvent);
             });
+            map.on('dblclick', function () {
+                if (me.getDrawingMode()) {
+                    return false;
+                }
+            });
 
             map.on('pointermove', function (evt) {
 
