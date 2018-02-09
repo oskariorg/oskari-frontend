@@ -44,6 +44,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          */
         _bindExtenderServiceListeners: function() {
             var me = this;
+            var mapLayerService = me.instance.sandbox.getService(
+                'Oskari.mapframework.service.MapLayerService'
+            );
 
             me.service.on('option.added', function() {
                 me.populateLayers();
@@ -55,9 +58,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
             me.service.on('admin-layer', function(data) {
                 var mode = data.mode;
-                var mapLayerService = me.instance.sandbox.getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+
                 if (mode === 'delete') {
                     mapLayerService.removeLayer(data.id);
                 } else if (mode === 'add') {
@@ -80,6 +81,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 if (data.ajax && data.success === false) {
                     me.populateLayers();
                 }
+            });
+
+
+            // group added
+            me.service.on('group-added', function(data) {
+                // update service groups
+                mapLayerService.updateLayerGroups(data);
+                me.populateLayers();
+
             });
         },
         /**

@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
         this._selectable = group.selectable;
         this._layers = [];
         this._groups = group.groups || [];
+        this._orderNumber = group.orderNumber;
         var me = this;
         this.searchIndex = {};
         group.layers.forEach(function(layer) {
@@ -81,5 +82,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
         },
         getGroups: function() {
             return this._groups;
+        },
+        getOrderNumber: function() {
+            return this._orderNumber;
+        },
+        setOrderNumber: function(orderNumber) {
+            this._orderNumber = orderNumber;
         }
     });

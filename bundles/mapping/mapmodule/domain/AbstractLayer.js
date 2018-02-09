@@ -67,7 +67,6 @@ Oskari.clazz.define(
         me._inspireName = null;
         me._organizationName = null;
         me._dataUrl = null;
-        me._orderNumber = null;
 
         /*
          * Array of sublayers. Notice that only type BASE_LAYER can
@@ -141,6 +140,8 @@ Oskari.clazz.define(
         me.errors = 0;
 
         me._groups = [];
+
+        me._orderNumber = 1000000;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object

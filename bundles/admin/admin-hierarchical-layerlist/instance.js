@@ -249,21 +249,43 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          */
         _saveOrder: function(event, data) {
             var me = this;
-            var draggedNodeData = jQuery(data.element).data();
             var draggedNode = data.data.origin.get_node(data.element);
+            if (!draggedNode.type) {
+                me.service.trigger('jstree-order-changed', {
+                    ajax: true,
+                    success: false
+                });
+                return;
+            }
+            var type = me._findJSTreeNodeActualType(draggedNode.type);
+
             var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
+            if (originalParentNode === false) {
+                originalParentNode = draggedNode.original;
+            }
+            var draggedId = (draggedNode.type === 'layer') ? draggedNode.a_attr['data-layer-id'] : draggedNode.a_attr['data-group-id'];
             var parentNode = data.data.origin.get_node(draggedNode.parent);
-            var draggedNodeId = draggedNodeData.layerId;
-            var draggedNodeNewParentId = parentNode.a_attr["data-group-id"];
+
             var draggedNodeOldParentId = originalParentNode.a_attr["data-group-id"];
-            //Get the new index inside the group's children
-            var draggedNodeNewIndex = _.indexOf(_.values(parentNode.children), draggedNode.id);
-            var ajaxData = {};
-            ajaxData.type = me._findJSTreeNodeActualType(draggedNode.type);
-            ajaxData.nodeId = draggedNodeId;
-            ajaxData.nodeIndex = draggedNodeNewIndex;
-            ajaxData.oldGroupId = draggedNodeOldParentId;
-            ajaxData.targetGroupId = draggedNodeNewParentId;
+
+            var ajaxData = {
+                orders: [],
+                parent: (parentNode.a_attr && parentNode.a_attr['data-group-id']) ? parentNode.a_attr['data-group-id'] : -1
+            };
+
+            parentNode.children.forEach(function(nodeId) {
+                var node = data.data.origin.get_node(nodeId);
+                var order = {
+                    type: node.type, // groups, subgroup, subgroups
+                    id: (node.type === 'layer') ? node.a_attr['data-layer-id'] : node.a_attr['data-group-id']
+                };
+                if (ajaxData.parent != -1 && ajaxData.parent != draggedNodeOldParentId && draggedNode.type === node.type && order.id === draggedId) {
+                    order.oldParent = draggedNodeOldParentId;
+                }
+                ajaxData.orders.push(order);
+            });
+
+
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -276,7 +298,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     errorDialog.fadeout();
                     me.service.trigger('jstree-order-changed', {
                         ajax: true,
-                        success: true
+                        success: false
                     });
                 },
                 success: function(response) {
@@ -285,7 +307,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     successDialog.fadeout();
                     me.service.trigger('jstree-order-changed', {
                         ajax: true,
-                        success: false
+                        success: true
                     });
                 }
             });

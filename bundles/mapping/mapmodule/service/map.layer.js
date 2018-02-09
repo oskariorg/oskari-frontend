@@ -326,6 +326,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setGroups(newLayerConf.groups);
             }
 
+            if (newLayerConf.orderNumber) {
+                layer.setOrderNumber(newLayerConf.orderNumber);
+            }
+
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
@@ -1346,6 +1350,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             layer.setGroups(mapLayerJson.groups);
+            layer.setOrderNumber(mapLayerJson.orderNumber);
 
             return layer;
         },

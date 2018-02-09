@@ -106,64 +106,11 @@ Oskari.clazz.define(
                 me.selectNodeFromTree(data.node, data.event);
             });
 
-            // group added
-            me.service.on('group-added', function(data) {
-                var parent = '#';
-                if (data.type === 'subgroup') {
-                    parent = 'group-' + data.parentId;
-                }
-                if (data.type === 'subgroup-subgroup') {
-                    parent = 'subgroup-' + data.parentId;
-                }
-
-                // update service groups
-                me._mapLayerService.updateLayerGroups(data);
-
-
-                var opts = {};
-                if (!data.selectable) {
-                    opts = {
-                        a_attr: {
-                            class: 'no-checkbox',
-                            'data-group-id': data.id,
-                            'data-parent-group-id': data.parentId
-                        }
-                    };
-                } else {
-                    opts = {
-                        a_attr: {
-                            'data-group-id': data.id,
-                            'data-parent-group-id': data.parentId
-                        }
-                    };
-                }
-
-                if (data.method === 'add') {
-                    var obj = me._getJsTreeObject(data.type + '-' + data.id,
-                        parent,
-                        me.sb.getLocalizedProperty(data.name) + ' (0)',
-                        data.type,
-                        opts
-                    );
-                    me.getJsTreeElement().jstree().create_node(obj.parent, obj);
-                    me._updateAllTools();
-
-                } else {
-                    var layerCount = me._mapLayerService.getAllLayerGroups(data.id).layers.length;
-                    var group = me._mapLayerService.getAllLayerGroups(data.id);
-                    group.selectable = data.selectable;
-                    group.name = data.name;
-                    var node = me.getJsTreeElement().jstree().get_node(data.type + '-' + data.id);
-                    node.a_attr = opts.a_attr;
-
-                    me.getJsTreeElement().jstree().rename_node(data.type + '-' + data.id, me.sb.getLocalizedProperty(data.name) + ' (' + layerCount + ')' + '<div class="' + data.type + '-tools"></div>');
-                    me._updateAllTools();
-                }
-            });
 
             // group deleted
             me.service.on('group-deleted', function(data) {
-                me.getJsTreeElement().jstree().delete_node(data.type + '-' + data.id);
+                var nodeId = me.getJsTreeElement().find('a[data-group-id=' + data.id + ']').parent('li').attr('id');
+                me.getJsTreeElement().jstree().delete_node(nodeId);
                 me._updateAllTools();
             });
 
@@ -324,20 +271,17 @@ Oskari.clazz.define(
         /**
          * Get JStree
          * @method  _getJsTreeObject
-         * @param   {String}         id     id for added node
-         * @param   {String}         parent parent id for added node
          * @param   {String}         text   node text
          * @param   {String}         type   node type (group|layer)
          * @param   {Object}         opts   extra options
          * @return  {Object}                Jstree node conf
          * @private
          */
-        _getJsTreeObject: function(id, parent, text, type, opts) {
+        _getJsTreeObject: function(text, type, opts, children) {
             var jstreeObject = {
-                id: id,
-                parent: parent,
                 text: text + '<div class="' + type + '-tools"></div>',
-                type: type
+                type: type,
+                children: children
             };
 
             // layer has already defined tools, so remove extra div
@@ -577,87 +521,6 @@ Oskari.clazz.define(
             return layerDiv;
         },
 
-        /**
-         * @method _arrayContaines
-         * @private
-         * @param {Array} arr
-         *     Array to be checked
-         * @param {String} val
-         *     Value to be searched
-         * FIXME IE8 isn't supported anymore, just use forEach or some
-         * IE8 doesn't have Array.indexOf so we use this...
-         */
-        _arrayContains: function(arr, val) {
-            var i;
-            if (arr.indexOf) {
-                return arr.indexOf(val) > -1;
-            }
-            for (i = 0; i < arr.length; i += 1) {
-                if (arr[i] === val) {
-                    return true;
-                }
-            }
-            return false;
-        },
-
-        /**
-         * @method _concatNew
-         * @private
-         * @param {Array} arr1
-         *     Array of previously concatenated values
-         * @param {Array} arr2
-         *     Array of values to be concatenated
-         * Concatenates (in place) those values from arr2 to arr1 that are not present in arr1
-         */
-        _concatNew: function(arr1, arr2) {
-            //"use strict";
-            var me = this,
-                i;
-
-            for (i = arr2.length - 1; i >= 0; i -= 1) {
-                if (!me._arrayContains(arr1, arr2[i])) {
-                    arr1.push(arr2[i]);
-                }
-            }
-        },
-
-        /**
-         * @method _isDefined
-         * @private
-         * @param value
-         * Determines if the given value... has a value.
-         */
-        _isDefined: function(value) {
-            //"use strict";
-            return typeof value !== 'undefined' && value !== null && value !== '';
-        },
-
-        /**
-         * @method _containsIgnoreCase
-         * @private
-         * @param {String} keyword
-         * @param {String} match
-         * Returns true if keyword contains match (ignoring case)
-         */
-        _containsIgnoreCase: function(keyword, match) {
-            //"use strict";
-            var me = this;
-            return me._isDefined(keyword) && me._isDefined(match) && keyword.toLowerCase().indexOf(match.toLowerCase()) > -1;
-        },
-
-        /**
-         * @method _matchesIgnoreCase
-         * @private
-         * @param {String} type1
-         * @param {String} type2
-         * Returns true if the given types match in lower case.
-         * Also returns false if one or both types are not defined
-         */
-        _matchesIgnoreCase: function(type1, type2) {
-            //"use strict";
-            var me = this;
-            return me._isDefined(type1) && me._isDefined(type2) && type1.toLowerCase() === type2.toLowerCase();
-        },
 
         /**
          * Update container height
@@ -976,12 +839,16 @@ Oskari.clazz.define(
             var me = this,
                 jsTreeData = [];
 
+
+            // group order is more defined
+
             if (me.getJsTreeElement().length > 0) {
                 me.getJsTreeElement().remove();
             }
             var layerTree = me.templates.layerTree.clone();
+            var layerCounter = 0;
 
-            var addLayers = function(groupElId, layers, groupId) {
+            var addLayers = function(groupElId, layers, groupId, orders) {
                 layers.forEach(function(l) {
                     var layer = l;
                     if (l.id) {
@@ -993,17 +860,21 @@ Oskari.clazz.define(
                             'data-layer-id': layer.getId()
                         }
                     };
-                    jsTreeData.push(me._getJsTreeObject('layer-' + layer.getId() + '-' + groupId,
-                        groupElId,
-                        jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
-                        'layer',
-                        opts));
+                    orders.push({
+                        index: layer.getOrderNumber(),
+                        conf: me._getJsTreeObject(jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
+                            'layer',
+                            opts)
+                    });
+                    layerCounter++;
 
                 });
             };
 
-            var addSubgroups = function(groupId, subGroups) {
+            var addSubgroups = function(groupId, subGroups, orders) {
                 subGroups.forEach(function(subgroup) {
+                    var subgroupChildren = [];
+                    var subgroupOrders = [];
                     var opts = {
                         a_attr: {
                             class: (!subgroup.selectable) ? 'no-checkbox' : '',
@@ -1012,19 +883,37 @@ Oskari.clazz.define(
                         }
                     };
 
-                    var jstreeObject = me._getJsTreeObject('subgroup-' + subgroup.id,
-                        'group-' + groupId,
-                        me.sb.getLocalizedProperty(subgroup.name) + ' (' + subgroup.layers.length + ')',
-                        'subgroup',
-                        opts);
 
-                    jsTreeData.push(jstreeObject);
-                    addLayers('subgroup-' + subgroup.id, subgroup.layers, subgroup.id);
+
+                    addLayers('subgroup-' + subgroup.id, subgroup.layers, subgroup.id, subgroupOrders);
+                    addSubgroupSubgroups(subgroup.id, subgroup.groups, subgroupOrders);
+                    // sort
+                    subgroupOrders.sort(function compare(a, b) {
+                        if (a.index < b.index)
+                            return -1;
+                        if (a.index > b.index)
+                            return 1;
+                        return 0;
+                    });
+
+                    subgroupOrders.forEach(function(order) {
+                        subgroupChildren.push(order.conf);
+                    });
+
+                    orders.push({
+                        index: subgroup.orderNumber,
+                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' (' + subgroup.layers.length + ')',
+                            'subgroup',
+                            opts, subgroupChildren)
+                    });
+
                 });
             };
 
-            var addSubgroupSubgroups = function(subgroupId, subGroups) {
+            var addSubgroupSubgroups = function(subgroupId, subGroups, orders) {
                 subGroups.forEach(function(subgroup) {
+                    var subgroupSubgroupChildren = [];
+                    var subgroupSubgroupsOrders = [];
                     var opts = {
                         a_attr: {
                             class: (!subgroup.selectable) ? 'no-checkbox' : '',
@@ -1033,22 +922,38 @@ Oskari.clazz.define(
                         }
                     };
 
-                    var jstreeObject = me._getJsTreeObject('subgroup-subgroup-' + subgroup.id,
-                        'subgroup-' + subgroupId,
-                        me.sb.getLocalizedProperty(subgroup.name) + ' (' + subgroup.layers.length + ')',
-                        'subgroup-subgroup',
-                        opts);
+                    addLayers('subgroup-subgroup-' + subgroup.id, subgroup.layers, subgroup.id, subgroupSubgroupsOrders);
+                    // sort
+                    subgroupSubgroupsOrders.sort(function compare(a, b) {
+                        if (a.index < b.index)
+                            return -1;
+                        if (a.index > b.index)
+                            return 1;
+                        return 0;
+                    });
 
-                    jsTreeData.push(jstreeObject);
-                    addLayers('subgroup-subgroup-' + subgroup.id, subgroup.layers, subgroup.id);
+                    subgroupSubgroupsOrders.forEach(function(order) {
+                        subgroupSubgroupChildren.push(order.conf);
+                    });
+
+                    orders.push({
+                        index: subgroup.orderNumber,
+                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' (' + subgroup.layers.length + ')',
+                            'subgroup-subgroup',
+                            opts, subgroupSubgroupChildren)
+                    });
                 });
             };
 
             me.tabPanel.getContainer().append(layerTree);
-            me.accordion.removeAllPanels();
             me.layerGroups = groups;
+
+
             groups.forEach(function(group) {
                 var layers = group.getLayers();
+                var groupOrders = [];
+                var groupChildren = [];
+
                 var extraOpts = {
                     a_attr: {
                         'data-group-id': group.getId()
@@ -1060,21 +965,38 @@ Oskari.clazz.define(
                 }
 
 
-                jsTreeData.push(me._getJsTreeObject('group-' + group.getId(),
-                    '#',
-                    group.getTitle() + ' (' + layers.length + ')',
-                    'group', extraOpts));
 
                 //Loop through group layers
-                addLayers('group-' + group.getId(), layers, group.getId());
+                addLayers('group-' + group.getId(), layers, group.getId(), groupOrders);
+
 
                 if (group.getGroups().length > 0) {
-                    addSubgroups(group.getId(), group.getGroups());
+                    var subgroupsSubgroupsOrder = [];
+                    addSubgroups(group.getId(), group.getGroups(), groupOrders);
 
-                    group.getGroups().forEach(function(subgroup) {
-                        addSubgroupSubgroups(subgroup.id, subgroup.groups);
-                    });
+                    /*
+                                        group.getGroups().forEach(function(subgroup) {
+                                            addSubgroupSubgroups(subgroup.id, subgroup.groups, subgroupsSubgroupsOrder);
+                                        });
+                                        */
                 }
+
+                // sort
+                groupOrders.sort(function compare(a, b) {
+                    if (a.index < b.index)
+                        return -1;
+                    if (a.index > b.index)
+                        return 1;
+                    return 0;
+                });
+
+                groupOrders.forEach(function(order) {
+                    groupChildren.push(order.conf);
+                });
+                var groupObject = me._getJsTreeObject(group.getTitle() + ' (' + layers.length + ')',
+                    'group', extraOpts, groupChildren);
+
+                jsTreeData.push(groupObject);
             });
 
             var jsTreeDiv = me.getJsTreeElement();
