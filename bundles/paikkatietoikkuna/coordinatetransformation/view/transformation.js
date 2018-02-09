@@ -190,7 +190,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     }
                 }
             }
-            this.outputTable.populate( obj );
+            this.outputTable.addRows( obj );
         },
         /**
          * @method handleClipboard
@@ -216,7 +216,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
                     var dataJson = me.validateData( pastedData );
 
-                    me.inputTable.populate( dataJson );
+                    me.inputTable.addRows( dataJson );
                 });
             }
         },
@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
          */
         handleFile: function( fileContent ) {
             var dataJson = this.validateData( fileContent );
-            this.inputTable.populate( dataJson );
+            this.inputTable.addRows( dataJson );
         },
         /**
          * @method handleRadioButtons
