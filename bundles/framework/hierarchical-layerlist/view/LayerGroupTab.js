@@ -107,12 +107,6 @@ Oskari.clazz.define(
             });
 
 
-            // group deleted
-            me.service.on('group-deleted', function(data) {
-                var nodeId = me.getJsTreeElement().find('a[data-group-id=' + data.id + ']').parent('li').attr('id');
-                me.getJsTreeElement().jstree().delete_node(nodeId);
-                me._updateAllTools();
-            });
 
             me.service.on('jstree-order-changed', function(data) {
                 if (!data.ajax) {
