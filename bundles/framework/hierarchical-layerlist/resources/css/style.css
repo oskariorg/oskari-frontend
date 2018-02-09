@@ -283,15 +283,15 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
     display: none; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {
     display: none; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"].jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"] .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
     margin-right: -16px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no-checkbox {
-    margin-left: 4px; }
+    margin-left: 14px; }
     div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no-checkbox i.jstree-checkbox {
       display: none; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open .jstree-ocl {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"].jstree-open .jstree-ocl {
     background-position: -32px 5px; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] .jstree-ocl {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"] .jstree-ocl {
     background-position: 0px 5px; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor {
     width: 90%;
@@ -404,11 +404,11 @@ div.hierarchical-layerlist .hierarchical-layerlist-tree {
       background-color: #ffffff; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-checkbox {
     margin-left: -4px; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"] {
     border: 1px solid #c0d0d0 !important; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"].jstree-open {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"].jstree-open {
     border: 1px solid #c0d0d0 !important; }
-  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[id^="group-"] > div.jstree-wholerow {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"] > div.jstree-wholerow {
     background-color: #f3f3f3 !important; }
 
 /*# sourceMappingURL=style.css.map */

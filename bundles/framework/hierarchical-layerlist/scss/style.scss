@@ -462,7 +462,7 @@ div.hierarchical-layerlist {
 
         li {
             a.no-checkbox {
-                margin-left: 4px;
+                margin-left: 14px;
                 i.jstree-checkbox {
                     display:none;
                 }
@@ -655,15 +655,15 @@ div.hierarchical-layerlist {
         .jstree-checkbox {
             margin-left: -4px;
         }
-        .jstree-node[id^="group-"] {
+        .jstree-node[aria-level="1"] {
             border: 1px solid #c0d0d0 !important;
             @extend .jstree-closed;
         }
-        .jstree-node[id^="group-"].jstree-open {
+        .jstree-node[aria-level="1"].jstree-open {
             border: 1px solid #c0d0d0 !important;
             @extend .jstree-open;
         }
-        .jstree-node[id^="group-"] > div.jstree-wholerow {
+        .jstree-node[aria-level="1"] > div.jstree-wholerow {
             background-color: #f3f3f3 !important;
         }
     }

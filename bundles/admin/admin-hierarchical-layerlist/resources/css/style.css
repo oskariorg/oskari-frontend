@@ -1,5 +1,6 @@
 .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .content .group-names label input.error {
   background-color: #ff6666; }
+
 .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button {
   text-shadow: none; }
   .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.delete {
@@ -21,7 +22,7 @@
       background-image: -ms-linear-gradient(top, #f85c5c, #e40a0a);
       background-image: -o-linear-gradient(top, #f85c5c, #e40a0a);
       background-image: linear-gradient(to bottom, #f85c5c, #e40a0a);
-      filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+      filter: progid:DXImageTransform.Microsoft.gradient GradientType=0, startColorstr=#f85c5c, endColorstr=#e40a0a; }
   .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.add {
     background-color: #217ad4;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#217ad4), to(#13477c));
@@ -41,7 +42,7 @@
       background-image: -ms-linear-gradient(top, #4694e2, #1a61a8);
       background-image: -o-linear-gradient(top, #4694e2, #1a61a8);
       background-image: linear-gradient(to bottom, #4694e2, #1a61a8);
-      filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+      filter: progid:DXImageTransform.Microsoft.gradient GradientType=0, startColorstr=#4694e2, endColorstr=#1a61a8; }
   .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.cancel {
     background-color: #e6e6e6;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#b3b3b3));
@@ -61,14 +62,16 @@
       background-image: -ms-linear-gradient(top, white, #cdcdcd);
       background-image: -o-linear-gradient(top, white, #cdcdcd);
       background-image: linear-gradient(to bottom, white, #cdcdcd);
-      filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+      filter: progid:DXImageTransform.Microsoft.gradient GradientType=0, startColorstr=white, endColorstr=#cdcdcd; }
 
 @media only screen and (max-height: 999px) and (min-height: 800px) {
   .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer {
     max-height: 650px; } }
+
 @media only screen and (max-height: 1199px) and (min-height: 1000px) {
   .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer {
     max-height: 700px; } }
+
 .oskari-flyout.admin-hierarchical-layerlist-add-layer {
   width: 50%;
   max-height: 80%; }
@@ -127,7 +130,7 @@
               background-image: -ms-linear-gradient(top, #4694e2, #1a61a8);
               background-image: -o-linear-gradient(top, #4694e2, #1a61a8);
               background-image: linear-gradient(to bottom, #4694e2, #1a61a8);
-              filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+              filter: progid:DXImageTransform.Microsoft.gradient GradientType=0, startColorstr=#4694e2, endColorstr=#1a61a8; }
           .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-remove-layer, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-remove-group {
             background-color: #f62b2b;
             background-image: -webkit-gradient(linear, left top, left bottom, from(#f62b2b), to(#b30808));
@@ -147,7 +150,7 @@
               background-image: -ms-linear-gradient(top, #f85c5c, #e40a0a);
               background-image: -o-linear-gradient(top, #f85c5c, #e40a0a);
               background-image: linear-gradient(to bottom, #f85c5c, #e40a0a);
-              filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+              filter: progid:DXImageTransform.Microsoft.gradient GradientType=0, startColorstr=#f85c5c, endColorstr=#e40a0a; }
           .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-layer-cancel, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-group-cancel {
             background-color: #e6e6e6;
             background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#b3b3b3));
@@ -167,7 +170,7 @@
               background-image: -ms-linear-gradient(top, white, #cdcdcd);
               background-image: -o-linear-gradient(top, white, #cdcdcd);
               background-image: linear-gradient(to bottom, white, #cdcdcd);
-              filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+              filter: progid:DXImageTransform.Microsoft.gradient GradientType=0, startColorstr=white, endColorstr=#cdcdcd; }
     .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .opacity-slider-tool {
       width: 215px; }
     .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .layout-slider {
@@ -272,17 +275,17 @@
   width: 25px;
   margin-right: 8px;
   color: #555; }
+
 .divmanazerpopup.admin-hierarchical-layerlist-group label.subgroup::before {
   content: "\25B6";
   width: 25px;
   margin-left: 32px;
   margin-right: 8px;
   color: #555; }
+
 .divmanazerpopup.admin-hierarchical-layerlist-group label.subgroupsubgroup::before {
   content: "\25B6";
   width: 25px;
   margin-left: 64px;
   margin-right: 8px;
   color: #555; }
-
-/*# sourceMappingURL=style.css.map */

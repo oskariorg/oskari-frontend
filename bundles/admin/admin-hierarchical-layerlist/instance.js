@@ -251,10 +251,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             var me = this;
             var draggedNode = data.data.origin.get_node(data.element);
             if (!draggedNode.type) {
-                me.service.trigger('jstree-order-changed', {
-                    ajax: true,
-                    success: false
-                });
                 return;
             }
             var type = me._findJSTreeNodeActualType(draggedNode.type);
