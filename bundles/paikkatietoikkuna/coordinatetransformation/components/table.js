@@ -138,26 +138,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             }
         },
         /**
-         * @method populate
+         * @method addRows
          *
-         * {Object} data, each key needs to have property lon & lat 
+         * {Object} coords, each key needs to have property lon & lat 
          */
-        populate: function( data ) {
-            var table = this.getElements().table;
-
-            for ( var key in data ) {
-                if ( data.hasOwnProperty( key ) ) {
-                    var row = this.template.row( { coords: data[key] } );
-                    table.prepend(row);
-                }
-            }
-            table.trigger('rowCountChanged');
-        },
         addRows: function (coords) {
             var table = this.getElements().table;
-            for (var i = 0; i < coords.length; i++ ) {
-                var row = this.template.row( { coords: coords[i] } );
-                table.prepend(row);
+            for ( var key in coords ) {
+                if ( coords.hasOwnProperty( key ) ) {
+                    var row = this.template.row( { coords: coords[key] } );
+                    table.prepend(row);
+                }
             }
             table.trigger('rowCountChanged');
         },
@@ -216,9 +207,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
 
             if( x !== '' && y !== '' || z !== '' ) {
 
-                var header = this.template.header({  north: x,
-                                                     east: y,
-                                                     ellipse_elevation: z });
+                var header = this.template.header({  
+                    north: x,
+                    east: y,
+                    ellipse_elevation: z 
+                });
 
                 jQuery( header ).insertBefore( jQuery( this.getContainer() ).find(".oskari-table-content") );
             }
