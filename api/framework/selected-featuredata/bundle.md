@@ -53,6 +53,9 @@ No statehandling has been implemented.
 <tr>
   <td> userinterface.UpdateExtensionRequest </td><td> Requests close on the flyout when publisher is closed and close to any other flyout when the publisher is opened.</td>
 </tr>
+<tr>
+  <td> AddLayerListFilterRequest </td><td> Requests add publishable filter to layerselector2 bundle.</td>
+</tr>
 </table>
 
 ## Events the bundle sends out
