@@ -136,12 +136,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     this.projectionSelected = false;
                     this.resetSelectToPlaceholder();
                     this.handleDropdownOptions( clsSelector( currentValue) );
-                    this.instance.inputTable.handleDisplayingElevationRows(false);
                     break;
                 case "KOORDINAATISTO_MAANT_2D":
                     this.projectionSelected = false;
                     var valueClass = clsSelector( datum ) + clsSelector( currentValue );
                     this.handleDropdownOptions( valueClass, "geodetic-coordinate" );
+                    instances["geodetic-coordinate"].resetToPlaceholder();
                     break;
                 case "KOORDINAATISTO_MAANT_3D":
                 case "KOORDINAATISTO_SUORAK_3D":
@@ -155,6 +155,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 case "GK":
                     this.projectionSelected = true;
                     this.handleDropdownOptions( clsSelector( currentValue ), "geodetic-coordinate" );
+                    instances["geodetic-coordinate"].resetToPlaceholder();
                     break;
                 case "COORDSYS_DEFAULT":
                     me.instance.startingSystem = true;
@@ -176,14 +177,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             if ( this.projectionSelected ) {
                 dropdowns.projection.parent().parent().show();
                if ( projection ) {
-                    classesToShow += clsSelector(datum) + clsSelector(projection);
+                    classesToShow += clsSelector(projection);
                 }
             } else {
                 dropdowns.projection.parent().parent().hide();
                 instances.projection.resetToPlaceholder();
 
                 if ( coordinate ) {
-                    classesToShow += clsSelector(datum) + clsSelector(coordinate);
+                    classesToShow += clsSelector(coordinate);
                 }
             }
             dropdowns["geodetic-coordinate"].find(classesToShow).show();
