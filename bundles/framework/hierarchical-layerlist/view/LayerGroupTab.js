@@ -865,6 +865,16 @@ Oskari.clazz.define(
                 });
             };
 
+            var getSublayerCount = function(group) {
+                var layers = group.layers.length;
+                if (group.groups.length > 0) {
+                    group.groups.forEach(function(subgroup) {
+                        layers += subgroup.layers.length;
+                    });
+                }
+                return layers;
+            };
+
             var addSubgroups = function(groupId, subGroups, orders) {
                 subGroups.forEach(function(subgroup) {
                     var subgroupChildren = [];
@@ -876,8 +886,6 @@ Oskari.clazz.define(
                             'data-parent-group-id': groupId
                         }
                     };
-
-
 
                     addLayers('subgroup-' + subgroup.id, subgroup.layers, subgroup.id, subgroupOrders);
                     addSubgroupSubgroups(subgroup.id, subgroup.groups, subgroupOrders);
@@ -896,7 +904,7 @@ Oskari.clazz.define(
 
                     orders.push({
                         index: subgroup.orderNumber,
-                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' (' + subgroup.layers.length + ')',
+                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' (' + getSublayerCount(subgroup) + ')',
                             'subgroup',
                             opts, subgroupChildren)
                     });
