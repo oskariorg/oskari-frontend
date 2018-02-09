@@ -694,7 +694,15 @@ Oskari.clazz.define(
             var isOpen = tree.jstree().is_open(node);
             var target = jQuery(event.target);
             var nodeChildren = node.children_d;
-            //var nodeChildrenLength = nodeChildren.length;
+
+            var layersChecked = [];
+            nodeChildren.forEach(function(nodeId) {
+                var node = tree.jstree().get_node(nodeId);
+                if (node.type === 'layer') {
+                    layersChecked.push(node.a_attr['data-layer-id']);
+                }
+            });
+
             var layerId = null;
 
             var allSelectedLayers = me.sb.findAllSelectedMapLayers();
@@ -765,9 +773,7 @@ Oskari.clazz.define(
                 case 'group':
                     if (isChecked) {
                         tree.jstree().uncheck_node(node);
-                        nodeChildren.forEach(function(node) {
-                            var child = tree.jstree().get_node(node);
-                            layerId = me._getNodeRealId(child);
+                        layersChecked.forEach(function(layerId) {
                             if (me.sb.isLayerAlreadySelected(layerId)) {
                                 me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
                             }
@@ -775,9 +781,7 @@ Oskari.clazz.define(
                     } else {
                         //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
                         // selected layers
-                        var layersChecked = nodeChildren.filter(function(n) {
-                            return n.indexOf('layer') >= 0;
-                        });
+
                         if ((layersChecked.length > 10 || allSelectedLayersLength >= 10)) {
 
                             var text = me.instance.getLocalization('manyLayersWarning').text;
@@ -791,9 +795,7 @@ Oskari.clazz.define(
                                 dialog.close(true);
                                 tree.jstree().open_node(node);
                                 tree.jstree().check_node(node);
-                                nodeChildren.forEach(function(nodechild) {
-                                    var child = tree.jstree().get_node(nodechild);
-                                    var layerId = me._getNodeRealId(child);
+                                layersChecked.forEach(function(layerId) {
                                     if (!me.sb.isLayerAlreadySelected(layerId)) {
                                         me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                                     }
@@ -807,9 +809,7 @@ Oskari.clazz.define(
                         } else {
                             tree.jstree().open_node(node);
                             tree.jstree().check_node(node);
-                            layersChecked.forEach(function(nodechild) {
-                                var child = tree.jstree().get_node(nodechild);
-                                var layerId = me._getNodeRealId(child);
+                            layersChecked.forEach(function(layerId) {
                                 if (!me.sb.isLayerAlreadySelected(layerId)) {
                                     me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                                 }
