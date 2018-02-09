@@ -136,6 +136,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     this.projectionSelected = false;
                     this.resetSelectToPlaceholder();
                     this.handleDropdownOptions( clsSelector( currentValue) );
+                    this.instance.inputTable.handleDisplayingElevationRows(false);
                     break;
                 case "KOORDINAATISTO_MAANT_2D":
                     this.projectionSelected = false;
@@ -159,12 +160,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     me.instance.startingSystem = true;
                     break;
                 case "KORKEUSJ_DEFAULT":
-                    this.displayTableElevationRow(false);
+                    this.instance.inputTable.handleDisplayingElevationRows(false);
                     break;
                 case "KORKEUSJ_N2000":
                 case "KORKEUSJ_N60":
                 case "KORKEUSJ_N43":
-                    this.displayTableElevationRow(true);        
+                    this.instance.inputTable.handleDisplayingElevationRows(true);        
                     break;
                 default:
                     break;
@@ -187,43 +188,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             }
             dropdowns["geodetic-coordinate"].find(classesToShow).show();
             this.updateSelectValues( instances );
-        },
-        /**
-         * @method displayTableElevationRow
-         * @param {boolean} display - true - display the row, false - hide or grey out depending if there is data in the row
-         * @desc handle hiding and showing the elevation row in the table
-         */
-        displayTableElevationRow: function ( display ) {
-            var me = this;
-            var isEmpty = true;
-            var elevationCells = me.instance.inputTable.getElements().rows.find('.elevation');
-
-            if ( !display ) {
-                elevationCells.attr("contenteditable", false);
-                //check if elevationcells have value, if true don't hide but grey out
-                elevationCells.each( function (key, val) {
-                    var element = jQuery( val );
-                    element.html().trim();
-                    if ( !element.is(':empty') ) {
-                        isEmpty = false;
-                    }
-                });
-                if ( !isEmpty ) {
-                    elevationCells.addClass('disabled');
-                } else {
-                    me.instance.inputTable.toggleElevationRows();
-                }
-            } else {
-                elevationCells.attr("contenteditable", true);
-
-                if ( elevationCells.hasClass('disabled') ) {
-                    elevationCells.removeClass('disabled');
-                } else if( !elevationCells.hasClass('oskari-hidden') ) {
-                    return;
-                } else {
-                    me.instance.inputTable.toggleElevationRows();   
-                }
-            }
         },
         resetSelectToPlaceholder: function () {
             //reset all but the datum

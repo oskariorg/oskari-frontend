@@ -25,7 +25,7 @@
 #rowwidth {
     max-width: 100px !important;
 }
-.disabled {
+.cell-disabled {
     background-color: grey !important;
 }
 .coordinatetransformation-flyout .header {
@@ -210,11 +210,6 @@
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
-.hoverable tr:hover .cell.control { 
-    /* float: right; */
-    /* display: inline-block; */
-}
-
 .coordinatetransformation-flyout .removerow {
     border-radius: 50%;
     height:1.3em;

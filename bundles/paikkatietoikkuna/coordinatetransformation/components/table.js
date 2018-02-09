@@ -49,6 +49,42 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         setElement: function ( el ) {
             this.container = el;
         },
+         /**
+         * @method displayTableElevationRow
+         * @param {boolean} display - true - display the row, false - hide or grey out depending if there is data in the row
+         * @desc handle hiding and showing the elevation row in the table
+         */
+        handleDisplayingElevationRows: function ( display ) {
+            var me = this;
+            var isEmpty = true;
+            var elevationCells = me.getElements().rows.find('.elevation');
+            if ( !display ) {
+                elevationCells.attr("contenteditable", false);
+                //check if elevationcells have value, if true don't hide but grey out
+                elevationCells.each( function (key, val) {
+                    var element = jQuery( val );
+                    element.html().trim();
+                    if ( !element.is(':empty') ) {
+                        isEmpty = false;
+                    }
+                });
+                if ( !isEmpty ) {
+                    elevationCells.addClass('cell-disabled');
+                } else {
+                    me.toggleElevationRows();
+                }
+            } else {
+                elevationCells.attr("contenteditable", true);
+
+                if ( elevationCells.hasClass('cell-disabled') ) {
+                    elevationCells.removeClass('cell-disabled');
+                } else if( !elevationCells.hasClass('oskari-hidden') ) {
+                    return;
+                } else {
+                    me.toggleElevationRows();
+                }
+            }
+        },
         toggleElevationRows: function () {
             var elevationRows = this.getElements().rows.find('.elevation');
             if ( elevationRows.hasClass('oskari-hidden') ) {
@@ -57,6 +93,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 elevationRows.addClass('oskari-hidden');
             }
         },
+        
         create: function () {
             var me = this;
                 var rowcounter = this.template.rowcounter({ rows: this.loc.utils.rows })
