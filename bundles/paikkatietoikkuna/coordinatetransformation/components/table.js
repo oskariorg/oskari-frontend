@@ -1,25 +1,24 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function( instance, loc ) {
     this.instance = instance;
     this.loc = loc;
-    this.numrows = 1;
     this.container = null;
     this.template = {
             tableWrapper: _.template('<div class="table"></div>'),
-            rowcounter: _.template('<div class="rowcount"><span id="num"></span> <%= rows %> </div>'),
+            rowcounter: _.template('<div class="rowcount"><span id="num"></span> ${rows} </div>'),
             header: _.template('<div class="oskari-table-header">'+
                                         '<table id="oskari-tbl-header" cellpadding="0" cellspacing="0" border="0">'+
                                             '<thead>'+
                                                 '<tr>' +
-                                                    '<th id="nort"><%= north %></th>'+
-                                                    '<th id="east"><%= east %></th>'+
-                                                    '<th id="ellipse_elevation" ><%= ellipse_elevation %></th>'+
+                                                    '<th id="nort">${north}</th>'+
+                                                    '<th id="east">${east}</th>'+
+                                                    '<th id="ellipse_elevation" >${ellipse_elevation}</th>'+
                                                 '</tr>'+
                                              '</thead>'+
                                         ' </table>'+
                                      '</div>'),
             row: _.template('<tr>' +
-                                    '<td class="cell lon" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
-                                    '<td class="cell lat" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
+                                    '<td class="cell lon" headers="north" style=" border: 1px solid black ;">${coords.lon}</td>'+
+                                    '<td class="cell lat" headers="east" style=" border: 1px solid black ;">${coords.lat}</td>'+
                                     '<td class="cell elevation oskari-hidden" headers="ellipse_elevation" style=" border: 1px solid black;"></td>'+
                                     '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
@@ -71,26 +70,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
 
                 var table = this.template.tableWrapper();
                 table = jQuery(table);
-
                 table.append(coordinatefield);                
-
                 table.find('.coordinatefield-table h5').append(rowcounter);
 
                 this.setElement( table );
 
+                this.bindRowCountListener();
+
                 var coords = {};
                 for( var i = 0; i < 10; i++ ) {
                     table.find("#oskari-coordinate-table").append(this.template.row( { coords: coords } ) );
-                    me.incrementNumRows();
                 }
 
                 return this.getContainer();
         },
-        incrementNumRows: function () {
-                this.getContainer().find("#num").text( this.numrows++ );
-        },
-        decrementNumRows: function () {
-                this.getContainer().find("#num").text( this.numrows-- );
+        displayNumberOfDataRows: function ( number ) {
+            this.getContainer().find("#num").text( number );
         },
         isEditable: function ( editable ) {
             var rows = this.getElements().rows;
@@ -108,7 +103,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         /**
          * @method populate
          *
-         * {Object} data, each key need to have property lon & lat 
+         * {Object} data, each key needs to have property lon & lat 
          */
         populate: function( data ) {
             var table = this.getElements().table;
@@ -117,7 +112,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 if ( data.hasOwnProperty( key ) ) {
                     var row = this.template.row( { coords: data[key] } );
                     table.prepend(row);
-                    this.incrementNumRows();
                 }
             }
             table.trigger('rowCountChanged');
@@ -127,25 +121,32 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             for (var i = 0; i < coords.length; i++ ) {
                 var row = this.template.row( { coords: coords[i] } );
                 table.prepend(row);
-                this.incrementNumRows();
             }
             table.trigger('rowCountChanged');
         },
         clearRows: function () {
-            var cells = this.getContainer().find('tr .cell:not(.cell.control)');
-            for(var i = 0; i < cells.length; i++) {
-                var trimmedCellValue = jQuery.trim( jQuery( cells[i] ).html() );
-                if( trimmedCellValue !== "" ) {
-                    jQuery( cells[i] ).parent().remove();
-                    this.decrementNumRows();
+            var rows = this.getElements().rows;
+            for ( var i = 0; i < rows.length; i++ ) {
+                var indexRow = jQuery( rows[i] );
+                if ( indexRow.children().first().html() !== ""  ) {
+                    indexRow.remove();
                 }
             }
+            this.getElements().table.trigger('rowCountChanged');
         },
         bindRowCountListener: function () {
             var me = this;
             var table = this.getElements().table;
             table.bind('rowCountChanged', function (evt) {
-                var rows = me.getElements().rows;
+                var rows = jQuery(evt.currentTarget).find('tr');
+                var number = 0;
+                for ( var i = 0; i < rows.length; i++ ) {
+                    var indexRow = jQuery( rows[i] );
+                    if ( indexRow.children().first().html() !== "" ) {
+                        number++;
+                    }
+                }
+                me.displayNumberOfDataRows( number );
             });
         },
         updateTitle: function (values) {

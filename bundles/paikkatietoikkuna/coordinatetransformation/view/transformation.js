@@ -97,7 +97,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             this.handleClipboard();
             this.handleButtons();
             this.handleRadioButtons();
-            this.inputTable.bindRowCountListener();
         },
         setVisible: function ( visible ) {
             if( !visible ) {
