@@ -249,7 +249,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          */
         _saveOrder: function(event, data) {
             var me = this;
-            var draggedNode = data.data.origin.get_node(data.element);
+            var draggedNode = data.data.origin.get_node(data.data.nodes[0]);
             if (!draggedNode.type) {
                 return;
             }
