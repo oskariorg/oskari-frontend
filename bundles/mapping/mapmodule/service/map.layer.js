@@ -354,14 +354,23 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         deleteLayerGroup: function(data) {
             var me = this;
-            var editable = me.getAllLayerGroups(data.parentId);
             var newGroups = [];
-            editable.groups.forEach(function(group) {
-                if (group.id != data.id) {
-                    newGroups.push(group);
-                }
-            });
-            editable.groups = newGroups;
+            if (data.parentId === -1) {
+                me._layerGroups.forEach(function(group) {
+                    if (group.id != data.id) {
+                        newGroups.push(group);
+                    }
+                });
+                me._layerGroups = newGroups;
+            } else {
+                var editable = me.getAllLayerGroups(data.parentId);
+                editable.groups.forEach(function(group) {
+                    if (group.id != data.id) {
+                        newGroups.push(group);
+                    }
+                });
+                editable.groups = newGroups;
+            }
         },
         /**
          * Updata layer groups
