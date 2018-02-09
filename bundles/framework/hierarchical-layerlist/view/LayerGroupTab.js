@@ -948,6 +948,20 @@ Oskari.clazz.define(
             me.tabPanel.getContainer().append(layerTree);
             me.layerGroups = groups;
 
+            var getLayerCount = function(group) {
+                var layers = group.getLayers().length;
+                if (group.getGroups().length > 0) {
+                    group.getGroups().forEach(function(subgroup) {
+                        layers += subgroup.layers.length;
+                        if (subgroup.groups.length > 0) {
+                            subgroup.groups.forEach(function(subgroupSubgroup) {
+                                layers += subgroupSubgroup.layers.length;
+                            });
+                        }
+                    });
+                }
+                return layers;
+            };
 
             groups.forEach(function(group) {
                 var layers = group.getLayers();
@@ -973,12 +987,6 @@ Oskari.clazz.define(
                 if (group.getGroups().length > 0) {
                     var subgroupsSubgroupsOrder = [];
                     addSubgroups(group.getId(), group.getGroups(), groupOrders);
-
-                    /*
-                                        group.getGroups().forEach(function(subgroup) {
-                                            addSubgroupSubgroups(subgroup.id, subgroup.groups, subgroupsSubgroupsOrder);
-                                        });
-                                        */
                 }
 
                 // sort
@@ -993,7 +1001,7 @@ Oskari.clazz.define(
                 groupOrders.forEach(function(order) {
                     groupChildren.push(order.conf);
                 });
-                var groupObject = me._getJsTreeObject(group.getTitle() + ' (' + layers.length + ')',
+                var groupObject = me._getJsTreeObject(group.getTitle() + ' (' + getLayerCount(group) + ')',
                     'group', extraOpts, groupChildren);
 
                 jsTreeData.push(groupObject);
