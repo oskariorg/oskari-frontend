@@ -140,9 +140,7 @@ Oskari.clazz.define(
                 jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId()).remove();
             }
             me._shape = shape;
-            if(me._id) {
-                Oskari.log('DrawTools').info('Previous drawing still on map and requesting new draw');
-            }
+
             // setup functionality id
             me._id = id;
             // setup options
