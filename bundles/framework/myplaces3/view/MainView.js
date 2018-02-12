@@ -123,6 +123,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                             this._setMeasurementResult(event.getData());
                         }
                     }else if(this.instance.isFinishedDrawing()){
+                        console.log(event);
                         this._handleFinishedDrawingEvent (event);
                     }
                 }
@@ -136,6 +137,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
          */
         _handleFinishedDrawingEvent: function (event) {
             this.drawing = event.getGeoJson();
+            if (this.drawing.features && this.drawing.features.length === 0){
+                //no features, user clicks save my place without valid geometry
+                this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
+                //should we start new drawing?? and inform user that line should have atleast 2 points and area 3 points
+                return;
+            }
             //TODO: closestPoint or centroid
             var location = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').getClosestPointFromGeoJSON(this.drawing);
             this.drawingData = event.getData();
