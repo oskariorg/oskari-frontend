@@ -123,7 +123,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                             this._setMeasurementResult(event.getData());
                         }
                     }else if(this.instance.isFinishedDrawing()){
-                        console.log(event);
                         this._handleFinishedDrawingEvent (event);
                     }
                 }
