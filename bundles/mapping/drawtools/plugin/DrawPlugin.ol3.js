@@ -346,17 +346,21 @@ Oskari.clazz.define(
             };
 
             if(!me.getLayerIdForFunctionality(id)) {
-                // layer not found for functionality id, nothing to do?
+                // layer not found for functionality id
+                // clear drawings from all drawing layers
+                me.clearDrawing();
                 return;
             }
             if(supressEvent === true) {
-                me.clearDrawing(id);
                 //another bundle sends StopDrawingRequest to clear own drawing (e.g. toolselected)
                 //skip deactivate draw and modify controls
                 //should be also with suppressEvent !== true ??
                 //TODO: remove this hack, when stopdrawing, startdrawing, cleardrawing,. methods and requests are handled more properly
                 if (me._id !== id){
+                    me.clearDrawing(); //clear all
                     return;
+                } else {
+                    me.clearDrawing(id); //clear drawing from given layer
                 }
             } else {
                 // try to finish unfinished (currently drawn) feature
@@ -431,23 +435,22 @@ Oskari.clazz.define(
          /**
          * @method clearDrawing
          * -  remove features from the draw layers
-         * @param {String} functionality id. If not given, will remove features from the current draw layer
+         * @param {String} functionality id. If not given, will remove features from all drawLayers
          */
         clearDrawing : function(id){
             var me = this;
+
             if(id) {
                 var layer = me.getLayer(me.getLayerIdForFunctionality(id));
                 if(layer) {
                     layer.getSource().getFeaturesCollection().clear();
                 }
             } else {
-                if(me.getLayer(me.getCurrentLayerId())) {
-                    me.getLayer(me.getCurrentLayerId()).getSource().getFeaturesCollection().clear();
-                }
-                // TODO: why is buffered layer only cleared here, but not when id is given?
-                // Should this be moved outside of the if/else?
-                me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
+                Object.keys(me._drawLayers).forEach(function(key){
+                    me._drawLayers[key].getSource().getFeaturesCollection().clear();
+                });
             }
+            me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
             // remove overlays (measurement tooltips)
             me.getMap().getOverlays().forEach(function (o) {
               if(!id || o.id === id) {
