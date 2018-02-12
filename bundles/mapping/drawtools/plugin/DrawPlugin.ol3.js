@@ -15,6 +15,7 @@ Oskari.clazz.define(
         this._styleTypes = ['draw', 'modify', 'intersect'];
         this._styles = {};
         this._drawLayers = {};
+        this._overlays = {};
         this._drawFeatureIdSequence = 0;
         this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
         this._mode = "";
@@ -451,13 +452,14 @@ Oskari.clazz.define(
                 });
             }
             me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
-            // remove overlays (measurement tooltips)
-            me.getMap().getOverlays().forEach(function (o) {
-              if(!id || o.id === id) {
-                  me.getMap().removeOverlay(o);
-              }
+
+            // remove overlays from map (measurement tooltips)
+            Object.keys(me._overlays).forEach(function(key){
+                me.getMap().removeOverlay(me._overlays[key]);
             });
-            jQuery('.' + me._tooltipClassForMeasure).remove();
+            me._overlays = {};
+
+            jQuery('.' + me._tooltipClassForMeasure).remove(); //do we need this??
         },
         /**
          * @method sendDrawingEvent
@@ -992,7 +994,8 @@ Oskari.clazz.define(
             if (me._sketch) {
                 var output,
                     area,
-                    length;
+                    length,
+                    overlay;
                 var geom = (me._sketch.getGeometry());
                 if (geom instanceof ol.geom.Polygon) {
                     area = me.getPolygonArea(geom);
@@ -1029,18 +1032,17 @@ Oskari.clazz.define(
                     tooltipCoord = geom.getLastCoordinate();
                 }
                 if(me.getOpts('showMeasureOnMap') && tooltipCoord) {
-                    me.getMap().getOverlays().forEach(function (o) {
-                        if(o.id === me._sketch.getId()) {
-                            var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
-                            ii.html(output);
-                            if(output==="") {
-                                ii.addClass('withoutText');
-                            } else {
-                                ii.removeClass('withoutText');
-                            }
-                            o.setPosition(tooltipCoord);
+                    overlay = me._overlays[me._sketch.getId()];
+                    if(overlay) {
+                        var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
+                        ii.html(output);
+                        if(output==="") {
+                            ii.addClass('withoutText');
+                        } else {
+                            ii.removeClass('withoutText');
                         }
-                    });
+                        overlay.setPosition(tooltipCoord);
+                    }
                 }
              }
         },
@@ -1346,6 +1348,7 @@ Oskari.clazz.define(
            tooltipElement.parentElement.style.pointerEvents = 'none';
            tooltip.id = id;
            me.getMap().addOverlay(tooltip);
+           me._overlays[id] = tooltip;
        }
    }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
