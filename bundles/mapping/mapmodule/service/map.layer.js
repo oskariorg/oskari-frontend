@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (suppressEvent !== true) {
                 // notify components of added layer if not suppressed
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
                 this._sandbox.notifyAll(event);
             }
         },
@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (suppressEvent !== true) {
                 // notify components of modified layer tools if not suppressed
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
                 this._sandbox.notifyAll(event);
             }
         },
@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
                 if (suppressEvent !== true) {
                     // notify components of added layer if not suppressed
-                    var evt = this._sandbox.getEventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                    var evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
                     this._sandbox.notifyAll(evt);
                 }
             }
@@ -221,11 +221,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // notify components of layer removal
                 if(parentLayer) {
                     // notify a collection layer has been updated
-                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                    evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
                 }
                 else {
                     // notify a layer has been removed
-                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+                    evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'remove');
                     // free up the layerId if actual removal
                     this._reservedLayerIds[layerId] = false;
                 }
@@ -330,7 +330,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // notify components of layer update
-            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
+            var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
             this._sandbox.notifyAll(evt);
         },
         /**
@@ -349,12 +349,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (layer) {
                 layer.setSticky(isSticky);
                 // notify components of layer update
-                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
+                var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
                 this._sandbox.notifyAll(evt);
             }
             // TODO: notify if layer not found?
         },
-        showUnsupportedPopup(){
+        showUnsupportedPopup: function(){
             if(this.popupCoolOff) {
                 return;
             }
