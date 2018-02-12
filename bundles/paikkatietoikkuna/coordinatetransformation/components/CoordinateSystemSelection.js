@@ -48,6 +48,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             this.populateSelect();
             this.handleInfoLink();
         },
+        /**
+         * @method populateSelect
+         * @desc creates an instance of the { Oskari.coordinatetransformation.component.select },
+         * and fills it with data
+         */
         populateSelect: function () {
             var me = this;
             var wrapper = this.getElement();

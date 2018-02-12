@@ -121,6 +121,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
 
                 return this.getContainer();
         },
+        /**
+         * @method render
+         *
+         * {Object} coords, each key needs to have property lon & lat 
+         */
+        render: function ( data ) {
+            this.clearRows();
+            var table = this.getElements().table;
+            for ( var key in data ) {
+                if ( data.hasOwnProperty( key ) ) {
+                    var row = this.template.row( { coords: data[key] } );
+                    table.prepend(row);
+                }
+            }
+            table.trigger('rowCountChanged');
+        },
         displayNumberOfDataRows: function ( number ) {
             this.getContainer().find("#num").text( number );
         },
@@ -136,21 +152,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                     jQuery(this).find('td').attr("contenteditable", true);
                 });
             }
-        },
-        /**
-         * @method addRows
-         *
-         * {Object} coords, each key needs to have property lon & lat 
-         */
-        addRows: function (coords) {
-            var table = this.getElements().table;
-            for ( var key in coords ) {
-                if ( coords.hasOwnProperty( key ) ) {
-                    var row = this.template.row( { coords: coords[key] } );
-                    table.prepend(row);
-                }
-            }
-            table.trigger('rowCountChanged');
         },
         clearRows: function () {
             var rows = this.getElements().rows;
@@ -181,25 +182,25 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             this.getElements().header.remove();
             
             var x = y = z = "";
-            if ( values.coordinatesystem === "COORDSYS_KKJ" ) {
+            if ( values["geodetic-coordinate"] === "COORDSYS_KKJ" ) {
                 x = this.loc.coordinatefield.kkjnorth
                 y = this.loc.coordinatefield.kkjeast
                 z = ""
-            } else if ( values.coordinatesystem === "COORDSYS_ETRS" ) {
+            } else if ( values["geodetic-coordinate"] === "COORDSYS_ETRS" ) {
                 x = this.loc.coordinatefield.kkjeast
                 y = this.loc.coordinatefield.kkjnorth
                 z = ""
             }
-            if ( values.dimension === "KOORDINAATISTO_MAANT_2D" ) {
+            if ( values.coordinate === "KOORDINAATISTO_MAANT_2D" ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
                 z = ""
-            } else if ( values.dimension === "KOORDINAATISTO_MAANT_3D" ) {
+            } else if ( values.coordinate === "KOORDINAATISTO_MAANT_3D" ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
                 z = this.loc.coordinatefield.ellipse_elevation
             }
-            if ( values.dimension === "KOORDINAATISTO_SUORAK_3D" ) {
+            if ( values.coordinate === "KOORDINAATISTO_SUORAK_3D" ) {
                     x = this.loc.coordinatefield.geox
                     y = this.loc.coordinatefield.geoy
                     z = this.loc.coordinatefield.geoz

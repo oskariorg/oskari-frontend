@@ -10,6 +10,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.startingSystem = false;
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
         me.file = Oskari.clazz.create('Oskari.coordinatetransformation.view.filesettings', me.instance, me.loc);
+        me.coordMap = {
+            coordinates: []
+        };
 
         me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
         me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
@@ -114,39 +117,45 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             if( !userSpec ) {
                 Oskari.log(this.getName()).warn("No specification for file-import");
             }
-            var lonlat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
-            var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
-            var numeric = new RegExp(/[0-9.]+/);
-            var numericMatcher = new RegExp(/([0-9.])+\s*,?/g);
-            var whitespaceseparatednum = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi)
+            var lonlatKeyMatch = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
+            var numericWhitespaceMatch = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi)
+            
+            var matched = data.match( lonlatKeyMatch );
+            var numMatch = data.match( numericWhitespaceMatch );
 
-            var getMatchedValues = function( matchedData, useLonLatMatcher ) {
-                var jsonLonLat = {};
-                for(var i = 0; i < matchedData.length; i++) {
-                    jsonLonLat[i] = {lon:'',lat:''};
-
-                    if( useLonLatMatcher ) {
-                        var match = matchedData[i].match(lonlat);
-                    } else {
-                        var match = matchedData[i].match(numericMatcher);
-                    }
-                    var lonValue = match[0].match(numeric);
-                    var latValue = match[1].match(numeric);
-                    jsonLonLat[i].lon = lonValue[0];
-                    jsonLonLat[i].lat = latValue[0];
-                }
-                return jsonLonLat;
-            };
-            var jsonLonLat = {};
-            var fullLonLatMatch = data.match(fullLonlat);
-            var numMatch = data.match(whitespaceseparatednum);
-            if( fullLonLatMatch !== null ) {
-                return getMatchedValues( fullLonLatMatch, true );
+             if( matched !== null ) {
+                return this.constructObjectFromRegExpMatch( matched, true );
             } else {
                 if( numMatch !== null ) {
-                    return getMatchedValues( numMatch, false );
+                    return this.constructObjectFromRegExpMatch( numMatch, false );
                 }
             }
+        },
+        /** 
+         * @method constructObjectFromRegExpMatch
+         * @description constructs a object from string with lon lat keys
+         */
+        constructObjectFromRegExpMatch: function ( data, lonlat ) {
+            var matchLonLat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
+            var matchNumericComma = new RegExp(/([0-9.])+\s*,?/g);
+            var numeric = new RegExp(/[0-9.]+/);
+            var array = [];
+            for ( var i = 0; i < data.length; i++ ) {
+                var lonlatObject = {};
+
+                if( lonlat ) {
+                    var match = data[i].match(matchLonLat);
+                } else {
+                    var match = data[i].match(matchNumericComma);
+                }
+                var lonValue = match[0].match(numeric);
+                var latValue = match[1].match(numeric);
+
+                lonlatObject.lon = lonValue[0];
+                lonlatObject.lat = latValue[0];
+                array.push(lonlatObject);
+            }
+            return array;
         },
         getSelectionValue: function ( selectListInstance ) {
             return selectListInstance.getValue();
@@ -175,22 +184,72 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 targetElevation: targetElevation
             }
         },
-        handleServerResponce: function ( response ) {
-            var responseCoords = response.coordinates;
+        /**
+         * @method constructLonLatObjectFromArray
+         * @description array -> object with lon lat keys
+         */
+        constructLonLatObjectFromArray: function ( data ) {
             var obj = {};
-            if( Array.isArray( responseCoords ) ) {
-                for ( var i in responseCoords ) {
-                    if( Array.isArray(responseCoords[i]) ) {
-                        for ( var j = 0; j < responseCoords[i].length; j++ ) {
+            if ( Array.isArray( data ) ) {
+                for ( var i in data ) {
+                    if( Array.isArray(data[i]) ) {
+                        for ( var j = 0; j < data[i].length; j++ ) {
                             obj[i] = {
-                                lon: responseCoords[i][0],
-                                lat: responseCoords[i][1]
+                                lon: data[i][0],
+                                lat: data[i][1]
                             }
                         }
                     }
                 }
             }
-            this.outputTable.addRows( obj );
+            return obj;
+        },
+        handleServerResponce: function ( response ) {
+            var obj = this.constructLonLatObjectFromArray(response.coordinates);
+            this.updateCoordinates("output", obj);
+        },
+        updateCoordinates: function ( flag, coordinates ) {
+            var me = this;
+            var data = me.coordMap.coordinates;
+            switch (flag) {
+                case 'input':
+                    coordinates.forEach( function ( pair ) {
+	                    data.push({
+                            input: pair
+                        });
+                    });
+                    break;
+                case 'output':
+                    for ( var i = 0; i < Object.keys( coordinates ).length; i++ ) {
+                        data[i].output = coordinates[i];
+                    }
+                    break;
+                default:
+                    break;
+            }
+            this.renderTable();
+        },
+        renderTable: function () {
+            var inputData = [];
+            var outputData = [];
+
+            var data = this.coordMap.coordinates;
+
+            data.map( function ( pair ) {
+                if ( pair.input ) {
+                    inputData.push( pair.input );
+                }
+                if ( pair.output ) {
+                    outputData.push( pair.output );
+                }
+            });
+
+            if ( inputData.length > 0 ) {
+                this.inputTable.render( inputData );
+            }
+            if ( outputData.length > 0 ) {
+                this.outputTable.render( outputData );
+            }
         },
         /**
          * @method handleClipboard
@@ -215,8 +274,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     pastedData = clipboardData.getData('Text');
 
                     var dataJson = me.validateData( pastedData );
-
-                    me.inputTable.addRows( dataJson );
+                    me.updateCoordinates( "input", dataJson );
                 });
             }
         },
@@ -226,7 +284,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
          */
         handleFile: function( fileContent ) {
             var dataJson = this.validateData( fileContent );
-            this.inputTable.addRows( dataJson );
+            this.updateCoordinates( dataJson );
         },
         /**
          * @method handleRadioButtons
@@ -263,10 +321,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 }
                 me.inputTable.isEditable( me.clipboardInsert );
             });
-                jQuery('.selelctFromMap').on("click", function() {
-                    me.instance.toggleViews("MapSelection");
-                    me.clipboardInsert = false;
-                });
+            jQuery('.selelctFromMap').on("click", function() {
+                me.instance.toggleViews("MapSelection");
+                me.clipboardInsert = false;
+            });
          },
         /**
          * @method selectMapProjectionValues
@@ -310,22 +368,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             });
             container.find('#transform').on("click", function () {
                 var crs = me.getCrsOptions();
-                var rows = me.inputTable.getElements().rows;
                 var coordinateArray = [];
-                rows.each(function () {
-                    var lat = jQuery(this).find('.lat').html().trim();
-                    var lon = jQuery(this).find('.lon').html().trim();
-                    var elevation = jQuery(this).find('.elevation').html().trim();
-                    if (lat != "" && lon != "" && elevation != "" ) {
-                        var coords = [ Number(lon), Number(lat), Number(elevation) ];
-                        coordinateArray.push( coords );
-                    }
-                    else if ( lat != "" && lon != "" ) {
-                        var coords = [ Number(lon), Number(lat) ];
-                        coordinateArray.push( coords );
-                    }
 
+                me.coordMap.sourceCrs = crs.source;
+                me.coordMap.targetCrs = crs.target;
+
+                me.coordMap.coordinates.forEach( function ( pair ) {
+                    var input = pair.input;
+                    var inputCoordinates = [ Number(input.lon), Number(input.lat) ];
+                    coordinateArray.push(inputCoordinates);
                 });
+
                 var payload = {
                     sourceCrs: crs.source,
                     sourceElevationCrs: crs.sourceElevation,
