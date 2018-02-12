@@ -85,6 +85,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             this.templateLayerFooterOutOfContentArea = jQuery('<p class="layer-msg">' + loc['out-of-content-area'] + ' <a href="JavaScript:void(0);">' + loc['move-to-content-area'] + '</a></p>');
 
+            this.templateUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="#">'+ loc['change-projection'] +'</a></div>');
+
             //set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
             elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
@@ -215,31 +217,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         _appendLayerFooter: function (layerDiv, layer, isInScale, isGeometryMatch) {
             var toolsDiv = layerDiv.find('div.layer-tools');
 
-            /* fix: we need this at anytime for slider to work */
-            var footer = this._createLayerFooter(layer, layerDiv);
-
-            if (!layer.isVisible()) {
-                toolsDiv.addClass('hidden-layer');
-                footer.css('display', 'none');
-                toolsDiv.append(this._createLayerFooterHidden(layer));
-            } else if (!isInScale) {
-                var oosFtr = this._createLayerFooterOutOfScale(layer);
-                toolsDiv.addClass('out-of-scale');
-                footer.css('display', 'none');
-                toolsDiv.append(oosFtr);
-            } else if (!isGeometryMatch) {
-                var oocaFtr = this._createLayerFooterOutOfContentArea(layer);
-                toolsDiv.addClass('out-of-content');
-                footer.css('display', 'none');
-                toolsDiv.append(oocaFtr);
+            var footer;
+            if(!layer.isSupported(this.instance.getSandbox().getMap().getSrsName())) {
+                footer = this._createUnsupportedFooter();
             } else {
-                footer.css('display', '');
+                /* fix: we need this at anytime for slider to work */
+                footer = this._createLayerFooter(layer, layerDiv);
+
+                if (!layer.isVisible()) {
+                    toolsDiv.addClass('hidden-layer');
+                    footer.css('display', 'none');
+                    toolsDiv.append(this._createLayerFooterHidden(layer));
+                } else if (!isInScale) {
+                    var oosFtr = this._createLayerFooterOutOfScale(layer);
+                    toolsDiv.addClass('out-of-scale');
+                    footer.css('display', 'none');
+                    toolsDiv.append(oosFtr);
+                } else if (!isGeometryMatch) {
+                    var oocaFtr = this._createLayerFooterOutOfContentArea(layer);
+                    toolsDiv.addClass('out-of-content');
+                    footer.css('display', 'none');
+                    toolsDiv.append(oocaFtr);
+                } else {
+                    footer.css('display', '');
+                }
             }
 
             toolsDiv.append(footer);
 
             var opa = layerDiv.find('div.layer-opacity div.opacity-slider input'),
                 slider = this._addSlider(layer, layerDiv, opa);
+        },
+        /**
+         * @private
+         * @method _createUnsupportedFooter create jQuery element for unsupported SRS footer
+         */
+        _createUnsupportedFooter: function () {
+            return this.templateUnsupported.clone();
         },
         /**
          * @private @method _switchRefreshIcon

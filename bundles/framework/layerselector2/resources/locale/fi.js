@@ -32,7 +32,8 @@ Oskari.registerLocalization(
             "type-base": "Taustakartta",
             "type-wms": "Karttataso",
             "type-wfs": "Tietotuote",
-            "type-wfs-manual": "Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä."
+            "type-wfs-manual": "Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä.",
+            "unsupported-srs": "Väärä karttaprojektio"
         },
         "backendStatus": {
             "OK": {

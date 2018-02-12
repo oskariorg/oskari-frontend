@@ -228,10 +228,18 @@ Oskari.clazz.define(
          * @return {Boolean}       true if this plugin handles the type of layers
          */
         isLayerSupported : function(layer) {
-            if(!layer) {
+            if(!layer || !this.isLayerSrsSupported(layer)) {
                 return false;
             }
             return layer.isLayerOfType(this.getLayerTypeSelector());
+        },
+        /**
+         * @method isLayerSrsSupported Checks if layer's SRS is supported by current map view
+         * @param {Oskari.mapframework.domain.AbstractLayer}  layer
+         * @return {Boolean}
+         */
+        isLayerSrsSupported: function(layer) {
+            return layer.isSupported(this.getSandbox().getMap().getSrsName());
         },
 
         getLayerTypeIdentifier: function () {
