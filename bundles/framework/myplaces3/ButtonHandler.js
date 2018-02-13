@@ -152,11 +152,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
         sendDrawRequest: function (config) {
             this.drawMode = config.drawMode;
             this.instance.setIsFinishedDrawing(false);
-            this.instance.enableGfi(false);
 
             var conf = jQuery.extend(true, {}, config);
             // clear drawing before start
-            this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true]);  
+            this.instance.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true, true]);
             this.instance.getSandbox().postRequestByName('DrawTools.StartDrawingRequest', [this.instance.getName(), conf.shape, conf.drawOptions]);
             this.instance.setIsEditPlace(false);
             this._showDrawHelper(config.drawMode);
@@ -294,9 +293,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
             'Toolbar.ToolSelectedEvent': function (event) {
                 if (this.drawMode !== event.getToolId() && !this.ignoreEvents) {
                     // changed tool -> cancel any drawing
-                    // do not trigger when placeform is shown 
+                    // do not trigger when placeform is shown
                     this.sendStopDrawRequest(true, true);
-                    this.instance.enableGfi(true);
                     if(this.dialog){
                         this.dialog.close();
                     }
@@ -324,8 +322,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
                         this.instance.sandbox.request(this, toolbarRequest);
                         // disable ignore to act normally after ^request
                         this.ignoreEvents = false;
-                        // select tool selection will enable gfi -> disable it again
-                        this.instance.enableGfi(false);
                         if (this.dialog) {
                             this.dialog.close();
                         }
@@ -341,7 +337,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
                     form = this.instance.getMainView().getForm(),
                     keyBoardRequest;
                 if (event.getId() == popupId){
-                    this.instance.enableGfi(true);
                     this.sendStopDrawRequest(true, true);
                     if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
                         keyBoardRequest = Oskari.requestBuilder('EnableMapKeyboardMovementRequest')();

@@ -78,7 +78,7 @@ jQuery(document).ready(function () {
 
             terribleHackToBeRemoved(appSetup.configuration, appSetup.env.lang || window.language);
 
-            app.setApplicationSetup(appSetup);
+            app.init(appSetup);
 
             app.startApplication(function () {
                 var sb = Oskari.getSandbox();
