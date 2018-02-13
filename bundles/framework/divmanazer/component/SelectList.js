@@ -82,10 +82,27 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     update: function() {
       this.element.find('select').trigger('chosen:updated');
     },
-    /**  @method addOption appends a new option to the select
-     *   @param { Object } object with keys id and title
+    /**  
+     * @method hideOptions hide all options except placeholder
      */
-
+    hideOptions: function () {
+      this.resetToPlaceholder();
+      var chosen = this.element.find('select');
+      chosen.find('option').not(":first-child").css('display', 'none');
+      chosen.trigger('chosen:updated');
+    },
+    /**  
+     * @method showOptions hide all options except placeholder
+     */
+    showOptions: function () {
+      var chosen = this.element.find('select');
+      chosen.find('option').not(":first-child").css('display', '');
+      chosen.trigger('chosen:updated');
+    },
+    /**  
+     * @method addOption appends a new option to the select
+     * @param { Object } object with keys id and title
+     */
     addOption: function ( data ) {
         var chosen = this.element.find('select');
         var option = this._option.clone();
