@@ -54,7 +54,7 @@ Oskari.clazz.define(
                 }
 
                 if(value.rect){
-                    jQuery(croppingBtn.getElement()).data("croppingMode","regtangle");
+                    jQuery(croppingBtn.getElement()).data("croppingMode","rectangle");
                 }else{
                     jQuery(croppingBtn.getElement()).data("croppingMode","polygon");
                 }
