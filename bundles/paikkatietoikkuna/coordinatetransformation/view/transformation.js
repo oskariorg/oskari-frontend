@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             this.outputTable.getContainer().find( ".coordinatefield-table" ).addClass( 'target' );
 
             if ( this.fileinput.canUseAdvancedUpload() ) {
-                var fileInputElement = this.fileinput.handleDragAndDrop( this.handleFile.bind( this ) );
+                var fileInputElement = this.fileinput.handleDragAndDrop( this.readFileData.bind( this ) );
             }
             wrapper.find( '.datasource-info' ).append( fileInputElement );
 
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             jQuery(container).append(wrapper);
 
-            this.handleClipboard();
+            this.handleClipboardPasteEvent();
             this.handleButtons();
             this.handleRadioButtons();
         },
@@ -206,30 +206,47 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         },
         handleServerResponce: function ( response ) {
             var obj = this.constructLonLatObjectFromArray(response.coordinates);
-            this.updateCoordinates("output", obj);
+            this.modifyCoordinateObject("output", obj);
         },
-        updateCoordinates: function ( flag, coordinates ) {
+        /**
+         * @method modifyCoordinateObject
+         * @param {string} flag - coordinate array contains two objects, input & output - flag determines which one you interact with
+         * @param {array} coordinates - an array containing objects with keys lon lat - one object for each coordinate pair
+         * @description 
+         */
+        modifyCoordinateObject: function ( flag, coordinates ) {
+            var data = this.coordMap.coordinates;
             var me = this;
-            var data = me.coordMap.coordinates;
-            switch (flag) {
-                case 'input':
+            var actions = {
+                'input': function () {
                     coordinates.forEach( function ( pair ) {
 	                    data.push({
                             input: pair
                         });
                     });
-                    break;
-                case 'output':
+                },
+                'output': function () {
                     for ( var i = 0; i < Object.keys( coordinates ).length; i++ ) {
                         data[i].output = coordinates[i];
                     }
-                    break;
-                default:
-                    break;
+                },
+                'clear': function () {
+                    me.coordMap.coordinates.length = 0;
+                }
+            };
+            if ( actions[flag] ) {
+                actions[flag]();
+            } else {
+                return;
             }
-            this.renderTable();
+
+            this.refreshTableData();
         },
-        renderTable: function () {
+        /**
+         * @method refreshTableData
+         * @description refreshes both input and output tables with current data
+         */
+        refreshTableData: function () {
             var inputData = [];
             var outputData = [];
 
@@ -244,18 +261,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 }
             });
 
-            if ( inputData.length > 0 ) {
-                this.inputTable.render( inputData );
-            }
-            if ( outputData.length > 0 ) {
-                this.outputTable.render( outputData );
-            }
+            this.inputTable.render( inputData );
+            this.outputTable.render( outputData );
         },
         /**
-         * @method handleClipboard
+         * @method handleClipboardPasteEvent
          * Handles the paste event in the input table
          */
-        handleClipboard: function () {
+        handleClipboardPasteEvent: function () {
             var me = this;
             var cells = document.getElementsByClassName("cell");
 
@@ -274,17 +287,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     pastedData = clipboardData.getData('Text');
 
                     var dataJson = me.validateData( pastedData );
-                    me.updateCoordinates( "input", dataJson );
+                    me.modifyCoordinateObject( "input", dataJson );
                 });
             }
         },
         /**
-         * @method handleFile
+         * @method readFileData
          * Pass this function as a callback to fileinput to get the file-data
          */
-        handleFile: function( fileContent ) {
-            var dataJson = this.validateData( fileContent );
-            this.updateCoordinates( dataJson );
+        readFileData: function( fileData ) {
+            var dataJson = this.validateData( fileData );
+            this.modifyCoordinateObject( dataJson );
         },
         /**
          * @method handleRadioButtons
@@ -339,27 +352,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var sourceelevationSelection = this.setSelectionValue( input["geodetic-coordinate"], "ETRS-TM35FIN" );
         },
         /**
-         * @method handleRadioButtons
-         * Inits the on change listeners for the radio buttons
+         * @method handleButtons
          */
         handleButtons: function () {
             var me = this;
             var container = me.getContainer();
             container.find('.clear').on("click", function () {
-                me.inputTable.clearRows();
-                me.outputTable.clearRows();
+                me.modifyCoordinateObject('clear');
                 me.helper.removeMarkers();
             });
             container.find('.show').on("click", function () {
                 var rows = me.inputTable.getElements().rows;
-                rows.each(function () {
-                    var lat = jQuery(this).find('.lat').html();
-                    var lon = jQuery(this).find('.lon').html();
-                    if(lat != "  " && lon != "  ") {
-                        var coords = { lon: lon, lat: lat };
-                        me.helper.addMarkerForCoords(coords, me.startingSystem);
-                    }
-                });
+                me.coordMap.coordinates.forEach( function ( pair ) {
+                    me.helper.addMarkerForCoords( pair.input, me.startingSystem );
+                });                
                 me.instance.toggleViews("mapmarkers");
             });
             container.find('.export').on("click", function () {
@@ -407,21 +413,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             this._userSelections = { "import": settings };
         },
         exportFile: function ( settings ) {
-            var me = this;
-                var rows = me.outputTable.getElements().rows;
-                var arr = [];
-                rows.each(function () {
-                    var lat = jQuery(this).find('.lat').html();
-                    var lon = jQuery(this).find('.lon').html();
-                    if ( lat != "  " && lon != "  " ) {
-                        var coords = { lon: lon, lat: lat };
-                        arr.push( coords );
-                    }
-                });
-            if( arr.length !== 0 ) {
-                me.fileinput.exportToFile( arr, settings.filename+'.txt' );
+            var exportArray = [];
+            this.coordMap.coordinates.forEach( function ( pair ) {
+                exportArray.push( pair.input );
+            });  
+            if( exportArray.length !== 0 ) {
+                this.fileinput.exportToFile( exportArray, settings.filename+'.txt' );
             } else {
-                Oskari.log(me.getName()).warn("No transformed coordinates to write to file!");
+                Oskari.log(this.getName()).warn("No transformed coordinates to write to file!");
             }
         },
         getUserSelections: function () {
