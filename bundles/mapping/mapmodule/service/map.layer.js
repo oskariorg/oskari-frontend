@@ -405,15 +405,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             // remove the first one for recursion
             var json = layers.shift();
-            setTimeout(function() {
-                var mapLayer = me.createMapLayer(json);
-                // unsupported maplayer type returns null so check for it
-                if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
-                    me.addLayer(mapLayer, true);
-                }
-                // continue with rest of the layers
+            var mapLayer = me.createMapLayer(json);
+            // unsupported maplayer type returns null so check for it
+            if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
+                me.addLayer(mapLayer, true);
+            }
+            // process remaining layers
+            if (layers.length%20 !== 0) {
+                // do it right a way
                 me._loadAllLayersAjaxCallBack(layers, callbackSuccess);
-            }, 0);
+            } else {
+                // yield cpu time after every 20 layers
+                setTimeout(function() {
+                    me._loadAllLayersAjaxCallBack(layers, callbackSuccess);
+                }, 0);
+            }
 
         },
 
