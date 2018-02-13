@@ -132,8 +132,25 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var projection = instances.projection.getValue();
             var clsSelector = this.makeClassSelector;
 
+            var table;
+            var system = this.element.attr('data-system');
+            // which table we operate on
+            if ( system === 'coordinate-input' ) {
+                table = this.instance.inputTable; 
+            } else {
+                table = this.instance.outputTable;
+            }
+
             me.instance.startingSystem = true;
             
+            if ( coordinate.indexOf("3D") > -1 ) {
+                table.handleDisplayingElevationRows(true);
+                instances.elevation.hideOptions();
+            } else {
+                table.handleDisplayingElevationRows(false);
+                instances.elevation.showOptions();
+            }
+
             switch ( currentValue ) {
                 case "DATUM_DEFAULT":
                 case "DATUM_KKJ":
@@ -144,8 +161,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     break;
                 case "KOORDINAATISTO_MAANT_2D":
                     this.projectionSelected = false;
-                    var valueClass = clsSelector( datum ) + clsSelector( currentValue );
-                    this.handleDropdownOptions( valueClass, "geodetic-coordinate" );
+                    var classSelector = clsSelector( datum ) + clsSelector( currentValue );
+                    this.handleDropdownOptions( classSelector, "geodetic-coordinate" );
                     instances["geodetic-coordinate"].resetToPlaceholder();
                     break;
                 case "KOORDINAATISTO_MAANT_3D":
@@ -153,6 +170,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     this.projectionSelected = false;
                     this.handleDropdownOptions( clsSelector( currentValue ), "geodetic-coordinate" );
                     instances["geodetic-coordinate"].resetToPlaceholder();
+                    table.handleDisplayingElevationRows(true);
                     break;
                 case "KOORDINAATISTO_SUORAK_2D":
                 case "KKJ_KAISTA":
@@ -165,35 +183,46 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 case "COORDSYS_DEFAULT":
                     me.instance.startingSystem = true;
                     break;
-                case "KORKEUSJ_DEFAULT":
-                    this.instance.inputTable.handleDisplayingElevationRows(false);
-                    break;
                 case "KORKEUSJ_N2000":
                 case "KORKEUSJ_N60":
                 case "KORKEUSJ_N43":
-                    this.instance.inputTable.handleDisplayingElevationRows(true);        
+                    table.handleDisplayingElevationRows(true);        
                     break;
                 default:
                     break;
             }
 
-            var classesToShow = clsSelector(datum);
+            var classSelector = clsSelector(datum);
 
             if ( this.projectionSelected ) {
                 dropdowns.projection.parent().parent().show();
                if ( projection ) {
-                    classesToShow += clsSelector(projection);
+                    classSelector += clsSelector(projection);
                 }
             } else {
                 dropdowns.projection.parent().parent().hide();
                 instances.projection.resetToPlaceholder();
 
                 if ( coordinate ) {
-                    classesToShow += clsSelector(coordinate);
+                    classSelector += clsSelector(coordinate);
                 }
             }
-            dropdowns["geodetic-coordinate"].find(classesToShow).show();
+            dropdowns["geodetic-coordinate"].find(classSelector).show();
             this.updateSelectValues( instances );
+            table.updateTitle( this.getSelectionValues() );
+        },
+        /**
+         * @method getSelectionValues
+         * @description gets all values from all the selectList components associated with this class
+         * @return { Object } containing the values
+         */
+        getSelectionValues: function () {
+            var me = this;
+            var values = {};
+            Object.keys( this.selectInstance ).forEach( function ( instance ) {
+                values[instance] = me.selectInstance[instance].getValue();
+            });
+            return values;
         },
         resetSelectToPlaceholder: function () {
             //reset all but the datum

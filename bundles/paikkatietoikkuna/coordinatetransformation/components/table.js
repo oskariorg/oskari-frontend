@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 if ( !isEmpty ) {
                     elevationCells.addClass('cell-disabled');
                 } else {
-                    me.toggleElevationRows();
+                    elevationCells.addClass('oskari-hidden');
                 }
             } else {
                 elevationCells.attr("contenteditable", true);
@@ -81,19 +81,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 } else if( !elevationCells.hasClass('oskari-hidden') ) {
                     return;
                 } else {
-                    me.toggleElevationRows();
+                    elevationCells.removeClass('oskari-hidden');
                 }
             }
         },
-        toggleElevationRows: function () {
-            var elevationRows = this.getElements().rows.find('.elevation');
-            if ( elevationRows.hasClass('oskari-hidden') ) {
-                elevationRows.removeClass('oskari-hidden');
-            } else {
-                elevationRows.addClass('oskari-hidden');
-            }
-        },
-        
         create: function () {
             var me = this;
                 var rowcounter = this.template.rowcounter({ rows: this.loc.utils.rows })
@@ -123,8 +114,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         },
         /**
          * @method render
-         *
-         * {Object} coords, each key needs to have property lon & lat 
+         * @param { Array } data, array of objects - each object needs to have property lon & lat 
          */
         render: function ( data ) {
             this.clearRows();
@@ -180,21 +170,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         },
         updateTitle: function (values) {
             this.getElements().header.remove();
-            
             var x = y = z = "";
-            if ( values["geodetic-coordinate"] === "COORDSYS_KKJ" ) {
+            if ( values["geodetic-coordinate"].indexOf("KKJ") !== -1 ) {
                 x = this.loc.coordinatefield.kkjnorth
                 y = this.loc.coordinatefield.kkjeast
-                z = ""
-            } else if ( values["geodetic-coordinate"] === "COORDSYS_ETRS" ) {
+            } else if ( values["geodetic-coordinate"].indexOf("ETRS") !== -1 ) {
                 x = this.loc.coordinatefield.kkjeast
                 y = this.loc.coordinatefield.kkjnorth
-                z = ""
             }
             if ( values.coordinate === "KOORDINAATISTO_MAANT_2D" ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
-                z = ""
             } else if ( values.coordinate === "KOORDINAATISTO_MAANT_3D" ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
@@ -205,6 +191,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                     y = this.loc.coordinatefield.geoy
                     z = this.loc.coordinatefield.geoz
             }
+            if( values.elevation !== 'KORKEUSJ_DEFAULT' && values.elevation !== "" ) {
+                z = this.loc.coordinatefield.elevation;
+            }
 
             if( x !== '' && y !== '' || z !== '' ) {
 
@@ -213,8 +202,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                     east: y,
                     ellipse_elevation: z 
                 });
-
-                jQuery( header ).insertBefore( jQuery( this.getContainer() ).find(".oskari-table-content") );
+                var header = jQuery(header);
+                if (z == '') {
+                   header.find('th').addClass('two');
+                   header.find('#ellipse_elevation').css('display', 'none');
+                } else {
+                    header.find('th').addClass('three');
+                }
+                header.insertBefore( this.getContainer().find(".oskari-table-content") );
             }
     }
 }, {

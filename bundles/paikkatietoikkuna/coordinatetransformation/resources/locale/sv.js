@@ -48,6 +48,7 @@ Oskari.registerLocalization(
                 "kkjeast":"Itä-koordinaatti [m]",
                 "lat":"Leveysaste",
                 "lon":"Pituusaste",
+                "elevation": "Korkeus [m]",
                 "geox":"Geosentrinen X [m]",
                 "geoy":"Geosentrinen Y [m]",
                 "geoz":"Geosentrinen Z [m]",

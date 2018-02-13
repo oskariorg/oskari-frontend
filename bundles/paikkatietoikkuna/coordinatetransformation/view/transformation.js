@@ -23,12 +23,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.sourceSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.SourceSelect', me.loc );
 
         me.file.create();
-        me._selectInstances = { input: null, target: null };
         me._userSelections = { import: null, export: null };
         me._template = {
             wrapper: jQuery('<div class="transformation-wrapper"></div>'),
-            title: _.template('<h4 class="header"><%= title %></h4>'),
-            conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
+            system: jQuery('<div class="systems"></div>'),
+            title: _.template('<h4 class="header"><%= title %></h4>'),            
             transformButton: _.template(
                 '<div class="transformation-button" style="display:inline-block;">' +
                     '<input id="transform" type="button" value="<%= convert %> >>">' +
@@ -67,20 +66,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 });
                                                             
             var wrapper = this._template.wrapper.clone();
+            var system = this._template.system.clone();
             if ( this.sourceSelect.getElement() ) {
                 wrapper.append( this.sourceSelect.getElement() );
             }
             if ( this.inputSystem.getElement() ) {
-                wrapper.append( this.inputSystem.getElement() );
-                wrapper.find( '.transformation-system' ).attr( 'id','inputcoordsystem' );
-                wrapper.find( '#inputcoordsystem' ).prepend( inputTitle );
+                var element = this.inputSystem.getElement();
+                element.attr('data-system', 'coordinate-input');
+                element.prepend( inputTitle );
+                system.append( element );
             }
             if ( this.outputSystem.getElement() ) {
-                wrapper.append( this.outputSystem.getElement() );
-                wrapper.find( '.transformation-system' ).not( '#inputcoordsystem' ).attr( 'id','targetcoordsystem' );
-                wrapper.find( '#targetcoordsystem' ).prepend( resultTitle );
+                var element = this.outputSystem.getElement();
+                element.attr('data-system', 'coordinate-output');
+                element.prepend( resultTitle );
+                system.append( element );
             }
-
+            wrapper.append(system);
             this.fileinput.create();
             this.outputTable.getContainer().find( ".coordinatefield-table" ).addClass( 'target' );
 

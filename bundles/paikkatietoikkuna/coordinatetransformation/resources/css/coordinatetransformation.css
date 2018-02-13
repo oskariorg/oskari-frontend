@@ -4,29 +4,8 @@
 .coordinatetransformation-flyout {
     top:0 !important;
 }
-.transformation-wrapper {
-    max-width: 50em !important;
-    display: flex;
-    flex-flow: row wrap;
-}
-.transformation-system {
-    display: inline-block;
-    font-size: 12px;
-    padding-left: 3px;
-}
- .system {
-    clear: left;
-    padding-top: 0.875em; 
-}
-
-#targetcoordsystem {
-    margin-left: 2em;
-}
 #rowwidth {
     max-width: 100px !important;
-}
-.cell-disabled {
-    background-color: grey !important;
 }
 .coordinatetransformation-flyout .header {
     font-size: 15px;
@@ -119,7 +98,29 @@
   -moz-transition:background-color 0.4s linear;
   transition:background-color 0.4s linear;
 }
-
+/*
+* SYSTEM SELCTOR
+*/
+.systems {
+    display: inline-flex;
+}
+.coordinateSystemWrapper:last-child {
+    margin-left: 2em;
+}
+.system {
+    clear: left;
+    padding-top: 0.875em; 
+}
+.transformation-wrapper {
+    max-width: 50em !important;
+    display: flex;
+    flex-flow: row wrap;
+}
+.transformation-system {
+    display: inline-block;
+    font-size: 12px;
+    padding-left: 3px;
+}
 /*
 *TABLE
 */
@@ -144,7 +145,7 @@
     border: 1px solid rgba(255,255,255,0.3);
 }
 .coordinatetransformation-flyout .oskari-table-header {
-    background-color:rgba(37, 184, 193, 0.8);
+    color: black;
     width: 20em !important;
 }
 .coordinatetransformation-flyout #oskari-tbl-header {
@@ -155,14 +156,17 @@
 .coordinatetransformation-flyout .target {
     padding-left:2.5em;
 }
-.coordinatetransformation-flyout th {
-  padding: 20px 8px;
+.coordinatefield-table th three {
   text-align: left;
   font-weight: 500;
   font-size: calc(0.55rem + 0.28vh);
-  color: #fff;
-  text-transform: uppercase;
   width: 33% !important;
+}
+.coordinatefield-table th two {
+  text-align: left;
+  font-weight: 500;
+  font-size: calc(0.55rem + 0.28vh);
+  width: 50% !important;
 }
 .coordinatetransformation-flyout td {
     background: #FAFAFA;
@@ -176,6 +180,9 @@
     border-bottom: 1px solid black;
     display: none; 
     position: relative;
+}
+.cell-disabled {
+    background-color: grey !important;
 }
 
 /*
