@@ -228,10 +228,18 @@ Oskari.clazz.define(
          * @return {Boolean}       true if this plugin handles the type of layers
          */
         isLayerSupported : function(layer) {
-            if(!layer) {
+            if(!layer || !this.isLayerSrsSupported(layer)) {
                 return false;
             }
             return layer.isLayerOfType(this.getLayerTypeSelector());
+        },
+        /**
+         * @method isLayerSrsSupported Checks if layer's SRS is supported by current map view
+         * @param {Oskari.mapframework.domain.AbstractLayer}  layer
+         * @return {Boolean}
+         */
+        isLayerSrsSupported: function(layer) {
+            return layer.isSupported(this.getSandbox().getMap().getSrsName());
         },
 
         getLayerTypeIdentifier: function () {
@@ -323,8 +331,13 @@ Oskari.clazz.define(
                 for (i = 0; i < olLayerList.length; ++i) {
                     if (olLayerList[i].redraw && typeof(olLayerList[i].redraw) === 'function') {
                         olLayerList[i].redraw(forced);
-                    } else if (olLayerList[i].getSource && typeof(olLayerList[i].getSource()) === 'function') {
-                        olLayerList[i].getSource().updateParams(params);
+                    } else if (typeof (olLayerList[i].getSource) === 'function' && typeof(olLayerList[i].getSource().updateParams) === 'function') {
+                        var updatedParams = jQuery.extend(true, {}, olLayerList[i].getSource().getParams(), params);
+                        //add timestamp to make sure that params are changed and layer is forced to redraw
+                        if(forced === true){
+                            updatedParams._ts = Date.now();
+                        }
+                        olLayerList[i].getSource().updateParams(updatedParams);
                     }
                 }
             }

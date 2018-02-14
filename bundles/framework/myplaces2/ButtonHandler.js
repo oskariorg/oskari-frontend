@@ -16,6 +16,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
         this.measureButtonGroup = 'basictools';
         this.ignoreEvents = false;
         this.dialog = null;
+        this.drawMode = null;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces2');
         var me = this;
         this.buttons = {
@@ -202,6 +203,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             } else if (conf.drawMode === 'measurearea') {
                 conf.drawMode = 'area';
             }
+            this.drawMode = conf.drawMode;
             var startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(conf);
             this.instance.sandbox.request(this, startRequest);
 
@@ -304,12 +306,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             /**
              * @method Toolbar.ToolSelectedEvent
              */
-            'Toolbar.ToolSelectedEvent': function () {
-                if (!this.ignoreEvents) {
+            'Toolbar.ToolSelectedEvent': function (event) {
+                if (event.getToolId() !== this.drawMode && !this.ignoreEvents) {
                     // changed tool -> cancel any drawing
                     // do not trigger when we return drawing tool to
                     this.sendStopDrawRequest(true);
                     this.instance.enableGfi(true);
+                    this.drawMode = null;
+                    if (this.dialog){
+                        this.dialog.close();
+                    }
                 }
             },
             /**

@@ -11,10 +11,33 @@ Some extra tags:
 
 ## 1.45.0
 
-#### [mod] DrawTools.StopDrawingRequest
+### [mod] [rpc] FeatureEvent
+
+is now triggered correctly on published maps/ol3 implementation when layer is cleared with MapModulePlugin.RemoveFeaturesFromMapRequest without parameters.
+
+### [mod] [rpc] DrawTools.StopDrawingRequest
 
 A new optional third parameter suppressEvent (boolean).
 If true the request doesn't trigger a DrawingEvent. Defaults to false.
+
+### [rem] MetaData.FinishedDrawingEvent
+
+Event removed from Metadatacatalogue bundle. New parallel version uses DrawTools.StartDrawingRequest and DrawTools.StopDrawingRequest instead to draw search coverage area on map.
+
+### [mod] MapMoveByLayerContentRequest
+
+MapMoveByLayerContentRequest now has a new optional param to zoom to layer extent (requires layer coverage data to be available).
+
+### [mod] PublishMapEditorRequest
+
+Now sets the publisher state as a whole for editing an embedded map instead of assuming for example layers to be adjusted prior to sending the request.
+
+### [add] new bundle: GeometryCutter
+
+Geometrycutter is a more bare bones replacement for the "geometryeditor" bundle. Geometrycutter has only two editing modes:
+
+- splitting a feature by a user drawn linestring as if it was a cutting "blade"
+- removing a part of a feature that overlaps a user drawn polygon (difference)
 
 ### [rem] [breaking] TimeseriesAnimationEvent, AnimateLayerRequest
 

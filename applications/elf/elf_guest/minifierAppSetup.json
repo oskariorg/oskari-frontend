@@ -222,7 +222,7 @@
                     }
                 }
             }
-        },      
+        },
         {
             "bundlename": "elf-language-selector",
             "metadata": {

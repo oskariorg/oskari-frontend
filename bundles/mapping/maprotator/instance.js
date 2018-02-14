@@ -45,17 +45,18 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
         sandbox = sandbox || Oskari.getSandbox();
         me.setSandbox(sandbox);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        me.createPlugin(true);
+        me.createPlugin();
         sandbox.register(me);
         sandbox.requestHandler('rotate.map', this);
     },
-    createPlugin: function( enabled, publisher ) {
-      if(typeof publisher === 'undefined'){
-        publisher = false;
+    createPlugin: function( ) {
+      if (this.plugin) {
+        return;
       }
       var conf = this.conf || {};
       var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.MapRotatorPlugin', conf);
-      if(!plugin.isSupported() && !publisher){
+      if ( !plugin.isSupported() ) {
+        // don't create plugin if ol4 is not supported
         return;
       }
       this._mapmodule.registerPlugin(plugin);

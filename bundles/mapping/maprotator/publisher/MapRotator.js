@@ -10,7 +10,8 @@ function() {
   templates: {
       'toolOptions': '<div class="tool-options"></div>'
   },
-  noUI: false,
+  noUI: null,
+  noUiIsCheckedInModifyMode: false,
 /**
   * Get tool object.
   * @method getTool
@@ -21,9 +22,7 @@ function() {
       return {
           id: 'Oskari.mapping.maprotator.MapRotatorPlugin',
           title: 'MapRotator',
-          config: {
-              instance: this.getMapRotatorInstance()
-          }
+          config: {}
       };
   },
   isDisplayed: function() {
@@ -34,50 +33,22 @@ function() {
   getMapRotatorInstance : function() {
     return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
   },
-  getPlugin: function() {
-    var maprotator = this.getMapRotatorInstance() || {};
-    return maprotator.plugin;
-  },
   //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
   bundleName: 'maprotator',
   /**
    * Initialise tool
    * @method init
    */
-  init: function(data) {
-      var me = this;
-      if ( !data || !data.configuration[me.bundleName] ) {
-          return;
-      }
+  init: function (data) {
+    var me = this;
 
-      me.setEnabled(true);
-      var conf = data.configuration[me.bundleName].conf || {};
-      me.noUI = !!conf.noUI;
+    if ( !data || !data.configuration[me.bundleName] ) {
+        return;
+    }
+    me.setEnabled(true);
 
-  },
-  /**
-  * Set enabled.
-  * @method setEnabled
-  * @public
-  *
-  * @param {Boolean} enabled is tool enabled or not
-  */
-  setEnabled : function(enabled) {
-      var me = this,
-          tool = me.getTool(),
-          request;
-
-      me.state.enabled = enabled;
-      if(tool.config.instance.plugin === null && enabled) {
-        tool.config.instance.createPlugin(true, true);
-        me.__started = true;
-      }
-      if(!enabled && me.__started){
-        if(me.getMapRotatorInstance().plugin && !me.noUI){
-            me.getMapRotatorInstance().stopPlugin();
-        }
-        me.__started = false;
-      }
+    var conf = data.configuration[me.bundleName].conf || {};
+    me.noUiIsCheckedInModifyMode = !!conf.noUI;
   },
   /**
   * Get values.
@@ -90,20 +61,25 @@ function() {
       var me = this;
       if(me.state.enabled) {
         var pluginConfig = this.getPlugin().getConfig();
-
-          if(me.noUI) {
-              pluginConfig.noUI = me.noUI;
-          }
-          var json = {
-              configuration: {}
-          };
-          json.configuration[me.bundleName] = {
-              conf: pluginConfig,
-              state: {}
-          };
-          return json;
-        } else {
-          return null;
+        for (var configName in pluginConfig) {
+            if (configName === 'noUI' && !me.noUI) {
+                pluginConfig[configName] = null;
+                delete pluginConfig[configName];
+            }
+        }
+        if(me.noUI) {
+            pluginConfig.noUI = me.noUI;
+        }
+        var json = {
+            configuration: {}
+        };
+        json.configuration[me.bundleName] = {
+            conf: pluginConfig,
+            state: {}
+        };
+        return json;
+    } else {
+        return null;
       }
   },
   /**
@@ -123,10 +99,10 @@ function() {
 
     input.setTitle( labelNoUI );
     input.setHandler( function( checked ) {
-        if(!me.getPlugin()){
+        if ( !me.getPlugin() ) {
             return;
         }
-        if( checked === 'on' ){
+        if ( checked === 'on' ) {
             me.noUI = true;
             me.getPlugin().teardownUI();
         } else {
@@ -134,8 +110,10 @@ function() {
             me.getPlugin().redrawUI();
         }
     });
-    input.setChecked(me.noUi);
-
+    if(me.noUiIsCheckedInModifyMode) {
+        input.setChecked(true);
+        me.noUI = true;
+    }
     var inputEl = input.getElement();
     template.append(inputEl);
     return template;
