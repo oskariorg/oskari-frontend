@@ -56,6 +56,11 @@ Card
 /*
  /CARD
 */
+.EPSG3067 {
+	content: url("../images/EPSG3067.png");
+    /*background-image: url("../images/EPSG3571.png");*/
+
+}
 .EPSG3571 {
 	content: url("../images/EPSG3571.png");
     /*background-image: url("../images/EPSG3571.png");*/

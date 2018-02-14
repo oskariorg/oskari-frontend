@@ -30,6 +30,9 @@ function (view, callback) {
     setElement: function (el) {
         this.element = el;
     },
+    createClassSelector: function ( crs ) {
+        return crs.replace(':', '');
+    },
     create: function (view) {
         var me = this;
 
@@ -37,7 +40,7 @@ function (view, callback) {
 
         var card = jQuery( tpl ({
             srs: view.srsName,
-            imgCls: view.imgCls,
+            imgCls: me.createClassSelector( view.srsName ),
             projectionName: view.name,
             tooltip: me.loc.error.hover.icon
         }));
