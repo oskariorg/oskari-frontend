@@ -1,7 +1,9 @@
 .oskari-projection-changer {
     height:36px;
     width: 36px;
-    background-color: green;
+    background-image: url("../images/VäliaikainenMaapalloikoni.png");
+    background-repeat: no-repeat;
+    background-position: center;
     margin-bottom: 10px !important;
     cursor: pointer;
 }
@@ -13,6 +15,8 @@
     overflow: hidden;
     align-items: center;
     justify-content: center;
+    padding-left: 3%;
+    overflow-x: hidden;
 }
 /*
 Card
@@ -44,21 +48,36 @@ Card
 .card-image {
     display: flex;
     justify-content: center;
-}
-.card-header {
+    height: auto; 
+    width: auto; 
+    max-width: 145px; 
+    max-height: 145px;
 }
 /*
  /CARD
 */
- /* .alaska {
-	background-image: url("../images/alaska.png");
-}  */
-.alaska::after {
-	content: url("../images/alaska.png");
+.EPSG3571 {
+	content: url("../images/EPSG3571.png");
+    /*background-image: url("../images/EPSG3571.png");*/
+
 }
- /* .bering {
-    background-image: url("../images/bering.png");
-}  */
-.bering::after {
-    content: url("../images/bering.png");
+.EPSG3572 {
+    content: url("../images/EPSG3572.png");
+    /*background-image: url("../images/EPSG3572.png");*/
+}
+.EPSG3573 {
+    content: url("../images/EPSG3573.png");
+    /*background-image: url("../images/EPSG3573.png");*/
+}
+.EPSG3574 {
+    content: url("../images/EPSG3574.png");
+    /*background-image: url("../images/EPSG3574.png");*/
+}
+.EPSG3575 {
+    content: url("../images/EPSG3575.png");
+    /*background-image: url("../images/EPSG3575.png");*/
+}
+.EPSG3576 {
+    content: url("../images/EPSG3576.png");
+    /*background-image: url("../images/EPSG3576.png");*/
 }

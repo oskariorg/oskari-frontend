@@ -22,10 +22,10 @@ function () {
         this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.projection.change.flyout', this, {
             width: 'auto',
-            cls: 'projection-changer-flyout'
+            cls: 'projection-change-flyout'
         });
         this.plugins['Oskari.userinterface.Flyout'].makeDraggable({
-            handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
+            handle : '.oskari-flyouttoolbar, .projection-data-container > .header',
             scroll : false
         });
         this.plugins['Oskari.userinterface.Flyout'].bringToTop();
@@ -63,37 +63,44 @@ function () {
         this.plugin.createUi();
     },
     hardcodedViews: function () {
+        // use Oskari.getSystemDefaultViews()
         var views = [
             {
                 "uuid":"379e1ac2-f3d4-437a-8bca-e8755516e1e6",
                 "name":"Paikkatietoikkuna.fi",
                 "srsName":"EPSG:3067",
-                "imgCls": 'alaska'
+                "imgCls": 'EPSG3571'
             },
             {
                 "uuid":"0364d4a4-97d0-4823-89d8-9532a8869ddb",
                 "name":"Paikkatietoikkuna.fi",
                 "srsName":"EPSG:3067",
-                "imgCls": 'bering'
+                "imgCls": 'EPSG3572'
             },
             {
                 "uuid":"90246d84-3958-fd8c-cb2c-2510cccca1d3",
                 "name":"Paikkatietoikkuna",
                 "srsName":"EPSG:3067",
-                "imgCls": 'bering'
+                "imgCls": 'EPSG3573'
             },
             {
-                imgCls: 'bering',
-                name: 'Atlantic'
+                "uuid":"379e1ac2-f3d4-437a-8bca-e8755516e1e6",
+                "name":"Paikkatietoikkuna.fi",
+                "srsName":"EPSG:3067",
+                "imgCls": 'EPSG3574'
             },
             {
-                imgCls: 'bering',
-                name: 'Europe'
+                "uuid":"0364d4a4-97d0-4823-89d8-9532a8869ddb",
+                "name":"Paikkatietoikkuna.fi",
+                "srsName":"EPSG:3067",
+                "imgCls": 'EPSG3575'
             },
             {
-                imgCls: 'bering',
-                name: 'Russia'
-            }
+                "uuid":"90246d84-3958-fd8c-cb2c-2510cccca1d3",
+                "name":"Paikkatietoikkuna",
+                "srsName":"EPSG:3067",
+                "imgCls": 'EPSG3576'
+            },
         ];
         return views;
     }
