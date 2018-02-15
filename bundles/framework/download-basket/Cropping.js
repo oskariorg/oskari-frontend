@@ -253,7 +253,7 @@ Oskari.clazz.define(
                 getAttributes: function(){
                     return "";
                 },
-                getLayerId: function(){
+                getId: function(){
                     return "";
                 }
             };
