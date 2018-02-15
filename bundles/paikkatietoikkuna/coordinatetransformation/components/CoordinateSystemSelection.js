@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             coordinateSystemSelection: _.template(
                 '<div class="transformation-system">' +
                     '<h5> ${ title }</h5>'+
-                    '<div class="system geodetic-datum" data-system="datum"><b class="dropdown_title"> ${ geodetic_datum }</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
+                    '<div class="system datum" data-system="datum"><b class="dropdown_title"> ${ geodetic_datum }</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
                     '<div class="system coordinate" data-system="coordinate"><b class="dropdown_title"> ${ coordinate_system }</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div>  </div> </br> ' +
                     '<div class="system projection" style="display:none;" data-system="projection"> ${ map_projection } <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br>' +
                     '<div class="system geodetic-coordinate" data-system="geodetic-coordinate"><b class="dropdown_title"> ${ geodetic_coordinate_system } *</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
@@ -59,10 +59,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             this.select.create();
             this.selectInstance = this.select.getSelectInstances();
             this.dropdowns = this.select.getDropdowns();
-            var i = 0;
             Object.keys( this.dropdowns ).forEach( function( key ) {
-                jQuery( wrapper.find( '.transformation-system' ).find( '.select' )[i] ).append( me.dropdowns[key] );
-                i++;
+                jQuery( wrapper.find( '.transformation-system' ).find( me.makeClassSelector(key) ).append( me.dropdowns[key] ));
             });
             this.handleSelectionChanged();
         },
@@ -75,10 +73,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             });
         },
         handleSelectionChanged: function () {
-            var element = this.getElement();
-            var systems = element.find('.system');
+            var systems =  this.getElement().find('.system');
             var me = this;
-            systems.each(function (idx, system) {
+            systems.each(function (index) {
                 jQuery( this ).on('change', function ( e ) {
                     me.handleSystemChange(e);
                 });
@@ -145,10 +142,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             
             if ( coordinate.indexOf("3D") > -1 ) {
                 table.handleDisplayingElevationRows(true);
-                instances.elevation.hideOptions();
+                instances.elevation.disable( true );
             } else {
                 table.handleDisplayingElevationRows(false);
-                instances.elevation.showOptions();
+                instances.elevation.disable( false );
             }
 
             switch ( currentValue ) {
@@ -195,12 +192,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var classSelector = clsSelector(datum);
 
             if ( this.projectionSelected ) {
-                dropdowns.projection.parent().parent().show();
+                dropdowns.projection.parent().show();
                if ( projection ) {
                     classSelector += clsSelector(projection);
                 }
             } else {
-                dropdowns.projection.parent().parent().hide();
+                dropdowns.projection.parent().hide();
                 instances.projection.resetToPlaceholder();
 
                 if ( coordinate ) {
