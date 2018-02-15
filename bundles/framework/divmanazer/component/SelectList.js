@@ -83,20 +83,18 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       this.element.find('select').trigger('chosen:updated');
     },
     /**  
-     * @method hideOptions hide all options except placeholder
+     * @method disable or enable select
+     * @param { boolean } true = disable
      */
-    hideOptions: function () {
-      this.resetToPlaceholder();
+    disable: function ( disableFlag ) {
       var chosen = this.element.find('select');
-      chosen.find('option').not(":first-child").css('display', 'none');
-      chosen.trigger('chosen:updated');
-    },
-    /**  
-     * @method showOptions hide all options except placeholder
-     */
-    showOptions: function () {
-      var chosen = this.element.find('select');
-      chosen.find('option').not(":first-child").css('display', '');
+      if ( disableFlag ) {
+          this.resetToPlaceholder();
+          chosen.prop('disabled', true)
+      }
+      else {
+        chosen.prop('disabled', false);
+      }
       chosen.trigger('chosen:updated');
     },
     /**  
