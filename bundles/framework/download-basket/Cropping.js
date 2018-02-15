@@ -308,7 +308,7 @@ Oskari.clazz.define(
                     width : mapVO.getWidth(),
                     height : mapVO.getHeight(),
                     srs : mapVO.getSrsName(),
-                    id: layerId
+                    id : layerId
                 },
                 success: function (data) {
                     var geojson_format = new OpenLayers.Format.GeoJSON();
