@@ -29,6 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this._stickyLayerIds = {};
         this._layerGroups = [];
 
+        this.loc = Oskari.getMsg.bind(null, 'MapModule');
+
         /**
          * @property typeMapping
          * Mapping from map-layer json "type" parameter to a class in Oskari
@@ -49,6 +51,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
         // used for cache newest layers
         this._newestLayers = null;
+
+        this._popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
+        this.popupCoolOff = false;
 
         /*
          * Layer filters
@@ -126,7 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (suppressEvent !== true) {
                 // notify components of added layer if not suppressed
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
                 this._sandbox.notifyAll(event);
             }
         },
@@ -144,7 +149,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (suppressEvent !== true) {
                 // notify components of modified layer tools if not suppressed
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
                 this._sandbox.notifyAll(event);
             }
         },
@@ -173,7 +178,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
                 if (suppressEvent !== true) {
                     // notify components of added layer if not suppressed
-                    var evt = this._sandbox.getEventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                    var evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
                     this._sandbox.notifyAll(evt);
                 }
             }
@@ -225,10 +230,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // notify components of layer removal
                 if (parentLayer) {
                     // notify a collection layer has been updated
-                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                    evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
                 } else {
                     // notify a layer has been removed
-                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+                    evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'remove');
                     // free up the layerId if actual removal
                     this._reservedLayerIds[layerId] = false;
                 }
@@ -308,6 +313,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.srs_name) {
                 layer.setSrs_name(newLayerConf.srs_name);
             }
+            if (newLayerConf.srs) {
+                layer.setSrsList(newLayerConf.srs);
+            }
 
             if (newLayerConf.admin) {
                 layer.setAdmin(newLayerConf.admin);
@@ -342,9 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             this.updateGroupsLayers(layerId, newLayerConf);
 
             // notify components of layer update
-            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
-
-
+            var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
             this._sandbox.notifyAll(evt);
         },
         /**
@@ -572,10 +578,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (layer) {
                 layer.setSticky(isSticky);
                 // notify components of layer update
-                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
+                var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
                 this._sandbox.notifyAll(evt);
             }
             // TODO: notify if layer not found?
+        },
+        showUnsupportedPopup: function() {
+            if (this.popupCoolOff) {
+                return;
+            }
+            var popup = this._popupService.createPopup();
+
+            var buttons = [popup.createCloseButton('OK')];
+            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj').replace(/[\n]/g, '<br>'), buttons);
+
+            this.popupCoolOff = true;
+            setTimeout(function() {
+                this.popupCoolOff = false;
+            }.bind(this), 500);
         },
         /**
          * @method loadAllLayersAjax
@@ -1301,6 +1321,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             layer.setVersion(mapLayerJson.version);
             layer.setSrs_name(mapLayerJson.srs_name);
+            layer.setSrsList(mapLayerJson.srs);
 
             // metadata
             layer.setDataUrl(mapLayerJson.dataUrl);

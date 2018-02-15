@@ -15,6 +15,7 @@ Oskari.clazz.define(
         this._styleTypes = ['draw', 'modify', 'intersect'];
         this._styles = {};
         this._drawLayers = {};
+        this._overlays = {};
         this._drawFeatureIdSequence = 0;
         this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
         this._mode = "";
@@ -127,6 +128,9 @@ Oskari.clazz.define(
             var me = this;
 
             me.drawMultiGeom = options.allowMultipleDrawing === 'multiGeom';
+            if(me._gfiTimeout){
+                clearTimeout(me._gfiTimeout);
+            }
             //disable gfi
             me.getMapModule().setDrawingMode(true);
             // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
@@ -137,9 +141,7 @@ Oskari.clazz.define(
                 jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId()).remove();
             }
             me._shape = shape;
-            if(me._id) {
-                Oskari.log('DrawTools').info('Previous drawing still on map and requesting new draw');
-            }
+
             // setup functionality id
             me._id = id;
             // setup options
@@ -345,13 +347,25 @@ Oskari.clazz.define(
             };
 
             if(!me.getLayerIdForFunctionality(id)) {
-                // layer not found for functionality id, nothing to do?
+                // layer not found for functionality id
+                // clear drawings from all drawing layers
+                me.clearDrawing();
                 return;
             }
-
             if(supressEvent === true) {
-                me.clearDrawing(id);
+                //another bundle sends StopDrawingRequest to clear own drawing (e.g. toolselected)
+                //skip deactivate draw and modify controls
+                //should be also with suppressEvent !== true ??
+                //TODO: remove this hack, when stopdrawing, startdrawing, cleardrawing,. methods and requests are handled more properly
+                if (me._id !== id){
+                    me.clearDrawing(); //clear all
+                    return;
+                } else {
+                    me.clearDrawing(id); //clear drawing from given layer
+                }
             } else {
+                // try to finish unfinished (currently drawn) feature
+                me.forceFinishDrawing();
                 me.sendDrawingEvent(id, options);
             }
             //deactivate draw and modify controls
@@ -360,9 +374,57 @@ Oskari.clazz.define(
             me._cleanupInternalState();
             me.getMap().un('pointermove', me.pointerMoveHandler, me);
             //enable gfi
-            setTimeout(function () {
+            me._gfiTimeout = setTimeout(function () {
                 me.getMapModule().setDrawingMode(false);
             }, 500);
+        },
+        /**
+         * @method forceFinishDrawing
+         * Try to finish drawing if _scetch contains the unfinished (currently drawn) feature
+         * Updates measurement on map and cleans sketch
+         */
+        forceFinishDrawing: function(){
+            if(this._sketch === null || this._sketch === undefined){
+                return;
+            }
+            var feature = this._sketch,
+                geom = feature.getGeometry(),
+                source = this.getCurrentDrawLayer().getSource(),
+                coords,
+                parsedCoords;
+
+            if (geom.getType() === "LineString"){
+                coords = geom.getCoordinates();
+                if(coords.length > 2){
+                    parsedCoords = coords.slice(0, coords.length-1); // remove last point
+                    geom.setCoordinates(parsedCoords);
+                    feature.setStyle(this._styles.modify);
+                    source.addFeature(feature);
+                    //update measurement result on map
+                    this._sketch = feature;
+                    this.pointerMoveHandler();
+                } else {
+                    //cannot finish geometry, remove measurement result from map
+                    this._cleanupInternalState();
+                }
+            } else if (geom.getType() === "Polygon"){
+                //only for exterior linear ring, drawtools doesn't support linear rings (holes)
+                coords = geom.getCoordinates()[0];
+                if (coords.length > 4){
+                    parsedCoords = coords.slice(0, coords.length-2); // remove second last point
+                    parsedCoords.push(coords[coords.length-1]); //add last point to close linear ring
+                    geom.setCoordinates([parsedCoords]); //add parsed exterior linear ring
+                    feature.setStyle(this._styles.modify);
+                    source.addFeature(feature);
+                    //update measurement result on map
+                    this._sketch = feature;
+                    this.pointerMoveHandler();
+                } else {
+                    //cannot finish geometry, remove measurement result from map
+                    this._cleanupInternalState();
+                }
+            }
+            this._sketch = null; //clean sketch to not add to drawing event
         },
         _cleanupInternalState: function() {
             // Remove measure result from map
@@ -374,30 +436,30 @@ Oskari.clazz.define(
          /**
          * @method clearDrawing
          * -  remove features from the draw layers
-         * @param {String} functionality id. If not given, will remove features from the current draw layer
+         * @param {String} functionality id. If not given, will remove features from all drawLayers
          */
         clearDrawing : function(id){
             var me = this;
+
             if(id) {
                 var layer = me.getLayer(me.getLayerIdForFunctionality(id));
                 if(layer) {
                     layer.getSource().getFeaturesCollection().clear();
                 }
             } else {
-                if(me.getLayer(me.getCurrentLayerId())) {
-                    me.getLayer(me.getCurrentLayerId()).getSource().getFeaturesCollection().clear();
-                }
-                // TODO: why is buffered layer only cleared here, but not when id is given?
-                // Should this be moved outside of the if/else?
-                me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
+                Object.keys(me._drawLayers).forEach(function(key){
+                    me._drawLayers[key].getSource().getFeaturesCollection().clear();
+                });
             }
-            // remove overlays (measurement tooltips)
-            me.getMap().getOverlays().forEach(function (o) {
-              if(!id || o.id === id) {
-                  me.getMap().removeOverlay(o);
-              }
+            me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
+
+            // remove overlays from map (measurement tooltips)
+            Object.keys(me._overlays).forEach(function(key){
+                me.getMap().removeOverlay(me._overlays[key]);
             });
-            jQuery('.' + me._tooltipClassForMeasure).remove();
+            me._overlays = {};
+
+            jQuery('.' + me._tooltipClassForMeasure).remove(); //do we need this??
         },
         /**
          * @method sendDrawingEvent
@@ -932,7 +994,8 @@ Oskari.clazz.define(
             if (me._sketch) {
                 var output,
                     area,
-                    length;
+                    length,
+                    overlay;
                 var geom = (me._sketch.getGeometry());
                 if (geom instanceof ol.geom.Polygon) {
                     area = me.getPolygonArea(geom);
@@ -969,18 +1032,17 @@ Oskari.clazz.define(
                     tooltipCoord = geom.getLastCoordinate();
                 }
                 if(me.getOpts('showMeasureOnMap') && tooltipCoord) {
-                    me.getMap().getOverlays().forEach(function (o) {
-                        if(o.id === me._sketch.getId()) {
-                            var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
-                            ii.html(output);
-                            if(output==="") {
-                                ii.addClass('withoutText');
-                            } else {
-                                ii.removeClass('withoutText');
-                            }
-                            o.setPosition(tooltipCoord);
+                    overlay = me._overlays[me._sketch.getId()];
+                    if(overlay) {
+                        var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
+                        ii.html(output);
+                        if(output==="") {
+                            ii.addClass('withoutText');
+                        } else {
+                            ii.removeClass('withoutText');
                         }
-                    });
+                        overlay.setPosition(tooltipCoord);
+                    }
                 }
              }
         },
@@ -1286,6 +1348,7 @@ Oskari.clazz.define(
            tooltipElement.parentElement.style.pointerEvents = 'none';
            tooltip.id = id;
            me.getMap().addOverlay(tooltip);
+           me._overlays[id] = tooltip;
        }
    }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
