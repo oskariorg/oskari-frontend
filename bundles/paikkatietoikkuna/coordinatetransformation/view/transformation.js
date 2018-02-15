@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             title: _.template('<h4 class="header"><%= title %></h4>'),            
             transformButton: _.template(
                 '<div class="transformation-button" style="display:inline-block;">' +
-                    '<input id="transform" type="button" value="<%= convert %> >>">' +
+                    '<input class="primary" id="transform" type="button" value="<%= convert %> >>">' +
                 '</div>'
             ),
             utilRow: _.template(
@@ -336,7 +336,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 }
                 me.inputTable.isEditable( me.clipboardInsert );
             });
-            jQuery('.selelctFromMap').on("click", function() {
+            jQuery('.selectFromMap').on("click", function() {
                 me.instance.toggleViews("MapSelection");
                 me.clipboardInsert = false;
             });

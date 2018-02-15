@@ -9,9 +9,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 '<div class="coordinate-datasource"> </br> ' +
                 '<h4><%= title %></h4>'+
                 '<form>'+
-                    '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
-                    '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
-                    '<input type="radio" id="mapselection" name="load" value="3"><label for="mapselection"> <span></span> <%= map %> </label>'+
+                    '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> ${clipboard} </label>'+
+                    '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> ${file} </label>'+
+                    '<input type="radio" id="mapselection" name="load" value="3"><label for="mapselection"> <span></span> ${map} </label>'+
                 '</form>'+
                 '</div>'
             ),
@@ -22,8 +22,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                     '</div>' +
                     '<div class="coordinateconversion-mapinfo" style=display:none;">'+
                         '<div class="mapinfo">'+
-                            '<i><%= mapinfo %><i> </br>'+
-                            '<input type="button" class="selelctFromMap" name="load" value="<%= map %>">' +
+                            '<i>${mapinfo}<i> </br>'+
+                            '<input type="button" class="selectFromMap" name="load" value="${map}">' +
                         '</div>' +
                     '</div>' +
                 '</div>'
@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             });
             wrapper.append(source);
             wrapper.append(info);
-            wrapper.find('.selelctFromMap').addClass('primary');
+            wrapper.find('.selectFromMap').addClass('primary');
             this.setElement(wrapper);
         },
         getValue: function () {
