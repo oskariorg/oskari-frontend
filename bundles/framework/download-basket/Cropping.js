@@ -44,6 +44,7 @@ Oskari.clazz.define(
                 var croppingBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 croppingBtn.addClass('primary cropping-btn');
                 croppingBtn.setTitle(value.getName());
+                jQuery(croppingBtn.getElement()).data("layerId",value.getId());
                 jQuery(croppingBtn.getElement()).data("layerName",value.getLayerName());
                 jQuery(croppingBtn.getElement()).data("layerUrl",value.getLayerUrl());
                 var layerAttributes = value.getAttributes();
@@ -289,6 +290,7 @@ Oskari.clazz.define(
             layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),
             layerGeometry = jQuery('.cropping-btn.selected').data('geometry'),
             layerName = jQuery('.cropping-btn.selected').data('layerName'),
+            layerId = jQuery('.cropping-btn.selected').data('layerId'),
             layerUrl = me.getUrlParams(jQuery('.cropping-btn.selected').data('layerUrl'),'id'),
             layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
             layerNameLang = jQuery('.cropping-btn.selected').val();
@@ -305,7 +307,8 @@ Oskari.clazz.define(
                     bbox : mapVO.getBboxAsString(),
                     width : mapVO.getWidth(),
                     height : mapVO.getHeight(),
-                    srs : mapVO.getSrsName()
+                    srs : mapVO.getSrsName(),
+                    id: layerId
                 },
                 success: function (data) {
                     var geojson_format = new OpenLayers.Format.GeoJSON();
