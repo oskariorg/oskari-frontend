@@ -19,7 +19,7 @@ Oskari.registerLocalization(
                 "ok": "Ok"
             },
             "projectionDesc": {
-                "EPSG:3067": "Tämä projektio on epsg:3067"
+                "EPSG:3067": ""
             }
         }
     }

@@ -1,6 +1,4 @@
-/*
- * Creates a flyout with tabs for different ways of visualizing data
- */
+
 Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (instance) {
     this.instance = instance;
     this.sb = instance.getSandbox();
@@ -55,8 +53,6 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
         url += this.getSelectedMapLayersUrlParam();
 
         window.location.href = url;
-
-        this.updateSelectedLayers(srs);
     },
     getSelectedMapLayersUrlParam: function () {
         var maplayerUrlString = "&mapLayers="
@@ -81,16 +77,6 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
         });
         maplayerUrlString += layerString;
         return maplayerUrlString;
-    },
-    updateSelectedLayers: function (srs) {
-        //disable layers that are not supported in new projection
-        var layerSelection = Oskari.getSandbox().findRegisteredModuleInstance('LayerSelection');
-        var layers = Oskari.getSandbox().findAllSelectedMapLayers();
-        layers.forEach( function (layer) {
-            if (layer._srs_name !== srs) {
-                //layer srs doesn't match the new projection srs
-            }
-        });
     }
 }, {
 });

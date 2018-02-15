@@ -8,7 +8,7 @@ Oskari.registerLocalization(
                 "tool": "Vaihda kartan projektiota"
             },
             "error": {
-                "title": "Map Layer Warning",
+                "title": "Varoitus",
                 "hover": {
                     "icon": "Kaikki valitut karttatasot eivät ole käytettävissä - Saat lisätietoja klikkaamalla ikonia"
                 },
@@ -19,7 +19,7 @@ Oskari.registerLocalization(
                 "ok": "Ok"
             },
             "projectionDesc": {
-                "EPSG:3067": "Tämä projektio on EPSG:3067"
+                "EPSG:3067": ""
             }
         }
     }

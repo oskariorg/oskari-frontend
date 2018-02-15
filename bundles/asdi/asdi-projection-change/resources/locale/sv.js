@@ -8,7 +8,7 @@ Oskari.registerLocalization(
                 "tool": "Byt kartprojektion"
             },
             "error": {
-                "title": "Map Layer Warning",
+                "title": "Varning",
                 "hover": {
                     "icon": "Vissa av de valda kartlagren kan inte visas - klicka för mer information"
                 },
@@ -19,7 +19,7 @@ Oskari.registerLocalization(
                 "ok": "Ok"
             },
             "projectionDesc": {
-                "EPSG:3067": "Tämä projektio on epsg:3067"
+                "EPSG:3067": ""
             }
         }
     }
