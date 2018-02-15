@@ -284,7 +284,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
 
             jQuery.ajax({
                 type: 'POST',
-                dataType: 'json',
                 contentType: 'application/json; charset=UTF-8',
                 url: me.sandbox.getAjaxUrl('LayerAndGroupOrder'),
                 data: JSON.stringify(ajaxData),
