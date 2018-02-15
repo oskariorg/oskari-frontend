@@ -1,0 +1,125 @@
+
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-sld-style" class="add-layer-label"  title="<%= instance.locale('admin.addSldStyleDesc') %>"><%= instance.locale('admin.addSldStyle') %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <div class="input-controls">
+            <select id="add-layer-sld-style" class="admin-sld-styles" multiple="true">
+            </select>
+        </div>
+    </div>
+</div>
+<div class="add-style-send">
+    <div class="add-layer-button-area">
+        <div class="input-controls">
+    <button id="import-layer-style-button" class="import-wfs-style-button"><%= instance.locale('admin.importStyle') %></button>
+       </div>
+    </div>
+    <div class="add-layer-style-import-block">
+        <div class="add-layer-record">
+            <div class="add-layer-style-import-title" title="<%= instance.locale('admin.addNewStyle') %>"><%= instance.locale('admin.addNewStyle') %></div>
+        </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-sld-style-sldname" class="add-layer-sld-style-label"  title="<%= instance.locale('admin.sldStyleName') %>"><%= instance.locale('admin.sldStyleName') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="style-controls">
+                <input type="text" id="add-layer-sld-style-sldname" class="add-layer-sld-style-sldname mid"
+                       placeholder="<%= instance.locale('admin.sldStyleName') %>"
+                       value= "<%= model.getLayerName() %>" />
+                <div class="icon-close mid"></div>
+            </div>
+        </div>
+    </div>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-sld-file" class="add-layer-sld-file-label"
+                   title="<%= instance.locale('admin.sldFileContentDesc') %>"><%= instance.locale('admin.sldFileContent') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="style-controls">
+
+                <textarea rows="3" cols="50" id="add-layer-sld-file" class="add-sld-file long"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="add-layer-button-area">
+        <div class="style-controls">
+            <button id="import-layer-style-save-button" class="save-wfs-style-button"><%= instance.locale('save') %></button>
+            <button id="import-layer-style-cancel-button" class="cancel-wfs-style-button"><%= instance.locale('cancel') %></button>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- div class="add-layer-record">
+    <button id="add-layer-wfs-button" class="edit-wfs-button"><%= instance.locale('admin.editWfs') %></button>
+</div -->
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-jobtype" class="add-class-label"
+               title="<%= instance.locale('admin.jobTypeDesc') %>"><%=
+            instance.locale('admin.jobTypeDesc') %></label>
+    </div>
+    <div class="add-layer-input-area adjacent">
+        <div class="input-controls">
+            <label><%= instance.locale('admin.jobTypes.default') %> <input type="radio" name="jobtype"
+                                                                                       id="layer-jobtype-default" <%
+                if(model.getVersion() == '1.1.0' ) { %>checked<% } %>
+                class="add-class-input" placeholder="placeholder" value="default" /></label>
+        </div>
+        <div class="input-controls">
+            <label><%= instance.locale('admin.jobTypes.fe') %> <input type="radio" name="jobtype"
+                                                                                  id="layer-jobtype-fe" <%
+                if(model.getVersion() == '2.0.0' ) { %>checked<% } %> class="add-class-input" placeholder="placeholder"
+                value="oskari-feature-engine" /></label>
+        </div>
+
+    </div>
+</div>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-manualRefresh" class="add-class-label"
+        title="<%= instance.locale('admin.manualRefresh') %>"><%=
+        instance.locale('admin.manualRefresh') %></label>
+    </div>
+    <div class="add-layer-input-area adjacent">
+        <div class="input-controls">
+
+            <input
+                    type="checkbox"
+                    id="add-layer-manual-refresh"
+                    class="add-class-input"
+                    name="manualRefresh"
+                    placeholder="placeholder"
+            <% if (model.isManualRefresh()) { %>checked<% } %>
+            />
+        </div>
+
+    </div>
+</div>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-resolveDepth" class="add-class-label"
+               title="<%= instance.locale('admin.resolveDepth') %>"><%=
+            instance.locale('admin.resolveDepth') %></label>
+    </div>
+    <div class="add-layer-input-area adjacent">
+        <div class="input-controls">
+
+            <input
+                    type="checkbox"
+                    id="add-layer-resolve-depth"
+                    class="add-class-input"
+                    name="resolveDepth"
+                    placeholder="placeholder"
+            <% if (model.isResolveDepth()) { %>checked<% } %>
+            />
+        </div>
+
+    </div>
+</div>
+
+

@@ -1,0 +1,389 @@
+<div class="add-layer-wrapper">
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-layertype" class="add-layer-label" title="<%= instance.locale('admin.layerTypeDesc') %>"><%= instance.locale('admin.layerType') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="add-layer-text"><%= instance.locale('admin.layertypes.' +model.getLayerType()) %></div>
+            <input type="hidden" id="add-layer-layertype" value="<%= model.getLayerType() %>layer" />
+        </div>
+    </div>
+<% if(header) { %>
+    <%= header({
+        capabilities: capabilities,
+        capabilitiesTemplate: capabilitiesTemplate,
+        model: model,
+        instance: instance,
+        isSubLayer: isSubLayer }) %>
+    <% } %>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-username" class="add-layer-label"
+                   title="<%= instance.locale('admin.username') %>"><%=instance.locale('admin.username') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-username" class="add-layer-input long"
+                       placeholder="<%= instance.locale('admin.username') %>"
+                       value="<%= model.getUsername() %>" />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-password" class="add-layer-label" title="<%= instance.locale('admin.password') %>"><%= instance.locale('admin.password') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <!--
+                    Chrome autofill workaround: http://stackoverflow.com/questions/15738259/disabling-chrome-autofill
+                    tested with chrome v. 51.0.2704.103 m
+                -->
+                <input type="password" id="add-layer-password" class="add-layer-input long"
+                       placeholder="<%= instance.locale('admin.password') %>"
+                       value="<%= model.getPassword() %>" autocomplete="new-password" />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
+
+    <%
+        var layerType = model.getLayerType();
+        if (layerType === "wms" || layerType === "wmts") {
+    %>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-attributes" class="add-layer-label"
+                       title="<%= instance.locale('admin.attributes') %>"><%=instance.locale('admin.attributes') %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <%
+                        var attributes = _.isEmpty(model.getAttributes()) ? "" : JSON.stringify(model.getAttributes());
+                    %>
+                    <textarea rows="3" cols="50" id="add-layer-attributes" class="add-layer-input long"><%=attributes%></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-selectedtime" class="add-layer-label"
+                       title="<%= instance.locale('admin.selectedTime') %>"><%=instance.locale('admin.selectedTime') %></label>
+            <% if(!_.isEmpty(model.getCapabilities())) { %>
+               <div class="layer-capabilities icon-info"></div>
+            <% } %>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-selectedtime" class="add-layer-input long"
+                       placeholder="<%= instance.locale('admin.selectedTime') %>"
+                       value="<%= model.getParams().time %>" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    <%
+        // Names are not necessary for sublayers, BUT we need to show something as the name for admins (!isSubLayer &&)
+        if ( model.getNameLanguages) { %>
+        <div class="add-layer-grouping" title="<%= instance.locale('admin.layerNameAndDesc') %>"><%= instance.locale('admin.layerNameAndDesc') %></div>
+
+        <%
+        var names = model.getNameLanguages();
+        var loc = Oskari.getMsg('DivManazer','LanguageSelect').languages;
+        for (var i = 0; i < names.length; i++) {
+            var lang = names[i]; %>
+            <div class="add-layer-record">
+                <div class="add-layer-label-area">
+                    <label for="add-layer-<%= lang %>-name" class="add-layer-label" title="<%= (loc[lang] || lang) + ':' %>"><%= (loc[lang] || lang) + ':' %></label>
+                </div>
+                <div class="add-layer-input-area">
+                    <div class="input-controls">
+                        <input type="text" id="add-layer-<%= lang %>-name" class="add-layer-input long" placeholder="<%= instance.locale('admin.generic.placeholder', {lang: loc[lang] || lang}) %>" value="<%= model.getName(lang) %>"  />
+                        <div class="icon-close"></div>
+                    </div>
+                    <div class="input-controls">
+                        <input type="text" id="add-layer-<%= lang %>-title" class="add-layer-input long" placeholder="<%= instance.locale('admin.generic.descplaceholder', {lang: loc[lang] || lang}) %>" value="<%= model.getDescription(lang) %>" />
+                        <div class="icon-close"></div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-datauuid" class="add-layer-label" title="<%= instance.locale('admin.metaInfoIdDesc') %>"><%= instance.locale('admin.metaInfoId') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-datauuid" class="add-layer-input long" placeholder="<%= instance.locale('admin.metaInfoIdDesc') %>" value="<%= model.getMetadataIdentifier() %>" />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-layer-record add-layer-separation">
+        <div class="add-layer-label-area">
+            <label for="add-layer-layerName" class="add-layer-label" title="<%= instance.locale('admin.wmsName') %>"><%= instance.locale('admin.wmsName') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-layerName" required class="add-layer-input long" placeholder="<%= instance.locale('admin.wmsName') %>" value="<%= model.getLayerName() %>" />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="select-dataprovider" class="add-layer-label"  title="<%= instance.locale('admin.addDataproviderDesc') %>"><%= instance.locale('admin.addDataprovider') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+            <select id="select-dataprovider" class="add-layer-input mid">
+                <% for(var i = 0; dataProviders != null && i < dataProviders.length; i++) { %>
+                <option value="<%= dataProviders[i].id %>" <% if(model.getOrganizationName() === dataProviders[i].name ) { %>selected<% } %> ><%= dataProviders[i].name %></option>
+                <% } %>
+            </select>
+            </div>
+            <button id="add-dataprovider-button" class="add-dataprovider-button"><%= instance.locale('admin.addDataproviderButton') %></button>
+        </div>
+    </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <%= instance.locale('admin.maplayerGroups') %>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <div class="admin-maplayer-groups-list">
+                    <% for(var i = 0; maplayerGroups != null && i < maplayerGroups.length; i++) { %>
+                       <div class="admin-maplayer-group" data-group-id="<%= maplayerGroups[i].id %>"><%= maplayerGroups[i].name %></div>
+                    <% } %>
+
+                </div>
+            </div>
+            <button id="select-maplayer-groups-button" class="select-maplayer-groups-button"><%= instance.locale('admin.selectMaplayerGroupsButton') %></button>
+        </div>
+    </div>
+
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="opacity-slider" class="add-layer-label" title="<%= instance.locale('admin.opacityDesc') %>"><%= instance.locale('admin.opacity') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <div class="left-tools opacity-slider-tool">
+                    <div class="oskariui admin-opacity-slider layer-opacity">
+                        <div class="layout-slider"></div>
+                    </div>
+                    <div class="opacity-slider" style="display:inline-block">
+                        <input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" value="<%= model.getOpacity() %>" style="width: 30px;padding: 2px;">%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- % if(model.getStyles().length > 1) { % -->
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-style" class="add-layer-label" title="<%= instance.locale('admin.styleDesc') %>"><%= instance.locale('admin.style') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <select id="add-layer-style" class="admin-layer-style">
+                 <% for(var i = 0; i < model.getStyles().length; i++) { %>
+                <option value="<%= model.getStyles()[i].getName() %>"
+                    <% if(model.getCurrentStyle().getName() === model.getStyles()[i].getName() ) {
+                         %>selected<%
+                     } %>
+                     ><%= model.getStyles()[i].getTitle() %></option>
+                <% } %>
+            </select>
+        </div>
+    </div>
+    <!-- % } % -->
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-minscale" class="add-layer-label" title="<%= instance.locale('admin.minScaleDesc') %>"><%= instance.locale('admin.minScale') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-minscale" class="add-layer-input long" placeholder="<%= instance.locale('admin.minScalePlaceholder') %>" value="<%= model.getMinScale() %>" required />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-maxscale" class="add-layer-label" title="<%= instance.locale('admin.maxScaleDesc') %>"><%= instance.locale('admin.maxScale') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-maxscale" class="add-layer-input long" placeholder="<%= instance.locale('admin.maxScalePlaceholder') %>" value="<%= model.getMaxScale() %>" required />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
+
+    <% if(model.getStyles().length < 1 || model.getStyles().length !== model.getStyleLegendUrls().length ) { %>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-legendImage" class="add-layer-label" title="<%= instance.locale('admin.legendImageDesc') %>"><%= instance.locale('admin.legendImage') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <textarea rows="3" cols="50" id="add-layer-legendImage" class="add-layer-input long" placeholder="<%= instance.locale('admin.legendImagePlaceholder') %>"><% if(model) { %><%= model.getLegendUrl() %><% } %></textarea>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <% if(model.getStyles().length > 1 && model.getStyles().length !== model.getStyleLegendUrls().length ) { %>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-style" class="add-layer-label" title="<%= instance.locale('admin.legendUrlDesc') %>"><%= instance.locale('admin.legendUrl') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <select id="add-layer-legendUrl" class="admin-layer-legendUrl">
+                <% for(var i = 0; i < model.getStyles().length; i++) { %>
+                  <% if(model.getStyleLegendUrl(model.getStyles()[i].getName()) !== '') { %>
+                   <option value="<%= model.getStyleLegendUrl(model.getStyles()[i].getName()) %>"
+                   ><%= model.getStyles()[i].getTitle() %></option>
+                  <% } %>
+                <% } %>
+                <option value="" selected><%= instance.locale('admin.noServiceLegendUrl') %></option>
+            </select>
+        </div>
+    </div>
+    <% } %>
+
+<% if(footer) { %>
+<%= footer({
+    model: model,
+    instance: instance,
+    isSubLayer: isSubLayer }) %>
+<% } %>
+
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-gfi-content" class="add-layer-label" title="<%= instance.locale('admin.gfiContent') %>"><%= instance.locale('admin.gfiContent') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <textarea rows="3" cols="50" id="add-layer-gfi-content" class="add-layer-input long"><%= model.getGfiContent() %></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label class="add-class-label" title="<%= instance.locale('admin.realtime') %>" ><%= instance.locale('admin.realtime') %>
+            </label>
+        </div>
+        <div class="add-class-input-area">
+            <div class="input-controls">
+                <label for="add-layer-realtime"><%= instance.locale('admin.realtime') %></label>
+                <input
+                    type="checkbox"
+                    id="add-layer-realtime"
+                    class="add-class-input"
+                    placeholder="placeholder"
+                    <% if (model.isRealtime()) { %>checked<% } %>
+                />
+            </div>
+            <div class="input-controls">
+                <label for="add-layer-refreshrate"></label>
+                <input
+                    type="text"
+                    id="add-layer-refreshrate"
+                    class="add-layer-input long"
+                    placeholder="<%= instance.locale('admin.refreshRate') %>"
+                    title="<%= instance.locale('admin.refreshRate') %>"
+                    <% if (model.getRefreshRate()) { %>value="<%= model.getRefreshRate() %>"<% } %>
+                />
+            </div>
+        </div>
+    </div>
+
+    <% if(!model.getId() && !isSubLayer) { %>
+    <!-- roles - only for new layers (not sublayers) -->
+    <div class="add-class-record">
+        <div class="add-class-label-area">
+            <label for="add-layer-view-roles" class="add-class-label" title="<%= instance.locale('admin.roles_for_admin') %>"><%= instance.locale('admin.viewingRightsRoles') %></label>
+        </div>
+        <div class="add-class-input-area adjacent">
+
+             <table>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <th style="text-align:left;"><%= roles[i].name %></th>
+                    <% } %>
+                    <th></th>
+                 </tr>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <td><input type="checkbox" id="layer-publish-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  <%= roles[i].name === 'Admin' ? 'checked="checked"' : '' %> value="<%= roles[i].id %>" /></td>
+                    <% } %>
+                    <td>Publish</td>
+                 </tr>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <td><input type="checkbox" id="layer-view-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  <%= roles[i].name === 'Admin' ? 'checked="checked"' : '' %>  value="<%= roles[i].id %>" /></td>
+                    <% } %>
+                    <td>View</td>
+                 </tr>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <td><input type="checkbox" id="layer-download-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  <%= roles[i].name === 'Admin' ? 'checked="checked"' : '' %>  value="<%= roles[i].id %>" /></td>
+                    <% } %>
+                    <td>Download</td>
+                 </tr>
+                 <tr>
+                    <% for(var i = 0; i < roles.length; i++) { %>
+                        <td><input type="checkbox" id="layer-enbedded-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  <%= roles[i].name === 'Admin' ? 'checked="checked"' : '' %>  value="<%= roles[i].id %>" /></td>
+                    <% } %>
+                    <td>Embedded</td>
+                 </tr>
+
+             </table>
+        </div>
+
+
+
+    </div>
+    <% } %>
+
+    <div class="add-layer-send">
+        <div class="add-layer-button-area">
+            <div class="input-controls buttons">
+                <% if(!model.getId()) { %>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
+                    title="<%= instance.locale('cancel') %>"><%= instance.locale('cancel') %></button>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"
+                        title="<%= instance.locale('admin.addNewLayer') %>" ><%= instance.locale('add') %></button>
+                <% } else { %>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-remove-sublayer' : 'admin-remove-layer' %>"
+                        title="<%= instance.locale('delete') %>"><%= instance.locale('delete') %></button>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
+                    title="<%= instance.locale('cancel') %>"><%= instance.locale('cancel') %></button>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"><%= instance.locale('save') %></button>
+                <% } %>
+
+            </div>
+        </div>
+    </div>
+
+    <br style="clear: both;" />
+</div>
