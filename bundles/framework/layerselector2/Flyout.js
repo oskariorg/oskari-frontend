@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
      *    reference to component that created the flyout
      */
 
-    function (instance) {
+    function(instance) {
         var me = this;
         //"use strict";
         this.instance = instance;
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.state = null;
         this.layerTabs = [];
         this.filterTemplate = jQuery('<div class="filter filter-border"><center><div class="filter-icon"></div><div class="filter-text"></div></center></div>');
-        this.filters= [];
+        this.filters = [];
         this._filterNewestCount = 20;
         this._currentFilter = null;
 
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
         this.addedButtons = {};
 
-        this.mapLayerService.on('Layerlist.Filter.Button.Add', function(button){
+        this.mapLayerService.on('Layerlist.Filter.Button.Add', function(button) {
             me.addFilterTool(button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
         });
     }, {
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function () {
+        getName: function() {
             //"use strict";
             return 'Oskari.mapframework.bundle.layerselector2.Flyout';
         },
@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function(el, width, height) {
             //"use strict";
             this.container = el[0];
             if (!jQuery(this.container).hasClass('layerselector2')) {
@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
-        startPlugin: function () {
+        startPlugin: function() {
             //"use strict";
             var me = this,
                 inspireTab = Oskari.clazz.create(
@@ -105,11 +105,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
 
             elParent = this.container.parentElement.parentElement;
-        	elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
-        	elId.attr('id', 'oskari_layerselector2_flyout_oskari_flyouttool_close');
+            elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
+            elId.attr('id', 'oskari_layerselector2_flyout_oskari_flyouttool_close');
 
             var buttons = me.mapLayerService.getLayerlistFilterButton();
-            Object.keys(buttons).forEach(function(key){
+            Object.keys(buttons).forEach(function(key) {
                 var button = buttons[key];
                 me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
             });
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Adds default filter buttons.
          * @method  @private addDefaultFilters
          */
-        addDefaultFilters: function(){
+        addDefaultFilters: function() {
             var me = this;
 
             // Add newest filter
@@ -133,13 +133,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Add newest filter.
          * @method  @public addNewestFilter
          */
-        addNewestFilter: function(){
+        addNewestFilter: function() {
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
             me.mapLayerService.registerLayerlistFilterButton(loc.buttons.newest,
-                loc.tooltips.newest.replace('##', me._filterNewestCount),
-                {
+                loc.tooltips.newest.replace('##', me._filterNewestCount), {
                     active: 'layer-newest',
                     deactive: 'layer-newest-disabled'
                 },
@@ -150,17 +149,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Add featuredata filter.
          * @method  @public addFeaturedataFilter
          */
-        addFeaturedataFilter: function(){
+        addFeaturedataFilter: function() {
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
             me.mapLayerService.registerLayerlistFilterButton(loc.buttons.featuredata,
-                loc.tooltips.featuredata,
-                {
+                loc.tooltips.featuredata, {
                     active: 'layer-stats',
                     deactive: 'layer-stats-disabled'
                 },
-            'featuredata');
+                'featuredata');
         },
 
         /**
@@ -168,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *
          * Interface method implementation, does nothing atm
          */
-        stopPlugin: function () {
+        stopPlugin: function() {
             //"use strict";
         },
 
@@ -176,7 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method getTitle
          * @return {String} localized text for the title of the flyout
          */
-        getTitle: function () {
+        getTitle: function() {
             //"use strict";
             return this.instance.getLocalization('title');
         },
@@ -185,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method getDescription
          * @return {String} localized text for the description of the flyout
          */
-        getDescription: function () {
+        getDescription: function() {
             //"use strict";
             return this.instance.getLocalization('desc');
         },
@@ -194,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method getOptions
          * Interface method implementation, does nothing atm
          */
-        getOptions: function () {
+        getOptions: function() {
             //"use strict";
         },
 
@@ -204,7 +202,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *     close/minimize/maximize etc
          * Interface method implementation, does nothing atm
          */
-        setState: function (state) {
+        setState: function(state) {
             //"use strict";
             this.state = state;
         },
@@ -214,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method  @public setContentState
          * @param {Object} state a content state
          */
-        setContentState: function (state) {
+        setContentState: function(state) {
             //"use strict";
             var i,
                 tab;
@@ -232,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
         },
 
-        getContentState: function () {
+        getContentState: function() {
             //"use strict";
             var state = {},
                 i,
@@ -251,7 +249,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method createUi
          * Creates the UI for a fresh start
          */
-        createUi: function () {
+        createUi: function() {
             //"use strict";
             var me = this,
                 // clear container
@@ -267,7 +265,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             // Add filter tab change listener
             me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
-                if(me._currentFilter) {
+                if (me._currentFilter) {
                     me.activateFilter(me._currentFilter);
                 }
             });
@@ -278,7 +276,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
 
             me.tabContainer.addTabChangeListener(
-                function (previousTab, newTab) {
+                function(previousTab, newTab) {
                     // Make sure this fires only when the flyout is open
                     if (!cel.parents('.oskari-flyout.oskari-closed').length) {
                         var searchInput = newTab.getContainer().find('input[type=text]');
@@ -300,7 +298,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *
          *
          */
-        focus: function () {
+        focus: function() {
             if (this.layerTabs) {
                 this.layerTabs[0].focus();
             }
@@ -310,7 +308,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Populate layer lists.
          * @method  @public populateLayers
          */
-        populateLayers: function () {
+        populateLayers: function() {
             //"use strict";
             var me = this;
             var sandbox = this.instance.getSandbox(),
@@ -339,7 +337,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method _getLayerGroups
          * @private
          */
-        _getLayerGroups: function (layers, groupingMethod) {
+        _getLayerGroups: function(layers, groupingMethod) {
             //"use strict";
             var me = this,
                 groupList = [],
@@ -349,7 +347,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 groupAttr;
 
             // sort layers by grouping & name
-            layers.sort(function (a, b) {
+            layers.sort(function(a, b) {
                 return me._layerListComparator(a, b, groupingMethod);
             });
 
@@ -370,7 +368,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
                 group.addLayer(layer);
             }
-            var sortedGroupList = jQuery.grep(groupList, function(group,index){
+            var sortedGroupList = jQuery.grep(groupList, function(group, index) {
                 return group.getLayers().length > 0;
             });
             return sortedGroupList;
@@ -386,7 +384,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
          * @param {String} groupingMethod method name to sort by
          */
-        _layerListComparator: function (a, b, groupingMethod) {
+        _layerListComparator: function(a, b, groupingMethod) {
             //"use strict";
             var nameA = a[groupingMethod]().toLowerCase(),
                 nameB = b[groupingMethod]().toLowerCase();
@@ -411,7 +409,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *           true if layer is selected, false if removed from selection
          * let's refresh ui to match current layer selection
          */
-        handleLayerSelectionChanged: function (layer, isSelected) {
+        handleLayerSelectionChanged: function(layer, isSelected) {
             //"use strict";
             var i,
                 tab;
@@ -427,7 +425,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *           layer that was modified
          * let's refresh ui to match current layers
          */
-        handleLayerModified: function (layer) {
+        handleLayerModified: function(layer) {
             //"use strict";
             var me = this,
                 i,
@@ -444,7 +442,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *           layer thats switch off diasable/enable is changed
          * let's refresh ui to match current layers
          */
-        handleLayerSticky: function (layer) {
+        handleLayerSticky: function(layer) {
             //"use strict";
             var me = this,
                 i,
@@ -461,7 +459,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *           layer that was added
          * let's refresh ui to match current layers
          */
-        handleLayerAdded: function (layer) {
+        handleLayerAdded: function(layer) {
             //"use strict";
             var me = this;
             me.populateLayers();
@@ -475,7 +473,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *           id of layer that was removed
          * let's refresh ui to match current layers
          */
-        handleLayerRemoved: function (layerId) {
+        handleLayerRemoved: function(layerId) {
             //"use strict";
             var me = this;
             me.populateLayers();
@@ -494,7 +492,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         addFilterTool: function(toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
             var me = this;
-            if(me.addedButtons[filterName]) {
+            if (me.addedButtons[filterName]) {
                 return;
             }
 
@@ -507,21 +505,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             };
             var loc = me.instance.getLocalization('layerFilter');
 
-            me.layerTabs.forEach(function(tab){
+            me.layerTabs.forEach(function(tab) {
                 var filterButton = me.filterTemplate.clone(),
                     filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
 
                 filterButton.attr('data-filter', filterName);
                 filterButton.find('.filter-text').html(toolText);
                 filterButton.attr('title', tooltip);
-                filterButton.find('.filter-icon').addClass('filter-'+filterName);
+                filterButton.find('.filter-icon').addClass('filter-' + filterName);
                 filterButton.find('.filter-icon').addClass(iconClassDeactive);
 
                 filterButton.unbind('click');
-                filterButton.bind('click', function(){
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filterName);
+                filterButton.bind('click', function() {
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
                     me.deactivateAllFilters(filterName);
-                    if(filterIcon.hasClass(iconClassDeactive)){
+                    if (filterIcon.hasClass(iconClassDeactive)) {
                         // Activate this filter
                         me._setFilterIconClasses(filterName);
                         me.activateFilter(filterName);
@@ -544,10 +542,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         _setFilterTooltip: function(filterName, tooltip) {
             var me = this;
-            me.layerTabs.forEach(function(tab){
+            me.layerTabs.forEach(function(tab) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filterName);
-                filterIcon.parents('.filter').attr('title',tooltip);
+                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
+                filterIcon.parents('.filter').attr('title', tooltip);
             });
         },
         /**
@@ -557,18 +555,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         _setFilterIconClasses: function(filterName) {
             var me = this;
-            me.layerTabs.forEach(function(tab){
+            me.layerTabs.forEach(function(tab) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
                 var filters = me.mapLayerService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key){
+                Object.keys(filters).forEach(function(key) {
                     var filter = filters[key];
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.id);
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
                     // First remove all active classes
                     filterIcon.removeClass(filter.cls.active);
                     filterIcon.removeClass(filter.cls.deactive);
                     filterIcon.removeClass('active');
                     // If filter has same than currently selected then activate icon
-                    if(filter.id === filterName) {
+                    if (filter.id === filterName) {
                         filterIcon.addClass(filter.cls.active);
                         filterIcon.addClass('active');
                     }
@@ -585,7 +583,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method @public activateFilter
          * @param  {Function} filterName activate filter name
          */
-        activateFilter: function(filterName){
+        activateFilter: function(filterName) {
             var me = this;
             me._currentFilter = filterName;
             me.populateLayers();
@@ -597,29 +595,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *
          * @param {String} notDeactivateThisFilter not deactivate this filter
          */
-        deactivateAllFilters: function(notDeactivateThisFilter){
+        deactivateAllFilters: function(notDeactivateThisFilter) {
             var me = this;
 
             me._currentFilter = null;
-            me.layerTabs.forEach(function(tab, tabIndex){
+            me.layerTabs.forEach(function(tab, tabIndex) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
                 var filters = me.mapLayerService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key){
+                Object.keys(filters).forEach(function(key) {
                     var filter = filters[key];
-                    if(!notDeactivateThisFilter || filter.name !== notDeactivateThisFilter) {
-                        var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.id);
+                    if (!notDeactivateThisFilter || filter.id !== notDeactivateThisFilter) {
+                        var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
                         filterIcon.removeClass(filter.cls.active);
                         filterIcon.removeClass('active');
                         filterIcon.addClass(filter.cls.deactive);
                         // Set tooltip for one per filter
-                        if(tabIndex === 0) {
+                        if (tabIndex === 0) {
                             me._setFilterTooltip(filter.name, filter.tooltip);
                         }
                     }
                 });
             });
 
-            if(!notDeactivateThisFilter) {
+            if (!notDeactivateThisFilter) {
                 me.activateFilter();
             }
         }
