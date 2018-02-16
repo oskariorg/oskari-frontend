@@ -64,7 +64,6 @@ Oskari.clazz.define(
         /* is linked layer ('sublayer') - no UI in layer selection */
         me._isLinkedLayer = null;
 
-        me._inspireName = null;
         me._organizationName = null;
         me._dataUrl = null;
 
@@ -369,43 +368,17 @@ Oskari.clazz.define(
             }
             return this._organizationName;
         },
-        /**
-         * @method setInspireName
-         * @param {String} param
-         *          inspire theme name under which the layer is listed in UI
-         */
-        setInspireName: function(param) {
-            if (param && typeof param === 'object') {
-                var values = {};
-                Object.keys(param).forEach(function(key) {
-                    values[key] = Oskari.util.sanitize(param[key]);
-                });
-                this._inspireName = values;
-            } else {
-                this._inspireName = Oskari.util.sanitize(param);
-            }
-        },
+
         /**
          * Returns an inspire name for the layer.
          * If the name is populated with a string, always returns it.
          * With populated object assumes that the object keys are language codes.
          * If language param is not given, uses Oskari.getLang()
          * @method getInspireName
-         * @param {String} lang language id like 'en' or 'fi' (optional)
          * @return {String} inspire theme name under which the layer is listed in UI
          */
-        getInspireName: function(lang) {
-            if (this._inspireName && typeof this._inspireName === 'object') {
-                if (!lang) {
-                    lang = Oskari.getLang();
-                }
-                var value = this._inspireName[lang];
-                if (!value) {
-                    value = this._inspireName[Oskari.getDefaultLanguage()];
-                }
-                return value;
-            }
-            return this._inspireName;
+        getInspireName: function() {
+            return this._groups[0].name;
         },
         /**
          * @method setFeatureInfoEnabled
@@ -1353,7 +1326,7 @@ Oskari.clazz.define(
          * @param {Array} groups groups array [{id:1,name:name"}]
          */
         setGroups: function(groups) {
-            this._groups = groups || [];
+            this._groups = groups || [{id:-1, name:""}];
         },
         /**
          * @method @public getGroups get groups
