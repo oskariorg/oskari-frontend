@@ -129,7 +129,7 @@ Oskari.clazz.define(
             failureCB = function () {
                 alert(me.getLocalization('errors').loadFailed);
             };
-            mapLayerService.loadAllLayersAjax(successCB, failureCB);
+            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB);
 
             this._registerForGuidedTour();
         },

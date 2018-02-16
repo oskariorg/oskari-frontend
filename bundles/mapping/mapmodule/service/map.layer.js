@@ -564,51 +564,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this.popupCoolOff = false;
             }.bind(this), 500);
         },
-        /**
-         * @method loadAllLayersAjax
-         * Loads layers JSON using the ajax URL given on #create()
-         * and parses it to internal layer objects by calling #createMapLayer() and #addLayer()
-         * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
-         * @param {Function} callbackFailure method to be called when something went wrong
-         */
-        loadAllLayersAjax: function(callbackSuccess, callbackFailure) {
-            var me = this,
-                epsg = me._sandbox.getMap().getSrsName();
-            // Used to bypass browsers' cache especially in IE, which seems to cause
-            // problems with displaying publishing permissions in some situations.
-            var timeStamp = new Date().getTime();
 
-            jQuery.ajax({
-                type: "GET",
-                dataType: 'json',
-                data: {
-                    timestamp: timeStamp,
-                    srs: epsg
-                },
-                beforeSend: function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                url: this._mapLayerUrl,
-                success: function (pResp) {
-                    me._loadAllLayersAjaxCallBack(pResp.layers, callbackSuccess);
-                },
-                error: function(jqXHR, textStatus) {
-                    if (callbackFailure && jqXHR.status !== 0) {
-                        callbackFailure();
-                    }
-                }
-            });
-        },
         /**
-         * @method _loadAllLayersAjaxCallBack
-         * Internal callback method for ajax loading in #loadAllLayersAjax()
+         * @method _loadLayersRecursive
+         * Internal callback method for laod layers recursive
          * @param {Object} pResp ajax response in JSON format
          * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
          * @private
          */
-        _loadAllLayersAjaxCallBack: function (layers, callbackSuccess) {
+        _loadLayersRecursive: function (layers, callbackSuccess) {
             var me = this;
             // check if recursion should end
             if(layers.length === 0) {
@@ -631,11 +595,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // process remaining layers
             if (layers.length%20 !== 0) {
                 // do it right a way
-                me._loadAllLayersAjaxCallBack(layers, callbackSuccess);
+                me._loadLayersRecursive(layers, callbackSuccess);
             } else {
                 // yield cpu time after every 20 layers
                 setTimeout(function() {
-                    me._loadAllLayersAjaxCallBack(layers, callbackSuccess);
+                    me._loadLayersRecursive(layers, callbackSuccess);
                 }, 0);
             }
 
@@ -693,19 +657,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var currentDepth = 0;
             var maxDepth = 3;
 
+            var layers = [];
+
             var addGroupLayers = function(groups) {
                 groups.forEach(function(group) {
                     if(group.layers) {
                         group.layers.forEach(function(layer) {
-                            if (me._reservedLayerIds[layer.id] !== true) {
-                                var mapLayer = me.createMapLayer(layer);
-                                if (!mapLayer) {
-                                    // unsupported map type, skip
-                                    // continue with next layer
-                                    return;
-                                }
-                                me.addLayer(mapLayer, true);
-                            }
+                            layers.push(layer);
                         });
                     }
                     if(group.groups) {
@@ -715,11 +673,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             };
 
             addGroupLayers(pResp);
-            me._allLayersAjaxLoaded = true;
-            me._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
-            if (callbackSuccess) {
-                callbackSuccess();
-            }
+            this._loadLayersRecursive(layers, callbackSuccess);
         },
 
         /**
