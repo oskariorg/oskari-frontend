@@ -771,7 +771,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         var subgroup = g.groups.filter(filterFunction)[0];
                         if (subgroup) {
                             layerGroups = subgroup;
-                            return true;
                         }
 
                         // Try to get subgroup subgroup
@@ -779,18 +778,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                             var subgroupSubgroup = sg.groups.filter(filterFunction)[0];
                             if (subgroupSubgroup) {
                                 layerGroups = subgroup;
-                                return true;
                             }
                         });
-
-                        if(layerGroups) {
-                            return true;
-                        }
                     });
 
                 }
             }
-            return this._layerGroups;
+            return layerGroups || this._layerGroups;
         },
 
 
