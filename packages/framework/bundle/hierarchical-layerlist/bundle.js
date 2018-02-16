@@ -44,6 +44,9 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 "src": "../../../../bundles/framework/hierarchical-layerlist/instance.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/layerselector2/service/layerlist.js"
+            },{
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/Flyout.js"
             }, {
                 "type": "text/javascript",

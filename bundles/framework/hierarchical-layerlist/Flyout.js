@@ -25,10 +25,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         this._filterNewestCount = 20;
         this._currentFilter = null;
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
 
         this.addedButtons = {};
 
-        this.mapLayerService.on('Layerlist.Filter.Button.Add', function(button) {
+        this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
             me.addFilterTool(button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
         });
         this._bindExtenderServiceListeners();
@@ -44,9 +45,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          */
         _bindExtenderServiceListeners: function() {
             var me = this;
-            var mapLayerService = me.instance.sandbox.getService(
-                'Oskari.mapframework.service.MapLayerService'
-            );
 
             me.service.on('option.added', function() {
                 me.populateLayers();
@@ -60,13 +58,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 var mode = data.mode;
 
                 if (mode === 'delete') {
-                    mapLayerService.removeLayer(data.id);
+                    me.mapLayerService.removeLayer(data.id);
                 } else if (mode === 'add') {
                     var layer = mapLayerService.createMapLayer(data.layerData);
-                    mapLayerService.addLayer(layer);
-                    mapLayerService.updateGroupsLayers(data.layerData.id, data.layerData, false, true);
+                    me.mapLayerService.addLayer(layer);
+                    me.mapLayerService.updateGroupsLayers(data.layerData.id, data.layerData, false, true);
                 } else {
-                    mapLayerService.updateLayer(data.layerData.id, data.layerData);
+                    me.mapLayerService.updateLayer(data.layerData.id, data.layerData);
 
                     // also update breadcrump information
                     me._updateBreadcrumbGroups(data.layerData);
@@ -87,13 +85,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             // group added
             me.service.on('group-added', function(data) {
                 // update service groups
-                mapLayerService.updateLayerGroups(data);
+                me.mapLayerService.updateLayerGroups(data);
                 me.populateLayers();
             });
 
             // group deleted
             me.service.on('group-deleted', function(data) {
-                mapLayerService.deleteLayerGroup(data.id, data.parentId);
+                me.mapLayerService.deleteLayerGroup(data.id, data.parentId);
                 me.populateLayers();
             });
         },
@@ -269,7 +267,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             var me = this;
             me.layerTabs.forEach(function(tab) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
-                var filters = me.mapLayerService.getLayerlistFilterButton();
+                var filters = me.layerlistService.getLayerlistFilterButton();
                 Object.keys(filters).forEach(function(key) {
                     var filter = filters[key];
                     var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
@@ -347,7 +345,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
             elId.attr('id', 'oskari_hierarchical-layerlist_flyout_oskari_flyouttool_close');
 
-            var buttons = me.mapLayerService.getLayerlistFilterButton();
+            var buttons = me.layerlistService.getLayerlistFilterButton();
             Object.keys(buttons).forEach(function(key) {
                 var button = buttons[key];
                 me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
@@ -376,7 +374,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
-            me.mapLayerService.registerLayerlistFilterButton(loc.buttons.newest,
+            me.layerlistService.registerLayerlistFilterButton(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount), {
                     active: 'layer-newest',
                     deactive: 'layer-newest-disabled'
@@ -392,7 +390,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
-            me.mapLayerService.registerLayerlistFilterButton(loc.buttons.featuredata,
+            me.layerlistService.registerLayerlistFilterButton(loc.buttons.featuredata,
                 loc.tooltips.featuredata, {
                     active: 'layer-stats',
                     deactive: 'layer-stats-disabled'
