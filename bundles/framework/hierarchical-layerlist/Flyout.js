@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
             // group deleted
             me.service.on('group-deleted', function(data) {
-                mapLayerService.deleteLayerGroup(data);
+                mapLayerService.deleteLayerGroup(data.id, data.parentId);
                 me.populateLayers();
             });
         },
