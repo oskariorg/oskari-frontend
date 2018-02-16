@@ -72,8 +72,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
         };
 
-        this.layerlistFilterButtons = {};
-
         Oskari.makeObservable(this);
     }, {
         /** @static @property __qname fully qualified name for service */
@@ -683,50 +681,32 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
 
             me._layerGroups = pResp;
-            pResp.forEach(function(group) {
-                group.layers.forEach(function(layer) {
-                    var mapLayer = me.createMapLayer(layer);
-                    if (!mapLayer) {
-                        // unsupported map type, skip
-                        // continue with next layer
-                        return;
-                    }
 
-                    if (me._reservedLayerIds[mapLayer.getId()] !== true) {
-                        me.addLayer(mapLayer, true);
-                    }
-                });
+            var currentDepth = 0;
+            var maxDepth = 3;
 
-                group.groups.forEach(function(subgroup) {
-                    subgroup.layers.forEach(function(layer) {
-                        var mapLayer = me.createMapLayer(layer);
-                        if (!mapLayer) {
-                            // unsupported map type, skip
-                            // continue with next layer
-                            return;
-                        }
-
-                        if (me._reservedLayerIds[mapLayer.getId()] !== true) {
-                            me.addLayer(mapLayer, true);
-                        }
-                    });
-
-                    subgroup.groups.forEach(function(subgroupSubgroup) {
-                        subgroupSubgroup.layers.forEach(function(layer) {
-                            var mapLayer = me.createMapLayer(layer);
-                            if (!mapLayer) {
-                                // unsupported map type, skip
-                                // continue with next layer
-                                return;
-                            }
-
-                            if (me._reservedLayerIds[mapLayer.getId()] !== true) {
+            var addGroupLayers = function(groups) {
+                groups.forEach(function(group) {
+                    if(group.layers) {
+                        group.layers.forEach(function(layer) {
+                            if (me._reservedLayerIds[layer.id] !== true) {
+                                var mapLayer = me.createMapLayer(layer);
+                                if (!mapLayer) {
+                                    // unsupported map type, skip
+                                    // continue with next layer
+                                    return;
+                                }
                                 me.addLayer(mapLayer, true);
                             }
                         });
-                    });
+                    }
+                    if(group.groups) {
+                        addGroupLayers(group.groups);
+                    }
                 });
-            });
+            };
+
+            addGroupLayers(pResp);
             me._allLayersAjaxLoaded = true;
             me._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
             if (callbackSuccess) {
@@ -777,7 +757,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         g.groups.forEach(function(sg){
                             var subgroupSubgroup = sg.groups.filter(filterFunction)[0];
                             if (subgroupSubgroup) {
-                                layerGroups = subgroup;
+                                layerGroups = subgroupSubgroup;
                             }
                         });
                     });
@@ -920,35 +900,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             me.layerFilters[filterId] = filterFunction;
         },
-        registerLayerlistFilterButton: function(text, tooltip, cls, filterId) {
-            var me = this;
-
-            if (me.layerlistFilterButtons[filterId]) {
-                Oskari.log(this.getName()).warn('[MapLayerService] "' + filterId + '" -layerlist filter button has allready defined. Not register layer list filter button.');
-                return;
-            }
-
-            var properties = {
-                text: text,
-                tooltip: tooltip,
-                cls: cls,
-                id: filterId
-            };
-            me.layerlistFilterButtons[filterId] = properties;
-            this.trigger('Layerlist.Filter.Button.Add', {
-                filterId: filterId,
-                properties: properties
-            });
-        },
-        getLayerlistFilterButton: function(filterId) {
-            var me = this;
-
-            if (filterId) {
-                return me.layerlistFilterButtons[filterId];
-            }
-
-            return me.layerlistFilterButtons;
-        },
         /**
          * @method  @public getFilteredLayers  Get filtered layers
          * @param  {String} filterId filter id
@@ -988,9 +939,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             allLayerGroups.forEach(function(group) {
                 var filteredLayers = [];
                 group.layers.forEach(function(layer) {
-                    var mapLayer = me.createMapLayer(layer);
+                    var mapLayer = me._sandbox.findMapLayerFromAllAvailable(layer.id);
                     if (!mapLayer) {
-                        // unsupported map type, skip
+                        // layer not found
                         // continue with next layer
                         return;
                     }
