@@ -29,6 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         this.templateLayerOutOfContentArea = null;
         this.sortableBinded = false;
         this._sliders = {};
+        this.toolsAsText = ['ownStyle', 'objectData', 'content-editor'];
     }, {
         /**
          * @method getName
@@ -786,10 +787,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 laytool = laytools[s];
                 if (laytool && laytool.getName() !== 'show-layer-legend-tool') {
                     // Icon or text link
-                    if (laytool.getIconCls() &&
-                        laytool.getName() !== 'ownStyle' &&
-                        laytool.getName() !== 'objectData' &&
-                        laytool.getName() !== 'content-editor') {
+                    if (laytool.getIconCls() && me.toolsAsText.indexOf(laytool.getName()) === -1) {
                         toolContainer = jQuery('<div></div>');
                         toolContainer.addClass(laytool.getIconCls());
                         toolContainer.attr('title', laytool.getTooltip());
