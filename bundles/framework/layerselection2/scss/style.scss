@@ -84,26 +84,6 @@ div.layerselection2 {
 					&.object-data a {
 						padding-left: 5px
 					}
-
-                    &.object-data {
-                        div.show-metadata-tool {
-                            width: 16px;
-                            height: 16px;
-                            background-image: url('../images/icon-info.png');
-                            background-repeat: no-repeat;
-
-                            &:hover {
-                                background-image: url('../images/icon-info_hover.png');
-                            }
-                        }
-
-                        div.show-filter-tool {
-                            width: 18px;
-                            height: 18px;
-                            background-image: url('../images/icon-funnel.png');
-                            background-repeat: no-repeat;
-                        }
-                    }
 				}
 			}
 		}

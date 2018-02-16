@@ -1371,6 +1371,17 @@ Oskari.clazz.define(
 
             return this._groups;
 
+        },
+        /**
+         * Is filter supported
+         * @method isFilterSupported
+         * @return {Boolean}         is filter supported
+         */
+        isFilterSupported: function() {
+            if(this.isLayerOfType('WFS') || this.isLayerOfType('ANALYSIS')) {
+                return true;
+            }
+            return false;
         }
 
     }
