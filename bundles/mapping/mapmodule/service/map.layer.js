@@ -1322,11 +1322,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setOrganizationName("");
             }
 
-            if (mapLayerJson.inspire) {
-                layer.setInspireName(mapLayerJson.inspire);
-            } else {
-                layer.setInspireName("");
-            }
             layer.setVisible(true);
 
             // extent
