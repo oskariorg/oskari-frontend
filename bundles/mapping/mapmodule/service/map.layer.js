@@ -591,8 +591,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     }
                 },
                 url: this._mapLayerUrl,
-                success: function(pResp) {
-                    me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
+                success: function (pResp) {
+                    me._loadAllLayersAjaxCallBack(pResp.layers, callbackSuccess);
                 },
                 error: function(jqXHR, textStatus) {
                     if (callbackFailure && jqXHR.status !== 0) {
@@ -608,29 +608,37 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
          * @private
          */
-        _loadAllLayersAjaxCallBack: function(pResp, callbackSuccess) {
-            var allLayers = pResp.layers,
-                i,
-                mapLayer;
+        _loadAllLayersAjaxCallBack: function (layers, callbackSuccess) {
+            var me = this;
+            // check if recursion should end
+            if(layers.length === 0) {
+                // notify components of added layers
+                this._allLayersAjaxLoaded = true;
+                this._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
 
-            for (i = 0; i < allLayers.length; i++) {
-                mapLayer = this.createMapLayer(allLayers[i]);
-                if (!mapLayer) {
-                    // unsupported map type, skip
-                    // continue with next layer
-                    continue;
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
                 }
+                return;
+            }
+            // remove the first one for recursion
+            var json = layers.shift();
+            var mapLayer = me.createMapLayer(json);
+            // unsupported maplayer type returns null so check for it
+            if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
+                me.addLayer(mapLayer, true);
+            }
+            // process remaining layers
+            if (layers.length%20 !== 0) {
+                // do it right a way
+                me._loadAllLayersAjaxCallBack(layers, callbackSuccess);
+            } else {
+                // yield cpu time after every 20 layers
+                setTimeout(function() {
+                    me._loadAllLayersAjaxCallBack(layers, callbackSuccess);
+                }, 0);
+            }
 
-                if (this._reservedLayerIds[mapLayer.getId()] !== true) {
-                    this.addLayer(mapLayer, true);
-                }
-            }
-            // notify components of added layer if not suppressed
-            this._allLayersAjaxLoaded = true;
-            this._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
-            if (callbackSuccess) {
-                callbackSuccess();
-            }
         },
 
         /**
