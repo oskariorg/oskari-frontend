@@ -123,13 +123,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 });
 
                 // Add layerlist filter button
-                mapLayerService.registerLayerlistFilterButton(loc.layerFilter.buttons.publishable,
-                loc.layerFilter.tooltips.publishable,
-                {
-                    active: 'layer-publishable',
-                    deactive: 'layer-publishable-disabled'
-                },
-                'publishable');
+                var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+                if(layerlistService) {
+                    layerlistService.registerLayerlistFilterButton(loc.layerFilter.buttons.publishable,
+                    loc.layerFilter.tooltips.publishable,
+                    {
+                        active: 'layer-publishable',
+                        deactive: 'layer-publishable-disabled'
+                    },
+                    'publishable');
+                }
             }
             this._registerForGuidedTour();
         },

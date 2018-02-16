@@ -26,10 +26,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this._currentFilter = null;
 
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
 
         this.addedButtons = {};
 
-        this.mapLayerService.on('Layerlist.Filter.Button.Add', function(button) {
+        this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
             me.addFilterTool(button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
         });
     }, {
@@ -108,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
             elId.attr('id', 'oskari_layerselector2_flyout_oskari_flyouttool_close');
 
-            var buttons = me.mapLayerService.getLayerlistFilterButton();
+            var buttons = me.layerlistService.getLayerlistFilterButton();
             Object.keys(buttons).forEach(function(key) {
                 var button = buttons[key];
                 me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
@@ -137,7 +138,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
-            me.mapLayerService.registerLayerlistFilterButton(loc.buttons.newest,
+            me.layerlistService.registerLayerlistFilterButton(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount), {
                     active: 'layer-newest',
                     deactive: 'layer-newest-disabled'
@@ -153,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
-            me.mapLayerService.registerLayerlistFilterButton(loc.buttons.featuredata,
+            me.layerlistService.registerLayerlistFilterButton(loc.buttons.featuredata,
                 loc.tooltips.featuredata, {
                     active: 'layer-stats',
                     deactive: 'layer-stats-disabled'
@@ -557,7 +558,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             var me = this;
             me.layerTabs.forEach(function(tab) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filters = me.mapLayerService.getLayerlistFilterButton();
+                var filters = me.layerlistService.getLayerlistFilterButton();
                 Object.keys(filters).forEach(function(key) {
                     var filter = filters[key];
                     var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
@@ -601,7 +602,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me._currentFilter = null;
             me.layerTabs.forEach(function(tab, tabIndex) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filters = me.mapLayerService.getLayerlistFilterButton();
+                var filters = me.layerlistService.getLayerlistFilterButton();
                 Object.keys(filters).forEach(function(key) {
                     var filter = filters[key];
                     if (!notDeactivateThisFilter || filter.id !== notDeactivateThisFilter) {
