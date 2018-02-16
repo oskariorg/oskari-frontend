@@ -758,6 +758,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getAllLayerGroups: function(id) {
+            var layerGroups = null;
             if (id && id != -1) {
                 var filterFunction = function(group) {
                     return group.id == id;
@@ -766,25 +767,28 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // group not found
                 // try to get subgroup
                 if (!group) {
-                    for (var i = 0; i < this._layerGroups.length; i++) {
-                        var g = this._layerGroups[i];
+                    this._layerGroups.forEach(function(g){
                         var subgroup = g.groups.filter(filterFunction)[0];
                         if (subgroup) {
-                            return subgroup;
+                            layerGroups = subgroup;
+                            return true;
                         }
 
                         // Try to get subgroup subgroup
-                        for (var j = 0; j < g.groups.length; j++) {
-                            var a = g.groups[j];
-                            var subgroupSubgroup = a.groups.filter(filterFunction)[0];
+                        g.groups.forEach(function(sg){
+                            var subgroupSubgroup = sg.groups.filter(filterFunction)[0];
                             if (subgroupSubgroup) {
-                                return subgroupSubgroup;
+                                layerGroups = subgroup;
+                                return true;
                             }
+                        });
+
+                        if(layerGroups) {
+                            return true;
                         }
-                    }
+                    });
 
                 }
-                return group;
             }
             return this._layerGroups;
         },
