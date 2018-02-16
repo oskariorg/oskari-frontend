@@ -356,27 +356,19 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /**
          * Delete layer group
          * @method deleteLayerGroup
-         * @param  {Object}         data group data
+         * @param  {Integer}         id group id
+         * @param {Integer}          parentId parent id
          */
-        deleteLayerGroup: function(data) {
+        deleteLayerGroup: function(id, parentId) {
             var me = this;
             var newGroups = [];
-            if (data.parentId === -1) {
-                me._layerGroups.forEach(function(group) {
-                    if (group.id != data.id) {
-                        newGroups.push(group);
-                    }
-                });
-                me._layerGroups = newGroups;
-            } else {
-                var editable = me.getAllLayerGroups(data.parentId);
-                editable.groups.forEach(function(group) {
-                    if (group.id != data.id) {
-                        newGroups.push(group);
-                    }
-                });
-                editable.groups = newGroups;
-            }
+            var editable = me.getAllLayerGroups(parentId);
+            editable.groups.forEach(function(group) {
+                if (group.id != id) {
+                    newGroups.push(group);
+                }
+            });
+            editable.groups = newGroups;
         },
         /**
          * Updata layer groups
@@ -766,7 +758,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getAllLayerGroups: function(id) {
-            if (id) {
+            if (id && id != -1) {
                 var filterFunction = function(group) {
                     return group.id == id;
                 };
