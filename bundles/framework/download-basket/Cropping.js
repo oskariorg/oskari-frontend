@@ -44,7 +44,7 @@ Oskari.clazz.define(
                 var croppingBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 croppingBtn.addClass('primary cropping-btn');
                 croppingBtn.setTitle(value.getName());
-                jQuery(croppingBtn.getElement()).data("layerId",value.getId());
+                jQuery(croppingBtn.getElement()).data("layerId",value.getLayerId());
                 jQuery(croppingBtn.getElement()).data("layerName",value.getLayerName());
                 jQuery(croppingBtn.getElement()).data("layerUrl",value.getLayerUrl());
                 var layerAttributes = value.getAttributes();
@@ -253,7 +253,7 @@ Oskari.clazz.define(
                 getAttributes: function(){
                     return "";
                 },
-                getId: function(){
+                getLayerId: function(){
                     return "";
                 }
             };
