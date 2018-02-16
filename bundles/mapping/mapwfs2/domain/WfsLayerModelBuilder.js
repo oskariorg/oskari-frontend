@@ -58,9 +58,6 @@ Oskari.clazz.define(
                 layer.selectStyle(mapLayerJson.style);
             }
 
-            // Wps Params
-            layer.setWpsLayerParams(mapLayerJson.wps_params);
-
             // WMS link layer id for wfs rendering option
             if (mapLayerJson.WMSLayerId) {
                 layer.setWMSLayerId(mapLayerJson.WMSLayerId);
