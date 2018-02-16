@@ -209,6 +209,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             sandbox.registerService(layerlistExtenderService);
             me.layerlistExtenderService = layerlistExtenderService;
 
+            var layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
+            sandbox.registerService(layerlistService);
+
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     sandbox.registerForEventByName(me, p);

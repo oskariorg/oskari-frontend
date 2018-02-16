@@ -673,7 +673,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             me._currentFilter = null;
             me.layerTabs.forEach(function(tab, tabIndex) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
-                var filters = me.mapLayerService.getLayerlistFilterButton();
+                var filters = me.layerlistService.getLayerlistFilterButton();
                 Object.keys(filters).forEach(function(key) {
                     var filter = filters[key];
                     if (!notDeactivateThisFilter || filter.id !== notDeactivateThisFilter) {
