@@ -50,7 +50,6 @@ Oskari.registerLocalization({
         "scale_dialog": {
             "title": "Skaala uppdaterad",
             "msg": "Detta kartlager kan inte visas på den valda skalnivån."
-        },
-        "filterTooltip": "Filter data"
+        }
     }
 });

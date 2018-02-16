@@ -354,7 +354,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             this._sandbox.notifyAll(evt);
         },
         /**
-         * Dalete layer group
+         * Delete layer group
          * @method deleteLayerGroup
          * @param  {Object}         data group data
          */
@@ -412,6 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
         },
 
+
         /**
          * Update layer groups
          * @method updateGroupsLayers
@@ -429,34 +430,28 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
+            var getLayerIndexInArray = function(arr){
+                var founded = -1;
+                for (var i = 0; i < groupLayers.length; i++) {
+                    var layer = groupLayers[i];
+                    if (layer.id === layerId) {
+                        founded = i;
+                        break;
+                    }
+                }
+                return founded;
+            };
+
+
             // update or insert
             if (!deleteLayer) {
-                var isLayerInGroup = function(groupLayers) {
-                    var founded = -1;
-                    for (var i = 0; i < groupLayers.length; i++) {
-                        var layer = groupLayers[i];
-                        if (layer.id === layerId) {
-                            founded = i;
-                            break;
-                        }
-                    }
-                    return founded;
-                };
-
-
-                var isGroup = function(groupId) {
-                    var isInGroup = jQuery.grep(newLayerConf.groups, function(group) {
-                        return group.id === groupId;
-                    });
-                    return isInGroup.length > 0;
-                };
                 var layerIndex = null;
 
                 for (var i = 0; i < me._layerGroups.length; i++) {
                     group = me._layerGroups[i];
 
                     // Check if layer is in main groups
-                    layerIndex = isLayerInGroup(group.layers);
+                    layerIndex = getLayerIndexInArray(group.layers);
                     if (layerIndex >= 0) {
                         if (deleteLayer) {
                             group.layers.splice(layerIndex, 1);
@@ -469,7 +464,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     for (var j = 0; j < group.groups.length; j++) {
                         var subgroup = group.groups[j];
 
-                        layerIndex = isLayerInGroup(subgroup.layers);
+                        layerIndex = getLayerIndexInArray(subgroup.layers);
                         if (layerIndex >= 0) {
                             if (deleteLayer) {
                                 group.groups[j].layers.splice(layerIndex, 1);
@@ -481,7 +476,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         if (subgroup.groups) {
                             for (var k = 0; k < subgroup.groups.length; k++) {
                                 var subgroupSubgroup = subgroup.groups[k];
-                                layerIndex = isLayerInGroup(subgroupSubgroup.layers);
+                                layerIndex = getLayerIndexInArray(subgroupSubgroup.layers);
                                 if (layerIndex >= 0) {
                                     if (deleteLayer) {
                                         group.groups[j].groups[k].layers.splice(layerIndex, 1);
@@ -519,42 +514,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // Also check if layer has removed from groups
             if (deleteLayer) {
-                // find all groups where layer is
-                // check main groups
-                var hasInGroupLayers = function(group) {
-                    var layers = jQuery.grep(group.layers, function(layer) {
-                        return layer.id === layerId;
-                    });
-                    return layers.length > 0;
-                };
-
-                var getLayerIndex = function(layers) {
-                    var returnIndex = -1;
-                    layers.forEach(function(layer, index) {
-                        if (layer.id === layerId) {
-                            returnIndex = index;
-                        }
-                    });
-                    return returnIndex;
-                };
                 me._layerGroups.forEach(function(group, index) {
                     // new layer is not in main groups so remove it
-                    if (hasInGroupLayers(group)) {
-                        group.layers.splice(getLayerIndex(group.layers), 1);
+                    if (getLayerIndexInArray(group.layers)>-1) {
+                        group.layers.splice(getLayerIndexInArray(group.layers), 1);
                     }
 
                     // check subgroups
                     group.groups.forEach(function(subgroup, subgroupIndex) {
                         // new layer is not in subgroups so remove it
-                        if (hasInGroupLayers(subgroup)) {
-                            subgroup.layers.splice(getLayerIndex(subgroup.layers), 1);
+                        if (getLayerIndexInArray(subgroup.layers)>-1) {
+                            subgroup.layers.splice(getLayerIndexInArray(subgroup.layers), 1);
                         }
 
                         // check subgroup subgroups
                         subgroup.groups.forEach(function(subgroupSubgroup, subgroupSubgroupIndex) {
                             // new layer is not in subgroups so remove it
-                            if (hasInGroupLayers(subgroupSubgroup)) {
-                                subgroupSubgroup.layers.splice(getLayerIndex(subgroupSubgroup.layers), 1);
+                            if (getLayerIndexInArray(subgroupSubgroup.layers)>-1) {
+                                subgroupSubgroup.layers.splice(getLayerIndexInArray(subgroupSubgroup.layers), 1);
                             }
                         });
                     });

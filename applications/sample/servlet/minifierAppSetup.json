@@ -412,23 +412,5 @@
 				}
 			}
 		}
-	}, {
-		"bundlename": "hierarchical-layerlist",
-		"metadata": {
-			"Import-Bundle": {
-				"hierarchical-layerlist": {
-					"bundlePath": "../../../packages/framework/bundle/"
-				}
-			}
-		}
-	}, {
-		"bundlename": "admin-hierarchical-layerlist",
-		"metadata": {
-			"Import-Bundle": {
-				"admin-hierarchical-layerlist": {
-					"bundlePath": "../../../packages/admin/bundle/"
-				}
-			}
-		}
 	}]
 }

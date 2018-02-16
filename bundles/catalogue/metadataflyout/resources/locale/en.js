@@ -3,7 +3,7 @@ Oskari.registerLocalization({
     "key": "catalogue.bundle.metadataflyout",
     "value": {
         "title": "Metadata",
-        "tooltip": "Show metadatas",
+        "tooltip": "Show metadata",
         "desc": "",
         "layer": {
             "name": "Metadata",

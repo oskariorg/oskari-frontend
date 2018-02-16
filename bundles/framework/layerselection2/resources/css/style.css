@@ -55,18 +55,6 @@ div.layerselection2 .layer.selected {
           padding-top: 2px; }
         div.layerselection2 .layer.selected div.layer-tools div.right-tools div.object-data a {
           padding-left: 5px; }
-        div.layerselection2 .layer.selected div.layer-tools div.right-tools div.object-data div.show-metadata-tool {
-          width: 16px;
-          height: 16px;
-          background-image: url("../images/icon-info.png");
-          background-repeat: no-repeat; }
-          div.layerselection2 .layer.selected div.layer-tools div.right-tools div.object-data div.show-metadata-tool:hover {
-            background-image: url("../images/icon-info_hover.png"); }
-        div.layerselection2 .layer.selected div.layer-tools div.right-tools div.object-data div.show-filter-tool {
-          width: 18px;
-          height: 18px;
-          background-image: url("../images/icon-funnel.png");
-          background-repeat: no-repeat; }
   div.layerselection2 .layer.selected div.stylesel {
     background-color: #f3f3f3; }
     div.layerselection2 .layer.selected div.stylesel label {

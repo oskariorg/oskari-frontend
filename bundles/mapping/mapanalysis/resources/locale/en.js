@@ -9,6 +9,7 @@ Oskari.registerLocalization(
         "layer": {
             "organization": "Own Analysis",
             "inspire": "Own Analysis"
-        }
+        },
+        "filterTooltip": "Filter data"
     }
 });

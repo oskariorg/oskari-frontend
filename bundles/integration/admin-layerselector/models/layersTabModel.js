@@ -201,8 +201,7 @@
                         // cleanup old layer Groups since we always refresh from server for now
                         me.layerGroups = [];
                         me.loadGroups(pResp, groupingMethod);
-                    },
-                    error: function() {}
+                    }
                 });
             },
 
