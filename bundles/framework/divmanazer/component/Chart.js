@@ -226,17 +226,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             var gx = d3.select(".axisLabel")
             .append("svg")
             .attr( "width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
-            .attr( "height", 10 )
+            .attr( "height", 12 )
             .append("g")
                 .attr("class", "x axis header")
                 .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" )
                 .call(this.xAxis);
 
             gx.select('.domain').remove();
-
-            gx.selectAll('line, path')
-                .attr('stroke', '#aaa')
-                .attr('shape-rendering', 'crispEdges');
+            gx.selectAll('line').remove();
             // / X
         },
     /**
