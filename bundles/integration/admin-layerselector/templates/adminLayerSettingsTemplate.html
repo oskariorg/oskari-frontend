@@ -118,6 +118,66 @@
         <% } %>
     <% } %>
 
+    <div class="add-layer-grouping" title="Map Layer Properties">Map Layer Properties</div>
+
+    <% if(model.getId()) { %> <!-- show only for existing layers, not new ones being created -->
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="" class="add-layer-label" title="Supported SRS">Supported SRS</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <%
+                    var srsList = model.getSrsList();
+                    for(var i = 0; srsList && i < srsList.length; i++) { %>
+                        <span><%= srsList[i] %></span>
+                        <% if(i < srsList.length-1) { %>, <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <%
+            var missingProjections = model.getMissingProjections();
+            if(missingProjections.length) {
+        %>
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="" class="add-layer-label" title="Missing SRS">Missing SRS</label>
+                <div class="layer-missing-projection icon-info" title="App default view projections not supported by layer"></div>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <% for(var i = 0; i < missingProjections.length; i++) { %>
+                        <span><%= missingProjections[i] %></span>
+                        <% if(i < missingProjections.length-1) { %>, <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    <% } %>
+
+    <% var forcedSRS = model.getAttributes().forcedSRS || []; %>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="" class="add-layer-label" title="Missing SRS">Forced SRS</label>
+            <div class="layer-missing-projection icon-info" title="View projections override compared to capabilities"></div>
+        </div>
+        <div class="add-layer-input-area add-layer-forced-proj-area">
+            <div class="input-controls">
+                <span class="add-layer-forced-proj-chits">
+                    <% for(var i = 0; i < forcedSRS.length; i++) { %>
+                        <span class="add-layer-forced-proj" data-proj="<%= forcedSRS[i] %>"><%= forcedSRS[i] %><span class="icon-close"></span></span>
+                    <% } %>
+                </span>
+                <span class="add-layer-forced-proj-inputgroup">
+                    <input class="add-layer-forced-proj-input add-layer-input" type="text"/>
+                    <button class="add-layer-forced-proj-add">Add</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-datauuid" class="add-layer-label" title="<%= instance.getLocalization('admin').metaInfoIdDesc %>"><%= instance.getLocalization('admin').metaInfoId %></label>

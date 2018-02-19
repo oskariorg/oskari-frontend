@@ -223,6 +223,33 @@ div.admin-layerselector {
 
         }
 
+        .add-layer-input-area.add-layer-forced-proj-area {
+            line-height: 40px;
+        }
+
+        .add-layer-forced-proj-input {
+            float: none;
+            width: 150px;
+        }
+
+        .add-layer-forced-proj {
+            background-color: #fff;
+            border: solid 1px #aaa;
+            padding: 5px 28px 5px 5px;
+            margin-right: 5px;
+            border-radius: 5px;
+            position: relative; 
+        }
+        .add-layer-forced-proj .icon-close {
+            top: 7px;
+            right: 5px;
+            opacity: 0.5;
+        }
+
+        .add-layer-forced-proj-inputgroup {
+            white-space: nowrap;
+        }
+
     }
 
     div.create-layer {

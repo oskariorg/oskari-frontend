@@ -148,6 +148,29 @@ div.admin-layerselector {
       div.admin-layerselector div.layer textarea.add-layer-input.long,
       div.admin-layerselector div.create-layer textarea.add-layer-input.long {
         width: 309px; }
+    div.admin-layerselector div.layer .add-layer-input-area.add-layer-forced-proj-area,
+    div.admin-layerselector div.create-layer .add-layer-input-area.add-layer-forced-proj-area {
+      line-height: 40px; }
+    div.admin-layerselector div.layer .add-layer-forced-proj-input,
+    div.admin-layerselector div.create-layer .add-layer-forced-proj-input {
+      float: none;
+      width: 150px; }
+    div.admin-layerselector div.layer .add-layer-forced-proj,
+    div.admin-layerselector div.create-layer .add-layer-forced-proj {
+      background-color: #fff;
+      border: solid 1px #aaa;
+      padding: 5px 28px 5px 5px;
+      margin-right: 5px;
+      border-radius: 5px;
+      position: relative; }
+    div.admin-layerselector div.layer .add-layer-forced-proj .icon-close,
+    div.admin-layerselector div.create-layer .add-layer-forced-proj .icon-close {
+      top: 7px;
+      right: 5px;
+      opacity: 0.5; }
+    div.admin-layerselector div.layer .add-layer-forced-proj-inputgroup,
+    div.admin-layerselector div.create-layer .add-layer-forced-proj-inputgroup {
+      white-space: nowrap; }
   div.admin-layerselector div.create-layer {
     min-height: 35px; }
   div.admin-layerselector div.layer:nth-child(even) {
