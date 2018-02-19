@@ -14,17 +14,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
             me.createUi();
             me.addClass('statsgrid-diagram-flyout');
             me.setContent(me.getElement());
+            me.scroll();
         }
     });
 }, {
     _template: {
-        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div><div class="chart"></div></div>')
+        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div><div class="axisLabel"></div><div class="chart"></div></div>')
     },
     setElement: function(el) {
         this.element = el;
     },
     getElement: function() {
         return this.element;
+    },
+    scroll: function () {
+        var me = this;
+        var axisLabel = jQuery('.axisLabel');
+        jQuery( jQuery('.statsgrid-diagram-flyout > .oskari-flyoutcontentcontainer') ).scroll(function() {
+            var scrollAmount = jQuery(this).scrollTop();
+            //14 is the 2% padding-bottom
+            var chartControlHeight = jQuery('.chart-controls').outerHeight() + 14;
+            if ( top > 50 ) {
+                axisLabel.addClass("sticky");
+                axisLabel.css("margin-top", function () {
+                   var el = jQuery('.statsgrid-diagram-flyout > .oskari-flyouttoolbar');
+                   return scrollAmount - chartControlHeight;
+                })
+            }
+            else  {
+                if ( axisLabel.hasClass('sticky') ) {
+                    axisLabel.removeClass("sticky");
+                    axisLabel.css("margin-top", "");
+                }
+            }
+        });
     },
     createUi: function() {
         if (this.getElement()) {
