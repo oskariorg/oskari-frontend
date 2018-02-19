@@ -167,28 +167,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                 }
             });
         }
-
-        //append the x-axis to different element so we can show the values when scrollign
-        var gx = d3.select(".axisLabel")
-        .append("svg")
-        .attr( "width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
-        .attr( "height", this.dimensions.height() )
-        .append("g")
+        // append x-tick lines to chart
+        var xtickAxis = this.svg.append("g")
             .attr("class", "x axis")
-            .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" )
+            .attr("transform", "translate(" + this.x(0) + ", 0)")
             .call(this.xAxis);
 
-        gx.select('.domain').remove();
+        xtickAxis.selectAll("x axis, tick, text").remove();
+        xtickAxis.select('.domain').remove();
 
-        gx.selectAll('line, path')
-            .attr('stroke', '#aaa')
-            .attr('shape-rendering', 'crispEdges');
 
         var gy = this.svg.append("g")
             .attr("class", "y axis")
             .attr("transform", "translate(" + this.x(0) + ", 0)")
             .call(this.yAxis);
-            
+
         gy.selectAll('line, path')
             .attr('x2', function ( d ) {
                 if ( d === null ) {
@@ -228,6 +221,23 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                     }
                 }
             })
+
+            //append the x-axis to different element so we can show the values when scrollign
+            var gx = d3.select(".axisLabel")
+            .append("svg")
+            .attr( "width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
+            .attr( "height", 10 )
+            .append("g")
+                .attr("class", "x axis header")
+                .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" )
+                .call(this.xAxis);
+
+            gx.select('.domain').remove();
+
+            gx.selectAll('line, path')
+                .attr('stroke', '#aaa')
+                .attr('shape-rendering', 'crispEdges');
+            // / X
         },
     /**
      * @method setColorScale
@@ -273,13 +283,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr("class", "bar")
             .attr("text-anchor", "middle")
             .style('fill', function( d,i ){ return me.colorScale(i); }) 
-            .attr("y", -7) // 7 is half of 15 height (pixel aligned)
+            .attr("y", -8) // 7 is half of 15 height (pixel aligned)
             .attr("x", function ( d ) { return me.x( Math.min( 0, d.value ) ); })
-            .attr("height", 15)
+            .attr("height", 17)
             .attr("width", function( d ) {
                  return Math.abs( me.x( d.value ) - me.x( 0 ) ); 
             });
-            
+        //append text
         bars.each(function (d) {
             if(typeof d.value === 'number') {
                 return;

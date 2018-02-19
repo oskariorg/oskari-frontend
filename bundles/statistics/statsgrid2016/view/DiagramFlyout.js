@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
             var scrollAmount = jQuery(this).scrollTop();
             //14 is the 2% padding-bottom
             var chartControlHeight = jQuery('.chart-controls').outerHeight() + 14;
-            if ( top > 50 ) {
+            if ( scrollAmount > 50 ) {
                 axisLabel.addClass("sticky");
                 axisLabel.css("margin-top", function () {
                    var el = jQuery('.statsgrid-diagram-flyout > .oskari-flyouttoolbar');
