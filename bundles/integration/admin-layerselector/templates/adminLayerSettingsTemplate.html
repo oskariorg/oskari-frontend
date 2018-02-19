@@ -118,12 +118,12 @@
         <% } %>
     <% } %>
 
-    <div class="add-layer-grouping" title="Map Layer Properties">Map Layer Properties</div>
+    <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerProps %>"><%= instance.getLocalization('admin').layerProps %></div>
 
     <% if(model.getId()) { %> <!-- show only for existing layers, not new ones being created -->
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="" class="add-layer-label" title="Supported SRS">Supported SRS</label>
+                <label class="add-layer-label" title="<%= instance.getLocalization('admin').supportedSRS %>"><%= instance.getLocalization('admin').supportedSRS %></label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
@@ -142,8 +142,8 @@
         %>
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="" class="add-layer-label" title="Missing SRS">Missing SRS</label>
-                <div class="layer-missing-projection icon-info" title="App default view projections not supported by layer"></div>
+                <label class="add-layer-label" title="<%= instance.getLocalization('admin').missingSRS %>"><%= instance.getLocalization('admin').missingSRS %></label>
+                <div class="layer-missing-projection icon-info" title="<%= instance.getLocalization('admin').missingInfo %>"></div>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
@@ -160,8 +160,8 @@
     <% var forcedSRS = model.getAttributes().forcedSRS || []; %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">
-            <label for="" class="add-layer-label" title="Missing SRS">Forced SRS</label>
-            <div class="layer-missing-projection icon-info" title="View projections override compared to capabilities"></div>
+            <label class="add-layer-label" title="<%= instance.getLocalization('admin').forcedSRS %>"><%= instance.getLocalization('admin').forcedSRS %></label>
+            <div class="layer-missing-projection icon-info" title="<%= instance.getLocalization('admin').forcedSRSInfo %>"></div>
         </div>
         <div class="add-layer-input-area add-layer-forced-proj-area">
             <div class="input-controls">
@@ -172,7 +172,7 @@
                 </span>
                 <span class="add-layer-forced-proj-inputgroup">
                     <input class="add-layer-forced-proj-input add-layer-input" type="text"/>
-                    <button class="add-layer-forced-proj-add">Add</button>
+                    <button class="add-layer-forced-proj-add"><%= instance.getLocalization('admin').forcedSRSAdd %></button>
                 </span>
             </div>
         </div>
