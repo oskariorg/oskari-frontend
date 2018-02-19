@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.model = null;
         this._defaultLocKey = 'Grid';
         this._loc = this._getLocalization('DivManazer');
+        this.interpolate = Oskari.getMsg.bind(null, 'DivManazer');
         this.template = jQuery(
             '<table class="oskari-grid"><thead><tr></tr></thead><tbody></tbody></table>'
         );
@@ -702,7 +703,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 row.attr('data-id', data[me.model.getIdField()]);
                 columnIndex = 0;
                 fieldNames.forEach(function(key) {
-                    value = data[key];
+                    if ( typeof data[key] === 'number' ) {
+                        value = me.interpolate('Grid.cellValue', {value: data[key]});
+                    } else {
+                        value = data[key];
+                    }
                     // Handle subtables
                     if (typeof value === 'object') {
                         columnIndex = me._createSubTable(

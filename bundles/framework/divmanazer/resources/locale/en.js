@@ -238,6 +238,7 @@ Oskari.registerLocalization(
             }
         },
         "Grid": {
+            "cellValue": "{value, number}",
             "columnSelector": {
                 "title": "Properties",
                 "tooltip": "Show columns"
