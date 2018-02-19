@@ -563,6 +563,7 @@ div.tab-material-controls div.title {
 .axisLabel.sticky {
     font-weight: bold;
     color:#F6F6F6;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     overflow: hidden;
     /* height: 700px; */
      z-index: 3; 
