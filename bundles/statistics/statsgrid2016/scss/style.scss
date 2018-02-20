@@ -508,9 +508,7 @@ div.oskari-flyout {
         }
 
         .oskari-datacharts {
-            position: relative;
-            height: 700px;
-            
+
             #graphic {
                 .bar {
                     fill: #5f89ad;
@@ -547,6 +545,8 @@ div.oskari-flyout {
     * ********************************************/
      &.statsgrid-diagram-flyout {
         .oskari-datacharts {
+            position: relative;
+            height: 700px;
             padding: $flyoutPadding;
         }
     }
