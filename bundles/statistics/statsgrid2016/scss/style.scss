@@ -335,8 +335,6 @@ div.oskari-flyout {
     * ********************************************/
     &.statsgrid-data-flyout {
         .oskari-datacharts {
-            position: relative;
-            height: 700px;
             padding: $flyoutPadding;
         }
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
@@ -510,6 +508,9 @@ div.oskari-flyout {
         }
 
         .oskari-datacharts {
+            position: relative;
+            height: 700px;
+            
             #graphic {
                 .bar {
                     fill: #5f89ad;
