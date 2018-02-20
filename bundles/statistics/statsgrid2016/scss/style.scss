@@ -922,16 +922,14 @@ div.tab-material-controls div.title {
     margin-top: -5px;
     position: absolute;
     opacity: 0.8;
-
-        .sticky {
-            font-weight: bold;
-            color:#F6F6F6;
-            text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-            overflow: hidden;
-            /* height: 700px; */
-            z-index: 3; 
-            max-height: 100%;
-        }
+}
+.sticky {
+    font-weight: bold;
+    color:#F6F6F6;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    overflow: hidden;
+    z-index: 3; 
+    max-height: 100%;
 }
 .chart {
     position: absolute; 
