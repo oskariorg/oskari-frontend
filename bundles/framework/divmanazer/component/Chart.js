@@ -28,8 +28,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         return this.svg !== null;
     },
     sortData: function () {
+        //if value is undefined set it to a big negative number so it will appear last in the chart
         this.data = this.data.sort(function (a, b) {
-            return d3.ascending(a.value || 0, b.value || 0);
+            return d3.ascending(a.value || -100000 , b.value || -100000);
         });
     },
     chartDimensions: function (leftMargin) {
@@ -40,7 +41,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                 top: 10,
                 right: 25,
                 bottom: 15,
-                left: leftMargin ? Math.min(leftMargin, 180) : 80
+                left: leftMargin ? Math.min(leftMargin, 140) : 80
             },
             xAxisOffset: -5,
             width: function () {
@@ -281,10 +282,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr("text-anchor", "middle")
             .style('fill', function( d,i ){ return me.colorScale(i); }) 
             .attr("y", -8) // 7 is half of 15 height (pixel aligned)
-            .attr("x", function ( d ) { return me.x( Math.min( 0, d.value ) ); })
+            .attr("x", function ( d ) { return d.value ? me.x( Math.min( 0, d.value ) ) : 0 })
             .attr("height", 17)
             .attr("width", function( d ) {
-                 return Math.abs( me.x( d.value ) - me.x( 0 ) ); 
+                 return d.value ? Math.abs( me.x( d.value ) - me.x( 0 ) ) : 0; 
             });
         //append text
         bars.each(function (d) {
@@ -366,7 +367,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         }
 
         var opts = options || {};
-        opts.width = 620;
+        opts.width = jQuery('.statsgrid-diagram-flyout').width() - 50;
         //Clear previous graphs
         this.clear();
         if( this.chartType === 'barchart' ) {
