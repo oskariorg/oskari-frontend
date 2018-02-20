@@ -577,4 +577,7 @@ div.tab-material-controls div.title {
 .chart {
     position: absolute; 
 }
+.statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
+    max-width:700px;
+  }
 /*# sourceMappingURL=style.css.map */
