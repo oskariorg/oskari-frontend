@@ -57,6 +57,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
         var el = this._template.container.clone();
         // this.loc.datacharts.indicatorVar as label?
         this._indicatorSelector.render(el.find('.chart-controls'));
+        this._diagram.createDataSortOption(el.find('.chart-controls .dropdown'));
         // this.loc.datacharts.descColor
         // Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu');
         this._diagram.render(el.find('.chart'));

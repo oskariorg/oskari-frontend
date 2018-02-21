@@ -142,6 +142,46 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
         });
     },
     /**
+     * @method createDataSortOption
+     * creates an SelectList with options for sorting the data
+     */
+    createDataSortOption: function ( container) {
+        var me = this;
+        var dropdownOptions = {
+            placeholder_text: this.loc.datacharts.sorting.desc,
+            allow_single_deselect: true,
+            disable_search_threshold: 10,
+            no_results_text: "locale.panels.newSearch.noResults",
+            width: '100%'
+        };
+        //hardcoded
+        var sortTypes = [
+            {
+                id: "name",
+                title: this.loc.datacharts.sorting.name
+            },
+            {
+                id: "ascending",
+                title: this.loc.datacharts.sorting.ascending
+            }
+        ];
+        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');  
+        var dropdown = select.create(sortTypes, dropdownOptions);
+
+        dropdown.css({
+            width: '27%',
+            marginLeft: '10px'
+        });
+
+        select.adjustChosen();
+
+        dropdown.on('change', function(event) {
+            event.stopPropagation();
+            me.getChartInstance().sortDataByType( select.getValue() );
+        });
+        container.append(dropdown); 
+    },
+    /**
      * @method getColorScale
      * gets the color scale of the mapselection
      * @return colors[] containing colors

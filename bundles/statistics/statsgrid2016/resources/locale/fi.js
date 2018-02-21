@@ -158,7 +158,12 @@ Oskari.registerLocalization(
           "descColor": "Kuvaajan väri",
           "selectClr": "Valittu väri",
           "clrFromMap": "Värit kartalla olevan luokittelun mukaan",
-          "chooseColor": "Valitse väri"
+          "chooseColor": "Valitse väri",
+          "sorting": {
+            "desc": "Lajittelu arvon mukaan",
+            "name": "Nimi",
+            "ascending": "Arvo"
+          }
         },
         "filter": {
             "title": "Suodatus",

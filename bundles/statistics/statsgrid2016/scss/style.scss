@@ -550,6 +550,7 @@ div.oskari-flyout {
             padding: $flyoutPadding;
         }
         .chart-controls {
+           display: inline-flex;
            padding-bottom: 2%; 
         }
     }

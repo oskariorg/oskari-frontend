@@ -321,6 +321,7 @@ div.oskari-flyout {
     height:700px;
     padding: 16px; }
       div.oskari-flyout.statsgrid-diagram-flyout .chart-controls {
+    display: inline-flex;
     padding-bottom: 2%; }
 
 /* ********************************************
@@ -565,7 +566,6 @@ div.tab-material-controls div.title {
     color:#F6F6F6;
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     overflow: hidden;
-    /* height: 700px; */
      z-index: 3; 
     max-height: 100%;
 }

@@ -8,9 +8,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
   this.chartType = null;
   this.containerWidth = null;
   this.plot = jQuery('<div style="width:100%"></div>');
+  this.sortingType = null;
   this._g = null;
   this._options = {
-    colors: ['#ebb819']
+    colors:  ['#555','#555']
   };
   this.loc = Oskari.getMsg.bind(null, 'DivManazer');
   this.noValStr = this.loc('graph.noValue');
@@ -26,12 +27,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     },
     chartIsInitialized: function () {
         return this.svg !== null;
-    },
-    sortData: function () {
-        //if value is undefined set it to a big negative number so it will appear last in the chart
-        this.data = this.data.sort(function (a, b) {
-            return d3.ascending(a.value || -100000 , b.value || -100000);
-        });
     },
     chartDimensions: function (leftMargin) {
         var me = this;
@@ -92,6 +87,49 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         }
     },
     /**
+     *
+     * @method sortDataByType
+     * @param { String } type - indicates what sort of sorting we want to apply to our chart.
+     * if no type provided it will default to value ascending
+     */
+    sortDataByType: function ( type ) {
+        var me = this;
+
+        if ( !this.sortingType ) {
+            if ( typeof type === "undefined" || type === "" ) {
+                type = 'ascending';
+            } 
+        } else if( type === undefined ) {
+            type = this.sortingType;
+        }
+
+        var sortTypes = {
+            "name": function () {
+                me.data = me.data.sort(function (a, b) {
+                    return d3.descending(a.name , b.name);
+                });
+                me.redraw();
+            },
+            "ascending": function () {
+                me.data = me.data.sort(function (a, b) {
+                    return d3.ascending(a.value || -100000 , b.value || -100000);
+                });
+                me.redraw();
+                return;
+
+            },
+            "descending": function () {
+                me.data = me.data.sort(function (a, b) {
+                    return d3.descending(a.value || 100000 , b.value || 100000);
+                });
+                me.redraw();
+                return;
+            }
+        }[type]();
+
+        me.sortingType = type;
+    },
+    /**
      * d3 axis are functions that generate svg-elements based on the scale given
      * @method initAxis
      *
@@ -134,7 +172,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      */
     handleData: function ( data ) {
         this.data = data;
-        this.sortData( this.data );
+        this.sortDataByType();
         var maxNameLength = d3.max(data, function (d) {return d.name.length});
         this.dimensions = this.chartDimensions(maxNameLength * 5.5);
     },
@@ -252,7 +290,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      * @param { Object } options if options color is passed it needs to be an array for d3 to apply it
      */
     createBarChart: function ( data, options ) {
-        if( data != undefined ) {
+        if( data != undefined && this.svg === null ) {
             this.handleData( data );
         }
         var opts = options || this._options;
@@ -367,7 +405,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         }
 
         var opts = options || {};
-        opts.width = jQuery('.statsgrid-diagram-flyout').width() - 50;
+        opts.width = 620
         //Clear previous graphs
         this.clear();
         if( this.chartType === 'barchart' ) {
