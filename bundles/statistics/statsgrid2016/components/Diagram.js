@@ -169,7 +169,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
         var dropdown = select.create(sortTypes, dropdownOptions);
 
         dropdown.css({
-            width: '27%',
             marginLeft: '10px'
         });
 

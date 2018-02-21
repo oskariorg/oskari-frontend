@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         // append x-tick lines to chart
         var xtickAxis = this.svg.append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(" + this.x(0) + ", 0)")
+            .attr("transform", "translate( 0, 0)")
             .call(this.xAxis);
 
         xtickAxis.selectAll("x axis, tick, text").remove();
