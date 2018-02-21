@@ -200,10 +200,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             if(!ranges.max) {
                 ranges.max = 4;
             }
-            var x = d3.scaleSqrt()
+            var x = d3.scaleLinear()
                 .domain([ranges.min, ranges.max])
                 .range([iconSize.min, iconSize.max]);
-            return x(index+1);
+            return x(index);
         },
         _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
             var me = this;

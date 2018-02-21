@@ -123,8 +123,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this._rangeSlider = {
         min: 10,
         max: 120,
-        defaultValues: [10,120],
-        step: 10,
+        defaultValues: [10,60],
+        step: 5,
         element: null
     };
     this._showNumericValueCheckButton = null;
