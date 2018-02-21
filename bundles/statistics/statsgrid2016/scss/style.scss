@@ -551,7 +551,11 @@ div.oskari-flyout {
         }
         .chart-controls {
            display: inline-flex;
-           padding-bottom: 2%; 
+           padding-bottom: 2%;
+           
+           .dropdown {
+               max-width: inherit;
+           }
         }
     }
 }

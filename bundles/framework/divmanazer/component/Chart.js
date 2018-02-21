@@ -94,12 +94,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      */
     sortDataByType: function ( type ) {
         var me = this;
-
+        // empty string ("") is the placeholder value from selectlist
         if ( !this.sortingType ) {
             if ( typeof type === "undefined" || type === "" ) {
                 type = 'ascending';
             } 
-        } else if( type === undefined ) {
+        } else if( type === undefined || type === "" ) {
             type = this.sortingType;
         }
 

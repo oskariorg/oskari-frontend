@@ -323,6 +323,9 @@ div.oskari-flyout {
       div.oskari-flyout.statsgrid-diagram-flyout .chart-controls {
     display: inline-flex;
     padding-bottom: 2%; }
+      div.oskari-flyout.statsgrid-diagram-flyout .chart-controls .dropdown { 
+        max-width: inherit;
+      }
 
 /* ********************************************
  * Statsgrid legend
