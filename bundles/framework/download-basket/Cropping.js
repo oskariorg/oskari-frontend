@@ -255,9 +255,6 @@ Oskari.clazz.define(
                 },
                 getId: function(){
                     return "";
-                },
-                getLayerId: function(){
-                    return "";
                 }
             };
 
@@ -310,11 +307,11 @@ Oskari.clazz.define(
                     url : layerUrl,
                     x : x,
                     y : y,
+                    id : layerId,
                     bbox : mapVO.getBboxAsString(),
                     width : mapVO.getWidth(),
                     height : mapVO.getHeight(),
                     srs : mapVO.getSrsName(),
-                    id : layerId()
                 },
                 success: function (data) {
                     var geojson_format = new OpenLayers.Format.GeoJSON();
@@ -543,7 +540,7 @@ Oskari.clazz.define(
                 jQuery.each( croppedAreaFeatures, function( feature_key, feature_value ) {
                     basketObject.layerNameLang = layer_value.getName();
                     basketObject.layerName = layer_value.getLayerName();
-                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(),'id');
+                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(),'id'); 
                     basketObject.cropLayerName = feature_value.attributes.layerName;
                     basketObject.cropLayerNameLang = feature_value.attributes.layerNameLang;
                     basketObject.cropLayerUrl = feature_value.attributes.layerUrl;
