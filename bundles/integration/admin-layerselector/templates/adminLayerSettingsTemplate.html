@@ -419,6 +419,8 @@
                     <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"><%= instance.getLocalization('save') %></button>
                     <button class="add-layer-btn <%= isSubLayer ? 'admin-remove-sublayer' : 'admin-remove-layer' %>"
                         title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
+                    <button class="add-layer-btn add-layer-recheck" 
+                        title="<%= instance.getLocalization('recheckTitle') %>"><%= instance.getLocalization('recheckTitle') %></button>
                 <% } %>
                 <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
                     title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>

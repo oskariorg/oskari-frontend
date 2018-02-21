@@ -204,6 +204,15 @@ Oskari.registerLocalization(
         "add": "Tillägg",
         "save": "Lagra",
         "delete": "Ta bort",
-        "ok": "OK"
+        "ok": "OK",
+        "close": "Stäng",
+        "query": "Hämta",
+        "recheckTitle": "Hämta getCapabilities",
+        "recheckAllButton": "Hämta alla getCapabilities",
+        "recheckAll": "Vill du hämta getCapabilites för alla kartlager? Operationen kan ta många minuter.",
+        "recheckAllSucceeded": "Uppdatering lyckades för {success, number} lager, misslyckades för {fail, number} lager.",
+        "recheckSucceeded": "Uppdatering lyckades.",
+        "recheckFailReason": "Uppdatering misslyckades: {reason}",
+        "recheckFail": "Uppdatering misslyckades."
     }
 });

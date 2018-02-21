@@ -204,6 +204,15 @@ Oskari.registerLocalization(
         "add": "Add",
         "save": "Save",
         "delete": "Remove",
-        "ok": "OK"
+        "ok": "OK",
+        "close": "Close",
+        "query": "Query",
+        "recheckTitle": "Re-check capabilities",
+        "recheckAllButton": "Re-check all capabilities",
+        "recheckAll": "Do you want to query getCapabilites for all layers? The operation can take many minutes.",
+        "recheckAllSucceeded": "Capabilites update succeeded for {success, number} layers, failed for {fail, number} layers.",
+        "recheckSucceeded": "Capabilities re-check succeeded.",
+        "recheckFailReason": "Capablities re-check failed: {reason}",
+        "recheckFail": "Capablities re-check failed."
     }
 });

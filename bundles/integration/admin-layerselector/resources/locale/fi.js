@@ -204,6 +204,15 @@ Oskari.registerLocalization(
         "add": "Lisää",
         "save": "Tallenna",
         "delete": "Poista",
-        "ok": "OK"
+        "ok": "OK",
+        "close": "Sulje",
+        "query": "Hae",
+        "recheckTitle": "Päivitä getCapabilities",
+        "recheckAllButton": "Päivitä kaikki getCapabilities",
+        "recheckAll": "Haluatko hakea getCapabilities-määritykset kaikille karttatasoille? Toiminonto saattaa kestää useita minuutteja.",
+        "recheckAllSucceeded": "GetCapabilities päivitys onnistui {success, number} tasolle, epäonnistui {fail, number} tasolle.",
+        "recheckSucceeded": "GetCapabilities päivitys onnistui.",
+        "recheckFailReason": "GetCapabilities päivitys epäonnistui: {reason}",
+        "recheckFail": "GetCapabilities päivitys epäonnistui."
     }
 });

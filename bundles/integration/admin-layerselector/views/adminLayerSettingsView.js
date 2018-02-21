@@ -52,8 +52,44 @@ define([
                 'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
                 'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup',
                 'click .add-layer-forced-proj .icon-close': 'removeForcedProj',
-                'click .add-layer-forced-proj-add': 'addForcedProj'
+                'click .add-layer-forced-proj-add': 'addForcedProj',
+                'click .add-layer-recheck': 'recheckCapabilities'
             },
+
+            recheckCapabilities: function(e) {
+                var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+
+                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var closeButton = popup.createCloseButton(loc('close'))
+
+                var content;
+
+                jQuery.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: this.model.getId()
+                    },
+                    url: this.instance.getSandbox().getAjaxUrl() + 'action_route=UpdateCapabilities',
+                    success: function (resp) {
+                        xhr = null;
+                        if(resp.success.length === 1) {
+                            content = jQuery('<span>' + loc('recheckSucceeded') + '<span>');
+                        } else {
+                            var reasonKey = Object.keys(resp.error)[0];
+                            var reason = resp.error[reasonKey];
+                            content = jQuery('<span>' + loc('recheckFailReason', {reason: reason}) + '<span>');
+                        }
+                        popup.show(loc('recheckTitle'), content, [closeButton]);
+                    },
+                    error: function (xhr, status, error) {
+                        xhr = null;
+                        content.append('<br><br><span>' + loc('recheckFail') + '<span>');
+                        popup.show(loc('recheckTitle'), content, [closeButton]);
+                    }
+                });
+            },
+
             addForcedProj: function (e) {
                 e.stopPropagation();
 

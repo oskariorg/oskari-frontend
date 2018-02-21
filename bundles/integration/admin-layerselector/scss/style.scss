@@ -130,6 +130,9 @@ div.admin-layerselector {
             float:right;
         }
 
+        .admin-layer-recheck-all {
+            float: right;
+        }
     }
 
     /* layer container */
@@ -303,6 +306,10 @@ div.admin-layerselector {
     .admin-edit-grouping-btn {
         float: right;
         margin: 5px 10px;
+    }
+
+    .add-layer-recheck {
+        margin-left: 25px;
     }
 
     button.admin-arrange-layers {
