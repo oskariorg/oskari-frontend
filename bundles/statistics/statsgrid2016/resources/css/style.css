@@ -321,10 +321,10 @@ div.oskari-flyout {
     height:700px;
     padding: 16px; }
       div.oskari-flyout.statsgrid-diagram-flyout .chart-controls {
-    display: inline-flex;
     padding-bottom: 2%; }
-      div.oskari-flyout.statsgrid-diagram-flyout .chart-controls .dropdown { 
-        max-width: inherit;
+      div.oskari-flyout.statsgrid-diagram-flyout .chart-controls .dropdown {
+        display: inline-flex;
+        max-width: 100%;
       }
 
 /* ********************************************
@@ -576,9 +576,6 @@ div.tab-material-controls div.title {
     margin-top: -5px;
     position: absolute;
     opacity: 0.8;
-}
-.chart {
-    position: absolute; 
 }
 .statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
     max-width:700px;
