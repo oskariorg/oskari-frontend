@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         // empty string ("") is the placeholder value from selectlist
         if ( !this.sortingType ) {
             if ( typeof type === "undefined" || type === "" ) {
-                type = 'value-ascending';
+                type = 'value-descending';
             } 
         } else if( type === undefined || type === "" ) {
             type = this.sortingType;
@@ -106,19 +106,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var sortTypes = {
             "name-ascending": function () {
                 me.data = me.data.sort(function (a, b) {
-                    return d3.descending(a.name , b.name);
+                    return d3.ascending(a.name , b.name);
                 });
                 me.redraw();
             },
             "name-descending": function () {
                 me.data = me.data.sort(function (a, b) {
-                    return d3.ascending(a.name , b.name);
+                    return d3.descending(a.name , b.name);
                 });
                 me.redraw();
             },
             "value-ascending": function () {
                 me.data = me.data.sort(function (a, b) {
-                    return d3.descending(a.value || -100000 , b.value || -100000);
+                    return d3.descending(a.value || 100000 , b.value || 100000);
                 });
                 me.redraw();
                 return;
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             },
             "value-descending": function () {
                 me.data = me.data.sort(function (a, b) {
-                    return d3.ascending(a.value || 100000 , b.value || 100000);
+                    return d3.ascending(a.value || -100000 , b.value || -100000);
                 });
                 me.redraw();
                 return;
