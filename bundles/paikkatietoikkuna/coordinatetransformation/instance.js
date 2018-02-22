@@ -11,11 +11,13 @@ Ways to start the bundle in console:
             }
         }
 });
-            var l = appSetup.startupSequence.length;
-            appSetup.startupSequence[l] = {
-                "bundlename":"coordinatetransformation" ,
+       var obj = {
+            "bundlename":"coordinatetransformation" ,
+            "metadata": {
+                "Import-Bundle": { "coordinatetransformation": { "bundlePath": "/Oskari/packages/paikkatietikkuna/bundle/" } }
             }
-            appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinatetransformation": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } } };
+        }
+        appSetup.startupSequence.push(obj);
 */
 Oskari.clazz.define("Oskari.coordinatetransformation.instance",
 function () {

@@ -7,31 +7,29 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             sourceWrapper: jQuery('<div class="sourceWrapper"></div>'),
             source: _.template(
                 '<div class="coordinate-datasource"> </br> ' +
-                '<h4><%= title %></h4>'+
+                '<h4>${title}</h4>'+
                 '<form>'+
-                    '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
-                    '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
-                    '<input type="radio" id="mapselection" name="load" value="3"><label for="mapselection"> <span></span> <%= map %> </label>'+
+                    '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> ${clipboard} </label>'+
+                    '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> ${file} </label>'+
+                    '<input type="radio" id="mapselection" name="load" value="3"><label for="mapselection"> <span></span> ${map} </label>'+
                 '</form>'+
                 '</div>'
             ),
             info: _.template(
                 '<div class="datasource-info">' +
                     '<div class="coordinateconversion-clipboardinfo" style=display:none;">'+
-                        '<div class="clipboardinfo"> <i><%= clipboardupload %><i> </div>'+
+                        '<div class="clipboardinfo"> <i>${clipboardupload}<i> </div>'+
                     '</div>' +
                     '<div class="coordinateconversion-mapinfo" style=display:none;">'+
                         '<div class="mapinfo">'+
-                            '<i><%= mapinfo %><i> </br>'+
-                            '<input type="button" class="selelctFromMap" name="load" value="<%= map %>">' +
+                            '<i>${mapinfo}<i> </br>'+
+                            '<input type="button" class="selelctFromMap" name="load" value="${map}">' +
                         '</div>' +
                     '</div>' +
                 '</div>'
             )
         }
-        if (this.element === null) {
-            this.createUi();
-        }
+        this.createUi();
     }, {
         getName: function() {
             return 'Oskari.coordinatetransformation.components.SourceSelect';
@@ -43,6 +41,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             return this.element;
         },
         createUi: function () {
+            if (this.element !== null) {
+                return;
+            }
             var wrapper = this._template.sourceWrapper.clone();
 
             var source = this._template.source({    
@@ -61,10 +62,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             wrapper.append(info);
             wrapper.find('.selelctFromMap').addClass('primary');
             this.setElement(wrapper);
-        },
-        getValue: function () {
-
-        },
+        }
     }
 );
  
