@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             });
             wrapper.append(source);
             wrapper.append(info);
-            wrapper.find('.selelctFromMap').addClass('primary');
+            wrapper.find('.selectFromMap').addClass('primary');
             this.setElement(wrapper);
         }
     }
