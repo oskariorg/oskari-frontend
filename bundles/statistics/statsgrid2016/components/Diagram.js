@@ -157,18 +157,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
         //hardcoded
         var sortTypes = [
             {
-                id: "name",
-                title: this.loc.datacharts.sorting.name
+                id: "value-ascending",
+                title: this.loc.datacharts.sorting['value-ascending']
             },
             {
-                id: "ascending",
-                title: this.loc.datacharts.sorting.ascending
-            }
+                id: "value-descending",
+                title: this.loc.datacharts.sorting['value-descending']
+            },
+            {
+                id: "name-ascending",
+                title: this.loc.datacharts.sorting['name-ascending']
+            },
+            {
+                id: "name-descending",
+                title: this.loc.datacharts.sorting['name-descending']
+            },
         ];
         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');  
         var dropdown = select.create(sortTypes, dropdownOptions);
 
         dropdown.css({
+            maxWidth: '25%',
             marginLeft: '10px'
         });
 

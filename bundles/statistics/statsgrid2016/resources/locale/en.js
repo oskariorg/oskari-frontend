@@ -161,8 +161,10 @@ Oskari.registerLocalization(
           "chooseColor": "Select color",
           "sorting": {
               "desc": "Sort by value",
-              "name": "Name",
-              "ascending": "Value"
+              "name-ascending": "Name ascending",
+              "name-descending": "Name descending",
+              "value-ascending": "Value ascending",
+              "value-descending": "Value descending"
           }
         },
         "filter": {

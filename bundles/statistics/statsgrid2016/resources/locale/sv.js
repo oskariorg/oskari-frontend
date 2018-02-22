@@ -161,8 +161,10 @@ Oskari.registerLocalization(
           "chooseColor": "Välj färg",
           "sorting": {
             "desc": "Sortera enligt värde",
-            "name": "Namn",
-            "ascending": "Värde"
+            "name-ascending": "Stigande enligt namn",
+            "name-descending": "Sjunkande enligt namn",
+            "value-ascending": "Stigande enligt värde",
+            "value-descending": "Sjunkande enligt värde"
           }
         },
         "filter": {

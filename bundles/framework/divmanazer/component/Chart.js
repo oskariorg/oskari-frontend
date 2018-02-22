@@ -97,20 +97,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         // empty string ("") is the placeholder value from selectlist
         if ( !this.sortingType ) {
             if ( typeof type === "undefined" || type === "" ) {
-                type = 'ascending';
+                type = 'value-ascending';
             } 
         } else if( type === undefined || type === "" ) {
             type = this.sortingType;
         }
 
         var sortTypes = {
-            "name": function () {
+            "name-ascending": function () {
                 me.data = me.data.sort(function (a, b) {
                     return d3.descending(a.name , b.name);
                 });
                 me.redraw();
             },
-            "ascending": function () {
+            "name-descending": function () {
+                me.data = me.data.sort(function (a, b) {
+                    return d3.ascending(a.name , b.name);
+                });
+                me.redraw();
+            },
+            "value-ascending": function () {
                 me.data = me.data.sort(function (a, b) {
                     return d3.ascending(a.value || -100000 , b.value || -100000);
                 });
@@ -118,7 +124,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                 return;
 
             },
-            "descending": function () {
+            "value-descending": function () {
                 me.data = me.data.sort(function (a, b) {
                     return d3.descending(a.value || 100000 , b.value || 100000);
                 });

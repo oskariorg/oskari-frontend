@@ -161,8 +161,10 @@ Oskari.registerLocalization(
           "chooseColor": "Valitse väri",
           "sorting": {
             "desc": "Lajittelu arvon mukaan",
-            "name": "Nimi",
-            "ascending": "Arvo"
+              "name-ascending": "Nimen mukaan nouseva",
+              "name-descending": "Nimen mukaan laskeva",
+              "value-ascending": "Arvon mukaan nouseva",
+              "value-descending": "Arvon mukaan laskeva"
           }
         },
         "filter": {
