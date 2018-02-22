@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             },
             "value-ascending": function () {
                 me.data = me.data.sort(function (a, b) {
-                    return d3.ascending(a.value || -100000 , b.value || -100000);
+                    return d3.descending(a.value || -100000 , b.value || -100000);
                 });
                 me.redraw();
                 return;
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             },
             "value-descending": function () {
                 me.data = me.data.sort(function (a, b) {
-                    return d3.descending(a.value || 100000 , b.value || 100000);
+                    return d3.ascending(a.value || 100000 , b.value || 100000);
                 });
                 me.redraw();
                 return;
