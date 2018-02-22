@@ -580,11 +580,6 @@ div.tab-material-controls div.title {
     position: absolute;
     opacity: 0.8;
 }
-.chart {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 .statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
     max-width:700px;
   }
