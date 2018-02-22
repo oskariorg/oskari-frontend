@@ -35,7 +35,7 @@ Oskari.registerLocalization(
             },
             {
                 "title": "Download Basket",
-                "tags": "guide_download-basket_temp_en"
+                "tags": "guide_download-basket_en"
             },
             {
                 "title": "FAQ",

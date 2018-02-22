@@ -35,7 +35,7 @@ Oskari.registerLocalization(
             },
             {
                 "title": "Latauskori",
-                "tags": "ohje_latauskori_temp"
+                "tags": "ohje_latauskori"
             },
             {
                 "title": "FAQ",

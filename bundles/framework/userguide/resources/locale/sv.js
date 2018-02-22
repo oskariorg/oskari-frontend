@@ -35,7 +35,7 @@ Oskari.registerLocalization(
             },
             {
                 "title": "Nedladdningskorg",
-                "tags": "guide_download-basket_temp_sv"
+                "tags": "guide_download-basket_sv"
             },
             {
                 "title": "FAQ",
