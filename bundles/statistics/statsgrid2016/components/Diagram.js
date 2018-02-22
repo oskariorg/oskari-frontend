@@ -157,12 +157,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
         //hardcoded
         var sortTypes = [
             {
-                id: "value-ascending",
-                title: this.loc.datacharts.sorting['value-ascending']
-            },
-            {
                 id: "value-descending",
                 title: this.loc.datacharts.sorting['value-descending']
+            },
+            {
+                id: "value-ascending",
+                title: this.loc.datacharts.sorting['value-ascending']
             },
             {
                 id: "name-ascending",

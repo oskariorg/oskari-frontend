@@ -160,7 +160,7 @@ Oskari.registerLocalization(
           "clrFromMap": "Colors by classification in the map",
           "chooseColor": "Select color",
           "sorting": {
-              "desc": "Sort by value",
+              "desc": "Order",
               "name-ascending": "Name ascending",
               "name-descending": "Name descending",
               "value-ascending": "Value ascending",
