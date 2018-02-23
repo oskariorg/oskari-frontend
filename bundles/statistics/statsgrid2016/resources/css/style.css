@@ -566,7 +566,10 @@ div.tab-material-controls div.title {
   padding: 1.2em; }
 .oskari-flyout.statsgrid-filter-flyout .tabsHeader {
   padding-top: 2em !important; }
-
+.chart {
+    display: flex;
+    justify-content: center;
+}
 .axisLabel.sticky {
     font-weight: bold;
     color:#F6F6F6;

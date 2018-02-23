@@ -925,7 +925,10 @@ div.tab-material-controls div.title {
         padding-top:2em !important;
     }
 }
-
+.chart {
+    display: flex;
+    justify-content: center;
+}
 .axisLabel {
     margin-top: -5px;
     position: absolute;
