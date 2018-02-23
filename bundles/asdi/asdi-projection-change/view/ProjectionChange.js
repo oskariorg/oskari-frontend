@@ -63,16 +63,14 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
             return;
         }
         layers.forEach( function (layer) {
-            if ( !layer.hidden ) {
-                if (layerString !== '') {
-                        layerString += ',';
-                }
-                layerString +=  layer.id + '+' + layer.opacity ;
-                if ( layer.style ) {
-                    layerString += '+' + layer.style;
-                } else {
-                    layerString += '+';
-                }
+            if (layerString !== '') {
+                    layerString += ',';
+            }
+            layerString +=  layer._id + '+' + layer._opacity ;
+            if ( layer.style ) {
+                layerString += '+' + layer.style;
+            } else {
+                layerString += '+';
             }
         });
         maplayerUrlString += layerString;
