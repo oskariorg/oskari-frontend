@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
   this.chartType = null;
   this.containerWidth = null;
   this.plot = jQuery('<div style="width:100%"></div>');
+  this.axisLabelValues = jQuery('<div style="width:100%"></div>');
   this.sortingType = null;
   this._g = null;
   this._options = {
@@ -34,13 +35,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var dimensions = {
             margin: {
                 top: 10,
-                right: 25,
+                right: leftMargin ? Math.min(leftMargin, 140) : 80,
                 bottom: 15,
                 left: leftMargin ? Math.min(leftMargin, 140) : 80
             },
             xAxisOffset: -5,
             width: function () {
-                var width = me.containerWidth || 500;
+                var width = me.containerWidth || 630;
                 return width - this.margin.left - this.margin.right;
             },
             height: function () {
@@ -76,6 +77,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr( "height", this.dimensions.height() + this.dimensions.margin.top + this.dimensions.margin.bottom )
             .append( "g" )
             .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" );
+
         return svg;
     },
     getDatasetMinMax: function () {
@@ -268,17 +270,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             })
 
             //append the x-axis to different element so we can show the values when scrollign
-            var gx = d3.select(".axisLabel")
+            var gx = d3.select( this.axisLabelValues.get(0) )
             .append("svg")
             .attr( "width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
             .attr( "height", 12 )
             .append("g")
-                .attr("class", "x axis header")
-                .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" )
-                .call(this.xAxis);
+            .attr("class", "x axis header")
+            .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" )
+            .call(this.xAxis);
 
             gx.select('.domain').remove();
             gx.selectAll('line').remove();
+
             // / X
         },
     /**
@@ -397,7 +400,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     },
     clear: function () {
         this.plot.empty();
-        jQuery('.axisLabel').empty();
+        this.axisLabelValues.empty();
     },
     /**
      * remove old graph and redraw
@@ -411,7 +414,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         }
 
         var opts = options || {};
-        opts.width = 620
+        opts.width = 630
         //Clear previous graphs
         this.clear();
         if( this.chartType === 'barchart' ) {
@@ -421,6 +424,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         }
 
         return chart;
+    },
+    getGraphAxisLabels: function () {
+        return this.axisLabelValues;
     },
     getGraph: function() {
         return this.plot;
