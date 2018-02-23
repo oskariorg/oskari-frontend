@@ -131,7 +131,7 @@ table {
         margin: 0;
         padding: 0;
         height: 100%;
-        font: 14px/16px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif
+        font: 14px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
     }
 
 	.search .resultList div h3 {

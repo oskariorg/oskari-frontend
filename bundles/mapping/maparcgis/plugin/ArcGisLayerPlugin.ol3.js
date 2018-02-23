@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @return {Boolean}       true if this plugin handles the type of layers
          */
         isLayerSupported : function(layer) {
-            if(!layer) {
+            if(!layer || !this.isLayerSrsSupported(layer)) {
                 return false;
             }
             return layer.isLayerOfType(this.layerType) || layer.isLayerOfType(this._layerType2);

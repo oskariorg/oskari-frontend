@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.telemetry.TelemetryBundleInstanc
             g.type = 'text/javascript'; g.async = true; g.defer = true; g.src = u + 'piwik.js'; s.parentNode.insertBefore(g, s);
         })();
     },
-    _pushEvent(/* variadic */) {
+    _pushEvent: function(/* variadic */) {
         var args = Array.prototype.slice.call(arguments);
         args.unshift('trackEvent');
         window._paq.push(args);
