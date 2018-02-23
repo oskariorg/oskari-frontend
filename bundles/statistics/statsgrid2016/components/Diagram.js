@@ -69,6 +69,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
                     colors: me.getColorScale()
                 });
             }
+
+            var labels = me.getChartHeaderElement();
+            el.parent().parent().find('.axisLabel').append(labels);
+
             me._renderDone();
         });
     },
@@ -81,6 +85,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
         this._renderState = {};
         if(state.repaint) {
             this.updateUI();
+        }
+    },
+    getChartHeaderElement: function () {
+        if( this.getChartInstance().chartIsInitialized() ) {
+            return this.getChartInstance().getGraphAxisLabels();
+        } else {
+            return null;
         }
     },
     /**

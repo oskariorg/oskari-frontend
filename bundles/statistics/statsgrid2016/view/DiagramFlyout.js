@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
     });
 }, {
     _template: {
-        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div><div class="axisLabel"></div><div class="chart"></div></div>')
+        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div> <div class="chart"> <div class="axisLabel"></div> </div></div>')
     },
     setElement: function(el) {
         this.element = el;
