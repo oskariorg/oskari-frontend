@@ -1,7 +1,7 @@
 .oskari-projection-changer {
     height:36px;
     width: 36px;
-    background-image: url("../images/VäliaikainenMaapalloikoni.png");
+    background-image: url("../images/temp_globe.png");
     background-repeat: no-repeat;
     background-position: center;
     margin-bottom: 10px !important;
@@ -30,15 +30,13 @@
     flex: 30%;
     -ms-flex: 30%;
 }
-.projection-info {
-}
 .projection-warning {
     display: none;
     height:10px;
     width: 10px;
     background-color: green;
 }
-.info-row {
+.projection-card > .info-row {
     width: inherit;
     display: inline-flex;
     display: -ms-inline-flex;

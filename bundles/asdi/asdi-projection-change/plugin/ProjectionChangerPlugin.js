@@ -1,15 +1,13 @@
 Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
-  function ( config, instance ) {
-    this._instance = instance;
+  function ( config, localization ) {
     this._config = config || {};
     this._clazz = 'Oskari.projection.change.ProjectionChangerPlugin';
     this._defaultLocation = 'top right';
     this._index = 55;
-    this._visible = false;
     this._templates = {
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
-    this._loc = instance.getLocalization();
+    this._loc = localization;
     this._mobileDefs = {
       buttons:  {
           'mobile-projectionchanger': {
@@ -17,6 +15,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
               tooltip: '',
               show: true,
               callback: function () {
+
               },
               sticky: true,
               toggleChangeIcon: false
@@ -24,19 +23,25 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
       },
       buttonGroup: 'mobile-toolbar'
     };
-    this._flyout = this._instance.getFlyout();
+
+    this._flyout = Oskari.clazz.create('Oskari.projection.change.flyout', this._loc, {
+        width: 'auto',
+        cls: 'projection-change-flyout'
+    });
+    this._flyout.makeDraggable({
+        handle : '.oskari-flyouttoolbar, .projection-data-container > .header',
+        scroll : false
+    });
     this._flyout.hide();
+
     this._log = Oskari.log('Oskari.projection.change.ProjectionChangerPlugin');
   }, {
 
     _createControlElement: function () {
-        var launcher = this._templates.projectionchanger.clone();
+      var launcher = this._templates.projectionchanger.clone();
 
-        launcher.attr('title', this._loc.tooltip.tool);
+      launcher.attr('title', this._loc.tooltip.tool);
 
-        if ( this._config.noUI ) {
-            return null;
-        }
       return launcher;
     },
     createUi: function() {
@@ -48,13 +53,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         var me = this;
         this._flyout.move(1300, 120, true);
         this.getElement().on( "click", function() {
-            if ( !me._visible ) {
-                me._flyout.show();
-                me._visible = true;
-            } else {
-                me._flyout.hide();
-                me._visible = false;
-            }
+            me._flyout.toggle();
         });
     },
     _createMobileUI: function () {

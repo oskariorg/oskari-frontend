@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
  */
 function (view, callback) {
     this.card = _.template('<div class="projection-card" data-srs="${srs}">'+
-                        '<div class="card-image ${imgCls}"></div> '+
+                        '<div class="card-image"></div> '+
                         '<div class="info-row">'+
                             '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+
@@ -19,19 +19,13 @@ function (view, callback) {
     this.view = view;
     this.infoView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionInformation', view);
     this.errorListing = Oskari.clazz.create('Oskari.projection.change.view.ErrorListing');
-    if ( !this.getElement() )
-    {
-        this.create(view);
-    }
+    this.create(view);
 }, {
     getElement: function () {
         return this.element;
     },
     setElement: function (el) {
         this.element = el;
-    },
-    createClassSelector: function ( crs ) {
-        return crs.replace(':', '');
     },
     create: function (view) {
         var me = this;
@@ -40,7 +34,6 @@ function (view, callback) {
 
         var card = jQuery( tpl ({
             srs: view.srsName,
-            imgCls: me.createClassSelector( view.srsName ),
             projectionName: view.name,
             tooltip: me.loc.error.hover.icon
         }));

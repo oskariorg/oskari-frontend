@@ -1,8 +1,8 @@
 
-Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (instance) {
-    this.instance = instance;
-    this.sb = instance.getSandbox();
-    this.loc = instance.getLocalization();
+Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function () {
+    this.instance =  Oskari.getSandbox().findRegisteredModuleInstance('projection-change');
+    this.sb = this.instance.getSandbox();
+    this.loc = this.instance.getLocalization();
     this.element = null;
     this.createUi();
 }, {
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
     getSelectedMapLayersUrlParam: function () {
         var maplayerUrlString = "&mapLayers="
         var layerString = '';
-        var layers = this.sb.getStatefulComponents().mapfull.getState().selectedLayers;
+        var layers = this.sb.getMap().getLayers();
         
         if ( layers.length === 0 ) {
             return;
