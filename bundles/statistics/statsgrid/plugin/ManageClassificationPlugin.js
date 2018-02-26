@@ -761,12 +761,10 @@ Oskari.clazz.define(
                     me._createColorDialog();
                 });
 
-                var flipColorsButton = jQuery(
-                    '<input type="button" value="' +
-                    me._locale.colorset.flipButton +
-                    '" />'
+                var flipColors = jQuery(
+                    '<span class="visible-map-style-choropleth flip-colors"><input id="legend-flip-colors" type="checkbox" checked="' + me.colorsFlipped + '"/><label for="legend-flip-colors">' + me._locale.colorset.flipButton + '<label></span>'
                 );
-                flipColorsButton.click(function (e) {
+                flipColors.find('#legend-flip-colors').change(function (e) {
                     me._flipCurrentColors();
                 });
 
@@ -779,7 +777,7 @@ Oskari.clazz.define(
                     colorsButton
                 );
                 classifyOptions.find('div.classificationColors').append(
-                    flipColorsButton
+                    flipColors
                 );
             }
 

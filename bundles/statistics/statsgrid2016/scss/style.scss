@@ -565,6 +565,16 @@ div.oskari-flyout {
     width: 300px;
     font-size: 12px;
 
+    .classification-colors.value {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .visible-map-style-choropleth.flip-colors {
+        margin-left: 10px;
+        line-height: 27px;
+    }
+
     >div.header {
         background-color: #fdf8d9;
         margin: 0;
@@ -636,13 +646,6 @@ div.oskari-flyout {
                 width: 96%;
                 font-size: 12px;
                 padding: 1px 2px;
-            }
-
-            button.reverse-colors {
-                margin-top: 5px;
-                margin-left: 0;
-                width: 95%;
-                padding: 4px 5px;
             }
 
             .point-size {
