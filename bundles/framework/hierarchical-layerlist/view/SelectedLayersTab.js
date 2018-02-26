@@ -247,7 +247,7 @@ Oskari.clazz.define(
          */
         _updateContainerHeight: function(height) {
             var me = this;
-            jQuery(me.tabPanel.getContainer()).css('max-height', (height * 0.7) + 'px');
+            jQuery(me.tabPanel.getContainer()).find('ul.layerlist').css('max-height', (height * 0.7) + 'px');
         },
 
         /**
