@@ -1,52 +1,54 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.view.filesettings',
+Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
     function (instance, loc) {
         var me = this;
-        me.instance = instance; 
+        me.instance = instance;
+        me.dataHandler = instance.dataHandler;
         me.loc = loc;
         me.element = {
             import: null, 
             export: null
         }
+        me._userSelections = { import: null, export: null };
         me._template = {
             import: _.template(' <div class="oskari-import" > </br> ' +
-                                    '<div class="formatrow"> <b class="title"><%= format %></b> <div class="file-select">'+
+                                    '<div class="formatrow"> <b class="title">${format}</b> <div class="file-select">'+
                                     '<select id="angletype">'+
-                                        '<option value="degree"><%= degree %></option>'+
-                                        '<option value="gradian"><%= gradian %></option>'+
-                                        '<option value="radian"><%= radian %></option>'+
+                                        '<option value="degree">${degree}</option>'+
+                                        '<option value="gradian">${gradian}</option>'+
+                                        '<option value="radian">${radian}</option>'+
                                         '</select></div>'+
-                                    '<label class="lbl"><input id="useid" class="chkbox" type="checkbox"><%= id %></label> </div>'+
-                                    '<div class="separatorrow"> <b class="title"><%= decimalseparator %></b> <div class="file-select">'+
+                                    '<label class="lbl"><input id="useid" class="chkbox" type="checkbox">${id}</label> </div>'+
+                                    '<div class="separatorrow"> <b class="title">${decimalseparator}</b> <div class="file-select">'+
                                     '<select id="decimalseparator">'+
-                                        '<option value="point"><%= point %></option>'+
-                                        '<option value="comma"><%= comma %></option>'+
+                                        '<option value="point">${point}</option>'+
+                                        '<option value="comma">${comma}</option>'+
                                     '</select>'+
                                     '</div>' +
-                                    '<label class="lbl"> <input id="reversecoordinates" class="chkbox" type="checkbox"> <%= reversecoords %></label> </div>' +
-                                    '<div class="headerrow">  <b class="title"><%= headercount %></b> <input id="headerrow" type="number"> </div>'+
-                                    '<input id="overlay-btn" class="cancel" type="button" value="<%= cancel %> " />' +
-                                    '<input id="overlay-btn" class="import" type="button" value="<%= done %>" />' +
+                                    '<label class="lbl"> <input id="reversecoordinates" class="chkbox" type="checkbox"> ${reversecoords}</label> </div>' +
+                                    '<div class="headerrow">  <b class="title">${headercount}</b> <input id="headerrow" type="number"> </div>'+
+                                    '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
+                                    '<input id="overlay-btn" class="import" type="button" value="${done}" />' +
                                 '</div>'
                                 ),
             export: _.template(' <div class="oskari-export">' +
-                                    '<div class="filerow"> <b class="title"><%= filename %></b> <input id="filename" type="text"> </div>'+
-                                    '<div class="formatrow"> <b class="title"><%= format %></b> <div class="file-select">'+
+                                    '<div class="filerow"> <b class="title">${filename}</b> <input id="filename" type="text"> </div>'+
+                                    '<div class="formatrow"> <b class="title">${format}</b> <div class="file-select">'+
                                     '<select id="angletype">'+
-                                        '<option value="degree"><%= degree %></option>'+
-                                        '<option value="gradian"><%= gradian %></option>'+
-                                        '<option value="radian"><%= radian %></option>'+
+                                        '<option value="degree">${degree}</option>'+
+                                        '<option value="gradian">${gradian}</option>'+
+                                        '<option value="radian">${radian}</option>'+
                                         '</select></div>'+
-                                    '<label class="lbl"><input id="useid" class="chkbox" type="checkbox"><%= id %></label> </div>'+
-                                    '<div class="separatorrow"> <b class="title"><%= decimalseparator %></b> <div class="file-select">'+
+                                    '<label class="lbl"><input id="useid" class="chkbox" type="checkbox">${id}</label> </div>'+
+                                    '<div class="separatorrow"> <b class="title">${decimalseparator}</b> <div class="file-select">'+
                                     '<select id="decimalseparator">'+
-                                        '<option value="point"><%= point %></option>'+
-                                        '<option value="comma"><%= comma %></option>'+
+                                        '<option value="point">${point}</option>'+
+                                        '<option value="comma">${comma}</option>'+
                                     '</select>'+
                                     '</div>' +
-                                    '<label class="lbl"> <input id="reversecoordinates" class="chkbox" type="checkbox"> <%= reversecoords %></label> </div>' +
-                                    '<div class="headerrow">  <b class="title"><%= headercount %></b> <input id="headerrow" type="number"> </div>'+
-                                    '<input id="overlay-btn" class="cancel" type="button" value="<%= cancel %> " />' +
-                                    '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %>" />' +
+                                    '<label class="lbl"> <input id="reversecoordinates" class="chkbox" type="checkbox"> ${reversecoords}</label> </div>' +
+                                    '<div class="headerrow">  <b class="title">${headercount}</b> <input id="headerrow" type="number"> </div>'+
+                                    '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
+                                    '<input id="overlay-btn" class="export" type="button" value="${fileexport}" />' +
                                 '</div>'
                                 ),
         } 
@@ -58,7 +60,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.filesettings',
             this.element = el;
         },
         getName: function() {
-            return 'Oskari.coordinatetransformation.view.filesettings';
+            return 'Oskari.coordinatetransformation.view.FileHandler';
         },
         create: function() {
             var me = this;
@@ -145,6 +147,36 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.filesettings',
                     caller.close(true);
                 }
             });
+        },
+        showFileDialogue: function( content, shouldExport ) {
+            var jc = jQuery(content);
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.makeDraggable();
+            dialog.createCloseIcon();
+            if( shouldExport ) {
+                dialog.show(this.loc.filesetting.export.title, jc);
+                this.file.getExportSettings( this.exportFile.bind(this), dialog.getJqueryContent(), dialog );
+            } else {
+                dialog.show(this.loc.filesetting.import.title, jc);
+                this.file.getImportSettings(  this.importSettings.bind(this), dialog.getJqueryContent(), dialog );
+            }
+        },
+        importSettings: function ( settings ) {
+            this._userSelections = { "import": settings };
+        },
+        exportFile: function ( settings ) {
+            var exportArray = [];
+            this.dataHandler.getCoordinateObject().forEach( function ( pair ) {
+                exportArray.push( pair.input );
+            });  
+            if( exportArray.length !== 0 ) {
+                this.fileInput.exportToFile( exportArray, settings.filename+'.txt' );
+            } else {
+                Oskari.log(this.getName()).warn("No transformed coordinates to write to file!");
+            }
+        },
+        getUserSelections: function () {
+            return this._userSelections;
         }
     }
 );

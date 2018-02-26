@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             });
 
             btn.setHandler(function() {
-                me.instance.getViews().transformation.modifyCoordinateObject( 'input', me.mapcoords );
+                me.instance.getViews().transformation.updateCoordinateData( 'input', me.mapcoords );
                 me.instance.getViews().transformation.isMapSelection = false;
                 me.instance.getViews().transformation.selectMapProjectionValues();
                 me.instance.toggleViews("transformation");

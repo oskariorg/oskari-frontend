@@ -8,11 +8,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.clipboardInsert = false;
         me.conversionContainer = null
         me.startingSystem = false;
+
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
-        me.file = Oskari.clazz.create('Oskari.coordinatetransformation.view.filesettings', me.instance, me.loc);
-        me.coordMap = {
-            coordinates: []
-        };
+        me.fileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.instance, me.loc);
+        me.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler', me.getUserSelections );
 
         me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
         me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
@@ -22,8 +21,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
         me.sourceSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.SourceSelect', me.loc );
 
-        me.file.create();
-        me._userSelections = { import: null, export: null };
+        me.fileHandler.create();
+
         me._template = {
             wrapper: jQuery('<div class="transformation-wrapper"></div>'),
             system: jQuery('<div class="systems"></div>'),
@@ -110,54 +109,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 this.getContainer().parent().parent().show();
             }
         },
-        /** 
-         * @method validateData
-         * check different conditions if data matches to them
-         */
-        validateData: function( data ) {
-            var userSpec = this.getUserSelections().import;
-            if( !userSpec ) {
-                Oskari.log(this.getName()).warn("No specification for file-import");
-            }
-            var lonlatKeyMatch = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
-            var numericWhitespaceMatch = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi)
-            
-            var matched = data.match( lonlatKeyMatch );
-            var numMatch = data.match( numericWhitespaceMatch );
-
-             if( matched !== null ) {
-                return this.constructObjectFromRegExpMatch( matched, true );
-            } else {
-                if( numMatch !== null ) {
-                    return this.constructObjectFromRegExpMatch( numMatch, false );
-                }
-            }
+        updateCoordinateData: function ( flag, coordinates ) {
+            this.dataHandler.modifyCoordinateObject( flag, coordinates );
+            this.refreshTableData();
         },
-        /** 
-         * @method constructObjectFromRegExpMatch
-         * @description constructs a object from string with lon lat keys
+        /**
+         * @method readFileData
+         * Pass this function as a callback to fileinput to get the file-data
          */
-        constructObjectFromRegExpMatch: function ( data, lonlat ) {
-            var matchLonLat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
-            var matchNumericComma = new RegExp(/([0-9.])+\s*,?/g);
-            var numeric = new RegExp(/[0-9.]+/);
-            var array = [];
-            for ( var i = 0; i < data.length; i++ ) {
-                var lonlatObject = {};
-
-                if( lonlat ) {
-                    var match = data[i].match(matchLonLat);
-                } else {
-                    var match = data[i].match(matchNumericComma);
-                }
-                var lonValue = match[0].match(numeric);
-                var latValue = match[1].match(numeric);
-
-                lonlatObject.lon = lonValue[0];
-                lonlatObject.lat = latValue[0];
-                array.push(lonlatObject);
-            }
-            return array;
+        readFileData: function( fileData ) {
+            var dataJson = this.dataHandler.validateData( fileData );
+            this.updateCoordinateData( dataJson );
+        },
+        getUserSelections: function () {
+            this.fileHandler.getUserSelections();
         },
         getSelectionValue: function ( selectListInstance ) {
             return selectListInstance.getValue();
@@ -186,63 +151,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 targetElevation: targetElevation
             }
         },
-        /**
-         * @method constructLonLatObjectFromArray
-         * @description array -> object with lon lat keys
-         */
-        constructLonLatObjectFromArray: function ( data ) {
-            var obj = {};
-            if ( Array.isArray( data ) ) {
-                for ( var i in data ) {
-                    if( Array.isArray(data[i]) ) {
-                        for ( var j = 0; j < data[i].length; j++ ) {
-                            obj[i] = {
-                                lon: data[i][0],
-                                lat: data[i][1]
-                            }
-                        }
-                    }
-                }
-            }
-            return obj;
-        },
         handleServerResponse: function ( response ) {
-            var obj = this.constructLonLatObjectFromArray(response.coordinates);
-            this.modifyCoordinateObject("output", obj);
-        },
-        /**
-         * @method modifyCoordinateObject
-         * @param {string} flag - coordinate array contains two objects, input & output - flag determines which one you interact with
-         * @param {array} coordinates - an array containing objects with keys lon lat - one object for each coordinate pair
-         * @description 
-         */
-        modifyCoordinateObject: function ( flag, coordinates ) {
-            var data = this.coordMap.coordinates;
-            var me = this;
-            var actions = {
-                'input': function () {
-                    coordinates.forEach( function ( pair ) {
-	                    data.push({
-                            input: pair
-                        });
-                    });
-                },
-                'output': function () {
-                    for ( var i = 0; i < Object.keys( coordinates ).length; i++ ) {
-                        data[i].output = coordinates[i];
-                    }
-                },
-                'clear': function () {
-                    me.coordMap.coordinates.length = 0;
-                }
-            };
-            if ( actions[flag] ) {
-                actions[flag]();
-            } else {
-                return;
-            }
-
-            this.refreshTableData();
+            var obj = this.dataHandler.constructLonLatObjectFromArray(response.coordinates);
+            this.updateCoordinateData("output", obj);
         },
         /**
          * @method refreshTableData
@@ -252,7 +163,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var inputData = [];
             var outputData = [];
 
-            var data = this.coordMap.coordinates;
+            var data = this.dataHandler.getCoordinateObject().coordinates;
 
             data.map( function ( pair ) {
                 if ( pair.input ) {
@@ -288,18 +199,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     clipboardData = e.clipboardData || window.clipboardData;
                     pastedData = clipboardData.getData('Text');
 
-                    var dataJson = me.validateData( pastedData );
-                    me.modifyCoordinateObject( "input", dataJson );
+                    var dataJson = me.dataHandler.validateData( pastedData );
+                    me.updateCoordinateData( "input", dataJson );
                 });
             }
-        },
-        /**
-         * @method readFileData
-         * Pass this function as a callback to fileinput to get the file-data
-         */
-        readFileData: function( fileData ) {
-            var dataJson = this.validateData( fileData );
-            this.modifyCoordinateObject( dataJson );
         },
         /**
          * @method handleRadioButtons
@@ -311,10 +214,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var clipboardInfo = container.find('.coordinateconversion-clipboardinfo');
             var mapSelectInfo = container.find('.coordinateconversion-mapinfo')
             var fileInput = container.find('.oskari-fileinput');
-            var importfile = me.file.getElement().import;
+            var importfile = me.fileHandler.getElement().import;
+
             jQuery('input[type=radio][name=load]').change(function() {
                 if (this.value == '1') {
-                    // me.showDialogue( importfile, false );
+                    // me.fileHandler.showFileDialogue( importfile, false );
                     clipboardInfo.hide();
                     mapSelectInfo.hide();
                     fileInput.show();
@@ -359,29 +263,30 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         handleButtons: function () {
             var me = this;
             var container = me.getContainer();
+            var coordinateObject = me.dataHandler.getCoordinateObject();
+
             container.find('.clear').on("click", function () {
-                me.modifyCoordinateObject('clear');
+                me.updateCoordinateData('clear');
                 me.helper.removeMarkers();
             });
             container.find('.show').on("click", function () {
                 var rows = me.inputTable.getElements().rows;
-                me.coordMap.coordinates.forEach( function ( pair ) {
+                coordinateObject.coordinates.forEach( function ( pair ) {
                     me.helper.addMarkerForCoords( pair.input, me.startingSystem );
                 });                
                 me.instance.toggleViews("mapmarkers");
             });
             container.find('.export').on("click", function () {
-                var exportfile = me.file.getElement().export;
-                me.showDialogue( exportfile, true );
+                var exportfile = me.fileHandler.getElement().export;
+                me.fileHandler.showFileDialogue( exportfile, true );
             });
             container.find('#transform').on("click", function () {
                 var crs = me.getCrsOptions();
                 var coordinateArray = [];
+                coordinateObject.sourceCrs = crs.source;
+                coordinateObject.targetCrs = crs.target;
 
-                me.coordMap.sourceCrs = crs.source;
-                me.coordMap.targetCrs = crs.target;
-
-                me.coordMap.coordinates.forEach( function ( pair ) {
+                coordinateObject.coordinates.forEach( function ( pair ) {
                     var input = pair.input;
                     var inputCoordinates = [ Number(input.lon), Number(input.lat) ];
                     coordinateArray.push(inputCoordinates);
@@ -394,39 +299,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     targetElevationCrs: crs.targetElevation,
                     coords: coordinateArray
                 }
-                me.instance.getService().getConvertedCoordinates( payload, me.handleServerResponce.bind( me ) );
+                me.instance.getService().getConvertedCoordinates( payload, me.handleServerResponse.bind( me ) );
             });
-        },
-
-        showDialogue: function( content, shouldExport ) {
-            var jc = jQuery(content);
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.makeDraggable();
-            dialog.createCloseIcon();
-            if( shouldExport ) {
-                dialog.show(this.loc.filesetting.export.title, jc);
-                this.file.getExportSettings( this.exportFile.bind(this), dialog.getJqueryContent(), dialog );
-            } else {
-                dialog.show(this.loc.filesetting.import.title, jc);
-                this.file.getImportSettings(  this.importSettings.bind(this), dialog.getJqueryContent(), dialog );
-            }
-        },
-        importSettings: function ( settings ) {
-            this._userSelections = { "import": settings };
-        },
-        exportFile: function ( settings ) {
-            var exportArray = [];
-            this.coordMap.coordinates.forEach( function ( pair ) {
-                exportArray.push( pair.input );
-            });  
-            if( exportArray.length !== 0 ) {
-                this.fileinput.exportToFile( exportArray, settings.filename+'.txt' );
-            } else {
-                Oskari.log(this.getName()).warn("No transformed coordinates to write to file!");
-            }
-        },
-        getUserSelections: function () {
-            return this._userSelections;
         }
     }
 );

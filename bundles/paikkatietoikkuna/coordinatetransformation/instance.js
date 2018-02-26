@@ -14,7 +14,7 @@ Ways to start the bundle in console:
        var obj = {
             "bundlename":"coordinatetransformation" ,
             "metadata": {
-                "Import-Bundle": { "coordinatetransformation": { "bundlePath": "/Oskari/packages/paikkatietikkuna/bundle/" } }
+                "Import-Bundle": { "coordinatetransformation": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } }
             }
         }
         appSetup.startupSequence.push(obj);

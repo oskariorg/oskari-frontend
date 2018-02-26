@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                     '<div class="coordinateconversion-mapinfo" style=display:none;">'+
                         '<div class="mapinfo">'+
                             '<i>${mapinfo}<i> </br>'+
-                            '<input type="button" class="selelctFromMap" name="load" value="${map}">' +
+                            '<input type="button" class="selectFromMap" name="load" value="${map}">' +
                         '</div>' +
                     '</div>' +
                 '</div>'
