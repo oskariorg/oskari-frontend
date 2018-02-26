@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this.systemInfo = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
         this.selectInstance = null;
         this.dropdowns = null;
-        this.projectionSelected = false;
+        this.enableProjectionSystem = false;
         this._template = {
             systemWrapper: jQuery('<div class="coordinateSystemWrapper"></div>'),
             coordinateSystemSelection: _.template(
@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
 
             switch ( currentValue ) {
                 case "DATUM_DEFAULT":
-                    this.projectionSelected = false;
+                    this.enableProjectionSystem = false;
                     this.resetSelectToPlaceholder();
                     Object.keys( this.dropdowns ).forEach( function ( key ) {
                         me.updateDropdownOptions( key ); 
@@ -141,21 +141,21 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     break;
                 case "DATUM_KKJ":
                 case "DATUM_EUREF-FIN":
-                    this.projectionSelected = false;
+                    this.enableProjectionSystem = false;
                     this.resetSelectToPlaceholder();
                     Object.keys( this.dropdowns ).forEach( function ( key ) {
                         me.updateDropdownOptions( key, clsSelector( currentValue) ); 
                     });
                     break;
                 case "KOORDINAATISTO_MAANT_2D":
-                    this.projectionSelected = false;
+                    this.enableProjectionSystem = false;
                     var classSelector = clsSelector( datum ) + clsSelector( currentValue );
                     this.updateDropdownOptions( "geodetic-coordinate", classSelector );
                     instances["geodetic-coordinate"].resetToPlaceholder();
                     break;
                 case "KOORDINAATISTO_MAANT_3D":
                 case "KOORDINAATISTO_SUORAK_3D":
-                    this.projectionSelected = false;
+                    this.enableProjectionSystem = false;
                     this.updateDropdownOptions( "geodetic-coordinate", clsSelector( currentValue ) );
                     instances["geodetic-coordinate"].resetToPlaceholder();
                     table.handleDisplayingElevationRows(true);
@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 case "KKJ_KAISTA":
                 case "TM":
                 case "GK":
-                    this.projectionSelected = true;
+                    this.enableProjectionSystem = true;
                     this.updateDropdownOptions( "geodetic-coordinate", clsSelector( currentValue ) );
                     instances["geodetic-coordinate"].resetToPlaceholder();
                     break;
@@ -182,7 +182,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
 
             var classSelector = clsSelector(datum);
 
-            if ( this.projectionSelected ) {
+            if ( this.enableProjectionSystem ) {
                 dropdowns.projection.parent().show();
                if ( projection ) {
                     classSelector += clsSelector(projection);

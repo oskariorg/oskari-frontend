@@ -175,7 +175,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 Oskari.log(this.getName()).warn("No transformed coordinates to write to file!");
             }
         },
-        getUserSelections: function () {
+        getUserFileSettingSelections: function () {
             return this._userSelections;
         }
     }

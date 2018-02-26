@@ -1,5 +1,5 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function( instance, loc ) {
-    this.instance = instance;
+Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function( view, loc ) {
+    this.transformView = view;
     this.loc = loc;
     this.container = null;
     this.template = {
@@ -41,8 +41,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             var elements = {
                 "table": this.getContainer().find( '#oskari-coordinate-table' ),
                 "rows": this.getContainer().find( "#oskari-coordinate-table tr" ),
-                "header": this.getContainer().find( ".oskari-table-header" ),
-
+                "header": this.getContainer().find( ".oskari-table-header" )
             }
         return elements;
         },
@@ -211,7 +210,26 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 }
                 header.insertBefore( this.getContainer().find(".oskari-table-content") );
             }
-    }
+        },
+        handleClipboardPasteEvent: function () {
+            var me = this;
+            var cells = document.getElementsByClassName("cell");
+
+            for ( var i = 0; i < cells.length; i++ ) {
+                cells[i].addEventListener('paste', function( e ) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    var clipboardData, pastedData;
+                    // Get pasted data via clipboard API
+                    clipboardData = e.clipboardData || window.clipboardData;
+                    pastedData = clipboardData.getData('Text');
+
+                    var dataJson = me.transformView.dataHandler.validateData( pastedData );
+                    me.transformView.updateCoordinateData( "input", dataJson );
+                });
+            }
+        }
 }, {
 
 });

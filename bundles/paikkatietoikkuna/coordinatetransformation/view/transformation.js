@@ -5,13 +5,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.loc = me.instance.getLocalization("flyout");
         me.helper = me.instance.helper;
         me.isMapSelection = false;
-        me.clipboardInsert = false;
         me.conversionContainer = null
         me.startingSystem = false;
 
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
         me.fileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.instance, me.loc);
-        me.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler', me.getUserSelections );
+        me.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler', me.getUserFileSettingSelections );
 
         me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
         me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
@@ -62,7 +61,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 clear: this.loc.utils.clear,
                 show: this.loc.utils.show,
                 fileexport: this.loc.utils.export
-                });
+            });
                                                             
             var wrapper = this._template.wrapper.clone();
             var system = this._template.system.clone();
@@ -98,7 +97,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             jQuery(container).append(wrapper);
 
-            this.handleClipboardPasteEvent();
+            this.inputTable.handleClipboardPasteEvent();
             this.handleButtons();
             this.handleRadioButtons();
         },
@@ -121,8 +120,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var dataJson = this.dataHandler.validateData( fileData );
             this.updateCoordinateData( dataJson );
         },
-        getUserSelections: function () {
-            this.fileHandler.getUserSelections();
+        getUserFileSettingSelections: function () {
+            this.fileHandler.getUserFileSettingSelections();
         },
         getSelectionValue: function ( selectListInstance ) {
             return selectListInstance.getValue();
@@ -150,6 +149,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 target: target,
                 targetElevation: targetElevation
             }
+        },
+        /**
+         * @method selectMapProjectionValues
+         * Inits the on change listeners for the radio buttons
+         */
+        selectMapProjectionValues: function () {
+            var input = this.inputSystem.getSelectInstance();
+            // EPSG-3067 settings
+            var sourceSelection = this.setSelectionValue( input.datum, "DATUM_EUREF-FIN" );
+            var sourceelevationSelection = this.setSelectionValue( input.coordinate, "KOORDINAATISTO_SUORAK_2D" );
+            var sourceSelection = this.setSelectionValue( input.projection, "TM" );
+            var sourceelevationSelection = this.setSelectionValue( input["geodetic-coordinate"], "ETRS-TM35FIN" );
         },
         handleServerResponse: function ( response ) {
             var obj = this.dataHandler.constructLonLatObjectFromArray(response.coordinates);
@@ -187,14 +198,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             for( var i = 0; i < cells.length; i++ ) {
                 cells[i].addEventListener('paste', function( e ) {
-                    // Stop data actually being pasted into div
                     e.stopPropagation();
                     e.preventDefault();
 
-                if( me.clipboardInsert === false ) {
-                    return;
-                }
-                var clipboardData, pastedData;
+                    var clipboardData, pastedData;
                     // Get pasted data via clipboard API
                     clipboardData = e.clipboardData || window.clipboardData;
                     pastedData = clipboardData.getData('Text');
@@ -211,52 +218,39 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         handleRadioButtons: function () {
             var me = this;
             var container = me.getContainer();
-            var clipboardInfo = container.find('.coordinateconversion-clipboardinfo');
-            var mapSelectInfo = container.find('.coordinateconversion-mapinfo')
-            var fileInput = container.find('.oskari-fileinput');
+            var clipboardInfoElement = container.find('.coordinateconversion-clipboardinfo');
+            var mapSelectInfoElement = container.find('.coordinateconversion-mapinfo')
+            var fileInputElement = container.find('.oskari-fileinput');
             var importfile = me.fileHandler.getElement().import;
 
             jQuery('input[type=radio][name=load]').change(function() {
+                me.inputTable.isEditable( false );
+                
                 if (this.value == '1') {
                     // me.fileHandler.showFileDialogue( importfile, false );
-                    clipboardInfo.hide();
-                    mapSelectInfo.hide();
-                    fileInput.show();
+                    clipboardInfoElement.hide();
+                    mapSelectInfoElement.hide();
+                    fileInputElement.show();
                     me.isMapSelection = false;
-                    me.clipboardInsert = false;
                 }
                 else if (this.value == '2') {
-                    fileInput.hide();
-                    mapSelectInfo.hide();
-                    me.clipboardInsert = true;
-                    clipboardInfo.show();
+                    fileInputElement.hide();
+                    mapSelectInfoElement.hide();
+                    clipboardInfoElement.show();
+                    me.inputTable.isEditable( true );
                     me.isMapSelection = false;
                 }
                 else if (this.value == '3') {
-                    clipboardInfo.hide();
-                    fileInput.hide();
-                    mapSelectInfo.show(); 
+                    clipboardInfoElement.hide();
+                    fileInputElement.hide();
+                    mapSelectInfoElement.show(); 
                     me.isMapSelection = true;    
                 }
-                me.inputTable.isEditable( me.clipboardInsert );
             });
             jQuery('.selectFromMap').on("click", function() {
                 me.instance.toggleViews("MapSelection");
-                me.clipboardInsert = false;
             });
          },
-        /**
-         * @method selectMapProjectionValues
-         * Inits the on change listeners for the radio buttons
-         */
-        selectMapProjectionValues: function () {
-            var input = this.inputSystem.getSelectInstance();
-            // EPSG-3067 settings
-            var sourceSelection = this.setSelectionValue( input.datum, "DATUM_EUREF-FIN" );
-            var sourceelevationSelection = this.setSelectionValue( input.coordinate, "KOORDINAATISTO_SUORAK_2D" );
-            var sourceSelection = this.setSelectionValue( input.projection, "TM" );
-            var sourceelevationSelection = this.setSelectionValue( input["geodetic-coordinate"], "ETRS-TM35FIN" );
-        },
         /**
          * @method handleButtons
          */

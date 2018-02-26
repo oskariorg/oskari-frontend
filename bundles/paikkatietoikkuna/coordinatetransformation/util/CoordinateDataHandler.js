@@ -1,10 +1,6 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', function ( getUserSelectionFunc ) {
-    /**
-     * @class Oskari.coordinatetransformation.CoordinateDataHandler
-     * @param { Function } getUserSelectionFunc, pass in the function to get user file import/export settings
-     */
-    this.userSelections = getUserSelectionFunc;
-    this.dataCoordinates = {
+Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', function ( ) {
+
+    this.data = {
         coordinates: []
     };
 },
@@ -13,17 +9,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         return 'Oskari.coordinatetransformation.CoordinateDataHandler';
     },
     getCoordinateObject: function () {
-        return this.dataCoordinates;
+        return this.data;
     },
     /** 
      * @method validateData
      * check different conditions if data matches to them
      */
     validateData: function( data ) {
-        var userSpec = this.userSelections().import;
-        if( !userSpec ) {
-            Oskari.log(this.getName()).warn("No specification for file-import");
-        }
         var lonlatKeyMatch = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
         var numericWhitespaceMatch = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi)
         
