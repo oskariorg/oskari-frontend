@@ -8,21 +8,6 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
     this._loc = localization;
-    this._mobileDefs = {
-      buttons:  {
-          'mobile-projectionchanger': {
-              iconCls: 'mobile-projectionchange',
-              tooltip: '',
-              show: true,
-              callback: function () {
-
-              },
-              sticky: true,
-              toggleChangeIcon: false
-          }
-      },
-      buttonGroup: 'mobile-toolbar'
-    };
 
     this._flyout = Oskari.clazz.create('Oskari.projection.change.flyout', this._loc, {
         width: 'auto',
@@ -55,9 +40,6 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         this.getElement().on( "click", function() {
             me._flyout.toggle();
         });
-    },
-    _createMobileUI: function () {
-
     },
     /**
      * Handle plugin UI and change it when desktop / mobile mode
