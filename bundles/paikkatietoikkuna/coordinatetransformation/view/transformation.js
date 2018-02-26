@@ -206,7 +206,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }
             return obj;
         },
-        handleServerResponce: function ( response ) {
+        handleServerResponse: function ( response ) {
             var obj = this.constructLonLatObjectFromArray(response.coordinates);
             this.modifyCoordinateObject("output", obj);
         },
