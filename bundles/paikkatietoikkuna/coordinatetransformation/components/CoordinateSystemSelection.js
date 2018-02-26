@@ -87,25 +87,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
          * @param {string} valueClass - class selector to show options for 
          * @param {string} keyToEmpty - optional param to empty only one specific key in the dropdown 
          */
-        updateDropdownOptions: function (valueClass, keyToEmpty) {
-            var dropdowns = this.dropdowns;
-            if ( valueClass.indexOf("DATUM_DEFAULT") !== -1 ) {
-                //show all options
-                Object.keys( dropdowns ).forEach( function ( key ) {
-                    dropdowns[key].find( 'option' ).show();
-                });
-                return;
-            }
-            if ( typeof keyToEmpty === 'undefined') {
-                Object.keys( dropdowns ).forEach( function ( key ) {
-                    dropdowns[key].find( 'option' ).hide();
-                    dropdowns[key].find( valueClass ).show();
-                });
+        updateDropdownOptions: function (dropdownId, valueId) {
+            if ( typeof valueId === 'string' ) {
+                this.dropdowns[dropdownId].find( 'option' ).hide();
+                this.dropdowns[dropdownId].find( valueId ).show();
             } else {
-                dropdowns[keyToEmpty].find( 'option' ).hide();
-                Object.keys( dropdowns ).forEach( function ( key ) {
-                    dropdowns[key].find( valueClass ).show();
-                });
+                this.dropdowns[dropdownId].find( 'option' ).show();
             }
         },
         makeClassSelector: function (variable) {
@@ -146,22 +133,30 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
 
             switch ( currentValue ) {
                 case "DATUM_DEFAULT":
+                    this.projectionSelected = false;
+                    this.resetSelectToPlaceholder();
+                    Object.keys( this.dropdowns ).forEach( function ( key ) {
+                        me.updateDropdownOptions( key ); 
+                    });
+                    break;
                 case "DATUM_KKJ":
                 case "DATUM_EUREF-FIN":
                     this.projectionSelected = false;
                     this.resetSelectToPlaceholder();
-                    this.updateDropdownOptions( clsSelector( currentValue) );
+                    Object.keys( this.dropdowns ).forEach( function ( key ) {
+                        me.updateDropdownOptions( key, clsSelector( currentValue) ); 
+                    });
                     break;
                 case "KOORDINAATISTO_MAANT_2D":
                     this.projectionSelected = false;
                     var classSelector = clsSelector( datum ) + clsSelector( currentValue );
-                    this.updateDropdownOptions( classSelector, "geodetic-coordinate" );
+                    this.updateDropdownOptions( "geodetic-coordinate", classSelector );
                     instances["geodetic-coordinate"].resetToPlaceholder();
                     break;
                 case "KOORDINAATISTO_MAANT_3D":
                 case "KOORDINAATISTO_SUORAK_3D":
                     this.projectionSelected = false;
-                    this.updateDropdownOptions( clsSelector( currentValue ), "geodetic-coordinate" );
+                    this.updateDropdownOptions( "geodetic-coordinate", clsSelector( currentValue ) );
                     instances["geodetic-coordinate"].resetToPlaceholder();
                     table.handleDisplayingElevationRows(true);
                     break;
@@ -170,7 +165,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 case "TM":
                 case "GK":
                     this.projectionSelected = true;
-                    this.updateDropdownOptions( clsSelector( currentValue ), "geodetic-coordinate" );
+                    this.updateDropdownOptions( "geodetic-coordinate", clsSelector( currentValue ) );
                     instances["geodetic-coordinate"].resetToPlaceholder();
                     break;
                 case "COORDSYS_DEFAULT":
