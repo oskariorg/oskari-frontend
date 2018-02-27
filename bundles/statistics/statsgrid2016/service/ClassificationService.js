@@ -200,10 +200,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             if(!ranges.max) {
                 ranges.max = 4;
             }
+            
             var x = d3.scaleLinear()
                 .domain([ranges.min, ranges.max])
                 .range([iconSize.min, iconSize.max]);
-            return x(index);
+
+            // Make size an even value for rendering
+            var size = Math.floor(x(index));
+            if (size % 2 !== 0) {
+                size += 1;
+            }
+
+            return size;
         },
         _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
             var me = this;
@@ -284,10 +292,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             var legendValuesPosition = function(size, index) {
                 var step = (maxSize - minSize/2)/(ranges.length-1);
                 var y = (ranges.length - index-1) * step;
-                if(y == 0) {
-                    y=1;
-                }
-                y += fontSize;
+                y += fontSize + 2;
                 return {
                     x1: maxSize/2,
                     x2: maxSize + 10,
