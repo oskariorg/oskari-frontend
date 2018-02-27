@@ -143,7 +143,7 @@ function() {
     stop : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
-            if ( stats.publisherHasTool(this.id) ) {
+            if ( stats.hasTool(this.id) ) {
                 stats.showEmbeddedTools(this.id, false);
             }
         }
