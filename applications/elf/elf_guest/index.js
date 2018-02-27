@@ -20,7 +20,7 @@ jQuery(document).ready(function() {
             appSetup.configuration.userguide.conf = {
                 "flyoutClazz": "Oskari.mapframework.bundle.userguide.SimpleFlyout"
             };
-            app.setApplicationSetup(appSetup);
+            app.init(appSetup);
             app.startApplication();
         },
         error : function(jqXHR, textStatus) {

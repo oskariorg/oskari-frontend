@@ -20,6 +20,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
     }, {
         __template: '<div class="layer"><input type="checkbox" /> ' +
                     '<div class="layer-tools">'+
+                    '   <div class="layer-not-supported backendstatus-maintenance-pending" title="" ></div>' +
                     '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' +
                     '   <div class="layer-icon"></div>'+
                     '   <div class="layer-info"></div>'+
@@ -202,10 +203,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             // setup id
             layerDiv.attr('layer_id', layer.getId());
             layerDiv.find('input').attr('id', 'oskari_layerselector2_layerlist_checkbox_layerid_' + layer.getId());
-            layerDiv.find('.layer-title').append(layer.getName());
-            layerDiv.find('.layer-title').click(function(){
-                layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
-            });
+            layerDiv.find('.layer-title')
+                .append(layer.getName())
+                .click(function(){
+                    layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
+                })
+                .toggleClass('not-supported', !layer.isSupported(sandbox.getMap().getSrsName()));
 
             layerDiv.find('input').change(function () {
                 checkbox = jQuery(this);
@@ -242,6 +245,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     mapLayerId
                 ]);
             });
+
+            /**
+             * Supported projection
+             */
+            tools.find('.layer-not-supported')
+                .css('display', !layer.isSupported(sandbox.getMap().getSrsName()) ? null : 'none')
+                .attr('title', this.localization.tooltip['unsupported-srs']);
 
             return layerDiv;
         }

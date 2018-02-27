@@ -408,7 +408,8 @@ Oskari.clazz.define(
                     link,
                     currentGroup,
                     group = -1,
-                    sanitizedHtml;
+                    sanitizedHtml,
+                    targetElem;
 
                 if (typeof datum.html === "string") {
                     sanitizedHtml = Oskari.util.sanitize(datum.html);
@@ -417,6 +418,7 @@ Oskari.clazz.define(
                 }
 
                 contentWrapper.append(sanitizedHtml);
+
 
 	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
@@ -437,10 +439,15 @@ Oskari.clazz.define(
                                 value: sanitizedActionName
                             });
                         }
-
                         currentGroup = action.group;
-
-                        if (currentGroup && currentGroup === group) {
+                        if (action.selector){
+                            targetElem = contentWrapper.find(action.selector);
+                        } else {
+                            targetElem = null;
+                        }
+                        if (targetElem instanceof jQuery) {
+                            targetElem.prepend(actionTemplate);
+                        }else if (currentGroup && currentGroup === group) {
                             actionTemplateWrapper.append(actionTemplate);
                         } else {
                             actionTemplateWrapper = me._actionTemplateWrapper.clone();

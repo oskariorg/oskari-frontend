@@ -363,7 +363,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
 
-            _.each(me.panels, function(panel) {
+            me.panels.forEach(function(panel) {
                if(typeof panel.stop === 'function') {
                     panel.stop();
                }
@@ -637,8 +637,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         /**
          * @method destroy
          * Destroys/removes this view from the screen.
-         *
-         *
          */
         destroy: function () {
             this.mainPanel.remove();

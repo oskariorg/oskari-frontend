@@ -14,6 +14,8 @@ Oskari.registerLocalization(
             "registerInfo2": "Genom att registrera dig som användare godkänner du ",
             "termsOfUseLinkText": "användarvillkoren",
             "termsOfUseLink": "http://maanmittauslaitos.fi/sv/e-tjanster/geodataportalen-paikkatietoikkuna",
+            "dataProtectionLinkText": "Dataskyddbeskrivningen för register över kundförhållanden",
+            "dataProtectionLink": "https://maanmittauslaitos.fi/sv/information-om-lantmateriverket/organisation/dataskyddbeskrivningar/register-over-kundforhallanden",
             "continueBtn": "Fortsätt till registreringen",
             "cancelBtn": "Avbryt"
         }
