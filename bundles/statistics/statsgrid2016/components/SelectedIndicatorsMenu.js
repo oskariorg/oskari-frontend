@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
                 width: '70%'
             });
             select.adjustChosen();
-            !!me.service.getStateService().activeIndicator.hash ? select.setValue( me.service.getStateService().activeIndicator.hash ) : select.selectFirstValue();
+            me.service.getStateService().activeIndicator.hash ? select.setValue( me.service.getStateService().activeIndicator.hash ) : select.selectFirstValue();
             me._select = select;
 
             container.append(dropdown);

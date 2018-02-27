@@ -29,15 +29,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     chartIsInitialized: function () {
         return this.svg !== null;
     },
-    chartDimensions: function (leftMargin) {
+    chartDimensions: function (sideMargin) {
         var me = this;
+        var margin = sideMargin ? Math.min(sideMargin, 140) : 80;
             //set up svg using margin conventions - we'll need plenty of room on the left for labels
         var dimensions = {
             margin: {
                 top: 10,
-                right: leftMargin ? Math.min(leftMargin, 140) : 80,
+                right: margin,
                 bottom: 15,
-                left: leftMargin ? Math.min(leftMargin, 140) : 80
+                left: margin
             },
             xAxisOffset: -5,
             width: function () {
@@ -107,34 +108,30 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
 
         var sortTypes = {
             "name-ascending": function () {
-                me.data = me.data.sort(function (a, b) {
-                    return d3.ascending(a.name , b.name);
-                });
-                me.redraw();
-            },
-            "name-descending": function () {
-                me.data = me.data.sort(function (a, b) {
+                me.data.sort(function (a, b) {
                     return d3.descending(a.name , b.name);
                 });
-                me.redraw();
+            },
+            "name-descending": function () {
+                me.data.sort(function (a, b) {
+                    return d3.ascending(a.name , b.name);
+                });
             },
             "value-ascending": function () {
-                me.data = me.data.sort(function (a, b) {
-                    return d3.descending(a.value || 100000 , b.value || 100000);
+                me.data.sort(function (a, b) {
+                    return d3.descending(a.value || 1000000 , b.value || 1000000);
                 });
-                me.redraw();
                 return;
-
             },
             "value-descending": function () {
-                me.data = me.data.sort(function (a, b) {
-                    return d3.ascending(a.value || -100000 , b.value || -100000);
+                me.data.sort(function (a, b) {
+                    return d3.ascending(a.value || -1000000 , b.value || -1000000);
                 });
-                me.redraw();
                 return;
             }
         }[type]();
 
+        me.redraw();
         me.sortingType = type;
     },
     /**
@@ -197,7 +194,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     },
     dataHasNegativeValues: function () {
         var dataset = this.getDatasetMinMax();
-        return dataset.min <= 0;
+        return dataset.min < 0;
     },
     /**
      *
@@ -229,11 +226,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr("transform", "translate(" + this.x(0) + ", 0)")
             .call(this.yAxis);
 
-        gy.selectAll('line, path')
+        gy.selectAll('line')
             .attr('x2', function ( d ) {
-                if ( d === null ) {
-                    return;
-                }
                 if ( negatives !== undefined ) {
                     if ( negatives.indexOf( d ) !== -1 && negatives !== undefined ) {
                         return 5;
