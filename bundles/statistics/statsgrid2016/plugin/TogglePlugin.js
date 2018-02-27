@@ -1,28 +1,24 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox, locale) {
-    this.sb = sandbox;
-    this.locale = locale;
+Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function( instance ) {
+    this.stats = instance
+    this.sb = instance.getSandbox();
+    this.locale = instance.getLocalization().published;
     this.element = null;
     this._clazz = 'Oskari.statistics.statsgrid.TogglePlugin';
     this._index = 4;
     this._defaultLocation = 'bottom right';
 }, {
-    showTool: function (tool, shown) {
-        if (!this.element) {
+    toggleTool: function (tool, shown) {
+        if ( !this.element ) {
             return;
         }
-        var stats = this.sb.findRegisteredModuleInstance('StatsGrid');
         var toolElement = this.element.find('.' + tool);
+
         if ( !shown ) {
             toolElement.hide();
             return;
         }
         toolElement.show();
-        var map = this.element.find('.map');
-        if(shown) {
-            toolElement.trigger('click');
-        } else {
-            map.trigger('click');
-        }
+        toolElement.trigger('click');
     },
     /**
      * Creates UI for coordinate display and places it on the maps
@@ -36,11 +32,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
             return this.element;
         }
         var me = this;
+        var stats = this.stats;
         var toggleButtons = jQuery('<div class="statsgrid-published-toggle-buttons mapplugin"><div class="map"></div><div class="table" style="display:none"></div><div class="diagram" style="display:none"></div>');
         var map = toggleButtons.find('.map');
         var table = toggleButtons.find('.table');
         var diagram = toggleButtons.find('.diagram');
-        var stats = this.sb.findRegisteredModuleInstance('StatsGrid');
         var flyoutManager =  stats.getTile().getFlyoutManager();
 
         map.attr('title', me.locale.showMap);

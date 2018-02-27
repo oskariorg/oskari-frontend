@@ -53,15 +53,15 @@ Oskari.clazz.define(
             
             me.getTile().getFlyoutManager().init();
 
-            if(this.isEmbedded()) {
+            if ( this.isEmbedded() ) {
                 // Start in an embedded map mode
 
                 // Always show legend on map when embedded
                 me.showLegendOnMap(true);
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
-
-                // TODO? better way to call than strings
+                
+                //
                 if( me.conf.grid ) {
                     me.showEmbeddedTools('table', true);
                 }
@@ -329,10 +329,10 @@ Oskari.clazz.define(
         },
         /**
          * Check if the tool has been added to the array containing tool names opened in publisher
-         * @method publisherHasTool
+         * @method hasTool
          * @param {String} tool tool name as string
          */
-        publisherHasTool: function (tool) {
+        hasTool: function (tool) {
             return this.embeddedTools.indexOf(tool) > -1;
         },
         /**
@@ -341,7 +341,7 @@ Oskari.clazz.define(
          * @param {String} tool tool name as string
          */
         toggleEmbeddedTools: function (tool) {
-            if ( this.publisherHasTool(tool) ) {
+            if ( this.hasTool(tool) ) {
                 this.getTile().toggleFlyout( tool );
             }
         },
@@ -354,31 +354,35 @@ Oskari.clazz.define(
         showEmbeddedTools: function (tool, enabled) {
             var sandbox = this.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
+            this.toggleEmbeddedTools(tool);
             if ( !enabled ) {
-                if ( !this.publisherHasTool(tool) ) {
+                if ( !this.hasTool(tool) ) {
+                    // not enabled and tool not registered
                     return;
                 } else {
-                    this.togglePlugin.showTool(tool, enabled);
+                    // not enabled and tool registered, hide tool
+                    this.togglePlugin.toggleTool(tool, enabled);
                 }
                 if ( this.embeddedTools.length !== 0 ) {
+                    // remove tool from the embedded tools
                     this.embeddedTools.splice( this.embeddedTools.indexOf(tool), 1 );
                 }
                 if ( this.togglePlugin && this.embeddedTools.length === 0 ) {
+                    // not enabled, no tools, unregister toggle plugin
                     mapModule.unregisterPlugin(this.togglePlugin);
                     mapModule.stopPlugin(this.togglePlugin);
                     this.togglePlugin = null;
                 }
-                return;
             } else {
                 if ( !this.togglePlugin ) {
-                    this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
+                    //enabled but no plugin, create the plugin
+                    this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this);
                     mapModule.registerPlugin(this.togglePlugin);
                     mapModule.startPlugin(this.togglePlugin);
                 }
                 this.embeddedTools.push(tool);
+                this.togglePlugin.toggleTool(tool, enabled);
             }
-            this.togglePlugin.showTool(tool, enabled);
         },
         /**
          * @method  @public showLegendOnMap Render published  legend
