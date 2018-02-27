@@ -10,6 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
   this.plot = jQuery('<div style="width:100%"></div>');
   this.axisLabelValues = jQuery('<div style="width:100%"></div>');
   this.sortingType = null;
+  this.defaultWidth = 630;
   this._g = null;
   this._options = {
     colors:  ['#555','#555']
@@ -42,7 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             },
             xAxisOffset: -5,
             width: function () {
-                var width = me.containerWidth || 630;
+                var width = me.containerWidth || me.defaultWidth;
                 return width - this.margin.left - this.margin.right;
             },
             height: function () {
@@ -408,7 +409,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         }
 
         var opts = options || {};
-        opts.width = 630
+        opts.width = this.defaultWidth;
         //Clear previous graphs
         this.clear();
         if( this.chartType === 'barchart' ) {
