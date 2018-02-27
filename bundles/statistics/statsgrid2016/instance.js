@@ -63,10 +63,10 @@ Oskari.clazz.define(
                 
                 //
                 if( me.conf.grid ) {
-                    me.showEmbeddedTools('table', true);
+                    me.enableEmbeddedTools('table', true);
                 }
                 if( me.conf.diagram ) {
-                    me.showEmbeddedTools('diagram', true);
+                    me.enableEmbeddedTools('diagram', true);
                 }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
@@ -346,12 +346,12 @@ Oskari.clazz.define(
             }
         },
         /**
-         * toggles the specified flyout from publisher
-         * @method showEmbeddedTools
+         * Enables the statsgrid tools to be used on the map in publisher
+         * @method enableEmbeddedTools
          * @param {String} tool tool name as string
          * @param {boolean} enabled is the tool enabled or not
          */
-        showEmbeddedTools: function (tool, enabled) {
+        enableEmbeddedTools: function (tool, enabled) {
             var sandbox = this.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             this.toggleEmbeddedTools(tool);
@@ -374,13 +374,14 @@ Oskari.clazz.define(
                     this.togglePlugin = null;
                 }
             } else {
+                this.embeddedTools.push(tool);
+
                 if ( !this.togglePlugin ) {
                     //enabled but no plugin, create the plugin
                     this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this);
                     mapModule.registerPlugin(this.togglePlugin);
                     mapModule.startPlugin(this.togglePlugin);
                 }
-                this.embeddedTools.push(tool);
                 this.togglePlugin.toggleTool(tool, enabled);
             }
         },
