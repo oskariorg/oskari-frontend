@@ -314,14 +314,23 @@ Oskari.clazz.define(
                     srs : mapVO.getSrsName(),
                 },
                 success: function (data) {
+                	var uniqueColumn = null;
+                	var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
+                	if(layer.getAttributes().unique) {
+                		uniqueColumn = layer.getAttributes().unique;
+                	}
                     var geojson_format = new OpenLayers.Format.GeoJSON();
                     var features = geojson_format.read(data.features[0]);
-                    var founded = me.croppingVectorLayer.getFeaturesByAttribute("cropid",data.features[0].id);
+                    var uniqueValue = (uniqueColumn) ? data.features[0].properties[uniqueColumn] : data.features[0].id;
+                    if(!uniqueValue) {
+                    	uniqueValue = data.features[0].id;
+                    }
+                    var founded = me.croppingVectorLayer.getFeaturesByAttribute("cropid",uniqueValue);
 
                         if(founded !== null && founded.length>0){
                             me.croppingVectorLayer.removeFeatures(founded);
                         }else{
-                            features[0].attributes.cropid = data.features[0].id;
+                            features[0].attributes.cropid = uniqueValue;
                             features[0].attributes.layerName= layerName;
                             features[0].attributes.layerUrl = layerUrl;
                             features[0].attributes.uniqueKey = layerUniqueKey;
