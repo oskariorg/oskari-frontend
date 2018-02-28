@@ -24,36 +24,26 @@
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
-                    "mapfull": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapmodule-plugin": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapwmts": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapwfs2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
                     "maparcgis": {
-                        "bundlePath": "../../../packages/arcgis/bundle/"
+                        "bundlePath": "/Oskari/packages/mapping/ol3/"
                     },
-                    "ui-components": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                    "mapmodule": {
+                        "bundlePath": "/Oskari/packages/mapping/ol3/"
                     },
                     "oskariui": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-
-                }
-            }
-        }, {
-            "bundlename": "divmanazer",
-            "metadata": {
-                "Import-Bundle": {
-                    "divmanazer": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapwfs2": {
+                        "bundlePath": "/Oskari/packages/mapping/ol3/"
+                    },
+                    "ui-components": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapfull": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapwmts": {
+                        "bundlePath": "/Oskari/packages/mapping/ol3/"
                     }
                 }
             }
@@ -71,7 +61,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "toolbar": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -80,7 +70,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "infobox": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -98,7 +88,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "metadatacatalogue": {
-                        "bundlePath": "../../../packages/catalogue/bundle/"
+                        "bundlePath": "../../../packages/catalogue/"
                     }
                 }
             }
@@ -252,7 +242,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "featuredata2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/framework/"
                     }
                 }
             }
