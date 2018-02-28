@@ -32,7 +32,7 @@ Oskari.clazz.define(
     }, {
         afterStart: function (sandbox) {
             var me = this;
-
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             // create the StatisticsService for handling ajax calls and common functionality.
             // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here (it's datasource specific)
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
@@ -53,6 +53,10 @@ Oskari.clazz.define(
             
             me.getTile().getFlyoutManager().init();
 
+            this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getTile().getFlyoutManager(), this.getLocalization().published );
+            mapModule.registerPlugin(this.togglePlugin);
+            mapModule.startPlugin(this.togglePlugin);
+
             if ( this.isEmbedded() ) {
                 // Start in an embedded map mode
 
@@ -63,10 +67,10 @@ Oskari.clazz.define(
                 
                 //
                 if( me.conf.grid ) {
-                    me.enableEmbeddedTools('table', true);
+                    me.togglePlugin.addTool('table');
                 }
                 if( me.conf.diagram ) {
-                    me.enableEmbeddedTools('diagram', true);
+                    me.togglePlugin.addTool('diagram');
                 }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
@@ -327,6 +331,9 @@ Oskari.clazz.define(
         getEmbeddedTools: function () {
             return this.embeddedTools;
         },
+        addEmbeddedTool: function ( tool ) {
+            this.embeddedTools.push(tool);
+        },
         /**
          * Check if the tool has been added to the array containing tool names opened in publisher
          * @method hasTool
@@ -343,46 +350,6 @@ Oskari.clazz.define(
         toggleEmbeddedTools: function (tool) {
             if ( this.hasTool(tool) ) {
                 this.getTile().toggleFlyout( tool );
-            }
-        },
-        /**
-         * Enables the statsgrid tools to be used on the map in publisher
-         * @method enableEmbeddedTools
-         * @param {String} tool tool name as string
-         * @param {boolean} enabled is the tool enabled or not
-         */
-        enableEmbeddedTools: function (tool, enabled) {
-            var sandbox = this.getSandbox();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            this.toggleEmbeddedTools(tool);
-            if ( !enabled ) {
-                if ( !this.hasTool(tool) ) {
-                    // not enabled and tool not registered
-                    return;
-                } else {
-                    // not enabled and tool registered, hide tool
-                    this.togglePlugin.toggleTool(tool, enabled);
-                }
-                if ( this.embeddedTools.length !== 0 ) {
-                    // remove tool from the embedded tools
-                    this.embeddedTools.splice( this.embeddedTools.indexOf(tool), 1 );
-                }
-                if ( this.togglePlugin && this.embeddedTools.length === 0 ) {
-                    // not enabled, no tools, unregister toggle plugin
-                    mapModule.unregisterPlugin(this.togglePlugin);
-                    mapModule.stopPlugin(this.togglePlugin);
-                    this.togglePlugin = null;
-                }
-            } else {
-                this.embeddedTools.push(tool);
-
-                if ( !this.togglePlugin ) {
-                    //enabled but no plugin, create the plugin
-                    this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this);
-                    mapModule.registerPlugin(this.togglePlugin);
-                    mapModule.startPlugin(this.togglePlugin);
-                }
-                this.togglePlugin.toggleTool(tool, enabled);
             }
         },
         /**

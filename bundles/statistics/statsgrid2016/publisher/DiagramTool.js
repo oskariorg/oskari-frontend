@@ -38,7 +38,11 @@ function() {},
         if(!stats) {
             return;
         }
-        stats.enableEmbeddedTools(this.id, enabled);
+        if(enabled) {
+            stats.togglePlugin.addTool(this.id);
+        } else {
+            stats.togglePlugin.removeTool(this.id);
+        }
     },
     /**
     * Get stats layer.
@@ -102,10 +106,8 @@ function() {},
     },
     stop : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if(stats) {
-            if ( stats.hasTool(this.id) ) {
-                stats.enableEmbeddedTools(this.id, false);
-            }
+        if (stats) {
+            stats.togglePlugin.removeTool(this.id);
         }
     }
 }, {

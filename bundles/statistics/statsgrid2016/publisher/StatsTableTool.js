@@ -86,7 +86,11 @@ function() {
         if(!stats) {
             return;
         }
-        stats.enableEmbeddedTools(this.id, enabled);
+        if(enabled) {
+            stats.togglePlugin.addTool(this.id);
+        } else {
+            stats.togglePlugin.removeTool(this.id);
+        }
     },
     /**
     * Is displayed.
@@ -133,8 +137,7 @@ function() {
                 statsgrid: {
                     state: statsGridState,
                     conf : {
-                        grid: me.state.enabled,
-                        vectorViewer: config.vectorViewer
+                        grid: me.state.enabled
                     }
                 }
             }
@@ -143,9 +146,7 @@ function() {
     stop : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
-            if ( stats.hasTool(this.id) ) {
-                stats.enableEmbeddedTools(this.id, false);
-            }
+            stats.togglePlugin.removeTool(this.id);
         }
     }
 }, {
