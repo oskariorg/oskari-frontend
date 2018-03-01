@@ -653,11 +653,29 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         /**
          * Activate selected filter.
          * @method @public activateFilter
-         * @param  {Function} filterName activate filter name
+         * @param  {String} filterName activate filter name
          */
         activateFilter: function(filterName) {
             var me = this;
             me._currentFilter = filterName;
+
+            me.layerTabs.forEach(function(tab) {
+                var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
+                var filters = me.layerlistService.getLayerlistFilterButton();
+                Object.keys(filters).forEach(function(key) {
+                    var filter = filters[key];
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
+                    if(filter.id === filterName) {
+                        filterIcon.removeClass(filter.cls.deactive);
+                        filterIcon.addClass(filter.cls.active);
+                        filterIcon.addClass('active');
+                    } else {
+                        filterIcon.removeClass(filter.cls.active);
+                        filterIcon.addClass(filter.cls.deactive);
+                        filterIcon.removeClass('active');
+                    }
+                });
+            });
             me.populateLayers();
         },
 
