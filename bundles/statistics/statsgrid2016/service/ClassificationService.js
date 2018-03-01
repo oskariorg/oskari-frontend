@@ -200,10 +200,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             if(!ranges.max) {
                 ranges.max = 4;
             }
-            var x = d3.scaleSqrt()
+            
+            var x = d3.scaleLinear()
                 .domain([ranges.min, ranges.max])
                 .range([iconSize.min, iconSize.max]);
-            return x(index+1);
+
+            // Make size an even value for rendering
+            var size = Math.floor(x(index));
+            if (size % 2 !== 0) {
+                size += 1;
+            }
+
+            return size;
         },
         _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
             var me = this;
@@ -252,8 +260,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
             );
 
-            svg.attr('height', maxSize + fontSize);
-            svg.find('svg.symbols').attr('y', fontSize);
+            svg.attr('height', maxSize + fontSize + 2);
             svg.find('svg.texts').attr('y', fontSize);
             svg.find('svg.texts').attr('height', maxSize + fontSize);
 
@@ -283,14 +290,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
 
             var legendValuesPosition = function(size, index) {
-                var step = ((maxSize-1)-minSize/2)/(ranges.length-1);
+                var step = (maxSize - minSize/2)/(ranges.length-1);
                 var y = (ranges.length - index-1) * step;
-                if(y == 0) {
-                    y=1;
-                }
-                if(index == ranges.length-1) {
-                    y+=3;
-                }
+                y += fontSize + 2;
                 return {
                     x1: maxSize/2,
                     x2: maxSize + 10,
@@ -298,6 +300,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     y2: y
                 };
             };
+
+            var classificationLabelCorrection = function(index) {
+                return ((ranges.length-1 - index) / (ranges.length-1) * fontSize) / 2;
+            }
 
             ranges.forEach(function(range, index){
                 // Create point symbol
@@ -317,14 +323,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                         max: opts.count-1
                     }
                 );
-                svgMain.find('circle').attr('cx', size/2);
-                svgMain.find('circle').attr('cy', size/2);
-                svgMain.find('circle').attr('r', (size/2)-1);
+                svgMain.find('circle').attr('cx', size/2 +1);
+                svgMain.find('circle').attr('cy', size/2 +1);
+                svgMain.find('circle').attr('r', size/2);
                 x = (maxSize - size)/2;
-                y = (maxSize - size);
+                y = maxSize + fontSize - size;
 
                 svgMain.attr('x', x);
                 svgMain.attr('y', y);
+                svgMain.attr('width', size+2);
+                svgMain.attr('height', size+2);
 
                 var circle = point.find('circle');
                 circle.attr({
@@ -358,7 +366,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
                 textSvgEl.find('text').attr({
                     x: valPos.x2 + 4,
-                    y: valPos.y2 + fontSize/2
+                    y: valPos.y2 + classificationLabelCorrection(index)
                 });
 
                 label.find('g').append(textSvgEl);

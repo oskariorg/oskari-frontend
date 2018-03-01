@@ -100,16 +100,17 @@
     background-color: #ffd400; }
   to {
     background-color: #FDF8D9; } }
+
 div.oskari-flyout {
   /* ********************************************
-  * Search styles
-  * ********************************************/
+    * Search styles
+    * ********************************************/
   /* ********************************************
-  * Data styles
-  * ********************************************/
+    * Data styles
+    * ********************************************/
   /* ********************************************
-  * Diagram styles
-  * ********************************************/ }
+    * Diagram styles
+    * ********************************************/ }
   div.oskari-flyout.statsgrid-search-flyout {
     /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
     max-width: 700px;
@@ -333,6 +334,12 @@ div.oskari-flyout {
   background-color: #FFFFFF;
   width: 300px;
   font-size: 12px; }
+  .statsgrid-legend-container .classification-colors.value {
+    display: inline-block;
+    vertical-align: top; }
+  .statsgrid-legend-container .visible-map-style-choropleth.flip-colors {
+    margin-left: 10px;
+    line-height: 27px; }
   .statsgrid-legend-container > div.header {
     background-color: #fdf8d9;
     margin: 0;
@@ -376,11 +383,6 @@ div.oskari-flyout {
       width: 96%;
       font-size: 12px;
       padding: 1px 2px; }
-    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications button.reverse-colors {
-      margin-top: 5px;
-      margin-left: 0;
-      width: 95%;
-      padding: 4px 5px; }
     .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .min {
       float: left; }
     .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .max {
@@ -406,10 +408,12 @@ div.oskari-flyout {
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend .popup-body > div.content {
   margin: 0px; }
+
 .divmanazerpopup.statsgrid-mobile-legend .popup-body div.accordion div.content {
   padding: 0;
   margin: 0;
   margin-left: 8px; }
+
 .divmanazerpopup.statsgrid-mobile-legend .popup-body div.geostats-legend div {
   margin: 2px 6px 2px 2px; }
 
@@ -450,24 +454,25 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
  * ********************************************/
 .oskari-tile.statsgrid .statsgrid-functionality {
   width: 95%;
+  height: 34px;
   display: inline-flex;
   display: -ms-inline-flexbox;
-  align-items: center;
   margin-left: 6px; }
-  .oskari-tile.statsgrid .statsgrid-functionality.hidden {
-    display: none;
-  }
   .oskari-tile.statsgrid .statsgrid-functionality .icon {
+    float: left;
     width: 30px;
     height: 30px;
     background-color: lightgray;
-    margin-left: 8px;
+    margin-left: 16px;
     background-repeat: no-repeat;
     background-position: center; }
   .oskari-tile.statsgrid .statsgrid-functionality .text {
+    float: left;
     margin-left: 4px;
     font-weight: bold;
-    font-size: 12px; }
+    font-size: 12px;
+    line-height: 34px;
+    vertical-align: middle; }
   .oskari-tile.statsgrid .statsgrid-functionality.material-selected .icon {
     background-color: #ffd400; }
   .oskari-tile.statsgrid .statsgrid-functionality.table .icon {
@@ -476,6 +481,9 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     background-image: url("../images/tile-search-light.png"); }
   .oskari-tile.statsgrid .statsgrid-functionality.diagram .icon {
     background-image: url("../images/tile-diagram-light.png"); }
+
+.oskari-tile.statsgrid .hidden {
+  display: none; }
 
 /* ********************************************
  * DataVisualizer styles
@@ -488,48 +496,65 @@ div.tab-material-controls div.title {
  * ********************************************/
 .oskari-flyout.statsgrid-filter-flyout .clear {
   clear: both; }
+
 .oskari-flyout.statsgrid-filter-flyout .right {
   float: right; }
+
 .oskari-flyout.statsgrid-filter-flyout .left {
   float: left; }
+
 .oskari-flyout.statsgrid-filter-flyout h5 {
   padding-bottom: 0 !important; }
+
 .oskari-flyout.statsgrid-filter-flyout .filter-button {
   margin-top: 1em; }
+
 .oskari-flyout.statsgrid-filter-flyout .active-filters {
   width: 15em; }
+
 .oskari-flyout.statsgrid-filter-flyout .content {
   width: 32em; }
+
 .oskari-flyout.statsgrid-filter-flyout .filterIndicator, .oskari-flyout.statsgrid-filter-flyout .filterCondition, .oskari-flyout.statsgrid-filter-flyout .oskari-table-header {
   width: 15em; }
+
 .oskari-flyout.statsgrid-filter-flyout .cell {
   height: 1em;
   padding: 7px;
   text-align: center; }
+
 .oskari-flyout.statsgrid-filter-flyout .indicator, .oskari-flyout.statsgrid-filter-flyout #indicator {
   width: 50%; }
+
 .oskari-flyout.statsgrid-filter-flyout .condition, .oskari-flyout.statsgrid-filter-flyout #condition, .oskari-flyout.statsgrid-filter-flyout .value, .oskari-flyout.statsgrid-filter-flyout #value {
   width: 20%; }
+
 .oskari-flyout.statsgrid-filter-flyout .headerCell {
   padding: 0.9375em 0.5em;
   text-align: left;
   font-weight: 500;
   font-size: calc(0.55rem + 0.28vh);
   text-transform: uppercase; }
+
 .oskari-flyout.statsgrid-filter-flyout td {
   background: #FAFAFA;
   text-align: center; }
+
 .oskari-flyout.statsgrid-filter-flyout .oskari-table-header {
   height: 3em; }
+
 .oskari-flyout.statsgrid-filter-flyout .removerow {
   border-radius: 50%;
   height: 1.3em;
   width: 1.37em;
   background-image: url("../images/icon-close.png"); }
+
 .oskari-flyout.statsgrid-filter-flyout .remove {
   width: 5%; }
+
 .oskari-flyout.statsgrid-filter-flyout .filter-edit-active {
   background: olivedrab !important; }
+
 .oskari-flyout.statsgrid-filter-flyout .hoverable {
   background: white;
   border-radius: 3px;
@@ -546,14 +571,15 @@ div.tab-material-controls div.title {
     color: #FFFFFF;
     border-top: 1px solid #22262e;
     border-bottom: 1px solid #22262e; }
+
 .oskari-flyout.statsgrid-filter-flyout tr:hover td {
   background: #4E5066;
   color: #FFFFFF;
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e; }
+
 .oskari-flyout.statsgrid-filter-flyout .filter {
   padding: 1.2em; }
+
 .oskari-flyout.statsgrid-filter-flyout .tabsHeader {
   padding-top: 2em !important; }
-
-/*# sourceMappingURL=style.css.map */
