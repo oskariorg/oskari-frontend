@@ -47,6 +47,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "src": "../../../../bundles/framework/layerselector2/view/PublishedLayersTab.js"
         },
         {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/layerselector2/request/ShowFilteredLayerListRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/layerselector2/request/ShowFilteredLayerListRequestHandler.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/layerselector2/request/AddLayerListFilterRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/layerselector2/request/AddLayerListFilterRequestHandler.js"
+        },
+        {
             "type": "text/css",
             "src": "../../../../bundles/framework/layerselector2/resources/css/style.css"
         }],

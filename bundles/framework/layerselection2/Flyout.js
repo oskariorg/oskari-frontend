@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         this.sortableBinded = false;
         this._sliders = {};
         this.toolsAsText = ['ownStyle', 'objectData', 'content-editor'];
+        this.blacklistedTools  = ['show-layer-legend-tool'];
     }, {
         /**
          * @method getName
@@ -785,7 +786,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             for (s = 0; s < laytools.length; s += 1) {
                 laytool = laytools[s];
-                if (laytool && laytool.getName() !== 'show-layer-legend-tool') {
+                if (laytool && me.blacklistedTools.indexOf(laytool.getName()) === -1) {
                     // Icon or text link
                     if (laytool.getIconCls() && me.toolsAsText.indexOf(laytool.getName()) === -1) {
                         toolContainer = jQuery('<div></div>');
