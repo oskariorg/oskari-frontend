@@ -222,7 +222,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // also update layer groups
-            this.updateGroupsLayers(layerId, null, true);
+            this.updateLayersInGroups(layerId, null, true);
 
             if (layer && suppressEvent !== true) {
                 // notify components of layer removal
@@ -345,7 +345,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // Also update layer to me._layerGroups
-            this.updateGroupsLayers(layerId, newLayerConf);
+            this.updateLayersInGroups(layerId, newLayerConf);
 
             // notify components of layer update
             var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
@@ -404,14 +404,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
 
         /**
-         * Update layer groups
-         * @method updateGroupsLayers
+         * Update layers in groups
+         * @method updateLayersInGroups
          * @param  {String}          layerId      layerid
          * @param  {Object}          newLayerConf new layer conf
          * @param  {Boolean}         deleteLayer delete layer
          * @param  {Boolean}         newLayer is new layer
          */
-        updateGroupsLayers: function(layerId, newLayerConf, deleteLayer, newLayer) {
+        updateLayersInGroups: function(layerId, newLayerConf, deleteLayer, newLayer) {
             var me = this;
             var groups = [];
             var group = null;
@@ -654,9 +654,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
 
             me._layerGroups = pResp;
-
-            var currentDepth = 0;
-            var maxDepth = 3;
 
             var layers = [];
 
