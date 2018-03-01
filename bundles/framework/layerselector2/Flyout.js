@@ -587,6 +587,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         activateFilter: function(filterName) {
             var me = this;
             me._currentFilter = filterName;
+
+            me.layerTabs.forEach(function(tab) {
+                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
+                var filters = me.layerlistService.getLayerlistFilterButton();
+                Object.keys(filters).forEach(function(key) {
+                    var filter = filters[key];
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
+                    if(filter.id === filterName) {
+                        filterIcon.removeClass(filter.cls.deactive);
+                        filterIcon.addClass(filter.cls.active);
+                        filterIcon.addClass('active');
+                    } else {
+                        filterIcon.removeClass(filter.cls.active);
+                        filterIcon.addClass(filter.cls.deactive);
+                        filterIcon.removeClass('active');
+                    }
+                });
+            });
             me.populateLayers();
         },
 
