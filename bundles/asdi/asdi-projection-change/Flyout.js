@@ -1,6 +1,6 @@
 Oskari.clazz.define('Oskari.projection.change.flyout', function (loc, options) {
     this.loc = loc;
-    this.projectionView = null;
+    this.projectionView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionChange');
     this.templates = {
         main: jQuery('<div></div>')
     }
@@ -8,10 +8,9 @@ Oskari.clazz.define('Oskari.projection.change.flyout', function (loc, options) {
     var me = this;
     this.on('show', function() {
         if (!me.getElement()) {
-            me.createUi();
             me.setTitle(me.loc.title);
             me.addClass(options.cls);
-            me.setContent(me.getElement());
+            me.setContent(me.projectionView.getElement());
         }
     });
 }, {
@@ -20,12 +19,6 @@ Oskari.clazz.define('Oskari.projection.change.flyout', function (loc, options) {
     },
     setElement: function (el) {
         this.element = el;
-    },
-    createUi: function () {
-        this.projectionView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionChange');
-        var container = this.templates.main.clone();
-        container.append(this.projectionView.getElement());
-        this.setElement( container );
     }
 }, {
     'extend': ['Oskari.userinterface.extension.ExtraFlyout']  

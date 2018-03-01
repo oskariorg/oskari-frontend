@@ -15,7 +15,7 @@ function (view, callback) {
                         '</div>');
     this.element = null;
     this.loc = Oskari.getLocalization('projection-change');
-    this.callback = callback;
+    this.projectionChangeHandler = callback;
     this.view = view;
     this.infoView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionInformation', view);
     this.errorListing = Oskari.clazz.create('Oskari.projection.change.view.ErrorListing');
@@ -29,7 +29,7 @@ function (view, callback) {
     },
     create: function (view) {
         var me = this;
-
+        debugger;
         var tpl = this.card;
 
         var card = jQuery( tpl ({
@@ -39,7 +39,7 @@ function (view, callback) {
         }));
 
         card.on('click', function () {
-            me.callback( view.uuid,  view.srsName );
+            me.projectionChangeHandler( view.uuid,  view.srsName );
         });
         //infolink
         card.find('.projection-info').on('click', function ( event ) {

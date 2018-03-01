@@ -1,7 +1,7 @@
 .oskari-projection-changer {
     height:36px;
     width: 36px;
-    background-image: url("../images/temp_globe.png");
+    background-image: url("../images/globe.png");
     background-repeat: no-repeat;
     background-position: center;
     margin-bottom: 10px !important;

@@ -11,7 +11,6 @@
  */
 Oskari.clazz.define("Oskari.projection.change.instance",
 function () {
-
 }, {
     __name: 'projection-change',
     getName: function () {
@@ -23,10 +22,6 @@ function () {
         this.createPlugin();
         this.createUi();
         sandbox.register(this);
-
-    },
-    getPlugins: function () {
-        return this.plugins;
     },
     getViews: function () {
         return this.getAppViews();

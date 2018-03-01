@@ -13,10 +13,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         width: 'auto',
         cls: 'projection-change-flyout'
     });
-    this._flyout.makeDraggable({
-        handle : '.oskari-flyouttoolbar, .projection-data-container > .header',
-        scroll : false
-    });
+    this._flyout.makeDraggable();
     this._flyout.hide();
 
     this._log = Oskari.log('Oskari.projection.change.ProjectionChangerPlugin');
@@ -24,12 +21,13 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
 
     _createControlElement: function () {
       var launcher = this._templates.projectionchanger.clone();
-
       launcher.attr('title', this._loc.tooltip.tool);
-
       return launcher;
     },
     createUi: function() {
+      if ( this.getElement() ) {
+        return;
+      }
       this._element = this._createControlElement();
       this.handleEvents();
       this.addToPluginContainer(this._element);
@@ -51,21 +49,14 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
       var isMobile = Oskari.util.isMobile();
       if( this.getElement() ) {
           this.teardownUI(true);
-      }
-      if( isMobile ) {
-        var mobileDefs = this.getMobileDefs();
-        this.removeToolbarButtons( mobileDefs.buttons, mobileDefs.buttonGroup );
-        this._createMobileUI();
       } else {
-        this._createUI();
+        this.createUi();
       }
     },
     teardownUI : function(stopping) {
     //detach old element from screen
-      var mobileDefs = this.getMobileDefs();
       this.getElement().detach();
       this.removeFromPluginContainer(this.getElement());
-      this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);  
     },
     getElement: function() {
         return this._element;
