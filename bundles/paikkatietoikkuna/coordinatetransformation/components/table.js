@@ -105,8 +105,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 this.bindRowCountListener();
 
                 var coords = {};
-                for( var i = 0; i < 10; i++ ) {
-                    table.find("#oskari-coordinate-table").append(this.template.row( { coords: coords } ) );
+                var tableRef = table.find("#oskari-coordinate-table");
+                var defaultTableRows = 10;
+                for ( var i = 0; i < defaultTableRows; i++ ) {
+                   tableRef.append(this.template.row( { coords: coords } ) );
                 }
 
                 return this.getContainer();
