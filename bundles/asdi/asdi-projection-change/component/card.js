@@ -29,7 +29,6 @@ function (view, callback) {
     },
     create: function (view) {
         var me = this;
-        debugger;
         var tpl = this.card;
 
         var card = jQuery( tpl ({
