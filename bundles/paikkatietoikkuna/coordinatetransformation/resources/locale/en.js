@@ -3,14 +3,15 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "coordinatetransformation",
     "value": {
+        "title": "Coordinate Transformation",
         "tile": {
-            "title": "Coordinateconversion"
+            "title": "Coordinate Transformation"
         },
         "flyout": {
-        "title": {
-            "input": "Lähtötiedot",
-            "result": "Tulostiedot"
-        },
+            "title": {
+                "input": "Lähtötiedot",
+                "result": "Tulostiedot"
+            },
             "coordinatesystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "geodetic_datum": "Geodeettinen datumi",
@@ -31,6 +32,7 @@ Oskari.registerLocalization(
                 "link":"valitse selaamalla",
                 "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
                 "mapinfo":"Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
+                "select": "Valitse",
                 "uploading":"Ladataan",
                 "success":"Valmis",
                 "error":"Virhe!",
@@ -47,10 +49,11 @@ Oskari.registerLocalization(
                 "kkjeast":"Itä-koordinaatti [m]",
                 "lat":"Leveysaste",
                 "lon":"Pituusaste",
+                "elevation": "Korkeus [m]",
                 "geox":"Geosentrinen X [m]",
                 "geoy":"Geosentrinen Y [m]",
                 "geoz":"Geosentrinen Z [m]",
-                "ellipse_height":"Ellipsoidinen korkeus [m]"
+                "ellipse_elevation":"Ellipsoidinen korkeus [m]"
             },
             "utils": {
                 "clear": "Tyhjennä taulukot",
@@ -81,6 +84,27 @@ Oskari.registerLocalization(
                     "title": "Lähtöaineiston ominaisuudet",
                 }
             }
+        },
+        "JSONOptions": {
+            "default": "Any option",
+            "CRFProjected2D": "Projected 2D",
+            "CRFProjected3D": "Projected 3D",
+            "CRFGeographic2D": "Geographic 2D",
+            "CRFGeographic3D": "Geographic 3D",
+            "choose": "Choose",
+            "none": "None"
+        },
+        "coordinate-system-info" : {
+            "geodetic": "geodetic",
+            "coordinate": "coordinate",
+            "projection": "projection",
+            "geodetic-coordinate": "geodetic-coordinate",
+            "elevation": "elevation",
+
+        },
+        "infoPopup" : {
+            "title": "Coordinate System Info",
+            "ok": "Ok"
         }
     }
 });
