@@ -59,25 +59,25 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
     getOptionsJSON: function() {
          var json = {
             "datum": {
-                0: { "id":"DATUM_DEFAULT", "title":"Mikä tahansa", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                0: { "id":"DATUM_DEFAULT", "title": this.loc.JSONOptions.default, "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 1: { "id":"DATUM_KKJ", "title":"KKJ", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 2: { "id":"DATUM_EUREF-FIN", "title":"EUREF-FIN", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"}
                 },
             "coordinate": {
-                0: { "id":"KOORDINAATISTO_DEFAULT", "title":"Mikä tahansa" },
-                1: { "id":"KOORDINAATISTO_SUORAK_2D", "title":"Suorakulmainen 2D (Taso)", "cls":"DATUM_KKJ DATUM_EUREF-FIN" },
-                2: { "id":"KOORDINAATISTO_SUORAK_3D", "title":"Suorakulmainen 3D", "cls":"DATUM_EUREF-FIN" },
-                3: { "id":"KOORDINAATISTO_MAANT_2D", "title":"Maantieteellinen 2D", "cls":"DATUM_EUREF-FIN DATUM_KKJ" },
-                4: { "id":"KOORDINAATISTO_MAANT_3D", "title":"Maantieteellinen 3D", "cls":"DATUM_EUREF-FIN" }
+                0: { "id":"KOORDINAATISTO_DEFAULT", "title": this.loc.JSONOptions.default },
+                1: { "id":"KOORDINAATISTO_SUORAK_2D", "title": this.loc.JSONOptions.CRFProjected2D, "cls":"DATUM_KKJ DATUM_EUREF-FIN" },
+                2: { "id":"KOORDINAATISTO_SUORAK_3D", "title": this.loc.JSONOptions.CRFProjected3D, "cls":"DATUM_EUREF-FIN" },
+                3: { "id":"KOORDINAATISTO_MAANT_2D", "title": this.loc.JSONOptions.CRFGeographic2D, "cls":"DATUM_EUREF-FIN DATUM_KKJ" },
+                4: { "id":"KOORDINAATISTO_MAANT_3D", "title": this.loc.JSONOptions.CRFGeographic3D, "cls":"DATUM_EUREF-FIN" }
                 },
             "projection": {
-                0: { "id":"DATUM_KARTTAPJ_DEFAULT", "title":"Mikä tahansa"},
+                0: { "id":"DATUM_KARTTAPJ_DEFAULT", "title": this.loc.JSONOptions.default},
                 1: { "id":"KKJ_KAISTA", "title":"KKJ", "cls":"DATUM_KKJ"},
                 2: { "id":"TM", "title":"ETRS-TM",  "cls":"DATUM_EUREF-FIN"},
                 3: { "id":"GK", "title":"ETRS-GK",  "cls":"DATUM_EUREF-FIN"}
                 },
             "geodetic-coordinate": {
-                0: { "id":"DEFAULT", "title":"Valitse" },
+                0: { "id":"DEFAULT", "title": this.loc.JSONOptions.choose },
                 1: { "id":"ETRS-GK19", "title":"ETRS-GK19", "cls":"DATUM_EUREF-FIN GK" },
                 2: { "id":"ETRS-GK20", "title":"ETRS-GK20", "cls":"DATUM_EUREF-FIN GK" },
                 3: { "id":"ETRS-GK21", "title":"ETRS-GK21", "cls":"DATUM_EUREF-FIN GK" },
@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
                 29: { "id":"KKJ_GEO", "title":"KKJ-Hayford", "cls":"DATUM_KKJ KOORDINAATISTO_MAANT_2D" }
                 },
             "elevation": {
-                0: { "id":"KORKEUSJ_DEFAULT", "title":"Ei mitään","cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                0: { "id":"KORKEUSJ_DEFAULT", "title": this.loc.JSONOptions.none,"cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 1: { "id":"KORKEUSJ_N2000", "title":"N2000", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 2: { "id":"KORKEUSJ_N60", "title":"N60", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 3: { "id":"KORKEUSJ_N43", "title":"N43", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"}

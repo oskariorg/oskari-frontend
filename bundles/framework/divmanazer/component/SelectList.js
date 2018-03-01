@@ -83,10 +83,10 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       this.element.find('select').trigger('chosen:updated');
     },
     /**  
-     * @method enable or disable select
+     * @method _setEnabledImpl or disable select
      * @param { boolean } true = enable
      */
-    enable: function ( enableFlag ) {
+    _setEnabledImpl: function ( enableFlag ) {
       var chosen = this.element.find('select');
       if ( enableFlag ) {
         chosen.prop('disabled', false);

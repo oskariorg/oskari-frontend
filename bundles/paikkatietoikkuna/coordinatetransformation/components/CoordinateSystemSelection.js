@@ -125,10 +125,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             
             if ( coordinate.indexOf("3D") > -1 ) {
                 table.handleDisplayingElevationRows(true);
-                instances.elevation.enable( false );
+                instances.elevation.setEnabled( false );
             } else {
                 table.handleDisplayingElevationRows(false);
-                instances.elevation.enable( true );
+                instances.elevation.setEnabled( true );
             }
 
             switch ( currentValue ) {

@@ -74,7 +74,7 @@ Oskari.registerLocalization(
                     "decimalseparator": "Desimaalierotin",
                     "headercount": "Otsakerivien määrä",
                     "reversecoords": "Koordinaatit käänteisesti",
-                    "id": "Käytä tunnistetta"   
+                    "id": "Käytä tunnistetta"
                 },
                 "export": {
                     "title": "Aineiston muodostaminen",
@@ -84,6 +84,15 @@ Oskari.registerLocalization(
                     "title": "Lähtöaineiston ominaisuudet",
                 }
             }
+        },
+        "JSONOptions": {
+            "default": "Mikä tahansa",
+            "CRFProjected2D": "Suorakulmainen 2D (Taso)",
+            "CRFProjected3D": "Suorakulmainen 3D",
+            "CRFGeographic2D": "Maantieteellinen 2D",
+            "CRFGeographic3D": "Maantieteellinen 3D",
+            "choose": "Valitse",
+            "none": "Ei mitään"
         },
         "coordinate-system-info" : {
             "geodetic": "geodetic",

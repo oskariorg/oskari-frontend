@@ -85,6 +85,15 @@ Oskari.registerLocalization(
                 }
             }
         },
+        "JSONOptions": {
+            "default": "Any option",
+            "CRFProjected2D": "Projected 2D",
+            "CRFProjected3D": "Projected 3D",
+            "CRFGeographic2D": "Geographic 2D",
+            "CRFGeographic3D": "Geographic 3D",
+            "choose": "Choose",
+            "none": "None"
+        },
         "coordinate-system-info" : {
             "geodetic": "geodetic",
             "coordinate": "coordinate",

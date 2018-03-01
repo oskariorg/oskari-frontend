@@ -84,6 +84,15 @@ Oskari.registerLocalization(
                 }
             }
         },
+        "JSONOptions": {
+            "default": "Mikä tahansa",
+            "CRFProjected2D": "Suorakulmainen 2D (Taso)",
+            "CRFProjected3D": "Suorakulmainen 3D",
+            "CRFGeographic2D": "Maantieteellinen 2D",
+            "CRFGeographic3D": "Maantieteellinen 3D",
+            "choose": "Valitse",
+            "none": "Ei mitään"
+        },
         "coordinate-system-info" : {
             "geodetic": "geodetic",
             "coordinate": "coordinate",
