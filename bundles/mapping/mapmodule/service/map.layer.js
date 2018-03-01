@@ -492,7 +492,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // Finally check at layer has all groups in dom
                 newLayerConf.groups.forEach(function(group) {
                     var groupConf = me.getAllLayerGroups(group.id);
-                    var isInGroup = jQuery.grep(me.getAllLayerGroups(group.id).layers, function(layer) {
+                    var groupLayers = me.getAllLayerGroups(group.id).layers || [];
+                    var isInGroup  =groupLayers.filter(function(layer) {
                         return layer.id === newLayerConf.id;
                     });
 
