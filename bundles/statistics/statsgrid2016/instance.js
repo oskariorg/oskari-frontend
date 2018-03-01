@@ -28,7 +28,7 @@ Oskari.clazz.define(
         this.diagramPlugin = null;
 
         this.regionsetViewer = null;
-        this.embeddedTools = [];
+        this.flyoutManager = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -47,13 +47,18 @@ Oskari.clazz.define(
                 me.statsService.setMapModes(['wms','vector']);
             }
             statsService.addDatasource(conf.sources);
+
+            // initialize flyoutmanager
+            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService);
+            this.flyoutManager.init();
+            //call extend to initialize the flyoutmanager in tile
+            this.getTile().extend();
+
             // disable tile if we don't have anything to show or enable if we do
             // setup initial state
             this.setState();
-            
-            me.getTile().getFlyoutManager().init();
 
-            this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getTile().getFlyoutManager(), this.getLocalization().published );
+            this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published );
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
@@ -97,6 +102,12 @@ Oskari.clazz.define(
          */
         getLayerService : function() {
             return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        },
+        getFlyoutManager: function () {
+            return this.flyoutManager;
+        },
+        getFlyout: function (type) {
+            return this.getFlyoutManager().getFlyout(type);
         },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
@@ -333,24 +344,6 @@ Oskari.clazz.define(
         },
         addEmbeddedTool: function ( tool ) {
             this.embeddedTools.push(tool);
-        },
-        /**
-         * Check if the tool has been added to the array containing tool names opened in publisher
-         * @method hasTool
-         * @param {String} tool tool name as string
-         */
-        hasTool: function (tool) {
-            return this.embeddedTools.indexOf(tool) > -1;
-        },
-        /**
-         * toggles the specified flyout from publisher
-         * @method toggleEmbeddedTools
-         * @param {String} tool tool name as string
-         */
-        toggleEmbeddedTools: function (tool) {
-            if ( this.hasTool(tool) ) {
-                this.getTile().toggleFlyout( tool );
-            }
         },
         /**
          * @method  @public showLegendOnMap Render published  legend
