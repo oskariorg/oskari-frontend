@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 } else if (mode === 'add') {
                     var layer = mapLayerService.createMapLayer(data.layerData);
                     me.mapLayerService.addLayer(layer);
-                    me.mapLayerService.updateGroupsLayers(data.layerData.id, data.layerData, false, true);
+                    me.mapLayerService.updateLayersInGroups(data.layerData.id, data.layerData, false, true);
                 } else {
                     me.mapLayerService.updateLayer(data.layerData.id, data.layerData);
 

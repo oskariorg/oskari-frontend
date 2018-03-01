@@ -116,18 +116,82 @@ Oskari.clazz.define(
                 }
             });
 
-            me.service.on('jstree-search', function(nodes, str, res) {
+            me.service.on('jstree-search', function(obj) {
                 setTimeout(function() {
                     me._updateAllTools();
+                    me._updateLayerCounts(true);
                 }, 200);
             });
 
-            me.service.on('jstree-search-clear', function(nodes, str, res) {
+            me.service.on('jstree-search-clear', function(obj) {
                 setTimeout(function() {
                     me._updateAllTools();
+                    me._updateLayerCounts();
                 }, 200);
             });
+        },
 
+        /**
+         * Update layer counts
+         * @method  _updateLayerCounts
+         * @param   {Booelan}           search is search
+         * @private
+         */
+        _updateLayerCounts: function(search) {
+            var me = this;
+            var jstree = me.getJsTreeElement().jstree(true);
+
+            var getNodesByType = function(type, childrens) {
+                var nodes = childrens || jstree.get_json('#', { flat: true });
+                return nodes.filter(function(node){
+                    return node.type === type;
+                });
+            };
+
+            var calculateLayerCounts = function(node) {
+                var getLayersCount = function(group){
+                    var node = jstree.get_node(group.id);
+                    var count = {
+                        visible: 0,
+                        all: 0
+                    };
+                    node.children.forEach(function(child){
+                        var childNode = jstree.get_node(child);
+                        if(childNode.type === 'layer' && childNode.state.hidden === false) {
+                            count.visible++;
+                        }
+                        if(childNode.type === 'layer') {
+                            count.all++;
+                        }
+                    });
+
+                    return count;
+                };
+
+
+                return getLayersCount(node);
+            };
+
+            var updateLayerCounts = function(type){
+                var groups = getNodesByType(type);
+                groups.forEach(function(groupNode){
+                    var countText = '';
+                    var count = calculateLayerCounts(groupNode);
+                    var nodeText = jstree.get_text(groupNode);
+                    var el = jQuery('<div>' + nodeText + '</div>');
+                    if(!search){
+                        el.find('.layer-count').html('(' + count.all + ')');
+                    } else {
+                        el.find('.layer-count').html('(' + count.visible + '/' + count.all + ')');
+                    }
+                    nodeText = el.html();
+                    jstree.rename_node(groupNode, nodeText);
+                });
+            };
+
+            updateLayerCounts('group');
+            updateLayerCounts('subgroup');
+            updateLayerCounts('subgroup-subgroup');
 
         },
 
@@ -561,8 +625,6 @@ Oskari.clazz.define(
          */
         _toggleLayerCheckboxes: function(layerId, checked) {
             var me = this;
-            var nodes = [];
-
             var layers = [];
             var modelData = me.getJsTreeElement().jstree(true)._model.data;
             Object.keys(modelData).forEach(function(key) {
@@ -833,9 +895,6 @@ Oskari.clazz.define(
             var me = this,
                 jsTreeData = [];
 
-
-            // group order is more defined
-
             if (me.getJsTreeElement().length > 0) {
                 me.getJsTreeElement().remove();
             }
@@ -848,31 +907,22 @@ Oskari.clazz.define(
                     if (l.id) {
                         layer = me.sb.findMapLayerFromAllAvailable(l.id);
                     }
-                    var opts = {
-                        a_attr: {
-                            'data-group-id': groupId,
-                            'data-layer-id': layer.getId()
-                        }
-                    };
-                    orders.push({
-                        index: layer.getOrderNumber(),
-                        conf: me._getJsTreeObject(jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
-                            'layer',
-                            opts)
-                    });
-                    layerCounter++;
-
+                    if(layer) {
+                        var opts = {
+                            a_attr: {
+                                'data-group-id': groupId,
+                                'data-layer-id': layer.getId()
+                            }
+                        };
+                        orders.push({
+                            index: layer.getOrderNumber(),
+                            conf: me._getJsTreeObject(jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
+                                'layer',
+                                opts)
+                        });
+                        layerCounter++;
+                    }
                 });
-            };
-
-            var getSublayerCount = function(group) {
-                var layers = group.layers.length;
-                if (group.groups.length > 0) {
-                    group.groups.forEach(function(subgroup) {
-                        layers += subgroup.layers.length;
-                    });
-                }
-                return layers;
             };
 
             var addSubgroups = function(groupId, subGroups, orders) {
@@ -901,10 +951,9 @@ Oskari.clazz.define(
                     subgroupOrders.forEach(function(order) {
                         subgroupChildren.push(order.conf);
                     });
-
                     orders.push({
                         index: subgroup.orderNumber,
-                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' (' + getSublayerCount(subgroup) + ')',
+                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' <span class="layer-count"></span>',
                             'subgroup',
                             opts, subgroupChildren)
                     });
@@ -940,7 +989,7 @@ Oskari.clazz.define(
 
                     orders.push({
                         index: subgroup.orderNumber,
-                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' (' + subgroup.layers.length + ')',
+                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' <span class="layer-count"></span>',
                             'subgroup-subgroup',
                             opts, subgroupSubgroupChildren)
                     });
@@ -949,21 +998,6 @@ Oskari.clazz.define(
 
             me.tabPanel.getContainer().append(layerTree);
             me.layerGroups = groups;
-
-            var getLayerCount = function(group) {
-                var layers = group.getLayers().length;
-                if (group.getGroups().length > 0) {
-                    group.getGroups().forEach(function(subgroup) {
-                        layers += subgroup.layers.length;
-                        if (subgroup.groups.length > 0) {
-                            subgroup.groups.forEach(function(subgroupSubgroup) {
-                                layers += subgroupSubgroup.layers.length;
-                            });
-                        }
-                    });
-                }
-                return layers;
-            };
 
             groups.forEach(function(group) {
                 var layers = group.getLayers();
@@ -979,8 +1013,6 @@ Oskari.clazz.define(
                 if (!group.hasSelectable()) {
                     extraOpts.a_attr.class = 'no-checkbox';
                 }
-
-
 
                 //Loop through group layers
                 addLayers('group-' + group.getId(), layers, group.getId(), groupOrders);
@@ -1003,7 +1035,7 @@ Oskari.clazz.define(
                 groupOrders.forEach(function(order) {
                     groupChildren.push(order.conf);
                 });
-                var groupObject = me._getJsTreeObject(group.getTitle() + ' (' + getLayerCount(group) + ')',
+                var groupObject = me._getJsTreeObject(group.getTitle() + ' <span class="layer-count"></span>',
                     'group', extraOpts, groupChildren);
 
                 jsTreeData.push(groupObject);
@@ -1026,8 +1058,9 @@ Oskari.clazz.define(
                 me._toggleLayerCheckboxes(layer.getId(), true);
             });
 
-            // Add group tools
+            // JStree is ready
             me.getJsTreeElement().on('ready.jstree', function() {
+                me._updateLayerCounts(false);
                 me._addGroupTools();
                 me._addSubgroupTools();
             });

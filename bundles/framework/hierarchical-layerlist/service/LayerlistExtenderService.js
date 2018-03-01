@@ -53,6 +53,7 @@
                             // check also dataprovider name
                             return (nodeText.indexOf(text) !== -1 || dataProvider.indexOf(text) !== -1);
                         }
+                        return false;
                     }
                 },
                 state: {
