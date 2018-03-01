@@ -70,13 +70,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }
             if ( this.inputSystem.getElement() ) {
                 var element = this.inputSystem.getElement();
-                element.attr('data-system', 'coordinate-input');
+                element.attr('data-type', 'coordinate-input');
                 element.prepend( inputTitle );
                 system.append( element );
             }
             if ( this.outputSystem.getElement() ) {
                 var element = this.outputSystem.getElement();
-                element.attr('data-system', 'coordinate-output');
+                element.attr('data-type', 'coordinate-output');
                 element.prepend( resultTitle );
                 system.append( element );
             }

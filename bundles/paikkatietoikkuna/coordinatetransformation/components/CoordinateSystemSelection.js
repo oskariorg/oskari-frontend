@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 jQuery( this ).on('change', function ( e ) {
                     me.handleSystemChange(e);
                 });
-            })
+            });
         },
         handleInfoLink: function () {
             var me = this;
@@ -113,7 +113,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var clsSelector = this.makeClassSelector;
 
             var table;
-            var system = this.element.attr('data-system');
+            // transform.js sets a data-type attribute to this element refactor to using Oskari.observable
+            var system = this.element.attr('data-type');
             // which table we operate on
             if ( system === 'coordinate-input' ) {
                 table = this.instance.inputTable; 
