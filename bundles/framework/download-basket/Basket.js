@@ -150,7 +150,7 @@ Oskari.clazz.define(
                     },
                     croppingUrl: parent.attr('data-cropping-url'),
                     croppingLayer: parent.attr('data-cropping-layer'),
-                    wmsUrl: parent.attr('data-layer-wmsurl'),
+                    id: parent.attr('data-layer-wmsurl'),
                     identifiers: parent.attr('data-identifiers')
                 };
 
