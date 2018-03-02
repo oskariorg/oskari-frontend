@@ -135,12 +135,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             var rows = this.getElements().rows;
             if( !editable ) {
                 rows.each( function ( row ) {
-                    jQuery(this).find('td').append('<div></div>').attr("contenteditable", false);
+                    jQuery(this).find('td').attr("contenteditable", false);
                 });
             }
             else {
                 rows.each( function ( row ) {
-                    jQuery(this).find('td').append('<div></div>').attr("contenteditable", true);
+                    jQuery(this).find('td').attr("contenteditable", true);
                 });
             }
         },
