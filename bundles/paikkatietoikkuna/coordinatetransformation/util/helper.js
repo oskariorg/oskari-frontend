@@ -40,7 +40,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
                     shape: 3
                 };
                 if ( startingSystem ) {
-                    debugger;
                     data.msg = "lon: "+coords.lon+ "lat: "+coords.lat;
                 }
             var request = this.addMarkerReq(data);
