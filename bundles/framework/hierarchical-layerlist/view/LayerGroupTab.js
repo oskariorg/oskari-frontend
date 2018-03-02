@@ -925,7 +925,7 @@ Oskari.clazz.define(
                 });
             };
 
-            var addSubgroups = function(groupId, subGroups, orders) {
+            var addSubgroups = function(type, groupId, subGroups, orders) {
                 subGroups.forEach(function(subgroup) {
                     var subgroupChildren = [];
                     var subgroupOrders = [];
@@ -937,8 +937,9 @@ Oskari.clazz.define(
                         }
                     };
 
-                    addLayers('subgroup-' + subgroup.id, subgroup.layers, subgroup.id, subgroupOrders);
-                    addSubgroupSubgroups(subgroup.id, subgroup.groups, subgroupOrders);
+                    addLayers(type + '-' + subgroup.id, subgroup.layers, subgroup.id, subgroupOrders);
+                    addSubgroups('subgroup-subgroup', subgroup.id, subgroup.groups, subgroupOrders);
+
                     // sort
                     subgroupOrders.sort(function compare(a, b) {
                         if (a.index < b.index)
@@ -954,45 +955,10 @@ Oskari.clazz.define(
                     orders.push({
                         index: subgroup.orderNumber,
                         conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' <span class="layer-count"></span>',
-                            'subgroup',
+                            type,
                             opts, subgroupChildren)
                     });
 
-                });
-            };
-
-            var addSubgroupSubgroups = function(subgroupId, subGroups, orders) {
-                subGroups.forEach(function(subgroup) {
-                    var subgroupSubgroupChildren = [];
-                    var subgroupSubgroupsOrders = [];
-                    var opts = {
-                        a_attr: {
-                            class: (!subgroup.selectable) ? 'no-checkbox' : '',
-                            'data-group-id': subgroup.id,
-                            'data-parent-group-id': subgroupId
-                        }
-                    };
-
-                    addLayers('subgroup-subgroup-' + subgroup.id, subgroup.layers, subgroup.id, subgroupSubgroupsOrders);
-                    // sort
-                    subgroupSubgroupsOrders.sort(function compare(a, b) {
-                        if (a.index < b.index)
-                            return -1;
-                        if (a.index > b.index)
-                            return 1;
-                        return 0;
-                    });
-
-                    subgroupSubgroupsOrders.forEach(function(order) {
-                        subgroupSubgroupChildren.push(order.conf);
-                    });
-
-                    orders.push({
-                        index: subgroup.orderNumber,
-                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' <span class="layer-count"></span>',
-                            'subgroup-subgroup',
-                            opts, subgroupSubgroupChildren)
-                    });
                 });
             };
 
@@ -1020,7 +986,7 @@ Oskari.clazz.define(
 
                 if (group.getGroups().length > 0) {
                     var subgroupsSubgroupsOrder = [];
-                    addSubgroups(group.getId(), group.getGroups(), groupOrders);
+                    addSubgroups('subgroup', group.getId(), group.getGroups(), groupOrders);
                 }
 
                 // sort
