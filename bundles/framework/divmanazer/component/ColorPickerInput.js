@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
      */
     function (options) {
         var me = this;
+        me._localization = Oskari.getLocalization("DivManazer");
 
         if (!options) {
             options = {}
@@ -38,7 +39,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
             color: '#818282',
             preferredFormat: 'hex',
             clickoutFiresChange: true,
-            chooseText: 'Ok',
+            chooseText: me._localization.buttons.ok,
             cancelText: '',
             localStorageKey: 'colorpicker',
             showPalette: true,

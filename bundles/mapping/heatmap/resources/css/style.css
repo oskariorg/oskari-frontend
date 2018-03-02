@@ -21,21 +21,6 @@
   margin-left: 0px;
   margin-right: 0px; }
 
-.heatmap.settings-dialog .colpick {
-  z-index: 20100; }
-
-.heatmap.settings-dialog .colpick_field input {
-  border: 0px !important;
-  padding: 0px !important;
-  box-shadow: inset 0px 0px 0px !important;
-  border-radius: 0px !important; }
-
-.heatmap.settings-dialog .colpick_hex_field input {
-  border: 0px !important;
-  padding: 0px !important;
-  box-shadow: inset 0px 0px 0px !important;
-  border-radius: 0px !important; }
-
 .heatmap.settings-dialog input[name="colorThemes"] {
   float: left;
   margin-top: 14px; }
@@ -46,8 +31,7 @@
 
 .heatmap.settings-dialog label.oskari-formcomponent.oskari-colorpickerinput {
   width: initial;
-  margin: 5px 1px;
-}
+  margin: 5px 1px; }
 
 .heatmap.settings-dialog input[name="heatmap-input"] {
   width: 120px !important; }
