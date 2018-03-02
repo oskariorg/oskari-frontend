@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Mérések",
             "close": "Mégsem",
             "guidance": {
-                "measureline": "Vonal mérése a térképen. Mérés befejezése dupla kattintással.",
-                "measurearea": "Terület mérése a térképen. Mérés befejezése dupla kattintással."
+                "measureline": "Vonal mérése a térképen.",
+                "measurearea": "Terület mérése a térképen."
             }
         },
         "guidedTour": {

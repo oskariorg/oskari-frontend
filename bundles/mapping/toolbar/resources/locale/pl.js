@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Pomiary",
             "close": "Anuluj",
             "guidance": {
-                "measureline": "Zmierz linię na mapie. Podwójne kliknięcie wstrzymuje pomiar.",
-                "measurearea": "Zmierz powierzchnię mapy.Podwójne kliknięcie wstrzymuje pomiar."
+                "measureline": "Zmierz linię na mapie.",
+                "measurearea": "Zmierz powierzchnię mapy."
             }
         },
         "guidedTour": {
