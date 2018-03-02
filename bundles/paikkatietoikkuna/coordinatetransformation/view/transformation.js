@@ -161,6 +161,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var sourceelevationSelection = this.setSelectionValue( input.coordinate, "KOORDINAATISTO_SUORAK_2D" );
             var sourceSelection = this.setSelectionValue( input.projection, "TM" );
             var sourceelevationSelection = this.setSelectionValue( input["geodetic-coordinate"], "ETRS-TM35FIN" );
+            this.updateTableTitle();
         },
         handleServerResponse: function ( response ) {
             var obj = this.dataHandler.constructLonLatObjectFromArray(response.coordinates);
@@ -187,6 +188,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             this.inputTable.render( inputData );
             this.outputTable.render( outputData );
+        },
+        updateTableTitle: function () {
+            this.inputTable.updateTitle( this.inputSystem.getSelectionValues() );
+            this.outputTable.updateTitle( this.outputSystem.getSelectionValues() );
         },
         /**
          * @method handleClipboardPasteEvent
@@ -226,7 +231,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             jQuery('input[type=radio][name=load]').change(function() {
                 me.inputTable.isEditable( false );
                 me.isMapSelection = false;
-                
+
                 if (this.value == '1') {
                     // me.fileHandler.showFileDialogue( importfile, false );
                     clipboardInfoElement.hide();
