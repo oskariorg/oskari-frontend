@@ -407,7 +407,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * Update layers in groups
          * @method updateLayersInGroups
          * @param  {String}          layerId      layerid
-         * @param  {Object}          newLayerConf new layer conf
+         * @param  {Object}          newLayerConf new layer JSONObject presentation, used only update/add
          * @param  {Boolean}         deleteLayer delete layer
          * @param  {Boolean}         newLayer is new layer
          */
