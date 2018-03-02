@@ -51,8 +51,7 @@ Oskari.clazz.define(
             // initialize flyoutmanager
             this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService);
             this.flyoutManager.init();
-            //call extend to initialize the flyoutmanager in tile
-            this.getTile().extend();
+            this.getTile().setupTools( this.flyoutManager );
 
             // disable tile if we don't have anything to show or enable if we do
             // setup initial state
@@ -105,9 +104,6 @@ Oskari.clazz.define(
         },
         getFlyoutManager: function () {
             return this.flyoutManager;
-        },
-        getFlyout: function (type) {
-            return this.getFlyoutManager().getFlyout(type);
         },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
@@ -338,12 +334,6 @@ Oskari.clazz.define(
                 state.activeRegion = activeRegion;
             }
             return state;
-        },
-        getEmbeddedTools: function () {
-            return this.embeddedTools;
-        },
-        addEmbeddedTool: function ( tool ) {
-            this.embeddedTools.push(tool);
         },
         /**
          * @method  @public showLegendOnMap Render published  legend

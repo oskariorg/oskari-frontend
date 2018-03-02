@@ -64,12 +64,12 @@ function(instance, service) {
     startPlugin : function() {
         this._addTileStyleClasses();
     },
-    extend: function () {
+    setupTools: function ( flyoutManager ) {
         var me = this;
         var tpl = this._templates.extraSelection;
-        this.flyoutManager = this.instance.getFlyoutManager();
-
-        this.flyoutManager.flyoutInfo.forEach(function(flyout) {
+        this.flyoutManager = flyoutManager;
+        
+        flyoutManager.flyoutInfo.forEach(function(flyout) {
             var tileExtension = jQuery(tpl({
                 id: flyout.id,
                 label : flyout.title
@@ -77,7 +77,7 @@ function(instance, service) {
             me.extendTile(tileExtension, flyout.id);
             tileExtension.bind('click', function(event) {
                 event.stopPropagation();
-                me.flyoutManager.toggle(flyout.id);
+                flyoutManager.toggle(flyout.id);
             });
         });
 

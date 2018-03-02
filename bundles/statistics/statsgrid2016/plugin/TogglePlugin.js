@@ -78,7 +78,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function( flyout
         this.addToPluginContainer( this.element );
     },
     teardownUI : function(stopping) {
-        // this.sb.postRequestByName('userinterface.UpdateExtensionRequest',[null, 'close', 'StatsGrid']);
         //detach old element from screen
         this.removeFromPluginContainer(this._element, !stopping);
         if(stopping) {
