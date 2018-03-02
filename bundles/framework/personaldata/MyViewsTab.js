@@ -352,6 +352,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 var link = me.templateLink.clone();
                 link.append(name);
                 link.bind('click', function () {
+                    var view = me._getViewById(data.id);
+                    if(view.srsName !== sandbox.getMap().getSrsName()) {
+                        window.location.href = view.url;
+                        return;
+                    }
                     var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
                     if (rb && !me.popupOpen) {
                         var req = rb(data.state);
