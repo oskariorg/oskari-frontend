@@ -3,8 +3,8 @@
  * Simple file uploading component
  * Call create to create element and with getElement reference the element.
  */
-Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (localization) {
-    this.loc = localization;
+Oskari.clazz.define('Oskari.userinterface.component.FileInput', function () {
+    this.loc = Oskari.getMsg.bind(null, 'DivManazer');
     this.el = null;
     this._template = {
         fileBox: _.template('<div class="oskari-fileinput" style="display:none"> '+
@@ -108,11 +108,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
          * Creates the element for handlign drag and drop
          */
         create: function() {
-            var fileinput = this._template.fileBox({ link: this.loc.datasourceinfo.link,
-                                                    fileupload: this.loc.datasourceinfo.fileupload,
-                                                    uploading: this.loc.datasourceinfo.uploading,
-                                                    success: this.loc.datasourceinfo.success,
-                                                    error: this.loc.datasourceinfo.error });
+            var fileinput = this._template.fileBox({ link: this.loc('fileInput').link,
+                                                    fileupload: this.loc('fileInput').fileupload,
+                                                    uploading: this.loc('fileInput').uploading,
+                                                    success: this.loc('fileInput').success,
+                                                    error: this.loc('fileInput').error });
             this.setElement(fileinput);
 
             // if( this.canUseAdvancedUpload ) {

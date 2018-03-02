@@ -331,6 +331,13 @@ Oskari.registerLocalization(
                 "noAggregateAnalysisPopupTitle": "Tunnuslukuja ei löytynyt",
                 "noAggregateAnalysisPopupContent": "Kyseiselle tasolle ei ole laskettu tunnuslukuja. Voit laskea tunnusluvut haluamallesi aineistolle Analyysi-toiminnon avulla.."
             }
+        },
+        "fileInput": {
+            "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
+            "link":"valitse selaamalla",
+            "uploading":"Ladataan",
+            "success":"Valmis",
+            "error":"Virhe!",
         }
     }
 });
