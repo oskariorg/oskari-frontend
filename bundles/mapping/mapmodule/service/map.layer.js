@@ -377,7 +377,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
             var editable = me.getAllLayerGroups(data.id);
             // if found then update only
-            if (editable) {
+            if (editable && editable.name) {
                 editable.name = data.name;
                 editable.parentId = data.parentId;
                 editable.selectable = data.selectable;
