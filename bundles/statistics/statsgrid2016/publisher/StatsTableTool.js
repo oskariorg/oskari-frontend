@@ -8,6 +8,7 @@ function() {
 
     groupedSiblings : false,
     templates: {},
+    id: "table",
     /**
      * Initialize tool
      * @params {} state data
@@ -51,7 +52,7 @@ function() {
     *
     * @return founded stats layer, if not found then null
     */
-    _getStatsLayer: function(){
+    _getStatsLayer: function() {
         var me = this,
             selectedLayers = me.__sandbox.findAllSelectedMapLayers(),
             statsLayer = null,
@@ -85,7 +86,11 @@ function() {
         if(!stats) {
             return;
         }
-        stats.showToggleButtons(enabled);
+        if(enabled) {
+            stats.togglePlugin.addTool(this.id);
+        } else {
+            stats.togglePlugin.removeTool(this.id);
+        }
     },
     /**
     * Is displayed.
@@ -132,8 +137,7 @@ function() {
                 statsgrid: {
                     state: statsGridState,
                     conf : {
-                        grid: me.state.enabled,
-                        vectorViewer: config.vectorViewer
+                        grid: me.state.enabled
                     }
                 }
             }
@@ -142,7 +146,7 @@ function() {
     stop : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
-            stats.showToggleButtons(false);
+            stats.togglePlugin.removeTool(this.id);
         }
     }
 }, {

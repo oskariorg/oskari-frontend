@@ -1,22 +1,57 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox, locale) {
-    this.sb = sandbox;
+Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function( flyoutManager, locale ) {
+    var me = this;
+    this.flyoutManager = flyoutManager;
     this.locale = locale;
     this.element = null;
     this._clazz = 'Oskari.statistics.statsgrid.TogglePlugin';
     this._index = 4;
     this._defaultLocation = 'bottom right';
+
+    this.flyoutManager.on('show', function (tool) {
+        me.toggleTool(tool, true);
+    });
+    this.flyoutManager.on('hide', function (tool) {  
+        me.toggleTool(tool, false);
+    });
 }, {
-    showTable : function(tableShown) {
-        if(!this.element) {
+    toggleTool: function (tool, shown) {
+        var toolElement = this.getToolElement(tool);
+
+        if ( !toolElement ) {
             return;
         }
-        var map = this.element.find('.map');
-        var table = this.element.find('.table');
-        if(tableShown) {
-            table.trigger('click');
-        } else {
-            map.trigger('click');
+        if ( !shown ) {
+            toolElement.removeClass('active');
+            return;
         }
+        toolElement.addClass('active');
+    },
+    addTool: function ( toolId ) {
+        var me = this;
+
+        if ( !this.element ) {
+            this.redrawUI();
+        }
+
+        var toolElement = jQuery('<div class='+ toolId +'></div>');
+
+        toolElement.bind('click', function () {
+            me.flyoutManager.toggle(toolId);
+        });
+        this.element.append(toolElement);
+    },
+    removeTool: function (toolId) {
+        var toolElement = this.getToolElement(toolId);
+        if ( toolElement ) {
+            toolElement.remove();
+        }
+        this.flyoutManager.hide(toolId);
+    },
+    getToolElement: function ( toolId ) {
+        if ( !this.element ) {
+            return;
+        }
+        return this.element.find('.' + toolId);
     },
     /**
      * Creates UI for coordinate display and places it on the maps
@@ -29,29 +64,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
         if(this.element) {
             return this.element;
         }
-        var me = this;
-        var toggleButtons = jQuery('<div class="statsgrid-published-toggle-buttons mapplugin"><div class="map"></div><div class="table"></div>');
-        var map = toggleButtons.find('.map');
-        var table = toggleButtons.find('.table');
+        var toggleButtons = jQuery('<div class="statsgrid-published-toggle-buttons mapplugin" />');
 
-        map.attr('title', me.locale.showMap);
-        table.attr('title', me.locale.showTable);
-
-        map.bind('click', function() {
-            if(!map.hasClass('active')) {
-                table.removeClass('active');
-                map.addClass('active');
-                me.sb.postRequestByName('userinterface.UpdateExtensionRequest',[null, 'close', 'StatsGrid']);
-            }
-        });
-
-        table.bind('click', function(){
-            if(!table.hasClass('active')) {
-                map.removeClass('active');
-                table.addClass('active');
-                me.sb.postRequestByName('userinterface.UpdateExtensionRequest',[null, 'detach', 'StatsGrid']);
-            }
-        });
         this.element = toggleButtons;
         return this.element;
     },
@@ -60,19 +74,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
      * @method  @public redrawUI
      */
     redrawUI: function() {
-        var me = this;
-        me._element = me._createControlElement();
-        this.addToPluginContainer(me._element);
+        this.element = this._createControlElement();
+        this.addToPluginContainer( this.element );
     },
     teardownUI : function(stopping) {
-        this.sb.postRequestByName('userinterface.UpdateExtensionRequest',[null, 'close', 'StatsGrid']);
         //detach old element from screen
         this.removeFromPluginContainer(this._element, !stopping);
         if(stopping) {
             this.element = null;
         }
     },
-    stopPlugin: function(){
+    stopPlugin: function() {
         this.teardownUI(true);
     }
 }, {

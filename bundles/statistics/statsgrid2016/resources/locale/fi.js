@@ -82,6 +82,9 @@ Oskari.registerLocalization(
             "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.",
             "cannotCreateLegend": "Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla."
         },
+        "diagram": {
+            "title": "Diagram"
+        },
         "parameters": {
             "sex": "Sukupuoli",
             "year": "Vuosi",
