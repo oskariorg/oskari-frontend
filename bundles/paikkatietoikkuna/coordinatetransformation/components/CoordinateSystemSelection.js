@@ -45,27 +45,27 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             });
             wrapper.append(coordinateSystemSelection);
             this.setElement(wrapper);
-            this.populateSelect();
+            this.createAndHandleSelect();
             this.handleInfoLink();
         },
         /**
-         * @method populateSelect
+         * @method createAndHandleSelect
          * @desc creates an instance of the { Oskari.coordinatetransformation.component.select },
          * and fills it with data
          */
-        populateSelect: function () {
+        createAndHandleSelect: function () {
             var me = this;
             var wrapper = this.getElement();
             this.select.create();
             this.selectInstance = this.select.getSelectInstances();
             this.dropdowns = this.select.getDropdowns();
+
             Object.keys( this.dropdowns ).forEach( function( key ) {
-                jQuery( wrapper.find( '.transformation-system' ).find( me.makeClassSelector(key) ).append( me.dropdowns[key] ));
-            });
-            
-            me.getElement().find('.system').each(function (index) {
-                jQuery( this ).on('change', function ( e ) {
-                    me.handleSystemChange(e);
+                var system = jQuery( wrapper.find( '.transformation-system' ).find( me.makeClassSelector(key) ).append( me.dropdowns[key] ));
+                system.on('change', { 'self': me }, function ( e ) {
+                    var self = e.data.self;
+                    var currentValue = self.selectInstance[e.currentTarget.dataset.system].getValue();
+                    self.handleSelectValueChange(currentValue);
                 });
             });
         },
@@ -76,11 +76,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 var key = this.parentElement.parentElement.dataset.system;
                 me.systemInfo.show( jQuery( this ), key );
             });
-        },
-        handleSystemChange: function (e) {
-            var current = this.selectInstance[e.currentTarget.dataset.system];
-            var currentValue = current.getValue();
-            this.handleSelectValueChange(currentValue);
         },
         /**
          * @method updateDropdownOptions
