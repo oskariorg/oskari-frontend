@@ -25,15 +25,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             var me = this;
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(this.loc.datasourceinfo.success),
+            btn = dialog.createCloseButton(this.loc.dsInfo.success),
             cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(this.loc.datasourceinfo.cancel);
+            cancelBtn.setTitle(this.loc.dsInfo.cancel);
             btn.addClass('primary');
             me.dialog = dialog;
 
             cancelBtn.setHandler(function() {
                 me.helper.removeMarkers();
                 dialog.close();
+                me.removeMapClickListener();
                 me.instance.toggleViews("transformation");
                 me.instance.getViews().transformation.isMapSelection = false;
                 me.mapcoords = [];
@@ -42,12 +43,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             btn.setHandler(function() {
                 me.instance.getViews().transformation.updateCoordinateData( 'input', me.mapcoords );
                 me.instance.getViews().transformation.isMapSelection = false;
+                me.removeMapClickListener();
                 me.instance.getViews().transformation.selectMapProjectionValues();
                 me.instance.toggleViews("transformation");
                 me.mapcoords = [];
             });
 
-            dialog.show('Note', this.loc.datasourceinfo.mapinfo, [cancelBtn, btn]);
+            dialog.show(this.loc.datasource.map, this.loc.dsInfo.mapinfo, [cancelBtn, btn]);
             dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
             this.mapClicksListener();
         },
@@ -59,9 +61,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
                 this.mapcoords.push( coords );
             }
         },
+        removeMapClickListener: function () {
+            jQuery('#mapdiv').off('click');
+        },
         mapClicksListener: function() {
             var me = this;
-            if( me.instance.getViews().transformation.MapSelection ) {
+            if( me.instance.isMapSelectionMode() ) {
                 jQuery('#mapdiv').on("click", function () {});
             } else {
                 return;

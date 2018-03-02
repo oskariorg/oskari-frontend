@@ -2,7 +2,7 @@
     max-height: 875px !important;
 }
 .coordinatetransformation-flyout {
-    top:0 !important;
+    top:0;
 }
 #rowwidth {
     max-width: 100px !important;

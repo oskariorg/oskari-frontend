@@ -16,6 +16,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
     init: function () {},
     eventHandlers: {
         'MapClickedEvent': function ( event, cb ) {
+            if (!this.instance.isMapSelectionMode()) {
+                return;
+            }
             this.clickCoordinates = event._lonlat;
             this.addMarkerForCoords( this.clickCoordinates );
             this.instance.getViews().MapSelection.getCoords( this.clickCoordinates )

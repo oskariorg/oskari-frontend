@@ -27,7 +27,7 @@ Oskari.registerLocalization(
                 "map": "Välj platser från kartan",
                 "choose":"Välj plats från kartan"
             },
-            "datasourceinfo": {
+            "dsInfo": {
                 "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
                 "link":"valitse selaamalla",
                 "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
