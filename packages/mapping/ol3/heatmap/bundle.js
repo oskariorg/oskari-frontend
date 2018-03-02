@@ -41,11 +41,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.heatmap.HeatmapBundle", function
             "src" : "../../../../bundles/mapping/heatmap/resources/css/style.css"
         }, {
         // NOTE! EXTERNAL LIBRARY!
-            "type": "text/javascript",
-            "src": "../../../../libraries/colpick-jQuery-Color-Picker-master/js/colpick.js"
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/spectrum/spectrum-min.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../libraries/colpick-jQuery-Color-Picker-master/css/colpick.css"
+            "src" : "../../../../libraries/spectrum/spectrum.css"
         }],
         "locales": [{
             "lang": "en",

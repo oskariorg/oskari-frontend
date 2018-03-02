@@ -267,7 +267,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     box-sizing: border-box;
 }
 .sp-top {
-    margin-bottom: 3px;
+    margin-bottom: 0px;
 }
 .sp-color, .sp-hue, .sp-clear {
     border: solid 1px #666;
@@ -427,7 +427,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   background-image: linear-gradient(to bottom, #eeeeee, #cccccc);
   border: 1px solid #ccc;
   border-bottom: 1px solid #bbb;
-  border-radius: 3px;
+  border-radius: 0px;
   color: #333;
   font-size: 14px;
   line-height: 1;
