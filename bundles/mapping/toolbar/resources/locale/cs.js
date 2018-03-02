@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Měření",
             "close": "Storno",
             "guidance": {
-                "measureline": "Změřit délku na mapě. Měření ukončíte dvojklikem.",
-                "measurearea": "Změřit plochu na mapě. Měření ukončíte dvojklikem."
+                "measureline": "Změřit délku na mapě.",
+                "measurearea": "Změřit plochu na mapě."
             }
         },
         "guidedTour": {

@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Mål",
             "close": "Annullér",
             "guidance": {
-                "measureline": "Mål en linje på kortet. Dobbeltklik for at stoppe måling.",
-                "measurearea": "Mål et område på kortet. Dobbeltklik for at stoppe måling."
+                "measureline": "Mål en linje på kortet.",
+                "measurearea": "Mål et område på kortet."
             }
         },
         "guidedTour": {
