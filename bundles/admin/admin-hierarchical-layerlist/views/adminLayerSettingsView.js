@@ -1168,7 +1168,7 @@ define([
 
                 data.viewPermissions = '';
                 data.downloadPermissions = '';
-                data.enbeddedPermissions = '';
+                data.embeddedPermissions = '';
                 data.publishPermissions = '';
                 for (var i = 0; i < me.roles.length; i += 1) {
                     if (form.find('#layer-view-roles-' + me.roles[i].id).is(':checked')) {
@@ -1177,8 +1177,8 @@ define([
                     if (form.find('#layer-download-roles-' + me.roles[i].id).is(':checked')) {
                         data.downloadPermissions += me.roles[i].id + ',';
                     }
-                    if (form.find('#layer-enbedded-roles-' + me.roles[i].id).is(':checked')) {
-                        data.enbeddedPermissions += me.roles[i].id + ',';
+                    if (form.find('#layer-embedded-roles-' + me.roles[i].id).is(':checked')) {
+                        data.embeddedPermissions += me.roles[i].id + ',';
                     }
                     if (form.find('#layer-publish-roles-' + me.roles[i].id).is(':checked')) {
                         data.publishPermissions += me.roles[i].id + ',';
