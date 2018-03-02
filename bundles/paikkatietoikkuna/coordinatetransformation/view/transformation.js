@@ -152,15 +152,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         },
         /**
          * @method selectMapProjectionValues
-         * Inits the on change listeners for the radio buttons
+         *  TODO set the projection to the one in the Oskari instance
          */
         selectMapProjectionValues: function () {
             var input = this.inputSystem.getSelectInstance();
             // EPSG-3067 settings
-            var sourceSelection = this.setSelectionValue( input.datum, "DATUM_EUREF-FIN" );
-            var sourceelevationSelection = this.setSelectionValue( input.coordinate, "KOORDINAATISTO_SUORAK_2D" );
-            var sourceSelection = this.setSelectionValue( input.projection, "TM" );
-            var sourceelevationSelection = this.setSelectionValue( input["geodetic-coordinate"], "ETRS-TM35FIN" );
+            this.setSelectionValue( input.datum, "DATUM_EUREF-FIN" );
+            this.setSelectionValue( input.coordinate, "KOORDINAATISTO_SUORAK_2D" );
+            this.setSelectionValue( input.projection, "TM" );
+            this.setSelectionValue( input["geodetic-coordinate"], "ETRS-TM35FIN" );
+
             this.updateTableTitle();
         },
         handleServerResponse: function ( response ) {
@@ -192,29 +193,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         updateTableTitle: function () {
             this.inputTable.updateTitle( this.inputSystem.getSelectionValues() );
             this.outputTable.updateTitle( this.outputSystem.getSelectionValues() );
-        },
-        /**
-         * @method handleClipboardPasteEvent
-         * Handles the paste event in the input table
-         */
-        handleClipboardPasteEvent: function () {
-            var me = this;
-            var cells = document.getElementsByClassName("cell");
-
-            for( var i = 0; i < cells.length; i++ ) {
-                cells[i].addEventListener('paste', function( e ) {
-                    e.stopPropagation();
-                    e.preventDefault();
-
-                    var clipboardData, pastedData;
-                    // Get pasted data via clipboard API
-                    clipboardData = e.clipboardData || window.clipboardData;
-                    pastedData = clipboardData.getData('Text');
-
-                    var dataJson = me.dataHandler.validateData( pastedData );
-                    me.updateCoordinateData( "input", dataJson );
-                });
-            }
         },
         /**
          * @method handleRadioButtons
