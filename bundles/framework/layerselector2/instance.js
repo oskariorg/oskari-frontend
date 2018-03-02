@@ -105,6 +105,9 @@ Oskari.clazz.define(
                 }
             }
 
+            var layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
+            sandbox.registerService(layerlistService);
+
             //Let's extend UI
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
@@ -134,7 +137,7 @@ Oskari.clazz.define(
             failureCB = function () {
                 alert(me.getLocalization('errors').loadFailed);
             };
-            mapLayerService.loadAllLayersAjax(successCB, failureCB);
+            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB);
 
             this._registerForGuidedTour();
         },

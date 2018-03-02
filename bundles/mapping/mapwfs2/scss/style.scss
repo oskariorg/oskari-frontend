@@ -107,3 +107,16 @@ div.mapplugins {
     }
 }
 
+/* layer tool icon */
+div.layer-tools {
+    div.right-tools {
+        div.object-data {
+            div.show-filter-tool {
+                width: 18px;
+                height: 18px;
+                background-image: url('../images/icon-funnel.png');
+                background-repeat: no-repeat;
+            }
+        }
+    }
+}
