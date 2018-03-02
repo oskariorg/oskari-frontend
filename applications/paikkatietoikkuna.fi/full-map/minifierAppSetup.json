@@ -9,56 +9,43 @@
                     }
                 }
             }
-        },
-		{
-			"bundlename": "openlayers-default-theme",
-			"metadata": {
-				"Import-Bundle": {
-					"openlayers-default-theme": {
-						"bundlePath": "../../../packages/openlayers/bundle/"
-					},
-					"openlayers-full-map": {
-						"bundlePath": "../../../packages/openlayers/bundle/"
-					}
-				}
-			}
 		}, {
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
-                    "mapwmts": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapwfs2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapstats": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapanalysis": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "maparcgis": {
-                        "bundlePath": "../../../packages/arcgis/bundle/"
-                    },
-                    "mapmyplaces": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapuserlayers" : {
-                        "bundlePath" : "../../../packages/framework/bundle/"
-                    },
-                    "mapmodule-plugin": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapfull": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "oskariui": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "ui-components": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
+					"mapmyplaces": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"maparcgis": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"mapmodule": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"oskariui": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					},
+					"mapwfs2": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"mapstats": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"mapuserlayers": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"ui-components": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					},
+					"mapanalysis": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"mapfull": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					},
+					"mapwmts": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					}
                 }
             }
 		}, {
@@ -71,11 +58,21 @@
 				}
 			}
 		}, {
+	        "bundlename" : "drawtools",
+	        "bundleinstancename" : "drawtools",
+	        "metadata" : {
+	            "Import-Bundle" : {
+	                "drawtools" : {
+	                    "bundlePath" : "../../../packages/mapping/ol3/"
+	                }
+	            }
+	        }
+	    }, {
 			"bundlename": "toolbar",
 			"metadata": {
 				"Import-Bundle": {
 					"toolbar": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					}
 				}
 			}
@@ -93,7 +90,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"infobox": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					}
 				}
 			}
@@ -111,7 +108,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"metadatacatalogue": {
-						"bundlePath": "../../../packages/catalogue/bundle/"
+						"bundlePath": "../../../packages/catalogue/"
 					}
 				}
 			}
@@ -185,15 +182,15 @@
 			"metadata": {
 				"Import-Bundle": {
 					"featuredata2": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../../packages/framework/"
 					}
 				}
 			}
 		}, {
-			"bundlename": "myplaces2",
+			"bundlename": "myplaces3",
 			"metadata": {
 				"Import-Bundle": {
-					"myplaces2": {
+					"myplaces3": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
 				}
@@ -239,10 +236,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"statsgrid": {
-						"bundlePath": "../../../packages/statistics/bundle/"
-					},
-					"geostats": {
-						"bundlePath": "../../../packages/libraries/bundle/"
+						"bundlePath": "../../../packages/statistics/"
 					}
 				}
 			}
@@ -263,10 +257,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "analyse": {
-                        "bundlePath": "../../../packages/analysis/bundle/"
-                    },
-                    "geometryeditor": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/analysis/ol3/"
                     }
                 }
             }
@@ -325,11 +316,20 @@
 				}
 			}
 		}, {
+			"bundlename" : "terrain-profile",
+			"metadata" : {
+				"Import-Bundle" : {
+					"terrain-profile" : {
+						"bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+					}
+				}
+			}
+		}, {
 			"bundlename" : "heatmap",
 			"metadata" : {
 				"Import-Bundle" : {
 					"heatmap" : {
-						"bundlePath" : "../../../packages/framework/bundle/"
+						"bundlePath" : "../../../packages/mapping/ol3/"
 					}
 				}
 			}
@@ -397,6 +397,15 @@
 	            }
 	        }
 	    }, {
+			"bundlename" : "telemetry",
+			"metadata" : {
+				"Import-Bundle" : {
+					"telemetry" : {
+						"bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+					}
+				}
+			}
+		}, {
 		    "bundlename" : "appsetup",
 		    "metadata" : {
 		        "Import-Bundle" : {

@@ -28,6 +28,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
         this._stickyLayerIds = {};
 
+        this.loc = Oskari.getMsg.bind(null, 'MapModule');
+
         /**
          * @property typeMapping
          * Mapping from map-layer json "type" parameter to a class in Oskari
@@ -48,6 +50,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
         // used for cache newest layers
         this._newestLayers = null;
+
+        this._popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
+        this.popupCoolOff = false;
 
         /*
         * Layer filters
@@ -121,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (suppressEvent !== true) {
                 // notify components of added layer if not suppressed
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
                 this._sandbox.notifyAll(event);
             }
         },
@@ -139,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (suppressEvent !== true) {
                 // notify components of modified layer tools if not suppressed
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
                 this._sandbox.notifyAll(event);
             }
         },
@@ -168,7 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
                 if (suppressEvent !== true) {
                     // notify components of added layer if not suppressed
-                    var evt = this._sandbox.getEventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                    var evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
                     this._sandbox.notifyAll(evt);
                 }
             }
@@ -216,11 +221,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // notify components of layer removal
                 if(parentLayer) {
                     // notify a collection layer has been updated
-                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                    evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
                 }
                 else {
                     // notify a layer has been removed
-                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+                    evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'remove');
                     // free up the layerId if actual removal
                     this._reservedLayerIds[layerId] = false;
                 }
@@ -299,6 +304,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.srs_name) {
                 layer.setSrs_name(newLayerConf.srs_name);
             }
+            if (newLayerConf.srs) {
+                layer.setSrsList(newLayerConf.srs);
+            }
 
             if (newLayerConf.admin) {
                 layer.setAdmin(newLayerConf.admin);
@@ -322,7 +330,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // notify components of layer update
-            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
+            var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
             this._sandbox.notifyAll(evt);
         },
         /**
@@ -341,10 +349,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (layer) {
                 layer.setSticky(isSticky);
                 // notify components of layer update
-                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
+                var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
                 this._sandbox.notifyAll(evt);
             }
             // TODO: notify if layer not found?
+        },
+        showUnsupportedPopup: function(){
+            if(this.popupCoolOff) {
+                return;
+            }
+            var popup = this._popupService.createPopup();
+
+            var buttons = [popup.createCloseButton('OK')];
+            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj').replace(/[\n]/g, '<br>'), buttons);
+
+            this.popupCoolOff = true;
+            setTimeout(function() {
+                this.popupCoolOff = false;
+            }.bind(this), 500);
         },
         /**
          * @method loadAllLayersAjax
@@ -374,7 +396,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 },
                 url: this._mapLayerUrl,
                 success: function (pResp) {
-                    me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
+                    me._loadAllLayersAjaxCallBack(pResp.layers, callbackSuccess);
                 },
                 error: function (jqXHR, textStatus) {
                     if (callbackFailure && jqXHR.status !== 0) {
@@ -390,29 +412,37 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
          * @private
          */
-        _loadAllLayersAjaxCallBack: function (pResp, callbackSuccess) {
-            var allLayers = pResp.layers,
-                i,
-                mapLayer;
+        _loadAllLayersAjaxCallBack: function (layers, callbackSuccess) {
+            var me = this;
+            // check if recursion should end
+            if(layers.length === 0) {
+                // notify components of added layers
+                this._allLayersAjaxLoaded = true;
+                this._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
 
-            for (i = 0; i < allLayers.length; i++) {
-                mapLayer = this.createMapLayer(allLayers[i]);
-                if (!mapLayer) {
-                    // unsupported map type, skip
-                    // continue with next layer
-                    continue;
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
                 }
+                return;
+            }
+            // remove the first one for recursion
+            var json = layers.shift();
+            var mapLayer = me.createMapLayer(json);
+            // unsupported maplayer type returns null so check for it
+            if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
+                me.addLayer(mapLayer, true);
+            }
+            // process remaining layers
+            if (layers.length%20 !== 0) {
+                // do it right a way
+                me._loadAllLayersAjaxCallBack(layers, callbackSuccess);
+            } else {
+                // yield cpu time after every 20 layers
+                setTimeout(function() {
+                    me._loadAllLayersAjaxCallBack(layers, callbackSuccess);
+                }, 0);
+            }
 
-                if (this._reservedLayerIds[mapLayer.getId()] !== true) {
-                    this.addLayer(mapLayer, true);
-                }
-            }
-            // notify components of added layer if not suppressed
-            this._allLayersAjaxLoaded = true;
-            this._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
-            if (callbackSuccess) {
-                callbackSuccess();
-            }
         },
 
         /**
@@ -863,6 +893,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             layer.setVersion(mapLayerJson.version);
             layer.setSrs_name(mapLayerJson.srs_name);
+            layer.setSrsList(mapLayerJson.srs);
 
             // metadata
             layer.setDataUrl(mapLayerJson.dataUrl);

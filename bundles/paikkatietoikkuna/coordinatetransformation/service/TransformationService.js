@@ -35,14 +35,14 @@ function(instance) {
         if( payload.sourceCrs ) {
             urlParameterString = urlParameterString.concat("&sourceCrs="+payload.sourceCrs);
         }
-        if( payload.sourceHeightCrs ) {
-            urlParameterString = urlParameterString.concat("&sourceHeightCrs="+payload.sourceHeightCrs);
+        if( payload.sourceElevationCrs ) {
+            urlParameterString = urlParameterString.concat("&sourceHeightCrs="+payload.sourceElevationCrs);
         }
         if( payload.targetCrs ) {
             urlParameterString = urlParameterString.concat("&targetCrs="+payload.targetCrs);
         }
-        if( payload.targetHeightCrs ) {
-            urlParameterString = urlParameterString.concat("&targetHeightCrs="+payload.targetHeightCrs);
+        if( payload.targetElevationCrs ) {
+            urlParameterString = urlParameterString.concat("&targetHeightCrs="+payload.targetElevationCrs);
         }
         var url = urlBase.concat(urlParameterString);
         return url;

@@ -14,6 +14,8 @@ Oskari.registerLocalization(
             "registerInfo2": "By registering, you agree to the ",
             "termsOfUseLinkText": "Terms of Use of Paikkatietoikkuna",
             "termsOfUseLink": "http://maanmittauslaitos.fi/en/e-services/geodata-portal-paikkatietoikkuna",
+            "dataProtectionLinkText": "The data protection description of the customer relations register",
+            "dataProtectionLink": "https://maanmittauslaitos.fi/en/about-nls/organisation/data-protection-description/customer-relations-register",
             "continueBtn": "Continue",
             "cancelBtn": "Cancel"
         }

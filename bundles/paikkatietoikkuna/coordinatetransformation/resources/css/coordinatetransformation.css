@@ -2,25 +2,7 @@
     max-height: 875px !important;
 }
 .coordinatetransformation-flyout {
-    top: 0 !important;
-}
-.conversionwrapper {
-    max-width: 50em !important;
-    display: flex;
-    flex-flow: row wrap;
-}
-.coordinateconversion-csystem {
-    display: inline-block;
-    font-size: 12px;
-    padding-left: 3px;
-}
- .geodetic-datum, .coordinate-system, .map-projection, .geodetic-coordinatesystem, .height-system {
-    clear: left;
-    padding-top: 0.875em; 
-}
-
-#targetcoordsystem {
-    margin-left: 2em;
+    top:0 !important;
 }
 #rowwidth {
     max-width: 100px !important;
@@ -42,21 +24,24 @@
     float:left;
     width: 20em !important;
 }
-.coordinatetransformation-flyout .conversionbtn {
+.coordinatetransformation-flyout .transformation-button {
     padding-left: 1.5em;
     float:left;
     margin-top: 6.25rem;
 }
-.coordinateconversion-buttons{
+.util-row{
     clear: left;
     width: 100%;
     padding-top: 1em;
 }
-.coordinateconversion-buttons.show.clear{
+.util-row.show.clear{
     float:left;
 }
-.coordinateconversion-datasource {
+.coordinate-datasource {
     width: 100%;
+}
+.sourceWrapper {
+    padding-bottom: 1em;
 }
 .coordinatetransformation-flyout .export, .rowcount {
     float:right;
@@ -65,7 +50,7 @@
 .coordinatetransformation-flyout .heightsystem {
     background-color: lightgray;
 }
-.coordinatetransformation-flyout #convert {
+.coordinatetransformation-flyout #transform {
     font-size:80%;
     vertical-align: middle;
 }
@@ -113,7 +98,29 @@
   -moz-transition:background-color 0.4s linear;
   transition:background-color 0.4s linear;
 }
-
+/*
+* SYSTEM SELCTOR
+*/
+.systems {
+    display: inline-flex;
+}
+.coordinateSystemWrapper:last-child {
+    margin-left: 2em;
+}
+.system {
+    clear: left;
+    padding-top: 0.875em; 
+}
+.transformation-wrapper {
+    max-width: 50em !important;
+    display: flex;
+    flex-flow: row wrap;
+}
+.transformation-system {
+    display: inline-block;
+    font-size: 12px;
+    padding-left: 3px;
+}
 /*
 *TABLE
 */
@@ -138,7 +145,7 @@
     border: 1px solid rgba(255,255,255,0.3);
 }
 .coordinatetransformation-flyout .oskari-table-header {
-    background-color:rgba(37, 184, 193, 0.8);
+    color: black;
     width: 20em !important;
 }
 .coordinatetransformation-flyout #oskari-tbl-header {
@@ -149,14 +156,17 @@
 .coordinatetransformation-flyout .target {
     padding-left:2.5em;
 }
-.coordinatetransformation-flyout th {
-  padding: 20px 8px;
+.coordinatefield-table th three {
   text-align: left;
   font-weight: 500;
   font-size: calc(0.55rem + 0.28vh);
-  color: #fff;
-  text-transform: uppercase;
   width: 33% !important;
+}
+.coordinatefield-table th two {
+  text-align: left;
+  font-weight: 500;
+  font-size: calc(0.55rem + 0.28vh);
+  width: 50% !important;
 }
 .coordinatetransformation-flyout td {
     background: #FAFAFA;
@@ -170,6 +180,9 @@
     border-bottom: 1px solid black;
     display: none; 
     position: relative;
+}
+.cell-disabled {
+    background-color: grey !important;
 }
 
 /*
@@ -204,11 +217,6 @@
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
-.hoverable tr:hover .cell.control { 
-    /* float: right; */
-    /* display: inline-block; */
-}
-
 .coordinatetransformation-flyout .removerow {
     border-radius: 50%;
     height:1.3em;
@@ -233,7 +241,7 @@
 }
 
 @media screen and (max-width: 640px) {
-    .conversionwrapper {
+    .transformation-wrapper {
         max-width: 27em !important;
     }
 
@@ -251,20 +259,20 @@
     .coordinatefield-result {
         order:6;
     }
-    .conversionbtn {
+    .transformation-button {
         order:5;
         clear:both;
         /* margin-top: 6.25rem; */
     }
-    .coordinateconversion-datasource {
+    .coordinate-datasource {
         order:1;
     }
-    .coordinateconversion-buttons {
+    .util-row {
         order: 7;
     }
 }
 @media screen and (max-width: 785px) {
-    .conversionwrapper {
+    .transformation-wrapper {
         max-width: 27em !important;
     }
     #targetcoordsystem {
@@ -281,15 +289,15 @@
     .coordinatefield-result {
         order:6;
     }
-    .conversionbtn {
+    .transformation-button {
         order:5;
         clear:both;
         /* margin-top: 6.25rem; */
     }
-    .coordinateconversion-datasource {
+    .coordinate-datasource {
         order:1;
     }
-    .coordinateconversion-buttons {
+    .util-row {
         order: 7;
     }
 

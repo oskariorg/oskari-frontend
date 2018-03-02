@@ -14,6 +14,8 @@ Oskari.registerLocalization(
             "registerInfo2": "Rekisteröitymällä hyväksyt Paikkatietoikkunan ",
             "termsOfUseLinkText": "käyttöehdot",
             "termsOfUseLink": "http://maanmittauslaitos.fi/asioi-verkossa/paikkatietoikkuna",
+            "dataProtectionLinkText": "Asiakassuhderekisterin tietosuojaseloste",
+            "dataProtectionLink": "https://maanmittauslaitos.fi/tietoa-maanmittauslaitoksesta/organisaatio/tietosuojaselosteet/asiakassuhderekisteri",
             "continueBtn": "Jatka rekisteröitymään"
         }
     }

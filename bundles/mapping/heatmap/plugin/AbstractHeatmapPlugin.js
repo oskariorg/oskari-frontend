@@ -44,13 +44,13 @@ Oskari.clazz.define(
                 layerId = layer.getId();
 
                 if ( layer.isLayerOfType( this.getLayerTypeSelector() ) ) {
-                    sandbox.printDebug('preselecting ' + layerId);
+                    Oskari.log(this._name).debug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
 
         },
-    
+
         /**
          * Updates the OpenLayers and redraws them if scales have changed.
          *
@@ -59,11 +59,15 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         _updateLayer: function(layer) {
+            if ( !layer.isLayerOfType( this.getLayerTypeSelector() ) ) {
+                // only handle layers of type heatmap
+                return
+            }
             var oLayers = this.getOLMapLayers(layer),
                 subs = layer.getSubLayers(),
                 layerList = subs.length ? subs : [layer],
                 llen = layerList.length,
-                scale = this.getMapModule().getMap().getScale(),
+                scale = this.getSandbox().getMap().getScale(),
                 i,
                 newRes,
                 isInScale;
@@ -157,7 +161,7 @@ Oskari.clazz.define(
 				'</StyledLayerDescriptor>';
 			return SLD;
         },
-        /** 
+        /**
          * Calculates the resolutions based on layer scales.
          *
          * @method _calculateResolutions

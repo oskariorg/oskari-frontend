@@ -678,7 +678,8 @@ Oskari.clazz.define(
                 connection.get().batch(function () {
                     me.getIO().addMapLayer(
                         layer.getId(),
-                        styleName
+                        styleName,
+                        layer.isVisible()
                     );
                     me.mapMoveHandler(); // setLocation
                 });

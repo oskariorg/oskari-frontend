@@ -221,6 +221,14 @@ jQuery.ajaxSetup({ cache: false });
          */
         stopApplication: function () {
             throw new Error('Not supported');
+        },
+
+        /**
+         * @method getSystemDefaultViews 
+         * @return {Object[]/undefined} default view objects Array or undefined if key not found in appSetup env
+         */
+        getSystemDefaultViews: function () {
+            return this.appSetup.env.defaultApps;
         }
     };
     o.app = new Bundle_facade();

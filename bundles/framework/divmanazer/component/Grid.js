@@ -725,15 +725,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 body.append(row);
             });
             rows = table.find('tbody tr');
-            rowClicked = function () {
-                me._dataSelected(jQuery(this).attr('data-id'));
+            rowClicked = function (e) {
+                me._dataSelected(jQuery(this).attr('data-id'), e.ctrlKey);
             };
-            rows.bind('click', rowClicked);
+            rows.on('click', rowClicked);
             // enable links to work normally (unbind row click on hover and rebind when mouse exits)
             rows.find('a').hover(function () {
-                jQuery(this).parents('tr').unbind('click');
+                jQuery(this).parents('tr').off('click');
             }, function () {
-                jQuery(this).parents('tr').bind('click', rowClicked);
+                jQuery(this).parents('tr').on('click', rowClicked);
             });
 
             me._checkPaging(table);

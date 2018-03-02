@@ -565,6 +565,16 @@ div.oskari-flyout {
     width: 300px;
     font-size: 12px;
 
+    .classification-colors.value {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .visible-map-style-choropleth.flip-colors {
+        margin-left: 10px;
+        line-height: 27px;
+    }
+
     >div.header {
         background-color: #fdf8d9;
         margin: 0;
@@ -636,13 +646,6 @@ div.oskari-flyout {
                 width: 96%;
                 font-size: 12px;
                 padding: 1px 2px;
-            }
-
-            button.reverse-colors {
-                margin-top: 5px;
-                margin-left: 0;
-                width: 95%;
-                padding: 4px 5px;
             }
 
             .point-size {
@@ -758,9 +761,10 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
 
  .oskari-tile.statsgrid {
     .statsgrid-functionality {
-        width: 100%;
+        width: 95%;
         height: 34px;
-        display: block;
+        display: inline-flex;
+        display: -ms-inline-flexbox;
         margin-left: 6px;
 
         .icon {
@@ -780,9 +784,6 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
             line-height: 34px;
             vertical-align: middle;
         }
-        .clear {
-            clear: both;
-        }
 
         &.material-selected .icon{
             background-color: #ffd400;
@@ -797,6 +798,10 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         &.diagram .icon {
             background-image: url("../images/tile-diagram-light.png");
         }
+        
+    }
+    .hidden {
+        display: none;
     }
 }
 
