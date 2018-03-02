@@ -25,9 +25,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             var me = this;
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(this.loc.datasourceinfo.success),
+            btn = dialog.createCloseButton(this.loc.dsInfo.success),
             cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(this.loc.datasourceinfo.cancel);
+            cancelBtn.setTitle(this.loc.dsInfo.cancel);
             btn.addClass('primary');
             me.dialog = dialog;
 
@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
                 me.mapcoords = [];
             });
 
-            dialog.show('Note', this.loc.datasourceinfo.mapinfo, [cancelBtn, btn]);
+            dialog.show(this.loc.datasource.map, this.loc.dsInfo.mapinfo, [cancelBtn, btn]);
             dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
             this.mapClicksListener();
         },

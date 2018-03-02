@@ -54,9 +54,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 map: this.loc.datasource.map 
             });
             var info = this._template.info({ 
-                clipboardupload: this.loc.datasourceinfo.clipboardupload,
-                mapinfo: this.loc.datasourceinfo.mapinfo,
-                map: this.loc.datasourceinfo.select
+                clipboardupload: this.loc.dsInfo.clipboardupload,
+                mapinfo: this.loc.dsInfo.mapinfo,
+                map: this.loc.dsInfo.select
             });
             wrapper.append(source);
             wrapper.append(info);
