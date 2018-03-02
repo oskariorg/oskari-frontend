@@ -225,29 +225,28 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             jQuery('input[type=radio][name=load]').change(function() {
                 me.inputTable.isEditable( false );
+                me.isMapSelection = false;
                 
                 if (this.value == '1') {
                     // me.fileHandler.showFileDialogue( importfile, false );
                     clipboardInfoElement.hide();
                     mapSelectInfoElement.hide();
                     fileInputElement.show();
-                    me.isMapSelection = false;
                 }
                 else if (this.value == '2') {
                     fileInputElement.hide();
                     mapSelectInfoElement.hide();
                     clipboardInfoElement.show();
                     me.inputTable.isEditable( true );
-                    me.isMapSelection = false;
                 }
                 else if (this.value == '3') {
                     clipboardInfoElement.hide();
                     fileInputElement.hide();
                     mapSelectInfoElement.show(); 
-                    me.isMapSelection = true;    
                 }
             });
             jQuery('.selectFromMap').on("click", function() {
+                me.isMapSelection = true;
                 me.instance.toggleViews("MapSelection");
             });
          },

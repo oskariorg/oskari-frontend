@@ -34,6 +34,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             cancelBtn.setHandler(function() {
                 me.helper.removeMarkers();
                 dialog.close();
+                me.removeMapClickListener();
                 me.instance.toggleViews("transformation");
                 me.instance.getViews().transformation.isMapSelection = false;
                 me.mapcoords = [];
@@ -42,6 +43,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             btn.setHandler(function() {
                 me.instance.getViews().transformation.updateCoordinateData( 'input', me.mapcoords );
                 me.instance.getViews().transformation.isMapSelection = false;
+                me.removeMapClickListener();
                 me.instance.getViews().transformation.selectMapProjectionValues();
                 me.instance.toggleViews("transformation");
                 me.mapcoords = [];
@@ -59,9 +61,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
                 this.mapcoords.push( coords );
             }
         },
+        removeMapClickListener: function () {
+            jQuery('#mapdiv').off('click');
+        },
         mapClicksListener: function() {
             var me = this;
-            if( me.instance.getViews().transformation.MapSelection ) {
+            if( me.instance.isMapSelectionMode() ) {
                 jQuery('#mapdiv').on("click", function () {});
             } else {
                 return;
