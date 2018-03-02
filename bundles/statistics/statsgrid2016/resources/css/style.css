@@ -217,7 +217,7 @@ div.oskari-flyout {
       animation-duration: 0.5s;
       animation-iteration-count: 3; }
     div.oskari-flyout.statsgrid-data-flyout table.oskari-grid td {
-      text-align: left; }
+      text-align: right; }
     div.oskari-flyout.statsgrid-data-flyout label span {
       /* Indicator selection form */
       width: 200px;
