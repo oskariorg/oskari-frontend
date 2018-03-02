@@ -11,11 +11,11 @@
     </div>
 <% if(header) { %>
     <%= header({
-        capabilities: capabilities, 
-        capabilitiesTemplate: capabilitiesTemplate, 
-        model: model, 
-        instance: instance, 
-        inspireThemes: inspireThemes, 
+        capabilities: capabilities,
+        capabilitiesTemplate: capabilitiesTemplate,
+        model: model,
+        instance: instance,
+        inspireThemes: inspireThemes,
         isSubLayer: isSubLayer }) %>
     <% } %>
 
@@ -40,7 +40,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <!-- 
+                <!--
                     Chrome autofill workaround: http://stackoverflow.com/questions/15738259/disabling-chrome-autofill
                     tested with chrome v. 51.0.2704.103 m
                 -->
@@ -52,10 +52,10 @@
         </div>
     </div>
 
-    <% 
+    <%
         var layerType = model.getLayerType();
         if (layerType === "wms" || layerType === "wmts") {
-    %>        
+    %>
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
@@ -95,7 +95,7 @@
         if ( model.getNameLanguages) { %>
         <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerNameAndDesc %>"><%= instance.getLocalization('admin').layerNameAndDesc %></div>
 
-        <% 
+        <%
         var names = model.getNameLanguages();
         var loc = Oskari.getLocalization('DivManazer').LanguageSelect.languages;
         for (var i = 0; i < names.length; i++) {
@@ -187,7 +187,7 @@
                  <% for(var i = 0; i < model.getStyles().length; i++) { %>
                 <option value="<%= model.getStyles()[i].getName() %>"
                     <% if(model.getCurrentStyle().getName() === model.getStyles()[i].getName() ) {
-                         %>selected<% 
+                         %>selected<%
                      } %>
                      ><%= model.getStyles()[i].getTitle() %></option>
                 <% } %>
@@ -252,10 +252,10 @@
     </div>
     <% } %>
 
-<% if(footer) { %> 
+<% if(footer) { %>
 <%= footer({
-    model: model, 
-    instance: instance, 
+    model: model,
+    instance: instance,
     inspireThemes: inspireThemes,
     isSubLayer: isSubLayer }) %>
 <% } %>
@@ -313,7 +313,7 @@
                  <tr>
                     <% for(var i = 0; i < roles.length; i++) { %>
                         <th><%= roles[i].name %></th>
-                    <% } %> 
+                    <% } %>
                     <th></th>
                  </tr>
                  <tr>
@@ -336,7 +336,7 @@
                  </tr>
                  <tr>
                     <% for(var i = 0; i < roles.length; i++) { %>
-                        <td><input type="checkbox" id="layer-enbedded-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                        <td><input type="checkbox" id="layer-embedded-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
                     <% } %>
                     <td>Embedded</td>
                  </tr>

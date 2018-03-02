@@ -582,7 +582,7 @@ define([
                         },
                         error: function(jqXHR) {
                             if (jqXHR.status !== 0) {
-                                me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorRemoveLayer']);
+                                me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').errorRemoveLayer);
                             }
                         }
                     });
@@ -592,7 +592,7 @@ define([
                     dialog.close();
                 });
 
-                dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
+                dialog.show(me.instance.getLocalization('admin').warningTitle, confirmMsg, [btn, cancelBtn]);
                 dialog.makeModal();
 
             },
@@ -632,10 +632,10 @@ define([
                         me.progressSpinner.stop();
                         // response should be a complete JSON for the new layer
                         if (!resp) {
-                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').update_or_insert_failed);
+                            me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').update_or_insert_failed);
                             success = false;
                         } else if (resp.error) {
-                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')[resp.error] || resp.error);
+                            me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin')[resp.error] || resp.error);
                             success = false;
                         }
                         // happy case - we got id
@@ -661,11 +661,11 @@ define([
                             });
                         }
                         if (resp.warn) {
-                            me._showDialog(me.instance.getLocalization('admin')['warningTitle'], me.instance.getLocalization('admin')[resp.warn] || resp.warn);
+                            me._showDialog(me.instance.getLocalization('admin').warningTitle, me.instance.getLocalization('admin')[resp.warn] || resp.warn);
                             success = false;
                         }
                         if (success) {
-                            me._showDialog(me.instance.getLocalization('admin')['successTitle'], me.instance.getLocalization('admin')['success']);
+                            me._showDialog(me.instance.getLocalization('admin').successTitle, me.instance.getLocalization('admin').success);
                         }
                     },
                     error: function(jqXHR) {
@@ -701,7 +701,7 @@ define([
                                     }
                                 }
                             }
-                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
+                            me._showDialog(me.instance.getLocalization('admin').errorTitle, err);
                         }
                     }
                 });
@@ -812,7 +812,7 @@ define([
 
                 data.viewPermissions = '';
                 data.downloadPermissions = '';
-                data.enbeddedPermissions = '';
+                data.embeddedPermissions = '';
                 data.publishPermissions = '';
                 for (var i = 0; i < me.roles.length; i += 1) {
                     if (form.find('#layer-view-roles-' + me.roles[i].id).is(':checked')) {
@@ -821,8 +821,8 @@ define([
                     if (form.find('#layer-download-roles-' + me.roles[i].id).is(':checked')) {
                         data.downloadPermissions += me.roles[i].id + ',';
                     }
-                    if (form.find('#layer-enbedded-roles-' + me.roles[i].id).is(':checked')) {
-                        data.enbeddedPermissions += me.roles[i].id + ',';
+                    if (form.find('#layer-embedded-roles-' + me.roles[i].id).is(':checked')) {
+                        data.embeddedPermissions += me.roles[i].id + ',';
                     }
                     if (form.find('#layer-publish-roles-' + me.roles[i].id).is(':checked')) {
                         data.publishPermissions += me.roles[i].id + ',';
@@ -851,7 +851,7 @@ define([
                         dialog.close();
                     });
 
-                    dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
+                    dialog.show(me.instance.getLocalization('admin').warningTitle, confirmMsg, [btn, cancelBtn]);
                     dialog.makeModal();
                 } else {
                     me._addLayerAjax(data, element, callback);
@@ -926,7 +926,7 @@ define([
                     },
                     error: function() {
                         jQuery('body').css('cursor', '');
-                        me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorSaveGroupLayer']);
+                        me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').errorSaveGroupLayer);
                     }
                 });
             },
@@ -952,7 +952,7 @@ define([
                         });
                     },
                     error: function() {
-                        me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorRemoveGroupLayer']);
+                        me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').errorRemoveGroupLayer);
                     }
                 });
             },
@@ -1013,7 +1013,7 @@ define([
                     error: function(jqXHR) {
                         me.progressSpinner.stop();
                         if (jqXHR.status !== 0) {
-                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').metadataReadFailure);
+                            me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').metadataReadFailure);
                         }
                     }
                 });
@@ -1035,9 +1035,9 @@ define([
                     if (capabilities && capabilities.layersWithErrors && capabilities.layersWithErrors.length > 0) {
                         warningMessage = _.template(LayersWithErrorsPopupTemplate, {
                             "capabilities": capabilities,
-                            title: me.instance.getLocalization('admin')['warning_some_of_the_layers_could_not_be_parsed']
+                            title: me.instance.getLocalization('admin').warning_some_of_the_layers_could_not_be_parsed
                         });
-                        warningDialog.show(me.instance.getLocalization('admin')['warningTitle'], warningMessage, [warningDialogOkBtn]);
+                        warningDialog.show(me.instance.getLocalization('admin').warningTitle, warningMessage, [warningDialogOkBtn]);
                         warningDialog.makeModal();
                     }
                 }
@@ -1115,7 +1115,7 @@ define([
                     },
                     error: function(jqXHR) {
                         if (jqXHR.status !== 0) {
-                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').sldStylesFetchError);
+                            me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').sldStylesFetchError);
                         }
                     }
                 });
