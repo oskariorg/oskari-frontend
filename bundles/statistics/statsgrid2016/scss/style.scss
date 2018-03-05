@@ -103,7 +103,8 @@ $flyoutPadding: 16px;
     font-weight: normal;
 
     .header {
-        width: 90%;
+        word-wrap: break-word;
+        width: 85%;
         position: absolute;
         top: 5px;
         .title {

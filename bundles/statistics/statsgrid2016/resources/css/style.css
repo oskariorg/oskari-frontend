@@ -62,7 +62,8 @@
   padding: 5px 5px 0px 5px;
   font-weight: normal; }
   .statsgrid-grid-table-header-content .header {
-    width: 90%;
+    word-wrap: break-word;
+    width: 85%;
     position: absolute;
     top: 5px; }
     .statsgrid-grid-table-header-content .header .title {
