@@ -11,24 +11,31 @@
  */
 Oskari.clazz.define("Oskari.projection.change.instance",
 function () {
+    this.sandbox = null;
+    this.loc = null;
 }, {
     __name: 'projection-change',
     getName: function () {
         return this.__name;
     },
-    afterStart: function () {
-        var sandbox = this.getSandbox();
-        this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+    start: function () {
+        this.sandbox = Oskari.getSandbox();
+        this.loc = Oskari.getLocalization('projection-change');
+        this._mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+
         this.createPlugin();
         this.createUi();
-        sandbox.register(this);
     },
     getViews: function () {
         return this.getAppViews();
     },
     createPlugin: function() {
-      var conf = this.conf || {};
-      var plugin = Oskari.clazz.create('Oskari.projection.change.ProjectionChangerPlugin', conf, this.getLocalization());
+      var params = {
+        views: this.getAppViews(),
+        loc: this.loc,
+        sb: this.sandbox  
+      }
+      var plugin = Oskari.clazz.create('Oskari.projection.change.ProjectionChangerPlugin', params, this.loc );
 
       this._mapmodule.registerPlugin(plugin);
       this._mapmodule.startPlugin(plugin);
@@ -45,6 +52,4 @@ function () {
     getAppViews: function () {
         return Oskari.app.getSystemDefaultViews();
     }
-}, {
-        extend : ["Oskari.userinterface.extension.DefaultExtension"]
 });

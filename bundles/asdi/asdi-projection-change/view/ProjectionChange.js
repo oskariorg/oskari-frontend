@@ -1,8 +1,8 @@
 
-Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function () {
-    this.instance =  Oskari.getSandbox().findRegisteredModuleInstance('projection-change');
-    this.sb = this.instance.getSandbox();
-    this.loc = this.instance.getLocalization();
+Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (params) {
+    this.views = params.views;
+    this.sb = params.sb
+    this.loc = params.loc;
     this.element = null;
     this.createUi();
 }, {
@@ -21,8 +21,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
             return;
         }
         var el = this._template.container.clone();
-        var views = this.instance.getViews();
-        views.forEach( function (view) {
+        this.views.forEach( function (view) {
             el.append( me.createCard( view ) );
         });
 

@@ -1,6 +1,6 @@
 Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
-  function ( config, localization ) {
-    this._config = config || {};
+  function ( options, localization ) {
+    this.options = options || {};
     this._clazz = 'Oskari.projection.change.ProjectionChangerPlugin';
     this._defaultLocation = 'top right';
     this._index = 55;
@@ -9,7 +9,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     };
     this._loc = localization;
 
-    this._flyout = Oskari.clazz.create('Oskari.projection.change.flyout', this._loc, {
+    this._flyout = Oskari.clazz.create('Oskari.projection.change.flyout', options, {
         width: 'auto',
         cls: 'projection-change-flyout'
     });
@@ -34,7 +34,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     },
     handleEvents: function () {
         var me = this;
-        this._flyout.move(1300, 120, true);
+        this._flyout.move(1200, 300, true);
         this.getElement().on( "click", function() {
             me._flyout.toggle();
         });

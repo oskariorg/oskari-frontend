@@ -1,6 +1,6 @@
-Oskari.clazz.define('Oskari.projection.change.flyout', function (loc, options) {
-    this.loc = loc;
-    this.projectionView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionChange');
+Oskari.clazz.define('Oskari.projection.change.flyout', function ( params, options ) {
+    this.loc = params.loc;
+    this.projectionView = Oskari.clazz.create('Oskari.projection.change.view.ProjectionChange', params );
     this.templates = {
         main: jQuery('<div></div>')
     }
