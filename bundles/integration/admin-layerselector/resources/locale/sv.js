@@ -210,9 +210,10 @@ Oskari.registerLocalization(
         "recheckTitle": "Hämta getCapabilities",
         "recheckAllButton": "Hämta alla getCapabilities",
         "recheckAll": "Vill du hämta getCapabilites för alla kartlager? Operationen kan ta många minuter.",
-        "recheckAllSucceeded": "Uppdatering lyckades för {success, number} lager, misslyckades för {fail, number} lager.",
-        "recheckSucceeded": "Uppdatering lyckades.",
+        "recheckAllSucceeded": "Uppdatering lyckades för {success, number} lager, misslyckades för {fail, number} lager. Uppdatera sidan för att se uppdaterade data.",
+        "recheckSucceeded": "Uppdatering lyckades. Uppdatera sidan för att se uppdaterade data.",
         "recheckFailReason": "Uppdatering misslyckades: {reason}",
-        "recheckFail": "Uppdatering misslyckades."
+        "recheckFail": "Uppdatering misslyckades.",
+        "recheckFailTimeout": "Uppdatering tidgräns överstegs. Processen fortsätter på servern."
     }
 });

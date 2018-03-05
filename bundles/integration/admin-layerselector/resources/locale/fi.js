@@ -210,9 +210,10 @@ Oskari.registerLocalization(
         "recheckTitle": "Päivitä getCapabilities",
         "recheckAllButton": "Päivitä kaikki getCapabilities",
         "recheckAll": "Haluatko hakea getCapabilities-määritykset kaikille karttatasoille? Toiminonto saattaa kestää useita minuutteja.",
-        "recheckAllSucceeded": "GetCapabilities päivitys onnistui {success, number} tasolle, epäonnistui {fail, number} tasolle.",
-        "recheckSucceeded": "GetCapabilities päivitys onnistui.",
+        "recheckAllSucceeded": "GetCapabilities päivitys onnistui {success, number} tasolle, epäonnistui {fail, number} tasolle. Lataa sivu uudelleen nähdäksesi päivittyneet tiedot.",
+        "recheckSucceeded": "GetCapabilities päivitys onnistui. Lataa sivu uudelleen nähdäksesi päivittyneet tiedot.",
         "recheckFailReason": "GetCapabilities päivitys epäonnistui: {reason}",
-        "recheckFail": "GetCapabilities päivitys epäonnistui."
+        "recheckFail": "GetCapabilities päivitys epäonnistui.",
+        "recheckFailTimeout": "GetCapabilities päivitys aikakatkaistiin. Päivitys jatkuu palvelimella."
     }
 });

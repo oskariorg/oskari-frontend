@@ -239,6 +239,10 @@ define([
                         },
                         error: function (xhr, status, error) {
                             xhr = null;
+                            if(status === 'timeout') {
+                                content.append('<br><br><span>' + loc('recheckFailTimeout') + '<span>');
+                                return;
+                            }
                             content.append('<br><br><span>' + loc('recheckFail') + '<span>');
                         }
                     });
