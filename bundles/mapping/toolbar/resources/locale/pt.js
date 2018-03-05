@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Medições",
             "close": "Cancelar",
             "guidance": {
-                "measureline": "Medir uma linha na carta. Duplo-clique para parar",
-                "measurearea": "Medir uma área na carta. Duplo-clique para parar"
+                "measureline": "Medir uma linha na carta.",
+                "measurearea": "Medir uma área na carta."
             }
         },
         "guidedTour": {

@@ -44,6 +44,7 @@ Oskari.clazz.define(
                 var croppingBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 croppingBtn.addClass('primary cropping-btn');
                 croppingBtn.setTitle(value.getName());
+                jQuery(croppingBtn.getElement()).data("layerId",value.getId());
                 jQuery(croppingBtn.getElement()).data("layerName",value.getLayerName());
                 jQuery(croppingBtn.getElement()).data("layerUrl",value.getLayerUrl());
                 var layerAttributes = value.getAttributes();
@@ -54,7 +55,7 @@ Oskari.clazz.define(
                 }
 
                 if(value.rect){
-                    jQuery(croppingBtn.getElement()).data("croppingMode","regtangle");
+                    jQuery(croppingBtn.getElement()).data("croppingMode","rectangle");
                 }else{
                     jQuery(croppingBtn.getElement()).data("croppingMode","polygon");
                 }
@@ -251,6 +252,9 @@ Oskari.clazz.define(
                 },
                 getAttributes: function(){
                     return "";
+                },
+                getId: function(){
+                    return "";
                 }
             };
 
@@ -289,6 +293,7 @@ Oskari.clazz.define(
             layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),
             layerGeometry = jQuery('.cropping-btn.selected').data('geometry'),
             layerName = jQuery('.cropping-btn.selected').data('layerName'),
+            layerId = jQuery('.cropping-btn.selected').data('layerId'),
             layerUrl = me.getUrlParams(jQuery('.cropping-btn.selected').data('layerUrl'),'id'),
             layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
             layerNameLang = jQuery('.cropping-btn.selected').val();
@@ -298,24 +303,34 @@ Oskari.clazz.define(
                 dataType: 'json',
                 url: ajaxUrl + 'action_route=GetFeatureForCropping',
                 data : {
-                    layers: layerName,
-                    url: layerUrl,
+                    layers : layerName,
+                    url : layerUrl,
                     x : x,
                     y : y,
+                    id : layerId,
                     bbox : mapVO.getBboxAsString(),
                     width : mapVO.getWidth(),
                     height : mapVO.getHeight(),
                     srs : mapVO.getSrsName()
                 },
                 success: function (data) {
+                	var uniqueColumn = null;
+                	var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
+                	if(layer.getAttributes().unique) {
+                		uniqueColumn = layer.getAttributes().unique;
+                	}
                     var geojson_format = new OpenLayers.Format.GeoJSON();
                     var features = geojson_format.read(data.features[0]);
-                    var founded = me.croppingVectorLayer.getFeaturesByAttribute("cropid",data.features[0].id);
+                    var uniqueValue = (uniqueColumn) ? data.features[0].properties[uniqueColumn] : data.features[0].id;
+                    if(!uniqueValue) {
+                    	uniqueValue = data.features[0].id;
+                    }
+                    var founded = me.croppingVectorLayer.getFeaturesByAttribute("cropid",uniqueValue);
 
                         if(founded !== null && founded.length>0){
                             me.croppingVectorLayer.removeFeatures(founded);
                         }else{
-                            features[0].attributes.cropid = data.features[0].id;
+                            features[0].attributes.cropid = uniqueValue;
                             features[0].attributes.layerName= layerName;
                             features[0].attributes.layerUrl = layerUrl;
                             features[0].attributes.uniqueKey = layerUniqueKey;
@@ -527,14 +542,15 @@ Oskari.clazz.define(
             var me = this;
             var selectedLayers = me._buildLayerList();
             var croppedAreaFeatures = me.croppingVectorLayer.features;
-            var basketObject = {};
+            
 
             //Finds layers that are active and loop cropping areas to them, collect are important values
             jQuery.each( selectedLayers, function( layer_key, layer_value ) {
                 jQuery.each( croppedAreaFeatures, function( feature_key, feature_value ) {
+                	var basketObject = {};
                     basketObject.layerNameLang = layer_value.getName();
                     basketObject.layerName = layer_value.getLayerName();
-                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(),'id');
+                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(),'id'); 
                     basketObject.cropLayerName = feature_value.attributes.layerName;
                     basketObject.cropLayerNameLang = feature_value.attributes.layerNameLang;
                     basketObject.cropLayerUrl = feature_value.attributes.layerUrl;

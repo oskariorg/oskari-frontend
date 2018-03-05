@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Măsurători",
             "close": "Anulare",
             "guidance": {
-                "measureline": "Măsurare linie pe hartă. Dublu-click pentru a încheia măsurătoarea",
-                "measurearea": "Măsurare suprafaţă pe hartă. Dublu-click pentru a încheia măsurătoarea"
+                "measureline": "Măsurare linie pe hartă.",
+                "measurearea": "Măsurare suprafaţă pe hartă."
             }
         },
         "guidedTour": {

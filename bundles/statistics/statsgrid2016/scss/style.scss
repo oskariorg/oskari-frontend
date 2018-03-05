@@ -103,7 +103,7 @@ $flyoutPadding: 16px;
     font-weight: normal;
 
     .header {
-        width: 90%;
+        width: 85%;
         position: absolute;
         top: 5px;
         .title {
@@ -349,7 +349,7 @@ div.oskari-flyout {
             }
 
             td {
-                text-align: left;
+                text-align: right;
             }
         }
 
@@ -738,6 +738,21 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         &.active {
             background-color: $lightColor;
             background-image: url('../images/table_light.png');
+        }
+    }
+     .diagram {
+        background-color: $darkColor;
+        float: left;
+        height: 36px;
+        width: 36px;
+        background-image: url("../images/tile-diagram-dark.png");
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position: center;    
+        &.active {
+            background-color: $lightColor;
+            background-image: url("../images/tile-diagram-light.png");
+            background-repeat: no-repeat;
         }
     }
 

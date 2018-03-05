@@ -11,11 +11,13 @@ Ways to start the bundle in console:
             }
         }
 });
-            var l = appSetup.startupSequence.length;
-            appSetup.startupSequence[l] = {
-                "bundlename":"coordinatetransformation" ,
+       var obj = {
+            "bundlename":"coordinatetransformation" ,
+            "metadata": {
+                "Import-Bundle": { "coordinatetransformation": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } }
             }
-            appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinatetransformation": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } } };
+        }
+        appSetup.startupSequence.push(obj);
 */
 Oskari.clazz.define("Oskari.coordinatetransformation.instance",
 function () {
@@ -56,8 +58,8 @@ function () {
     },
     instantiateViews: function () {
         this.views = {
-            conversion: Oskari.clazz.create('Oskari.coordinatetransformation.view.conversion', this),
-            mapselect: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapselect', this),
+            transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this),
+            MapSelection: Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateMapSelection', this),
             mapmarkers: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapmarkers', this)
         }
     },
@@ -74,8 +76,8 @@ function () {
     createUi: function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
     },
-    isMapSelectMode: function () {
-        return this.views["conversion"].isMapSelect;
+    isMapSelectionMode: function () {
+        return this.views["transformation"].isMapSelection;
     },
     /**
      * Creates the coordinatetransformation service and registers it to the sandbox.

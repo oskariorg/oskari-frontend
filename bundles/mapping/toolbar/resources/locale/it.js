@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Risultati della misura",
             "close": "Cancella",
             "guidance": {
-                "measureline": "Disegna una linea e misura la sua lunghezza sulla mappa. Clicca per creare il primo punto della linea e per iniziare la misura. Dopo di che clicca per creare gli altri vertici della linea. Fai doppio click sul punto finale per interrompere la misura.",
-                "measurearea": "Disegna un'area e misurala sulla mappa. Clicca per creare il primo vertice di un lato dell'area per iniziare la misura. Dopo di che clicca per creare gli altri vertici dei lati. Fai doppio click sul punto finale dell'ultimo lato per interrompere la misura."
+                "measureline": "Disegna una linea e misura la sua lunghezza sulla mappa. Clicca per creare il primo punto della linea e per iniziare la misura. Dopo di che clicca per creare gli altri vertici della linea.",
+                "measurearea": "Disegna un'area e misurala sulla mappa. Clicca per creare il primo vertice di un lato dell'area per iniziare la misura. Dopo di che clicca per creare gli altri vertici dei lati."
             }
         }
     }

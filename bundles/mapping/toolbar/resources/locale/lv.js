@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Mērījumi",
             "close": "Atcelt",
             "guidance": {
-                "measureline": "Mērīt līniju uz kartes. Dubultklikšķis, lai apturētu mērīšanu.",
-                "measurearea": "Mērīt laukumu uz kartes. Dubultklikšķis, lai apturētu mērīšanu."
+                "measureline": "Mērīt līniju uz kartes.",
+                "measurearea": "Mērīt laukumu uz kartes."
             }
         },
         "guidedTour": {
