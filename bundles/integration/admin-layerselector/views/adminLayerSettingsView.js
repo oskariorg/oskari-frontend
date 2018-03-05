@@ -57,6 +57,7 @@ define([
             },
 
             recheckCapabilities: function(e) {
+                var me = this;
                 var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
 
                 var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -75,6 +76,12 @@ define([
                         xhr = null;
                         if(resp.success.length === 1) {
                             content = jQuery('<span>' + loc('recheckSucceeded') + '<span>');
+                            jQuery(e.currentTarget).parents('.accordion').trigger({
+                                type: 'adminAction',
+                                command: 'editLayer',
+                                layerData: resp.layerUpdate,
+                                baseLayerId: me.options.baseLayerId
+                            });
                         } else {
                             var reasonKey = Object.keys(resp.error)[0];
                             var reason = resp.error[reasonKey];
@@ -836,7 +843,7 @@ define([
                 data.metadataId = form.find('#add-layer-datauuid').val();
 
                 try {
-                    var attrJson = JSON.parse(form.find('#add-layer-attributes').val());
+                    var attrJson = JSON.parse(form.find('#add-layer-attributes').val().trim() || '{}');
 
                     // overwrite forcedSRS with form values
                     var forcedSRS = form.find('.add-layer-forced-proj').map(function() {

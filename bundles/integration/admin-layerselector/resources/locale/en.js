@@ -211,7 +211,7 @@ Oskari.registerLocalization(
         "recheckAllButton": "Re-check all capabilities",
         "recheckAll": "Do you want to query getCapabilites for all layers? The operation can take many minutes.",
         "recheckAllSucceeded": "Capabilites update succeeded for {success, number} layers, failed for {fail, number} layers. Reload page to see updated data.",
-        "recheckSucceeded": "Capabilities re-check succeeded. Reload page to see updated data.",
+        "recheckSucceeded": "Capabilities re-check succeeded.",
         "recheckFailReason": "Capablities re-check failed: {reason}",
         "recheckFail": "Capablities re-check failed.",
         "recheckFailTimeout": "Capabilites check timeout. Process continues to run on server."
