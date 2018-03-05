@@ -311,7 +311,7 @@ Oskari.clazz.define(
                     bbox : mapVO.getBboxAsString(),
                     width : mapVO.getWidth(),
                     height : mapVO.getHeight(),
-                    srs : mapVO.getSrsName(),
+                    srs : mapVO.getSrsName()
                 },
                 success: function (data) {
                 	var uniqueColumn = null;
