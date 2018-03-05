@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Niðurstöður mælinga.",
             "close": "Hætta við",
             "guidance": {
-                "measureline": "Hvernig á að teikna línu og mæla lengd hennar á kortinu. Smelltu á upphafspunkt línunnar til að hefja mælingu. Eftir það smellirðu á alla rofstaði línunnar. Tvísmelltu á endapunkt línunnar til að hætta að mæla.",
-                "measurearea": "Hvernig á að teikna svæði og mæla lengd þess á kortinu. Smelltu á upphafspunkt svæðisins til að hefja mælingu. Eftir það smellirðu á alla rofstaði svæðisins. Tvísmelltu á endapunkt flákans til að hætta að mæla."
+                "measureline": "Hvernig á að teikna línu og mæla lengd hennar á kortinu. Smelltu á upphafspunkt línunnar til að hefja mælingu. Eftir það smellirðu á alla rofstaði línunnar.",
+                "measurearea": "Hvernig á að teikna svæði og mæla lengd þess á kortinu. Smelltu á upphafspunkt svæðisins til að hefja mælingu. Eftir það smellirðu á alla rofstaði svæðisins."
             }
         }
     }

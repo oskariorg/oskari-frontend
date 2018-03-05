@@ -94,10 +94,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
             layer.setOverrideSld(mapLayerJson.override_sld);
         }
 		if (loclayer.organization) {
-		layer.setOrganizationName(loclayer.organization);
+		    layer.setOrganizationName(loclayer.organization);
 		}
 		if (loclayer.inspire) {
-        layer.setInspireName(loclayer.inspire);
+            layer.setGroups({
+                id:layer.getId(),
+                name:loclayer.inspire
+            });
         }
 	}
 });

@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Measurement Results",
             "close": "Cancel",
             "guidance": {
-                "measureline": "Draw a measurable line by cliking its breaking points. Finally double-click an ending point.",
-                "measurearea": "Draw a measurable area by clicking its corner points. Finally double-click an ending point."
+                "measureline": "Draw a measurable line by cliking its breaking points.",
+                "measurearea": "Draw a measurable area by clicking its corner points."
             }
         },
         "guidedTour": {

@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Messfunktionen",
             "close": "Abbrechen",
             "guidance": {
-                "measureline": "Linie zeichnen und Entfernung auf Karte messen. Klicken Sie auf den Startpunkt der Linie, um die Messung zu beginnen. Klicken Sie nun alle Stützpunkte an. Doppelklick auf Endpunkt beendet die Messung.",
-                "measurearea": "Fläche zeichnen und auf Karte messen. Klicken Sie auf den Startpunkt der Flächenkante, um die Messung zu beginnen. Klicken Sie nun alle Stützpunkte an. Doppelklick auf Endpunkt beendet die Messung."
+                "measureline": "Linie zeichnen und Entfernung auf Karte messen. Klicken Sie auf den Startpunkt der Linie, um die Messung zu beginnen. Klicken Sie nun alle Stützpunkte an.",
+                "measurearea": "Fläche zeichnen und auf Karte messen. Klicken Sie auf den Startpunkt der Flächenkante, um die Messung zu beginnen. Klicken Sie nun alle Stützpunkte an."
             }
         },
         "guidedTour": {
