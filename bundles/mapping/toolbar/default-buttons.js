@@ -25,8 +25,7 @@ Oskari.clazz.category(
          * @method _getLinkUuid
          * @private
          * 
-         * @return {String} current view uuid, if public view. Otherwise returns uuid of system default view with same srs as current view
-         * @throws {Error} if current view srs is not found in SystemDefaultViews
+         * @return {String} current view uuid, if public view. Otherwise returns uuid of system default view with same srs as current view.
          */
         _getLinkUuid: function () {
             if(Oskari.app.isPublic()) {
@@ -38,7 +37,7 @@ Oskari.clazz.category(
                 return appsetup.srsName === srs;
             });
             if(!matchingSystemAppsetup) {
-                throw new Error('No default view found with current view srs! This should be impossible...');
+                return null;
             }
             return matchingSystemAppsetup.uuid;
         },
@@ -185,7 +184,14 @@ Oskari.clazz.category(
                                 var mapUrlPrefix = me.__getMapUrl();
                                 var linkParams = me.getSandbox().generateMapLinkParameters({});
 
-                                linkParams += '&uuid=' + me._getLinkUuid();
+                                var viewUuid = me._getLinkUuid();
+                                if(!viewUuid) {
+                                    var closeBtn = me.dialog.createCloseButton();
+                                    me.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
+                                    return;
+                                }
+
+                                linkParams += '&uuid=' + viewUuid;
 
                                 // This is kinda ugly...
                                 // Only show marker if there's no markers.
