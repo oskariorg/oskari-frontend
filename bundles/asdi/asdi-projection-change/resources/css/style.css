@@ -31,7 +31,6 @@
     -ms-flex: 30%;
 }
 .projection-warning {
-    display: none;
     height:16px;
     width: 16px;
     background-image: url("../images/warning-light.png");

@@ -4,30 +4,42 @@
 Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', function (projection) {
     this.projection = projection;
     this.loc = Oskari.getLocalization('projection-change');
+    this.infoView = _.template('<div class="oskari-projection-information"><i>${desc}</i><br/><img src="/Oskari/bundles/asdi/asdi-projection-change/resources/images/${img}"></img></div>');
 }, {
-    _template: {
-        container: jQuery('<div class="oskari-projection-information"><div class="card-image"></div></div>')
-    },
-    setElement: function(el) {
-        this.element = el;
+    setElement: function(dialog) {
+        this.dialog = dialog;
     },
     getElement: function() {
-        return this.element;
+        return this.dialog;
+    },
+    createClassSelector: function ( srs ) {
+       return srs.replace(':', '');
+    },
+    constructTitle: function () {
+        var title = this.projection.name + ' [' + this.projection.srsName + ']';
+        return title;
     },
     show: function( parentElement ) {
-        var content = this._template.container.clone();
-        content.find('.card-image').addClass(this.projection.imgCls);
+        var me = this;
+        if ( this.getElement() ) {
+            return;
+        }
+        var info = jQuery( this.infoView ({
+            desc: this.projection.srsName,
+            img: this.createClassSelector( this.projection.srsName ) + '.png',
+        }));
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var btn = dialog.createCloseButton(this.loc.infoPopup.ok);
         btn.addClass('primary');
         btn.setHandler( function () {
             dialog.close(true);
+            me.dialog = null;
         });
         dialog.dialog.zIndex(parentElement.zIndex() + 1);
-        dialog.setContent(content);
-        dialog.show(this.loc.infoPopup.title, this.loc.projectionDesc[this.projection.srsName], [btn]);
+        // dialog.setContent(info);
+        dialog.show(this.constructTitle(), info, [btn]);
         dialog.moveTo(parentElement);
         dialog.makeDraggable();
+        this.setElement(dialog);
     }
-}, {
 });

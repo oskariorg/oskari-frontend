@@ -10,7 +10,7 @@ function (view, callback) {
                         '<div class="info-row">'+
                             '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+
-                            '<div class="projection-warning" title="${tooltip}"></div>'+
+                            '<div class="projection-warning oskari-hidden" title="${tooltip}"></div>'+
                         '</div>'+
                         '</div>');
     this.element = null;
@@ -27,6 +27,22 @@ function (view, callback) {
     setElement: function (el) {
         this.element = el;
     },
+    checkUnsupportedLayers: function () {
+        var me = this;
+        var layers = Oskari.getSandbox().getMap().getLayers();
+        var unsupportedLayers = layers.filter( function (a) {
+            return a.isSupported(me.view.srsName);
+        });
+        if ( unsupportedLayers.length !== 0 ) {
+            var warningElement = this.getElement().find('.projection-warning');
+            warningElement.removeClass('oskari-hidden');
+            //warningLink
+            warningElement.on('click', function ( event ) {
+                event.stopPropagation();
+                me.errorListing.show( jQuery(this), unsupportedLayers );
+            });
+        }     
+    },
     create: function (view) {
         var me = this;
         var tpl = this.card;
@@ -37,7 +53,8 @@ function (view, callback) {
             tooltip: me.loc.error.hover.icon
         }));
 
-        card.on('click', function () {
+        card.on('click', function (e) {
+            e.stopPropagation();
             me.projectionChangeHandler( view.uuid,  view.srsName );
         });
         //infolink
@@ -45,13 +62,7 @@ function (view, callback) {
             event.stopPropagation();
             me.infoView.show( jQuery(this) );
         });
-        //warningLink
-        card.find('.projection-warning').on('click', function ( event ) {
-            event.stopPropagation();
-            me.errorListing.show( jQuery(this) );
-        });
-
         this.setElement(card);
+        this.checkUnsupportedLayers();
     }
-}, {
 });
