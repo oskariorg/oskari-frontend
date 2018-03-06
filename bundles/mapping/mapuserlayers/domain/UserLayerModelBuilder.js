@@ -25,10 +25,10 @@ Oskari.clazz.define(
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             // set layer specific data
             layer.setOrganizationName(loclayer.organization);
-            layer.setGroups({
+            layer.setGroups([{
                 id:layer.getId(),
                 name:loclayer.inspire
-            });
+            }]);
             layer.setDescription(mapLayerJson.description);
             layer.setSource(mapLayerJson.source);
             layer.setRenderingElement(mapLayerJson.renderingElement);
