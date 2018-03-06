@@ -30,8 +30,8 @@ function (view, callback) {
     checkUnsupportedLayers: function () {
         var me = this;
         var layers = Oskari.getSandbox().getMap().getLayers();
-        var unsupportedLayers = layers.filter( function (a) {
-            return a.isSupported(me.view.srsName);
+        var unsupportedLayers = layers.filter( function (layer) {
+            return !layer.isSupported(me.view.srsName);
         });
         if ( unsupportedLayers.length !== 0 ) {
             var warningElement = this.getElement().find('.projection-warning');
