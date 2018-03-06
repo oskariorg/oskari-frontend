@@ -420,8 +420,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             var getLayerIndexInArray = function(arr){
                 var founded = -1;
-                for (var i = 0; i < groupLayers.length; i++) {
-                    var layer = groupLayers[i];
+                for (var i = 0; i < arr.length; i++) {
+                    var layer = arr[i];
                     if (layer.id === layerId) {
                         founded = i;
                         break;
@@ -720,6 +720,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         });
                     });
 
+                } else {
+                    layerGroups = group;
                 }
             }
             return layerGroups || this._layerGroups;
