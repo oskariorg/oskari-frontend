@@ -21,9 +21,11 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', funct
     },
     show: function( parentElement ) {
         var me = this;
+
         if ( this.getElement() ) {
             return;
         }
+
         var info = jQuery( this.infoView ({
             desc: this.projection.srsName,
             img: this.createClassSelector( this.projection.srsName ) + '.png',
@@ -36,7 +38,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', funct
             me.dialog = null;
         });
         dialog.dialog.zIndex(parentElement.zIndex() + 1);
-        // dialog.setContent(info);
+
         dialog.show(this.constructTitle(), info, [btn]);
         dialog.moveTo(parentElement);
         dialog.makeDraggable();
