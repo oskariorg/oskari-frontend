@@ -53,7 +53,7 @@ function (view, callback) {
             tooltip: me.loc.error.hover.icon
         }));
 
-        card.on('click', function (e) {
+        card.find('.card-image').on('click', function (e) {
             e.stopPropagation();
             me.projectionChangeHandler( view.uuid,  view.srsName );
         });

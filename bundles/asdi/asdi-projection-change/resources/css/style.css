@@ -26,14 +26,17 @@
     height: 160px;
     margin: 3px;
     margin-bottom: 10px;
-    cursor: pointer;
     flex: 30%;
     -ms-flex: 30%;
     padding: 15px;
 }
+.projection-info {
+    cursor: pointer;
+}
 .projection-warning {
     height:16px;
     width: 16px;
+    cursor: pointer;
     background-image: url("../images/warning-light.png");
     background-repeat: no-repeat;
     background-position: center;}
@@ -45,6 +48,8 @@
     align-items: center;
 }
 .card-image {
+    cursor: pointer;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     height: auto; 
