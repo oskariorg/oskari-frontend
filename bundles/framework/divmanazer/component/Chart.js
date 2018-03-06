@@ -90,6 +90,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             max: max
         }
     },
+    nullsLast: function (a, b) {
+        if(a == null && b == null) return 0;
+        if(a == null) return -1;
+        if(b == null) return 1;
+    },
     /**
      *
      * @method sortDataByType
@@ -120,13 +125,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             },
             "value-ascending": function () {
                 me.data.sort(function (a, b) {
-                    return d3.descending(a.value || 1000000 , b.value || 1000000);
+                    var result = me.nullsLast(a.value, b.value);
+                    if (!result) {
+                        return d3.descending(a.value, b.value);
+                    }
+                    return result;
                 });
                 return;
             },
             "value-descending": function () {
                 me.data.sort(function (a, b) {
-                    return d3.ascending(a.value || -1000000 , b.value || -1000000);
+                    var result = me.nullsLast(a.value, b.value);
+                    if (!result) {
+                        return d3.ascending(a.value, b.value);
+                    }
+                    return result;
                 });
                 return;
             }
