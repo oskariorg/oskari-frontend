@@ -171,11 +171,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         },
         updateTitle: function (values) {
             this.getElements().header.remove();
+            // TODO Refactor this
             var x = y = z = "";
+            if ( values.projection === 'GK') {
+                x = this.loc.coordinatefield.kkjnorth;
+                y = this.loc.coordinatefield.kkjeast;
+            }
             if ( values["geodetic-coordinate"].indexOf("KKJ") !== -1 ) {
                 x = this.loc.coordinatefield.kkjnorth
                 y = this.loc.coordinatefield.kkjeast
-            } else if ( values["geodetic-coordinate"].indexOf("ETRS") !== -1 ) {
+            } else if ( values["geodetic-coordinate"].indexOf("ETRS") !== -1 && values.projection !== 'GK' ) {
                 x = this.loc.coordinatefield.kkjeast
                 y = this.loc.coordinatefield.kkjnorth
             }

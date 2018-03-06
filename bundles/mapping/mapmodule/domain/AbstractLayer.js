@@ -189,12 +189,7 @@ Oskari.clazz.define(
                     break;
                 }
             }
-            for (lang in inspire) {
-                if (inspire.hasOwnProperty(lang)) {
-                    this.setInspireName(inspire);
-                    break;
-                }
-            }
+
             for (lang in organization) {
                 if (organization.hasOwnProperty(lang)) {
                     this.setOrganizationName(organization);

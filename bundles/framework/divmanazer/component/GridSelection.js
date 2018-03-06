@@ -19,7 +19,9 @@ Oskari.clazz.category(
             var me = this;
             // set selectedColumn in either case so render will use it immediately
             this.__selectedColumn = value;
-
+            if ( !me._fullFieldNames ) {
+                return;
+            }
             var columnIndex = me._fullFieldNames.map( function( name ) {
                return name.key;
            }).indexOf( value );

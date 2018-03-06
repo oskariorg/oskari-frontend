@@ -170,9 +170,9 @@
 }
 .coordinatetransformation-flyout td {
     background: #FAFAFA;
-    text-align: center;
 }
 .coordinatetransformation-flyout .cell {
+    text-align: center;
     height: 1em;
 }
 .coordinatetransformation-flyout .cell.control {

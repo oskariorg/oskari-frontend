@@ -296,9 +296,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.orgName) {
                 layer.setOrganizationName(newLayerConf.orgName);
             }
-            if (newLayerConf.inspire) {
-                layer.setInspireName(newLayerConf.inspire);
-            }
+
             if (newLayerConf.realtime) {
                 layer.setRealtime(newLayerConf.realtime);
             }
@@ -1074,11 +1072,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 baseLayer.setOrganizationName("");
             }
 
-            if (baseMapJson.inspire) {
-                baseLayer.setInspireName(baseMapJson.inspire);
-            } else {
-                baseLayer.setInspireName("");
-            }
             baseLayer.setLegendImage(baseMapJson.legendImage);
             baseLayer.setDescription(baseMapJson.info);
             baseLayer.setQueryable(false);

@@ -62,7 +62,7 @@
   padding: 5px 5px 0px 5px;
   font-weight: normal; }
   .statsgrid-grid-table-header-content .header {
-    width: 90%;
+    width: 85%;
     position: absolute;
     top: 5px; }
     .statsgrid-grid-table-header-content .header .title {
@@ -218,7 +218,7 @@ div.oskari-flyout {
       animation-duration: 0.5s;
       animation-iteration-count: 3; }
     div.oskari-flyout.statsgrid-data-flyout table.oskari-grid td {
-      text-align: left; }
+      text-align: right; }
     div.oskari-flyout.statsgrid-data-flyout label span {
       /* Indicator selection form */
       width: 200px;
@@ -448,6 +448,26 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
 .statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
   overflow-x: hidden;
   overflow-y: auto; }
+
+  /** Diagram styles **/
+  div.mapplugins .statsgrid-published-diagram {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      float: right;
+      margin: 10px !important; }
+  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .diagram {
+    background-color: #3c3c3c;
+    float: left;
+    height: 36px;
+    width: 36px;
+    background-image: url("../images/tile-diagram-dark.png");
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;    
+  }
+  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .active {
+      background-color: #ffffff;
+      background-image: url("../images/tile-diagram-light.png");
+      background-repeat: no-repeat; }
 
 /* ********************************************
  * Statsgrid tile styles
