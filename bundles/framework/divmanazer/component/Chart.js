@@ -94,6 +94,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         if(a == null && b == null) return 0;
         if(a == null) return -1;
         if(b == null) return 1;
+        return 0;
     },
     /**
      *
@@ -112,18 +113,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             type = this.sortingType;
         }
 
-        var sortTypes = {
-            "name-ascending": function () {
+        switch( type ) {
+            case "name-ascending":
                 me.data.sort(function (a, b) {
                     return d3.descending(a.name , b.name);
                 });
-            },
-            "name-descending": function () {
+            break;
+            case "name-descending":
                 me.data.sort(function (a, b) {
                     return d3.ascending(a.name , b.name);
                 });
-            },
-            "value-ascending": function () {
+            break;
+            case "value-ascending":
                 me.data.sort(function (a, b) {
                     var result = me.nullsLast(a.value, b.value);
                     if (!result) {
@@ -131,9 +132,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                     }
                     return result;
                 });
-                return;
-            },
-            "value-descending": function () {
+            break;
+            case "value-descending":
                 me.data.sort(function (a, b) {
                     var result = me.nullsLast(a.value, b.value);
                     if (!result) {
@@ -141,9 +141,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                     }
                     return result;
                 });
-                return;
-            }
-        }[type]();
+            break;
+        }
 
         me.redraw();
         me.sortingType = type;
@@ -160,10 +159,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var range = this.x.range();
         var width = range[1] - range[0];
         var tickTarget = (width / numDigits) / 10;
-
-        this.yAxis = d3.axisLeft( this.y )
-        .tickSizeInner(5)
-        .tickSizeOuter(0);
 
         this.xAxis = d3.axisTop( this.x )
         .ticks(Math.min(10, tickTarget))
@@ -217,65 +212,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     svgAppendElements: function () {
         var me = this;
 
-        if( this.dataHasNegativeValues() ) {
-            var negatives = [];
-            this.data.forEach( function (d) {
-                if(d.value < 0) {
-                    negatives.push( d.name );
-                }
-            });
-        }
         // append x-tick lines to chart
         var xtickAxis = this.svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate( 0, 0)")
             .call(this.xAxis);
 
-        xtickAxis.selectAll("x axis, tick, text").remove();
-        xtickAxis.select('.domain').remove();
-
-
-        var gy = this.svg.append("g")
-            .attr("class", "y axis")
-            .attr("transform", "translate(" + this.x(0) + ", 0)")
-            .call(this.yAxis);
-
-        gy.selectAll('line')
-            .attr('x2', function ( d ) {
-                if ( negatives !== undefined ) {
-                    if ( negatives.indexOf( d ) !== -1 && negatives !== undefined ) {
-                        return 5;
-                    } else {
-                        return -5;
-                    }
-                }
-            })
-            .attr('stroke', '#aaa')
-            .attr('shape-rendering', 'crispEdges');
-
-        gy.selectAll('text')
-            .attr("text-anchor", function (d) {
-                if ( d === null ) {
-                    return;
-                }
-                if ( negatives !== undefined ) {
-                    if ( negatives.indexOf(d) !== -1 ) {
-                        return "start";
-                    }
-                }
-            })
-            .attr('x', function ( d ) {
-                if ( d === null ) {
-                    return;
-                }
-                if ( negatives !== undefined ) {
-                    if ( negatives.indexOf(d) !== -1 && negatives !== undefined ) {
-                        return 8;
-                    } else {
-                        return -8;
-                    }
-                }
-            })
+            xtickAxis.selectAll("x axis, tick, text").remove();
+            xtickAxis.select('.domain').remove();
 
             //append the x-axis to different element so we can show the values when scrollign
             var gx = d3.select( this.axisLabelValues.get(0) )
@@ -321,14 +265,62 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         this.initChart();
 
         var me = this;
-        
+
+        // labels
+        var labels = this.svg.append('g')
+            .selectAll(".labels")
+            .data(this.data)
+            .enter()
+            .append("g")
+            .attr("class", function ( d ) { return d.value < 0 ? "labels negative" : "labels positive" } )
+            .attr("transform", function ( d ) {
+                var marginized = me.y(d.name) + 11;
+                return  "translate("+ me.x(0) +","+ marginized +")";
+            })
+        //append lines
+        labels.append("line")
+            .attr('x2', function ( d ) {
+                if ( d.value < 0 ) {
+                    return 5;
+                } else {
+                    return -5;
+                }
+            })
+            .attr('y1', 0)
+            .attr('y2', 0)           
+            .attr('x1', 0)
+            .attr('stroke', '#aaa')
+            .attr('shape-rendering', 'crispEdges');
+        //append text
+        labels.append("text")
+            .attr("text-anchor", function (d) {
+                if ( d.value < 0 ) {
+                    return "start";
+                }
+                return "end";
+            })
+            .attr('x', function ( d ) {
+                if ( d.value < 0 ) {
+                    return 8;
+                } else {
+                    return -8;
+                }
+            })
+            .attr('dy', '0.32em')
+            .style('font-size', '11px')
+            .attr('fill', '#000')
+            .text(function (d) {
+                return d.name;
+            });
+
+        // bars
         var bars = this.svg.insert('g','g.y').selectAll(".bar")
             .data(this.data)
             .enter()
             .append("g")
             .attr("class", function ( d ) { return d.value < 0 ? "negative" : "positive" } )
             .attr('transform', function ( d ) {
-                return 'translate(0,' + ( me.y( d.name ) + me.y.bandwidth() / 2 ) + ')'; 
+                return 'translate(0,' + ( me.y( d.name ) + me.y.bandwidth() / 2 ) + ')';
             });
 
         //append rects
