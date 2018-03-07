@@ -7,7 +7,8 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Länk",
                 "ok": "OK",
-                "title": "Gör en länk till kartvyn."
+                "title": "Gör en länk till kartvyn.",
+                "cannot": "Denna kartvy kan inte länkas till. Skapa en ny kartvy och försök igen."
             },
             "history": {
                 "reset": "Gå tillbaka till standardvyn för kartvyn.",
