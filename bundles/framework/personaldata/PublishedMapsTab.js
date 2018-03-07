@@ -281,9 +281,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             if ( viewProjection !== currentProjection ) {
                 return false;
             }
-            return false;
+            return true;
         },
-        constructUrlUuid: function (srs) {
+        constructUrlWithUuid: function (srs) {
             var views = Oskari.app.getSystemDefaultViews();
             var uuid;
             views.forEach( function (view) {
@@ -415,7 +415,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 
                     var supported = me._isCurrentProjectionSupportedForView( data );
                     if (!supported) {
-                        me.createProjectionChangeDialog( cb.bind(me, me.constructUrlUuid.bind(this, srs) ));
+                        me.createProjectionChangeDialog( cb.bind(me, me.constructUrlWithUuid.bind(me, srs) ));
                         return;
                     }
 
@@ -477,7 +477,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 
                     var supported = me._isCurrentProjectionSupportedForView( data );
                     if (!supported) {
-                        me.createProjectionChangeDialog( me._loadProjectionUuid.bind( this, me.constructUrlUuid(srs) ) );
+                        me.createProjectionChangeDialog( me._loadProjectionUuid.bind( this, me.constructUrlWithUuid(srs) ) );
                         return;
                     }
 
