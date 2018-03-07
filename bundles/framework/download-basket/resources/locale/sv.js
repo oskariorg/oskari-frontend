@@ -12,7 +12,7 @@ Oskari.registerLocalization({
             "download-basket-cropping-tab" : {
                 "title" : "Avgränsning",
                 "choose-cropping-mode" : "Välj avgränsningsalternativ i ditt tycke ",
-                "choose-wanted-areas-from-map" : "Välj genom att klicka på kartan det område eller de områden som du vill ladda ned. Avgränsningen tar med de data som skär avgränsningsområdet. Ifall valda data för nedladdning har en stor filstorlek kan nedladdningen dröja längre.  Data som flyttats till nedladdningskorgen dyker upp i fliken för nedladdningskorgen. Avmarkera avgränsningen genom att trycka på det valda området igen.”
+                "choose-wanted-areas-from-map" : "Välj genom att klicka på kartan det område eller de områden som du vill ladda ned. Avgränsningen tar med de data som skär avgränsningsområdet. Ifall valda data för nedladdning har en stor filstorlek kan nedladdningen dröja längre.  Data som flyttats till nedladdningskorgen dyker upp i fliken för nedladdningskorgen. Avmarkera avgränsningen genom att trycka på det valda området igen.”,
                 "users-temp-basket" : "Valda områden: <strong></strong> st, vill du flytta objekten till nedladdningskorgen?",
                 "move-to-basket" : "Flytta till nedladdningskorgen ",
                 "temp-basket-empty" : "Avmarkera val ",
