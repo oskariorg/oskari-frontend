@@ -21,17 +21,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapmarkers',
         show: function() {
             var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(this.loc.datasourceinfo.success);
+            btn = dialog.createCloseButton(this.loc.dsInfo.success);
             me.dialog = dialog;
 
             btn.addClass('primary');
 
-
             btn.setHandler(function() {
-                me.instance.toggleViews("conversion");
+                me.instance.toggleViews("transformation");
             });
 
-            dialog.show('View', this.loc.datasourceinfo.mapmarkers, [btn]);
+            dialog.show(this.loc.utils.show, this.loc.dsInfo.mapmarkers, [btn]);
             dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
         }
     }

@@ -50,7 +50,78 @@ define([
                 'change .admin-interface-version': 'handleInterfaceVersionChange',
                 'change .admin-sld-styles': 'handleSldStylesChange',
                 'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
-                'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup'
+                'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup',
+                'click .add-layer-forced-proj .icon-close': 'removeForcedProj',
+                'click .add-layer-forced-proj-add': 'addForcedProj',
+                'click .add-layer-recheck': 'recheckCapabilities'
+            },
+
+            recheckCapabilities: function(e) {
+                var me = this;
+                var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+
+                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var closeButton = popup.createCloseButton(loc('close'))
+
+                var content;
+
+                jQuery.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: this.model.getId()
+                    },
+                    url: this.instance.getSandbox().getAjaxUrl() + 'action_route=UpdateCapabilities',
+                    success: function (resp) {
+                        xhr = null;
+                        if(resp.success.length === 1) {
+                            content = jQuery('<span>' + loc('recheckSucceeded') + '<span>');
+                            jQuery(e.currentTarget).parents('.accordion').trigger({
+                                type: 'adminAction',
+                                command: 'editLayer',
+                                layerData: resp.layerUpdate,
+                                baseLayerId: me.options.baseLayerId
+                            });
+                        } else {
+                            var reasonKey = Object.keys(resp.error)[0];
+                            var reason = resp.error[reasonKey];
+                            content = jQuery('<span>' + loc('recheckFailReason', {reason: reason}) + '<span>');
+                        }
+                        popup.show(loc('recheckTitle'), content, [closeButton]);
+                    },
+                    error: function (xhr, status, error) {
+                        xhr = null;
+                        content.append('<br><br><span>' + loc('recheckFail') + '<span>');
+                        popup.show(loc('recheckTitle'), content, [closeButton]);
+                    }
+                });
+            },
+
+            addForcedProj: function (e) {
+                e.stopPropagation();
+
+                var forcedSRS = jQuery(e.target)
+                    .parent().parent()
+                    .find('.add-layer-forced-proj').map(function() {
+                        return this.getAttribute('data-proj');
+                    })
+                    .get();
+                var input = jQuery(e.target).siblings('.add-layer-forced-proj-input');
+                var value = input.val().trim();
+                if(value === '' || forcedSRS.includes(value)) {
+                    input.focus();
+                    return;
+                }
+                jQuery(e.target)
+                    .parent().parent()
+                    .find('.add-layer-forced-proj-chits')
+                    .append('<span class="add-layer-forced-proj" data-proj="' + value + '">' + value + '<span class="icon-close"></span></span>');
+                input.val('');
+                input.focus();
+            },
+            removeForcedProj: function(e) {
+                e.stopPropagation();
+                jQuery(e.target).parent().remove();
             },
             showCapabilitiesPopup : function() {
                 var caps = this.model.getCapabilities();
@@ -770,7 +841,23 @@ define([
                 data.legendImage = form.find('#add-layer-legendImage').val();
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
                 data.metadataId = form.find('#add-layer-datauuid').val();
-                data.attributes = form.find('#add-layer-attributes').val();
+
+                try {
+                    var attrJson = JSON.parse(form.find('#add-layer-attributes').val().trim() || '{}');
+
+                    // overwrite forcedSRS with form values
+                    var forcedSRS = form.find('.add-layer-forced-proj').map(function() {
+                        return this.getAttribute('data-proj');
+                    }).get();
+                    if(forcedSRS.length) {
+                        attrJson.forcedSRS = forcedSRS;
+                    } else {
+                        delete attrJson.forcedSRS;
+                    }
+                    data.attributes = JSON.stringify(attrJson);
+                } catch (error) {
+                    // don't include "attributes" in data if malformed JSON
+                }
 
                 // layer type specific
                 // TODO: maybe something more elegant?

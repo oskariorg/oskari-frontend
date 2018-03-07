@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Metingen",
             "close": "Annuleren",
             "guidance": {
-                "measureline": "Meet een lijn in de kaart. Dubbelklik om te stoppen met meten.",
-                "measurearea": "Meet een gebied in de kaart. Dubbelklik om te stoppen met meten."
+                "measureline": "Meet een lijn in de kaart.",
+                "measurearea": "Meet een gebied in de kaart."
             }
         },
         "guidedTour": {

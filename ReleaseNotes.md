@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.45.1
+
+For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/8?closed=1
+
+- Myplaces drawing fixes to improve usability and interaction with GFI.
+- Doubleclicking the map while drawing to finish the sketch no longer zooms in.
+- WFS-highlights for layers that are not on the map can now be done as before.
+- Heatmap reacted to layer events for non-heatmap layers. This has been fixed.
+
 ## 1.45.0
 
 For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/4?closed=1

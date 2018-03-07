@@ -3,14 +3,15 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "coordinatetransformation",
     "value": {
+        "title": "Koordinaattimuunnos",
         "tile": {
             "title": "Koordinaattimuunnos"
         },
         "flyout": {
-        "title": {
-            "input": "Lähtötiedot",
-            "result": "Tulostiedot"
-        },
+            "title": {
+                "input": "Lähtötiedot",
+                "result": "Tulostiedot"
+            },
             "coordinatesystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "geodetic_datum": "Geodeettinen datumi",
@@ -26,11 +27,12 @@ Oskari.registerLocalization(
                 "map": "Valitse sijainnit kartalta",
                 "choose":"Valitse sijainti kartalta"
             },
-            "datasourceinfo": {
+            "dsInfo": {
                 "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
                 "link":"valitse selaamalla",
                 "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
                 "mapinfo":"Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
+                "select": "Valitse",
                 "uploading":"Ladataan",
                 "success":"Valmis",
                 "error":"Virhe!",
@@ -47,10 +49,11 @@ Oskari.registerLocalization(
                 "kkjeast":"Itä-koordinaatti [m]",
                 "lat":"Leveysaste",
                 "lon":"Pituusaste",
+                "elevation": "Korkeus [m]",
                 "geox":"Geosentrinen X [m]",
                 "geoy":"Geosentrinen Y [m]",
                 "geoz":"Geosentrinen Z [m]",
-                "ellipse_height":"Ellipsoidinen korkeus [m]"
+                "ellipse_elevation":"Ellipsoidinen korkeus [m]"
             },
             "utils": {
                 "clear": "Tyhjennä taulukot",
@@ -71,7 +74,7 @@ Oskari.registerLocalization(
                     "decimalseparator": "Desimaalierotin",
                     "headercount": "Otsakerivien määrä",
                     "reversecoords": "Koordinaatit käänteisesti",
-                    "id": "Käytä tunnistetta"   
+                    "id": "Käytä tunnistetta"
                 },
                 "export": {
                     "title": "Aineiston muodostaminen",
@@ -81,6 +84,27 @@ Oskari.registerLocalization(
                     "title": "Lähtöaineiston ominaisuudet",
                 }
             }
+        },
+        "JSONOptions": {
+            "default": "Mikä tahansa",
+            "CRFProjected2D": "Suorakulmainen 2D (Taso)",
+            "CRFProjected3D": "Suorakulmainen 3D",
+            "CRFGeographic2D": "Maantieteellinen 2D",
+            "CRFGeographic3D": "Maantieteellinen 3D",
+            "choose": "Valitse",
+            "none": "Ei mitään"
+        },
+        "coordinate-system-info" : {
+            "geodetic": "geodetic",
+            "coordinate": "coordinate",
+            "projection": "projection",
+            "geodetic-coordinate": "geodetic-coordinate",
+            "elevation": "elevation",
+
+        },
+        "infoPopup" : {
+            "title": "Coordinate System Info",
+            "ok": "Ok"
         }
     }
 });

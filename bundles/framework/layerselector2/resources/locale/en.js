@@ -32,7 +32,8 @@ Oskari.registerLocalization(
             "type-base": "Background map",
             "type-wms": "Map layer (WMS, WMTS)",
             "type-wfs": "Data product (WFS)",
-            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window."
+            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window.",
+            "unsupported-srs": "Unsupported map projection"
         },
         "backendStatus": {
             "OK": {

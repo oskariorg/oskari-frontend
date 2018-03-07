@@ -118,6 +118,66 @@
         <% } %>
     <% } %>
 
+    <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerProps %>"><%= instance.getLocalization('admin').layerProps %></div>
+
+    <% if(model.getId()) { %> <!-- show only for existing layers, not new ones being created -->
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label class="add-layer-label" title="<%= instance.getLocalization('admin').supportedSRS %>"><%= instance.getLocalization('admin').supportedSRS %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <%
+                    var srsList = model.getSrsList();
+                    for(var i = 0; srsList && i < srsList.length; i++) { %>
+                        <span><%= srsList[i] %></span>
+                        <% if(i < srsList.length-1) { %>, <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <%
+            var missingProjections = model.getMissingProjections();
+            if(missingProjections.length) {
+        %>
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label class="add-layer-label" title="<%= instance.getLocalization('admin').missingSRS %>"><%= instance.getLocalization('admin').missingSRS %></label>
+                <div class="layer-missing-projection icon-info" title="<%= instance.getLocalization('admin').missingInfo %>"></div>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <% for(var i = 0; i < missingProjections.length; i++) { %>
+                        <span><%= missingProjections[i] %></span>
+                        <% if(i < missingProjections.length-1) { %>, <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    <% } %>
+
+    <% var forcedSRS = model.getAttributes().forcedSRS || []; %>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label class="add-layer-label" title="<%= instance.getLocalization('admin').forcedSRS %>"><%= instance.getLocalization('admin').forcedSRS %></label>
+            <div class="layer-missing-projection icon-info" title="<%= instance.getLocalization('admin').forcedSRSInfo %>"></div>
+        </div>
+        <div class="add-layer-input-area add-layer-forced-proj-area">
+            <div class="input-controls">
+                <span class="add-layer-forced-proj-chits">
+                    <% for(var i = 0; i < forcedSRS.length; i++) { %>
+                        <span class="add-layer-forced-proj" data-proj="<%= forcedSRS[i] %>"><%= forcedSRS[i] %><span class="icon-close"></span></span>
+                    <% } %>
+                </span>
+                <span class="add-layer-forced-proj-inputgroup">
+                    <input class="add-layer-forced-proj-input add-layer-input" type="text"/>
+                    <button class="add-layer-forced-proj-add"><%= instance.getLocalization('admin').forcedSRSAdd %></button>
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-datauuid" class="add-layer-label" title="<%= instance.getLocalization('admin').metaInfoIdDesc %>"><%= instance.getLocalization('admin').metaInfoId %></label>
@@ -359,6 +419,8 @@
                     <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"><%= instance.getLocalization('save') %></button>
                     <button class="add-layer-btn <%= isSubLayer ? 'admin-remove-sublayer' : 'admin-remove-layer' %>"
                         title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
+                    <button class="add-layer-btn add-layer-recheck" 
+                        title="<%= instance.getLocalization('recheckTitle') %>"><%= instance.getLocalization('recheckTitle') %></button>
                 <% } %>
                 <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
                     title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>

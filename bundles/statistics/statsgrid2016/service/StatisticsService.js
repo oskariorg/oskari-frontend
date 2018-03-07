@@ -180,7 +180,7 @@
         getRegionsets: function (includeOnlyIds) {
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var layers = service.getLayersOfType('STATS');
-            if (!layers) {
+            if (!layers || layers.length === 0) {
                 return [];
             }
             var list = [];

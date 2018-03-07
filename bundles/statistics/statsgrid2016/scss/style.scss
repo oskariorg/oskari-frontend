@@ -103,7 +103,7 @@ $flyoutPadding: 16px;
     font-weight: normal;
 
     .header {
-        width: 90%;
+        width: 85%;
         position: absolute;
         top: 5px;
         .title {
@@ -349,7 +349,7 @@ div.oskari-flyout {
             }
 
             td {
-                text-align: left;
+                text-align: right;
             }
         }
 
@@ -565,6 +565,16 @@ div.oskari-flyout {
     width: 300px;
     font-size: 12px;
 
+    .classification-colors.value {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .visible-map-style-choropleth.flip-colors {
+        margin-left: 10px;
+        line-height: 27px;
+    }
+
     >div.header {
         background-color: #fdf8d9;
         margin: 0;
@@ -636,13 +646,6 @@ div.oskari-flyout {
                 width: 96%;
                 font-size: 12px;
                 padding: 1px 2px;
-            }
-
-            button.reverse-colors {
-                margin-top: 5px;
-                margin-left: 0;
-                width: 95%;
-                padding: 4px 5px;
             }
 
             .point-size {
@@ -735,6 +738,21 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         &.active {
             background-color: $lightColor;
             background-image: url('../images/table_light.png');
+        }
+    }
+     .diagram {
+        background-color: $darkColor;
+        float: left;
+        height: 36px;
+        width: 36px;
+        background-image: url("../images/tile-diagram-dark.png");
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position: center;    
+        &.active {
+            background-color: $lightColor;
+            background-image: url("../images/tile-diagram-light.png");
+            background-repeat: no-repeat;
         }
     }
 
