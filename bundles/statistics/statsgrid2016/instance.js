@@ -25,11 +25,14 @@ Oskari.clazz.define(
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
+        this.diagramPlugin = null;
+
         this.regionsetViewer = null;
+        this.flyoutManager = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
-
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             // create the StatisticsService for handling ajax calls and common functionality.
             // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here (it's datasource specific)
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
@@ -44,18 +47,35 @@ Oskari.clazz.define(
                 me.statsService.setMapModes(['wms','vector']);
             }
             statsService.addDatasource(conf.sources);
+
+            // initialize flyoutmanager
+            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService);
+            this.flyoutManager.init();
+            this.getTile().setupTools( this.flyoutManager );
+
             // disable tile if we don't have anything to show or enable if we do
             // setup initial state
             this.setState();
 
-            if(this.isEmbedded()) {
+            this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published );
+            mapModule.registerPlugin(this.togglePlugin);
+            mapModule.startPlugin(this.togglePlugin);
+
+            if ( this.isEmbedded() ) {
                 // Start in an embedded map mode
-                // Embedded map might not have the grid. If enabled show toggle buttons so user can access it
-                me.showToggleButtons(conf.grid !== false, this.state.view);
+
                 // Always show legend on map when embedded
                 me.showLegendOnMap(true);
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
+                
+                //
+                if( me.conf.grid ) {
+                    me.togglePlugin.addTool('table');
+                }
+                if( me.conf.diagram ) {
+                    me.togglePlugin.addTool('diagram');
+                }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
             this.__setupLayerTools();
@@ -81,6 +101,9 @@ Oskari.clazz.define(
          */
         getLayerService : function() {
             return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        },
+        getFlyoutManager: function () {
+            return this.flyoutManager;
         },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
@@ -170,12 +193,6 @@ Oskari.clazz.define(
                 if( wasClosed ) {
                     me.getTile().hideExtensions();
                     return;
-                }
-                if( this.isEmbedded() && !wasClosed ) {
-                    // open table on embedded map
-                    // TODO: is wasClosed check unnecessary?
-                    me.getTile().getFlyoutManager().init();
-                    me.getTile().toggleFlyout( 'table' );
                 } else {
                     me.getTile().showExtensions();
                 }
@@ -318,24 +335,6 @@ Oskari.clazz.define(
             }
             return state;
         },
-        showToggleButtons: function(enabled, visible) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            if(!enabled) {
-                if(this.togglePlugin) {
-                    mapModule.unregisterPlugin(me.togglePlugin);
-                    mapModule.stopPlugin(me.togglePlugin);
-                }
-                return;
-            }
-            if(!this.togglePlugin) {
-                this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
-            }
-            mapModule.registerPlugin(me.togglePlugin);
-            mapModule.startPlugin(me.togglePlugin);
-            me.togglePlugin.showTable(visible || me.visible);
-        },
         /**
          * @method  @public showLegendOnMap Render published  legend
          * This method is also used to setup functionalities for publisher preview
@@ -367,7 +366,6 @@ Oskari.clazz.define(
             }
             return;
         },
-
         /**
          * @method  @public enableClassification change published map classification visibility.
          * @param  {Boolean} enabled allow user to change classification or not

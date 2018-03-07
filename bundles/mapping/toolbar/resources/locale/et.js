@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Mõõtmustulemused",
             "close": "Tühista",
             "guidance": {
-                "measureline": "Mõõda joon kaardil. Topeltklõps lõpetab mõõtmise.",
-                "measurearea": "Mõõda pindala kaardil. Topeltkklõps lõpetab mõõtmise."
+                "measureline": "Mõõda joon kaardil.",
+                "measurearea": "Mõõda pindala kaardil."
             }
         },
         "guidedTour": {
