@@ -283,7 +283,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             }
             return false;
         },
-        _loadProjectionUuid: function (srs) {
+        constructUrlUuid: function (srs) {
             var views = Oskari.app.getSystemDefaultViews();
             var uuid;
             views.forEach( function (view) {
@@ -297,7 +297,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 url += window.location.pathname;
             }
             url += "?uuid="+uuid;
-
+            return url;
+        },
+        _loadProjectionUuid: function (url) {
             window.location.href = url;
         },
         /**
@@ -309,16 +311,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
         createProjectionChangeDialog: function (cb) {
             var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var btn = dialog.createCloseButton("OK");
-            var cancel = dialog.createCloseButton("Cancel");
+            var btn = dialog.createCloseButton(this.loc("projectionError").ok);
+            var cancel = dialog.createCloseButton( this.loc("projectionError").cancel );
             cancel.setHandler( function () {
                 dialog.close(true);
             });
             btn.addClass('primary');
             btn.setHandler( function () {
                 cb();
+                dialog.close(true);
             });
-            dialog.show("PROJECTION ERROR", "Change projection to the saved views projection.", [cancel, btn]);
+            dialog.show(this.loc("projectionError").title, this.loc("projectionError").msg, [cancel, btn]);
             dialog.makeDraggable();
         },
         /**
@@ -398,18 +401,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // set up the link from name field
             var showRenderer = function (name, data) {
                 var link = me.templateLink.clone();
+                var srs = data.state.mapfull.state.srs;
                 link.text(name);
                 link.bind('click', function () {
+
                     var cb = function (url) {
                         window.open(
-                            url,
+                            url(),
                             'Published',
                             'location=1,status=1,scrollbars=yes,width=850,height=800'
                         );
                     }
+
                     var supported = me._isCurrentProjectionSupportedForView( data );
                     if (!supported) {
-                        me.createProjectionChangeDialog(cb);
+                        me.createProjectionChangeDialog( cb.bind(me, me.constructUrlUuid.bind(this, srs) ));
                         return;
                     }
 
@@ -465,12 +471,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             //sending a request to publisher for editing view
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
+                var srs = data.state.mapfull.state.srs;
                 link.text(name);
                 link.bind('click', function () {
 
                     var supported = me._isCurrentProjectionSupportedForView( data );
                     if (!supported) {
-                        me.createProjectionChangeDialog( me._loadProjectionUuid.bind(this, data.state.mapfull.state.srs) );
+                        me.createProjectionChangeDialog( me._loadProjectionUuid.bind( this, me.constructUrlUuid(srs) ) );
                         return;
                     }
 
