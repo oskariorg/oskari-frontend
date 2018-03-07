@@ -90,6 +90,13 @@ Oskari.registerLocalization(
             "wmsServiceMetaId": "Gränssnittjänstens metadata-tagg",
             "wmsServiceMetaIdDesc": "Gränssnittjänstens metadata-filtagg",
             "layerNameAndDesc": "Lagrets namn och kort beskrivning",
+            "layerProps": "Lagrets enskaper",
+            "forcedSRS": "Tvingade SRS",
+            "forcedSRSInfo": "Tvångs SRS jämfört med GetCapabilites",
+            "forcedSRSAdd": "Tillägga",
+            "supportedSRS": "Stöd SRS",
+            "missingSRS": "Saknade SRS",
+            "missingInfo": "Denna kartlager stöder inte vissa applikationens standardprojektioner",
             "metaInfoIdDesc": "Geodata&shy;registrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
             "metaInfoId": "Metadatans filtagg",
             "wmsName": "Unik namn för kartlager",
@@ -197,6 +204,16 @@ Oskari.registerLocalization(
         "add": "Tillägg",
         "save": "Lagra",
         "delete": "Ta bort",
-        "ok": "OK"
+        "ok": "OK",
+        "close": "Stäng",
+        "query": "Hämta",
+        "recheckTitle": "Hämta getCapabilities",
+        "recheckAllButton": "Hämta alla getCapabilities",
+        "recheckAll": "Vill du hämta getCapabilites för alla kartlager? Operationen kan ta många minuter.",
+        "recheckAllSucceeded": "Uppdatering lyckades för {success, number} lager, misslyckades för {fail, number} lager. Uppdatera sidan för att se uppdaterade data.",
+        "recheckSucceeded": "Uppdatering lyckades.",
+        "recheckFailReason": "Uppdatering misslyckades: {reason}",
+        "recheckFail": "Uppdatering misslyckades.",
+        "recheckFailTimeout": "Uppdatering tidgräns överstegs. Processen fortsätter på servern."
     }
 });

@@ -405,6 +405,19 @@ if (!Function.prototype.bind) {
                 return legends;
             },
 
+            getMissingProjections: function() {
+                var defaultUniqueEPSG = {};
+                Oskari.app.getSystemDefaultViews().forEach(function(view) {
+                    defaultUniqueEPSG[view.srsName] = true;
+                });
+                var supported = this.getSrsList() || [];
+                supported.forEach(function(srs) {
+                    delete defaultUniqueEPSG[srs];
+                });
+
+                return Object.keys(defaultUniqueEPSG);
+            },
+
             /**
              * Returns defined language codes or default language if not set
              * @method  _getLanguages
