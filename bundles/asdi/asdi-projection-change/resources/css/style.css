@@ -1,0 +1,90 @@
+.oskari-projection-changer {
+    height:36px;
+    width: 36px;
+    background-image: url("../images/projection-dark.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    background-color: #333438;
+    margin-bottom: 8.5px !important;
+    cursor: pointer;
+}
+.oskari-map-projection {
+    max-width: 600px;
+    display: flex;
+    display: -ms-flex;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    padding-left: 3%;
+    overflow-x: hidden;
+}
+/*
+ * Card
+ */
+.projection-card {
+    height: 160px;
+    margin: 3px;
+    margin-bottom: 10px;
+    flex: 30%;
+    -ms-flex: 30%;
+    padding: 15px;
+}
+.projection-info {
+    cursor: pointer;
+}
+.projection-warning {
+    height:16px;
+    width: 16px;
+    cursor: pointer;
+    background-image: url("../images/warning-light.png");
+    background-repeat: no-repeat;
+    background-position: center;}
+.projection-card > .info-row {
+    width: inherit;
+    display: inline-flex;
+    display: -ms-inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+.card-image {
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    height: auto; 
+    width: auto; 
+    max-width: 145px; 
+    max-height: 145px;
+}
+[data-srs="EPSG:3067"] .card-image {
+    margin: auto;
+    content: url("../images/EPSG3571.png");
+}
+[data-srs="EPSG:3571"] .card-image {
+    margin: auto;
+    content: url("../images/EPSG3571.png");
+}
+[data-srs="EPSG:3572"] .card-image {
+    margin: auto;
+    content: url("../images/EPSG3572.png");
+}
+[data-srs="EPSG:3573"] .card-image {
+    margin: auto;
+    content: url("../images/EPSG3573.png");
+}
+[data-srs="EPSG:3574"] .card-image {
+    margin: auto;
+    content: url("../images/EPSG3574.png");
+}
+[data-srs="EPSG:3575"] .card-image {
+    margin: auto;
+    content: url("../images/EPSG3575.png");
+}
+[data-srs="EPSG:3576"] .card-image {
+    margin: auto;
+    content: url("../images/EPSG3576.png");
+}
+/*
+ * / CARD
+ */

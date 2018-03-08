@@ -179,6 +179,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 height : this._popup.height()
             };
         },
+        toggle: function () {
+            if ( this.isVisible() ) {
+                this.hide();
+            } else {
+                this.show();
+            }
+        },
         /**
          * @method makeDraggable
          * Makes dialog draggable with jQuery Event Drag plugin

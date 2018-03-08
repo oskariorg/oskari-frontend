@@ -19,7 +19,8 @@ define([
             events: {
                 "click .admin-layer-tab": "toggleTab",
                 "keydown .admin-layerselectorapp": "catchInputs",
-                "keyup .admin-layerselectorapp": "catchInputs"
+                "keyup .admin-layerselectorapp": "catchInputs",
+                "click .admin-layer-recheck-all": "recheckCapabilities"
             },
 
             /**
@@ -206,7 +207,52 @@ define([
              */
             catchInputs: function(e) {
                 e.stopPropagation();
-            }
+            },
 
+            recheckCapabilities: function(e) {
+                var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+
+                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var closeButton = popup.createCloseButton(loc('close'))
+                var primaryButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                primaryButton.setTitle(loc('query'));
+                var me = this;
+                var xhr;
+
+                closeButton.setHandler(function() {
+                    if(xhr) {
+                        xhr.abort();
+                    }
+                    popup.close();
+                });
+
+                var content = jQuery('<span>' + loc('recheckAll') + '<span>')
+                primaryButton.setPrimary(true);
+                primaryButton.setHandler(function () {
+                    xhr = jQuery.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: me.instance.getSandbox().getAjaxUrl() + 'action_route=UpdateCapabilities',
+                        success: function (resp) {
+                            xhr = null;
+                            var successCount = resp.success.length;
+                            var failCount = Object.keys(resp.error).length;
+                            content.append('<br><br><span>' + loc('recheckAllSucceeded', {success: successCount, fail: failCount}) + '<span>');
+                        },
+                        error: function (xhr, status, error) {
+                            xhr = null;
+                            if(status === 'timeout') {
+                                content.append('<br><br><span>' + loc('recheckFailTimeout') + '<span>');
+                                return;
+                            }
+                            content.append('<br><br><span>' + loc('recheckFail') + '<span>');
+                        }
+                    });
+
+                    jQuery(primaryButton.getElement()).attr('disabled', true);
+                });
+
+                popup.show(loc('recheckTitle'), content, [closeButton, primaryButton]);
+            }
         });
     });
