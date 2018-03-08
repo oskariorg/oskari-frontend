@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
  */
 function (view, callback) {
     this.card = _.template('<div class="projection-card" data-srs="${srs}">'+
-                        '<div class="card-image"></div> '+
+                        '<img class="card-image" src="/Oskari/bundles/asdi/asdi-projection-change/resources/images/${img}"></img> '+
                         '<div class="info-row">'+
                             '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+
@@ -45,20 +45,20 @@ function (view, callback) {
     setElement: function (el) {
         this.element = el;
     },
-    checkUnsupportedLayers: function () {
+    createClassSelector: function ( className ) {
+       return className.replace(':', '');
+    },
+    hasUnsupportedLayers: function () {
         var me = this;
         var layers = Oskari.getSandbox().getMap().getLayers();
         var unsupportedLayers = layers.filter( function (layer) {
             return !layer.isSupported(me.view.srsName);
         });
-        if ( unsupportedLayers.length !== 0 ) {
-            var warningElement = this.getElement().find('.projection-warning');
-            warningElement.removeClass('oskari-hidden');
-            //warningLink
-            warningElement.on('click', function ( event ) {
-                event.stopPropagation();
-                me.errorListing.show( jQuery(this), unsupportedLayers );
-            });
+        return unsupportedLayers;
+    },
+    toggleWarningElement: function () {
+        if ( this.hasUnsupportedLayers().length !== 0 ) {
+            this.getElement().find('.projection-warning').removeClass('oskari-hidden');
         }     
     },
     create: function (view) {
@@ -66,13 +66,14 @@ function (view, callback) {
         var tpl = this.card;
 
         var card = jQuery( tpl ({
+            img: this.createClassSelector( view.srsName ) + '.png',
             srs: view.srsName,
             projectionName: view.name,
             tooltip: me.loc.error.hover.icon
         }));
 
-        card.find('.card-image').on('click', function (e) {
-            e.stopPropagation();
+        card.find('.card-image').on('click', function (event) {
+            event.stopPropagation();
             me.projectionChangeHandler( view.uuid,  view.srsName );
         });
         //infolink
@@ -80,8 +81,13 @@ function (view, callback) {
             event.stopPropagation();
             me.infoView.show( jQuery(this) );
         });
+        //warningLink
+        card.find('.projection-warning').on('click', function ( event ) {
+            event.stopPropagation();
+            me.errorListing.show( jQuery(this), me.hasUnsupportedLayers() );
+        });
         this.setElement(card);
-        this.checkUnsupportedLayers();
+        this.toggleWarningElement();
 
         for (p in this.eventHandlers) {
             if (this.eventHandlers.hasOwnProperty(p)) {
