@@ -58,9 +58,14 @@ function (view, callback) {
         return unsupportedLayers;
     },
     toggleWarningElement: function () {
+        var element = this.getElement().find('.projection-warning');
         if ( this.getUnsupportedLayers().length !== 0 ) {
-            this.getElement().find('.projection-warning').removeClass('oskari-hidden');
-        }     
+            element.removeClass('oskari-hidden');
+        } else {
+            if ( !element.hasClass('.oskari-hidden') ) {
+                element.addClass('oskari-hidden');
+            }
+        }
     },
     create: function (view) {
         var me = this;
