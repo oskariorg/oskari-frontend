@@ -23,10 +23,10 @@ function (view, callback) {
 }, {
     eventHandlers: {
         AfterMapLayerRemoveEvent: function (event) {
-            this.checkUnsupportedLayers();
+            this.toggleWarningElement();
         },
         AfterMapLayerAddEvent: function (event) {
-            this.checkUnsupportedLayers();
+            this.toggleWarningElement();
         }
     },
     onEvent: function (event) {
