@@ -479,6 +479,17 @@ div.hierarchical-layerlist {
                 background-position: 0px 5px;
             }
         }
+
+        .jstree-anchor[data-tools-visible="false"] {
+            span.layer {
+                span.layer-tools {
+                    .layer-tool {
+                        display: none;
+                    }
+                }
+            }
+        }
+
         .jstree-anchor {
             width: 90%;
             padding: 4px;

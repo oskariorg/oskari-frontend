@@ -130,6 +130,38 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 groupAttr;
 
             var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();
+
+            var layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers();
+            var layersCopy = layers.slice(0);
+            var notLoadedBackend = {};
+
+            layersCopy.forEach(function(layer){
+                var group = layer.getGroups()[0];
+                if(isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
+                    if(!notLoadedBackend[group.id]) {
+                        notLoadedBackend[group.id] = {
+                            groups: [],
+                            id: group.id,
+                            layers: [],
+                            name:{},
+                            orderNumber: -1,
+                            selectable: true,
+                            toolsVisible: false
+                        };
+
+                        notLoadedBackend[group.id].name[Oskari.getLang()] = group.name;
+                    }
+                    notLoadedBackend[group.id].layers.push({id:layer.getId()});
+                }
+            });
+
+
+            Object.keys(notLoadedBackend).forEach(function(key){
+                var group = notLoadedBackend[key];
+                allGroups.unshift(group);
+            });
+
+
             allGroups.forEach(function(group) {
                 groupModel = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup',
@@ -138,7 +170,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 );
                 groupList.push(groupModel);
             });
-
 
             if (me.service.hasAdmin()) {
                 return groupList;
@@ -156,10 +187,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 var filtered = [];
                 if (group.getGroups().length > 0) {
                     var groups = group.getGroups();
-
                     var subgroups = groups.filter(function(subgroup) {
-
-
                         if (subgroup.groups) {
                             var subgroupsubgroups = subgroup.groups || [];
                             var subsubFilter = subgroupsubgroups.filter(function(subgroupsubgroup) {
@@ -556,19 +584,19 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         populateLayers: function() {
             var me = this;
             var sandbox = this.instance.getSandbox(),
-                // populate layer list
-                layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers(),
                 i,
                 tab,
-                layersCopy,
                 groups;
+
             for (i = 0; i < this.layerTabs.length; i += 1) {
                 tab = this.layerTabs[i];
+
                 // populate tab if it has grouping method
                 if (tab.groupingMethod) {
                     groups = this._getLayerGroups(
                         tab.groupingMethod
                     );
+
                     tab.showLayerGroups(groups);
                 }
             }

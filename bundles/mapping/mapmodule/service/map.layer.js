@@ -1255,6 +1255,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 builder.parseLayerData(layer, mapLayerJson, this);
             }
 
+            if (mapLayerJson.groups){
+                layer.setGroups(mapLayerJson.groups);
+            }
+
             if (mapLayerJson.created && isNaN(Date.parse(mapLayerJson.created)) === false) {
                 var created = new Date(mapLayerJson.created);
                 if (created) {
@@ -1262,7 +1266,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             }
 
-            layer.setGroups(mapLayerJson.groups);
+
             layer.setOrderNumber(mapLayerJson.orderNumber);
 
             return layer;

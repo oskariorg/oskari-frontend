@@ -12,10 +12,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
         this._layers = [];
         this._groups = group.groups || [];
         this._orderNumber = group.orderNumber;
+        this._toolsVisible = (typeof group.toolsVisible === 'boolean') ? group.toolsVisible : true;
         var me = this;
         this.searchIndex = {};
         group.layers.forEach(function(layer) {
-            me.addLayer(mapLayerService.createMapLayer(layer));
+            me.addLayer(Oskari.getSandbox().findMapLayerFromAllAvailable(layer.id));
         });
     }, {
         /**
@@ -88,5 +89,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
         },
         setOrderNumber: function(orderNumber) {
             this._orderNumber = orderNumber;
+        },
+        isToolsVisible: function() {
+            return this._toolsVisible;
         }
     });
