@@ -232,6 +232,9 @@ define([
                     xhr = jQuery.ajax({
                         type: 'POST',
                         dataType: 'json',
+                        data: {
+                            srs: me.instance.getSandbox().getMap().getSrsName()
+                        },
                         url: me.instance.getSandbox().getAjaxUrl() + 'action_route=UpdateCapabilities',
                         success: function (resp) {
                             xhr = null;

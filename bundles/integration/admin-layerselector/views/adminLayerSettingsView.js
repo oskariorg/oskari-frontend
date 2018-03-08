@@ -64,12 +64,14 @@ define([
                 var closeButton = popup.createCloseButton(loc('close'))
 
                 var content;
+                var sandbox = this.instance.sandbox;
 
                 jQuery.ajax({
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        id: this.model.getId()
+                        id: this.model.getId(),
+                        srs: sandbox.getMap().getSrsName()
                     },
                     url: this.instance.getSandbox().getAjaxUrl() + 'action_route=UpdateCapabilities',
                     success: function (resp) {
