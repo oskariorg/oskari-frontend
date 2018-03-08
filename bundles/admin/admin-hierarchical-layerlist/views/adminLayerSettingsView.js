@@ -221,6 +221,8 @@ define([
                 me.progressSpinner.insertTo(jQuery('.admin-hierarchical-layerlist-add-layer .oskari-flyoutcontentcontainer'));
                 me.progressSpinner.start();
 
+                data.srs = me.instance.sandbox.getMap().getSrsName();
+
                 jQuery.ajax({
                     type: 'POST',
                     data: data,
@@ -1251,6 +1253,8 @@ define([
 
                     data.viewPermissions = checkedPermissions.join();
                 }
+
+                data.srs = me.instance.sandbox.getMap().getSrsName();
 
                 // make AJAX call
                 jQuery.ajax({
