@@ -21,6 +21,24 @@ function (view, callback) {
     this.errorListing = Oskari.clazz.create('Oskari.projection.change.view.ErrorListing');
     this.create(view);
 }, {
+    eventHandlers: {
+        AfterMapLayerRemoveEvent: function (event) {
+            this.checkUnsupportedLayers();
+        },
+        AfterMapLayerAddEvent: function (event) {
+            this.checkUnsupportedLayers();
+        }
+    },
+    onEvent: function (event) {
+        var handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
+    },
+    getName: function () {
+        return 'Oskari.projection.change.component.card';
+    },
     getElement: function () {
         return this.element;
     },
@@ -64,5 +82,11 @@ function (view, callback) {
         });
         this.setElement(card);
         this.checkUnsupportedLayers();
+
+        for (p in this.eventHandlers) {
+            if (this.eventHandlers.hasOwnProperty(p)) {
+                Oskari.getSandbox().registerForEventByName(this, p);
+            }
+        }
     }
 });
