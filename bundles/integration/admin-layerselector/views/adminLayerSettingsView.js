@@ -622,6 +622,8 @@ define([
                 // Progress spinner
                 me.progressSpinner.start();
 
+                data.srs = sandbox.getMap().getSrsName();
+
                 jQuery.ajax({
                     type: 'POST',
                     data: data,
@@ -894,6 +896,8 @@ define([
 
                     data.viewPermissions = checkedPermissions.join();
                 }
+
+                data.srs = sandbox.getMap().getSrsName();
 
                 // make AJAX call
                 jQuery.ajax({
