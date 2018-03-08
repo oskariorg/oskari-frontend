@@ -45,8 +45,8 @@ function (view, callback) {
     setElement: function (el) {
         this.element = el;
     },
-    getImagePath: function ( className ) {
-        var name = className.replace(':', '');
+    getImagePath: function ( epsg ) {
+        var name = epsg.replace(':', '');
         return '/Oskari/bundles/asdi/asdi-projection-change/resources/images/' + name + '.png';
     },
     getUnsupportedLayers: function () {
