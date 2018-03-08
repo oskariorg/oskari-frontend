@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
  */
 function (view, callback) {
     this.card = _.template('<div class="projection-card" data-srs="${srs}">'+
-                        '<img class="card-image" src="/Oskari/bundles/asdi/asdi-projection-change/resources/images/${img}"></img> '+
+                        '<img class="card-image" src="${imgPath}"></img> '+
                         '<div class="info-row">'+
                             '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+
@@ -45,10 +45,11 @@ function (view, callback) {
     setElement: function (el) {
         this.element = el;
     },
-    createClassSelector: function ( className ) {
-       return className.replace(':', '');
+    getImagePath: function ( className ) {
+        var name = className.replace(':', '');
+        return '/Oskari/bundles/asdi/asdi-projection-change/resources/images/' + name + '.png';
     },
-    hasUnsupportedLayers: function () {
+    getUnsupportedLayers: function () {
         var me = this;
         var layers = Oskari.getSandbox().getMap().getLayers();
         var unsupportedLayers = layers.filter( function (layer) {
@@ -57,7 +58,7 @@ function (view, callback) {
         return unsupportedLayers;
     },
     toggleWarningElement: function () {
-        if ( this.hasUnsupportedLayers().length !== 0 ) {
+        if ( this.getUnsupportedLayers().length !== 0 ) {
             this.getElement().find('.projection-warning').removeClass('oskari-hidden');
         }     
     },
@@ -66,7 +67,7 @@ function (view, callback) {
         var tpl = this.card;
 
         var card = jQuery( tpl ({
-            img: this.createClassSelector( view.srsName ) + '.png',
+            imgPath: me.getImagePath(view.srsName),
             srs: view.srsName,
             projectionName: view.name,
             tooltip: me.loc.error.hover.icon
@@ -84,7 +85,7 @@ function (view, callback) {
         //warningLink
         card.find('.projection-warning').on('click', function ( event ) {
             event.stopPropagation();
-            me.errorListing.show( jQuery(this), me.hasUnsupportedLayers() );
+            me.errorListing.show( jQuery(this), me.getUnsupportedLayers() );
         });
         this.setElement(card);
         this.toggleWarningElement();
