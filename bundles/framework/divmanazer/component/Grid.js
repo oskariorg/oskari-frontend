@@ -768,7 +768,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector.addClass('column-selector-placeholder');
 
             columnSelector.addClass('column-selector');
-            columnSelectorLabel.find('.title').html(me._loc('Grid.columnSelector').title);
+            columnSelectorLabel.find('.title').html(me._loc('Grid.columnSelector.title'));
             me.visibleColumnSelector.append(columnSelectorLabel);
             me.visibleColumnSelector.append(columnSelector);
 
@@ -971,7 +971,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 exportButton.setPrimary(true);
-                exportButton.setTitle(me._loc('Grid.export')['export']);
+                exportButton.setTitle(me._loc('Grid.export.export.export'));
                 exportButton.setHandler(function () {
                     var values = exportForm.getValues({});
                     values.data = me._getTableData(values.columns !== 'all', values.export_selection);
@@ -981,19 +981,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     if(jQuery(exportForm.getElement().elements.dataSource).is(':checked')) {
                         additionalInfo.push({
                             type : 'datasource',
-                            name : me._loc('Grid.export').additional.dataSource,
+                            name : me._loc('Grid.export.additional.dataSource'),
                             value : exportForm.getElement().elements.dataSource.value
                         });
                     }
                     additionalInfo.push({
                         type : 'layerName',
-                        name : me._loc('Grid.export').additional.layerName,
+                        name : me._loc('Grid.export.additional.layerName'),
                         value : me._getLayerName()
                     });
                     if(jQuery(exportForm.getElement().elements.metadata).is(':checked')) {
                         additionalInfo.push({
                             type : 'metadata',
-                            name : me._loc('Grid.export').additional.metadata,
+                            name : me._loc('Grid.export.additional.metadata'),
                             value : exportForm.getElement().elements.metadata.value
                         });
                     }
@@ -1006,7 +1006,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 exportPopupButton.setPrimary(true);
-                exportPopupButton.setTitle(me._loc('Grid.export').title);
+                exportPopupButton.setTitle(me._loc('Grid.export.title'));
                 exportPopupButton.setHandler(function () {
                     me.exportPopup = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
@@ -1016,7 +1016,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     me.exportPopup.makeModal();
 
                     me.exportPopup.show(
-                        me._loc('Grid.export').title,
+                        me._loc('Grid.export.title'),
                         jQuery(exportForm.getElement()),
                         [cancelButton, exportButton]
                     );
