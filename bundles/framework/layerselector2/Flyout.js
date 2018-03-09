@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
      */
 
     function (instance) {
-        //"use strict";
+        
         this.instance = instance;
         this.container = null;
         this.template = null;
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @return {String} the name for the component
          */
         getName: function () {
-            //"use strict";
+            
             return 'Oskari.mapframework.bundle.layerselector2.Flyout';
         },
 
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Interface method implementation
          */
         setEl: function (el, width, height) {
-            //"use strict";
+            
             this.container = el[0];
             if (!jQuery(this.container).hasClass('layerselector2')) {
                 jQuery(this.container).addClass('layerselector2');
@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-            //"use strict";
+            
             var me = this,
                 inspireTab = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.layerselector2.view.LayersTab',
@@ -153,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Interface method implementation, does nothing atm
          */
         stopPlugin: function () {
-            //"use strict";
+            
         },
 
         /**
@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @return {String} localized text for the title of the flyout
          */
         getTitle: function () {
-            //"use strict";
+            
             return this.instance.getLocalization('title');
         },
 
@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @return {String} localized text for the description of the flyout
          */
         getDescription: function () {
-            //"use strict";
+            
             return this.instance.getLocalization('desc');
         },
 
@@ -179,7 +179,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Interface method implementation, does nothing atm
          */
         getOptions: function () {
-            //"use strict";
+            
         },
 
         /**
@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Interface method implementation, does nothing atm
          */
         setState: function (state) {
-            //"use strict";
+            
             this.state = state;
         },
 
@@ -199,7 +199,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @param {Object} state a content state
          */
         setContentState: function (state) {
-            //"use strict";
+            
             var i,
                 tab;
             // prepare for complete state reset
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         },
 
         getContentState: function () {
-            //"use strict";
+            
             var state = {},
                 i,
                 tab;
@@ -236,7 +236,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Creates the UI for a fresh start
          */
         createUi: function () {
-            //"use strict";
+            
             var me = this,
                 // clear container
                 cel = jQuery(this.container),
@@ -295,7 +295,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method  @public populateLayers
          */
         populateLayers: function () {
-            //"use strict";
+            
             var me = this;
             var sandbox = this.instance.getSandbox(),
                 // populate layer list
@@ -327,7 +327,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @private
          */
         _getLayerGroups: function (layers, groupingMethod) {
-            //"use strict";
+            
             var me = this,
                 groupList = [],
                 group = null,
@@ -374,7 +374,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @param {String} groupingMethod method name to sort by
          */
         _layerListComparator: function (a, b, groupingMethod) {
-            //"use strict";
+            
             var nameA = a[groupingMethod]().toLowerCase(),
                 nameB = b[groupingMethod]().toLowerCase();
             if (nameA === nameB && (a.getName() && b.getName())) {
@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * let's refresh ui to match current layer selection
          */
         handleLayerSelectionChanged: function (layer, isSelected) {
-            //"use strict";
+            
             var i,
                 tab;
             for (i = 0; i < this.layerTabs.length; i += 1) {
@@ -415,7 +415,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * let's refresh ui to match current layers
          */
         handleLayerModified: function (layer) {
-            //"use strict";
+            
             var me = this,
                 i,
                 tab;
@@ -432,7 +432,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * let's refresh ui to match current layers
          */
         handleLayerSticky: function (layer) {
-            //"use strict";
+            
             var me = this,
                 i,
                 tab;
@@ -449,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * let's refresh ui to match current layers
          */
         handleLayerAdded: function (layer) {
-            //"use strict";
+            
             var me = this;
             me.populateLayers();
             // we could just add the layer to correct group and update the layer count for the group
@@ -463,7 +463,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * let's refresh ui to match current layers
          */
         handleLayerRemoved: function (layerId) {
-            //"use strict";
+            
             var me = this;
             me.populateLayers();
             // we could  just remove the layer and update the layer count for the group

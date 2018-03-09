@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @class Oskari.userinterface.component.Fieldset
  * Generic form component
@@ -9,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Fieldset',
      * @static
      */
     function () {
-        'use strict';
+        
         var me = this;
         me._clazz = 'Oskari.userinterface.component.Fieldset';
         me._element = document.createElement('fieldset');
@@ -19,7 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Fieldset',
         me._element.appendChild(me._titleEl);
     }, {
         _destroyImpl: function (cleanup) {
-            'use strict';
+            
             var i,
                 components = this.getComponents();
 
@@ -33,7 +34,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Fieldset',
          * @return {Boolean} enabled
          */
         isEnabled: function () {
-            'use strict';
+            
             return !this._element.disabled;
         },
 
@@ -42,7 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Fieldset',
          * @param {Boolean} enabled
          */
         setEnabled: function (enabled) {
-            'use strict';
+            
             if (typeof enabled !== 'boolean') {
                 throw new TypeError(
                     this.getClazz() +
@@ -53,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Fieldset',
         },
 
         getTitle: function () {
-            'use strict';
+            
             return this._titleEl.textContent;
         },
 
@@ -61,7 +62,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Fieldset',
          * @method setTitle
          */
         setTitle: function (title) {
-            'use strict';
+            
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';

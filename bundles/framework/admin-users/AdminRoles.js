@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @class Oskari.mapframework.bundle.admin-users.AdminRoles
  *
@@ -237,7 +238,7 @@ Oskari.clazz.define(
          * @return {String} Permissions table
          */
         createLayerRightGrid: function (columnHeaders, layerRightsJSON) {
-            'use strict';
+            
             var table = '<table class="layer-rights-table">',
                 i = 0,
                 tr = 0,

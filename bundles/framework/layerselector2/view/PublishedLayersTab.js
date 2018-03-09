@@ -10,7 +10,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
      */
 
     function (instance, title) {
-        //"use strict";
+        
         this.instance = instance;
         this.title = title;
         this.layerGroups = [];
@@ -19,17 +19,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
     }, {
 
         getTitle: function () {
-            //"use strict";
+            
             return this.title;
         },
 
         getTabPanel: function () {
-            //"use strict";
+            
             return this.tabPanel;
         },
 
         getState: function () {
-            //"use strict";
+            
             var state = {
                 tab: this.getTitle(),
                 filter: this.filterField.getValue(),
@@ -46,7 +46,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         setState: function (state) {
-            //"use strict";
+            
             if (!state) {
                 return;
             }
@@ -63,7 +63,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         _createUI: function () {
-            //"use strict";
+            
             var me = this;
             me.tabPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             me.tabPanel.setTitle(this.title);
@@ -82,7 +82,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         getFilterField: function () {
-            //"use strict";
+            
             if (this.filterField) {
                 return this.filterField;
             }
@@ -101,7 +101,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         _searchTrigger: function (keyword) {
-            //"use strict";
+            
             var me = this;
             // clear any previous search if search field changes
             if (me.searchTimer) {
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         _relatedSearchTrigger: function (keyword) {
-            //"use strict";
+            
             var me = this;
             // clear any previous search if search field changes
             if (me.searchTimer) {
@@ -134,7 +134,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         tabSelected: function () {
-            //"use strict";
+            
             // update data if now done so yet
             if (this.layerGroups.length === 0) {
                 this.accordion.showMessage(this.instance.getLocalization('loading'));
@@ -162,7 +162,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         tabUnselected: function () {
-            //"use strict";
+            
         },
 
         /**
@@ -170,7 +170,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
          * @private
          */
         _populateLayerGroups: function (jsonResponse) {
-            //"use strict";
+            
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
@@ -205,7 +205,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
          * @return maplayer json for the category
          */
         _getPublishedLayer: function (jsonResponse, mapLayerService, usersOwnLayer) {
-            //"use strict";
+            
             var baseJson = this._getMapLayerJsonBase(),
                 layer;
             baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + jsonResponse.id + "&"; // this.instance.conf.wmsUrl
@@ -244,7 +244,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
          * @return {Object}
          */
         _getMapLayerJsonBase: function () {
-            //"use strict";
+            
             var catLoc = this.instance.getLocalization('published'),
                 json = {
                     wmsName: 'ows:my_places_categories',
@@ -259,7 +259,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         showLayerGroups: function (groups) {
-            //"use strict";
+            
             var me = this,
                 i,
                 group,
@@ -320,7 +320,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
          */
 
         _search: function (keyword) {
-            //"use strict";
+            
             var me = this;
 
             if (!keyword || keyword.length === 0) {
@@ -359,7 +359,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         setLayerSelected: function (layerId, isSelected) {
-            //"use strict";
+            
             var layerCont = this.layerContainers[layerId];
             if (layerCont) {
                 layerCont.setSelected(isSelected);
@@ -367,7 +367,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         },
 
         updateLayerContent: function (layerId, layer) {
-            //"use strict";
+            
             // empty the listing to trigger refresh when this tab is selected again
             this.accordion.removeMessage();
             this.showLayerGroups([]);
