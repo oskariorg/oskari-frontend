@@ -10,13 +10,12 @@
     cursor: pointer;
 }
 .oskari-map-projection {
-    max-width: 600px;
+    width: 600px;
     display: flex;
     display: -ms-flex;
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    padding-left: 3%;
     overflow-x: hidden;
 }
 /*
@@ -56,34 +55,6 @@
     width: auto; 
     max-width: 145px; 
     max-height: 145px;
-}
-[data-srs="EPSG:3067"] .card-image {
-    margin: auto;
-    content: url("../images/EPSG3571.png");
-}
-[data-srs="EPSG:3571"] .card-image {
-    margin: auto;
-    content: url("../images/EPSG3571.png");
-}
-[data-srs="EPSG:3572"] .card-image {
-    margin: auto;
-    content: url("../images/EPSG3572.png");
-}
-[data-srs="EPSG:3573"] .card-image {
-    margin: auto;
-    content: url("../images/EPSG3573.png");
-}
-[data-srs="EPSG:3574"] .card-image {
-    margin: auto;
-    content: url("../images/EPSG3574.png");
-}
-[data-srs="EPSG:3575"] .card-image {
-    margin: auto;
-    content: url("../images/EPSG3575.png");
-}
-[data-srs="EPSG:3576"] .card-image {
-    margin: auto;
-    content: url("../images/EPSG3576.png");
 }
 /*
  * / CARD
