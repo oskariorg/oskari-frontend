@@ -225,7 +225,7 @@ jQuery.ajaxSetup({ cache: false });
 
         /**
          * @method getSystemDefaultViews 
-         * @return {Object[]/undefined} default view objects Array or undefined if key not found in appSetup env
+         * @return {Object[]} default view objects Array
          */
         getSystemDefaultViews: function () {
             return this.appSetup.env.defaultApps || [];
