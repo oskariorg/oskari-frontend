@@ -61,6 +61,8 @@ Oskari.clazz.define(
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
+            this.showLegend();
+
             if ( this.isEmbedded() ) {
                 // Start in an embedded map mode
 
@@ -334,6 +336,10 @@ Oskari.clazz.define(
                 state.activeRegion = activeRegion;
             }
             return state;
+        },
+        showLegend: function () {
+            var flyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.LegendFlyout', this.isEmbedded() );
+            flyout.show();
         },
         /**
          * @method  @public showLegendOnMap Render published  legend
