@@ -16,8 +16,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             	'</div>'),
             'propertySelect' : _.template('<div><span>${label}</span></div>'),
             'select' : _.template('<select name="heatmapProperties">' +
-            			'<option value="">${label}</option>' +
-            			'<% _.forEach(props, function(value) {  %>' +
+                        '<option value="">${label}</option>' +
+                        '<% props.forEach(function(value) {  %>' +
             				'<option>${value}</option>'+
         				'<% }); %>' +
             		'</select>'),
@@ -46,8 +46,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             
         },
 
-        __createColorPickers: function() {
-            this.__colorPickers = [
+        _createColorPickers: function() {
+            this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput'),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput'),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput')
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 
             dialog.addClass('heatmap settings-dialog');
 
-            this.__createColorPickers();
+            this._createColorPickers();
     		var content = jQuery(this.__templates.main());
 
 			// TODO: maybe replace radius field with a slider?
@@ -114,9 +114,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             content.append(customThemeLabel);
 
             var customThemeGroup = jQuery(this.__templates.customThemeGroup());
-			customThemeGroup.append(this.__colorPickers[0].getElement());
-			customThemeGroup.append(this.__colorPickers[1].getElement());
-			customThemeGroup.append(this.__colorPickers[2].getElement());
+			customThemeGroup.append(this._colorPickers[0].getElement());
+			customThemeGroup.append(this._colorPickers[1].getElement());
+			customThemeGroup.append(this._colorPickers[2].getElement());
             content.append(customThemeGroup);
 
             // set latest selected color theme checked
@@ -130,9 +130,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             //set colors for colorboxes
             var colorSetup = layer.getColorSetup();
             if (colorSetup) {
-                this.__colorPickers[0].setValue(colorSetup[0]);
-                this.__colorPickers[1].setValue(colorSetup[1]);
-                this.__colorPickers[2].setValue(colorSetup[2]);
+                this._colorPickers[0].setValue(colorSetup[0]);
+                this._colorPickers[1].setValue(colorSetup[1]);
+                this._colorPickers[2].setValue(colorSetup[2]);
             }
 
 			var okBtn = null;
@@ -167,9 +167,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             var colorPickerHandler = function() {
                 jQuery("input[id=customTheme]").attr("checked", true);
             }
-            this.__colorPickers[0].setHandler(colorPickerHandler);
-            this.__colorPickers[1].setHandler(colorPickerHandler);
-            this.__colorPickers[2].setHandler(colorPickerHandler);
+            this._colorPickers[0].setHandler(colorPickerHandler);
+            this._colorPickers[1].setHandler(colorPickerHandler);
+            this._colorPickers[2].setHandler(colorPickerHandler);
             
     		dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
             jQuery(dialog.dialog[0]).find(".actions").addClass("heatmap-actions");
@@ -188,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             }
             else {
                 var colorBoxes = jQuery(element[0].parentElement).find('.color-box');
-                _.forEach(colorBoxes, function (colorBox) {
+                colorBoxes.forEach(function (colorBox) {
                     me.colors.push(jQuery(colorBox).attr("color"));
                 });
             }
@@ -198,7 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
         //Returns colors that are selected with color picker
         getColorSetup: function () {
             var selectedColors = [];
-            _.forEach(this.__colorPickers, function (picker) {
+            this._colorPickers.forEach(function (picker) {
                 selectedColors.push(picker.getValue());
             });
             return selectedColors;

@@ -63,17 +63,14 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * Focuses the component.
          */
         focus: function () {
-            'use strict';
             this._input.focus();
         },
 
         isEnabled: function () {
-            'use strict';
             return !this._input.disabled;
         },
 
         _valueChanged: function () {
-            'use strict';
             if (this.getHandler()) {
                 this.getHandler()(this.getValue());
             }
@@ -83,13 +80,11 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * @method _setEnabledImpl
          */
         _setEnabledImpl: function (enabled) {
-            'use strict';
             var action = enabled ? 'enable' : 'disable';
             jQuery(this._input).spectrum(action);
         },
 
         getName: function () {
-            'use strict';
             return this._input.name;
         },
 
@@ -97,17 +92,14 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * @method setName
          */
         setName: function (name) {
-            'use strict';
             this._input.name = name || '';
         },
 
         getPlaceHolder: function () {
-            'use strict';
             return this._input.placeholder;
         },
 
         setPlaceHolder: function (placeholder) {
-            'use strict';
             this._input.placeholder = placeholder;
         },
 
@@ -115,12 +107,10 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * @method _setRequiredImpl
          */
         _setRequiredImpl: function () {
-            'use strict';
             this._input.required = this.isRequired();
         },
 
         getTitle: function () {
-            'use strict';
             return this._titleEl.textContent;
         },
 
@@ -128,7 +118,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * @method setTitle
          */
         setTitle: function (title) {
-            'use strict';
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -139,7 +128,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
         },
 
         getTooltip: function () {
-            'use strict';
             return this._element.title;
         },
 
@@ -147,12 +135,10 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * @method setTooltip
          */
         setTooltip: function () {
-            'use strict';
             this._element.title = this.getTooltip();
         },
 
         getValue: function () {
-            'use strict';
             return jQuery(this._input).spectrum('get').toHexString();
         },
 
@@ -160,7 +146,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * @method setValue
          */
         setValue: function (value) {
-            'use strict';
             return jQuery(this._input).spectrum('set', value);
         },
 
@@ -168,7 +153,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * @method _setVisibleImpl
          */
         _setVisibleImpl: function () {
-            'use strict';
             this.getElement().style.display = this.isVisible() ? '' : 'none';
         }
     }, {
