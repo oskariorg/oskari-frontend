@@ -228,7 +228,7 @@ jQuery.ajaxSetup({ cache: false });
          * @return {Object[]/undefined} default view objects Array or undefined if key not found in appSetup env
          */
         getSystemDefaultViews: function () {
-            return this.appSetup.env.defaultApps;
+            return this.appSetup.env.defaultApps || [];
         }
     };
     o.app = new Bundle_facade();
