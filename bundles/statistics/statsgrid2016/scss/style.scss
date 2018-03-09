@@ -508,6 +508,7 @@ div.oskari-flyout {
         }
 
         .oskari-datacharts {
+
             #graphic {
                 .bar {
                     fill: #5f89ad;
@@ -544,7 +545,20 @@ div.oskari-flyout {
     * ********************************************/
      &.statsgrid-diagram-flyout {
         .oskari-datacharts {
+            position: relative;
+            height: 700px;
             padding: $flyoutPadding;
+        }
+        .chart-controls {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 2%;
+           
+           .dropdown {
+                display: flex;
+                max-width: 100%;
+           }
         }
     }
 }
@@ -929,3 +943,24 @@ div.tab-material-controls div.title {
         padding-top:2em !important;
     }
 }
+.chart {
+    display: flex;
+    justify-content: center;
+}
+.axisLabel {
+    margin-top: -5px;
+    position: absolute;
+    opacity: 0.8;
+}
+.sticky {
+    font-weight: bold;
+    color:#F6F6F6;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    overflow: hidden;
+    z-index: 3; 
+    max-height: 100%;
+}
+
+.statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
+    max-width:700px;
+  }
