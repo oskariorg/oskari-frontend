@@ -971,7 +971,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 exportButton.setPrimary(true);
-                exportButton.setTitle(me._loc('Grid.export.export.export'));
+                exportButton.setTitle(me._loc('Grid.export.export'));
                 exportButton.setHandler(function () {
                     var values = exportForm.getValues({});
                     values.data = me._getTableData(values.columns !== 'all', values.export_selection);
