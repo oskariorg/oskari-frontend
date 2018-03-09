@@ -11,7 +11,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
      */
 
     function (layer, sandbox, localization) {
-        //"use strict";
+        
         this.sandbox = sandbox;
         this.localization = localization;
         this.layer = layer;
@@ -32,11 +32,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
          * @return {String} layer id
          */
         getId: function () {
-            //"use strict";
+            
             return this.layer.getId();
         },
         setVisible: function (bln) {
-            //"use strict";
+            
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             if (bln) {
@@ -46,7 +46,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             }
         },
         setSelected: function (isSelected) {
-            //"use strict";
+            
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             this.ui.find('input').attr('checked', !!isSelected);
@@ -56,7 +56,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
          * @method updateLayerContent
          */
         updateLayerContent: function (layer) {
-            //"use strict";
+            
             /* set title */
             var newName = layer.getName(),
                 /* set/clear alert if required */
@@ -100,7 +100,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
         },
         getContainer: function () {
-            //"use strict";
+            
             return this.ui;
         },
         /**
@@ -110,7 +110,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
          */
         _createLayerContainer: function (layer) {
-            //"use strict";
+            
             var me = this,
                 sandbox = me.sandbox,
                 // create from layer template
