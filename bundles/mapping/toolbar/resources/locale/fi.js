@@ -7,7 +7,8 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Tee linkki karttanäkymään.",
                 "ok": "OK",
-                "title": "Linkki karttanäkymään"
+                "title": "Linkki karttanäkymään",
+                "cannot": "Karttalinkkiä ei voida luoda tähän näkymään. Luo uusi näkymä ja yritä uudelleen."
             },
             "history": {
                 "reset": "Siirry oletusnäkymään.",
