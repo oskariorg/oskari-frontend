@@ -109,6 +109,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 jActive = jQuery(activeLegend);
                 jActive.append(legendUI);
                 container.append(jActive);
+
+                var edit = container.find('.edit-active-legend');
+
+                edit.on('click', function () {
+                    //toggle accordion
+                });
             });
         });
         // Start creating the actual UI
@@ -173,7 +179,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         panel.on('close', function() {
             me._setPanelState(panel);
         });
-        panel.setTitle(title);
+        panel.getHeader().remove();
         return panel;
     },
     /**

@@ -559,7 +559,24 @@ div.oskari-flyout {
     /* Float right to not overlap with other plugins */
     float: right;
 }
+.active-legend {
 
+}
+.active-legend-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
+.active-legend-header > .title {
+  font-weight: bold;
+}
+.edit-active-legend {
+  height: 16px;
+  width: 16px;
+  right: 0 !important;
+  background-image: url(../images/edit-dark.png);
+}
 .statsgrid-legend-container {
     background-color: #FFFFFF;
     width: 300px;
