@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @class Oskari.userinterface.component.NumberInput
  *
@@ -9,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
      * @method create called automatically on construction
      */
     function () {
-        'use strict';
+        
         this._element.className = 'oskari-formcomponent oskari-numberinput';
         this._input.type = 'number';
     }, {
@@ -19,7 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
          * @return {String} max
          */
         getMax: function () {
-            'use strict';
+            
             return this._input.max;
         },
 
@@ -28,7 +29,7 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
          * @param {String} max
          */
         setMax: function (max) {
-            'use strict';
+            
             if (!this._isNumberOrEmpty(max)) {
                 throw new TypeError(
                     this.getClazz() + '.setMax: ' + max + ' is Not a Number'
@@ -42,7 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
          * @return {String} min
          */
         getMin: function () {
-            'use strict';
+            
             return this._input.min;
         },
 
@@ -51,7 +52,7 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
          * @param {String} min
          */
         setMin: function (min) {
-            'use strict';
+            
             if (!this._isNumberOrEmpty(min)) {
                 throw new TypeError(
                     this.getClazz() + '.setMin: ' + min + ' s Not a Number'
@@ -65,7 +66,7 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
          * @return {String} step
          */
         getStep: function () {
-            'use strict';
+            
             return this._input.step;
         },
 
@@ -74,7 +75,7 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
          * @param {String} step
          */
         setStep: function (step) {
-            'use strict';
+            
             if (!this._isNumberOrEmpty(step)) {
                 throw new TypeError(
                     this.getClazz() + '.setStep: ' + step + ' is Not a Number'
@@ -88,7 +89,7 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
          * @param {String} value
          */
         setValue: function (value) {
-            'use strict';
+            
             if (!this._isNumberOrEmpty(value)) {
                 throw new TypeError(
                     this.getClazz() + '.setValue: ' + value + ' is Not a Number'

@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @class Oskari.userinterface.component.Component
  * Component
@@ -9,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
      * @static
      */
     function () {
-        'use strict';
+        
         this._clazz = 'Oskari.userinterface.component.Component';
         this._element = null;
         this._visible = true;
@@ -21,7 +22,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} cleanup True if destroy is called just for cleanup
          */
         destroy: function (cleanup) {
-            'use strict';
+            
             this._destroyImpl(cleanup);
             if (!cleanup) {
                 if (this._element) {
@@ -38,7 +39,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} cleanup True if destroy is called just for cleanup
          */
         _destroyImpl: function (cleanup) {
-            'use strict';
+            
             return undefined;
         },
 
@@ -47,7 +48,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {Array} Component classes in an array
          */
         _getClasses: function () {
-            'use strict';
+            
             if (this._element && this._element.className) {
                 return this._element.className.split(/\s+/).sort();
             }
@@ -59,7 +60,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {String} className
          */
         addClass: function (className) {
-            'use strict';
+            
             if(!this._element) {
                 return;
             }
@@ -75,7 +76,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {String} className
          */
         removeClass: function (className) {
-            'use strict';
+            
             if(!this._element) {
                 return;
             }
@@ -93,7 +94,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} toggle
          */
         toggleClass: function (className, toggle) {
-            'use strict';
+            
             if (toggle) {
                 this.addClass(className);
             } else {
@@ -106,7 +107,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {String} clazz
          */
         getClazz: function () {
-            'use strict';
+            
             return this._clazz;
         },
 
@@ -115,7 +116,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {HTMLElement} element
          */
         getElement: function () {
-            'use strict';
+            
             return this._element;
         },
 
@@ -124,7 +125,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {String} name
          */
         getName: function () {
-            'use strict';
+            
             return undefined;
         },
 
@@ -133,7 +134,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {String} name
          */
         setName: function (name) {
-            'use strict';
+            
             return undefined;
         },
 
@@ -142,7 +143,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {String} title
          */
         getTitle: function () {
-            'use strict';
+            
             return undefined;
         },
 
@@ -151,7 +152,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {String} title
          */
         setTitle: function (title) {
-            'use strict';
+            
             return undefined;
         },
 
@@ -160,7 +161,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {Boolean}
          */
         isVisible: function () {
-            'use strict';
+            
             return this._visible;
         },
 
@@ -169,7 +170,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} visible
          */
         setVisible: function (visible) {
-            'use strict';
+            
             if (typeof visible !== 'boolean') {
                 throw new TypeError(
                     this.getClazz() +
@@ -184,7 +185,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} visible
          */
         _setVisibleImpl: function (visible) {
-            'use strict';
+            
             return undefined;
         },
 
@@ -193,7 +194,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {HTMLElement} container
          */
         insertTo: function (container) {
-            'use strict';
+            
             var cont;
             if (!container) {
                 throw new TypeError(

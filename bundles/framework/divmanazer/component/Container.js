@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @class Oskari.userinterface.component.Container
  * Container
@@ -9,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
      * @static
      */
     function () {
-        'use strict';
+        
         this._clazz = 'Oskari.userinterface.component.Container';
         this._components = [];
     }, {
@@ -19,7 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @param {HTMLElement} component
          */
         addComponent: function (component) {
-            'use strict';
+            
             if(!this._element) {
                 Oskari.getSandbox().printWarn(
                     this.getClazz() + '.addComponent: container not initialized'
@@ -61,7 +62,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @param {HTMLElement} component
          */
         removeComponent: function (component) {
-            'use strict';
+            
             if (component === null || component === undefined) {
                 throw new TypeError(
                     this.getClazz() + '.removeComponent: ' +
@@ -86,7 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @param {Array} components
          */
         getComponents: function () {
-            'use strict';
+            
             return this._components.slice(0);
         },
 
@@ -97,7 +98,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @return {Object}                   Values object
          */
         getValues: function (values, eventElement) {
-            'use strict';
+            
             var i,
                 me = this,
                 component,
@@ -146,7 +147,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @param {HTMLElement} component
          */
         _getComponentIndex: function (component) {
-            'use strict';
+            
             var i,
                 c,
                 ret = -1;

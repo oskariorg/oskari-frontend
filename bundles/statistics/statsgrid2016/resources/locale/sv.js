@@ -158,7 +158,14 @@ Oskari.registerLocalization(
           "descColor": "Figurens färg",
           "selectClr": "Vald färg",
           "clrFromMap": "Färgsättning enligt kartas klassificering",
-          "chooseColor": "Välj färg"
+          "chooseColor": "Välj färg",
+          "sorting": {
+            "desc": "Sortera",
+            "name-ascending": "Stigande enligt namn",
+            "name-descending": "Sjunkande enligt namn",
+            "value-ascending": "Stigande enligt värde",
+            "value-descending": "Sjunkande enligt värde"
+          }
         },
         "filter": {
             "title": "Filtrering",

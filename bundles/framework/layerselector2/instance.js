@@ -16,7 +16,7 @@ Oskari.clazz.define(
      */
 
     function () {
-        //"use strict";
+        
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
@@ -33,7 +33,7 @@ Oskari.clazz.define(
          * @return {String} the name for the component
          */
         getName: function () {
-            //"use strict";
+            
             return this.__name;
         },
         /**
@@ -42,7 +42,7 @@ Oskari.clazz.define(
          * Sets the sandbox reference to this component
          */
         setSandbox: function (sandbox) {
-            //"use strict";
+            
             this.sandbox = sandbox;
         },
         /**
@@ -50,7 +50,7 @@ Oskari.clazz.define(
          * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
-            //"use strict";
+            
             return this.sandbox;
         },
 
@@ -65,7 +65,7 @@ Oskari.clazz.define(
          *     structure and if parameter key is given
          */
         getLocalization: function (key) {
-            //"use strict";
+            
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -80,7 +80,7 @@ Oskari.clazz.define(
          * implements BundleInstance protocol start method
          */
         start: function () {
-            //"use strict";
+            
             var me = this,
                 conf = me.conf,
                 sandboxName = conf ? conf.sandbox : 'sandbox',
@@ -146,7 +146,7 @@ Oskari.clazz.define(
          * implements Module protocol init method - does nothing atm
          */
         init: function () {
-            //"use strict";
+            
             return null;
         },
         /**
@@ -154,7 +154,7 @@ Oskari.clazz.define(
          * implements BundleInstance protocol update method - does nothing atm
          */
         update: function () {
-            //"use strict";
+            
         },
         /**
          * @method onEvent
@@ -162,7 +162,7 @@ Oskari.clazz.define(
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            //"use strict";
+            
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -183,7 +183,7 @@ Oskari.clazz.define(
              * Calls flyouts handleLayerSelectionChanged() method
              */
             AfterMapLayerRemoveEvent: function (event) {
-                //"use strict";
+                
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
             },
 
@@ -194,7 +194,7 @@ Oskari.clazz.define(
              * Calls flyouts handleLayerSelectionChanged() method
              */
             AfterMapLayerAddEvent: function (event) {
-                //"use strict";
+                
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true);
             },
 
@@ -203,7 +203,7 @@ Oskari.clazz.define(
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
             MapLayerEvent: function (event) {
-                //"use strict";
+                
                 var me = this,
                     flyout = me.plugins['Oskari.userinterface.Flyout'],
                     tile = me.plugins['Oskari.userinterface.Tile'],
@@ -281,7 +281,7 @@ Oskari.clazz.define(
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            //"use strict";
+            
             var me = this,
                 sandbox = me.sandbox(),
                 request,
@@ -309,7 +309,7 @@ Oskari.clazz.define(
          * Oskari.mapframework.bundle.layerselector2.Tile
          */
         startExtension: function () {
-            //"use strict";
+            
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.layerselector2.Flyout',
                 this
@@ -325,7 +325,7 @@ Oskari.clazz.define(
          * Clears references to flyout and tile
          */
         stopExtension: function () {
-            //"use strict";
+            
             this.plugins['Oskari.userinterface.Flyout'] = null;
             this.plugins['Oskari.userinterface.Tile'] = null;
         },
@@ -335,7 +335,7 @@ Oskari.clazz.define(
          * @return {Object} references to flyout and tile
          */
         getPlugins: function () {
-            //"use strict";
+            
             return this.plugins;
         },
         /**
@@ -343,7 +343,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            //"use strict";
+            
             return this.getLocalization('title');
         },
         /**
@@ -351,7 +351,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            //"use strict";
+            
             return this.getLocalization('desc');
         },
         /**
@@ -359,7 +359,7 @@ Oskari.clazz.define(
          * (re)creates the UI for "all layers" functionality
          */
         createUi: function () {
-            //"use strict";
+            
             var me = this;
             me.plugins['Oskari.userinterface.Flyout'].createUi();
             me.plugins['Oskari.userinterface.Tile'].refresh();
@@ -370,7 +370,7 @@ Oskari.clazz.define(
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-            //"use strict";
+            
             this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
         },
 
@@ -379,7 +379,7 @@ Oskari.clazz.define(
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            //"use strict";
+            
             return this.plugins['Oskari.userinterface.Flyout'].getContentState();
         },
 
