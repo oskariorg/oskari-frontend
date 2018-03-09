@@ -130,9 +130,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             //set colors for colorboxes
             var colorSetup = layer.getColorSetup();
             if (colorSetup) {
-                jQuery(content).find('.box-1').attr({"color": colorSetup[0], "style": "background-color:" + colorSetup[0]});
-                jQuery(content).find('.box-2').attr({"color": colorSetup[1], "style": "background-color:" + colorSetup[1]});
-                jQuery(content).find('.box-3').attr({"color": colorSetup[2], "style": "background-color:" + colorSetup[2]});
+                this.__colorPickers[0].setValue(colorSetup[0]);
+                this.__colorPickers[1].setValue(colorSetup[1]);
+                this.__colorPickers[2].setValue(colorSetup[2]);
             }
 
 			var okBtn = null;
@@ -163,6 +163,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                 dialog.close();
                 delete me.dialog;
             });
+            
+            var colorPickerHandler = function() {
+                jQuery("input[id=customTheme]").attr("checked", true);
+            }
+            this.__colorPickers[0].setHandler(colorPickerHandler);
+            this.__colorPickers[1].setHandler(colorPickerHandler);
+            this.__colorPickers[2].setHandler(colorPickerHandler);
+            
     		dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
             jQuery(dialog.dialog[0]).find(".actions").addClass("heatmap-actions");
     		dialog.makeDraggable();
