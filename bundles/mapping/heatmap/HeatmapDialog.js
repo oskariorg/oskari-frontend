@@ -188,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             }
             else {
                 var colorBoxes = jQuery(element[0].parentElement).find('.color-box');
-                colorBoxes.forEach(function (colorBox) {
+                colorBoxes.each(function (index, colorBox) {
                     me.colors.push(jQuery(colorBox).attr("color"));
                 });
             }
