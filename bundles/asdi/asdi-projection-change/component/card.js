@@ -62,9 +62,7 @@ function (view, callback) {
         if ( this.getUnsupportedLayers().length !== 0 ) {
             element.removeClass('oskari-hidden');
         } else {
-            if ( !element.hasClass('.oskari-hidden') ) {
-                element.addClass('oskari-hidden');
-            }
+            element.addClass('oskari-hidden');
         }
     },
     create: function (view) {
