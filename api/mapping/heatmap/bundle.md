@@ -67,7 +67,7 @@ This bundle doesn't send out any events.
     <td> Used to create the component UI from begin to end</td>
   </tr>
   <tr>
-    <td> [colpick Color Picker](http://colpick.com/plugin) </td>
+    <td> [Spectrum Color Picker](https://bgrins.github.io/spectrum/) </td>
     <td> Heatmap bundle </td>
     <td> Used to select colors for heatmap</td>
   </tr>
