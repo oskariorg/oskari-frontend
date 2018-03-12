@@ -42,12 +42,8 @@ No state is required.
   <td>Sends out when user changes the opacity for a layer</td>
 </tr>
 <tr>
-  <td> `MapModulePlugin.AddFeaturesToMapRequest` </td>
-  <td> Adds layer extent feature to map and zoomed in it's extent</td>
-</tr>
-<tr>
-  <td> `MapModulePlugin.RemoveFeaturesFromMapRequest` </td>
-  <td> Removes layer extent from map </td>
+  <td> `MapModulePlugin.MapMoveByLayerContentRequest` </td>
+  <td> Allows the user to move the map by the layer content</td>
 </tr>
 <tr>
   <td> `userinterface.UpdateExtensionRequest` </td>

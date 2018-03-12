@@ -348,14 +348,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         var me = this;
         if (me._layer.getGeometryWKT() && me._layer.getGeometryWKT() !== '') {
             me.addTool('zoom-to-extent', 'zoom-to-extent-tool', me.locale.tooltips.zoomToLayerExtent, function(evt) {
-                me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [me._layer.getGeometryWKT(), {
-                    layerId: 'hierarchical-layerlist-layer-extent',
-                    clearPrevious: true,
-                    layerOptions: null,
-                    centerTo: true
-                }]);
-
-                me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'hierarchical-layerlist-layer-extent']);
+                me.sb.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [me._layer.getId(), true]);
             });
         }
     },
