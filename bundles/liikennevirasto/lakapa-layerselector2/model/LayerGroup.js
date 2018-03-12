@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.L
 	     */
 
 	    function (title) {
-	        //"use strict";
+	        
 	        this.name = title;
 	        this.layers = [];
 	        this.searchIndex = {};
@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.L
 	         * @param {String} value
 	         */
 	        setTitle: function (value) {
-	            //"use strict";
+	            
 	            this.name = value;
 	        },
 	        /**
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.L
 	         * @return {String}
 	         */
 	        getTitle: function () {
-	            //"use strict";
+	            
 	            return this.name;
 	        },
 	        /**
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.L
 	         * @param {Layer} layer
 	         */
 	        addLayer: function (layer) {
-	            //"use strict";
+	            
 	            this.layers.push(layer);
 	            this.searchIndex[layer.getId()] = this._getSearchIndex(layer);
 	        },
@@ -41,11 +41,11 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.L
 	         * @return {Layer[]}
 	         */
 	        getLayers: function () {
-	            //"use strict";
+	            
 	            return this.layers;
 	        },
 	        _getSearchIndex: function (layer) {
-	            //"use strict";
+	            
 	            var val = layer.getName() + ' ' +
 	                layer.getInspireName() + ' ' +
 	                layer.getOrganizationName();
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.L
 	            return val.toLowerCase();
 	        },
 	        matchesKeyword: function (layerId, keyword) {
-	            //"use strict";
+	            
 	            var searchableIndex = this.searchIndex[layerId];
 	            return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
 	        }

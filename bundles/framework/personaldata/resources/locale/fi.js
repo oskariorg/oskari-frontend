@@ -7,6 +7,12 @@ Oskari.registerLocalization(
         "desc": "Omat tiedot",
         "notLoggedIn": "Kirjautuneena käyttäjävä voit tarkistaa täällä käyttäjätietosi sekä omat kohteesi, karttanäkymäsi, upotetut karttasi, indikaattorisi, analyysisi ja aineistosi.",
         "notLoggedInText": "Kirjaudu sisään",
+        "projectionError": {
+            "title" : "Projektiot eivät ole yhteensopivia",
+            "msg":"Vaihda kartan projektiota tarkastaaksesi näkymää.",
+            "ok": "OK",
+            "cancel": "Peruuta"
+        },
         "tabs": {
             "myviews": {
                 "title": "Karttanäkymät",

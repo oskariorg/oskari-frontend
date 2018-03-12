@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @class Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin
  */
@@ -2061,7 +2062,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         if (!Array.prototype.forEach) {
 
             Array.prototype.forEach = function forEach(callback, thisArg) {
-                'use strict';
+                
                 var T, k;
 
                 if (this === null) {

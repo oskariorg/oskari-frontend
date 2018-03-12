@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @class Oskari.userinterface.component.RadioButtonGroup
  *
@@ -9,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
      * @method create called automatically on construction
      */
     function () {
-        'use strict';
+        
         var me = this;
         me._clazz = 'Oskari.userinterface.component.RadioButtonGroup';
         me._element = document.createElement('fieldset');
@@ -23,7 +24,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * Focuses the component.
          */
         focus: function () {
-            'use strict';
+            
             var radioButton = this._element.querySelector('input');
             if (radioButton) {
                 radioButton.focus();
@@ -31,7 +32,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
         },
 
         isEnabled: function () {
-            'use strict';
+            
             return !this.getElement().disabled;
         },
 
@@ -40,7 +41,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * @param {Array} options
          */
         setOptions: function (options) {
-            'use strict';
+            
             if (!Array.isArray(options)) {
                 throw new TypeError(
                     this.getClazz() +
@@ -86,7 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
         },
 
         _valueChanged: function () {
-            'use strict';
+            
             var value = this.getValue();
 
             if (this.getHandler()) {
@@ -98,12 +99,12 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * @method _setEnabledImpl
          */
         _setEnabledImpl: function (enabled) {
-            'use strict';
+            
             this._element.disabled = !enabled;
         },
 
         getName: function () {
-            'use strict';
+            
             return this._name || '';
         },
 
@@ -111,7 +112,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * @method setName
          */
         setName: function (name) {
-            'use strict';
+            
             var i,
                 inputs = this._element.querySelectorAll('input');
 
@@ -126,7 +127,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * @method _setRequiredImpl
          */
         _setRequiredImpl: function () {
-            'use strict';
+            
             var i,
                 inputs = this._element.querySelectorAll('input');
             // TODO check if this actually does something...
@@ -136,7 +137,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
         },
 
         getTitle: function () {
-            'use strict';
+            
             return this._titleEl.textContent;
         },
 
@@ -144,7 +145,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * @method setTitle
          */
         setTitle: function (title) {
-            'use strict';
+            
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -155,7 +156,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
         },
 
         getTooltip: function () {
-            'use strict';
+            
             return this._element.title;
         },
 
@@ -163,12 +164,12 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * @method setTooltip
          */
         setTooltip: function (tooltip) {
-            'use strict';
+            
             this._element.title = tooltip;
         },
 
         getValue: function () {
-            'use strict';
+            
             var input = this._element.querySelector('input:checked');
             return input ? input.value : undefined;
         },
@@ -177,7 +178,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * @method setValue
          */
         setValue: function (value) {
-            'use strict';
+            
             var i,
                 input,
                 inputs = this._element.querySelectorAll('input'),
@@ -201,7 +202,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
          * @method _setVisibleImpl
          */
         _setVisibleImpl: function () {
-            'use strict';
+            
             this.getElement().style.display = this.isVisible() ? '' : 'none';
         }
     }, {

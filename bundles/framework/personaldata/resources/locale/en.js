@@ -7,6 +7,12 @@ Oskari.registerLocalization(
         "desc": "My Data",
         "notLoggedIn": "As a logged-in user you can see here your account information and all your saved places, map views, embedded maps, indicators, analysis and datasets.",
         "notLoggedInText": "Log in",
+        "projectionError": {
+            "title" : "Prokektiot eivät ole yhteensopivia",
+            "msg":"Vaihda kartan projektiota tarkastaaksesi näkymää.",
+            "ok": "OK",
+            "cancel": "Cancel"
+        },
         "tabs": {
             "myviews": {
                 "title": "My Map Views",

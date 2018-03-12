@@ -275,7 +275,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             }
             return gridModel;
         },
-
+        _isCurrentProjectionSupportedForView: function (data) {
+            var currentProjection = Oskari.getSandbox().getMap().getSrsName();
+            var viewProjection = data.state.mapfull.state.srs;
+            return viewProjection === currentProjection;
+        },
+        constructUrlWithUuid: function (srs) {
+            var views = Oskari.app.getSystemDefaultViews();
+            var uuid;
+            views.forEach( function (view) {
+                if ( view.srsName === srs ) {
+                    uuid = view.uuid;
+                    return;
+                }
+            });
+            var url = window.location.origin;
+            if (window.location.pathname && window.location.pathname.length) {
+                url += window.location.pathname;
+            }
+            url += "?uuid="+uuid;
+            return url;
+        },
+        /**
+         * @method createProjectionChangeDialog
+         * Creates Oskari.userinterface.component.Popup for infoing about projection mismatch between map / published view
+         *
+         * @param function cb - callback to call when clicking ok button
+          */
+        createProjectionChangeDialog: function (cb) {
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var btn = dialog.createCloseButton(this.loc("projectionError").ok);
+            var cancel = dialog.createCloseButton( this.loc("projectionError").cancel );
+            cancel.setHandler( function () {
+                dialog.close(true);
+            });
+            btn.addClass('primary');
+            btn.setHandler( function () {
+                cb();
+                dialog.close(true);
+            });
+            dialog.show(this.loc("projectionError").title, this.loc("projectionError").msg, [cancel, btn]);
+            dialog.makeDraggable();
+        },
         /**
          * @private @method _getGrid
          * Creates Oskari.userinterface.component.Grid and populates it with
@@ -353,8 +395,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // set up the link from name field
             var showRenderer = function (name, data) {
                 var link = me.templateLink.clone();
+                var srs = data.state.mapfull.state.srs;
                 link.text(name);
                 link.bind('click', function () {
+
+                    var supported = me._isCurrentProjectionSupportedForView( data );
+                    if (!supported) {
+                        me.createProjectionChangeDialog( function() {
+                            window.open(
+                                me.constructUrlWithUuid(srs),
+                                'Published',
+                                'location=1,status=1,scrollbars=yes,width=850,height=800'
+                            );
+                        });
+                        return;
+                    }
+
                     if (!me.popupOpen) {
                         setMapState(data, false, function () {
                             setMapState(data, true);
@@ -407,8 +463,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             //sending a request to publisher for editing view
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
+                var srs = data.state.mapfull.state.srs;
                 link.text(name);
                 link.bind('click', function () {
+
+                    var supported = me._isCurrentProjectionSupportedForView( data );
+                    if (!supported) {
+                        me.createProjectionChangeDialog( function() {
+                            window.location.href = me.constructUrlWithUuid(srs);
+                        });
+                        return;
+                    }
+
                     if (!me.popupOpen) {
                         var resp = service.isViewLayersLoaded(data, sandbox);
                         if (resp.status) {

@@ -45,14 +45,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
             var dropdown = select.create(options, dropdownOptions);
             dropdown.css({
-                width: '100%'
+                width: '70%'
             });
             select.adjustChosen();
-            select.selectFirstValue();
+            me.service.getStateService().activeIndicator.hash ? select.setValue( me.service.getStateService().activeIndicator.hash ) : select.selectFirstValue();
             me._select = select;
 
             container.append(dropdown);
-            container.on('change', function(event) {
+            dropdown.on('change', function(event) {
                 me.service.getStateService().setActiveIndicator(select.getValue());
             });
             me._renderDone();

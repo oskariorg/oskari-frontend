@@ -52,16 +52,10 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
      * @method generateMapLinkParameters
      * Generates query string for an URL that has the maps state with coordinates, zoom and selected map layers
      *
-     * Options syntax/supported fields:  {
-     *     marker : <boolean, default false>,
-     *     forceCache : <boolean, default true>,
-     *     noSavedState : <boolean, default true>
-     * }
-     *
-     * @param {Object} options - overrides default parameter values (optional)
+     * @param {Object} extraParams - object with parameters to add {param: value}
      * @return {String}
      */
-    generateMapLinkParameters: function (options) {
+    generateMapLinkParameters: function (extraParams) {
         // get stateful component parameters
         // Note! These parameters must be passed to the server in index.js to be used
         var components = this.getStatefulComponents();
@@ -83,18 +77,9 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
             }
         }
 
-        // use given options or empty object to have the strings only once
-        options = options || {
-            'showMarker': false,
-            'forceCache': false,
-            'noSavedState': false
-        };
-
-        for (iterator in options) {
-            if (options.hasOwnProperty(iterator)) {
-                optionsLinkParameterArray.push(iterator + '=' + (options[iterator] !== false));
-            }
-        }
+        Object.keys(extraParams || {}).forEach(function (param) {
+            optionsLinkParameterArray.push(param + '=' + extraParams[param]);
+        });
 
         // Use array join to make sure the values are always separated with '&', but not the first or last
         return componentLinkParameterArray.concat(optionsLinkParameterArray).join('&') || null;
