@@ -313,7 +313,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     );
                     tab.showLayerGroups(groups);
                 }
-            }
+            });
         },
 
         /**
@@ -393,7 +393,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         handleLayerSelectionChanged: function (layer, isSelected) {
             this.layerTabs.forEach(function (tab) {
                 tab.setLayerSelected(layer.getId(), isSelected);
-            }
+            });
         },
 
         /**
