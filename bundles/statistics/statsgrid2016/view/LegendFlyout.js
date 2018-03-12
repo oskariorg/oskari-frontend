@@ -8,8 +8,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.LegendFlyout', function(em
             var div = me.container.clone();
             me.view.render( div );
             me.setContent( div );
-            me.view.openLegendPanel();
             me.makeDraggable();
+            me.getElement().find('.oskari-flyouttoolbar').remove();
         }
     });
 }, {
