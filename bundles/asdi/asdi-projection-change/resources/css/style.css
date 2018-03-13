@@ -13,6 +13,8 @@
     width: 600px;
     display: flex;
     display: -ms-flex;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
     overflow: hidden;
     align-items: center;
     justify-content: center;
@@ -25,8 +27,8 @@
     height: 160px;
     margin: 3px;
     margin-bottom: 10px;
-    flex: 30%;
-    -ms-flex: 30%;
+    flex: 20%;
+    -ms-flex: 20%;
     padding: 15px;
 }
 .projection-info {
@@ -41,8 +43,8 @@
     background-position: center;}
 .projection-card > .info-row {
     width: inherit;
-    display: inline-flex;
-    display: -ms-inline-flex;
+    display: flex;
+    display: -ms-flex;
     justify-content: center;
     align-items: center;
 }
