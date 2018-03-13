@@ -4,10 +4,8 @@ Oskari.registerLocalization({
     "value": {
         "buttons": {
             "add": "Add",
-            "cancel": "Cancel",
             "update": "Update",
             "delete": "Delete",
-            "ok": "Ok",
             "select": "Select"
         },
         "tooltips": {

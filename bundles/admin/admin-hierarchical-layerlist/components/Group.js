@@ -54,53 +54,45 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             btnDelete.setHandler(function() {
                 // check at group has no layers or subgroups
                 var group = me.layerService.getAllLayerGroups(id);
-                var isLayersOrGroups = (group && group.layers && group.layers.length > 0) ? true : false;
-                if (group.groups && group.groups.length > 0) {
-                    isLayersOrGroups = true;
-                }
-                if (isLayersOrGroups) {
+
+                if (group.hasLayers() || group.hasSubgroups()) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     dialog.show(me.locale('errors.groupnameDeleteCheckLayers.title'), me.locale('errors.groupnameDeleteCheckLayers.message'));
                     dialog.fadeout(5000);
-                } else {
-                    var data = {
-                        id: id
-                    };
-
-                    // ned be confirm deleteing ?
-                    //
-                    // Confirm dialog
-                    var confirmDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    var confirmBtnOk = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                    var confirmBtnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-                    confirmBtnOk.addClass('primary');
-                    confirmBtnOk.setTitle(me.locale('buttons.ok'));
-                    confirmBtnOk.setHandler(function() {
-                        confirmDialog.close();
-                        me._deleteGroup(data, popup, opts.type, tool);
-                    });
-
-                    confirmBtnCancel.setTitle(me.locale('buttons.cancel'));
-                    confirmBtnCancel.setHandler(function() {
-                        confirmDialog.close();
-                    });
-
-                    var groupName = me.sandbox.getLocalizedProperty(group.name);
-
-                    confirmDialog.show(me.locale('confirms.groupDelete.title'), me.locale('confirms.groupDelete.message', {
-                        groupname: groupName
-                    }), [confirmBtnCancel, confirmBtnOk]);
-                    confirmDialog.makeModal();
-
-
+                    return;
                 }
+
+                var data = {
+                    id: id
+                };
+
+                // Confirm dialog
+                var confirmDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var confirmBtnOk = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+                var confirmBtnCancel = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+
+                confirmBtnOk.addClass('primary');
+                confirmBtnOk.setHandler(function() {
+                    confirmDialog.close();
+                    me._deleteGroup(data, popup, opts.type, tool);
+                });
+
+                confirmBtnCancel.setHandler(function() {
+                    confirmDialog.close();
+                });
+
+                var groupName = Oskari.getLocalized(group.getName());
+
+                confirmDialog.show(me.locale('confirms.groupDelete.title'), me.locale('confirms.groupDelete.message', {
+                    groupname: groupName
+                }), [confirmBtnCancel, confirmBtnOk]);
+                confirmDialog.makeModal();
+
             });
             returnObject.buttons.push(btnDelete);
         }
 
-        var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        btnCancel.setTitle(me.locale('buttons.cancel'));
+        var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
         btnCancel.addClass('cancel');
         btnCancel.setHandler(function() {
             popup.close();

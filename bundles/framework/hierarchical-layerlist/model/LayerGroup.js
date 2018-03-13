@@ -6,16 +6,16 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
      */
 
     function(group, mapLayerService) {
-        this._name = group.name[Oskari.getLang()] || group.name[Oskari.getDefaultLanguage()];
-        this._id = group.id;
-        this._selectable = group.selectable;
+        this._name = Oskari.getLocalized(group.name);
+        this._id = group.getId();
+        this._selectable = group.hasSelectable();
         this._layers = [];
-        this._groups = group.groups || [];
-        this._orderNumber = group.orderNumber;
-        this._toolsVisible = (typeof group.toolsVisible === 'boolean') ? group.toolsVisible : true;
+        this._groups = group.getGroups() || [];
+        this._orderNumber = group.getOrderNumber();
+        this._toolsVisible = group.hasToolsVisible();
         var me = this;
         this.searchIndex = {};
-        group.layers.forEach(function(layer) {
+        group.getLayers().forEach(function(layer) {
             me.addLayer(Oskari.getSandbox().findMapLayerFromAllAvailable(layer.id));
         });
     }, {

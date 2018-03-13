@@ -184,20 +184,20 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
 
         // get breadcrump
         var getGroupName = function(group) {
-            return Oskari.getLocalized(me.service.getAllLayerGroups(group.id).name);
+            return Oskari.getLocalized(me.service.getAllLayerGroups(group.id).getName());
         };
 
         // Get layer parent group
         var parentGroup = me.service.getAllLayerGroups(groupId);
         groups.push(getGroupName(parentGroup));
-        if (parentGroup.parentId > 0) {
+        if (parentGroup.getParentId() > 0) {
             // check also group parent group
-            var parentGroup1 = me.service.getAllLayerGroups(parentGroup.parentId);
+            var parentGroup1 = me.service.getAllLayerGroups(parentGroup.getParentId());
             groups.push(getGroupName(parentGroup1));
 
-            if (parentGroup1.parentId > 0) {
+            if (parentGroup1.getParentId() > 0) {
                 // check also group parent group
-                var parentGroup2 = me.service.getAllLayerGroups(parentGroup1.parentId);
+                var parentGroup2 = me.service.getAllLayerGroups(parentGroup1.getParentId());
                 groups.push(getGroupName(parentGroup2));
             }
         }

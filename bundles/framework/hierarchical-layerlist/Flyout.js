@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 var group = layer.getGroups()[0];
                 if(isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
                     if(!notLoadedBackend[group.id]) {
-                        notLoadedBackend[group.id] = {
+                        notLoadedBackend[group.id] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
                             groups: [],
                             id: group.id,
                             layers: [],
@@ -147,9 +147,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                             orderNumber: -1,
                             selectable: true,
                             toolsVisible: false
-                        };
-
-                        notLoadedBackend[group.id].name[Oskari.getLang()] = group.name;
+                        });
+                        notLoadedBackend[group.id].getName()[Oskari.getLang()] = group.name;
                     }
                     notLoadedBackend[group.id].layers.push({id:layer.getId()});
                 }

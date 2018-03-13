@@ -359,12 +359,25 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
             var newGroups = [];
             var editable = me.getAllLayerGroups(parentId);
-            editable.groups.forEach(function(group) {
-                if (group.id != id) {
-                    newGroups.push(group);
+
+            var getGroupIndexInArray = function(arr){
+                var founded = -1;
+                for (var i = 0; i < arr.length; i++) {
+                    var group = arr[i];
+                    if (group.id === id) {
+                        founded = i;
+                        break;
+                    }
                 }
-            });
-            editable.groups = newGroups;
+                return founded;
+            };
+
+            var groupIndex = getGroupIndexInArray(editable.groups || editable);
+            if (groupIndex >= 0 && editable.groups) {
+                editable.groups.splice(groupIndex, 1);
+            } else {
+                editable.splice(groupIndex, 1);
+            }
         },
         /**
          * Updata layer groups
@@ -380,23 +393,27 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 editable.parentId = data.parentId;
                 editable.selectable = data.selectable;
             } else if (data.parentId === -1) {
-                me.getAllLayerGroups().push({
-                    groups: [],
-                    id: data.id,
-                    name: data.name,
-                    layers: [],
-                    parentId: data.parentId,
-                    selectable: data.selectable
-                });
+                me.getAllLayerGroups().push(
+                    Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
+                        groups: [],
+                        id: data.id,
+                        name: data.name,
+                        layers: [],
+                        parentId: data.parentId,
+                        selectable: data.selectable
+                    })
+                );
             } else {
-                me.getAllLayerGroups(data.parentId).groups.push({
-                    groups: [],
-                    id: data.id,
-                    name: data.name,
-                    layers: [],
-                    parentId: data.parentId,
-                    selectable: data.selectable
-                });
+                me.getAllLayerGroups(data.parentId).groups.push(
+                    Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
+                        groups: [],
+                        id: data.id,
+                        name: data.name,
+                        layers: [],
+                        parentId: data.parentId,
+                        selectable: data.selectable
+                    })
+                );
             }
         },
 
@@ -651,7 +668,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         _loadAllLayerGroupsAjaxCallBack: function(pResp, callbackSuccess) {
             var me = this;
 
-            me._layerGroups = pResp;
+            me._layerGroups = [];
 
             var layers = [];
 
@@ -665,6 +682,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     if(group.groups) {
                         addGroupLayers(group.groups);
                     }
+                    var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
+                    me._layerGroups.push(groupDom);
                 });
             };
 
@@ -698,22 +717,22 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getAllLayerGroups: function(id) {
             var layerGroups = null;
             if (id && id != -1) {
-                var filterFunction = function(group) {
+                var findFunction = function(group) {
                     return group.id == id;
                 };
-                var group = this._layerGroups.filter(filterFunction)[0];
+                var group = this._layerGroups.find(findFunction);
                 // group not found
                 // try to get subgroup
                 if (!group) {
                     this._layerGroups.forEach(function(g){
-                        var subgroup = g.groups.filter(filterFunction)[0];
+                        var subgroup = g.groups.find(findFunction);
                         if (subgroup) {
                             layerGroups = subgroup;
                         }
 
                         // Try to get subgroup subgroup
                         g.groups.forEach(function(sg){
-                            var subgroupSubgroup = sg.groups.filter(filterFunction)[0];
+                            var subgroupSubgroup = sg.groups.find(findFunction);
                             if (subgroupSubgroup) {
                                 layerGroups = subgroupSubgroup;
                             }
