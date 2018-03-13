@@ -363,37 +363,37 @@ div.oskari-flyout {
     margin-left: 8px; }
   .statsgrid-legend-container div.accordion div.geostats-legend div {
     margin: 2px 6px 2px 2px; }
-  .statsgrid-legend-container > .accordion .accordion_panel {
+  .statsgrid-legend-container .classification > .accordion .accordion_panel {
     border: 0px;
     overflow: visible; }
-    .statsgrid-legend-container > .accordion .accordion_panel .header .headerIcon {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .header .headerIcon {
       margin: 0;
       margin-left: 4px; }
-    .statsgrid-legend-container > .accordion .accordion_panel .header .headerText {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .header .headerText {
       font-size: 12px;
       padding: 0;
       font-weight: normal; }
-    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .classification-options .numeric-value .oskari-formcomponent {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .classification-options .numeric-value .oskari-formcomponent {
       margin-bottom: 4px;
       margin-top: 8px; }
-    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .label {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .label {
       font-weight: bold; }
-    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications select {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications select {
       width: 96%;
       font-size: 12px;
       padding: 1px 2px; }
-    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .min {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .min {
       float: left; }
-    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .max {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .max {
       float: right;
       margin-right: 4%; }
-    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .clear {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .clear {
       clear: both; }
-    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .point-range {
+    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .point-size .point-range {
       width: 90%;
       background-image: url(../images/opacity_slider_long.png);
       background-repeat: no-repeat; }
-    .statsgrid-legend-container > .accordion .accordion_panel .oskari-color-selection {
+    .statsgrid-legend-container  .classification > .accordion .accordion_panel .oskari-color-selection {
       z-index: 10; }
   .statsgrid-legend-container .statsgrid-svg {
     float: left; }
@@ -403,25 +403,30 @@ div.oskari-flyout {
     float: left; }
   .statsgrid-legend-container .clear {
     clear: both; }
-  .active-legend {
 
-  }
-  .active-legend-header {
+  .active-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-content: center;
   }
-  .active-legend-header > .title {
+  .active-header > .title {
+    width: 90%;
     font-weight: bold;
   }
-  .edit-active-legend {
+  .edit-legend {
+    margin-right: 3%;
     height: 16px;
     width: 16px;
     right: 0 !important;
     background-image: url(../images/edit-dark.png);
   }
-
+  .edit-active {
+    height: 16px;
+    width: 16px;
+    right: 0 !important;
+    background-image: url(../images/edit-hover.png);
+  }
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend .popup-body > div.content {
   margin: 0px; }
