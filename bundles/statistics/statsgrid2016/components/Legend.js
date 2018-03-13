@@ -223,58 +223,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         });
     },
     /**
-     * Creates the header part for the legend UI
-     * @param  {Object}   activeIndicator identifies the current active indicator
-     * @param  {Function} callback        function to call with header element as param or undefined for error
-     */
-    _createHeader: function (activeIndicator, callback) {
-        var service = this.service;
-        if(!service) {
-            // not available yet
-            callback();
-            return;
-        }
-        var sb = this.sb;
-        var headerTemplate = this.__templates.header;
-        var sourceUILabel = this.locale('statsgrid.source');
-        var stateService = this.service.getStateService();
-        var indicators = stateService.getIndicators();
-
-        var getSourceLink = function(currentHash){
-            var currentIndex = stateService.getIndicatorIndex(currentHash);
-            var nextIndicatorIndex = currentIndex + 1;
-            if(nextIndicatorIndex === indicators.length) {
-                nextIndicatorIndex = 0;
-            }
-            return {
-                indexForUI: nextIndicatorIndex + 1,
-                handler: function() {
-                    var i = indicators[nextIndicatorIndex];
-                    stateService.setActiveIndicator(i.hash);
-                }
-            };
-        };
-
-        this._getLabels(activeIndicator, function (labels) {
-            if(indicators.length < 2) {
-                // no need to setup link, remove it instead
-                var noLinksHeader = jQuery(headerTemplate(tplParams));
-                noLinksHeader.find('.link').remove();
-                callback(noLinksHeader);
-                return;
-            }
-
-            var link = getSourceLink(activeIndicator.hash);
-            labels.link = sourceUILabel + ' ' + link.indexForUI  + ' >>';
-            var head = jQuery(headerTemplate(labels));
-            var indicatorChangedLink = head.find('.link');
-            indicatorChangedLink.click(function(){
-                link.handler();
-            });
-            callback(head);            
-        });
-    },
-    /**
      * Creates the color <> number range UI
      * @param  {Object}   activeIndicator identifies the current active indicator
      * @param  {Function} callback        function to call with legend element as param or undefined for error
