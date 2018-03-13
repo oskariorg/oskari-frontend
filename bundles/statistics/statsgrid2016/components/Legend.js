@@ -6,11 +6,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     this.__templates = {
         error: _.template('<div class="legend-noactive">${ msg }</div>'),
         header: _.template('<div class="header"><div class="link">${ link }</div><div class="title">${ source }</div><div class="sourcename">${ label }</div></div>'),
-        activeHeader: _.template('<div class="title">${label}</div> <div class="edit-legend"></div> '),
-        activeLegend: _.template('<div class="active-legend"> <div class="active-legend-header"> <div class="title">${label}</div> <div class="edit-legend"></div> </div> </div>')
+        activeHeader: _.template('<div class="title">${label}</div> '),
+        activeLegend: jQuery('<div class="active-legend"></div>')
     };
     this._element = jQuery('<div class="statsgrid-legend-container"> '+
-        '<div class="active-header"></div>'+
+        '<div class="active-header">  <div class="edit-legend"></div> </div>'+
         '<div class="classification"></div>'+
         '<div class="active-legend"></div>'+
     '</div>');
@@ -52,11 +52,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             return;
         }
         this._renderState.inProgress = true;
-        // start rendering
+
         var me = this;
         var container = this._element;
         var accordion = this._accordion;
-        // cleanup previous UI
+        var singleHeader = true;
         // NOTE! detach classification before re-render to keep eventhandlers
         this.editClassification.getElement().detach();
         accordion.removeAllPanels();
@@ -89,28 +89,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             me._renderDone();
             return;
         }
+        // create inidicator dropdown if we have more than one indicator
+        if ( this.service.getStateService().getIndicators().length > 1 ) {
+            var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', this.service);
+            indicatorMenu.render( container.find('.active-header') );
+            singleHeader = false;
+        }
+
         var classificationOpts = this.service.getStateService().getClassificationOpts(activeIndicator.hash);
 
         this._createLegend(activeIndicator, function(legendUI, classificationOpts) {
             var self = me;
             me._getLabels(activeIndicator, function (labels) {
-                var header = me.__templates.activeHeader({
-                    label: labels.label
-                });
+
+                //header
+                if ( singleHeader ) {
+                    container.find('.active-header').empty();
+                    var header = me.__templates.activeHeader({
+                        label: labels.label
+                    });
+                    jActive = jQuery(header);
+                    container.find('.active-header').append( jQuery(header) );
+                }
+
                 if(!classificationOpts) {
                     // didn't get classification options so not enough data to classify or other error
                     container.append(legendUI);
                     self._renderDone();
                     return;
                 }
-                //empty old ones if any
-                container.find('.active-header').empty();
+                //legend
                 container.find('.active-legend').empty();
+                var legend = me.__templates.activeLegend.clone();
+                legend.html(legendUI);
+                container.find('.active-legend').append( legend );
 
-                jActive = jQuery(header);
-                jActive.append(legendUI);
-                container.find('.active-header').append( jQuery(header) );
-                container.find('.active-legend').append( legendUI );
                 var edit = container.find('.edit-legend');
 
                 edit.on('click', function (event) {
