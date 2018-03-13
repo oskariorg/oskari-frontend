@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
     __templates: {
         select: jQuery('<div class="dropdown"></div>')
     },
-    render: function(el) {
+    render: function(el, config) {
         var me = this;
         if(this.element) {
             // already rendered, just move the element to new el when needed
@@ -33,6 +33,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         }
         this._renderState.inProgress = true;
         var container = me.__templates.select.clone();
+        container.css("width", config.width || '');
         this.element = container;
         var dropdownOptions = {
             placeholder_text: "",
@@ -57,7 +58,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             });
             me._renderDone();
         });
-        el.append(container);
++        el.append(container);
     },
     /****** PRIVATE METHODS ******/
     /**
