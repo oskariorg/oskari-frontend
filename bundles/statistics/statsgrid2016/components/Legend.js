@@ -103,11 +103,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                     self._renderDone();
                     return;
                 }
+                //empty old ones if any
+                container.find('.active-header').empty();
+                container.find('.active-legend').empty();
+
                 jActive = jQuery(header);
                 jActive.append(legendUI);
                 container.find('.active-header').append( jQuery(header) );
                 container.find('.active-legend').append( legendUI );
-
                 var edit = container.find('.edit-legend');
 
                 edit.on('click', function (event) {
@@ -331,12 +334,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
 
         me.service.on('StatsGrid.IndicatorEvent', function(event) {
             // if indicator is removed/added - recalculate the source 1/2 etc links
-            // me.render();
+            me.render();
         });
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
             // Always show the active indicator - also handles "no indicator selected"
-            // me.render();
+            me.render();
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
