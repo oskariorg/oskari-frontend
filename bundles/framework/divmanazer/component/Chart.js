@@ -216,10 +216,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var xtickAxis = this.svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate( 0, 0)")
+            .attr('shape-rendering', 'crispEdges')
             .call(this.xAxis);
 
             xtickAxis.selectAll("x axis, tick, text").remove();
             xtickAxis.select('.domain').remove();
+
+        xtickAxis.selectAll('line')
+            .attr('stroke', '#aaa')
 
             //append the x-axis to different element so we can show the values when scrollign
             var gx = d3.select( this.axisLabelValues.get(0) )
