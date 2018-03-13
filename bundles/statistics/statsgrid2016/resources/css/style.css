@@ -405,17 +405,17 @@ div.oskari-flyout {
     clear: both; }
 
   .active-header {
-    width: 100%;
+    width: 93%;
     display: flex;
     justify-content: space-between;
     align-content: center;
+    padding: 5px;
   }
   .active-header > .title {
     width: 90%;
     font-weight: bold;
   }
   .edit-legend {
-    margin-right: 3%;
     height: 16px;
     width: 16px;
     right: 0 !important;
