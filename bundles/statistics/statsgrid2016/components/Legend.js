@@ -100,7 +100,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox) {
             if ( me.service.getStateService().getIndicators().length > 1 ) {
                 var edit = me.__templates.edit.clone();
                 var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
-                indicatorMenu.render( headerContainer, { width:"inherit" } );
+                indicatorMenu.render( headerContainer );
+                indicatorMenu.setWidth('inherit');
                 headerContainer.append(edit);
             } else {
                 me._getLabels(activeIndicator, function (labels) {
