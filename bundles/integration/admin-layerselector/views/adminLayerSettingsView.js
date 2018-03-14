@@ -266,7 +266,7 @@ define([
                         id: this.model.getId(),
                         srs: sandbox.getMap().getSrsName()
                     },
-                    url: sandbox.getAjaxUrl() + 'action_route=UpdateCapabilities',
+                    url: sandbox.getAjaxUrl('UpdateCapabilities'),
                     success: function (resp) {
                         xhr = null;
                         if(resp.success.length === 1) {

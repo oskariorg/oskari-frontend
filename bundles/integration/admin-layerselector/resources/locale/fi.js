@@ -214,7 +214,7 @@ Oskari.registerLocalization(
         "query": "Hae",
         "recheckTitle": "Päivitä getCapabilities",
         "recheckAllButton": "Päivitä kaikki getCapabilities",
-        "recheckAll": "Haluatko hakea getCapabilities-määritykset kaikille karttatasoille? Toiminonto saattaa kestää useita minuutteja.",
+        "recheckAll": "Haluatko hakea getCapabilities-määritykset kaikille karttatasoille? Toiminto saattaa kestää useita minuutteja.",
         "recheckAllSucceeded": "GetCapabilities päivitys onnistui {success, number} tasolle, epäonnistui {fail, number} tasolle. Lataa sivu uudelleen nähdäksesi päivittyneet tiedot.",
         "recheckSucceeded": "GetCapabilities päivitys onnistui.",
         "recheckFailReason": "GetCapabilities päivitys epäonnistui: {reason}",

@@ -287,6 +287,8 @@
 /**
  * Here add hierarchical admin tool layerlist icons
  */
+div.hierarchical-layerlist .main-tools .main-tool.update-capabilities {
+  background-image: url("../images/glyphicons-82-refresh.png"); }
 div.hierarchical-layerlist .main-tools .main-tool.add-group {
   background-image: url("../images/glyphicons-433-plus.png"); }
 div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.add-subgroup {

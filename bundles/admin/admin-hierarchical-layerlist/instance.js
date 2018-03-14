@@ -35,6 +35,15 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 cls: 'add-group',
                 tooltip: me.locale('tooltips.addMainGroup')
             });
+
+            // Add update all capabilities tool
+            me.service.addMainTool('update-capabilities', function(tool) {
+                me._recheckAllCapabilities(tool);
+            }, {
+                cls: 'update-capabilities',
+                tooltip: me.locale('recheckAllButton')
+            });
+
         },
         /**
          * Add group tools
@@ -197,7 +206,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             var me = this;
             // Add edit tool for layers
             me.service.addLayerTool('edit-layer', function(tool, groupId, layerId) {
-
                 me.layer.showLayerAddPopup(tool, layerId, groupId);
             }, {
                 cls: 'edit-layer',
@@ -311,6 +319,64 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 }
             });
             me.service.trigger('order.changed', data);
+        },
+
+        /**
+         * Recheck all layer capabilities
+         * @method  _recheckAllCapabilities
+         * @param   {Object}                tool jQuery tool element
+         * @private
+         */
+        _recheckAllCapabilities: function(tool){
+            var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+
+            var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var closeButton = popup.createCloseButton(loc('close'));
+            var primaryButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            primaryButton.setTitle(loc('query'));
+            var me = this;
+            var xhr;
+
+            closeButton.setHandler(function() {
+                if(xhr) {
+                    xhr.abort();
+                }
+                popup.close();
+                tool.removeClass('active');
+            });
+
+            var content = jQuery('<span>' + loc('recheckAll') + '<span>');
+            primaryButton.setPrimary(true);
+            primaryButton.setHandler(function () {
+                xhr = jQuery.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        srs: me.sandbox.getMap().getSrsName()
+                    },
+                    url: me.sandbox.getAjaxUrl('UpdateCapabilities'),
+                    success: function (resp) {
+                        xhr = null;
+                        var successCount = resp.success.length;
+                        var failCount = Object.keys(resp.error).length;
+                        content.append('<br><br><span>' + loc('recheckAllSucceeded', {success: successCount, fail: failCount}) + '<span>');
+                        tool.removeClass('active');
+                    },
+                    error: function (xhr, status, error) {
+                        xhr = null;
+                        if(status === 'timeout') {
+                            content.append('<br><br><span>' + loc('recheckFailTimeout') + '<span>');
+                            return;
+                        }
+                        content.append('<br><br><span>' + loc('recheckFail') + '<span>');
+                        tool.removeClass('active');
+                    }
+                });
+
+                jQuery(primaryButton.getElement()).attr('disabled', true);
+            });
+
+            popup.show(loc('recheckTitle'), content, [closeButton, primaryButton]);
         },
 
 

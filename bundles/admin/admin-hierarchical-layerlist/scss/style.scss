@@ -15,6 +15,7 @@ $errorColor: lighten(#ff0000, 20%);
 $editIcon: url("../images/glyphicons-151-edit.png");
 $addLayerIcon: url("../images/glyphicons-191-plus-sign.png");
 $addGroupIcon: url("../images/glyphicons-433-plus.png");
+$updateCapabilitiesIcon: url("../images/glyphicons-82-refresh.png");
 
 @mixin gradient-button($startColor, $endColor, $textColor)
 {
@@ -370,6 +371,9 @@ $addGroupIcon: url("../images/glyphicons-433-plus.png");
 div.hierarchical-layerlist {
     .main-tools {
         .main-tool {
+            &.update-capabilities{
+                background-image: $updateCapabilitiesIcon;
+            }
             &.add-group {
                 background-image:$addGroupIcon;
             }
