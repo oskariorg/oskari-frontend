@@ -150,8 +150,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             data = _.extend(dataTemplate, metadataJson);
 
-            data.lineageStatements.forEach(function (lineage) {
-                lineage = me._prettify(lineage);
+            data.lineageStatements.forEach(function (lineage, index) {
+                data.lineageStatements[index] = me._prettify(lineage);
+            });
+
+            data.dataQualities.forEach(function(dataQuality) {
+                dataQuality.UIlabel = me.locale.heading[dataQuality.nodeName];
             });
 
             for (i = 0; i < data.identifications.length; i += 1) {

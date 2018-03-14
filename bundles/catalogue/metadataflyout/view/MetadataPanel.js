@@ -144,8 +144,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
                     '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(lineageStatements, function (paragraph) { %>' +
-                    '            <p><%= paragraph %></p>' +
+                    '        <% _.forEach(lineageStatements, function (lineage) { %>' +
+                    '           <% _.forEach(lineage, function (paragraph) { %>' +
+                    '               <p>${paragraph}</p>' +
+                    '           <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
 
@@ -308,8 +310,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
                     '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(lineageStatements, function (paragraph) { %>' +
-                    '            <p><%= paragraph %></p>' +
+                    '        <% _.forEach(lineageStatements, function (lineage) { %>' +
+                    '           <% _.forEach(lineage, function (paragraph) { %>' +
+                    '               <p>${paragraph}</p>' +
+                    '           <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
 
@@ -391,8 +395,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '    <% } %>' +
 
                     '    <% if (dataQualities.length) { %>' +
-                    '        <h2>' + this.locale.heading.reportConformance + '</h2>' +
                     '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
+                    '           <h2>${dataQuality.UIlabel}</h2>' +
+                    '           <h3>' + this.locale.heading.reportConformance + '</h3>' +
                     '           <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
                     '           <% if (conformanceResult.specification) { %>' +
                                     this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
@@ -446,14 +451,16 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 'quality': _.template(
                     '<article>' +
                     '    <% if (lineageStatements.length) { %>' +
-                    '        <br> <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(lineageStatements, function (paragraph) { %>' +
-                    '           <p>${paragraph}</p>' +
+                    '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
+                    '        <% _.forEach(lineageStatements, function (lineage) { %>' +
+                    '           <% _.forEach(lineage, function (paragraph) { %>' +
+                    '               <p>${paragraph}</p>' +
+                    '           <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
                     '    <% if (dataQualities.length) { %>' +
                     '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '           <br> <h2> ${dataQuality.UIlabel}</h2>' +
+                    '           <h2> ${dataQuality.UIlabel}</h2>' +
                     '           <% if (dataQuality.nameOfMeasure) { %>' +
                                     this.locale.qualityContent.nameOfMeasure + ' : <%= dataQuality.nameOfMeasure %> <br>' +
                     '           <% } %>' +
@@ -477,7 +484,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '               <% }); %> '+
                     '           <% } %>' +
                     '           <% if (dataQuality.conformanceResultList.length) { %>' +
-                    '               <br> <h3>' + this.locale.qualityContent.conformanceResult + '</h3>' +
+                    '               <h3>' + this.locale.qualityContent.conformanceResult + '</h3>' +
                     '               <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
                     '                   <% if (conformanceResult.specification) { %>' +
                                             this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
@@ -490,7 +497,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '               <% }); %> '+
                     '           <% } %>' +
                     '           <% if (dataQuality.quantitativeResultList.length) { %>' +
-                    '               <br> <h3>' + this.locale.qualityContent.quantitativeResult + '</h3>' +
+                    '               <h3>' + this.locale.qualityContent.quantitativeResult + '</h3>' +
                     '               <% _.forEach(dataQuality.quantitativeResultList, function (quantitativeResult) { %>' +
                     '                   <% if (quantitativeResult.valueType) { %>' +
                                             this.locale.qualityContent.valueType + ': <%= quantitativeResult.valueType %> <br>' +
@@ -609,7 +616,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
             }
         },
-
+        //DO we need this??
         preprocessModel : {
             'quality' : function(model) {
                 if(!model || !model.dataQualities || !model.dataQualities.length) {
@@ -659,9 +666,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     if (me._templates.tabs[tabId]) {
                         //the "native" tabs have keys in this bundles locale
                         entry.setTitle(locale[tabId]);
-                        if(me.preprocessModel[tabId]) {
-                            me.preprocessModel[tabId].apply(me, [model]);
-                        }
                         entry.setContent(
                             me._templates.tabs[tabId](model)
                         );
