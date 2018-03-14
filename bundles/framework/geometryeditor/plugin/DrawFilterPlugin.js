@@ -1,4 +1,3 @@
-'use strict';
 /**
  * @class Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin
  */
