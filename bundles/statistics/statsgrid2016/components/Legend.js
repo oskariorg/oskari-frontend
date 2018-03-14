@@ -1,6 +1,6 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, locale) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox) {
     this.sb = sandbox;
-    this.locale = locale;
+    this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
     this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.__templates = {
@@ -16,12 +16,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     '</div>');
     this._bindToEvents();
 
-    this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sandbox, locale);
+    this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sandbox, this.locale);
     this._renderState = {
         panels : {}
     };
-    // initialize with legend panel open
-    this._renderState.panels[this.locale('legend.title')] = true;
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     // some components need to know when rendering is completed.
     Oskari.makeObservable(this);
@@ -56,7 +54,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         var me = this;
         var container = this._element;
         var accordion = this._accordion;
-        var singleHeader = true;
+        var multipleIndicators = false;
         // NOTE! detach classification before re-render to keep eventhandlers
         this.editClassification.getElement().detach();
         accordion.removeAllPanels();
@@ -89,59 +87,55 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             me._renderDone();
             return;
         }
-        // create inidicator dropdown if we have more than one indicator
-        if ( this.service.getStateService().getIndicators().length > 1 ) {
-            var edit = me.__templates.edit.clone();
-            var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', this.service);
-            indicatorMenu.render( container.find('.active-header'), { width:"inherit" } );
-            container.find('.active-header').append(edit);
-            singleHeader = false;
-        }
 
         var classificationOpts = this.service.getStateService().getClassificationOpts(activeIndicator.hash);
 
         this._createLegend(activeIndicator, function(legendUI, classificationOpts) {
-            var self = me;
-            me._getLabels(activeIndicator, function (labels) {
+            var headerContainer = container.find('.active-header');
+            var legendContainer = container.find('.active-legend');
+            headerContainer.empty();
+            legendContainer.empty();
 
-                //header
-                if ( singleHeader ) {
-                    container.find('.active-header').empty();
+            // create inidicator dropdown if we have more than one indicator
+            if ( me.service.getStateService().getIndicators().length > 1 ) {
+                var edit = me.__templates.edit.clone();
+                var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
+                indicatorMenu.render( headerContainer, { width:"inherit" } );
+                headerContainer.append(edit);
+            } else {
+                me._getLabels(activeIndicator, function (labels) {
                     var header = me.__templates.activeHeader({
                         label: labels.label
                     });
                     var edit = me.__templates.edit.clone();
-                    header.append(edit);
-                    jActive = jQuery(header);
-                    container.find('.active-header').append( jQuery(header) );
-                }
+                    headerContainer.append( header );
+                    headerContainer.append(edit);
+                }); //_getLabels
+            }
+            if(!classificationOpts) {
+                // didn't get classification options so not enough data to classify or other error
+                container.append(legendUI);
+                me._renderDone();
+                return;
+            }
+            //legend
+            legendContainer.html( legendUI );
 
-                if(!classificationOpts) {
-                    // didn't get classification options so not enough data to classify or other error
-                    container.append(legendUI);
-                    self._renderDone();
-                    return;
-                }
-                //legend
-                container.find('.active-legend').empty();
-                container.find('.active-legend').html( legendUI );
+            var edit = container.find('.edit-legend');
 
-                var edit = container.find('.edit-legend');
-
-                edit.on('click', function (event) {
-                    var target = jQuery(event.target);
-                    //toggle accordion
-                    me._accordion.getPanels().forEach( function (panel) {
-                        if ( panel.isOpen() ) {
-                            panel.close();
-                            target.removeClass('edit-active');
-                        } else {
-                            target.addClass('edit-active');
-                            panel.open();
-                        }
-                    });
-                }); //edit
-            }); //_getLabels
+            edit.on('click', function (event) {
+                var target = jQuery(event.target);
+                //toggle accordion
+                me._accordion.getPanels().forEach( function (panel) {
+                    if ( panel.isOpen() ) {
+                        panel.close();
+                        target.removeClass('edit-active');
+                    } else {
+                        target.addClass('edit-active');
+                        panel.open();
+                    }
+                });
+            }); //edit
         }); //_createLegend
     },
     /****** PRIVATE METHODS ******/

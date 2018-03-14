@@ -1,29 +1,23 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool',
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.TransparentTool',
 function() {},
 {
     index : 1,
     group: 'data',
     allowedLocations : [],
     allowedSiblings : [],
-    id: "diagram",
 
     init: function (data) {
         var me = this;
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (data && Oskari.util.keyExists(data, 'configuration.statsgrid.conf') && data.configuration.statsgrid.conf.diagram !== false) {
-            me.setEnabled(true);
-        } else {
-            me.setEnabled(false);
-        }
     },
     getTool: function(stateData) {
         var me = this;
         if(!me.__tool) {
             me.__tool = {
-                id: 'Oskari.statistics.statsgrid.TogglePlugin',
-                title: 'displayDiagram',
+                id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
+                title: 'transparent',
                 config: {
-                    diagram: true
+                    transparent: false
                 }
             };
          }
@@ -39,9 +33,9 @@ function() {},
             return;
         }
         if(enabled) {
-            stats.togglePlugin.addTool(this.id);
+            stats.classificationPlugin.makeTransparent(true);
         } else {
-            stats.togglePlugin.removeTool(this.id);
+            stats.classificationPlugin.makeTransparent(false);
         }
     },
     /**
@@ -50,7 +44,7 @@ function() {},
     *
     * @return found stats layer, if not found then null
     */
-    _getStatsLayer: function(){
+    _getStatsLayer: function() {
         var me = this,
             selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers(),
             statsLayer = null,
@@ -98,17 +92,13 @@ function() {},
                 statsgrid: {
                     state: statsGridState,
                     conf : {
-                        diagram: me.state.enabled,
+                        transparent: me.state.enabled,
                     }
                 }
             }
         };
     },
     stop : function() {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (stats) {
-            stats.togglePlugin.removeTool(this.id);
-        }
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

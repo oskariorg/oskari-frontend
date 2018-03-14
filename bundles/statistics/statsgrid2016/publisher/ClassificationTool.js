@@ -49,10 +49,10 @@ function() {
         var me = this;
         if(!me.__tool) {
             me.__tool = {
-                id: 'Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin',
+                id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
                 title: 'allowClassification',
                 config: {
-                    allowClassification: false
+                    allowClassification: false,
                 }
             };
          }
@@ -145,8 +145,6 @@ function() {
                     statsgrid: {
                         conf : {
                             allowClassification: me.state.enabled,
-                            legendLocation : this.getPlugin().getLocation(),
-                            vectorViewer: config.vectorViewer
                         }
                     }
                 }

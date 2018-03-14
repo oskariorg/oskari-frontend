@@ -1,7 +1,7 @@
 /**
- * @class Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
+ * @class Oskari.statistics.statsgrid.ClassificationPlugin
  */
-Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin',
+Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
     /**
      * @method create called automatically on construction
      * @static
@@ -15,10 +15,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me._mapmodule = mapmodule;
         me._sandbox = sandbox;
         me._instance = instance;
-        me._clazz = 'Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin';
+        me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._defaultLocation = 'top right';
         me._index = 9;
-        me._name = 'ClassificationToolPlugin';
+        me._name = '';
         me._element = null;
         me._templates = {
             main: jQuery('<div class="mapplugin statsgrid-legend-plugin"></div>')
@@ -29,20 +29,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         // - publisher tool needs to implement getPlugin()
         // publisher tool writes location to statsgrid.conf.legendLocation since this is not only a plugin
         //  for this reason we need to call setLocation() manually as location is not in the default path "config.location.classes"
-        me.setLocation(config.legendLocation || me._defaultLocation);
+        // me.setLocation(config.legendLocation || me._defaultLocation);
 
         me._mobileDefs = {
             buttons:  {
-                'mobile-coordinatetool': {
+                'mobile-statsclassification': {
                     iconCls: 'mobile-statslegend',
                     tooltip: locale.legend.title,
                     show: true,
                     callback: function () {
-                        if(me._popup && me._popup.isVisible()) {
-                            me._popup.close(true);
-                        } else {
-                            me._showPopup();
-                        }
+
                     },
                     sticky: true,
                     toggleChangeIcon: true
@@ -50,33 +46,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             },
             buttonGroup: 'mobile-toolbar'
         };
-        me.log = Oskari.log('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin');
+        me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
 
-        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, locale);
+        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox);
         this.__legend.on('rendered', function(){
             me._calculatePluginSize();
         });
     }, {
-
-        /**
-         * Show popup.
-         * @method @private _showPopup
-         */
-        _showPopup: function() {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
-            this._popup = popupService.createPopup();
-            this._popup.onClose(function() {
-                // detach so we dont lose eventlistener bindings
-                me.getElement().detach();
-                sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
-            });
-            this._popup.addClass('statsgrid-mobile-legend');
-            this._popup.show(null, this.getElement());
-            this._popup.moveTo(jQuery('div.mobileToolbarDiv'), 'top', true);
-            me._calculatePluginSize();
-        },
 
         /**
          * @method _setLayerToolsEditModeImpl
@@ -116,7 +92,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             this.__legend.render(me._element);
             return me._element;
         },
+        /**
+         * @method _createUi Create element and construct DOM structure
+         * @private
+         * @param  {Boolean} isMobile is UI in mobile mode?
+         */
+        _createUi: function (isMobile) {
+            var me = this;
+            me._element = me._createControlElement();
+            this.addToPluginContainer(me._element);
+            if (isMobile) {
 
+            } else {
+                me._makeDraggable();
+            }
+        },
+        _makeDraggable: function () {
+            this._element.draggable();
+        },
+        makeTransparent: function ( transparent ) {
+            if ( !this._element ) {
+                return;
+            }
+            if ( transparent ) {
+                this._element.find('.statsgrid-legend-container').addClass('legend-transparent');
+            } else {
+                this._element.find('.statsgrid-legend-container').removeClass('legend-transparent');
+            }
+        },
         teardownUI : function(stopping) {
             //detach old element from screen
             var me = this;
@@ -148,14 +151,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             }
             this.teardownUI();
 
-            me._element = me._createControlElement();
             if (!toolbarNotReady && mapInMobileMode) {
                 // create mobile
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
                 return;
             }
-
-            this.addToPluginContainer(me._element);
+            this._createUi();
         },
 
         /**

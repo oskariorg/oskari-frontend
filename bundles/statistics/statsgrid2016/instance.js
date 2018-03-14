@@ -56,21 +56,22 @@ Oskari.clazz.define(
             // disable tile if we don't have anything to show or enable if we do
             // setup initial state
             this.setState();
+            this.createClassficationView(true);
 
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published );
+
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
-
-            this.showLegend();
 
             if ( this.isEmbedded() ) {
                 // Start in an embedded map mode
 
-                // Always show legend on map when embedded
-                me.showLegendOnMap(true);
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
-                
+
+                if (me.conf.transparent) {
+                    me.classificationPlugin.makeTransparent(true);
+                }
                 //
                 if( me.conf.grid ) {
                     me.togglePlugin.addTool('table');
@@ -337,40 +338,29 @@ Oskari.clazz.define(
             }
             return state;
         },
-        showLegend: function () {
-            var flyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.LegendFlyout', this.isEmbedded() );
-            flyout.show();
-        },
-        /**
-         * @method  @public showLegendOnMap Render published  legend
-         * This method is also used to setup functionalities for publisher preview
-         */
-        showLegendOnMap: function(enabled){
-            var me = this;
+        createClassficationView: function ( enabled ) {
 
-            var config = me.getConfiguration();
-            var sandbox = me.getSandbox();
-            var locale = this.getLocalization();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             if(!enabled) {
-                if(me.plugin) {
-                    mapModule.unregisterPlugin(me.plugin);
-                    mapModule.stopPlugin(me.plugin);
-                    me.plugin = null;
+                if(this.classificationPlugin) {
+                    mapModule.unregisterPlugin(this.classificationPlugin);
+                    mapModule.stopPlugin(me.classificationPlugin);
+                    this.classificationPlugin = null;
                 }
                 return;
             }
 
-            if(!me.plugin) {
-                me.plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
-            }
-            mapModule.registerPlugin(me.plugin);
-            mapModule.startPlugin(me.plugin);
+            var config = this.getConfiguration();
+            var sandbox = this.getSandbox();
+            var locale = this.getLocalization();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+
+            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, this.getLocalization(), mapModule, sandbox);
+            mapModule.registerPlugin(this.classificationPlugin);
+            mapModule.startPlugin(this.classificationPlugin);
             //get the plugin order straight in mobile toolbar even for the tools coming in late
             if (Oskari.util.isMobile() && this.plugin.hasUI()) {
                 mapModule.redrawPluginUIs(true);
             }
-            return;
         },
         /**
          * @method  @public enableClassification change published map classification visibility.
