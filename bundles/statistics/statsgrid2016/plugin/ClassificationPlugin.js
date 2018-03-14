@@ -8,17 +8,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
      * @param {Object} config
      *      JSON config with params needed to run the plugin
      */
-    function (instance, config, locale, mapmodule, sandbox) {
+    function (instance, config, locale, sandbox) {
         var me = this;
         me._locale = locale;
         me._config = config || {};
-        me._mapmodule = mapmodule;
         me._sandbox = sandbox;
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._defaultLocation = 'top right';
         me._index = 9;
-        me._name = '';
+        me._name = 'ClassificationPlugin';
         me._element = null;
         me._templates = {
             main: jQuery('<div class="mapplugin statsgrid-legend-plugin"></div>')
@@ -33,7 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
 
         me._mobileDefs = {
             buttons:  {
-                'mobile-statsclassification': {
+                'mobile-classification': {
                     iconCls: 'mobile-statslegend',
                     tooltip: locale.legend.title,
                     show: true,
@@ -183,11 +182,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             };
         },
         _calculatePluginSize: function() {
+            if(!this._element) {
+                return;
+            }
             var me = this;
 
             var sandbox = me.getSandbox();
             var height = sandbox.getMap().getHeight();
-            var headerHeight = me._element.find('.header').first().height();
+            var headerHeight = me._element.find('.active-header').first().height();
             if(Oskari.util.isMobile() && me._popup) {
                 me._popup.getJqueryContent().find('.accordion').css({
                     'overflow': 'auto',

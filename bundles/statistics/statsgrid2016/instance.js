@@ -26,6 +26,7 @@ Oskari.clazz.define(
 
         this.togglePlugin = null;
         this.diagramPlugin = null;
+        this.classificationPlugin = null;
 
         this.regionsetViewer = null;
         this.flyoutManager = null;
@@ -348,15 +349,16 @@ Oskari.clazz.define(
             if(!enabled) {
                 if(this.classificationPlugin) {
                     mapModule.unregisterPlugin(this.classificationPlugin);
-                    mapModule.stopPlugin(me.classificationPlugin);
+                    mapModule.stopPlugin(this.classificationPlugin);
                     this.classificationPlugin = null;
                 }
                 return;
             }
-
-            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, this.getLocalization(), mapModule, sandbox);
-            mapModule.registerPlugin(this.classificationPlugin);
-            mapModule.startPlugin(this.classificationPlugin);
+            if (!this.classificationPlugin) {
+                this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, this.getLocalization(), sandbox);
+                mapModule.registerPlugin(this.classificationPlugin);
+                mapModule.startPlugin(this.classificationPlugin);
+            }
             //get the plugin order straight in mobile toolbar even for the tools coming in late
             if (Oskari.util.isMobile() && this.classificationPlugin.hasUI()) {
                 mapModule.redrawPluginUIs(true);
@@ -367,10 +369,10 @@ Oskari.clazz.define(
          * @param  {Boolean} enabled allow user to change classification or not
          */
         enableClassification: function(enabled) {
-            if(!this.plugin) {
+            if(!this.classificationPlugin) {
                 return;
             }
-            this.plugin.enableClassification(enabled);
+            this.classificationPlugin.enableClassification(enabled);
         }
 
     }, {
