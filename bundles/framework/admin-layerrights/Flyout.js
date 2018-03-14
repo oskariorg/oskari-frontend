@@ -1,4 +1,3 @@
-'use strict';
 /**
  * @class Oskari.framework.bundle.admin-layerrights.Flyout
  *
