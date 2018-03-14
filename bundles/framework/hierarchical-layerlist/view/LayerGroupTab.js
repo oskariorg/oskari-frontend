@@ -101,14 +101,14 @@ Oskari.clazz.define(
                 me._addLayerTools();
             });
 
-            // jstree conditional select changed
-            me.service.on('jstree-contionalselect', function(data) {
+            // conditional select changed
+            me.service.on('conditional.select', function(data) {
                 me.selectNodeFromTree(data.node, data.event);
             });
 
 
 
-            me.service.on('jstree-order-changed', function(data) {
+            me.service.on('order.changed', function(data) {
                 if (!data.ajax) {
                     setTimeout(function() {
                         me._updateAllTools();
@@ -116,14 +116,14 @@ Oskari.clazz.define(
                 }
             });
 
-            me.service.on('jstree-search', function(obj) {
+            me.service.on('search', function(obj) {
                 setTimeout(function() {
                     me._updateAllTools();
                     me._updateLayerCounts(true);
                 }, 200);
             });
 
-            me.service.on('jstree-search-clear', function(obj) {
+            me.service.on('search.clear', function(obj) {
                 setTimeout(function() {
                     me._updateAllTools();
                     me._updateLayerCounts();

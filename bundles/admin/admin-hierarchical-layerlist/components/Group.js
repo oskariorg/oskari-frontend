@@ -215,7 +215,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
                     response.method = 'update';
                 }
                 tool.removeClass('active');
-                me.service.trigger('group-added', response);
+                me.service.trigger('group.added', response);
             }
         });
     },
@@ -251,7 +251,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
 
                 response.type = type;
                 tool.removeClass('active');
-                me.service.trigger('group-deleted', response);
+                me.service.trigger('group.deleted', response);
             }
         });
     }

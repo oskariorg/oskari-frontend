@@ -859,7 +859,7 @@ define([
                                 me.options.flyout.hide();
                             }
                             if(me.options.instance.service) {
-                                me.options.instance.service.trigger('admin-layer', {
+                                me.options.instance.service.trigger('admin.layer', {
                                     mode: 'delete',
                                     id: me.model.getId()
                                 });
@@ -944,12 +944,12 @@ define([
                                 me.options.flyout.hide();
                             }
                             if (me.model.getId() !== null && me.model.getId() !== undefined && me.options.instance.service) {
-                                me.options.instance.service.trigger('admin-layer', {
+                                me.options.instance.service.trigger('admin.layer', {
                                     mode: 'edit',
                                     layerData: resp
                                 });
                             } else if(me.options.instance.service){
-                                me.options.instance.service.trigger('admin-layer', {
+                                me.options.instance.service.trigger('admin.layer', {
                                     mode: 'add',
                                     layerData: resp
                                 });

@@ -60,7 +60,7 @@
                     key: 'hierarchical-layerlist'
                 },
                 conditionalselect: function(node, event) {
-                    me.trigger('jstree-contionalselect', {
+                    me.trigger('conditional.select', {
                         node: node,
                         event: event
                     });
@@ -70,7 +70,7 @@
             this._events = [{
                 name: 'search.jstree',
                 handler: function(nodes, str, res) {
-                    me.trigger('jstree-search', {
+                    me.trigger('search', {
                         nodes: nodes,
                         str: str,
                         res: res
@@ -79,7 +79,7 @@
             }, {
                 name: 'clear_search.jstree',
                 handler: function(nodes, str, res) {
-                    me.trigger('jstree-search-clear', {
+                    me.trigger('search.clear', {
                         nodes: nodes,
                         str: str,
                         res: res

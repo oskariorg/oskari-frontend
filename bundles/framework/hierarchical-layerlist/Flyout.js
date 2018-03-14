@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 me.populateLayers();
             });
 
-            me.service.on('admin-layer', function(data) {
+            me.service.on('admin.layer', function(data) {
                 var mode = data.mode;
 
                 if (mode === 'delete') {
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 me.populateLayers();
             });
 
-            me.service.on('jstree-order-changed', function(data) {
+            me.service.on('order.changed', function(data) {
                 // order not changed, need reload tree
                 if (data.ajax && data.success === false) {
                     me.populateLayers();
@@ -83,14 +83,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
 
             // group added
-            me.service.on('group-added', function(data) {
+            me.service.on('group.added', function(data) {
                 // update service groups
                 me.mapLayerService.updateLayerGroups(data);
                 me.populateLayers();
             });
 
             // group deleted
-            me.service.on('group-deleted', function(data) {
+            me.service.on('group.deleted', function(data) {
                 me.mapLayerService.deleteLayerGroup(data.id, data.parentId);
                 me.populateLayers();
             });
@@ -103,16 +103,22 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          */
         _updateBreadcrumbGroups: function(layerData) {
             var me = this;
-            if (me.instance._selectedLayerGroupId[layerData.id]) {
-                var currentGroupId = me.instance._selectedLayerGroupId[layerData.id];
-                var founded = jQuery.grep(layerData.groups, function(group) {
-                    return group.id === currentGroupId;
-                });
 
-                if (founded.length === 0) {
-                    // update groups to first
-                    me.instance._selectedLayerGroupId[layerData.id] = layerData.groups[0].id;
-                }
+            // Check at if layer is selected
+            var currentGroupId = me.instance._selectedLayerGroupId[layerData.id];
+            if (!currentGroupId) {
+                // requested group not found - ignoring
+                return;
+            }
+
+            // check if the layer belongs to the referenced group
+            var group = layerData.groups.find(function(group) {
+                return group.id === currentGroupId;
+            });
+
+            if(!group) {
+                // update group reference to the FIRST group the layer belongs to IF the layer was not part of the "currentGroup"
+                me.instance._selectedLayerGroupId[layerData.id] = layerData.groups[0].id;
             }
         },
 

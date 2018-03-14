@@ -43,7 +43,7 @@ Oskari.clazz.define(
          */
         _bindExtenderServiceListeners: function() {
             var me = this;
-            me.service.on('group-added', function(data) {
+            me.service.on('group.added', function(data) {
                 if (data.method === 'update') {
                     Object.keys(me._layers).forEach(function(key) {
                         me._layers[key].updateBreadcrumb();
@@ -51,7 +51,7 @@ Oskari.clazz.define(
                 }
             });
 
-            me.service.on('admin-layer', function(data) {
+            me.service.on('admin.layer', function(data) {
                 if (data.mode !== 'delete' && me._layers[data.layerData.id]) {
                     var layer = me.sb.findMapLayerFromAllAvailable(data.layerData.id);
                     me._layers[data.layerData.id].updateLayer(layer);
