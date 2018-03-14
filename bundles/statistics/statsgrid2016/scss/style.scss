@@ -559,6 +559,10 @@ div.oskari-flyout {
     /* Float right to not overlap with other plugins */
     float: right;
 }
+.legend-transparent {
+   background-color: rgba(255,255,255,0.2)
+}
+    
 .active-legend {
 
 }
