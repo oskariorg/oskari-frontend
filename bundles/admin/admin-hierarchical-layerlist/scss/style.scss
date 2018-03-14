@@ -12,6 +12,10 @@ $cancelTextColor: #000;
 
 $errorColor: lighten(#ff0000, 20%);
 
+$editIcon: url("../images/glyphicons-151-edit.png");
+$addLayerIcon: url("../images/glyphicons-191-plus-sign.png");
+$addGroupIcon: url("../images/glyphicons-433-plus.png");
+
 @mixin gradient-button($startColor, $endColor, $textColor)
 {
     background-color: $startColor;
@@ -354,6 +358,74 @@ $errorColor: lighten(#ff0000, 20%);
                     margin-left: 64px;
                     margin-right: 8px;
                     color: #555;
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Here add hierarchical admin tool layerlist icons
+ */
+div.hierarchical-layerlist {
+    .main-tools {
+        .main-tool {
+            &.add-group {
+                background-image:$addGroupIcon;
+            }
+        }
+    }
+    .hierarchical-layerlist-tree {
+        .jstree-anchor {
+            .group-tools {
+                .group-tool {
+                    &.add-subgroup {
+                        background-image:$addGroupIcon;
+                    }
+
+                    &.edit-group {
+                        background-image: $editIcon;
+                    }
+
+                    &.add-layer {
+                        background-image:$addLayerIcon;
+                    }
+                }
+            }
+
+            .subgroup-tools {
+                .subgroup-tool {
+                    &.add-subgroup-subgroup {
+                        background-image:$addGroupIcon;
+                    }
+
+                    &.edit-subgroup {
+                        background-image: $editIcon;
+                    }
+
+                    &.add-layer {
+                        background-image:$addLayerIcon;
+                    }
+                }
+            }
+
+            .subgroup-subgroup-tools {
+                .subgroup-subgroup-tool {
+                    &.edit-subgroup-subgroup {
+                        background-image: $editIcon;
+                    }
+
+                    &.add-layer {
+                        background-image:$addLayerIcon;
+                    }
+                }
+            }
+
+            .layer-tools {
+                .layer-tool {
+                    &.edit-layer {
+                        background-image: $editIcon;
+                    }
                 }
             }
         }

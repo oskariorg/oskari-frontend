@@ -284,4 +284,28 @@
   margin-right: 8px;
   color: #555; }
 
+/**
+ * Here add hierarchical admin tool layerlist icons
+ */
+div.hierarchical-layerlist .main-tools .main-tool.add-group {
+  background-image: url("../images/glyphicons-433-plus.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.add-subgroup {
+  background-image: url("../images/glyphicons-433-plus.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.edit-group {
+  background-image: url("../images/glyphicons-151-edit.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.add-layer {
+  background-image: url("../images/glyphicons-191-plus-sign.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.add-subgroup-subgroup {
+  background-image: url("../images/glyphicons-433-plus.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.edit-subgroup {
+  background-image: url("../images/glyphicons-151-edit.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.add-layer {
+  background-image: url("../images/glyphicons-191-plus-sign.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool.edit-subgroup-subgroup {
+  background-image: url("../images/glyphicons-151-edit.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool.add-layer {
+  background-image: url("../images/glyphicons-191-plus-sign.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool.edit-layer {
+  background-image: url("../images/glyphicons-151-edit.png"); }
+
 /*# sourceMappingURL=style.css.map */

@@ -3,9 +3,6 @@ $selectedLayersTabTextColor: #fff;
 $selectedLayersTabLayerPadding: 6px;
 $selectedLayersTabLayerFontSize: 12px;
 $selectedLayersTabLabelWidth: 50px;
-$editIcon: url("../images/glyphicons/glyphicons-151-edit.png");
-$addLayerIcon: url("../images/glyphicons/glyphicons-191-plus-sign.png");
-$addGroupIcon: url("../images/glyphicons/glyphicons-433-plus.png");
 
 .hierarchical-layerlist-flyout
 {
@@ -179,11 +176,6 @@ div.hierarchical-layerlist {
                         &.active {
                             background-color: #ffde00;
                         }
-
-                        &.add-group {
-                            background-image:$addGroupIcon;
-                        }
-
                     }
                 }
 
@@ -515,19 +507,6 @@ div.hierarchical-layerlist {
                     &.active {
                         background-color: #ffde00;
                     }
-
-                    &.add-subgroup {
-                        background-image:$addGroupIcon;
-                    }
-
-                    &.edit-group {
-                        background-image: $editIcon;
-                    }
-
-                    &.add-layer {
-                        background-image:$addLayerIcon;
-                    }
-
                 }
             }
 
@@ -553,19 +532,6 @@ div.hierarchical-layerlist {
                     &.active {
                         background-color: #ffde00;
                     }
-
-                    &.add-subgroup-subgroup {
-                        background-image:$addGroupIcon;
-                    }
-
-                    &.edit-subgroup {
-                        background-image: $editIcon;
-                    }
-
-                    &.add-layer {
-                        background-image:$addLayerIcon;
-                    }
-
                 }
             }
 
@@ -591,15 +557,6 @@ div.hierarchical-layerlist {
                     &.active {
                         background-color: #ffde00;
                     }
-
-                    &.edit-subgroup-subgroup {
-                        background-image: $editIcon;
-                    }
-
-                    &.add-layer {
-                        background-image:$addLayerIcon;
-                    }
-
                 }
             }
 
@@ -624,10 +581,6 @@ div.hierarchical-layerlist {
 
                     &.active {
                         background-color: #ffde00;
-                    }
-
-                    &.edit-layer {
-                        background-image: $editIcon;
                     }
                 }
             }
