@@ -142,12 +142,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        </ul>' +
                     '    <% } %>' +
 
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
+                    '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
+                    '        <% _.forEach(lineageStatements, function (paragraph) { %>' +
+                    '            <p><%= paragraph %></p>' +
                     '        <% }); %>' +
                     '    <% } %>' +
 
@@ -308,12 +306,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        </ul>' +
                     '    <% } %>' +
 
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
+                    '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
+                    '        <% _.forEach(lineageStatements, function (paragraph) { %>' +
+                    '            <p><%= paragraph %></p>' +
                     '        <% }); %>' +
                     '    <% } %>' +
 
@@ -397,9 +393,16 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '    <% if (dataQualities.length) { %>' +
                     '        <h2>' + this.locale.heading.reportConformance + '</h2>' +
                     '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.reportConformances, function (reportConformance) { %>' +
-                    '                <p><%= reportConformance %></p>' +
-                    '            <% }); %>' +
+                    '           <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
+                    '           <% if (conformanceResult.specification) { %>' +
+                                    this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (conformanceResult.pass == "true") {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
+                    '           else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
+                    '           <% if (conformanceResult.explanation) { %>' +
+                                    this.locale.qualityContent.explanation + ': <%= conformanceResult.explanation %> <br>' +
+                    '           <% } %>' +
+                    '        <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
 
@@ -442,12 +445,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 ),
                 'quality': _.template(
                     '<article>' +
-                    '    <% if (dataQualityObject.dataQualityNodes.length) { %>' +
-                    '        <% _.forEach(dataQualityObject.dataQualityNodes, function (dataQuality) { %>' +
+                    '    <% if (lineageStatements.length) { %>' +
+                    '        <br> <h2>' + this.locale.heading.lineageStatement + '</h2>' +
+                    '        <% _.forEach(lineageStatements, function (paragraph) { %>' +
+                    '           <p>${paragraph}</p>' +
+                    '        <% }); %>' +
+                    '    <% } %>' +
+                    '    <% if (dataQualities.length) { %>' +
+                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
                     '           <br> <h2> ${dataQuality.UIlabel}</h2>' +
-                    '           <% if (dataQuality.linageStatement) { %>' +
-                                    this.locale.heading.lineageStatement + ' : <%= dataQuality.linageStatement %> <br>' +
-                    '           <% } %>' +
                     '           <% if (dataQuality.nameOfMeasure) { %>' +
                                     this.locale.qualityContent.nameOfMeasure + ' : <%= dataQuality.nameOfMeasure %> <br>' +
                     '           <% } %>' +
@@ -606,11 +612,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
         preprocessModel : {
             'quality' : function(model) {
-                if(!model.dataQualityObject || !model.dataQualityObject.dataQualityNodes || !model.dataQualityObject.dataQualityNodes.length) {
+                if(!model || !model.dataQualities || !model.dataQualities.length) {
                     return model;
                 };
                 var loc = this.locale.heading;
-                model.dataQualityObject.dataQualityNodes.forEach(function(dataQuality) {
+                model.dataQualities.forEach(function(dataQuality) {
                     dataQuality.UIlabel =  loc[dataQuality.nodeName];
                 });
                 return model;
