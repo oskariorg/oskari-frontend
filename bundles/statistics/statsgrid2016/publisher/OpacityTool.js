@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.TransparentTool',
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool',
 function() {},
 {
     index : 1,
