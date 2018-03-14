@@ -219,6 +219,12 @@ Oskari.registerLocalization(
         "recheckSucceeded": "Capabilities re-check succeeded.",
         "recheckFailReason": "Capablities re-check failed: {reason}",
         "recheckFail": "Capablities re-check failed.",
-        "recheckFailTimeout": "Capabilites check timeout. Process continues to run on server."
+        "recheckFailTimeout": "Capabilites check timeout. Process continues to run on server.",
+        "successMessages": {
+            "dataproviderSave": {
+                "title": "Dataprovider saving was successful",
+                "message": "Dataprovider saving was successful"
+            }
+        },
     }
 });

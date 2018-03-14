@@ -80,7 +80,7 @@ define([
                     success: function(response) {
                         popup.close();
                         var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        successDialog.show(me.instance.locale('succeeses.dataproviderSave.title'), me.instance.locale('succeeses.dataproviderSave.message'));
+                        successDialog.show(me.instance.locale('successMessages.dataproviderSave.title'), me.instance.locale('successMessages.dataproviderSave.message'));
                         successDialog.fadeout();
 
                         jQuery('#select-dataprovider').append('<option value="' + response.id + '">' + Oskari.getLocalized(response.name) + '</option>');

@@ -206,7 +206,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             success: function(response) {
                 popup.close();
                 var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                successDialog.show(me.locale('succeeses.groupnameSave.title'), me.locale('succeeses.groupnameSave.message'));
+                successDialog.show(me.locale('successMessages.groupnameSave.title'), me.locale('successMessages.groupnameSave.message'));
                 successDialog.fadeout();
 
                 response.type = type;
@@ -246,7 +246,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             success: function(response) {
                 popup.close();
                 var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                successDialog.show(me.locale('succeeses.groupnameDelete.title'), me.locale('succeeses.groupnameDelete.message'));
+                successDialog.show(me.locale('successMessages.groupnameDelete.title'), me.locale('successMessages.groupnameDelete.message'));
                 successDialog.fadeout();
 
                 response.type = type;

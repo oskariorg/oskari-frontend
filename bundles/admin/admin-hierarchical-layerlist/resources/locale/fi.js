@@ -61,7 +61,7 @@ Oskari.registerLocalization({
                 "message": "Karttatasolla pitää olla vähintään yksi ryhmä"
             }
         },
-        "succeeses": {
+        "successMessages": {
             "groupnameSave": {
                 "title": "Ryhmän tallennus onnistui",
                 "message": "Ryhmän tallennus onnistui"
@@ -73,10 +73,6 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Tason/ryhmän siirto onnistui",
                 "message": "Tason/ryhmän siirto onnistui"
-            },
-            "dataproviderSave": {
-                "title": "Tiedontuottajan tallennus onnistui",
-                "message": "Tiedontuottajan tallennus onnistui"
             }
         },
         "confirms": {

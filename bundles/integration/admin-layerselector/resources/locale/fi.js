@@ -219,6 +219,12 @@ Oskari.registerLocalization(
         "recheckSucceeded": "GetCapabilities päivitys onnistui.",
         "recheckFailReason": "GetCapabilities päivitys epäonnistui: {reason}",
         "recheckFail": "GetCapabilities päivitys epäonnistui.",
-        "recheckFailTimeout": "GetCapabilities päivitys aikakatkaistiin. Päivitys jatkuu palvelimella."
+        "recheckFailTimeout": "GetCapabilities päivitys aikakatkaistiin. Päivitys jatkuu palvelimella.",
+        "successMessages": {
+            "dataproviderSave": {
+                "title": "Tiedontuottajan tallennus onnistui",
+                "message": "Tiedontuottajan tallennus onnistui"
+            }
+        }
     }
 });

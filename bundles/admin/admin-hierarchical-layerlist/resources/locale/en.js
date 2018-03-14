@@ -61,7 +61,7 @@ Oskari.registerLocalization({
                 "message": "Maplayer must have least one group"
             }
         },
-        "succeeses": {
+        "successMessages": {
             "groupnameSave": {
                 "title": "Group saving was successful",
                 "message": "Group saving was successful"
@@ -73,10 +73,6 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Moving layer/group successful",
                 "message": "Moving layer/group successful"
-            },
-            "dataproviderSave": {
-                "title": "Dataprovider saving was successful",
-                "message": "Dataprovider saving was successful"
             }
         },
         "confirms": {

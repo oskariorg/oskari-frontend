@@ -302,7 +302,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 },
                 success: function(response) {
                     var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    successDialog.show(me.locale('succeeses.nodeDropSave.title'), me.locale('succeeses.nodeDropSave.message'));
+                    successDialog.show(me.locale('successMessages.nodeDropSave.title'), me.locale('successMessages.nodeDropSave.message'));
                     successDialog.fadeout();
                     me.service.trigger('order.changed', {
                         ajax: true,

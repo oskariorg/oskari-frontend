@@ -61,7 +61,7 @@ Oskari.registerLocalization({
                 "message": "Maplayer måste ha minst en grupp"
             }
         },
-        "succeeses": {
+        "successMessages": {
             "groupnameSave": {
                 "title": "Gruppbesparingar var framgångsrika",
                 "message": "Gruppbesparingar var framgångsrika"
@@ -73,10 +73,6 @@ Oskari.registerLocalization({
             "nodeDropSave": {
                 "title": "Flyttning av maplayer/grupp lyckades",
                 "message": "Flyttning av maplayer/grupp lyckades"
-            },
-            "dataproviderSave": {
-                "title": "Dataprovider var framgångsrika",
-                "message": "Dataprovider var framgångsrika"
             }
         },
         "confirms": {

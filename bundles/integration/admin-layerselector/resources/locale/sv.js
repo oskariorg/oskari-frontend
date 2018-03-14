@@ -219,6 +219,12 @@ Oskari.registerLocalization(
         "recheckSucceeded": "Uppdatering lyckades.",
         "recheckFailReason": "Uppdatering misslyckades: {reason}",
         "recheckFail": "Uppdatering misslyckades.",
-        "recheckFailTimeout": "Uppdatering tidgräns överstegs. Processen fortsätter på servern."
+        "recheckFailTimeout": "Uppdatering tidgräns överstegs. Processen fortsätter på servern.",
+        "successMessages": {
+            "dataproviderSave": {
+                "title": "Dataprovider var framgångsrika",
+                "message": "Dataprovider var framgångsrika"
+            }
+        }
     }
 });
