@@ -24,7 +24,7 @@ function() {
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats && this.isDisplayed(pdata)) {
-            stats.showLegendOnMap(true);
+            stats.createClassficationView(true);
         }
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
             me.setEnabled(true);
@@ -35,7 +35,7 @@ function() {
     // required for dragndrop in publisher - also plugin needs to
     getPlugin : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        return stats.plugin;
+        return stats.classificationPlugin;
     },
     /**
     * Get tool object.
@@ -162,7 +162,7 @@ function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
             stats.enableClassification(true);
-            stats.showLegendOnMap(false);
+            stats.createClassficationView(false);
         }
     }
 }, {

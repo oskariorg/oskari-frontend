@@ -56,6 +56,7 @@ Oskari.clazz.define(
             // disable tile if we don't have anything to show or enable if we do
             // setup initial state
             this.setState();
+
             this.createClassficationView(true);
 
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published );
@@ -339,6 +340,10 @@ Oskari.clazz.define(
             return state;
         },
         createClassficationView: function ( enabled ) {
+            var config = this.getConfiguration();
+            var sandbox = this.getSandbox();
+            var locale = this.getLocalization();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             if(!enabled) {
                 if(this.classificationPlugin) {
@@ -349,16 +354,11 @@ Oskari.clazz.define(
                 return;
             }
 
-            var config = this.getConfiguration();
-            var sandbox = this.getSandbox();
-            var locale = this.getLocalization();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
             this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, this.getLocalization(), mapModule, sandbox);
             mapModule.registerPlugin(this.classificationPlugin);
             mapModule.startPlugin(this.classificationPlugin);
             //get the plugin order straight in mobile toolbar even for the tools coming in late
-            if (Oskari.util.isMobile() && this.plugin.hasUI()) {
+            if (Oskari.util.isMobile() && this.classificationPlugin.hasUI()) {
                 mapModule.redrawPluginUIs(true);
             }
         },

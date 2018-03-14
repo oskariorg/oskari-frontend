@@ -101,9 +101,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var me = this;
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
-            if (isMobile) {
-
-            } else {
+            if (!isMobile) {
                 me._makeDraggable();
             }
         },
@@ -156,7 +154,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
                 return;
             }
-            this._createUi();
+            this._createUi(mapInMobileMode);
         },
 
         /**
