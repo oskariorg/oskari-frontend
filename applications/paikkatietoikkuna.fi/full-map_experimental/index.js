@@ -1,8 +1,8 @@
+'use strict';
 /**
  * Start when dom ready
  */
 jQuery(document).ready(function () {
-    "use strict";
     var getAppSetupParams = {},
         key,
         hostIdx,

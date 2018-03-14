@@ -7,7 +7,8 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Make a link to the map view.",
                 "ok": "OK",
-                "title": "Link to Map View"
+                "title": "Link to Map View",
+                "cannot": "This map view cannot be linked to. Create a new map view and try again."
             },
             "history": {
                 "reset": "Move to the default map view.",

@@ -5,9 +5,10 @@
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
 
-    function (sandbox) {
+    function(sandbox) {
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = sandbox;
+        this.service = null;
     }, {
         /**
          * parses any additional fields to model
@@ -15,17 +16,17 @@ Oskari.clazz.define(
          * @param {Object} mapLayerJson JSON presentation of the layer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
-        parseLayerData: function (layer, mapLayerJson, maplayerService) {
-            var me = this,
-                toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
+        parseLayerData: function(layer, mapLayerJson, maplayerService) {
+            var me = this;
 
             if (layer.isLayerOfType("WFS")) {
-                var locOwnStyle = this.localization['own-style'],
-                    toolOwnStyle = toolBuilder();
+                var locOwnStyle = me.localization['own-style'];
+                var toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
                 toolOwnStyle.setName("ownStyle");
                 toolOwnStyle.setTitle(locOwnStyle);
+                toolOwnStyle.setIconCls('show-own-style-tool');
                 toolOwnStyle.setTooltip(locOwnStyle);
-                toolOwnStyle.setCallback(function () {
+                toolOwnStyle.setCallback(function() {
                     me.sandbox.postRequestByName('ShowOwnStyleRequest', [layer.getId()]);
                 });
                 layer.addTool(toolOwnStyle);
@@ -57,11 +58,8 @@ Oskari.clazz.define(
                 layer.selectStyle(mapLayerJson.style);
             }
 
-            // Wps Params
-            layer.setWpsLayerParams(mapLayerJson.wps_params);
-
             // WMS link layer id for wfs rendering option
-            if(mapLayerJson.WMSLayerId){
+            if (mapLayerJson.WMSLayerId) {
                 layer.setWMSLayerId(mapLayerJson.WMSLayerId);
             }
 

@@ -161,7 +161,14 @@ Oskari.registerLocalization(
           "descColor": "Color of the graph",
           "selectClr": "Selected color",
           "clrFromMap": "Colors by classification in the map",
-          "chooseColor": "Select color"
+          "chooseColor": "Select color",
+          "sorting": {
+              "desc": "Order",
+              "name-ascending": "Name ascending",
+              "name-descending": "Name descending",
+              "value-ascending": "Value ascending",
+              "value-descending": "Value descending"
+          }
         },
         "filter": {
             "title": "Filtering",

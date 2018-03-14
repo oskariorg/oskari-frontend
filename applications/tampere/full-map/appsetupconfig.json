@@ -17,7 +17,7 @@
 		},
 		"featuredata2": {
 			"state": {
-				
+
 			},
 			"conf": {
 				"selectionTools": true
@@ -25,26 +25,26 @@
 		},
 		"layerselection2": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"metadatacatalogue": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"search-from-channels": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"layerselector2": {
@@ -54,20 +54,20 @@
 				"groups": []
 			},
 			"conf": {
-				
+
 			}
 		},
 		"metadataflyout": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"personaldata": {
 			"state": {
-				
+
 			},
 			"conf": {
 				"publishedMapUrl": {
@@ -84,7 +84,7 @@
 		},
 		"publisher": {
 			"state": {
-				
+
 			},
 			"conf": {
 				"drawRoleIds": [],
@@ -2971,7 +2971,7 @@
 					},
 					"inspire": "Opaskartat",
 					"options": {
-						
+
 					},
 					"dataUrl_uuid": "08f343de-d1e6-4418-af09-9e74249f36d7",
 					"styles": [{
@@ -2979,7 +2979,7 @@
 						"name": "raster"
 					}],
 					"params": {
-						
+
 					},
 					"orgName": "Tampereen kaupunki",
 					"url": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82",
@@ -2987,7 +2987,7 @@
 					"wmsUrl": "http://wms1.navici.com/wmts/2172f22ba9e8c687a7521c20238e7e82",
 					"subtitle": "",
 					"attributes": {
-						
+
 					}
 				}],
 				"imageLocation": "/Oskari/resources",
@@ -3008,15 +3008,15 @@
 		},
 		"openlayers-default-theme": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"search": {
 			"state": {
-				
+
 			},
 			"conf": {
 				"disableDefault": true
@@ -3024,39 +3024,39 @@
 		},
 		"maplegend": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"divmanazer": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"statehandler": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"myplaces2": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		},
 		"infobox": {
 			"state": {
-				
+
 			},
 			"conf": {
 				"adaptable": true
@@ -3064,16 +3064,16 @@
 		},
 		"coordinatedisplay": {
 			"state": {
-				
+
 			},
 			"conf": {
-				
+
 			}
 		}
 	},
 	"startupSequence": [{
 		"instanceProps": {
-			
+
 		},
 		"title": "OpenLayers",
 		"bundleinstancename": "openlayers-default-theme",
@@ -3095,7 +3095,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Map",
 		"bundleinstancename": "mapfull",
@@ -3180,7 +3180,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Oskari DIV Manazer",
 		"fi": "divmanazer",
@@ -3199,7 +3199,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Toolbar",
 		"bundleinstancename": "toolbar",
@@ -3218,7 +3218,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Infobox",
 		"fi": "infobox",
@@ -3237,7 +3237,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Statehandler",
 		"bundleinstancename": "statehandler",
@@ -3256,7 +3256,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Search",
 		"bundleinstancename": "search",
@@ -3275,7 +3275,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Maplayer selection",
 		"bundleinstancename": "layerselector2",
@@ -3294,7 +3294,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Chosen maplayers",
 		"bundleinstancename": "layerselection2",
@@ -3313,7 +3313,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Coordinate display",
 		"bundleinstancename": "coordinatedisplay",
@@ -3332,7 +3332,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Metadata Flyout",
 		"bundleinstancename": "metadataflyout",
@@ -3351,7 +3351,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Feature data",
 		"bundleinstancename": "featuredata2",
@@ -3370,7 +3370,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Map publisher",
 		"bundleinstancename": "publisher",
@@ -3389,7 +3389,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Personal data",
 		"bundleinstancename": "personaldata",
@@ -3408,7 +3408,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "metadatacatalogue",
 		"bundleinstancename": "metadatacatalogue",
@@ -3427,7 +3427,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "My places",
 		"bundleinstancename": "myplaces2",
@@ -3446,7 +3446,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "Map legend",
 		"bundleinstancename": "maplegend",
@@ -3465,7 +3465,7 @@
 	},
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "SearchFromChannelsBundle",
 		"fi": "search-from-channels",

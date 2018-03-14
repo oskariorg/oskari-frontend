@@ -90,6 +90,13 @@ Oskari.registerLocalization(
             "wmsServiceMetaId": "Palvelun metatiedon tunniste",
             "wmsServiceMetaIdDesc": "Anna rajapintapalvelua kuvaavan metatiedon tiedostotunniste.",
             "layerNameAndDesc": "Karttatason nimi ja kuvaus",
+            "layerProps": "Karttatason ominaisuudet",
+            "forcedSRS": "Pakotetut projektiot",
+            "forcedSRSInfo": "Pakotetut projektiot verrattuna GetCapabilites-määritykseen",
+            "forcedSRSAdd": "Lisää",
+            "supportedSRS": "Tuetut projektiot",
+            "missingSRS": "Puuttuvat projektiot",
+            "missingInfo": "Sovelluksen oletusnäkymien projektiot, joita taso ei tue",
             "metaInfoIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "metaInfoId": "Metatiedon tiedosto&shy;tunniste",
             "wmsName": "Karttatason yksilöivä nimi",
@@ -197,6 +204,16 @@ Oskari.registerLocalization(
         "add": "Lisää",
         "save": "Tallenna",
         "delete": "Poista",
-        "ok": "OK"
+        "ok": "OK",
+        "close": "Sulje",
+        "query": "Hae",
+        "recheckTitle": "Päivitä getCapabilities",
+        "recheckAllButton": "Päivitä kaikki getCapabilities",
+        "recheckAll": "Haluatko hakea getCapabilities-määritykset kaikille karttatasoille? Toiminonto saattaa kestää useita minuutteja.",
+        "recheckAllSucceeded": "GetCapabilities päivitys onnistui {success, number} tasolle, epäonnistui {fail, number} tasolle. Lataa sivu uudelleen nähdäksesi päivittyneet tiedot.",
+        "recheckSucceeded": "GetCapabilities päivitys onnistui.",
+        "recheckFailReason": "GetCapabilities päivitys epäonnistui: {reason}",
+        "recheckFail": "GetCapabilities päivitys epäonnistui.",
+        "recheckFailTimeout": "GetCapabilities päivitys aikakatkaistiin. Päivitys jatkuu palvelimella."
     }
 });

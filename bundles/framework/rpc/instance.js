@@ -38,7 +38,7 @@ Oskari.clazz.define(
          * BundleInstance protocol method
          */
         start: function () {
-            'use strict';
+            
             var me = this,
                 channel,
                 conf = this.conf || {},
@@ -402,7 +402,7 @@ Oskari.clazz.define(
          *
          */
         _bindFunctions: function (channel) {
-            'use strict';
+            
             var me = this,
                 funcs = this._allowedFunctions;
             var bindFunction = function(name) {
@@ -443,7 +443,7 @@ Oskari.clazz.define(
          * @return {Boolean} Does origin match config domain
          */
         _domainMatch: function (origin) {
-            'use strict';
+            
             var sb = this.sandbox;
             if(!origin) {
                 this.log.warn('No origin in RPC message');
@@ -476,7 +476,7 @@ Oskari.clazz.define(
          *
          */
         _registerEventHandler: function (eventName) {
-            'use strict';
+            
             var me = this;
             if (me.eventHandlers[eventName]) {
                 // Event handler already in place
@@ -500,7 +500,7 @@ Oskari.clazz.define(
          *
          */
         stop: function () {
-            'use strict';
+            
             var me = this,
                 sandbox = this.sandbox,
                 p;
@@ -528,7 +528,7 @@ Oskari.clazz.define(
          *
          */
         onEvent: function (event) {
-            'use strict';
+            
             var me = this,
                 handler = me.eventHandlers[event.getName()];
             if (!handler) {
@@ -548,7 +548,7 @@ Oskari.clazz.define(
          * @return {Object}       Event params
          */
         _getParams: function (event) {
-            'use strict';
+            
             var ret = {},
                 key,
                 allowedTypes = ['string', 'number', 'boolean'];
@@ -597,7 +597,7 @@ Oskari.clazz.define(
          *
          */
         update: function () {
-            'use strict';
+            
             return undefined;
         },
 
@@ -608,7 +608,7 @@ Oskari.clazz.define(
          *
          */
         _unregisterEventHandler: function (eventName) {
-            'use strict';
+            
             delete this.eventHandlers[eventName];
             this.sandbox.unregisterFromEventByName(this, eventName);
         }

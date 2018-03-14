@@ -90,6 +90,13 @@ Oskari.registerLocalization(
             "wmsServiceMetaId": "Service metadata identifier",
             "wmsServiceMetaIdDesc": "Give a file identifier for the metadata describing the interface.",
             "layerNameAndDesc": "Map Layer Name and Description",
+            "layerProps": "Map Layer Properties",
+            "forcedSRS": "Forced SRS",
+            "forcedSRSInfo": "View projections override compared to capabilities",
+            "forcedSRSAdd": "Add",
+            "supportedSRS": "Supported SRS",
+            "missingSRS": "Missing SRS",
+            "missingInfo": "App default view projections not supported by layer",
             "metaInfoIdDesc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
             "metaInfoId": "Metadata file identifier",
             "wmsName": "Unique name",
@@ -197,6 +204,16 @@ Oskari.registerLocalization(
         "add": "Add",
         "save": "Save",
         "delete": "Remove",
-        "ok": "OK"
+        "ok": "OK",
+        "close": "Close",
+        "query": "Query",
+        "recheckTitle": "Re-check capabilities",
+        "recheckAllButton": "Re-check all capabilities",
+        "recheckAll": "Do you want to query getCapabilites for all layers? The operation can take many minutes.",
+        "recheckAllSucceeded": "Capabilites update succeeded for {success, number} layers, failed for {fail, number} layers. Reload page to see updated data.",
+        "recheckSucceeded": "Capabilities re-check succeeded.",
+        "recheckFailReason": "Capablities re-check failed: {reason}",
+        "recheckFail": "Capablities re-check failed.",
+        "recheckFailTimeout": "Capabilites check timeout. Process continues to run on server."
     }
 });

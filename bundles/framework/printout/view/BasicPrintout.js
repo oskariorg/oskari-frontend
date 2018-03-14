@@ -529,20 +529,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @return {Object}
          */
         _gatherSelections: function (format) {
-            var me = this,
-                container = me.mainPanel,
-                sandbox = me.instance.getSandbox(),
-                size = container.find('input[name=size]:checked').val(),
-                selectedFormat = (format !== null && format !== undefined) ? format : container.find('input[name=format]:checked').val(),
-                title = container.find('.printout_title_field').val(),
-                maplinkArgs = sandbox.generateMapLinkParameters(),
-                p,
-                selections = {
-                    pageTitle: title,
-                    pageSize: size,
-                    maplinkArgs: maplinkArgs,
-                    format: selectedFormat || 'application/pdf'
-                };
+            var me = this;
+            var container = me.mainPanel;
+            var sandbox = me.instance.getSandbox();
+            var size = container.find('input[name=size]:checked').val();
+            var selectedFormat = (format !== null && format !== undefined) ? format : container.find('input[name=format]:checked').val();
+            var title = container.find('.printout_title_field').val();
+            var maplinkArgs = sandbox.generateMapLinkParameters({
+                'srs': sandbox.getMap().getSrsName(),
+                'resolution': sandbox.getMap().getResolution()
+            });
+            var selections = {
+                pageTitle: title,
+                pageSize: size,
+                maplinkArgs: maplinkArgs,
+                format: selectedFormat || 'application/pdf'
+            };
 
             if (!size) {
                 var firstSizeOption = container.find('input[name=size]').first();
@@ -550,7 +552,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 selections.pageSize = firstSizeOption.val();
             }
 
-            for (p in me.contentOptionsMap) {
+            for (var p in me.contentOptionsMap) {
                 if (me.contentOptionsMap.hasOwnProperty(p)) {
                     selections[p] = me.contentOptionDivs[p].find('input').prop('checked');
                 }
@@ -581,13 +583,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          *
          * @param {String} geoJson Stringified GeoJSON
          * @param {String} tileData Stringified tile data
-         * @param {Object} printUrl Url to print service action route GetPreview
+         * @param {Object} printUrl Url to print service action route GetPrint
          * @param {Object} selections map data as returned by _gatherSelections()
          *
          */
         openPostURLinWindow: function (geoJson, tileData, tableData, printUrl, selections) {
-            var me = this,
-                wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200';
+            var me = this;
+            var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200';
             if (me._isLandscape(selections)) {
                 wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=1200,' + 'height=850';
             }
@@ -657,7 +659,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
             var contentOptionArgs = contentOptions.join(''),
                 formatArgs = '&format=' + selections.format,
-                parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + layoutArgs;
+                parameters = maplinkArgs + '&action_route=GetPrint' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + layoutArgs;
 
             url = url + parameters;
 

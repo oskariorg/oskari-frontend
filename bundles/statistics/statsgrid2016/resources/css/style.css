@@ -318,7 +318,18 @@ div.oskari-flyout {
     div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .grid path {
       stroke-width: 0; }
   div.oskari-flyout.statsgrid-diagram-flyout .oskari-datacharts {
+    position: relative;
+    height:700px;
     padding: 16px; }
+      div.oskari-flyout.statsgrid-diagram-flyout .chart-controls {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+    padding-bottom: 2%; }
+      div.oskari-flyout.statsgrid-diagram-flyout .chart-controls .dropdown {
+        display: flex;
+        max-width: 100%;
+      }
 
 /* ********************************************
  * Statsgrid legend
@@ -627,3 +638,25 @@ div.tab-material-controls div.title {
 
 .oskari-flyout.statsgrid-filter-flyout .tabsHeader {
   padding-top: 2em !important; }
+
+  .chart {
+    display: flex;
+    justify-content: center;
+}
+.axisLabel.sticky {
+    font-weight: bold;
+    color:#F6F6F6;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    overflow: hidden;
+     z-index: 3; 
+    max-height: 100%;
+}
+.axisLabel {
+    margin-top: -5px;
+    position: absolute;
+    opacity: 0.8;
+}
+.statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
+    max-width:700px;
+  }
+/*# sourceMappingURL=style.css.map */
