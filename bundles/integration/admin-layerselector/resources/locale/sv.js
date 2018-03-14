@@ -198,7 +198,12 @@ Oskari.registerLocalization(
             "errorTitle": "Fel",
             "warningTitle": "Varning",
             "successTitle": "Lagrat",
-            "warning_some_of_the_layers_could_not_be_parsed": "Nägra kartlager kunde inte bearbetas."
+            "warning_some_of_the_layers_could_not_be_parsed": "Nägra kartlager kunde inte bearbetas.",
+            "addDataprovider": "Dataprovider",
+            "groupTitle": "Gruppnivå namn",
+            "addDataproviderButton": "Tillägg",
+            "maplayerGroups": "Maplayer-grupper",
+            "selectMaplayerGroupsButton": "Välj grupper"
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",

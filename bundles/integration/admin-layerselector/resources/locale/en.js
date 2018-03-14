@@ -198,7 +198,12 @@ Oskari.registerLocalization(
             "errorTitle": "Error",
             "warningTitle": "Warning",
             "successTitle": "Saving Succeeded",
-            "warning_some_of_the_layers_could_not_be_parsed": "Some of the map layers could not be parsed."
+            "warning_some_of_the_layers_could_not_be_parsed": "Some of the map layers could not be parsed.",
+            "addDataprovider": "Dataprovider",
+            "groupTitle": "Map layer group name",
+            "addDataproviderButton": "Add",
+            "maplayerGroups": "Maplayer groups",
+            "selectMaplayerGroupsButton": "Select groups"
         },
         "cancel": "Cancel",
         "add": "Add",

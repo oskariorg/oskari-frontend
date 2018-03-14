@@ -71,6 +71,8 @@ define([
                 this.tabTemplate = _.template(TabPanelTemplate);
                 this.accordionTemplate = _.template(AccordionPanelTemplate);
                 this.layerTemplate = _.template(LayerRowTemplate);
+                this.layerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+                this.dataProviders = null;
                 _.bindAll(this);
                 this.__setupSupportedLayerTypes();
                 this.render();
@@ -324,6 +326,84 @@ define([
                 }
             },
             /**
+             * Get dataproviders
+             * @method getDataproviders
+             * @param  {Boolean}        emptyCache empty cache
+             * @param  {Function}       callback   callback function
+             */
+            getDataproviders: function(emptyCache, callback) {
+                var me = this;
+                if (!me.dataProviders || emptyCache === true) {
+                    jQuery.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=UTF-8',
+                        url: Oskari.getSandbox().getAjaxUrl('GetMapLayerGroups'),
+                        error: function() {
+                            var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
+                            errorDialog.fadeout();
+                        },
+                        success: function(response) {
+                            me.dataProviders = [];
+                            response.organization.forEach(function(org) {
+                                me.dataProviders.push({
+                                    id: org.id,
+                                    name: Oskari.getLocalized(org.name)
+                                });
+                            });
+
+                            me.dataProviders.sort(function(a, b) {
+                                return Oskari.util.naturalSort(a.name, b.name);
+                            });
+                            callback();
+
+                        }
+                    });
+                } else {
+                    callback();
+                }
+            },
+
+            /**
+             * Get mapl layer groups for layer group selection
+             * @method  _getMaplayerGroups
+             * @return  {Array}           groups
+             * @private
+             */
+            _getMaplayerGroups: function() {
+                var me = this;
+                var groups = [];
+
+                me.layerService.getAllLayerGroups().forEach(function(group) {
+                    groups.push({
+                        id: group.id,
+                        cls: 'group',
+                        name: Oskari.getLocalized(group.name)
+                    });
+
+                    // subgroups
+                    group.groups.forEach(function(subgroup) {
+                        groups.push({
+                            id: subgroup.id,
+                            cls: 'subgroup',
+                            name: Oskari.getLocalized(subgroup.name)
+                        });
+
+                        // subgroup subgroups
+                        subgroup.groups.forEach(function(subgroupsubgroup) {
+                            groups.push({
+                                id: subgroupsubgroup.id,
+                                cls: 'subgroupsubgroup',
+                                name: Oskari.getLocalized(subgroupsubgroup.name)
+                            });
+                        });
+                    });
+                });
+
+                return groups;
+            },
+            /**
              * Shows layer settings when admin clicks
              * add or edit layer (class / organization)
              *
@@ -335,36 +415,54 @@ define([
                     layer = element.parent(),
                     me = this;
 
-                if (!layer.find('.admin-add-layer').hasClass('show-add-layer')) {
-                    // create layer settings view for adding or editing layer
-                    var settings = new AdminLayerSettingsView({
-                        model: null,
-                        supportedTypes: me.supportedTypes,
-                        instance: this.options.instance
-                    });
+                me.getDataproviders(false, function() {
+                    var dataProviderId = element.parents('.accordion').attr('lcid');
+                    if (!layer.find('.admin-add-layer').hasClass('show-add-layer')) {
+                        // create layer settings view for adding or editing layer
 
-                    layer.append(settings.$el);
-                    // activate slider (opacity)
-                    layer.find('.layout-slider').slider({
-                        min: 0,
-                        max: 100,
-                        value: 100,
-                        slide: function(event, ui) {
-                            jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
+                        var groupDetails = me.layerService.getAllLayerGroups()[0];
+                        var layerModel = null;
+                        if(!me.instance.locale) {
+                            me.instance.locale = Oskari.getMsg.bind(null, 'admin-layerselector');
                         }
-                    });
-                    // change the title of the button
-                    element.html(this.options.instance.getLocalization('cancel'));
-                    element.attr('title', this.options.instance.getLocalization('cancel'));
-                    setTimeout(function() {
-                        layer.find('.admin-add-layer').addClass('show-add-layer');
-                    }, 30);
-                } else {
-                    layer.find('.admin-add-layer').removeClass('show-add-layer');
-                    element.html(this.options.instance.getLocalization('admin').addLayer);
-                    element.attr('title', this.options.instance.getLocalization('admin').addLayerDesc);
-                    layer.find('.admin-add-layer').remove();
-                }
+                        var settings = new AdminLayerSettingsView({
+                            model: layerModel,
+                            supportedTypes: me.supportedTypes,
+                            instance: me.instance,
+                            groupId: groupDetails.id,
+                            dataProviders: me.dataProviders,
+                            baseLayerId: null,
+                            allMaplayerGroups: me._getMaplayerGroups(),
+                            maplayerGroups: (layerModel) ? layerModel.getGroups() : [{
+                                id: groupDetails.id,
+                                name: Oskari.getLocalized(groupDetails.name)
+                            }],
+                            dataProviderId: dataProviderId
+                        });
+
+                        layer.append(settings.$el);
+                        // activate slider (opacity)
+                        layer.find('.layout-slider').slider({
+                            min: 0,
+                            max: 100,
+                            value: 100,
+                            slide: function(event, ui) {
+                                jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
+                            }
+                        });
+                        // change the title of the button
+                        element.html(me.options.instance.getLocalization('cancel'));
+                        element.attr('title', me.options.instance.getLocalization('cancel'));
+                        setTimeout(function() {
+                            layer.find('.admin-add-layer').addClass('show-add-layer');
+                        }, 30);
+                    } else {
+                        layer.find('.admin-add-layer').removeClass('show-add-layer');
+                        element.html(me.options.instance.getLocalization('admin').addLayer);
+                        element.attr('title', me.options.instance.getLocalization('admin').addLayerDesc);
+                        layer.find('.admin-add-layer').remove();
+                    }
+                });
             },
             /**
              * Hides layer settings

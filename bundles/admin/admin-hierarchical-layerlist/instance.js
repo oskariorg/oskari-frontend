@@ -86,8 +86,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 cls: 'add-subgroup',
                 tooltip: me.locale('tooltips.addSubgroup')
             });
-
-
         },
         /**
          * Add subgroup tools
@@ -315,7 +313,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         *******************************************************************************************************************************/
         getLocalization: function(key) {
             if (!this.locale) {
-                this.locale = Oskari.getMsg.bind(null, this.getName());
+                this.locale = Oskari.getMsg.bind(null, 'admin-layerselector');
             }
             if (key) {
                 return this.locale(key);

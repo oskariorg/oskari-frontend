@@ -95,9 +95,7 @@ $errorColor: lighten(#ff0000, 20%);
 
 .oskari-flyout {
     &.admin-hierarchical-layerlist-add-layer {
-        width: 50%;
         max-height: 80%;
-
 
         div.oskari-flyoutcontentcontainer {
             .spinner {

@@ -373,7 +373,7 @@ Oskari.clazz.define(
          * @return {String} inspire theme name under which the layer is listed in UI
          */
         getInspireName: function() {
-            return this._groups[0].name;
+            return (this._groups[0]) ? this._groups[0].name : '';
         },
         /**
          * @method setFeatureInfoEnabled

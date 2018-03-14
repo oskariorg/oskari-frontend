@@ -41,19 +41,33 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundle",
                 "type": "text/css",
                 "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/css/style.css"
             }],
-            "locales": [{
-                "lang": "fi",
-                "type": "text/javascript",
-                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/fi.js"
-            }, {
-                "lang": "sv",
-                "type": "text/javascript",
-                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/sv.js"
-            }, {
-                "lang": "en",
-                "type": "text/javascript",
-                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/en.js"
-            }]
+            "locales": [
+                {
+                    "lang": "fi",
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/integration/admin-layerselector/resources/locale/fi.js"
+                }, {
+                    "lang": "en",
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/integration/admin-layerselector/resources/locale/en.js"
+                }, {
+                    "lang": "sv",
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/integration/admin-layerselector/resources/locale/sv.js"
+                },
+                {
+                    "lang": "fi",
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/fi.js"
+                }, {
+                    "lang": "sv",
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/sv.js"
+                }, {
+                    "lang": "en",
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/locale/en.js"
+                }]
         },
         "bundle": {
             "manifest": {

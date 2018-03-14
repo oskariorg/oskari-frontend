@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         var requirementsConfig = {
             waitSeconds: 15,
             paths: {
-                '_bundle': '../../../Oskari/bundles/admin/admin-hierarchical-layerlist'
+                '_bundle': '../../../Oskari/bundles/integration/admin-layerselector'
             }
         };
         require.config(requirementsConfig);
@@ -213,7 +213,6 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                     model: layerModel,
                     supportedTypes: me.supportedTypes,
                     instance: me.instance,
-                    spinnerContainer: content,
                     groupId: groupId,
                     dataProviders: me.dataProviders,
                     flyout: me._extraFlyout,

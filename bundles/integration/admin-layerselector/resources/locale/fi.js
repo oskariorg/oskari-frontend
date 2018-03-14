@@ -198,7 +198,12 @@ Oskari.registerLocalization(
             "errorTitle": "Virhe",
             "warningTitle": "Varoitus",
             "successTitle": "Tallennettu",
-            "warning_some_of_the_layers_could_not_be_parsed": "Osaa tasoista ei voitu käsitellä."
+            "warning_some_of_the_layers_could_not_be_parsed": "Osaa tasoista ei voitu käsitellä.",
+            "addDataprovider": "Tiedontuottaja",
+            "groupTitle": "Taustakarttatason nimi",
+            "addDataproviderButton": "Lisää",
+            "maplayerGroups": "Tason ryhmät",
+            "selectMaplayerGroupsButton": "Valitse ryhmät"
         },
         "cancel": "Peruuta",
         "add": "Lisää",
