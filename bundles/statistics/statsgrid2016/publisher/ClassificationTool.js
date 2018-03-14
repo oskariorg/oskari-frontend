@@ -26,11 +26,6 @@ function() {
         if(stats && this.isDisplayed(pdata)) {
             stats.createClassficationView(true);
         }
-        if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
-            me.setEnabled(true);
-        } else {
-            me.setEnabled(false);
-        }
     },
     // required for dragndrop in publisher - also plugin needs to
     getPlugin : function() {

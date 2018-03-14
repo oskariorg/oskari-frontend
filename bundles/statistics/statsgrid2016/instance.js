@@ -67,7 +67,6 @@ Oskari.clazz.define(
 
             if ( this.isEmbedded() ) {
                 // Start in an embedded map mode
-
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
 
@@ -356,13 +355,14 @@ Oskari.clazz.define(
             }
             if (!this.classificationPlugin) {
                 this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, this.getLocalization(), sandbox);
-                mapModule.registerPlugin(this.classificationPlugin);
-                mapModule.startPlugin(this.classificationPlugin);
             }
+            mapModule.registerPlugin(this.classificationPlugin);
+            mapModule.startPlugin(this.classificationPlugin);
             //get the plugin order straight in mobile toolbar even for the tools coming in late
             if (Oskari.util.isMobile() && this.classificationPlugin.hasUI()) {
                 mapModule.redrawPluginUIs(true);
             }
+            return;
         },
         /**
          * @method  @public enableClassification change published map classification visibility.
