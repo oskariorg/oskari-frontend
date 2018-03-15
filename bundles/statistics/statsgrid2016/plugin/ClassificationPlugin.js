@@ -2,12 +2,7 @@
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
  */
 Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
-    /**
-     * @method create called automatically on construction
-     * @static
-     * @param {Object} config
-     *      JSON config with params needed to run the plugin
-     */
+
     function (instance, config, locale, sandbox) {
         var me = this;
         me._locale = locale;
@@ -15,10 +10,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._sandbox = sandbox;
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
-        me._defaultLocation = 'top right';
         me._index = 9;
+        this._defaultLocation = 'top right';
         me._name = 'ClassificationPlugin';
-        me._element = null;
+        me.element = null;
         me._templates = {
             main: jQuery('<div class="mapplugin statsgrid-legend-plugin"></div>')
         };
@@ -52,92 +47,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             me._calculatePluginSize();
         });
     }, {
-
-        /**
-         * @method _setLayerToolsEditModeImpl
-         * Called after layerToolsEditMode is set.
-         *
-         *
-         */
         _setLayerToolsEditModeImpl: function () {
-            var me = this;
-            if(!me.getElement()) {
+            if ( !this.getElement() ) {
                 return;
             }
-            if (!me.inLayerToolsEditMode()) {
-                me.setLocation(
-                    me.getElement().parents('.mapplugins').attr(
+            if ( !this.inLayerToolsEditMode() ) {
+                this.setLocation(
+                    this.getElement().parents('.mapplugins').attr(
                         'data-location'
                     )
                 );
             }
         },
-        /**
-         * Creates UI for classification UI.
-         * @private @method _createControlElement
-         *
-         * @return {jQuery}
-         */
         _createControlElement: function () {
-            var me = this;
-            var sb = me._sandbox;
-            var locale = me._locale;
-            var config = me._config;
+            var sb = this._sandbox;
+            var locale = this._locale;
+            var config = this._config;
 
-            if(me._element !== null) {
-                return me._element;
+            if ( this.element !== null ) {
+                return this.element;
             }
-            me._element = me._templates.main.clone();
-            this.__legend.render(me._element);
-            return me._element;
+            this.element = this._templates.main.clone();
+            this.__legend.render(this.element);
+            return this.element;
         },
-        /**
-         * @method _createUi Create element and construct DOM structure
-         * @private
-         * @param  {Boolean} isMobile is UI in mobile mode?
-         */
-        _createUi: function (isMobile) {
-            var me = this;
-            me._element = me._createControlElement();
-            this.addToPluginContainer(me._element);
-            if (!isMobile) {
-                me._makeDraggable();
-            }
-        },
-        _makeDraggable: function () {
-            this._element.draggable();
-        },
-        makeTransparent: function ( transparent ) {
-            if ( !this._element ) {
-                return;
-            }
-            if ( transparent ) {
-                this._element.find('.statsgrid-legend-container').addClass('legend-transparent');
-            } else {
-                this._element.find('.statsgrid-legend-container').removeClass('legend-transparent');
-            }
-        },
-        teardownUI : function(stopping) {
-            //detach old element from screen
-            var me = this;
-            this.removeFromPluginContainer(me._element, !stopping);
-            if (this._popup) {
-                me.getElement().detach();
-                this._popup.close(true);
-            }
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-        },
-
-        /**
-         * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public redrawUI
-         * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
-         */
         redrawUI: function(mapInMobileMode, forced) {
-            var me = this;
-            var sandbox = me.getSandbox();
+            var sandbox = this.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
@@ -151,52 +86,68 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             if (!toolbarNotReady && mapInMobileMode) {
                 // create mobile
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+                return false;
+            }
+            this.addToPluginContainer( this._createControlElement() );
+            this._makeDraggable();
+            return false;
+        },
+        teardownUI: function(stopping) {
+            var element = this.getElement();
+            //detach old element from screen
+            if (element ) {
+                element.detach();
+                this.removeFromPluginContainer(element, !stopping);
+                this.element = null;
+            }
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+        },
+        _makeDraggable: function () {
+            this.getElement().draggable();
+        },
+        makeTransparent: function ( transparent ) {
+            var element = this.getElement();
+            if ( !element ) {
                 return;
             }
-            this._createUi(mapInMobileMode);
+            if ( transparent ) {
+                element.find('.statsgrid-legend-container').addClass('legend-transparent');
+            } else {
+                element.find('.statsgrid-legend-container').removeClass('legend-transparent');
+            }
         },
-
-        /**
-         * Get jQuery element.
-         * @method @public getElement
-         */
-        getElement: function(){
-            return this._element;
+        getElement: function() {
+            return this.element;
         },
-
         enableClassification: function(enabled) {
             this.__legend.allowClassification(enabled);
         },
-        stopPlugin: function(){
+        stopPlugin: function() {
             this.teardownUI(true);
         },
         _createEventHandlers: function () {
             return {
-                /**
-                 * @method MapSizeChangedEvent
-                 * Adjust size if map size changes
-                 */
                 MapSizeChangedEvent: function () {
                     this._calculatePluginSize();
                 }
             };
         },
         _calculatePluginSize: function() {
-            if(!this._element) {
+            var element = this.getElement();
+
+            if ( !element ) {
                 return;
             }
-            var me = this;
-
-            var sandbox = me.getSandbox();
-            var height = sandbox.getMap().getHeight();
-            var headerHeight = me._element.find('.active-header').first().height();
-            if(Oskari.util.isMobile() && me._popup) {
-                me._popup.getJqueryContent().find('.accordion').css({
+            var height = this.getSandbox().getMap().getHeight();
+            var headerHeight = element.find('.active-header').first().height();
+            if ( Oskari.util.isMobile() ) {
+                this._popup.getJqueryContent().find('.accordion').css({
                     'overflow': 'auto',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
-            } else if(!Oskari.util.isMobile()){
-                me._element.find('.accordion').css({
+            } else if ( !Oskari.util.isMobile() ) {
+                element.find('.accordion').css({
                     'overflow': 'auto',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });

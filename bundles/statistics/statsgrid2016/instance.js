@@ -61,7 +61,6 @@ Oskari.clazz.define(
             this.createClassficationView(true);
 
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published );
-
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
@@ -353,9 +352,7 @@ Oskari.clazz.define(
                 }
                 return;
             }
-            if (!this.classificationPlugin) {
-                this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, this.getLocalization(), sandbox);
-            }
+            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, this.getLocalization(), sandbox);
             mapModule.registerPlugin(this.classificationPlugin);
             mapModule.startPlugin(this.classificationPlugin);
             //get the plugin order straight in mobile toolbar even for the tools coming in late

@@ -12,19 +12,15 @@ function() {
         'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
     ],
-
-    /**
-     * Initialize tool
-     * @params {} state data
-     * @method init
-     * @public
-     */
     init: function (pdata) {
-        var me = this;
-
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if(stats && this.isDisplayed(pdata)) {
+        if ( stats ) {
             stats.createClassficationView(true);
+        }
+        if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
+            this.setEnabled(true);
+        } else {
+            this.setEnabled(false);
         }
     },
     // required for dragndrop in publisher - also plugin needs to
@@ -32,18 +28,9 @@ function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         return stats.classificationPlugin;
     },
-    /**
-    * Get tool object.
-     * @params {}  pdta.configuration.publishedgrid.state
-    * @method getTool
-    * @private
-    *
-    * @returns {Object} tool
-    */
-    getTool: function(pdata){
-        var me = this;
-        if(!me.__tool) {
-            me.__tool = {
+    getTool: function(pdata) {
+        if(!this.__tool) {
+            this.__tool = {
                 id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
                 title: 'allowClassification',
                 config: {
@@ -51,17 +38,10 @@ function() {
                 }
             };
          }
-        return me.__tool;
+        return this.__tool;
     },
-    /**
-    * Get stats layer.
-    * @method @private _getStatsLayer
-    *
-    * @return founded stats layer, if not found then null
-    */
-    _getStatsLayer: function(){
-        var me = this,
-            selectedLayers = me.__sandbox.findAllSelectedMapLayers(),
+    _getStatsLayer: function() {
+            var selectedLayers = this.__sandbox.findAllSelectedMapLayers(),
             statsLayer = null,
             layer;
         for (i = 0; i < selectedLayers.length; i += 1) {
@@ -73,35 +53,17 @@ function() {
         }
         return statsLayer;
     },
-    /**
-    * Set enabled.
-    * @method setEnabled
-    * @public
-    *
-    * @param {Boolean} enabled is tool enabled or not
-    */
-
     setEnabled : function(enabled) {
-        var me = this;
-
         if(typeof enabled !== 'boolean') {
             enabled = false;
         }
 
-        me.state.enabled = enabled;
-
+        this.state.enabled = enabled;
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if(stats) {
-            stats.enableClassification(enabled);
-        }
+
+        this.getPlugin().enableClassification(enabled);
+
     },
-    /**
-    * Is displayed.
-    * @method isDisplayed
-    * @public
-    *
-    * @returns {Boolean} is tool displayed
-    */
     isDisplayed: function(data) {
         var hasStatsLayerOnMap = this._getStatsLayer() !== null;
         if(hasStatsLayerOnMap) {
@@ -158,7 +120,7 @@ function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
             stats.enableClassification(true);
-            stats.createClassficationView(false);
+            // stats.createClassficationView(false);
         }
     }
 }, {
