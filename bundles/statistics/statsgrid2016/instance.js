@@ -65,6 +65,7 @@ Oskari.clazz.define(
             if ( this.isEmbedded() ) {
                 // Start in an embedded map mode
                 // Classification can be disabled for embedded map
+                me.createClassficationView(true);
                 me.enableClassification(conf.allowClassification !== false);
 
                 if (me.conf.transparent) {
