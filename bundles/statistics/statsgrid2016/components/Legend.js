@@ -54,7 +54,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox) {
         var me = this;
         var container = this._element;
         var accordion = this._accordion;
-        var multipleIndicators = false;
         // NOTE! detach classification before re-render to keep eventhandlers
         this.editClassification.getElement().detach();
         accordion.removeAllPanels();
