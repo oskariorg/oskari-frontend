@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
 
                 var value = el.find('input').val().trim();
                 data.locales[el.attr('data-locale')] = value;
-                if (value.length < 4) {
+                if (!value.length) {
                     hasValidLocales = false;
                     el.find('input').addClass('error');
                 } else {
@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             el.find('input').bind('keyup', function() {
                 var inputEl = jQuery(this);
                 var value = inputEl.val().trim();
-                if (value.length < 4) {
+                if (!value.length) {
                     inputEl.addClass('error');
                 } else {
                     inputEl.removeClass('error');
