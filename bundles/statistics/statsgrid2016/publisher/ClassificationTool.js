@@ -120,7 +120,7 @@ function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
             stats.enableClassification(true);
-            // stats.createClassficationView(false);
+            stats.createClassficationView(false);
         }
     }
 }, {
