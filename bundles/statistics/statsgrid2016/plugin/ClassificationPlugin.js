@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
-        this._defaultLocation = 'top right';
+        this._defaultLocation = 'right bottom';
         me._name = 'ClassificationPlugin';
         me.element = null;
         me._templates = {
