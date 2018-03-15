@@ -111,6 +111,7 @@ Oskari.registerLocalization(
                 "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä.",
                 "grid": "Näytä tilastotiedot taulukossa",
                 "allowClassification": "Salli luokittelu",
+                "transparent": "Aseta luokittelun tausta läpinäkyväksi",
                 "displayDiagram" : "Näytä pylväsdiagrammi"
             },
             "layout": {
