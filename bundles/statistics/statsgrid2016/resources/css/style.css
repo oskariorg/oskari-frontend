@@ -428,6 +428,9 @@ div.oskari-flyout {
     width: 90%;
     font-weight: bold;
   }
+  .active-legend {
+    height:100%;
+  }
   .edit-legend {
     height: 16px;
     width: 16px;
