@@ -58,8 +58,6 @@ Oskari.clazz.define(
             // setup initial state
             this.setState();
 
-            this.createClassficationView(true);
-
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published );
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
@@ -195,9 +193,11 @@ Oskari.clazz.define(
                 }
                 if( wasClosed ) {
                     me.getTile().hideExtensions();
+                    me.createClassficationView(false);
                     return;
                 } else {
                     me.getTile().showExtensions();
+                    me.createClassficationView(true);
                 }
             },
             /**
