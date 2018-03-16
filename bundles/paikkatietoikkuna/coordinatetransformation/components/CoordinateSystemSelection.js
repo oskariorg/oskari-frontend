@@ -84,10 +84,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
          */
         updateDropdownOptions: function (dropdownId, valueId) {
             if ( typeof valueId === 'string' ) {
-                this.dropdowns[dropdownId].find( 'option' ).hide();
-                this.dropdowns[dropdownId].find( valueId ).show();
+                this.dropdowns[dropdownId].find( 'option' ).css('display', 'none');
+                this.dropdowns[dropdownId].find( valueId ).css('display', '');
             } else {
-                this.dropdowns[dropdownId].find( 'option' ).show();
+                this.dropdowns[dropdownId].find( 'option' ).css('display', '');
             }
         },
         makeClassSelector: function (variable) {
@@ -179,12 +179,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var classSelector = clsSelector(datum);
 
             if ( this.enableProjectionSystem ) {
-                dropdowns.projection.parent().show();
+                dropdowns.projection.parent().parent().show();
                if ( projection ) {
                     classSelector += clsSelector(projection);
                 }
             } else {
-                dropdowns.projection.parent().hide();
+                dropdowns.projection.parent().parent().hide();
                 instances.projection.resetToPlaceholder();
 
                 if ( coordinate ) {
