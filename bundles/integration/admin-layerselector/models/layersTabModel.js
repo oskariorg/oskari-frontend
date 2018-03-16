@@ -215,6 +215,9 @@
                 var me = this;
                 var groups = me.layerGroups;
                 var results = classes[this.type];
+                if(this.type === 'inspire') {
+                    results = classes.mapLayerGroups;
+                }
                 var hasChanges = false;
                 _.each(results, function(item) {
                     var changes = me._parseObjectToGroup(item, groupingMethod);

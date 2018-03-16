@@ -313,30 +313,35 @@ module.exports = function(grunt) {
                 fileMap = {},
                 result = null;
 
-            for (var i = 0; i < files.length; ++i) {
-                if (!fs.existsSync(files[i])) {
-                    var msg = 'Couldnt locate ' + files[i]; 
+            files.forEach(function(filePath) {
+                if (!fs.existsSync(filePath)) {
+                    var msg = "Couldn't locate " + filePath;
                     grunt.log.warn(msg);
                     grunt.fail.fatal(msg);
-                    throw msg;
+                    throw new Error(msg);
                 }
                 // do not put duplicates on compiled code
-                if(!fileMap[files[i]]) {
-                    fileMap[files[i]] = true;
-                    okFiles.push(files[i]);
+                if(!fileMap[filePath]) {
+                    fileMap[filePath] = true;
+                    okFiles.push(filePath);
                 } else {
-                    grunt.log.writeln('File already added:' + files[i]);
+                    grunt.log.writeln('File already added:' + filePath);
                 }
-            }
+            });
 
             // minify or concatenate the files
-            if (!concat) {
+            if (concat) {
+                var fileContents = '';
+                okFiles.forEach(function(filePath) {
+                    fileContents += fs.readFileSync(filePath, 'utf8');
+                });
+                // emulate the result uglify creates, but only concatenating
+                result = {"code" : fileContents};
+            } else {
                 try {
                     result = UglifyJS.minify(okFiles, {
                         outSourceMap : "oskari.min.js.map",
                         sourceMapUrl : "oskari.min.js.map",
-                        //p  : "relative",
-                        //sourceRoot : "/Oskari",
                         sourceMapIncludeSources : true,
                         warnings : true,
                         compress : true
@@ -353,12 +358,6 @@ module.exports = function(grunt) {
                     err.origError = e;
                     grunt.log.warn('Uglifying sources ' + okFiles.join() + ' failed.');
                     grunt.fail.warn(err);
-                }
-            } else {
-                // emulate the result uglify creates, but only concatenating
-                result = {"code" : ""};
-                for (var j = 0, jlen = okFiles.length; j < jlen; j +=1) {
-                    result.code += fs.readFileSync(okFiles[j], 'utf8');
                 }
             }
             var code = result.code;

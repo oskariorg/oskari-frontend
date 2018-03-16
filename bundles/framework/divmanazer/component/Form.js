@@ -1,4 +1,3 @@
-'use strict';
 /**
  * @class Oskari.userinterface.component.Form
  * Generic form component

@@ -1,61 +1,75 @@
 /**
- * @class Oskari.userinterface.component.CheckboxInput
+ * @class Oskari.userinterface.component.ColorPickerInput
  *
- * Simple text input component
+ * Color picker component with default color palette
  */
-Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
+Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
 
     /**
      * @method create called automatically on construction
+     * @param object options colorPicker options for customizing spectrum component
      */
-    function () {
-        
+    function (options) {
         var me = this;
+        
+        if (!options) {
+            options = {}
+        }
 
-        me._clazz = 'Oskari.userinterface.component.CheckboxInput';
+        me._clazz = 'Oskari.userinterface.component.ColorPickerInput';
+
         me._element = document.createElement('label');
         me._input = document.createElement('input');
         me._titleEl = document.createElement('span');
-        me._element.className = 'oskari-formcomponent oskari-checkboxinput';
         me._titleEl.style.display = 'none';
-        me._input.type = 'checkbox';
-        // TODO none of these fire on autocomplete
+        me._element.appendChild(me._input);
+        me._element.appendChild(me._titleEl);
+
+        me._element.className = 'oskari-formcomponent oskari-colorpickerinput';
+        me._input.type = 'text';
+
         me._input.onchange = function () {
             me._valueChanged();
         };
         me._input.input = me._input.onchange;
         me._input.onkeyup = me._input.onchange;
-        me._element.appendChild(me._input);
-        me._element.appendChild(me._titleEl);
+
+        me._colorPickerOptions = {
+            color: '#818282',
+            preferredFormat: 'hex',
+            clickoutFiresChange: true,
+            chooseText: Oskari.getMsg('DivManazer', 'buttons.ok'),
+            cancelText: '',
+            localStorageKey: 'colorpicker',
+            showPalette: true,
+            hideAfterPaletteSelect:true,
+            showAlpha: false,
+            palette: [
+                ['#ffffff','#666666'],
+                ['#ffde00','#f8931f'],
+                ['#ff3334','#bf2652'],
+                ['#000000','#cccccc'],
+                ['#652d90','#3233ff'],
+                ['#26bf4b','#00ff01']
+            ],
+            maxSelectionSize: 2
+        };
+        jQuery.extend(me._colorPickerOptions, options);
+        jQuery(me._input).spectrum(me._colorPickerOptions);
     }, {
         /**
          * @method focus
          * Focuses the component.
          */
         focus: function () {
-            
             this._input.focus();
         },
 
-        isChecked: function () {
-            return this._input.checked;
-        },
-
-        setChecked: function (checked) {
-            if (this._input.checked !== checked) {
-                this._input.checked = checked;
-                this._valueChanged();
-            }
-        },
-
         isEnabled: function () {
-            
             return !this._input.disabled;
         },
 
-
         _valueChanged: function () {
-            
             if (this.getHandler()) {
                 this.getHandler()(this.getValue());
             }
@@ -65,12 +79,11 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method _setEnabledImpl
          */
         _setEnabledImpl: function (enabled) {
-            
-            this._input.disabled = !enabled;
+            var action = enabled ? 'enable' : 'disable';
+            jQuery(this._input).spectrum(action);
         },
 
         getName: function () {
-            
             return this._input.name;
         },
 
@@ -78,17 +91,14 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method setName
          */
         setName: function (name) {
-            
             this._input.name = name || '';
         },
 
         getPlaceHolder: function () {
-            
             return this._input.placeholder;
         },
 
         setPlaceHolder: function (placeholder) {
-            
             this._input.placeholder = placeholder;
         },
 
@@ -96,12 +106,10 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method _setRequiredImpl
          */
         _setRequiredImpl: function () {
-            
             this._input.required = this.isRequired();
         },
 
         getTitle: function () {
-            
             return this._titleEl.textContent;
         },
 
@@ -109,7 +117,6 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method setTitle
          */
         setTitle: function (title) {
-            
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -120,7 +127,6 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
         },
 
         getTooltip: function () {
-            
             return this._element.title;
         },
 
@@ -128,28 +134,24 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method setTooltip
          */
         setTooltip: function () {
-            
             this._element.title = this.getTooltip();
         },
 
         getValue: function () {
-            
-            return this._input.checked ? this._input.value : undefined;
+            return jQuery(this._input).spectrum('get').toHexString();
         },
 
         /**
          * @method setValue
          */
         setValue: function (value) {
-            
-            this._input.value = value;
+            return jQuery(this._input).spectrum('set', value);
         },
 
         /**
          * @method _setVisibleImpl
          */
         _setVisibleImpl: function () {
-            
             this.getElement().style.display = this.isVisible() ? '' : 'none';
         }
     }, {

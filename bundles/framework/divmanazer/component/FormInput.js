@@ -1,4 +1,3 @@
-'use strict';
 /**
  * @class Oskari.userinterface.component.FormInput
  * Form field to be used with Oskari.userinterface.component.Form
