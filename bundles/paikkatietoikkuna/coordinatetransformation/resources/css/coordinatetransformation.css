@@ -234,7 +234,6 @@
     position: absolute;
 }
 .coordinatetransformation-flyout .dropdown_title {
-    float: left;
     font-weight: bold;
     word-break: break-word;
     max-width:12em !important;
