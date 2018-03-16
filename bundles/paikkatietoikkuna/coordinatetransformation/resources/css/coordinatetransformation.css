@@ -4,10 +4,16 @@
 .coordinatetransformation-flyout {
     top:0;
 }
-#rowwidth {
+.transformation-wrapper {
+    max-width: 50em !important;
+    display: flex;
+    flex-flow: row wrap;
+}
+.transformation-wrapper #rowwidth {
     max-width: 100px !important;
 }
-.multiple-items-center {
+
+.transformation-wrapper .center-align {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,18 +40,18 @@
     float:left;
     margin-top: 6.25rem;
 }
-.util-row{
+.transformation-wrapper .util-row{
     clear: left;
     width: 100%;
     padding-top: 1em;
 }
-.util-row.show.clear{
+.transformation-wrapper .util-row.show.clear{
     float:left;
 }
-.coordinate-datasource {
+.transformation-wrapper .coordinate-datasource {
     width: 100%;
 }
-.sourceWrapper {
+.transformation-wrapper .sourceWrapper {
     padding-bottom: 1em;
 }
 .coordinatetransformation-flyout .export, .rowcount {
@@ -106,23 +112,17 @@
 /*
 * SYSTEM SELCTOR
 */
-.selectMountPoint {
+.transformation-wrapper .selectMountPoint {
     margin-left: auto;
 }
-.systems {
+.transformation-wrapper .systems {
     display: inline-flex;
 }
 .coordinateSystemWrapper:last-child {
     margin-left: 2em;
 }
-.system {
-    clear: left;
+.transformation-wrapper .system {
     padding-top: 0.875em; 
-}
-.transformation-wrapper {
-    max-width: 50em !important;
-    display: flex;
-    flex-flow: row wrap;
 }
 .transformation-system {
     display: inline-block;
@@ -189,7 +189,7 @@
     display: none; 
     position: relative;
 }
-.cell-disabled {
+.transformation-wrapper .cell-disabled {
     background-color: grey !important;
 }
 
