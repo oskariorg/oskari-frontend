@@ -8,8 +8,8 @@ Oskari.registerLocalization(
         "notLoggedIn": "As a logged-in user you can see here your account information and all your saved places, map views, embedded maps, indicators, analysis and datasets.",
         "notLoggedInText": "Log in",
         "projectionError": {
-            "title" : "Prokektiot eivät ole yhteensopivia",
-            "msg":"Vaihda kartan projektiota tarkastaaksesi näkymää.",
+            "title" : "Projections are incompatible",
+            "msg": "Projection will be changed, so that the published map can be edited",
             "ok": "OK",
             "cancel": "Cancel"
         },
