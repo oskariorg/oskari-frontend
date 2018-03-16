@@ -423,6 +423,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         },
         update: function() {
 
+        },
+        getSandbox: function(){
+            return this.sandbox;
         }
     }, {
         /**
