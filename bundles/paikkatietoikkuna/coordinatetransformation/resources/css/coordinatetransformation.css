@@ -7,6 +7,11 @@
 #rowwidth {
     max-width: 100px !important;
 }
+.multiple-items-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .coordinatetransformation-flyout .header {
     font-size: 15px;
     line-height: 22px;
@@ -101,6 +106,9 @@
 /*
 * SYSTEM SELCTOR
 */
+.selectMountPoint {
+    margin-left: auto;
+}
 .systems {
     display: inline-flex;
 }
@@ -224,9 +232,6 @@
     background-image: url('../images/icon-close.png');
     right:-5em;
     position: absolute;
-}
-.coordinatetransformation-flyout .select {
-    float:right;
 }
 .coordinatetransformation-flyout .dropdown_title {
     float: left;
