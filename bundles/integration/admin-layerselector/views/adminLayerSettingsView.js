@@ -192,7 +192,7 @@ define([
                         var name = el.attr('data-name');
                         var id = el.attr('data-id');
                         selected.push({
-                            id: parseFloat(id),
+                            id: id,
                             name: name
                         });
                         ids.push(id);
@@ -224,7 +224,7 @@ define([
 
                 var isInGroup = function(groupId) {
                     var grepped = jQuery.grep(me.options.maplayerGroups, function(g) {
-                        return g.id === groupId;
+                        return g.id == groupId;
                     });
                     return grepped.length > 0;
                 };

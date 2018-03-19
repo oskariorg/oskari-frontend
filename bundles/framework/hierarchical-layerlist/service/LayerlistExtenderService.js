@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierServic
+ * @class Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService
  */
 (function(Oskari) {
     var _log = Oskari.log('HierarchicalLayerlist.LayerlistExtenderService');
@@ -13,8 +13,8 @@
         function() {
             var me = this;
             this.sb = Oskari.getSandbox();
-            this._options = {
-                /* Default options */
+            /* Default options for jsTree */
+            this._jsTreeOptions = {
                 core: {
                     check_callback: true,
                     themes: {
@@ -91,7 +91,7 @@
             this._subgroupTools = {};
             this._subgroupSubgroupTools = {};
             this._layerTools = {};
-            this._hasAdmin = false;
+            this._showEmptyGroups = false;
 
             // attach on, off, trigger functions
             Oskari.makeObservable(this);
@@ -115,26 +115,26 @@
                 return this.sandbox;
             },
             /**
-             * Get layerlist options
+             * Get layerlist jsTree options
              * @method getLayerlistOption
              * @param  {String}                 key layerlist option id, if not defined then return all.
              * @return {Object|String|Boolean}  option value
              */
             getLayerlistOption: function(key) {
                 if (!key) {
-                    return this._options;
+                    return this._jsTreeOptions;
                 }
-                return this._options[key];
+                return this._jsTreeOptions[key];
             },
             /**
-             * Add layerlist option
+             * Add jsTree layerlist option
              * @method addLayerlistOption, for example allow draggin etc.
              * @param  {String}                 key     option key
              * @param  {Object|String|Boolean}  value   option value
              * @param {Boolean}                 notTriggerEvent not trigger event when tru, defaults false
              */
             addLayerlistOption: function(key, value, notTriggerEvent) {
-                this._options[key] = value;
+                this._jsTreeOptions[key] = value;
                 if (!notTriggerEvent) {
                     this.trigger('option.added', {
                         key: key,
@@ -401,21 +401,21 @@
                 });
             },
             /**
-             * Sets admin role
-             * @method setAdmin
-             * @param  {Boolean} isAdmin is admin
+             * Sets show empty groups
+             * @method showEmptyGroups
+             * @param  {Boolean} show empty groups
              */
-            setAdmin: function(isAdmin) {
-                this._hasAdmin = isAdmin;
-                this.trigger('admin.changed', this._hasAdmin);
+            showEmptyGroups: function(showEmptyGroups) {
+                this._showEmptyGroups = showEmptyGroups;
+                this.trigger('show.empty.groups', this._showEmptyGroups);
             },
             /**
-             * Has admin
-             * @method hasAdmin
-             * @return {Boolean} is admin-hierarchical-layerlist configured
+             * Is empty groups visible
+             * @method hasEmptyGroupsVisible
+             * @return {Boolean} show empty groups
              */
-            hasAdmin: function() {
-                return this._hasAdmin;
+            hasEmptyGroupsVisible: function() {
+                return this._showEmptyGroups;
             }
 
         }, {

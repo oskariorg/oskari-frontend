@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
     function(instance) {
         var me = this;
         this.instance = instance;
+        this.sb = this.instance.sandbox;
         this.service = this.instance.layerlistExtenderService;
         this.container = null;
         this.template = null;
@@ -24,8 +25,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
         this._filterNewestCount = 20;
         this._currentFilter = null;
-        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-        this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+        this.mapLayerService = this.sb.getService('Oskari.mapframework.service.MapLayerService');
+        this.layerlistService = this.sb.getService('Oskari.mapframework.service.LayerlistService');
+        this.notifierService = this.sb.getService('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
 
         this.addedButtons = {};
 
@@ -33,6 +35,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             me.addFilterTool(button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
         });
         this._bindExtenderServiceListeners();
+        this._bindOskariEvents();
     }, {
 
         /*******************************************************************************************************************************
@@ -50,7 +53,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 me.populateLayers();
             });
 
-            me.service.on('admin.changed', function() {
+            me.service.on('show.empty.groups', function() {
                 me.populateLayers();
             });
 
@@ -93,6 +96,40 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             me.service.on('group.deleted', function(data) {
                 me.mapLayerService.deleteLayerGroup(data.id, data.parentId);
                 me.populateLayers();
+            });
+        },
+        /**
+         * Bind Oskari events
+         * @method  _bindOskariEvents
+         * @private
+         */
+        _bindOskariEvents: function() {
+            var me = this;
+
+            me.notifierService.on('MapLayerEvent', function(evt) {
+                if (evt.getOperation() === 'add' || evt.getOperation() === 'remove') {
+                    me.populateLayers();
+                }
+            });
+
+            me.notifierService.on('BackendStatus.BackendStatusChangedEvent', function(evt) {
+                var me = this,
+                    layerId = evt.getLayerId();
+                if (layerId === null || layerId === undefined) {
+                    // Massive update so just recreate the whole ui
+                    me.populateLayers();
+                }
+            });
+
+            me.notifierService.on('userinterface.ExtensionUpdatedEvent', function(evt) {
+                // ExtensionUpdateEvents are fired a lot, only let hierarchical-layerlist extension event to be handled when enabled
+                if (evt.getExtension().getName() !== me.instance.getName()) {
+                    // wasn't me -> do nothing
+                    return;
+                }
+                if (evt.getViewState() !== 'close') {
+                    me.focus();
+                }
             });
         },
         /**
@@ -176,7 +213,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 groupList.push(groupModel);
             });
 
-            if (me.service.hasAdmin()) {
+            if (me.service.hasEmptyGroupsVisible()) {
                 return groupList;
             }
 
@@ -605,28 +642,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                     tab.showLayerGroups(groups);
                 }
             }
-        },
-
-        /**
-         * @method handleLayerAdded
-         * @param {Oskari.mapframework.domain.AbstractLayer} layer
-         *           layer that was added
-         * let's refresh ui to match current layers
-         */
-        handleLayerAdded: function(layer) {
-            var me = this;
-            me.populateLayers();
-        },
-
-        /**
-         * @method handleLayerRemoved
-         * @param {String} layerId
-         *           id of layer that was removed
-         * let's refresh ui to match current layers
-         */
-        handleLayerRemoved: function(layerId) {
-            var me = this;
-            me.populateLayers();
         },
 
         /**

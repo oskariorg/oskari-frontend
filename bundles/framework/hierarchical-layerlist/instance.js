@@ -203,6 +203,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             var notifierService = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
             sandbox.registerService(notifierService);
             me.notifierService = notifierService;
+            me.notifierService.eventHandlers.forEach(function(eventName){
+                sandbox.registerForEventByName(me.notifierService, eventName);
+            });
 
             // create the LayerlistExtenderService for extend layerlist functions.
             var layerlistExtenderService = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
@@ -212,12 +215,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             var layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
             sandbox.registerService(layerlistService);
 
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
-
             //Let's extend UI
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
@@ -225,7 +222,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             // create and register request handlers
             var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
             sandbox.addRequestHandler('ShowFilteredLayerListRequest', reqHandler);
-
 
             var reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
             sandbox.addRequestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
@@ -246,7 +242,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * implements Module protocol init method - does nothing atm
          */
         init: function() {
-            //"use strict";
             return null;
         },
         /**
@@ -254,142 +249,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * implements BundleInstance protocol update method - does nothing atm
          */
         update: function() {
-            //"use strict";
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function(event) {
-            //"use strict";
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-
-            return handler.apply(this, [event]);
-
-        },
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            /**
-             * @method AfterMapLayerRemoveEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-             */
-            AfterMapLayerRemoveEvent: function(event) {
-                this.notifierService.notifyOskariEvent(event);
-            },
-
-            /**
-             * @method AfterMapLayerAddEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-             */
-            AfterMapLayerAddEvent: function(event) {
-                this.notifierService.notifyOskariEvent(event);
-            },
-
-            /**
-             * @method MapLayerEvent
-             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-             */
-            MapLayerEvent: function(event) {
-                //"use strict";
-                var me = this,
-                    flyout = me.plugins['Oskari.userinterface.Flyout'],
-                    tile = me.plugins['Oskari.userinterface.Tile'],
-                    mapLayerService = me.sandbox.getService(
-                        'Oskari.mapframework.service.MapLayerService'
-                    ),
-                    layerId = event.getLayerId(),
-                    layer;
-
-                if (event.getOperation() === 'add') {
-                    layer = mapLayerService.findMapLayer(layerId);
-                    flyout.handleLayerAdded(layer);
-                } else if (event.getOperation() === 'remove') {
-                flyout.handleLayerRemoved(layerId);
-                }
-
-                this.notifierService.notifyOskariEvent(event);
-            },
-
-            'BackendStatus.BackendStatusChangedEvent': function(event) {
-                var me = this,
-                    layerId = event.getLayerId(),
-                    status = event.getStatus(),
-                    flyout = this.plugins['Oskari.userinterface.Flyout'],
-                    mapLayerService = this.sandbox.getService(
-                        'Oskari.mapframework.service.MapLayerService'
-                    ),
-                    layer;
-
-                if (layerId === null || layerId === undefined) {
-                    // Massive update so just recreate the whole ui
-                    flyout.populateLayers();
-
-                }
-            },
-
-            /**
-             * @method ExtensionUpdatedEvent
-             */
-            'userinterface.ExtensionUpdatedEvent': function(event) {
-                var me = this,
-                    plugin = me.plugins['Oskari.userinterface.Flyout'];
-
-                // ExtensionUpdateEvents are fired a lot, only let hierarchical-layerlist extension event to be handled when enabled
-                if (event.getExtension().getName() !== this.getName()) {
-                    // wasn't me -> do nothing
-                    return;
-                }
-                if (event.getViewState() !== 'close') {
-                    plugin.focus();
-                }
-            },
-
-            /**
-             * @method MapLayerVisibilityChangedEvent
-             */
-            'MapLayerVisibilityChangedEvent': function(event) {
-                this.notifierService.notifyOskariEvent(event);
-            },
-            /**
-             * @method AfterChangeMapLayerOpacityEvent
-             */
-            'AfterChangeMapLayerOpacityEvent': function(event) {
-                if (event._creator !== this.getName()) {
-                    this.notifierService.notifyOskariEvent(event);
-                }
-            },
-            /**
-             * @method AfterChangeMapLayerStyleEvent
-             */
-            'AfterChangeMapLayerStyleEvent': function(event) {
-                if (event._creator !== this.getName()) {
-                    this.notifierService.notifyOskariEvent(event);
-                }
-            },
-            /**
-             * @method AfterRearrangeSelectedMapLayerEvent
-             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
-             *
-             * Rearranges layers
-             */
-            'AfterRearrangeSelectedMapLayerEvent': function(event) {
-                if (event._creator !== this.getName()) {
-                    this.notifierService.notifyOskariEvent(event);
-                }
-            },
-            MapSizeChangedEvent: function(evt) {
-                if (evt._creator !== this.getName()) {
-                    this.notifierService.notifyOskariEvent(evt);
-                }
-            }
-
         },
 
         /**

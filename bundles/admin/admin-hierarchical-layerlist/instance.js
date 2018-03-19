@@ -403,8 +403,8 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 return;
             }
             me.sandbox.register(this);
-            // set admin configured
-            me.service.setAdmin(true);
+            // set show empty groups configured
+            me.service.showEmptyGroups(true);
             me._addMainTools();
             me._addGroupTools();
             me._addSubgroupTools();

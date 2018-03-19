@@ -15,8 +15,13 @@
             Oskari.makeObservable(this);
 
         }, {
-            __name: "HierarchicalLayerlist.OskariEventNotifierService",
-            __qname: "Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService",
+            __name: 'HierarchicalLayerlist.OskariEventNotifierService',
+            __qname: 'Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService',
+            // handled Oskari events
+            eventHandlers: ['AfterMapLayerRemoveEvent','AfterMapLayerAddEvent','MapLayerEvent',
+                'BackendStatus.BackendStatusChangedEvent','userinterface.ExtensionUpdatedEvent',
+                'MapLayerVisibilityChangedEvent','AfterChangeMapLayerOpacityEvent','AfterChangeMapLayerStyleEvent',
+                'AfterRearrangeSelectedMapLayerEvent','MapSizeChangedEvent'],
             /*******************************************************************************************************************************
             /* PUBLIC METHODS
             *******************************************************************************************************************************/
@@ -28,6 +33,9 @@
             },
             getSandbox: function() {
                 return this.sandbox;
+            },
+            onEvent: function(event) {
+                this.notifyOskariEvent(event);
             },
 
             /**
