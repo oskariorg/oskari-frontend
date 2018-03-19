@@ -3,7 +3,6 @@ Oskari.registerLocalization({
     "key": "admin-layerselector",
     "value": {
         "buttons": {
-            "add": "Lisää",
             "update": "Päivitä",
             "delete": "Poista",
             "select": "Valitse"
@@ -19,12 +18,9 @@ Oskari.registerLocalization({
         "groupTitles": {
             "addMainGroup": "Anna pääryhmän nimi",
             "addSubgroup": "Anna aliryhmän nimi",
-            "localePrefix": "Nimi kielellä",
             "editMainGroup": "Muokkaa pääryhmää",
             "editSubgroup": "Muokkaa aliryhmää",
-            "addLayer": "Lisää karttataso",
-            "addDataprovider": "Lisää tiedontuottaja",
-            "selectLayerGroups": "Valitse karttatason ryhmät"
+            "addLayer": "Lisää karttataso"
         },
         "selectableGroup": "Valintaryhmä",
         "errors": {

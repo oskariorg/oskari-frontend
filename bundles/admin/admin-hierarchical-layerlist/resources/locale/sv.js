@@ -3,7 +3,6 @@ Oskari.registerLocalization({
     "key": "admin-layerselector",
     "value": {
         "buttons": {
-            "add": "Tillägg",
             "update": "Uppdatera",
             "delete": "Ta bort",
             "select": "Välj"
@@ -19,12 +18,9 @@ Oskari.registerLocalization({
         "groupTitles": {
             "addMainGroup": "Huvudgruppsnamn",
             "addSubgroup": "Lägg till undergrupp",
-            "localePrefix": "Namnet på",
             "editMainGroup": "Huvudgruppsnamn",
             "editSubgroup": "Redigera undergrupp",
-            "addLayer": "Lägg till maplayerr",
-            "addDataprovider": "Lägg till dataprovider",
-            "selectLayerGroups": "Välj lagergrupper"
+            "addLayer": "Lägg till maplayerr"
         },
         "selectableGroup": "selektionsgrupp",
         "errors": {

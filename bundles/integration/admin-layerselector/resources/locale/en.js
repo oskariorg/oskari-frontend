@@ -226,5 +226,13 @@ Oskari.registerLocalization(
                 "message": "Dataprovider saving was successful"
             }
         },
+        "groupTitles": {
+            "localePrefix": "Name in",
+            "addDataprovider": "Add dataprovider",
+            "selectLayerGroups": "Select layer groups"
+        },
+        "buttons": {
+            "add": "Add"
+        }
     }
 });

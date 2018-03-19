@@ -225,6 +225,14 @@ Oskari.registerLocalization(
                 "title": "Tiedontuottajan tallennus onnistui",
                 "message": "Tiedontuottajan tallennus onnistui"
             }
+        },
+        "groupTitles": {
+            "localePrefix": "Nimi kielellä",
+            "addDataprovider": "Lisää tiedontuottaja",
+            "selectLayerGroups": "Valitse karttatason ryhmät"
+        },
+        "buttons": {
+            "add": "Lisää"
         }
     }
 });

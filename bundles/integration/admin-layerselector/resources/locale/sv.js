@@ -225,6 +225,14 @@ Oskari.registerLocalization(
                 "title": "Dataprovider var framgångsrika",
                 "message": "Dataprovider var framgångsrika"
             }
+        },
+        "groupTitles": {
+            "localePrefix": "Namnet på",
+            "addDataprovider": "Lägg till dataprovider",
+            "selectLayerGroups": "Välj lagergrupper"
+        },
+        "buttons": {
+            "add": "Tillägg"
         }
     }
 });
