@@ -13,11 +13,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             coordinateSystemSelection: _.template(
                 '<div class="transformation-system">' +
                     '<h5> ${ title }</h5>'+
-                    '<div class="system datum" data-system="datum"><b class="dropdown_title"> ${ geodetic_datum }</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
-                    '<div class="system coordinate" data-system="coordinate"><b class="dropdown_title"> ${ coordinate_system }</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div>  </div> </br> ' +
-                    '<div class="system projection" style="display:none;" data-system="projection"> ${ map_projection } <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br>' +
-                    '<div class="system geodetic-coordinate" data-system="geodetic-coordinate"><b class="dropdown_title"> ${ geodetic_coordinate_system } *</b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> </div> </br> ' +
-                    '<div class="system elevation" data-system="elevation"><b class="dropdown_title"> ${ elevation_system } </b> <a href="#"><div class="infolink icon-info"></div></a> <div class="select"></div> '+
+                    '<div class="system datum center-align" data-system="datum"><b class="dropdown_title"> ${ geodetic_datum }</b>  <div class="selectMountPoint"></div> <a href="#"><div class="infolink icon-info"></div></a> </div>' +
+                    '<div class="system coordinate center-align" data-system="coordinate"><b class="dropdown_title"> ${ coordinate_system }</b> <div class="selectMountPoint"></div>  <a href="#"><div class="infolink icon-info"></div></a> </div>' +
+                    '<div class="system projection center-align" style="display:none;" data-system="projection"> ${ map_projection } </b> <div class="selectMountPoint"></div> <a href="#"><div class="infolink icon-info"></div></a> </div>'+
+                    '<div class="system geodetic-coordinate center-align" data-system="geodetic-coordinate"><b class="dropdown_title"> ${ geodetic_coordinate_system } *</b> <div class="selectMountPoint"></div> <a href="#"><div class="infolink icon-info"></div></a> </div>' +
+                    '<div class="system elevation center-align" data-system="elevation"><b class="dropdown_title"> ${ elevation_system } </b> <div class="selectMountPoint"></div>  <a href="#"><div class="infolink icon-info"></div></a> </div> '+
                 '</div>'
             ),
         }
@@ -61,8 +61,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             this.dropdowns = this.select.getDropdowns();
 
             Object.keys( this.dropdowns ).forEach( function( key ) {
-                var system = jQuery( wrapper.find( '.transformation-system' ).find( me.makeClassSelector(key) ).append( me.dropdowns[key] ));
-                system.on('change', { 'self': me }, function ( e ) {
+                var system = jQuery( wrapper.find( '.transformation-system' ).find( me.makeClassSelector(key) ).find('.selectMountPoint').append( me.dropdowns[key] ));
+                system.parent().on('change', { 'self': me }, function ( e ) {
                     var self = e.data.self;
                     var currentValue = self.selectInstance[e.currentTarget.dataset.system].getValue();
                     self.handleSelectValueChange(currentValue);
@@ -84,10 +84,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
          */
         updateDropdownOptions: function (dropdownId, valueId) {
             if ( typeof valueId === 'string' ) {
-                this.dropdowns[dropdownId].find( 'option' ).hide();
-                this.dropdowns[dropdownId].find( valueId ).show();
+                this.dropdowns[dropdownId].find( 'option' ).css('display', 'none');
+                this.dropdowns[dropdownId].find( valueId ).css('display', '');
             } else {
-                this.dropdowns[dropdownId].find( 'option' ).show();
+                this.dropdowns[dropdownId].find( 'option' ).css('display', '');
             }
         },
         makeClassSelector: function (variable) {
@@ -179,12 +179,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var classSelector = clsSelector(datum);
 
             if ( this.enableProjectionSystem ) {
-                dropdowns.projection.parent().show();
+                dropdowns.projection.parent().parent().show();
                if ( projection ) {
                     classSelector += clsSelector(projection);
                 }
             } else {
-                dropdowns.projection.parent().hide();
+                dropdowns.projection.parent().parent().hide();
                 instances.projection.resetToPlaceholder();
 
                 if ( coordinate ) {

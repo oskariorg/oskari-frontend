@@ -435,112 +435,47 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
-            var getLayerIndexInArray = function(arr){
-                var founded = -1;
-                for (var i = 0; i < arr.length; i++) {
-                    var layer = arr[i];
-                    if (layer.id === layerId) {
-                        founded = i;
-                        break;
+            // remove layer from group on delete, update layer in group if already exists
+            // recurses the group structure
+            var recurseLayerUpdate = function (group) {
+                // Check if layer is in group
+                var layerIndex = group.layers.findIndex(function(layer) {
+                    return layer.id === layerId;
+                });
+                if(layerIndex !== -1) {
+                    if (deleteLayer) {
+                        group.layers.splice(layerIndex, 1);
+                    } else {
+                        group.layers[layerIndex] = newLayerConf;
                     }
                 }
-                return founded;
+                // recurse to next level of groups
+                if(group.groups) {
+                    group.groups.forEach(function(subgroup) {
+                        recurseLayerUpdate(subgroup);
+                    });
+                }
             };
+            // use recurseLayerUpdate to go through the whole group structure to find layers to update or delete
+            me._layerGroups.forEach(function(group) {
+                recurseLayerUpdate(group);
+            });
 
-
-            // update or insert
-            if (!deleteLayer) {
-                var layerIndex = null;
-
-                for (var i = 0; i < me._layerGroups.length; i++) {
-                    group = me._layerGroups[i];
-
-                    // Check if layer is in main groups
-                    layerIndex = getLayerIndexInArray(group.layers);
-                    if (layerIndex >= 0) {
-                        if (deleteLayer) {
-                            group.layers.splice(layerIndex, 1);
-                        } else {
-                            group.layers[layerIndex] = newLayerConf;
-                        }
-                    }
-
-                    // check subgroups
-                    for (var j = 0; j < group.groups.length; j++) {
-                        var subgroup = group.groups[j];
-
-                        layerIndex = getLayerIndexInArray(subgroup.layers);
-                        if (layerIndex >= 0) {
-                            if (deleteLayer) {
-                                group.groups[j].layers.splice(layerIndex, 1);
-                            } else {
-                                group.groups[j].layers[layerIndex] = newLayerConf;
-                            }
-                        }
-                        // check subgroup subgroups
-                        if (subgroup.groups) {
-                            for (var k = 0; k < subgroup.groups.length; k++) {
-                                var subgroupSubgroup = subgroup.groups[k];
-                                layerIndex = getLayerIndexInArray(subgroupSubgroup.layers);
-                                if (layerIndex >= 0) {
-                                    if (deleteLayer) {
-                                        group.groups[j].groups[k].layers.splice(layerIndex, 1);
-                                    } else {
-                                        group.groups[j].groups[k].layers[layerIndex] = newLayerConf;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (layerIndex >= 0) {
-                            break;
-                        }
-                    }
-
-                    if (layerIndex >= 0) {
-                        break;
-                    }
-
-                }
-
-
-                // Finally check at layer has all groups in dom
+            // Finally check if layer has new groups
+            if(!deleteLayer && newLayerConf && newLayerConf.groups) {
+                // for each group on the layer
                 newLayerConf.groups.forEach(function(group) {
+                    // find the group details
                     var groupConf = me.getAllLayerGroups(group.id);
-                    var groupLayers = me.getAllLayerGroups(group.id).layers || [];
-                    var isInGroup  =groupLayers.filter(function(layer) {
+                    var groupLayers = groupConf.layers || [];
+                    // check if the layer is referenced in the group details
+                    var layer = groupLayers.find(function(layer) {
                         return layer.id === newLayerConf.id;
                     });
-
-                    if (isInGroup.length === 0) {
+                    // if layer is not part of the groups layers -> add it
+                    if (!layer) {
                         me.getAllLayerGroups(group.id).layers.push(newLayerConf);
                     }
-                });
-            }
-
-            // Also check if layer has removed from groups
-            if (deleteLayer) {
-                me._layerGroups.forEach(function(group, index) {
-                    // new layer is not in main groups so remove it
-                    if (getLayerIndexInArray(group.layers)>-1) {
-                        group.layers.splice(getLayerIndexInArray(group.layers), 1);
-                    }
-
-                    // check subgroups
-                    group.groups.forEach(function(subgroup, subgroupIndex) {
-                        // new layer is not in subgroups so remove it
-                        if (getLayerIndexInArray(subgroup.layers)>-1) {
-                            subgroup.layers.splice(getLayerIndexInArray(subgroup.layers), 1);
-                        }
-
-                        // check subgroup subgroups
-                        subgroup.groups.forEach(function(subgroupSubgroup, subgroupSubgroupIndex) {
-                            // new layer is not in subgroups so remove it
-                            if (getLayerIndexInArray(subgroupSubgroup.layers)>-1) {
-                                subgroupSubgroup.layers.splice(getLayerIndexInArray(subgroupSubgroup.layers), 1);
-                            }
-                        });
-                    });
                 });
             }
         },
