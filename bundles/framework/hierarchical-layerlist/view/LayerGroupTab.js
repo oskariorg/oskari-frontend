@@ -155,6 +155,7 @@ Oskari.clazz.define(
                         visible: 0,
                         all: 0
                     };
+
                     node.children.forEach(function(child){
                         var childNode = jstree.get_node(child);
                         if(childNode.type === 'layer' && childNode.state.hidden === false) {
@@ -163,6 +164,12 @@ Oskari.clazz.define(
                         if(childNode.type === 'layer') {
                             count.all++;
                         }
+                        if(childNode.type !== 'layer') {
+                            var subCount = getLayersCount(childNode);
+                            count.visible += subCount.visible;
+                            count.all += subCount.all;
+                        }
+
                     });
 
                     return count;
