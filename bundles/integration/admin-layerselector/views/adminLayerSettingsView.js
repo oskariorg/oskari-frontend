@@ -99,7 +99,7 @@ define([
 
                 var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                errorDialog.setId('admin-hierarchical-layerlist-group-error-popup');
+                errorDialog.setId('admin-layerlist-group-error-popup');
                 var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
                 btnCancel.addClass('cancel');
                 btnCancel.setHandler(function() {
@@ -108,7 +108,7 @@ define([
                 buttons.push(btnCancel);
                 var btnOk = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
                 buttons.push(btnOk);
-                popup.addClass('admin-hierarchical-layerlist-group');
+                popup.addClass('admin-layerlist-group');
 
                 var loc = (Oskari.getMsg('DivManazer', 'LanguageSelect').languages) ? Oskari.getMsg('DivManazer', 'LanguageSelect').languages : {};
                 btnOk.addClass('add');
@@ -171,7 +171,7 @@ define([
 
                 var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                errorDialog.setId('admin-hierarchical-layerlist-group-error-popup');
+                errorDialog.setId('admin-layerlist-group-error-popup');
                 var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
 
                 btnCancel.addClass('cancel');
@@ -181,7 +181,7 @@ define([
                 buttons.push(btnCancel);
                 var btnOk = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
                 buttons.push(btnOk);
-                popup.addClass('admin-hierarchical-layerlist-group');
+                popup.addClass('admin-layerlist-group');
 
                 btnOk.addClass('add');
                 btnOk.setHandler(function() {
@@ -197,14 +197,14 @@ define([
                         });
                         ids.push(id);
 
-                        var list = jQuery('.admin-hierarchical-layerlist-add-layer .admin-maplayer-groups-list');
+                        var list = jQuery('.admin-add-layer .admin-maplayer-groups-list');
                         list.empty();
                     });
                     if (selected.length === 0) {
                         errorDialog.show(me.instance.locale('errors.maplayerGroups.title'), me.instance.locale('errors.maplayerGroups.message'));
                         errorDialog.fadeout();
                     } else {
-                        var list = jQuery('.admin-hierarchical-layerlist-add-layer .admin-maplayer-groups-list');
+                        var list = jQuery('.admin-add-layer .admin-maplayer-groups-list');
                         list.empty();
                         var template = jQuery('<div class="admin-maplayer-group"></div>');
                         selected.forEach(function(sel) {
