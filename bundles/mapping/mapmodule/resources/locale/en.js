@@ -20,7 +20,7 @@ Oskari.registerLocalization(
             "zoomLvl-12": ""
         },
         "unsupportedProjHeader": "Notice",
-        "unsupportedProj": "Some layers added to this map view cannot be shown,\nbecause the current map projection is unsupported.",
+        "unsupportedProj": "Some layers added to this map view cannot be shown with the current map projection.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Terms of Use",
