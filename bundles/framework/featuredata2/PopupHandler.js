@@ -13,6 +13,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
     function (instance) {
         this.instance = instance;
+        this.btnContainer = null;
 
         var me = this,
             sandbox = me.instance.getSandbox(),
@@ -23,7 +24,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
         if (!me.selectionPlugin) {
             var config = {
-                id: "FeatureData"
+                id: "FeatureData",
+                instance: this
             };
             me.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, sandbox);
             mapModule.registerPlugin(me.selectionPlugin);
@@ -116,7 +118,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
     }, {
 
         __templates: {
-            "wrapper": '<div></div>',
+            "wrapper": '<div class="FeatureDataPopupWrapper"></div>',
             "toolsButton": '<div style= "display: inline-block;"></div>',
             "instructions": '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
             "selectOptions": '<div>' +
@@ -145,11 +147,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             if(jQuery('.tools_selection').is(':visible')) {
                 return;
             }
-
-            // close popup so we can update the selection geometry
-            // this is done so we can optimize grid updates on normal updateExtensionRequests.
-            // if the selection show wouldn't use this request but a custom one, this wouldn't be needed
-            me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
 
             //renders selections tools to the content
             me.renderSelectionToolButtons(content);
@@ -193,9 +190,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             cancelBtn.setTitle(this.loc.button.cancel);
             cancelBtn.setHandler(function () {
                 //destroy the active sketch, disable the selected control
-                me.WFSLayerService.setSelectionToolsActive(false);
-                me.selectionPlugin.drawLayer.removeAllFeatures();
-                me.selectionPlugin._toggleControl();
+                me.selectionPlugin.stopDrawing();
                 dialog.close(true);
             });
             cancelBtn.addClass('primary');
@@ -225,14 +220,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 activeTool = null,
                 startDrawing;
 
+            content.addClass("selectionToolsDiv");
+
             _.forEach(me.buttons, function (button) {
                 var btnContainer = me.template.toolsButton.clone();
 
                 btnContainer.attr("title", button.tooltip);
                 btnContainer.addClass(button.iconCls);
                 btnContainer.addClass("tool");
-                btnContainer.bind('click', function () {
+                btnContainer.bind('click', function (evt, deselect) {
                     me.removeButtonSelection(content);
+                    if( deselect ) {
+                        activeTool = null;
+                        startDrawing = false;
+                        me.selectionPlugin.clearDrawing();
+                        return;
+                    }
                     if (button === activeTool) {
                         activeTool = null;
                         startDrawing = false;
@@ -244,6 +247,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                         button.callback(startDrawing);
                     }
                 });
+                me.btnContainer = btnContainer;
                 content.append(btnContainer);
             });
 
@@ -254,11 +258,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
          * Handles active-class of tool buttons
          */
         removeButtonSelection: function (content) {
+            if(!content) {
+                content = jQuery(".selectionToolsDiv");
+            }
             var me = this,
                 isActive = jQuery(content).find(".tool").hasClass("active");
 
             if (isActive) {
                 jQuery(content).find(".active").removeClass("active");
+                me.WFSLayerService.setSelectionToolsActive(false);
             }
         }
     });

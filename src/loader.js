@@ -262,13 +262,19 @@
                         return;
                     }
                     loading.push(item.id);
-                    me.handleBundleLoad(item.path, bundle.metadata.source, function () {
+                    me.handleBundleLoad(item.path, bundle.metadata.source, item.id, function () {
                         done(item.id);
                     });
                 });
             },
-            handleBundleLoad: function (basePath, src, callback) {
+            handleBundleLoad: function (basePath, src, bundleId, callback) {
                 var files = [];
+                function registerGlobalExpose(expose, path) {
+                    if (!expose) {
+                        return;
+                    }
+                    globalExpose[path] = expose;
+                }
 
                 // src.locales
                 if (src.locales) {
@@ -281,9 +287,7 @@
                         if (file.src.endsWith('.js')) {
                             var path = getPath(basePath, file.src);
                             files.push(path);
-                            if (file.expose) {
-                                globalExpose[path] = file.expose;
-                            }
+                            registerGlobalExpose(file.expose, path);
                         }
                     });
                 }
@@ -302,9 +306,7 @@
 
                         if (file.src.endsWith('.js')) {
                             files.push(path);
-                            if (file.expose) {
-                                globalExpose[path] = file.expose;
-                            }
+                            registerGlobalExpose(file.expose, path);
                         } else if (file.src.endsWith('.css')) {
                             linkFile(path);
                         }
@@ -325,7 +327,11 @@
                             // this would be a linked file.js with amd support
                             var key = globalExpose[files[i]];
                             if (key) {
+                                if(typeof window[key] !== 'undefined') {
+                                    log.error('Global variable ' + key + ' is being overwritten with new value as a result of bundle.js expose: ', files[i], ' by ' + bundleId);
+                                }
                                 window[key] = arguments[i];
+                                log.info(bundleId + ' exposed ' + key + ' from ' + files[i]);
                             } else {
                                 log.warn('Support for AMD-files is not yet implemented. Bundles need to have an "expose" statement in bundle.js to register libs as globals.', files[i]);
                             }

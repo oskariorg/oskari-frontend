@@ -1,7 +1,7 @@
 {
 	"startupSequence": [{
 		"instanceProps": {
-			
+
 		},
 		"title": "OpenLayers",
 		"bundleinstancename": "openlayers-default-theme",
@@ -20,8 +20,7 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"bundlename": "mapfull",
 		"metadata": {
 			"Import-Bundle": {
@@ -57,10 +56,9 @@
 				}
 			}
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Oskari DIV Manazer",
 		"fi": "divmanazer",
@@ -76,10 +74,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Toolbar",
 		"bundleinstancename": "toolbar",
@@ -95,10 +92,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Infobox",
 		"fi": "infobox",
@@ -114,10 +110,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Statehandler",
 		"bundleinstancename": "statehandler",
@@ -133,10 +128,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Search",
 		"bundleinstancename": "search",
@@ -152,10 +146,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Maplayer selection",
 		"bundleinstancename": "layerselector2",
@@ -171,10 +164,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Chosen maplayers",
 		"bundleinstancename": "layerselection2",
@@ -190,10 +182,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Coordinate display",
 		"bundleinstancename": "coordinatedisplay",
@@ -209,10 +200,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Metadata Flyout",
 		"bundleinstancename": "metadataflyout",
@@ -228,10 +218,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Feature data",
 		"bundleinstancename": "featuredata2",
@@ -247,10 +236,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Map publisher",
 		"bundleinstancename": "publisher",
@@ -266,10 +254,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Personal data",
 		"bundleinstancename": "personaldata",
@@ -285,10 +272,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "metadatacatalogue",
 		"bundleinstancename": "metadatacatalogue",
@@ -304,10 +290,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "My places",
 		"bundleinstancename": "myplaces2",
@@ -323,10 +308,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "Map legend",
 		"bundleinstancename": "maplegend",
@@ -342,10 +326,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "SearchFromChannelsBundle",
 		"fi": "search-from-channels",
@@ -361,10 +344,9 @@
 			},
 			"Require-Bundle-Instance": []
 		}
-	},
-	{
+	}, {
 		"instanceProps": {
-			
+
 		},
 		"title": "SelectedFeaturedata",
 		"fi": "selected-featuredata",
@@ -375,6 +357,24 @@
 		"metadata": {
 			"Import-Bundle": {
 				"selected-featuredata": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
+	}, {
+		"instanceProps": {
+
+		},
+		"title": "Chosen maplayers",
+		"bundleinstancename": "hierarchical-layerlist",
+		"fi": "hierarchical-layerlist",
+		"sv": "hierarchical-layerlist",
+		"en": "hierarchical-layerlist",
+		"bundlename": "hierarchical-layerlist",
+		"metadata": {
+			"Import-Bundle": {
+				"hierarchical-layerlist": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
 				}
 			},

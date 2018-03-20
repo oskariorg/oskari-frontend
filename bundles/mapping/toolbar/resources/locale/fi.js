@@ -7,7 +7,8 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Tee linkki karttanäkymään.",
                 "ok": "OK",
-                "title": "Linkki karttanäkymään"
+                "title": "Linkki karttanäkymään",
+                "cannot": "Karttalinkkiä ei voida luoda tähän näkymään. Luo uusi näkymä ja yritä uudelleen."
             },
             "history": {
                 "reset": "Siirry oletusnäkymään.",
@@ -25,13 +26,13 @@ Oskari.registerLocalization(
             "title": "Mittaustulokset",
             "close": "Lopeta",
             "guidance": {
-                "measureline": "Piirrä mitattava etäisyys klikkaamalla viivan taitepisteitä. Lopuksi kaksoisklikkaa päätepistettä.",
-                "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä. Lopuksi kaksoisklikkaa alkupistettä."
+                "measureline": "Piirrä mitattava etäisyys klikkaamalla viivan taitepisteitä.",
+                "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä."
             }
         },
         "guidedTour": {
             "title": "Työkalut",
-            "message": "Työkalujen avulla voit muokata karttanäkymää. Pidä hiiren kursoroa työkalun päällä ja saat ohjeet sen käyttöön. <br/> <br/> Osa työkaluista on saatavilla vain kirjautuneille käyttäjille."
+            "message": "Työkalujen avulla voit muokata karttanäkymää. Pidä hiiren kursoria työkalun päällä ja saat ohjeet sen käyttöön. <br/> <br/> Osa työkaluista on saatavilla vain kirjautuneille käyttäjille."
         }
     }
 });

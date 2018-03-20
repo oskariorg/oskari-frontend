@@ -117,43 +117,6 @@ Oskari.registerLocalization(
                     }
                 ]
             },
-            "legend": {
-                "label": "Legenda mapy",
-                "tooltip": "Vybrať umiestnenie pre legendu mapy. Pokiaľ nevyberiete umiestnenie, legenda mypy sa nezobrazí na mapovom výtlačku.",
-                "options": [
-                    {
-                        "id": "oskari_legenda_Nie",
-                        "loca": "Nie",
-                        "label": "Bez legendy mapy",
-                        "tooltip": "Legenda mapy nie je zobrazená na výtlačku mapy.",
-                        "selected": true
-                    },
-                    {
-                        "id": "oskari_legenda_ĽD",
-                        "loca": "ĽD",
-                        "label": "Ľavý dolný roh",
-                        "tooltip": "Legenda mypy je zobrazená v ľavom dolnom rohu výtlačku."
-                    },
-                    {
-                        "id": "oskari_legenda_ĽH",
-                        "loca": "ĽH",
-                        "label": "Ľavý horný roh",
-                        "tooltip": "Legenda mypy je zobrazená v ľavom hornom rohu výtlačku."
-                    },
-                    {
-                        "id": "oskari_legenda_PH",
-                        "loca": "PH",
-                        "label": "Pravý horný roh",
-                        "tooltip": "Legenda mypy je zobrazená v pravom hornom rohu výtlačku."
-                    },
-                    {
-                        "id": "oskari_legenda_PD",
-                        "loca": "PD",
-                        "label": "Pravý dolný roh",
-                        "tooltip": "Legenda mypy je zobrazená v pravom dolnom rohu výtlačku."
-                    }
-                ]
-            },
             "help": "Pomoc",
             "error": {
                 "title": "Chyba",

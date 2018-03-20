@@ -66,6 +66,10 @@ Oskari.clazz.define(
                     layerParams = _layer.getParams() || {},
                     layerOptions = _layer.getOptions() || {},
                     layerAttributes = _layer.getAttributes() || undefined;
+                
+                if(!layerOptions.hasOwnProperty('singleTile') && layerAttributes && layerAttributes.times) {
+                    layerOptions.singleTile = true;
+                }
 
                 if (_layer.isRealtime()) {
                     var date = new Date();
@@ -91,7 +95,7 @@ Oskari.clazz.define(
                 }
                 if(layerOptions.singleTile === true) {
                     layerImpl = new ol.layer.Image({
-                        source: new ol.source.ImageWMS({
+                        source: new ol.source.OskariImageWMS({
                             url : _layer.getLayerUrl(),
                             params : defaultParams,
                             crossOrigin : _layer.getAttributes('crossOrigin'),
@@ -100,6 +104,7 @@ Oskari.clazz.define(
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
+                    this._registerLayerEvents(layerImpl, _layer, 'image');
                 } else {
                     layerImpl = new ol.layer.Tile({
                         source : new ol.source.OskariTileWMS({
@@ -112,7 +117,7 @@ Oskari.clazz.define(
                         opacity: layer.getOpacity() / 100
                     });
 
-                    this._registerLayerEvents(layerImpl, _layer);
+                    this._registerLayerEvents(layerImpl, _layer, 'tile');
                 }
                 // Set min max Resolutions
                 if (_layer.getMaxScale() && _layer.getMaxScale() !== -1 ) {
@@ -132,19 +137,19 @@ Oskari.clazz.define(
             this.setOLMapLayers(layer.getId(), olLayers);
 
         },
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function(layer, oskariLayer, prefix){
           var me = this;
           var source = layer.getSource();
 
-          source.on('tileloadstart', function() {
+          source.on(prefix + 'loadstart', function() {
             me.getMapModule().loadingState( oskariLayer._id, true);
           });
 
-          source.on('tileloadend', function() {
+          source.on(prefix + 'loadend', function() {
             me.getMapModule().loadingState( oskariLayer._id, false);
           });
 
-          source.on('tileloaderror', function() {
+          source.on(prefix + 'loaderror', function() {
             me.getMapModule().loadingState( oskariLayer.getId(), null, true );
           });
 
@@ -214,7 +219,7 @@ Oskari.clazz.define(
                     		var layerSource = olLayerList[i].getSource();
                     		//TileWMS -> original is ol.source.TileWMS.getTileLoadFunction
                     		if (layerSource.getTileLoadFunction && typeof(layerSource.getTileLoadFunction) === 'function') {
-                    			var originalTileLoadFunction = new ol.source.TileWMS().getTileLoadFunction();
+                    			var originalTileLoadFunction = new ol.source.OskariTileWMS().getTileLoadFunction();
 								layerSource.setTileLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
 										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
@@ -226,7 +231,7 @@ Oskari.clazz.define(
                     		}
                     		//ImageWMS -> original is ol.source.ImageWMS.getImageLoadFunction
                     		else if (layerSource.getImageLoadFunction && typeof(layerSource.getImageLoadFunction) === 'function') {
-                    			var originalImageLoadFunction = new ol.source.ImageWMS().getImageLoadFunction();
+                    			var originalImageLoadFunction = new ol.source.OskariImageWMS().getImageLoadFunction();
 								layerSource.setImageLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
 										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";

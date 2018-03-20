@@ -201,8 +201,7 @@ Oskari.clazz.define(
             // Request tab to be added to personal data
             var tab = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
-                this,
-                this.localization.personalDataTab
+                this
             );
             this.personalDataTab = tab;
             this.sandbox.request(
@@ -443,8 +442,6 @@ Oskari.clazz.define(
                     var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                     me.sandbox.request(me.getName(), request);
                     this.analyse.setEnabled(false);
-                    this.analyse.contentPanel._deactivateSelectControls();
-                    this.analyse.contentPanel._deactivateSelectTools();
                     this.analyse.hide();
                 }
                 me.WFSLayerService.setAnalysisWFSLayerId(null);

@@ -31,7 +31,7 @@ Oskari.registerLocalization(
                     "cancel": "Annuller",
                     "error_noname": "Tast navnet",
                     "deletetitle": "Bekræft sletning",
-                    "deletemsg": "Vil du slette dette map view?"
+                    "deletemsg": "Vil du slette dette map view \"{name}\"?"
                 },
                 "save": {
                     "success": "Map view'et er blevet gemt",

@@ -3,6 +3,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this._values = {};
+    this._selections = [];
+    Oskari.makeObservable(this);
 }, {
     __templates : {
         main : _.template('<div class="stats-ind-params">'+
@@ -68,7 +71,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
             }
 
             // selections
-            var selectContainer = [];
+            me._selections = [];
             indicator.selectors.forEach(function(selector, index) {
                 var placeholderText = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id].placeholder) ? panelLoc.selectionValues[selector.id].placeholder :panelLoc.defaultPlaceholder;
                 var label = (locale.parameters[selector.id]) ? locale.parameters[selector.id] : selector.id;
@@ -103,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
                     dropdown.parent().addClass('margintop');
                 }
                 cont.append(tempSelect);
-                selectContainer.push(select);
+                me._selections.push(select);
             });
 
             if(indicator.regionsets.length === 0) {
@@ -121,28 +124,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
                 errorService.show(locale.errors.title,locale.errors.indicatorMetadataIsEmpty);
             }
 
-            if(elements.btn) {
-                elements.btn.setHandler(function() {
-                    var values = {
-                        datasource : datasrc,
-                        indicator : indId,
-                        selections : {}
-                    };
-                    selectContainer.forEach(function(select) {
-                        values.selections[select.getId()] = select.getValue();
-                    });
-                    var added = me.service.getStateService().addIndicator(datasrc, indId, values.selections);
-                    if(added === false) {
-                        // already added, set as active instead
-                        var hash = me.service.getStateService().getHash(datasrc, indId, values.selections);
-                        me.service.getStateService().setActiveIndicator(hash);
-                    }
-                    me.service.getStateService().setRegionset(regionSelect.value());
+            me._values = {
+                datasource : datasrc,
+                indicator : indId,
+                regionset: regionSelect.value()
+            };
 
-                    me.instance.getFlyout().closePanels();
-                });
-                elements.btn.setEnabled(indicator.regionsets.length>0);
-            }
+            me.trigger('indicator.changed', indicator.regionsets.length>0);
         });
+    },
+    getValues: function(){
+        var me = this;
+        var selections = {};
+        me._selections.forEach(function(select) {
+            selections[select.getId()] = select.getValue();
+        });
+        me._values.selections = selections;
+        return me._values;
     }
 });

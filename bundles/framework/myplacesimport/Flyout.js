@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 // Prevent from sending if there were missing fields
                 if (me.__validateForm (form, locale)){
                     return; //e.preventDefault()
-                };
+                }
 
                 jQuery.ajax({
                     url: action,
@@ -249,7 +249,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                         if (textStatus === "error"){
                             try {
                                 err = JSON.parse(jqXHR.responseText);
-                                console.log(err);
                                 if (err.error !== null && err.error !== undefined) {
                                     error = err.error;
                                     if (err.error.warning !== undefined && err.error.warning.featuresSkipped){
@@ -282,7 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             msg = msg + " " + warning;
                         }
                         me.__showMessage(title, msg, false);
-                    },
+                    }
                 });
                 // Prevent page from submitting
                 return false;
@@ -364,7 +363,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             var title = locale.finish.success.title,
                 msg = locale.finish.success.message,
                 json,
-                me=this
+                me=this,
                 fadeout = true;
              try {
                 json = JSON.parse(response);
@@ -403,23 +402,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             if (fadeout) {
                 dialog.fadeout(5000);
             }
-        },
-        /**
-         * Checks if json is null or undefined or if it has a key `error`.
-         *
-         * @method __jsonError
-         * @private
-         * @param  {JSON} json
-         * @return {Boolean}
-         *//*
-        __jsonError: function(json) {
-            var error = false;
-
-            if (json === null || json === undefined) error = true;
-            else if (json.error) error = true;
-
-            return error;
-        }*/
+        }
     }, {
         "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
     });

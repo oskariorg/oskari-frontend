@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
      *        instance reference to component that created the tile
      */
     function(instance) {
-        "use strict";
+        
         var me = this;
         me.instance = instance;
         me.container = null;
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {String} the name for the component
          */
         getName: function() {
-            "use strict";
+            
             return 'Oskari.framework.bundle.admin-layerrights.Flyout';
         },
 
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Interface method implementation
          */
         setEl: function(el, width, height) {
-            "use strict";
+            
             this.container = el[0];
             if (!jQuery(this.container).hasClass('admin-layerrights')) {
                 jQuery(this.container).addClass('admin-layerrights');
@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * that will be used to create the UI
          */
         startPlugin: function() {
-            "use strict";
+            
 
             this.template = jQuery(
                 '<div class="admin-layerrights">\n' +
@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Interface method implementation, does nothing atm
          */
         stopPlugin: function() {
-            "use strict";
+            
         },
 
         /**
@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {String} localized text for the title of the flyout
          */
         getTitle: function() {
-            "use strict";
+            
             return this.instance.getLocalization('title');
         },
 
@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * flyout
          */
         getDescription: function() {
-            "use strict";
+            
             return this.instance.getLocalization('desc');
         },
 
@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Interface method implementation, does nothing atm
          */
         getOptions: function() {
-            "use strict";
+            
         },
 
         /**
@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {Object} state
          */
         setState: function(state) {
-            "use strict";
+            
             this.state = state;
         },
 
@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {Object} state
          */
         getState: function() {
-            "use strict";
+            
             if (!this.state) {
                 return {};
             }
@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Save layer rights
          */
         doSave: function() {
-            "use strict";
+            
             var me = this,
                 changedPermissions = me.extractSelections();
 
@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} content
          */
         setContent: function(content) {
-            "use strict";
+            
             // TODO add filters (provider/theme etc.)
             var me = this,
                 flyout = jQuery(this.container),
@@ -282,7 +282,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 option.remove();
             }
             if (operation == 'update') {
-                option.html(role.name);
+                option.text(role.name);
             }
             if (operation == 'add') {
                 select.append("<option value=" + role.id + ">" + role.name + "</option>");
@@ -296,7 +296,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {String} Permissions table
          */
         createLayerRightGrid: function(layerRightsJSON) {
-            "use strict";
+            
             var me = this,
                 table = me._templates.table.clone(),
                 thead = table.find('thead'),
@@ -349,7 +349,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 cell = me._templates.name.clone();
                 cell.attr('data-resource', layerRight.resourceName);
                 cell.attr('data-namespace', layerRight.namespace);
-                cell.html(layerRight.name);
+                cell.text(Oskari.util.sanitize(layerRight.name));
                 dataCell.append(cell);
                 dataRow.append(dataCell);
 
@@ -393,7 +393,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {Object} Dirty table rows
          */
         extractSelections: function() {
-            "use strict";
+            
             var me = this,
                 data = [],
                 container = jQuery(me.container),
@@ -475,7 +475,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} externalType
          */
         updatePermissionsTable: function(activeRole, externalType) {
-            "use strict";
+            
             var me = this;
             me.progressSpinner.start();
 
@@ -538,7 +538,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} selectedId
          */
         getExternalIdsAjaxRequest: function(externalType, selectedId) {
-            "use strict";
+            
             var me = this;
 
             //ajaxRequestGoing = true;
@@ -559,29 +559,30 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} selectedId
          */
         makeExternalIdsSelect: function(result, externalType, selectedId) {
-            "use strict";
+            
             var externalIdSelect = jQuery(this.container).find("select.admin-layerrights-role"),
-                a,
+                optionEl,
                 d,
                 rightsLoc = this.instance._localization.rights;
 
             externalIdSelect.html("");
             if (externalType !== "0") {
-                if (selectedId !== "0") {
-                    a = '<option value="0" >-- ' + rightsLoc.selectValue + ' --</option>';
-                } else {
-                    a = '<option value="0" selected="selected">-- ' + rightsLoc.selectValue + ' --</option>';
+                optionEl = document.createElement('option');
+                optionEl.value = "0";
+                optionEl.textContent = '-- ' + rightsLoc.selectValue + ' --';
+                if (selectedId == "0") {
+                    optionEl.setAttribute('selected', 'selected');
                 }
+                externalIdSelect.append(optionEl);
                 for (d = 0; d < result.external.length; d += 1) {
-                    if (result.external[d].id === selectedId) {
-                        a += '<option selected="selected" value="' + result.external[d].id + '">' + result.external[d].name + "</option>";
-                    } else {
-                        a += '<option value="' + result.external[d].id + '">' + result.external[d].name + "</option>";
-                    }
+                  optionEl = document.createElement('option');
+                  optionEl.value = result.external[d].id;
+                  optionEl.textContent = result.external[d].name;
+                  if (result.external[d].id === selectedId) {
+                        optionEl.setAttribute('selected', 'selected');
+                  }
+                  externalIdSelect.append(optionEl);
                 }
-                externalIdSelect.html(a);
-            } else {
-                externalIdSelect.html("");
             }
         }
 

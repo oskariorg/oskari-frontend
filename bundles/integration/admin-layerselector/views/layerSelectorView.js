@@ -5,7 +5,7 @@ define([
         '_bundle/models/layersTabModel',
         '_bundle/views/tabPanelView'
     ],
-    function (ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPanelView) {
+    function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPanelView) {
         return Backbone.View.extend({
 
 
@@ -19,7 +19,8 @@ define([
             events: {
                 "click .admin-layer-tab": "toggleTab",
                 "keydown .admin-layerselectorapp": "catchInputs",
-                "keyup .admin-layerselectorapp": "catchInputs"
+                "keyup .admin-layerselectorapp": "catchInputs",
+                "click .admin-layer-recheck-all": "recheckCapabilities"
             },
 
             /**
@@ -28,7 +29,7 @@ define([
              *
              * @method initialize
              */
-            initialize: function () {
+            initialize: function() {
                 this.instance = this.options.instance;
                 this.el = this.options.el;
                 this.appTemplate = _.template(ViewTemplate);
@@ -44,7 +45,7 @@ define([
              *
              * @method render
              */
-            render: function () {
+            render: function() {
                 this.el.html(this.appTemplate);
             },
 
@@ -55,7 +56,7 @@ define([
              * @param {Object} LayerGroupingTab contains layersTabModel
              * @param {String} tabType - what kind of tab this is (inspire vs. organization)
              */
-            _renderLayerGroups: function (layerGroupingTab, tabType) {
+            _renderLayerGroups: function(layerGroupingTab, tabType) {
                 if (!layerGroupingTab) {
                     return;
                 }
@@ -73,7 +74,7 @@ define([
                         tabId: tabType
                     }));
             },
-            removeLayer : function(layerId) {
+            removeLayer: function(layerId) {
                 // removing layer from the main collection
                 // layer groups monitor the main collection and update
                 // their state based on changes to the main collection
@@ -81,27 +82,29 @@ define([
                 var layer = models.get(layerId);
                 models.removeLayer(layerId);
                 // trigger change for sublayers parent so changes reflect on UI
-                if(layer.getParentId() !== -1) {
+                if (layer.getParentId() !== -1) {
                     var parent = models.get(layer.getParentId());
-                    if(parent) {
+                    if (parent) {
                         parent.trigger('change', parent);
                     }
                 }
             },
-            addToCollection: function (layerList) {
-                if(!this.instance.models || !this.instance.models.layers) {
+            addToCollection: function(layerList) {
+                if (!this.instance.models || !this.instance.models.layers) {
                     return false;
                 }
                 var models = this.instance.models.layers;
                 // merge updates existing
-                models.add(layerList, {merge: true});
+                models.add(layerList, {
+                    merge: true
+                });
                 _.each(layerList, function(layer) {
-                    if(layer.getParentId() === -1) {
+                    if (layer.getParentId() === -1) {
                         return;
                     }
                     // trigger change for sublayers parent so changes reflect on UI
                     var parent = models.get(layer.getParentId());
-                    if(parent) {
+                    if (parent) {
                         parent.trigger('change', parent);
                     }
                 });
@@ -113,10 +116,10 @@ define([
              * @method addToCollection
              * @param {Array} models which are created from layers.
              */
-            createUI: function (models) {
+            createUI: function(models) {
                 var collection = new LayerCollection(models);
                 this.instance.models = {
-                    "layers" : collection
+                    "layers": collection
                 };
                 // clear everything
                 this.el.html(this.appTemplate);
@@ -125,11 +128,11 @@ define([
                 this.inspireTabModel = new LayersTabModel({
                     layers: collection,
                     type: 'inspire',
-                    baseUrl : this.instance.getSandbox().getAjaxUrl() + '&action_route=',
-                    actions : {
-                        load : "InspireThemes",
-                        save : "InspireThemes",
-                        remove : "InspireThemes"
+                    baseUrl: this.instance.getSandbox().getAjaxUrl() + '&action_route=',
+                    actions: {
+                        load: "MapLayerGroups",
+                        save: "MapLayerGroups",
+                        remove: "MapLayerGroups"
                     },
                     title: this.instance.getLocalization('filter').inspire
                 });
@@ -140,11 +143,11 @@ define([
                 this.organizationTabModel = new LayersTabModel({
                     layers: collection,
                     type: 'organization',
-                    baseUrl : this.instance.getSandbox().getAjaxUrl() + '&action_route=',
-                    actions : {
-                        load : "GetMapLayerGroups",
-                        save : "SaveOrganization",
-                        remove : "DeleteOrganization"
+                    baseUrl: this.instance.getSandbox().getAjaxUrl() + '&action_route=',
+                    actions: {
+                        load: "GetMapLayerGroups",
+                        save: "SaveOrganization",
+                        remove: "DeleteOrganization"
                     },
                     title: this.instance.getLocalization('filter').organization
                 });
@@ -171,7 +174,7 @@ define([
              * @method toggleTab
              * @param {Object} e - click event
              */
-            toggleTab: function (e) {
+            toggleTab: function(e) {
                 // this event does not need to bubble up.
                 e.stopPropagation();
                 var target = jQuery(e.currentTarget),
@@ -202,9 +205,57 @@ define([
              * @method catchInputs
              * @param {Object} e - click event
              */
-            catchInputs: function (e) {
+            catchInputs: function(e) {
                 e.stopPropagation();
-            }
+            },
 
+            recheckCapabilities: function(e) {
+                var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+
+                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var closeButton = popup.createCloseButton(loc('close'));
+                var primaryButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                primaryButton.setTitle(loc('query'));
+                var me = this;
+                var xhr;
+
+                closeButton.setHandler(function() {
+                    if(xhr) {
+                        xhr.abort();
+                    }
+                    popup.close();
+                });
+
+                var content = jQuery('<span>' + loc('recheckAll') + '<span>');
+                primaryButton.setPrimary(true);
+                primaryButton.setHandler(function () {
+                    xhr = jQuery.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            srs: me.instance.getSandbox().getMap().getSrsName()
+                        },
+                        url: me.instance.getSandbox().getAjaxUrl('UpdateCapabilities'),
+                        success: function (resp) {
+                            xhr = null;
+                            var successCount = resp.success.length;
+                            var failCount = Object.keys(resp.error).length;
+                            content.append('<br><br><span>' + loc('recheckAllSucceeded', {success: successCount, fail: failCount}) + '<span>');
+                        },
+                        error: function (xhr, status, error) {
+                            xhr = null;
+                            if(status === 'timeout') {
+                                content.append('<br><br><span>' + loc('recheckFailTimeout') + '<span>');
+                                return;
+                            }
+                            content.append('<br><br><span>' + loc('recheckFail') + '<span>');
+                        }
+                    });
+
+                    jQuery(primaryButton.getElement()).attr('disabled', true);
+                });
+
+                popup.show(loc('recheckTitle'), content, [closeButton, primaryButton]);
+            }
         });
     });

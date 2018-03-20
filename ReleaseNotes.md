@@ -1,15 +1,271 @@
 # Release Notes
 
+## 1.45.1
+
+For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/8?closed=1
+
+- Myplaces drawing fixes to improve usability and interaction with GFI.
+- Doubleclicking the map while drawing to finish the sketch no longer zooms in.
+- WFS-highlights for layers that are not on the map can now be done as before.
+- Heatmap reacted to layer events for non-heatmap layers. This has been fixed.
+
+## 1.45.0
+
+For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/4?closed=1
+
+### Mapmodule
+
+- Numerous issues fixed regarding map rotation.
+- WMS singletile layers in OpenLayers 3 implementation now send progress events like tiled layers.
+- Empty results for GetFeatureInfo (map click on layer) functionality is no longer shown as empty infobox.
+- Reseting the map having hidden WFS-layers now works as expected. Previously hidden WFS-layers became visible on reset.
+- Plugin ordering fix.
+
+#### OpenLayers update (4.4.2)
+
+- Bundled Openlayers 3+ version updated (currently used for embedded maps).
+- Most of the bundles for the sample application now have a parallel implementation usable with OpenLayers 4. This is in preparation for migrating all of Oskari to use Openlayers 3+ version not just for embedded maps but also for GeoPortal appsetups.
+
+#### Embedded maps
+
+- Embedded maps including maplegends can now be reset as normal. Previously maplegends caused problems on reset.
+
+#### Drawing functionality (drawtools)
+
+- Mapclicks are no longer propagated while drawing on Openlayers 3+ mapmodule.
+- Polygons now include the closing point for linear rings (https://github.com/oskariorg/oskari-frontend/pull/177).
+- It's now possible to get drawn geometries as a feature with MultiGeometry instead of having multiple features with "simple" geometries (https://github.com/oskariorg/oskari-frontend/pull/).
+- It's also possible to edit MultiGeometries on drawtools.
+- Other bugfixes.
+
+### Timeseries functionality
+
+- Adds generalized timeseries UI that any other bundle can use with TimeseriesService.
+- Adds support for registering layer animation implementations with TimeseriesLayerService (via TimeseriesService).
+- Adds implementation for animating WMS layers (via TimeseriesLayerService).
+
+https://github.com/oskariorg/oskari-frontend/pull/152
+https://github.com/oskariorg/oskari-frontend/pull/170
+
+### Publisher
+
+- Map size handling fixes.
+- Publisher can now be configured to skip creating tile on the menubar and bind the functionality to open from configured element (https://github.com/oskariorg/oskari-frontend/pull/216).
+- New (admin) bundle for creating embedded maps by a JSON configuration. Adds options to import/export configuration in publisher. Usable for replicating embedded map configs from one user to another within an instance (https://github.com/oskariorg/oskari-frontend/pull/204)
+
+### Statistical maps functionality
+
+- Diagram is now available as a visualization in addition to map and table data.
+- The basic userinterface has been changed and every visualization now has it's own flyout.
+- Legend now adds a scrollbar when needed (on small screens).
+
+### Misc
+
+- Printing no longer supports any statistical maps related overlays like the legend. This is a quick fix for allowing Openlayers 4 based printing. A new printing frontend is "under construction" and it will allow functionalities to "hook into" the printing interface in the same way that they can to publisher. This means printing no longer has references to other functionalities. Instead other functionalities can add additional options for printing.
+
+#### Internals
+
+- Updated bundled jsts.js to 0.16.0
+- A lot of unused libraries have been removed from the libraries folder.
+- Sandbox now has errorhandling for Oskari events minimizing the impact of one eventhandler failing for the app as a whole:
+
+    Sandbox: Error notifying FeatureData2 about DrawingEvent
+
+- Oskari loader now announces (in developer console) any exposed libraries bundles have and possible overrides from other bundles.
+- Added more tests for RPC-functionalities
+- Added Oskari.BasicBundle to the core that manages most of the boilerplate code for bundles without the basic tile/flyout setup (https://github.com/oskariorg/oskari-frontend/pull/226)
+- Added Oskari.urls.getLocation([key]) where key can be "login", "register" etc that enables bundle-specific url configurations to be removed in the future. Urls are provided in GetAppSetup XHR response under "env" key.
+
+#### Deprecated:
+
+- sandbox.getLocalizedProperty() in favor of Oskari.getLocalized(). They were duplicate implementations for the same thing.
+- Oskari.app.setApplicationSetup() with identical Oskari.app.init() just to have a shorter name.
+- Oskari.getSandbox().getAjaxUrl() with Oskari.urls.getRoute(); since URLs are not sandbox specific, but global to the application
+- Oskari.getSandbox().setAjaxUrl(url) with Oskari.urls.set("api", [url]);
+
+## 1.44.3
+
+### VectorLayerPlugin / AddFeaturesToMapRequest
+
+Fixed an issue where a vectorlayer that was shown on the UI layer selection (created with the request showLayer=true) could not be re-added to the map after being removed.
+
+### Map plugin localization
+
+Fixed an issue where plugin couldn't start because it didn't have localization. This fixes an issue where map legends tool in publisher was not working properly.
+
+## 1.44.2
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools for statistics functionality activated only when editing published maps with said functionality and not when creating new published maps.
+
+### Build-script
+
+Fixed an issue where images were not correctly copied for minified application when folder name included uppercase characters.
+
+## 1.44.1
+
+### Grid
+
+Fixed issues:
+- grid paging didn't work
+- grid selection error when ``select``-function  is used to select row when grid has not data yet
+
+#### VectorLayerPlugin ol2/ol3
+
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer which has none.
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer that is not on the map (now ignores the call, previously cleared all features from all layers).
+Fixed an error introduced in 1.44.0 where ``MapModulePlugin.AddFeaturesToMapRequest`` with priority value resulted in a JavaScript error.
+
+### publisher2
+
+Fixed an issue where the button to add layers in publisher didn't work.
+
+### FormInput
+
+Floating labels were created to all FormInput components which used setPlaceHolder method. Now floating labels are created by calling setFloatingLabel. If you want to use floating labels with FormInput component, you have to use new method. Floating label position can be adjusted with topPosition, which adds a value to the css-directive "top".
+
+Optionally tooltip can be bound to input (default binds to label).
+
+Now floating label is floated when input is selected instead of typing text.
+
+### drawtools
+
+See [api/CHANGELOG.md](api/CHANGELOG.md) for changes.
+Refactored the code for the functionality to make it more accessible.
+
+### Data sanitation
+
+Improved security by sanitizing values.
+
+### statistics/statsgrid2016
+
+Fixed an issue where publisher tools couldn't restore thematic maps functionality (for editing) from a previously saved published map.
+This resulted in thematic maps functionality being removed from the published map on edit.
+
 ## 1.44.0
+
+### layerselector2
+
+Filter buttons are now shown on each tab instead of just the first one. Also fixed undefined error for ShowFilteredLayerListRequest.
+
+Changed ``stats`` filter name to ``featuredata`` for consistency as it filters layers having feature data and not stats layers.
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'featuredata']);
+```
+
+Filtering performance has been improved.
+
+Requests should be serializable to JSON and shouldn't be used to pass functions. AddLayerListFilterRequest and ShowFilteredLayerListRequest refactored based on this and the function parameters have been removed.
+Filter-functions can be registered to MapLayerService. By default it includes built-in filters for 'featuredata' and 'newest' ids.
+
+Use built-in filters:
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest']);
+```
+
+Register new filter and use this:
+```javascript
+// Register new filter
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
+});
+// Use new filter by request, the second parameter opens the layer listing flyout if it's closed
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', true]);
+```
+
+Add new filter button for layer listing:
+```javascript
+// Add layer filter to map layer service
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('publishable', function(layer){
+    return (layer.getPermission('publish') === 'publication_permission_ok');
+});
+
+// Add layerlist filter button
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+        'Publishable',
+        'Show publishable layers',
+        'layer-publishable',
+        'layer-publishable-disabled',
+        'publishable'
+]);
+```
+
+### Timeseries improvements
+
+Animation now waits for frame to load before advancing.
+The next animation frame is buffered before it's shown. Depending on the service used this might make the animation go slower, but is more user (and service) friendly.
+Added new event TimeseriesAnimationEvent.
+Changed ProgressEvent to include layer id instead of 'maplayer' (functionality id) string as ID value.
+
+### divmanazer Chart component
+
+``New component`` for creating bar or line charts.
+
+```javascript
+var barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox());
+var data = [{name:"2", value:1},{name:"1", value:3},{name:"11", value:31},{name:"12", value:32},{name:"13", value:300},{name:"14", value:355},{name:"15", value:366},{name:"16", value:377}];
+barchart.createBarChart(data);
+jQuery('<div></div>').append(barchart);
+
+```
+
+### Core/Oskari-global
+
+Added new localization function that supports message templates: Oskari.getMsg(). It should be used instead of Oskari.getLocalization().
+
+  Oskari.getMsg('<MyBundlesLocalizationKey>', '<path.to.message>', {key1: value1, key2: value2});
+
+Included intl-messageformat library into frontend core. It uses standard ICU message format and allows interpolation, pluralization, number/date formatting.
+
+For more details see http://oskari.org/documentation/development/localization
+
+#### Logger
+
+Oskari.log() now has an additional function for notifying about deprecated calls without spamming the developer console:
+
+     Oskari.log([name]).deprecated('myOldFunc()');
+     Oskari.log([name]).deprecated('myOtherOldFunc()', 'Use myNewFunc() instead.');
+
+Prints out:
+
+- myOldFunc() will be removed in future release. Remove calls to it.
+- myOtherOldFunc() will be removed in future release. Use myNewFunc() instead.
+
+#### Oskari.util
+
+Changed mobile mode detection. Now the mode switch is determined from ´#mapdiv´-element size (previous was window size).
+
+### featuredata2
+
+Featuredata2 now has a new control for showing selected rows on top of the table. This makes finding and comparing selected items easier.
+
+### Grid
+
+Grid split into smaller files to make it more manageable:
+
+- GridSelection.js includes select functionalities
+- GridPaging.js includes paging functionalities
+- GridSort.js includes sorting functionalaties
+
+New ``moveSelectedRowsTop()``-function. This can be used to move selected rows on top of the table. Boolean true param moves the selected rows on top while false will return them on correct places based on current sorting. If the table is not currently sorted the rows are not moved with false-parameter.
+
+```javascript
+  var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+  ...
+  // show selected rows top
+  grid.moveSelectedRowsTop(true);
+
+  // not show selected rows top
+  grid.moveSelectedRowsTop(false);
+```
 
 ### FormInput
 
 Added floating label functionality to FormInput. Floating labels are created by calling setPlaceholder(). If the floating label is of from the input field you can adjust it with addMarginToLabel, which adds a a value (px) to the css-directive "top".
-
-### Drawtools
-
-Fixed failing StopDrawingRequest.
-
 
 ### Guidedtour
 
@@ -35,9 +291,27 @@ Known issues:
 
 Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
 
+Fixed followings in point map style:
+- allowed change classify (distinct/discontinous)
+- maked smaller point more smaller
+- legend: dublicate values now displayed one time ( 0.0000 - 0.0000  --> 0.0000)
+- legend: fixed distinct legend value labels
+
+Changes:
+- used d3 library for calculating point symbol sizes
+
+UI improvements:
+- moved show values checkbox before color selection
+- layer opacity value are now showed opacity selectbox
+
 ### mapmodule
 
-Changed using escape funtion to encodeURIComponent because escape function is depricated in JavaScript version 1.5.
+Fixed an issue where layers disappeared when pinch zooming on Android. Caused by zoom level having decimals instead of integer values.
+
+Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
+
+Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
+
 
 #### VectorLayerPlugin ol2/ol3
 
@@ -49,10 +323,6 @@ New functionalities for ``AddFeaturesToMapRequest``. New options available:
 - layerName: Added layer name (showed in layerselector2/layerselection2)
 - layerDescription: Added layer description (showed subtitle in layerselection2)
 - layerPermissions: Added layer permission
-
-### Oskari.util
-
-Changed mobile mode detection. Now size is checked from ´#mapdiv´-element (previous was window size):
 
 ### infobox
 
@@ -71,15 +341,18 @@ The drawn figures are now removed from the map when PlaceForm is closed by click
 DrawPlugin now checks preconditions before trying to save the drawn figures on the map.
 A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
 
+Fix for layer updating on map when myplaces are updated by the user.
+
 ### Search
 
 The default search UI now includes an optional autocomplete functionality.
 Searchchannels in oskari-server must provide support for it to be useful.
 See oskari-server ReleaseNotes on details how to support autocompletion.
 
-### Visualization form UI for polygon styles with no fill / no stroke
+### Visualization form UI
 
-User can select "no stroke" and "no fill" as stroke and fill colors. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
+User can select "no stroke" and "no fill" as stroke and fill colors for polygons. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
+Bug fixes for default values (point marker), color selections and restoring values for the forms when editing.
 
 ### Background layerselector plugin
 
@@ -89,6 +362,10 @@ This change keeps the layer selector visible always (except Publish map), but tu
 ### Analysis
 
 Fixed an issue with english translations where selecting analysis method "Analysis Layer Union" showed the parameters for "Buffers and sector".
+
+### Initial tests for RPC
+
+Initial versions of tests have been added under oskari-frontend/test/rpc.
 
 ## 1.43.0
 

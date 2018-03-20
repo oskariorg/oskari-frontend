@@ -2,15 +2,8 @@
     var log = Oskari.log('Oskari.deprecated');
 
     // Warn 2 times before falling silent
-    var warnMessagesSent = {};
     var warn = function (name) {
-        if (!warnMessagesSent[name]) {
-            warnMessagesSent[name] = 0;
-        }
-        warnMessagesSent[name]++;
-        if (warnMessagesSent[name] < 3) {
-            log.warn('Oskari.' + name + '() will be removed in future release. Remove calls to it.');
-        }
+        log.deprecated('Oskari.' + name + '()');
     };
 
     var mode = 'default';

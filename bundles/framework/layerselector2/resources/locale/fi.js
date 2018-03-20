@@ -32,7 +32,8 @@ Oskari.registerLocalization(
             "type-base": "Taustakartta",
             "type-wms": "Karttataso",
             "type-wfs": "Tietotuote",
-            "type-wfs-manual": "Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä."
+            "type-wfs-manual": "Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä.",
+            "unsupported-srs": "Väärä karttaprojektio"
         },
         "backendStatus": {
             "OK": {
@@ -73,11 +74,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Uusimmat",
-                "stats": "Vektoritasot"
+                "featuredata": "Vektoritasot"
             },
             "tooltips": {
                 "newest": "Näytä ## uusinta karttatasoa",
-                "stats": "Näytä vain vektoritasot",
+                "featuredata": "Näytä vain vektoritasot",
                 "remove": "Poista suodatus"
             }
         },

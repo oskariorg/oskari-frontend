@@ -16,6 +16,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
         this.measureButtonGroup = 'basictools';
         this.ignoreEvents = false;
         this.dialog = null;
+        this.drawMode = null;
+        this.loc = Oskari.getMsg.bind(null, 'MyPlaces2');
         var me = this;
         this.buttons = {
             'point': {
@@ -76,15 +78,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * implements Module protocol init method
          */
         init: function () {
-            var loc = this.instance.getLocalization('tools'),
-                user = Oskari.user();
+            var user = Oskari.user();
             // different tooltip for guests - "Please log in to use"
-            var guestPostfix = ' - ' + this.instance.getLocalization('guest').loginShort,
+            var guestPostfix = ' - ' + this.loc('guest.loginShort'),
                 tool,
                 tooltip;
             for (tool in this.buttons) {
                 if (this.buttons.hasOwnProperty(tool)) {
-                    tooltip = loc[tool].tooltip;
+                    tooltip = this.loc('tools.' + tool + '.tooltip');
                     if (!user.isLoggedIn()) {
                         tooltip = tooltip + guestPostfix;
                     }
@@ -117,7 +118,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                         });
                     };
                     measureTool.iconCls = 'tool-measure-line';
-                    measureTool.tooltip = loc.tools.measureline.tooltip;
+                    measureTool.tooltip = me.loc('tools.measureline.tooltip');
                     sandbox.request(me, reqBuilder(tool, me.measureButtonGroup, measureTool));
                 }
                 if (tool === 'area') {
@@ -128,7 +129,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                         });
                     };
                     measureTool.iconCls = 'tool-measure-area';
-                    measureTool.tooltip = loc.tools.measurearea.tooltip;
+                    measureTool.tooltip = me.loc('tools.measurearea.tooltip');
                     sandbox.request(me, reqBuilder(tool, me.measureButtonGroup, measureTool));
                 }
             };
@@ -145,7 +146,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 // TODO: this is not the way to do this: instead allow request to be used for
                 // saving a place and make the basic measurement tools use it when available
                 if (Oskari.user().isLoggedIn() && addAdditionalMeasureTools) {
-                    var loc = me.instance.getLocalization();
                     if (tool === 'line') {
                         addMeasureTool(tool);
                     }
@@ -203,6 +203,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             } else if (conf.drawMode === 'measurearea') {
                 conf.drawMode = 'area';
             }
+            this.drawMode = conf.drawMode;
             var startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(conf);
             this.instance.sandbox.request(this, startRequest);
 
@@ -222,11 +223,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 this.dialog = null;
             }
             var me = this,
-                locTool = this.instance.getLocalization('tools')[drawMode];
-
-            var locBtns = this.instance.getLocalization('buttons'),
-                title = locTool.title,
-                message = locTool.add,
+                title = me.loc('tools.' + drawMode + '.title'),
+                message = me.loc('tools.' + drawMode + '.add'),
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.dialog = dialog;
             var buttons = [],
@@ -244,7 +242,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
             var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
-            finishBtn.setTitle(locBtns.finish);
+            finishBtn.setTitle(me.loc('buttons.finish'));
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
                 me.sendStopDrawRequest();
@@ -259,7 +257,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 // No need to show the measurement result for a point
                 measureResult.remove();
             } else {
-                measureResult.html(locTool.noResult);
+                measureResult.html(me.loc('tools.' + drawMode + '.noResult'));
             }
 
             dialog.show(title, content, buttons);
@@ -308,12 +306,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             /**
              * @method Toolbar.ToolSelectedEvent
              */
-            'Toolbar.ToolSelectedEvent': function () {
-                if (!this.ignoreEvents) {
+            'Toolbar.ToolSelectedEvent': function (event) {
+                if (event.getToolId() !== this.drawMode && !this.ignoreEvents) {
                     // changed tool -> cancel any drawing
                     // do not trigger when we return drawing tool to
                     this.sendStopDrawRequest(true);
                     this.instance.enableGfi(true);
+                    this.drawMode = null;
+                    if (this.dialog){
+                        this.dialog.close();
+                    }
                 }
             },
             /**
@@ -369,8 +371,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
                 var drawingMode = event.getDrawingMode();
                 if (drawingMode !== undefined && drawingMode !== null) {
-                    var loc = this.instance.getLocalization('tools'),
-                        areaDialogContent = loc[drawingMode].next,
+                    var areaDialogContent = this.loc('tools.' + drawingMode + '.next'),
                         content = this.dialog.getJqueryContent();
                     if (content.find('div.infoText') !== areaDialogContent) {
                         content.find('div.infoText').html(areaDialogContent);

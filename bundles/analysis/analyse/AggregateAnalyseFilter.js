@@ -8,11 +8,10 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance} instance
      * @param {Oskari.userinterface.component.FilterDialog} filterDialog
      */
 
-    function (instance, filterDialog) {
+    function(instance, filterDialog) {
         this.instance = instance;
         this.localization = filterDialog.loc;
         this.filterDialog = filterDialog;
@@ -57,7 +56,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
                 title = this.localization.aggregateAnalysisFilter.noAggregateAnalysisPopupTitle,
                 content = this.localization.aggregateAnalysisFilter.noAggregateAnalysisPopupContent;
             okBtn.setPrimary(true);
-            okBtn.setHandler(function () {
+            okBtn.setHandler(function() {
                 dialog.close(true);
             });
             dialog.show(title, content, [okBtn]);
@@ -68,8 +67,8 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @method _blink
          * blinks the input element when aggregate value is selected
          */
-        _blink : function(element) {
-            if(!element) {
+        _blink: function(element) {
+            if (!element) {
                 return;
             }
             // animate to low opacity
@@ -77,7 +76,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
                 opacity: 0.25
             }, 250, function() {
                 // on complete, animate back to fully visible
-                 element.animate({
+                element.animate({
                     opacity: 1
                 });
             });
@@ -95,21 +94,25 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
             // Get values for first select
             var options = _.map(aggregateAnalysis, function(aggregateAnalyse) {
                 var analyse = {
-                    title : aggregateAnalyse.name,
-                    value : aggregateAnalyse.wpsLayerId
+                    title: aggregateAnalyse.name,
+                    value: aggregateAnalyse.wpsLayerId
                 };
                 return analyse;
             });
-            options.unshift({title: me.localization.aggregateAnalysisFilter.selectAggregateAnalyse});
+            options.unshift({
+                title: me.localization.aggregateAnalysisFilter.selectAggregateAnalyse
+            });
 
             this.aggregateValuesSelect = Oskari.clazz.create('Oskari.userinterface.component.MultiLevelSelect');
 
             me.content.append('<div class="filter-popup-multiselect"><div class="header"><div class="icon-close"></div><h3 class="popupHeader">' + me.localization.aggregateAnalysisFilter.aggregateValueSelectTitle + '</h3></div></div>');
-            me.selectValues = [{options: options}];
+            me.selectValues = [{
+                options: options
+            }];
             me.aggregateValuesSelect.setOptions(me.selectValues);
             me.aggregateValuesSelect.insertTo(me.content.find('.filter-popup-multiselect'));
 
-            me.content.find('.icon-close').on('click', function () {
+            me.content.find('.icon-close').on('click', function() {
                 me.content.find('.filter-popup-multiselect').remove();
                 me._turnOnClickOff();
                 me.content.find('.input-blink').removeClass("input-blink");
@@ -146,15 +149,15 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          */
         getAggregateAnalysisJSON: function(analyse_id) {
             var me = this;
-            var url = me.instance.sandbox.getAjaxUrl() + 'action_route=GetAnalysisData&analyse_id=' + analyse_id;
+            var url = Oskari.getSandbox().getAjaxUrl() + 'action_route=GetAnalysisData&analyse_id=' + analyse_id;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
                 url: url,
-                success: function (result) {
+                success: function(result) {
                     me.handleResult(result);
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
                         me.localization.aggregateAnalysisFilter.getAggregateAnalysisFailed,
@@ -170,7 +173,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * parses aggregate analysis JSON to correct format for MultiLevelSelect
          * creates the second select of MultiLevelSelect
          */
-        handleResult: function (data) {
+        handleResult: function(data) {
             var me = this,
                 index = 1,
                 options = [];
@@ -185,15 +188,19 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
 
                 var datasets = _.keys(indicatorItem);
 
-                    var values = {
-                        title: datasets[0],
-                        value: datasets[0]
-                    };
+                var values = {
+                    title: datasets[0],
+                    value: datasets[0]
+                };
 
                 options.push(values);
             });
-            options.unshift({title: me.localization.aggregateAnalysisFilter.selectIndicator});
-            var updateValues = {options: options};
+            options.unshift({
+                title: me.localization.aggregateAnalysisFilter.selectIndicator
+            });
+            var updateValues = {
+                options: options
+            };
 
 
             me.selectValues[index] = updateValues;
@@ -209,23 +216,26 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @param {string} keyValue
          * parses options for last select
          */
-        parseLastSelect: function (keyValue) {
+        parseLastSelect: function(keyValue) {
             var me = this,
                 index = 2,
                 options = [],
                 datasets = _.find(me.indicatorData, function(obj) {
-                    return obj.hasOwnProperty(keyValue)
+                    return obj.hasOwnProperty(keyValue);
                 })[keyValue];
 
-            for(var key in datasets) {
-                if(datasets.hasOwnProperty(key)){
+            for (var key in datasets) {
+                if (datasets.hasOwnProperty(key)) {
                     options.push({
-                        title : key + ':   ' + datasets[key],
-                        value : datasets[key]
+                        title: key + ':   ' + datasets[key],
+                        value: datasets[key]
                     });
                 }
             }
-            var updateLastValues = {multiple: true, options: options};
+            var updateLastValues = {
+                multiple: true,
+                options: options
+            };
             me.selectValues[index] = updateLastValues;
             me.aggregateValuesSelect.setOptions(me.selectValues);
             if (_.isUndefined(me.selectReadyButton)) {
@@ -242,7 +252,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
         /**
          * @method useAggregateValue
          */
-        useAggregateValue: function (key, callback) {
+        useAggregateValue: function(key, callback) {
             callback(key);
         },
 
@@ -250,11 +260,11 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @method _openPopup
          * opens a modal popup, no buttons or anything.
          */
-        _openPopup: function (title, content) {
+        _openPopup: function(title, content) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             okBtn.setPrimary(true);
-            okBtn.setHandler(function () {
+            okBtn.setHandler(function() {
                 dialog.close(true);
             });
             dialog.show(title, content, [okBtn]);
@@ -267,7 +277,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
             me.content.find('.icon-close').off('click');
         },
 
-        _getErrorText: function (jqXHR, textStatus, errorThrown) {
+        _getErrorText: function(jqXHR, textStatus, errorThrown) {
             var error = errorThrown.message || errorThrown,
                 err;
             try {

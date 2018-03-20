@@ -383,7 +383,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         },
         setTitle: function (title) {
             if (title) {
-                this.dialog.find('h3').html(title);
+                this.dialog.find('h3').html(Oskari.util.sanitize(title));
             } else {
                 jQuery(this.dialog).find('h3').remove();
             }

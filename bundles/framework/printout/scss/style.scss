@@ -84,8 +84,7 @@ div.field select {
 }
 
 .printout_format_label,
-.printout_title_label,
-.printout_legend_label {
+.printout_title_label {
     font-weight: bold;
     margin: 5px 0;
 }
@@ -133,6 +132,11 @@ div.basic_printout {
         margin-right: 10px;
     }
 
+    div.preview {
+        img {
+            width: 100%;
+        }
+    }
     div.preview-portrait {
         margin: 8px;
         padding: 5px;

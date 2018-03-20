@@ -231,8 +231,8 @@ Oskari.clazz.define(
                     delete this._features[layerId];
                 }
             }
-            // Removes all features from all layers
-            else {
+            // Removes all features from all layers if layer is not specified
+            else if(!layer) {
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
@@ -265,20 +265,24 @@ Oskari.clazz.define(
                 }
             }
 
+            // If there is no features to remove then return
+            if(!featuresToRemove || featuresToRemove.length === 0) {
+                return;
+            }
+
             // notify other components of removal
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
             var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
 
             olLayer.removeFeatures(featuresToRemove);
-            for (var i = 0; i < featuresToRemove.length; i++) {
-                var feature = featuresToRemove[i];
 
+            featuresToRemove.forEach(function(feature) {
                 // remove from "cache"
-                me._removeFromCache(this._getLayerId(olLayer.name), feature);
+                me._removeFromCache(me._getLayerId(olLayer.name), feature);
                 var geojson = JSON.parse(formatter.write([feature]));
-                removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
-            }
+                removeEvent.addFeature(feature.id, geojson, me._getLayerId(olLayer.name));
+            });
             sandbox.notifyAll(removeEvent);
         },
         _removeFromCache : function(layerId, feature) {
@@ -369,7 +373,10 @@ Oskari.clazz.define(
             var layer = mapLayerService.findMapLayer(options.layerId);
             if(!layer) {
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
-                layer.setInspireName(options.layerInspireName || 'VECTOR');
+                layer.setGroups([{
+                    id: options.layerId,
+                    name: options.layerInspireName || 'VECTOR'
+                }]);
                 layer.setOrganizationName(options.layerOrganizationName || 'VECTOR');
                 layer.setOpacity(options.opacity || 100);
                 layer.setVisible(true);
@@ -518,7 +525,7 @@ Oskari.clazz.define(
                     center = new OpenLayers.LonLat((right - ((right - left) / 2)), (top - ((top - bottom) / 2)));
                 }
 
-                mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds);
+                mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
                 me._sandbox.request(me, mapmoveRequest);
 
                 // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
@@ -530,20 +537,15 @@ Oskari.clazz.define(
                 }
             }
 
-            if(options.showLayer && !mapLayerService.findMapLayer(options.layerId)) {
-                mapLayerService.addLayer(layer);
-
-                var requestBuilder = me._sandbox.getRequestBuilder(
-                    'AddMapLayerRequest'
-                );
-                if (requestBuilder) {
-                    var request = requestBuilder(layer.getId());
+            if(options.showLayer) {
+                if(!mapLayerService.findMapLayer(options.layerId)) {
+                    mapLayerService.addLayer(layer);
+                }
+                if(!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId)) {
+                    var request = Oskari.requestBuilder('AddMapLayerRequest')(layer.getId());
                     me._sandbox.request(me, request);
                 }
-
-            }
-
-            if(options.showLayer) {
+                // not too sure about this logic and if we can assume AddMapLayerRequest is sync
                 olLayer.display(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
             }
         },

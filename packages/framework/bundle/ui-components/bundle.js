@@ -79,6 +79,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Button.js"
         }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/divmanazer/component/buttons/CloseButton.js"
+        }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Form.js"
         }, {

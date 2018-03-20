@@ -22,6 +22,10 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Create Embedded Map",
             "titleEdit": "Update Embedded Map",
+            "transfer": {
+                "label": "Transfer configuration",
+                "PublishTransfer": "Enable transfer"
+            },
             "domain": {
                 "title": "Basic settings",
                 "label": "Website address (without http and www prefixes)",
@@ -106,7 +110,8 @@ Oskari.registerLocalization(
                 "label": "Thematic maps",
                 "tooltip": "Show thematic maps on the map.",
                 "grid": "Show thematic data in table",
-                "allowClassification": "Allow classification"
+                "allowClassification": "Allow classification",
+                "displayDiagram" : "Display charts"
             },
             "layout": {
                 "label": "Graphic Layout",
@@ -204,9 +209,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Welcome to publish embedded map on your website. Please log in or register first.",
             "signup": "Log in",
-            "signupUrl": "/web/fi/login",
-            "register": "Register",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Register"
         },
         "StartView": {
             "text": "Welcome to publish embedded map on your website.",

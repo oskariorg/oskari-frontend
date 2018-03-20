@@ -47,6 +47,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.service.PrintService',
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
+                data: {
+                    srs: this.sandbox.getMap().getSrsName()
+                },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/j-son;charset=UTF-8");

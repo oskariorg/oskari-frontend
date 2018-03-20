@@ -40,7 +40,7 @@ Oskari.registerLocalization(
             "deleteTitle": "Poista indikaattori",
             "destroyIndicator": "Poista",
             "cancelDelete": "Peruuta",
-            "confirmDelete": "Haluatko varmasti poistaa indikaattorin",
+            "confirmDelete": "Haluatko varmasti poistaa indikaattorin \"{name}\"?",
             "newIndicator": "Uusi indikaattori",
             "error": {
                 "title": "Virhe",

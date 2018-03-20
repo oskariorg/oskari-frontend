@@ -23,39 +23,35 @@ Oskari.clazz.define("Oskari.mapframework.bundle.heatmap.HeatmapBundle", function
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/heatmap/instance.js"
+            "src": "../../../../bundles/mapping/heatmap/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/heatmap/HeatmapDialog.js"
+            "src": "../../../../bundles/mapping/heatmap/HeatmapDialog.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/heatmap/plugin/HeatmapLayerPlugin.js"
+            "src": "../../../../bundles/mapping/heatmap/plugin/AbstractHeatmapPlugin.js"
+        },{
+            "type": "text/javascript",
+            "src": "../../../../bundles/mapping/heatmap/plugin/HeatmapLayerPlugin.ol2.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/heatmap/domain/HeatmapLayer.js"
+            "src": "../../../../bundles/mapping/heatmap/domain/HeatmapLayer.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/framework/heatmap/resources/css/style.css"
-        }, {
-        // NOTE! EXTERNAL LIBRARY!
-            "type": "text/javascript",
-            "src": "../../../../libraries/colpick-jQuery-Color-Picker-master/js/colpick.js"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../libraries/colpick-jQuery-Color-Picker-master/css/colpick.css"
+            "src" : "../../../../bundles/mapping/heatmap/resources/css/style.css"
         }],
         "locales": [{
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/heatmap/resources/locale/en.js"
+            "src": "../../../../bundles/mapping/heatmap/resources/locale/en.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/heatmap/resources/locale/fi.js"
+            "src": "../../../../bundles/mapping/heatmap/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/heatmap/resources/locale/sv.js"
+            "src": "../../../../bundles/mapping/heatmap/resources/locale/sv.js"
         }]
     }
 });

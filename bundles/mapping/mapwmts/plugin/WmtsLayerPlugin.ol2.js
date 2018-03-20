@@ -90,7 +90,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 map.addLayer(wmtsLayer);
                 map.setLayerIndex(wmtsLayer, oldLayerIndex);
             }, function() {
-//                console.log("Error updating WMTS layer");
             });
         },
         /**
@@ -101,10 +100,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          */
          _registerLayerEvents: function(layer, oskariLayer){
            var me = this;
-
-           layer.events.register("loadstart", layer, function(){
-             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer._id);
-           });
 
            layer.events.register("tileloadstart", layer, function(){
              me.getMapModule().loadingState( oskariLayer.getId(), true);
@@ -160,7 +155,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                         map.setLayerIndex(wmtsLayer, 0);
                     }
             }, function() {
-//                console.log("Error loading capabilitiesXML");
             });
         },
 

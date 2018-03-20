@@ -9,7 +9,170 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.45.0
+
+### [mod] [rpc] FeatureEvent
+
+is now triggered correctly on published maps/ol3 implementation when layer is cleared with MapModulePlugin.RemoveFeaturesFromMapRequest without parameters.
+
+### [mod] [rpc] DrawTools.StopDrawingRequest
+
+A new optional third parameter suppressEvent (boolean).
+If true the request doesn't trigger a DrawingEvent. Defaults to false.
+
+### [rem] MetaData.FinishedDrawingEvent
+
+Event removed from Metadatacatalogue bundle. New parallel version uses DrawTools.StartDrawingRequest and DrawTools.StopDrawingRequest instead to draw search coverage area on map.
+
+### [mod] MapMoveByLayerContentRequest
+
+MapMoveByLayerContentRequest now has a new optional param to zoom to layer extent (requires layer coverage data to be available).
+
+### [mod] PublishMapEditorRequest
+
+Now sets the publisher state as a whole for editing an embedded map instead of assuming for example layers to be adjusted prior to sending the request.
+
+### [add] new bundle: GeometryCutter
+
+Geometrycutter is a more bare bones replacement for the "geometryeditor" bundle. Geometrycutter has only two editing modes:
+
+- splitting a feature by a user drawn linestring as if it was a cutting "blade"
+- removing a part of a feature that overlaps a user drawn polygon (difference)
+
+### [rem] [breaking] TimeseriesAnimationEvent, AnimateLayerRequest
+
+Timeseries functionality rewrite. Old event & request removed.
+
+### [rem] [breaking] mapfull configuration
+
+Mapfull no longer receives or handles "globalMapAjaxUrl" and "user" in bundle configuration. Handling has been moved to Oskari.app.init().
+If you haven't implemented a custom version of "mapfull" bundle or the Oskari-global this has no effect.
+
+## 1.44.1
+
+### [mod] [rpc] DrawingEvent
+
+Fixed an issue where:
+
+1) Draw a shape (like Polygon) with functionality id 1
+2) Draw another type of shape (like LineString) with functionality id 2
+3) Draw the same shape as in step 1 with functionality id 3
+
+Resulted in DrawingEvents on step 3 to have an empty features array. Features the user draws are now sent correctly.
+
+DrawingEvent with isFinished = true is now correctly triggered also when user modifies the geometry.
+Previously isFinished was only ever "true" for the original draw and always false for any modifications.
+
+Length and area information in the event are now the sum for all the LineStrings (for length) and (non-intersecting) Polygons instead of the last drawn shape.
+The length/area is written to geojson properties per feature so if you need to access measurement for the latest feature it's still there like this:
+
+```javascript
+    {
+        data : {
+             length : 0,
+             area : 39696895.99975586
+        },
+        geojson : {
+            features : [{ geometry: ..., properties : {
+                    area : 20396544
+                },
+                { geometry: ..., properties : {
+                    area : 19300351.99975586
+                }]
+        }
+    }
+```
+
+To get the same information you can do `event.geojson.features[event.geojson.features.length - 1].properties.area`, but it makes more sense to have the sum on the data block instead of measures for the latest feature in a collection of features.
+
+Notes:
+
+- If you have just one feature ever this works like before.
+- Only lines and polygons are counted for the area/length (circles/points with buffers are not).
+- The measurements are for non-buffered features.
+
+### metadatacatalogue [add]
+
+Added new OpenLayers independent version of metadatacatalogue. New bundle.js is under packages/catalogue/metadatacatalogue/. In the new version `MetaData.FinishedDrawingEvent` is removed. Instead you can listen to `DrawingEvent` where id "catalogue.bundle.metadatacatalogue" and isFinished is true.
+
 ## 1.44
+
+### [mod] [breaking] AddLayerListFilterRequest
+
+Removed function parameter to make request serializable to JSON. The filter function can now be registered to MapLayerService.
+
+Before:
+```javascript
+// Add new layerlist filter button to layerselector
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest',[
+    'Publishable',
+    'Show publishable layers',
+    function(layer){
+        return (layer.getPermission('publish') === 'publication_permission_ok');
+    },
+    'layer-publishable',
+    'layer-publishable-disabled',
+    'publishable'
+]);
+```
+
+After:
+
+```javascript
+// Add layer filter to map layer service
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('publishable', function(layer){
+    return (layer.getPermission('publish') === 'publication_permission_ok');
+});
+
+// Add layerlist filter button
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+        'Publishable',
+        'Show publishable layers',
+        'layer-publishable',
+        'layer-publishable-disabled',
+        'publishable'
+]);
+```
+
+### [mod] [breaking] ShowFilteredLayerListRequest
+
+Changed ``stats`` filter name to ``featuredata`` (because it filters featuredata layers and not stats layers). Also made request serializable to JSON (removed function parameter).
+
+Before:
+```javascript
+// Use buil-in filter
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'stats']);
+
+// Register new filter and use this
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
+},'find_layers_name_start_a', false]);
+```
+
+After:
+```javascript
+// Use built-in filter
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['featuredata']);
+
+// Register new filter
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
+});
+// Use new filter by request
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', false]);
+```
+
+#### [mod] [breaking] ProgressEvent
+
+The event API itself is unchanged, but the only core bundle that sent out the event was not using it according to the API docs. You can ignore this change if your code does not expect ProgressEvent's getID() method to always return string 'maplayer'.
+
+#### [add] TimeseriesAnimationEvent
+
+Event is sent out when timeseries animation advances or is stopped
 
 #### [mod] [rpc]AddFeaturesToMapRequest
 
@@ -21,6 +184,7 @@ New functionalities for ``AddFeaturesToMapRequest``. New options available:
 - layerName: Added layer name (showed in layerselector2/layerselection2)
 - layerDescription: Added layer description (showed subtitle in layerselection2)
 - layerPermissions: Added layer permission
+- image.sizePx: image icon size in pixels. Used this is size not defined (size is used for Oskari icon size calculation)
 
 ## 1.42
 

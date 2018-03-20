@@ -15,8 +15,7 @@ Oskari.clazz.define(
             name: 'StatsGrid',
             sandbox: 'sandbox',
             stateful: true,
-            tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout',
+            tileClazz: 'Oskari.statistics.statsgrid.Tile',
             vectorViewer: false
         };
         this.visible = false;
@@ -26,12 +25,14 @@ Oskari.clazz.define(
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
+        this.diagramPlugin = null;
 
         this.regionsetViewer = null;
+        this.flyoutManager = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
-
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             // create the StatisticsService for handling ajax calls and common functionality.
             // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here (it's datasource specific)
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
@@ -46,19 +47,35 @@ Oskari.clazz.define(
                 me.statsService.setMapModes(['wms','vector']);
             }
             statsService.addDatasource(conf.sources);
+
+            // initialize flyoutmanager
+            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService);
+            this.flyoutManager.init();
+            this.getTile().setupTools( this.flyoutManager );
+
             // disable tile if we don't have anything to show or enable if we do
-            this.getTile().setEnabled(this.hasData());
             // setup initial state
             this.setState();
 
-            if(this.isEmbedded()) {
+            this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published );
+            mapModule.registerPlugin(this.togglePlugin);
+            mapModule.startPlugin(this.togglePlugin);
+
+            if ( this.isEmbedded() ) {
                 // Start in an embedded map mode
-                // Embedded map might not have the grid. If enabled show toggle buttons so user can access it
-                me.showToggleButtons(conf.grid !== false, this.state.view);
+
                 // Always show legend on map when embedded
                 me.showLegendOnMap(true);
                 // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
+                
+                //
+                if( me.conf.grid ) {
+                    me.togglePlugin.addTool('table');
+                }
+                if( me.conf.diagram ) {
+                    me.togglePlugin.addTool('diagram');
+                }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
             this.__setupLayerTools();
@@ -75,7 +92,7 @@ Oskari.clazz.define(
             return jQuery('#contentMap').hasClass('published');
         },
         hasData: function () {
-            return this.statsService.getDatasource().length;
+            return !!this.statsService.getDatasource().length;
         },
 
         /**
@@ -84,6 +101,9 @@ Oskari.clazz.define(
          */
         getLayerService : function() {
             return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        },
+        getFlyoutManager: function () {
+            return this.flyoutManager;
         },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
@@ -151,38 +171,30 @@ Oskari.clazz.define(
             'StatsGrid.DatasourceEvent': function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
-            'UIChangeEvent' : function() {
-                // close/tear down the ui when receiving the event
-                this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
-                var flyout = this.getFlyout();
-                if(flyout) {
-                    var legend = this.getFlyout().getLegendFlyout();
-                    if(legend) {
-                        legend.hide();
-                    }
-                }
+            'StatsGrid.Filter': function(evt) {
+                this.statsService.notifyOskariEvent(evt);
             },
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
-                    // not me/no data -> do nothing
+            'UIChangeEvent' : function(evt) {
+                this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+            },
+            'userinterface.ExtensionUpdatedEvent': function ( event ) {
+                var me = this;
+                // Not handle other extension update events
+                if(event.getExtension().getName() !== me.getName()) {
                     return;
                 }
                 var wasClosed = event.getViewState() === 'close';
                 // moving flyout around will trigger attach states on each move
                 var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
-                if(wasClosed){
+                if( !visibilityChanged ) {
                     return;
                 }
-                var renderMode = this.isEmbedded();
-                // rendermode changes if we are in geoportal and open the flyout in publisher
-                if(this._lastRenderMode !== renderMode && visibilityChanged) {
-                    this.getFlyout().render(renderMode);
-                    this._lastRenderMode = renderMode;
-                    this.getFlyout().setGridHeaderHeight();
+                if( wasClosed ) {
+                    me.getTile().hideExtensions();
+                    return;
+                } else {
+                    me.getTile().showExtensions();
                 }
             },
             /**
@@ -191,8 +203,11 @@ Oskari.clazz.define(
              *
              */
             MapLayerEvent: function (event) {
+                if(!this.getTile()) {
+                    return;
+                }
                 // Enable tile when stats layer is available
-                this.getTile().setEnabled(this.hasData());
+                // this.getTile().setEnabled(this.hasData());
                 // setup tools for new layers
                 if(event.getOperation() !== 'add')  {
                     // only handle add layer
@@ -208,7 +223,10 @@ Oskari.clazz.define(
             },
             FeatureEvent: function(evt) {
                 this.statsService.notifyOskariEvent(evt);
-            }
+            },
+            AfterChangeMapLayerOpacityEvent: function (evt) {
+                 this.statsService.notifyOskariEvent(evt);
+             }
         },
 
         /**
@@ -317,27 +335,9 @@ Oskari.clazz.define(
             }
             return state;
         },
-        showToggleButtons: function(enabled, visible) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            if(!enabled) {
-                if(this.togglePlugin) {
-                    mapModule.unregisterPlugin(me.togglePlugin);
-                    mapModule.stopPlugin(me.togglePlugin);
-                }
-                return;
-            }
-            if(!this.togglePlugin) {
-                this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
-            }
-            me.getFlyout().move(0,0);
-            mapModule.registerPlugin(me.togglePlugin);
-            mapModule.startPlugin(me.togglePlugin);
-            me.togglePlugin.showTable(visible || me.visible);
-        },
         /**
          * @method  @public showLegendOnMap Render published  legend
+         * This method is also used to setup functionalities for publisher preview
          */
         showLegendOnMap: function(enabled){
             var me = this;
@@ -366,10 +366,9 @@ Oskari.clazz.define(
             }
             return;
         },
-
         /**
          * @method  @public enableClassification change published map classification visibility.
-         * @param  {Boolean} visible visible or not
+         * @param  {Boolean} enabled allow user to change classification or not
          */
         enableClassification: function(enabled) {
             if(!this.plugin) {

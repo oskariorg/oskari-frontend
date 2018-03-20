@@ -99,6 +99,7 @@ Oskari.registerLocalization(
             "differenceMessage": "Förändrade data skyddade objekt har markerats med värde ",
             "noDataMessage": "Antal = Antal utan skyddad objekt",
             "noDataCommonMessage": "Antal = Antal utan skyddad objekt"
-        }
+        },
+        "showSelectedFirst": "Visa de valda först"
     }
 });

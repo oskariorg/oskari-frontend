@@ -9,14 +9,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
      *
      * @param {Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance} instance
      * Reference to component that created the tab
-     * @param {Object} localization
      *
      */
-    function (instance, localization) {
+    function (instance) {
         this.instance = instance;
         this.template = jQuery('<div class="viewsList volatile"></div>');
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
-        this.loc = localization;
+        this.loc = Oskari.getMsg.bind(null, 'PersonalData');
         this.container = null;
     }, {
         /**
@@ -39,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @return {string}
          */
         getTitle: function () {
-            return this.loc.title;
+            return this.loc('tabs.publishedmaps.title');
         },
 
         /**
@@ -92,7 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 if (isSuccess) {
                     me._renderViewsList(response.views);
                 } else {
-                    me._showErrorMessage(me.loc.error.loadfailed);
+                    me._showErrorMessage(me.loc('tabs.publishedmaps.error.loadfailed'));
                 }
             });
         },
@@ -116,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 }
             }
             // couldn't find view -> show an error
-            me._showErrorMessage(me.loc.error.generic);
+            me._showErrorMessage(me.loc('tabs.publishedmaps.error.generic'));
         },
 
         /**
@@ -138,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 okBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button'
                 );
-            okBtn.setTitle(me.loc.button.ok);
+            okBtn.setTitle(me.loc('tabs.publishedmaps.button.ok'));
             okBtn.addClass('primary');
 
             okBtn.setHandler(function () {
@@ -147,16 +146,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     cb();
                 }
             });
-            var cancelBtn = dialog.createCloseButton(me.loc.button.cancel);
+            var cancelBtn = dialog.createCloseButton(me.loc('tabs.publishedmaps.button.cancel'));
             if (blnMissing) {
                 dialog.show(
-                    me.loc.popup.showErrorTitle,
-                    me.loc.popup.showConfirmMissing, [cancelBtn, okBtn]
+                    me.loc('tabs.publishedmaps.popup.showErrorTitle'),
+                    me.loc('tabs.publishedmaps.popup.showConfirmMissing'), [cancelBtn, okBtn]
                 );
             } else {
                 dialog.show(
-                    me.loc.popup.showErrorTitle,
-                    me.loc.popup.showConfirmNotLoaded, [cancelBtn]
+                    me.loc('tabs.publishedmaps.popup.showErrorTitle'),
+                    me.loc('tabs.publishedmaps.popup.showConfirmNotLoaded'), [cancelBtn]
                 );
             }
             dialog.makeModal();
@@ -179,19 +178,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 ),
                 sandbox = me.instance.sandbox;
 
-            okBtn.setTitle(me.loc['delete']);
+            okBtn.setTitle(me.loc('tabs.publishedmaps.delete'));
             okBtn.addClass('primary');
             okBtn.setHandler(function () {
                 me._deleteView(view);
                 dialog.close();
             });
-            var cancelBtn = dialog.createCloseButton(me.loc.button.cancel);
+            var cancelBtn = dialog.createCloseButton(me.loc('tabs.publishedmaps.button.cancel'));
             dialog.onClose(function () {
                 me.popupOpen = false;
             });
             dialog.show(
-                me.loc.popup.deletetitle,
-                me.loc.popup.deletemsg, [cancelBtn, okBtn]
+                me.loc('tabs.publishedmaps.popup.deletetitle'),
+                me.loc('tabs.publishedmaps.popup.deletemsg', {name: view.name}),
+                [cancelBtn, okBtn]
             );
             me.popupOpen = true;
             dialog.makeModal();
@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 if (isSuccess) {
                     me._refreshViewsList();
                 } else {
-                    me._showErrorMessage(me.loc.error.notdeleted);
+                    me._showErrorMessage(me.loc('tabs.publishedmaps.error.notdeleted'));
                 }
             });
         },
@@ -229,9 +229,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 'Oskari.userinterface.component.Popup'
             );
             // delete failed
-            var button = dialog.createCloseButton(this.loc.button.ok);
+            var button = dialog.createCloseButton(this.loc('tabs.publishedmaps.button.ok'));
             button.addClass('primary');
-            dialog.show(this.loc.error.title, msg, [button]);
+            dialog.show(this.loc('tabs.publishedmaps.error.title'), msg, [button]);
         },
 
         /**
@@ -260,22 +260,64 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     'id': view.id,
                     'uuid': view.uuid,
                     'state': view.state,
-                    'name': view.name,
+                    'name': Oskari.util.sanitize(view.name),
                     'url': view.url,
                     'domain': view.pubDomain,
                     'lang': view.lang,
                     'isPublic': isPublic,
-                    'show': this.loc.show,
-                    'html': this.loc.getHTML,
-                    'edit': this.loc.edit,
-                    'publish': isPublic ? this.loc.unpublish : this.loc.publish,
-                    'delete': this.loc['delete']
+                    'show': this.loc('tabs.publishedmaps.show'),
+                    'html': this.loc('tabs.publishedmaps.getHTML'),
+                    'edit': this.loc('tabs.publishedmaps.edit'),
+                    'publish': isPublic ? this.loc('tabs.publishedmaps.unpublish') : this.loc('tabs.publishedmaps.publish'),
+                    'delete': this.loc('tabs.publishedmaps.delete')
                 };
                 gridModel.addData(data);
             }
             return gridModel;
         },
-
+        _isCurrentProjectionSupportedForView: function (data) {
+            var currentProjection = Oskari.getSandbox().getMap().getSrsName();
+            var viewProjection = data.state.mapfull.state.srs;
+            return viewProjection === currentProjection;
+        },
+        constructUrlWithUuid: function (srs) {
+            var views = Oskari.app.getSystemDefaultViews();
+            var uuid;
+            views.forEach( function (view) {
+                if ( view.srsName === srs ) {
+                    uuid = view.uuid;
+                    return;
+                }
+            });
+            var url = window.location.origin;
+            if (window.location.pathname && window.location.pathname.length) {
+                url += window.location.pathname;
+            }
+            url += "?uuid="+uuid;
+            return url;
+        },
+        /**
+         * @method createProjectionChangeDialog
+         * Creates Oskari.userinterface.component.Popup for infoing about projection mismatch between map / published view
+         *
+         * @param function cb - callback to call when clicking ok button
+          */
+        createProjectionChangeDialog: function (cb) {
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var btn = dialog.createCloseButton(this.loc("projectionError").ok);
+            var cancel = dialog.createCloseButton( this.loc("projectionError").cancel );
+            cancel.setHandler( function () {
+                dialog.close(true);
+            });
+            btn.addClass('primary');
+            btn.setHandler( function () {
+                cb();
+                dialog.close(true);
+            });
+            dialog.show(this.loc("projectionError").title, this.loc("projectionError").msg, [cancel, btn]);
+            dialog.makeDraggable();
+        },
         /**
          * @private @method _getGrid
          * Creates Oskari.userinterface.component.Grid and populates it with
@@ -314,7 +356,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 }
                 // create link
                 var link = me.templateLink.clone();
-                link.append(name);
+                link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
                         window.open(
@@ -353,8 +395,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // set up the link from name field
             var showRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-                link.append(name);
+                var srs = data.state.mapfull.state.srs;
+                link.text(name);
                 link.bind('click', function () {
+
+                    var supported = me._isCurrentProjectionSupportedForView( data );
+                    if (!supported) {
+                        me.createProjectionChangeDialog( function() {
+                            window.open(
+                                me.constructUrlWithUuid(srs),
+                                'Published',
+                                'location=1,status=1,scrollbars=yes,width=850,height=800'
+                            );
+                        });
+                        return;
+                    }
+
                     if (!me.popupOpen) {
                         setMapState(data, false, function () {
                             setMapState(data, true);
@@ -392,7 +448,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             var htmlRenderer = function (name, data) {
                 var url = sandbox.createURL(data.url);
                 var link = me.templateLink.clone();
-                link.append(name);
+                link.text(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id),
                         size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
@@ -407,14 +463,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             //sending a request to publisher for editing view
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-                link.append(name);
+                var srs = data.state.mapfull.state.srs;
+                link.text(name);
                 link.bind('click', function () {
+
+                    var supported = me._isCurrentProjectionSupportedForView( data );
+                    if (!supported) {
+                        me.createProjectionChangeDialog( function() {
+                            window.location.href = me.constructUrlWithUuid(srs);
+                        });
+                        return;
+                    }
+
                     if (!me.popupOpen) {
-                        if (setMapState(data, false, function () {
-                                setMapState(data, true);
-                                editRequestSender(data);
-                            })) {
+                        var resp = service.isViewLayersLoaded(data, sandbox);
+                        if (resp.status) {
                             editRequestSender(data);
+                        } else {
+                            me._confirmSetState(function() {
+                                editRequestSender(data);
+                            }, resp.msg === 'missing');
                         }
                         return false;
                     }
@@ -426,7 +494,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // set up the link from delete field
             var deleteRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-                link.append(name);
+                link.text(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
@@ -442,7 +510,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             service = instance.getViewService();
             var publishRenderer = function (name, data) {
                 var link = me.templateLink.clone();
-                link.html(name);
+                link.text(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
@@ -454,18 +522,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                                 if (isSuccess) {
                                     view.isPublic = newState;
                                     if (view.isPublic) {
-                                        data.publish = me.loc.unpublish;
+                                        data.publish = me.loc('tabs.publishedmaps.unpublish');
                                     } else {
-                                        data.publish = me.loc.publish;
+                                        data.publish = me.loc('tabs.publishedmaps.publish');
                                     }
                                     link.html(data.publish);
                                 } else if (newState) {
                                     me._showErrorMessage(
-                                        me.loc.error.makePublic
+                                        me.loc('tabs.publishedmaps.error.makePublic')
                                     );
                                 } else {
                                     me._showErrorMessage(
-                                        me.loc.error.makePrivate
+                                        me.loc('tabs.publishedmaps.error.makePrivate')
                                     );
                                 }
                             });
@@ -479,17 +547,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // setup localization
             var i,
                 key,
+                path,
                 coluiname;
 
-            for (i = 0; i < visibleFields.length; i += 1) {
+            for (i = 0; i < visibleFields.length; ++i) {
                 key = visibleFields[i];
-                coluiname = 'grid.' + key;
-                if (this.loc &&
-                    this.loc.grid &&
-                    this.loc.grid[key]) {
-                    coluiname = this.loc.grid[key];
-                }
-                grid.setColumnUIName(key, coluiname);
+                path = 'tabs.publishedmaps.grid.' + key;
+                coluiname = this.loc(path);
+                grid.setColumnUIName(key, coluiname || path);
             }
 
             return grid;
@@ -571,11 +636,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          */
         _showIframeCodePopup: function (url, size, name) {
             var me = this,
-                loc = this.loc,
                 dialog = Oskari.clazz.create(
                     'Oskari.userinterface.component.Popup'
                 ),
-                okBtn = dialog.createCloseButton(loc.button.ok),
+                okBtn = dialog.createCloseButton(this.loc('tabs.publishedmaps.button.ok')),
                 iframeCode,
                 textarea,
                 content,
@@ -596,7 +660,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 '<textarea rows="3" cols="77">' +
                 iframeCode +
                 '</textarea>';
-            content = loc.published.desc + '<br/>' + textarea;
+            content = this.loc('tabs.publishedmaps.published.desc') + '<br/>' + textarea;
 
             dialog.makeModal();
             dialog.stopKeydownPropagation();

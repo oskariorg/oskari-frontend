@@ -22,6 +22,10 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Inbädda kartan",
             "titleEdit": "Redigera den inbäddade karta",
+            "transfer": {
+                "label": "Överföra konfigurationen",
+                "PublishTransfer": "Aktivera överföring"
+            },
             "domain": {
                 "title": "Webbplats",
                 "label": "Webbplats för inbäddad karta",
@@ -203,9 +207,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Du kan skapa inbäddade kartor efter att du har loggat in på tjänsten.",
             "signup": "Logga in",
-            "signupUrl": "/web/sv/login",
-            "register": "Registrera dig",
-            "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrera dig"
         },
         "StartView": {
             "text": "Du kan inbädda den kartvy som du har definierat här på din egen webbplats.",

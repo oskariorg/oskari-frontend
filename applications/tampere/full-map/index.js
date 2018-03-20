@@ -16,10 +16,10 @@ jQuery(document).ready(function () {
             });
         },
         startApplication = function (setup) {
-            // check that both setup and config are loaded 
+            // check that both setup and config are loaded
             // before actually starting the application
             var app = Oskari.app;
-            app.setApplicationSetup(setup);
+            app.init(setup);
             app.setConfiguration(setup.configuration);
             app.startApplication(function (startupInfos) {
                 // all bundles have been loaded

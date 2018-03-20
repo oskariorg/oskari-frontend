@@ -54,8 +54,7 @@ div.field select {
     background-color: #eee; }
 
 .printout_format_label,
-.printout_title_label,
-.printout_legend_label {
+.printout_title_label {
   font-weight: bold;
   margin: 5px 0; }
 
@@ -89,6 +88,9 @@ div.basic_printout div.tool input,
 div.basic_printout div.printout_settings_cont input {
   margin-right: 10px; }
 
+div.basic_printout div.preview img {
+    width: 100%;
+}
 div.basic_printout div.preview-portrait {
   margin: 8px;
   padding: 5px;

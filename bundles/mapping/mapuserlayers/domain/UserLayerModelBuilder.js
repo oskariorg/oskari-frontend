@@ -25,12 +25,19 @@ Oskari.clazz.define(
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             // set layer specific data
             layer.setOrganizationName(loclayer.organization);
-            layer.setInspireName(loclayer.inspire);
+            layer.setGroups([{
+                id:'USERLAYER',
+                name:loclayer.inspire
+            }]);
             layer.setDescription(mapLayerJson.description);
             layer.setSource(mapLayerJson.source);
             layer.setRenderingElement(mapLayerJson.renderingElement);
             layer.addLayerUrl(mapLayerJson.renderingUrl);
-            layer.setFeatureProperties(this.addHiddenFields(mapLayerJson.fields));
+            if (mapLayerJson.fields && mapLayerJson.fields.length !== 0){
+                layer.setFeatureProperties(this.addHiddenFields(mapLayerJson.fields));
+            } else {
+                layer.setFeatureProperties([]);
+            }
         },
 
         addHiddenFields: function(fields){
@@ -43,7 +50,7 @@ Oskari.clazz.define(
             if (fields.indexOf('__centerY') === -1){
                 fields.push('__centerY');
             }
-        return fields;
+            return fields;
         }
     }
 );

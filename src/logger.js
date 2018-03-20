@@ -80,6 +80,20 @@
         _doLogging(this.name, 'warn', arguments, this.includeCaller, arguments.callee);
     };
 
+    // Warn 2 times before falling silent
+    var deprecatedMessagesSent = {};
+    Logger.prototype.deprecated = function (name, extraInfo) {
+        if (!deprecatedMessagesSent[name]) {
+            deprecatedMessagesSent[name] = 0;
+        }
+        deprecatedMessagesSent[name]++;
+        if (deprecatedMessagesSent[name] < 3) {
+            _doLogging(this.name, 'warn',
+                [name + ' will be removed in future release.', extraInfo || 'Remove calls to it.'],
+                this.includeCaller, arguments.callee);
+        }
+    };
+
     Logger.prototype.error = function () {
         _doLogging(this.name, 'error', arguments, this.includeCaller, arguments.callee);
     };

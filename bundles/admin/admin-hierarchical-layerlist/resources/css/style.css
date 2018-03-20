@@ -1,0 +1,313 @@
+.divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .content .group-names label input.error {
+  background-color: #ff6666; }
+.divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button {
+  text-shadow: none; }
+  .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.delete {
+    background-color: #f62b2b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f62b2b), to(#b30808));
+    background-image: -webkit-linear-gradient(top, #f62b2b, #b30808);
+    background-image: -moz-linear-gradient(top, #f62b2b, #b30808);
+    background-image: -ms-linear-gradient(top, #f62b2b, #b30808);
+    background-image: -o-linear-gradient(top, #f62b2b, #b30808);
+    background-image: linear-gradient(to bottom, #f62b2b, #b30808);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=$startColor, endColorstr=$endColor);
+    color: #fff;
+    border-color: #e40a0a #f85c5c #f85c5c #e40a0a; }
+    .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.delete:hover {
+      background-color: #f85c5c;
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#f85c5c), to(#e40a0a));
+      background-image: -webkit-linear-gradient(top, #f85c5c, #e40a0a);
+      background-image: -moz-linear-gradient(top, #f85c5c, #e40a0a);
+      background-image: -ms-linear-gradient(top, #f85c5c, #e40a0a);
+      background-image: -o-linear-gradient(top, #f85c5c, #e40a0a);
+      background-image: linear-gradient(to bottom, #f85c5c, #e40a0a);
+      filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+  .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.add {
+    background-color: #217ad4;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#217ad4), to(#13477c));
+    background-image: -webkit-linear-gradient(top, #217ad4, #13477c);
+    background-image: -moz-linear-gradient(top, #217ad4, #13477c);
+    background-image: -ms-linear-gradient(top, #217ad4, #13477c);
+    background-image: -o-linear-gradient(top, #217ad4, #13477c);
+    background-image: linear-gradient(to bottom, #217ad4, #13477c);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=$startColor, endColorstr=$endColor);
+    color: #fff;
+    border-color: #1a61a8 #4694e2 #4694e2 #1a61a8; }
+    .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.add:hover {
+      background-color: #4694e2;
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#4694e2), to(#1a61a8));
+      background-image: -webkit-linear-gradient(top, #4694e2, #1a61a8);
+      background-image: -moz-linear-gradient(top, #4694e2, #1a61a8);
+      background-image: -ms-linear-gradient(top, #4694e2, #1a61a8);
+      background-image: -o-linear-gradient(top, #4694e2, #1a61a8);
+      background-image: linear-gradient(to bottom, #4694e2, #1a61a8);
+      filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+  .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.cancel {
+    background-color: #e6e6e6;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#b3b3b3));
+    background-image: -webkit-linear-gradient(top, #e6e6e6, #b3b3b3);
+    background-image: -moz-linear-gradient(top, #e6e6e6, #b3b3b3);
+    background-image: -ms-linear-gradient(top, #e6e6e6, #b3b3b3);
+    background-image: -o-linear-gradient(top, #e6e6e6, #b3b3b3);
+    background-image: linear-gradient(to bottom, #e6e6e6, #b3b3b3);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=$startColor, endColorstr=$endColor);
+    color: #000;
+    border-color: #cdcdcd white white #cdcdcd; }
+    .divmanazerpopup.admin-hierarchical-layerlist-group .popup-body .actions .oskari-button.cancel:hover {
+      background-color: white;
+      background-image: -webkit-gradient(linear, left top, left bottom, from(white), to(#cdcdcd));
+      background-image: -webkit-linear-gradient(top, white, #cdcdcd);
+      background-image: -moz-linear-gradient(top, white, #cdcdcd);
+      background-image: -ms-linear-gradient(top, white, #cdcdcd);
+      background-image: -o-linear-gradient(top, white, #cdcdcd);
+      background-image: linear-gradient(to bottom, white, #cdcdcd);
+      filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+
+@media only screen and (max-height: 999px) and (min-height: 800px) {
+  .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer {
+    max-height: 650px; } }
+@media only screen and (max-height: 1199px) and (min-height: 1000px) {
+  .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer {
+    max-height: 700px; } }
+.oskari-flyout.admin-hierarchical-layerlist-add-layer {
+  max-height: 80%; }
+  .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer .spinner {
+    position: absolute !important; }
+  .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer .icon-close {
+    display: inline-block;
+    opacity: 0;
+    position: absolute;
+    top: 9px;
+    right: 10px;
+    margin-left: 0;
+    cursor: pointer; }
+  .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer {
+    float: left;
+    margin-right: 5px;
+    margin-top: 3px;
+    margin-left: 10px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .admin-maplayer-groups-list {
+      max-height: 90px;
+      overflow-y: auto;
+      margin: 10px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-wrapper {
+      width: 500px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .add-class-grouping {
+      font-weight: bold;
+      font-size: 130%;
+      margin-top: 20px;
+      margin-bottom: 10px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer input[type=checkbox] {
+      margin-top: 0; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls {
+      position: relative;
+      margin-right: 5px; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons {
+        text-align: center; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button {
+          margin: 10px;
+          text-shadow: none; }
+          .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-layer-ok, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-group-ok {
+            background-color: #217ad4;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#217ad4), to(#13477c));
+            background-image: -webkit-linear-gradient(top, #217ad4, #13477c);
+            background-image: -moz-linear-gradient(top, #217ad4, #13477c);
+            background-image: -ms-linear-gradient(top, #217ad4, #13477c);
+            background-image: -o-linear-gradient(top, #217ad4, #13477c);
+            background-image: linear-gradient(to bottom, #217ad4, #13477c);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=$startColor, endColorstr=$endColor);
+            color: #fff;
+            border-color: #1a61a8 #4694e2 #4694e2 #1a61a8; }
+            .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-layer-ok:hover, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-group-ok:hover {
+              background-color: #4694e2;
+              background-image: -webkit-gradient(linear, left top, left bottom, from(#4694e2), to(#1a61a8));
+              background-image: -webkit-linear-gradient(top, #4694e2, #1a61a8);
+              background-image: -moz-linear-gradient(top, #4694e2, #1a61a8);
+              background-image: -ms-linear-gradient(top, #4694e2, #1a61a8);
+              background-image: -o-linear-gradient(top, #4694e2, #1a61a8);
+              background-image: linear-gradient(to bottom, #4694e2, #1a61a8);
+              filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+          .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-remove-layer, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-remove-group {
+            background-color: #f62b2b;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#f62b2b), to(#b30808));
+            background-image: -webkit-linear-gradient(top, #f62b2b, #b30808);
+            background-image: -moz-linear-gradient(top, #f62b2b, #b30808);
+            background-image: -ms-linear-gradient(top, #f62b2b, #b30808);
+            background-image: -o-linear-gradient(top, #f62b2b, #b30808);
+            background-image: linear-gradient(to bottom, #f62b2b, #b30808);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=$startColor, endColorstr=$endColor);
+            color: #fff;
+            border-color: #e40a0a #f85c5c #f85c5c #e40a0a; }
+            .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-remove-layer:hover, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-remove-group:hover {
+              background-color: #f85c5c;
+              background-image: -webkit-gradient(linear, left top, left bottom, from(#f85c5c), to(#e40a0a));
+              background-image: -webkit-linear-gradient(top, #f85c5c, #e40a0a);
+              background-image: -moz-linear-gradient(top, #f85c5c, #e40a0a);
+              background-image: -ms-linear-gradient(top, #f85c5c, #e40a0a);
+              background-image: -o-linear-gradient(top, #f85c5c, #e40a0a);
+              background-image: linear-gradient(to bottom, #f85c5c, #e40a0a);
+              filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+          .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-layer-cancel, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-group-cancel {
+            background-color: #e6e6e6;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#b3b3b3));
+            background-image: -webkit-linear-gradient(top, #e6e6e6, #b3b3b3);
+            background-image: -moz-linear-gradient(top, #e6e6e6, #b3b3b3);
+            background-image: -ms-linear-gradient(top, #e6e6e6, #b3b3b3);
+            background-image: -o-linear-gradient(top, #e6e6e6, #b3b3b3);
+            background-image: linear-gradient(to bottom, #e6e6e6, #b3b3b3);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=$startColor, endColorstr=$endColor);
+            color: #000;
+            border-color: #cdcdcd white white #cdcdcd; }
+            .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-layer-cancel:hover, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .input-controls.buttons button.admin-add-group-cancel:hover {
+              background-color: white;
+              background-image: -webkit-gradient(linear, left top, left bottom, from(white), to(#cdcdcd));
+              background-image: -webkit-linear-gradient(top, white, #cdcdcd);
+              background-image: -moz-linear-gradient(top, white, #cdcdcd);
+              background-image: -ms-linear-gradient(top, white, #cdcdcd);
+              background-image: -o-linear-gradient(top, white, #cdcdcd);
+              background-image: linear-gradient(to bottom, white, #cdcdcd);
+              filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%)); }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .opacity-slider-tool {
+      width: 215px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .layout-slider {
+      width: 140px;
+      float: left;
+      margin-top: 6px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .opacity-slider {
+      float: right;
+      line-height: 25px; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .opacity-slider input {
+        float: left;
+        margin-right: 5px;
+        margin-top: 0; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer .left-tools .layer-opacity {
+      display: inline-block;
+      background-image: url(../images/opacity_slider.png);
+      background-repeat: no-repeat;
+      background-position-y: 3px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-grouping {
+      font-weight: bold;
+      font-size: 130%;
+      margin-top: 20px;
+      margin-bottom: 10px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-style-send div.add-layer-button-area {
+      margin-left: 9em;
+      min-width: 220px; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-style-send div.add-layer-button-area div.input-controls {
+        width: 100%; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-style-import-block {
+      display: none;
+      margin: 8px;
+      border: 1pt solid #c0d0d0;
+      padding: 10px; }
+    .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record {
+      width: 100%;
+      margin-bottom: 8px;
+      overflow: hidden;
+      position: relative; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-label-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-label-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-label-area {
+        display: table;
+        float: left; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-label-area .add-class-label, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-label-area .add-class-label, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-label-area .add-class-label {
+          font-weight: bold;
+          width: 75px;
+          display: table-cell;
+          vertical-align: middle; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record input, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record input, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record input {
+        float: left;
+        margin-right: 5px;
+        margin-top: 3px; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record.capabilities div.add-layer-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record.capabilities div.add-layer-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record.capabilities div.add-layer-input-area {
+        max-height: 250px;
+        overflow: auto; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record.capabilities ul, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record.capabilities ul, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record.capabilities ul {
+        margin: 0 20px 5px 20px; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record.capabilities ul li, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record.capabilities ul li, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record.capabilities ul li {
+          cursor: pointer; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area {
+        margin-left: 9em;
+        min-width: 220px; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-label-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-label-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-label-area {
+        display: table;
+        float: left;
+        font-weight: bold; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-label-area label.add-layer-label, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-label-area label.add-layer-label, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-label-area label.add-layer-label {
+          font-weight: bold;
+          width: 75px;
+          display: table-cell;
+          vertical-align: middle; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-label-area label.add-class-label, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-label-area label.add-class-label, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-label-area label.add-class-label {
+          font-weight: bold;
+          width: 75px;
+          display: table-cell;
+          vertical-align: middle; }
+      .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area {
+        margin-left: 9em;
+        min-width: 220px; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-input-area div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-input-area div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-input-area div.add-class-input-area, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area div.add-class-input-area {
+          margin-left: 9em;
+          min-width: 220px; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-input-area div.add-layer-text, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area div.add-layer-text, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-input-area div.add-layer-text, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area div.add-layer-text, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-input-area div.add-layer-text, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area div.add-layer-text {
+          height: 30px; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-input-area.adjacent .input-controls, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area.adjacent .input-controls, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-input-area.adjacent .input-controls, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area.adjacent .input-controls, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-input-area.adjacent .input-controls, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area.adjacent .input-controls {
+          float: left; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-input-area .input-controls .add-layer-input.mid, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area .input-controls .add-layer-input.mid, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-input-area .input-controls .add-layer-input.mid, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area .input-controls .add-layer-input.mid, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-input-area .input-controls .add-layer-input.mid, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area .input-controls .add-layer-input.mid {
+          width: 217px;
+          float: left; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-input-area .input-controls .add-layer-input.long, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area .input-controls .add-layer-input.long, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-input-area .input-controls .add-layer-input.long, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area .input-controls .add-layer-input.long, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-input-area .input-controls .add-layer-input.long, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area .input-controls .add-layer-input.long {
+          width: 297px; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-input-area .add-dataprovider-button, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area .add-dataprovider-button, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-input-area .add-dataprovider-button, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area .add-dataprovider-button, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-input-area .add-dataprovider-button, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area .add-dataprovider-button {
+          margin-left: 6px; }
+        .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-layer-input-area select, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-group-record div.add-class-input-area select, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-layer-input-area select, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-layer-record div.add-class-input-area select, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-layer-input-area select, .oskari-flyout.admin-hierarchical-layerlist-add-layer div.oskari-flyoutcontentcontainer div.admin-add-layer div.add-class-record div.add-class-input-area select {
+          width: 309px;
+          padding: 8px 10px 8px 10px;
+          -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+          -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+          display: block; }
+
+.divmanazerpopup.admin-layerlist-group label.group::before {
+  content: "\25B6";
+  width: 25px;
+  margin-right: 8px;
+  color: #555; }
+.divmanazerpopup.admin-layerlist-group label.subgroup::before {
+  content: "\25B6";
+  width: 25px;
+  margin-left: 32px;
+  margin-right: 8px;
+  color: #555; }
+.divmanazerpopup.admin-layerlist-group label.subgroupsubgroup::before {
+  content: "\25B6";
+  width: 25px;
+  margin-left: 64px;
+  margin-right: 8px;
+  color: #555; }
+
+/**
+ * Here add hierarchical admin tool layerlist icons
+ */
+div.hierarchical-layerlist .main-tools .main-tool.update-capabilities {
+  background-image: url("../images/glyphicons-82-refresh.png"); }
+div.hierarchical-layerlist .main-tools .main-tool.add-group {
+  background-image: url("../images/glyphicons-433-plus.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.add-subgroup {
+  background-image: url("../images/glyphicons-433-plus.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.edit-group {
+  background-image: url("../images/glyphicons-151-edit.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.add-layer {
+  background-image: url("../images/glyphicons-191-plus-sign.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.add-subgroup-subgroup {
+  background-image: url("../images/glyphicons-433-plus.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.edit-subgroup {
+  background-image: url("../images/glyphicons-151-edit.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.add-layer {
+  background-image: url("../images/glyphicons-191-plus-sign.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool.edit-subgroup-subgroup {
+  background-image: url("../images/glyphicons-151-edit.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool.add-layer {
+  background-image: url("../images/glyphicons-191-plus-sign.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool.edit-layer {
+  background-image: url("../images/glyphicons-151-edit.png"); }
+
+/*# sourceMappingURL=style.css.map */

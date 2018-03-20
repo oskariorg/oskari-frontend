@@ -7,6 +7,12 @@ Oskari.registerLocalization(
         "desc": "Omat tiedot",
         "notLoggedIn": "Kirjautuneena käyttäjävä voit tarkistaa täällä käyttäjätietosi sekä omat kohteesi, karttanäkymäsi, upotetut karttasi, indikaattorisi, analyysisi ja aineistosi.",
         "notLoggedInText": "Kirjaudu sisään",
+        "projectionError": {
+            "title" : "Projektiot eivät ole yhteensopivia",
+            "msg": "Vaihdetaan projektiota karttajulkaisun muokkauksen mahdollistamiseksi.",
+            "ok": "OK",
+            "cancel": "Peruuta"
+        },
         "tabs": {
             "myviews": {
                 "title": "Karttanäkymät",
@@ -32,7 +38,7 @@ Oskari.registerLocalization(
                     "cancel": "Peruuta",
                     "error_noname": "Karttanäkymän nimi puuttuu. Anna nimi ja yritä uudelleen.",
                     "deletetitle": "Poista karttanäkymä",
-                    "deletemsg": "Haluatko poistaa valitun karttanäkymän?",
+                    "deletemsg": "Haluatko poistaa karttanäkymän \"{name}\"?",
                     "default": "Oletusnäkymä"
                 },
                 "save": {
@@ -89,7 +95,7 @@ Oskari.registerLocalization(
                     "cancel": "Peruuta",
                     "error_noname": "Kartan nimi on pakollinen tieto. Anna kartalle nimi ja yritä uudelleen.",
                     "deletetitle": "Poista julkaistu kartta",
-                    "deletemsg": "Haluatko poistaa tämän julkaistun kartan? Kartta ei tämän jälkeen näy enää verkkosivullasi.",
+                    "deletemsg": "Haluatko poistaa julkaistun kartan \"{name}\"? Kartta ei tämän jälkeen näy enää verkkosivullasi.",
                     "showErrorTitle": "Karttanäkymässä on puutteita",
                     "showConfirmMissing": "Osa karttatasoista ei ole käytettävissä. Haluatko silti avata karttanäkymän?",
                     "showConfirmNotLoaded": "Osa karttatasoista ei latautunut karttanäkymään."

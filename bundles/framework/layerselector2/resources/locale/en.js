@@ -32,7 +32,8 @@ Oskari.registerLocalization(
             "type-base": "Background map",
             "type-wms": "Map layer (WMS, WMTS)",
             "type-wfs": "Data product (WFS)",
-            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window."
+            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window.",
+            "unsupported-srs": "Unsupported map projection"
         },
         "backendStatus": {
             "OK": {
@@ -73,11 +74,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
         },

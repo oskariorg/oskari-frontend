@@ -14,16 +14,16 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             input;
         Oskari.log('Oskari.userinterface.component.FormInput').warn('Deprecated - please use Oskari.userinterface.component.TextInput instead.');
         this.sandbox = sandbox;
-        this.template = jQuery('<div class="oskarifield"><label class="oskarifield_label"></label><input id="oskari_input" class="oskarifield_input" type="text" /></div>');
+        this.template = jQuery('<div class="oskarifield"><label></label><input type="text"/></div>');
         this.templateErrors = jQuery('<div class="error"></div>');
         this.templateTooltip = jQuery('<div class="icon-info"></div>');
         this.templateClearButton = jQuery('<div class="icon-close"></div>');
         this._field = this.template.clone();
 
-        label = this._field.find('.oskarifield_label');
+        label = this._field.find('label');
         label.attr('for', name);
 
-        input = this._field.find('.oskarifield_input').focus();
+        input = this._field.find('input').focus();
 
         input.attr('name', name);
         this._name = name;
@@ -32,23 +32,24 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._requiredMsg = 'required';
         this._contentCheck = false;
         this._contentCheckMsg = 'illegal characters';
-        this._labelMargin = null;
-
         this._bindFocusAndBlur();
         // word characters, digits, whitespace and chars '-,.?!' allowed
         this._regExp = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*/;
         this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
     }, {
-        bindOnInput: function() {
-            var me = this;
-            this._field.find('.oskarifield_input').on('input', function() {
+        /**
+         * @method bindOnFloatingLabelInput
+         * binds floating label functionality.
+         */
+        bindOnFloatingLabelInput: function() {
+            this._field.find('.oskarifield_floating_input').on('focus', function() {
                 var $field = jQuery(this).closest('.oskarifield');
-                if (this.value) {
-                    $field.addClass('oskarifield--not-empty');
-                    if(me._labelMargin !== null) {
-                        $field.find('.oskarifield_label').css('top', me._labelMargin + 'px');
-                    }
-                } else {
+                $field.addClass('oskarifield--not-empty');
+            });
+
+            this._field.find('.oskarifield_floating_input').on('blur', function() {
+                var $field = jQuery(this).closest('.oskarifield');
+                if (!this.value) {
                     $field.removeClass('oskarifield--not-empty');
                 }
             });
@@ -93,18 +94,24 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * Sets the fields tooltip and possible help tags
          * @param {String} pTooltip tooltip text
          * @param {String} pDataTags comma separated list of article tags identifying the help article for this field
+         * @param {Boolean} bindToInput (optional) true to add tooltip before input instead of label. Useful with floating labels.
          */
-        setTooltip: function (pTooltip, pDataTags) {
+        setTooltip: function (pTooltip, pDataTags, bindToInput) {
+            bindToInput = bindToInput || false;
             // TODO: check existing tooltip
             var tooltip = this.templateTooltip.clone(),
-                label;
+                place;
             tooltip.attr('title', pTooltip);
             if (pDataTags) {
                 tooltip.addClass('help');
                 tooltip.attr('helptags', pDataTags);
             }
-            label = this._field.find('label');
-            label.before(tooltip);
+            if (bindToInput){
+                place = this._field.find('input');
+            }else{
+                place = this._field.find('label');
+            }
+            place.before(tooltip);
         },
         /**
          * @method setPlaceholder
@@ -114,12 +121,36 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setPlaceholder: function (pLabel) {
             var input = this._field.find('input');
             input.attr('placeholder', pLabel);
+        },
+        /**
+         * @method setFloatingLabel
+         * Sets the fields floating label
+         * @param {String} pLabel
+         * @param {Integer} topPosition (optional) to adjust floating label in pixels. In CSS oskarifield_floating_label default top value 0px.
+         */
+        setFloatingLabel: function (pLabel, topPosition) {
+            var input = this._field.find('input'),
+                label = this._field.find('label');
+            if (topPosition){
+                this._setTopPosition(label, topPosition);
+            }
+            label.addClass('oskarifield_floating_label');
+            input.addClass('oskarifield_floating_input');
+            input.attr('placeholder', pLabel);
             // if we set placeholder we can set the label aswell for floating label
             this.setLabel(pLabel);
-            this.bindOnInput();
+            this.bindOnFloatingLabelInput();
         },
-        addMarginToLabel: function ( margin ) {
-           this._labelMargin = margin;
+        /**
+         * @method _setTopPosition
+         * Adds a value (px) to the element's css-directive top to override CSS default top value.
+         * @param {Object} elem HTML element
+         * @param {Integer} top value in px
+         */
+        _setTopPosition: function (elem, top) {
+            if (typeof top === "number"){
+                elem.css('top', top + 'px');
+            }
         },
         /**
          * @method setRequired
@@ -206,7 +237,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {String} value
          */
         setValue: function (value) {
-            this._field.find('input').attr('value', value);
+            var input = this._field.find('input');
+            input.attr('value', value);
+            if(value && input.hasClass("oskarifield_floating_input")){
+                this._field.addClass('oskarifield--not-empty');
+            }
         },
 
         /**
@@ -374,11 +409,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if up is pressed on the input
          */
         bindUpKey: function (callback) {
-            'use strict';
+            
             var me = this,
                 input = this._field.find('input');
 
-            input.keyup(function () {
+            input.keyup(function (event) {
                 callback(event);
             });
         },
@@ -389,7 +424,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if down is pressed on the input
          */
         bindDownKey: function (callback) {
-            'use strict';
+            
             var me = this,
                 input = this._field.find('input');
 
@@ -407,7 +442,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if blur has happened for the input
          */
         bindOnBlur: function (callback) {
-            'use strict';
+            
             // all set, ready to bind requests
             var input = this._field.find('input');
             input.blur(function () {
@@ -431,9 +466,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 input.keyup(callback);
             }
         },
+        bindAutocompleteSelect: function (callback) {
+            var input = this._field.find('input');
+            input.on("autocompleteselect", callback);
+        },
         autocomplete: function (results) {
             var input = this._field.find('input');
-            input.attr('autocomplete', 'on');
+            input.attr('autocomplete', 'off');
             input.autocomplete({
                 source: results
             });
@@ -450,7 +489,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          */
         addClearButton: function (id) {
             var clearButton = this.templateClearButton.clone(),
-                input = this._field.find('.oskarifield_input');
+                input = this._field.find('input');
 
             clearButton.attr('id', id);
             clearButton.bind('click', function () {

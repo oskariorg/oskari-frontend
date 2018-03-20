@@ -10,6 +10,8 @@ Oskari.registerLocalization(
             "show": "Show",
             "hide": "Hide",
             "hidden": "The map layer is temporarily hidden.",
+            "unsupported-projection": "Map layer cannot be shown in selected map projection.",
+            "change-projection": "Change map projection",
             "out-of-scale": "The map layer cannot be shown at this scale level.",
             "move-to-scale": "Please move to a suitable map level.",
             "out-of-content-area": "The map layer has no features at the map view area.",

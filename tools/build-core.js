@@ -12,6 +12,7 @@ var files = [
 	'../libraries/requirejs/text-plugin-2.0.14.js',
     '../libraries/mobile-detect/mobile-detect-1.3.2.js',
     '../libraries/dompurify/purify_0.8.0.min.js',
+    '../libraries/intl-messageformat/intl-messageformat-with-locales-2.1.0.js',
 	'../src/polyfills.js',
     // Oskari global
 	'../src/oskari.js',
@@ -38,6 +39,7 @@ var files = [
     // Oskari application helpers
 	'../src/loader.js',
     '../src/oskari.app.js',
+    '../src/BasicBundle.js',
     // deprecated functions
     '../src/deprecated/module_spec.js',
     '../src/deprecated/builder_api.js',

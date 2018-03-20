@@ -13,18 +13,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerL
     function(sandbox, instance) {
         this.sandbox = sandbox;
         this.instance = instance;
+        this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
     }, {
         /**
          * @method handleRequest
-         * Shows WFS feature data with requested properties
+         * Adds layerlist filter button
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
          * @param {Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest} request
          *      request to handle
          */
         handleRequest : function(core, request) {
-            var layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
-            layerSelectorFlyout.addFilterTool(request.getToolText(), request.getTooltip(), request.getFilterFunction(), request.getIconClassActive(), request.getIconClassDeactive(), request.getFilterName());
+            this.layerlistService.registerLayerlistFilterButton(request.getToolText(), request.getTooltip(), {
+                    active: request.getIconClassActive(),
+                    deactive: request.getIconClassDeactive()
+                }, request.getFilterName());
         }
     }, {
         /**

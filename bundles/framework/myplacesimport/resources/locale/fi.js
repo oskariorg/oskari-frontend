@@ -67,7 +67,7 @@ Oskari.registerLocalization(
             },
             "warning":{
                 "features_skipped":"Huomio! Aineiston tuonnissa <xx> kohdetta hylättiin puuttuvien tai viallisten koordinaattien tai geometrian vuoksi."
-            },
+            }
         },
         "tab": {
             "title": "Aineistot",
@@ -80,7 +80,7 @@ Oskari.registerLocalization(
                 "remove": "Poista",
                 "removeButton": "Poista"
             },
-            "confirmDeleteMsg": "Haluatko poistaa aineiston:",
+            "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "save": "Tallenna",

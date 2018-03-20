@@ -7,6 +7,12 @@ Oskari.registerLocalization(
         "desc": "My Data",
         "notLoggedIn": "As a logged-in user you can see here your account information and all your saved places, map views, embedded maps, indicators, analysis and datasets.",
         "notLoggedInText": "Log in",
+        "projectionError": {
+            "title" : "Projections are incompatible",
+            "msg": "Projection will be changed, so that the published map can be edited",
+            "ok": "OK",
+            "cancel": "Cancel"
+        },
         "tabs": {
             "myviews": {
                 "title": "My Map Views",
@@ -32,7 +38,7 @@ Oskari.registerLocalization(
                     "cancel": "Cancel",
                     "error_noname": "The map view name is required. Please type a name and try again.",
                     "deletetitle": "Delete Map View",
-                    "deletemsg": "Do you want to delete the map view?",
+                    "deletemsg": "Do you want to delete the map view \"{name}\"?",
                     "default": "Default view"
                 },
                 "save": {
@@ -89,7 +95,7 @@ Oskari.registerLocalization(
                     "cancel": "Cancel",
                     "error_noname": "The map layer name is required. Please type a name and try again.",
                     "deletetitle": "Delete Embedded Map",
-                    "deletemsg": "You are deleting this embedded map. After that the map is not visible at your website. Do you want to delete the map?",
+                    "deletemsg": "You are deleting the embedded map \"{name}\". After that the map is not visible at your website. Do you want to delete the map?",
                     "showErrorTitle": "Error",
                     "showConfirmMissing": "All the map layers are not available. Do you want to open the embedded map?",
                     "showConfirmNotLoaded": "All the map layers could not be loaded."

@@ -7,15 +7,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
      * @static
      * @param {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance} instance
      *      reference to the myplacesimport instance
-     * @param {Object} localization
-     *      instance's localization
      */
 
-    function (instance, localization) {
+    function (instance) {
         var me = this,
             p;
         me.instance = instance;
-        me.loc = localization;
+        me.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
         me.layerMetaType = 'USERLAYER';
         me.visibleFields = [
             'name', 'description', 'source', 'edit', 'remove'
@@ -72,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             grid.setColumnValueRenderer('remove', function (name, data) {
                 var link = me.template.link.clone();
 
-                link.append(me.loc.grid['removeButton']).bind('click', function () {
+                link.append(me.loc('tab.buttons.delete')).bind('click', function () {
                     me._confirmDeleteUserLayer(data);
                     return false;
                 });
@@ -80,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             });
             // setup localization
             _.each(this.visibleFields, function (field) {
-                grid.setColumnUIName(field, me.loc.grid[field]);
+                grid.setColumnUIName(field, me.loc('tab.grid.' + field));
             });
 
             me.container = me.template.main.clone();
@@ -105,20 +103,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          */
         _confirmDeleteUserLayer: function (data) {
             var me = this;
-            //var loc = this.loc.notification['delete'];
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
-            okBtn.setTitle(me.loc.buttons['delete']);
+            okBtn.setTitle(me.loc('tab.buttons.delete'));
             okBtn.addClass('primary');
 
             okBtn.setHandler(function () {
                 me._deleteUserLayer(data.id);
                 dialog.close();
             });
-            var cancelBtn = dialog.createCloseButton(me.loc.buttons.cancel),
-                confirmMsg = me.loc.confirmDeleteMsg + ' "' + data.name + '"?';
-            dialog.show(me.loc.title, confirmMsg, [cancelBtn, okBtn]);
+            var cancelBtn = dialog.createCloseButton(me.loc('tab.buttons.cancel')),
+                confirmMsg = me.loc('tab.confirmDeleteMsg', {name: data.name});
+            dialog.show(me.loc('tab.title'), confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
         },
         /**
@@ -188,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
 
             // show msg to user about successful removal
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(me.loc.notification.deletedTitle, me.loc.notification.deletedMsg);
+            dialog.show(me.loc('tab.notification.deletedTitle'), me.loc('tab.notification.deletedMsg'));
             dialog.fadeout(3000);
         },
         /**
@@ -198,8 +195,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          */
         _deleteFailure: function () {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = dialog.createCloseButton(this.loc.buttons.ok);
-            dialog.show(this.loc.error.title, this.loc.error.generic, [okBtn]);
+                okBtn = dialog.createCloseButton(this.loc('tab.buttons.ok'));
+            dialog.show(this.loc('tab.error.title'), this.loc('tab.error.generic'), [okBtn]);
         },
         /**
          * Renders current user layers to a grid model and returns it.

@@ -123,7 +123,7 @@ function() {
             this.drawPlugin.draw(request.getId(), shapeType, request.getOptions());
         }
         else if (request.getName() === 'DrawTools.StopDrawingRequest') {
-            this.drawPlugin.stopDrawing(request.getId(), request.isClearCurrent());
+            this.drawPlugin.stopDrawing(request.getId(), request.isClearCurrent(), request.supressEvent());
         }
     },
 

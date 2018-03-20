@@ -211,43 +211,21 @@ Oskari.clazz.define(
          */
         createWfsLayerSelect: function (){
             var me = this;
-            var epsg = this.sandbox.getMap().getSrsName(),
-                    ajaxUrl = this.sandbox.getAjaxUrl(),
-                    timeStamp = new Date().getTime();
 
-            jQuery.ajax({
-                type: "GET",
-                dataType: 'json',
-                data : {
-                    timestamp : timeStamp,
-                    epsg : epsg
-                },
-                url: ajaxUrl + 'action_route=GetMapLayers&lang=' + Oskari.getLang(),
-                success: function (data) {
-                    var allLayers = data.layers;
-                    var wfsLayers = jQuery.grep(allLayers, function(layer,index){
-                        return layer.type.toLowerCase() === 'wfslayer';
-                    });
-                    me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', {
-                            value: "",
-                            text : ""
-                    }));
-                    jQuery.each(wfsLayers, function(index, layer){
-                        me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', {
-                            value: layer.id,
-                            text : layer.name[Oskari.getLang()]
-                        }));
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+            var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var allLayers = mapLayerService.getAllLayers();
 
-                    me._openPopup(
-                        me._getLocalization('layers_failed'),
-                        error
-                    );
-                }
+            var wfsLayers = allLayers.filter(function(layer){
+                return layer.getLayerType() === 'wfs'
             });
+
+            wfsLayers.forEach(function(layer){
+                me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', {
+                    value: layer.getId(),
+                    text : layer.getName()
+                }));
+            });
+
         },
 
         /**
@@ -308,6 +286,10 @@ Oskari.clazz.define(
 
             jQuery.ajax({
                 type: 'GET',
+                dataType: 'json',
+                data: {
+                    srs: me.sandbox.getMap().getSrsName()
+                },
                 url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
                 success: function (data) {
                     me._createList(me, data.channels, me.state.filter);

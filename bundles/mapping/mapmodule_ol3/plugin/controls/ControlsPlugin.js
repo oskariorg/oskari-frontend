@@ -20,6 +20,8 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.mapmodule.ControlsPlugin';
         me._name = 'ControlsPlugin';
+        me.boxZoom = null;
+        me.removedInteractions = [];
     }, {
         /**
          * @public @method hasUI
@@ -88,6 +90,9 @@ Oskari.clazz.define(
                  */
 
                 'Toolbar.ToolSelectedEvent': function (event) {
+                    if ( event._toolId !== "zoombox" ) {
+                        this.disableMouseDragZoom();
+                    }
                     return;
                 }
             };
@@ -108,7 +113,35 @@ Oskari.clazz.define(
                 'DisableMapMouseMovementRequest' : mapMovementHandler
             };
         },
+        disableMouseDragZoom: function () {
+            var me = this;
+            if ( this.boxZoom ) {
+                this.getMap().removeInteraction( this.boxZoom );
+            }
+            this.removedInteractions.forEach( function ( interaction ) {
+                me.getMap().addInteraction( interaction );
+            });
+            this.removedInteractions = [];
+        },
+        mouseDragZoomInteraction: function () {
+            var me = this;
 
+            me.getMap().getInteractions().forEach( function( interaction ) {
+                if ( interaction instanceof ol.interaction.DragPan || interaction instanceof ol.interaction.DragZoom ) {
+                    me.getMap().removeInteraction( interaction );
+                    me.removedInteractions.push( interaction );
+                }
+            });
+            if ( !this.boxZoom ) {
+                this.boxZoom = new ol.interaction.DragZoom({
+                    condition: function ( mapBrowserEvent ) {
+                        return ol.events.condition.mouseOnly( mapBrowserEvent );
+                    }
+                });
+            }
+
+            this.getMap().addInteraction( this.boxZoom );
+        },
         /**
          * @private @method _createMapControls
          * Constructs/initializes necessary controls for the map. After this they can be added to the map
@@ -121,18 +154,15 @@ Oskari.clazz.define(
             var mouseInteractionRemove = [];
             var kbInteractionRemove = [];
 
-
-            //TODO: add Esc button handler
-
             // Map movement/keyboard control
             if (conf.keyboardControls === false) {
-              me.getMap().getInteractions().forEach(function(interaction){
-                if (interaction instanceof ol.interaction.KeyboardPan ||interaction instanceof ol.interaction.KeyboardZoom ){
-                  kbInteractionRemove.push(interaction);
+              me.getMap().getInteractions().forEach( function( interaction ) {
+                if ( interaction instanceof ol.interaction.KeyboardPan || interaction instanceof ol.interaction.KeyboardZoom ) {
+                  kbInteractionRemove.push( interaction );
                 }
               });
-              kbInteractionRemove.forEach(function(interaction){
-                me.getMap().removeInteraction(interaction);
+              kbInteractionRemove.forEach( function ( interaction ) {
+                me.getMap().removeInteraction( interaction );
               })
             }
 

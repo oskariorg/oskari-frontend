@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
             _.each(me.tools, function(tool){
 
-                if (tool.isDisplayed()) {
+                if (tool.isDisplayed(me.data)) {
                     var value = tool.getValues();
                     if (value !== undefined && value !== null) {
                         me._extendRecursive(values, value);
@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             var me = this;
             _.each(me.tools, function(tool) {
                 //don't call for tools that already have been set enabled (=plugin has already been created.)
-                if (tool.isDisplayed() && !tool.isShownInToolsPanel() && !tool.state.enabled) {
+                if (tool.isDisplayed(me.data) && !tool.isShownInToolsPanel() && !tool.state.enabled) {
                     tool.setEnabled(true);
                 }
             });
@@ -644,7 +644,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 tools = me.tools;
 
             _.each(me.tools, function(tool) {
-                if (tool.isDisplayed() && tool.isStarted()) {
+                if (tool.isDisplayed(me.data) && tool.isStarted()) {
                     //reset
                     tool.setEnabled(false);
                     tool.setEnabled(true);

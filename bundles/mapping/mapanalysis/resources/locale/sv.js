@@ -9,6 +9,7 @@ Oskari.registerLocalization(
         "layer": {
             "organization": "Mina analyser",
             "inspire": "Mina analyser"
-        }
+        },
+        "filterTooltip": "Filter data"
     }
 });

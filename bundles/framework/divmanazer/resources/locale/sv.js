@@ -3,6 +3,10 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "DivManazer",
     "value": {
+        "graph": {
+            "noValue": "Inte tillgänglig",
+            "tick": "{value, number}"
+        },
         "buttons": {
             "add": "Lägg till",
             "cancel": "Avbryt",
@@ -314,6 +318,13 @@ Oskari.registerLocalization(
                 "value_missing": "Värdet saknas.",
                 "boolean_operator_missing": "Den logiska operatören saknas."
             }
+        },
+        "fileInput": {
+            "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
+            "link":"valitse selaamalla",
+            "uploading":"Ladataan",
+            "success":"Valmis",
+            "error":"Virhe!",
         }
     }
 });

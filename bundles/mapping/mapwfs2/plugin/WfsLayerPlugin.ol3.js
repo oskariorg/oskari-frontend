@@ -641,7 +641,8 @@ Oskari.clazz.define(
 
                     me.getIO().addMapLayer(
                         layer.getId(),
-                        styleName
+                        styleName,
+                        layer.isVisible()
                     );
                     me.mapMoveHandler(); // setLocation
                 });
@@ -781,7 +782,9 @@ Oskari.clazz.define(
                 var OLLayer = this.getOLMapLayer(
                     event.getMapLayer()
                 );
-                //OLLayer.redraw();
+                if (typeof OLLayer.getSource().refresh ==='function'){
+                    OLLayer.getSource().refresh();
+                }
 
                 this.getIO().setMapLayerStyle(
                     event.getMapLayer().getId(),
@@ -1123,7 +1126,7 @@ Oskari.clazz.define(
                 },
                 rowidx = 0,
                 colidx = 0;
-            var tileRangeExtentArray = tileGrid.getTileRangeForExtentAndResolutionWrapper(mapExtent, resolution);
+            var tileRangeExtentArray = tileGrid.getTileRangeForExtentAndZoomWrapper(mapExtent, z);
             var tileRangeExtent = {
                 minX: tileRangeExtentArray[0],
                 minY: tileRangeExtentArray[1],
@@ -1501,11 +1504,8 @@ Oskari.clazz.define(
             if (!imageUrl || !boundsObj) {
                 return;
             }
-
-
-
             if (layerType === me.__typeHighlight) {
-                  ols = [imageSize.width,imageSize.height];  //ol.Size
+                ols = [imageSize.width,imageSize.height];  //ol.Size
                 layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
 
                 wfsMapImageLayer = new ol.layer.Image({
@@ -1529,14 +1529,16 @@ Oskari.clazz.define(
                     map.setLayerIndex(wfsMapImageLayer, layerIndex);
                 }
 
-                // highlight picture on top of normal layer images
-                highlightLayer = me.getOLMapLayer(layer, me.__typeHighlight);
-
+                // highlight picture on top of normal layer images (if both are available)
+                // for example postprocessor bundle can highlight without the "normal layer"
                 if (normalLayer && highlightLayer) {
+                    var layerToMove = me.getOLMapLayer(layer, me.__typeHighlight);
+                    var higlightLayerIndex = mapmodule.getLayerIndex(layerToMove);
+                    highlightLayer = map.getLayers().removeAt(higlightLayerIndex);
+
                     normalLayerIndex = mapmodule.getLayerIndex(normalLayer);
                     map.getLayers().insertAt(normalLayerIndex, highlightLayer);
                 }
-
             } else { // "normal"
                 var ollayer = normalLayer;
                 ollayer.getSource().setupImageContent(boundsObj, imageUrl, ollayer, map, boundaryTile);
@@ -1560,6 +1562,7 @@ Oskari.clazz.define(
          */
         deleteTileCache: function (layerId, styleName) {
             // TODO: force reload of tiles - required for custom style change
+            // now layer's source is refreshed in changeMapLayerStyleHandler
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

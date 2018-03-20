@@ -37,7 +37,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
                 layer.setOrganizationName(loclayer.organization);
             }
             if (loclayer.inspire) {
-                layer.setInspireName(loclayer.inspire);
+                layer.setGroups([{
+                    id:'MYPLACES',
+                    name:loclayer.inspire
+                }]);
             }
         }
     });

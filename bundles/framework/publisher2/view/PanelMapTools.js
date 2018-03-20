@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             if (me.data) {
               _.each(me.tools, function (tool) {
                 try {
-                  tool.init(me.data);
+                  tool.init(me.data, me.instance);
                 } catch(e) {
                     Oskari.log('publisher2.view.PanelMapTools').error('Error initializing publisher tool ' + tool.getTool().id);
                 }

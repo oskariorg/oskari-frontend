@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Mjerenja",
             "close": "Poništi",
             "guidance": {
-                "measureline": "Izmjeri liniju na karti. Dvostruki klik za prekid mjerenja.",
-                "measurearea": "Izmjeri površinu na karti. Dvostruki klik za prekid mjerenja."
+                "measureline": "Izmjeri liniju na karti.",
+                "measurearea": "Izmjeri površinu na karti."
             }
         },
         "guidedTour": {

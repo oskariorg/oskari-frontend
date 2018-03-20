@@ -94,7 +94,7 @@ Oskari.clazz.define(
                     me._deleteRole(role);
                 }
             );
-            item.find('h3').html(role.name);
+            item.find('h3').text(role.name);
             btn.insertTo(item.find('div.header'));
             return item;
         },
@@ -237,7 +237,7 @@ Oskari.clazz.define(
          * @return {String} Permissions table
          */
         createLayerRightGrid: function (columnHeaders, layerRightsJSON) {
-            'use strict';
+            
             var table = '<table class="layer-rights-table">',
                 i = 0,
                 tr = 0,

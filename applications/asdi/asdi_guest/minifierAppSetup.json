@@ -1,5 +1,14 @@
 {
     "startupSequence": [{
+        "bundlename": "asdi-lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "asdi-lang-overrides": {
+                        "bundlePath": "../../../packages/asdi/bundle/"
+                    }
+                }
+            }
+        }, {
             "bundlename": "openlayers-default-theme",
             "metadata": {
                 "Import-Bundle": {
@@ -15,36 +24,26 @@
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
-                    "mapfull": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                    "maparcgis": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapmodule-plugin": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                    "mapmodule": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapwmts": {
+                    "oskariui": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
                     "mapwfs2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "maparcgis": {
-                        "bundlePath": "../../../packages/arcgis/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
                     "ui-components": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
-                    "oskariui": {
+                    "mapfull": {
                         "bundlePath": "../../../packages/framework/bundle/"
-                    }
-
-                }
-            }
-        }, {
-            "bundlename": "divmanazer",
-            "metadata": {
-                "Import-Bundle": {
-                    "divmanazer": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapwmts": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -62,7 +61,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "toolbar": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -71,7 +70,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "infobox": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -89,7 +88,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "metadatacatalogue": {
-                        "bundlePath": "../../../packages/catalogue/bundle/"
+                        "bundlePath": "../../../packages/catalogue/"
                     }
                 }
             }
@@ -243,7 +242,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "featuredata2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/framework/"
                     }
                 }
             }

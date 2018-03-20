@@ -26,6 +26,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         this.toolbars = {};
         this.groupsToToolbars = {};
         this._toolbarConfigs = {};
+        this.currentMeasureTool = null;
     }, {
         /**
          * @static
@@ -308,6 +309,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 var me = this;
                 var sandbox = this.getSandbox();
 
+                me.currentMeasureTool = null;
+
                 /* we'll show prompt if measure tool has been selected */
                 if (!me.measureTools[event.getGroupId()]) {
                     return;
@@ -315,6 +318,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 if (!me.measureTools[event.getGroupId()][event.getToolId()]) {
                     return;
                 }
+                me.currentMeasureTool = event.getToolId();
 
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];
 

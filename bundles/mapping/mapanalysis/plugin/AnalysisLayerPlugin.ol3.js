@@ -81,6 +81,8 @@ Oskari.clazz.define(
                     'LAYERS': layer.getWpsName(),
                     'FORMAT': 'image/png'
                 },
+                visible = layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
+                opacity = layer.getOpacity() / 100,
                 openlayer = new ol.layer.Image({
                     source: new ol.source.ImageWMS({
                         url: wms.URL,
@@ -92,11 +94,11 @@ Oskari.clazz.define(
                     }),
                     minResolution: minResolution,
                     maxResolution: maxResolution,
-                    visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
-                    opacity: layer.getOpacity() / 100
+                    visible: visible,
+                    opacity: opacity
                 });
 
-            this._registerLayerEvents(openLayer, layer);
+            this._registerLayerEvents(openlayer, layer);
             this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
 
             // store reference to layers
