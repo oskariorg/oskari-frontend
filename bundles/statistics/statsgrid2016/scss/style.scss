@@ -576,24 +576,32 @@ div.oskari-flyout {
 .legend-transparent {
    background-color: rgba(255,255,255,0.2)
 }
-    
+.active-header {
+    width: 93%;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    padding: 5px;
+}
+.active-header > .title {
+    width: 90%;
+    font-weight: bold;
+}
 .active-legend {
     height:100%;
 }
-.active-legend-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
+
+.edit-legend {
+    height: 16px;
+    width: 16px;
+    right: 0 !important;
+    background-image: url(../images/edit-dark.png);
 }
-.active-legend-header > .title {
-  font-weight: bold;
-}
-.edit-active-legend {
-  height: 16px;
-  width: 16px;
-  right: 0 !important;
-  background-image: url(../images/edit-dark.png);
+.edit-active {
+    height: 16px;
+    width: 16px;
+    right: 0 !important;
+    background-image: url(../images/edit-hover.png);
 }
 .statsgrid-legend-container {
     background-color: #FFFFFF;
@@ -649,7 +657,7 @@ div.oskari-flyout {
         }
     }
 
-    >.accordion .accordion_panel {
+    > .classification .accordion .accordion_panel {
         border: 0px;
         overflow: visible;
 
