@@ -49,8 +49,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
                 width: '100%'
             });
             select.adjustChosen();
-            me.service.getStateService().activeIndicator.hash ? select.setValue( me.service.getStateService().activeIndicator.hash ) : select.selectFirstValue();
-            me._select = select;
+            
+            if ( me.service.getStateService().activeIndicator ) {
+                me.service.getStateService().activeIndicator.hash ? select.setValue( me.service.getStateService().activeIndicator.hash ) : select.selectFirstValue();
+                me._select = select;
+            }
 
             container.append(dropdown);
             dropdown.on('change', function(event) {

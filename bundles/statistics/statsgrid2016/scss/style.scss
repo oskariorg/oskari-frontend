@@ -577,10 +577,9 @@ div.oskari-flyout {
    background-color: rgba(255,255,255,0.2)
 }
 .active-header {
-    width: 93%;
     display: flex;
     justify-content: space-between;
-    align-content: center;
+    align-items: center;
     padding: 5px;
 }
 .active-header > .title {
@@ -719,6 +718,10 @@ div.oskari-flyout {
 
     .statsgrid-svg {
         float: left;
+    }
+    .statsgrid-svg-legend {
+        margin: 0 auto;
+        width:50%;
     }
     .statsgrid-range {
         float: left;

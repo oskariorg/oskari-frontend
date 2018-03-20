@@ -102,7 +102,7 @@ function() {
                     statsgrid: {
                         conf : {
                             allowClassification: me.state.enabled,
-                            legendLocation : this.getPlugin().getLocation()
+                            legendLocation : 'right top'
                         }
                     }
                 }

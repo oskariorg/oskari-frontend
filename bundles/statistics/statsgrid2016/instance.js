@@ -198,7 +198,9 @@ Oskari.clazz.define(
                     return;
                 } else {
                     me.getTile().showExtensions();
-                    me.createClassficationView(true);
+                    if ( !me.isEmbedded() ) {
+                        me.createClassficationView(true);
+                    }
                 }
             },
             /**

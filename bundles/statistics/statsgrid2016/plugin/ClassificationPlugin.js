@@ -11,7 +11,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
-        this._defaultLocation = 'right bottom';
+
+        if ( instance.isEmbedded() )
+        {
+            this._defaultLocation = config.legendLocation;
+        }
+        else {
+            this._defaultLocation = 'right bottom';
+        }
+        
         me._name = 'ClassificationPlugin';
         me.element = null;
         me._templates = {
@@ -128,6 +136,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         _createEventHandlers: function () {
             return {
+                // 'StatsGrid.ActiveIndicatorChangedEvent' : function(evt) {
+                // },
                 MapSizeChangedEvent: function () {
                     this._calculatePluginSize();
                 }
@@ -148,7 +158,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 });
             } else if ( !Oskari.util.isMobile() ) {
                 element.find('.accordion').css({
-                    'overflow': 'auto',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
             }
