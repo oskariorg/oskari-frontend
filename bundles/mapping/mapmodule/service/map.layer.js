@@ -607,7 +607,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             var layers = [];
 
-            var addGroupLayers = function(groups) {
+            var addGroupLayers = function(groups, recursive) {
                 groups.forEach(function(group) {
                     if(group.layers) {
                         group.layers.forEach(function(layer) {
@@ -615,10 +615,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         });
                     }
                     if(group.groups) {
-                        addGroupLayers(group.groups);
+                        addGroupLayers(group.groups, true);
                     }
-                    var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
-                    me._layerGroups.push(groupDom);
+
+                    // If not recursive, then
+                    if(!recursive) {
+                        var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
+                        me._layerGroups.push(groupDom);
+                    }
                 });
             };
 
