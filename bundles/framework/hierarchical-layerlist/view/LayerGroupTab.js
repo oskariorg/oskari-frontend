@@ -997,7 +997,6 @@ Oskari.clazz.define(
 
 
                 if (group.getGroups().length > 0) {
-                    var subgroupsSubgroupsOrder = [];
                     addSubgroups('subgroup', group.getId(), group.getGroups(), groupOrders);
                 }
 
