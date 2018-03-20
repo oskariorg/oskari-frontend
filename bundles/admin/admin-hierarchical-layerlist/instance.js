@@ -232,7 +232,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 if (!draggedNode.type) {
                     return;
                 }
-                var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
+                var originalParentNode = data.data.origin.get_node(draggedNode.parent);
                 if (originalParentNode === false) {
                     originalParentNode = draggedNode.original;
                 }
@@ -265,10 +265,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 });
                 if (!data.data.origin.is_open(targetGroup)) {
                     data.data.origin.open_node(targetGroup);
-                    me._saveOrder(ajaxData);
-                } else {
-                    me._saveOrder(ajaxData);
                 }
+
+                me._saveOrder(ajaxData);
             });
         },
         /**
