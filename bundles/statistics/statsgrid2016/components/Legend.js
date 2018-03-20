@@ -58,10 +58,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox) {
         this.editClassification.getElement().detach();
         accordion.removeAllPanels();
 
+        if ( container.find('.legend-noactive') ) {
+            container.find('.legend-noactive').remove();
+        }
+
         for (var i = 0; i < container.children().length; i++) {
             jQuery( container.children()[i] ).empty();
         }
-        if(el) {
+
+        if ( el ) {
             // attach container to parent if provided, otherwise updates UI in the current parent
             el.append(container);
         }
