@@ -227,15 +227,12 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             jQuery(document).on('dnd_stop.vakata', function(event, data) {
                 //If the drag target group is not open, we have to open it.
                 //Otherwise we can't get the necessary information of the drag operation.
-                var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop('id').split('_')[0]);
+                var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop('id').split('_anchor')[0]);
                 var draggedNode = data.data.origin.get_node(data.data.nodes[0]);
                 if (!draggedNode.type) {
                     return;
                 }
-                var originalParentNode = data.data.origin.get_node(draggedNode.original.parent);
-                if (originalParentNode === false) {
-                    originalParentNode = draggedNode.original;
-                }
+                var originalParentNode = draggedNode.original;
 
                 // Get ajax data
                 var type = me._findJSTreeNodeActualType(draggedNode.type);
@@ -265,10 +262,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 });
                 if (!data.data.origin.is_open(targetGroup)) {
                     data.data.origin.open_node(targetGroup);
-                    me._saveOrder(ajaxData);
-                } else {
-                    me._saveOrder(ajaxData);
                 }
+
+                me._saveOrder(ajaxData);
             });
         },
         /**

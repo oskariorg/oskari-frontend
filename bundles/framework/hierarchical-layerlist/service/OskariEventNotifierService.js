@@ -35,20 +35,8 @@
                 return this.sandbox;
             },
             onEvent: function(event) {
-                this.notifyOskariEvent(event);
-            },
-
-            /**
-             * Used to propate Oskari events for files that have reference to service, but don't need to be registered to sandbox.
-             * Usage: service.on('Event', function(evt) {});
-             *
-             * instance.js registers eventhandlers and calls this to let components know about events.
-             * @param  {Oskari.mapframework.event.Event} event event that needs to be propagated to components
-             */
-            notifyOskariEvent: function(event) {
                 this.trigger(event.getName(), event);
             }
-
         }, {
             'protocol': ['Oskari.mapframework.service.Service']
         });
