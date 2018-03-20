@@ -113,8 +113,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             });
 
             me.notifierService.on('BackendStatus.BackendStatusChangedEvent', function(evt) {
-                var me = this,
-                    layerId = evt.getLayerId();
+                var layerId = evt.getLayerId();
                 if (layerId === null || layerId === undefined) {
                     // Massive update so just recreate the whole ui
                     me.populateLayers();
