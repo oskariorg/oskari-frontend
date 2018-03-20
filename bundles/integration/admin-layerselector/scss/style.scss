@@ -241,7 +241,7 @@ div.admin-layerselector {
             padding: 5px 28px 5px 5px;
             margin-right: 5px;
             border-radius: 5px;
-            position: relative; 
+            position: relative;
         }
         .add-layer-forced-proj .icon-close {
             top: 7px;
@@ -441,6 +441,20 @@ div.admin-layerselector {
         .admin-add-layer-cancel {
             float: right;
             margin-right: 10px;
+        }
+        select {
+            &.add-layer-input {
+                height: 36px;
+            }
+        }
+        .add-layer-input {
+            &.mid {
+                width: 217px;
+                float: left;
+            }
+            &.long {
+                width: 297px;
+            }
         }
 
     }

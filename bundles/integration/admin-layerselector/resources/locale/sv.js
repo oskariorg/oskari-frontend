@@ -198,7 +198,12 @@ Oskari.registerLocalization(
             "errorTitle": "Fel",
             "warningTitle": "Varning",
             "successTitle": "Lagrat",
-            "warning_some_of_the_layers_could_not_be_parsed": "Nägra kartlager kunde inte bearbetas."
+            "warning_some_of_the_layers_could_not_be_parsed": "Nägra kartlager kunde inte bearbetas.",
+            "addDataprovider": "Dataprovider",
+            "groupTitle": "Gruppnivå namn",
+            "addDataproviderButton": "Tillägg",
+            "maplayerGroups": "Maplayer-grupper",
+            "selectMaplayerGroupsButton": "Välj grupper"
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
@@ -214,6 +219,20 @@ Oskari.registerLocalization(
         "recheckSucceeded": "Uppdatering lyckades.",
         "recheckFailReason": "Uppdatering misslyckades: {reason}",
         "recheckFail": "Uppdatering misslyckades.",
-        "recheckFailTimeout": "Uppdatering tidgräns överstegs. Processen fortsätter på servern."
+        "recheckFailTimeout": "Uppdatering tidgräns överstegs. Processen fortsätter på servern.",
+        "successMessages": {
+            "dataproviderSave": {
+                "title": "Dataprovider var framgångsrika",
+                "message": "Dataprovider var framgångsrika"
+            }
+        },
+        "groupTitles": {
+            "localePrefix": "Namnet på",
+            "addDataprovider": "Lägg till dataprovider",
+            "selectLayerGroups": "Välj lagergrupper"
+        },
+        "buttons": {
+            "add": "Tillägg"
+        }
     }
 });

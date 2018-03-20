@@ -1,0 +1,396 @@
+.hierarchical-layerlist-flyout .oskari-flyoutcontentcontainer {
+  max-height: none; }
+
+div.hierarchical-layerlist div.layer-filter {
+  margin: 10px;
+  color: #949494; }
+div.hierarchical-layerlist div.filter {
+  border: 1px solid #a4a4a4;
+  padding: 10px;
+  float: left;
+  cursor: pointer;
+  margin-bottom: 5px;
+  margin-left: -1px; }
+div.hierarchical-layerlist div.accordion {
+  overflow: auto; }
+  div.hierarchical-layerlist div.accordion div.accordion_panel div.content {
+    padding: 0; }
+div.hierarchical-layerlist span.layer input {
+  float: left;
+  margin-right: 5px; }
+div.hierarchical-layerlist span.layer input[type=checkbox] {
+  margin-top: -2px; }
+div.hierarchical-layerlist span.layer label.layer-title {
+  /* Let's just imagine this is tabular data... */
+  font-size: 12px; }
+div.hierarchical-layerlist span.layer span.layer-tools {
+  float: right; }
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist span.layer span.layer-tools {
+    margin-top: -30px; } }
+div.hierarchical-layerlist span.layer span.layer-icon {
+  float: left;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  margin-top: 5px; }
+div.hierarchical-layerlist span.layer span.layer-info {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  margin-top: 5px;
+  float: left; }
+div.hierarchical-layerlist span.layer span.layer-backendstatus-icon {
+  float: left;
+  width: 20px;
+  height: 16px;
+  margin-right: 4px;
+  margin-top: 5px;
+  background-repeat: no-repeat; }
+div.hierarchical-layerlist span.layer span.backendstatus-down {
+  height: 20px !important;
+  margin-bottom: 2px;
+  cursor: pointer; }
+div.hierarchical-layerlist span.layer span.backendstatus-maintenance {
+  height: 20px !important;
+  margin-bottom: 2px;
+  cursor: pointer; }
+div.hierarchical-layerlist span.layer span.backendstatus-ok {
+  height: 20px !important;
+  margin-bottom: 2px;
+  cursor: pointer; }
+div.hierarchical-layerlist span.layer span.backendstatus-unknown {
+  height: 20px !important;
+  margin-bottom: 2px; }
+div.hierarchical-layerlist span.layer span.backendstatus-unstable {
+  height: 20px !important;
+  margin-bottom: 2px; }
+div.hierarchical-layerlist div.layerGroup {
+  background-color: #f3f3f3;
+  border: 1px solid #c0d0d0;
+  margin: 0;
+  padding: 0; }
+  div.hierarchical-layerlist div.layerGroup.open {
+    background-color: #FFFFFF; }
+  div.hierarchical-layerlist div.layerGroup div.groupIcon {
+    display: inline-block;
+    margin-left: 12px;
+    vertical-align: middle; }
+  div.hierarchical-layerlist div.layerGroup div.groupHeader {
+    display: inline-block;
+    padding: 8px 10px 8px 12px; }
+div.hierarchical-layerlist div.tab-content {
+  padding: 0; }
+  div.hierarchical-layerlist div.tab-content div.oskarifield {
+    margin: 10px;
+    position: relative; }
+    div.hierarchical-layerlist div.tab-content div.oskarifield input[type=text] {
+      width: 90%; }
+    div.hierarchical-layerlist div.tab-content div.oskarifield .icon-close {
+      margin-right: -20px; }
+    div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .field-description {
+      max-width: 80%;
+      float: left;
+      padding: 3px 0;
+      color: #666; }
+      div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .field-description .icon-info {
+        display: inline-block; }
+    div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools {
+      float: right; }
+      div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool {
+        width: 26px;
+        height: 26px;
+        float: left;
+        margin-left: 4px;
+        margin-top: 4px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        cursor: pointer; }
+        div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .main-tools .main-tool.active {
+          background-color: #ffde00; }
+    div.hierarchical-layerlist div.tab-content div.oskarifield .description-and-tools .clear {
+      clear: both; }
+    div.hierarchical-layerlist div.tab-content div.oskarifield .related-keywords {
+      display: none;
+      overflow: hidden;
+      height: 30px;
+      line-height: 30px; }
+      div.hierarchical-layerlist div.tab-content div.oskarifield .related-keywords .keywords-title {
+        box-sizing: border-box;
+        height: 30px;
+        line-height: 30px;
+        color: #000;
+        font-weight: bold;
+        float: left; }
+      div.hierarchical-layerlist div.tab-content div.oskarifield .related-keywords .keyword-cont {
+        display: block;
+        box-sizing: border-box;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        color: #0085D1;
+        float: left; }
+        div.hierarchical-layerlist div.tab-content div.oskarifield .related-keywords .keyword-cont .keyword {
+          float: left;
+          min-width: 91px; }
+        div.hierarchical-layerlist div.tab-content div.oskarifield .related-keywords .keyword-cont .type {
+          background-color: #333438;
+          border: solid 2px #FFDE00;
+          color: #FFDE00;
+          width: 34px;
+          line-height: 16px;
+          padding: 3px;
+          margin: 2px;
+          float: right;
+          display: inline-block;
+          text-align: center; }
+      div.hierarchical-layerlist div.tab-content div.oskarifield .related-keywords .focus {
+        background-color: #333438;
+        color: white; }
+div.hierarchical-layerlist li#hierarchical-layerlist-selected-layers-tab {
+  background-color: #1eb54e;
+  color: #fff; }
+  div.hierarchical-layerlist li#hierarchical-layerlist-selected-layers-tab div.layers-selected {
+    position: relative; }
+    div.hierarchical-layerlist li#hierarchical-layerlist-selected-layers-tab div.layers-selected .layer-count {
+      color: #000;
+      font-weight: normal;
+      text-align: center;
+      font-size: 11px; }
+div.hierarchical-layerlist ul.layerlist {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+  div.hierarchical-layerlist ul.layerlist .width-prefix {
+    width: 50px; }
+  div.hierarchical-layerlist ul.layerlist .text-right {
+    text-align: right; }
+  div.hierarchical-layerlist ul.layerlist li.layer {
+    border: 1pt solid #c0d0e0;
+    margin: 5px;
+    background-color: #fff;
+    font: 10pt Arial,sans-serif; }
+    div.hierarchical-layerlist ul.layerlist li.layer .layer-info {
+      cursor: move;
+      padding: 6px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible {
+        float: left;
+        width: 50px;
+        font-size: 12px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .visible a {
+          cursor: pointer;
+          text-decoration: underline; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header {
+        float: left;
+        max-width: 70%; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .breadcrumb {
+          font-size: 8pt; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .title {
+          font-size: 14pt;
+          margin-top: 4px;
+          margin-bottom: 4px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header .description {
+          font-size: 9pt; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools {
+        float: right; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle {
+          background-image: url("../images/glyphicons/glyphicons-174-play.png");
+          background-repeat: no-repeat;
+          background-position: right center;
+          width: 18px;
+          height: 20px;
+          float: left;
+          margin: 4px;
+          cursor: default; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle.open {
+            background-image: url("../images/glyphicons/glyphicons-224-chevron-right.png");
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            transform: rotate(90deg); }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .icon {
+          cursor: default;
+          float: left;
+          margin: 4px;
+          margin-top: 6px; }
+    div.hierarchical-layerlist ul.layerlist li.layer .layer-tools {
+      display: none;
+      background-color: #f3f3f3;
+      padding: 6px;
+      font-size: 12px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .stylesel label {
+        display: inline-block; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .opacity {
+        background-image: url(../images/opacity_slider.png);
+        background-repeat: no-repeat;
+        margin-left: 54px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        float: left; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .opacity .slider {
+          width: 140px;
+          display: inline-block;
+          margin-right: 16px; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .opacity .slider-text {
+          display: inline-block; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .opacity .slider-text input {
+            width: 25px;
+            padding: 1px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .layer-rights {
+        float: right;
+        display: none;
+        text-align: center;
+        height: 32px;
+        line-height: 32px;
+        margin-left: 4px; }
+      div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools {
+        float: right; }
+        div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool {
+          width: 26px;
+          height: 26px;
+          float: left;
+          margin-left: 4px;
+          margin-top: 4px;
+          background-repeat: no-repeat;
+          background-position: center center; }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.zoom-to-extent-tool {
+            background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-featuredata-tool {
+            background-image: url("../images/glyphicons/glyphicons-115-list.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-own-style-tool {
+            background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-metadata-tool {
+            background-image: url("../images/glyphicons/glyphicons-196-info-sign.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-filter-tool {
+            background-image: url("../images/glyphicons/glyphicons-321-filter.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-layer-legend-tool {
+            background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
+          div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-content-editor-tool {
+            background-image: url("../images/glyphicons/glyphicons-31-pencil.png"); }
+div.hierarchical-layerlist .hierarchical-layerlist-tree {
+  overflow-y: auto; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow-hovered {
+    background-color: #fdf8d9; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-subgroup-icon {
+    display: none; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-group-icon {
+    display: none; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-layer-icon {
+    display: none; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"].jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"] .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-last .jstree-ocl {
+    margin-right: -16px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no-checkbox {
+    margin-left: 14px; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree li a.no-checkbox i.jstree-checkbox {
+      display: none; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-open .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"].jstree-open .jstree-ocl {
+    background-position: -32px 5px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-closed .jstree-ocl, div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"] .jstree-ocl {
+    background-position: 0px 5px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor[data-tools-visible="false"] span.layer span.layer-tools .layer-tool {
+    display: none; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor {
+    width: 90%;
+    padding: 4px;
+    margin-left: 10px;
+    /* Group tools */
+    /* Subgroup tools */
+    /* Subgroup subgroup tools */
+    /*Layer tools */ }
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools {
+    margin-top: -30px; } }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools {
+      float: right; }
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool {
+        width: 26px;
+        height: 26px;
+        float: left;
+        margin-left: 4px;
+        margin-top: 4px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        cursor: pointer; }
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .group-tools .group-tool.active {
+          background-color: #ffde00; }
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools {
+    margin-top: -30px; } }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools {
+      float: right;
+      display: inline; }
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool {
+        width: 26px;
+        height: 26px;
+        float: left;
+        margin-left: 4px;
+        margin-top: 4px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        cursor: pointer; }
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-tools .subgroup-tool.active {
+          background-color: #ffde00; }
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools {
+    margin-top: -30px; } }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools {
+      float: right;
+      display: inline; }
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool {
+        width: 26px;
+        height: 26px;
+        float: left;
+        margin-left: 4px;
+        margin-top: 4px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        cursor: pointer; }
+        div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .subgroup-subgroup-tools .subgroup-subgroup-tool.active {
+          background-color: #ffde00; }
+@-moz-document url-prefix() {
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool {
+    margin-top: -30px; } }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool {
+      width: 26px;
+      height: 26px;
+      float: left;
+      margin-left: 4px;
+      margin-top: 4px;
+      background-repeat: no-repeat;
+      background-position: center center;
+      cursor: pointer; }
+      div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-anchor .layer-tools .layer-tool.active {
+        background-color: #ffde00; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow {
+    height: 40px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node {
+    border: 1px solid #c0d0d0;
+    font-size: 16px;
+    font-weight: bold; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node div.jstree-wholerow {
+      background-color: #f3f3f3; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-node.jstree-open div.jstree-wholerow {
+      background-color: #FAFAFA; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf {
+    border: none; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf span.layer-title {
+      font-size: 14px;
+      font-weight: normal; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf:nth-child(even) div.jstree-wholerow {
+      background-color: #f3f3f3; }
+    div.hierarchical-layerlist .hierarchical-layerlist-tree ul.jstree-children li.jstree-leaf:nth-child(odd) div.jstree-wholerow {
+      background-color: #ffffff; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-checkbox {
+    margin-left: -4px; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"] {
+    border: 1px solid #c0d0d0 !important; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"].jstree-open {
+    border: 1px solid #c0d0d0 !important; }
+  div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-node[aria-level="1"] > div.jstree-wholerow {
+    background-color: #f3f3f3 !important; }
+
+/*# sourceMappingURL=style.css.map */

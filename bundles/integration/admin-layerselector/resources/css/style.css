@@ -315,6 +315,13 @@ div.admin-layerselector {
     div.admin-layerselector .input-controls .admin-add-layer-cancel {
       float: right;
       margin-right: 10px; }
+    div.admin-layerselector .input-controls select.add-layer-input {
+      height: 36px; }
+    div.admin-layerselector .input-controls .add-layer-input.mid {
+      width: 217px;
+      float: left; }
+    div.admin-layerselector .input-controls .add-layer-input.long {
+      width: 297px; }
   div.admin-layerselector .adjacent .input-controls {
     float: left; }
   div.admin-layerselector .icon-close {
@@ -378,3 +385,5 @@ div.divmanazerpopup div.content div.admin-layerselector {
         margin-right: 20px; }
       div.divmanazerpopup div.content div.admin-layerselector div.layer div.admin-add-layer div.add-layer-send {
         display: none; }
+
+/*# sourceMappingURL=style.css.map */
