@@ -10,8 +10,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         me.id  = json.id;
         me.layers = json.layers || [];
         me.name = json.name;
-        me.orderNumber = json.orderNumber || 10000;
-        me.parentId = json.parentId || -1;
+        me.orderNumber = (typeof json.orderNumber !== 'undefined') ? json.orderNumber : 10000;
+        me.parentId = (typeof json.parentId !== 'undefined') ? json.parentId : -1;
         me.selectable = (typeof json.selectable === 'boolean') ? json.selectable : true;
         me.toolsVisible = (typeof json.toolsVisible === 'boolean') ? json.toolsVisible : true;
     }, {
