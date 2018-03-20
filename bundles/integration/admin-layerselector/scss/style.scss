@@ -524,7 +524,9 @@ div.admin-layerselector {
     }
 
 }
-
+div.admin-layerselector .accordion .accordion_panel .header {
+    display: block;
+  }
 div.divmanazerpopup div.content div.admin-layerselector {
 
     margin-right: 20px;

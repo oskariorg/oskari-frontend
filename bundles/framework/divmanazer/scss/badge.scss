@@ -35,8 +35,8 @@
     @include border-radius(9px);
 }
 .badge-wrapper {
-    display: inline-block;
-    position: absolute;
+    margin-left: auto;
+    margin-right: 5%;
     height: inherit;
 }
 a.oskari-badge:hover {
