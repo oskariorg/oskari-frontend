@@ -279,7 +279,9 @@ Oskari.clazz.define(
             });
 
             me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function(evt) {
-                me._handleLayerOrderChanged(evt);
+                if (event._creator !== this.instance.getName()) {
+                    me._handleLayerOrderChanged(evt);
+                }
             });
 
             me._notifierService.on('AfterChangeMapLayerOpacityEvent', function(evt) {
