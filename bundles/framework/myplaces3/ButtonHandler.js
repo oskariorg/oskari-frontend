@@ -238,7 +238,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
             if (this.drawMode === 'line'){
                 measurement = data.length;
             } else if (this.drawMode === 'area'){
-                measurement = data.area;         
+                measurement = data.area;
             } else {
                 return;
             }
@@ -267,8 +267,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.ButtonHandler",
 
         stop: function () {
             // Toolbar.RemoveToolButtonRequest
-            // remove live bindings
-            jQuery('div.myplaces3 div.button').die();
+            // remove on bindings
+            jQuery('div.myplaces3 div.button').off();
         },
         /**
          * @method onEvent
