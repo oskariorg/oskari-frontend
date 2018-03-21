@@ -127,6 +127,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox) {
             legendContainer.html( legendUI );
 
             var edit = container.find('.edit-legend');
+            if ( Object.keys(me._renderState).length > 0 ) {
+                if ( me._renderState.panels[me._accordion.panels[0].getTitle()] ) {
+                    edit.addClass('edit-active');
+                } else {
+                    edit.removeClass('edit-active');   
+                }
+            }
 
             edit.on('click', function (event) {
                 var target = jQuery(event.target);
@@ -194,6 +201,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox) {
         panel.on('close', function() {
             me._setPanelState(panel);
         });
+        panel.setTitle(title);
         panel.getHeader().remove();
         return panel;
     },
