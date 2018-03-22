@@ -22,39 +22,39 @@ Oskari.clazz.define(
     }, {
         __name: 'MyPlaces3',
 
-        __drawStyle:{
-            draw : {
-                fill : {
+        __drawStyle: {
+            draw: {
+                fill: {
                     color: 'rgba(35, 216, 194, 0.3)'
                 },
-                stroke : {
+                stroke: {
                     color: 'rgba(35, 216, 194, 1)',
                     width: 2
                 },
-                image : {
+                image: {
                     radius: 4,
                     fill: {
                         color: 'rgba(35, 216, 194, 0.7)'
                     }
                 }
             },
-            modify : {
-                fill : {
+            modify: {
+                fill: {
                     color: 'rgba(0, 0, 238, 0.3)'
                 },
-                stroke : {
+                stroke: {
                     color: 'rgba(0, 0, 238, 1)',
                     width: 2
                 },
-                image : {
-                  radius: 4,
+                image: {
+                    radius: 4,
                     fill: {
                         color: 'rgba(0,0,0,1)'
                     }
                 }
             }
         },
-        getDrawStyle: function (){
+        getDrawStyle: function () {
             return this.__drawStyle;
         },
         /**
@@ -81,8 +81,8 @@ Oskari.clazz.define(
          * @param {String} message popup message
          */
         showMessage: function (title, message) {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             okBtn.setHandler(function () {
                 dialog.close(true);
             });
@@ -109,16 +109,16 @@ Oskari.clazz.define(
             return this.myPlacesService;
         },
 
-        isFinishedDrawing: function(){
+        isFinishedDrawing: function () {
             return this.finishedDrawing;
         },
-        setIsFinishedDrawing: function(bln){
+        setIsFinishedDrawing: function (bln) {
             this.finishedDrawing = !!bln;
         },
-        isEditPlace: function(){
+        isEditPlace: function () {
             return this.editPlace;
         },
-        setIsEditPlace: function(bln){
+        setIsEditPlace: function (bln) {
             this.editPlace = !!bln;
         },
 
@@ -165,16 +165,14 @@ Oskari.clazz.define(
         /**
          * @method  @private _addEventHandlers Add event handlers
          */
-        _addRequestHandlers: function() {
-            var me = this,
-                conf = me.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
+        _addRequestHandlers: function () {
+            var conf = this.conf || {};
+            var sandbox = Oskari.getSandbox(conf.sandbox);
 
             var editRequestHandler = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler',
                 sandbox,
-                me
+                this
             );
             sandbox.addRequestHandler(
                 'MyPlaces.EditPlaceRequest',
@@ -200,7 +198,7 @@ Oskari.clazz.define(
             var openAddLayerDialogHandler = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDialogHandler',
                 sandbox,
-                me
+                this
             );
             sandbox.addRequestHandler(
                 'MyPlaces.OpenAddLayerDialogRequest',
@@ -213,16 +211,14 @@ Oskari.clazz.define(
          */
         start: function () {
             // Should this not come as a param?
-            var me = this,
-                conf = me.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
+            var conf = this.conf || {};
+            var sandbox = Oskari.getSandbox(conf.sandbox);
             this.sandbox = sandbox;
 
-            Oskari.log('MyPlaces3').debug("Initializing my places module...");
+            Oskari.log('MyPlaces3').debug('Initializing my places module...');
 
             // handles toolbar buttons related to my places
-            this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces3.ButtonHandler", this);
+            this.buttons = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.ButtonHandler', this);
             this.buttons.start();
 
             var user = Oskari.user();
@@ -231,16 +227,16 @@ Oskari.clazz.define(
                 return;
             }
 
-            sandbox.register(me);
+            sandbox.register(this);
             // handles category related logic - syncs categories to my places map layers etc
             this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.CategoryHandler', this);
             this.categoryHandler.start();
 
             // handles my places insert form etc
-            this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces3.view.MainView", this);
+            this.view = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.MainView', this);
             this.view.start();
 
-            me._addRequestHandlers();
+            this._addRequestHandlers();
 
             this.tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesTab', this);
 
@@ -257,16 +253,16 @@ Oskari.clazz.define(
             // init loads the places/categories
             this.myPlacesService.init();
 
-            if(!sandbox.hasHandler('PersonalData.AddTabRequest')) {
+            if (!sandbox.hasHandler('PersonalData.AddTabRequest')) {
                 return;
             }
             var addAsFirstTab = true;
             var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
             var req = reqBuilder(
-                    this.tab.getTitle(),
-                    this.tab.getContent(),
-                    addAsFirstTab,
-                    me.idPrefix);
+                this.tab.getTitle(),
+                this.tab.getContent(),
+                addAsFirstTab,
+                this.idPrefix);
             sandbox.request(this, req);
         },
         /**
@@ -280,27 +276,18 @@ Oskari.clazz.define(
         openAddLayerDialog: function (originator, side) {
             // create popup
             // TODO popup doesn't block bg?
-            var me = this,
-                dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                categoryForm = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.myplaces3.view.CategoryForm',
-                    me
-                ),
-                categoryHandler = Oskari.clazz.create(
-                    "Oskari.mapframework.bundle.myplaces3.CategoryHandler",
-                    me
-                ),
-                buttons = [],
-                saveBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.SaveButton'
-                ),
-                cancelBtn = dialog.createCloseButton(me.loc('buttons.cancel'));
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me);
+
+            var categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.CategoryHandler', me);
+            var buttons = [];
+            var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+            var cancelBtn = dialog.createCloseButton(me.loc('buttons.cancel'));
 
             saveBtn.setHandler(function () {
-                var values = categoryForm.getValues(),
-                    errors = categoryHandler.validateCategoryFormValues(values);
+                var values = categoryForm.getValues();
+                var errors = categoryHandler.validateCategoryFormValues(values);
 
                 if (errors.length !== 0) {
                     categoryHandler.showValidationErrorMessage(errors);
