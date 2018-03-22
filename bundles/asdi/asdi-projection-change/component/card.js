@@ -59,7 +59,7 @@ function (view, callback) {
     },
     toggleWarningElement: function () {
         var element = this.getElement().find('.projection-warning');
-        if ( this.getUnsupportedLayers().length == 0 ) {
+        if ( this.getUnsupportedLayers().length !== 0 ) {
             element.removeClass('oskari-hidden');
         } else {
             element.addClass('oskari-hidden');
