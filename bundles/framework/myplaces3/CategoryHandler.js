@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
 
     function (instance) {
         this.instance = instance;
+        this.sandbox = instance.sandbox;
         // init layers from link (for printing) on initial load
         this.initialLoad = true;
         this.metaType = 'MYPLACES';
@@ -37,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          */
         start: function () {
             var me = this;
-            var sandbox = this.instance.sandbox;
+            var sandbox = this.sandbox;
 
             if (!Oskari.user().isLoggedIn()) {
                 // guest users don't need this
@@ -86,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          */
         _handlePlacesChanged: function () {
             var me = this;
-            var sandbox = this.instance.sandbox;
+            var sandbox = this.sandbox;
             // check map layers for categorychanges
             var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var categories = this.instance.getService().getAllCategories();
@@ -155,7 +156,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          */
         addLayerToService: function (category) {
             // add maplayer to Oskari
-            var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var json = this._getMapLayerJson(category);
             var myplacesLayer = mapLayerService.createMapLayer(json);
             mapLayerService.addLayer(myplacesLayer);
@@ -242,7 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         editCategory: function (category) {
             var me = this;
 
-            this.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+            this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
             var values = {
                 name: category.getName(),
@@ -289,13 +290,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 me.saveCategory(category);
 
                 dialog.close();
-                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(me.loc('buttons.cancel'));
             cancelBtn.setHandler(function () {
                 dialog.close();
-                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
@@ -474,10 +475,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                     dialog.fadeout();
                     // refresh map layer on map -> send update request
                     var layerId = me._getMapLayerId(model.getId());
-                    var layerIsSelected = me.instance.sandbox.isLayerAlreadySelected(layerId);
+                    var layerIsSelected = me.sandbox.isLayerAlreadySelected(layerId);
                     if (layerIsSelected) {
                         var request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
-                        me.instance.sandbox.request(me, request);
+                        me.sandbox.request(me, request);
                     }
                     return;
                 }
@@ -583,7 +584,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                     var defCat = service.getDefaultCategory();
                     var layerId = this._getMapLayerId(defCat.getId());
                     var request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
-                    this.instance.sandbox.request(this, request);
+                    this.sandbox.request(this, request);
                 }
                 // NOTE OK
                 dialog.show(me.loc('notification.categoryDelete.title'), me.loc('notification.categoryDelete.deleted'));
@@ -630,7 +631,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 this._showMessage(me.loc('notification.error.title'), me.loc('notification.error.generic'));
                 return;
             }
-            var sandbox = this.instance.sandbox;
+            var sandbox = this.sandbox;
             // check map layers for categorychanges
             var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var layerId = this._getMapLayerId(category.getId());

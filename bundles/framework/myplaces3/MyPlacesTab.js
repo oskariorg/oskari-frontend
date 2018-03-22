@@ -98,20 +98,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     panel.getContainer().empty();
                     panel.grid.renderTo(panel.getContainer());
 
-                    var editLink = this.linkTemplate.clone();
+                    var editLink = me.linkTemplate.clone();
                     editLink.addClass('categoryOp');
                     editLink.addClass('edit');
-                    editLink.append(this.loc('tab.editCategory'));
+                    editLink.append(me.loc('tab.editCategory'));
                     editLink.on('click', function () {
                         sandbox.request(me.instance, editReqBuilder(id));
                         return false;
                     });
                     panel.getContainer().append(editLink);
 
-                    var deleteLink = this.linkTemplate.clone();
+                    var deleteLink = me.linkTemplate.clone();
                     deleteLink.addClass('categoryOp');
                     deleteLink.addClass('delete');
-                    deleteLink.append(this.loc('tab.deleteCategory'));
+                    deleteLink.append(me.loc('tab.deleteCategory'));
                     deleteLink.on('click', function () {
                         sandbox.request(me.instance, deleteReqBuilder(id));
                         return false;
