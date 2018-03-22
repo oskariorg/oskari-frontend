@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "MyPlacesImport",
     "value": {
-        "title": "Dataset Import",
+        "title": "Own datasets",
         "desc": "",
         "tool": {
             "tooltip": "Import your own datasets."
@@ -26,7 +26,7 @@ Oskari.registerLocalization(
             },
             "layer": {
                 "title": "Dataset Information",
-                "name": "Name",
+                "name": "Map layer name",
                 "desc": "Description",
                 "source": "Data source",
                 "style": "Style definitions"
@@ -70,6 +70,8 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Datasets",
+            "editLayer": "Edit map layer",
+            "deleteLayer": "Delete map layer",
             "grid": {
                 "name": "Name",
                 "description": "Description",
@@ -95,9 +97,10 @@ Oskari.registerLocalization(
             "error": {
                 "title": "Error",
                 "generic": "A system error occurred.",
-                "editMsg": "A system error occurred.",
-                "getStyle": "Failed to get the defined style for the dataset. Change style definitions before you save changes.",
-                "styleName": "The name is missing. Please type it and try again"
+                "deleteMsg": "Deleting the dataset failed due to an error in the system. Please try again later.",
+                "editMsg": "Updating the dataset failed due to an error in the system. Please try again later.",
+                "getStyle": "The style defined for the dataset was not found. Default values are shown on the form. Change the style definitions before saving the changes.",
+                "styleName": "Give the map layer a name and try again."
             }
         },
         "layer": {
