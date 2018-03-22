@@ -13,28 +13,27 @@ Oskari.clazz.define(
      */
     function (instance) {
         this.instance = instance;
-        var loc = instance.getLocalization('flyout');
+        this.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
             
         this.visualizationForm = Oskari.clazz.create(
         'Oskari.userinterface.component.VisualizationForm'
         );
-
         this.template = jQuery(
         	'<div class="myplacesimportstyleform">' +
             '   <div class="field name">' + 
-            '       <label for="userlayername">'+ loc.layer.name +'</label><br clear="all" />' + 
+            '       <label for="userlayername">'+ this.loc('flyout.layer.name') +'</label><br clear="all" />' +
             '       <input type="text" data-name="userlayername" />' + 
             '   </div>' +
             '   <div class="field desc">' + 
-            '       <label for="description">'+ loc.layer.desc +'</label><br clear="all" />' +
+            '       <label for="description">'+ this.loc('flyout.layer.desc') +'</label><br clear="all" />' +
             '       <input type="text" data-name="userlayerdesc" />' +
             '   </div>' +
             '   <div class="field source">' + 
-            '       <label for ="datasource">'+ loc.layer.source +'</label><br clear="all" />' +
+            '       <label for ="datasource">'+ this.loc('flyout.layer.source') +'</label><br clear="all" />' +
             '       <input type="text" data-name="userlayersource" />' +
             '   </div>' +
             '   <div class="field visualization">' +
-                    '<label for=style>' + loc.layer.style + '</label><br clear="all" />' +
+                    '<label for=style>' + this.loc('flyout.layer.style') + '</label><br clear="all" />' +
                     '<div class="rendering"></div>' +
             '   </div>'+
             '</div>');
