@@ -27,6 +27,9 @@
     justify-content: center;
     overflow-x: hidden;
 }
+.projection-highlight {
+    border: 2px solid rgb(12,60,98);
+}
 /*
  * Card
  */
