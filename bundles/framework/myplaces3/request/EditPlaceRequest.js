@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditPlaceReque
     function (placeId) {
         this._placeId = placeId;
     }, {
-        __name: "MyPlaces.EditPlaceRequest",
+        __name: 'MyPlaces.EditPlaceRequest',
         /**
          * @method getName
          * @return {String} request name
