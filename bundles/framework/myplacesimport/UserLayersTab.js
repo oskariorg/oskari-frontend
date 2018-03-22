@@ -345,11 +345,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 action = this.instance.getService().getGetUserLayerStyleUrl();
 
             jQuery.ajax({
-                url: action,
-                data: {
-                    id: id
-                },
-                type: 'POST',
+                url: action + '&id=' + id,
+                type: 'GET',
                 success: function (response) {
                     if (typeof jQuery.parseJSON(response) == 'object'){
                         form.setStyleValues(response);
