@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.PublishCategor
  */
     function (categoryId, isPublic) {
         this._categoryId = categoryId;
-        this._isPublic = isPublic == true;
+        this._isPublic = !!isPublic;
     }, {
         __name: 'MyPlaces.PublishCategoryRequest',
         /**

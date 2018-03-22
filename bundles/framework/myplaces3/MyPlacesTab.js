@@ -42,10 +42,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             var me = this;
             me.addAddLayerButton();
             me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', me.loc('tab.nocategories'), me.addLayerButton);
-            //TODO do not load all places at startup, load when category is selected
-            //me.tabsContainer.addTabChangeListener(function(prevTab, newTab){
+            // TODO do not load all places at startup, load when category is selected
+            // me.tabsContainer.addTabChangeListener(function(prevTab, newTab){
             //    newTab.handleSelection(true);
-            //});
+            // });
         },
 
         addAddLayerButton: function () {
