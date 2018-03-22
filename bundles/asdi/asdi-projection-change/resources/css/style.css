@@ -1,13 +1,20 @@
 .oskari-projection-changer {
     height:36px;
     width: 36px;
-    background-image: url("../images/projection-dark.png");
+    background-image: url("../images/projection-light.png");
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 50%;
-    background-color: #333438;
+    background-color: #fff;
     margin-bottom: 8.5px !important;
     cursor: pointer;
+}
+.mobile-projection-dark {
+    height:36px;
+    width: 36px;
+    background-image: url("../images/projection-dark.png");
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .oskari-map-projection {
     width: 600px;

@@ -9,9 +9,9 @@ Oskari.clazz.define('Oskari.projection.change.view.ErrorListing', function () {
         return this.element;
     },
     createList: function (errorList) {
-        var list = jQuery('<div></div>');
+        var list = jQuery('<ul></ul>');
         errorList.forEach( function ( unsupported ) {
-            list.append( jQuery('<p>'+ unsupported.getLayerName() +'</p><br/>') );
+            list.append( jQuery('<li>'+ unsupported.getLayerName() +'</li>') );
         });
         return list;
     },

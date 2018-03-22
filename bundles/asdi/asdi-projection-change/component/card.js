@@ -59,7 +59,7 @@ function (view, callback) {
     },
     toggleWarningElement: function () {
         var element = this.getElement().find('.projection-warning');
-        if ( this.getUnsupportedLayers().length !== 0 ) {
+        if ( this.getUnsupportedLayers().length == 0 ) {
             element.removeClass('oskari-hidden');
         } else {
             element.addClass('oskari-hidden');
@@ -72,7 +72,7 @@ function (view, callback) {
         var card = jQuery( tpl ({
             imgPath: me.getImagePath(view.srsName),
             srs: view.srsName,
-            projectionName: view.name,
+            projectionName: me.loc.projectionCode[view.srsName].displayName,
             tooltip: me.loc.error.hover.icon
         }));
 

@@ -18,8 +18,37 @@ Oskari.registerLocalization(
                 "title": "Projection Information",
                 "ok": "Ok"
             },
-            "projectionDesc": {
-                "EPSG:3067": ""
+            "projectionCode": {
+                "EPSG:3571": {
+                    "displayName": "Bering Sea",
+                    "name": "North Pole LAEA Bering Sea",
+                    "desc": "Suitable for studies of Bering Sea area."
+                },
+                "EPSG:3572": { 
+                    "displayName": "Alaska",
+                    "name": "North Pole LAEA Alaska",
+                    "desc": "Suitable for studies of Alaskan area."
+                },
+                "EPSG:3573": {
+                    "displayName": "Canada",
+                    "name": "North Pole LAEA Canada",
+                    "desc": "Suitable for studies of Canadian Arctic area."
+                },
+                "EPSG:3574": {
+                    "displayName": "Atlantic",
+                    "name": "North Pole LAEA Atlantic",
+                    "desc": "Suitable for studies of North Atlantic and Greenland area."
+                },
+                "EPSG:3575": {
+                    "displayName": "Europe",
+                    "name": "North Pole LAEA Europe",
+                    "desc": "Suitable for studies of north European Arctic area."
+                },
+                "EPSG:3576": {
+                    "displayName": "Russia",
+                    "name": "North Pole LAEA Russia",
+                    "desc": "Suitable for studies of Russian Arctic area."
+                }
             }
         }
     }
