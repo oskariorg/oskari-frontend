@@ -37,11 +37,6 @@ Oskari.clazz.define(
                     '<div class="rendering"></div>' +
             '   </div>'+
             '</div>');
-        this.templateTableRow = jQuery('<tr></tr>');
-        this.templateTableCell = jQuery('<td></td>');
-        this.templateTextInput = jQuery('<input type="text"/>');
-        this._isDefault = undefined;
-
     }, {               
         start: function () {},
 
@@ -50,8 +45,7 @@ Oskari.clazz.define(
          * @return {jQuery} jquery reference for the form
          */
     	getForm: function () {
-            var ui = this.template.clone(),
-                table = ui.find('div.visualization table');
+            var ui = this.template.clone();
             // populate the rendering fields
             var content = ui.find('div.rendering');
             content.append(this.visualizationForm.getForm());
@@ -141,7 +135,6 @@ Oskari.clazz.define(
                 values.desc = onScreenForm.find('input[data-name=userlayerdesc]').val();
                 values.source = onScreenForm.find('input[data-name=userlayersource]').val();
             }
-            values._isDefault = this._isDefault || false;
             values.style = JSON.stringify(me._getStyleValues(me.visualizationForm));
 
             return values;
