@@ -235,6 +235,15 @@
                 }
             }
         }, {
+            "bundlename": "asdi-projection-change",
+            "metadata": {
+                "Import-Bundle": {
+                    "asdi-projection-change": {
+                        "bundlePath": "../../../packages/asdi/bundle/"
+                    }
+                }
+            }
+        }, {
             "bundlename": "featuredata2",
             "metadata": {
                 "Import-Bundle": {
