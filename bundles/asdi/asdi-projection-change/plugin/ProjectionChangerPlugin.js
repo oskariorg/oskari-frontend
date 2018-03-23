@@ -40,7 +40,8 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     _createEventHandlers: function () {
       return {
         'MapSizeChangedEvent' : function(evt) {
-          this.moveFlyout();
+            var x = evt._width - 525; 
+            this._flyout.move(x, 300, true);
         }
       }
     },
