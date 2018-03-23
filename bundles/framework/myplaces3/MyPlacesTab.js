@@ -42,10 +42,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             var me = this;
             me.addAddLayerButton();
             me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', me.loc('tab.nocategories'), me.addLayerButton);
-            //TODO do not load all places at startup, load when category is selected
-            //me.tabsContainer.addTabChangeListener(function(prevTab, newTab){
+            // TODO do not load all places at startup, load when category is selected
+            // me.tabsContainer.addTabChangeListener(function(prevTab, newTab){
             //    newTab.handleSelection(true);
-            //});
+            // });
         },
 
         addAddLayerButton: function () {
@@ -74,61 +74,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
              * Updates the category tabs and grids inside them with current data
              */
             'MyPlaces.MyPlacesChangedEvent': function () {
-                var me = this,
-                    service = me.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService'),
-                    categories = service.getAllCategories();
-                var editLinkClosure = function (id) {
-                    return function () {
-                        var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
-                        me.instance.sandbox.request(me.instance, request);
-                        return false;
-                    };
-                };
-                var deletelinkClosure = function (id) {
-                    return function () {
-                        var request = me.instance.sandbox.getRequestBuilder('MyPlaces.DeleteCategoryRequest')(id);
-                        me.instance.sandbox.request(me.instance, request);
-                        return false;
-                    };
-                };
-                var i,
-                    id,
-                    panel;
-                for (i = 0; i < categories.length; ++i) {
-                    id = categories[i].getId();
-                    panel = this.tabPanels[id];
+                var me = this;
+                var sandbox = me.instance.sandbox;
+                var service = sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService');
+                var editReqBuilder = Oskari.requestBuilder('MyPlaces.EditCategoryRequest');
+                var deleteReqBuilder = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest');
+                var categories = service.getAllCategories();
+                categories.forEach(function (cat) {
+                    var id = cat.getId();
+                    var panel = me.tabPanels[id];
                     if (!panel) {
-                        panel = this._createCategoryTab(categories[i]);
-                        this.tabsContainer.addPanel(panel);
-                        this.tabPanels[id] = panel;
+                        panel = me._createCategoryTab(cat);
+                        me.tabsContainer.addPanel(panel);
+                        me.tabPanels[id] = panel;
                     } else {
-                        //lets set a name for the panel
-                        panel.setTitle(categories[i].name);
+                        // lets set a name for the panel
+                        panel.setTitle(cat.name);
                         // update panel graphics
                         me.tabsContainer.updatePanel(panel);
                     }
                     // update places
-                    this._populatePlaces(id);
+                    me._populatePlaces(id);
                     panel.getContainer().empty();
                     panel.grid.renderTo(panel.getContainer());
 
-                    var editLink = this.linkTemplate.clone();
+                    var editLink = me.linkTemplate.clone();
                     editLink.addClass('categoryOp');
                     editLink.addClass('edit');
-                    editLink.append(this.loc('tab.editCategory'));
-                    editLink.on('click', editLinkClosure(id));
+                    editLink.append(me.loc('tab.editCategory'));
+                    editLink.on('click', function () {
+                        sandbox.request(me.instance, editReqBuilder(id));
+                        return false;
+                    });
                     panel.getContainer().append(editLink);
 
-                    var deleteLink = this.linkTemplate.clone();
+                    var deleteLink = me.linkTemplate.clone();
                     deleteLink.addClass('categoryOp');
                     deleteLink.addClass('delete');
-                    deleteLink.append(this.loc('tab.deleteCategory'));
-                    deleteLink.on('click', deletelinkClosure(id));
+                    deleteLink.append(me.loc('tab.deleteCategory'));
+                    deleteLink.on('click', function () {
+                        sandbox.request(me.instance, deleteReqBuilder(id));
+                        return false;
+                    });
                     panel.getContainer().append(deleteLink);
-
-                }
+                });
                 this._removeObsoleteCategories();
 
+                var places = service.getAllMyPlaces();
                 // Inform user of some features not being loaded due to
                 // the max features restriction
                 if (this.instance.conf &&
@@ -148,17 +140,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          */
         _showPlace: function (geometry, categoryId) {
             // center map on selected place
-            var me = this,
-                mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
-                center = mapModule.getCentroidFromGeoJSON(geometry),
-                bounds = me._fitBounds(mapModule.getBoundsFromGeoJSON(geometry)),
-                mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds);
+            var me = this;
+            var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            var center = mapModule.getCentroidFromGeoJSON(geometry);
+            var bounds = me._fitBounds(mapModule.getBoundsFromGeoJSON(geometry));
+            var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
-            var layerId = 'myplaces_' + categoryId,
-                layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            var layerId = 'myplaces_' + categoryId;
+            var layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
-                var request = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+                var request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
                 this.instance.sandbox.request(this.instance, request);
             }
         },
@@ -183,10 +175,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * @private
          */
         _deletePlace: function (data) {
-            var me = this,
-                sandbox = this.instance.sandbox,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var me = this;
+            var sandbox = this.instance.sandbox;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(me.loc('tab.notification.delete.btnDelete'));
             okBtn.addClass('primary');
 
@@ -209,8 +201,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 };
                 service.deleteMyPlace(data.id, callback);
             });
-            var cancelBtn = dialog.createCloseButton(me.loc('tab.notification.delete.btnCancel')),
-                confirmMsg = me.loc('tab.notification.delete.confirm', {name: data.name});
+            var cancelBtn = dialog.createCloseButton(me.loc('tab.notification.delete.btnCancel'));
+            var confirmMsg = me.loc('tab.notification.delete.confirm', {name: data.name});
             dialog.show(me.loc('tab.notification.delete.title'), confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
         },
@@ -221,21 +213,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * @return {String} matching draw mode string-key for the geometry
          * @private
          */
-         //TODO move to more common place
+        // TODO move to more common place
         _getDrawModeFromGeometry: function (geometry) {
             if (geometry === null) {
                 return null;
             }
-            var ret = null,
-                type = geometry.type;
+            var type = geometry.type;
             if (type === 'MultiPoint' || type === 'Point') {
-                ret = 'point';
+                return 'point';
             } else if (type === 'MultiLineString' || type === 'LineString') {
-                ret = 'line';
-            } else if (type === 'MultiPolygon'|| type === 'Polygon') {
-                ret = 'area';
+                return 'line';
+            } else if (type === 'MultiPolygon' || type === 'Polygon') {
+                return 'area';
             }
-            return ret;
+            return null;
         },
         /**
          * @method _createCategoryTab
@@ -244,18 +235,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * @private
          */
         _createCategoryTab: function (category) {
-            var me = this,
-                id = category.getId(),
-                panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+            var me = this;
+            var id = category.getId();
+            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setId(me.instance.idPrefix + '-category-' + id);
             panel.setTitle(category.getName());
-            //TODO do not load all places at startup, load when category is selected
-            /*var selectionHandler = function (selected) {
+            // TODO do not load all places at startup, load when category is selected
+            /* var selectionHandler = function (selected) {
                 if (selected){
                     if (!category.isLoaded()){
                         var service = me.instance.getService();
                         service.loadPlacesInCategory(id);
-                        
                     }
                 }
             };
@@ -265,8 +255,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             panel.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
             var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete'];
             panel.grid.setVisibleFields(visibleFields);
+            // setup localization
+            visibleFields.forEach(function (field) {
+                panel.grid.setColumnUIName(field, me.loc('tab.grid.' + field));
+            });
             // set up the link from name field
-            var nameRenderer = function (name, data) {
+            panel.grid.setColumnValueRenderer('name', function (name, data) {
                 var link = me.linkTemplate.clone();
                 var linkIcon = me.iconTemplate.clone();
                 var shape = me._getDrawModeFromGeometry(data.geometry);
@@ -278,10 +272,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     return false;
                 });
                 return link;
-            };
-            panel.grid.setColumnValueRenderer('name', nameRenderer);
+            });
             // set up the link from edit field
-            var editRenderer = function (name, data) {
+            panel.grid.setColumnValueRenderer('edit', function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
                 link.bind('click', function () {
@@ -289,10 +282,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     return false;
                 });
                 return link;
-            };
-            panel.grid.setColumnValueRenderer('edit', editRenderer);
+            });
             // set up the link from edit field
-            var deleteRenderer = function (name, data) {
+            panel.grid.setColumnValueRenderer('delete', function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
                 link.bind('click', function () {
@@ -300,15 +292,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     return false;
                 });
                 return link;
-            };
-            panel.grid.setColumnValueRenderer('delete', deleteRenderer);
-            // setup localization
-            var i,
-                key;
-            for (i = 0; i < visibleFields.length; ++i) {
-                key = visibleFields[i];
-                panel.grid.setColumnUIName(key, me.loc('tab.grid.' + key));
-            }
+            });
             return panel;
         },
         /**
@@ -317,22 +301,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * @param {Number} categoryId id for category to populate
          */
         _populatePlaces: function (categoryId) {
-            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService'),
-                places = service.getPlacesInCategory(categoryId), //service.getAllMyPlaces(),
-                panel = this.tabPanels[categoryId];
+            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService');
+            var panel = this.tabPanels[categoryId];
             // update places
             var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
             gridModel.setIdField('id');
             panel.grid.setDataModel(gridModel);
-            if (!places){
+
+            var places = service.getPlacesInCategory(categoryId); // service.getAllMyPlaces(),
+            if (!places) {
                 return;
             }
             for (var i = 0; i < places.length; ++i) {
-                var mapmodule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
-                    geometry = places[i].getGeometry(),
-                    drawMode = this._getDrawModeFromGeometry(geometry),
-                    measurement = mapmodule.getMeasurementResult(geometry),
-                    formatedMeasurement = mapmodule.formatMeasurementResult(measurement, drawMode);
+                var mapmodule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
+                var geometry = places[i].getGeometry();
+                var drawMode = this._getDrawModeFromGeometry(geometry);
+                var measurement = mapmodule.getMeasurementResult(geometry);
+                var formatedMeasurement = mapmodule.formatMeasurementResult(measurement, drawMode);
                 gridModel.addData({
                     'id': places[i].getId(),
                     'name': places[i].getName(),
@@ -354,35 +339,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * @return {String}
          */
         _formatDate: function (service, date) {
-            var time = service.parseDate(date),
-                value = '';
+            // returns an array with date on first index and time on the second when available
+            var time = service.parseDate(date);
             if (time.length > 0) {
-                value = time[0];
+                return time[0];
             }
-            return value;
+            return '';
         },
         /**
          * @method _removeObsoleteCategories
          * Removes tabs for categories that have been removed
          */
         _removeObsoleteCategories: function () {
-            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService'),
-                categoryId,
-                category;
-            for (var key in this.tabPanels) {                
-                if (this.tabPanels.hasOwnProperty(key)) {
-                    categoryId = parseInt(key);
-                    category = service.findCategory(parseInt(categoryId));
-                    if (!category) {
-                        // removed
-                        this.tabsContainer.removePanel(this.tabPanels[categoryId]);
-                        this.tabPanels[categoryId].grid = undefined;
-                        delete this.tabPanels[categoryId].grid;
-                        this.tabPanels[categoryId] = undefined;
-                        delete this.tabPanels[categoryId];
-                    }
+            var me = this;
+            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService');
+            var panels = this.tabPanels;
+            Object.keys(panels).forEach(function (catId) {
+                var id = parseInt(catId);
+                var category = service.findCategory(id);
+                if (category) {
+                    return;
                 }
-            }
+
+                // category has been removed -> clean up the UI
+                me.tabsContainer.removePanel(panels[id]);
+                panels[id].grid = undefined;
+                delete panels[id].grid;
+                panels[id] = undefined;
+                delete panels[id];
+            });
         },
         /**
          * @method onEvent
@@ -391,48 +376,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @method bindEvents
          * Register tab as eventlistener
          */
         bindEvents: function () {
-            var instance = this.instance,
-                sandbox = instance.getSandbox(),
-                p;
+            var me = this;
+            var sandbox = this.instance.getSandbox();
             // faking to be module with getName/onEvent methods
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
-
+            Object.keys(this.eventHandlers).forEach(function (eventName) {
+                sandbox.registerForEventByName(me, eventName);
+            });
         },
         /**
          * @method unbindEvents
          * Unregister tab as eventlistener
          */
         unbindEvents: function () {
-            var instance = this.instance,
-                sandbox = instance.getSandbox(),
-                p;
+            var me = this;
+            var sandbox = this.instance.getSandbox();
             // faking to be module with getName/onEvent methods
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
+            Object.keys(this.eventHandlers).forEach(function (eventName) {
+                sandbox.unregisterFromEventByName(me, eventName);
+            });
         },
 
-        _informOfMaxFeatures: function(container) {
+        _informOfMaxFeatures: function (container) {
             var alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
             alert.insertTo(container);
             alert.setContent(this.loc('tab.maxFeaturesExceeded'));
@@ -445,10 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * TODO: maybe config for expansion frame size
          */
         _fitBounds: function (gbounds) {
-
-            if (gbounds.bottom === gbounds.top &&
-                gbounds.left === gbounds.right)
-            {
+            if (gbounds.bottom === gbounds.top && gbounds.left === gbounds.right) {
                 gbounds.bottom = gbounds.bottom - 100;
                 gbounds.left = gbounds.left - 100;
                 gbounds.top = gbounds.top + 100;
