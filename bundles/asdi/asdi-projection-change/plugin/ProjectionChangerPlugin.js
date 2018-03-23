@@ -19,7 +19,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     this._mobileDefs = {
       buttons: {
         'mobile-projectionchange': {
-            iconCls: 'mobile-projection-dark',
+            iconCls: 'mobile-projection-light',
             tooltip: '',
             show: true,
             callback: function () {
