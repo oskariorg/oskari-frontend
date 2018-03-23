@@ -26,7 +26,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
               me._flyout.toggle();
             },
             sticky: true,
-            toggleChangeIcon: false
+            toggleChangeIcon: true
         }
       },
       buttonGroup: 'mobile-toolbar'
