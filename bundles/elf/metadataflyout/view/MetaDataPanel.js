@@ -278,27 +278,27 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
                     '           <h2> ${dataQuality.UIlabel}</h2>' +
                     '           <% if (dataQuality.nameOfMeasure) { %>' +
-                                    this.locale.qualityContent.nameOfMeasure + ' : <%= dataQuality.nameOfMeasure %> <br>' +
+                                    this.locale.qualityContent.nameOfMeasure + ': <%= dataQuality.nameOfMeasure %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.measureDescription) { %>' +
-                                    this.locale.qualityContent.measureDescription + ' : <%= dataQuality.measureDescription %> <br>' +
+                                    this.locale.qualityContent.measureDescription + ': <%= dataQuality.measureDescription %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.evaluationMethodType) { %>' +
-                                    this.locale.qualityContent.evaluationMethodType + ' : <%= dataQuality.evaluationMethodType %> <br>' +
+                                    this.locale.qualityContent.evaluationMethodType + ': <%= dataQuality.evaluationMethodType %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.evaluationMethodDescription) { %>' +
-                                    this.locale.qualityContent.evaluationMethodDescription + ' : <%= dataQuality.evaluationMethodDescription %> <br>' +
+                                    this.locale.qualityContent.evaluationMethodDescription + ': <%= dataQuality.evaluationMethodDescription %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.measureIdentificationAuthorization) { %>' +
-                                    this.locale.qualityContent.measureIdentificationAuthorization + ' : <%= dataQuality.measureIdentificationAuthorization %> <br>' +
+                                    this.locale.qualityContent.measureIdentificationAuthorization + ': <%= dataQuality.measureIdentificationAuthorization %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.measureIdentificationCode) { %>' +
-                                   this.locale.qualityContent.measureIdentificationCode + ' : <%= dataQuality.measureIdentificationCode %> <br>' +
+                                   this.locale.qualityContent.measureIdentificationCode + ': <%= dataQuality.measureIdentificationCode %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.dateTime.length) { %>' +
                     '               <% _.forEach(dataQuality.dateTime, function (dateTime) { %>' +
                     '                   <% if (dateTime) { %>' +
-                                            this.locale.qualityContent.dateTime + ' : <%= dateTime %> <br>' +
+                                            this.locale.qualityContent.dateTime + ': <%= dateTime %> <br>' +
                     '                   <% } %>' +
                     '               <% }); %> '+
                     '           <% } %>' +
