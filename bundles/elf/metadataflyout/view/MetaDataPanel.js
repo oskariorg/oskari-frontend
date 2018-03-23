@@ -286,6 +286,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           <% if (dataQuality.evaluationMethodType) { %>' +
                                     this.locale.qualityContent.evaluationMethodType + ' : <%= dataQuality.evaluationMethodType %> <br>' +
                     '           <% } %>' +
+                    '           <% if (dataQuality.evaluationMethodDescription) { %>' +
+                                    this.locale.qualityContent.evaluationMethodDescription + ' : <%= dataQuality.evaluationMethodDescription %> <br>' +
+                    '           <% } %>' +
                     '           <% if (dataQuality.measureIdentificationAuthorization) { %>' +
                                     this.locale.qualityContent.measureIdentificationAuthorization + ' : <%= dataQuality.measureIdentificationAuthorization %> <br>' +
                     '           <% } %>' +
