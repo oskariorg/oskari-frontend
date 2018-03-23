@@ -21,7 +21,12 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
             return;
         }
         var el = this._template.container.clone();
-        this.views.forEach( function (view) {
+
+        var sortedViews = this.views.sort( function ( viewA, viewB ) {
+            return viewA.srsName < viewB.srsName ? -1 : 1;
+        });
+
+        sortedViews.forEach( function (view) {
             el.append( me.createCard( view ) );
         });
         this.setElement(el);
