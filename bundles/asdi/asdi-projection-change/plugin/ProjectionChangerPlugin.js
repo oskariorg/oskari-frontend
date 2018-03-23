@@ -52,11 +52,13 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         this._element = jQuery('.' + mobileDefs.buttons["mobile-projectionchange"].iconCls);
     },
+    moveFlyout: function () {
+      var windowWidth = jQuery(window).width();
+      var x = windowWidth - 700; 
+      this._flyout.move(x, 300, true);
+    },
     handleEvents: function () {
         var me = this;
-        var windowWidth = jQuery(window).width();
-        var x = windowWidth - 700; 
-        this._flyout.move(x, 300, true);
         this.getElement().on( "click", function() {
             me._flyout.toggle();
         });
@@ -76,7 +78,8 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
             this.createMobileUi();
         } else {
              this.createUi();
-        } 
+        }
+        this.moveFlyout();
     },
     teardownUI : function(stopping) {
     //detach old element from screen
