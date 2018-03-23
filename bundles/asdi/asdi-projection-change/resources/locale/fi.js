@@ -19,7 +19,7 @@ Oskari.registerLocalization(
                 "ok": "Ok"
             },
             "projectionCode": {
-                "EPSG:3067": {
+                "EPSG:3571": {
                     "displayName": "Beringinmeri",
                     "name": "North Pole LAEA Bering Sea",
                     "desc": "Sopii Beringinmeren kuvaukseen."
