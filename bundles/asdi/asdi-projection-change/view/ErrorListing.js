@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ErrorListing', function () {
         return this.element;
     },
     createList: function (errorList) {
-        var list = jQuery('<ul></ul>');
+        var list = jQuery('<ul class="projection-errorlist"></ul>');
         errorList.forEach( function ( unsupported ) {
             list.append( jQuery('<li>'+ unsupported.getName() +'</li>') );
         });

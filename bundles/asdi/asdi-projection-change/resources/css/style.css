@@ -30,6 +30,10 @@
 .projection-highlight {
     border: 2px solid rgb(12,60,98);
 }
+.projection-errorlist {
+    padding: 5px;
+    
+}
 /*
  * Card
  */
