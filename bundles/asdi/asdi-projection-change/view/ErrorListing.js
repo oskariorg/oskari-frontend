@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ErrorListing', function () {
     createList: function (errorList) {
         var list = jQuery('<ul></ul>');
         errorList.forEach( function ( unsupported ) {
-            list.append( jQuery('<li>'+ unsupported.getLayerName() +'</li>') );
+            list.append( jQuery('<li>'+ unsupported.getName() +'</li>') );
         });
         return list;
     },
