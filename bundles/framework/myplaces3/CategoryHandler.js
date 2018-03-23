@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             // check for update or add
             categories.forEach(function (cat) {
                 var layer = mapLayers.find(function (layer) {
-                    return this._getMapLayerId(cat.getId()) === layer.getId();
+                    return me._getMapLayerId(cat.getId()) === layer.getId();
                 });
 
                 if (!layer) {
@@ -319,7 +319,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 var row = jQuery('<li></li>');
                 row.append(err.error);
                 content.append(row);
-            })
+            });
             dialog.makeModal();
             dialog.show(this.loc('validation.title'), content, [okBtn]);
         },
@@ -513,8 +513,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 return;
             }
             var places = service.getPlacesInCategory(category.getId());
-            var cancelBtn = dialog.createCloseButton(me.loc('buttons.cancel'));
-            var buttons = [cancelBtn];
+            var buttons = [dialog.createCloseButton(me.loc('buttons.cancel'))];
 
             var content = '';
             if (places.length > 0) {

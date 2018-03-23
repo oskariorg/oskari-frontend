@@ -256,8 +256,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete'];
             panel.grid.setVisibleFields(visibleFields);
             // setup localization
-            visibleFields.forEach(function (key) {
-                panel.grid.setColumnUIName(key, me.loc('tab.grid.' + key));
+            visibleFields.forEach(function (field) {
+                panel.grid.setColumnUIName(field, me.loc('tab.grid.' + field));
             });
             // set up the link from name field
             panel.grid.setColumnValueRenderer('name', function (name, data) {
@@ -351,6 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * Removes tabs for categories that have been removed
          */
         _removeObsoleteCategories: function () {
+            var me = this;
             var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService');
             var panels = this.tabPanels;
             Object.keys(panels).forEach(function (catId) {
@@ -361,7 +362,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 }
 
                 // category has been removed -> clean up the UI
-                this.tabsContainer.removePanel(panels[id]);
+                me.tabsContainer.removePanel(panels[id]);
                 panels[id].grid = undefined;
                 delete panels[id].grid;
                 panels[id] = undefined;

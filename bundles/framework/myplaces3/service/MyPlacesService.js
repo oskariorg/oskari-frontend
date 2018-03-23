@@ -640,7 +640,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     categoryModel = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory');
                     categoryModel.setId(category.id);
                 } else { // Update
-                    categoryModel = this.findCategory(category.id);
+                    categoryModel = me.findCategory(category.id);
                     if (!categoryModel) {
                         cb(false, null, isNew);
                         Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Cannot find category to update');
@@ -655,11 +655,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 category.setPublic(!!properties.publisher_name);
 
                 categoryModel.setDotSize(properties.dot_size);
-                categoryModel.setDotColor(this._formatColorFromServer(properties.dot_color));
+                categoryModel.setDotColor(me._formatColorFromServer(properties.dot_color));
                 categoryModel.setDotShape(properties.dot_shape);
 
                 categoryModel.setLineWidth(properties.stroke_width);
-                categoryModel.setLineColor(this._formatColorFromServer(properties.stroke_color));
+                categoryModel.setLineColor(me._formatColorFromServer(properties.stroke_color));
                 categoryModel.setLineCap(properties.stroke_linecap);
                 categoryModel.setLineCorner(properties.stroke_linejoin);
                 categoryModel.setLineStyle(properties.stroke_dasharray);
@@ -667,8 +667,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 categoryModel.setAreaLineWidth(properties.border_width);
                 categoryModel.setAreaLineCorner(properties.border_linejoin);
                 categoryModel.setAreaLineStyle(properties.border_dasharray);
-                categoryModel.setAreaLineColor(this._formatColorFromServer(properties.border_color));
-                categoryModel.setAreaFillColor(this._formatColorFromServer(properties.fill_color));
+                categoryModel.setAreaLineColor(me._formatColorFromServer(properties.border_color));
+                categoryModel.setAreaFillColor(me._formatColorFromServer(properties.fill_color));
                 categoryModel.setAreaFillStyle(properties.fill_pattern);
                 if (isNew) {
                     me._addCategory(categoryModel);
