@@ -4,7 +4,7 @@
 Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', function (projection) {
     this.projection = projection;
     this.loc = Oskari.getLocalization('projection-change');
-    this.infoView = _.template('<div class="oskari-projection-information"><i>${desc}</i><br/><img style="padding-top=5px" src="/Oskari/bundles/asdi/asdi-projection-change/resources/images/${img}"></img></div>');
+    this.infoView = _.template('<div class="oskari-projection-information"><i>${desc}</i><br/><img style="padding-top:5px" src="/Oskari/bundles/asdi/asdi-projection-change/resources/images/${img}"></img></div>');
 }, {
     setElement: function(dialog) {
         this.dialog = dialog;
