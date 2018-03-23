@@ -250,12 +250,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             if (!this.dialog || !this.drawMode) {
                 return;
             }
-            var areaDialogContent = this.loc('tools.' + this.drawMode + '.next');
             var content = this.dialog.getJqueryContent();
-            if (content.find('div.infoText') !== areaDialogContent) {
-                content.find('div.infoText').html(areaDialogContent);
-                this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
-            }
+            // after the first geometry change the popup text to instruct the user that another geometry can be added to the same feature
+            content.find('div.infoText').html(this.loc('tools.' + this.drawMode + '.next'));
+            // as the popup size probably changes with text change -> move it so it's still pointing at the button
+            this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
         },
 
         stop: function () {
