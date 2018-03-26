@@ -68,8 +68,8 @@
 /*
  * / CARD
  */
- @media screen and (max-width: 785px) {
-    .projection-mobile {
+ @media handheld, screen and (max-width: 640px) {
+ .projection-mobile {
         display: block;
         position: absolute;
         margin: auto;
