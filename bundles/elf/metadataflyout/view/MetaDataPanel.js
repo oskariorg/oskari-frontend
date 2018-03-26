@@ -308,7 +308,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   <% if (conformanceResult.specification) { %>' +
                                             this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
                     '                   <% } %>' +
-                    '                   <% if (conformanceResult.pass == "true") {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
+                    '                   <% if (conformanceResult.pass === true) {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
                     '                       else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
                     '                   <% if (conformanceResult.explanation) { %>' +
                                             this.locale.qualityContent.explanation + ': <%= conformanceResult.explanation %> <br>' +
