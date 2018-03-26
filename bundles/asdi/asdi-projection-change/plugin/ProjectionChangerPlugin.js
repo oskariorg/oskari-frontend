@@ -7,6 +7,8 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     this.offsetRight = '63%';
     this.offsetRightSmallScreen = '40%';
     this.offsetTop = '30%';
+    this.mobileOffsetRight = '40%';
+    this.mobileOffsetTop = '10%';
     this._templates = {
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
@@ -70,10 +72,10 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         var mobileDefs = this.getMobileDefs();
         this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         this._element = jQuery('.' + mobileDefs.buttons["mobile-projectionchange"].iconCls);
+        this._flyout.move(this.mobileOffsetRight, this.mobileOffsetTop, true);
     },
     handleEvents: function () {
         var me = this;
-        var windowWidth = jQuery(window).width();
         this._flyout.move(this.offsetRight, this.offsetTop, true);
         this.getElement().on( "click", function() {
             me._flyout.toggle();
