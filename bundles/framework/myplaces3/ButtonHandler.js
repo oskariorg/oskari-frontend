@@ -259,8 +259,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
 
         stop: function () {
             // Toolbar.RemoveToolButtonRequest
-            // remove live bindings
-            jQuery('div.myplaces3 div.button').die();
+            // remove on bindings
+            jQuery('div.myplaces3 div.button').off();
         },
         /**
          * @method onEvent
