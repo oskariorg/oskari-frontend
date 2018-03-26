@@ -16,36 +16,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.PublishCategor
  * @param {Boolean}
  *            isPublic true to make layer publishable, false to make it private
  */
-function(categoryId, isPublic) {
-    this._categoryId = categoryId;
-    this._isPublic = isPublic == true;
-}, {
-    __name : "MyPlaces.PublishCategoryRequest",
-    /**
-     * @method getName
-     * @return {String} request name
-     */
-    getName : function() {
-        return this.__name;
-    },
-    /**
-     * @method getId
-     * @return {Number} id of category to be edited
-     */
-    getId : function() {
-        return this._categoryId;
-    },
-    /**
-     * @method getId
-     * @return {Number} id of category to be edited
-     */
-    isPublic : function() {
-        return this._isPublic;
-    }
-}, {
+    function (categoryId, isPublic) {
+        this._categoryId = categoryId;
+        this._isPublic = !!isPublic;
+    }, {
+        __name: 'MyPlaces.PublishCategoryRequest',
+        /**
+         * @method getName
+         * @return {String} request name
+         */
+        getName: function () {
+            return this.__name;
+        },
+        /**
+         * @method getId
+         * @return {Number} id of category to be edited
+         */
+        getId: function () {
+            return this._categoryId;
+        },
+        /**
+         * @method getId
+         * @return {Number} id of category to be edited
+         */
+        isPublic: function () {
+            return this._isPublic;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        'protocol': ['Oskari.mapframework.request.Request']
+    });
