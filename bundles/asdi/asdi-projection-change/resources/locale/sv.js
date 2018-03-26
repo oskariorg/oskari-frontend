@@ -18,8 +18,37 @@ Oskari.registerLocalization(
                 "title": "Kartprojektionens information",
                 "ok": "Ok"
             },
-            "projectionDesc": {
-                "EPSG:3067": ""
+            "projectionCode": {
+                "EPSG:3571": {
+                    "displayName": "Beringshavet",
+                    "name": "North Pole LAEA Bering Sea",
+                    "desc": "Lämplig för studier av Berin Sea-området."
+                },
+                "EPSG:3572": {
+                    "displayName": "Alaska",
+                    "name": "North Pole LAEA Alaska",
+                    "desc": "Lämplig för studier av Alaskan-området."
+                },
+                "EPSG:3573": {
+                    "displayName": "Kanada",
+                    "name": "North Pole LAEA Canada",
+                    "desc": "Lämplig för studier av Kanadensiska arktiska området."
+                },
+                "EPSG:3574": {
+                    "displayName": "Nordatlanten",
+                    "name": "North Pole LAEA Atlantic",
+                    "desc": "Lämplig för studier av Nordatlanten och Grönland."
+                },
+                "EPSG:3575": {
+                    "displayName": "Europe",
+                    "name": "North Pole LAEA Europe",
+                    "desc": "Lämplig för studier av nordeuropeiska arktiska området."
+                },
+                "EPSG:3576": {
+                    "displayName": "Ryssland",
+                    "name": "North Pole LAEA Russia",
+                    "desc": "Lämplig för studier av ryska arktiska området."
+                }
             }
         }
     }

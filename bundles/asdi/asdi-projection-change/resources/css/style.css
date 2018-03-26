@@ -1,11 +1,11 @@
 .oskari-projection-changer {
     height:36px;
     width: 36px;
-    background-image: url("../images/projection-dark.png");
+    background-image: url("../images/projection-light.png");
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 50%;
-    background-color: #333438;
+    background-color: #fff;
     margin-bottom: 8.5px !important;
     cursor: pointer;
 }
@@ -19,6 +19,13 @@
     align-items: center;
     justify-content: center;
     overflow-x: hidden;
+}
+.projection-highlight {
+    border: 2px solid rgb(12,60,98);
+}
+.projection-errorlist {
+    padding: 5px;
+
 }
 /*
  * Card

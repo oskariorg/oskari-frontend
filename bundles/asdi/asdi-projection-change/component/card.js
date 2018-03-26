@@ -72,7 +72,7 @@ function (view, callback) {
         var card = jQuery( tpl ({
             imgPath: me.getImagePath(view.srsName),
             srs: view.srsName,
-            projectionName: view.name,
+            projectionName: me.loc.projectionCode[view.srsName].displayName,
             tooltip: me.loc.error.hover.icon
         }));
 
