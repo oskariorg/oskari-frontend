@@ -3,72 +3,36 @@
  * Start when dom ready
  */
 jQuery(document).ready(function () {
-    var getAppSetupParams = {},
-        key,
-        hostIdx,
-        pathIdx;
-    if (!ajaxUrl) {
-        alert('Ajax URL not set - cannot proceed');
-        return;
-    }
-
-    function getURLParameter(name) {
-        var re = name + '=' + '([^&]*)(&|$)',
-            value = new RegExp(re).exec(location.search);
-        if (value && value.length && value.length > 1) {
-            value = value[1];
-        }
-        if (value) {
-            return decodeURI(value);
-        }
-        return null;
-    }
-
-    // returns empty string if parameter doesn't exist
-    // otherwise returns '<param>=<param value>&'
-    function getAdditionalParam(param) {
-        var value = getURLParameter(param);
-        if (value) {
-            return param + '=' + value + '&';
-        }
-        return '';
-    }
-
-    // remove host part from url
-    if (ajaxUrl.indexOf('http') === 0) {
-        hostIdx = ajaxUrl.indexOf('://') + 3;
-        pathIdx = ajaxUrl.indexOf('/', hostIdx);
-        ajaxUrl = ajaxUrl.substring(pathIdx);
-    }
-
+    var getAppSetupParams = {};
     // populate url with possible control parameters
-    if (typeof window.controlParams === 'object') {
-        for (key in window.controlParams) {
-            if (window.controlParams.hasOwnProperty(key)) {
-                getAppSetupParams[key] = window.controlParams[key];
-            }
-        }
-    }
+    Object.keys(window.controlParams || {}).forEach(function (key) {
+        getAppSetupParams[key] = window.controlParams[key];
+    });
 
-    function gfiParamHandler(sandbox) {
-        if (getURLParameter('showGetFeatureInfo') !== 'true') {
+    function gfiParamHandler (sandbox) {
+        if (Oskari.util.getRequestParam('showGetFeatureInfo', false) !== 'true') {
             return;
         }
-        var lon = sandbox.getMap().getX(),
-            lat = sandbox.getMap().getY(),
-            mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-            px = mapModule.getMap().getViewPortPxFromLonLat({
-                lon: lon,
-                lat: lat
-            });
-        sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
+        // getPixelFromCoordinate should be part of mapmodule instead of doing ol3-specific code here
+        // for some reason a timeout is required, but this is a hacky feature anyway
+        // TODO: refactor to be more useful.GetFeatureInfoRequest shouldn't take both coordinates and pixels but one or the other
+        // otherwise we should check if the pixels and coordinates do actually match
+        setTimeout(function () {
+            var lon = sandbox.getMap().getX();
+            var lat = sandbox.getMap().getY();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            var px = mapModule.getMap().getPixelFromCoordinate([lon, lat]);
+            if (px) {
+                sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px[0], px[1]]);
+            }
+        }, 500);
     }
 
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
-        data : getAppSetupParams,
-        url: ajaxUrl + 'action_route=GetAppSetup',
+        data: getAppSetupParams,
+        url: '/action?action_route=GetAppSetup',
         success: function (appSetup) {
             var app = Oskari.app;
             if (!appSetup.startupSequence) {
@@ -96,41 +60,41 @@ jQuery(document).ready(function () {
 // currently personaldata, publisher, analysis etc require
 // bundle-specific config for login/register urls
 // Should be changed so that Oskari.getURLs() could be used as a generic config/environment
-    function terribleHackToBeRemoved(conf, lang) {
-        if(!conf.personaldata) {
+    function terribleHackToBeRemoved (conf, lang) {
+        if (!conf.personaldata) {
             conf.personaldata = {};
         }
-        if(!conf.personaldata.conf) {
+        if (!conf.personaldata.conf) {
             conf.personaldata.conf = {};
         }
-        if(!conf.personaldata.conf.logInUrl) {
+        if (!conf.personaldata.conf.logInUrl) {
             conf.personaldata.conf.logInUrl = '/auth';
             // personal data doesn't support registration link
         }
 
-        if(!conf.analyse) {
+        if (!conf.analyse) {
             conf.analyse = {};
         }
-        if(!conf.analyse.conf) {
+        if (!conf.analyse.conf) {
             conf.analyse.conf = {};
         }
-        if(!conf.analyse.conf.loginUrl) {
+        if (!conf.analyse.conf.loginUrl) {
             conf.analyse.conf.loginUrl = '/auth';
         }
-        if(!conf.analyse.conf.registerUrl) {
+        if (!conf.analyse.conf.registerUrl) {
             conf.analyse.conf.registerUrl = 'https://omatili.maanmittauslaitos.fi/?lang=' + lang;
         }
 
-        if(!conf.publisher2) {
+        if (!conf.publisher2) {
             conf.publisher2 = {};
         }
-        if(!conf.publisher2.conf) {
+        if (!conf.publisher2.conf) {
             conf.publisher2.conf = {};
         }
-        if(!conf.publisher2.conf.loginUrl) {
+        if (!conf.publisher2.conf.loginUrl) {
             conf.publisher2.conf.loginUrl = '/auth';
         }
-        if(!conf.publisher2.conf.registerUrl) {
+        if (!conf.publisher2.conf.registerUrl) {
             conf.publisher2.conf.registerUrl = 'https://omatili.maanmittauslaitos.fi/?lang=' + lang;
         }
     }
