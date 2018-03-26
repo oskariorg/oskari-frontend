@@ -83,7 +83,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
                     }
                     selection.append(option);
                 }
-                this._bindCategoryChange();
             }
             if (isPublished) {
                 // remove the layer selections if in a publised map
@@ -92,7 +91,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
 
             // Hide the image preview at first
             this._updateImageUrl('', ui);
-            this._bindImageUrlChange();
 
             if (this.initialValues) {
                 ui.find('input[data-name=placename]').attr('value', this.initialValues.place.name);
@@ -194,6 +192,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
             this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
             this._getOnScreenForm().find('div.measurementResult').html(this.measurementResult);
         },
+        bindEvents: function(){
+            var me = this;
+            var isPublished = (this.options ? this.options.published : false);
+            if(!isPublished) {
+                me._bindCategoryChange();
+            }
+
+            me._bindImageUrlChange();
+        },
         /**
          * @method _bindCategoryChange
          * Binds change listener for category selection.
@@ -205,7 +212,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
         _bindCategoryChange: function () {
             var me = this,
                 onScreenForm = this._getOnScreenForm();
-            onScreenForm.find('select[data-name=category]').live('change', function () {
+            onScreenForm.find('select[data-name=category]').on('change', function () {
                 // remove category form is initialized
                 if (me.categoryForm) {
                     me.categoryForm.destroy();
@@ -224,7 +231,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
         _bindImageUrlChange: function () {
             var me = this,
                 onScreenForm = me._getOnScreenForm();
-            onScreenForm.find('input[data-name=imagelink]').live('change keyup', function () {
+            onScreenForm.find('input[data-name=imagelink]').on('change keyup', function () {
                 me._updateImageUrl(jQuery(this).val(), me._getOnScreenForm());
             });
         },
@@ -258,11 +265,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
          * Removes eventlisteners
          */
         destroy: function () {
-            // unbind live bindings
+            // unbind on bindings
             var onScreenForm = this._getOnScreenForm();
-            onScreenForm.find('select[data-name=category]').die();
-            onScreenForm.find('input[data-name=imagelink]').die();
-            onScreenForm.find('a.newLayerLink').die();
+            onScreenForm.find('select[data-name=category]').off();
+            onScreenForm.find('input[data-name=imagelink]').off();
+            onScreenForm.find('a.newLayerLink').off();
             if (this.categoryForm) {
                 this.categoryForm.destroy();
                 this.categoryForm = undefined;

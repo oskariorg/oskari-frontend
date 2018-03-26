@@ -4,6 +4,9 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     this._clazz = 'Oskari.projection.change.ProjectionChangerPlugin';
     this._defaultLocation = 'top right';
     this._index = 55;
+    this.offsetRight = '63%';
+    this.offsetRightSmallScreen = '40%';
+    this.offsetTop = '30%';
     this._templates = {
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
@@ -40,8 +43,13 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     _createEventHandlers: function () {
       return {
         'MapSizeChangedEvent' : function(evt) {
-            var x = evt._width - 525; 
-            this._flyout.move(x, 300, true);
+            var width = evt._width;
+            //if the rightoffset + element width is greater than screensize use a different right offset
+            if ( width * 0.63 + this._flyout.getElement().width() > width ) {
+              this._flyout.move(this.offsetRightSmallScreen, this.offsetTop, true);
+              return;
+            }
+            this._flyout.move(this.offsetRight, this.offsetTop, true);
         }
       }
     },
@@ -66,8 +74,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     handleEvents: function () {
         var me = this;
         var windowWidth = jQuery(window).width();
-        var x = windowWidth - 700; 
-        this._flyout.move(x, 300, true);
+        this._flyout.move(this.offsetRight, this.offsetTop, true);
         this.getElement().on( "click", function() {
             me._flyout.toggle();
         });
