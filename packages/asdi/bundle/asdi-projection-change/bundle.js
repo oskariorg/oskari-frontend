@@ -34,6 +34,9 @@ Oskari.clazz.define("Oskari.projection.change", function() {
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/asdi/asdi-projection-change/plugin/ProjectionChangerPlugin.js"
             }, {
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/asdi/asdi-projection-change/request/ShowProjectionChangerRequest.js"
+            }, {
                 "type": "text/javascript",
                 "src" : "../../../../bundles/asdi/asdi-projection-change/component/card.js"
             }, {
