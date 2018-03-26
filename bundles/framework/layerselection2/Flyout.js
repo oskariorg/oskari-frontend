@@ -259,22 +259,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @method _createUnsupportedFooter create jQuery element for unsupported SRS footer
          */
         _createUnsupportedFooter: function () {
+            var me = this;
+            var sandbox = me.instance.getSandbox();
+            var footer;
 
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                footer;
-
-            if (sandbox.hasHandler('userinterface.ShowProjectionChangerRequest')) {
+            if (sandbox.hasHandler('ShowProjectionChangerRequest')) {
                 // show link to change projection
                 footer = me.templateChangeUnsupported.clone();
-                footer.find('a').bind('click', function() {
+                footer.find('a').bind('click', function () {
                     // send request to show projection changer
-                    var request = sandbox.getRequestBuilder('userinterface.ShowProjectionChangerRequest')();
+                    var request = sandbox.getRequestBuilder('ShowProjectionChangerRequest')();
                     sandbox.request(me.instance.getName(), request);
                     return false;
                 });
-            }
-            else {
+            } else {
                 footer = me.templateUnsupported.clone();
             }
 

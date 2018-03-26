@@ -3,10 +3,10 @@
  */
 Oskari.clazz.define('Oskari.projection.change.request.ShowProjectionChangerRequest',
     function () {
-        
+               
     },
     {
-        __name: "userinterface.ShowProjectionChangerRequest",
+        __name: 'ShowProjectionChangerRequest',
         getName: function () {
             return this.__name;
         }

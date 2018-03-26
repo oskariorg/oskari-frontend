@@ -26,11 +26,13 @@ function () {
         this.createPlugin();
         this.createUi();
 
-        this.showUiHandler = Oskari.clazz.create('Oskari.projection.change.request.ShowProjectionChangerRequestHandler', this.plugin);
-        this.sandbox.addRequestHandler('userinterface.ShowProjectionChangerRequest', this.showUiHandler);
+        this.sandbox.addRequestHandler('ShowProjectionChangerRequest', this);
     },
     getViews: function () {
         return this.getAppViews();
+    },
+    handleRequest: function (core, request) {
+        this.plugin.getFlyout().show();
     },
     createPlugin: function() {
       var params = {
@@ -47,9 +49,8 @@ function () {
     stopPlugin: function() {
       this._mapmodule.unregisterPlugin(this.plugin);
       this._mapmodule.stopPlugin(this.plugin);
-      this.sandbox.removeRequestHandler('userinterface.ShowProjectionChangerRequest', this.showUiHandler);
+      this.sandbox.removeRequestHandler('ShowProjectionChangerRequest', this);
       this.plugin = null;
-      this.showUiHandler = null;
     },
     createUi: function () {
         this.plugin.createUi();
