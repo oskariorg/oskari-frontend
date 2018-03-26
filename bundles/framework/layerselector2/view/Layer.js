@@ -11,7 +11,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
      */
 
     function (layer, sandbox, localization) {
-        //"use strict";
+        
         this.sandbox = sandbox;
         this.localization = localization;
         this.layer = layer;
@@ -20,6 +20,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
     }, {
         __template: '<div class="layer"><input type="checkbox" /> ' +
                     '<div class="layer-tools">'+
+                    '   <div class="layer-not-supported backendstatus-maintenance-pending" title="" ></div>' +
                     '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' +
                     '   <div class="layer-icon"></div>'+
                     '   <div class="layer-info"></div>'+
@@ -31,11 +32,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
          * @return {String} layer id
          */
         getId: function () {
-            //"use strict";
+            
             return this.layer.getId();
         },
         setVisible: function (bln) {
-            //"use strict";
+            
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             if (bln) {
@@ -45,7 +46,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             }
         },
         setSelected: function (isSelected) {
-            //"use strict";
+            
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             this.ui.find('input').attr('checked', !!isSelected);
@@ -55,7 +56,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
          * @method updateLayerContent
          */
         updateLayerContent: function (layer) {
-            //"use strict";
+            
             /* set title */
             var newName = layer.getName(),
                 /* set/clear alert if required */
@@ -99,7 +100,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
         },
         getContainer: function () {
-            //"use strict";
+            
             return this.ui;
         },
         /**
@@ -109,7 +110,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
          */
         _createLayerContainer: function (layer) {
-            //"use strict";
+            
             var me = this,
                 sandbox = me.sandbox,
                 // create from layer template
@@ -202,10 +203,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             // setup id
             layerDiv.attr('layer_id', layer.getId());
             layerDiv.find('input').attr('id', 'oskari_layerselector2_layerlist_checkbox_layerid_' + layer.getId());
-            layerDiv.find('.layer-title').append(layer.getName());
-            layerDiv.find('.layer-title').click(function(){
-                layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
-            });
+            layerDiv.find('.layer-title')
+                .append(layer.getName())
+                .click(function(){
+                    layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
+                })
+                .toggleClass('not-supported', !layer.isSupported(sandbox.getMap().getSrsName()));
 
             layerDiv.find('input').change(function () {
                 checkbox = jQuery(this);
@@ -242,6 +245,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     mapLayerId
                 ]);
             });
+
+            /**
+             * Supported projection
+             */
+            tools.find('.layer-not-supported')
+                .css('display', !layer.isSupported(sandbox.getMap().getSrsName()) ? null : 'none')
+                .attr('title', this.localization.tooltip['unsupported-srs']);
 
             return layerDiv;
         }

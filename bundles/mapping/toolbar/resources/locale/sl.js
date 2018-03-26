@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Rezultati meritev",
             "close": "Prekliči",
             "guidance": {
-                "measureline": "Nariši črto na karti in izmeri njeno dolžino. Klikni na začetno točko, nato na vse lomne točke in dvoklikni na končno točko za končanje merjenja.",
-                "measurearea": "Nariši območje na karti in izmeri njegovo površino. Klikni na začetno točko oboda, nato na vse lomne točke in dvoklikni na končno točko za končanje merjenja."
+                "measureline": "Nariši črto na karti in izmeri njeno dolžino. Klikni na začetno točko, nato na vse lomne točke.",
+                "measurearea": "Nariši območje na karti in izmeri njegovo površino. Klikni na začetno točko oboda, nato na vse lomne točke."
             }
         },
         "guidedTour": {

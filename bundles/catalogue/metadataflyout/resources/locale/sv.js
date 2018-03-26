@@ -1,9 +1,9 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "sv",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
         "title": "Metadata",
+        "tooltip": "Visa metadata",
         "desc": "",
         "layer": {
             "name": "Metadata",

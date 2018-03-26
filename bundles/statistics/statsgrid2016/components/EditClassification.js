@@ -79,7 +79,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '<div class="classification-colors value">'+
 
                     '</div>'+
-                    '<button class="reverse-colors visible-map-style-choropleth">'+this.locale.colorset.flipButton+'</button>'+
+                    '<span class="visible-map-style-choropleth flip-colors"><input id="legend-flip-colors" type="checkbox"/><label for="legend-flip-colors">'+this.locale.colorset.flipButton+'<label></span>'+
                 '</div>'+
 
                 // transparency
@@ -123,8 +123,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this._rangeSlider = {
         min: 10,
         max: 120,
-        defaultValues: [10,120],
-        step: 10,
+        defaultValues: [10,60],
+        step: 5,
         element: null
     };
     this._showNumericValueCheckButton = null;
@@ -203,10 +203,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 
         me._element.find('select.classify-mode').val(classification.mode);
         me._element.find('select.color-set').val(classification.type);
-        me._element.find('button.reverse-colors').addClass('primary');
-        if(!classification.reverseColors) {
-            me._element.find('button.reverse-colors').removeClass('primary');
-        }
+        me._element.find('#legend-flip-colors').attr('checked', classification.reverseColors);
         // update color selection values
         var colors = service.getColorService().getDefaultSimpleColors();
         if(mapStyle === 'choropleth') {
@@ -270,7 +267,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             mode: me._element.find('select.classify-mode').val(),
             type: me._element.find('select.color-set').val(),
             name: me._colorSelect.getValue(),
-            reverseColors: me._element.find('button.reverse-colors').hasClass('primary'),
+            reverseColors: me._element.find('#legend-flip-colors').attr('checked'),
             mapStyle: me._element.find('select.map-style').val(),
             // only used for points vector
             min: range[0],
@@ -363,13 +360,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         me._colorSelect.setHandler(updateClassification);
         me._element.find('select').bind('change', updateClassification);
 
-        me._element.find('button.reverse-colors').bind('click', function(){
-            var el = jQuery(this);
-            if(el.hasClass('primary')) {
-                el.removeClass('primary');
-            } else {
-                el.addClass('primary');
-            }
+        me._element.find('#legend-flip-colors').change(function(){
             updateClassification();
         });
         return me._element;

@@ -1,4 +1,7 @@
 div.grid-tools {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
     height: 34px;
     position: static;
     margin-left: 10px;

@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
      * @method create called automatically on construction
      */
     function (name) {
-        'use strict';
+        
         var me = this,
             closeIcon = document.createElement('div'),
             controlsWrapper = document.createElement('div');
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * Focuses the component.
          */
         focus: function () {
-            'use strict';
+            
             this._input.focus();
         },
 
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @return {Boolean} enabled
          */
         isEnabled: function () {
-            'use strict';
+            
             return !this.getElement().disabled;
         },
 
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @param {Boolean} enabled
          */
         _setEnabledImpl: function (enabled) {
-            'use strict';
+            
             this._input.disabled = !enabled;
         },
 
@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @private
          */
         _valueChanged: function () {
-            'use strict';
+            
             if (this.getHandler()) {
                 this.getHandler()(this.getValue());
             }
@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @return {String} name
          */
         getName: function () {
-            'use strict';
+            
             return this._input.name;
         },
 
@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @param {String} name
          */
         setName: function (name) {
-            'use strict';
+            
             this._input.name = name || '';
         },
 
@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @return {String} placeholder
          */
         getPlaceholder: function () {
-            'use strict';
+            
             return this._input.placeholder;
         },
 
@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @param {String} placeholder
          */
         setPlaceholder: function (placeholder) {
-            'use strict';
+            
             this._input.placeholder = placeholder;
         },
 
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @method _setRequiredImpl
          */
         _setRequiredImpl: function () {
-            'use strict';
+            
             this._input.required = this.isRequired();
         },
 
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @return {String} title
          */
         getTitle: function () {
-            'use strict';
+            
             return this._titleEl.textContent;
         },
 
@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @param {String} title
          */
         setTitle: function (title) {
-            'use strict';
+            
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @return {String} tooltip
          */
         getTooltip: function () {
-            'use strict';
+            
             return this._element.title;
         },
 
@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @param {String} tooltip
          */
         setTooltip: function (tooltip) {
-            'use strict';
+            
             this._element.title = tooltip;
         },
 
@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @return {String} value
          */
         getValue: function () {
-            'use strict';
+            
             return this._input.value;
         },
 
@@ -179,7 +179,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @param {String} value
          */
         setValue: function (value) {
-            'use strict';
+            
             this._input.value = value;
         },
 
@@ -187,7 +187,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TextAreaInput',
          * @method _setVisibleImpl
          */
         _setVisibleImpl: function () {
-            'use strict';
+            
             this.getElement().style.display = this.isVisible() ? '' : 'none';
         }
     }, {

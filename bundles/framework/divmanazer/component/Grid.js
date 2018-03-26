@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
     function () {
         this.model = null;
         this._defaultLocKey = 'Grid';
-        this._loc = this._getLocalization('DivManazer');
+        this._loc = Oskari.getMsg.bind(null, 'DivManazer');
         this.template = jQuery(
             '<table class="oskari-grid"><thead><tr></tr></thead><tbody></tbody></table>'
         );
@@ -702,7 +702,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 row.attr('data-id', data[me.model.getIdField()]);
                 columnIndex = 0;
                 fieldNames.forEach(function(key) {
-                    value = data[key];
+                    if ( typeof data[key] === 'number' ) {
+                        value = me._loc('Grid.cellValue', {value: data[key]});
+                    } else {
+                        value = data[key];
+                    }
                     // Handle subtables
                     if (typeof value === 'object') {
                         columnIndex = me._createSubTable(
@@ -764,7 +768,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector.addClass('column-selector-placeholder');
 
             columnSelector.addClass('column-selector');
-            columnSelectorLabel.find('.title').html(me._loc.columnSelector.title);
+            columnSelectorLabel.find('.title').html(me._loc('Grid.columnSelector.title'));
             me.visibleColumnSelector.append(columnSelectorLabel);
             me.visibleColumnSelector.append(columnSelector);
 
@@ -967,7 +971,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 exportButton.setPrimary(true);
-                exportButton.setTitle(me._loc['export']['export']);
+                exportButton.setTitle(me._loc('Grid.export.export'));
                 exportButton.setHandler(function () {
                     var values = exportForm.getValues({});
                     values.data = me._getTableData(values.columns !== 'all', values.export_selection);
@@ -977,19 +981,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     if(jQuery(exportForm.getElement().elements.dataSource).is(':checked')) {
                         additionalInfo.push({
                             type : 'datasource',
-                            name : me._loc['export'].additional.dataSource,
+                            name : me._loc('Grid.export.additional.dataSource'),
                             value : exportForm.getElement().elements.dataSource.value
                         });
                     }
                     additionalInfo.push({
                         type : 'layerName',
-                        name : me._loc['export'].additional.layerName,
+                        name : me._loc('Grid.export.additional.layerName'),
                         value : me._getLayerName()
                     });
                     if(jQuery(exportForm.getElement().elements.metadata).is(':checked')) {
                         additionalInfo.push({
                             type : 'metadata',
-                            name : me._loc['export'].additional.metadata,
+                            name : me._loc('Grid.export.additional.metadata'),
                             value : exportForm.getElement().elements.metadata.value
                         });
                     }
@@ -1002,7 +1006,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 exportPopupButton.setPrimary(true);
-                exportPopupButton.setTitle(me._loc['export'].title);
+                exportPopupButton.setTitle(me._loc('Grid.export.title'));
                 exportPopupButton.setHandler(function () {
                     me.exportPopup = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
@@ -1012,7 +1016,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     me.exportPopup.makeModal();
 
                     me.exportPopup.show(
-                        me._loc['export'].title,
+                        me._loc('Grid.export.title'),
                         jQuery(exportForm.getElement()),
                         [cancelButton, exportButton]
                     );
@@ -1073,7 +1077,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 input,
                 filename,
                 me = this,
-                loc = me._loc['export'];
+                loc = me._loc('Grid.export');
 
             form.addClass('oskari-grid-export');
             form.addClass('clearfix');

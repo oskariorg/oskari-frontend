@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Výsledky merania",
             "close": "Zrušiť",
             "guidance": {
-                "measureline": "Nakresli merateľnú líniu kliknutím na jej lomové body. Nakoniec dvojklik na koncovom bode.",
-                "measurearea": "Nakresli merateľnú plochu kliknutím na jej rohové body. Nakoniec dvojklik na koncovom bode."
+                "measureline": "Nakresli merateľnú líniu kliknutím na jej lomové body.",
+                "measurearea": "Nakresli merateľnú plochu kliknutím na jej rohové body."
             }
         },
         "guidedTour": {

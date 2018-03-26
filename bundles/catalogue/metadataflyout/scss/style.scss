@@ -45,7 +45,7 @@
 		}
 
 	}
-	
+
 }
 
 /* xml */
@@ -61,4 +61,22 @@
 	text-align: left;
 	display: block;
 	margin-bottom: 12px;
+}
+
+/* layer tool icon */
+div.layer-tools {
+	div.right-tools {
+		div.object-data {
+            div.show-metadata-tool {
+                width: 16px;
+                height: 16px;
+                background-image: url('../images/icon-info.png');
+                background-repeat: no-repeat;
+
+                &:hover {
+                    background-image: url('../images/icon-info_hover.png');
+                }
+            }
+		}
+	}
 }

@@ -34,7 +34,7 @@
     /* Firefox 4, Safari 5, Opera 10, IE 9 */
     border: 5px solid rgba(0, 0, 0, 0.2);
     border-radius: 7px;
-    z-index: 20000;
+    z-index: 50000;
 
     &.no_resize div.content textarea {
         resize: none;

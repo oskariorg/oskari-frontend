@@ -28,24 +28,6 @@
 			margin-right: 0px;
 		}
 
-		.colpick {
-			z-index: 20100;
-		}
-
-		.colpick_field input {
-			border: 0px!important;
-			padding: 0px!important;
-			box-shadow: inset 0px 0px 0px!important;
-			border-radius: 0px!important;
-		}
-
-		.colpick_hex_field input {
-			border: 0px!important;
-			padding: 0px!important;
-			box-shadow: inset 0px 0px 0px!important;
-			border-radius: 0px!important;
-		}
-
 		input[name="colorThemes"] {
 			float: left;
 			margin-top: 14px;
@@ -54,6 +36,11 @@
 		label.oskari-formcomponent {
 			display: inline-block;
 			width: 140px;
+		}
+
+		label.oskari-formcomponent.oskari-colorpickerinput {
+			width: initial;
+			margin: 5px 1px;
 		}
 
 		input[name="heatmap-input"] {

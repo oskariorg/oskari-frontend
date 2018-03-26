@@ -7,6 +7,12 @@ Oskari.registerLocalization(
         "desc": "Mina uppgifter",
         "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, inbäddade kartor, indikatorer, analys och dataset.  <a href='/web/sv/login'>Logga in</a>.",
         "notLoggedInText": "Logga in.",
+        "projectionError": {
+            "title" : "Projektionerna är inkompatibla",
+            "msg": "Utbytas projektionen för att redigera kartpubliceringen",
+            "ok": "OK",
+            "cancel": "Avbryt"
+        },
         "tabs": {
             "myviews": {
                 "title": "Mina kartvyer",

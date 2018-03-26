@@ -59,7 +59,6 @@ div.layerselection2 .layer.selected {
     background-color: #f3f3f3; }
     div.layerselection2 .layer.selected div.stylesel label {
       padding: 7px; }
-
 div.layerselection2 ul.selectedLayersList {
   height: 100%;
   width: 100%;
@@ -105,3 +104,5 @@ div.analyse-filter-popup-content div.filter-option {
     width: 65px; }
   div.analyse-filter-popup-content div.filter-option select.operator {
     width: 210px; }
+
+/*# sourceMappingURL=style.css.map */

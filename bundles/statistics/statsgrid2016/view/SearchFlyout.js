@@ -92,10 +92,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             var extraValues = me.getExtraFeatures().getValues();
 
             if(extraValues.openTable) {
-                me.instance.getTile().openExtension('table');
+                me.instance.getFlyoutManager().open('table');
             }
             if(extraValues.openDiagram) {
-                me.instance.getTile().openExtension('diagram');
+                me.instance.getFlyoutManager().open('diagram');
             }
         });
 

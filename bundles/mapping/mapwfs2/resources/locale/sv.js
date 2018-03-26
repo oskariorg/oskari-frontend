@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "sv",
     "key": "MapWfs2",
     "value": {
@@ -49,8 +48,8 @@ Oskari.registerLocalization(
             }
         },
         "scale_dialog": {
-          "title": "Skaala uppdaterad",
-          "msg":"Detta kartlager kan inte visas på den valda skalnivån."
+            "title": "Skaala uppdaterad",
+            "msg": "Detta kartlager kan inte visas på den valda skalnivån."
         }
     }
 });

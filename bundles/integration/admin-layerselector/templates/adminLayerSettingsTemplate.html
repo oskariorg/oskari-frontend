@@ -11,11 +11,10 @@
     </div>
 <% if(header) { %>
     <%= header({
-        capabilities: capabilities, 
-        capabilitiesTemplate: capabilitiesTemplate, 
-        model: model, 
-        instance: instance, 
-        inspireThemes: inspireThemes, 
+        capabilities: capabilities,
+        capabilitiesTemplate: capabilitiesTemplate,
+        model: model,
+        instance: instance,
         isSubLayer: isSubLayer }) %>
     <% } %>
 
@@ -40,7 +39,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <!-- 
+                <!--
                     Chrome autofill workaround: http://stackoverflow.com/questions/15738259/disabling-chrome-autofill
                     tested with chrome v. 51.0.2704.103 m
                 -->
@@ -52,10 +51,10 @@
         </div>
     </div>
 
-    <% 
+    <%
         var layerType = model.getLayerType();
         if (layerType === "wms" || layerType === "wmts") {
-    %>        
+    %>
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
@@ -95,7 +94,7 @@
         if ( model.getNameLanguages) { %>
         <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerNameAndDesc %>"><%= instance.getLocalization('admin').layerNameAndDesc %></div>
 
-        <% 
+        <%
         var names = model.getNameLanguages();
         var loc = Oskari.getLocalization('DivManazer').LanguageSelect.languages;
         for (var i = 0; i < names.length; i++) {
@@ -117,6 +116,66 @@
             </div>
         <% } %>
     <% } %>
+
+    <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerProps %>"><%= instance.getLocalization('admin').layerProps %></div>
+
+    <% if(model.getId()) { %> <!-- show only for existing layers, not new ones being created -->
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label class="add-layer-label" title="<%= instance.getLocalization('admin').supportedSRS %>"><%= instance.getLocalization('admin').supportedSRS %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <%
+                    var srsList = model.getSrsList();
+                    for(var i = 0; srsList && i < srsList.length; i++) { %>
+                        <span><%= srsList[i] %></span>
+                        <% if(i < srsList.length-1) { %>, <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <%
+            var missingProjections = model.getMissingProjections();
+            if(missingProjections.length) {
+        %>
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label class="add-layer-label" title="<%= instance.getLocalization('admin').missingSRS %>"><%= instance.getLocalization('admin').missingSRS %></label>
+                <div class="layer-missing-projection icon-info" title="<%= instance.getLocalization('admin').missingInfo %>"></div>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <% for(var i = 0; i < missingProjections.length; i++) { %>
+                        <span><%= missingProjections[i] %></span>
+                        <% if(i < missingProjections.length-1) { %>, <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    <% } %>
+
+    <% var forcedSRS = model.getAttributes().forcedSRS || []; %>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label class="add-layer-label" title="<%= instance.getLocalization('admin').forcedSRS %>"><%= instance.getLocalization('admin').forcedSRS %></label>
+            <div class="layer-missing-projection icon-info" title="<%= instance.getLocalization('admin').forcedSRSInfo %>"></div>
+        </div>
+        <div class="add-layer-input-area add-layer-forced-proj-area">
+            <div class="input-controls">
+                <span class="add-layer-forced-proj-chits">
+                    <% for(var i = 0; i < forcedSRS.length; i++) { %>
+                        <span class="add-layer-forced-proj" data-proj="<%= forcedSRS[i] %>"><%= forcedSRS[i] %><span class="icon-close"></span></span>
+                    <% } %>
+                </span>
+                <span class="add-layer-forced-proj-inputgroup">
+                    <input class="add-layer-forced-proj-input add-layer-input" type="text"/>
+                    <button class="add-layer-forced-proj-add"><%= instance.getLocalization('admin').forcedSRSAdd %></button>
+                </span>
+            </div>
+        </div>
+    </div>
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
@@ -142,22 +201,38 @@
         </div>
     </div>
 
-    <% if(!isSubLayer) { %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">
-            <label for="add-layer-inspire-theme" class="add-layer-label"  title="<%= instance.getLocalization('admin').addInspireThemeDesc %>"><%= instance.getLocalization('admin').addInspireTheme %></label>
+            <label for="select-dataprovider" class="add-layer-label"  title="<%= instance.locale('admin.addDataproviderDesc') %>"><%= instance.locale('admin.addDataprovider') %></label>
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-            <select id="add-layer-inspire-theme">
-                <% for(var i = 0; inspireThemes != null && i < inspireThemes.length; i++) { %>
-                <option value="<%= inspireThemes[i].id %>" <% if(model.getInspireName() == inspireThemes[i].name ) { %>selected<% } %> ><%= inspireThemes[i].name %></option>
+            <select id="select-dataprovider" class="add-layer-input mid">
+                <% for(var i = 0; dataProviders != null && i < dataProviders.length; i++) { %>
+                <option value="<%= dataProviders[i].id %>" <% if(model.getOrganizationName() === dataProviders[i].name || dataProviderId == dataProviders[i].id) { %>selected<% } %> ><%= dataProviders[i].name %></option>
                 <% } %>
             </select>
             </div>
+            <button id="add-dataprovider-button" class="add-dataprovider-button"><%= instance.locale('admin.addDataproviderButton') %></button>
         </div>
     </div>
-    <% } %>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label class="add-layer-label"><%= instance.locale('admin.maplayerGroups') %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <div class="admin-maplayer-groups-list">
+                    <% for(var i = 0; maplayerGroups != null && i < maplayerGroups.length; i++) { %>
+                       <div class="admin-maplayer-group" data-group-id="<%= maplayerGroups[i].id %>"><%= maplayerGroups[i].name %></div>
+                    <% } %>
+
+                </div>
+            </div>
+            <button id="select-maplayer-groups-button" class="select-maplayer-groups-button"><%= instance.locale('admin.selectMaplayerGroupsButton') %></button>
+        </div>
+    </div>
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
@@ -187,7 +262,7 @@
                  <% for(var i = 0; i < model.getStyles().length; i++) { %>
                 <option value="<%= model.getStyles()[i].getName() %>"
                     <% if(model.getCurrentStyle().getName() === model.getStyles()[i].getName() ) {
-                         %>selected<% 
+                         %>selected<%
                      } %>
                      ><%= model.getStyles()[i].getTitle() %></option>
                 <% } %>
@@ -252,11 +327,10 @@
     </div>
     <% } %>
 
-<% if(footer) { %> 
+<% if(footer) { %>
 <%= footer({
-    model: model, 
-    instance: instance, 
-    inspireThemes: inspireThemes,
+    model: model,
+    instance: instance,
     isSubLayer: isSubLayer }) %>
 <% } %>
 
@@ -312,31 +386,31 @@
              <table>
                  <tr>
                     <% for(var i = 0; i < roles.length; i++) { %>
-                        <th><%= roles[i].name %></th>
-                    <% } %> 
+                        <th style="text-align:left;"><%= roles[i].name %></th>
+                    <% } %>
                     <th></th>
                  </tr>
                  <tr>
                     <% for(var i = 0; i < roles.length; i++) { %>
-                        <td><input type="checkbox" id="layer-publish-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                        <td><input type="checkbox" id="layer-publish-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  <%= roles[i].name === 'Admin' ? 'checked="checked"' : '' %> value="<%= roles[i].id %>" /></td>
                     <% } %>
                     <td>Publish</td>
                  </tr>
                  <tr>
                     <% for(var i = 0; i < roles.length; i++) { %>
-                        <td><input type="checkbox" id="layer-view-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                        <td><input type="checkbox" id="layer-view-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  <%= roles[i].name === 'Admin' ? 'checked="checked"' : '' %>  value="<%= roles[i].id %>" /></td>
                     <% } %>
                     <td>View</td>
                  </tr>
                  <tr>
                     <% for(var i = 0; i < roles.length; i++) { %>
-                        <td><input type="checkbox" id="layer-download-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                        <td><input type="checkbox" id="layer-download-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  <%= roles[i].name === 'Admin' ? 'checked="checked"' : '' %>  value="<%= roles[i].id %>" /></td>
                     <% } %>
                     <td>Download</td>
                  </tr>
                  <tr>
                     <% for(var i = 0; i < roles.length; i++) { %>
-                        <td><input type="checkbox" id="layer-enbedded-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></td>
+                        <td><input type="checkbox" id="layer-embedded-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  <%= roles[i].name === 'Admin' ? 'checked="checked"' : '' %>  value="<%= roles[i].id %>" /></td>
                     <% } %>
                     <td>Embedded</td>
                  </tr>
@@ -359,6 +433,8 @@
                     <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"><%= instance.getLocalization('save') %></button>
                     <button class="add-layer-btn <%= isSubLayer ? 'admin-remove-sublayer' : 'admin-remove-layer' %>"
                         title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
+                    <button class="add-layer-btn add-layer-recheck"
+                        title="<%= instance.getLocalization('recheckTitle') %>"><%= instance.getLocalization('recheckTitle') %></button>
                 <% } %>
                 <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
                     title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>
