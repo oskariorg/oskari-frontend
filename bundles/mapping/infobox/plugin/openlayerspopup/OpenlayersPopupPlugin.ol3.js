@@ -238,10 +238,9 @@ Oskari.clazz.define(
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
-                    //start with ol default positioning
+                    //start with null positioning
                     positioning: null,
-                    offset: [offsetX, offsetY],
-                    autoPan: true
+                    offset: [offsetX, offsetY]
                 });
                 mapModule.getMap().addOverlay(popup);
                 jQuery(popup.getElement()).html(popupContentHtml);
