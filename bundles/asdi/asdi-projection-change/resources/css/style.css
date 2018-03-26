@@ -84,14 +84,21 @@
         background-color: #fff;
     }
     .oskari-map-projection {
-        width: 250px;
+        width: 250px !important;
         display: flex;
         display: -ms-flex;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -moz-flex;
+        display: -webkit-flex;
+        -ms-box-orient: horizontal;
+
         flex-wrap: wrap;
         -ms-flex-wrap: wrap;
         overflow: hidden;
         align-items: center;
         justify-content: center;
+        -webkit-justify-content: center; 
         overflow-x: hidden;
     }
     .projection-card {
