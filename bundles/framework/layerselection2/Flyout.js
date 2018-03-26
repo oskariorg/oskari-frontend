@@ -85,7 +85,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             this.templateLayerFooterOutOfContentArea = jQuery('<p class="layer-msg">' + loc['out-of-content-area'] + ' <a href="JavaScript:void(0);">' + loc['move-to-content-area'] + '</a></p>');
 
-            this.templateUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="#">'+ loc['change-projection'] +'</a></div>');
+            this.templateUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '</div>');
+
+            this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">'+ loc['change-projection'] +'</a></div>');
 
             //set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
@@ -257,7 +259,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @method _createUnsupportedFooter create jQuery element for unsupported SRS footer
          */
         _createUnsupportedFooter: function () {
-            return this.templateUnsupported.clone();
+
+            var me = this,
+                sandbox = me.instance.getSandbox(),
+                footer;
+
+            if (sandbox.hasHandler('userinterface.ShowProjectionChangerRequest')) {
+                // show link to change projection
+                footer = me.templateChangeUnsupported.clone();
+                footer.find('a').bind('click', function() {
+                    // send request to show projection changer
+                    var request = sandbox.getRequestBuilder('userinterface.ShowProjectionChangerRequest')();
+                    sandbox.request(me.instance.getName(), request);
+                    return false;
+                });
+            }
+            else {
+                footer = me.templateUnsupported.clone();
+            }
+
+            return footer;
         },
         /**
          * @private @method _switchRefreshIcon

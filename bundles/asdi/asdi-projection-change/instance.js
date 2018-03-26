@@ -25,6 +25,9 @@ function () {
 
         this.createPlugin();
         this.createUi();
+
+        this.showUiHandler = Oskari.clazz.create('Oskari.projection.change.request.ShowProjectionChangerRequestHandler', this.plugin);
+        this.sandbox.addRequestHandler('userinterface.ShowProjectionChangerRequest', this.showUiHandler);
     },
     getViews: function () {
         return this.getAppViews();
@@ -44,7 +47,9 @@ function () {
     stopPlugin: function() {
       this._mapmodule.unregisterPlugin(this.plugin);
       this._mapmodule.stopPlugin(this.plugin);
+      this.sandbox.removeRequestHandler('userinterface.ShowProjectionChangerRequest', this.showUiHandler);
       this.plugin = null;
+      this.showUiHandler = null;
     },
     createUi: function () {
         this.plugin.createUi();
