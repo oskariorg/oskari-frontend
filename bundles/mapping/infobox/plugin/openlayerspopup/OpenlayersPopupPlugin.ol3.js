@@ -659,6 +659,10 @@ Oskari.clazz.define(
          * @param {Array} lonlat where to show the popup
          */
         _panMapToShowPopup: function (lonlatArray) {
+            // don't try to pan the map if gfi popup position isn't in the viewport
+            if (!this.getMapModule().isLonLatInViewport(lonlatArray, 20)){
+                return;
+            }
             var me = this,
                 pixels = me.getMapModule().getPixelFromCoordinate(lonlatArray),
                 size = me.getMapModule().getSize(),
