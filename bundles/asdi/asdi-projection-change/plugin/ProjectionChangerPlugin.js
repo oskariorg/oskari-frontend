@@ -7,8 +7,8 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     this.offsetRight = '63%';
     this.offsetRightSmallScreen = '40%';
     this.offsetTop = '30%';
-    this.mobileOffsetRight = '40%';
-    this.mobileOffsetTop = '10%';
+    this.mobileOffsetRight = '30%';
+    this.mobileOffsetTop = '13%';
     this._templates = {
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
@@ -51,7 +51,9 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
               this._flyout.move(this.offsetRightSmallScreen, this.offsetTop, true);
               return;
             }
-            this._flyout.move(this.offsetRight, this.offsetTop, true);
+            if ( !Oskari.util.isMobile() ) {
+              this._flyout.move(this.offsetRight, this.offsetTop, true);
+            }
         }
       }
     },

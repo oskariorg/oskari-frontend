@@ -69,6 +69,13 @@
  * / CARD
  */
  @media screen and (max-width: 775px) and (min-width: 350px) {
+    .projection-mobile {
+        width: 250px;
+        height: 450px;
+    }
+    .projection-mobile > .oskari-flyoutcontentcontainer {
+        background-color: #fff;
+    }
     .oskari-map-projection {
         width: 250px;
         display: flex;
