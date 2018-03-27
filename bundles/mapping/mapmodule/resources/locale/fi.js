@@ -20,7 +20,7 @@ Oskari.registerLocalization(
             "zoomLvl-12": ""
         },
         "unsupportedProjHeader": "Huom.",
-        "unsupportedProj": "Jotkin tähän karttanäkymään lisätyt tasot\neivät tue nykyistä karttaprojektiota,\nminkä vuoksi niitä ei voida näyttää.",
+        "unsupportedProj": "Joitain karttatasoja ei voida näyttää tässä karttaprojektiossa.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Käyttöehdot",

@@ -234,6 +234,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             sandbox.request(me.getName(), request);
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[name=placename]').focus();
+
+            // Here need add bindings
+            me.form.bindEvents();
         },
         /**
          * Destroys the opened form popup(s) from the screen.

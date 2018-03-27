@@ -1,14 +1,14 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(sandbox, locale) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (sandbox, locale) {
     this.sb = sandbox;
     this.LAYER_ID = 'STATS_LAYER';
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
     this.locale = locale;
     var me = this;
-    me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+    me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
         me.setValues(event.getCurrent());
     });
-    me.service.on('AfterChangeMapLayerOpacityEvent', function(event) {
+    me.service.on('AfterChangeMapLayerOpacityEvent', function (event) {
         me.setLayerOpacityValue(event.getMapLayer());
     });
     this.__templates = {
@@ -91,7 +91,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-
                 '<div class="classification-color-set visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale('colorset.setselection') +'</div>'+
                     '<div class="color-set value">'+
@@ -103,16 +102,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                         '</select>'+
                     '</div>'+
                 '</div>'+
-
             '</div>'+
-
             '</div>')
 
     };
 
     var transparencyEl = this.__templates.classification.find('select.transparency-value');
-    for(var i=100;i>=30;i-=10) {
-        transparencyEl.append('<option value="'+i+'">'+ i +' %</option>');
+    for (var i = 100; i >= 30; i -= 10) {
+        transparencyEl.append('<option value="' + i + '">' + i + ' %</option>');
     }
     this.__templates.classification.find('select.transparency-value option[value=100]').attr('selected', 'selected');
 
@@ -128,22 +125,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         element: null
     };
     this._showNumericValueCheckButton = null;
-
 }, {
-    _toggleMapStyle: function(mapStyle) {
+    _toggleMapStyle: function (mapStyle) {
         var me = this;
         var style = mapStyle || 'choropleth';
         me._element.find('.visible-map-style-points').hide();
         me._element.find('.visible-map-style-choropleth').hide();
         me._element.find('.visible-map-style-' + style).show();
     },
-    setLayerOpacityValue: function(layer){
+    setLayerOpacityValue: function (layer) {
         var me = this;
-        if(me.hasSelectChange) {
+        if (me.hasSelectChange) {
             me.hasSelectChange = false;
             return;
         }
-        if(layer.getId() === me.LAYER_ID) {
+        if (layer.getId() === me.LAYER_ID) {
             var transparencyEl = me._element.find('select.transparency-value');
             transparencyEl.find('option#hiddenvalue').remove();
             var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + layer.getOpacity() + ' %' +'</option>');
@@ -159,23 +155,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
      * @method setValues init selections
      * @param  {Object} classification options. Defaults to current active indicator options
      */
-    setValues: function(classification){
+    setValues: function (classification) {
         var me = this;
 
-        if(!this._element) {
+        if (!this._element) {
             // not rendered yet
             return;
         }
         var service = me.service;
         var state = service.getStateService();
         var ind = state.getActiveIndicator();
-        if(!ind) {
+        if (!ind) {
             // no active indicator
             return;
         }
         classification = classification || state.getClassificationOpts(ind.hash);
 
-        me._element.find('select.map-style').bind('change', function(){
+        me._element.find('select.map-style').bind('change', function () {
             var el = jQuery(this);
             var value = el.val();
             me._toggleMapStyle(value);
@@ -193,7 +189,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         var amount = me._element.find('select.amount-class');
         amount.empty();
         var option = jQuery('<option></option>');
-        for(var i=amountRange.min;i<amountRange.max+1;i++) {
+        for (var i = amountRange.min; i < amountRange.max + 1; i++) {
             var op = option.clone();
             op.html(i);
             op.attr('value', i);
@@ -206,7 +202,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         me._element.find('#legend-flip-colors').attr('checked', classification.reverseColors);
         // update color selection values
         var colors = service.getColorService().getDefaultSimpleColors();
-        if(mapStyle === 'choropleth') {
+        if (mapStyle === 'choropleth') {
             colors = service.getColorService().getOptionsForType(classification.type, classification.count, classification.reverseColors);
         }
 
@@ -215,17 +211,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         me._colorSelect.refresh();
 
         // disable invalid choices
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
-            if(err) {
+        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function (err, data) {
+            if (err) {
                 // propably nothing to tell the user at this point. There will be some invalid choices available on the form
                 return;
             }
             var validOptions = service.getClassificationService().getAvailableOptions(data);
-            if(validOptions.maxCount) {
+            if (validOptions.maxCount) {
                 var options = amount.find('option');
-                options.each(function(index, opt) {
+                options.each(function (index, opt) {
                     opt = jQuery(opt);
-                    if(opt.val() > validOptions.maxCount) {
+                    if (opt.val() > validOptions.maxCount) {
                         opt.attr('disabled', true);
                     }
                 });
@@ -236,20 +232,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         var max = classification.max || me._rangeSlider.defaultValues[1];
         var updateClassification = false;
 
-        if(max-min < classification.count * (me._rangeSlider.step || 1) ) {
+        if (max - min < classification.count * (me._rangeSlider.step || 1)) {
             min = me._rangeSlider.defaultValues[0];
             max = me._rangeSlider.defaultValues[1];
             updateClassification = true;
         }
-        me._rangeSlider.element.slider('values', [min,max]);
+        me._rangeSlider.element.slider('values', [min, max]);
         me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
 
-        if(updateClassification) {
-            state.setClassification(ind.hash,  me.getSelectedValues(), true);
+        if (updateClassification) {
+            state.setClassification(ind.hash, me.getSelectedValues(), true);
         }
 
-        if(classification.transparency) {
+        if (classification.transparency) {
             me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
         }
     },
@@ -258,7 +254,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
      * @method  @public getSelectedValues gets selected values
      * @return {Object} selected values object
      */
-    getSelectedValues: function(){
+    getSelectedValues: function () {
         var me = this;
         var range = me._rangeSlider.element.slider('values');
         var values = {
@@ -273,10 +269,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             min: range[0],
             max: range[1],
             transparency: me._element.find('select.transparency-value').val(),
-            showValues: (me._showNumericValueCheckButton.getValue() === 'on') ? true : false
+            showValues: (me._showNumericValueCheckButton.getValue() === 'on')
         };
 
-        if(values.mapStyle !== 'points') {
+        if (values.mapStyle !== 'points') {
             delete values.min;
             delete values.max;
             delete values.transparency;
@@ -291,19 +287,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
      * @method  @public getElement  get element
      * @return {Object} jQuery element object
      */
-    getElement: function() {
+    getElement: function () {
         var me = this;
         var service = me.service;
-        if(!service) {
+        if (!service) {
             // not available yet
             return;
         }
-        if(me._element) {
+        if (me._element) {
             return me._element;
         }
         me._element = me.__templates.classification.clone();
 
-        if(!service.hasMapMode('vector')) {
+        if (!service.hasMapMode('vector')) {
             me._element.find('.visible-on-vector').remove();
         }
 
@@ -311,26 +307,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         me._element.find('.classification-colors.value').append(me._colorSelect.getElement());
 
         var stateService = me.service.getStateService();
-        var updateClassification = function() {
+        var updateClassification = function () {
             me.hasSelectChange = true;
             stateService.setClassification(stateService.getActiveIndicator().hash, me.getSelectedValues());
         };
 
-        if(!me._rangeSlider.element) {
+        if (!me._rangeSlider.element) {
             me._rangeSlider.element = me._element.find('.point-range');
 
             me._rangeSlider.element.slider({
                 min: me._rangeSlider.min,
                 max: me._rangeSlider.max,
-                step:me._rangeSlider.step,
+                step: me._rangeSlider.step,
                 range: true,
-                values: [me._rangeSlider.defaultValues[0],me._rangeSlider.defaultValues[1]],
+                values: [me._rangeSlider.defaultValues[0], me._rangeSlider.defaultValues[1]],
                 slide: function (event, ui) {
                     var min = ui.values[0];
                     var max = ui.values[1];
                     var el = jQuery(this);
                     var count = (!isNaN(el.attr('data-count'))) ? parseFloat(el.attr('data-count')) : 2;
-                    if(max-min >= count * (me._rangeSlider.step || 1)) {
+                    if (max - min >= count * (me._rangeSlider.step || 1)) {
                         return true;
                     }
                     return false;
@@ -341,49 +337,45 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             });
         }
 
-        if(!me._showNumericValueCheckButton) {
+        if (!me._showNumericValueCheckButton) {
             me._showNumericValueCheckButton = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
             me._showNumericValueCheckButton.setTitle(me.locale('classify.map.showValues'));
-            me._showNumericValueCheckButton.setHandler(function(){
+            me._showNumericValueCheckButton.setHandler(function () {
                 updateClassification();
             });
             me._element.find('.numeric-value').append(me._showNumericValueCheckButton.getElement());
         }
-
 
         // setup initial values
         me.setValues();
         // might have been set before render
         this.setEnabled(this.__enabled);
 
-
         me._colorSelect.setHandler(updateClassification);
         me._element.find('select').bind('change', updateClassification);
 
-        me._element.find('#legend-flip-colors').change(function(){
+        me._element.find('#legend-flip-colors').change(function () {
             updateClassification();
         });
         return me._element;
-
     },
     /**
      * @method  @public setEnabled set enabled
      * @param {Boolean} enabled is edit enabled or not
      */
-    setEnabled: function(enabled) {
+    setEnabled: function (enabled) {
         var me = this;
-        if(typeof enabled !== 'boolean') {
+        if (typeof enabled !== 'boolean') {
             return;
         }
         this.__enabled = !!enabled;
-        if(!this._element) {
+        if (!this._element) {
             // not rendered yet
             return;
         }
         me._element.find('select').prop('disabled', !enabled).trigger('chosen:updated');
         me._element.find('button').prop('disabled', !enabled);
         me._colorSelect.setEnabled(enabled);
-        me._element.find('.point-range').slider('option','disabled',!enabled);
+        me._element.find('.point-range').slider('option','disabled', !enabled);
     }
-
 });

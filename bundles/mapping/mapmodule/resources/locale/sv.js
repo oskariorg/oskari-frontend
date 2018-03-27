@@ -20,7 +20,7 @@ Oskari.registerLocalization(
             "zoomLvl-12": ""
         },
         "unsupportedProjHeader": "Obs.",
-        "unsupportedProj": "Vissa kartlager kan inte visas\nmed den valda kartprojektionen.",
+        "unsupportedProj": "Vissa kartlager i denna kartvy kan inte visas med den aktuella kartprojektionen.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Användarvillkor",

@@ -38,6 +38,7 @@ define([
                 me.classNames = me.options.classes;
                 me.template = _.template(ViewTemplate);
                 me.subLayerTemplate = _.template(SubLayerTemplate);
+                this.layerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
                 // listenTo will remove dead listeners, use it instead of on()
                 this.listenTo(this.model, 'add', function() {
                     me.render();
@@ -122,6 +123,83 @@ define([
                 }
             },
             /**
+             * Get mapl layer groups for layer group selection
+             * @method  _getMaplayerGroups
+             * @return  {Array}           groups
+             * @private
+             */
+            _getMaplayerGroups: function() {
+                var me = this;
+                var groups = [];
+
+                me.layerService.getAllLayerGroups().forEach(function(group) {
+                    groups.push({
+                        id: group.id,
+                        cls: 'group',
+                        name: Oskari.getLocalized(group.name)
+                    });
+
+                    // subgroups
+                    group.groups.forEach(function(subgroup) {
+                        groups.push({
+                            id: subgroup.id,
+                            cls: 'subgroup',
+                            name: Oskari.getLocalized(subgroup.name)
+                        });
+
+                        // subgroup subgroups
+                        subgroup.groups.forEach(function(subgroupsubgroup) {
+                            groups.push({
+                                id: subgroupsubgroup.id,
+                                cls: 'subgroupsubgroup',
+                                name: Oskari.getLocalized(subgroupsubgroup.name)
+                            });
+                        });
+                    });
+                });
+
+                return groups;
+            },
+            /**
+             * Get dataproviders
+             * @method getDataproviders
+             * @param  {Boolean}        emptyCache empty cache
+             * @param  {Function}       callback   callback function
+             */
+            getDataproviders: function(emptyCache, callback) {
+                var me = this;
+                if (!me.dataProviders || emptyCache === true) {
+                    jQuery.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=UTF-8',
+                        url: Oskari.getSandbox().getAjaxUrl('GetMapLayerGroups'),
+                        error: function() {
+                            var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
+                            errorDialog.fadeout();
+                        },
+                        success: function(response) {
+                            me.dataProviders = [];
+                            response.organization.forEach(function(org) {
+                                me.dataProviders.push({
+                                    id: org.id,
+                                    name: Oskari.getLocalized(org.name)
+                                });
+                            });
+
+                            me.dataProviders.sort(function(a, b) {
+                                return Oskari.util.naturalSort(a.name, b.name);
+                            });
+                            callback();
+
+                        }
+                    });
+                } else {
+                    callback();
+                }
+            },
+            /**
              * Show and hide settings related to this layer
              *
              * @method toggleLayerSettings
@@ -129,25 +207,39 @@ define([
             toggleLayerSettings: function (e) {
                 var me = this,
                     element = jQuery(e.currentTarget);
-                //show layer settings
-                if (element.parents('.admin-add-layer').length === 0 && !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
-                    e.stopPropagation();
-                    // create AdminLayerSettingsView
-                    var settings = new AdminLayerSettingsView({
-                        model: me.model,
-                        supportedTypes : me.supportedTypes,
-                        instance: me.options.instance,
-                        classes: me.classNames,
-                        layerTabModel: me.options.layerTabModel
-                    });
-                    element.append(settings.$el);
-                    element.find('.admin-add-layer').addClass('show-edit-layer');
-                } else {
-                    //hide layer settings
-                    element.find('.admin-add-layer').removeClass('show-edit-layer');
-                    element.find('.admin-add-layer').remove();
 
-                }
+                me.getDataproviders(false,function(){
+                    //show layer settings
+                    if (element.parents('.admin-add-layer').length === 0 && !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
+                        e.stopPropagation();
+                        if(!me.instance.locale) {
+                            me.instance.locale = Oskari.getMsg.bind(null, 'admin-layerselector');
+                        }
+                        var groupId = element.parents('.accordion').attr('lcid');
+                        var groupDetails = me.layerService.getAllLayerGroups(groupId);
+
+                        // create AdminLayerSettingsView
+                        var settings = new AdminLayerSettingsView({
+                            model: me.model,
+                            supportedTypes : me.supportedTypes,
+                            instance: me.options.instance,
+                            classes: me.classNames,
+                            layerTabModel: me.options.layerTabModel,
+                            dataProviders: me.dataProviders,
+                            allMaplayerGroups: me._getMaplayerGroups(),
+                            maplayerGroups: (me.model) ? me.model.getGroups() : [{
+                                    id: groupDetails.id,
+                                    name: Oskari.getLocalized(groupDetails.name)
+                                }]
+                        });
+                        element.append(settings.$el);
+                        element.find('.admin-add-layer').addClass('show-edit-layer');
+                    } else {
+                        //hide layer settings
+                        element.find('.admin-add-layer').removeClass('show-edit-layer');
+                        element.find('.admin-add-layer').remove();
+                    }
+                });
             },
 
             toggleSubLayerSettings: function (e) {

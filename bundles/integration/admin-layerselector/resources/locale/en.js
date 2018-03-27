@@ -198,7 +198,12 @@ Oskari.registerLocalization(
             "errorTitle": "Error",
             "warningTitle": "Warning",
             "successTitle": "Saving Succeeded",
-            "warning_some_of_the_layers_could_not_be_parsed": "Some of the map layers could not be parsed."
+            "warning_some_of_the_layers_could_not_be_parsed": "Some of the map layers could not be parsed.",
+            "addDataprovider": "Dataprovider",
+            "groupTitle": "Map layer group name",
+            "addDataproviderButton": "Add",
+            "maplayerGroups": "Maplayer groups",
+            "selectMaplayerGroupsButton": "Select groups"
         },
         "cancel": "Cancel",
         "add": "Add",
@@ -214,6 +219,20 @@ Oskari.registerLocalization(
         "recheckSucceeded": "Capabilities re-check succeeded.",
         "recheckFailReason": "Capablities re-check failed: {reason}",
         "recheckFail": "Capablities re-check failed.",
-        "recheckFailTimeout": "Capabilites check timeout. Process continues to run on server."
+        "recheckFailTimeout": "Capabilites check timeout. Process continues to run on server.",
+        "successMessages": {
+            "dataproviderSave": {
+                "title": "Dataprovider saving was successful",
+                "message": "Dataprovider saving was successful"
+            }
+        },
+        "groupTitles": {
+            "localePrefix": "Name in",
+            "addDataprovider": "Add dataprovider",
+            "selectLayerGroups": "Select layer groups"
+        },
+        "buttons": {
+            "add": "Add"
+        }
     }
 });

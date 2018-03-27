@@ -21,11 +21,16 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
             return;
         }
         var el = this._template.container.clone();
-        this.views.forEach( function (view) {
-            el.append( me.createCard( view ) );
+
+        var sortedViews = this.views.sort( function ( viewA, viewB ) {
+            return viewA.srsName < viewB.srsName ? -1 : 1;
         });
 
+        sortedViews.forEach( function (view) {
+            el.append( me.createCard( view ) );
+        });
         this.setElement(el);
+        this.highlightCurrentProjection();
     },
     /**
       * @method createCard
@@ -35,6 +40,11 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
         var card = Oskari.clazz.create('Oskari.projection.change.component.card', view, this.changeProjection.bind(this) );
         return card.getElement();
     },
+    highlightCurrentProjection: function () {
+        var srs = Oskari.getSandbox().getMap().getSrsName();
+        var current = this.getElement().find('[data-srs="'+srs+'"]');
+        current.find('.card-image').addClass('projection-highlight');
+    }, 
     /**
       * @method changeProjection
       * @description reloads the page with a new uuid

@@ -199,7 +199,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             //set measurement result from drawing
             } else {
                 this._setMeasurementResult(this.drawingData);
-            }            
+            }
 
             var formEl = me.form.getForm(categories),
                 content = [{
@@ -247,6 +247,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             sandbox.request(me.getName(), request);
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[data-name=placename]').focus();
+
+            // Here need add bindings
+            me.form.bindEvents();
         },
         /**
          * @method _getDrawModeFromGeometry
@@ -417,7 +420,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             place.setAttentionText(Oskari.util.sanitize(values.attention_text));
             place.setCategoryId(values.category);
             if (drawing){
-                place.setDrawToolsMultiGeometry(drawing); 
+                place.setDrawToolsMultiGeometry(drawing);
             } else if (this.tempGeom) {
                 place.setGeometry(this.tempGeom); // if not edited
             }

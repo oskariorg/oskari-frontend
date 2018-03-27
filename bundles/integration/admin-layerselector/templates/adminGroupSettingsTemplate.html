@@ -2,7 +2,7 @@
     <div class="add-group-wrapper">
         <div class="add-class-grouping" title="<%= instance.getLocalization('admin')[groupTitle] %>"><%= instance.getLocalization('admin')[groupTitle] %></div>
 
-    <% 
+    <%
         var names = model.getNameLanguages();
         for (var i = 0; i < names.length; i++) {
             var lang = names[i] %>
@@ -21,16 +21,34 @@
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-inspire-theme" class="add-layer-label"  title="<%= instance.getLocalization('admin').addInspireThemeDesc %>"><%= instance.getLocalization('admin').addInspireTheme %></label>
+                <label for="select-dataprovider" class="add-layer-label"  title="<%= instance.locale('admin.addDataproviderDesc') %>"><%= instance.locale('admin.addDataprovider') %></label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                <select id="add-layer-inspire-theme">
-                    <% for(var i = 0; inspireThemes != null && i < inspireThemes.length; i++) { %>
-                    <option value="<%= inspireThemes[i].id %>" <% if(model && model.getInspireName() == inspireThemes[i].name ) { %>selected<% } %> ><%= inspireThemes[i].name %></option>
+                <select id="select-dataprovider" class="add-layer-input mid">
+                    <% for(var i = 0; dataProviders != null && i < dataProviders.length; i++) { %>
+                    <option value="<%= dataProviders[i].id %>" <% if(model.getOrganizationName() == dataProviders[i].name ) { %>selected<% } %> ><%= dataProviders[i].name %></option>
                     <% } %>
                 </select>
                 </div>
+                <button id="add-dataprovider-button" class="add-dataprovider-button"><%= instance.locale('admin.addDataproviderButton') %></button>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <%= instance.locale('admin.maplayerGroups') %>
+        </div>
+        <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <div class="admin-maplayer-groups-list">
+                        <% for(var i = 0; maplayerGroups != null && i < maplayerGroups.length; i++) { %>
+                           <div class="admin-maplayer-group" data-group-id="<%= maplayerGroups[i].id %>"><%= maplayerGroups[i].name %></div>
+                        <% } %>
+
+                    </div>
+                </div>
+                <button id="select-maplayer-groups-button" class="select-maplayer-groups-button"><%= instance.locale('admin.selectMaplayerGroupsButton') %></button>
             </div>
         </div>
 

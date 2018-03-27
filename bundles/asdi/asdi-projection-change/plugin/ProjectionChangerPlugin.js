@@ -4,21 +4,55 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     this._clazz = 'Oskari.projection.change.ProjectionChangerPlugin';
     this._defaultLocation = 'top right';
     this._index = 55;
+    this.offsetRight = '63%';
+    this.offsetRightSmallScreen = '40%';
+    this.offsetTop = '30%';
     this._templates = {
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
     this._loc = localization;
-
+    
     this._flyout = Oskari.clazz.create('Oskari.projection.change.flyout', options, {
         width: 'auto',
         cls: 'projection-change-flyout'
     });
     this._flyout.makeDraggable();
     this._flyout.hide();
-
+    var me = this;
+    this._mobileDefs = {
+      buttons: {
+        'mobile-projectionchange': {
+            iconCls: 'mobile-projection-light',
+            tooltip: '',
+            show: true,
+            callback: function () {
+              me._flyout.toggle();
+            },
+            sticky: true,
+            toggleChangeIcon: true
+        }
+      },
+      buttonGroup: 'mobile-toolbar'
+    };
     this._log = Oskari.log('Oskari.projection.change.ProjectionChangerPlugin');
   }, {
-
+    /**
+   * Create event handlers.
+   * @method @private _createEventHandlers
+   */
+    _createEventHandlers: function () {
+      return {
+        'MapSizeChangedEvent' : function(evt) {
+            var width = evt._width;
+            //if the rightoffset + element width is greater than screensize use a different right offset
+            if ( width * 0.63 + this._flyout.getElement().width() > width ) {
+              this._flyout.move(this.offsetRightSmallScreen, this.offsetTop, true);
+              return;
+            }
+            this._flyout.move(this.offsetRight, this.offsetTop, true);
+        }
+      }
+    },
     _createControlElement: function () {
       var launcher = this._templates.projectionchanger.clone();
       launcher.attr('title', this._loc.tooltip.tool);
@@ -32,9 +66,15 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
       this.handleEvents();
       this.addToPluginContainer(this._element);
     },
+    createMobileUi: function () {
+        var mobileDefs = this.getMobileDefs();
+        this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+        this._element = jQuery('.' + mobileDefs.buttons["mobile-projectionchange"].iconCls);
+    },
     handleEvents: function () {
         var me = this;
-        this._flyout.move(1200, 300, true);
+        var windowWidth = jQuery(window).width();
+        this._flyout.move(this.offsetRight, this.offsetTop, true);
         this.getElement().on( "click", function() {
             me._flyout.toggle();
         });
@@ -46,20 +86,28 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
      * @param {Boolean} forced application has started and ui should be rendered with assets that are available
      */
     redrawUI: function() {
-      var isMobile = Oskari.util.isMobile();
-      if( this.getElement() ) {
-          this.teardownUI(true);
-      } else {
-        this.createUi();
-      }
+        var isMobile = Oskari.util.isMobile();
+        if ( this.getElement() ) {
+           this.teardownUI(true);
+        }
+        if ( isMobile ) {
+            this.createMobileUi();
+        } else {
+             this.createUi();
+        }
     },
     teardownUI : function(stopping) {
     //detach old element from screen
+      var mobileDefs = this.getMobileDefs();
       this.getElement().detach();
       this.removeFromPluginContainer(this.getElement());
+      this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
     },
     getElement: function() {
         return this._element;
+    },
+    getFlyout: function() {
+      return this._flyout;
     },
     stopPlugin: function() {
       this.teardownUI(true);

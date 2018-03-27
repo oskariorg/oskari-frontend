@@ -306,7 +306,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             contentPanel.append(mapTitle);
 
             /* CONTENT options from localisations files */
-
             for (f = 0; f < me.contentOptions.length; f += 1) {
                 var dat = me.contentOptions[f],
                     opt = me.template.option.clone();
@@ -323,7 +322,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 contentPanel.append(opt);
 
             }
-
+            if ( me.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getProjectionUnits() !== 'm' ) {
+                me.contentOptionDivs.pageScale.css('display', 'none');
+            }
             return panel;
         },
 

@@ -213,7 +213,7 @@ define([
                 var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
 
                 var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var closeButton = popup.createCloseButton(loc('close'))
+                var closeButton = popup.createCloseButton(loc('close'));
                 var primaryButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 primaryButton.setTitle(loc('query'));
                 var me = this;
@@ -226,7 +226,7 @@ define([
                     popup.close();
                 });
 
-                var content = jQuery('<span>' + loc('recheckAll') + '<span>')
+                var content = jQuery('<span>' + loc('recheckAll') + '<span>');
                 primaryButton.setPrimary(true);
                 primaryButton.setHandler(function () {
                     xhr = jQuery.ajax({
@@ -235,7 +235,7 @@ define([
                         data: {
                             srs: me.instance.getSandbox().getMap().getSrsName()
                         },
-                        url: me.instance.getSandbox().getAjaxUrl() + 'action_route=UpdateCapabilities',
+                        url: me.instance.getSandbox().getAjaxUrl('UpdateCapabilities'),
                         success: function (resp) {
                             xhr = null;
                             var successCount = resp.success.length;

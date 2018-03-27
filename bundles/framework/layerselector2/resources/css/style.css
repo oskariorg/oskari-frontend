@@ -35,7 +35,7 @@ div.layerselector2 div.layer {
     /* Let's just imagine this is tabular data... */
     font-size: 12px; }
   div.layerselector2 div.layer .layer-title.not-supported {
-    opacity: 0.5; }
+    color: #888; }
   div.layerselector2 div.layer div.layer-tools {
     float: right; }
   div.layerselector2 div.layer div.layer-icon {

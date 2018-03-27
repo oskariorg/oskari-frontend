@@ -64,18 +64,6 @@
             }
         }
     },{
-        "bundlename": "publishedgrid",
-        "metadata": {
-            "Import-Bundle": {
-                "publishedgrid": {
-                    "bundlePath": "../../../packages/statistics/bundle/"
-                },
-                "geostats": {
-                    "bundlePath": "../../../packages/libraries/bundle/"
-                }
-            }
-        }
-    },{
         "bundlename": "divmanazer",
         "metadata": {
             "Import-Bundle": {

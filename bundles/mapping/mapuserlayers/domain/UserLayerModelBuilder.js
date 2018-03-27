@@ -26,7 +26,7 @@ Oskari.clazz.define(
             // set layer specific data
             layer.setOrganizationName(loclayer.organization);
             layer.setGroups([{
-                id:layer.getId(),
+                id:'USERLAYER',
                 name:loclayer.inspire
             }]);
             layer.setDescription(mapLayerJson.description);

@@ -1,0 +1,437 @@
+$deleteColorStart: #f62b2b;
+$deleteColorEnd: darken($deleteColorStart, 20%);
+$deleteTextColor: #fff;
+
+$addColorStart: #217ad4;
+$addColorEnd: darken($addColorStart, 20%);
+$addTextColor: #fff;
+
+$cancelColorStart: #e6e6e6;
+$cancelColorEnd: darken($cancelColorStart, 20%);
+$cancelTextColor: #000;
+
+$errorColor: lighten(#ff0000, 20%);
+
+$editIcon: url("../images/glyphicons-151-edit.png");
+$addLayerIcon: url("../images/glyphicons-191-plus-sign.png");
+$addGroupIcon: url("../images/glyphicons-433-plus.png");
+$updateCapabilitiesIcon: url("../images/glyphicons-82-refresh.png");
+
+@mixin gradient-button($startColor, $endColor, $textColor)
+{
+    background-color: $startColor;
+    background-image: -webkit-gradient(linear, left top, left bottom, from($startColor), to($endColor));
+    background-image: -webkit-linear-gradient(top, $startColor, $endColor);
+    background-image: -moz-linear-gradient(top, $startColor, $endColor);
+    background-image: -ms-linear-gradient(top, $startColor, $endColor);
+    background-image: -o-linear-gradient(top, $startColor, $endColor);
+    background-image: linear-gradient(to bottom, $startColor, $endColor);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=$startColor, endColorstr=$endColor);
+    color: $textColor;
+    border-color: darken($startColor, 10%) lighten($startColor, 10%) lighten($startColor, 10%) darken($startColor, 10%);
+
+    &:hover {
+        background-color: lighten($startColor, 10%);
+        background-image: -webkit-gradient(linear, left top, left bottom, from(lighten($startColor, 10%)), to(lighten($endColor, 10%)));
+        background-image: -webkit-linear-gradient(top, lighten($startColor, 10%), lighten($endColor, 10%));
+        background-image: -moz-linear-gradient(top, lighten($startColor, 10%), lighten($endColor, 10%));
+        background-image: -ms-linear-gradient(top, lighten($startColor, 10%), lighten($endColor, 10%));
+        background-image: -o-linear-gradient(top, lighten($startColor, 10%), lighten($endColor, 10%));
+        background-image: linear-gradient(to bottom, lighten($startColor, 10%), lighten($endColor, 10%));
+        filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=lighten($startColor, 10%), endColorstr=lighten($endColor, 10%));
+    }
+}
+
+.divmanazerpopup {
+    &.admin-hierarchical-layerlist-group {
+        .popup-body {
+            .content {
+                .group-names {
+                    label {
+                        input {
+                            &.error {
+                                background-color: $errorColor;
+                            }
+                        }
+                    }
+                }
+            }
+            .actions {
+                .oskari-button {
+                    text-shadow:none;
+                    &.delete {
+                        @include gradient-button($deleteColorStart, $deleteColorEnd, $deleteTextColor);
+                    }
+
+                    &.add {
+                        @include gradient-button($addColorStart, $addColorEnd, $addTextColor);
+                    }
+
+                    &.cancel {
+                        @include gradient-button($cancelColorStart, $cancelColorEnd, $cancelTextColor);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-height: 999px) and (min-height: 800px) {
+    .oskari-flyout {
+        &.admin-hierarchical-layerlist-add-layer {
+
+            div.oskari-flyoutcontentcontainer {
+                max-height: 650px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-height: 1199px) and (min-height: 1000px) {
+    .oskari-flyout {
+        &.admin-hierarchical-layerlist-add-layer {
+
+            div.oskari-flyoutcontentcontainer {
+                max-height: 700px;
+            }
+        }
+    }
+}
+
+.oskari-flyout {
+    &.admin-hierarchical-layerlist-add-layer {
+        max-height: 80%;
+
+        div.oskari-flyoutcontentcontainer {
+            .spinner {
+                position: absolute !important;
+            }
+
+            .icon-close {
+                display: inline-block;
+                opacity: 0;
+                position: absolute;
+                top: 9px;
+                right: 10px;
+                margin-left: 0;
+                cursor: pointer;
+            }
+
+            div.admin-add-layer {
+                float: left;
+                margin-right: 5px;
+                margin-top: 3px;
+                margin-left:10px;
+
+                .admin-maplayer-groups-list {
+                    max-height: 90px;
+                    overflow-y: auto;
+                    margin: 10px
+                }
+
+                div.add-group-wrapper {
+                    width:500px;
+                }
+
+                .add-class-grouping {
+                    font-weight: bold;
+                    font-size: 130%;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                }
+
+                input[type=checkbox] {
+                    margin-top:0;
+                }
+
+                .input-controls {
+                    position: relative;
+                    margin-right: 5px;
+                    &.buttons {
+                        text-align: center;
+                        button {
+                            margin:10px;
+                            text-shadow: none;
+
+                            &.admin-add-layer-ok, &.admin-add-group-ok {
+                                @include gradient-button($addColorStart, $addColorEnd, $addTextColor);
+                            }
+                            &.admin-remove-layer, &.admin-remove-group {
+                                @include gradient-button($deleteColorStart, $deleteColorEnd, $deleteTextColor);
+                            }
+                            &.admin-add-layer-cancel, &.admin-add-group-cancel {
+                                @include gradient-button($cancelColorStart, $cancelColorEnd, $cancelTextColor);
+                            }
+                        }
+                    }
+                }
+
+                .opacity-slider-tool {
+                    width: 215px;
+                }
+                .layout-slider {
+                    width: 140px;
+                    float: left;
+                    margin-top: 6px;
+                }
+                .opacity-slider {
+                    float: right;
+                    line-height: 25px;
+
+                    input {
+                        float: left;
+                        margin-right: 5px;
+                        margin-top: 0;
+                    }
+                }
+                .left-tools {
+                    .layer-opacity {
+                        display: inline-block;
+                        background-image: url(../images/opacity_slider.png);
+                        background-repeat: no-repeat;
+                        background-position-y: 3px;
+                    }
+                }
+
+                div.add-layer-grouping {
+                    font-weight: bold;
+                    font-size: 130%;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                }
+
+                div.add-style-send {
+                    div.add-layer-button-area {
+                        margin-left: 9em;
+                        min-width: 220px;
+                        div.input-controls {
+                            width:100%;
+                        }
+                    }
+                }
+
+                div.add-layer-style-import-block {
+                    display: none;
+                    margin: 8px;
+                    border: 1pt solid #c0d0d0;
+                    padding: 10px;
+                }
+
+                div.add-group-record,div.add-layer-record,div.add-class-record {
+                    width: 100%;
+                    margin-bottom: 8px;
+                    overflow: hidden;
+                    position: relative;
+
+                    div.add-class-label-area {
+                        display: table;
+                        float: left;
+
+                        .add-class-label {
+                            font-weight: bold;
+                            width: 75px;
+                            display: table-cell;
+                            vertical-align: middle;
+                        }
+                    }
+
+                    input {
+                        float: left;
+                        margin-right: 5px;
+                        margin-top: 3px;
+                    }
+
+                    &.capabilities {
+                        div.add-layer-input-area {
+                            max-height: 250px;
+                            overflow: auto;
+                        }
+                        ul {
+                            margin: 0 20px 5px 20px;
+                            li {
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    div.add-class-input-area {
+                        margin-left: 9em;
+                        min-width: 220px;
+                    }
+
+                    div.add-layer-label-area {
+                        display: table;
+                        float: left;
+                        font-weight: bold;
+
+                        label.add-layer-label {
+                            font-weight: bold;
+                            width: 75px;
+                            display: table-cell;
+                            vertical-align: middle;
+                        }
+
+                        label.add-class-label {
+                            font-weight: bold;
+                            width: 75px;
+                            display: table-cell;
+                            vertical-align: middle;
+                        }
+                    }
+
+                    div.add-layer-input-area, div.add-class-input-area {
+
+                        div.add-class-input-area {
+                            margin-left: 9em;
+                            min-width: 220px;
+                        }
+
+                        margin-left: 9em;
+                        min-width: 220px;
+
+                        div.add-layer-text {
+                            height:30px;
+                        }
+
+                        &.adjacent {
+                            .input-controls {
+                                float: left;
+                            }
+                        }
+                        .input-controls {
+                            .add-layer-input {
+
+                                &.mid {
+                                    width: 217px;
+                                    float: left;
+                                }
+                                &.long {
+                                    width: 297px;
+                                }
+                            }
+                        }
+
+                        .add-dataprovider-button {
+                            margin-left:6px;
+                        }
+
+                        select {
+                            width: 309px;
+                            padding: 8px 10px 8px 10px;
+                            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+                            -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+                            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+                            display: block;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+.divmanazerpopup {
+    &.admin-layerlist-group {
+
+        label {
+            &.group {
+                &::before {
+                    content: "\25B6";
+                    width: 25px;
+                    margin-right: 8px;
+                    color: #555;
+                }
+            }
+            &.subgroup {
+                &::before {
+                    content: "\25B6";
+                    width: 25px;
+                    margin-left: 32px;
+                    margin-right: 8px;
+                    color: #555;
+                }
+            }
+            &.subgroupsubgroup {
+                &::before {
+                    content: "\25B6";
+                    width: 25px;
+                    margin-left: 64px;
+                    margin-right: 8px;
+                    color: #555;
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Here add hierarchical admin tool layerlist icons
+ */
+div.hierarchical-layerlist {
+    .main-tools {
+        .main-tool {
+            &.update-capabilities{
+                background-image: $updateCapabilitiesIcon;
+            }
+            &.add-group {
+                background-image:$addGroupIcon;
+            }
+        }
+    }
+    .hierarchical-layerlist-tree {
+        .jstree-anchor {
+            .group-tools {
+                .group-tool {
+                    &.add-subgroup {
+                        background-image:$addGroupIcon;
+                    }
+
+                    &.edit-group {
+                        background-image: $editIcon;
+                    }
+
+                    &.add-layer {
+                        background-image:$addLayerIcon;
+                    }
+                }
+            }
+
+            .subgroup-tools {
+                .subgroup-tool {
+                    &.add-subgroup-subgroup {
+                        background-image:$addGroupIcon;
+                    }
+
+                    &.edit-subgroup {
+                        background-image: $editIcon;
+                    }
+
+                    &.add-layer {
+                        background-image:$addLayerIcon;
+                    }
+                }
+            }
+
+            .subgroup-subgroup-tools {
+                .subgroup-subgroup-tool {
+                    &.edit-subgroup-subgroup {
+                        background-image: $editIcon;
+                    }
+
+                    &.add-layer {
+                        background-image:$addLayerIcon;
+                    }
+                }
+            }
+
+            .layer-tools {
+                .layer-tool {
+                    &.edit-layer {
+                        background-image: $editIcon;
+                    }
+                }
+            }
+        }
+    }
+}

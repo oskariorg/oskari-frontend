@@ -359,12 +359,25 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
             var newGroups = [];
             var editable = me.getAllLayerGroups(parentId);
-            editable.groups.forEach(function(group) {
-                if (group.id != id) {
-                    newGroups.push(group);
+
+            var getGroupIndexInArray = function(arr){
+                var founded = -1;
+                for (var i = 0; i < arr.length; i++) {
+                    var group = arr[i];
+                    if (group.id === id) {
+                        founded = i;
+                        break;
+                    }
                 }
-            });
-            editable.groups = newGroups;
+                return founded;
+            };
+
+            var groupIndex = getGroupIndexInArray(editable.groups || editable);
+            if (groupIndex >= 0 && editable.groups) {
+                editable.groups.splice(groupIndex, 1);
+            } else {
+                editable.splice(groupIndex, 1);
+            }
         },
         /**
          * Updata layer groups
@@ -375,28 +388,32 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
             var editable = me.getAllLayerGroups(data.id);
             // if found then update only
-            if (editable) {
+            if (editable && editable.name) {
                 editable.name = data.name;
                 editable.parentId = data.parentId;
                 editable.selectable = data.selectable;
             } else if (data.parentId === -1) {
-                me.getAllLayerGroups().push({
-                    groups: [],
-                    id: data.id,
-                    name: data.name,
-                    layers: [],
-                    parentId: data.parentId,
-                    selectable: data.selectable
-                });
+                me.getAllLayerGroups().push(
+                    Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
+                        groups: [],
+                        id: data.id,
+                        name: data.name,
+                        layers: [],
+                        parentId: data.parentId,
+                        selectable: data.selectable
+                    })
+                );
             } else {
-                me.getAllLayerGroups(data.parentId).groups.push({
-                    groups: [],
-                    id: data.id,
-                    name: data.name,
-                    layers: [],
-                    parentId: data.parentId,
-                    selectable: data.selectable
-                });
+                me.getAllLayerGroups(data.parentId).groups.push(
+                    Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
+                        groups: [],
+                        id: data.id,
+                        name: data.name,
+                        layers: [],
+                        parentId: data.parentId,
+                        selectable: data.selectable
+                    })
+                );
             }
         },
 
@@ -418,112 +435,47 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
-            var getLayerIndexInArray = function(arr){
-                var founded = -1;
-                for (var i = 0; i < groupLayers.length; i++) {
-                    var layer = groupLayers[i];
-                    if (layer.id === layerId) {
-                        founded = i;
-                        break;
+            // remove layer from group on delete, update layer in group if already exists
+            // recurses the group structure
+            var recurseLayerUpdate = function (group) {
+                // Check if layer is in group
+                var layerIndex = group.layers.findIndex(function(layer) {
+                    return layer.id === layerId;
+                });
+                if(layerIndex !== -1) {
+                    if (deleteLayer) {
+                        group.layers.splice(layerIndex, 1);
+                    } else {
+                        group.layers[layerIndex] = newLayerConf;
                     }
                 }
-                return founded;
+                // recurse to next level of groups
+                if(group.groups) {
+                    group.groups.forEach(function(subgroup) {
+                        recurseLayerUpdate(subgroup);
+                    });
+                }
             };
+            // use recurseLayerUpdate to go through the whole group structure to find layers to update or delete
+            me._layerGroups.forEach(function(group) {
+                recurseLayerUpdate(group);
+            });
 
-
-            // update or insert
-            if (!deleteLayer) {
-                var layerIndex = null;
-
-                for (var i = 0; i < me._layerGroups.length; i++) {
-                    group = me._layerGroups[i];
-
-                    // Check if layer is in main groups
-                    layerIndex = getLayerIndexInArray(group.layers);
-                    if (layerIndex >= 0) {
-                        if (deleteLayer) {
-                            group.layers.splice(layerIndex, 1);
-                        } else {
-                            group.layers[layerIndex] = newLayerConf;
-                        }
-                    }
-
-                    // check subgroups
-                    for (var j = 0; j < group.groups.length; j++) {
-                        var subgroup = group.groups[j];
-
-                        layerIndex = getLayerIndexInArray(subgroup.layers);
-                        if (layerIndex >= 0) {
-                            if (deleteLayer) {
-                                group.groups[j].layers.splice(layerIndex, 1);
-                            } else {
-                                group.groups[j].layers[layerIndex] = newLayerConf;
-                            }
-                        }
-                        // check subgroup subgroups
-                        if (subgroup.groups) {
-                            for (var k = 0; k < subgroup.groups.length; k++) {
-                                var subgroupSubgroup = subgroup.groups[k];
-                                layerIndex = getLayerIndexInArray(subgroupSubgroup.layers);
-                                if (layerIndex >= 0) {
-                                    if (deleteLayer) {
-                                        group.groups[j].groups[k].layers.splice(layerIndex, 1);
-                                    } else {
-                                        group.groups[j].groups[k].layers[layerIndex] = newLayerConf;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (layerIndex >= 0) {
-                            break;
-                        }
-                    }
-
-                    if (layerIndex >= 0) {
-                        break;
-                    }
-
-                }
-
-
-                // Finally check at layer has all groups in dom
+            // Finally check if layer has new groups
+            if(!deleteLayer && newLayerConf && newLayerConf.groups) {
+                // for each group on the layer
                 newLayerConf.groups.forEach(function(group) {
+                    // find the group details
                     var groupConf = me.getAllLayerGroups(group.id);
-                    var groupLayers = me.getAllLayerGroups(group.id).layers || [];
-                    var isInGroup  =groupLayers.filter(function(layer) {
+                    var groupLayers = groupConf.layers || [];
+                    // check if the layer is referenced in the group details
+                    var layer = groupLayers.find(function(layer) {
                         return layer.id === newLayerConf.id;
                     });
-
-                    if (isInGroup.length === 0) {
+                    // if layer is not part of the groups layers -> add it
+                    if (!layer) {
                         me.getAllLayerGroups(group.id).layers.push(newLayerConf);
                     }
-                });
-            }
-
-            // Also check if layer has removed from groups
-            if (deleteLayer) {
-                me._layerGroups.forEach(function(group, index) {
-                    // new layer is not in main groups so remove it
-                    if (getLayerIndexInArray(group.layers)>-1) {
-                        group.layers.splice(getLayerIndexInArray(group.layers), 1);
-                    }
-
-                    // check subgroups
-                    group.groups.forEach(function(subgroup, subgroupIndex) {
-                        // new layer is not in subgroups so remove it
-                        if (getLayerIndexInArray(subgroup.layers)>-1) {
-                            subgroup.layers.splice(getLayerIndexInArray(subgroup.layers), 1);
-                        }
-
-                        // check subgroup subgroups
-                        subgroup.groups.forEach(function(subgroupSubgroup, subgroupSubgroupIndex) {
-                            // new layer is not in subgroups so remove it
-                            if (getLayerIndexInArray(subgroupSubgroup.layers)>-1) {
-                                subgroupSubgroup.layers.splice(getLayerIndexInArray(subgroupSubgroup.layers), 1);
-                            }
-                        });
-                    });
                 });
             }
         },
@@ -651,11 +603,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         _loadAllLayerGroupsAjaxCallBack: function(pResp, callbackSuccess) {
             var me = this;
 
-            me._layerGroups = pResp;
+            me._layerGroups = [];
 
             var layers = [];
 
-            var addGroupLayers = function(groups) {
+            var addGroupLayers = function(groups, recursive) {
                 groups.forEach(function(group) {
                     if(group.layers) {
                         group.layers.forEach(function(layer) {
@@ -663,7 +615,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         });
                     }
                     if(group.groups) {
-                        addGroupLayers(group.groups);
+                        addGroupLayers(group.groups, true);
+                    }
+
+                    // If not recursive, then
+                    if(!recursive) {
+                        var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
+                        me._layerGroups.push(groupDom);
                     }
                 });
             };
@@ -698,28 +656,30 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getAllLayerGroups: function(id) {
             var layerGroups = null;
             if (id && id != -1) {
-                var filterFunction = function(group) {
+                var findFunction = function(group) {
                     return group.id == id;
                 };
-                var group = this._layerGroups.filter(filterFunction)[0];
+                var group = this._layerGroups.find(findFunction);
                 // group not found
                 // try to get subgroup
                 if (!group) {
                     this._layerGroups.forEach(function(g){
-                        var subgroup = g.groups.filter(filterFunction)[0];
+                        var subgroup = g.groups.find(findFunction);
                         if (subgroup) {
                             layerGroups = subgroup;
                         }
 
                         // Try to get subgroup subgroup
                         g.groups.forEach(function(sg){
-                            var subgroupSubgroup = sg.groups.filter(filterFunction)[0];
+                            var subgroupSubgroup = sg.groups.find(findFunction);
                             if (subgroupSubgroup) {
                                 layerGroups = subgroupSubgroup;
                             }
                         });
                     });
 
+                } else {
+                    layerGroups = group;
                 }
             }
             return layerGroups || this._layerGroups;
@@ -1253,6 +1213,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 builder.parseLayerData(layer, mapLayerJson, this);
             }
 
+            if (mapLayerJson.groups){
+                layer.setGroups(mapLayerJson.groups);
+            }
+
             if (mapLayerJson.created && isNaN(Date.parse(mapLayerJson.created)) === false) {
                 var created = new Date(mapLayerJson.created);
                 if (created) {
@@ -1260,7 +1224,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             }
 
-            layer.setGroups(mapLayerJson.groups);
+
             layer.setOrderNumber(mapLayerJson.orderNumber);
 
             return layer;

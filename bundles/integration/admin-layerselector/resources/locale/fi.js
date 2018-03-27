@@ -198,7 +198,12 @@ Oskari.registerLocalization(
             "errorTitle": "Virhe",
             "warningTitle": "Varoitus",
             "successTitle": "Tallennettu",
-            "warning_some_of_the_layers_could_not_be_parsed": "Osaa tasoista ei voitu käsitellä."
+            "warning_some_of_the_layers_could_not_be_parsed": "Osaa tasoista ei voitu käsitellä.",
+            "addDataprovider": "Tiedontuottaja",
+            "groupTitle": "Taustakarttatason nimi",
+            "addDataproviderButton": "Lisää",
+            "maplayerGroups": "Tason ryhmät",
+            "selectMaplayerGroupsButton": "Valitse ryhmät"
         },
         "cancel": "Peruuta",
         "add": "Lisää",
@@ -209,11 +214,25 @@ Oskari.registerLocalization(
         "query": "Hae",
         "recheckTitle": "Päivitä getCapabilities",
         "recheckAllButton": "Päivitä kaikki getCapabilities",
-        "recheckAll": "Haluatko hakea getCapabilities-määritykset kaikille karttatasoille? Toiminonto saattaa kestää useita minuutteja.",
+        "recheckAll": "Haluatko hakea getCapabilities-määritykset kaikille karttatasoille? Toiminto saattaa kestää useita minuutteja.",
         "recheckAllSucceeded": "GetCapabilities päivitys onnistui {success, number} tasolle, epäonnistui {fail, number} tasolle. Lataa sivu uudelleen nähdäksesi päivittyneet tiedot.",
         "recheckSucceeded": "GetCapabilities päivitys onnistui.",
         "recheckFailReason": "GetCapabilities päivitys epäonnistui: {reason}",
         "recheckFail": "GetCapabilities päivitys epäonnistui.",
-        "recheckFailTimeout": "GetCapabilities päivitys aikakatkaistiin. Päivitys jatkuu palvelimella."
+        "recheckFailTimeout": "GetCapabilities päivitys aikakatkaistiin. Päivitys jatkuu palvelimella.",
+        "successMessages": {
+            "dataproviderSave": {
+                "title": "Tiedontuottajan tallennus onnistui",
+                "message": "Tiedontuottajan tallennus onnistui"
+            }
+        },
+        "groupTitles": {
+            "localePrefix": "Nimi kielellä",
+            "addDataprovider": "Lisää tiedontuottaja",
+            "selectLayerGroups": "Valitse karttatason ryhmät"
+        },
+        "buttons": {
+            "add": "Lisää"
+        }
     }
 });
