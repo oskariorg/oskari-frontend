@@ -24,11 +24,14 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     this._mobileDefs = {
       buttons: {
         'mobile-projectionchange': {
-            iconCls: 'mobile-projection-light',
+            iconCls: 'mobile-projection',
             tooltip: '',
-            show: true,
+            show: false,
             callback: function () {
               me._flyout.toggle();
+              if ( !me._flyout.isVisible() ) {
+               me.mobilePluginOnClose()
+              }
             },
             sticky: true,
             toggleChangeIcon: true
@@ -57,6 +60,9 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         }
       }
     },
+    mobilePluginOnClose: function () {
+        this._resetMobileIcon(this.getElement(), this._mobileDefs.buttons['mobile-projectionchange'].iconCls);
+    },
     _createControlElement: function () {
       var launcher = this._templates.projectionchanger.clone();
       launcher.attr('title', this._loc.tooltip.tool);
@@ -71,10 +77,14 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
       this.addToPluginContainer(this._element);
     },
     createMobileUi: function () {
+        var me = this;
         var mobileDefs = this.getMobileDefs();
         this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         this._element = jQuery('.' + mobileDefs.buttons["mobile-projectionchange"].iconCls);
         this._flyout.move(this.mobileOffsetRight, this.mobileOffsetTop, true);
+        this._flyout.on('hide', function () {
+          me.mobilePluginOnClose();
+        })
     },
     handleEvents: function () {
         var me = this;
