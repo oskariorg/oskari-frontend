@@ -81,10 +81,12 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         var mobileDefs = this.getMobileDefs();
         this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         this._element = jQuery('.' + mobileDefs.buttons["mobile-projectionchange"].iconCls);
+        var elem = this._flyout.getElement();
+        debugger;
         this._flyout.move(this.mobileOffsetRight, this.mobileOffsetTop, true);
         this._flyout.on('hide', function () {
           me.mobilePluginOnClose();
-        })
+        });
     },
     handleEvents: function () {
         var me = this;
