@@ -34,8 +34,8 @@ a.oskari-badge:hover {
   text-decoration: none;
   cursor: pointer; }
 .badge-wrapper {
-  margin-left: auto;
-  margin-right: 5%;
+  display: inline-block;
+  position: absolute;
   height: inherit;
 }
 .oskari-badge-important {
