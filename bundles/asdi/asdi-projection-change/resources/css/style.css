@@ -65,6 +65,9 @@
     max-width: 145px; 
     max-height: 145px;
 }
+.projection-preview-image {
+    padding-top:5px;
+}
 /*
  * / CARD
  */
@@ -101,5 +104,12 @@
         flex: 0 !important;
         -ms-flex: 0 !important;
         padding: 15px;
+    }
+    .projection-preview-image {
+        padding-top:5px;
+        max-width: 250px; 
+        max-height: 250px;
+        margin: 0 auto;
+        display: flex;
     }
 }
