@@ -108,6 +108,9 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     getElement: function() {
         return this._element;
     },
+    getFlyout: function() {
+      return this._flyout;
+    },
     stopPlugin: function() {
       this.teardownUI(true);
     }
