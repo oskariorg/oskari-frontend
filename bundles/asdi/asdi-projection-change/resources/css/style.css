@@ -68,23 +68,9 @@
 /*
  * / CARD
  */
- @media handheld, screen and (max-width: 640px) {
- .projection-mobile {
-        display: block;
-        position: absolute;
-        margin: auto;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: 250px;
-        height: 450px;
-    }
-    .projection-mobile > .oskari-flyoutcontentcontainer {
-        background-color: #fff;
-    }
+ @media screen and (max-width: 775px) and (min-width: 350px) {
     .oskari-map-projection {
-        width: 250px !important;
+        width: 250px;
         display: flex;
         display: -ms-flex;
         display: -webkit-box;
@@ -105,8 +91,8 @@
         height: 160px;
         margin: 3px;
         margin-bottom: 10px;
-        flex: 0;
-        -ms-flex: 0;
+        flex: 0 !important;
+        -ms-flex: 0 !important;
         padding: 15px;
     }
 }
