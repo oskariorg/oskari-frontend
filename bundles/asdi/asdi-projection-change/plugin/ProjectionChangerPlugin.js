@@ -56,6 +56,9 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
             }
             if ( !Oskari.util.isMobile() ) {
               this._flyout.move(this.offsetRight, this.offsetTop, true);
+              this._flyout.toggleMobileClasses(false);
+            } else {
+              this._flyout.toggleMobileClasses(true);
             }
         }
       }
@@ -73,7 +76,6 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         return;
       }
       this._element = this._createControlElement();
-      this.toggleMobileClasses(false);
       this.handleEvents();
       this.addToPluginContainer(this._element);
     },
@@ -82,21 +84,10 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         var mobileDefs = this.getMobileDefs();
         this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         this._element = jQuery('.' + mobileDefs.buttons["mobile-projectionchange"].iconCls);
-        this.toggleMobileClasses(true);
         this._flyout.move(this.mobileOffsetRight, this.mobileOffsetTop, true);
         this._flyout.on('hide', function () {
           me.mobilePluginOnClose();
         });
-    },
-    toggleMobileClasses: function (enabled) {
-        var elem = this._flyout.getElement();
-        if ( enabled ) {
-          elem.find('.oskari-map-projection').addClass('projection-mobile');
-          elem.find('.projection-card').addClass('card-mobile');
-        } else {
-          elem.find('.oskari-map-projection').removeClass('projection-mobile');
-          elem.find('.projection-card').removeClass('card-mobile');
-        }
     },
     handleEvents: function () {
         var me = this;
