@@ -262,19 +262,17 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                     var groups = group.groups || group.getGroups();
                     for (i = 0; i < groups.length; i++) {
                         subgroup = groups[i];
-                        if (isGroupLayers(groups[i])) {
+                        if (isGroupLayers(subgroup)) {
                             sortedGroupList.push(removeGroupWhereNoLayers(group));
                             return;
                         }
-                    }
-
-                    // check subgroup subgroups
-                    for (i = 0; i < groups.length; i++) {
-                        subgroup = groups[i].groups || groups[i].getGroups();
-                        if (subgroup.groups) {
-                            for (var j = 0; j < subgroup.groups.length; j++) {
-                                if (isGroupLayers(subgroup.groups[j])) {
-                                    sortedGroupList.push(group);
+                        // check subgroup subgroups
+                        else {
+                            var subgroups = groups[i].groups || groups[i].getGroups(); // array
+                            for (var j = 0; j < subgroups.length; j++) {
+                                var subsubgroup = subgroups[j];
+                                if (isGroupLayers(subsubgroup)) {
+                                    sortedGroupList.push(removeGroupWhereNoLayers(group));
                                     return;
                                 }
                             }
