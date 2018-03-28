@@ -119,25 +119,26 @@ Oskari.clazz.define(
             me.service.on('search', function(obj) {
                 setTimeout(function() {
                     me._updateAllTools();
-                    me._updateLayerCounts(true);
+                    me._updateLayerCountsAndGroupsVisibility(true);
                 }, 200);
             });
 
             me.service.on('search.clear', function(obj) {
                 setTimeout(function() {
                     me._updateAllTools();
-                    me._updateLayerCounts();
+                    me._updateLayerCountsAndGroupsVisibility();
                 }, 200);
             });
         },
 
         /**
-         * Update layer counts
-         * @method  _updateLayerCounts
+         * Update layer counts and groups visibility
+         *
+         * @method  _updateLayerCountsAndGroupsVisibility
          * @param   {Booelan}           search is search
          * @private
          */
-        _updateLayerCounts: function(search) {
+        _updateLayerCountsAndGroupsVisibility: function(search) {
             var me = this;
             var jstree = me.getJsTreeElement().jstree(true);
 
@@ -184,6 +185,11 @@ Oskari.clazz.define(
                 groups.forEach(function(groupNode){
                     var countText = '';
                     var count = calculateLayerCounts(groupNode);
+                    if(count.all === 0 && !me.service.hasEmptyGroupsVisible()) {
+                        jstree.hide_node(groupNode);
+                    } else {
+                        jstree.show_node(groupNode);
+                    }
                     var nodeText = jstree.get_text(groupNode);
                     var el = jQuery('<div>' + nodeText + '</div>');
                     if(!search){
@@ -1038,7 +1044,7 @@ Oskari.clazz.define(
 
             // JStree is ready
             me.getJsTreeElement().on('ready.jstree', function() {
-                me._updateLayerCounts(false);
+                me._updateLayerCountsAndGroupsVisibility(false);
                 me._addGroupTools();
                 me._addSubgroupTools();
             });
@@ -1066,7 +1072,6 @@ Oskari.clazz.define(
          * Clears related keywords popup
          */
         clearRelatedKeywordsPopup: function(keyword, oskarifield) {
-            //"use strict";
             // clear only if sent keyword has changed or it is not null
             if (this.sentKeyword && this.sentKeyword !== keyword) {
                 oskarifield.find('.related-keywords').html('').hide();
