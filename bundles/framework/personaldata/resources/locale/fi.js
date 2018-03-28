@@ -120,7 +120,8 @@ Oskari.registerLocalization(
                     "notsaved": "Kartan julkaisu epäonnistui.",
                     "notdeleted": "Kartan poisto epäonnistui.",
                     "makePublic": "Kartan muuttaminen julkiseksi epäonnistui.",
-                    "makePrivate": "Kartan muuttaminen yksityiseksi epäonnistui."
+                    "makePrivate": "Kartan muuttaminen yksityiseksi epäonnistui.",
+                    "loadfailed": "Julkaistujen karttojen haku epäonnistui."
                 }
             },
             "account": {
