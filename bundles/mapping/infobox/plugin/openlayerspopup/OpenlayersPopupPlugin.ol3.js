@@ -175,7 +175,6 @@ Oskari.clazz.define(
                 popupType,
                 popupDOM,
                 popup;
-
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
 
             if(isMarker){
@@ -693,8 +692,9 @@ Oskari.clazz.define(
             //If supported ol.OverlayPositioning is used, use it instead of default values
             Object.keys(posClasses).forEach(function (pos){
                 if (positioning === posClasses[pos]){
-                    positionX = positioning.split("-")[1];
-                    positionY = positioning.split("-")[0];
+                    var popupDirection = positioning.split("-");
+                    positionY = popupDirection[0];
+                    positionX = popupDirection[1];
                 }
             });
             //TODO: popupHeaderArrow and header sizes are not included
