@@ -72,6 +72,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
       if ( this.getElement() ) {
         return;
       }
+      this._flyout.off('hide');
       this._element = this._createControlElement();
       this.handleEvents();
       this.addToPluginContainer(this._element);
