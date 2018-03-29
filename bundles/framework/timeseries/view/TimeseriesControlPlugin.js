@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             rangeStart: null,
             rangeEnd: null,
             isAnimating: false,
-            frameInterval: 1000,
+            frameInterval: 2000,
             stepInterval: 'minutes'
         };
         me._setFrameInterval(me._uiState.frameInterval); // sets throttle for animation, too
@@ -344,6 +344,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var speedMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
             speedMenu.setOptions(this._generateSelectOptions('animationSpeed.', this.__speedOptions));
             speedMenu.setTitle(this.loc('label.animationSpeed'));
+            debugger;
             speedMenu.setValue(this._uiState.frameInterval);
             speedMenu.setHandler(function (value) {
                 me._setAnimationState(false);
