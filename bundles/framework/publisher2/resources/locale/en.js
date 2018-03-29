@@ -111,6 +111,7 @@ Oskari.registerLocalization(
                 "tooltip": "Show thematic maps on the map.",
                 "grid": "Show thematic data in table",
                 "allowClassification": "Allow classification",
+                "transparent": "Set classification background transparent",
                 "displayDiagram" : "Display charts"
             },
             "layout": {

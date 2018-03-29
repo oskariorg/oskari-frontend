@@ -120,7 +120,10 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/ClassificationTool.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/plugin/ClassificationToolPlugin.js"
+                "src": "../../../bundles/statistics/statsgrid2016/publisher/OpacityTool.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/plugin/ClassificationPlugin.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/DiagramTool.js"

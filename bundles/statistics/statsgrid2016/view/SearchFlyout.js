@@ -50,7 +50,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             parent.find('.oskari-flyout-title p').html(title);
             parent.find('.oskari-flyouttools').show();
         }
-        this.showLegend(!isEmbedded);
         this.addContent(this.getElement(), isEmbedded);
     },
     addContent: function (el, isEmbedded) {
@@ -110,49 +109,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         container.find('.title').html(locale.panels.extraFeatures.title);
         container.find('.content').append(this._extraFeatures.getPanelContent());
         return container;
-    },
-    getLegendFlyout: function () {
-        if (this.__legendFlyout) {
-            return this.__legendFlyout;
-        }
-        var locale = this.instance.getLocalization().legend;
-        var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', locale.title, {
-            width: 'auto',
-            cls: 'statsgrid-legend-flyout'
-        });
-        flyout.makeDraggable({
-            handle: '.oskari-flyouttoolbar, .statsgrid-legend-container > .header',
-            scroll: false
-        });
-        this.__legendFlyout = flyout;
-        // render content
-        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', this.instance.getSandbox(), this.instance.getLocalization());
-        var container = jQuery('<div/>');
-        this.__legend.render(container);
-        flyout.setContent(container);
-        return this.__legendFlyout;
-    },
-    showLegend: function (enabled) {
-        var me = this;
-        if (!enabled) {
-            me.removeSideTools();
-            return;
-        }
-        var locale = this.instance.getLocalization();
-        me.addSideTool(locale.legend.title, function (el, bounds) {
-            // lazy render
-            var flyout = me.getLegendFlyout();
-            if (flyout.isVisible()) {
-                flyout.hide();
-            } else {
-                // show and reset position
-                flyout.move(bounds.right, bounds.top, true);
-                // init legend panel open when the flyout is opened
-                me.__legend.openLegendPanel();
-                flyout.show();
-                flyout.bringToTop();
-            }
-        });
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

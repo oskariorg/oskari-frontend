@@ -16,24 +16,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             '<div class="classification-options">'+
                 // map style
                 '<div class="classification-map-style visible-map-style-choropleth visible-map-style-points visible-on-vector">'+
-                    '<div class="label">'+ this.locale.classify.map.mapStyle +'</div>'+
+                    '<div class="label">'+ this.locale('classify.map.mapStyle') +'</div>'+
                     '<div class="map-style value">'+
                         '<select class="map-style">'+
-                            '<option value="choropleth" selected="selected">'+this.locale.classify.map.choropleth+'</option>'+
-                            '<option value="points">'+this.locale.classify.map.points+'</option>'+
+                            '<option value="choropleth" selected="selected">'+this.locale('classify.map.choropleth')+'</option>'+
+                            '<option value="points">'+this.locale('classify.map.points')+'</option>'+
                         '</select>'+
                     '</div>'+
                 '</div>'+
 
                 // method
                 '<div class="classification-method visible-map-style-choropleth visible-map-style-points">'+
-                    '<div class="label">'+ this.locale.classify.classifymethod +'</div>'+
+                    '<div class="label">'+ this.locale('classify.classifymethod') +'</div>'+
                     '<div class="method value">'+
                         '<select class="method">'+
                             // FIXME: use classificationService.getAvailableMethods()
-                            '<option value="jenks" selected="selected">'+this.locale.classify.methods.jenks+'</option>'+
-                            '<option value="quantile">'+this.locale.classify.methods.quantile+'</option>'+
-                            '<option value="equal">'+this.locale.classify.methods.equal+'</option>'+
+                            '<option value="jenks" selected="selected">'+this.locale('classify.methods.jenks')+'</option>'+
+                            '<option value="quantile">'+this.locale('classify.methods.quantile')+'</option>'+
+                            '<option value="equal">'+this.locale('classify.methods.equal')+'</option>'+
                         '</select>'+
                     '</div>'+
                 '</div>'+
@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 // classes
                 '<div class="classification-count visible-map-style-choropleth visible-map-style-points">'+
                     // use colorService.getOptionsForType()
-                    '<div class="label">'+ this.locale.classify.classes +'</div>'+
+                    '<div class="label">'+ this.locale('classify.classes') +'</div>'+
                     '<div class="amount-class value">'+
                         '<select class="amount-class">'+
                         '</select>'+
@@ -50,20 +50,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
                 // classify mode
                 '<div class="classification-mode visible-map-style-choropleth visible-map-style-points">'+
-                    '<div class="label">'+ this.locale.classify.mode +'</div>'+
+                    '<div class="label">'+ this.locale('classify.mode') +'</div>'+
                     '<div class="classify-mode value">'+
                         '<select class="classify-mode">'+
                             // FIXME: use classificationService.getAvailableModes()
-                            '<option value="distinct" selected="selected">'+ this.locale.classify.modes.distinct +'</option>'+
-                            '<option value="discontinuous">'+ this.locale.classify.modes.discontinuous +'</option>'+
+                            '<option value="distinct" selected="selected">'+ this.locale('classify.modes.distinct') +'</option>'+
+                            '<option value="discontinuous">'+ this.locale('classify.modes.discontinuous') +'</option>'+
                         '</select>'+
                     '</div>'+
                 '</div>'+
 
                 // points size
                 '<div class="point-size oskariui visible-map-style-points visible-on-vector">'+
-                    '<div class="label">'+ this.locale.classify.map.pointSize +'</div>'+
-                    '<div class="minmaxlabels"><div class="min">'+ this.locale.classify.map.min +'</div><div class="max">'+ this.locale.classify.map.max +'</div><div class="clear"></div></div>' +
+                    '<div class="label">'+ this.locale('classify.map.pointSize') +'</div>'+
+                    '<div class="minmaxlabels"><div class="min">'+ this.locale('classify.map.min') +'</div><div class="max">'+ this.locale('classify.map.max') +'</div><div class="clear"></div></div>' +
                     '<div class="point-range value">'+
                     '</div>'+
                 '</div>'+
@@ -74,17 +74,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
                 // colors
                 '<div class="classification-colors visible-map-style-choropleth visible-map-style-points">'+
-                    '<div class="label visible-map-style-choropleth">'+ this.locale.colorset.button +'</div>'+
-                    '<div class="label visible-map-style-points">'+ this.locale.classify.map.color +'</div>'+
+                    '<div class="label visible-map-style-choropleth">'+ this.locale('colorset.button') +'</div>'+
+                    '<div class="label visible-map-style-points">'+ this.locale('classify.map.color') +'</div>'+
                     '<div class="classification-colors value">'+
 
                     '</div>'+
-                    '<span class="visible-map-style-choropleth flip-colors"><input id="legend-flip-colors" type="checkbox"/><label for="legend-flip-colors">'+this.locale.colorset.flipButton+'<label></span>'+
+                    '<span class="visible-map-style-choropleth flip-colors"><input id="legend-flip-colors" type="checkbox"/><label for="legend-flip-colors">'+this.locale('colorset.flipButton')+'<label></span>'+
                 '</div>'+
 
                 // transparency
                 '<div class="point-transparency visible-map-style-points visible-on-vector">'+
-                    '<div class="label">'+ this.locale.classify.map.transparency +'</div>'+
+                    '<div class="label">'+ this.locale('classify.map.transparency') +'</div>'+
                     '<div class="transparency-value value">'+
                         '<select class="transparency-value">'+
                         '</select>'+
@@ -92,13 +92,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 '</div>'+
 
                 '<div class="classification-color-set visible-map-style-choropleth">'+
-                    '<div class="label">'+ this.locale.colorset.setselection +'</div>'+
+                    '<div class="label">'+ this.locale('colorset.setselection') +'</div>'+
                     '<div class="color-set value">'+
                         '<select class="color-set">'+
                             // FIXME: use colorService getAvailableTypes()
-                            '<option value="seq" selected="selected">'+ this.locale.colorset.seq +'</option>'+
-                            '<option value="qual">'+ this.locale.colorset.qual +'</option>'+
-                            '<option value="div">'+ this.locale.colorset.div +'</option>'+
+                            '<option value="seq" selected="selected">'+ this.locale('colorset.seq') +'</option>'+
+                            '<option value="qual">'+ this.locale('colorset.qual') +'</option>'+
+                            '<option value="div">'+ this.locale('colorset.div') +'</option>'+
                         '</select>'+
                     '</div>'+
                 '</div>'+
@@ -339,7 +339,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         if (!me._showNumericValueCheckButton) {
             me._showNumericValueCheckButton = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-            me._showNumericValueCheckButton.setTitle(me.locale.classify.map.showValues);
+            me._showNumericValueCheckButton.setTitle(me.locale('classify.map.showValues'));
             me._showNumericValueCheckButton.setHandler(function () {
                 updateClassification();
             });
