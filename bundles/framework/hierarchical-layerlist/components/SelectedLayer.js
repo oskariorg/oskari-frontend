@@ -1,8 +1,9 @@
-Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', function(instance, layer, sandbox, locale) {
+Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', function(instance, layer, sandbox, locale, tab) {
     this.instance = instance;
     this.locale = locale;
     this.sb = sandbox;
     this.service = this.sb.getService('Oskari.mapframework.service.MapLayerService');
+    this.tab = tab;
     this._template = jQuery('<li class="layer selected">' +
         '   <div class="layer-info">' +
         '       <div class="visible"><a></a></div>' +
@@ -249,7 +250,10 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         toggleIcon.attr('title', me.locale.tooltips.openLayerTools);
 
         if (!me._binded) {
-            me._el.find('.layer-info').bind('click', function() {
+            me._el.find('.layer-info').bind('mouseup', function() {
+                if(me.tab.hasDragging()) {
+                    return;
+                }
                 if (toggleIcon.hasClass('open')) {
                     toggleIcon.attr('title', me.locale.tooltips.openLayerTools);
                     toggleIcon.removeClass('open');
