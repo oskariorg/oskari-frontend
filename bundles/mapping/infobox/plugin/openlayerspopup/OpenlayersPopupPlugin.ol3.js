@@ -666,7 +666,7 @@ Oskari.clazz.define(
          */
         _panMapToShowPopup: function (lonlatArray, positioning, margins) {
             var margins = margins || this._viewportMargins;
-            // don't try to pan the map if gfi popup position isn't in the viewport
+            // don't try to pan the map if gfi popup position isn't in the viewport (extended with isInViewport margin)
             if (!this.getMapModule().isLonLatInViewport(lonlatArray, margins.isInViewport)){
                 return;
             }
@@ -682,6 +682,13 @@ Oskari.clazz.define(
                 popup = jQuery('.olPopup'),
                 popupX = popup.width(),
                 popupY = popup.height();
+            //WORKAROUND: pixels should be in the viewport.
+            //if them aren't, then mapmove isn't ended before getPixelFromCoordinate called
+            //and pixels aren't calculated correctly -> don't try to pan map
+            var margin = margins.isInViewport / 2;
+            if (pixels.y > mapSize.height + margin || pixels.y < -margin || pixels.x > mapSize.width + margin || pixels.x < -margin){
+                return;
+            }
 
             //If supported ol.OverlayPositioning is used, use it instead of default values
             Object.keys(posClasses).forEach(function (pos){
