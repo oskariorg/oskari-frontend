@@ -277,6 +277,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             ) + unit;
         },
 
+        /**
+         * @method isLonLatInViewport
+         * @param {ol.Coordinate} lonlatArray
+         * @param {Number} extendSize (optional) px to expand the viewport size
+         * @return {Boolean} true if coordinate is in the viewport
+         *
+         * Check if given coordinate is in the current viewport
+         */
+        isLonLatInViewport: function (lonlatArray, extendSize) {
+            var extendSize = typeof extendSize === 'number' ? extendSize : 0,
+                currentExtent = this.getCurrentExtent(),
+                mapSize = this.getSize(),
+                view = this.getMap().getView(),
+                width = mapSize.width + extendSize,
+                height = mapSize.height + extendSize,
+                extent = view.calculateExtent([width, height]);
+
+            return ol.extent.containsCoordinate(extent,lonlatArray);
+        },
+
 /*<------------- / OL3 specific ----------------------------------- */
 
 
