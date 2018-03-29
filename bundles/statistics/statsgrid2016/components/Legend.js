@@ -1,6 +1,6 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, locale) {
     this.sb = sandbox;
-    this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
+    this.locale = locale;
     this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.__templates = {
@@ -58,13 +58,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox) {
         this.editClassification.getElement().detach();
         accordion.removeAllPanels();
 
-        if ( container.find('.legend-noactive') ) {
-            container.find('.legend-noactive').remove();
-        }
-
-        for (var i = 0; i < container.children().length; i++) {
-            jQuery( container.children()[i] ).empty();
-        }
+        container.find('.legend-noactive').remove();
+        container.children().empty();
 
         if ( el ) {
             // attach container to parent if provided, otherwise updates UI in the current parent

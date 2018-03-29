@@ -344,7 +344,7 @@ Oskari.clazz.define(
         createClassficationView: function ( enabled ) {
             var config = this.getConfiguration();
             var sandbox = this.getSandbox();
-            var locale = this.getLocalization();
+            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             if(!enabled) {
@@ -355,7 +355,7 @@ Oskari.clazz.define(
                 }
                 return;
             }
-            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, this.getLocalization(), sandbox);
+            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
             mapModule.registerPlugin(this.classificationPlugin);
             mapModule.startPlugin(this.classificationPlugin);
             //get the plugin order straight in mobile toolbar even for the tools coming in late

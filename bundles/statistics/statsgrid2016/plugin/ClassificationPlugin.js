@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             buttons:  {
                 'mobile-classification': {
                     iconCls: 'mobile-statslegend',
-                    tooltip: locale.legend.title,
+                    tooltip: locale('legend.title'),
                     show: true,
                     callback: function () {
 
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         };
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
 
-        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox);
+        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, this._locale);
         this.__legend.on('rendered', function(){
             me._calculatePluginSize();
         });
@@ -69,8 +69,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         _createControlElement: function () {
             var sb = this._sandbox;
-            var locale = this._locale;
-            var config = this._config;
 
             if ( this.element !== null ) {
                 return this.element;
