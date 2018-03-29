@@ -853,29 +853,42 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 Oskari.log(this.getName()).warn('[MapLayerService] not found layer filter "' + filterId + '". Returning all layer groups.');
                 return allLayerGroups;
             }
-            var filteredLayerGroups = [];
-            allLayerGroups.forEach(function(group) {
-                var filteredLayers = [];
-                group.layers.forEach(function(layer) {
-                    var mapLayer = me._sandbox.findMapLayerFromAllAvailable(layer.id);
-                    if (!mapLayer) {
-                        // layer not found
-                        // continue with next layer
-                        return;
-                    }
-                    if (filterFunction(mapLayer)) {
-                        filteredLayers.push(layer);
-                    }
-                });
-                if (filteredLayers.length > 0) {
-                    filteredLayerGroups.push({
-                        id: group.id,
-                        name: group.name,
-                        layers: filteredLayers
+
+
+
+            var getRecursiveFilteredGroups = function(groups) {
+                var filteredGroups = [];
+
+                groups.forEach(function(group) {
+                    var filteredLayers = [];
+                    group.getLayers().forEach(function(layer) {
+                        var mapLayer = me._sandbox.findMapLayerFromAllAvailable(layer.id);
+                        if (!mapLayer) {
+                            // layer not found
+                            // continue with next layer
+                            return;
+                        }
+                        if (filterFunction(mapLayer)) {
+                            filteredLayers.push(layer);
+                        }
                     });
-                }
-            });
-            return filteredLayerGroups;
+
+                    var json = {
+                        id: group.getId(),
+                        name: group.getName(),
+                        layers: filteredLayers,
+                        selectable: group.hasSelectable(),
+                        orderNumber: group.getOrderNumber(),
+                        groups: getRecursiveFilteredGroups(group.getGroups())
+                    };
+                    filteredGroups.push(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', json));
+
+                });
+
+                return filteredGroups;
+            };
+
+            return getRecursiveFilteredGroups(allLayerGroups);
         },
         /**
          * @method registerLayerModel
