@@ -619,19 +619,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
             }
         },
-        //DO we need this??
-        preprocessModel : {
-            'quality' : function(model) {
-                if(!model || !model.dataQualities || !model.dataQualities.length) {
-                    return model;
-                };
-                var loc = this.locale.heading;
-                model.dataQualities.forEach(function(dataQuality) {
-                    dataQuality.UIlabel =  loc[dataQuality.nodeName];
-                });
-                return model;
-            }
-        },
         /**
          * @public @method init
          *
