@@ -4,9 +4,11 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     this._clazz = 'Oskari.projection.change.ProjectionChangerPlugin';
     this._defaultLocation = 'top right';
     this._index = 55;
-    this.offsetRight = '63%';
-    this.offsetRightSmallScreen = '40%';
+    this.offsetRight = '45%';
+    this.offsetRightSmallScreen = '20%';
     this.offsetTop = '30%';
+    this.mobileOffsetRight = '30%';
+    this.mobileOffsetTop = '13%';
     this._templates = {
       projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
     };
@@ -22,11 +24,14 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     this._mobileDefs = {
       buttons: {
         'mobile-projectionchange': {
-            iconCls: 'mobile-projection-light',
+            iconCls: 'mobile-projection',
             tooltip: '',
-            show: true,
+            show: false,
             callback: function () {
               me._flyout.toggle();
+              if ( !me._flyout.isVisible() ) {
+               me.mobilePluginOnClose()
+              }
             },
             sticky: true,
             toggleChangeIcon: true
@@ -45,13 +50,18 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         'MapSizeChangedEvent' : function(evt) {
             var width = evt._width;
             //if the rightoffset + element width is greater than screensize use a different right offset
-            if ( width * 0.63 + this._flyout.getElement().width() > width ) {
+            if ( width * 0.45 + this._flyout.getElement().width() > width ) {
               this._flyout.move(this.offsetRightSmallScreen, this.offsetTop, true);
               return;
             }
-            this._flyout.move(this.offsetRight, this.offsetTop, true);
+            if ( !Oskari.util.isMobile() ) {
+              this._flyout.move(this.offsetRight, this.offsetTop, true);
+            }
         }
       }
+    },
+    mobilePluginOnClose: function () {
+        this._resetMobileIcon(this.getElement(), this._mobileDefs.buttons['mobile-projectionchange'].iconCls);
     },
     _createControlElement: function () {
       var launcher = this._templates.projectionchanger.clone();
@@ -62,18 +72,23 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
       if ( this.getElement() ) {
         return;
       }
+      this._flyout.off('hide');
       this._element = this._createControlElement();
       this.handleEvents();
       this.addToPluginContainer(this._element);
     },
     createMobileUi: function () {
+        var me = this;
         var mobileDefs = this.getMobileDefs();
         this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         this._element = jQuery('.' + mobileDefs.buttons["mobile-projectionchange"].iconCls);
+        this._flyout.move(this.mobileOffsetRight, this.mobileOffsetTop, true);
+        this._flyout.on('hide', function () {
+          me.mobilePluginOnClose();
+        });
     },
     handleEvents: function () {
         var me = this;
-        var windowWidth = jQuery(window).width();
         this._flyout.move(this.offsetRight, this.offsetTop, true);
         this.getElement().on( "click", function() {
             me._flyout.toggle();

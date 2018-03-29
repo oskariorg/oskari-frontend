@@ -53,7 +53,11 @@ function () {
       this.plugin = null;
     },
     createUi: function () {
-        this.plugin.createUi();
+        if ( Oskari.util.isMobile() ) {
+            this.plugin.createMobileUi();
+        } else {
+            this.plugin.createUi();
+        }
     },
     getAppViews: function () {
         return Oskari.app.getSystemDefaultViews();

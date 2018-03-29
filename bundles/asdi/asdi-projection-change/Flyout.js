@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.projection.change.flyout', function ( params, option
     this.element = null;
     var me = this;
     this.on('show', function() {
+        
         if (!me.hasContent()) {
             me.setTitle(me.loc.title);
             me.addClass(options.cls);
