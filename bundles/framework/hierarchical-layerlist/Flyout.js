@@ -296,7 +296,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @return {String} the name for the component
          */
         getName: function() {
-            //"use strict";
             return 'Oskari.framework.bundle.hierarchical-layerlist.Flyout';
         },
 

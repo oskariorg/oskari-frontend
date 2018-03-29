@@ -31,6 +31,7 @@ Oskari.clazz.define(
         this._createUI();
         this._bindOskariEvents();
         this._bindExtenderServiceListeners();
+        this._dragging = false;
     }, {
         /*******************************************************************************************************************************
         /* PRIVATE METHODS
@@ -90,10 +91,12 @@ Oskari.clazz.define(
 
             layerContainer.sortable({
                 start: function(event, ui) {
+                    me._dragging = true;
                     var height = ui.item.height();
                     me._calculateContainerHeightDuringSort(height);
                 },
                 stop: function(event, ui) {
+                    me._dragging = false;
                     me._calculateContainerHeightDuringSort();
                     me._layerOrderChanged(ui.item);
                 }
@@ -153,7 +156,7 @@ Oskari.clazz.define(
                 return;
             }
             var list = me.tabPanel.getContainer().find('.layerlist');
-            var layerComponent = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', me.instance, layer, me.sb, me.locale);
+            var layerComponent = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.SelectedLayer', me.instance, layer, me.sb, me.locale, me);
             var previousLayers = list.find('li.layer');
             if (layer.isBaseLayer() && !keepLayersOrder && !forceAdd) {
                 previousLayers = list.find('li.layer[data-layerid^=base_]');
@@ -279,7 +282,7 @@ Oskari.clazz.define(
             });
 
             me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function(evt) {
-                if (event._creator !== this.instance.getName()) {
+                if (evt._creator !== me.instance.getName()) {
                     me._handleLayerOrderChanged(evt);
                 }
             });
@@ -338,10 +341,22 @@ Oskari.clazz.define(
         getTabPanel: function() {
             return this.tabPanel;
         },
+        /**
+         * Update selected laeyrs
+         * @method updateSelected  Layers
+         */
         updateSelectedLayers: function() {
             var me = this;
             me._setSelectedLayers();
             me._updateLayerCount();
+        },
+        /**
+         * Has dragging
+         * @method hasDragging
+         * @return {Boolean}   has dragging
+         */
+        hasDragging: function(){
+            return this._dragging;
         }
     }
 );
