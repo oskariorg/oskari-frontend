@@ -14,6 +14,8 @@ function(instance) {
     var ajaxUrl = this.sandbox.getAjaxUrl() + '&action_route=';
     this.urls.create = (ajaxUrl + 'CreateUserLayer');
     this.urls.get = (ajaxUrl + 'GetUserLayers');
+    this.urls.edit = (ajaxUrl + 'EditUserLayer');
+    this.urls.getStyle = (ajaxUrl + 'GetUserLayerStyle');
 }, {
     __name: "MyPlacesImport.MyPlacesImportService",
     __qname : "Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService",
@@ -39,6 +41,26 @@ function(instance) {
     getFileImportUrl: function() {
         return this.urls.create+'&epsg='+this.sandbox.getMap().getSrsName();
     },
+    /**
+     * Returns the url used to update layer.
+     *
+     * @method getEditLayerUrl
+     * @return {String}
+     */
+    getEditLayerUrl: function() {
+        return this.urls.edit;
+    },
+
+    /**
+     * Returns the url used to get userlayer style.
+     *
+     * @method getUserLayerStyleUrl
+     * @return {String}
+     */
+    getGetUserLayerStyleUrl: function() {
+        return this.urls.getStyle;
+    },
+
     /**
      * Retrieves the user layers (with the id param only the specified layer)
      * from the backend and adds them to the map layer service.
@@ -74,6 +96,30 @@ function(instance) {
                 }
             }
         });
+    },
+
+    /**
+     * Update userlayer name, source and description
+     *
+     * @method updateLayer
+     * @param {String} id
+     * @param {Object} updatedLayer
+     */
+    updateLayer: function (id, updatedLayer){
+        var mapLayerService = this.sandbox
+                .getService('Oskari.mapframework.service.MapLayerService'),
+            layer = mapLayerService.findMapLayer(id),
+            request = this.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(id, true),
+            layerIsSelected = this.sandbox.isLayerAlreadySelected(id),
+            evt = this.sandbox.getEventBuilder('MapLayerEvent')(id, 'update');
+        layer.setName(updatedLayer.name);
+        layer.setSource(updatedLayer.source);
+        layer.setDescription(updatedLayer.description);
+
+        this.sandbox.notifyAll(evt);
+        if (layerIsSelected){
+            this.instance.sandbox.request(this.instance, request);
+        }
     },
     /**
      * Adds the layers to the map layer service.

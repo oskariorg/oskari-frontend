@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "MyPlacesImport",
     "value": {
-        "title": "Dataset importering",
+        "title": "Eget dataset",
         "desc": "Du kan importera dina egna dataset i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat.",
         "tool": {
             "tooltip": "Importera ditt eget dataset"
@@ -26,7 +26,7 @@ Oskari.registerLocalization(
             },
             "layer": {
                 "title": "Spara dataset information:",
-                "name": "Namn",
+                "name": "Namnge kartlagret",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
                 "style": "Dataset stil definitioner:"
@@ -69,26 +69,38 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Dataset",
+            "editLayer": "Redigera kartlagret",
+            "deleteLayer": "Ta bort kartlagret",
             "grid": {
                 "name": "Namn",
                 "description": "Beskrivning",
                 "source": "Datakälla",
+                "edit": "Redigera",
+                "editButton": "Redigera",
                 "remove": "Ta bort",
                 "removeButton": "Ta bort"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
+                "save": "Spara",
                 "cancel": "Avbryt",
-                "delete": "Ta bort"
+                "delete": "Ta bort",
+                "close": "Stäng"
             },
             "notification": {
                 "deletedTitle": "Ta bort dataset",
-                "deletedMsg": "Datasetet har tagits bort"
+                "deletedMsg": "Datasetet har tagits bort",
+                "editedMsg": "Datasetet har uppdaterats"
+
             },
             "error": {
                 "title": "Fel!",
-                "generic": "Systemfel. Försök på nytt senare."
+                "generic": "Systemfel. Försök på nytt senare.",
+                "deleteMsg": "Systemfel. Försök på nytt senare.",
+                "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
+                "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
+                "styleName": "Namnge kartlagret och försök sedan på nytt."
             }
         },
         "layer": {

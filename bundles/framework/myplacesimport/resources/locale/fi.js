@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "MyPlacesImport",
     "value": {
-        "title": "Omien aineistojen tuonti",
+        "title": "Omat aineistot",
         "desc": "",
         "tool": {
             "tooltip": "Omien aineistojen tuonti"
@@ -26,7 +26,7 @@ Oskari.registerLocalization(
             },
             "layer": {
                 "title": "Tallenna karttatason tiedot:",
-                "name": "Nimi",
+                "name": "Karttatason nimi",
                 "desc": "Kuvaus",
                 "source": "Tietolähde",
                 "style": "Tyylimäärittelyt"
@@ -71,26 +71,37 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Aineistot",
+            "editLayer": "Muokkaa karttatasoa",
+            "deleteLayer": "Poista karttataso",
             "grid": {
                 "name": "Nimi",
                 "description": "Kuvaus",
                 "source": "Tietolähde",
+                "edit": "Muokkaa",
+                "editButton": "Muokkaa",
                 "remove": "Poista",
                 "removeButton": "Poista"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
             "buttons": {
                 "ok": "OK",
+                "save": "Tallenna",
                 "cancel": "Peruuta",
-                "delete": "Poista"
+                "delete": "Poista",
+                "close": "Sulje"
             },
             "notification": {
                 "deletedTitle": "Poista aineisto",
-                "deletedMsg": "Aineisto on poistettu."
+                "deletedMsg": "Aineisto on poistettu.",
+                "editedMsg": "Aineisto on päivitetty."
             },
             "error": {
                 "title": "Virhe",
-                "generic": "Aineiston lataus epäonnistui järjestelmässä tapahtuneen virheen vuoksi."
+                "generic": "Aineiston lataus epäonnistui järjestelmässä tapahtuneen virheen vuoksi.",
+                "deleteMsg": "Aineiston poistaminen epäonnistui järjestelmässä tapahtuneen virheen vuoksi.",
+                "editMsg": "Aineiston päivitys epäonnistui järjestelmässä tapahtuneen virheen vuoksi. Yritä myöhemmin uudelleen.",
+                "getStyle": "Aineistolle määritettyä tyyliä ei onnistuttu hakemaan. Lomakkeella näytetään oletusarvot. Vaihda tyylimäärittelyn arvot ennen muutosten tallennusta.",
+                "styleName": "Anna karttatasolle nimi ja yritä sitten uudelleen."
             }
         },
         "layer": {
