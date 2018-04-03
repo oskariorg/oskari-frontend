@@ -10,7 +10,7 @@ function (view, callback) {
                         '<div class="info-row">'+
                             '<p class="card-header"> ${projectionName} </p>'+
                             '<div class="projection-info icon-info"></div>'+
-                            '<div class="projection-warning oskari-hidden" title="${tooltip}"></div>'+
+                            '<div class="projection-warning icon-warning-light oskari-hidden" title="${tooltip}"></div>'+
                         '</div>'+
                         '</div>');
     this.element = null;

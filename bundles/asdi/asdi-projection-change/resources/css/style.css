@@ -42,12 +42,8 @@
     cursor: pointer;
 }
 .projection-warning {
-    height:16px;
-    width: 16px;
     cursor: pointer;
-    background-image: url("../images/warning-light.png");
-    background-repeat: no-repeat;
-    background-position: center;}
+}
 .projection-card > .info-row {
     width: inherit;
     display: flex;
