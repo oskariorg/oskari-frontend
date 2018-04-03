@@ -20,7 +20,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
     }, {
         __template: '<div class="layer"><input type="checkbox" /> ' +
                     '<div class="layer-tools">'+
-                    '   <div class="layer-not-supported warning-light" title="" ></div>' +
+                    '   <div class="layer-not-supported icon-warning-light" title="" ></div>' +
                     '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' +
                     '   <div class="layer-icon"></div>'+
                     '   <div class="layer-info"></div>'+
