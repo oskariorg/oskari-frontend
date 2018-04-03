@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 regionSelect.value(me.getCurrentRegionset());
                 regionSelect.field.on('change', function() {
                     var value = jQuery(this).val();
-                    me.log.info('Selected region ' + value);
+                    me.log.debug('Selected region ' + value);
                     me.service.getStateService().setRegionset(value);
                 });
                 // container includes
@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                     tableHeader.find('.icon').attr('data-ind-hash', ind.hash);
                     tableHeader.find('.icon').bind('click', function(){
                         var hash = jQuery(this).attr('data-ind-hash');
-                        log.info('Removing indicator ', + ind.hash);
+                        log.debug('Removing indicator ', + ind.hash);
 
                         // Set default sort order
                         if(me._sortOrder.item === ind.hash) {
@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     _handleIndicatorAdded: function(datasrc, indId, selections) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
-        log.info('Indicator added ', src, indId, selections);
+        log.debug('Indicator added ', src, indId, selections);
         var state = this.service.getStateService();
         var hash = this.service.getStateService().getHash(datasrc, indId, selections);
 
@@ -388,7 +388,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     _handleIndicatorRemoved: function(datasrc, indId, selections) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
-        log.info('Indicator removed', src, indId, selections);
+        log.debug('Indicator removed', src, indId, selections);
         this._handleRegionsetChanged(this.getCurrentRegionset());
     },
 
@@ -407,12 +407,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             }
         });
         this.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
-            log.info('Region changed! ', event.getRegionset());
+            log.debug('Region changed! ', event.getRegionset());
             me._handleRegionsetChanged(event.getRegionset());
         });
 
         this.service.on('StatsGrid.RegionSelectedEvent', function(event) {
-            log.info('Region selected! ', event.getRegion());
+            log.debug('Region selected! ', event.getRegion());
             if(!me.mainEl || !me.grid) {
                 // ui not created yet
                 return;
@@ -430,7 +430,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
             var current = event.getCurrent();
-            log.info('Active indicator changed! ', current);
+            log.debug('Active indicator changed! ', current);
             if(current && me.grid) {
                 me.grid.selectColumn(current.hash);
             }

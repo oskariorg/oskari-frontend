@@ -120,7 +120,8 @@ Oskari.registerLocalization(
                     "notsaved": "The embedded map could not be updated.",
                     "notdeleted": "The embedded map could not be deleted.",
                     "makePublic": "The embedded map could not be published.",
-                    "makePrivate": "The embedded map could not be unpublished."
+                    "makePrivate": "The embedded map could not be unpublished.",
+                    "loadfailed": "The embedded maps could not be retrieved."
                 }
             },
             "account": {

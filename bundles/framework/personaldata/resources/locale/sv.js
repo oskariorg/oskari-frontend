@@ -118,7 +118,8 @@ Oskari.registerLocalization(
                     "notsaved": "Den inbäddade kartan kunde inte sparas. Försök på nytt senare.",
                     "notdeleted": "Den inbäddade kartan kunde inte tas bort. Försök på nytt senare.",
                     "makePublic": "Den inbäddade kartan kunde inte publiceras. Försök på nytt senare.",
-                    "makePrivate": "Den inbäddade kartan kunde inte avpubliceras. Försök på nytt senare."
+                    "makePrivate": "Den inbäddade kartan kunde inte avpubliceras. Försök på nytt senare.",
+                    "loadfailed": "De inbäddade kartor kunde inte laddas ned. Försök på nytt senare."
                 }
             },
             "account": {
