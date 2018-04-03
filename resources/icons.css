@@ -1598,3 +1598,19 @@
     background-position: -5044px 0px !important;
 }
 
+.warning-dark {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -5072px 0px !important;
+}
+
+.warning-light {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -5088px 0px !important;
+}
+
