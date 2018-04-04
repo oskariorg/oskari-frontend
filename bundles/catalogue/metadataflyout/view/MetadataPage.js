@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 url;
             // underscore templates don't like missing values, so let's extend empty strings and arrays...
             dataTemplate = {
-                dataQualityObject: {},
+                lineageStatements: [],
                 dataQualities: [],
                 distributionFormats: [],
                 fileIdentifier: '',
@@ -150,12 +150,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             data = _.extend(dataTemplate, metadataJson);
 
-            data.dataQualities.forEach(function (dataQuality) {
-                dataQuality.lineageStatement =
-                    me._prettify(dataQuality.lineageStatement);
+            data.lineageStatements.forEach(function (lineage, index) {
+                data.lineageStatements[index] = me._prettify(lineage);
+            });
 
-                dataQuality.reportConformances =
-                    dataQuality.reportConformances || [];
+            data.dataQualities.forEach(function(dataQuality) {
+                dataQuality.UIlabel = me.locale.heading[dataQuality.nodeName];
             });
 
             for (i = 0; i < data.identifications.length; i += 1) {

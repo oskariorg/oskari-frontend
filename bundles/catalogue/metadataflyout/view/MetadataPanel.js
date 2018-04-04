@@ -142,12 +142,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        </ul>' +
                     '    <% } %>' +
 
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
+                    '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
+                    '        <% _.forEach(lineageStatements, function (lineage) { %>' +
+                    '           <% _.forEach(lineage, function (paragraph) { %>' +
+                    '               <p>${paragraph}</p>' +
+                    '           <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
 
@@ -308,12 +308,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        </ul>' +
                     '    <% } %>' +
 
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
+                    '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
+                    '        <% _.forEach(lineageStatements, function (lineage) { %>' +
+                    '           <% _.forEach(lineage, function (paragraph) { %>' +
+                    '               <p>${paragraph}</p>' +
+                    '           <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
 
@@ -395,11 +395,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '    <% } %>' +
 
                     '    <% if (dataQualities.length) { %>' +
-                    '        <h2>' + this.locale.heading.reportConformance + '</h2>' +
                     '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.reportConformances, function (reportConformance) { %>' +
-                    '                <p><%= reportConformance %></p>' +
-                    '            <% }); %>' +
+                    '           <h2>${dataQuality.UIlabel}</h2>' +
+                    '           <h3>' + this.locale.heading.reportConformance + '</h3>' +
+                    '           <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
+                    '           <% if (conformanceResult.specification) { %>' +
+                                    this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (conformanceResult.pass === true) {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
+                    '           else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
+                    '           <% if (conformanceResult.explanation) { %>' +
+                                    this.locale.qualityContent.explanation + ': <%= conformanceResult.explanation %> <br>' +
+                    '           <% } %>' +
+                    '        <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
 
@@ -442,41 +450,49 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 ),
                 'quality': _.template(
                     '<article>' +
-                    '    <% if (dataQualityObject.dataQualityNodes.length) { %>' +
-                    '        <% _.forEach(dataQualityObject.dataQualityNodes, function (dataQuality) { %>' +
-                    '           <br> <h2> ${dataQuality.UIlabel}</h2>' +
-                    '           <% if (dataQuality.linageStatement) { %>' +
-                                    this.locale.heading.lineageStatement + ' : <%= dataQuality.linageStatement %> <br>' +
-                    '           <% } %>' +
+                    '    <% if (lineageStatements.length) { %>' +
+                    '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
+                    '        <% _.forEach(lineageStatements, function (lineage) { %>' +
+                    '           <% _.forEach(lineage, function (paragraph) { %>' +
+                    '               <p>${paragraph}</p>' +
+                    '           <% }); %>' +
+                    '        <% }); %>' +
+                    '    <% } %>' +
+                    '    <% if (dataQualities.length) { %>' +
+                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
+                    '           <h2> ${dataQuality.UIlabel}</h2>' +
                     '           <% if (dataQuality.nameOfMeasure) { %>' +
-                                    this.locale.qualityContent.nameOfMeasure + ' : <%= dataQuality.nameOfMeasure %> <br>' +
+                                    this.locale.qualityContent.nameOfMeasure + ': <%= dataQuality.nameOfMeasure %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.measureDescription) { %>' +
-                                    this.locale.qualityContent.measureDescription + ' : <%= dataQuality.measureDescription %> <br>' +
+                                    this.locale.qualityContent.measureDescription + ': <%= dataQuality.measureDescription %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.evaluationMethodType) { %>' +
-                                    this.locale.qualityContent.evaluationMethodType + ' : <%= dataQuality.evaluationMethodType %> <br>' +
+                                    this.locale.qualityContent.evaluationMethodType + ': <%= dataQuality.evaluationMethodType %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.evaluationMethodDescription) { %>' +
+                                    this.locale.qualityContent.evaluationMethodDescription + ': <%= dataQuality.evaluationMethodDescription %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.measureIdentificationAuthorization) { %>' +
-                                    this.locale.qualityContent.measureIdentificationAuthorization + ' : <%= dataQuality.measureIdentificationAuthorization %> <br>' +
+                                    this.locale.qualityContent.measureIdentificationAuthorization + ': <%= dataQuality.measureIdentificationAuthorization %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.measureIdentificationCode) { %>' +
-                                   this.locale.qualityContent.measureIdentificationCode + ' : <%= dataQuality.measureIdentificationCode %> <br>' +
+                                   this.locale.qualityContent.measureIdentificationCode + ': <%= dataQuality.measureIdentificationCode %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.dateTime.length) { %>' +
                     '               <% _.forEach(dataQuality.dateTime, function (dateTime) { %>' +
                     '                   <% if (dateTime) { %>' +
-                                            this.locale.qualityContent.dateTime + ' : <%= dateTime %> <br>' +
+                                            this.locale.qualityContent.dateTime + ': <%= dateTime %> <br>' +
                     '                   <% } %>' +
                     '               <% }); %> '+
                     '           <% } %>' +
                     '           <% if (dataQuality.conformanceResultList.length) { %>' +
-                    '               <br> <h3>' + this.locale.qualityContent.conformanceResult + '</h3>' +
+                    '               <h3>' + this.locale.qualityContent.conformanceResult + '</h3>' +
                     '               <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
                     '                   <% if (conformanceResult.specification) { %>' +
                                             this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
                     '                   <% } %>' +
-                    '                   <% if (conformanceResult.pass == "true") {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
+                    '                   <% if (conformanceResult.pass === true) {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
                     '                       else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
                     '                   <% if (conformanceResult.explanation) { %>' +
                                             this.locale.qualityContent.explanation + ': <%= conformanceResult.explanation %> <br>' +
@@ -484,7 +500,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '               <% }); %> '+
                     '           <% } %>' +
                     '           <% if (dataQuality.quantitativeResultList.length) { %>' +
-                    '               <br> <h3>' + this.locale.qualityContent.quantitativeResult + '</h3>' +
+                    '               <h3>' + this.locale.qualityContent.quantitativeResult + '</h3>' +
                     '               <% _.forEach(dataQuality.quantitativeResultList, function (quantitativeResult) { %>' +
                     '                   <% if (quantitativeResult.valueType) { %>' +
                                             this.locale.qualityContent.valueType + ': <%= quantitativeResult.valueType %> <br>' +
@@ -603,19 +619,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
             }
         },
-
-        preprocessModel : {
-            'quality' : function(model) {
-                if(!model.dataQualityObject || !model.dataQualityObject.dataQualityNodes || !model.dataQualityObject.dataQualityNodes.length) {
-                    return model;
-                };
-                var loc = this.locale.heading;
-                model.dataQualityObject.dataQualityNodes.forEach(function(dataQuality) {
-                    dataQuality.UIlabel =  loc[dataQuality.nodeName];
-                });
-                return model;
-            }
-        },
         /**
          * @public @method init
          *
@@ -653,9 +656,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     if (me._templates.tabs[tabId]) {
                         //the "native" tabs have keys in this bundles locale
                         entry.setTitle(locale[tabId]);
-                        if(me.preprocessModel[tabId]) {
-                            me.preprocessModel[tabId].apply(me, [model]);
-                        }
                         entry.setContent(
                             me._templates.tabs[tabId](model)
                         );

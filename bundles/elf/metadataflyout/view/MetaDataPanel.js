@@ -233,8 +233,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '       <tr>'+
                     '           <td>'+this.locale.tableHeaders.technicalInformation.lineage+'</td>'+
                     '           <td>'+
-                    '               <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '                   <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
+                    '               <% _.forEach(lineageStatements, function (lineage) { %>' +
+                    '                   <% _.forEach(lineage, function (paragraph) { %>' +
                     '                       <p><%= paragraph %></p>' +
                     '                   <% }); %>' +
                     '               <% }); %>' +
@@ -266,153 +266,76 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 ),
                 'quality': _.template(
                     '<article>' +
-
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
+                    '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
+                    '        <% _.forEach(lineageStatements, function (lineage) { %>' +
+                    '           <% _.forEach(lineage, function (paragraph) { %>' +
+                    '               <p>${paragraph}</p>' +
+                    '           <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
                     '    <% if (dataQualities.length) { %>' +
                     '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '           <% if (dataQuality.absoluteExternalPositionalAccuracyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.absoluteExternalPositionalAccuracy + '</h2>' +
-                    '               <% _.forEach(dataQuality.absoluteExternalPositionalAccuracyList, function(dataQualityItem) { %>'+
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
+                    '           <h2> ${dataQuality.UIlabel}</h2>' +
+                    '           <% if (dataQuality.nameOfMeasure) { %>' +
+                                    this.locale.qualityContent.nameOfMeasure + ': <%= dataQuality.nameOfMeasure %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureDescription) { %>' +
+                                    this.locale.qualityContent.measureDescription + ': <%= dataQuality.measureDescription %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.evaluationMethodType) { %>' +
+                                    this.locale.qualityContent.evaluationMethodType + ': <%= dataQuality.evaluationMethodType %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.evaluationMethodDescription) { %>' +
+                                    this.locale.qualityContent.evaluationMethodDescription + ': <%= dataQuality.evaluationMethodDescription %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureIdentificationAuthorization) { %>' +
+                                    this.locale.qualityContent.measureIdentificationAuthorization + ': <%= dataQuality.measureIdentificationAuthorization %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureIdentificationCode) { %>' +
+                                   this.locale.qualityContent.measureIdentificationCode + ': <%= dataQuality.measureIdentificationCode %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.dateTime.length) { %>' +
+                    '               <% _.forEach(dataQuality.dateTime, function (dateTime) { %>' +
+                    '                   <% if (dateTime) { %>' +
+                                            this.locale.qualityContent.dateTime + ': <%= dateTime %> <br>' +
+                    '                   <% } %>' +
                     '               <% }); %> '+
-                    '           <% } %>'+
-                    '           <% if (dataQuality.accuracyOfTimeMeasurementList.length) { %>' +
-                    '               <h2>' + this.locale.heading.accuracyOfTimeMeasurement + '</h2>' +
-                    '               <% _.forEach(dataQuality.accuracyOfTimeMeasurementList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '              <% }) %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.completenessCommissionList.length) { %>' +
-                    '               <h2>' + this.locale.heading.completenessCommission + '</h2>' +
-                    '               <% _.forEach(dataQuality.completenessCommissionList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.completenessOmissionList.length) { %>' +
-                    '              <h2>' + this.locale.heading.completenessOmission + '</h2>' +
-                    '               <% _.forEach(dataQuality.completenessOmissionList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.conceptualConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.conceptualConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.conceptualConsistencyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.domainConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.domainConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.domainConsistencyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.formatConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.formatConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.formatConsistencyList, function (dataQualityItem) { %>' +
-                    '                 <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                    <p><%= item %></p>' +
-                    '                 <% }); %>' +
-                    '                 <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.griddedDataPositionalAccuracyList.length) { %>' +
-                    '              <h2>' + this.locale.heading.griddedDataPositionalAccuracy + '</h2>' +
-                    '               <% _.forEach(dataQuality.griddedDataPositionalAccuracyList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.nonQuantitativeAttributeAccuracyList.length) { %>' +
-                    '              <h2>' + this.locale.heading.nonQuantitativeAttributeAccuracy + '</h2>' +
-                    '              <% _.forEach(dataQuality.nonQuantitativeAttributeAccuracyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '              <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.quantitativeAttributeAccuracyList.length) { %>' +
-                    '              <h2>' + this.locale.heading.quantitativeAttributeAccuracy + '</h2>' +
-                    '              <% _.forEach(dataQuality.quantitativeAttributeAccuracyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '              <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.relativeInternalPositionalAccuracyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.relativeInternalPositionalAccuracy + '</h2>' +
-                    '               <% _.forEach(dataQuality.relativeInternalPositionalAccuracyList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.temporalConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.temporalConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.temporalConsistencyList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.temporalValidityList.length) { %>' +
-                    '               <h2>' + this.locale.heading.temporalValidity + '</h2>' +
-                    '               <% _.forEach(dataQuality.temporalValidityList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.thematicClassificationCorrectnessList.length) { %>' +
-                    '               <h2>' + this.locale.heading.thematicClassificationCorrectness + '</h2>' +
-                    '               <% _.forEach(dataQuality.thematicClassificationCorrectnessList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.topologicalConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.topologicalConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.topologicalConsistencyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '       <br/><br/>'+
+                    '           <% } %>' +
+                    '           <% if (dataQuality.conformanceResultList.length) { %>' +
+                    '               <h3>' + this.locale.qualityContent.conformanceResult + '</h3>' +
+                    '               <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
+                    '                   <% if (conformanceResult.specification) { %>' +
+                                            this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (conformanceResult.pass === true) {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
+                    '                       else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
+                    '                   <% if (conformanceResult.explanation) { %>' +
+                                            this.locale.qualityContent.explanation + ': <%= conformanceResult.explanation %> <br>' +
+                    '                   <% } %>' +
+                    '               <% }); %> '+
+                    '           <% } %>' +
+                    '           <% if (dataQuality.quantitativeResultList.length) { %>' +
+                    '               <h3>' + this.locale.qualityContent.quantitativeResult + '</h3>' +
+                    '               <% _.forEach(dataQuality.quantitativeResultList, function (quantitativeResult) { %>' +
+                    '                   <% if (quantitativeResult.valueType) { %>' +
+                                            this.locale.qualityContent.valueType + ': <%= quantitativeResult.valueType %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (quantitativeResult.valueUnit) { %>' +
+                                            this.locale.qualityContent.valueUnit + ': <%= quantitativeResult.valueUnit %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (quantitativeResult.errorStatistic) { %>' +
+                                            this.locale.qualityContent.errorStatistic + ': <%= quantitativeResult.errorStatistic %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (dataQuality.quantitativeResult.length) { %>' +
+                    '                       <% _.forEach(dataQuality.quantitativeResult, function (value) { %>' +
+                    '                           <% if (value) { %>' +
+                                                    this.locale.qualityContent.value + ': <%= value %> <br>' +
+                    '                           <% } %>' +
+                    '                       <% }); %> '+
+                    '                   <% } %>' +
+                    '               <% }); %> '+
+                    '           <% } %>' +
                     '       <% }); %> '+
                     '    <% } %> '+
                     '</article>'
@@ -512,6 +435,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
             }
         },
+
         /**
          * @public @method init
          *
