@@ -2,10 +2,10 @@
     width: 39em;
     display: inline-block;
 }
- .filerow, .formatrow, .separatorrow, .headerrow {
+ .filerow, .formatRow, .decimalSeparator, .headerLineCount {
     float:left;
 }
- .filerow, .formatrow, .separatorrow, .headerrow {
+ .filerow, .formatRow, .decimalSeparator, .headerLineCount {
     clear: left;
     padding-top: 0.875em; 
 }
@@ -24,10 +24,10 @@
     float: right;
     padding-left: 3em;
 }
-.file-select {
+.settingsSelect {
     float: left;
 }
-.file-select > select {
+.settingsSelect > select {
     float: right;
     width: 12em;
 }
