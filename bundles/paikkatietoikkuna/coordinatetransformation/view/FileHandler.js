@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             import: null, 
             export: null
         }
-        me._userSelections = { import: null, export: null };
         me._template = {
             import: _.template(' <div class="oskari-import" > </br> ' +
                                     '<div class="formatRow"> '+
@@ -20,7 +19,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                                 '<option value="radian">${radian}</option>'+
                                             '</select>'+
                                         '</div>'+
-                                        '<label class="lbl"><input id="useid" class="chkbox" type="checkbox">${id}</label>'+
+                                        '<label class="lbl"><input id="prefixId" class="chkbox" type="checkbox">${id}</label>'+
                                     '</div>'+
                                     '<div class="decimalSeparator"> '+
                                         '<b class="title">${decimalseparator}</b> '+
@@ -52,7 +51,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                             '<option value="radian">${radian}</option>'+
                                         '</select>'+
                                     '</div>'+
-                                    '<label class="lbl"><input id="useid" class="chkbox" type="checkbox">${id}</label>'+
+                                    '<label class="lbl"><input id="prefixId" class="chkbox" type="checkbox">${id}</label>'+
                                 '</div>'+
                                 '<div class="decimalSeparator"> '+
                                     '<b class="title">${decimalseparator}</b> '+
@@ -69,7 +68,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                     '<input id="headerrow" type="number"> '+
                                 '</div>'+
                                     '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
-                                    '<input id="overlay-btn" class="import" type="button" value="${fileExport}" />' +
+                                    '<input id="overlay-btn" class="export" type="button" value="${fileExport}" />' +
                                 '</div>' +
                                 '</div>'
                                 ),
@@ -86,7 +85,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         },
         create: function() {
             var me = this;
-            var fileexport = this._template.export({
+            var fileExport = this._template.export({
                 title: me.loc.filesetting.export.title,
                 filename:me.loc.filesetting.export.filename,
                 format: me.loc.filesetting.general.format,
@@ -102,7 +101,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 point: me.loc.filesetting.general.point,
                 comma: me.loc.filesetting.general.comma
             });
-            var fileimport = this._template.import({
+            var fileImport = this._template.import({
                 format: me.loc.filesetting.general.format,
                 decimalseparator: me.loc.filesetting.general.decimalseparator,
                 id: me.loc.filesetting.general.id,
@@ -117,7 +116,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 comma: me.loc.filesetting.general.comma 
             });
 
-            this.setElement( { import: fileimport, export: fileexport } );
+            this.setElement( { import: fileImport, export: fileExport } );
+            this.createEventHandlers();
+        },
+        createEventHandlers: function () {
+            var me = this;
+            jQuery( this.getElement().import ).find('.import').on('click', function () {
+                var settings = me.getImportSettings();
+            });
+            jQuery( this.getElement().import ).find('.cancel').on('click', function () {
+
+            });
+            jQuery( this.getElement().export ).find('.export').on('click', function () {
+                var settings = me.getExportSettings();
+            });
+            jQuery( this.getElement().export ).find('.cancel').on('click', function () {
+
+            });
         },
         /**
          * @method getExportSettings
@@ -130,7 +145,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                     filename: element.find('#filename').val(),
                     unit: element.find('#unit option:checked').val(),
                     decimalSeparator: element.find('#decimalseparator option:checked').val(),
-                    id: element.find('#useid').is(":checked"),
+                    prefixId: element.find('#prefixId').is(":checked"),
                     axisFlip: element.find('#reversecoordinates').is(":checked"),
                     headerLineCount: element.find('#headerrow').val(),
                 }
@@ -144,30 +159,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         getImportSettings: function () {
             var element = jQuery(this.element.import);
             var settings = {
-                    unit: element.find('#unit option:checked').val(),
-                    decimalseparator: element.find('#decimalseparator option:checked').val(),
-                    id: impelementort.find('#useid').is(":checked"),
-                    axisFlip: element.find('#reversecoordinates').is(":checked"),
-                    headerLineCount: element.find('#headerrow').val(),
+                unit: element.find('#unit option:checked').val(),
+                decimalseparator: element.find('#decimalseparator option:checked').val(),
+                prefixId: element.find('#prefixId').is(":checked"),
+                axisFlip: element.find('#reversecoordinates').is(":checked"),
+                headerLineCount: element.find('#headerrow').val()
             }
             return settings;
         },
-        showFileDialogue: function( content, shouldExport ) {
-            var jc = jQuery(content);
+        showFileDialogue: function( shouldExport ) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.makeDraggable();
             dialog.createCloseIcon();
             if( shouldExport ) {
-                dialog.show(this.loc.filesetting.export.title, jc);
-                this.getExportSettings( this.exportFile.bind(this), dialog.getJqueryContent(), dialog );
+                dialog.show(this.loc.filesetting.export.title, jQuery( this.getElement().export ));
             } else {
-                dialog.show(this.loc.filesetting.import.title, jc);
-                var settings = this.getImportSettings();
-                debugger;
+                dialog.show(this.loc.filesetting.import.title, jQuery( this.getElement().import ));
             }
-        },
-        importSettings: function ( settings ) {
-            this._userSelections = { "import": settings };
         },
         exportFile: function ( settings ) {
             var exportArray = [];
@@ -179,9 +187,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             } else {
                 Oskari.log(this.getName()).warn("No transformed coordinates to write to file!");
             }
-        },
-        getUserFileSettingSelections: function () {
-            return this._userSelections;
         }
     }
 );
