@@ -416,7 +416,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (!me.selectionPlugin) {
                     me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
                 }
-                if (me.selectionPlugin.DRAW_REQUEST_ID !== evt.getId()) {
+                // published maps won't have selection plugin always
+                if (!me.selectionPlugin || me.selectionPlugin.DRAW_REQUEST_ID !== evt.getId()) {
                     // event is from some other functionality
                     return;
                 }
