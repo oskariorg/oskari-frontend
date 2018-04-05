@@ -297,7 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                     data: values,
                     type: 'POST',
                     success: function (response) {
-                        if (typeof jQuery.parseJSON(response) == 'object') {
+                        if (typeof response === 'object') {
                             msg = me.loc('tab.notification.editedMsg');
                             title = me.loc('tab.title');
                             me.instance.getService().updateLayer(data.id, response);
@@ -348,7 +348,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 url: action + '&id=' + id,
                 type: 'GET',
                 success: function (response) {
-                    if (typeof jQuery.parseJSON(response) == 'object'){
+                    if (typeof response === 'object') {
                         form.setStyleValues(response);
                     }else{
                         me._showMessage(me.loc('tab.error.title'), me.loc('tab.error.getStyle'), false);
