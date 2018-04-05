@@ -1,10 +1,11 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
-    function (dataHandler, loc) {
+    function (dataHandler, loc, type) {
         var me = this;
         Oskari.makeObservable(this);
         me.dataHandler = dataHandler;
         me.loc = loc;
         me.element = null;
+        me.type = type;
         me._template = {
             settings: _.template(' <div class="oskari-coordinate-form">' +
                                     '<% if (typeof(filename) !== "undefined") { %> '+
@@ -55,9 +56,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         getName: function() {
             return 'Oskari.coordinatetransformation.view.FileHandler';
         },
-        create: function( type ) {
+        create: function() {
             var fileSettings;
-            if ( type === "export" ) {
+            if ( this.type === "export" ) {
                 fileSettings = this._template.settings({
                     title: this.loc.filesetting.export.title,
                     filename:this.loc.filesetting.export.filename,
@@ -136,9 +137,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         },
         showFileDialogue: function() {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var title = this.type === "import" ? this.loc.filesetting.import.title : this.loc.filesetting.export.title;
             dialog.makeDraggable();
             dialog.createCloseIcon();
-            dialog.show(this.loc.filesetting.export.title, jQuery( this.getElement() ));
+            dialog.show(title, jQuery( this.getElement() ));
             this.createEventHandlers();
         },
         exportFile: function ( settings ) {

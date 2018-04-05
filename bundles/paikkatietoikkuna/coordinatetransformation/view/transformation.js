@@ -11,8 +11,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler' );
 
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
-        me.importFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.dataHandler, me.loc);
-        me.exportFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.dataHandler, me.loc);
+        me.importFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.dataHandler, me.loc, "import");
+        me.exportFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.dataHandler, me.loc, "export");
 
         me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
         me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.sourceSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.SourceSelect', me.loc );
 
         me.importFileHandler.create();
-        me.exportFileHandler.create("export");
+        me.exportFileHandler.create();
 
         me.importFileHandler.on('GetSettings', function (settings) {
         });
