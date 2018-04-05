@@ -43,9 +43,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                 '</div>'+
                                     '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
                                     '<% if(typeof(fileExport) !== "undefined") { %>'+
-                                        '<input id="overlay-btn" class="export" type="button" value="${fileExport}" />'+
+                                        '<input id="overlay-btn" class="done" type="button" value="${fileExport}" />'+
                                     '<% } else { %>'+
-                                        '<input id="overlay-btn" class="import" type="button" value="${done}" />' +
+                                        '<input id="overlay-btn" class="done" type="button" value="${done}" />' +
                                     '<% } %>' +
                                 '</div>' +
                                 '</div>'
@@ -101,14 +101,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         },
         createEventHandlers: function ( dialog ) {
             var me = this;
-            jQuery( '.oskari-coordinate-form' ).on('click', '.import', function () {
+            jQuery( '.oskari-coordinate-form' ).on('click', '.done', function () {
                 me.trigger('GetSettings', me.getFormSelections() );
                 dialog.close();
             });
-            jQuery( 'oskari-coordinate-form' ).on('click', '.export', function () {
-                me.trigger('GetSettings', me.getFormSelections() );
-                dialog.close();
-            });
+
             jQuery( '.oskari-coordinate-form' ).on('click', '.cancel', function () {
                 dialog.close();
             });
