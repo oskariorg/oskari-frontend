@@ -1,47 +1,15 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
-    function (instance, loc) {
+    function (dataHandler, loc) {
         var me = this;
-        me.instance = instance;
-        me.dataHandler = instance.dataHandler;
+        Oskari.makeObservable(this);
+        me.dataHandler = dataHandler;
         me.loc = loc;
-        me.element = {
-            import: null, 
-            export: null
-        }
+        me.element = null;
         me._template = {
-            import: _.template(' <div class="oskari-import" > </br> ' +
-                                    '<div class="formatRow"> '+
-                                        '<b class="title">${format}</b> '+
-                                        '<div class="settingsSelect">'+
-                                            '<select id="unit">'+
-                                                '<option value="degree">${degree}</option>'+
-                                                '<option value="gradian">${gradian}</option>'+
-                                                '<option value="radian">${radian}</option>'+
-                                            '</select>'+
-                                        '</div>'+
-                                        '<label class="lbl"><input id="prefixId" class="chkbox" type="checkbox">${id}</label>'+
-                                    '</div>'+
-                                    '<div class="decimalSeparator"> '+
-                                        '<b class="title">${decimalseparator}</b> '+
-                                        '<div class="settingsSelect">'+
-                                            '<select id="decimalseparator">'+
-                                                '<option value="point">${point}</option>'+
-                                                '<option value="comma">${comma}</option>'+
-                                            '</select>'+
-                                        '</div>' +
-                                        '<label class="lbl"> <input id="reversecoordinates" class="chkbox" type="checkbox"> ${reversecoords}</label> '+
-                                    '</div>' +
-                                    '<div class="headerLineCount"> '+
-                                        '<b class="title">${headercount}</b>'+
-                                        '<input id="headerrow" type="number"> '+
-                                    '</div>'+
-                                        '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
-                                        '<input id="overlay-btn" class="import" type="button" value="${done}" />' +
-                                    '</div>' +
-                                '</div>'
-                                ),
-            export: _.template(' <div class="oskari-export">' +
-                                    '<div class="fileRow"> <b class="title">${filename}</b> <input id="filename" type="text"> </div>'+
+            settings: _.template(' <div class="oskari-coordinate-form">' +
+                                    '<% if (typeof(filename) !== "undefined") { %> '+
+                                        '<div class="fileRow"> <b class="title">${filename}</b> <input id="filename" type="text"> </div>'+
+                                    '<% } %>'+            
                                     '<div class="formatRow"> '+
                                     '<b class="title">${format}</b> '+
                                     '<div class="settingsSelect">'+
@@ -68,96 +36,95 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                     '<input id="headerrow" type="number"> '+
                                 '</div>'+
                                     '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
-                                    '<input id="overlay-btn" class="export" type="button" value="${fileExport}" />' +
+                                    '<% if(typeof(fileExport) !== "undefined") { %>'+
+                                        '<input id="overlay-btn" class="export" type="button" value="${fileExport}" />'+
+                                    '<% } else { %>'+
+                                        '<input id="overlay-btn" class="import" type="button" value="${done}" />' +
+                                    '<% } %>' +
                                 '</div>' +
                                 '</div>'
-                                ),
+                                )
         } 
     }, {
         getElement: function() {
             return this.element;
         },
         setElement: function( el ) {
-            this.element = el;
+            this.element = jQuery(el);
         },
         getName: function() {
             return 'Oskari.coordinatetransformation.view.FileHandler';
         },
-        create: function() {
-            var me = this;
-            var fileExport = this._template.export({
-                title: me.loc.filesetting.export.title,
-                filename:me.loc.filesetting.export.filename,
-                format: me.loc.filesetting.general.format,
-                decimalseparator: me.loc.filesetting.general.decimalseparator,
-                id: me.loc.filesetting.general.id,
-                reversecoords: me.loc.filesetting.general.reversecoords,
-                headercount: me.loc.filesetting.general.headercount,
-                cancel: me.loc.utils.cancel,
-                fileExport: me.loc.utils.export,
-                degree:me.loc.filesetting.general.degree,
-                gradian:me.loc.filesetting.general.gradian,
-                radian: me.loc.filesetting.general.radian,
-                point: me.loc.filesetting.general.point,
-                comma: me.loc.filesetting.general.comma
-            });
-            var fileImport = this._template.import({
-                format: me.loc.filesetting.general.format,
-                decimalseparator: me.loc.filesetting.general.decimalseparator,
-                id: me.loc.filesetting.general.id,
-                reversecoords: me.loc.filesetting.general.reversecoords,
-                headercount: me.loc.filesetting.general.headercount,
-                cancel: me.loc.utils.cancel,
-                done: me.loc.utils.done,
-                degree:me.loc.filesetting.general.degree,
-                gradian:me.loc.filesetting.general.gradian,
-                radian: me.loc.filesetting.general.radian,
-                point: me.loc.filesetting.general.point,
-                comma: me.loc.filesetting.general.comma 
-            });
+        create: function( type ) {
+            var fileSettings;
+            if ( type === "export" ) {
+                fileSettings = this._template.settings({
+                    title: this.loc.filesetting.export.title,
+                    filename:this.loc.filesetting.export.filename,
+                    fileExport: this.loc.utils.export,
+                    format: this.loc.filesetting.general.format,
+                    decimalseparator: this.loc.filesetting.general.decimalseparator,
+                    id: this.loc.filesetting.general.id,
+                    reversecoords: this.loc.filesetting.general.reversecoords,
+                    headercount: this.loc.filesetting.general.headercount,
+                    cancel: this.loc.utils.cancel,
+                    degree:this.loc.filesetting.general.degree,
+                    gradian:this.loc.filesetting.general.gradian,
+                    radian: this.loc.filesetting.general.radian,
+                    point:this.loc.filesetting.general.point,
+                    comma: this.loc.filesetting.general.comma
+                });
+            } else {
+                fileSettings = this._template.settings({
+                    format: this.loc.filesetting.general.format,
+                    decimalseparator: this.loc.filesetting.general.decimalseparator,
+                    id: this.loc.filesetting.general.id,
+                    reversecoords: this.loc.filesetting.general.reversecoords,
+                    headercount: this.loc.filesetting.general.headercount,
+                    cancel: this.loc.utils.cancel,
+                    done: this.loc.utils.done,
+                    degree:this.loc.filesetting.general.degree,
+                    gradian:this.loc.filesetting.general.gradian,
+                    radian: this.loc.filesetting.general.radian,
+                    point: this.loc.filesetting.general.point,
+                    comma: this.loc.filesetting.general.comma 
+                });
+            }
 
-            this.setElement( { import: fileImport, export: fileExport } );
-            this.createEventHandlers();
+            this.setElement( fileSettings );
         },
         createEventHandlers: function () {
             var me = this;
-            jQuery( this.getElement().import ).find('.import').on('click', function () {
-                var settings = me.getImportSettings();
+            jQuery( '.oskari-coordinate-form' ).on('click', '.import', function () {
+                me.trigger('GetSettings', me.getImportSettings() );
             });
-            jQuery( this.getElement().import ).find('.cancel').on('click', function () {
-
+            jQuery( 'oskari-coordinate-form' ).on('click', '.export', function () {
+                me.trigger('GetSettings', me.getExportSettings() );
             });
-            jQuery( this.getElement().export ).find('.export').on('click', function () {
-                var settings = me.getExportSettings();
-            });
-            jQuery( this.getElement().export ).find('.cancel').on('click', function () {
+            jQuery( '.oskari-coordinate-form' ).on('click', '.cancel', function () {
 
             });
         },
         /**
          * @method getExportSettings
-         * {function} callback, send the settings back to callback-function
-         * {context} context in which to look for elements
          */
         getExportSettings: function () {
-                var element = jQuery(this.element.export);
-                var settings = {
-                    filename: element.find('#filename').val(),
-                    unit: element.find('#unit option:checked').val(),
-                    decimalSeparator: element.find('#decimalseparator option:checked').val(),
-                    prefixId: element.find('#prefixId').is(":checked"),
-                    axisFlip: element.find('#reversecoordinates').is(":checked"),
-                    headerLineCount: element.find('#headerrow').val(),
-                }
-                return settings;
+            var element = jQuery('.oskari-coordinate-form');
+            var settings = {
+                filename: element.find('#filename').val(),
+                unit: element.find('#unit option:checked').val(),
+                decimalSeparator: element.find('#decimalseparator option:checked').val(),
+                prefixId: element.find('#prefixId').is(":checked"),
+                axisFlip: element.find('#reversecoordinates').is(":checked"),
+                headerLineCount: element.find('#headerrow').val(),
+            }
+            return settings;
         },
         /**
          * @method getImportSettings
-         * {function} callback, send the settings back to callback-function
-         * {context} context in which to look for elements
          */
         getImportSettings: function () {
-            var element = jQuery(this.element.import);
+            var element = jQuery('.oskari-coordinate-form');
             var settings = {
                 unit: element.find('#unit option:checked').val(),
                 decimalseparator: element.find('#decimalseparator option:checked').val(),
@@ -167,15 +134,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             }
             return settings;
         },
-        showFileDialogue: function( shouldExport ) {
+        showFileDialogue: function() {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.makeDraggable();
             dialog.createCloseIcon();
-            if( shouldExport ) {
-                dialog.show(this.loc.filesetting.export.title, jQuery( this.getElement().export ));
-            } else {
-                dialog.show(this.loc.filesetting.import.title, jQuery( this.getElement().import ));
-            }
+            dialog.show(this.loc.filesetting.export.title, jQuery( this.getElement() ));
+            this.createEventHandlers();
         },
         exportFile: function ( settings ) {
             var exportArray = [];
