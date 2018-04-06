@@ -68,7 +68,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
 
             var linkInfo = me.linkToTermsOfUse.clone();
             var termsOfUseTemplate = jQuery('<a target="_blank" href=' + me.loc.popup.termsOfUseLink + '>' + me.loc.popup.termsOfUseLinkText + '</a>');
+            var dataProtectionTemplate = jQuery('<a target="_blank" href=' + me.loc.popup.dataProtectionLink + '>' + me.loc.popup.dataProtectionLinkText + '</a>');
             linkInfo.append(termsOfUseTemplate);
+            linkInfo.append('</br>');
+            linkInfo.append(dataProtectionTemplate);
             linkInfo.prepend(me.loc.popup.registerInfo2);
 
             me.popupContent.append(registerInfo);

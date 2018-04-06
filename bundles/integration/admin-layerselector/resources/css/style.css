@@ -57,6 +57,8 @@ div.admin-layerselector {
     min-width: 480px; }
     div.admin-layerselector .oskariTabs div.tabsHeader ul li.admin-modify-wms {
       float: right; }
+    div.admin-layerselector .oskariTabs .admin-layer-recheck-all {
+      float: right; }
   div.admin-layerselector div.tab-content div.oskarifield {
     padding: 10px;
     min-height: 35px; }
@@ -148,6 +150,29 @@ div.admin-layerselector {
       div.admin-layerselector div.layer textarea.add-layer-input.long,
       div.admin-layerselector div.create-layer textarea.add-layer-input.long {
         width: 309px; }
+    div.admin-layerselector div.layer .add-layer-input-area.add-layer-forced-proj-area,
+    div.admin-layerselector div.create-layer .add-layer-input-area.add-layer-forced-proj-area {
+      line-height: 40px; }
+    div.admin-layerselector div.layer .add-layer-forced-proj-input,
+    div.admin-layerselector div.create-layer .add-layer-forced-proj-input {
+      float: none;
+      width: 150px; }
+    div.admin-layerselector div.layer .add-layer-forced-proj,
+    div.admin-layerselector div.create-layer .add-layer-forced-proj {
+      background-color: #fff;
+      border: solid 1px #aaa;
+      padding: 5px 28px 5px 5px;
+      margin-right: 5px;
+      border-radius: 5px;
+      position: relative; }
+    div.admin-layerselector div.layer .add-layer-forced-proj .icon-close,
+    div.admin-layerselector div.create-layer .add-layer-forced-proj .icon-close {
+      top: 7px;
+      right: 5px;
+      opacity: 0.5; }
+    div.admin-layerselector div.layer .add-layer-forced-proj-inputgroup,
+    div.admin-layerselector div.create-layer .add-layer-forced-proj-inputgroup {
+      white-space: nowrap; }
   div.admin-layerselector div.create-layer {
     min-height: 35px; }
   div.admin-layerselector div.layer:nth-child(even) {
@@ -172,6 +197,8 @@ div.admin-layerselector {
   div.admin-layerselector .admin-edit-grouping-btn {
     float: right;
     margin: 5px 10px; }
+  div.admin-layerselector .add-layer-recheck {
+    margin-left: 25px; }
   div.admin-layerselector button.admin-arrange-layers {
     background-color: #eee;
     background-image: url("arrange-icon.png");
@@ -288,6 +315,13 @@ div.admin-layerselector {
     div.admin-layerselector .input-controls .admin-add-layer-cancel {
       float: right;
       margin-right: 10px; }
+    div.admin-layerselector .input-controls select.add-layer-input {
+      height: 36px; }
+    div.admin-layerselector .input-controls .add-layer-input.mid {
+      width: 217px;
+      float: left; }
+    div.admin-layerselector .input-controls .add-layer-input.long {
+      width: 297px; }
   div.admin-layerselector .adjacent .input-controls {
     float: left; }
   div.admin-layerselector .icon-close {
@@ -336,7 +370,9 @@ div.admin-layerselector {
   div.admin-layerselector .fetch-ws-button {
     margin-top: 2px;
     margin-bottom: 5px; }
-
+div.admin-layerselector .accordion .accordion_panel .header {
+  display: block;
+}
 div.divmanazerpopup div.content div.admin-layerselector {
   margin-right: 20px; }
   div.divmanazerpopup div.content div.admin-layerselector div.layer {
@@ -349,3 +385,5 @@ div.divmanazerpopup div.content div.admin-layerselector {
         margin-right: 20px; }
       div.divmanazerpopup div.content div.admin-layerselector div.layer div.admin-add-layer div.add-layer-send {
         display: none; }
+
+/*# sourceMappingURL=style.css.map */

@@ -150,7 +150,7 @@ Oskari.clazz.define(
                     },
                     croppingUrl: parent.attr('data-cropping-url'),
                     croppingLayer: parent.attr('data-cropping-layer'),
-                    wmsUrl: parent.attr('data-layer-wmsurl'),
+                    id: parent.attr('data-layer-id'),
                     identifiers: parent.attr('data-identifiers')
                 };
 
@@ -339,7 +339,7 @@ Oskari.clazz.define(
                 me._selected.forEach(function(basketItem, index){
                     var basketEl = template.clone();
                     basketEl.attr('data-layer-name',basketItem.layerName);
-                    basketEl.attr('data-layer-wmsurl',basketItem.layerUrl);
+                    basketEl.attr('data-layer-id',basketItem.layerUrl);
                     basketEl.attr('data-bbox-bottom',basketItem.bbox.bottom);
                     basketEl.attr('data-bbox-left',basketItem.bbox.left);
                     basketEl.attr('data-bbox-right',basketItem.bbox.right);

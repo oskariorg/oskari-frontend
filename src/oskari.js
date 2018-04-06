@@ -6,12 +6,12 @@
 Oskari = (function () {
     var _markers = [];
     var _urls = {};
-    var getUrl = function(key) {
+    var getUrl = function (key) {
         return _urls[key] || 'N/A';
     }
 
     return {
-        VERSION: '1.45.1',
+        VERSION: '1.46.0',
 
         /**
          * @public @static @method Oskari.setMarkers
@@ -47,10 +47,10 @@ Oskari = (function () {
                 OR
                 Oskari.urls.set('login', 'https://my.map.com/login');
              */
-            set: function(urlsOrKey, optionalValue) {
-                if(typeof urlsOrKey === 'string') {
+            set: function (urlsOrKey, optionalValue) {
+                if (typeof urlsOrKey === 'string') {
                     _urls[urlsOrKey] = optionalValue;
-                } else if(typeof urlsOrKey === 'object') {
+                } else if (typeof urlsOrKey === 'object') {
                     _urls = urlsOrKey || {};
                 } else {
                     throw new Error('Unrecognized parameter for urls: ' + urlsOrKey);
@@ -61,7 +61,7 @@ Oskari = (function () {
              * @param  {String} key type of url like "login" or "registration"
              * @return {String} URL that points to requested functionality
              */
-            getLocation: function(key) {
+            getLocation: function (key) {
                 return getUrl(key);
             },
             /**
@@ -69,9 +69,9 @@ Oskari = (function () {
              * @param  {String} route [description]
              * @return {String} url to use when making API calls
              */
-            getRoute: function(route) {
+            getRoute: function (route) {
                 var url = getUrl('api');
-                if(route) {
+                if (route) {
                     // TODO: check if url ends with ? or &
                     return url + 'action_route=' + route;
                 }

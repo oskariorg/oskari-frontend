@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "MapWfs2",
     "value": {
@@ -50,8 +49,8 @@ Oskari.registerLocalization(
             }
         },
         "scale_dialog": {
-          "title": "Scale updated",
-          "msg":"Layer not available on current zoom level"
+            "title": "Scale updated",
+            "msg": "Layer not available on current zoom level"
         }
     }
 });

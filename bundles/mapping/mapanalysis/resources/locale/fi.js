@@ -9,6 +9,7 @@ Oskari.registerLocalization(
         "layer": {
             "organization": "Omat analyysit",
             "inspire": "Omat analyysit"
-        }
+        },
+        "filterTooltip": "Suodata aineistoja"
     }
 });

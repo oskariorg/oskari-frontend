@@ -44,20 +44,38 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         this._getIndicatorUILabels(function(options) {
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
             var dropdown = select.create(options, dropdownOptions);
+            me.dropdown = dropdown;
             dropdown.css({
                 width: '100%'
             });
             select.adjustChosen();
-            select.selectFirstValue();
-            me._select = select;
+            
+            if ( me.service.getStateService().activeIndicator ) {
+                me.service.getStateService().activeIndicator.hash ? select.setValue( me.service.getStateService().activeIndicator.hash ) : select.selectFirstValue();
+                me._select = select;
+            }
 
             container.append(dropdown);
-            container.on('change', function(event) {
+            dropdown.on('change', function(event) {
                 me.service.getStateService().setActiveIndicator(select.getValue());
             });
             me._renderDone();
         });
         el.append(container);
+    },
+    /**
+     * @method setWidth {string} width for css style
+     * this function targets the whole elements width
+     */
+    setWidth: function (width) {
+        this.element.css('width', width);
+    },
+    /**
+     * @method setDropdownWidth {string} width for css style
+     * this function targets the jQuery chosen list
+     */
+    setDropdownWidth: function (width) {
+        this.dropdown.css('width', width);
     },
     /****** PRIVATE METHODS ******/
     /**

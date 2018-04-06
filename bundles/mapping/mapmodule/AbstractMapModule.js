@@ -78,6 +78,8 @@ Oskari.clazz.define(
 
         me._sandbox = null;
 
+        me._mapLayerService = null;
+
         // reference to map-engine controls
         me._controls = {};
         // reference to plugins
@@ -165,13 +167,6 @@ Oskari.clazz.define(
 
             me._sandbox = sandbox;
 
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            if(!mapLayerService) {
-                // create maplayer service to sandbox if it doesn't exist yet
-                mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox);
-                sandbox.registerService(mapLayerService);
-            }
-
             var stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandbox);
             sandbox.registerService(stateService);
             this.handleMapLinkParams(stateService);
@@ -234,7 +229,13 @@ Oskari.clazz.define(
                     sandbox.registerForEventByName(this, p);
                 }
             }
-            var layerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
+            this._mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            if(!this._mapLayerService) {
+                // create maplayer service to sandbox if it doesn't exist yet
+                this._mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox);
+                sandbox.registerService(this._mapLayerService);
+            }
 
             //register request handlers
             this.requestHandlers = {
@@ -243,7 +244,7 @@ Oskari.clazz.define(
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
                 registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
-                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), layerService)
+                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService)
             };
 
             sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
@@ -2272,7 +2273,12 @@ Oskari.clazz.define(
                 keepLayersOrder = true,
                 isBaseMap = false,
                 layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [];
+                layerFunctions = [],
+                sandbox = this.getSandbox();
+            
+            if(!layer.isSupported(sandbox.getMap().getSrsName())) {
+                this._mapLayerService.showUnsupportedPopup();
+            }
 
             _.each(layerPlugins, function (plugin) {
                 // true if either plugin doesn't have the function or says the layer is supported.
@@ -2342,7 +2348,10 @@ Oskari.clazz.define(
             	sandbox = me.getSandbox(),
             	layerPlugins = me.getLayerPlugins(),
             	layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-
+            if(!layer){
+                // couldn't find layer to update
+                return;
+            }
             _.each(layerPlugins, function (plugin) {
                 // true if either plugin doesn't have the function or says the layer is supported.
                 var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);

@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
      * @method create called automatically on construction
      */
     function () {
-        'use strict';
+        
         var me = this;
         me._clazz = 'Oskari.userinterface.component.Select';
         me._element = document.createElement('label');
@@ -31,12 +31,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * Focuses the component.
          */
         focus: function () {
-            'use strict';
+            
             this._select.focus();
         },
 
         isEnabled: function () {
-            'use strict';
+            
             return !this._element.disabled;
         },
 
@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * Does the component allow multiple selections
          */
         isMultiple: function () {
-            'use strict';
+            
             return this._select.multiple;
         },
 
@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @param multiple
          */
         setMultiple: function (multiple) {
-            'use strict';
+            
             if (typeof multiple !== 'boolean') {
                 throw new TypeError(
                     this.getClazz() +
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @param {Array} options
          */
         setOptions: function (options) {
-            'use strict';
+            
             if (!Array.isArray(options)) {
                 throw new TypeError(
                     this.getClazz() +
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
         },
 
         _getValueArray: function (value) {
-            'use strict';
+            
             var selectedValues = [];
 
             // Fill selected values for easy contains check
@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
         },
 
         _valueChanged: function () {
-            'use strict';
+            
             if (this.getHandler()) {
                 this.getHandler()(this.getValue());
             }
@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @method _setEnabledImpl
          */
         _setEnabledImpl: function (enabled) {
-            'use strict';
+            
             this._select.disabled = !enabled;
         },
 
@@ -158,7 +158,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @return {String} name
          */
         getName: function () {
-            'use strict';
+            
             return this.select.name;
         },
 
@@ -167,12 +167,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @param {String} name
          */
         setName: function (name) {
-            'use strict';
+            
             this._select.name = name || '';
         },
 
         isRequired: function () {
-            'use strict';
+            
             return this._select.required;
         },
 
@@ -180,7 +180,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @method _setRequiredImpl
          */
         _setRequiredImpl: function () {
-            'use strict';
+            
             this._select.required = this.isRequired();
         },
 
@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @method getTitle
          */
         getTitle: function () {
-            'use strict';
+            
             return this._titleEl.textContent;
         },
 
@@ -198,7 +198,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @param {String} title
          */
         setTitle: function (title) {
-            'use strict';
+            
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
         },
 
         getTooltip: function () {
-            'use strict';
+            
             return this._element.title;
         },
 
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @method setTooltip
          */
         setTooltip: function (tooltip) {
-            'use strict';
+            
             this._element.title = tooltip;
         },
 
@@ -228,7 +228,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
         },
 
         getValue: function () {
-            'use strict';
+            
             var i,
                 me = this,
                 opts = me._select.querySelectorAll('option:checked'),
@@ -249,7 +249,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @method setValue
          */
         setValue: function (value) {
-            'use strict';
+            
             var i,
                 oldValues = this._getValueArray(this.getValue()),
                 selectedValues = this._getValueArray(value),
@@ -283,7 +283,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
          * @method _setVisibleImpl
          */
         _setVisibleImpl: function () {
-            'use strict';
+            
             this.getElement().style.display = this.isVisible() ? '' : 'none';
         }
     }, {

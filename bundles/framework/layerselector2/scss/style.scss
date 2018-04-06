@@ -56,6 +56,10 @@ div.layerselector2 {
             font-size: 12px;
         }
 
+        .layer-title.not-supported {
+            color: #888;
+        }
+
         div.layer-tools {
             float: right;
         }
@@ -80,6 +84,13 @@ div.layerselector2 {
             height: 16px;
             margin-right: 4px;
             background-repeat: no-repeat;
+        }
+
+        div.layer-not-supported {
+            float: left;
+            margin-right: 4px;
+            background-repeat: no-repeat;
+            margin-top: -2px;
         }
 
         div.backendstatus-down {

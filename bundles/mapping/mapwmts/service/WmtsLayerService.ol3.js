@@ -50,6 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             var wmtsLayer = new ol.layer.Tile({
                 source: new ol.source.WMTS(wmtsOptions),
                 transparent: true,
+                opacity: layer.getOpacity()/100,
                 visible: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible()
             });
             success(wmtsLayer);

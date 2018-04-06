@@ -696,7 +696,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if(fields.length === 0) { //layer view is empty, get fields from DescribeFeatureType
                 fields = ["__fid"];
                 $.each(me.fieldsTypes, function(key, value) {
-                   if(!value.startsWith("gml:")) { //skip geometry
+                   if(value.indexOf('gml:') !== 0) { //skip geometry
                        fields.push(key);
                    }
                 });

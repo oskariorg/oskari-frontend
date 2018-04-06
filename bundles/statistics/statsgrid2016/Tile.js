@@ -17,7 +17,7 @@ function(instance, service) {
     this.container = null;
     this.template = null;
     this._tileExtensions = {};
-    this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
+    this.flyoutManager = null;
     this._templates = {
         extraSelection : _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div></div>')
     };
@@ -63,11 +63,13 @@ function(instance, service) {
      */
     startPlugin : function() {
         this._addTileStyleClasses();
+    },
+    setupTools: function ( flyoutManager ) {
         var me = this;
-        var instance = me.instance;
-        var sandbox = instance.getSandbox();
         var tpl = this._templates.extraSelection;
-        this.getFlyoutManager().flyoutInfo.forEach(function(flyout) {
+        this.flyoutManager = flyoutManager;
+        
+        flyoutManager.flyoutInfo.forEach(function(flyout) {
             var tileExtension = jQuery(tpl({
                 id: flyout.id,
                 label : flyout.title
@@ -75,10 +77,18 @@ function(instance, service) {
             me.extendTile(tileExtension, flyout.id);
             tileExtension.bind('click', function(event) {
                 event.stopPropagation();
-                me.toggleFlyout(flyout.id);
+                flyoutManager.toggle(flyout.id);
             });
         });
+
         this.hideExtensions();
+
+        this.flyoutManager.on('show', function (flyout) {
+            me.toggleExtension(flyout, true);
+        });
+        this.flyoutManager.on('hide', function (flyout) {
+            me.toggleExtension(flyout, false);
+        });
     },
     /**
      * Adds a class for the tile so we can programmatically identify which functionality the tile controls.
@@ -110,37 +120,15 @@ function(instance, service) {
           var extension = container.find(el);
           this._tileExtensions[type] = extension;
     },
-    /**
-     * @method  @public openExtension opens extension
-     * @param  {String} type  flyout type
-     */
-    openExtension: function(type) {
-        var me = this;
-        var flyout = this.getFlyoutManager().getFlyout(type);
-        if(!flyout) {
-            // unrecognized flyout
+    toggleExtension: function (flyout, shown) {
+
+        var element = this.getExtensions()[flyout];
+
+        if ( !shown ) {
+            element.removeClass('material-selected');
             return;
         }
-        var el = this.getExtensions()[type];
-        me.getFlyoutManager().open(type);
-        if (!el.hasClass('material-selected') ) {
-            el.addClass('material-selected');
-        }
-    },
-     /**
-     * @method  @public closeExtension opens extension
-     * @param  {String} type  flyout type
-     */
-    closeExtension: function(type) {
-        var me = this;
-        var flyout = this.getFlyoutManager().getFlyout(type);
-        if(!flyout) {
-            // unrecognized flyout
-            return;
-        }
-        var el = this.getExtensions()[type];
-        me.getFlyoutManager().hide(type);
-        el.removeClass('material-selected');
+        element.addClass('material-selected');
     },
     /**
      * Hides all the extra options (used when tile is "deactivated")
@@ -150,7 +138,7 @@ function(instance, service) {
         var extraOptions = me.getExtensions();
         Object.keys(extraOptions).forEach(function(key) {
             // hide all flyout
-            me.getFlyoutManager().hide( key );
+            me.flyoutManager.hide( key );
             // hide the tile "extra selection"
             var extension = extraOptions[key];
             extension.removeClass('material-selected');
@@ -164,7 +152,7 @@ function(instance, service) {
     showExtensions: function () {
         var me = this;
         var extraOptions = me.getExtensions();
-        this.getFlyoutManager().init();
+        this.flyoutManager.init();
         Object.keys(extraOptions).forEach(function(key) {
             extraOptions[key].removeClass('hidden');
         });
@@ -175,25 +163,6 @@ function(instance, service) {
      */
     getExtensions: function () {
         return this._tileExtensions;
-    },
-    getFlyoutManager: function () {
-        return this._flyoutManager;
-    },
-    getFlyout: function (type) {
-        return this.getFlyoutManager().getFlyout(type);
-    },
-    toggleFlyout: function (type) {
-        var flyout = this.getFlyoutManager().getFlyout(type);
-        if(!flyout) {
-            // unrecognized flyout
-            return;
-        }
-        if(flyout.isVisible()) {
-            this.closeExtension(type);
-            return;
-        }
-        // open flyout
-        this.openExtension(type);
     }
 }, {
     /**

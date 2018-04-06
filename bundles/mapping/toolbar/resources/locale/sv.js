@@ -7,7 +7,8 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Länk",
                 "ok": "OK",
-                "title": "Gör en länk till kartvyn."
+                "title": "Gör en länk till kartvyn.",
+                "cannot": "Denna kartvy kan inte länkas till. Skapa en ny kartvy och försök igen."
             },
             "history": {
                 "reset": "Gå tillbaka till standardvyn för kartvyn.",
@@ -25,8 +26,8 @@ Oskari.registerLocalization(
             "title": "Mätningsresultat",
             "close": "Avbryt",
             "guidance": {
-                "measureline": "Rita en linje och mät avståndet på kartan. Klicka på startpunkten för linjen att börja mäta. Efter det klickar du ut samtliga brytpunkter på linjen. Dubbelklicka på slutpunkten på linjen för att avsluta mätningen.",
-                "measurearea": "Rita ett område och mät den på kartan. Klicka på startpunkten för områdets gränslinje för att börja mäta. Efter det klickar du på samtliga brytpunkter i gränslinjen. Dubbelklicka på slutpunkten av gränslinjen för att sluta mäta."
+                "measureline": "Rita en linje och mät avståndet på kartan. Klicka på startpunkten för linjen att börja mäta. Efter det klickar du ut samtliga brytpunkter på linjen.",
+                "measurearea": "Rita ett område och mät den på kartan. Klicka på startpunkten för områdets gränslinje för att börja mäta. Efter det klickar du på samtliga brytpunkter i gränslinjen."
             }
         },
         "guidedTour": {

@@ -82,10 +82,25 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     update: function() {
       this.element.find('select').trigger('chosen:updated');
     },
-    /**  @method addOption appends a new option to the select
-     *   @param { Object } object with keys id and title
+    /**  
+     * @method _setEnabledImpl or disable select
+     * @param { boolean } true = enable
      */
-
+    _setEnabledImpl: function ( enableFlag ) {
+      var chosen = this.element.find('select');
+      if ( enableFlag ) {
+        chosen.prop('disabled', false);
+      }
+      else {
+        this.resetToPlaceholder();
+        chosen.prop('disabled', true)
+      }
+      chosen.trigger('chosen:updated');
+    },
+    /**  
+     * @method addOption appends a new option to the select
+     * @param { Object } object with keys id and title
+     */
     addOption: function ( data ) {
         var chosen = this.element.find('select');
         var option = this._option.clone();

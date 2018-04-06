@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "MyPlacesImport",
     "value": {
-        "title": "Dataset Import",
+        "title": "Own datasets",
         "desc": "",
         "tool": {
             "tooltip": "Import your own datasets."
@@ -26,7 +26,7 @@ Oskari.registerLocalization(
             },
             "layer": {
                 "title": "Dataset Information",
-                "name": "Name",
+                "name": "Map layer name",
                 "desc": "Description",
                 "source": "Data source",
                 "style": "Style definitions"
@@ -70,26 +70,37 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Datasets",
+            "editLayer": "Edit map layer",
+            "deleteLayer": "Delete map layer",
             "grid": {
                 "name": "Name",
                 "description": "Description",
                 "source": "Data source",
+                "edit": "Edit",
+                "editButton": "Edit",
                 "remove": "Delete",
                 "removeButton": "Delete"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
             "buttons": {
                 "ok": "OK",
+                "save": "Save",
                 "cancel": "Cancel",
-                "delete": "Delete"
+                "delete": "Delete",
+                "close": "Close"
             },
             "notification": {
                 "deletedTitle": "Dataset Delete",
-                "deletedMsg": "The dataset has been deleted."
+                "deletedMsg": "The dataset has been deleted.",
+                "editedMsg": "The dataset has been updated."
             },
             "error": {
                 "title": "Error",
-                "generic": "A system error occurred."
+                "generic": "A system error occurred.",
+                "deleteMsg": "Deleting the dataset failed due to an error in the system. Please try again later.",
+                "editMsg": "Updating the dataset failed due to an error in the system. Please try again later.",
+                "getStyle": "The style defined for the dataset was not found. Default values are shown on the form. Change the style definitions before saving the changes.",
+                "styleName": "Give the map layer a name and try again."
             }
         },
         "layer": {

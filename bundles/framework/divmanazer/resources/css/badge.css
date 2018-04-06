@@ -34,9 +34,9 @@ a.oskari-badge:hover {
   text-decoration: none;
   cursor: pointer; }
 .badge-wrapper {
-    display: inline-block;
-    position: absolute;
-    height: inherit;
+  display: inline-block;
+  position: absolute;
+  height: inherit;
 }
 .oskari-badge-important {
   background-color: #b94a48; }

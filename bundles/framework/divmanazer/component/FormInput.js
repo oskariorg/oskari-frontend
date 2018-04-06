@@ -409,7 +409,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if up is pressed on the input
          */
         bindUpKey: function (callback) {
-            'use strict';
+            
             var me = this,
                 input = this._field.find('input');
 
@@ -424,7 +424,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if down is pressed on the input
          */
         bindDownKey: function (callback) {
-            'use strict';
+            
             var me = this,
                 input = this._field.find('input');
 
@@ -442,7 +442,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if blur has happened for the input
          */
         bindOnBlur: function (callback) {
-            'use strict';
+            
             // all set, ready to bind requests
             var input = this._field.find('input');
             input.blur(function () {

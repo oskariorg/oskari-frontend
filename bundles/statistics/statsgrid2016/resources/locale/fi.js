@@ -82,6 +82,9 @@ Oskari.registerLocalization(
             "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.",
             "cannotCreateLegend": "Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla."
         },
+        "diagram": {
+            "title": "Diagram"
+        },
         "parameters": {
             "sex": "Sukupuoli",
             "year": "Vuosi",
@@ -158,7 +161,14 @@ Oskari.registerLocalization(
           "descColor": "Kuvaajan väri",
           "selectClr": "Valittu väri",
           "clrFromMap": "Värit kartalla olevan luokittelun mukaan",
-          "chooseColor": "Valitse väri"
+          "chooseColor": "Valitse väri",
+          "sorting": {
+            "desc": "Järjestys",
+              "name-ascending": "Nimen mukaan nouseva",
+              "name-descending": "Nimen mukaan laskeva",
+              "value-ascending": "Arvon mukaan nouseva",
+              "value-descending": "Arvon mukaan laskeva"
+          }
         },
         "filter": {
             "title": "Suodatus",

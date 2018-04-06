@@ -14,7 +14,7 @@ Oskari.clazz.define(
      * @param {Object} options
      *
      */
-    function (params, options) {
+    function(params, options) {
         var me = this;
         /* Internal id for this map layer.
         Id needs to be undefined instead of null
@@ -64,10 +64,8 @@ Oskari.clazz.define(
         /* is linked layer ('sublayer') - no UI in layer selection */
         me._isLinkedLayer = null;
 
-        me._inspireName = null;
         me._organizationName = null;
         me._dataUrl = null;
-        me._orderNumber = null;
 
         /*
          * Array of sublayers. Notice that only type BASE_LAYER can
@@ -128,6 +126,8 @@ Oskari.clazz.define(
         // Spatial reference system
         me._srs_name = null;
 
+        me._srsList = null;
+
         // Admin params, applicable only for admin users
         me._admin = null;
 
@@ -139,6 +139,10 @@ Oskari.clazz.define(
         me.loaded = 0;
         me.tilesToLoad = 0;
         me.errors = 0;
+
+        me._groups = [];
+
+        me._orderNumber = 1000000;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -147,7 +151,7 @@ Oskari.clazz.define(
          *          object containing localization for name/desc/inspire/organization
          * (e.g. MapLayerService)
          */
-        setLocalization: function (loc) {
+        setLocalization: function(loc) {
             var name = {},
                 desc = {},
                 inspire = {},
@@ -185,12 +189,7 @@ Oskari.clazz.define(
                     break;
                 }
             }
-            for (lang in inspire) {
-                if (inspire.hasOwnProperty(lang)) {
-                    this.setInspireName(inspire);
-                    break;
-                }
-            }
+
             for (lang in organization) {
                 if (organization.hasOwnProperty(lang)) {
                     this.setOrganizationName(organization);
@@ -205,7 +204,7 @@ Oskari.clazz.define(
          * internally. Non-string values will be coecred to a string.
          * (e.g. MapLayerService)
          */
-        setId: function (id) {
+        setId: function(id) {
             this._id = id;
         },
         /**
@@ -214,7 +213,7 @@ Oskari.clazz.define(
          *          unique identifier for map layer used to reference the layer internally
          * (e.g. MapLayerService)
          */
-        getId: function () {
+        getId: function() {
             return this._id;
         },
         /**
@@ -223,7 +222,7 @@ Oskari.clazz.define(
          *          unique identifier for parent map layer used to reference the layer internally
          * (e.g. MapLayerService)
          */
-        setParentId: function (id) {
+        setParentId: function(id) {
             this._baseLayerId = id;
         },
         /**
@@ -232,7 +231,7 @@ Oskari.clazz.define(
          *          unique identifier for parent map layer used to reference the layer internally
          * (e.g. MapLayerService)
          */
-        getParentId: function () {
+        getParentId: function() {
             if (!this._baseLayerId) {
                 return -1;
             }
@@ -243,7 +242,7 @@ Oskari.clazz.define(
          * @param {String} queryFormat
          *          f.ex. 'text/html'
          */
-        setQueryFormat: function (queryFormat) {
+        setQueryFormat: function(queryFormat) {
             this._queryFormat = queryFormat;
         },
         /**
@@ -251,7 +250,7 @@ Oskari.clazz.define(
          * f.ex. 'text/html'
          * @return {String}
          */
-        getQueryFormat: function () {
+        getQueryFormat: function() {
             return this._queryFormat;
         },
         /**
@@ -259,7 +258,7 @@ Oskari.clazz.define(
          * @param {String/Object} name
          *          name for the maplayer that is shown in UI
          */
-        setName: function (name) {
+        setName: function(name) {
             if (name && typeof name === 'object') {
                 var values = {};
                 Object.keys(name).forEach(function(key) {
@@ -279,13 +278,13 @@ Oskari.clazz.define(
          * @param {String} lang language id like 'en' or 'fi' (optional)
          * @return {String} maplayer UI name
          */
-        getName: function (lang) {
+        getName: function(lang) {
             if (this._name && typeof this._name === 'object') {
                 if (!lang) {
                     lang = Oskari.getLang();
                 }
                 var value = this._name[lang];
-                if(!value) {
+                if (!value) {
                     value = this._name[Oskari.getDefaultLanguage()];
                 }
                 return value;
@@ -300,14 +299,14 @@ Oskari.clazz.define(
          * Not as type WMS or Vector but base or normal layer.
          * See #setAsBaseLayer(), #setAsGroupLayer() and #setAsNormalLayer()
          */
-        setType: function (type) {
+        setType: function(type) {
             this._type = type;
         },
         /**
          * @method getType
          * @return {String} maplayer type (BASE/NORMAL)
          */
-        getType: function () {
+        getType: function() {
             return this._type;
         },
         /**
@@ -315,14 +314,14 @@ Oskari.clazz.define(
          * @param {String} param
          *          URL string used to show more info about the layer
          */
-        setDataUrl: function (param) {
+        setDataUrl: function(param) {
             this._dataUrl = param;
         },
         /**
          * @method getDataUrl
          * @return {String} URL string used to show more info about the layer
          */
-        getDataUrl: function () {
+        getDataUrl: function() {
             return this._dataUrl;
         },
         /**
@@ -330,7 +329,7 @@ Oskari.clazz.define(
          * @param {String/Object} param
          *          organization name under which the layer is listed in UI
          */
-        setOrganizationName: function (param) {
+        setOrganizationName: function(param) {
             if (param && typeof param === 'object') {
                 var values = {};
                 Object.keys(param).forEach(function(key) {
@@ -341,6 +340,7 @@ Oskari.clazz.define(
                 this._organizationName = Oskari.util.sanitize(param);
             }
         },
+
         /**
          * Returns a organization name for the layer.
          * If the name is populated with a string, always returns it.
@@ -350,69 +350,43 @@ Oskari.clazz.define(
          * @param {String} lang language id like 'en' or 'fi' (optional)
          * @return {String} organization name under which the layer is listed in UI
          */
-        getOrganizationName: function (lang) {
+        getOrganizationName: function(lang) {
             if (this._organizationName && typeof this._organizationName === 'object') {
                 if (!lang) {
                     lang = Oskari.getLang();
                 }
                 var value = this._organizationName[lang];
-                if(!value) {
+                if (!value) {
                     value = this._organizationName[Oskari.getDefaultLanguage()];
                 }
                 return value;
             }
             return this._organizationName;
         },
-        /**
-         * @method setInspireName
-         * @param {String} param
-         *          inspire theme name under which the layer is listed in UI
-         */
-        setInspireName: function (param) {
-            if (param && typeof param === 'object') {
-                var values = {};
-                Object.keys(param).forEach(function(key) {
-                    values[key] = Oskari.util.sanitize(param[key]);
-                });
-                this._inspireName = values;
-            } else {
-                this._inspireName = Oskari.util.sanitize(param);
-            }
-        },
+
         /**
          * Returns an inspire name for the layer.
          * If the name is populated with a string, always returns it.
          * With populated object assumes that the object keys are language codes.
          * If language param is not given, uses Oskari.getLang()
          * @method getInspireName
-         * @param {String} lang language id like 'en' or 'fi' (optional)
          * @return {String} inspire theme name under which the layer is listed in UI
          */
-        getInspireName: function (lang) {
-            if (this._inspireName && typeof this._inspireName === 'object') {
-                if (!lang) {
-                    lang = Oskari.getLang();
-                }
-                var value = this._inspireName[lang];
-                if(!value) {
-                    value = this._inspireName[Oskari.getDefaultLanguage()];
-                }
-                return value;
-            }
-            return this._inspireName;
+        getInspireName: function() {
+            return (this._groups[0]) ? this._groups[0].name : '';
         },
         /**
          * @method setFeatureInfoEnabled
          * @return {Boolean} featureInfoEnabled true to enable feature info functionality
          */
-        setFeatureInfoEnabled: function (featureInfoEnabled) {
+        setFeatureInfoEnabled: function(featureInfoEnabled) {
             this._featureInfoEnabled = featureInfoEnabled;
         },
         /**
          * @method isFeatureInfoEnabled
          * @return {Boolean} true if feature info functionality should be enabled
          */
-        isFeatureInfoEnabled: function () {
+        isFeatureInfoEnabled: function() {
             if (this._featureInfoEnabled === true) {
                 return true;
             }
@@ -423,7 +397,7 @@ Oskari.clazz.define(
          * @param {String} description
          *          map layer description text
          */
-        setDescription: function (description) {
+        setDescription: function(description) {
             this._description = description;
         },
         /**
@@ -435,13 +409,13 @@ Oskari.clazz.define(
          * @param {String} lang language id like 'en' or 'fi' (optional)
          * @return {String} map layer description text
          */
-        getDescription: function (lang) {
+        getDescription: function(lang) {
             if (this._description && typeof this._description === 'object') {
                 if (!lang) {
                     lang = Oskari.getLang();
                 }
                 var value = this._description[lang];
-                if(!value) {
+                if (!value) {
                     value = this._description[Oskari.getDefaultLanguage()];
                 }
                 return Oskari.util.sanitize(value);
@@ -456,14 +430,14 @@ Oskari.clazz.define(
          */
         loadingStarted: function(remaining) {
 
-          if(typeof remaining === 'undefined'){
-            this.loading +=1;
-          } else {
-            this.loading = remaining;
-          }
-          this.tilesToLoad = this.loading;
+            if (typeof remaining === 'undefined') {
+                this.loading += 1;
+            } else {
+                this.loading = remaining;
+            }
+            this.tilesToLoad = this.loading;
 
-          return this.loading === 1;
+            return this.loading === 1;
         },
         /**
          * Called when openlayers 2/3 tileloadend event fires
@@ -473,13 +447,13 @@ Oskari.clazz.define(
          */
         loadingDone: function(remaining) {
 
-          if(typeof remaining === 'undefined'){
-            this.loading -=1;
-          } else {
-            this.loading = remaining;
-          }
-          this.loaded += 1;
-          return this.loading === 0;
+            if (typeof remaining === 'undefined') {
+                this.loading -= 1;
+            } else {
+                this.loading = remaining;
+            }
+            this.loaded += 1;
+            return this.loading === 0;
         },
         /**
          * Called when openlayers 2/3 tileloaderror event fires
@@ -488,12 +462,12 @@ Oskari.clazz.define(
          */
         loadingError: function(errors) {
 
-          if(typeof errors === 'undefined'){
-            this.errors += 1;
-          } else {
-            this.errors = errors;
-          }
-          return this.errors;
+            if (typeof errors === 'undefined') {
+                this.errors += 1;
+            } else {
+                this.errors = errors;
+            }
+            return this.errors;
         },
         /**
          * Check if all the tiles/features have been loaded
@@ -501,17 +475,17 @@ Oskari.clazz.define(
          * @return {boolean} true if this.loading === 0, else false
          */
         getLoadingState: function() {
-          var state = {
-            'loading': this.loading,
-            'loaded': this.loaded,
-            'errors': this.errors
-          };
-          return state;
+            var state = {
+                'loading': this.loading,
+                'loaded': this.loaded,
+                'errors': this.errors
+            };
+            return state;
         },
-        resetLoadingState: function(){
-          this.loaded = 0;
-          this.errors = 0;
-          this.tilesToLoad = 0;
+        resetLoadingState: function() {
+            this.loaded = 0;
+            this.errors = 0;
+            this.tilesToLoad = 0;
         },
         /**
          * @method addSubLayer
@@ -522,7 +496,7 @@ Oskari.clazz.define(
          * If layer has sublayers, it is basically a "metalayer" for maplayer ui
          * purposes and actual map images to show are done with sublayers
          */
-        addSubLayer: function (layer) {
+        addSubLayer: function(layer) {
             var sublayers = this.getSubLayers(),
                 i,
                 len;
@@ -543,7 +517,7 @@ Oskari.clazz.define(
          * If layer has sublayers, it is basically a "metalayer" for maplayer ui
          * purposes and actual map images to show are done with sublayers
          */
-        getSubLayers: function () {
+        getSubLayers: function() {
             return this._subLayers;
         },
         /**
@@ -552,7 +526,7 @@ Oskari.clazz.define(
          *          largest scale when the layer is shown (otherwise not shown in map and
          * "greyed out"/disabled in ui)
          */
-        setMaxScale: function (maxScale) {
+        setMaxScale: function(maxScale) {
             this._maxScale = maxScale;
         },
         /**
@@ -561,7 +535,7 @@ Oskari.clazz.define(
          *          largest scale when the layer is shown (otherwise not shown in map and
          * "greyed out"/disabled in ui)
          */
-        getMaxScale: function () {
+        getMaxScale: function() {
             return this._maxScale;
         },
         /**
@@ -570,7 +544,7 @@ Oskari.clazz.define(
          *          smallest scale when the layer is shown (otherwise not shown in map and
          * "greyed out"/disabled in ui)
          */
-        setMinScale: function (minScale) {
+        setMinScale: function(minScale) {
             this._minScale = minScale;
         },
         /**
@@ -579,35 +553,35 @@ Oskari.clazz.define(
          *          smallest scale when the layer is shown (otherwise not shown in map and
          * "greyed out"/disabled in ui)
          */
-        getMinScale: function () {
+        getMinScale: function() {
             return this._minScale;
         },
         /**
          * @method setOrderNumber
          * @param {Number} orderNumber
          */
-        setOrderNumber: function (orderNumber) {
+        setOrderNumber: function(orderNumber) {
             this._orderNumber = orderNumber;
         },
         /**
          * @method getOrderNumber
          * @return {Number} orderNumber
          */
-        getOrderNumber: function () {
+        getOrderNumber: function() {
             return this._orderNumber;
         },
         /**
          * @method isVisible
          * @return {Boolean} true if this is should be shown
          */
-        isVisible: function () {
+        isVisible: function() {
             return this._visible === true;
         },
         /**
          * @method setVisible
          * @param {Boolean} visible true if this is should be shown
          */
-        setVisible: function (visible) {
+        setVisible: function(visible) {
             this._visible = visible;
         },
         /**
@@ -615,7 +589,7 @@ Oskari.clazz.define(
          * @param {Number} opacity
          *          0-100 in percents
          */
-        setOpacity: function (opacity) {
+        setOpacity: function(opacity) {
             this._opacity = opacity;
         },
         /**
@@ -623,7 +597,7 @@ Oskari.clazz.define(
          * @return {Number} opacity
          *          0-100 in percents
          */
-        getOpacity: function () {
+        getOpacity: function() {
             if (this._opacity === null || this._opacity === undefined) {
                 return 100;
             }
@@ -635,7 +609,7 @@ Oskari.clazz.define(
          * @param {String} value
          *          WKT geometry
          */
-        setGeometryWKT: function (value) {
+        setGeometryWKT: function(value) {
             this._geometryWKT = value;
         },
         /**
@@ -643,7 +617,7 @@ Oskari.clazz.define(
          * Get geometry as wellknown text
          * @return {String} WKT geometry
          */
-        getGeometryWKT: function () {
+        getGeometryWKT: function() {
             return this._geometryWKT;
         },
         /**
@@ -651,7 +625,7 @@ Oskari.clazz.define(
          * @param {OpenLayers.Geometry.Geometry[]} value
          *          array of WKT geometries or actual OpenLayer geometries
          */
-        setGeometry: function (value) {
+        setGeometry: function(value) {
             this._geometry = value;
         },
         /**
@@ -659,7 +633,7 @@ Oskari.clazz.define(
          * @return {OpenLayers.Geometry.Geometry[]}
          *          array of WKT geometries or actual OpenLayer geometries
          */
-        getGeometry: function () {
+        getGeometry: function() {
             return this._geometry;
         },
         /**
@@ -669,7 +643,7 @@ Oskari.clazz.define(
          * @param {String} permission
          *          actual permission setting for action
          */
-        addPermission: function (action, permission) {
+        addPermission: function(action, permission) {
             this._permissions[action] = permission;
         },
         /**
@@ -677,7 +651,7 @@ Oskari.clazz.define(
          * @param {String} action
          *          action key from which permission setting should be removed
          */
-        removePermission: function (action) {
+        removePermission: function(action) {
             this._permissions[action] = null;
             delete this._permissions[action];
         },
@@ -687,7 +661,7 @@ Oskari.clazz.define(
          *          action key for which permission we want
          * @return {String} permission setting for given action
          */
-        getPermission: function (action) {
+        getPermission: function(action) {
             return this._permissions[action];
         },
         /**
@@ -695,7 +669,7 @@ Oskari.clazz.define(
          * Gets the identifier (uuid style) for getting layers metadata
          * @return {String}
          */
-        getMetadataIdentifier: function () {
+        getMetadataIdentifier: function() {
             return this._metadataIdentifier;
         },
         /**
@@ -703,7 +677,7 @@ Oskari.clazz.define(
          * Sets the identifier (uuid style) for getting layers metadata
          * @param {String} metadataid
          */
-        setMetadataIdentifier: function (metadataid) {
+        setMetadataIdentifier: function(metadataid) {
             this._metadataIdentifier = metadataid;
         },
         /**
@@ -711,7 +685,7 @@ Oskari.clazz.define(
          * Status text for layer operatibility (f.ex. 'DOWN')
          * @return {String}
          */
-        getBackendStatus: function () {
+        getBackendStatus: function() {
             return this._backendStatus;
         },
         /**
@@ -719,7 +693,7 @@ Oskari.clazz.define(
          * Status text for layer operatibility (f.ex. 'DOWN')
          * @param {String} backendStatus
          */
-        setBackendStatus: function (backendStatus) {
+        setBackendStatus: function(backendStatus) {
             this._backendStatus = backendStatus;
         },
         /**
@@ -727,7 +701,7 @@ Oskari.clazz.define(
          * @param {String} type used to group layers by f.ex. functionality.
          * Layers can be fetched based on metatype f.ex. 'myplaces'
          */
-        setMetaType: function (type) {
+        setMetaType: function(type) {
             this._metaType = type;
         },
         /**
@@ -735,7 +709,7 @@ Oskari.clazz.define(
          * @return {String} type used to group layers by f.ex. functionality.
          * Layers can be fetched based on metatype f.ex. 'myplaces'
          */
-        getMetaType: function () {
+        getMetaType: function() {
             return this._metaType;
         },
         /**
@@ -743,7 +717,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.Style} style
          * adds style to layer
          */
-        addStyle: function (style) {
+        addStyle: function(style) {
             if (!style || !style.getName || typeof style.getName !== 'function') {
                 // invalid style
                 return;
@@ -769,7 +743,7 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.domain.Style[]}
          * Gets layer styles
          */
-        getStyles: function () {
+        getStyles: function() {
             if (!this._styles) {
                 this._styles = [];
             }
@@ -781,7 +755,7 @@ Oskari.clazz.define(
          * Selects a #Oskari.mapframework.domain.Style with given name as #getCurrentStyle.
          * If style is not found, assigns an empty #Oskari.mapframework.domain.Style to #getCurrentStyle
          */
-        selectStyle: function (styleName) {
+        selectStyle: function(styleName) {
             var me = this,
                 i,
                 style;
@@ -794,7 +768,7 @@ Oskari.clazz.define(
                 }
             }
             // if layer has only one style - always use it
-            if(me.getStyles().length === 1) {
+            if (me.getStyles().length === 1) {
                 this._currentStyle = me.getStyles()[0];
                 return;
             }
@@ -810,7 +784,7 @@ Oskari.clazz.define(
          * @private
          * @return {Oskari.mapframework.domain.Style} empty style
          */
-        _createEmptyStyle: function () {
+        _createEmptyStyle: function() {
             var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
 
             style.setName('');
@@ -822,7 +796,7 @@ Oskari.clazz.define(
          * @method getCurrentStyle
          * @return {Oskari.mapframework.domain.Style} current style
          */
-        getCurrentStyle: function () {
+        getCurrentStyle: function() {
             if (!this._currentStyle) {
                 // prevent "nullpointer" if selectstyle hasn't been called
                 this.selectStyle('');
@@ -834,7 +808,7 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.domain.Tool[]}
          * Get layer tools
          */
-        getTools: function () {
+        getTools: function() {
             return this._tools;
         },
         /**
@@ -842,7 +816,7 @@ Oskari.clazz.define(
          * @params {Oskari.mapframework.domain.Tool[]}
          * Set layer tools
          */
-        setTools: function (tools) {
+        setTools: function(tools) {
             this._tools = tools;
         },
         /**
@@ -850,8 +824,8 @@ Oskari.clazz.define(
          * @params {Oskari.mapframework.domain.Tool}
          * adds layer tool to tools
          */
-        addTool: function (tool) {
-            if(!tool || this.getTool(tool.getName())) {
+        addTool: function(tool) {
+            if (!tool || this.getTool(tool.getName())) {
                 // check for duplicates and invalid param
                 return;
             }
@@ -863,7 +837,7 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.domain.Tool}
          * adds layer tool to tools
          */
-        getTool: function (toolName) {
+        getTool: function(toolName) {
             var tool = null,
                 i;
 
@@ -885,16 +859,16 @@ Oskari.clazz.define(
          * @method setLegendImage
          * @return {String} legendImage URL to a legend image
          */
-        setLegendImage: function (legendImage) {
+        setLegendImage: function(legendImage) {
             this._legendImage = legendImage;
         },
         /**
          * @method getLegendImage
          * @return {String} URL to a legend image
          */
-        getLegendImage: function () {
+        getLegendImage: function() {
             var style = this.getCurrentStyle();
-            if(style && style.getLegend()) {
+            if (style && style.getLegend()) {
                 return style.getLegend();
             }
             return this._legendImage;
@@ -903,7 +877,7 @@ Oskari.clazz.define(
          * @method getLegendImage
          * @return {Boolean} true if layer has a legendimage or its styles have legend images
          */
-        hasLegendImage: function () {
+        hasLegendImage: function() {
             var i,
                 ret = false;
 
@@ -924,14 +898,14 @@ Oskari.clazz.define(
          * True if layer switch off is disable
          * @param {Boolean} isSticky
          */
-        setSticky: function (isSticky) {
+        setSticky: function(isSticky) {
             this._isSticky = isSticky;
         },
         /**
          * @method isSticky
          * True if layer switch off is disable
          */
-        isSticky: function () {
+        isSticky: function() {
             return this._isSticky;
         },
         /**
@@ -939,14 +913,14 @@ Oskari.clazz.define(
          * True if layer is linked to other layer as 'sublayer'
          * @param {Boolean} isLinkedLayer
          */
-        setLinkedLayer: function (isLinkedLayer) {
+        setLinkedLayer: function(isLinkedLayer) {
             this._isLinkedLayer = isLinkedLayer;
         },
         /**
          * @method isLinkedlayer
          * True if layer is linked to other layer as 'sublayer'
          */
-        isLinkedLayer: function () {
+        isLinkedLayer: function() {
             return this._isLinkedLayer;
         },
         /**
@@ -954,7 +928,7 @@ Oskari.clazz.define(
          * True if we should call GFI on the layer
          * @param {Boolean} queryable
          */
-        setQueryable: function (queryable) {
+        setQueryable: function(queryable) {
             this._queryable = queryable;
         },
         /**
@@ -962,42 +936,42 @@ Oskari.clazz.define(
          * True if we should call GFI on the layer
          * @param {Boolean} queryable
          */
-        getQueryable: function () {
+        getQueryable: function() {
             return this._queryable;
         },
         /**
          * @method setAsBaseLayer
          * sets layer type to BASE_LAYER
          */
-        setAsBaseLayer: function () {
+        setAsBaseLayer: function() {
             this._type = 'BASE_LAYER';
         },
         /**
          * @method setAsNormalLayer
          * sets layer type to NORMAL_LAYER
          */
-        setAsNormalLayer: function () {
+        setAsNormalLayer: function() {
             this._type = 'NORMAL_LAYER';
         },
         /**
          * @method setAsGroupLayer
          * Sets layer type to GROUP_LAYER
          */
-        setAsGroupLayer: function () {
+        setAsGroupLayer: function() {
             this._type = 'GROUP_LAYER';
         },
         /**
          * @method isGroupLayer
          * @return {Boolean} true if this is a group layer (=has sublayers)
          */
-        isGroupLayer: function () {
+        isGroupLayer: function() {
             return this._type === 'GROUP_LAYER';
         },
         /**
          * @method isBaseLayer
          * @return {Boolean} true if this is a base layer (=has sublayers)
          */
-        isBaseLayer: function () {
+        isBaseLayer: function() {
             // TODO check if this really works
             return this._type === 'BASE_LAYER';
         },
@@ -1006,7 +980,7 @@ Oskari.clazz.define(
          * @param {Number} scale scale to compare to
          * @return {Boolean} true if given scale is between this layer's or its sublayers' min/max scales.
          */
-        isInScale: function (scale) {
+        isInScale: function(scale) {
             var _inScale = false,
                 _subLayers = this.getSubLayers();
 
@@ -1014,7 +988,7 @@ Oskari.clazz.define(
 
             if (_subLayers && _subLayers.length) {
                 // Check if any of the sublayers is in scale
-                _inScale = _.any(_subLayers, function (subLayer) {
+                _inScale = _.any(_subLayers, function(subLayer) {
                     return subLayer.isInScale(scale);
                 });
             } else {
@@ -1030,7 +1004,7 @@ Oskari.clazz.define(
          * @method getLayerType
          * @return {String} layer type in lower case
          */
-        getLayerType: function () {
+        getLayerType: function() {
             return this._layerType.toLowerCase();
         },
         /**
@@ -1038,14 +1012,14 @@ Oskari.clazz.define(
          * @param {String} flavour layer type to check against. A bit misleading since setType is base/group/normal, this is used to check if the layer is a WMS layer.
          * @return {Boolean} true if flavour is the specified layer type
          */
-        isLayerOfType: function (flavour) {
+        isLayerOfType: function(flavour) {
             return flavour && flavour.toLowerCase() === this.getLayerType();
         },
         /**
          * @method getIconClassname
          * @return {String} layer icon classname used in the CSS style.
          */
-        getIconClassname: function () {
+        getIconClassname: function() {
             var ret;
 
             if (this.isBaseLayer()) {
@@ -1061,21 +1035,21 @@ Oskari.clazz.define(
          * @method getParams
          * @return {Object} optional layer parameters for OpenLayers, empty object if no parameters were passed in construction
          */
-        getParams: function () {
+        getParams: function() {
             return this._params;
         },
         /**
          * @method setParams
          * @param {Object} optional layer parameters for OpenLayers
          */
-        setParams: function (param) {
+        setParams: function(param) {
             this._params = param;
         },
         /**
          * @method getOptions
          * @return {Object} optional layer options for OpenLayers, empty object if no options were passed in construction
          */
-        getOptions: function () {
+        getOptions: function() {
             return this._options;
         },
         /**
@@ -1083,9 +1057,9 @@ Oskari.clazz.define(
          * @param {String} key optional key to get value directly from attributes
          * @return {Object} optional layer attributes like heatmap-parameters
          */
-        getAttributes: function (key) {
+        getAttributes: function(key) {
             var attr = this._attributes || {};
-            if(key) {
+            if (key) {
                 return attr[key];
             }
             return attr;
@@ -1094,7 +1068,7 @@ Oskari.clazz.define(
          * @method setAttributes
          * @param {Object} optional layer attributes like heatmap-parameters
          */
-        setAttributes: function (param) {
+        setAttributes: function(param) {
             this._attributes = param;
         },
 
@@ -1102,16 +1076,16 @@ Oskari.clazz.define(
          * @method hasFeatureData
          * @return {Boolean} true if the layer has feature data
          */
-        hasFeatureData: function () {
+        hasFeatureData: function() {
             return this._featureData;
         },
         /**
          * @method isManualRefresh
          * @return {Boolean} true/false
          */
-        isManualRefresh: function () {
-            if (this.getAttributes().manualRefresh){
-                return this.getAttributes().manualRefresh
+        isManualRefresh: function() {
+            if (this.getAttributes().manualRefresh) {
+                return this.getAttributes().manualRefresh;
             } else {
                 return false;
             }
@@ -1120,9 +1094,9 @@ Oskari.clazz.define(
          * @method isResolveDepth
          * @return {Boolean} true/false
          */
-        isResolveDepth: function () {
-            if (this.getAttributes().resolveDepth){
-                return this.getAttributes().resolveDepth
+        isResolveDepth: function() {
+            if (this.getAttributes().resolveDepth) {
+                return this.getAttributes().resolveDepth;
             } else {
                 return false;
             }
@@ -1131,14 +1105,14 @@ Oskari.clazz.define(
          * @method getLayerName
          * @return {String} layer functional (not UI) name
          */
-        getLayerName: function () {
+        getLayerName: function() {
             return this._layerName;
         },
         /**
          * @method setLayerName
          * @param {String} layer functional (not UI) name
          */
-        setLayerName: function (name) {
+        setLayerName: function(name) {
             this._layerName = name;
         },
         /**
@@ -1146,7 +1120,7 @@ Oskari.clazz.define(
          * @param {String} layerUrl
          * Apppends the url to layer array of image urls
          */
-        addLayerUrl: function (layerUrl) {
+        addLayerUrl: function(layerUrl) {
             var list = this.getLayerUrls(),
                 listLen = list.length,
                 foundExisting = false,
@@ -1170,7 +1144,7 @@ Oskari.clazz.define(
          * @return {String[]}
          * Returns array of layer image urls
          */
-        setLayerUrls: function (urlList) {
+        setLayerUrls: function(urlList) {
             if (Object.prototype.toString.call(urlList) === '[object Array]') {
                 this._layerUrls = urlList;
             }
@@ -1184,7 +1158,7 @@ Oskari.clazz.define(
          * @return {String[]}
          * Returns array of layer image urls
          */
-        getLayerUrls: function () {
+        getLayerUrls: function() {
             if (!this._layerUrls) {
                 this._layerUrls = [];
             }
@@ -1195,7 +1169,7 @@ Oskari.clazz.define(
          * @return {String}
          * Returns first url of layer urls array
          */
-        getLayerUrl: function () {
+        getLayerUrl: function() {
             var list = this.getLayerUrls();
 
             if (list && list.length > 0) {
@@ -1206,14 +1180,14 @@ Oskari.clazz.define(
          * @method setRealtime
          * @param {Boolean} realtime
          */
-        setRealtime: function (realtime) {
+        setRealtime: function(realtime) {
             this._realtime = (realtime === true);
         },
         /**
          * @method isRealtime
          * @return {Boolean}
          */
-        isRealtime: function () {
+        isRealtime: function() {
             return this._realtime;
         },
         /**
@@ -1221,14 +1195,14 @@ Oskari.clazz.define(
          * @return {Boolean}
          * Has timeseries data
          */
-        hasTimeseries: function () {
+        hasTimeseries: function() {
             return !!this.getAttributes().times;
         },
         /**
          * @method setRefreshRate
          * @param {Number} refreshRate
          */
-        setRefreshRate: function (refreshRate) {
+        setRefreshRate: function(refreshRate) {
             if (refreshRate < 0) {
                 this._refreshRate = 0;
             } else {
@@ -1239,49 +1213,75 @@ Oskari.clazz.define(
          * @method getRefreshRate
          * @return {Number}
          */
-        getRefreshRate: function () {
+        getRefreshRate: function() {
             return this._refreshRate;
         },
         /**
          * @method setVersion
          * @param {String} WMS, WMTS or WFS version
          */
-        setVersion: function (version) {
+        setVersion: function(version) {
             this._version = version;
         },
         /**
          * @method getVersion
          * @return {String}
          */
-        getVersion: function () {
+        getVersion: function() {
             return this._version;
         },
         /**
          * @method setSrs_name
          * @param {String} Spatial reference system
          */
-        setSrs_name: function (srs_name) {
+        setSrs_name: function(srs_name) {
             this._srs_name = srs_name;
         },
         /**
          * @method getSrs_name
          * @return {String}
          */
-        getSrs_name: function () {
+        getSrs_name: function() {
             return this._srs_name;
+        },
+        /**
+         * @method isSupported does the layer support given projection?
+         * @param {String} projection
+         * @return {Boolean} true if no data about support or param found in supported
+         */
+        isSupported: function(projection) {
+            if(!this._srsList || !this._srsList.length) {
+                // if list is not provided, treat as supported
+                return true;
+            }
+            return this._srsList.indexOf(projection) !== -1;
+        },
+        /**
+         * @method setSrsList
+         * @param {String[]} list of projections
+         */
+        setSrsList: function(list) {
+            this._srsList = list;
+        },
+        /**
+         * @method setSrsList
+         * @return {String[]} list of projections
+         */
+        getSrsList: function() {
+            return this._srsList;
         },
         /**
          * @method setGfiContent
          * @param {String} gfiContent GetFeatureInfo content
          */
-        setGfiContent: function (gfiContent) {
+        setGfiContent: function(gfiContent) {
             this._gfiContent = gfiContent;
         },
         /**
          * @method getGfiContent
          * @return {String} gfiContent GetFeatureInfo content
          */
-        getGfiContent: function () {
+        getGfiContent: function() {
             return this._gfiContent;
         },
 
@@ -1289,7 +1289,7 @@ Oskari.clazz.define(
          * Sets an admin block
          * @param {Object} admin
          */
-        setAdmin: function (admin) {
+        setAdmin: function(admin) {
             this._admin = admin;
         },
 
@@ -1297,7 +1297,7 @@ Oskari.clazz.define(
          * Returns an admin block
          * @return {Object} admin
          */
-        getAdmin: function () {
+        getAdmin: function() {
             return this._admin;
         },
 
@@ -1305,7 +1305,7 @@ Oskari.clazz.define(
          * Sets an created block
          * @param {Date} created
          */
-        setCreated: function(created){
+        setCreated: function(created) {
             this._created = created;
         },
 
@@ -1313,8 +1313,43 @@ Oskari.clazz.define(
          * Returns an created block
          * @return {Date} created
          */
-        getCreated: function(){
+        getCreated: function() {
             return this._created;
+        },
+        /**
+         * @method @public setGroups
+         * @param {Array} groups groups array [{id:1,name:name"}]
+         */
+        setGroups: function(groups) {
+            this._groups = groups || [{id:-1, name:""}];
+        },
+        /**
+         * @method @public getGroups get groups
+         * @param {String/Integer} groupId group id
+         */
+        getGroups: function(groupId) {
+            if (groupId) {
+                var group = this._groups.filter(function(g) {
+                    return (g.id === groupId);
+                });
+                if (group.length === 1) {
+                    return group;
+                }
+            }
+
+            return this._groups;
+
+        },
+        /**
+         * Is filter supported
+         * @method isFilterSupported
+         * @return {Boolean}         is filter supported
+         */
+        isFilterSupported: function() {
+            if(this.isLayerOfType('WFS') || this.isLayerOfType('ANALYSIS')) {
+                return true;
+            }
+            return false;
         }
 
     }

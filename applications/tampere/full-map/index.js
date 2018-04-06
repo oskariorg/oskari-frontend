@@ -16,7 +16,7 @@ jQuery(document).ready(function () {
             });
         },
         startApplication = function (setup) {
-            // check that both setup and config are loaded 
+            // check that both setup and config are loaded
             // before actually starting the application
             var app = Oskari.app;
             app.init(setup);
