@@ -39,13 +39,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * Removes all selected indicators, selected region and regionset is set to undefined
          */
         reset : function() {
-            var me = this;
-            this.indicators.forEach(function(ind) {
-                me.removeIndicator(ind.datasource, ind.indicator, ind.selections);
-            });
-            this.toggleRegion();
-            this.setRegionset();
+            var previousIndicator = this.activeIndicator;
+            this.indicators = []
             this.classification = null;
+            this.setActiveIndicator();
+            this.setRegionset();
+            this.toggleRegion(null);
+            // notify
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
+            this.sandbox.notifyAll(eventBuilder(this.activeIndicator, previousIndicator));
         },
         /**
          * Returns id of the current regionset
