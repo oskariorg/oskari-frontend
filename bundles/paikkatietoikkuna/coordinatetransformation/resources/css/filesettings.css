@@ -31,10 +31,10 @@
     float: right;
     width: 12em;
 }
-.cancel {
+.coordinate-form-cancel {
     clear: left;
     float: left;
 }
-.done {
+.coordinate-form-done {
     float:right;
 }
