@@ -377,10 +377,10 @@ Oskari.clazz.define(
                             me._getLocalization('basket-license-name'));
                         licenseLink.attr('href',me._sandbox.getLocalizedProperty(me.instance.conf.licenseUrl) ||
                             me.instance.conf.licenseUrl);
-                   /* } else {
+                    }/* else {
                         licenseTitle.remove();
                         licenseLink.remove();
-                    } */
+                    }*/
 
                     basketEl.find('.icon-close-dark').click(function(event){
                         var basketEl = jQuery(this).parents('.download-basket__component');
