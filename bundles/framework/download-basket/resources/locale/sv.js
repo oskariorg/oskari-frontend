@@ -45,6 +45,7 @@ Oskari.registerLocalization({
                 "basket-cropping-layer-title" : "Avgränsningsdata: ",
                 "basket-license-title" : "Bruksanvisning: ",
                 "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –licens"
+                "basket-license-url" : "https://creativecommons.org/licenses/by/4.0/"
             }
         }
     }

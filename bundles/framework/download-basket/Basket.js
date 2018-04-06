@@ -363,6 +363,9 @@ Oskari.clazz.define(
                     basketEl.find('.download-basket__component-layer-name').text(basketItem.layerNameLang);
                     basketEl.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
                     basketEl.find('.basket__content-cropping>span').text(basketItem.cropLayerNameLang);
+                    
+                    basketEl.find('.basket__content-license>strong').text(me._getLocalization('basket-license-title'));
+                    basketEl.find('.basket__content-license>a').text(me._getLocalization('basket-license-name')).attr("href",me._getLocalization('basket-license-url'));
 
                     // License link handling
                     var licenseTitle = basketEl.find('.basket__content-license>strong');
@@ -374,10 +377,10 @@ Oskari.clazz.define(
                             me._getLocalization('basket-license-name'));
                         licenseLink.attr('href',me._sandbox.getLocalizedProperty(me.instance.conf.licenseUrl) ||
                             me.instance.conf.licenseUrl);
-                    } else {
+                   /* } else {
                         licenseTitle.remove();
                         licenseLink.remove();
-                    }
+                    } */
 
                     basketEl.find('.icon-close-dark').click(function(event){
                         var basketEl = jQuery(this).parents('.download-basket__component');
