@@ -11,9 +11,10 @@ function(instance) {
     this.sandbox = instance.sandbox;
     this.urls = {};
 
-    var ajaxUrl = this.sandbox.getAjaxUrl() + '&action_route=';
-    this.urls.create = (ajaxUrl + 'CreateUserLayer');
-    this.urls.get = (ajaxUrl + 'GetUserLayers');
+    var ajaxUrl = this.sandbox.getAjaxUrl() + 'action_route=';
+    var srsName = this.sandbox.getMap().getSrsName();
+    this.urls.create = ajaxUrl + 'CreateUserLayer&srs=' + srsName;
+    this.urls.get = ajaxUrl + 'GetUserLayers&srs=' + srsName;
     this.urls.edit = (ajaxUrl + 'EditUserLayer');
     this.urls.getStyle = (ajaxUrl + 'GetUserLayerStyle');
 }, {
@@ -39,7 +40,7 @@ function(instance) {
      * @return {String}
      */
     getFileImportUrl: function() {
-        return this.urls.create+'&epsg='+this.sandbox.getMap().getSrsName();
+        return this.urls.create;
     },
     /**
      * Returns the url used to update layer.
