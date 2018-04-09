@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
          */
         readFileData: function( fileData ) {
             var dataJson = this.dataHandler.validateData( fileData );
-            this.updateCoordinateData( dataJson );
+            this.updateCoordinateData( "import", dataJson );
         },
         getSelectionValue: function ( selectListInstance ) {
             return selectListInstance.getValue();
