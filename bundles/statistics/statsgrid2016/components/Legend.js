@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 indicatorMenu.render( headerContainer );
                 indicatorMenu.setWidth('94%');
                 headerContainer.append(edit);
-                me._createEditClassificationListener(container.find('.edit-legend'));
+                me._createEditClassificationListener();
             } else {
                 me._getLabels(activeIndicator, function (labels) {
                     var header = me.__templates.activeHeader({
@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                     headerContainer.empty();
                     headerContainer.append(header);
                     headerContainer.append(edit);
-                    me._createEditClassificationListener(container.find('.edit-legend'));
+                    me._createEditClassificationListener();
                 }); //_getLabels
             }
             if(!classificationOpts) {
