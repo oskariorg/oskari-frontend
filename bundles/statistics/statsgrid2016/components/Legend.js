@@ -102,14 +102,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 indicatorMenu.render( headerContainer );
                 indicatorMenu.setWidth('94%');
                 headerContainer.append(edit);
+                me._createEditClassificationListener(container.find('.edit-legend'));
             } else {
                 me._getLabels(activeIndicator, function (labels) {
                     var header = me.__templates.activeHeader({
                         label: labels.label
                     });
                     var edit = me.__templates.edit.clone();
-                    headerContainer.append( header );
+                    headerContainer.empty();
+                    headerContainer.append(header);
                     headerContainer.append(edit);
+                    me._createEditClassificationListener(container.find('.edit-legend'));
                 }); //_getLabels
             }
             if(!classificationOpts) {
@@ -120,8 +123,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             }
             //legend
             legendContainer.html( legendUI );
+        }); //_createLegend
+    },
 
-            var edit = container.find('.edit-legend');
+    /****** PRIVATE METHODS ******/
+    /**
+     * Adds functionality to edit classification button.
+     */
+    _createEditClassificationListener : function() {
+        var edit = this._element.find('.edit-legend');
+        if (edit) {
+            var me = this;
             if ( Object.keys(me._renderState).length > 0 ) {
                 if ( me._renderState.panels[me._accordion.panels[0].getTitle()] ) {
                     edit.addClass('edit-active');
@@ -142,10 +154,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                         panel.open();
                     }
                 });
-            }); //edit
-        }); //_createLegend
+            });
+        }
     },
-    /****** PRIVATE METHODS ******/
     /**
      * Triggers a new render when needed (if render was called before previous was finished)
      */
