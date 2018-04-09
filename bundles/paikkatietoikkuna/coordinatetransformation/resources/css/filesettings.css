@@ -2,14 +2,12 @@
     width: 39em;
     display: inline-block;
 }
- .filerow, .formatRow, .decimalSeparator, .headerLineCount {
+.oskari-coordinate-form .filerow, .formatRow, .decimalSeparator, .headerLineCount {
     float:left;
-}
- .filerow, .formatRow, .decimalSeparator, .headerLineCount {
     clear: left;
     padding-top: 0.875em; 
 }
-.title {
+.oskari-coordinate-form .title {
     font-weight: bold;
     word-break: break-word;
     width: 12em !important;
@@ -17,24 +15,24 @@
     float: left;
     padding-right: 0.4em;
 }
-.lbl > .chkbox {
+.oskari-coordinate-form .lbl > .chkbox {
     float: left;
 }
-.lbl {
+.oskari-coordinate-form .lbl {
     float: right;
     padding-left: 3em;
 }
-.settingsSelect {
+.oskari-coordinate-form .settingsSelect {
     float: left;
 }
-.settingsSelect > select {
+.oskari-coordinate-form .settingsSelect > select {
     float: right;
     width: 12em;
 }
-.coordinate-form-cancel {
+.oskari-coordinate-form .cancel {
     clear: left;
     float: left;
 }
-.coordinate-form-done {
+.oskari-coordinate-form .done {
     float:right;
 }

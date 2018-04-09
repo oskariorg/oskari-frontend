@@ -41,11 +41,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                     '<b class="title">${headercount}</b>'+
                                     '<input id="headerrow" type="number"> '+
                                 '</div>'+
-                                    '<input id="overlay-btn" class="coordinate-form-cancel" type="button" value="${cancel} " />' +
+                                    '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
                                     '<% if(typeof(fileExport) !== "undefined") { %>'+
-                                        '<input id="overlay-btn" class="coordinate-form-done" type="button" value="${fileExport}" />'+
+                                        '<input id="overlay-btn" class="done" type="button" value="${fileExport}" />'+
                                     '<% } else { %>'+
-                                        '<input id="overlay-btn" class="coordinate-form-done" type="button" value="${done}" />' +
+                                        '<input id="overlay-btn" class="done" type="button" value="${done}" />' +
                                     '<% } %>' +
                                 '</div>' +
                                 '</div>'
