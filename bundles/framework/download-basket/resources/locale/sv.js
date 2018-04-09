@@ -44,12 +44,8 @@ Oskari.registerLocalization({
                 "basket-email-will-be" : "u får till den givna e-postadressen en länk genom vilken du kommer åt att ladda ner din data. Det kan dröja en stund att skicka länken för nedladdning ifall din data är stor.",
                 "basket-cropping-layer-title" : "Avgränsningsdata: ",
                 "basket-license-title" : "Bruksanvisning: ",
-<<<<<<< HEAD
                 "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –licens",
                 "basket-license-url" : "https://creativecommons.org/licenses/by/4.0/"
-=======
-                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –licens"
->>>>>>> branch 'master' of https://github.com/oskariorg/oskari-frontend.git
             }
         }
     }
