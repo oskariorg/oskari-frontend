@@ -177,6 +177,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/CheckboxInput.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/divmanazer/component/ColorPickerInput.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/FileInput.js"
             }, {
                 "type": "text/javascript",
@@ -324,7 +327,14 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "type": "text/javascript",
                 "expose": "d3",
                 "src": "../../../../libraries/d3/d3.min.js"
-            } 
+            }, {
+                // NOTE! EXTERNAL LIBRARY!
+                "type" : "text/javascript",
+                "src" : "../../../../libraries/spectrum/spectrum-min.js"
+            }, {
+                "type" : "text/css",
+                "src" : "../../../../libraries/spectrum/spectrum.css"
+            }
         ],
         "locales": [{
             "lang": "af",

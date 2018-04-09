@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             rangeStart: null,
             rangeEnd: null,
             isAnimating: false,
-            frameInterval: 1000,
+            frameInterval: 2000,
             stepInterval: 'minutes'
         };
         me._setFrameInterval(me._uiState.frameInterval); // sets throttle for animation, too

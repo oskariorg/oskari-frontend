@@ -1,8 +1,8 @@
-div.layerselection2 { 
+div.layerselection2 {
 	.layer.selected {
 		border: 1pt solid #c0d0e0;
 		margin: 0 5px 5px 0;
-		height: unquote("70px\\9"); /*IE9 */ 
+		height: unquote("70px\\9"); /*IE9 */
 
 		div.layer-info {
 			background-color: #FFF;
@@ -17,7 +17,7 @@ div.layerselection2 {
 				width: 16px;
 				background-repeat: no-repeat;
 			}
-			
+
 			div.layer-title {
 				cursor: move;
 				display: inline;
@@ -60,7 +60,7 @@ div.layerselection2 {
 				div.layer-opacity {
 					display: inline-block;
 					background-image: url('../images/opacity_slider.png');
-					background-repeat: no-repeat;    
+					background-repeat: no-repeat;
 
 					div.opacity-slider input {
 						padding: 1px;
@@ -76,7 +76,7 @@ div.layerselection2 {
 				div {
 					float: left;
 					margin-right: 5px;
-					
+
 					&.layer-rights, &.object-data {
 						padding-top: 2px;
 					}
@@ -96,7 +96,7 @@ div.layerselection2 {
 		}
 
 	}
-	
+
 	ul.selectedLayersList {
 		height: 100%;
 		width: 100%;
@@ -131,7 +131,7 @@ div.analyse-filter-popup-content div.filter-option {
             min-width: 16px;
             text-align: center;
         }
-        
+
     }
 
     &.filter-option-aggregate {

@@ -136,6 +136,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
          */
         _handleFinishedDrawingEvent: function (event) {
             this.drawing = event.getGeoJson();
+            if (this.drawing.features && this.drawing.features.length === 0){
+                //no features, user clicks save my place without valid geometry
+                this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
+                //should we start new drawing?? and inform user that line should have atleast 2 points and area 3 points
+                return;
+            }
             //TODO: closestPoint or centroid
             var location = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').getClosestPointFromGeoJSON(this.drawing);
             this.drawingData = event.getData();
@@ -193,7 +199,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             //set measurement result from drawing
             } else {
                 this._setMeasurementResult(this.drawingData);
-            }            
+            }
 
             var formEl = me.form.getForm(categories),
                 content = [{
@@ -241,6 +247,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             sandbox.request(me.getName(), request);
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[data-name=placename]').focus();
+
+            // Here need add bindings
+            me.form.bindEvents();
         },
         /**
          * @method _getDrawModeFromGeometry
@@ -411,7 +420,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             place.setAttentionText(Oskari.util.sanitize(values.attention_text));
             place.setCategoryId(values.category);
             if (drawing){
-                place.setDrawToolsMultiGeometry(drawing); 
+                place.setDrawToolsMultiGeometry(drawing);
             } else if (this.tempGeom) {
                 place.setGeometry(this.tempGeom); // if not edited
             }

@@ -1,0 +1,94 @@
+.oskari-projection-changer {
+    height:36px;
+    width: 36px;
+    background-image: url("../images/projection-light.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    background-color: #fff;
+    margin-bottom: 8.5px !important;
+    cursor: pointer;
+}
+.oskari-map-projection {
+    width: 600px;
+    display: flex;
+    display: -ms-flex;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+.projection-highlight {
+    border: 2px solid rgb(12,60,98);
+}
+.projection-errorlist {
+    padding: 5px;
+
+}
+/*
+ * Card
+ */
+.projection-card {
+    height: 160px;
+    margin: 3px;
+    margin-bottom: 10px;
+    flex: 20%;
+    -ms-flex: 20%;
+    padding: 15px;
+}
+.projection-info {
+    cursor: pointer;
+}
+.projection-warning {
+    cursor: pointer;
+}
+.projection-card > .info-row {
+    width: inherit;
+    display: flex;
+    display: -ms-flex;
+    justify-content: center;
+    align-items: center;
+}
+.card-image {
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    height: auto; 
+    width: auto; 
+    max-width: 145px; 
+    max-height: 145px;
+}
+.projection-preview-image {
+    padding-top:5px;
+}
+
+.projection-mobile {
+    width: 250px;
+    height: 650px;
+    display: flex;
+    display: -ms-flex;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -webkit-flex;
+    -ms-box-orient: horizontal;
+
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    overflow: scroll;
+    align-items: center;
+    justify-content: center;
+    -webkit-justify-content: center; 
+    overflow-x: hidden;
+}
+.card-mobile {
+    height: 160px;
+    margin: 3px;
+    margin-bottom: 10px;
+    flex: 0 !important;
+    -ms-flex: 0 !important;
+    padding: 15px;
+} 

@@ -1,9 +1,9 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "fi",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
         "title": "Metatieto",
+        "tooltip": "Näytä metatiedot",
         "desc": "",
         "layer": {
             "name": "Metatieto",
@@ -388,23 +388,23 @@ Oskari.registerLocalization(
             "qualityContent": {
                 "qualityPassTrue": "Aineisto on sääntöjenmukainen.",
                 "qualityPassFalse": "Aineisto ei ole sääntöjenmukainen.",
-                "nameOfMeasure" : "Laatumittarin nimi",
-                "citationTitle" : "Nimi",
-                "measureIdentificationCode" : "Laatumittarin tunniste koodi",
-                "measureIdentificationAuthorization" : "Laatumittarin tunniste tunnistautuminen",
-                "measureDescription" : "Laatumittarin kuvailu",
-                "evaluationMethodType" : "Arviointimenetelmän tyyppi",
-                "evaluationMethodDescription" : "Arviointimenetelmän kuvailu",
-                "evaluationProcedure" : "Arviointimenettelyn viitetiedot",
-                "dateTime" : "Päivämäärä ja aika",
-                "specification" : "Tietomäärittelyn viitetiedot",
-                "explanation" : "Selitys",
-                "valueType" : "Laatutuloksen tyyppi",
-                "valueUnit" : "Laatutuloksen yksikkö",
-                "errorStatistic" : "Tilastollinen menetelmä",
-                "value" : "Arvo",
-                "conformanceResult" : "Vaatimuksenmukaisuus",
-                "quantitativeResult" : "Mitattu laatutulos"
+                "nameOfMeasure": "Laatumittarin nimi",
+                "citationTitle": "Nimi",
+                "measureIdentificationCode": "Laatumittarin tunniste koodi",
+                "measureIdentificationAuthorization": "Laatumittarin tunniste tunnistautuminen",
+                "measureDescription": "Laatumittarin kuvailu",
+                "evaluationMethodType": "Arviointimenetelmän tyyppi",
+                "evaluationMethodDescription": "Arviointimenetelmän kuvailu",
+                "evaluationProcedure": "Arviointimenettelyn viitetiedot",
+                "dateTime": "Päivämäärä ja aika",
+                "specification": "Tietomäärittelyn viitetiedot",
+                "explanation": "Selitys",
+                "valueType": "Laatutuloksen tyyppi",
+                "valueUnit": "Laatutuloksen yksikkö",
+                "errorStatistic": "Tilastollinen menetelmä",
+                "value": "Arvo",
+                "conformanceResult": "Vaatimuksenmukaisuus",
+                "quantitativeResult": "Mitattu laatutulos"
             },
             "heading": {
                 "abstractTextData": "Aineiston tiivistelmä",

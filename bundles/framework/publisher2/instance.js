@@ -20,12 +20,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         var conf = this.getConfiguration();
         conf.name = 'Publisher2';
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
-        if( !!this.configurationHasCustomElement() ) {
-            conf.tileClazz = null;
-            this.customElementClickHandler();
-        }
         this.defaultConf = conf;
         this.publisher = null;
+        this.customTileRef = null;
     }, {
         /**
          * @static
@@ -50,6 +47,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 return;
             }
             return handler.apply(this, [event]);
+        },
+        init: function () {
+            var tileElem = jQuery(this.getConfiguration().tileElement);
+            if(tileElem.length && tileElem.length !== 0) {
+                this.customTileRef = this.getConfiguration().tileElement;
+                this.conf.tileClazz = null;
+                this.customElementClickHandler(tileElem);
+            }
         },
 
         /**
@@ -100,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var me = this;
             var sandbox = this.getSandbox();
             var loc = this.getLocalization();
-            
+
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
             // create and register request handler
             var reqHandler = Oskari.clazz.create(
@@ -118,13 +123,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 });
 
                 // Add layerlist filter button
-                Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
-                        loc.layerFilter.buttons.publishable,
-                        loc.layerFilter.tooltips.publishable,
-                        'layer-publishable',
-                        'layer-publishable-disabled',
-                        'publishable'
-                ]);
+                var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+                if(layerlistService) {
+                    layerlistService.registerLayerlistFilterButton(loc.layerFilter.buttons.publishable,
+                    loc.layerFilter.tooltips.publishable,
+                    {
+                        active: 'layer-publishable',
+                        deactive: 'layer-publishable-disabled'
+                    },
+                    'publishable');
+                }
             }
             this._registerForGuidedTour();
         },
@@ -135,14 +143,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             return this.__service;
         },
         /**
-         * @return {String} reference to element-id to use instead of tile as bundle ui-element
+         * @return {String} reference to element-id to use instead of tile as bundle ui-element, returns null if isn't set in conf
          */
-        configurationHasCustomElement: function () {
-             return this.getConfiguration().tileElement;
+        getCustomTileRef: function () {
+             return this.customTileRef;
         },
-        customElementClickHandler: function () {
+         /**
+         * @method customElementClickHandler
+         * @param {jQuery} tileElement
+         */
+        customElementClickHandler: function (tileElement) {
             var me = this;
-            jQuery( this.configurationHasCustomElement() ).on("click", function () {
+            tileElement.on("click", function () {
                 me.getSandbox().postRequestByName(
                     'userinterface.UpdateExtensionRequest', [me, 'toggle']
                 );
@@ -165,8 +177,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
-            if ( !!this.configurationHasCustomElement() ) {
-                 blnEnabled ? jQuery( this.configurationHasCustomElement() ).addClass('activePublish') : jQuery( this.configurationHasCustomElement() ).removeClass('activePublish');
+            if ( this.getCustomTileRef() ) {
+                 blnEnabled ? jQuery( this.getCustomTileRef() ).addClass('activePublish') : jQuery( this.getCustomTileRef() ).removeClass('activePublish');
             }
             if (blnEnabled) {
                 var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');

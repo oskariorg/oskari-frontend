@@ -3,29 +3,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.element = null;
     this.sandbox = this.instance.getSandbox();
     this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this._extraFeatures = Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures', this.instance.getSandbox(), this.instance.getLocalization().panels.extraFeatures, this);
+    this._extraFeatures = Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures',
+        this.instance.getSandbox(), this.instance.getLocalization().panels.extraFeatures, this);
     var me = this;
-    this.on('show', function() {
-        if(!me.getElement()) {
+    this.on('show', function () {
+        if (!me.getElement()) {
             me.createUi();
             me.addClass('statsgrid-search-flyout');
             me.setContent(me.getElement());
         }
     });
 }, {
-    setElement: function ( el ) {
+    setElement: function (el) {
         this.element = el;
     },
     getElement: function () {
         return this.element;
     },
     clearUi: function () {
-        if( this.element === null ) {
+        if (this.element === null) {
             return;
         }
         this.element.empty();
     },
-    getExtraFeatures: function(){
+    getExtraFeatures: function () {
         return this._extraFeatures;
     },
     /**
@@ -37,10 +38,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var locale = this.instance.getLocalization();
         // empties all
         this.clearUi();
-        this.setElement( jQuery( '<div class="statsgrid-search-container"></div>' ) );
+        this.setElement(jQuery('<div class="statsgrid-search-container"></div>'));
         var title = locale.flyout.title;
         var parent = this.getElement().parent().parent();
-        if(isEmbedded) {
+        if (isEmbedded) {
             parent.find('.oskari-flyout-title p').html(title);
             // Remove close button from published
             parent.find('.oskari-flyouttools').hide();
@@ -49,21 +50,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             parent.find('.oskari-flyout-title p').html(title);
             parent.find('.oskari-flyouttools').show();
         }
-        this.showLegend(!isEmbedded);
         this.addContent(this.getElement(), isEmbedded);
     },
-    addContent : function (el, isEmbedded) {
-        var me = this;
-        // no search for embedded map
-        if(isEmbedded) {
+    addContent: function (el, isEmbedded) {
+        if (isEmbedded) {
+            // no search for embedded map
             return;
         }
-        var service = me.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-        var state = service.getStateService();
-        el.append(me.getNewSearchElement());
-        el.append(me.getExtraFeaturesElement());
+        el.append(this.getNewSearchElement());
+        el.append(this.getExtraFeaturesElement());
     },
-    getNewSearchElement: function(){
+    getNewSearchElement: function () {
         var me = this;
         var container = jQuery('<div></div>');
         var locale = this.instance.getLocalization();
@@ -77,12 +74,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         btn.setEnabled(false);
         btn.insertTo(container);
 
-        btn.setHandler(function(event) {
+        btn.setHandler(function (event) {
             event.stopPropagation();
             var values = selectionComponent.getValues();
 
             var added = me.service.getStateService().addIndicator(values.datasource, values.indicator, values.selections);
-            if(added === false) {
+            if (added === false) {
                 // already added, set as active instead
                 var hash = me.service.getStateService().getHash(values.datasource, values.indicator.selections);
                 me.service.getStateService().setActiveIndicator(hash);
@@ -91,71 +88,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
             var extraValues = me.getExtraFeatures().getValues();
 
-            if(extraValues.openTable) {
-                me.instance.getTile().openExtension('table');
+            if (extraValues.openTable) {
+                me.instance.getFlyoutManager().open('table');
             }
-            if(extraValues.openDiagram) {
-                me.instance.getTile().openExtension('diagram');
+            if (extraValues.openDiagram) {
+                me.instance.getFlyoutManager().open('diagram');
             }
         });
 
-        selectionComponent.on('indicator.changed', function(enabled){
+        selectionComponent.on('indicator.changed', function (enabled) {
             btn.setEnabled(enabled);
         });
 
         return container;
     },
-    getExtraFeaturesElement: function(){
-        var me = this;
+    getExtraFeaturesElement: function () {
         var container = jQuery('<div class="extrafeatures"><div class="title"></div><div class="content"></div></div>');
         var locale = this.instance.getLocalization();
 
         container.find('.title').html(locale.panels.extraFeatures.title);
         container.find('.content').append(this._extraFeatures.getPanelContent());
         return container;
-    },
-     getLegendFlyout : function() {
-        if(this.__legendFlyout) {
-            return this.__legendFlyout;
-        }
-        var locale = this.instance.getLocalization().legend;
-        var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', locale.title, {
-            width: 'auto',
-            cls: 'statsgrid-legend-flyout'
-        });
-        flyout.makeDraggable({
-            handle : '.oskari-flyouttoolbar, .statsgrid-legend-container > .header',
-            scroll : false
-        });
-        this.__legendFlyout = flyout;
-        // render content
-        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', this.instance.getSandbox(), this.instance.getLocalization());
-        var container = jQuery('<div/>');
-        this.__legend.render(container);
-        flyout.setContent(container);
-        return this.__legendFlyout;
-    },
-    showLegend : function(enabled) {
-        var me = this;
-        if(!enabled) {
-            me.removeSideTools();
-            return;
-        }
-        var locale = this.instance.getLocalization();
-        me.addSideTool(locale.legend.title, function(el, bounds) {
-            // lazy render
-            var flyout = me.getLegendFlyout();
-            if(flyout.isVisible()) {
-                flyout.hide();
-            } else {
-                // show and reset position
-                flyout.move(bounds.right, bounds.top, true);
-                // init legend panel open when the flyout is opened
-                me.__legend.openLegendPanel();
-                flyout.show();
-                flyout.bringToTop();
-            }
-        });
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

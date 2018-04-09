@@ -69,6 +69,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
                     colors: me.getColorScale()
                 });
             }
+
+            var labels = me.getChartHeaderElement();
+            el.parent().parent().find('.axisLabel').append(labels);
+
             me._renderDone();
         });
     },
@@ -81,6 +85,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
         this._renderState = {};
         if(state.repaint) {
             this.updateUI();
+        }
+    },
+    getChartHeaderElement: function () {
+        if( this.getChartInstance().chartIsInitialized() ) {
+            return this.getChartInstance().getGraphAxisLabels();
+        } else {
+            return null;
         }
     },
     /**
@@ -140,6 +151,54 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function(service, loc
             });
             callback(indicatorData);
         });
+    },
+    /**
+     * @method createDataSortOption
+     * creates an SelectList with options for sorting the data
+     */
+    createDataSortOption: function ( container) {
+        var me = this;
+        var dropdownOptions = {
+            placeholder_text: this.loc.datacharts.sorting.desc,
+            allow_single_deselect: true,
+            disable_search_threshold: 10,
+            no_results_text: "locale.panels.newSearch.noResults",
+            width: '100%'
+        };
+        //hardcoded
+        var sortTypes = [
+            {
+                id: "value-descending",
+                title: this.loc.datacharts.sorting['value-descending']
+            },
+            {
+                id: "value-ascending",
+                title: this.loc.datacharts.sorting['value-ascending']
+            },
+            {
+                id: "name-ascending",
+                title: this.loc.datacharts.sorting['name-ascending']
+            },
+            {
+                id: "name-descending",
+                title: this.loc.datacharts.sorting['name-descending']
+            },
+        ];
+        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');  
+        var dropdown = select.create(sortTypes, dropdownOptions);
+
+        dropdown.css({
+            width: '180px',
+            marginLeft: '10px'
+        });
+
+        select.adjustChosen();
+
+        dropdown.on('change', function(event) {
+            event.stopPropagation();
+            me.getChartInstance().sortDataByType( select.getValue() );
+        });
+        container.append(dropdown); 
     },
     /**
      * @method getColorScale

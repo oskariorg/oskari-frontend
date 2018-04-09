@@ -9,51 +9,38 @@
                 }
             }
         }, {
-            "bundlename": "openlayers-default-theme",
-            "metadata": {
-                "Import-Bundle": {
-                    "openlayers-default-theme": {
-                        "bundlePath": "../../../packages/openlayers/bundle/"
-                    },
-                    "openlayers-full-map": {
-                        "bundlePath": "../../../packages/openlayers/bundle/"
-                    }
-                }
-            }
-        }, {
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
-                    "mapfull": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                    "maparcgis": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapmodule-plugin": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                    "mapmodule": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapwmts": {
+                    "oskariui": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
                     "mapwfs2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "maparcgis": {
-                        "bundlePath": "../../../packages/arcgis/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
                     "ui-components": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
-                    "oskariui": {
+                    "mapfull": {
                         "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapwmts": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
-
                 }
             }
         }, {
-            "bundlename": "divmanazer",
-            "metadata": {
-                "Import-Bundle": {
-                    "divmanazer": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+            "bundlename" : "drawtools",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "drawtools" : {
+                        "bundlePath" : "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -71,7 +58,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "toolbar": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -80,7 +67,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "infobox": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -98,7 +85,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "metadatacatalogue": {
-                        "bundlePath": "../../../packages/catalogue/bundle/"
+                        "bundlePath": "../../../packages/catalogue/"
                     }
                 }
             }
@@ -248,11 +235,20 @@
                 }
             }
         }, {
+            "bundlename": "asdi-projection-change",
+            "metadata": {
+                "Import-Bundle": {
+                    "asdi-projection-change": {
+                        "bundlePath": "../../../packages/asdi/bundle/"
+                    }
+                }
+            }
+        }, {
             "bundlename": "featuredata2",
             "metadata": {
                 "Import-Bundle": {
                     "featuredata2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/framework/"
                     }
                 }
             }

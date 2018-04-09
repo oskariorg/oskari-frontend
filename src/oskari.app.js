@@ -221,6 +221,14 @@ jQuery.ajaxSetup({ cache: false });
          */
         stopApplication: function () {
             throw new Error('Not supported');
+        },
+
+        /**
+         * @method getSystemDefaultViews 
+         * @return {Object[]} default view objects Array
+         */
+        getSystemDefaultViews: function () {
+            return this.appSetup.env.defaultApps || [];
         }
     };
     o.app = new Bundle_facade();

@@ -33,6 +33,14 @@ Oskari.clazz.define(
             'top':'bottom-center',
             'bottom':'top-center'
         };
+        // popup max size = map size * 0.7
+        me._viewportMargins = {
+            'top': 60,
+            'right': 100,
+            'bottom': 40,
+            'left': 50,
+            'isInViewport': 20
+        };
 
         me.log = Oskari.log('Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin');
     }, {
@@ -167,7 +175,6 @@ Oskari.clazz.define(
                 popupType,
                 popupDOM,
                 popup;
-
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
 
             if(isMarker){
@@ -230,16 +237,13 @@ Oskari.clazz.define(
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
-                    //start with ol default positioning
+                    //start with null positioning
                     positioning: null,
-                    offset: [offsetX, offsetY],
-                    autoPan: true
+                    offset: [offsetX, offsetY]
                 });
-
                 mapModule.getMap().addOverlay(popup);
                 jQuery(popup.getElement()).html(popupContentHtml);
-
-                setTimeout(me._panMapToShowPopup.bind(me, lonlatArray), 0);
+                setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
 
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
@@ -312,6 +316,7 @@ Oskari.clazz.define(
                     }
                     //update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3)
                     popup.setPositioning(positioning);
+
                 } else {
                     me._adaptPopupSize(id, refresh);
                 }
@@ -658,36 +663,79 @@ Oskari.clazz.define(
          * Pans map if gfi popup would be out of screen
          * @param {Array} lonlat where to show the popup
          */
-        _panMapToShowPopup: function (lonlatArray) {
-            var me = this,
-                pixels = me.getMapModule().getPixelFromCoordinate(lonlatArray),
-                size = me.getMapModule().getSize(),
-                width = size.width - 128, // add some safety margin here so the popup close button won't go under the zoombar...
-                height = size.height - 128;
-            // if infobox would be out of screen
-            // -> move map to make infobox visible on screen
-            var panx = 0,
-                pany = 0,
-                popup = jQuery('.olPopup'),
-                infoboxWidth = popup.width(),
-                infoboxHeight = popup.height();
+        _panMapToShowPopup: function (lonlatArray, positioning, margins) {
+            var margins = margins || this._viewportMargins;
+            // don't try to pan the map if gfi popup position isn't in the viewport (extended with isInViewport margin)
+            if (!this.getMapModule().isLonLatInViewport(lonlatArray, margins.isInViewport)){
+                return;
+            }
 
-            if (pixels.x + infoboxWidth > width) {
-                if (infoboxWidth > width) {
-                    panx = -pixels.x;
-                } else {
-                    panx = width - (pixels.x + infoboxWidth);
+            var me = this,
+                posClasses = me._positionClasses, // supported ol.OverlayPositionings
+                pixels = me.getMapModule().getPixelFromCoordinate(lonlatArray),
+                mapSize = me.getMapModule().getSize(),
+                panY = 0,
+                panX = 0,
+                positionX = 'left', // default ('no-position-info')
+                positionY = 'top', // default ('no-position-info')
+                popup = jQuery('.olPopup'),
+                popupX = popup.width(),
+                popupY = popup.height();
+            //WORKAROUND: pixels should be in the viewport.
+            //if them aren't, then mapmove isn't ended before getPixelFromCoordinate called
+            //and pixels aren't calculated correctly -> don't try to pan map
+            var margin = margins.isInViewport / 2;
+            if (pixels.y > mapSize.height + margin || pixels.y < -margin || pixels.x > mapSize.width + margin || pixels.x < -margin){
+                return;
+            }
+
+            //If supported ol.OverlayPositioning is used, use it instead of default values
+            Object.keys(posClasses).forEach(function (pos){
+                if (positioning === posClasses[pos]){
+                    var popupDirection = positioning.split("-");
+                    positionY = popupDirection[0];
+                    positionX = popupDirection[1];
+                }
+            });
+            //TODO: popupHeaderArrow and header sizes are not included
+            // Check panY
+            if (positionY === "top"){
+                if (pixels.y + popupY + margins.bottom > mapSize.height){
+                    panY = (pixels.y + popupY + margins.bottom) - mapSize.height;
+                // check that we are not "over the top"
+                } else if (pixels.y < margins.top){
+                    panY = pixels.y - margins.top;
+                }
+            }else if (positionY === "center"){
+                if (pixels.y + (popupY/2) + margins.bottom > mapSize.height){
+                    panY = (pixels.y + popupY/2 + margins.bottom) - mapSize.height;
+                } else if (pixels.y - popupY/2 - margins.top < 0 ){
+                    panY = pixels.y - popupY/2 - margins.top;
+                }
+            }else if (positionY === "bottom"){
+                if (pixels.y - popupY - margins.top < 0){
+                    panY =  pixels.y - popupY - margins.top;
                 }
             }
-            if (pixels.y + infoboxHeight > height) {
-                pany = height - (pixels.y + infoboxHeight);
+            // Check panX
+            if (positionX === "left"){
+                if (pixels.x + popupX + margins.right  > mapSize.width){
+                    panX = (pixels.x + popupX + margins.right) - mapSize.width;
+                }
+            }else if (positionX === "center"){
+                if (pixels.x + popupX/2 + margins.right > mapSize.width){
+                    panX = (pixels.x + popupX/2 + margins.right) - mapSize.width;
+                } else if (pixels.x - popupX/2 - margins.left < 0 ){
+                    panX = pixels.x - popupX/2 - margins.left;
+                }
+            }else if (positionX === "right"){
+                if (pixels.x - popupX - margins.left < 0 ){
+                    panX = pixels.x - popupX - margins.left;
+                }
             }
-            // check that we are not "over the top"
-            else if (pixels.y < 70) {
-                pany = 70;
-            }
-            if (panx !== 0 || pany !== 0) {
-                me.getMapModule().panMapByPixels(-panx, -pany);
+            // Pan map if needed
+            if (panX !== 0 || panY !== 0) {
+                me.getMapModule().panMapByPixels(panX, panY);
             }
         },
 

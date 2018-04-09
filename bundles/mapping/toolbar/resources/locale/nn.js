@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Måleresultat",
             "close": "Avbryt",
             "guidance": {
-                "measureline": "Teikn ei line og mål avstanden på kartet. Klikk startpunktet på lina for å starte målinga. Klikk deretter på alle knekkpunkta på lina. Dobbelklikk på endepunktet for å fullføre målinga.",
-                "measurearea": "Teikn eit areal og mål flaten på kartet. Klikk startpunktet på avgrensingslina for å starte målinga. Klikk deretter på alle knekkpunkta på lina. Dobbelklikk på endepunktet for å fullføre målinga."
+                "measureline": "Teikn ei line og mål avstanden på kartet. Klikk startpunktet på lina for å starte målinga. Klikk deretter på alle knekkpunkta på lina.",
+                "measurearea": "Teikn eit areal og mål flaten på kartet. Klikk startpunktet på avgrensingslina for å starte målinga. Klikk deretter på alle knekkpunkta på lina."
             }
         }
     }

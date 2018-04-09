@@ -1,5 +1,58 @@
 # Release Notes
 
+## 1.46.0
+
+For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/7?closed=1
+
+### Core changes
+
+- Oskari.app.getSystemDefaultViews() has been added. It returns an array of basic appsetup information that can be used to detect alternative default apps.
+For example if the server instance has different appsetups for different projection setups the options can be found with this function although it can be used to just provide different apps that are available in the system.
+- Bundles have been updated to work with jQuery 1.10.x (previously 1.7.x)
+- Lots of unused code/libraries have been removed.
+- Added some polyfills
+
+### Projection support
+
+- Maplayer listing and selected layers now indicate if a layer does not support the current map projection (requires the information from server).
+- Admin functionality now shows information about projections layers support (based on layer capabilities response).
+- Admin functionality now has a new button to trigger capabilities update for a layer (previously triggered on layer information save).
+- The map publishing functionality now supports multiprojection setups.
+- Lists for saved views and embedded map edit links can now handle items that are not in the current map projection. Opening such view or editing a map will trigger a page reload.
+- Links now include an uuid that matches a system default appsetup that supports the current map projection. Basically meaning that links are no longer always pointing to the system default view.
+
+### Thematic maps
+
+- Lots of fine-tuning on the user interface
+- Tuning the dot presentation on thematic maps
+- It is now possible to include a diagram presentation in published thematic maps
+
+### Hierarchical layerselector
+
+- Layer handling have been changed to accommodate a hierarchical group setting for layers.
+- A new bundle 'framework/hierarchical-layerlist' has been added. Can be used as a drop-in replacement for current layerselector and layerselection bundles.
+- A new admin bundle 'admin/admin-hierarchical-layerlist' has been added. Can be used as a drop-in replacement for current layer admin bundle, but is only compatible with the new hierarchical-layerlist.
+
+### Misc
+
+- Users can now edit the name and style of an imported dataset (userlayer).
+- The map popup (infobox) now tries harder to handle the async nature of kinectic scrolling of OpenLayers 3+ based map. Basically sending a MapMoveRequest and ShowInfoBoxRequest next to each other should no longer move to map to entirely different location that was requested.
+- Performance improvements on layer handling for systems that have loads of layers
+- Fixes for download basket functionality.
+- The printing functionality has been changed to use the new server implementation.
+- Small glitches throughout the user interface has been squashed.
+- Fixed an issue where layer opacity was not handled properly on OpenLayers 3+ based mapmodule (published maps).
+- Layer metadata display has been improved
+
+## 1.45.1
+
+For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/8?closed=1
+
+- Myplaces drawing fixes to improve usability and interaction with GFI.
+- Doubleclicking the map while drawing to finish the sketch no longer zooms in.
+- WFS-highlights for layers that are not on the map can now be done as before.
+- Heatmap reacted to layer events for non-heatmap layers. This has been fixed.
+
 ## 1.45.0
 
 For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/4?closed=1

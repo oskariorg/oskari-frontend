@@ -25,8 +25,8 @@ Oskari.registerLocalization(
             "title": "Matjet",
             "close": "Anulo",
             "guidance": {
-                "measureline": "Mat një vijë në hartë. Kliko dy herë për ta ndalur matjen.",
-                "measurearea": "Mat një sipërfaqe në hartë. Kliko dy herë për ta ndalur matjen."
+                "measureline": "Mat një vijë në hartë.",
+                "measurearea": "Mat një sipërfaqe në hartë."
             }
         },
         "guidedTour": {

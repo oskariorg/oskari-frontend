@@ -373,7 +373,10 @@ Oskari.clazz.define(
             var layer = mapLayerService.findMapLayer(options.layerId);
             if(!layer) {
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
-                layer.setInspireName(options.layerInspireName || 'VECTOR');
+                layer.setGroups([{
+                    id: options.layerId,
+                    name: options.layerInspireName || 'VECTOR'
+                }]);
                 layer.setOrganizationName(options.layerOrganizationName || 'VECTOR');
                 layer.setOpacity(options.opacity || 100);
                 layer.setVisible(true);

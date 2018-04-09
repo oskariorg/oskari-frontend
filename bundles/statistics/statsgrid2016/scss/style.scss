@@ -103,7 +103,7 @@ $flyoutPadding: 16px;
     font-weight: normal;
 
     .header {
-        width: 90%;
+        width: 85%;
         position: absolute;
         top: 5px;
         .title {
@@ -349,7 +349,7 @@ div.oskari-flyout {
             }
 
             td {
-                text-align: left;
+                text-align: right;
             }
         }
 
@@ -508,6 +508,7 @@ div.oskari-flyout {
         }
 
         .oskari-datacharts {
+
             #graphic {
                 .bar {
                     fill: #5f89ad;
@@ -544,7 +545,20 @@ div.oskari-flyout {
     * ********************************************/
      &.statsgrid-diagram-flyout {
         .oskari-datacharts {
+            position: relative;
+            height: 700px;
             padding: $flyoutPadding;
+        }
+        .chart-controls {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 2%;
+           
+           .dropdown {
+                display: flex;
+                max-width: 100%;
+           }
         }
     }
 }
@@ -559,11 +573,49 @@ div.oskari-flyout {
     /* Float right to not overlap with other plugins */
     float: right;
 }
+.legend-transparent {
+   background-color: rgba(255,255,255,0.2)
+}
+.active-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+.active-header > .title {
+    width: 90%;
+    font-weight: bold;
+}
+.active-legend {
+    height:100%;
+}
 
+.edit-legend {
+    height: 16px;
+    width: 16px;
+    right: 0 !important;
+    background-image: url(../images/edit-dark.png);
+}
+.edit-active {
+    height: 16px;
+    width: 16px;
+    right: 0 !important;
+    background-image: url(../images/edit-hover.png);
+}
 .statsgrid-legend-container {
     background-color: #FFFFFF;
     width: 300px;
     font-size: 12px;
+
+    .classification-colors.value {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .visible-map-style-choropleth.flip-colors {
+        margin-left: 10px;
+        line-height: 27px;
+    }
 
     >div.header {
         background-color: #fdf8d9;
@@ -604,7 +656,7 @@ div.oskari-flyout {
         }
     }
 
-    >.accordion .accordion_panel {
+    > .classification .accordion .accordion_panel {
         border: 0px;
         overflow: visible;
 
@@ -638,13 +690,6 @@ div.oskari-flyout {
                 padding: 1px 2px;
             }
 
-            button.reverse-colors {
-                margin-top: 5px;
-                margin-left: 0;
-                width: 95%;
-                padding: 4px 5px;
-            }
-
             .point-size {
                 .minmaxlabels {
                     .min {
@@ -673,6 +718,10 @@ div.oskari-flyout {
 
     .statsgrid-svg {
         float: left;
+    }
+    .statsgrid-svg-legend {
+        margin: 0 auto;
+        width:50%;
     }
     .statsgrid-range {
         float: left;
@@ -735,6 +784,21 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         &.active {
             background-color: $lightColor;
             background-image: url('../images/table_light.png');
+        }
+    }
+     .diagram {
+        background-color: $darkColor;
+        float: left;
+        height: 36px;
+        width: 36px;
+        background-image: url("../images/tile-diagram-dark.png");
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position: center;    
+        &.active {
+            background-color: $lightColor;
+            background-image: url("../images/tile-diagram-light.png");
+            background-repeat: no-repeat;
         }
     }
 
@@ -911,3 +975,24 @@ div.tab-material-controls div.title {
         padding-top:2em !important;
     }
 }
+.chart {
+    display: flex;
+    justify-content: center;
+}
+.axisLabel {
+    margin-top: -5px;
+    position: absolute;
+    opacity: 0.8;
+}
+.sticky {
+    font-weight: bold;
+    color:#F6F6F6;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    overflow: hidden;
+    z-index: 3; 
+    max-height: 100%;
+}
+
+.statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
+    max-width:700px;
+  }

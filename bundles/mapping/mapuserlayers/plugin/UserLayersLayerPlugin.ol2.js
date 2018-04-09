@@ -149,7 +149,36 @@ Oskari.clazz.define(
                 }
             }
         },
+         /**
+         * Used when layer is modified. Just trigger an update.
+         * @param  {Oskari.mapframework.domain.AbstractLayer} layer  [description]
+         * @param  {Boolean} forced
+         * @param  {Object} params
+         */
+        updateLayerParams : function(layer, forced, params) {
+            //var openLayerId = 'layer_' + layer.getId();
+            var ol = this.getOLMapLayers(layer);
 
+            if(!ol) {
+                return;
+            }
+            params = params || {};
+            if(forced) {
+                params._ts = Date.now();
+            }
+
+            if (jQuery.isArray(ol)){
+                for (i=0; i < ol.length; i+=1){
+                    if (typeof ol[i].mergeNewParams ==='function'){
+                        ol[i].mergeNewParams(params);
+                    }
+                }
+            } else {
+                if (typeof ol.mergeNewParams ==='function'){
+                    ol.mergeNewParams(params);
+                }
+            }
+        },
         /**
          * If layer.getGeometry() is empty, tries to parse layer.getGeometryWKT()
          * and set parsed geometry to the layer

@@ -16,8 +16,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             	'</div>'),
             'propertySelect' : _.template('<div><span>${label}</span></div>'),
             'select' : _.template('<select name="heatmapProperties">' +
-            			'<option value="">${label}</option>' +
-            			'<% _.forEach(props, function(value) {  %>' +
+                        '<option value="">${label}</option>' +
+                        '<% props.forEach(function(value) {  %>' +
             				'<option>${value}</option>'+
         				'<% }); %>' +
             		'</select>'),
@@ -41,16 +41,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                                         '</div>' +
                                     '</div>'),
 
-            'colorpicker' : _.template('<div><span>${label}</span></div>' +
-                            '<div class="colorpicker-group"><input id="theme4" type="radio" name="colorThemes">' +
-                            '<div class="color-box color-picker box-1" color="#818282" style="background-color:#818282"></div>' +
-                            '<div class="color-box color-picker box-2" color="#818282" style="background-color:#818282"></div>' +
-                            '<div class="color-box color-picker box-3" color="#818282" style="background-color:#818282"></div>' +
-                            '</div>')
-
+            'customThemeLabel' : _.template('<div><span>${label}</span></div>'),
+            'customThemeGroup' : _.template('<div class="colorpicker-group"><input id="customTheme" type="radio" name="colorThemes"></div>'),
+            
         },
 
-
+        _createColorPickers: function() {
+            this._colorPickers = [
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput'),
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput'),
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput')
+            ];
+        },
 
     	showDialog : function(layer, callback, isNew) {
     		if(this.dialog) {
@@ -61,8 +63,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
     			dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
             dialog.addClass('heatmap settings-dialog');
-    		var content = jQuery(this.__templates.main());
 
+            this._createColorPickers();
+    		var content = jQuery(this.__templates.main());
 
 			// TODO: maybe replace radius field with a slider?
 			var radiusInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
@@ -105,20 +108,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 
 
             //colorpicker -->
-            var colorPicker = jQuery(this.__templates.colorpicker( {
+            var customThemeLabel = jQuery(this.__templates.customThemeLabel( {
                 label: this.loc.colorPickerLabel
             }));
-            var colorbox = colorPicker.find('.color-picker');
-            jQuery(colorbox).colpick({
-                layout:'rgbhex',
-                onSubmit:function(hsb,hex,rgb,el) {
-                    jQuery(el).css('background-color', '#'+ hex);
-                    jQuery(el).attr("color", '#'+ hex);
-                    $(el).colpickHide();
-                }
-            });
+            content.append(customThemeLabel);
 
-            content.append(colorPicker);
+            var customThemeGroup = jQuery(this.__templates.customThemeGroup());
+			customThemeGroup.append(this._colorPickers[0].getElement());
+			customThemeGroup.append(this._colorPickers[1].getElement());
+			customThemeGroup.append(this._colorPickers[2].getElement());
+            content.append(customThemeGroup);
 
             // set latest selected color theme checked
             var selectedColorTheme = layer.getSelectedTheme();
@@ -131,9 +130,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             //set colors for colorboxes
             var colorSetup = layer.getColorSetup();
             if (colorSetup) {
-                jQuery(content).find('.box-1').attr({"color": colorSetup[0], "style": "background-color:" + colorSetup[0]});
-                jQuery(content).find('.box-2').attr({"color": colorSetup[1], "style": "background-color:" + colorSetup[1]});
-                jQuery(content).find('.box-3').attr({"color": colorSetup[2], "style": "background-color:" + colorSetup[2]});
+                this._colorPickers[0].setValue(colorSetup[0]);
+                this._colorPickers[1].setValue(colorSetup[1]);
+                this._colorPickers[2].setValue(colorSetup[2]);
             }
 
 			var okBtn = null;
@@ -164,6 +163,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                 dialog.close();
                 delete me.dialog;
             });
+            
+            var colorPickerHandler = function() {
+                jQuery("input[id=customTheme]").attr("checked", true);
+            }
+            this._colorPickers[0].setHandler(colorPickerHandler);
+            this._colorPickers[1].setHandler(colorPickerHandler);
+            this._colorPickers[2].setHandler(colorPickerHandler);
+            
     		dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
             jQuery(dialog.dialog[0]).find(".actions").addClass("heatmap-actions");
     		dialog.makeDraggable();
@@ -174,23 +181,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             this.colors = [];
             this.colors.push("#FFFFFF");
             var me = this,
-                element = jQuery(content).find("input:checked"),
-                colorBoxes = jQuery(element[0].parentElement).find('.color-box');
-            _.forEach(colorBoxes, function (colorBox) {
-                me.colors.push(jQuery(colorBox).attr("color"));
-            });
+                element = jQuery(content).find("input:checked");
+
+            if (element.attr('id') === "customTheme") {
+                this.colors = this.colors.concat(this.getColorSetup());
+            }
+            else {
+                var colorBoxes = jQuery(element[0].parentElement).find('.color-box');
+                colorBoxes.each(function (index, colorBox) {
+                    me.colors.push(jQuery(colorBox).attr("color"));
+                });
+            }
             return me.colors;
         },
 
         //Returns colors that are selected with color picker
-        getColorSetup: function (content) {
-            var me = this,
-                selectedColors = [];
-                element = jQuery(content).find("input:checked");
-
-            selectColorsElement = jQuery(content).find('.color-picker');
-            _.forEach(selectColorsElement, function (colorElement) {
-                selectedColors.push(jQuery(colorElement).attr("color"));
+        getColorSetup: function () {
+            var selectedColors = [];
+            this._colorPickers.forEach(function (picker) {
+                selectedColors.push(picker.getValue());
             });
             return selectedColors;
         },

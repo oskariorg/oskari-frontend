@@ -79,6 +79,9 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/domain/tool.js"
+                },{
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/domain/MaplayerGroup.js"
                 },
                 /**
                  * controls plugin
