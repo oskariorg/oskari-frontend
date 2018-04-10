@@ -122,6 +122,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 element.addClass('statsgrid-legend-plugin-transparent');
                 element.find('.statsgrid-legend-container').addClass('legend-transparent');
             } else {
+                element.removeClass('statsgrid-legend-plugin-transparent');
+                element.addClass('statsgrid-legend-plugin');
                 element.find('.statsgrid-legend-container').removeClass('legend-transparent');
             }
         },
