@@ -131,31 +131,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
      * Adds functionality to edit classification button.
      */
     _createEditClassificationListener : function() {
-        var edit = this._element.find('.edit-legend');
-        if (edit) {
-            var me = this;
-            if ( Object.keys(me._renderState).length > 0 ) {
-                if ( me._renderState.panels[me._accordion.panels[0].getTitle()] ) {
-                    edit.addClass('edit-active');
-                } else {
-                    edit.removeClass('edit-active');   
-                }
-            }
-
-            edit.on('click', function (event) {
-                var target = jQuery(event.target);
-                //toggle accordion
-                me._accordion.getPanels().forEach( function (panel) {
-                    if ( panel.isOpen() ) {
-                        panel.close();
-                        target.removeClass('edit-active');
-                    } else {
-                        target.addClass('edit-active');
-                        panel.open();
-                    }
-                });
+        var me = this;
+        this._element.find('.edit-legend').on('click', function (event) {
+            // toggle accordion
+            me._accordion.getPanels().forEach(function (panel) {
+                panel.isOpen() ? panel.close() : panel.open();
             });
-        }
+        });
     },
     /**
      * Triggers a new render when needed (if render was called before previous was finished)
@@ -203,9 +185,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.on('open', function() {
             me._setPanelState(panel);
+            me._element.find('.edit-legend').addClass('edit-active');
         });
         panel.on('close', function() {
             me._setPanelState(panel);
+            me._element.find('.edit-legend').removeClass('edit-active');
         });
         panel.setTitle(title);
         panel.getHeader().remove();
