@@ -341,7 +341,7 @@ div.oskari-flyout {
   /* Float right to not overlap with other plugins */
   float: right; }
   .statsgrid-legend-plugin-transparent {
-    color:#FFFFFF !important;
+    color:#FFFFFF;
     text-shadow:
       -1px -1px 0 #000,
       1px -1px 0 #000,
@@ -354,16 +354,20 @@ div.oskari-flyout {
     .statsgrid-legend-plugin-transparent .geostats-legend-counter {
       color: #ffffff;
     }
-    .statsgrid-legend-plugin-transparent .accordion_panel {
-      background-color: transparent !important;
+    .statsgrid-legend-plugin-transparent .accordion .accordion_panel {
+      background-color: transparent;
     }
-    .statsgrid-legend-plugin-transparent .accordion_panel .open {
-      background-color: transparent !important;
+    .statsgrid-legend-plugin-transparent .accordion .accordion_panel.open {
+      background-color: transparent;
     }
     .statsgrid-legend-plugin-transparent .dropdown {
         text-shadow: none;
         color: #000;
     }
+    .statsgrid-legend-plugin-transparent .statsgrid-svg-legend {
+      text-shadow: none;
+      color: #000;
+  }
 .statsgrid-legend-container {
   background-color: #FFFFFF;
   width: 300px;

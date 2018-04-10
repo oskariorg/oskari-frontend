@@ -574,7 +574,7 @@ div.oskari-flyout {
     float: right;
 }
 .statsgrid-legend-plugin-transparent {
-    color:#FFFFFF !important;
+    color:#FFFFFF;
     text-shadow:
       -1px -1px 0 #000,
       1px -1px 0 #000,
@@ -588,12 +588,16 @@ div.oskari-flyout {
       color: #ffffff;
     }
     .statsgrid-legend-plugin-transparent .accordion_panel {
-      background-color: transparent !important;
+      background-color: transparent;
     }
     .statsgrid-legend-plugin-transparent .accordion_panel .open {
-      background-color: transparent !important;
+      background-color: transparent;
     }
     .statsgrid-legend-plugin-transparent .dropdown {
+        text-shadow: none;
+        color: #000;
+    }
+    .statsgrid-legend-plugin-transparent .statsgrid-svg-legend {
         text-shadow: none;
         color: #000;
     }
