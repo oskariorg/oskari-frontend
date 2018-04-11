@@ -60,15 +60,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         this.layerFilters = {
             'featuredata': function (layer) {
-                return (layer.hasFeatureData());
+                return layer.hasFeatureData();
             },
             'newest': function (layer) {
-                me.getNewestLayers(20);
-                var ids = [];
-                jQuery(me._newestLayers).each(function (index, layer) {
-                    ids.push(layer.getId());
+                // kinda heavy, but get a list of 20 newest layers and check if the requested layer is one them
+                // getNewestLayers() caches the result so in practice it's not as heavy as it looks.
+                return !!me.getNewestLayers(20).find(function (newLayer) {
+                    return layer.getId() === newLayer.getId();
                 });
-                return (jQuery.inArray(layer.getId(), ids) !== -1);
             }
         };
 
@@ -760,16 +759,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
         getLayersByMetadataId: function (metadataIdentifier) {
-            var list = [],
-                i,
-                layer;
-            for (i = 0; i < this._loadedLayersList.length; ++i) {
-                layer = this._loadedLayersList[i];
-                if (layer.getMetadataIdentifier() === metadataIdentifier) {
-                    list.push(layer);
-                }
-            }
-            return list;
+            return this._loadedLayersList.filter(function (layer) {
+                return layer.getMetadataIdentifier() === metadataIdentifier;
+            });
         },
         /**
          * @method  @public registerLayerFilter Register layer filter
