@@ -189,9 +189,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            true to not send event (should only be used on test cases to avoid unnecessary events)
          */
         removeLayer: function (layerId, suppressEvent) {
-            var layer = this.findMapLayer(layerId),
-                parentLayer = null,
-                evt = null;
+            var layer = this.findMapLayer(layerId);
+            var parentLayer = null;
+
             if (!layer) {
                 // not found in layers OR sublayers!
                 // TODO: should we notify somehow?
@@ -210,29 +210,29 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // work on sublayers instead
                 layerList = parentLayer.getSubLayers();
             }
-
-            for (var i = 0; i < layerList.length; i++) {
-                if ((layerList[i].getId() + '') === (layerId + '')) {
-                    layerList.splice(i, 1);
-                    break;
-                }
+            var indexToRemove = layerList.findIndex(function (item) {
+                return item.getId() + '' === layerId + '';
+            });
+            if (indexToRemove !== -1) {
+                layerList.splice(indexToRemove, 1);
             }
 
             // also update layer groups
             this.updateLayersInGroups(layerId, null, true);
 
             if (layer && suppressEvent !== true) {
+                var notify = this.getSandbox().notifyAll;
+                var mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
                 // notify components of layer removal
                 if (parentLayer) {
                     // notify a collection layer has been updated
-                    evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                    notify(mapLayerEvent(parentLayer.getId(), 'update'));
                 } else {
-                    // notify a layer has been removed
-                    evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'remove');
                     // free up the layerId if actual removal
                     this._reservedLayerIds[layerId] = false;
+                    // notify a layer has been removed
+                    notify(mapLayerEvent(layer.getId(), 'remove'));
                 }
-                this.getSandbox().notifyAll(evt);
             }
         },
 
