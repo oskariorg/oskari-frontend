@@ -154,7 +154,7 @@ Oskari.clazz.define(
         preselectLayers: function (layers) {
             var me = this;
             var log = Oskari.log('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
-            layers.filter(this.isLayerSupported).forEach(function (layer) {
+            layers.filter(this.isLayerSupported.bind(this)).forEach(function (layer) {
                 log.debug('preselecting ' + layer.getId());
                 // TODO: check that maplayer isn't on map yet
                 me.addMapLayerToMap(layer, true, layer.isBaseLayer());
