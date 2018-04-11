@@ -1373,26 +1373,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *  layerModel if found matching id or null if not found
          */
         findMapLayer: function (id, layerList) {
-            var i,
-                layer,
-                subLayers = [];
             if (!layerList) {
                 layerList = this._loadedLayersList;
             }
-            for (i = 0; i < layerList.length; i++) {
-                layer = layerList[i];
-                if (layer.getId() + '' === id + '') {
-                    return layer;
-                } else {
-                    subLayers = subLayers.concat(layer.getSubLayers());
-                }
+            var layer = layerList.find(function (layer) {
+                return layer.getId() + '' === id + '';
+            });
+            if (layer) {
+                return layer;
             }
-            // didnt find layer from base level, try sublayers if there are any
-            if (subLayers.length > 0) {
-                return this.findMapLayer(id, subLayers);
-            } else {
+            // layer not found in regular layers, check sublayers
+            var sublayers = [];
+            layerList.forEach(function (layer) {
+                sublayers = sublayers.concat(layer.getSubLayers());
+            });
+            if (!sublayers.length) {
                 return null;
             }
+            return this.findMapLayer(id, sublayers);
         },
         /**
          * @method findMapLayerByName
@@ -1407,26 +1405,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *  layerModel if found matching name or null if not found
          */
         findMapLayerByName: function (name, layerList) {
-            var i,
-                layer,
-                subLayers = [];
             if (!layerList) {
                 layerList = this._loadedLayersList;
             }
-            for (i = 0; i < layerList.length; i++) {
-                layer = layerList[i];
-                if (layer.getLayerName() + '' === name + '') {
-                    return layer;
-                } else {
-                    subLayers = subLayers.concat(layer.getSubLayers());
-                }
+            var layer = layerList.find(function (layer) {
+                return layer.getLayerName() + '' === name + '';
+            });
+            if (layer) {
+                return layer;
             }
-            // didn't find layer from base level, try sublayers if there are any
-            if (subLayers.length > 0) {
-                return this.findMapLayerByName(name, subLayers);
-            } else {
+            // layer not found in regular layers, check sublayers
+            var sublayers = [];
+            layerList.forEach(function (layer) {
+                sublayers = sublayers.concat(layer.getSubLayers());
+            });
+            if (!sublayers.length) {
                 return null;
             }
+            return this.findMapLayerByName(name, sublayers);
         },
         /**
          * Checks if the layers in view data are available
@@ -1446,6 +1442,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // return true of layer was NOT found
                 return !me.findMapLayer(id, layers);
             });
+            // return true if all layers were found
             return !missingLayer;
         }
     }, {
