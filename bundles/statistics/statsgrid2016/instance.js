@@ -203,6 +203,14 @@ Oskari.clazz.define(
                     }
                 }
             },
+            AfterMapLayerRemoveEvent: function (event) {
+                var layer = event.getMapLayer();
+                if(!layer || layer.getId() !== 'STATS_LAYER') {
+                    return;
+                }
+                var emptyState = {};
+                this.setState(emptyState);
+            },
             /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
