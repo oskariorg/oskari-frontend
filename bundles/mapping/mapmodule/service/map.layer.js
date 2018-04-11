@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
             // if parent id is present, forward to addSubLayer()
-            if (layerModel.getParentId() != -1) {
+            if (layerModel.getParentId() !== -1) {
                 this.addSubLayer(layerModel.getParentId(), layerModel, suppressEvent);
                 return;
             }
@@ -425,8 +425,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         updateLayersInGroups: function (layerId, newLayerConf, deleteLayer, newLayer) {
             var me = this;
-            var groups = [];
-            var group = null;
 
             if (me._layerGroups.length === 0) {
                 return;
@@ -646,9 +644,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         getAllLayerGroups: function (id) {
             var layerGroups = null;
-            if (id && id != -1) {
+            if (id && id !== -1) {
                 var findFunction = function (group) {
-                    return group.id == id;
+                    return group.id + '' === id + '';
                 };
                 var group = this._layerGroups.find(findFunction);
                 // group not found
@@ -722,22 +720,20 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
         getNewestLayers: function (count) {
-            var me = this;
-            if (me._newestLayers) {
-                return me._newestLayers;
+            if (this._newestLayers) {
+                return this._newestLayers;
             }
-            var list = [],
-                i;
+            var layersWithCreatedDate = [];
+            var layersWithoutCreatedDate = [];
+            this._loadedLayersList.forEach(function (layer) {
+                if (layer.getCreated() !== null && !isNaN(layer.getCreated().getTime())) {
+                    layersWithCreatedDate.push(layer);
+                } else {
+                    layersWithoutCreatedDate.push(layer);
+                }
+            })
 
-            var layersWhereCreatedDate = jQuery.grep(this._loadedLayersList, function (layer) {
-                return layer._created !== null && !isNaN(layer._created.getTime());
-            });
-
-            var layersWhereNoCreatedDate = jQuery.grep(this._loadedLayersList, function (layer) {
-                return layer._created === null || (layer._created !== null && isNaN(layer._created.getTime()));
-            });
-
-            var newestToOldestLayers = layersWhereCreatedDate.sort(function (a, b) {
+            layersWithCreatedDate.sort(function (a, b) {
                 if (a.getCreated() > b.getCreated()) {
                     return -1;
                 } else if (a.getCreated() < b.getCreated()) {
@@ -747,22 +743,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             });
 
-            for (i = 0; i < newestToOldestLayers.length; i++) {
-                list.push(newestToOldestLayers[i]);
-                if (list.length === count) {
-                    break;
-                }
-            }
-
+            var list = layersWithCreatedDate.slice(count);
             if (list.length < count) {
-                for (i = 0; i < layersWhereNoCreatedDate.length; i++) {
-                    list.push(layersWhereNoCreatedDate[i]);
-                    if (list.length === count) {
-                        break;
-                    }
-                }
+                // add layers without create date to fill in latest array
+                list = list.concat(layersWithoutCreatedDate.slice(count - list.length));
             }
-            me._newestLayers = list;
+            this._newestLayers = list;
             return list;
         },
         /**
