@@ -563,30 +563,25 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
          * @param {Function} callbackFailure method to be called when something went wrong
          */
-        loadAllLayerGroupsAjax: function(callbackSuccess, callbackFailure) {
-            var me = this,
-                epsg = me._sandbox.getMap().getSrsName();
+        loadAllLayerGroupsAjax: function (callbackSuccess, callbackFailure) {
+            var me = this;
             // Used to bypass browsers' cache especially in IE, which seems to cause
             // problems with displaying publishing permissions in some situations.
             var timeStamp = new Date().getTime();
 
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 dataType: 'json',
                 data: {
                     timestamp: timeStamp,
-                    srs: epsg
+                    srs: me.getSandbox().getMap().getSrsName(),
+                    lang: Oskari.getLang()
                 },
-                beforeSend: function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                url: me._sandbox.getAjaxUrl('GetHierarchicalMapLayerGroups') + '&lang=' + Oskari.getLang(),
-                success: function(pResp) {
+                url: Oskari.urls.getRoute('GetHierarchicalMapLayerGroups'),
+                success: function (pResp) {
                     me._loadAllLayerGroupsAjaxCallBack(pResp, callbackSuccess);
                 },
-                error: function(jqXHR, textStatus) {
+                error: function (jqXHR, textStatus) {
                     if (callbackFailure && jqXHR.status !== 0) {
                         callbackFailure();
                     }
