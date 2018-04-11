@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (suppressEvent !== true) {
                 // notify components of added layer if not suppressed
                 var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
-                this._sandbox.notifyAll(event);
+                this.getSandbox().notifyAll(event);
             }
         },
         /**
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (suppressEvent !== true) {
                 // notify components of modified layer tools if not suppressed
                 var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'tool');
-                this._sandbox.notifyAll(event);
+                this.getSandbox().notifyAll(event);
             }
         },
 
@@ -161,22 +161,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            true to not send event (should only be used on initial load to avoid unnecessary events)
          */
         addSubLayer: function (parentLayerId, layerModel, suppressEvent) {
-            var parentLayer = this.findMapLayer(parentLayerId),
-                subLayers;
+            var parentLayer = this.findMapLayer(parentLayerId);
+            if (!parentLayer || !parentLayer.isBaseLayer() || !parentLayer.isGroupLayer()) {
+                throw new Error('Trying to add a sublayer to unsupported parent (id:' + parentLayerId + ')');
+            }
 
-            if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
-                layerModel.setParentId(parentLayerId);
-                subLayers = parentLayer.getSubLayers();
-                if (!parentLayer.addSubLayer(layerModel)) {
-                    // wasn't added - already added
-                    return;
-                }
+            layerModel.setParentId(parentLayerId);
+            if (!parentLayer.addSubLayer(layerModel)) {
+                // wasn't added - already added -> skip event since nothing was updated
+                return;
+            }
 
-                if (suppressEvent !== true) {
-                    // notify components of added layer if not suppressed
-                    var evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
-                    this._sandbox.notifyAll(evt);
-                }
+            if (suppressEvent !== true) {
+                // notify components of added layer if not suppressed
+                var evt = Oskari.eventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                this.getSandbox().notifyAll(evt);
             }
         },
 
@@ -198,11 +197,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // TODO: should we notify somehow?
                 return;
             }
-            // remove the layer from core.
-            this._sandbox.removeMapLayer(layerId);
+            // remove the layer from map state
+            this.getSandbox().getMap().removeLayer(layerId);
             // default to all layers
             var layerList = this._loadedLayersList;
-            if (layer.getParentId() != -1) {
+            if (layer.getParentId() !== -1) {
                 // referenced layer is a sublayer
                 parentLayer = this.findMapLayer(layer.getParentId());
                 if (!parentLayer) {
@@ -233,7 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     // free up the layerId if actual removal
                     this._reservedLayerIds[layerId] = false;
                 }
-                this._sandbox.notifyAll(evt);
+                this.getSandbox().notifyAll(evt);
             }
         },
 
@@ -344,7 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // notify components of layer update
             var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
-            this._sandbox.notifyAll(evt);
+            this.getSandbox().notifyAll(evt);
         },
         /**
          * Delete layer group
@@ -491,7 +490,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setSticky(isSticky);
                 // notify components of layer update
                 var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
-                this._sandbox.notifyAll(evt);
+                this.getSandbox().notifyAll(evt);
             }
             // TODO: notify if layer not found?
         },
@@ -523,7 +522,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (layers.length === 0) {
                 // notify components of added layers
                 this._allLayersAjaxLoaded = true;
-                this._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
+                this.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
 
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
@@ -827,7 +826,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 groups.forEach(function (group) {
                     var filteredLayers = [];
                     group.getLayers().forEach(function (layer) {
-                        var mapLayer = me._sandbox.findMapLayerFromAllAvailable(layer.id);
+                        var mapLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
                         if (!mapLayer) {
                             // layer not found
                             // continue with next layer
