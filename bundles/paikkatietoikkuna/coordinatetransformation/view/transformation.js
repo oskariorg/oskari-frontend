@@ -25,9 +25,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.importFileHandler.create();
         me.exportFileHandler.create();
 
+        me.userFileSettings = {
+            import: null,
+            export: null
+        }
+
         me.importFileHandler.on('GetSettings', function (settings) {
+            me.userFileSettings.import = settings;
         });
         me.exportFileHandler.on('GetSettings', function (settings) {
+            me.userFileSettings.export = settings;
         });
 
         me._template = {
@@ -119,6 +126,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         updateCoordinateData: function ( flag, coordinates ) {
             this.dataHandler.modifyCoordinateObject( flag, coordinates );
             this.refreshTableData();
+        },
+        getUserFileSettings: function () {
+            return this.userFileSettings;
         },
         /**
          * @method readFileData
@@ -258,9 +268,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             });
             container.find('.export').on("click", function () {
                 me.exportFileHandler.showFileDialogue();
+                var userSettings = me.getUserFileSettings().export; 
             });
             container.find('#transform').on("click", function () {
                 var crs = me.getCrsOptions();
+                var userSettings = me.getUserFileSettings().import;
                 var coordinateArray = [];
                 coordinateObject.sourceCrs = crs.source;
                 coordinateObject.targetCrs = crs.target;
