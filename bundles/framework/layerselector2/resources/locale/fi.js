@@ -74,11 +74,13 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Uusimmat",
-                "featuredata": "Vektoritasot"
+                "featuredata": "Vektoritasot",
+                "timeseries": "Aikasarjalliset"
             },
             "tooltips": {
                 "newest": "Näytä ## uusinta karttatasoa",
                 "featuredata": "Näytä vain vektoritasot",
+                "timeseries": "Näytä vain aikasarjalliset",
                 "remove": "Poista suodatus"
             }
         },

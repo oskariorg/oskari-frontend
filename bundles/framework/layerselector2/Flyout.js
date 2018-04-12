@@ -124,6 +124,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             // Add featuredata filter
             me.addFeaturedataFilter();
+
+            me.addTimeseriesFilter();
         },
 
         /**
@@ -157,7 +159,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 },
                 'featuredata');
         },
+        /**
+         * Add timerseries filter.
+         * @method  @public addNewestFilter
+         */
+        addTimeseriesFilter: function() {
+            var me = this,
+                loc = me.instance.getLocalization('layerFilter');
 
+            me.layerlistService.registerLayerlistFilterButton(loc.buttons.timeseries,
+                loc.tooltips.timeseries, {
+                    active: 'layer-timeseries',
+                    deactive: 'layer-timeseries-disabled'
+                },
+                'timeseries');
+        },
         /**
          * @method stopPlugin
          *
