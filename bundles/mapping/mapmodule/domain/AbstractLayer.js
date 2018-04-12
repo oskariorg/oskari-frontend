@@ -825,7 +825,7 @@ Oskari.clazz.define(
          * adds layer tool to tools
          */
         getTool: function (toolName) {
-            return this.getTools.find(function (tool) {
+            return this.getTools().find(function (tool) {
                 return tool.getName() === toolName;
             });
         },
