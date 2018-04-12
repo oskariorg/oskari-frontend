@@ -30,6 +30,8 @@ function () {
         this.views = null;
         this.helper = null;
         this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
+        this.isMapSelection = false;
+        this.sandbox = Oskari.getSandbox();
 }, {
     __name: 'coordinatetransformation',
     getName: function () {
@@ -76,8 +78,22 @@ function () {
     createUi: function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
     },
-    isMapSelectionMode: function () {
-        return this.views["transformation"].isMapSelection;
+    mapSelectionMode: function () {
+        return this.isMapSelection;
+    },
+    setMapSelectionMode: function (isSelect){
+        this.isMapSelection = !!isSelect;
+        if (isSelect === true){
+            this.sandbox.postRequestByName(
+                'EnableMapKeyboardMovementRequest'
+            );
+            this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [false]);
+        } else {
+            this.sandbox.postRequestByName(
+                'DisableMapKeyboardMovementRequest'
+            );
+            this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [true]);
+        }
     },
     /**
      * Creates the coordinatetransformation service and registers it to the sandbox.

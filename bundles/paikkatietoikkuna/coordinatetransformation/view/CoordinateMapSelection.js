@@ -34,16 +34,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             cancelBtn.setHandler(function() {
                 me.helper.removeMarkers();
                 dialog.close();
-                me.removeMapClickListener();
+                //me.removeMapClickListener();
                 me.instance.toggleViews("transformation");
-                me.instance.getViews().transformation.isMapSelection = false;
+                me.instance.setMapSelectionMode(false);
                 me.mapcoords = [];
             });
 
             btn.setHandler(function() {
                 me.instance.getViews().transformation.updateCoordinateData( 'input', me.mapcoords );
-                me.instance.getViews().transformation.isMapSelection = false;
-                me.removeMapClickListener();
+                me.instance.setMapSelectionMode(false);
+                //me.removeMapClickListener();
                 me.instance.getViews().transformation.selectMapProjectionValues();
                 me.instance.toggleViews("transformation");
                 me.mapcoords = [];
@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
 
             dialog.show(this.loc('mapMarkers.select.title'), this.loc('mapMarkers.select.info'), [cancelBtn, btn]);
             dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
-            this.mapClicksListener();
+            //this.mapClicksListener();
         },
         getCoords: function ( coords ) {
             Object.keys( coords ).forEach( function ( key ) {
@@ -61,17 +61,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
                 this.mapcoords.push( coords );
             }
         },
+        /* TODO: do we need these??
         removeMapClickListener: function () {
             jQuery('#mapdiv').off('click');
         },
         mapClicksListener: function() {
             var me = this;
-            if( me.instance.isMapSelectionMode() ) {
+            if( me.instance.isMapSelection() ) {
                 jQuery('#mapdiv').on("click", function () {});
             } else {
                 return;
             }
-        }
+        }*/
     }
 );
- 

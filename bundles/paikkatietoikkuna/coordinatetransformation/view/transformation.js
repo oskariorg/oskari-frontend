@@ -4,7 +4,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.instance = instance;
         me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         me.helper = me.instance.helper;
-        me.isMapSelection = false;
         me.conversionContainer = null
         me.startingSystem = false;
 
@@ -216,37 +215,33 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         handleRadioButtons: function () {
             var me = this;
             var container = me.getContainer();
-            var clipboardInfoElement = container.find('.coordinateconversion-clipboardinfo');
+            var keyboardInfoElement = container.find('.coordinateconversion-keyboardinfo');
             var mapSelectInfoElement = container.find('.coordinateconversion-mapinfo')
             var fileInputElement = container.find('.oskari-fileinput');
 
             jQuery('input[type=radio][name=load]').change(function() {
-                me.inputTable.isEditable( false );
-                me.isMapSelection = false;
-
-                if (this.value == '1') {
+                if (this.value == 'file') {
+                    me.inputTable.isEditable(false);
                     me.importFileHandler.showFileDialogue();
                     clipboardInfoElement.hide();
                     mapSelectInfoElement.hide();
                     fileInputElement.show();
                 }
-                else if (this.value == '2') {
+                else if (this.value == 'keyboard') {
+                    me.inputTable.isEditable(true);
                     fileInputElement.hide();
                     mapSelectInfoElement.hide();
                     clipboardInfoElement.show();
-                    me.inputTable.isEditable( true );
                 }
-                else if (this.value == '3') {
-                    clipboardInfoElement.hide();
+                else if (this.value == 'map') {
+                    me.inputTable.isEditable(false);
+                    keyboardInfoElement.hide();
                     fileInputElement.hide();
-                    mapSelectInfoElement.show(); 
+                    mapSelectInfoElement.show();
                 }
             });
-            jQuery('.selectFromMap').on("click", function() {
-                me.isMapSelection = true;
-                me.instance.toggleViews("MapSelection");
-            });
-         },
+        },
+
         /**
          * @method handleButtons
          */
@@ -254,6 +249,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var me = this;
             var container = me.getContainer();
             var coordinateObject = me.dataHandler.getCoordinateObject();
+
+            jQuery('.selectFromMap').on("click", function() {
+                me.instance.setMapSelectionMode(true);
+                me.instance.toggleViews("MapSelection");
+            });
 
             container.find('.clear').on("click", function () {
                 me.updateCoordinateData('clear');
