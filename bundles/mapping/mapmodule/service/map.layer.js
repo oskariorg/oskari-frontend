@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
     function (sandbox, mapLayerUrl) {
         var me = this;
-        this._mapLayerUrl = mapLayerUrl || sandbox.getAjaxUrl('GetMapLayers') + '&lang=' + Oskari.getLang();
+        this._mapLayerUrl = mapLayerUrl || Oskari.urls.getRoute('GetMapLayers') + '&lang=' + Oskari.getLang();
         this._sandbox = sandbox;
         this._allLayersAjaxLoaded = false;
         this._loadedLayersList = [];
@@ -557,14 +557,37 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 me._layerGroups.push(groupDom);
             });
 
+            var flatLayerGroups = [];
+            var gatherFlatGroups = function (groups) {
+                groups.forEach(function (group) {
+                    flatLayerGroups.push(group);
+                    gatherFlatGroups(group.getGroups());
+                });
+            }
+            gatherFlatGroups(me._layerGroups);
+
             this._loadLayersRecursive(pResp.layers, function () {
+                // FIXME: refactor codebase to get rid of these circular references.
+                var allLayers = me.getAllLayers();
+                // groups are expected to contain the layer objects -> inject layers to groups based on list of ids the group holds
+                flatLayerGroups.forEach(function (group) {
+                    var layersInGroup = allLayers.filter(function (layer) {
+                        return group.getLayerIdList().findIndex(function (id) {
+                            return id === layer.getId();
+                        }) !== -1;
+                    });
+
+                    group.setLayers(layersInGroup);
+                    // layers are expected to have reference to groups they are in -> injecting groups to layer
+                    layersInGroup.forEach(function (layer) {
+                        layer.getGroups().push({
+                            id: group.getId(),
+                            name: Oskari.getLocalized(group.getName())
+                        });
+                    });
+                });
+
                 // notify components of added layers
-                me._allLayersAjaxLoaded = true;
-
-                // TODO: layers are expected to have some reference to groups they are in -> we should inject the groups here
-                // TODO: also groups are expected to contain the layer objects -> inject those as well
-                // FIXME: refactor codebase to get rid of such circular references.
-
                 me.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
@@ -583,6 +606,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
             // check if recursion should end
             if (layers.length === 0) {
+                me._allLayersAjaxLoaded = true;
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
