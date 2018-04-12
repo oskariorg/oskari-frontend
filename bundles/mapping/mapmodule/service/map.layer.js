@@ -510,45 +510,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         /**
-         * @method _loadLayersRecursive
-         * Internal callback method for laod layers recursive
-         * @param {Object} pResp ajax response in JSON format
-         * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
-         * @private
-         */
-        _loadLayersRecursive: function (layers, callbackSuccess) {
-            var me = this;
-            // check if recursion should end
-            if (layers.length === 0) {
-                // notify components of added layers
-                this._allLayersAjaxLoaded = true;
-                this.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
-
-                if (typeof callbackSuccess === 'function') {
-                    callbackSuccess();
-                }
-                return;
-            }
-            // remove the first one for recursion
-            var json = layers.shift();
-            var mapLayer = me.createMapLayer(json);
-            // unsupported maplayer type returns null so check for it
-            if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
-                me.addLayer(mapLayer, true);
-            }
-            // process remaining layers
-            if (layers.length % 20 !== 0) {
-                // do it right a way
-                me._loadLayersRecursive(layers, callbackSuccess);
-            } else {
-                // yield cpu time after every 20 layers
-                setTimeout(function () {
-                    me._loadLayersRecursive(layers, callbackSuccess);
-                }, 0);
-            }
-        },
-
-        /**
          * @method loadAllLayerGroupsAjax
          * Loads layers JSON using the ajax URL given on #create()
          * and parses it to internal layer objects by calling #createMapLayer() and #addLayer()
@@ -615,6 +576,45 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             addGroupLayers(pResp);
             this._loadLayersRecursive(layers, callbackSuccess);
+        },
+
+        /**
+         * @method _loadLayersRecursive
+         * Internal callback method for laod layers recursive
+         * @param {Object} pResp ajax response in JSON format
+         * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
+         * @private
+         */
+        _loadLayersRecursive: function (layers, callbackSuccess) {
+            var me = this;
+            // check if recursion should end
+            if (layers.length === 0) {
+                // notify components of added layers
+                this._allLayersAjaxLoaded = true;
+                this.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
+
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+                return;
+            }
+            // remove the first one for recursion
+            var json = layers.shift();
+            var mapLayer = me.createMapLayer(json);
+            // unsupported maplayer type returns null so check for it
+            if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
+                me.addLayer(mapLayer, true);
+            }
+            // process remaining layers
+            if (layers.length % 20 !== 0) {
+                // do it right a way
+                me._loadLayersRecursive(layers, callbackSuccess);
+            } else {
+                // yield cpu time after every 20 layers
+                setTimeout(function () {
+                    me._loadLayersRecursive(layers, callbackSuccess);
+                }, 0);
+            }
         },
 
         /**
