@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         var me = this;
         me.groups = [];
 
-        json.groups.forEach(function (subgroup) {
+        (json.groups || []).forEach(function (subgroup) {
             me.groups.push(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', subgroup));
         });
 

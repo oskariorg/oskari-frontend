@@ -353,7 +353,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         deleteLayerGroup: function (id, parentId) {
             var me = this;
-            var newGroups = [];
             var editable = me.getAllLayerGroups(parentId);
 
             var getGroupIndexInArray = function (arr) {
@@ -553,34 +552,29 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             me._layerGroups = [];
 
-            var layers = [];
+            pResp.groups.forEach(function (group) {
+                var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
+                me._layerGroups.push(groupDom);
+            });
 
-            var addGroupLayers = function (groups, recursive) {
-                groups.forEach(function (group) {
-                    if (group.layers) {
-                        group.layers.forEach(function (layer) {
-                            layers.push(layer);
-                        });
-                    }
-                    if (group.groups) {
-                        addGroupLayers(group.groups, true);
-                    }
+            this._loadLayersRecursive(pResp.layers, function () {
+                // notify components of added layers
+                me._allLayersAjaxLoaded = true;
 
-                    // If not recursive, then
-                    if (!recursive) {
-                        var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
-                        me._layerGroups.push(groupDom);
-                    }
-                });
-            };
+                // TODO: layers are expected to have some reference to groups they are in -> we should inject the groups here
+                // TODO: also groups are expected to contain the layer objects -> inject those as well
+                // FIXME: refactor codebase to get rid of such circular references.
 
-            addGroupLayers(pResp);
-            this._loadLayersRecursive(layers, callbackSuccess);
+                me.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+            });
         },
 
         /**
          * @method _loadLayersRecursive
-         * Internal callback method for laod layers recursive
+         * Internal callback method for load layers recursive
          * @param {Object} pResp ajax response in JSON format
          * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
          * @private
@@ -589,10 +583,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var me = this;
             // check if recursion should end
             if (layers.length === 0) {
-                // notify components of added layers
-                this._allLayersAjaxLoaded = true;
-                this.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
-
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
