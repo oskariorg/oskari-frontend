@@ -573,8 +573,36 @@ div.oskari-flyout {
     /* Float right to not overlap with other plugins */
     float: right;
 }
+.statsgrid-legend-plugin-transparent {
+    color:#FFFFFF;
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
+    pointer-events: auto;
+    text-align: left;
+    /* Float right to not overlap with other plugins */
+    float: right; }
+    .statsgrid-legend-plugin-transparent .geostats-legend-counter {
+      color: #ffffff;
+    }
+    .statsgrid-legend-plugin-transparent .accordion_panel {
+      background-color: transparent;
+    }
+    .statsgrid-legend-plugin-transparent .accordion_panel .open {
+      background-color: transparent;
+    }
+    .statsgrid-legend-plugin-transparent .dropdown {
+        text-shadow: none;
+        color: #000;
+    }
+    .statsgrid-legend-plugin-transparent .statsgrid-svg-legend {
+        text-shadow: none;
+        color: #000;
+    }
 .legend-transparent {
-   background-color: rgba(255,255,255,0.2)
+   background-color: transparent;
 }
 .active-header {
     display: flex;
@@ -591,8 +619,11 @@ div.oskari-flyout {
 }
 
 .edit-legend {
+    cursor: pointer;
     height: 16px;
     width: 16px;
+    margin-left: 2px;
+    margin-right: -2px;
     right: 0 !important;
     background-image: url(../images/edit-dark.png);
 }
