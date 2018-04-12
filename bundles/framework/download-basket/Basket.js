@@ -364,23 +364,30 @@ Oskari.clazz.define(
                     basketEl.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
                     basketEl.find('.basket__content-cropping>span').text(basketItem.cropLayerNameLang);
                     
-                    basketEl.find('.basket__content-license>strong').text(me._getLocalization('basket-license-title'));
-                    basketEl.find('.basket__content-license>a').text(me._getLocalization('basket-license-name')).attr("href",me._getLocalization('basket-license-url'));
 
                     // License link handling
                     var licenseTitle = basketEl.find('.basket__content-license>strong');
                     var licenseLink = basketEl.find('.basket__content-license>a');
-                    if(me.instance.conf.licenseUrl) {
-                        licenseTitle.text(me._getLocalization('basket-license-title'));
+                    var layerId = basketItem.layerUrl;
+                    
+	                if (me.instance.conf.licenceByLayers[layerId]) {
+	                	licenseTitle.text(me._getLocalization('basket-license-title'));
+	                    licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenceByLayers[layerId].licenseName) ||
+	                        me.instance.conf.licenseName ||
+	                        me._getLocalization('basket-license-name'));
+	                    licenseLink.attr('href', me._sandbox.getLocalizedProperty(me.instance.conf.licenceByLayers[layerId].licenseUrl) ||
+	                        me.instance.conf.licenseUrl);
+	                } else if(me.instance.conf.licenseUrl) {
+                    	licenseTitle.text(me._getLocalization('basket-license-title'));
                         licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseName) ||
                             me.instance.conf.licenseName ||
                             me._getLocalization('basket-license-name'));
-                        licenseLink.attr('href',me._sandbox.getLocalizedProperty(me.instance.conf.licenseUrl) ||
+                        licenseLink.attr('href', me._sandbox.getLocalizedProperty(me.instance.conf.licenseUrl) ||
                             me.instance.conf.licenseUrl);
-                    }/* else {
+                    } else {
                         licenseTitle.remove();
                         licenseLink.remove();
-                    }*/
+                    }
 
                     basketEl.find('.icon-close-dark').click(function(event){
                         var basketEl = jQuery(this).parents('.download-basket__component');
