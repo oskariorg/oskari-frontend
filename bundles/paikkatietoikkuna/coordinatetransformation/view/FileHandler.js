@@ -65,35 +65,38 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             var fileSettings;
             if ( this.flag === "export" ) {
                 fileSettings = this._template.settings({
-                    title: this.loc.filesetting.export.title,
-                    filename:this.loc.filesetting.export.filename,
-                    fileExport: this.loc.utils.export,
-                    format: this.loc.filesetting.general.format,
-                    decimalseparator: this.loc.filesetting.general.decimalseparator,
-                    id: this.loc.filesetting.general.id,
-                    reversecoords: this.loc.filesetting.general.reversecoords,
-                    headercount: this.loc.filesetting.general.headercount,
-                    cancel: this.loc.utils.cancel,
-                    degree:this.loc.filesetting.general.degree,
-                    gradian:this.loc.filesetting.general.gradian,
-                    radian: this.loc.filesetting.general.radian,
-                    point:this.loc.filesetting.general.point,
-                    comma: this.loc.filesetting.general.comma
+                    //title: this.loc('fileSettings.export.title'),
+                    fileName: this.loc('fileSettings.export.filename'),
+                    //fileExport: this.loc('fileSettings'),
+                    format: this.loc('fileSettings.options.format'),
+                    decimalseparator: this.loc('fileSettings.options.decimalSeparator'),
+                    id: this.loc('fileSettings.options.useId'),
+                    reversecoords: this.loc('fileSettings.options.reverseCoords'),
+                    headercount: this.loc('fileSettings.options.headerCount'),
+                    cancel: this.loc('actions.cancel'),
+                    done: this.loc('actions.done'),
+                    degree: this.loc('fileSettings.options.degree'),
+                    gradian: this.loc('fileSettings.options.gradian'),
+                    radian: this.loc('fileSettings.options.radian'),
+                    point: this.loc('fileSettings.options.point'),
+                    comma: this.loc('fileSettings.options.comma')
                 });
             } else {
                 fileSettings = this._template.settings({
-                    format: this.loc.filesetting.general.format,
-                    decimalseparator: this.loc.filesetting.general.decimalseparator,
-                    id: this.loc.filesetting.general.id,
-                    reversecoords: this.loc.filesetting.general.reversecoords,
-                    headercount: this.loc.filesetting.general.headercount,
-                    cancel: this.loc.utils.cancel,
-                    done: this.loc.utils.done,
-                    degree:this.loc.filesetting.general.degree,
-                    gradian:this.loc.filesetting.general.gradian,
-                    radian: this.loc.filesetting.general.radian,
-                    point: this.loc.filesetting.general.point,
-                    comma: this.loc.filesetting.general.comma 
+                    //title: this.loc('fileSettings.import.title'),
+                    //fileExport: this.loc('fileSettings'),
+                    format: this.loc('fileSettings.options.format'),
+                    decimalseparator: this.loc('fileSettings.options.decimalSeparator'),
+                    id: this.loc('fileSettings.options.useId'),
+                    reversecoords: this.loc('fileSettings.options.reverseCoords'),
+                    headercount: this.loc('fileSettings.options.headerCount'),
+                    cancel: this.loc('actions.cancel'),
+                    done: this.loc('actions.done'),
+                    degree: this.loc('fileSettings.options.degree'),
+                    gradian: this.loc('fileSettings.options.gradian'),
+                    radian: this.loc('fileSettings.options.radian'),
+                    point: this.loc('fileSettings.options.point'),
+                    comma: this.loc('fileSettings.options.comma')
                 });
             }
 
@@ -127,7 +130,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         },
         showFileDialogue: function() {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var title = this.flag === "import" ? this.loc.filesetting.import.title : this.loc.filesetting.export.title;
+            var title = this.flag === "import" ? this.loc('fileSettings.import.title') : this.loc('fileSettings.export.title');
             dialog.makeDraggable();
             dialog.createCloseIcon();
             dialog.show(title, jQuery( this.getElement() ));

@@ -29,6 +29,7 @@ function () {
         this.transformationService = null;
         this.views = null;
         this.helper = null;
+        this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
 }, {
     __name: 'coordinatetransformation',
     getName: function () {
@@ -47,8 +48,7 @@ function () {
         var sandbox = this.getSandbox();
         this.transformationService = this.createService(sandbox);
         this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        var locale = this.getLocalization();
-        this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper', this, locale );
+        this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper', this);
 
         this.instantiateViews();
         this.createUi();

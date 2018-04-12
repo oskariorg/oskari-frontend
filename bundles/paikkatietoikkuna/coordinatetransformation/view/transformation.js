@@ -2,7 +2,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
     function (instance) {
         var me = this;
         me.instance = instance;
-        me.loc = me.instance.getLocalization("flyout");
+        me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         me.helper = me.instance.helper;
         me.isMapSelection = false;
         me.conversionContainer = null
@@ -17,8 +17,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
         me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
 
-        me.inputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this);
-        me.outputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this);
+        me.inputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this,  me.loc);
+        me.outputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this,  me.loc);
 
         me.sourceSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.SourceSelect', me.loc );
 
@@ -64,18 +64,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         createUI: function( container ) {
             this.conversionContainer = container;
 
-            var inputTitle = this._template.title( { title: this.loc.title.input } );
-            var resultTitle = this._template.title( { title: this.loc.title.result } ); 
+            var inputTitle = this._template.title( { title: this.loc('flyout.coordinateSystem.input') } );
+            var resultTitle = this._template.title( { title: this.loc('flyout.coordinateSystem.output') } );
 
             var inputTable = this.inputTable.create();
             var targetTable = this.outputTable.create();
 
-            var transformButton = this._template.transformButton({ convert: this.loc.coordinatefield.convert });
+            var transformButton = this._template.transformButton({ convert: this.loc('actions.convert') });
 
             var utilRow = this._template.utilRow({
-                clear: this.loc.utils.clear,
-                show: this.loc.utils.show,
-                fileexport: this.loc.utils.export
+                clear: this.loc('actions.clearTable'),
+                show: this.loc('actions.showMarkers'),
+                fileexport: this.loc('actions.export')
             });
                                                             
             var wrapper = this._template.wrapper.clone();

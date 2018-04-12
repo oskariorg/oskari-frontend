@@ -22,8 +22,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                     '</div>' +
                     '<div class="coordinateconversion-mapinfo" style=display:none;">'+
                         '<div class="mapinfo">'+
-                            '<i>${mapinfo}<i> </br>'+
-                            '<input type="button" class="selectFromMap" name="load" value="${map}">' +
+                            '<i>${mapInfo}<i> </br>'+
+                            '<input type="button" class="selectFromMap" name="load" value="${mapButton}">' +
                         '</div>' +
                     '</div>' +
                 '</div>'
@@ -47,16 +47,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             var wrapper = this._template.sourceWrapper.clone();
 
             var source = this._template.source({    
-                title: this.loc.datasource.title, 
-                file: this.loc.datasource.file,
-                clipboard: this.loc.datasource.clipboard,
-                choose: this.loc.datasource.choose,
-                map: this.loc.datasource.map 
+                title: this.loc('flyout.dataSource.title'),
+                file: this.loc('flyout.dataSource.file.label'),
+                clipboard: this.loc('flyout.dataSource.keyboard.label'),
+                //choose: this.loc('flyout.dataSource.file.label'),
+                map: this.loc('flyout.dataSource.map.label')
             });
             var info = this._template.info({ 
-                clipboardupload: this.loc.dsInfo.clipboardupload,
-                mapinfo: this.loc.dsInfo.mapinfo,
-                map: this.loc.dsInfo.select
+                clipboardupload:this.loc('flyout.dataSource.keyboard.info'),
+                mapInfo: this.loc('flyout.dataSource.map.info'),
+                mapButton: this.loc('actions.select')
             });
             wrapper.append(source);
             wrapper.append(info);

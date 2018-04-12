@@ -8,103 +8,120 @@ Oskari.registerLocalization(
             "title": "Koordinaattimuunnos"
         },
         "flyout": {
-            "title": {
-                "input": "Lähtötiedot",
-                "result": "Tulostiedot"
-            },
-            "coordinatesystem": {
+            "title":"Koordinaattimuunnos",
+            "coordinateSystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
-                "geodetic_datum": "Geodeettinen datumi",
-                "coordinate_system": "Koordinaatisto",
-                "map_projection": "Karttaprojektiojärjestelmä",
-                "geodetic_coordinatesystem": "Geodeettinen koordinaattijärjestelmä",
-                "heigth_system":"Korkeusjärjestelmä"
+                "input": "Lähtötiedot",
+                "output": "Tulostiedot",
+                "noFilter": "Mikä tahansa",
+                "geodeticDatum": {
+                    "label": "Geodeettinen datumi",
+                    "infoTitle": "Geodeettinen datumi",
+                    "infoContent": ""
+                },
+                "coordinateSystem":{
+                    "label": "Koordinaatisto",
+                    "infoTitle": "Koordinaatisto",
+                    "infoContent": "",
+                    "proj2D": "Suorakulmainen 2D (Taso)",
+                    "proj3D": "Suorakulmainen 3D",
+                    "geo2D": "Maantieteellinen 2D",
+                    "geo3D": "Maantieteellinen 3D"
+                },
+                "mapProjection":{
+                    "label": "Karttaprojektiojärjestelmä",
+                    "infoTitle": "Karttaprojektiojärjestelmä",
+                    "infoContent": ""
+                },
+                "geodeticCoordinateSystem":{
+                    "label": "Geodeettinen koordinaattijärjestelmä",
+                    "infoTitle": "Geodeettinen koordinaattijärjestelmä",
+                    "infoContent":"",
+                    "choose": "Valitse",
+                    "kkj": "KKJ kaista {zone, number}",
+                    "ykj": "KKJ kaista 3 / YKJ"
+                },
+                "heightSystem":{
+                    "label": "Korkeusjärjestelmä",
+                    "infoTitle":"",
+                    "infoContent": "",
+                    "none": "Ei mitään"
+                }
             },
-            "datasource": {
+            "dataSource": {
                 "title": "Koordinaattitietojen lähde",
-                "file": "Tiedostosta",
-                "clipboard": "Näppäimistö/leikepöytä",
-                "map": "Valitse sijainnit kartalta",
-                "choose":"Valitse sijainti kartalta"
+                "file": {
+                    "label": "Tiedostosta",
+                    "info":  "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
+                    "link": "valitse selaamalla",
+                    "uploading": "Ladataan",
+                    "error": "Virhe!",
+                    "success": "Valmis"
+                },
+                "keyboard": {
+                    "label": "Näppäimistöltä",
+                    "info": "Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna."
+                },
+                "map": {
+                    "label": "Valitse sijainnit kartalta",
+                    "info": "Valitse yksi tai useampia pisteitä kartalta klikkaamalla."
+                }
             },
-            "dsInfo": {
-                "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
-                "link":"valitse selaamalla",
-                "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
-                "mapinfo":"Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
-                "select": "Valitse",
-                "uploading":"Ladataan",
-                "success":"Valmis",
-                "error":"Virhe!",
-                "cancel":"Peruuta",
-                "mapmarkers": "Tarkastele muunnettuja koordinaatteja kartalla."
-            },
-            "coordinatefield": {
+            "coordinateField": {
                 "input": "Muunnettavat koordinaatit",
-                "result": "Tuloskoordinaatit",
-                "convert": "Muunna",
-                "north":"N",
-                "east":"E",
-                "kkjnorth":"Pohjois-koordinaatti [m]",
-                "kkjeast":"Itä-koordinaatti [m]",
+                "output": "Tuloskoordinaatit",
+                "north":"Pohjois-koordinaatti [m]",
+                "east":"Itä-koordinaatti [m]",
                 "lat":"Leveysaste",
                 "lon":"Pituusaste",
                 "elevation": "Korkeus [m]",
-                "geox":"Geosentrinen X [m]",
-                "geoy":"Geosentrinen Y [m]",
-                "geoz":"Geosentrinen Z [m]",
-                "ellipse_elevation":"Ellipsoidinen korkeus [m]"
-            },
-            "utils": {
-                "clear": "Tyhjennä taulukot",
-                "show": "Näytä sijainnit kartalla",
-                "export": "Vie tulokset tiedostoon",
-                "done": "Valmis",
-                "cancel": "Peruuta",
+                "geoX":"Geosentrinen X [m]",
+                "geoY":"Geosentrinen Y [m]",
+                "geoZ":"Geosentrinen Z [m]",
+                "ellipseElevation":"Ellipsoidinen korkeus [m]",
                 "rows": "Riviä"
-            },
-            "filesetting": {
-                "general": {
-                    "degree": "Aste",
-                    "gradian": "Gooni (graadi)",
-                    "radian": "Radiaani",
-                    "point": "Piste",
-                    "comma": "Pilkku",
-                    "format": "Kulman muoto/yksikkö",
-                    "decimalseparator": "Desimaalierotin",
-                    "headercount": "Otsakerivien määrä",
-                    "reversecoords": "Koordinaatit käänteisesti",
-                    "id": "Käytä tunnistetta"
-                },
-                "export": {
-                    "title": "Aineiston muodostaminen",
-                    "filename": "Tiedoston nimi",
-                },
-                "import": {
-                    "title": "Lähtöaineiston ominaisuudet",
-                }
             }
         },
-        "JSONOptions": {
-            "default": "Mikä tahansa",
-            "CRFProjected2D": "Suorakulmainen 2D (Taso)",
-            "CRFProjected3D": "Suorakulmainen 3D",
-            "CRFGeographic2D": "Maantieteellinen 2D",
-            "CRFGeographic3D": "Maantieteellinen 3D",
-            "choose": "Valitse",
-            "none": "Ei mitään"
+        "mapMarkers":{
+            "show":{
+                "title": "Näytä sijainnit kartalla",
+                "info" : "Tarkastele muunnettuja koordinaatteja kartalla."
+            },
+            "select":{
+                "title": "Näytä sijainnit kartalla",
+                "info": "Valitse yksi tai useampia pisteitä kartalta klikkaamalla."
+            }
         },
-        "coordinate-system-info" : {
-            "geodetic": "geodetic",
-            "coordinate": "coordinate",
-            "projection": "projection",
-            "geodetic-coordinate": "geodetic-coordinate",
-            "elevation": "elevation",
-
-        },
-        "infoPopup" : {
-            "title": "Coordinate System Info",
+        "actions": {
+            "convert": "Muunna",
+            "clearTable": "Tyhjennä taulukot",
+            "showMarkers": "Näytä sijainnit kartalla",
+            "export": "Vie tulokset tiedostoon",
+            "select": "Valitse",
+            "cancel": "Peruuta",
+            "done": "Valmis",
             "ok": "Ok"
+        },
+        "fileSettings": {
+            "options": {
+                "degree": "Aste",
+                "gradian": "Gooni (graadi)",
+                "radian": "Radiaani",
+                "point": "Piste",
+                "comma": "Pilkku",
+                "format": "Kulman muoto/yksikkö",
+                "decimalSeparator": "Desimaalierotin",
+                "headerCount": "Otsakerivien määrä",
+                "reverseCoords": "Koordinaatit käänteisesti",
+                "useId": "Käytä tunnistetta"
+            },
+            "export": {
+                "title": "Aineiston muodostaminen",
+                "fileName": "Tiedoston nimi"
+            },
+            "import": {
+                "title": "Lähtöaineiston ominaisuudet"
+            }
         }
     }
 });

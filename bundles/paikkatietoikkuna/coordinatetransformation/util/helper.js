@@ -1,5 +1,5 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance, locale) {
-    this.loc = locale;
+Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance) {
+    this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
     this.instance = instance;
     this.sb = instance.sandbox;
     this.removeMarkersReq = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
@@ -62,25 +62,25 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
     getOptionsJSON: function() {
          var json = {
             "datum": {
-                0: { "id":"DATUM_DEFAULT", "title": this.loc.JSONOptions.default, "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                0: { "id":"DATUM_DEFAULT", "title": this.loc('flyout.coordinateSystem.noFilter'), "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 1: { "id":"DATUM_KKJ", "title":"KKJ", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 2: { "id":"DATUM_EUREF-FIN", "title":"EUREF-FIN", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"}
                 },
             "coordinate": {
-                0: { "id":"KOORDINAATISTO_DEFAULT", "title": this.loc.JSONOptions.default },
-                1: { "id":"KOORDINAATISTO_SUORAK_2D", "title": this.loc.JSONOptions.CRFProjected2D, "cls":"DATUM_KKJ DATUM_EUREF-FIN" },
-                2: { "id":"KOORDINAATISTO_SUORAK_3D", "title": this.loc.JSONOptions.CRFProjected3D, "cls":"DATUM_EUREF-FIN" },
-                3: { "id":"KOORDINAATISTO_MAANT_2D", "title": this.loc.JSONOptions.CRFGeographic2D, "cls":"DATUM_EUREF-FIN DATUM_KKJ" },
-                4: { "id":"KOORDINAATISTO_MAANT_3D", "title": this.loc.JSONOptions.CRFGeographic3D, "cls":"DATUM_EUREF-FIN" }
+                0: { "id":"KOORDINAATISTO_DEFAULT", "title": this.loc('flyout.coordinateSystem.noFilter') },
+                1: { "id":"KOORDINAATISTO_SUORAK_2D", "title": this.loc('flyout.coordinateSystem.coordinateSystem.proj2D'), "cls":"DATUM_KKJ DATUM_EUREF-FIN" },
+                2: { "id":"KOORDINAATISTO_SUORAK_3D", "title": this.loc('flyout.coordinateSystem.coordinateSystem.proj3D'), "cls":"DATUM_EUREF-FIN" },
+                3: { "id":"KOORDINAATISTO_MAANT_2D", "title": this.loc('flyout.coordinateSystem.coordinateSystem.geo2D'), "cls":"DATUM_EUREF-FIN DATUM_KKJ" },
+                4: { "id":"KOORDINAATISTO_MAANT_3D", "title": this.loc('flyout.coordinateSystem.coordinateSystem.geo3D'), "cls":"DATUM_EUREF-FIN" }
                 },
             "projection": {
-                0: { "id":"DATUM_KARTTAPJ_DEFAULT", "title": this.loc.JSONOptions.default},
+                0: { "id":"DATUM_KARTTAPJ_DEFAULT", "title": this.loc('flyout.coordinateSystem.noFilter')},
                 1: { "id":"KKJ_KAISTA", "title":"KKJ", "cls":"DATUM_KKJ"},
                 2: { "id":"TM", "title":"ETRS-TM",  "cls":"DATUM_EUREF-FIN"},
                 3: { "id":"GK", "title":"ETRS-GK",  "cls":"DATUM_EUREF-FIN"}
                 },
             "geodetic-coordinate": {
-                0: { "id":"DEFAULT", "title": this.loc.JSONOptions.choose },
+                0: { "id":"DEFAULT", "title": this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.choose') },
                 1: { "id":"ETRS-GK19", "title":"ETRS-GK19", "cls":"DATUM_EUREF-FIN GK" },
                 2: { "id":"ETRS-GK20", "title":"ETRS-GK20", "cls":"DATUM_EUREF-FIN GK" },
                 3: { "id":"ETRS-GK21", "title":"ETRS-GK21", "cls":"DATUM_EUREF-FIN GK" },
@@ -103,16 +103,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance,
                 20: { "id":"EUREF-FIN-GEO2D", "title":"EUREF-FIN-GRS80", "cls":"DATUM_EUREF-FIN KOORDINAATISTO_MAANT_2D" },
                 21: { "id":"EUREF-FIN-GEO3D", "title":"EUREF-FIN-GRS80h", "cls":"DATUM_EUREF-FIN KOORDINAATISTO_MAANT_3D" },
                 22: { "id":"ETRS-EUREF-FIN_SUORAK3d", "title":"EUREF-FIN-XYZ", "cls":"DATUM_EUREF-FIN KOORDINAATISTO_SUORAK_3D" },
-                23: { "id":"KKJ0", "title":"KKJ kaista 0", "cls":"DATUM_KKJ KKJ_KAISTA" },
-                24: { "id":"KKJ1", "title":"KKJ kaista 1", "cls":"DATUM_KKJ KKJ_KAISTA" },
-                25: { "id":"KKJ2", "title":"KKJ kaista 2", "cls":"DATUM_KKJ KKJ_KAISTA" },
-                26: { "id":"KKJ3", "title":"KKJ kaista 3 / YKJ", "cls":"DATUM_KKJ KKJ_KAISTA" },
-                27: { "id":"KKJ4", "title":"KKJ kaista 4", "cls":"DATUM_KKJ KKJ_KAISTA" },
-                28: { "id":"KKJ5", "title":"KKJ kaista 5", "cls":"DATUM_KKJ KKJ_KAISTA" },
+                23: { "id":"KKJ0", "title":"", "cls":"DATUM_KKJ KKJ_KAISTA" },
+                24: { "id":"KKJ1", "title": this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':1}), "cls":"DATUM_KKJ KKJ_KAISTA" },
+                25: { "id":"KKJ2", "title": this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':2}), "cls":"DATUM_KKJ KKJ_KAISTA" },
+                26: { "id":"KKJ3", "title": this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.ykj'), "cls":"DATUM_KKJ KKJ_KAISTA" },
+                27: { "id":"KKJ4", "title": this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':4}), "cls":"DATUM_KKJ KKJ_KAISTA" },
+                28: { "id":"KKJ5", "title": this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':5}), "cls":"DATUM_KKJ KKJ_KAISTA" },
                 29: { "id":"KKJ_GEO", "title":"KKJ-Hayford", "cls":"DATUM_KKJ KOORDINAATISTO_MAANT_2D" }
                 },
             "elevation": {
-                0: { "id":"KORKEUSJ_DEFAULT", "title": this.loc.JSONOptions.none,"cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                0: { "id":"KORKEUSJ_DEFAULT", "title": this.loc('flyout.coordinateSystem.heightSystem.none'),"cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 1: { "id":"KORKEUSJ_N2000", "title":"N2000", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 2: { "id":"KORKEUSJ_N60", "title":"N60", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
                 3: { "id":"KORKEUSJ_N43", "title":"N43", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"}

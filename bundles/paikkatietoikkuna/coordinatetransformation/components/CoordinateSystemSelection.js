@@ -1,7 +1,7 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemSelection',
-    function (view) {
+    function (view, loc) {
         this.instance = view;
-        this.loc = view.loc;
+        this.loc = loc;
         this.element = null;
         this.select = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', view );
         this.systemInfo = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
@@ -36,12 +36,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var wrapper = this._template.systemWrapper.clone();
 
             var coordinateSystemSelection = this._template.coordinateSystemSelection({
-                title: this.loc.coordinatesystem.title,
-                geodetic_datum: this.loc.coordinatesystem.geodetic_datum,
-                coordinate_system: this.loc.coordinatesystem.coordinate_system,
-                map_projection: this.loc.coordinatesystem.map_projection,
-                geodetic_coordinate_system:this.loc.coordinatesystem.geodetic_coordinatesystem,
-                elevation_system:this.loc.coordinatesystem.heigth_system 
+                title: this.loc('flyout.coordinateSystem.title'),
+                geodetic_datum: this.loc('flyout.coordinateSystem.geodeticDatum.label'),
+                coordinate_system:  this.loc('flyout.coordinateSystem.coordinateSystem.label'),
+                map_projection:  this.loc('flyout.coordinateSystem.mapProjection.label'),
+                geodetic_coordinate_system: this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.label'),
+                elevation_system: this.loc('flyout.coordinateSystem.heightSystem.label')
             });
             wrapper.append(coordinateSystemSelection);
             this.setElement(wrapper);

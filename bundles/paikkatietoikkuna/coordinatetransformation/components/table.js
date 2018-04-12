@@ -86,12 +86,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         },
         create: function () {
             var me = this;
-                var rowcounter = this.template.rowcounter({ rows: this.loc.utils.rows })
+                var rowcounter = this.template.rowcounter({ rows: this.loc('flyout.coordinateField.rows') })
                                                                                 
                 var coordinatefield = this.template.table({
-                    input: this.loc.coordinatefield.input,
-                    north:this.loc.coordinatefield.north,
-                    east:this.loc.coordinatefield.east,
+                    input: this.loc('flyout.coordinateField.input'),
+                    north:this.loc('flyout.coordinateField.north'),
+                    east:this.loc('flyout.coordinateField.east'),
                     ellipse_elevation: "" 
                 });
 
@@ -172,7 +172,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         updateTitle: function (values) {
             this.getElements().header.remove();
             // TODO Refactor this
-            var x = y = z = "";
+            /*var x = y = z = "";
             if ( values.projection === 'GK') {
                 x = this.loc.coordinatefield.kkjnorth;
                 y = this.loc.coordinatefield.kkjeast;
@@ -216,7 +216,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                     header.find('th').addClass('three');
                 }
                 header.insertBefore( this.getContainer().find(".oskari-table-content") );
-            }
+            }*/
         },
         handleClipboardPasteEvent: function () {
             var me = this;
