@@ -1060,7 +1060,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 baseLayer.setOpacity(100);
             }
 
-            baseLayer.setGroups(baseMapJson.groups);
+            if (baseMapJson.groups) {
+                baseLayer.setGroups(baseMapJson.groups);
+            }
 
             return baseLayer;
         },
