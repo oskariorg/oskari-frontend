@@ -208,8 +208,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             });
             return values;
         },
-        resetSelectToPlaceholder: function () {
-            //reset all but the datum
+        resetSelectToPlaceholder: function (resetDatum) {
+            if (resetDatum === true){
+                this.selectInstance.datum.resetToPlaceholder();
+            }
             this.selectInstance.coordinate.resetToPlaceholder();
             this.selectInstance.projection.resetToPlaceholder();
             this.selectInstance["geodetic-coordinate"].resetToPlaceholder();
