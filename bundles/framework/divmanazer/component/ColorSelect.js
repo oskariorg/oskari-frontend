@@ -193,7 +193,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         /**
          * @public close close selection
          */
-        close: function(){
+        close: function() {
             var me = this;
             me._selected.attr('data-state', 'closed');
             me._selection.hide();
@@ -306,10 +306,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             me._element.append(me._selection);
 
             me._setHandlers();
-            jQuery(document).off('click');
-            jQuery(document).on('click', function(){
-                me.close();
-            });
 
             me.close();
         },

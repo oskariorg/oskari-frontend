@@ -302,8 +302,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         if (!service.hasMapMode('vector')) {
             me._element.find('.visible-on-vector').remove();
         }
-
-        me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+        if (!me._colorSelect) {
+            me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+        }
         me._element.find('.classification-colors.value').append(me._colorSelect.getElement());
 
         var stateService = me.service.getStateService();
