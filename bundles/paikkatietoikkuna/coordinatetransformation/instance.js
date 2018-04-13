@@ -25,8 +25,9 @@ function () {
         conf.name = 'coordinatetransformation';
         conf.flyoutClazz = 'Oskari.coordinatetransformation.Flyout'
         this.plugins = {};
-        this._mapmodule = null;
+        //this._mapmodule = null;
         this.transformationService = null;
+        this.dataHandler = null;
         this.views = null;
         this.helper = null;
         this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
@@ -47,16 +48,30 @@ function () {
      * @method afterStart
      */
     afterStart: function () {
-        var sandbox = this.getSandbox();
-        this.transformationService = this.createService(sandbox);
-        this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        for ( var p in this.eventHandlers ) {
+            if (this.eventHandlers.hasOwnProperty(p)) {
+                this.sandbox.registerForEventByName(this, p);
+            }
+        }
+        this.transformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
+        //this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper', this);
+        this.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler' );
 
         this.instantiateViews();
         this.createUi();
     },
     getPlugins: function() {
         return this.plugins;
+    },
+    getDataHandler: function() {
+        return this.dataHandler;
+    },
+    getHelper: function () {
+        return this.helper;
+    },
+    hasInputCoords: function () {
+        return this.dataHandler.getData().inputCoords.length !== 0;
     },
     instantiateViews: function () {
         this.views = {
@@ -95,16 +110,42 @@ function () {
             this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [true]);
         }
     },
+    addMapCoordsToInput: function (addBln){
+        this.getDataHandler().addMapCoordsToInput(addBln);
+        if (addBln === true){
+            this.views.transformation.refreshTableData();
+        }
+    },
     /**
      * Creates the coordinatetransformation service and registers it to the sandbox.
      * @method createService
      * @param  {Oskari.Sandbox} sandbox
      * @return {Oskari.coordinatetransformation.TransformationService}
-     */
+     *
     createService: function(sandbox) {
         var TransformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
         sandbox.registerService(TransformationService);
         return TransformationService;
+    },*/
+    onEvent : function(event) {
+        var handler = this.eventHandlers[event.getName()];
+        if(!handler){
+            return;
+        }
+        return handler.apply(this, [event]);
+    },
+    eventHandlers: {
+        'MapClickedEvent': function ( event ) {
+            if (!this.mapSelectionMode()) {
+                return;
+            }
+            var lonlat = event._lonlat;
+            var helper = this.getHelper();
+            //add coords to map coords
+            this.getDataHandler().addMapCoord(lonlat);
+            helper.addMarkerForCoords(lonlat);
+            //this.instance.getViews().MapSelection.getCoords( this.clickCoordinates )
+        }
     }
 }, {
         /**

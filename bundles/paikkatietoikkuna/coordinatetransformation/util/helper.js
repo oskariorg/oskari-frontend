@@ -2,32 +2,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance)
     var me = this;
     this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
     this.instance = instance;
-    this.sb = instance.sandbox;
+    this.sb = Oskari.getSandbox();
     this.removeMarkersReq = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
     this.addMarkerReq = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
-    for ( var p in this.eventHandlers ) {
-        this.sb.registerForEventByName(this, p);
-        this.clickCoordinates = null;
-        this.moveReq = Oskari.requestBuilder('MapMoveRequest');
-    }
 }, {
     getName: function() {
         return 'Oskari.coordinatetransformation.helper';
     },
     init: function () {},
-    eventHandlers: {
-        'MapClickedEvent': function ( event, cb ) {
-            if (!this.instance.mapSelectionMode()) {
-                return;
-            }
-            this.clickCoordinates = event._lonlat;
-            this.addMarkerForCoords( this.clickCoordinates );
-            this.instance.getViews().MapSelection.getCoords( this.clickCoordinates )
-        }
-    },
-    getClickCoordinates: function() {
-        return this.clickCoordinates;
-    },
     addMarkerForCoords: function (coords, startingSystem) {
         if ( !this.instance.mapSelectionMode()  ) {
             return;
@@ -51,14 +33,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance)
             this.sb.request('MainMapModule', this.removeMarkersReq());
         }
     },
-    onEvent : function(event) {
-    	var handler = this.eventHandlers[event.getName()];
 
-        if(!handler)
-        	return;
-
-        return handler.apply(this, [event]);
-    },
     getOptionsJSON: function() {
          var json = {
             "datum": {
