@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             mode: me._element.find('select.classify-mode').val(),
             type: me._element.find('select.color-set').val(),
             name: me._colorSelect.getValue(),
-            reverseColors: me._element.find('#legend-flip-colors').attr('checked'),
+            reverseColors: me._element.find('#legend-flip-colors').is(':checked'),
             mapStyle: me._element.find('select.map-style').val(),
             // only used for points vector
             min: range[0],
