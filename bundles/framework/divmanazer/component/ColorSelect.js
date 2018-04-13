@@ -306,8 +306,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             me._element.append(me._selection);
 
             me._setHandlers();
-
-            jQuery(document).bind('click', function(){
+            jQuery(document).off('click');
+            jQuery(document).on('click', function(){
                 me.close();
             });
 
