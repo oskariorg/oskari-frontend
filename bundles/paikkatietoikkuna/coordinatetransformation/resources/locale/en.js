@@ -50,6 +50,7 @@ Oskari.registerLocalization(
             },
             "dataSource": {
                 "title": "Koordinaattitietojen lähde",
+                "confirmChange": "Muunnettavat koordinaatit tyhjennetään ja koordinaattijärjestelmän tiedot poistetaan. Haluatko jatkaa?",
                 "file": {
                     "label": "Tiedostosta",
                     "info":  "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
@@ -79,7 +80,8 @@ Oskari.registerLocalization(
                 "geoY":"Geosentrinen Y [m]",
                 "geoZ":"Geosentrinen Z [m]",
                 "ellipseElevation":"Ellipsoidinen korkeus [m]",
-                "rows": "Riviä"
+                "rows": "Riviä",
+                "clearTables": "Haluatko tyhjentää taulukot?"
             }
         },
         "mapMarkers":{
