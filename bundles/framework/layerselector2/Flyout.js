@@ -117,15 +117,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @method  @private addDefaultFilters
          */
         addDefaultFilters: function() {
-            var me = this;
-
-            // Add newest filter
-            me.addNewestFilter();
-
-            // Add featuredata filter
-            me.addFeaturedataFilter();
-
-            me.addTimeseriesFilter();
+            this.addNewestFilter();
+            this.addFeaturedataFilter();
+            this.addTimeseriesFilter();
         },
 
         /**

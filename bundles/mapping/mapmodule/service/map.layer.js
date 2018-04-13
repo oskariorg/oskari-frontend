@@ -68,6 +68,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return !!me.getNewestLayers(20).find(function (newLayer) {
                     return layer.getId() === newLayer.getId();
                 });
+            },
+            'timeseries' : function ( layer ) {
+                return layer.hasTimeseries();
             }
         };
 
