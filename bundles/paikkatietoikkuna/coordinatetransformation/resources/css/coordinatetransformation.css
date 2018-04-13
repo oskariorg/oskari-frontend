@@ -1,6 +1,3 @@
-.coordinatetransformation-flyout > .oskari-flyoutcontentcontainer{
-    max-height: 875px !important;
-}
 .coordinatetransformation-flyout {
     top:0;
 }
@@ -182,6 +179,9 @@
 .coordinatetransformation-flyout .cell {
     text-align: center;
     height: 1em;
+}
+.coordinatetransformation-flyout .cell.invalid-coord {
+    border: 2px solid red !important; /*TODO */
 }
 .coordinatetransformation-flyout .cell.control {
     border: inherit; 
