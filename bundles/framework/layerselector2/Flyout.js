@@ -26,7 +26,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
-
+        
+        this.mapLayerService.on('Layers.Loaded', function (loaded) {
+            if (loaded) {
+                me.displayExtraFilters();
+            }
+        });
         this.addedButtons = {};
 
         this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
@@ -118,10 +123,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         addDefaultFilters: function() {
             this.addNewestFilter();
-            this.addFeaturedataFilter();
-            this.addTimeseriesFilter();
         },
-
+        /**
+         * Adds extra filter buttons if layers exists
+         * @method  @private displayFilters
+         */
+        displayExtraFilters() {
+            if ( this.mapLayerService.getFilteredLayers('featuredata').length !== 0) {
+                this.addFeaturedataFilter();
+            }
+            if ( this.mapLayerService.getFilteredLayers('timeseries').length !== 0) {
+                this.addTimeseriesFilter();
+            }
+        },
         /**
          * Add newest filter.
          * @method  @public addNewestFilter

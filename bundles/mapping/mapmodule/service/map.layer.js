@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this._layerGroups = [];
 
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
+        Oskari.makeObservable(this);
 
         /**
          * @property typeMapping
@@ -528,6 +529,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
 
                 if (typeof callbackSuccess === 'function') {
+                    me.trigger("Layers.Loaded", true);
                     callbackSuccess();
                 }
                 return;
