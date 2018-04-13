@@ -587,10 +587,10 @@ div.oskari-flyout {
     .statsgrid-legend-plugin-transparent .geostats-legend-counter {
       color: #ffffff;
     }
-    .statsgrid-legend-plugin-transparent .accordion_panel {
+    .statsgrid-legend-plugin-transparent .accordion .accordion_panel {
       background-color: transparent;
     }
-    .statsgrid-legend-plugin-transparent .accordion_panel .open {
+    .statsgrid-legend-plugin-transparent .accordion .accordion_panel.open {
       background-color: transparent;
     }
     .statsgrid-legend-plugin-transparent .dropdown {
