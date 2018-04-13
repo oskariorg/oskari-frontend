@@ -1,14 +1,20 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', function ( ) {
 
-    this.data = {
-        coordinates: []
+    this.data = { //TODO
+        inputCoords: [], //[[1324, 12424]]
+        resultCoords: [], //[[1324, 12424]]
+        mapCoords: [], //[{lon:123, lat:134}]
+        lonFirst: true //TODO
+        //inputSrs:
+        //outputSrs:
+        //mapSrs
     };
 },
 {
     getName: function() {
         return 'Oskari.coordinatetransformation.CoordinateDataHandler';
     },
-    getCoordinateObject: function () {
+    getData: function () {
         return this.data;
     },
     /** 
@@ -76,12 +82,73 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         }
         return obj;
     },
+    addInputCoord: function (coord){
+        this.data.inputCoords.push(coord);
+    },
+    addInputCoords: function (coords){
+        this.data.inputCoords = coords;
+    },
+    //generic -> to helper??
+    //lonLatCoordToArray
+    addLonLatCoordToArray: function (array, coord, lonFirst){
+        if (typeof coord.lon !== 'number' && typeof coord.lat !== 'number'){
+            return
+        }
+        var arr = [];
+        if (lonFirst === true){ //this.data.lonFirst
+            arr.push(coord.lon);
+            arr.push(coord.lat);
+        } else {
+            arr.push(coord.lat);
+            arr.push(coord.lon);
+        }
+        return arr;
+        //array.push(arr);//this.addInputCoord(array);
+    },
+    //generic -> to helper??
+    arrayCoordToLonLat: function (coord, lonFirst){
+        var obj = {};
+        if (lonFirst === true){
+            obj.lon = coord[0];
+            obj.lat = coord[1];
+        }else{
+            obj.lat = coord[0];
+            obj.lon = coord[1];
+        }
+        return obj;
+    },
+    //lonlat
+    addMapCoord: function (coord) {
+        this.data.mapCoords.push(coord);
+    },
+    addMapCoordsToInput: function (addBln){
+        var me = this;
+        var coords = me.getData().mapCoords;
+        if (addBln === true){
+            for (var i = 0 ; i < coords.length ; i++ ) {
+                me.data.inputCoords.push(me.addLonLatCoordToArray(null, coords[i], true));
+            }
+        }
+        coords.length = 0;
+    },
+    clearCoords: function () {
+        this.data.inputCoords.length = 0;
+        this.data.mapCoords.length = 0;
+        this.data.resultCoords.length = 0;
+    },
+    checkCoordsArrays: function(){
+        var input = this.data.inputCoords.length,
+            result = this.data.resultCoords.length;
+        if (input !== 0 && result !==0){
+            return input === output;
+        }
+    },
     /**
      * @method modifyCoordinateObject
      * @param {string} flag - coordinate array contains two objects, input & output - flag determines which one you interact with
      * @param {array} coordinates - an array containing objects with keys lon lat - one object for each coordinate pair
      * @description 
-     */
+     *
     modifyCoordinateObject: function ( flag, coordinates ) {
         var data = this.getCoordinateObject().coordinates;
         var me = this;
@@ -106,6 +173,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
             actions[flag]();
         } else {
             return;
-        }
+        }*/
     },
 });

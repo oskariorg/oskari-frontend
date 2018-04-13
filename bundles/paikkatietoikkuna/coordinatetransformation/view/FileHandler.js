@@ -138,9 +138,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         },
         exportFile: function ( settings ) {
             var exportArray = [];
-            this.dataHandler.getCoordinateObject().forEach( function ( pair ) {
-                exportArray.push( pair.input );
-            });  
+            //this.dataHandler.getCoordinateObject().forEach( function ( pair ) {
+            //    exportArray.push( pair.input );
+            //});  
             if( exportArray.length !== 0 ) {
                 this.fileInput.exportToFile( exportArray, settings.filename+'.txt' );
             } else {

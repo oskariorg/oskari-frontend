@@ -1,7 +1,8 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function( view, loc ) {
+Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function( view, loc ) { //CoordinateTable
     this.transformView = view;
     this.loc = loc;
     this.container = null;
+    this.defaultTableRows = 10;
     this.template = {
             tableWrapper: _.template('<div class="table"></div>'),
             rowcounter: _.template('<div class="rowcount"><span id="num"></span> ${rows} </div>'),
@@ -17,9 +18,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                                         ' </table>'+
                                      '</div>'),
             row: _.template('<tr>' +
-                                    '<td class="cell lon" headers="north" style=" border: 1px solid black ;">${coords.lon}</td>'+
-                                    '<td class="cell lat" headers="east" style=" border: 1px solid black ;">${coords.lat}</td>'+
-                                    '<td class="cell elevation oskari-hidden" headers="ellipse_elevation" style=" border: 1px solid black;"></td>'+
+                                    '<td class="cell lon" headers="north" style=" border: 1px solid black ;">${coords.col1}</td>'+
+                                    '<td class="cell lat" headers="east" style=" border: 1px solid black ;">${coords.col2}</td>'+
+                                    '<td class="cell elevation oskari-hidden" headers="ellipse_elevation" style=" border: 1px solid black;">${coords.elev}</td>'+
                                     '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
             table:_.template('<div class="coordinatefield-table" style="display:inline-block;">' +
@@ -106,8 +107,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
 
                 var coords = {};
                 var tableRef = table.find("#oskari-coordinate-table");
-                var defaultTableRows = 10;
-                for ( var i = 0; i < defaultTableRows; i++ ) {
+
+                for ( var i = 0; i < this.defaultTableRows; i++ ) {
                    tableRef.append(this.template.row( { coords: coords } ) );
                 }
 
@@ -115,17 +116,25 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         },
         /**
          * @method render
-         * @param { Array } data, array of objects - each object needs to have property lon & lat 
+         * @param { Array } coords, array of coordinate arrays
          */
-        render: function ( data ) {
-            this.clearRows();
+        render: function ( coords ) {
             var table = this.getElements().table;
-            for ( var key in data ) {
-                if ( data.hasOwnProperty( key ) ) {
-                    var row = this.template.row( { coords: data[key] } );
-                    table.prepend(row);
+            var row,
+                rowData = {},
+                coord;
+            this.emptyTableCells();
+            for ( var i = coords.length-1; i >= 0 ; i-- ) {
+                coord = coords[i];
+                rowData.col1 = coord[0];
+                rowData.col2 = coord[1];
+                if (coord[2]){
+                    rowData.elev = coord[2];
                 }
+                row = this.template.row({coords:rowData});
+                table.prepend(row);
             }
+            this.handleTableSize(coords.length);
             table.trigger('rowCountChanged');
         },
         displayNumberOfDataRows: function ( number ) {
@@ -134,23 +143,40 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         isEditable: function ( editable ) {
             var rows = this.getElements().rows;
             if( !editable ) {
-                rows.each( function ( row ) {
+                rows.each( function () {
                     jQuery(this).find('td').attr("contenteditable", false);
                 });
             }
             else {
-                rows.each( function ( row ) {
+                rows.each( function () {
                     jQuery(this).find('td').attr("contenteditable", true);
                 });
             }
         },
-        clearRows: function () {
+        emptyTableCells: function() {
+            var isEditable = true; //TODO
+            var cell;
             var rows = this.getElements().rows;
-            for ( var i = 0; i < rows.length; i++ ) {
+            for (var i = 0; i < rows.length; i++ ) {
+                jQuery(rows[i]).find("td").each(function(){
+                    cell = jQuery(this);
+                    cell.text("");//empty();
+                    cell.removeClass("invalid-coord");
+                    if (isEditable){
+                        cell.attr("contenteditable", true);
+                    }
+                });
+            }
+        },
+        handleTableSize: function (dataRows) {
+            var i = this.defaultTableRows;
+            if (dataRows > this.defaultTableRows){
+                i = dataRows;
+            }
+            var rows = this.getElements().rows;
+            for (i; i < rows.length; i++ ) {
                 var indexRow = jQuery( rows[i] );
-                if ( indexRow.children().first().html() !== ""  ) {
-                    indexRow.remove();
-                }
+                indexRow.remove();
             }
             this.getElements().table.trigger('rowCountChanged');
         },

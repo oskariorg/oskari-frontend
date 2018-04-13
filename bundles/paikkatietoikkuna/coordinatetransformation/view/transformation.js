@@ -6,8 +6,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.helper = me.instance.helper;
         me.conversionContainer = null
         me.startingSystem = false;
-
-        me.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler' );
+        me.sourceSelection = null; //TODO move
 
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
         me.importFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.dataHandler, me.loc, "import");
@@ -111,7 +110,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             jQuery(container).append(wrapper);
 
-            this.inputTable.handleClipboardPasteEvent();
+            //this.inputTable.handleClipboardPasteEvent();
             this.handleButtons();
             this.handleRadioButtons();
         },
@@ -122,10 +121,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 this.getContainer().parent().parent().show();
             }
         },
-        updateCoordinateData: function ( flag, coordinates ) {
-            this.dataHandler.modifyCoordinateObject( flag, coordinates );
+        /*updateCoordinateData: function ( flag, coordinates ) {
+            this.instance.getDataHandler().modifyCoordinateObject( flag, coordinates );
             this.refreshTableData();
-        },
+        },*/
         getUserFileSettings: function () {
             return this.userFileSettings;
         },
@@ -134,8 +133,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
          * Pass this function as a callback to fileinput to get the file-data
          */
         readFileData: function( fileData ) {
-            var dataJson = this.dataHandler.validateData( fileData );
-            this.updateCoordinateData( "import", dataJson );
+            var dataJson = this.instance.getDataHandler().validateData( fileData );
+            //this.updateCoordinateData( "import", dataJson );
         },
         getSelectionValue: function ( selectListInstance ) {
             return selectListInstance.getValue();
@@ -164,6 +163,21 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 targetElevation: targetElevation
             }
         },
+        disableInputSelections: function (disable){
+            var inputSystem = this.inputSystem.getSelectInstance();
+            if (disable === true){
+                inputSystem["geodetic-coordinate"].setValue("ETRS-TM35FIN"); //TODO mapsrs when epsg is id -> selectMapProjectionValues
+                this.updateTableTitle();
+                Object.keys( inputSystem ).forEach( function ( key ) {
+                    inputSystem[key].setEnabled(false);
+                });
+            }else{
+                Object.keys( inputSystem ).forEach( function ( key ) {
+                    inputSystem[key].setEnabled(true);
+                });
+
+            }
+        },
         /**
          * @method selectMapProjectionValues
          *  TODO set the projection to the one in the Oskari instance
@@ -178,35 +192,56 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             this.updateTableTitle();
         },
-        handleServerResponse: function ( response ) {
-            var obj = this.dataHandler.constructLonLatObjectFromArray(response.coordinates);
-            this.updateCoordinateData("output", obj);
+        handleServerResponse: function ( coords, dimension) {
+            //var obj = this.getDataHandler().constructLonLatObjectFromArray(response.coordinates);
+            //this.updateCoordinateData("output", obj);
+            this.instance.getDataHandler().getData().resultCoords = coords;
+            this.refreshTableData();
         },
         /**
          * @method refreshTableData
          * @description refreshes both input and output tables with current data
          */
+         //TODO should we use coordsChanged event to trigger refresh table
         refreshTableData: function () {
-            var inputData = [];
-            var outputData = [];
+            var data = this.instance.getDataHandler().getData();
+            //var inputData = data.inputCoords;
+            //var outputData = data.resultCoords;
 
-            var data = this.dataHandler.getCoordinateObject().coordinates;
-
-            data.map( function ( pair ) {
+            /*data.map( function ( pair ) {
                 if ( pair.input ) {
                     inputData.push( pair.input );
                 }
                 if ( pair.output ) {
                     outputData.push( pair.output );
                 }
-            });
+            });*/
 
-            this.inputTable.render( inputData );
-            this.outputTable.render( outputData );
+            this.inputTable.render(data.inputCoords);
+            this.outputTable.render(data.resultCoords);
         },
         updateTableTitle: function () {
             this.inputTable.updateTitle( this.inputSystem.getSelectionValues() );
             this.outputTable.updateTitle( this.outputSystem.getSelectionValues() );
+        },
+        confirmResetFyout: function (){
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                cancelBtn = dialog.createCloseButton(this.loc('actions.cancel'));
+            okBtn.setTitle(this.loc('actions.ok'));
+            okBtn.addClass('primary');
+            okBtn.setHandler(function() {
+                me.resetFlyout();
+                dialog.close();
+            });
+            dialog.show(this.loc('flyout.dataSource.title'), this.loc('flyout.dataSource.confirmChange'), [cancelBtn, okBtn]);
+        },
+        resetFlyout: function () {
+            var me = this;
+            me.instance.getDataHandler().clearCoords();
+            me.refreshTableData();
+            //reset coords system selections ??
         },
         /**
          * @method handleRadioButtons
@@ -214,41 +249,108 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
          */
         handleRadioButtons: function () {
             var me = this;
+            jQuery('input[type=radio][name=load]').click(function(evt) {
+                me.inputSystem.resetSelectToPlaceholder(true);
+                if (me.sourceSelection !== this.value && me.instance.hasInputCoords()){
+                    me.confirmResetFyout();
+                    //TODO if yes then select radio button
+                    evt.preventDefault();
+                } else {
+                    me.sourceSelection = this.value;
+                    me.handleSourceSelection(me, this.value);
+                }
+            });
+        },
+        handleSourceSelection: function(me, value){
             var container = me.getContainer();
             var keyboardInfoElement = container.find('.coordinateconversion-keyboardinfo');
             var mapSelectInfoElement = container.find('.coordinateconversion-mapinfo')
             var fileInputElement = container.find('.oskari-fileinput');
 
-            jQuery('input[type=radio][name=load]').change(function() {
-                if (this.value == 'file') {
-                    me.inputTable.isEditable(false);
-                    me.importFileHandler.showFileDialogue();
-                    clipboardInfoElement.hide();
-                    mapSelectInfoElement.hide();
-                    fileInputElement.show();
+            if (value == 'file') {
+                me.inputTable.isEditable(false);
+                me.importFileHandler.showFileDialogue();
+                keyboardInfoElement.hide();
+                mapSelectInfoElement.hide();
+                fileInputElement.show();
+                me.disableInputSelections(false);
+                me.bindInputTableHandler(false);
+            }
+            else if (value == 'keyboard') {
+                me.inputTable.isEditable(true);
+                fileInputElement.hide();
+                mapSelectInfoElement.hide();
+                keyboardInfoElement.show();
+                me.disableInputSelections(false);
+                me.bindInputTableHandler(true);
+            }
+            else if (value == 'map') {
+                me.inputTable.isEditable(false);
+                keyboardInfoElement.hide();
+                fileInputElement.hide();
+                mapSelectInfoElement.show();
+                //me.selectMapProjectionValues();
+                me.disableInputSelections(true);
+                me.bindInputTableHandler(false);
+            }
+        },
+        //bind and unbind table input listener
+        bindInputTableHandler: function (bindBln){
+            var me = this;
+            var tableElem = me.inputTable.getContainer();
+
+            if (bindBln === true){
+                jQuery(tableElem).find('.oskari-table-content').on("focusout", {meRef:me}, me.inputTableHandler); //tbody //focus, focusout,
+            } else {
+                jQuery(tableElem).find('.oskari-table-content').off("focusout", me.inputTableHandler);
+            }
+        },
+        inputTableHandler: function (event){
+            var me = event.data.meRef;
+            var dimension = 2; //TODO if dimension === 3  3 2
+            var rows = jQuery(event.currentTarget).find("tr");
+            var cells;
+            var coord;
+            var inputCoords = [];
+            //var validRowCounter = 0;
+
+            rows.each(function(){
+                coord = [];
+                cells = jQuery(this).find("td");
+                for (var i = 0; i < dimension ; i++){
+                    if(me.handleCell(coord, cells[i])===false){
+                        //quit and add valid coordinates
+                        return false;
+                    }
                 }
-                else if (this.value == 'keyboard') {
-                    me.inputTable.isEditable(true);
-                    fileInputElement.hide();
-                    mapSelectInfoElement.hide();
-                    clipboardInfoElement.show();
-                }
-                else if (this.value == 'map') {
-                    me.inputTable.isEditable(false);
-                    keyboardInfoElement.hide();
-                    fileInputElement.hide();
-                    mapSelectInfoElement.show();
-                }
+                inputCoords.push(coord);
+                // TODO: check if epsg bbox contains coord
+                //validRowCounter++;
             });
+            //add valid coordinates
+            me.instance.getDataHandler().addInputCoords(inputCoords);
         },
 
+        handleCell: function(coord, cell){ //or handleRow
+            var cell = jQuery(cell);
+            var cellValue = cell.html().replace(',', '.');
+            var num = parseFloat(cellValue);
+            if (isNaN(num)){ //do not update input coords
+                cell.addClass("invalid-coord");
+                return false;
+            }
+            cell.text(num); //update cell content with parsed float
+            cell.removeClass("invalid-coord");
+            coord.push(num);
+            return true;
+        },
         /**
          * @method handleButtons
          */
         handleButtons: function () {
             var me = this;
             var container = me.getContainer();
-            var coordinateObject = me.dataHandler.getCoordinateObject();
+            var data = me.instance.getDataHandler().getData();
 
             jQuery('.selectFromMap').on("click", function() {
                 me.instance.setMapSelectionMode(true);
@@ -256,13 +358,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             });
 
             container.find('.clear').on("click", function () {
-                me.updateCoordinateData('clear');
-                me.helper.removeMarkers();
+                me.instance.getDataHandler().clearCoords();
+                me.refreshTableData();
+                //me.helper.removeMarkers();
             });
             container.find('.show').on("click", function () {
-                var rows = me.inputTable.getElements().rows;
-                coordinateObject.coordinates.forEach( function ( pair ) {
-                    me.helper.addMarkerForCoords( pair.input, me.startingSystem );
+                //var rows = me.inputTable.getElements().rows;
+                data.inputCoords.forEach( function ( coords ) {
+                    me.helper.addMarkerForCoords( coords, me.startingSystem );
                 });                
                 me.instance.toggleViews("mapmarkers");
             });
@@ -273,24 +376,24 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             container.find('#transform').on("click", function () {
                 var crs = me.getCrsOptions();
                 var userSettings = me.getUserFileSettings().import;
-                var coordinateArray = [];
-                coordinateObject.sourceCrs = crs.source;
-                coordinateObject.targetCrs = crs.target;
+                //var coordinateArray = [];
+                //data.sourceCrs = crs.source; 
+                //data.targetCrs = crs.target;
 
-                coordinateObject.coordinates.forEach( function ( pair ) {
+                /*coordinateObject.coordinates.forEach( function ( pair ) {
                     var input = pair.input;
                     var inputCoordinates = [ Number(input.lon), Number(input.lat) ];
                     coordinateArray.push(inputCoordinates);
-                });
+                });*/
 
                 var payload = {
                     sourceCrs: crs.source,
                     sourceElevationCrs: crs.sourceElevation,
                     targetCrs: crs.target,
                     targetElevationCrs: crs.targetElevation,
-                    coords: coordinateArray
+                    coords: data.inputCoords
                 }
-                me.instance.getService().getConvertedCoordinates( payload, me.handleServerResponse.bind( me ) );
+                me.instance.getService().getConvertedCoordinates( payload, me.handleServerResponse.bind( me ) ); //callback
             });
         }
     }

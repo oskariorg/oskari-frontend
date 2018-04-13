@@ -3,9 +3,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
         var me = this;
         me.instance = instance;
         me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
-        me.helper = me.instance.helper;
         me.mapSelectionContainer = null;
-        me.mapcoords = [];
+        //me.mapCoords = [];
         me.dialog = null;
     }, {
         getName: function() {
@@ -23,7 +22,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
         },
         show: function() {
             var me = this;
-
+            var helper = me.instance.getHelper();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             btn = dialog.createCloseButton(this.loc('actions.done')),
             cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -32,35 +31,38 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             me.dialog = dialog;
 
             cancelBtn.setHandler(function() {
-                me.helper.removeMarkers();
+                helper.removeMarkers();
                 dialog.close();
                 //me.removeMapClickListener();
                 me.instance.toggleViews("transformation");
                 me.instance.setMapSelectionMode(false);
-                me.mapcoords = [];
+                me.instance.addMapCoordsToInput(false);
+                //me.mapcoords = [];
             });
 
             btn.setHandler(function() {
-                me.instance.getViews().transformation.updateCoordinateData( 'input', me.mapcoords );
+                //me.instance.getViews().transformation.updateCoordinateData( 'input', me.mapcoords );
                 me.instance.setMapSelectionMode(false);
+                helper.removeMarkers();
+                dialog.close();
                 //me.removeMapClickListener();
-                me.instance.getViews().transformation.selectMapProjectionValues();
                 me.instance.toggleViews("transformation");
-                me.mapcoords = [];
+                me.instance.addMapCoordsToInput(true);
+                //me.mapcoords = [];
             });
 
             dialog.show(this.loc('mapMarkers.select.title'), this.loc('mapMarkers.select.info'), [cancelBtn, btn]);
             dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
             //this.mapClicksListener();
         },
-        getCoords: function ( coords ) {
+        /*getCoords: function ( coords ) {
             Object.keys( coords ).forEach( function ( key ) {
                 coords[key] = Math.round( coords[key] );
             });
             if( coords != null ) {
                 this.mapcoords.push( coords );
             }
-        },
+        },*/
         /* TODO: do we need these??
         removeMapClickListener: function () {
             jQuery('#mapdiv').off('click');
