@@ -352,9 +352,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         this.setEnabled(this.__enabled);
 
         me._colorSelect.setHandler(updateClassification);
-        me._element.find('select').bind('change', updateClassification);
+        me._element.find('select').on('change', updateClassification);
 
-        me._element.find('#legend-flip-colors').change(function () {
+        me._element.find('#legend-flip-colors').on('change', function () {
             updateClassification();
         });
         return me._element;
