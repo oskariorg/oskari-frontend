@@ -52,8 +52,15 @@
         // @property {Boolean} _isMoving true when map is being dragged
         this._isMoving = false;
 
-        // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
+        // @property {String} _projectionCode SRS projsandboxection code, defaults to 'EPSG:3067'
         this._projectionCode = 'EPSG:3067';
+
+        this._mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        if (!this._mapLayerService) {
+            // create maplayer service to sandbox if it doesn't exist yet
+            this._mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox);
+            this._sandbox.registerService(this._mapLayerService);
+        }
     }, {
         /** @static @property __name service name */
         __name: 'mapmodule.state',
@@ -350,6 +357,12 @@
             if (!layer || !layer.getId()) {
                 log.warn('Attempt to add layer that is not available.');
                 return;
+            }
+            if (!layer.isSupported( this._sandbox.getMap().getSrsName() )) {
+                this._mapLayerService.showUnsupportedPopup();
+                if ( layer.hasTimeseries() ) {
+                    return;
+                }
             }
             if (this.isLayerSelected(layer.getId())) {
                 log.warn('Layer already added. Skipping id ' + layer.getId());
