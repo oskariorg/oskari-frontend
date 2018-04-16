@@ -22,7 +22,7 @@ tools/test-results.xml
 *.tar.gz
 bower_components/*
 .DS_Store
-
+tools/
 .metadata
 bin/
 tmp/
