@@ -2250,10 +2250,6 @@ Oskari.clazz.define(
                 layerFunctions = [],
                 sandbox = this.getSandbox();
 
-            if (!layer.isSupported(sandbox.getMap().getSrsName())) {
-                this._mapLayerService.showUnsupportedPopup();
-            }
-
             _.each(layerPlugins, function (plugin) {
                 // true if either plugin doesn't have the function or says the layer is supported.
                 var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
