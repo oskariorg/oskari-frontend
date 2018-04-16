@@ -370,12 +370,12 @@ Oskari.clazz.define(
                     var licenseLink = basketEl.find('.basket__content-license>a');
                     var layerId = basketItem.layerUrl;
                     
-	                if (me.instance.conf.licenceByLayers[layerId]) {
+	                if (me.instance.conf.licenseByLayers && me.instance.conf.licenseByLayers[layerId]) {
 	                	licenseTitle.text(me._getLocalization('basket-license-title'));
-	                    licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenceByLayers[layerId].licenseName) ||
+	                    licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseName) ||
 	                        me.instance.conf.licenseName ||
 	                        me._getLocalization('basket-license-name'));
-	                    licenseLink.attr('href', me._sandbox.getLocalizedProperty(me.instance.conf.licenceByLayers[layerId].licenseUrl) ||
+	                    licenseLink.attr('href', me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseUrl) ||
 	                        me.instance.conf.licenseUrl);
 	                } else if(me.instance.conf.licenseUrl) {
                     	licenseTitle.text(me._getLocalization('basket-license-title'));
