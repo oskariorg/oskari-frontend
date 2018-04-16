@@ -122,10 +122,11 @@ Oskari.clazz.define(
             var me = this,
                 layers = me._sandbox.findAllSelectedMapLayers();
             for (var i = 0; i < layers.length; i++) {
-                if (!layers[i].hasTimeseries()) {
+                if (!layers[i].hasTimeseries() || !layers[i].isVisible() || !layers[i].isSupported(me._sandbox.getMap().getSrsName()) ) {
                     continue;
                 }
                 var layer = layers[i];
+
                 var series = this._timeseriesService.getTimeseries(layer.getId(), 'layer');
                 if (series) {
                     // existing timeseries layer -> update it (priority changed if layers rearranged)
