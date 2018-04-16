@@ -8,9 +8,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.conversionContainer = null
         me.startingSystem = false;
 
+        me.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler' );
+
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
-        me.fileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.instance, me.loc);
-        me.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler', me.getUserFileSettingSelections );
+        me.importFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.dataHandler, me.loc, "import");
+        me.exportFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.dataHandler, me.loc, "export");
 
         me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
         me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc );
@@ -20,7 +22,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
         me.sourceSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.SourceSelect', me.loc );
 
-        me.fileHandler.create();
+        me.importFileHandler.create();
+        me.exportFileHandler.create();
+
+        me.userFileSettings = {
+            import: null,
+            export: null
+        }
+
+        me.importFileHandler.on('GetSettings', function (settings) {
+            me.userFileSettings.import = settings;
+        });
+        me.exportFileHandler.on('GetSettings', function (settings) {
+            me.userFileSettings.export = settings;
+        });
 
         me._template = {
             wrapper: jQuery('<div class="transformation-wrapper"></div>'),
@@ -112,16 +127,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             this.dataHandler.modifyCoordinateObject( flag, coordinates );
             this.refreshTableData();
         },
+        getUserFileSettings: function () {
+            return this.userFileSettings;
+        },
         /**
          * @method readFileData
          * Pass this function as a callback to fileinput to get the file-data
          */
         readFileData: function( fileData ) {
             var dataJson = this.dataHandler.validateData( fileData );
-            this.updateCoordinateData( dataJson );
-        },
-        getUserFileSettingSelections: function () {
-            this.fileHandler.getUserFileSettingSelections();
+            this.updateCoordinateData( "import", dataJson );
         },
         getSelectionValue: function ( selectListInstance ) {
             return selectListInstance.getValue();
@@ -204,14 +219,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var clipboardInfoElement = container.find('.coordinateconversion-clipboardinfo');
             var mapSelectInfoElement = container.find('.coordinateconversion-mapinfo')
             var fileInputElement = container.find('.oskari-fileinput');
-            var importfile = me.fileHandler.getElement().import;
 
             jQuery('input[type=radio][name=load]').change(function() {
                 me.inputTable.isEditable( false );
                 me.isMapSelection = false;
 
                 if (this.value == '1') {
-                    // me.fileHandler.showFileDialogue( importfile, false );
+                    me.importFileHandler.showFileDialogue();
                     clipboardInfoElement.hide();
                     mapSelectInfoElement.hide();
                     fileInputElement.show();
@@ -253,11 +267,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 me.instance.toggleViews("mapmarkers");
             });
             container.find('.export').on("click", function () {
-                var exportfile = me.fileHandler.getElement().export;
-                me.fileHandler.showFileDialogue( exportfile, true );
+                me.exportFileHandler.showFileDialogue();
+                var userSettings = me.getUserFileSettings().export; 
             });
             container.find('#transform').on("click", function () {
                 var crs = me.getCrsOptions();
+                var userSettings = me.getUserFileSettings().import;
                 var coordinateArray = [];
                 coordinateObject.sourceCrs = crs.source;
                 coordinateObject.targetCrs = crs.target;

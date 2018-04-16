@@ -1,15 +1,13 @@
-.oskari-export {
+.oskari-coordinate-form {
     width: 39em;
     display: inline-block;
 }
- .filerow, .formatrow, .separatorrow, .headerrow {
+.oskari-coordinate-form .filerow, .formatRow, .decimalSeparator, .headerLineCount {
     float:left;
-}
- .filerow, .formatrow, .separatorrow, .headerrow {
     clear: left;
     padding-top: 0.875em; 
 }
-.title {
+.oskari-coordinate-form .title {
     font-weight: bold;
     word-break: break-word;
     width: 12em !important;
@@ -17,24 +15,24 @@
     float: left;
     padding-right: 0.4em;
 }
-.lbl > .chkbox {
+.oskari-coordinate-form .lbl > .chkbox {
     float: left;
 }
-.lbl {
+.oskari-coordinate-form .lbl {
     float: right;
     padding-left: 3em;
 }
-.file-select {
+.oskari-coordinate-form .settingsSelect {
     float: left;
 }
-.file-select > select {
+.oskari-coordinate-form .settingsSelect > select {
     float: right;
     width: 12em;
 }
-.cancel {
+.oskari-coordinate-form .cancel {
     clear: left;
     float: left;
 }
-.import {
+.oskari-coordinate-form .done {
     float:right;
 }
