@@ -98,6 +98,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getSandbox: function () {
             return this._sandbox;
         },
+        getActiveFilters: function (layer) {
+            var me = this;
+            Object.keys(this.layerFilters).forEach( function( key ) {
+                me.layerFilters[key](layer);
+            });
+        },
         /**
          * @method addLayer
          * Adds the layer to them Oskari system so it can be added to the map etc.
