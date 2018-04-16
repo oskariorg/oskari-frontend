@@ -41,6 +41,11 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         this._selectedValue = null;
         this._selected = null;
         this._selection = null;
+        
+        var me = this;
+        jQuery(document).on('click', function () {
+            me.close();
+        });
     }, {
         /**
          * @method @private _destroyImpl
@@ -193,7 +198,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         /**
          * @public close close selection
          */
-        close: function(){
+        close: function() {
             var me = this;
             me._selected.attr('data-state', 'closed');
             me._selection.hide();
@@ -306,10 +311,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             me._element.append(me._selection);
 
             me._setHandlers();
-
-            jQuery(document).bind('click', function(){
-                me.close();
-            });
 
             me.close();
         },
