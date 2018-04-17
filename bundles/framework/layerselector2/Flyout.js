@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             if (filtersWithLayers.length !== 0) {
                 filtersWithLayers.forEach( function(filter) {
                     var button = me.layerlistService.getLayerlistFilterButton(filter);
-                    me.filterComponent.create(me.layerTabs, button.text, button.tooltip, button.cls.active, button.cls.deactive, button.filterId);
+                    me.filterComponent.create(me.layerTabs, button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
                 });
             }
             return filtersWithLayers;
