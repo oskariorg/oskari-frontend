@@ -10,28 +10,76 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance)
         return 'Oskari.coordinatetransformation.helper';
     },
     init: function () {},
-    addMarkerForCoords: function (coords, startingSystem) {
-        if ( !this.instance.mapSelectionMode()  ) {
-            return;
+    addMarkerForCoords: function (coords, lonFirst, showLabel, color) {
+        var color = color || "ff0000";
+
+        var x,
+            y;
+        if ( lonFirst === true ) {
+            lon = coords[0];
+            lat = coords[1];
+        } else {
+            lon = coords[1];
+            lat = coords[0];
         }
+
         if ( this.addMarkerReq ) {
                 var data = {
-                    x: Number(coords.lon),
-                    y: Number(coords.lat),
-                    color: "ff0000",
+                    x: lon,
+                    y: lat,
+                    color: color,
                     shape: 3
                 };
-                if ( startingSystem ) {
-                    data.msg = "lon: "+coords.lon+ "lat: "+coords.lat;
+                if ( showLabel === true ) { //lonFirst labels
+                    data.msg = "lon: "+ lon+ "; lat: "+ lat; //TODO handle offset
                 }
             var request = this.addMarkerReq(data);
             this.sb.request('MainMapModule', request);
         }
     },
+    showMarkersOnMap: function (coords, addExisting){ //TODO
+        var me = this;
+        // ---
+        var color;
+        if (addExisting === true){
+            color = "#ffe5e5";
+        }
+        // ---
+        coords.forEach( function ( coord ) {
+            me.addMarkerForCoords(coord, true, true, color);
+        });
+    },
+
     removeMarkers: function () {
         if( this.removeMarkersReq ) {
             this.sb.request('MainMapModule', this.removeMarkersReq());
         }
+    },
+    //if valid return true else return localized errorMsg
+    validateSelectionsForTransform: function (crs, file, inputData){
+        var error = "";//= true;
+        //source crs and target crs should be always selected
+        if (!crs.source || !crs.target){
+            error += this.loc('flyout.transform.validateErrors.crs') + " ";
+        }
+        //TODO check if source or target is 3D
+        if (crs.sourceElevation && !crs.targetElevation){
+            error += this.loc('flyout.transform.validateErrors.targetHeight') + " ";
+        }
+        if (crs.targetElevation && !crs.sourceElevation){
+            error += this.loc('flyout.transform.validateErrors.sourceHeight') + " ";
+        }
+        if (!file && inputData === false){ //TODO better checking file / inputcoords
+            error +=  this.loc('flyout.transform.validateErrors.noInputData') + " ";
+        }
+        if (file && !file.filename){ //TODO better checking file / inputcoords
+            error +=  this.loc('flyout.transform.validateErrors.noInputFile') + " ";
+        }
+
+        if (error.length === 0){
+            return true
+        }
+        return error;
     },
 
     getOptionsJSON: function() {
