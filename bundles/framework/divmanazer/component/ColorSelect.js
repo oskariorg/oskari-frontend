@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         this._selectedValue = null;
         this._selected = null;
         this._selection = null;
-        
+
         var me = this;
         jQuery(document).on('click', function () {
             me.close();
@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             var me = this;
             me._enabled = enabled;
 
-            if(enabled) {
+            if (enabled) {
                 me._element.removeClass('disabled');
             } else {
                 me._element.addClass('disabled');
@@ -198,8 +198,12 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         /**
          * @public close close selection
          */
-        close: function() {
+        close: function () {
             var me = this;
+            if (!me._selected) {
+                // not rendered yet
+                return;
+            }
             me._selected.attr('data-state', 'closed');
             me._selection.hide();
         },
@@ -253,7 +257,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @method  @public setColorValues set colors
          * @param {Object} colors colors array
          */
-        setColorValues: function(colors){
+        setColorValues: function (colors) {
             var me = this;
 
             if(me._selected) {
@@ -269,17 +273,17 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
 
             me._element.empty();
 
-            if(typeof colors !== 'object' || !colors.length){
+            if (typeof colors !== 'object' || !colors.length) {
                 // not an array
                 return;
             }
             me._selection.hide();
 
-            colors.forEach(function(colorsDef, index) {
+            colors.forEach(function (colorsDef, index) {
                 // colorsDef can be like '#FFFFFF', ['#FFFFFF'] or { id : <myid>, value : ['#FFFFFF']}
                 var colorset = colorsDef.value || colorsDef;
                 var colorSel = me._getColorTemplate(colorset);
-                if(!colorSel) {
+                if (!colorSel) {
                     return;
                 }
                 var opt = me._templates.option.clone();
@@ -288,7 +292,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
                 opt.attr('data-id', colorsDef.id || index);
 
                 var width = 6;
-                if(typeof colorset === 'string') {
+                if (typeof colorset === 'string') {
                     width = 16;
                 } else {
                     width = 6 * colorset.length;
@@ -321,16 +325,14 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         _setVisibleImpl: function (visible) {
             var me = this;
             me._visible = visible;
-            if(visible) {
+            if (visible) {
                 me._element.show();
             } else {
                 me._element.hide();
             }
-
-
             return visible;
         }
 }, {
-     extend: ['Oskari.userinterface.component.FormComponent']
+    extend: ['Oskari.userinterface.component.FormComponent']
     }
 );
