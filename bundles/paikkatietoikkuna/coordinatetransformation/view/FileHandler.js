@@ -7,47 +7,56 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         me.element = null;
         me.flag = flag;
         me._template = {
-            settings: _.template(' <div class="oskari-coordinate-form">' +
+            settings: _.template('<div class="oskari-coordinate-form">' +
                                     '<% if (typeof(filename) !== "undefined") { %> '+
-                                        '<div class="fileRow"> <b class="title">${filename}</b> <input id="filename" type="text"> </div>'+
+                                        '<div class="fileRow">' +
+                                            '<b class="title">${filename}</b>' +
+                                            '<input id="filename" type="text">' +
+                                        '</div>'+
                                     '<% } %>'+            
                                     '<div class="formatRow"> '+
-                                    '<b class="title">${format}</b> '+
-                                    '<div class="settingsSelect">'+
-                                        '<select id="unit">'+
-                                            '<option value="degree">${degree}</option>'+
-                                            '<option value="gradian">${gradian}</option>'+
-                                            '<option value="radian">${radian}</option>'+
-                                            '<option value="DDD.dd">DDD.dd</option>'+
-                                            '<option value="DD MM SS.ss">DD MM SS.ss</option>'+
-                                            '<option value="DD MM.mm">DD MM.mm</option>'+
-                                            '<option value="DDMMSS.ss">DDMMSS.ss</option>'+
-                                            '<option value="DDMM.mm">DDMM.mm</option>'+
-                                        '</select>'+
+                                        '<b class="title">${format}</b> '+
+                                        '<div class="settingsSelect">'+
+                                            '<select id="unit">'+
+                                                '<option value="degree">${degree}</option>'+
+                                                '<option value="gradian">${gradian}</option>'+
+                                                '<option value="radian">${radian}</option>'+
+                                                '<option value="DDD.dd">DDD.dd</option>'+
+                                                '<option value="DD MM SS.ss">DD MM SS.ss</option>'+
+                                                '<option value="DD MM.mm">DD MM.mm</option>'+
+                                                '<option value="DDMMSS.ss">DDMMSS.ss</option>'+
+                                                '<option value="DDMM.mm">DDMM.mm</option>'+
+                                            '</select>'+
+                                        '</div>'+
+                                        '<label class="lbl">' +
+                                            '<input id="prefixId" class="chkbox" type="checkbox">' +
+                                            '${id}' +
+                                        '</label>'+
                                     '</div>'+
-                                    '<label class="lbl"><input id="prefixId" class="chkbox" type="checkbox">${id}</label>'+
-                                '</div>'+
-                                '<div class="decimalSeparator"> '+
-                                    '<b class="title">${decimalseparator}</b> '+
-                                    '<div class="settingsSelect">'+
-                                        '<select id="decimalseparator">'+
-                                            '<option value="point">${point}</option>'+
-                                            '<option value="comma">${comma}</option>'+
-                                        '</select>'+
+                                    '<div class="decimalSeparator"> '+
+                                        '<b class="title">${decimalseparator}</b> '+
+                                        '<div class="settingsSelect">'+
+                                            '<select id="decimalseparator">'+
+                                                '<option value="point">${point}</option>'+
+                                                '<option value="comma">${comma}</option>'+
+                                            '</select>'+
+                                        '</div>' +
+                                        '<label class="lbl">' +
+                                            '<input id="reversecoordinates" class="chkbox" type="checkbox">' +
+                                            '${reversecoords}' +
+                                        '</label> '+
                                     '</div>' +
-                                    '<label class="lbl"> <input id="reversecoordinates" class="chkbox" type="checkbox"> ${reversecoords}</label> '+
-                                '</div>' +
-                                '<div class="headerLineCount"> '+
-                                    '<b class="title">${headercount}</b>'+
-                                    '<input id="headerrow" type="number"> '+
-                                '</div>'+
+                                    '<div class="headerLineCount"> '+
+                                        '<b class="title">${headercount}</b>'+
+                                        '<input id="headerrow" type="number"> '+
+                                    '</div>'+
                                     '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
                                     '<% if(typeof(fileExport) !== "undefined") { %>'+
                                         '<input id="overlay-btn" class="done" type="button" value="${fileExport}" />'+
                                     '<% } else { %>'+
                                         '<input id="overlay-btn" class="done" type="button" value="${done}" />' +
                                     '<% } %>' +
-                                '</div>' +
+                                    '</div>' +
                                 '</div>'
                                 )
         } 
