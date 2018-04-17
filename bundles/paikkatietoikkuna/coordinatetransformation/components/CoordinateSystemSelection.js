@@ -116,8 +116,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             } else {
                 table = this.instance.outputTable;
             }
-
-            me.instance.startingSystem = true;
             
             if ( coordinate.indexOf("3D") > -1 ) {
                 table.handleDisplayingElevationRows(true);

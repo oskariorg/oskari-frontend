@@ -50,14 +50,17 @@ function(instance) {
     getConvertedCoordinates: function( payload, successCb, errorCb ) {
         var url = this.requestUrlBuilder( payload );
         jQuery.ajax({
-           contentType: "application/json",
-           type: "POST",
-           url: url,
-           data: JSON.stringify(payload.coords),
-           success: function(response) {
-               successCb(response);
-           }
-       });
+            contentType: "application/json",
+            type: "POST",
+            url: url,
+            data: JSON.stringify(payload.coords),
+            success: function(response) {
+                successCb(response);
+            },
+            error: function(){
+                errorCb(); //TODO errorCodes??
+            }
+        });
     },
     _handleResponse: function(response, cb) {
         cb(response);

@@ -89,8 +89,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         this.data.inputCoords = coords;
     },
     //generic -> to helper??
-    //lonLatCoordToArray
-    addLonLatCoordToArray: function (array, coord, lonFirst){
+    //lonLatCoordToArray or addLonLatCoordToArray (array,..)
+    lonLatCoordToArray: function ( coord, lonFirst){
         if (typeof coord.lon !== 'number' && typeof coord.lat !== 'number'){
             return
         }
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         var coords = me.getData().mapCoords;
         if (addBln === true){
             for (var i = 0 ; i < coords.length ; i++ ) {
-                me.data.inputCoords.push(me.addLonLatCoordToArray(null, coords[i], true));
+                me.data.inputCoords.push(me.lonLatCoordToArray(coords[i], true));
             }
         }
         coords.length = 0;
@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         if (input !== 0 && result !==0){
             return input === output;
         }
-    },
+    }
     /**
      * @method modifyCoordinateObject
      * @param {string} flag - coordinate array contains two objects, input & output - flag determines which one you interact with
@@ -173,6 +173,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
             actions[flag]();
         } else {
             return;
-        }*/
-    },
+        }
+    },*/
 });

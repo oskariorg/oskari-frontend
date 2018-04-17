@@ -99,14 +99,10 @@ function () {
     setMapSelectionMode: function (isSelect){
         this.isMapSelection = !!isSelect;
         if (isSelect === true){
-            this.sandbox.postRequestByName(
-                'EnableMapKeyboardMovementRequest'
-            );
+            this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [false]);
         } else {
-            this.sandbox.postRequestByName(
-                'DisableMapKeyboardMovementRequest'
-            );
+            this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [true]);
         }
     },
@@ -123,9 +119,9 @@ function () {
      * @return {Oskari.coordinatetransformation.TransformationService}
      *
     createService: function(sandbox) {
-        var TransformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
-        sandbox.registerService(TransformationService);
-        return TransformationService;
+        var transformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
+        sandbox.registerService(transformationService);
+        return transformationService;
     },*/
     onEvent : function(event) {
         var handler = this.eventHandlers[event.getName()];
@@ -140,11 +136,11 @@ function () {
                 return;
             }
             var lonlat = event._lonlat;
-            var helper = this.getHelper();
+            var coordArray = this.dataHandler.lonLatCoordToArray(lonlat, true);
+
             //add coords to map coords
-            this.getDataHandler().addMapCoord(lonlat);
-            helper.addMarkerForCoords(lonlat);
-            //this.instance.getViews().MapSelection.getCoords( this.clickCoordinates )
+            this.dataHandler.addMapCoord(lonlat);
+            this.helper.addMarkerForCoords(coordArray, true, true);
         }
     }
 }, {
