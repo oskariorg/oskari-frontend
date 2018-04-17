@@ -15,7 +15,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         this._controlPlugin;
         this._timeseriesService;
         this._timeseriesLayerService;
-        this._layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
     }, {
         __name: 'timeseries',
         /**
@@ -66,9 +65,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          */
         _registerForLayerFiltering: function () {
             var me = this,
-                loc = Oskari.getMsg.bind(null, 'timeseries');
+                loc = Oskari.getMsg.bind(null, 'timeseries'),
+                layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
 
-            me._layerlistService.registerLayerlistFilterButton( loc("layerFilter.timeseries"),
+            layerlistService.registerLayerlistFilterButton( loc("layerFilter.timeseries"),
                 loc("layerFilter.tooltip"), {
                     active: 'layer-timeseries',
                     deactive: 'layer-timeseries-disabled'
