@@ -7,18 +7,32 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             sourceWrapper: jQuery('<div class="sourceWrapper"></div>'),
             source: _.template(
                 '<div class="coordinate-datasource"> </br> ' +
-                '<h4>${title}</h4>'+
-                '<form>'+
-                    '<input type="radio" id="clipboard" name="load" value="keyboard"><label for="clipboard"><span></span> ${clipboard} </label>'+
-                    '<input type="radio" id="file" name="load" value="file"><label for="file"> <span></span> ${file} </label>'+
-                    '<input type="radio" id="mapselection" name="load" value="map"><label for="mapselection"> <span></span> ${map} </label>'+
-                '</form>'+
+                    '<h4>${title}</h4>'+
+                    '<form>'+
+                        '<input type="radio" id="clipboard" name="load" value="keyboard">' +
+                        '<label for="clipboard">' +
+                            '<span/>' +
+                            '${clipboard}' +
+                        '</label>'+
+                        '<input type="radio" id="file" name="load" value="file">' +
+                        '<label for="file">' +
+                            '<span/>' +
+                            '${file}' +
+                        '</label>'+
+                        '<input type="radio" id="mapselection" name="load" value="map">' +
+                        '<label for="mapselection">' +
+                            '<span/>' +
+                            '${map}' +
+                        '</label>'+
+                    '</form>'+
                 '</div>'
             ),
             info: _.template(
                 '<div class="datasource-info">' +
                     '<div class="coordinateconversion-clipboardinfo" style=display:none;">'+
-                        '<div class="clipboardinfo"> <i>${clipboardupload}<i> </div>'+
+                        '<div class="clipboardinfo">' +
+                            '<i>${clipboardupload}<i>' +
+                        '</div>'+
                     '</div>' +
                     '<div class="coordinateconversion-mapinfo" style=display:none;">'+
                         '<div class="mapinfo">'+
