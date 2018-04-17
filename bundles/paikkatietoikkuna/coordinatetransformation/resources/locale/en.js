@@ -81,7 +81,22 @@ Oskari.registerLocalization(
                 "geoZ":"Geosentrinen Z [m]",
                 "ellipseElevation":"Ellipsoidinen korkeus [m]",
                 "rows": "Riviä",
-                "clearTables": "Haluatko tyhjentää taulukot?"
+                "clearTables": "Tyhjennä taulukot",
+                "confirmClear": "Haluatko tyhjentää taulukot?"
+            },
+            "transform": {
+                "validateErrors": {
+                    "title": "Virhe!",
+                    "crs": "Geodeettinen koordinaattijärjestelmä pitää olla valittuna sekä lähtö- että tulostiedoissa.",
+                    "sourceHeight": "Lähtötietojen korkeusjärjestelmää ei ole valittu.",
+                    "targetHeight": "Tulostietojen korkeusjärjestelmää ei ole valittu.",
+                    "noInputData": "Ei muunnettavia koordinaatteja.",
+                    "noInputFile": "Lähtöaineiston sisältävää tiedostoa ei ole valittu."
+                },
+                "responseErrors": {
+                    "title": "Virhe muunnoksessa!",
+                    "errorMsg": "Koordinaattimuunnos epäonnistui..."
+                }
             }
         },
         "mapMarkers":{
@@ -102,7 +117,8 @@ Oskari.registerLocalization(
             "select": "Valitse",
             "cancel": "Peruuta",
             "done": "Valmis",
-            "ok": "Ok"
+            "ok": "Ok",
+            "close": "Sulje"
         },
         "fileSettings": {
             "options": {
