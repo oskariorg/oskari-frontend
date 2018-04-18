@@ -107,62 +107,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             // empty any current lists
             var me = this;
             var container = me.content.find('div.content');
-            var layers = [];
-            var deniedLayers = [];
-            var selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
-            var i;
-            var layer;
-            var layersList;
-            var heading;
-            var txt;
 
+            // cleanup
             container.find('div.error').remove();
             container.find('div.layerlist').remove();
-            for (i = 0; i < selectedLayers.length; ++i) {
-                layer = selectedLayers[i];
-                if (!me.service.hasPublishRight(layer) &&
-                        layer.getId().toString().indexOf('myplaces_') < 0) {
+
+            // split layers to publishable or not
+            var layers = [];
+            var deniedLayers = [];
+            me.instance.sandbox.findAllSelectedMapLayers().forEach(function (layer) {
+                if (!me.service.hasPublishRight(layer)) {
                     deniedLayers.push(layer);
                 } else {
                     layers.push(layer);
                 }
-            }
-            // render list of layers with publication rights
-            if (layers.length > 0) {
-                layersList = me._getRenderedLayerList(layers);
-                heading = layersList.find('h4');
-                txt = 'loc.layerlist_title';
-                if (me.loc && me.loc.layerlist_title) {
-                    txt = me.loc.layerlist_title;
-                }
-                heading.append(txt);
-                container.append(layersList);
+            });
 
-                // enable/disable me.buttons['continue']
-                me.buttons['continue'].setEnabled(true);
-
-                // render list of layers that cannot be published
-                if (deniedLayers.length > 0) {
-                    var deniedLayersList = me._getRenderedLayerList(deniedLayers);
-                    heading = deniedLayersList.find('h4');
-                    heading.append(this.loc.layerlist_denied);
-                    // add tooltip
-                    var tooltip = me.templateInfo.clone();
-                    tooltip.attr('title', me.loc.denied_tooltip);
-                    heading.before(tooltip);
-                    container.append(deniedLayersList);
-                }
-            } else {
+            // check if we have any layers for publishing
+            if (layers.length === 0) {
+                // no layers available for publishing
                 var errorsList = me.templateError.clone();
                 var error = me.templateListItem.clone();
                 error.append(me.loc.layerlist_empty);
                 errorsList.find('ul').append(error);
                 container.append(errorsList);
 
-                // disable me.buttons['continue']
+                // disable Continue button
                 me.buttons['continue'].setEnabled(false);
+                return;
             }
 
+            // good for publishing
+            // render list of layers with publication rights
+            var layersListEl = me._getRenderedLayerList(layers);
+            layersListEl.find('h4').append(me.loc.layerlist_title || 'loc.layerlist_title');
+            container.append(layersListEl);
+
+            // enable Continue button
+            me.buttons['continue'].setEnabled(true);
+
+            // render list of layers that cannot be published if there are any
+            if (deniedLayers.length > 0) {
+                var deniedLayersList = me._getRenderedLayerList(deniedLayers);
+                var heading = deniedLayersList.find('h4');
+                heading.append(this.loc.layerlist_denied);
+                // add tooltip
+                var tooltip = me.templateInfo.clone();
+                tooltip.attr('title', me.loc.denied_tooltip);
+                heading.before(tooltip);
+                container.append(deniedLayersList);
+            }
         },
 
         /**
@@ -179,19 +173,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
         _getRenderedLayerList: function (list) {
             var layerList = this.templateLayerList.clone();
             var listElement = layerList.find('ul');
-            var i;
-            var layer;
-            var item;
-            for (i = 0; i < list.length; ++i) {
-                layer = list[i];
-                item = this.templateListItem.clone();
-                if (layer.getId().toString().indexOf('myplaces_') > -1) {
-                    item.append(layer.getName() + ' (' + this.loc.myPlacesDisclaimer + ')');
-                } else {
-                    item.append(layer.getName());
+            var listItemTemplate = this.templateListItem;
+            var usercontentDisclaimer = this.loc.myPlacesDisclaimer;
+
+            (list || []).forEach(function (layer) {
+                var item = listItemTemplate.clone();
+                var txt = layer.getName();
+                // TODO: this covers myplaces layers - what about userlayers?
+                if (layer.isLayerOfType('MYPLACES')) {
+                    txt = txt + ' (' + usercontentDisclaimer + ')';
                 }
+                item.append(txt);
                 listElement.append(item);
-            }
+            });
             return layerList;
         },
 
@@ -252,19 +246,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
         _checkTouAccepted: function () {
             var me = this;
             jQuery.ajax({
-                url: me.instance.sandbox.getAjaxUrl(),
+                url: Oskari.urls.getRoute('HasAcceptedPublishedTermsOfUse'),
                 type: 'GET',
-                data: {
-                    action_route: 'HasAcceptedPublishedTermsOfUse'
-                },
-                dataType: 'json',
                 error: function () {
                     this.success(false);
-                },
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
                 },
                 success: function (resp) {
                     me.hasAcceptedTou = resp;
@@ -294,19 +279,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
         _markTouAccepted: function () {
             var me = this;
             jQuery.ajax({
-                url: me.instance.sandbox.getAjaxUrl(),
+                url: Oskari.urls.getRoute('AcceptPublishedTermsOfUse'),
                 type: 'GET',
-                data: {
-                    action_route: 'AcceptPublishedTermsOfUse'
-                },
-                dataType: 'json',
                 error: function () {
                     this.success(false);
-                },
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
                 },
                 success: function (resp) {
                     me.hasAcceptedTou = resp;
