@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
     function (sandbox, mapLayerUrl) {
         var me = this;
-        this._mapLayerUrl = mapLayerUrl || sandbox.getAjaxUrl('GetMapLayers') + '&lang=' + Oskari.getLang();
+        this._mapLayerUrl = mapLayerUrl || Oskari.urls.getRoute('GetMapLayers') + '&lang=' + Oskari.getLang();
         this._sandbox = sandbox;
         this._allLayersAjaxLoaded = false;
         this._loadedLayersList = [];
@@ -353,7 +353,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         deleteLayerGroup: function (id, parentId) {
             var me = this;
-            var newGroups = [];
             var editable = me.getAllLayerGroups(parentId);
 
             var getGroupIndexInArray = function (arr) {
@@ -510,45 +509,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         /**
-         * @method _loadLayersRecursive
-         * Internal callback method for laod layers recursive
-         * @param {Object} pResp ajax response in JSON format
-         * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
-         * @private
-         */
-        _loadLayersRecursive: function (layers, callbackSuccess) {
-            var me = this;
-            // check if recursion should end
-            if (layers.length === 0) {
-                // notify components of added layers
-                this._allLayersAjaxLoaded = true;
-                this.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
-
-                if (typeof callbackSuccess === 'function') {
-                    callbackSuccess();
-                }
-                return;
-            }
-            // remove the first one for recursion
-            var json = layers.shift();
-            var mapLayer = me.createMapLayer(json);
-            // unsupported maplayer type returns null so check for it
-            if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
-                me.addLayer(mapLayer, true);
-            }
-            // process remaining layers
-            if (layers.length % 20 !== 0) {
-                // do it right a way
-                me._loadLayersRecursive(layers, callbackSuccess);
-            } else {
-                // yield cpu time after every 20 layers
-                setTimeout(function () {
-                    me._loadLayersRecursive(layers, callbackSuccess);
-                }, 0);
-            }
-        },
-
-        /**
          * @method loadAllLayerGroupsAjax
          * Loads layers JSON using the ajax URL given on #create()
          * and parses it to internal layer objects by calling #createMapLayer() and #addLayer()
@@ -592,29 +552,83 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             me._layerGroups = [];
 
-            var layers = [];
+            pResp.groups.forEach(function (group) {
+                var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
+                me._layerGroups.push(groupDom);
+            });
 
-            var addGroupLayers = function (groups, recursive) {
+            var flatLayerGroups = [];
+            var gatherFlatGroups = function (groups) {
                 groups.forEach(function (group) {
-                    if (group.layers) {
-                        group.layers.forEach(function (layer) {
-                            layers.push(layer);
-                        });
-                    }
-                    if (group.groups) {
-                        addGroupLayers(group.groups, true);
-                    }
-
-                    // If not recursive, then
-                    if (!recursive) {
-                        var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
-                        me._layerGroups.push(groupDom);
-                    }
+                    flatLayerGroups.push(group);
+                    gatherFlatGroups(group.getGroups());
                 });
-            };
+            }
+            gatherFlatGroups(me._layerGroups);
 
-            addGroupLayers(pResp);
-            this._loadLayersRecursive(layers, callbackSuccess);
+            this._loadLayersRecursive(pResp.layers, function () {
+                // FIXME: refactor codebase to get rid of these circular references.
+                var allLayers = me.getAllLayers();
+                // groups are expected to contain the layer objects -> inject layers to groups based on list of ids the group holds
+                flatLayerGroups.forEach(function (group) {
+                    var layersInGroup = allLayers.filter(function (layer) {
+                        return group.getLayerIdList().findIndex(function (id) {
+                            return id === layer.getId();
+                        }) !== -1;
+                    });
+
+                    group.setLayers(layersInGroup);
+                    // layers are expected to have reference to groups they are in -> injecting groups to layer
+                    layersInGroup.forEach(function (layer) {
+                        layer.getGroups().push({
+                            id: group.getId(),
+                            name: Oskari.getLocalized(group.getName())
+                        });
+                    });
+                });
+
+                // notify components of added layers
+                me.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+            });
+        },
+
+        /**
+         * @method _loadLayersRecursive
+         * Internal callback method for load layers recursive
+         * @param {Object} pResp ajax response in JSON format
+         * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
+         * @private
+         */
+        _loadLayersRecursive: function (layers, callbackSuccess) {
+            var me = this;
+            // check if recursion should end
+            if (layers.length === 0) {
+                me._allLayersAjaxLoaded = true;
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+                return;
+            }
+            // remove the first one for recursion
+            var json = layers.shift();
+            var mapLayer = me.createMapLayer(json);
+            // unsupported maplayer type returns null so check for it
+            if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
+                me.addLayer(mapLayer, true);
+            }
+            // process remaining layers
+            if (layers.length % 20 !== 0) {
+                // do it right a way
+                me._loadLayersRecursive(layers, callbackSuccess);
+            } else {
+                // yield cpu time after every 20 layers
+                setTimeout(function () {
+                    me._loadLayersRecursive(layers, callbackSuccess);
+                }, 0);
+            }
         },
 
         /**
@@ -1046,7 +1060,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 baseLayer.setOpacity(100);
             }
 
-            baseLayer.setGroups(baseMapJson.groups);
+            if (baseMapJson.groups) {
+                baseLayer.setGroups(baseMapJson.groups);
+            }
 
             return baseLayer;
         },
