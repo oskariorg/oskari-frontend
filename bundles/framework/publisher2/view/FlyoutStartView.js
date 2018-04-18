@@ -40,8 +40,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
          * component will be rendered to
          */
         render: function (container) {
-            var me = this,
-                content = me.template.clone();
+            var me = this;
+            var content = me.template.clone();
             me.content = content;
 
             content.find('div.content').before(me.loc.text);
@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             touContentLink.append(me.loc.touLink);
             var conf = me.instance.conf || {};
             var url = me.instance.sandbox.getLocalizedProperty(conf.termsOfUseUrl) || '';
-            if(url.indexOf('http') === 0) {
+            if (url.indexOf('http') === 0) {
                 // starts with http - use as a link
                 touContentLink.attr('target', '_blank');
                 touContentLink.attr('href', url);
@@ -77,7 +77,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                     var req = publishMapEditorRequestBuilder();
                     me.instance.sandbox.request(me.instance, req);
                 }
-
             });
             me.buttons['continue'] = continueButton;
             me._updateContinueButton();
@@ -106,16 +105,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
          */
         _renderLayerLists: function () {
             // empty any current lists
-            var me = this,
-                container = me.content.find('div.content'),
-                layers = [],
-                deniedLayers = [],
-                selectedLayers = me.instance.sandbox.findAllSelectedMapLayers(),
-                i,
-                layer,
-                layersList,
-                heading,
-                txt;
+            var me = this;
+            var container = me.content.find('div.content');
+            var layers = [];
+            var deniedLayers = [];
+            var selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
+            var i;
+            var layer;
+            var layersList;
+            var heading;
+            var txt;
+
             container.find('div.error').remove();
             container.find('div.layerlist').remove();
             for (i = 0; i < selectedLayers.length; ++i) {
@@ -153,8 +153,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                     container.append(deniedLayersList);
                 }
             } else {
-                var errorsList = me.templateError.clone(),
-                    error = me.templateListItem.clone();
+                var errorsList = me.templateError.clone();
+                var error = me.templateListItem.clone();
                 error.append(me.loc.layerlist_empty);
                 errorsList.find('ul').append(error);
                 container.append(errorsList);
@@ -177,11 +177,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
          * @return {jQuery} DOM element with layer listing
          */
         _getRenderedLayerList: function (list) {
-            var layerList = this.templateLayerList.clone(),
-                listElement = layerList.find('ul'),
-                i,
-                layer,
-                item;
+            var layerList = this.templateLayerList.clone();
+            var listElement = layerList.find('ul');
+            var i;
+            var layer;
+            var item;
             for (i = 0; i < list.length; ++i) {
                 layer = list[i];
                 item = this.templateListItem.clone();
@@ -232,8 +232,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 return;
             }
 
-            var dlg = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeBtn = dlg.createCloseButton(me.loc.buttons.close);
+            var dlg = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var closeBtn = dlg.createCloseButton(me.loc.buttons.close);
 
             closeBtn.setHandler(function () {
                 dlg.close(true);
