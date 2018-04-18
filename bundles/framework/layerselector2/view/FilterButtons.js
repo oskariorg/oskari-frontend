@@ -14,54 +14,35 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             var me = this;
             var loc = Oskari.getLocalization('LayerSelector').layerFilter;
 
-            me.filterButtons.filter(function(button) {
-                if ( button.name === filterName ) {
-                    me.render();
-                    return;
-                }
-            });
-            
-            tabs.forEach(function(tab) {
-                var filterButton;
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
+            var filterButton = me.filterTemplate.clone()
 
-                if ( !me.buttonIsCreated(filterName) ) {
-                    filterButton = me.filterTemplate.clone()
-                    //filterContainer.empty();
-    
-                    filterButton.attr('data-filter', filterName);
-                    filterButton.find('.filter-text').html(toolText);
-                    filterButton.attr('title', tooltip);
-                    filterButton.find('.filter-icon').addClass('filter-' + filterName);
-                    filterButton.find('.filter-icon').addClass(iconClassDeactive);
-                    me.filterButtons.push({
-                        name: filterName,
-                        element: filterButton
-                    });
-                }
-                else {
-                    me.filterButtons.filter(function(button) {
-                        if ( button.name === filterName ) {
-                            filterButton = button.element;
-                        }
-                    });
-                }
-                filterButton.unbind('click');
-                filterButton.bind('click', function() {
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
-                    me.deactivateAllFilters(filterName);
-                    if (filterIcon.hasClass(iconClassDeactive)) {
-                        // Activate this filter
-                        me._setFilterIconClasses(filterName);
-                        me.activateFilter(filterName);
-                        me._setFilterTooltip(filterName, loc.tooltips.remove);
-                    } else {
-                        // Deactivate all filters
-                        me.deactivateAllFilters();
-                    }
+            filterButton.attr('data-filter', filterName);
+            filterButton.find('.filter-text').html(toolText);
+            filterButton.attr('title', tooltip);
+            filterButton.find('.filter-icon').addClass('filter-' + filterName);
+            filterButton.find('.filter-icon').addClass(iconClassDeactive);
+           
+            if ( !me.buttonIsCreated(filterName) ) {
+                me.filterButtons.push({
+                    name: filterName,
+                    element: filterButton
                 });
-                filterContainer.append(filterButton);
+            }
+            filterButton.unbind('click');
+            filterButton.bind('click', function(evt) {
+                var filterIcon = jQuery(evt.target).parent().find('.filter-icon.' + 'filter-' + filterName);
+                me.deactivateAllFilters(filterName);
+                if (filterIcon.hasClass(iconClassDeactive)) {
+                    // Activate this filter
+                    me._setFilterIconClasses(filterName);
+                    me.activateFilter(filterName);
+                    me._setFilterTooltip(filterName, loc.tooltips.remove);
+                } else {
+                    // Deactivate all filters
+                    me.deactivateAllFilters();
+                }
             });
+                me.render();
         },
         buttonIsCreated: function (filterName) {
             var created = false;
