@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
             // if match add
             var filters = me.handleFilters();
-            if ( filters.includes(button.filterId) ) {
+            if ( filters.includes(button.filterId) || button.filterId === "newest" ) {
                     me.filterComponent.create(me.layerTabs, button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
             }
         });
@@ -314,7 +314,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             var sandbox = this.instance.getSandbox();
             // populate layer list
             var layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers();
-
             this.layerTabs.forEach(function (tab) {
                 // populate tab if it has grouping method
                 if (tab.groupingMethod) {

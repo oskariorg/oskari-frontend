@@ -6,24 +6,46 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
                                             '<center><div class="filter-icon">'+
                                             '</div><div class="filter-text"></div></center>'+
                                         '</div>');
-        this.filteButtons = null;
+        this.filterButtons = [];
         Oskari.makeObservable(this);
     }, {
         create: function (tabs, toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
             this.layerTabs = tabs;
             var me = this;
             var loc = Oskari.getLocalization('LayerSelector').layerFilter;
+
+            me.filterButtons.filter(function(button) {
+                if ( button.name === filterName ) {
+                    me.render();
+                    return;
+                }
+            });
+            
             tabs.forEach(function(tab) {
-                var filterButton = me.filterTemplate.clone(),
-                filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                filterContainer.empty();
+                var filterButton;
+                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
 
-                filterButton.attr('data-filter', filterName);
-                filterButton.find('.filter-text').html(toolText);
-                filterButton.attr('title', tooltip);
-                filterButton.find('.filter-icon').addClass('filter-' + filterName);
-                filterButton.find('.filter-icon').addClass(iconClassDeactive);
-
+                if ( !me.buttonIsCreated(filterName) ) {
+                    filterButton = me.filterTemplate.clone()
+                    //filterContainer.empty();
+    
+                    filterButton.attr('data-filter', filterName);
+                    filterButton.find('.filter-text').html(toolText);
+                    filterButton.attr('title', tooltip);
+                    filterButton.find('.filter-icon').addClass('filter-' + filterName);
+                    filterButton.find('.filter-icon').addClass(iconClassDeactive);
+                    me.filterButtons.push({
+                        name: filterName,
+                        element: filterButton
+                    });
+                }
+                else {
+                    me.filterButtons.filter(function(button) {
+                        if ( button.name === filterName ) {
+                            filterButton = button.element;
+                        }
+                    });
+                }
                 filterButton.unbind('click');
                 filterButton.bind('click', function() {
                     var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
@@ -40,6 +62,15 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
                 });
                 filterContainer.append(filterButton);
             });
+        },
+        buttonIsCreated: function (filterName) {
+            var created = false;
+            this.filterButtons.filter(function(button) {
+                if ( button.name === filterName ) {
+                    created = true;
+                }
+            });
+            return created;
         },
           /**
          * Set filter button tooltip
@@ -143,6 +174,16 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             if (!notDeactivateThisFilter) {
                 me.activateFilter();
             }
+        },
+        render: function() {
+            var me = this;
+            this.layerTabs.forEach( function( tab ) {
+                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
+                filterContainer.empty();
+                me.filterButtons.forEach( function(button) {
+                    filterContainer.append(button.element);
+                });
+            });
         }
     }
 );
