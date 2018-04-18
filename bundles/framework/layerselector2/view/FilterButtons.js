@@ -14,35 +14,39 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             var me = this;
             var loc = Oskari.getLocalization('LayerSelector').layerFilter;
 
-            var filterButton = me.filterTemplate.clone()
+            if ( me.buttonIsCreated(filterName) ) {
+                me.render();
+                return;
+            } else {
+                var filterButton = me.filterTemplate.clone()
 
-            filterButton.attr('data-filter', filterName);
-            filterButton.find('.filter-text').html(toolText);
-            filterButton.attr('title', tooltip);
-            filterButton.find('.filter-icon').addClass('filter-' + filterName);
-            filterButton.find('.filter-icon').addClass(iconClassDeactive);
-           
-            if ( !me.buttonIsCreated(filterName) ) {
+                filterButton.attr('data-filter', filterName);
+                filterButton.find('.filter-text').html(toolText);
+                filterButton.attr('title', tooltip);
+                filterButton.find('.filter-icon').addClass('filter-' + filterName);
+                filterButton.find('.filter-icon').addClass(iconClassDeactive);
+               
                 me.filterButtons.push({
                     name: filterName,
                     element: filterButton
                 });
-            }
-            filterButton.unbind('click');
-            filterButton.bind('click', function(evt) {
-                var filterIcon = jQuery(evt.target).parent().find('.filter-icon.' + 'filter-' + filterName);
-                me.deactivateAllFilters(filterName);
-                if (filterIcon.hasClass(iconClassDeactive)) {
-                    // Activate this filter
-                    me._setFilterIconClasses(filterName);
-                    me.activateFilter(filterName);
-                    me._setFilterTooltip(filterName, loc.tooltips.remove);
-                } else {
-                    // Deactivate all filters
-                    me.deactivateAllFilters();
-                }
-            });
+
+                filterButton.unbind('click');
+                filterButton.bind('click', function(evt) {
+                    var filterIcon = jQuery(evt.target).parent().find('.filter-icon.' + 'filter-' + filterName);
+                    me.deactivateAllFilters(filterName);
+                    if (filterIcon.hasClass(iconClassDeactive)) {
+                        // Activate this filter
+                        me._setFilterIconClasses(filterName);
+                        me.activateFilter(filterName);
+                        me._setFilterTooltip(filterName, loc.tooltips.remove);
+                    } else {
+                        // Deactivate all filters
+                        me.deactivateAllFilters();
+                    }
+                });
                 me.render();
+            }
         },
         buttonIsCreated: function (filterName) {
             var created = false;
@@ -162,7 +166,7 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
                 var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
                 filterContainer.empty();
                 me.filterButtons.forEach( function(button) {
-                    filterContainer.append(button.element);
+                    filterContainer.append(button.element.clone(true));
                 });
             });
         }

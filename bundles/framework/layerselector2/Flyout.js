@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
         this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
             // if match add
-            var filters = me.handleFilters();
+            var filters = me.mapLayerService.getActiveFilters();
             if ( filters.includes(button.filterId) || button.filterId === "newest" ) {
                     me.filterComponent.create(me.layerTabs, button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
             }
@@ -111,12 +111,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             elParent = this.container.parentElement.parentElement;
             elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
             elId.attr('id', 'oskari_layerselector2_flyout_oskari_flyouttool_close');
-
-            var buttons = me.layerlistService.getLayerlistFilterButton();
-            Object.keys(buttons).forEach(function(key) {
-                var button = buttons[key];
-                me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
-            });
+            
+            me.handleFilters();
         },
 
         /**
@@ -138,7 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     me.filterComponent.create(me.layerTabs, button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
                 });
             }
-            return filtersWithLayers;
         },
         /**
          * Add newest filter.
