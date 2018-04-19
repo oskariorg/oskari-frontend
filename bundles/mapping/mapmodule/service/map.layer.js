@@ -761,7 +761,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             });
 
-            var list = layersWithCreatedDate.slice(count);
+            var list = layersWithCreatedDate.slice(0, count);
             if (list.length < count) {
                 // add layers without create date to fill in latest array
                 list = list.concat(layersWithoutCreatedDate.slice(count - list.length));
