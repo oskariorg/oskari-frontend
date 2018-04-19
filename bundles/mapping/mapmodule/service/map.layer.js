@@ -126,6 +126,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // everything ok, lets add the layer
             this._loadedLayersList.push(layerModel);
 
+            // flush cache for newest filter when layer is added
+            this._newestLayers = null;
+
             if (suppressEvent !== true) {
                 // notify components of added layer if not suppressed
                 var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
