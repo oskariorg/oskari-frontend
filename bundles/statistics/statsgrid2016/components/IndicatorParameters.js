@@ -41,6 +41,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         elements = elements || {};
 
         this.clean();
+        if ( Array.isArray( indId ) ) {
+            me._createCombinedParameters(el, datasrc, indId, elements);
+            return;
+        }
 
         if (!indId && indId === '') {
             if (elements.dataLabelWithTooltips) {
@@ -131,6 +135,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
 
             me.trigger('indicator.changed', indicator.regionsets.length > 0);
         });
+    },
+    _createCombinedParameters: function (el, datasrc, indicators, elements) {
+        var me = this;
+        indicators = indicators.filter( function (n) { return n != "" } );
+        var selectors = [];
+        indicators.forEach( function (indicatorId) {
+            me.service.getIndicatorMetadata(datasrc, indicatorId, function (err, indicator) {
+                selectors.push(indicator.selectors);    
+            });
+        });
+        //logic to create only one of each selector and combining the values from all indicators
     },
     getValues: function () {
         var me = this;

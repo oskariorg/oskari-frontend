@@ -121,7 +121,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             allow_single_deselect: true,
             disable_search_threshold: 10,
             no_results_text: locale.panels.newSearch.noResults,
-            width: '100%'
+            width: '100%',
+            multi: true
         };
         var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
         var indicDropdown = indicSelect.create(undefined, indicOptions);

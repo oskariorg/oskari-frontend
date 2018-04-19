@@ -25,7 +25,11 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       var select = this._selectTemplate.clone();
       this.element = select;
       if ( data === undefined ) {
-        return this.makeChosen( select, options );
+        if ( options.multi ) {
+          return this.makeMultiChosen(select, options);
+        } else {
+          return this.makeChosen( select, options );
+        }
       }
 
       //append empty options so we can use the placeholder
@@ -50,13 +54,32 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         select.find('select').append(option);
 
       }
-      return this.makeChosen( select, options );
+      if (options.multi) {
+        return this.makeMultiChosen( select, options );
+      } else {
+        return this.makeChosen( select, options );
+      }
     },
     /**@method makeChosen
     *  applies jQuery chosen to specidied element
     * @param {element} el
      */
     makeChosen: function( el, options ) {
+      el.find( 'select' ).chosen({
+          width: options.width,
+          no_results_text: options.no_results_text,
+          placeholder_text: options.placeholder_text,
+          disable_search_threshold: options.disable_search_threshold ? options.disable_search_threshold : 10,
+          allow_single_deselect : options.allow_single_deselect ? options.allow_single_deselect : false
+      });
+      return el;
+    },
+    /**@method makeMultiChosen
+    *  applies jQuery chosen to specidied element
+    * @param {element} el
+     */
+    makeMultiChosen: function( el, options ) {
+      el.find( 'select' ).attr('multiple', true);
       el.find( 'select' ).chosen({
           width: options.width,
           no_results_text: options.no_results_text,
@@ -149,7 +172,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     getId: function () {
       return this.id;
     },
-
+    
     setValue: function ( value ) {
       if ( !this.element.find('select') ) {
         Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");
