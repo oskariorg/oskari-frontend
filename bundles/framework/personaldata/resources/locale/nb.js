@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "Mine data",
         "notLoggedIn": "Mine data inneholder din brukerprofil og dine lagrede forekomster, kart, 'embeddede' kart, indikatorer, analyser og datasett. <a href='/web/nb/login'>Logg inn for å sjekke dine data</a>.",
         "notLoggedInText": "Logg inn for å kontrollere dine data",
+        "register": "Register",
         "tabs": {
             "myviews": {
                 "title": "Mine kart",
