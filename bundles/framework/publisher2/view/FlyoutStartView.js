@@ -40,8 +40,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
          * component will be rendered to
          */
         render: function (container) {
-            var me = this,
-                content = me.template.clone();
+            var me = this;
+            var content = me.template.clone();
             me.content = content;
 
             content.find('div.content').before(me.loc.text);
@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             touContentLink.append(me.loc.touLink);
             var conf = me.instance.conf || {};
             var url = me.instance.sandbox.getLocalizedProperty(conf.termsOfUseUrl) || '';
-            if(url.indexOf('http') === 0) {
+            if (url.indexOf('http') === 0) {
                 // starts with http - use as a link
                 touContentLink.attr('target', '_blank');
                 touContentLink.attr('href', url);
@@ -77,7 +77,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                     var req = publishMapEditorRequestBuilder();
                     me.instance.sandbox.request(me.instance, req);
                 }
-
             });
             me.buttons['continue'] = continueButton;
             me._updateContinueButton();
@@ -106,63 +105,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
          */
         _renderLayerLists: function () {
             // empty any current lists
-            var me = this,
-                container = me.content.find('div.content'),
-                layers = [],
-                deniedLayers = [],
-                selectedLayers = me.instance.sandbox.findAllSelectedMapLayers(),
-                i,
-                layer,
-                layersList,
-                heading,
-                txt;
+            var me = this;
+            var container = me.content.find('div.content');
+
+            // cleanup
             container.find('div.error').remove();
             container.find('div.layerlist').remove();
-            for (i = 0; i < selectedLayers.length; ++i) {
-                layer = selectedLayers[i];
-                if (!me.service.hasPublishRight(layer) &&
-                        layer.getId().toString().indexOf('myplaces_') < 0) {
+
+            // split layers to publishable or not
+            var layers = [];
+            var deniedLayers = [];
+            me.instance.sandbox.findAllSelectedMapLayers().forEach(function (layer) {
+                if (!me.service.hasPublishRight(layer)) {
                     deniedLayers.push(layer);
                 } else {
                     layers.push(layer);
                 }
-            }
-            // render list of layers with publication rights
-            if (layers.length > 0) {
-                layersList = me._getRenderedLayerList(layers);
-                heading = layersList.find('h4');
-                txt = 'loc.layerlist_title';
-                if (me.loc && me.loc.layerlist_title) {
-                    txt = me.loc.layerlist_title;
-                }
-                heading.append(txt);
-                container.append(layersList);
+            });
 
-                // enable/disable me.buttons['continue']
-                me.buttons['continue'].setEnabled(true);
-
-                // render list of layers that cannot be published
-                if (deniedLayers.length > 0) {
-                    var deniedLayersList = me._getRenderedLayerList(deniedLayers);
-                    heading = deniedLayersList.find('h4');
-                    heading.append(this.loc.layerlist_denied);
-                    // add tooltip
-                    var tooltip = me.templateInfo.clone();
-                    tooltip.attr('title', me.loc.denied_tooltip);
-                    heading.before(tooltip);
-                    container.append(deniedLayersList);
-                }
-            } else {
-                var errorsList = me.templateError.clone(),
-                    error = me.templateListItem.clone();
+            // check if we have any layers for publishing
+            if (layers.length === 0) {
+                // no layers available for publishing
+                var errorsList = me.templateError.clone();
+                var error = me.templateListItem.clone();
                 error.append(me.loc.layerlist_empty);
                 errorsList.find('ul').append(error);
                 container.append(errorsList);
 
-                // disable me.buttons['continue']
+                // disable Continue button
                 me.buttons['continue'].setEnabled(false);
+                return;
             }
 
+            // good for publishing
+            // render list of layers with publication rights
+            var layersListEl = me._getRenderedLayerList(layers);
+            layersListEl.find('h4').append(me.loc.layerlist_title || 'loc.layerlist_title');
+            container.append(layersListEl);
+
+            // enable Continue button
+            me.buttons['continue'].setEnabled(true);
+
+            // render list of layers that cannot be published if there are any
+            if (deniedLayers.length > 0) {
+                var deniedLayersList = me._getRenderedLayerList(deniedLayers);
+                var heading = deniedLayersList.find('h4');
+                heading.append(this.loc.layerlist_denied);
+                // add tooltip
+                var tooltip = me.templateInfo.clone();
+                tooltip.attr('title', me.loc.denied_tooltip);
+                heading.before(tooltip);
+                container.append(deniedLayersList);
+            }
         },
 
         /**
@@ -177,21 +171,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
          * @return {jQuery} DOM element with layer listing
          */
         _getRenderedLayerList: function (list) {
-            var layerList = this.templateLayerList.clone(),
-                listElement = layerList.find('ul'),
-                i,
-                layer,
-                item;
-            for (i = 0; i < list.length; ++i) {
-                layer = list[i];
-                item = this.templateListItem.clone();
-                if (layer.getId().toString().indexOf('myplaces_') > -1) {
-                    item.append(layer.getName() + ' (' + this.loc.myPlacesDisclaimer + ')');
-                } else {
-                    item.append(layer.getName());
+            var layerList = this.templateLayerList.clone();
+            var listElement = layerList.find('ul');
+            var listItemTemplate = this.templateListItem;
+            var usercontentDisclaimer = this.loc.myPlacesDisclaimer;
+
+            (list || []).forEach(function (layer) {
+                var item = listItemTemplate.clone();
+                var txt = layer.getName();
+                // TODO: this covers myplaces layers - what about userlayers?
+                if (layer.isLayerOfType('MYPLACES')) {
+                    txt = txt + ' (' + usercontentDisclaimer + ')';
                 }
+                item.append(txt);
                 listElement.append(item);
-            }
+            });
             return layerList;
         },
 
@@ -232,8 +226,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 return;
             }
 
-            var dlg = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeBtn = dlg.createCloseButton(me.loc.buttons.close);
+            var dlg = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var closeBtn = dlg.createCloseButton(me.loc.buttons.close);
 
             closeBtn.setHandler(function () {
                 dlg.close(true);
@@ -252,19 +246,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
         _checkTouAccepted: function () {
             var me = this;
             jQuery.ajax({
-                url: me.instance.sandbox.getAjaxUrl(),
+                url: Oskari.urls.getRoute('HasAcceptedPublishedTermsOfUse'),
                 type: 'GET',
-                data: {
-                    action_route: 'HasAcceptedPublishedTermsOfUse'
-                },
-                dataType: 'json',
                 error: function () {
                     this.success(false);
-                },
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
                 },
                 success: function (resp) {
                     me.hasAcceptedTou = resp;
@@ -294,19 +279,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
         _markTouAccepted: function () {
             var me = this;
             jQuery.ajax({
-                url: me.instance.sandbox.getAjaxUrl(),
+                url: Oskari.urls.getRoute('AcceptPublishedTermsOfUse'),
                 type: 'GET',
-                data: {
-                    action_route: 'AcceptPublishedTermsOfUse'
-                },
-                dataType: 'json',
                 error: function () {
                     this.success(false);
-                },
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
                 },
                 success: function (resp) {
                     me.hasAcceptedTou = resp;
