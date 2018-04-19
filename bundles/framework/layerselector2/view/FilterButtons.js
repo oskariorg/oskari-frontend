@@ -7,6 +7,7 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
                                             '</div><div class="filter-text"></div></center>'+
                                         '</div>');
         this.filterButtons = [];
+
         Oskari.makeObservable(this);
     }, {
         create: function (tabs, toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
@@ -14,7 +15,7 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             var me = this;
             var loc = Oskari.getLocalization('LayerSelector').layerFilter;
 
-            if ( me.buttonIsCreated(filterName) ) {
+            if ( me.filterIsCreated(filterName) ) {
                 me.render();
                 return;
             } else {
@@ -48,7 +49,7 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
                 me.render();
             }
         },
-        buttonIsCreated: function (filterName) {
+        filterIsCreated: function (filterName) {
             var created = false;
             this.filterButtons.filter(function(button) {
                 if ( button.name === filterName ) {
