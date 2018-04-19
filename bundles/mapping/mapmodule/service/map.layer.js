@@ -223,6 +223,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // also update layer groups
             this.updateLayersInGroups(layerId, null, true);
 
+            // flush cache for newest filter when layer is removed
+            this._newestLayers = null;
+
             if (layer && suppressEvent !== true) {
                 var notify = this.getSandbox().notifyAll;
                 var mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
