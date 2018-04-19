@@ -29,7 +29,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.addedButtons = {};
 
         this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
-            // if match add
             var filters = me.mapLayerService.getActiveFilters();
             if ( filters.includes(button.filterId) || button.filterId === "newest" ) {
                     me.filterComponent.create(me.layerTabs, button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
@@ -123,11 +122,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             var me = this;
             // Add newest filter
             me.addNewestFilter();
-            me.addFeaturedataFilter();
         },
         handleFilters: function () {
             var me = this;
             var filtersWithLayers = this.mapLayerService.getActiveFilters();
+
             if (filtersWithLayers.length !== 0) {
                 filtersWithLayers.forEach( function(filter) {
                     var button = me.layerlistService.getLayerlistFilterButton(filter);
@@ -149,21 +148,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     deactive: 'layer-newest-disabled'
                 },
                 'newest');
-        },
-        /**
-         * Add featuredata filter.
-         * @method  @public _registerForLayerFiltering
-         */
-        addFeaturedataFilter: function() {
-            var me = this,
-            loc = me.instance.getLocalization('layerFilter');
-
-            me.layerlistService.registerLayerlistFilterButton(loc.buttons.featuredata,
-                loc.tooltips.featuredata, {
-                    active: 'layer-stats',
-                    deactive: 'layer-stats-disabled'
-                },
-                'featuredata');
         },
         /**
          * @method stopPlugin
