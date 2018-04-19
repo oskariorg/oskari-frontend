@@ -726,7 +726,6 @@ Oskari.clazz.define(
          * @return {Oskari.userinterface.component.FormInput} field
          */
         getFilterField: function() {
-            //"use strict";
             var me = this,
                 field,
                 timer = 0;
@@ -950,13 +949,13 @@ Oskari.clazz.define(
                     var opts = {
                         a_attr: {
                             class: (!subgroup.selectable) ? 'no-checkbox' : '',
-                            'data-group-id': subgroup.id,
+                            'data-group-id': subgroup.getId(),
                             'data-parent-group-id': groupId
                         }
                     };
 
-                    addLayers(type + '-' + subgroup.id, subgroup.layers, subgroup.id, subgroupOrders);
-                    addSubgroups('subgroup-subgroup', subgroup.id, subgroup.groups, subgroupOrders);
+                    addLayers(type + '-' + subgroup.getId(), subgroup.getLayers(), subgroup.getId(), subgroupOrders);
+                    addSubgroups('subgroup-subgroup', subgroup.getId(), subgroup.getGroups(), subgroupOrders);
 
                     // sort
                     subgroupOrders.sort(function compare(a, b) {
@@ -984,7 +983,6 @@ Oskari.clazz.define(
             me.layerGroups = groups;
 
             groups.forEach(function(group) {
-                var layers = group.getLayers();
                 var groupOrders = [];
                 var groupChildren = [];
 
@@ -999,7 +997,7 @@ Oskari.clazz.define(
                 }
 
                 //Loop through group layers
-                addLayers('group-' + group.getId(), layers, group.getId(), groupOrders, group.isToolsVisible());
+                addLayers('group-' + group.getId(), group.getLayers(), group.getId(), groupOrders, group.isToolsVisible());
 
 
                 if (group.getGroups().length > 0) {

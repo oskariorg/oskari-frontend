@@ -826,28 +826,27 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         getFilteredLayerGroups: function (filterId) {
             var me = this;
-            var filterFunction = me.layerFilters[filterId];
             var allLayerGroups = me.getAllLayerGroups();
+            var filteredLayers = me.getFilteredLayers(filterId);
 
-            if (!filterFunction) {
-                Oskari.log(this.getName()).warn('[MapLayerService] not found layer filter "' + filterId + '". Returning all layer groups.');
-                return allLayerGroups;
-            }
+            var hasFilteredLayer = function(groupLayer) {
+                var layers = filteredLayers.filter(function(l) {
+                    return groupLayer.getId() === l.getId();
+                });
+                return layers.length > 0;
+            };
 
             var getRecursiveFilteredGroups = function (groups) {
                 var filteredGroups = [];
 
                 groups.forEach(function (group) {
                     var filteredLayers = [];
-                    group.getLayers().forEach(function (layer) {
-                        var mapLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-                        if (!mapLayer) {
-                            // layer not found
-                            // continue with next layer
-                            return;
-                        }
-                        if (filterFunction(mapLayer)) {
-                            filteredLayers.push(layer);
+                    var filteredLayerModels = [];
+
+                    group.getLayers().forEach(function (mapLayer) {
+                        if (hasFilteredLayer(mapLayer)) {
+                            filteredLayers.push(mapLayer.getId());
+                            filteredLayerModels.push(mapLayer);
                         }
                     });
 
@@ -859,7 +858,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         orderNumber: group.getOrderNumber(),
                         groups: getRecursiveFilteredGroups(group.getGroups())
                     };
-                    filteredGroups.push(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', json));
+                    var groupModel = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', json);
+                    groupModel.setLayers(filteredLayerModels);
+                    filteredGroups.push(groupModel);
                 });
 
                 return filteredGroups;
