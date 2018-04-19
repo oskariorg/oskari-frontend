@@ -44,8 +44,8 @@ Oskari.registerLocalization({
                 "basket-email-will-be" : "A download link will be sent to the e-mail address you provided. If the selected datasets are very large in file size, the processing may take some time.",
                 "basket-cropping-layer-title" : "Cropping option: ",
                 "basket-license-title" : "License: ",
-                "basket-license-name" : "Creative Commons Name 4.0 (BY, ByAttribution) –license",
-                "basket-license-url" : "https://creativecommons.org/licenses/by/4.0/"
+                "basket-license-name" : "Creative Commons BY 4.0",
+                "basket-license-url" : "https://creativecommons.org/licenses/by/4.0/deed.en"
             }
         }
     }
