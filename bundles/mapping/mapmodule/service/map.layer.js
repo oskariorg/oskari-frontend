@@ -126,6 +126,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // everything ok, lets add the layer
             this._loadedLayersList.push(layerModel);
 
+            // flush cache for newest filter when layer is added
+            this._newestLayers = null;
+
             if (suppressEvent !== true) {
                 // notify components of added layer if not suppressed
                 var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
@@ -219,6 +222,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // also update layer groups
             this.updateLayersInGroups(layerId, null, true);
+
+            // flush cache for newest filter when layer is removed
+            this._newestLayers = null;
 
             if (layer && suppressEvent !== true) {
                 var notify = this.getSandbox().notifyAll;
@@ -755,7 +761,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             });
 
-            var list = layersWithCreatedDate.slice(count);
+            var list = layersWithCreatedDate.slice(0, count);
             if (list.length < count) {
                 // add layers without create date to fill in latest array
                 list = list.concat(layersWithoutCreatedDate.slice(count - list.length));
