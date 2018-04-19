@@ -182,9 +182,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 if(group && isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
                     if(!notLoadedBackend[group.id]) {
                         notLoadedBackend[group.id] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
-                            groups: [],
                             id: group.id,
-                            layers: [],
                             name:{},
                             orderNumber: -1,
                             selectable: true,
@@ -192,7 +190,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                         });
                         notLoadedBackend[group.id].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.id].layers.push({id:layer.getId()});
+                    notLoadedBackend[group.id].layers.push(layer.getId());
+                    notLoadedBackend[group.id].layersModels.push(layer);
                 }
             });
 
