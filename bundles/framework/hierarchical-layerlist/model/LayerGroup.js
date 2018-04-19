@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
         var me = this;
         this.searchIndex = {};
         group.getLayers().forEach(function(layer) {
-            me.addLayer(Oskari.getSandbox().findMapLayerFromAllAvailable(layer.id));
+            me.addLayer(layer);
         });
     }, {
         /**

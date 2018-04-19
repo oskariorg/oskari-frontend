@@ -374,28 +374,25 @@
              * Remove a class with given id
              *
              * @method removeClass
-             * @param {integer} id of class/organization that needs to be removed
+             * @param {integer|String} id of class/organization that needs to be removed
              * @private
              */
-            _removeClass: function(id) {
+            _removeClass: function (id) {
                 var groups = this.layerGroups;
-                var foundIndex = -1;
-                for (var i = groups.length - 1; i >= 0; i -= 1) {
-                    /// === wont match it correctly for some reason, maybe string from DOM attribute <> integer
-                    if (groups[i].id === id) {
-                        foundIndex = i;
-                        break;
-                    }
-                }
+                var foundIndex = groups.findIndex(function (group) {
+                    // group.id is number and id can be a string...
+                    return '' + group.id === '' + id
+                });
+
                 if (foundIndex !== -1) {
                     var me = this;
                     var group = groups.splice(foundIndex, 1)[0];
                     // remove layers so they are removed from the other tab as well
                     var layers = group.getLayers();
-                    _.each(layers, function(layer) {
+                    layers.forEach(function (layer) {
                         // this will trigger removal of layer which updates both tabs
                         me.trigger('adminAction', {
-                            type: "adminAction",
+                            type: 'adminAction',
                             command: 'removeLayer',
                             modelId: layer.getId()
                         });
