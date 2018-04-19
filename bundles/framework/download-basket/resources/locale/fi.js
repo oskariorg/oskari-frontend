@@ -44,8 +44,8 @@ Oskari.registerLocalization({
                 "basket-email-will-be" : "Ilmoittamaasi sähköpostisoitteeseen lähetetään linkki, josta voit käydä lataamassa aineistot. Latauslinkin lähettäminen saattaa kestää hieman, jos ladattavat aineistot ovat kooltaan suuria.",
                 "basket-cropping-layer-title" : "Rajausaineisto: ",
                 "basket-license-title" : "Käyttöehdot: ",
-                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi",
-                "basket-license-url" : "https://creativecommons.org/licenses/by/4.0/"
+                "basket-license-name" : "Creative Commons BY 4.0",
+                "basket-license-url" : " https://creativecommons.org/licenses/by/4.0/deed.fi"
             }
         }
     }
