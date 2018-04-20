@@ -29,9 +29,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             ),
             info: _.template(
                 '<div class="datasource-info">' +
-                    '<div class="coordinateconversion-clipboardinfo" style=display:none;">'+
-                        '<div class="clipboardinfo">' +
-                            '<i>${clipboardupload}<i>' +
+                    '<div class="coordinateconversion-keyboardinfo" style=display:none;">'+
+                        '<div class="keyboardinfo">' +
+                            '<i>${keyboardupload}<i>' +
                         '</div>'+
                     '</div>' +
                     '<div class="coordinateconversion-mapinfo" style=display:none;">'+
@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 map: this.loc('flyout.dataSource.map.label')
             });
             var info = this._template.info({ 
-                clipboardupload:this.loc('flyout.dataSource.keyboard.info'),
+                keyboardupload:this.loc('flyout.dataSource.keyboard.info'),
                 mapInfo: this.loc('flyout.dataSource.map.info'),
                 mapButton: this.loc('actions.select')
             });
