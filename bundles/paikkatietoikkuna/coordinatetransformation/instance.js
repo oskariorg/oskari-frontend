@@ -33,6 +33,7 @@ function () {
         this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         this.isMapSelection = false;
         this.sandbox = Oskari.getSandbox();
+        this.coordSystemOptions = null;
 }, {
     __name: 'coordinatetransformation',
     getName: function () {
@@ -57,9 +58,16 @@ function () {
         //this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper', this);
         this.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler' );
-
+        this.coordSystemOptions = this.helper.getOptionsJSON();
+        this.helper.createCls(this.coordSystemOptions);
         this.instantiateViews();
         this.createUi();
+    },
+    getcoordSystemOptions: function () {
+        return this.coordSystemOptions;
+    },
+    getEpsgValues: function (srs) {
+        return this.coordSystemOptions["geodetic-coordinate"][srs];
     },
     getPlugins: function() {
         return this.plugins;
@@ -75,7 +83,7 @@ function () {
     },
     instantiateViews: function () {
         this.views = {
-            transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this),
+            transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this, this.getcoordSystemOptions()),
             MapSelection: Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateMapSelection', this),
             mapmarkers: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapmarkers', this)
         }
