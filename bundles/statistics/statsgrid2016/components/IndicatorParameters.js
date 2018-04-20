@@ -41,15 +41,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         elements = elements || {};
 
         this.clean();
-        if ( Array.isArray( indId ) ) {
-            me._createCombinedParameters(el, datasrc, indId, elements);
-            return;
-        }
 
         if (!indId && indId === '') {
             if (elements.dataLabelWithTooltips) {
                 elements.dataLabelWithTooltips.find('.tooltip').show();
             }
+            return;
+        }
+
+        if ( Array.isArray( indId ) ) {
+            me._createCombinedParameters(el, datasrc, indId, elements);
             return;
         }
 
@@ -138,12 +139,70 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     },
     _createCombinedParameters: function (el, datasrc, indicators, elements) {
         var me = this;
+        var locale = me.instance.getLocalization();
+        var panelLoc = locale.panels.newSearch;
         indicators = indicators.filter( function (n) { return n != "" } );
-        var selectors = [];
+
+        var cont = jQuery(this.__templates.main());
+        el.append(cont);
+        this.container = cont;
+        var allSelectors = [];
         indicators.forEach( function (indicatorId) {
             me.service.getIndicatorMetadata(datasrc, indicatorId, function (err, indicator) {
-                selectors.push(indicator.selectors);    
+                indicator.selectors.forEach( function (selector) {
+                    allSelectors.push(selector);
+                });
             });
+        });
+
+        allSelectors.sort(function (a, b) {
+            return a.id > b.id ? 1 : -1;
+        });
+        var sharedSelectors = allSelectors;
+        for ( var i = 0; i < sharedSelectors.length-1; i++ ) {
+            if ( sharedSelectors[i].id === sharedSelectors[i+1].id ) {
+                sharedSelectors.splice( 1, i )
+              }
+        }
+
+        var selections = [];
+        //put the values from all indicator selectors to the shared selectors
+        allSelectors.forEach( function (key) {
+            key.allowedValues.forEach(function (val) {
+                var name = val.name || val.id || val;
+                val.title = val.name;
+                var optName = (panelLoc.selectionValues[key.id] && panelLoc.selectionValues[key.id][name]) ? panelLoc.selectionValues[key.id][name] : name;
+    
+                var valObject = {
+                    id: val.id || val,
+                    title: optName
+                };
+                // check if selections contains the value already
+                if ( !selections.some(function(key) { return key.id === valObject.id && key.title === valObject.title; }) ) {
+                    selections.push(valObject);
+                } 
+            });
+        });
+        sharedSelectors.forEach( function ( shared, index ) {
+            var placeholderText = (panelLoc.selectionValues[shared.id] && panelLoc.selectionValues[shared.id].placeholder) ? panelLoc.selectionValues[shared.id].placeholder : panelLoc.defaultPlaceholder;
+            var label = (locale.parameters[shared.id]) ? locale.parameters[shared.id] : shared.id;
+            var tempSelect = jQuery(me.__templates.select({id: shared.id, label: label}));
+            var options = {
+                placeholder_text: placeholderText,
+                allow_single_deselect: true,
+                disable_search_threshold: 10,
+                width: '100%'
+            };
+            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', shared.id);
+            var dropdown = select.create(selections, options);
+            dropdown.css({width: '205px'});
+            select.adjustChosen();
+            select.selectFirstValue();
+            tempSelect.find('.label').append(dropdown);
+            if (index > 0) {
+                dropdown.parent().addClass('margintop');
+            }
+            cont.append(tempSelect);
         });
         //logic to create only one of each selector and combining the values from all indicators
     },
