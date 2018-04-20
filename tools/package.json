@@ -14,6 +14,7 @@
     "core": "node build-core.js",
     "sprite": "./node_modules/.bin/grunt sprite:main",
     "build": "./node_modules/.bin/grunt release:servlet",
+    "build-livi": "./node_modules/.bin/grunt release:livi:../applications/livi/servlet/minifierAppSetup.json,../applications/livi/servlet_published_ol3/minifierAppSetup.json",
     "build-paikkis": "./node_modules/.bin/grunt release:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map_ol3/minifierAppSetup.json",
     "build-asdi": "./node_modules/.bin/grunt release:asdi:../applications/asdi/asdi_guest/minifierAppSetup.json,../applications/asdi/asdi_published/minifierAppSetup.json",
     "build-elf": "./node_modules/.bin/grunt release:elf:../applications/elf/elf_guest/minifierAppSetup.json,../applications/elf/elf_published/minifierAppSetup.json",
