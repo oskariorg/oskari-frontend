@@ -68,7 +68,7 @@ Oskari.registerLocalization(
                     "info": "Valitse yksi tai useampia pisteitä kartalta klikkaamalla."
                 }
             },
-            "coordinateField": {
+            "coordinateTable": {
                 "input": "Muunnettavat koordinaatit",
                 "output": "Tuloskoordinaatit",
                 "north":"Pohjois-koordinaatti [m]",
