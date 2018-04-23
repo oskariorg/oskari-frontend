@@ -1,443 +1,246 @@
 {
 	"startupSequence": [
-		{
-			"instanceProps": {},
-			"title": "OpenLayers",
-			"bundleinstancename": "openlayers-default-theme",
-			"fi": "OpenLayers",
-			"sv": "OpenLayers",
-			"en": "OpenLayers",
-			"bundlename": "openlayers-default-theme",
-			"metadata": {
-				"Import-Bundle": {
-					"openlayers-default-theme": {
-						"bundlePath": "../../../packages/openlayers/bundle/"
+        {
+            "bundlename": "lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "lang-overrides": {
+                        "bundlePath": "../../../packages/paikkatietoikkuna/"
+                    }
+                }
+            }
+		}, {
+            "bundlename": "mapfull",
+            "metadata": {
+                "Import-Bundle": {
+					"mapmyplaces": {
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
-					"openlayers-full-map": {
-						"bundlePath": "../../../packages/openlayers/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		}, {
-			"instanceProps": {},
-			"title": "Map",
-			"bundleinstancename": "mapfull",
-			"fi": "Map",
-			"sv": "Map",
-			"en": "Map",
-			"bundlename": "mapfull",
-			"metadata": {
-				"Import-Bundle": {
-					"mapwmts": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-  					"service-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-map-layer": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "request-map-layer": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapmodule-plugin": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-                    "ui-components": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapfull": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "core-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "oskariui": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapwfs2": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapuserlayers": {
-            			"bundlePath": "../../../packages/framework/bundle/"
-          			},
- 					"request-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
+					"maparcgis": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"mapmodule": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"oskariui": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					},
+					"mapwfs2": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
 					"mapstats": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-					"domain": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
- 					"core-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-					"request-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "sandbox-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-                    "mapmyplaces": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-	                "mapanalysis": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-					"service-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "sandbox-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-					"event-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "maparcgis": {
-	                    "bundlePath": "../../../packages/arcgis/bundle/"
-	                }
-				},
-				"Require-Bundle-Instance": []
-			}
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"mapuserlayers": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"ui-components": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					},
+					"mapanalysis": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					},
+					"mapfull": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					},
+					"mapwmts": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					}
+                }
+            }
 		}, {
-			"instanceProps": {},
-			"title": "Oskari DIV Manazer",
-			"bundleinstancename": "divmanazer",
-			"fi": "Oskari DIV Manazer",
-			"sv": "Oskari DIV Manazer",
-			"en": "Oskari DIV Manazer",
 			"bundlename": "divmanazer",
 			"metadata": {
 				"Import-Bundle": {
 					"divmanazer": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Toolbar",
-			"bundleinstancename": "toolbar",
-			"fi": "toolbar",
-			"sv": "toolbar",
-			"en": "toolbar",
+	        "bundlename" : "drawtools",
+	        "bundleinstancename" : "drawtools",
+	        "metadata" : {
+	            "Import-Bundle" : {
+	                "drawtools" : {
+	                    "bundlePath" : "../../../packages/mapping/ol3/"
+	                }
+	            }
+	        }
+	    }, {
 			"bundlename": "toolbar",
 			"metadata": {
 				"Import-Bundle": {
 					"toolbar": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Info Box",
-			"bundleinstancename": "infobox",
-			"fi": "infobox",
-			"sv": "infobox",
-			"en": "infobox",
-			"bundlename": "infobox",
-			"metadata": {
-				"Import-Bundle": {
-					"infobox": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		},	{
-			"instanceProps": {},
-			"title": "StateHandler",
-			"bundleinstancename": "statehandler",
-			"fi": "jquery",
-			"sv": "jquery",
-			"en": "jquery",
 			"bundlename": "statehandler",
 			"metadata": {
 				"Import-Bundle": {
 					"statehandler": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Haku",
-			"bundleinstancename": "search",
-			"fi": "search",
-			"sv": "search",
-			"en": "search",
+			"bundlename": "infobox",
+			"metadata": {
+				"Import-Bundle": {
+					"infobox": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					}
+				}
+			}
+		}, {
 			"bundlename": "search",
 			"metadata": {
 				"Import-Bundle": {
 					"search": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
-		},  {
-			"instanceProps": {},
-			"title": "Karttatasot",
-			"bundleinstancename": "layerselector2",
-			"fi": "layerselector",
-			"sv": "layerselector",
-			"en": "layerselector",
+		}, {
+			"bundlename": "metadatacatalogue",
+			"metadata": {
+				"Import-Bundle": {
+					"metadatacatalogue": {
+						"bundlePath": "../../../packages/catalogue/"
+					}
+				}
+			}
+		}, {
 			"bundlename": "layerselector2",
 			"metadata": {
 				"Import-Bundle": {
 					"layerselector2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
-		},  {
-			"instanceProps": {},
-			"title": "Valitut karttatasot",
-			"bundleinstancename": "layerselection2",
-			"fi": "layerselection",
-			"sv": "layerselection",
-			"en": "layerselection",
+		}, {
 			"bundlename": "layerselection2",
 			"metadata": {
 				"Import-Bundle": {
 					"layerselection2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		}, {
-			"bundlename" : "coordinatetool",
-			"bundleinstancename" : "coordinatetool",
-			"metadata" : {
-				"Import-Bundle" : {
-					"coordinatetool" : {
-						"bundlePath" : "../../../packages/framework/bundle/"
-					}
 				}
 			}
-		},  {
-			"instanceProps": {},
-			"title": "Metadata Flyout",
-			"bundleinstancename": "metadataflyout",
-			"fi": "metadataflyout",
-			"sv": "metadataflyout",
-			"en": "metadataflyout",
-			"bundlename": "metadataflyout",
-			"metadata": {
-				"Import-Bundle": {
-					"metadataflyout": {
-						"bundlePath": "../../../packages/catalogue/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
 		}, {
-			"instanceProps": {},
-			"title": "Featuredata",
-			"bundleinstancename": "featuredata2",
-			"fi": "Kohdetiedot",
-			"sv": "Kohdetiedot",
-			"en": "Kohdetiedot",
-			"bundlename": "featuredata2",
-			"metadata": {
-				"Import-Bundle": {
-					"featuredata2": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		},  {
-			"instanceProps": {},
-			"title": "Karttajulkaisu",
-			"bundleinstancename": "publisher2",
-			"fi": "jquery",
-			"sv": "jquery",
-			"en": "jquery",
-			"bundlename": "publisher2",
-			"metadata": {
-				"Import-Bundle": {
-					"publisher2": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		} ,  {
-			"instanceProps": {},
-			"title": "Omat tiedot",
-			"bundleinstancename": "personaldata",
-			"fi": "personaldata",
-			"sv": "personaldata",
-			"en": "personaldata",
 			"bundlename": "personaldata",
 			"metadata": {
 				"Import-Bundle": {
 					"personaldata": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
-		},  {
-			"instanceProps": {},
-			"title": "metadatacatalogue",
-			"bundleinstancename": "metadatacatalogue",
-			"fi": "metadatacatalogue",
-			"sv": "metadatacatalogue",
-			"en": "metadatacatalogue",
-			"bundlename": "metadatacatalogue",
+		}, {
+			"title": "Karttajulkaisu",
+			"bundleinstancename": "publisher2",
+			"bundlename": "publisher2",
 			"metadata": {
 				"Import-Bundle": {
-					"metadatacatalogue": {
-						"bundlePath": "../../../packages/catalogue/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		},  {
-			"instanceProps": {},
-			"title": "Places",
-			"bundleinstancename": "myplaces2",
-			"fi": "Paikat",
-			"sv": "Platser",
-			"en": "Places",
-			"bundlename": "myplaces2",
-			"metadata": {
-				"Import-Bundle": {
-					"myplaces2": {
+					"publisher2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
-		},  {
-			"instanceProps": {},
-			"title": "maplegend",
-			"fi": "maplegend",
-			"bundleinstancename": "maplegend",
-			"sv": "maplegend",
-			"en": "maplegend",
+		}, {
 			"bundlename": "maplegend",
 			"metadata": {
 				"Import-Bundle": {
 					"maplegend": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "UserGuide",
-			"bundleinstancename": "userguide",
-			"fi": "userguide",
-			"sv": "userguide",
-			"en": "userguide",
 			"bundlename": "userguide",
 			"metadata": {
 				"Import-Bundle": {
 					"userguide": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "guidedtour",
-			"fi": "guidedtour",
-			"bundleinstancename": "guidedtour",
-			"sv": "guidedtour",
-			"en": "guidedtour",
+			"bundlename": "metadataflyout",
+			"metadata": {
+				"Import-Bundle": {
+					"metadataflyout": {
+						"bundlePath": "../../../packages/catalogue/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename": "featuredata2",
+			"metadata": {
+				"Import-Bundle": {
+					"featuredata2": {
+						"bundlePath": "../../../packages/framework/"
+					}
+				}
+			}
+		}, {
+			"bundlename": "myplaces3",
+			"metadata": {
+				"Import-Bundle": {
+					"myplaces3": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
 			"bundlename": "guidedtour",
 			"metadata": {
 				"Import-Bundle": {
 					"guidedtour": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "backendstatus",
-			"fi": "backendstatus",
-			"bundleinstancename": "backendstatus",
-			"sv": "backendstatus",
-			"en": "backendstatus",
 			"bundlename": "backendstatus",
 			"metadata": {
 				"Import-Bundle": {
 					"backendstatus": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"title": "Printout",
-			"fi": "Karttatuloste",
-			"sv": "Kartutskrift",
-			"en": "Map Printout",
 			"bundlename": "printout",
-			"bundleinstancename": "printout",
 			"metadata": {
 				"Import-Bundle": {
 					"printout": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
-			},
-			"instanceProps": {}
+				}
+			}
 		}, {
-			"title": "PostProcessor",
-			"fi": "PostProcessor",
-			"sv": "PostProcessor",
-			"en": "PostProcessor",
 			"bundlename": "postprocessor",
-			"bundleinstancename": "postprocessor",
 			"metadata": {
 				"Import-Bundle": {
 					"postprocessor": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
-			},
-			"instanceProps": {}
+				}
+			}
 		}, {
-			"bundleinstancename": "statsgrid",
 			"bundlename": "statsgrid",
 			"metadata": {
 				"Import-Bundle": {
 					"statsgrid": {
-						"bundlePath": "../../../packages/statistics/bundle/"
-					},
-					"geostats": {
-						"bundlePath": "../../../packages/libraries/bundle/"
+						"bundlePath": "../../../packages/statistics/"
 					}
 				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Karttatasot",
-			"bundleinstancename": "admin-layerselector",
-			"fi": "admin layerselector",
-			"sv": "admin layerselector",
-			"en": "admin layerselector",
 			"bundlename": "admin-layerselector",
 			"metadata": {
 				"Import-Bundle": {
@@ -447,34 +250,19 @@
 					"bb": {
 						"bundlePath": "../../../packages/integration/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
-		},
-		  {
-            "title": "Analyse",
-            "fi": "Analyysi",
-            "sv": "Analys",
-            "en": "Analyse",
+		}, {
             "bundlename": "analyse",
-            "bundleinstancename": "analyse",
             "metadata": {
                 "Import-Bundle": {
                     "analyse": {
-                        "bundlePath": "../../../packages/analysis/bundle/"
-                    },
-                    "geometryeditor": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/analysis/ol3/"
                     }
                 }
             }
         }, {
-        	"title": "Admin Layer Rights",
-        	"fi": "Tasojen Oikeuksienhallinta",
-        	"sv": "alr",
-        	"en": "alr",
         	"bundlename": "admin-layerrights",
-        	"bundleinstancename": "admin-layerrights",
         	"metadata": {
         		"Import-Bundle": {
         			"admin-layerrights": {
@@ -483,24 +271,34 @@
         		}
         	}
         }, {
-		    "title" : "myplacesimport",
-		    "fi" : "myplacesimport",
-		    "sv" : "myplacesimport",
-		    "en" : "myplacesimport",
 		    "bundlename" : "myplacesimport",
-		    "bundleinstancename" : "myplacesimport",
 		    "metadata" : {
 		        "Import-Bundle" : {
 		            "myplacesimport" : {
 		                "bundlePath" : "../../../packages/framework/bundle/"
 		            }
-		        },
-		        "Require-Bundle-Instance" : []
-		    },
-		    "instanceProps" : {}
+		        }
+		    }
+		}, {
+		    "bundlename" : "routesearch",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "routesearch" : {
+		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+		            }
+		        }
+		    }
+		}, {
+		    "bundlename" : "register",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "register" : {
+		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+		            }
+		        }
+		    }
 		}, {
 		    "bundlename" : "admin",
-		    "bundleinstancename" : "admin",
 		    "metadata" : {
 		        "Import-Bundle" : {
 		            "admin" : {
@@ -509,77 +307,78 @@
 		        }
 		    }
 		}, {
-		    "bundlename" : "publishedstatehandler",
-		    "bundleinstancename" : "publishedstatehandler",
-		    "metadata" : {
-		        "Import-Bundle" : {
-		            "publishedstatehandler" : {
-		                "bundlePath" : "../../../packages/framework/bundle/"
-		            }
-		        }
-		    }
-		}, {
-		    "bundlename" : "admin-users",
-		    "bundleinstancename" : "admin-users",
-		    "metadata" : {
-		        "Import-Bundle" : {
-		            "admin-users" : {
-		                "bundlePath" : "../../../packages/framework/bundle/"
-		            }
-		        }
-		    }
-		},	{
-	        "title" : "AdminWfsSearchChannel",
-	        "fi" : "admin-wfs-search-channel",
-	        "sv" : "admin-wfs-search-channel",
-	        "en" : "admin-wfs-search-channel",
-	        "bundlename" : "admin-wfs-search-channel",
-	        "bundleinstancename" : "admin-wfs-search-channel",
-	        "metadata" : {
-                "Import-Bundle" : {
-                        "admin-wfs-search-channel" : {
-                                "bundlePath" : "../../../packages/tampere/bundle/"
-                        }
-                },
-                "Require-Bundle-Instance" : []
-	        }
-		},  {
-	        "title" : "SearchFromChannelsBundle",
-	        "fi" : "search-from-channels",
-	        "sv" : "search-from-channels",
-	        "en" : "search-from-channels",
-	        "bundlename" : "search-from-channels",
-	        "bundleinstancename" : "search-from-channels",
-    	    "metadata" : {
-                "Import-Bundle" : {
-                        "search-from-channels" : {
-                                "bundlePath" : "../../../packages/tampere/bundle/"
-                        }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "title": "Remote procedure call",
-            "bundlename": "rpc",
-            "metadata": {
-                "Import-Bundle": {
-                    "rpc": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                }
-            }
-        }, {
-			"bundlename" : "heatmap",
-			"bundleinstancename" : "heatmap",
+			"bundlename" : "findbycoordinates",
 			"metadata" : {
 				"Import-Bundle" : {
-					"heatmap" : {
+					"findbycoordinates" : {
 						"bundlePath" : "../../../packages/framework/bundle/"
 					}
 				}
 			}
 		}, {
-            "title": "Timeseries",
+			"bundlename" : "terrain-profile",
+			"metadata" : {
+				"Import-Bundle" : {
+					"terrain-profile" : {
+						"bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "heatmap",
+			"metadata" : {
+				"Import-Bundle" : {
+					"heatmap" : {
+						"bundlePath" : "../../../packages/mapping/ol3/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "coordinatetool",
+			"metadata" : {
+				"Import-Bundle" : {
+					"coordinatetool" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingUI",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingUI" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "routingService",
+			"metadata" : {
+				"Import-Bundle" : {
+					"routingService" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename" : "feedbackService",
+			"metadata" : {
+			  "Import-Bundle" : {
+				"feedbackService" : {
+				  "bundlePath" : "../../../packages/framework/bundle/"
+				}
+			  }
+			}
+	  	}, {
+		    "bundlename" : "metrics",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "metrics" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
+		}, {
             "bundlename": "timeseries",
             "metadata": {
                 "Import-Bundle": {
@@ -588,21 +387,33 @@
                     }
                 }
             }
-		}, {
-			"title": "SelectedFeaturedata",
-			"fi": "selected-featuredata",
-			"bundleinstancename": "selected-featuredata",
-			"sv": "selected-featuredata",
-			"en": "selected-featuredata",
-			"bundlename": "selected-featuredata",
-			"metadata": {
-				"Import-Bundle": {
-					"selected-featuredata": {
-						"bundlePath": "../../../packages/framework/bundle/"
+        }, {
+	        "bundlename": "maprotator",
+	        "metadata": {
+	            "Import-Bundle": {
+	                "maprotator": {
+	                    "bundlePath": "../../../packages/mapping/ol3/"
+	                }
+	            }
+	        }
+	    }, {
+			"bundlename" : "telemetry",
+			"metadata" : {
+				"Import-Bundle" : {
+					"telemetry" : {
+						"bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
+		}, {
+		    "bundlename" : "appsetup",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "appsetup" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
 		}
-    ]
+	]
 }
