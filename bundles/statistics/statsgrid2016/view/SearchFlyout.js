@@ -77,11 +77,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         btn.setHandler(function (event) {
             event.stopPropagation();
             var values = selectionComponent.getValues();
+            var selectedIndicators = values.indicator;
+            // indicator loop check Array.isArray
+            if( !Array.isArray(values.indicator) ) {
+                selectedIndicators = [values.indicator];
+            }
 
-            var added = me.service.getStateService().addIndicator(values.datasource, values.indicator, values.selections);
-            if (added === false) {
+            var newActiveIndicator = false;
+
+            selectedIndicators.forEach( function( indicator ) {
+                var added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections);
+                if ( added ) {
+                    newActiveIndicator = indicator;
+                } 
+            });
+
+            if (newActiveIndicator !== false) {
                 // already added, set as active instead
-                var hash = me.service.getStateService().getHash(values.datasource, values.indicator.selections);
+                var hash = me.service.getStateService().getHash(values.datasource, newActiveIndicator, values.selections);
                 me.service.getStateService().setActiveIndicator(hash);
             }
             me.service.getStateService().setRegionset(values.regionset);
