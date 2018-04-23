@@ -986,7 +986,7 @@ Oskari.clazz.define(
 
             me.tabPanel.getContainer().append(layerTree);
 
-            if(jQuery('.hierarchical-layerlist-search-noresults').length === 0) {
+            if(me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults').length === 0) {
                 var noSearchResults = me.templates.noSearchResults.clone();
                 noSearchResults.html(me.instance.getLocalization('errors.noResults')).hide();
                 me.tabPanel.getContainer().append(noSearchResults);
@@ -1084,7 +1084,8 @@ Oskari.clazz.define(
          * @param  {Boolean}                  visible has message visible
          */
         setNoResultMessageVisible: function(visible) {
-            var noResultsElement = jQuery('.hierarchical-layerlist-search-noresults');
+            var me = this;
+            var noResultsElement = me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults');
             if(!visible) {
                 noResultsElement.hide();
                 return;
