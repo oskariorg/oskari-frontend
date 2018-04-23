@@ -280,24 +280,6 @@
 		        }
 		    }
 		}, {
-		    "bundlename" : "routesearch",
-		    "metadata" : {
-		        "Import-Bundle" : {
-		            "routesearch" : {
-		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
-		            }
-		        }
-		    }
-		}, {
-		    "bundlename" : "register",
-		    "metadata" : {
-		        "Import-Bundle" : {
-		            "register" : {
-		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
-		            }
-		        }
-		    }
-		}, {
 		    "bundlename" : "admin",
 		    "metadata" : {
 		        "Import-Bundle" : {
@@ -312,15 +294,6 @@
 				"Import-Bundle" : {
 					"findbycoordinates" : {
 						"bundlePath" : "../../../packages/framework/bundle/"
-					}
-				}
-			}
-		}, {
-			"bundlename" : "terrain-profile",
-			"metadata" : {
-				"Import-Bundle" : {
-					"terrain-profile" : {
-						"bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
 					}
 				}
 			}
@@ -370,50 +343,50 @@
 			  }
 			}
 	  	}, {
-		    "bundlename" : "metrics",
-		    "metadata" : {
-		        "Import-Bundle" : {
-		            "metrics" : {
-		                "bundlePath" : "../../../packages/admin/bundle/"
+		    	"bundlename" : "metrics",
+		   	"metadata" : {
+		          "Import-Bundle" : {
+		          	"metrics" : {
+		                  "bundlePath" : "../../../packages/admin/bundle/"
 		            }
 		        }
 		    }
 		}, {
-            "bundlename": "timeseries",
-            "metadata": {
-                "Import-Bundle": {
-                    "timeseries": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+            		"bundlename": "timeseries",
+            		"metadata": {
+              		  "Import-Bundle": {
+                    		"timeseries": {
+                        	 "bundlePath": "../../../packages/framework/bundle/"
                     }
                 }
             }
         }, {
-	        "bundlename": "maprotator",
-	        "metadata": {
-	            "Import-Bundle": {
+	       		"bundlename": "maprotator",
+	        	"metadata": {
+	            	  "Import-Bundle": {
 	                "maprotator": {
 	                    "bundlePath": "../../../packages/mapping/ol3/"
 	                }
 	            }
 	        }
 	    }, {
-			"bundlename" : "telemetry",
-			"metadata" : {
-				"Import-Bundle" : {
-					"telemetry" : {
-						"bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
-					}
-				}
-			}
-		}, {
-		    "bundlename" : "appsetup",
-		    "metadata" : {
-		        "Import-Bundle" : {
+		    	"bundlename" : "appsetup",
+		   	"metadata" : {
+		          "Import-Bundle" : {
 		            "appsetup" : {
 		                "bundlePath" : "../../../packages/admin/bundle/"
 		            }
 		        }
 		    }
+		}, {
+			"bundlename" : "download-basket",
+			"metadata" : {
+			  "Import-Bundle" : {
+				"download-basket" : {
+				"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
 		}
 	]
 }
