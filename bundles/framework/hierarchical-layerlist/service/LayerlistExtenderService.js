@@ -19,7 +19,8 @@
                     check_callback: true,
                     themes: {
                         variant: 'large'
-                    }
+                    },
+                    dblclick_toggle: false
                 },
                 checkbox: {
                     keep_selected_style: false
