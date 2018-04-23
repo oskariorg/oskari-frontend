@@ -49,7 +49,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         createMap: function () {
             var me = this;
-            var sandbox = me._sandbox;
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
@@ -202,8 +201,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         getMeasurementResult: function (geometry) {
-            var olGeom = this.getOLGeometryFromGeoJSON(geometry),
-                sum = 0;
+            var olGeom = this.getOLGeometryFromGeoJSON(geometry);
+            var sum = 0;
             if (olGeom.getType() === 'LineString') {
                 return olGeom.getLength();
             } else if (olGeom.getType() === 'MultiLineString') {
@@ -877,12 +876,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (!wkt) {
                 return null;
             }
-            var me = this,
-                feature = me.getFeatureFromWKT(wkt),
-                centroid,
-                bounds,
-                mapBounds,
-                zoomToBounds = null;
+            var me = this;
+            var feature = me.getFeatureFromWKT(wkt);
+            var centroid;
+            var bounds;
+            var mapBounds;
+            var zoomToBounds = null;
 
             if (!feature) {
                 return;
@@ -950,11 +949,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         getOLGeometryFromGeoJSON: function (geojson) {
-            var olGeoJSON = new ol.format.GeoJSON(),
-                olGeom,
-                olMultiGeom,
-                features,
-                olFeature;
+            var olGeoJSON = new ol.format.GeoJSON();
+            var olGeom;
+            var features;
             // DrawTools (allowMultipleDrawing: multiGeom) returns FeatureCollection where features[0] is multigeom
             // TODO: fix to handle common FeatureCollection
             // TODO: FeatureCollection -> readFeatures() -> getGeometry()
