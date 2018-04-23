@@ -781,6 +781,10 @@ Oskari.clazz.define(
                 }
             });
 
+            if(node.type.indexOf('group') > -1 && !jQuery(event.target).hasClass('jstree-checkbox')) {
+                return;
+            }
+
             var layerId = null;
 
             var allSelectedLayers = me.sb.findAllSelectedMapLayers();
@@ -1072,9 +1076,17 @@ Oskari.clazz.define(
                 });
             });
 
+
             me.getJsTreeElement().on('redraw.jstree',function(nodes){
                 me._updateAllTools();
                 me._updateLayerCountsAndGroupsVisibility(true);
+            });
+
+            // Add click handler for toggle groups open/close state
+            me.getJsTreeElement().on('click', function(evt) {
+                if(!jQuery(evt.target).hasClass('jstree-checkbox') && !jQuery(evt.target).hasClass('jstree-ocl')) {
+                    me.getJsTreeElement().jstree(true).toggle_node(evt.target);
+                }
             });
         },
 
