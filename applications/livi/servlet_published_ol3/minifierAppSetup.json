@@ -146,6 +146,15 @@
                     }
                 }
             }
-        }
+        }, {
+			"bundlename" : "download-basket",
+			"metadata" : {
+			  "Import-Bundle" : {
+				"download-basket" : {
+				"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}
     ]
 }
