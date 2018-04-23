@@ -12,6 +12,10 @@ $selectedLayersTabLabelWidth: 50px;
 }
 
 div.hierarchical-layerlist {
+    div.hierarchical-layerlist-search-noresults {
+        padding: 10px;
+    }
+
     div.layer-filter {
         margin: 10px;
         color: #949494;

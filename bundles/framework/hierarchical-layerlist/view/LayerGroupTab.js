@@ -41,6 +41,7 @@ Oskari.clazz.define(
             layerFilter: jQuery('<div class="layer-filter hierarchical-layerlist-layer-filter">' +
                 '</div><div style="clear:both;"></div>'),
             layerTree: jQuery('<div class="hierarchical-layerlist-tree"></div>'),
+            noSearchResults: jQuery('<div class="hierarchical-layerlist-search-noresults"></div>'),
             layerContainer: jQuery('<span class="layer">' +
                 '<span class="layer-tools">' +
                 '   <span class="layer-backendstatus-icon backendstatus-unknown" title=""></span>' +
@@ -106,28 +107,25 @@ Oskari.clazz.define(
                 me.selectNodeFromTree(data.node, data.event);
             });
 
-
-
             me.service.on('order.changed', function(data) {
                 if (!data.ajax) {
-                    setTimeout(function() {
-                        me._updateAllTools();
-                    }, 200);
+                    me._updateAllTools();
                 }
             });
 
-            me.service.on('search', function(obj) {
-                setTimeout(function() {
-                    me._updateAllTools();
-                    me._updateLayerCountsAndGroupsVisibility(true);
-                }, 200);
+            me.service.on('search', function(data) {
+                // if nothing results found then hide jstree and show no results text
+                if (data.str.res.length == 0) {
+                    me.getJsTreeElement().hide();
+                    me.setNoResultMessageVisible(true);
+                } else {
+                    me.getJsTreeElement().show();
+                    me.setNoResultMessageVisible(false);
+                }
             });
 
             me.service.on('search.clear', function(obj) {
-                setTimeout(function() {
-                    me._updateAllTools();
-                    me._updateLayerCountsAndGroupsVisibility();
-                }, 200);
+                me.setNoResultMessageVisible(false);
             });
         },
 
@@ -162,6 +160,7 @@ Oskari.clazz.define(
                         if(childNode.type === 'layer' && childNode.state.hidden === false) {
                             count.visible++;
                         }
+
                         if(childNode.type === 'layer') {
                             count.all++;
                         }
@@ -185,7 +184,8 @@ Oskari.clazz.define(
                 groups.forEach(function(groupNode){
                     var countText = '';
                     var count = calculateLayerCounts(groupNode);
-                    if(count.all === 0 && !me.service.hasEmptyGroupsVisible()) {
+                    var node = jstree.get_node(groupNode);
+                    if((count.all === 0 && !me.service.hasEmptyGroupsVisible()) || node.state.hidden) {
                         jstree.hide_node(groupNode);
                     } else {
                         jstree.show_node(groupNode);
@@ -205,7 +205,6 @@ Oskari.clazz.define(
             updateLayerCounts('group');
             updateLayerCounts('subgroup');
             updateLayerCounts('subgroup-subgroup');
-
         },
 
         /**
@@ -215,10 +214,16 @@ Oskari.clazz.define(
          */
         _updateAllTools: function() {
             var me = this;
-            me._addGroupTools();
-            me._addSubgroupTools();
-            me._addSubgroupSubgroupTools();
-            me._addLayerTools();
+            // ugly timeout, need remove in future
+            // wait at js tree is rendered
+            clearTimeout(me.toolsTimeout);
+            me.toolsTimeout = setTimeout(function() {
+                me._addGroupTools();
+                me._addSubgroupTools();
+                me._addSubgroupSubgroupTools();
+                me._addLayerTools();
+            }, 200);
+
         },
         /**
          * Add group tools
@@ -980,6 +985,14 @@ Oskari.clazz.define(
             };
 
             me.tabPanel.getContainer().append(layerTree);
+
+            if(jQuery('.hierarchical-layerlist-search-noresults').length === 0) {
+                var noSearchResults = me.templates.noSearchResults.clone();
+                noSearchResults.html(me.instance.getLocalization('errors.noResults')).hide();
+                me.tabPanel.getContainer().append(noSearchResults);
+                me.setNoResultMessageVisible(false);
+            }
+
             me.layerGroups = groups;
 
             groups.forEach(function(group) {
@@ -1058,6 +1071,25 @@ Oskari.clazz.define(
                     me._toggleLayerCheckboxes(layer.getId(), true);
                 });
             });
+
+            me.getJsTreeElement().on('redraw.jstree',function(nodes){
+                me._updateAllTools();
+                me._updateLayerCountsAndGroupsVisibility(true);
+            });
+        },
+
+        /**
+         * Set no result message visible
+         * @method setNoResultMessageVisible
+         * @param  {Boolean}                  visible has message visible
+         */
+        setNoResultMessageVisible: function(visible) {
+            var noResultsElement = jQuery('.hierarchical-layerlist-search-noresults');
+            if(!visible) {
+                noResultsElement.hide();
+                return;
+            }
+            noResultsElement.show();
         },
 
         /**

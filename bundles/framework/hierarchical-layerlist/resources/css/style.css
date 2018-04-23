@@ -1,6 +1,8 @@
 .hierarchical-layerlist-flyout .oskari-flyoutcontentcontainer {
   max-height: none; }
 
+div.hierarchical-layerlist div.hierarchical-layerlist-search-noresults {
+  padding: 10px; }
 div.hierarchical-layerlist div.layer-filter {
   margin: 10px;
   color: #949494; }
