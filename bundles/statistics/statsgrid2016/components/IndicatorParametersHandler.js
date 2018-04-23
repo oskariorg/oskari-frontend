@@ -13,9 +13,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         this.indicators = indicators;
 
         if ( Array.isArray( indicators ) ) {
-            return this.handleMultipleIndicators(datasrc, indicators, elements);
+            this.handleMultipleIndicators(datasrc, indicators, elements);
+            return;
         }
-        return this.handleSingleIndicator(datasrc, indicators, elements);
+        this.handleSingleIndicator(datasrc, indicators, elements);
     },
     handleSingleIndicator: function(datasrc, indId, elements) {
         var me = this;
@@ -85,7 +86,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         var panelLoc = this.locale.panels.newSearch;
         var allSelectors = [];
         var regionsSets = [];
-        var deferredArray = []
+        var deferredArray = [];
 
         indicators.forEach( function (indicatorId) {
             var deferred = new jQuery.Deferred();
@@ -104,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
             });
             deferredArray.push(deferred);
         });
-        // when all the deferreds have been resolved -> proceed with creating selects
+        // when all the deferreds have been resolved -> proceed with handling data
         jQuery.when.apply( jQuery, deferredArray ).done( function() {
 
             allSelectors.sort(function (a, b) {
@@ -147,7 +148,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 values: combinedValues
             }
             me.trigger('Data.Loaded', data);
-            return data;
         });
     }
 });

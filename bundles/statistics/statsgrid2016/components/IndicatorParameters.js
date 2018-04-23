@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             }
             return;
         }
-        //get the data to create ui withs
+        //get the data to create ui with
         me.paramHandler.getData( datasrc, indId, elements );
     },
     getValues: function () {
