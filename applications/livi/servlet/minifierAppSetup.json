@@ -1,15 +1,6 @@
 {
 	"startupSequence": [
         {
-            "bundlename": "lang-overrides",
-            "metadata": {
-                "Import-Bundle": {
-                    "lang-overrides": {
-                        "bundlePath": "../../../packages/paikkatietoikkuna/"
-                    }
-                }
-            }
-		}, {
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
