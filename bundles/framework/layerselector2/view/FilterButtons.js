@@ -1,17 +1,25 @@
 Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
-    function (layertabs) {
-        this.layerTabs = null;
+    function ( element ) {
+        var me = this;
+        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
         this.filterTemplate = jQuery('<div class="filter filter-border">'+
                                             '<center><div class="filter-icon">'+
                                             '</div><div class="filter-text"></div></center>'+
                                         '</div>');
         this.filterButtons = [];
+        this._anchorElement = element;
+
+        this.layerlistService.on('Layerlist.Filter.Button.Add', function( button ) {
+            var filters = me.mapLayerService.getActiveFilters();
+            if ( filters.includes(button.filterId) || button.filterId === "newest" ) {
+                me.createButton( button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId );
+            }
+        });
 
         Oskari.makeObservable(this);
     }, {
-        create: function (tabs, toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
-            this.layerTabs = tabs;
+        createButton: function ( toolText, tooltip, iconClassActive, iconClassDeactive, filterName ) {
             var me = this;
             var loc = Oskari.getLocalization('LayerSelector').layerFilter;
 
@@ -58,6 +66,12 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             });
             return created;
         },
+        setFilters: function ( activeFiltersList ) {
+            activeFiltersList.forEach( function( filter ) {
+                var button = me.layerlistService.getLayerlistFilterButton(filter);
+                me.createButton(me.layerTabs, button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
+            });
+        },
           /**
          * Set filter button tooltip
          * @method  @private _setFilterTooltip
@@ -65,12 +79,9 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
          * @param {String} tooltip    tooltip
          */
         _setFilterTooltip: function(filterName, tooltip) {
-            var me = this;
-            me.layerTabs.forEach(function(tab) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
-                filterIcon.parents('.filter').attr('title', tooltip);
-            });
+            var filterContainer = this._anchorElement;
+            var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
+            filterIcon.parents('.filter').attr('title', tooltip);
         },
         /**
          * Set filter icon classes
@@ -78,27 +89,25 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
          * @param {String} filterName filter name
          */
         _setFilterIconClasses: function(filterName) {
-            var me = this;
-            me.layerTabs.forEach(function(tab) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
-                    var filter = filters[key];
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
-                    // First remove all active classes
-                    filterIcon.removeClass(filter.cls.active);
-                    filterIcon.removeClass(filter.cls.deactive);
-                    filterIcon.removeClass('active');
-                    // If filter has same than currently selected then activate icon
-                    if (filter.id === filterName) {
-                        filterIcon.addClass(filter.cls.active);
-                        filterIcon.addClass('active');
-                    }
-                    // Otherwise use deactive icon
-                    else {
-                        filterIcon.addClass(filter.cls.deactive);
-                    }
-                });
+            var filterContainer = this._anchorElement;
+            var filters = this.layerlistService.getLayerlistFilterButton();
+
+            Object.keys( filters ).forEach( function( key ) {
+                var filter = filters[key];
+                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
+                // First remove all active classes
+                filterIcon.removeClass(filter.cls.active);
+                filterIcon.removeClass(filter.cls.deactive);
+                filterIcon.removeClass('active');
+                // If filter has same than currently selected then activate icon
+                if (filter.id === filterName) {
+                    filterIcon.addClass(filter.cls.active);
+                    filterIcon.addClass('active');
+                }
+                // Otherwise use deactive icon
+                else {
+                    filterIcon.addClass(filter.cls.deactive);
+                }
             });
         },
         /**
@@ -107,27 +116,24 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
          * @param  {Function} filterName activate filter name
          */
         activateFilter: function(filterName) {
-            var me = this;
-            me._currentFilter = filterName;
+            this._currentFilter = filterName;
 
-            me.layerTabs.forEach(function(tab) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
-                    var filter = filters[key];
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
-                    if(filter.id === filterName) {
-                        filterIcon.removeClass(filter.cls.deactive);
-                        filterIcon.addClass(filter.cls.active);
-                        filterIcon.addClass('active');
-                    } else {
-                        filterIcon.removeClass(filter.cls.active);
-                        filterIcon.addClass(filter.cls.deactive);
-                        filterIcon.removeClass('active');
-                    }
-                });
+            var filterContainer = this._anchorElement;
+            var filters = this.layerlistService.getLayerlistFilterButton();
+            Object.keys(filters).forEach(function(key) {
+                var filter = filters[key];
+                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
+                if(filter.id === filterName) {
+                    filterIcon.removeClass(filter.cls.deactive);
+                    filterIcon.addClass(filter.cls.active);
+                    filterIcon.addClass('active');
+                } else {
+                    filterIcon.removeClass(filter.cls.active);
+                    filterIcon.addClass(filter.cls.deactive);
+                    filterIcon.removeClass('active');
+                }
             });
-            this.trigger('FilterActivate', me._currentFilter);
+            this.trigger('FilterActivate', this._currentFilter);
         },
         /**
          * Deactivate all filters
@@ -137,24 +143,20 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
          */
         deactivateAllFilters: function(notDeactivateThisFilter) {
             var me = this;
-
             me._currentFilter = null;
-            me.layerTabs.forEach(function(tab, tabIndex) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
-                    var filter = filters[key];
-                    if (!notDeactivateThisFilter || filter.id !== notDeactivateThisFilter) {
-                        var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
-                        filterIcon.removeClass(filter.cls.active);
-                        filterIcon.removeClass('active');
-                        filterIcon.addClass(filter.cls.deactive);
-                        // Set tooltip for one per filter
-                        if (tabIndex === 0) {
-                            me._setFilterTooltip(filter.name, filter.tooltip);
-                        }
-                    }
-                });
+            var filterContainer = this._anchorElement;
+            var filters = me.layerlistService.getLayerlistFilterButton();
+
+            Object.keys(filters).forEach(function(key) {
+                var filter = filters[key];
+                if (!notDeactivateThisFilter || filter.id !== notDeactivateThisFilter) {
+                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
+                    filterIcon.removeClass(filter.cls.active);
+                    filterIcon.removeClass('active');
+                    filterIcon.addClass(filter.cls.deactive);
+                    // Set tooltip for one per filter
+                        me._setFilterTooltip(filter.name, filter.tooltip);
+                }
             });
 
             if (!notDeactivateThisFilter) {
@@ -163,12 +165,10 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
         },
         render: function() {
             var me = this;
-            this.layerTabs.forEach( function( tab ) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                filterContainer.empty();
-                me.filterButtons.forEach( function(button) {
-                    filterContainer.append(button.element.clone(true));
-                });
+            this._anchorElement.empty();
+
+            this.filterButtons.forEach( function ( button ) {
+                me._anchorElement.append(button.element.clone(true));
             });
         }
     }
