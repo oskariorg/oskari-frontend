@@ -27,7 +27,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
         this.addedButtons = {};
         this.filterComponents = [];
-
     }, {
 
         /**
@@ -101,25 +100,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
             elId.attr('id', 'oskari_layerselector2_flyout_oskari_flyouttool_close');
             
-            me.handleFilters();
+            me.createFilterButtons();
         },
         /**
          * Create filterbuttons for each active filter
-         * @method  @public handleFilters
+         * @method  @public createFilterButtons
          */
-        handleFilters: function () {
+        createFilterButtons: function () {
             var me = this;
-            var filtersWithLayers = this.mapLayerService.getActiveFilters();
             this.layerTabs.forEach( function ( tab ) {
                 var filterButton = Oskari.clazz.create("Oskari.layerselector2.view.FilterButtons", tab.getTabPanel().getContainer().find('.layerselector2-layer-filter') );
                 me.filterComponents.push(filterButton);
-                filterButton.setFilters( filtersWithLayers );
 
                 filterButton.on('FilterActivate', function (currentFilter) {
                     me._currentFilter = currentFilter;
                     me.populateLayers();
                 });
                 
+            });
+        },
+        setActiveFilter: function () {
+            var me = this;
+            this.filterComponents.forEach( function ( component ) {
+                component.activateFilter( me._currentFilter );
+            });
+        },
+        updateFilters: function () {
+            var me = this;
+            var filtersWithLayers = this.mapLayerService.getActiveFilters();
+
+            this.filterComponents.forEach( function ( component ) {
+                component.setFilters( filtersWithLayers );
             });
         },
         /**
@@ -213,7 +224,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
             return state;
         },
-
         /**
          * @method createUi
          * Creates the UI for a fresh start
@@ -234,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             // Add filter tab change listener
             me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
                 if (me._currentFilter) {
-                    me.activateFilter(me._currentFilter);
+                    me.setActiveFilter();
                 }
             });
             me.tabContainer.insertTo(cel);
