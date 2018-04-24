@@ -1,21 +1,45 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', function ( ) {
-
-    this.data = { //TODO
-        inputCoords: [], //[[1324, 12424]]
-        resultCoords: [], //[[1324, 12424]]
-        mapCoords: [], //[{lon:123, lat:134}]
-        lonFirst: true //TODO
-        //inputSrs:
-        //outputSrs:
-        //mapSrs
-    };
-},
-{
+    this.inputCoords = []; //[[1324, 12424]]
+    this.resultCoords = []; //[[1324, 12424]]
+    this.mapCoords = []; //[{lon:123, lat:134}]
+    Oskari.makeObservable(this);
+}, {
     getName: function() {
         return 'Oskari.coordinatetransformation.CoordinateDataHandler';
     },
-    getData: function () {
-        return this.data;
+    getInputCoords: function () {
+        return this.inputCoords;
+    },
+    addInputCoord: function (coord){
+        this.inputCoords.push(coord);
+        //this.trigger('InputCoordAdded', coord);
+        this.trigger('InputCoordsChanged', this.inputCoords);
+    },
+    setInputCoords: function (coords, suppressEvent){
+        this.inputCoords = coords;
+        //don't render input table
+        if (suppressEvent !== true){
+            this.trigger('InputCoordsChanged', coords);
+        }
+    },
+    getResultCoords: function() {
+        return this.resultCoords;
+    },
+    setResultCoords: function (coords) {
+        this.resultCoords = coords;
+        this.trigger('ResultCoordsChanged', coords);
+    },
+    //lonlat
+    getMapCoords: function () {
+        return this.mapCoords;
+    },
+    //lonlat
+    setMapCoords: function (coords) {
+        this.mapCoords = coords;
+    },
+    //lonlat
+    addMapCoord: function (coord) {
+        this.mapCoords.push(coord);
     },
     /** 
      * @method validateData
@@ -82,20 +106,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         }
         return obj;
     },
-    addInputCoord: function (coord){
-        this.data.inputCoords.push(coord);
-    },
-    addInputCoords: function (coords){
-        this.data.inputCoords = coords;
-    },
+
     //generic -> to helper??
     //lonLatCoordToArray or addLonLatCoordToArray (array,..)
     lonLatCoordToArray: function ( coord, lonFirst){
-        if (typeof coord.lon !== 'number' && typeof coord.lat !== 'number'){
-            return
-        }
         var arr = [];
-        if (lonFirst === true){ //this.data.lonFirst
+        if (typeof coord.lon !== 'number' && typeof coord.lat !== 'number'){
+            return arr;
+        }
+        if (lonFirst === true){
             arr.push(coord.lon);
             arr.push(coord.lat);
         } else {
@@ -103,7 +122,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
             arr.push(coord.lon);
         }
         return arr;
-        //array.push(arr);//this.addInputCoord(array);
     },
     //generic -> to helper??
     arrayCoordToLonLat: function (coord, lonFirst){
@@ -117,28 +135,26 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         }
         return obj;
     },
-    //lonlat
-    addMapCoord: function (coord) {
-        this.data.mapCoords.push(coord);
-    },
     addMapCoordsToInput: function (addBln){
         var me = this;
-        var coords = me.getData().mapCoords;
+        var coords = me.getMapCoords();
         if (addBln === true){
             for (var i = 0 ; i < coords.length ; i++ ) {
-                me.data.inputCoords.push(me.lonLatCoordToArray(coords[i], true));
+                me.addInputCoord(me.lonLatCoordToArray(coords[i], true)); //TODO check mapsrs lonFirst
             }
         }
         coords.length = 0;
     },
     clearCoords: function () {
-        this.data.inputCoords.length = 0;
-        this.data.mapCoords.length = 0;
-        this.data.resultCoords.length = 0;
+        this.inputCoords.length = 0;
+        this.mapCoords.length = 0;
+        this.resultCoords.length = 0;
+        this.trigger('InputCoordsChanged', this.inputCoords);
+        this.trigger('ResultCoordsChanged', this.resultCoords);
     },
     checkCoordsArrays: function(){
-        var input = this.data.inputCoords.length,
-            result = this.data.resultCoords.length;
+        var input = this.inputCoords.length,
+            result = this.resultCoords.length;
         if (input !== 0 && result !==0){
             return input === output;
         }
