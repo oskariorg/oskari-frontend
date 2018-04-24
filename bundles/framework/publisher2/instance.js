@@ -175,6 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             if (this.getCustomTileRef()) {
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
             }
+            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (blnEnabled) {
                 var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                 this.getSandbox().request(this, stateRB(data.configuration));
@@ -184,6 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
                 me.getService().setNonPublisherLayers(deniedLayers || this.getLayersWithoutPublishRights());
                 me.getService().removeLayers();
+                me.getService().setMapToolStyle(mapModule.getToolStyle());
                 me.oskariLang = Oskari.getLang();
 
                 map.addClass('mapPublishMode');
@@ -208,9 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 Oskari.setLang(me.oskariLang);
 
                 // change the mapmodule toolstyle back to normal
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-                // TODO: reset to what it was when publisher was started instead of removing it (mapmodule.getToolStyle())
-                mapModule.changeToolStyle(null);
+                mapModule.changeToolStyle(me.getService().getMapToolStyle());
 
                 if (me.publisher) {
                     // show flyout?
