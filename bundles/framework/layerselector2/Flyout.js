@@ -25,19 +25,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
-        this.filterComponent = Oskari.clazz.create("Oskari.layerselector2.view.FilterButtons");
         this.addedButtons = {};
+        this.filterComponents = [];
 
-        this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
-            var filters = me.mapLayerService.getActiveFilters();
-            if ( filters.includes(button.filterId) || button.filterId === "newest" ) {
-                    me.filterComponent.create(me.layerTabs, button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
-            }
-        });
-        this.filterComponent.on('FilterActivate', function (currentFilter) {
-            me._currentFilter = currentFilter;
-            me.populateLayers();
-        });
     }, {
 
         /**
@@ -113,26 +103,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             
             me.handleFilters();
         },
-
         /**
-         * Adds default filter buttons.
-         * @method  @private addDefaultFilters
+         * Create filterbuttons for each active filter
+         * @method  @public handleFilters
          */
-        addDefaultFilters: function() {
-            var me = this;
-            // Add newest filter
-            me.addNewestFilter();
-        },
         handleFilters: function () {
             var me = this;
             var filtersWithLayers = this.mapLayerService.getActiveFilters();
+            this.layerTabs.forEach( function ( tab ) {
+                var filterButton = Oskari.clazz.create("Oskari.layerselector2.view.FilterButtons", tab.getTabPanel().getContainer().find('.layerselector2-layer-filter') );
+                me.filterComponents.push(filterButton);
+                filterButton.setFilters( filtersWithLayers );
 
-            if (filtersWithLayers.length !== 0) {
-                filtersWithLayers.forEach( function(filter) {
-                    var button = me.layerlistService.getLayerlistFilterButton(filter);
-                    me.filterComponent.create(me.layerTabs, button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
+                filterButton.on('FilterActivate', function (currentFilter) {
+                    me._currentFilter = currentFilter;
+                    me.populateLayers();
                 });
-            }
+                
+            });
         },
         /**
          * Add newest filter.
@@ -268,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             );
 
             // Create default filters
-            me.addDefaultFilters();
+            me.addNewestFilter();
             me.populateLayers();
         },
 
