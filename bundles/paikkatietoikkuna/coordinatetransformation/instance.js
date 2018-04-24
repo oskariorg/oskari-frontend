@@ -34,6 +34,10 @@ function () {
         this.isMapSelection = false;
         this.sandbox = Oskari.getSandbox();
         this.coordSystemOptions = null;
+        this.dimensions = {
+            input: 2,
+            result: 2
+        };
 }, {
     __name: 'coordinatetransformation',
     getName: function () {
@@ -45,15 +49,25 @@ function () {
     getService: function () {
         return this.transformationService;
     },
+    setDimension: function (type, srs, elevation){
+        var srsValues = this.getEpsgValues(srs),
+            dimension;
+        if (srsValues && (srsValues.coord === "COORD_PROJ_3D" || srsValues.coord === "COORD_GEOG_3D")){
+            dimension = 3;
+        } else if (elevation !== ""){
+            dimension = 3;
+        } else {
+            dimension = 2;
+        }
+        this.dimensions[type] = dimension;
+    },
+    getDimension: function (type){
+        return this.dimensions[type];
+    },
     /**
      * @method afterStart
      */
     afterStart: function () {
-        for ( var p in this.eventHandlers ) {
-            if (this.eventHandlers.hasOwnProperty(p)) {
-                this.sandbox.registerForEventByName(this, p);
-            }
-        }
         this.transformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
         //this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper', this);
@@ -62,7 +76,22 @@ function () {
         this.helper.createCls(this.coordSystemOptions);
         this.instantiateViews();
         this.createUi();
+        //this.setMapSelectionMode(false); //TODO flyout hide/show
+        this.bindListeners();
     },
+    bindListeners: function (){
+        var me = this;
+        this.dataHandler.on('InputCoordAdded', function (coords) {
+            me.views.transformation.inputTable.render(coords);
+        });
+        this.dataHandler.on('InputCoordsChanged', function (coords) {
+            me.views.transformation.inputTable.render(coords);
+        });
+        this.dataHandler.on('ResultCoordsChanged', function (coords) {
+            me.views.transformation.outputTable.render(coords);
+        });
+    },
+
     getcoordSystemOptions: function () {
         return this.coordSystemOptions;
     },
@@ -78,8 +107,8 @@ function () {
     getHelper: function () {
         return this.helper;
     },
-    hasInputCoords: function () {
-        return this.dataHandler.getData().inputCoords.length !== 0;
+    hasInputCoords: function () { //TODO to handler
+        return this.dataHandler.getInputCoords().length !== 0;
     },
     instantiateViews: function () {
         this.views = {
@@ -114,11 +143,8 @@ function () {
             this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [true]);
         }
     },
-    addMapCoordsToInput: function (addBln){
+    addMapCoordsToInput: function (addBln){ //event??
         this.getDataHandler().addMapCoordsToInput(addBln);
-        if (addBln === true){
-            this.views.transformation.refreshTableData();
-        }
     },
     /**
      * Creates the coordinatetransformation service and registers it to the sandbox.
@@ -131,24 +157,17 @@ function () {
         sandbox.registerService(transformationService);
         return transformationService;
     },*/
-    onEvent : function(event) {
-        var handler = this.eventHandlers[event.getName()];
-        if(!handler){
-            return;
-        }
-        return handler.apply(this, [event]);
-    },
     eventHandlers: {
         'MapClickedEvent': function ( event ) {
             if (!this.mapSelectionMode()) {
                 return;
             }
             var lonlat = event._lonlat;
-            var coordArray = this.dataHandler.lonLatCoordToArray(lonlat, true);
+            var coordArray = this.dataHandler.lonLatCoordToArray(lonlat, true); //TODO check mapSrs lonFirst
 
             //add coords to map coords
             this.dataHandler.addMapCoord(lonlat);
-            this.helper.addMarkerForCoords(coordArray, true, true);
+            this.helper.addMarkerForCoords(coordArray, true, true); //TODO check mapSrs lonFirst
         }
     }
 }, {
