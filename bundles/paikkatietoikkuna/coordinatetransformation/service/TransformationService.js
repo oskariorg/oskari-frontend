@@ -28,32 +28,50 @@ function(instance) {
      */
     init: function() {},
 
-    requestUrlBuilder: function ( payload ) {
+    requestUrlBuilder: function ( crs ) {
         var urlBase = "action?action_route=CoordinateTransformation";
         var urlParameterString = "";
 
-        if( payload.sourceCrs ) {
-            urlParameterString = urlParameterString.concat("&sourceCrs="+payload.sourceCrs);
+        if( crs.sourceCrs ) {
+            urlParameterString += "&sourceCrs=" + crs.sourceCrs;
         }
-        if( payload.sourceElevationCrs ) {
-            urlParameterString = urlParameterString.concat("&sourceHeightCrs="+payload.sourceElevationCrs);
+        if( crs.sourceElevationCrs ) {
+            urlParameterString += "&sourceHeightCrs=" + crs.sourceElevationCrs;
         }
-        if( payload.targetCrs ) {
-            urlParameterString = urlParameterString.concat("&targetCrs="+payload.targetCrs);
+        if( crs.targetCrs ) {
+            urlParameterString += "&targetCrs=" + crs.targetCrs;
         }
-        if( payload.targetElevationCrs ) {
-            urlParameterString = urlParameterString.concat("&targetHeightCrs="+payload.targetElevationCrs);
+        if( crs.targetElevationCrs ) {
+            urlParameterString += "&targetHeightCrs=" + crs.targetElevationCrs;
         }
-        var url = urlBase.concat(urlParameterString);
-        return url;
+        return urlBase + urlParameterString;
     },
-    getConvertedCoordinates: function( payload, successCb, errorCb ) {
-        var url = this.requestUrlBuilder( payload );
+    formDataBuilder: function (file, settings){
+        var file = file;
+        var settings = settings;
+        var formData = new FormData();
+        //formData.append('sourceCrs', crs.source);
+        //formData.append('sourceElevationCrs', crs.sourceElevation);
+        //formData.append('targetCrs', crs.target);
+        //formData.append('targetElevationCrs', crs.targetElevation);
+        //
+        if (settings.export){
+            formData.append('exportSettings', settings.export);
+        }
+        if (settings.import){
+            formData.append('importSettings', settings.import);
+        }
+        formData.append('coordFile', file);
+        return formData;
+
+    },
+    transformArrayToArray: function(coords, crs, successCb, errorCb ) {
+        var url = this.requestUrlBuilder( crs );
         jQuery.ajax({
             contentType: "application/json",
             type: "POST",
             url: url,
-            data: JSON.stringify(payload.coords),
+            data: JSON.stringify(coords),
             success: function(response) {
                 successCb(response);
             },
@@ -62,9 +80,60 @@ function(instance) {
             }
         });
     },
+    transformFileToArray: function (file, crs, fileSettings, successCb, errorCb){
+        var url = this.requestUrlBuilder( crs);
+        var formData = this.formDataBuilder(file, fileSettings);
+         jQuery.ajax({
+            contentType: false, //multipart/form-data
+            type: "POST",
+            cache : false,
+            processData: false,
+            url: url,
+            data: formData,
+            success: function(response) {
+                successCb(response);
+            },
+            error: function(){
+                errorCb(); //TODO errorCodes??
+            }
+        });
+    },
+    transformArrayToFile: function(coords, crs, fileSettings, successCb, errorCb ) {
+        var url = this.requestUrlBuilder( crs );
+        jQuery.ajax({
+            contentType: "application/json",
+            type: "POST",
+            url: url,
+            data: JSON.stringify(coords),
+            success: function(response) {
+                successCb(response);
+            },
+            error: function(){
+                errorCb(); //TODO errorCodes??
+            }
+        });
+    },
+    transformFileToFile: function(file, crs, fileSettings, successCb, errorCb ) {
+        var url = this.requestUrlBuilder( crs );
+        var formData = this.formDataBuilder(file, fileSettings);
+        jQuery.ajax({
+            contentType: false, //multipart/form-data
+            type: "POST",
+            cache : false,
+            processData: false,
+            url: url,
+            data: formData,
+            success: function(response) {
+                successCb(response);
+            },
+            error: function(){
+                errorCb(); //TODO errorCodes??
+            }
+        });
+    }/*
     _handleResponse: function(response, cb) {
         cb(response);
-    }
+    }*/
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']
 });
