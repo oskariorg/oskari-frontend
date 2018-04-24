@@ -6,10 +6,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this.type = type;
         this.element = null;
         this.select = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', view );
-        //this.systemInfo = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
+        this.systemInfo = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
         this.selectInstances = {};
         this.dropdowns = {};
         //this.enableProjectionSystem = false;
+        this.selections;
         this._template = {
             systemWrapper: jQuery('<div class="coordinateSystemWrapper"></div>'),
             coordinateSystemSelection: _.template(
@@ -54,6 +55,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             )
         }
         this.createUi();
+        Oskari.makeObservable(this);
     }, {
         getName: function() {
             return 'Oskari.coordinatetransformation.component.CoordinateSystemSelection';
@@ -88,6 +90,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             });
             // hide projection select
             this.showProjectionSelect(false);
+            //init selections
+            this.storeSelectionValues();
             this.handleInfoLink();
         },
         createDropdown: function (container, json, key){
@@ -144,6 +148,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 });
             });
         },*/
+        //TODO
         handleInfoLink: function () {
             var me = this;
             this.getElement().find('.infolink').on('click', function ( event ) {
@@ -158,7 +163,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
          * @param {string} valueClass - class selector to show options for 
          * @param {string} keyToEmpty - optional param to empty only one specific key in the dropdown 
          */
-        updateDropdownOptions: function (dropdownId, selector) {;
+        updateDropdownOptions: function (dropdownId, selector) {
             if ( typeof selector === 'string' && selector !=="") {
                 this.dropdowns[dropdownId].find( 'option' ).css('display', 'none');
                 this.dropdowns[dropdownId].find( selector ).css('display', '');
@@ -166,11 +171,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 this.dropdowns[dropdownId].find( 'option' ).css('display', '');
             }
         },
+        updateGoeCoordDropdown: function () {
+            var clsSelector = this.makeClassSelectorFromSelections();
+            this.updateDropdownOptions( "geodetic-coordinate", clsSelector );
+            this.resetSelectToPlaceholder("geodetic-coordinate");
+        },
         makeClassSelector: function (variable) {
             if (variable === "DEFAULT" || variable === ""){
                 return "";
             }
             return "." + variable;
+        },
+        makeClassSelectorFromSelections: function (){
+            var selects = this.selections;
+            return this.makeClassSelector(selects.coordinate)+
+                this.makeClassSelector(selects.projection)+
+                this.makeClassSelector(selects.datum);
         },
         /**
          * @method handleSelectValueChange
@@ -181,34 +197,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var currentValue = select.getValue();
             var selectId = select.getId();
             var me = this;
-            var dropdowns = this.dropdowns;
-            var instances = this.selectInstances;
-            var datum = instances.datum.getValue();
-            var coordinate = instances.coordinate.getValue();
-            var projection = instances.projection.getValue();
+            this.storeSelectionValue(selectId, currentValue);
             var clsSelector;
-
             var disableElevSystem = false;
             var showElevationRow = false;
-            var showProjSystem = false;
-            /*
-            var table;
-            // transform.js sets a data-type attribute to this element refactor to using Oskari.observable
-            var system = this.element.attr('data-type');
-            // which table we operate on
-            if ( system === 'coordinate-input' ) {
-                table = this.instance.inputTable;
-            } else {
-                table = this.instance.outputTable;
-            }
-            */
-            /*if ( coordinate.indexOf("3D") > -1 ) {
-                table.handleDisplayingElevationRows(true);
-                instances.elevation.setEnabled( false );
-            } else {
-                table.handleDisplayingElevationRows(false);
-                instances.elevation.setEnabled( true );
-            }*/
+            //placeholder value is DEFAULT, removed value is ""
             if (currentValue === ""){
                 currentValue = "DEFAULT";
             }
@@ -216,52 +209,47 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             switch ( selectId ) {
                 case "datum":
                     clsSelector = this.makeClassSelector(currentValue);
-                    //enableProjectionSystem = false;
                     this.resetSelectsToPlaceholder();
                     //Update all dropdowns
                     Object.keys( this.dropdowns ).forEach( function ( key ) {
                         me.updateDropdownOptions( key, clsSelector );
                     });
+                    this.showProjectionSelect(false);
                     break;
                 case "coordinate":
                     if (currentValue === "COORD_PROJ_2D") {
-                        showProjSystem = true;
+                        this.showProjectionSelect(true);
+                    } else {
+                        this.showProjectionSelect(false);
                     }
-                    clsSelector = this.makeClassSelector(currentValue) + this.makeClassSelector(datum);
-                    this.updateDropdownOptions( "geodetic-coordinate", clsSelector );
-                    this.resetSelectToPlaceholder("geodetic-coordinate");
                     if (currentValue === "COORD_GEOG_3D" || currentValue === "COORD_PROJ_3D"){
                         disableElevSystem = true;
                         showElevationRow = true;
                     }
+                    this.updateGoeCoordDropdown();
                     break;
                 case "projection":
                     showProjSystem = true;
-                    clsSelector = this.makeClassSelector(currentValue)+this.makeClassSelector(coordinate)+this.makeClassSelector(datum);
-                    this.updateDropdownOptions( "geodetic-coordinate", clsSelector );
-                    this.resetSelectToPlaceholder("geodetic-coordinate");
+                    this.updateGoeCoordDropdown();
                     break;
                 case "elevation":
-                    if (currentValue !== "DEFAULT" || currentValue !== ""){
+                    if (currentValue !== "DEFAULT" ){
                         showElevationRow = true;
                     }
-                    this.view.updateTableHeader(this.type, this.getSelectionValues()['geodetic-coordinate'], currentValue);
                     break;
                 case "geodetic-coordinate":
                     if (currentValue === "EPSG:4936" || currentValue === "EPSG:4937") { //3D
                         disableElevSystem = true;
                         showElevationRow = true;
                     }
-                    this.view.updateTableHeader(this.type, currentValue, this.getSelectionValues().elevation); //TODO
                     break;
                 default:
                     return;
             }
+            this.storeSelectionValues();
             this.disableElevationSelection(disableElevSystem);
-            this.showProjectionSelect(showProjSystem);
-            this.updateSelectValues( instances ); //TODO only (selectId, currentValue) --> reset placeholders
-            this.view.handleTableElevationRows(this.type, showElevationRow);
-            //TODO trigger event
+            this.updateSelectValues();
+            this.trigger('CoordSystemChanged', this.type);
         },
         disableElevationSelection: function (disable){
             var select = this.selectInstances.elevation;
@@ -293,32 +281,52 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 selects.datum.setValue(srsOptions.datum);
                 selects.coordinate.setValue(srsOptions.coord);
                 selects["geodetic-coordinate"].setValue(mapSrs);
+                this.resetSelectToPlaceholder("elevation");
             }
+            this.storeSelectionValues();
+            this.updateSelectValues();
+            this.trigger('CoordSystemChanged', this.type);
         },
         showProjectionSelect: function (display){
-            var select = this.selectInstances.projection;
             var elem = jQuery(this.getElement()).find(".projection");
             if (display === true){
                 jQuery(elem).css("display","");
             } else {
                 jQuery(elem).css("display", "none");
-                select.resetToPlaceholder();
+                this.resetSelectToPlaceholder("projection");
             }
         },
-        /**
-         * @method getSelectionValues
-         * @description gets all values from all the selectList components associated with this class
-         * @return { Object } containing the values
-         */
-        getSelectionValues: function () { //TODO
+        getSelections: function (){
+            return this.selections;
+        },
+        getSrs: function () {
+            return this.selections["geodetic-coordinate"];
+        },
+        getElevation: function () {
+            return this.selections.elevation;
+        },
+        storeSelectionValue: function (key, value){
+            if (value === "DEFAULT"){
+                this.selections[key] = ""; //TODO null or ""
+            } else {
+                this.selections[key] = value
+            }
+        },
+        storeSelectionValues: function () {
             var me = this;
             var values = {};
+            var value;
             Object.keys( this.selectInstances ).forEach( function ( instance ) {
-                values[instance] = me.selectInstances[instance].getValue();
+                value = me.selectInstances[instance].getValue();
+                if (value === "DEFAULT"){
+                    values[instance] = ""; //TODO null or ""
+                } else {
+                    values[instance] = value
+                }
             });
-            return values;
+            me.selections = values;
         },
-        resetSelectsToPlaceholder: function (resetDatum) { //TODO
+        resetSelectsToPlaceholder: function (resetDatum) {
             var selects = this.selectInstances;
             Object.keys( selects ).forEach( function ( key ) {
                 if (key === "datum" && resetDatum !== true){
@@ -335,9 +343,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 select.setValue('DEFAULT'); //TODO
             }
         },
-        updateSelectValues: function ( instances ) { //TODO
-            Object.keys( instances ).forEach( function ( key ) {
-                instances[key].update();
+        updateSelectValues: function () {
+            var selects = this.selectInstances;
+            Object.keys( selects ).forEach( function ( key ) {
+                selects[key].update();
             });
         },
         getSelectInstances: function () {
