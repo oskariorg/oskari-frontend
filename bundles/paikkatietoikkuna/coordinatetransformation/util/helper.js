@@ -59,22 +59,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance)
     validateSelectionsForTransform: function (crs, file, inputData){
         var error = "";//= true;
         //source crs and target crs should be always selected
-        if (!crs.source || !crs.target){
+        if (!crs.sourceCrs || !crs.targetCrs){
             error += this.loc('flyout.transform.validateErrors.crs') + " ";
         }
         //TODO check if source or target is 3D
-        if (crs.sourceElevation && !crs.targetElevation){
+        if (crs.sourceElevationCrs && !crs.targetElevationCrs){
             error += this.loc('flyout.transform.validateErrors.targetHeight') + " ";
         }
-        if (crs.targetElevation && !crs.sourceElevation){
+        if (crs.targetElevationCrs && !crs.sourceElevationCrs){
             error += this.loc('flyout.transform.validateErrors.sourceHeight') + " ";
         }
         if (!file && inputData === false){ //TODO better checking file / inputcoords
             error +=  this.loc('flyout.transform.validateErrors.noInputData') + " ";
         }
-        if (file && !file.filename){ //TODO better checking file / inputcoords
-            error +=  this.loc('flyout.transform.validateErrors.noInputFile') + " ";
-        }
+        //if (file && !file.filename){ //TODO better checking file / inputcoords
+        //    error +=  this.loc('flyout.transform.validateErrors.noInputFile') + " ";
+        //}
 
         if (error.length === 0){
             return true
