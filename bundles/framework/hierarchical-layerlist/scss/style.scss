@@ -3,6 +3,7 @@ $selectedLayersTabTextColor: #fff;
 $selectedLayersTabLayerPadding: 6px;
 $selectedLayersTabLayerFontSize: 12px;
 $selectedLayersTabLabelWidth: 50px;
+$bottomToolsIconSize: 16px;
 
 .hierarchical-layerlist-flyout
 {
@@ -12,6 +13,10 @@ $selectedLayersTabLabelWidth: 50px;
 }
 
 div.hierarchical-layerlist {
+    div.hierarchical-layerlist-search-noresults {
+        padding: 10px;
+    }
+
     div.layer-filter {
         margin: 10px;
         color: #949494;
@@ -314,8 +319,9 @@ div.hierarchical-layerlist {
                         width: 18px;
                         height:20px;
                         float:left;
-                        margin: 4px;
+                        margin: 2px;
                         cursor: default;
+                        background-size: 12px;
 
                         &.open {
                             background-image:url("../images/glyphicons/glyphicons-224-chevron-right.png");
@@ -385,40 +391,62 @@ div.hierarchical-layerlist {
                         float:right;
 
                         .tool {
-                            width: 26px;
-                            height:26px;
+                            width: $bottomToolsIconSize;
+                            height:$bottomToolsIconSize;
                             float:left;
                             margin-left:4px;
-                            margin-top: 4px;
+                            margin-top: 8px;
                             background-repeat: no-repeat;
                             background-position: center center;
+                            background-size: $bottomToolsIconSize;
 
                             &.zoom-to-extent-tool {
                                 background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
+                                &:hover {
+                                    background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame-hover.png");
+                                }
                             }
 
                             &.show-featuredata-tool {
                                 background-image:url("../images/glyphicons/glyphicons-115-list.png");
+                                &:hover {
+                                    background-image:url("../images/glyphicons/glyphicons-115-list-hover.png");
+                                }
                             }
 
                             &.show-own-style-tool {
                                 background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png");
+                                &:hover {
+                                    background-image: url("../images/glyphicons/glyphicons-91-eyedropper-hover.png");
+                                }
                             }
 
                             &.show-metadata-tool {
                                 background-image: url("../images/glyphicons/glyphicons-196-info-sign.png");
+                                &:hover {
+                                    background-image: url("../images/glyphicons/glyphicons-196-info-sign-hover.png");
+                                }
                             }
 
                             &.show-filter-tool {
                                 background-image: url("../images/glyphicons/glyphicons-321-filter.png");
+                                &:hover {
+                                    background-image: url("../images/glyphicons/glyphicons-321-filter-hover.png");
+                                }
                             }
 
                             &.show-layer-legend-tool {
                                 background-image: url("../images/glyphicons/glyphicons-37-file.png");
+                                &:hover {
+                                    background-image: url("../images/glyphicons/glyphicons-37-file-hover.png");
+                                }
                             }
 
                             &.show-content-editor-tool {
                                 background-image: url("../images/glyphicons/glyphicons-31-pencil.png");
+                                &:hover {
+                                    background-image: url("../images/glyphicons/glyphicons-31-pencil-hover.png");
+                                }
                             }
 
                         }

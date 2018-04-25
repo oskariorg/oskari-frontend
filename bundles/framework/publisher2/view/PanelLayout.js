@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         me.instance = instance;
         me.sandbox = sandbox;
         me.mapModule = mapmodule;
+        me._originalToolStyle = null;
         // The values to be sent to plugins to actually change the style.
         me.initialValues = {
             fonts: [{
@@ -163,9 +164,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 this.template[t] = jQuery(this.__templates[t]);
             }
         }
-
-
-
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
@@ -178,8 +176,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          * @method getName
          * @return {String} the name of the component
          */
-        getName: function() {
-            return "Oskari.mapframework.bundle.publisher2.view.PanelLayout";
+        getName: function () {
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelLayout';
         },
         /**
          * @method onEvent
@@ -224,12 +222,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             // "Precompile" the templates
             for (var f in me.fields) {
                 if (me.fields.hasOwnProperty(f)) {
-                    field = me.fields[f];
-                    template = field.getContent.apply(me, arguments);
+                    var field = me.fields[f];
+                    var template = field.getContent.apply(me, arguments);
                     field.content = template;
                 }
             }
-
+            me._originalToolStyle = me.mapModule.getToolStyle();
             if (me.data.metadata) {
                 me._changeMapModuleToolstyle(me.data.metadata.style);
             }
@@ -275,23 +273,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             };
             return me.values;
         },
-        _changeMapModuleToolstyle: function(style) {
+        _changeMapModuleToolstyle: function (style) {
             var me = this;
 
             if (!style) {
                 style = me.getValues().metadata.style;
             }
             me.mapModule.changeToolStyle(style);
-
         },
-        _populateLayoutPanel: function() {
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
-                contentPanel = panel.getContainer(),
-                f,
-                field;
+        _populateLayoutPanel: function () {
+            var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            var contentPanel = panel.getContainer();
+            var field;
 
             panel.setTitle(this.loc.layout.label);
-            for (f in this.fields) {
+            for (var f in this.fields) {
                 if (this.fields.hasOwnProperty(f)) {
                     field = this.fields[f];
                     contentPanel.append(field.content);
@@ -341,29 +337,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          * @return {jQuery} the tool styles template
          */
         _getToolStylesTemplate: function () {
-            var me = this,
-                template = this.template.toolStyles.clone(),
-                toolStylesLabel = this.loc.layout.fields.toolStyles.label,
-                toolStyles = this.initialValues.toolStyles,
-                tsLen = toolStyles.length,
-                toolStyleOption,
-                toolStyleName,
-                i;
+            var me = this;
+            var template = this.template.toolStyles.clone();
+            var toolStylesLabel = this.loc.layout.fields.toolStyles.label;
 
             // Set the localizations.
             template.find('label').html(toolStylesLabel).after('<br />');
-
-            for (i = 0; i < tsLen; ++i) {
-                toolStyleOption = this.template.option.clone();
-                toolStyleName = this.loc.layout.fields.toolStyles[toolStyles[i].val];
+            var styleSelect = template.find('select');
+            // add options
+            this.initialValues.toolStyles.forEach(function (toolStyle) {
+                var toolStyleOption = me.template.option.clone();
+                var toolStyleName = me.loc.layout.fields.toolStyles[toolStyle.val];
                 toolStyleOption.attr({
-                    value: toolStyles[i].val
+                    value: toolStyle.val
                 }).html(toolStyleName);
-                template.find('select').append(toolStyleOption);
-            }
-
+                // add as option
+                styleSelect.append(toolStyleOption);
+            });
             // Set the select change handler.
-            template.find('select').on('change', function (e) {
+            styleSelect.on('change', function (e) {
                 me._changeMapModuleToolstyle();
             });
 
@@ -384,27 +376,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          * @return {Object/null}
          */
         _getItemByCode: function (code, list) {
-            var listLen = list.length,
-                i;
-            for (i = 0; i < listLen; ++i) {
-                if (list[i].val === code) {
-                    return list[i];
-                }
-            }
-            return null;
+            return list.find(function (item) {
+                return item.val === code;
+            });
         },
         /**
         * Stop panel.
         * @method stop
         * @public
         **/
-        stop: function(){
+        stop: function () {
             var me = this;
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.sandbox.unregisterFromEventByName(me, p);
-                }
-            }
+            Object.keys(me.eventHandlers).forEach(function (eventName) {
+                me.sandbox.unregisterFromEventByName(me, eventName);
+            });
+            // change the mapmodule toolstyle back to normal
+            me.mapModule.changeToolStyle({ toolStyle: me._originalToolStyle });
         }
-	}
+    }
 );
