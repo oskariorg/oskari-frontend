@@ -76,7 +76,6 @@ function () {
         this.helper.createCls(this.coordSystemOptions);
         this.instantiateViews();
         this.createUi();
-        //this.setMapSelectionMode(false); //TODO flyout hide/show
         this.bindListeners();
     },
     bindListeners: function (){
@@ -130,16 +129,11 @@ function () {
     createUi: function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
     },
-    mapSelectionMode: function () {
-        return this.isMapSelection;
-    },
     setMapSelectionMode: function (isSelect){
         this.isMapSelection = !!isSelect;
         if (isSelect === true){
-            this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [false]);
         } else {
-            this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [true]);
         }
     },
@@ -159,7 +153,7 @@ function () {
     },*/
     eventHandlers: {
         'MapClickedEvent': function ( event ) {
-            if (!this.mapSelectionMode()) {
+            if (!this.isMapSelection) {
                 return;
             }
             var lonlat = event._lonlat;
@@ -168,6 +162,16 @@ function () {
             //add coords to map coords
             this.dataHandler.addMapCoord(lonlat);
             this.helper.addMarkerForCoords(coordArray, true, true); //TODO check mapSrs lonFirst
+        },
+        'userinterface.ExtensionUpdatedEvent': function (event) {
+            if(event.getExtension().getName() !==this.getName()){
+                return;
+            }
+            if (state === "attach" || state === "restore"){
+                this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+            } else if (state === "close" || state === "minimize"){
+                this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+            }
         }
     }
 }, {
