@@ -8,6 +8,7 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
                                             '</div><div class="filter-text"></div></center>'+
                                         '</div>');
         this.filterButtons = [];
+        this.renderableButtons = [];
         this.rootElement = element;
 
         this.layerlistService.on('Layerlist.Filter.Button.Add', function( button ) {
@@ -65,6 +66,7 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             if ( activeFiltersList.length === 0 ) {
                 return;
             }
+            me.renderableButtons = activeFiltersList;
             activeFiltersList.forEach( function( filter ) {
                 var button = me.layerlistService.getLayerlistFilterButton(filter);
                 if ( me.filterIsCreated(button.id) ) {
@@ -168,9 +170,8 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
         render: function() {
             var me = this;
             this.rootElement.empty();
-            var filtersWithLayers = this.mapLayerService.getActiveFilters();
             this.filterButtons.forEach( function ( button ) {
-                if ( _.include(filtersWithLayers, button.name) ) {
+                if ( _.include(me.renderableButtons, button.name) || button.name === "newest" ) {
                     me.rootElement.append( button.element.clone(true) );
                 }
             });
