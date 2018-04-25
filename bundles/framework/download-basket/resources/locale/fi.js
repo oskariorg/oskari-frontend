@@ -25,7 +25,7 @@ Oskari.registerLocalization({
                 "no-layers-selected-title" : "Valitse karttataso",
                 "no-layers-selected-message" : "Valitse haluamasi aineistot KARTTATASOT valikosta, joista haluat ladata aineistoa",
                 "basket-raster-problem-title" : "Huomautus",
-                "basket-raster-problem" : "karttatasoa ei voida toistaiseksi ladata palvelusta."
+                "basket-raster-problem" : "Karttatasoa ei voida toistaiseksi ladata palvelusta."
             },
             "download-basket-tab" : {
                 "title" : "Latauskori",
@@ -35,6 +35,8 @@ Oskari.registerLocalization({
                 "basket-next" : "Seuraava",
                 "basket-send" : "Lataa aineistot",
                 "insert-email-for-download" : "Syötä sähköpostiosoitteesi latausta varten",
+                "privacy-policy" : "Tietosuojaseloste",
+                "privacy-policy-url" : "https://www.liikennevirasto.fi/yhteystiedot/kansalaisen-tietosuoja-liikenneviraston-palveluissa",
                 "basket-user-email" : "Sähköpostiosoite",
                 "basket-user-email-sure" : "Varmista sähköpostiosoite",
                 "check-form-error-huom" : "Huomautus",
