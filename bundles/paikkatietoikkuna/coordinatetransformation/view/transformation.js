@@ -394,7 +394,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 this.instance.getService().transformArrayToFile( coords, crsSettings, fileSettings, this.handleFileResponse.bind( this ), this.handleErrorResponse.bind(this) );
             }
         },
-        handleArrayResponse: function ( coords, dimension) {
+        handleArrayResponse: function (response) {
+            //TODO add some checking
+            var coords = response.coordinates;
+            //TODO check that response dimension matches
+            var dimension = response.dimension;
             this.instance.getDataHandler().setResultCoords(coords);
         },
         handleFileResponse: function (){
