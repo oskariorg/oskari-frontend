@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 var mode = data.mode;
 
                 if (mode === 'delete') {
-                    me.mapLayerService.removeLayer(data.id);
+                    me.mapLayerService.removeLayer(data.id, true);
                 } else if (mode === 'add') {
                     var layer = me.mapLayerService.createMapLayer(data.layerData);
                     me.mapLayerService.addLayer(layer);
@@ -166,7 +166,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         _getLayerGroups: function(groupingMethod) {
             var me = this,
                 groupList = [],
-                groupModel = null,
                 n,
                 layer,
                 groupAttr;
@@ -190,7 +189,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                         });
                         notLoadedBackend[group.id].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.id].layers.push(layer.getId());
+                    notLoadedBackend[group.id].getChildren().push({id:layer.getId(), type:'layer'});
                     notLoadedBackend[group.id].layersModels.push(layer);
                 }
             });
@@ -203,11 +202,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
 
             allGroups.forEach(function(group) {
-                groupModel = Oskari.clazz.create(
+                var groupModel = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup',
                     group,
                     me.mapLayerService
                 );
+
                 groupList.push(groupModel);
             });
             return groupList;
