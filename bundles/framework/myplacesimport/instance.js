@@ -122,15 +122,23 @@ function () {
 
         var me = this,
             sandbox = this.getSandbox(),
-            reqBuilder, request;
+            reqBuilder,
+            request,
+            mapMoveByContentReqBuilder;
 
         this.getService().addLayerToService(layerJson, false, function(mapLayer) {
             // refresh the tab
             me.getTab().refresh();
             // Request the layer to be added to the map.
-            requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
-            if (requestBuilder) {
-                request = requestBuilder(mapLayer.getId());
+            reqBuilder = Oskari.requestBuilder('AddMapLayerRequest');
+            if (reqBuilder) {
+                request = reqBuilder(mapLayer.getId());
+                sandbox.request(me, request);
+            }
+            // Request to move and zoom map to layer's content
+            mapMoveByContentReqBuilder = Oskari.requestBuilder('MapModulePlugin.MapMoveByLayerContentRequest');
+            if (mapMoveByContentReqBuilder) {
+                request = mapMoveByContentReqBuilder(mapLayer.getId(), true);
                 sandbox.request(me, request);
             }
         });
