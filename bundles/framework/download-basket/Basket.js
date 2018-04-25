@@ -19,7 +19,7 @@ Oskari.clazz.define(
             main: jQuery('<div class="oskari__download-basket"></div>'),
             basketWrapper : jQuery('<div class="oskari__download-basket-wrapper"><p class="empty-basket"></p></div>'),
             basketButtons : jQuery('<div class="oskari__download-basket-buttons"></div>'),
-            basketUserInfo : jQuery('<div class="oskari__download-basket-user-info"><p></p></div>'),
+            basketUserInfo : jQuery('<div class="oskari__download-basket-user-info"><p></p><a target="_blank"></a></div>'),
             basketForm : jQuery(
                 '<form method="" action="">' +
                 '<fieldset>' +
@@ -56,7 +56,8 @@ Oskari.clazz.define(
 
             //Basket user info
             me._templates.basketUserInfo.append(me._templates.basketForm);
-            me._templates.basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
+	    me._templates.basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
+            me._templates.basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr("href",me._getLocalization('privacy-policy-url'));
             me._templates.main.append(me._templates.basketUserInfo);
             me._templates.basketUserInfo.hide();
 
