@@ -1,6 +1,8 @@
 .hierarchical-layerlist-flyout .oskari-flyoutcontentcontainer {
   max-height: none; }
 
+div.hierarchical-layerlist div.hierarchical-layerlist-search-noresults {
+  padding: 10px; }
 div.hierarchical-layerlist div.layer-filter {
   margin: 10px;
   color: #949494; }
@@ -203,8 +205,9 @@ div.hierarchical-layerlist ul.layerlist {
           width: 18px;
           height: 20px;
           float: left;
-          margin: 4px;
-          cursor: default; }
+          margin: 2px;
+          cursor: default;
+          background-size: 12px; }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-info .header-tools .toggle.open {
             background-image: url("../images/glyphicons/glyphicons-224-chevron-right.png");
             -webkit-transform: rotate(90deg);
@@ -250,27 +253,42 @@ div.hierarchical-layerlist ul.layerlist {
       div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools {
         float: right; }
         div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool {
-          width: 26px;
-          height: 26px;
+          width: 16px;
+          height: 16px;
           float: left;
           margin-left: 4px;
-          margin-top: 4px;
+          margin-top: 8px;
           background-repeat: no-repeat;
-          background-position: center center; }
+          background-position: center center;
+          background-size: 16px; }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.zoom-to-extent-tool {
             background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.zoom-to-extent-tool:hover {
+              background-image: url("../images/glyphicons/glyphicons-488-fit-image-to-frame-hover.png"); }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-featuredata-tool {
             background-image: url("../images/glyphicons/glyphicons-115-list.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-featuredata-tool:hover {
+              background-image: url("../images/glyphicons/glyphicons-115-list-hover.png"); }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-own-style-tool {
             background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-own-style-tool:hover {
+              background-image: url("../images/glyphicons/glyphicons-91-eyedropper-hover.png"); }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-metadata-tool {
             background-image: url("../images/glyphicons/glyphicons-196-info-sign.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-metadata-tool:hover {
+              background-image: url("../images/glyphicons/glyphicons-196-info-sign-hover.png"); }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-filter-tool {
             background-image: url("../images/glyphicons/glyphicons-321-filter.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-filter-tool:hover {
+              background-image: url("../images/glyphicons/glyphicons-321-filter-hover.png"); }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-layer-legend-tool {
             background-image: url("../images/glyphicons/glyphicons-37-file.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-layer-legend-tool:hover {
+              background-image: url("../images/glyphicons/glyphicons-37-file-hover.png"); }
           div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-content-editor-tool {
             background-image: url("../images/glyphicons/glyphicons-31-pencil.png"); }
+            div.hierarchical-layerlist ul.layerlist li.layer .layer-tools .tools-container .bottom-tools .tool.show-content-editor-tool:hover {
+              background-image: url("../images/glyphicons/glyphicons-31-pencil-hover.png"); }
 div.hierarchical-layerlist .hierarchical-layerlist-tree {
   overflow-y: auto; }
   div.hierarchical-layerlist .hierarchical-layerlist-tree .jstree-wholerow-hovered {

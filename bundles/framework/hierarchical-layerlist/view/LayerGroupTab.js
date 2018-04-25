@@ -41,6 +41,7 @@ Oskari.clazz.define(
             layerFilter: jQuery('<div class="layer-filter hierarchical-layerlist-layer-filter">' +
                 '</div><div style="clear:both;"></div>'),
             layerTree: jQuery('<div class="hierarchical-layerlist-tree"></div>'),
+            noSearchResults: jQuery('<div class="hierarchical-layerlist-search-noresults"></div>'),
             layerContainer: jQuery('<span class="layer">' +
                 '<span class="layer-tools">' +
                 '   <span class="layer-backendstatus-icon backendstatus-unknown" title=""></span>' +
@@ -106,28 +107,25 @@ Oskari.clazz.define(
                 me.selectNodeFromTree(data.node, data.event);
             });
 
-
-
             me.service.on('order.changed', function(data) {
                 if (!data.ajax) {
-                    setTimeout(function() {
-                        me._updateAllTools();
-                    }, 200);
+                    me._updateAllTools();
                 }
             });
 
-            me.service.on('search', function(obj) {
-                setTimeout(function() {
-                    me._updateAllTools();
-                    me._updateLayerCountsAndGroupsVisibility(true);
-                }, 200);
+            me.service.on('search', function(data) {
+                // if nothing results found then hide jstree and show no results text
+                if (data.str.res.length == 0) {
+                    me.getJsTreeElement().hide();
+                    me.setNoResultMessageVisible(true);
+                } else {
+                    me.getJsTreeElement().show();
+                    me.setNoResultMessageVisible(false);
+                }
             });
 
             me.service.on('search.clear', function(obj) {
-                setTimeout(function() {
-                    me._updateAllTools();
-                    me._updateLayerCountsAndGroupsVisibility();
-                }, 200);
+                me.setNoResultMessageVisible(false);
             });
         },
 
@@ -162,6 +160,7 @@ Oskari.clazz.define(
                         if(childNode.type === 'layer' && childNode.state.hidden === false) {
                             count.visible++;
                         }
+
                         if(childNode.type === 'layer') {
                             count.all++;
                         }
@@ -185,7 +184,8 @@ Oskari.clazz.define(
                 groups.forEach(function(groupNode){
                     var countText = '';
                     var count = calculateLayerCounts(groupNode);
-                    if(count.all === 0 && !me.service.hasEmptyGroupsVisible()) {
+                    var node = jstree.get_node(groupNode);
+                    if((count.all === 0 && !me.service.hasEmptyGroupsVisible()) || node.state.hidden) {
                         jstree.hide_node(groupNode);
                     } else {
                         jstree.show_node(groupNode);
@@ -205,7 +205,6 @@ Oskari.clazz.define(
             updateLayerCounts('group');
             updateLayerCounts('subgroup');
             updateLayerCounts('subgroup-subgroup');
-
         },
 
         /**
@@ -215,10 +214,16 @@ Oskari.clazz.define(
          */
         _updateAllTools: function() {
             var me = this;
-            me._addGroupTools();
-            me._addSubgroupTools();
-            me._addSubgroupSubgroupTools();
-            me._addLayerTools();
+            // ugly timeout, need remove in future
+            // wait at js tree is rendered
+            clearTimeout(me.toolsTimeout);
+            me.toolsTimeout = setTimeout(function() {
+                me._addGroupTools();
+                me._addSubgroupTools();
+                me._addSubgroupSubgroupTools();
+                me._addLayerTools();
+            }, 200);
+
         },
         /**
          * Add group tools
@@ -726,7 +731,6 @@ Oskari.clazz.define(
          * @return {Oskari.userinterface.component.FormInput} field
          */
         getFilterField: function() {
-            //"use strict";
             var me = this,
                 field,
                 timer = 0;
@@ -776,6 +780,10 @@ Oskari.clazz.define(
                     layersChecked.push(node.a_attr['data-layer-id']);
                 }
             });
+
+            if(node.type.indexOf('group') > -1 && !jQuery(event.target).hasClass('jstree-checkbox')) {
+                return;
+            }
 
             var layerId = null;
 
@@ -950,13 +958,13 @@ Oskari.clazz.define(
                     var opts = {
                         a_attr: {
                             class: (!subgroup.selectable) ? 'no-checkbox' : '',
-                            'data-group-id': subgroup.id,
+                            'data-group-id': subgroup.getId(),
                             'data-parent-group-id': groupId
                         }
                     };
 
-                    addLayers(type + '-' + subgroup.id, subgroup.layers, subgroup.id, subgroupOrders);
-                    addSubgroups('subgroup-subgroup', subgroup.id, subgroup.groups, subgroupOrders);
+                    addLayers(type + '-' + subgroup.getId(), subgroup.getLayers(), subgroup.getId(), subgroupOrders);
+                    addSubgroups('subgroup-subgroup', subgroup.getId(), subgroup.getGroups(), subgroupOrders);
 
                     // sort
                     subgroupOrders.sort(function compare(a, b) {
@@ -981,10 +989,17 @@ Oskari.clazz.define(
             };
 
             me.tabPanel.getContainer().append(layerTree);
+
+            if(me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults').length === 0) {
+                var noSearchResults = me.templates.noSearchResults.clone();
+                noSearchResults.html(me.instance.getLocalization('errors.noResults')).hide();
+                me.tabPanel.getContainer().append(noSearchResults);
+                me.setNoResultMessageVisible(false);
+            }
+
             me.layerGroups = groups;
 
             groups.forEach(function(group) {
-                var layers = group.getLayers();
                 var groupOrders = [];
                 var groupChildren = [];
 
@@ -999,7 +1014,7 @@ Oskari.clazz.define(
                 }
 
                 //Loop through group layers
-                addLayers('group-' + group.getId(), layers, group.getId(), groupOrders, group.isToolsVisible());
+                addLayers('group-' + group.getId(), group.getLayers(), group.getId(), groupOrders, group.isToolsVisible());
 
 
                 if (group.getGroups().length > 0) {
@@ -1060,6 +1075,34 @@ Oskari.clazz.define(
                     me._toggleLayerCheckboxes(layer.getId(), true);
                 });
             });
+
+
+            me.getJsTreeElement().on('redraw.jstree',function(nodes){
+                me._updateAllTools();
+                me._updateLayerCountsAndGroupsVisibility(true);
+            });
+
+            // Add click handler for toggle groups open/close state
+            me.getJsTreeElement().on('click', function(evt) {
+                if(!jQuery(evt.target).hasClass('jstree-checkbox') && !jQuery(evt.target).hasClass('jstree-ocl')) {
+                    me.getJsTreeElement().jstree(true).toggle_node(evt.target);
+                }
+            });
+        },
+
+        /**
+         * Set no result message visible
+         * @method setNoResultMessageVisible
+         * @param  {Boolean}                  visible has message visible
+         */
+        setNoResultMessageVisible: function(visible) {
+            var me = this;
+            var noResultsElement = me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults');
+            if(!visible) {
+                noResultsElement.hide();
+                return;
+            }
+            noResultsElement.show();
         },
 
         /**

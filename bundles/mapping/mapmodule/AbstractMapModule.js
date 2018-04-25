@@ -563,8 +563,8 @@ Oskari.clazz.define(
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
                         // transform coordinates from browser projection to current
-                        var lonlat = me.transformCoordinates({ 
-                            lon: position.coords.longitude, 
+                        var lonlat = me.transformCoordinates({
+                            lon: position.coords.longitude,
                             lat: position.coords.latitude }, 'EPSG:4326');
                         sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat));
                         // notify callback
@@ -645,9 +645,9 @@ Oskari.clazz.define(
          */
         getClosestZoomLevel: function (minScale, maxScale) {
             var zoomLevel = this.getMapZoom();
-            var scale = this.getMapScale(),
-                scaleList = this.getScaleArray(),
-                i;
+            var scale = this.getMapScale();
+            var scaleList = this.getScaleArray();
+            var i;
             // default to values from scaleList if missing
             minScale = minScale || scaleList[0];
             maxScale = maxScale || scaleList[scaleList.length - 1];
@@ -729,10 +729,9 @@ Oskari.clazz.define(
             if (!scale && scale !== 0) {
                 return -1;
             }
-            var resIndex = -1,
-                scaleList = this.getScaleArray(),
-                i;
-            for (i = 1; i < scaleList.length; i += 1) {
+            var resIndex = -1;
+            var scaleList = this.getScaleArray();
+            for (var i = 1; i < scaleList.length; i += 1) {
                 if ((scale > scaleList[i]) && (scale <= scaleList[i - 1])) {
                     // resolutions are in the same order as scales so just use them
                     resIndex = i - 1;
@@ -754,8 +753,8 @@ Oskari.clazz.define(
          * @return {Number[]} calculated mapscales that are within given bounds
          */
         calculateLayerScales: function (maxScale, minScale) {
-            var layerScales = [],
-                mapScales = this.getScaleArray();
+            var layerScales = [];
+            var mapScales = this.getScaleArray();
 
             for (var i = 0; i < mapScales.length; i += 1) {
                 if ((!minScale || minScale >= mapScales[i]) && (!maxScale || maxScale <= mapScales[i])) {
@@ -773,9 +772,9 @@ Oskari.clazz.define(
          * @return {Number[]} calculated resolutions that are within given bounds
          */
         calculateLayerResolutions: function (maxScale, minScale) {
-            var layerResolutions = [],
-                mapScales = this.getScaleArray(),
-                mapResolutions = this.getResolutionArray();
+            var layerResolutions = [];
+            var mapScales = this.getScaleArray();
+            var mapResolutions = this.getResolutionArray();
 
             for (var i = 0; i < mapScales.length; i += 1) {
                 if ((!minScale || minScale >= mapScales[i]) && (!maxScale || maxScale <= mapScales[i])) {
@@ -816,16 +815,16 @@ Oskari.clazz.define(
          * Signal map-engine that DOMElement size has changed and trigger a MapSizeChangedEvent
          */
         updateSize: function () {
-            var sandbox = this.getSandbox(),
-                mapVO = sandbox.getMap(),
-                width = mapVO.getWidth(),
-                height = mapVO.getHeight();
+            var sandbox = this.getSandbox();
+            var mapVO = sandbox.getMap();
+            var width = mapVO.getWidth();
+            var height = mapVO.getHeight();
 
             this._updateSizeImpl();
             this.updateDomain();
 
-            var widthNew = mapVO.getWidth(),
-                heightNew = mapVO.getHeight();
+            var widthNew = mapVO.getWidth();
+            var heightNew = mapVO.getHeight();
             // send as an event forward
             if (width !== widthNew || height !== heightNew) {
                 var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
@@ -938,7 +937,7 @@ Oskari.clazz.define(
             }, 50);
         },
         notifyErrors: function (errors, oskariLayer) {
-            Oskari.log(this.getName()).warn('error loading layer: ' + oskariLayer._name);
+            Oskari.log(this.getName()).warn('error loading layer: ' + oskariLayer.getName());
         },
         /**
          * Returns state for mapmodule including plugins that have getState() function
@@ -947,9 +946,9 @@ Oskari.clazz.define(
          */
         getState: function () {
             var state = {
-                    plugins: {}
-                },
-                pluginName;
+                plugins: {}
+            };
+            var pluginName;
 
             for (pluginName in this._pluginInstances) {
                 if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
@@ -964,8 +963,8 @@ Oskari.clazz.define(
          * @return {String} link parameters for map state
          */
         getStateParameters: function () {
-            var params = '',
-                pluginName;
+            var params = '';
+            var pluginName;
 
             for (pluginName in this._pluginInstances) {
                 if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
@@ -996,9 +995,9 @@ Oskari.clazz.define(
          */
         notifyStartMove: function () {
             this.getSandbox().getMap().setMoving(true);
-            var centerX = this.getMapCenter().lon,
-                centerY = this.getMapCenter().lat,
-                evt = Oskari.eventBuilder('MapMoveStartEvent')(centerX, centerY);
+            var centerX = this.getMapCenter().lon;
+            var centerY = this.getMapCenter().lat;
+            var evt = Oskari.eventBuilder('MapMoveStartEvent')(centerX, centerY);
             this.getSandbox().notifyAll(evt);
         },
         /**
@@ -1029,8 +1028,8 @@ Oskari.clazz.define(
         },
 
         getMobileDiv: function () {
-            var me = this,
-                mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv');
+            var me = this;
+            var mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv');
 
             return mobileDiv;
         },
@@ -1091,7 +1090,6 @@ Oskari.clazz.define(
         _handleMapSizeChanges: function (newSize, pluginName) {
             var me = this;
             var modeChanged = false;
-            var mobileDiv = this.getMobileDiv();
             if (Oskari.util.isMobile()) {
                 modeChanged = me.getMobileMode() !== true;
                 me.setMobileMode(true);
@@ -1114,8 +1112,8 @@ Oskari.clazz.define(
          *
          */
         redrawPluginUIs: function (modeChanged) {
-            var me = this,
-                sortedList = me._getSortedPlugins();
+            var me = this;
+            var sortedList = me._getSortedPlugins();
             _.each(sortedList, function (plugin) {
                 if (plugin && typeof plugin.redrawUI === 'function') {
                     plugin.redrawUI(me.getMobileMode(), modeChanged);
@@ -1234,8 +1232,7 @@ Oskari.clazz.define(
             return this._cursorStyle;
         },
         setCursorStyle: function (cursorStyle) {
-            var me = this,
-                element = this.getMapEl();
+            var element = this.getMapEl();
             jQuery(element).css('cursor', cursorStyle);
             this._cursorStyle = cursorStyle;
             return this._cursorStyle;
@@ -1246,13 +1243,12 @@ Oskari.clazz.define(
          * toggles the crosshair marking the center of the map
          */
         toggleCrosshair: function (show) {
-            var me = this,
-                crosshair = null,
-                mapEl = me.getMapEl();
+            var crosshair = null;
+            var mapEl = this.getMapEl();
 
             mapEl.find('div.oskari-crosshair').remove();
             if (show) {
-                crosshair = me.templates.crosshair.clone();
+                crosshair = this.templates.crosshair.clone();
                 mapEl.append(crosshair);
             }
         },
@@ -1374,7 +1370,6 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         registerPlugin: function (plugin) {
-            var sandbox = this.getSandbox();
             plugin.setMapModule(this);
             var pluginName = plugin.getName();
             this.log.debug(
@@ -1396,8 +1391,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         unregisterPlugin: function (plugin) {
-            var sandbox = this.getSandbox(),
-                pluginName = plugin.getName();
+            var pluginName = plugin.getName();
 
             this.log.debug(
                 '[' + this.getName() + ']' + ' Unregistering ' + pluginName
@@ -1414,12 +1408,11 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         startPlugin: function (plugin) {
-            var sandbox = this.getSandbox(),
-                pluginName = plugin.getName();
+            var pluginName = plugin.getName();
 
             this.log.debug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             try {
-                var tryAgainLater = plugin.startPlugin(sandbox);
+                var tryAgainLater = plugin.startPlugin(this.getSandbox());
                 if (tryAgainLater && typeof plugin.redrawUI === 'function') {
                     this.lazyStartPlugins.push(plugin);
                 }
@@ -1459,11 +1452,8 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         stopPlugin: function (plugin) {
-            var sandbox = this.getSandbox(),
-                pluginName = plugin.getName();
-
-            this.log.debug('[' + this.getName() + ']' + ' Starting ' + pluginName);
-            plugin.stopPlugin(sandbox);
+            this.log.debug('[' + this.getName() + ']' + ' Starting ' + plugin.getName());
+            plugin.stopPlugin(this.getSandbox());
         },
         /**
          * @method startPlugin
@@ -1565,8 +1555,7 @@ Oskari.clazz.define(
          * @param  {Object} styles styles object
          */
         registerWellknownStyle: function (key, styles) {
-            var me = this,
-                sandbox = this.getSandbox();
+            var me = this;
 
             if (key && styles) {
                 var styleKey = Oskari.util.sanitize(key);
@@ -1626,8 +1615,7 @@ Oskari.clazz.define(
          * @return {Object} returns styles for wanted key or if defined also style name return only wanted style
          */
         getWellknownStyle: function (key, style) {
-            var me = this,
-                sandbox = this.getSandbox();
+            var me = this;
 
             if (!me._wellknownStyles[key] && !style) {
                 this.log.warn('Not found wellknown markers for key=' + key + ', returning default markers');
@@ -1673,10 +1661,9 @@ Oskari.clazz.define(
          * @return {String} marget svg image format
          */
         getSvg: function (style) {
-            var sandbox = this.getSandbox(),
-                marker = this._markerTemplate.clone(),
-                svgObject = null,
-                isWellknownMarker = false;
+            var marker = this._markerTemplate.clone();
+            var svgObject = null;
+            var isWellknownMarker = false;
 
             // marker shape is number --> find it from Oskari.getMarkers()
             if (!isNaN(style.shape)) {
@@ -1692,10 +1679,9 @@ Oskari.clazz.define(
                 if (style.stroke) {
                     svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', style.stroke);
                 }
-            }
-            // marker shape is svg
-            else if ((typeof style.shape === 'object' && style.shape !== null &&
+            } else if ((typeof style.shape === 'object' && style.shape !== null &&
                 style.shape.data) || (typeof style.shape === 'string' && style.shape.indexOf('<svg') > -1)) {
+                // marker shape is svg
                 var offset = {
                     x: style.offsetX || style.shape.x,
                     y: style.offsetY || style.shape.y
@@ -1714,19 +1700,17 @@ Oskari.clazz.define(
                     offsetX: offset.x,
                     offsetY: offset.y
                 };
-            }
-            // Marker is welknown named svg marker
-            else if (typeof style.shape === 'object' && style.shape !== null &&
+            } else if (typeof style.shape === 'object' && style.shape !== null &&
                 style.shape.key && style.shape.name) {
+                // Marker is welknown named svg marker
                 svgObject = this.getWellknownStyle(style.shape.key, style.shape.name);
                 if (svgObject === null) {
                     this.log.warn('Not identified wellknown marker shape. Not handled getSvg.');
                     return null;
                 }
                 isWellknownMarker = true;
-            }
-            // marker icon not found
-            else {
+            } else {
+                // marker icon not found
                 return null;
             }
 
@@ -1925,8 +1909,8 @@ Oskari.clazz.define(
 
             var removeClasses = function (el) {
                 el.removeClass(function (index, classes) {
-                    var removeThese = '',
-                        classNames = classes.split(' ');
+                    var removeThese = '';
+                    var classNames = classes.split(' ');
 
                     // Check if there are any old font classes.
                     for (j = 0; j < classNames.length; j += 1) {
@@ -2018,14 +2002,13 @@ Oskari.clazz.define(
             }
         },
         _getContainerWithClasses: function (containerClasses) {
-            var mapDiv = this.getMapEl(),
-                containerDiv = jQuery(
-                    '<div class="mapplugins">' +
+            var containerDiv = jQuery(
+                '<div class="mapplugins">' +
                     '  <div class="mappluginsContainer">' +
                     '    <div class="mappluginsContent"></div>' +
                     '  </div>' +
                     '</div>'
-                );
+            );
 
             containerDiv.addClass(containerClasses);
             containerDiv.attr('data-location', containerClasses);
@@ -2049,12 +2032,10 @@ Oskari.clazz.define(
          * Adds containers for map control plugins
          */
         _addMapControlPluginContainers: function () {
-            var containerClasses = this._getContainerClasses(),
-                containerDiv,
-                mapDiv = this.getMapEl(),
-                i;
+            var containerClasses = this._getContainerClasses();
+            var mapDiv = this.getMapEl();
 
-            for (i = 0; i < containerClasses.length; i += 1) {
+            for (var i = 0; i < containerClasses.length; i += 1) {
                 mapDiv.append(
                     this._getContainerWithClasses(containerClasses[i])
                 );
@@ -2062,10 +2043,10 @@ Oskari.clazz.define(
         },
 
         _getMapControlPluginContainer: function (containerClasses) {
-            var splitClasses = (containerClasses + '').split(' '),
-                selector = '.mapplugins.' + splitClasses.join('.'),
-                containerDiv,
-                mapDiv = this.getMapEl();
+            var splitClasses = (containerClasses + '').split(' ');
+            var selector = '.mapplugins.' + splitClasses.join('.');
+            var containerDiv;
+            var mapDiv = this.getMapEl();
 
             containerDiv = mapDiv.find(selector);
             if (!containerDiv.length) {
@@ -2119,11 +2100,12 @@ Oskari.clazz.define(
 
         setMapControlPlugin: function (element, containerClasses, position) {
             // Get the container
-            var container = this._getMapControlPluginContainer(containerClasses),
-                content = container.find('.mappluginsContainer .mappluginsContent'),
-                inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
-                precedingPlugin = null,
-                curr;
+            var container = this._getMapControlPluginContainer(containerClasses);
+            var content = container.find('.mappluginsContainer .mappluginsContent');
+            // bottom corner container?
+            var inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses);
+            var precedingPlugin = null;
+            var curr;
 
             if (!element) {
                 throw 'Element is non-existent.';
@@ -2175,8 +2157,8 @@ Oskari.clazz.define(
          * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
         removeMapControlPlugin: function (element, keepContainerVisible, detachOnly) {
-            var container = element.parents('.mapplugins'),
-                content = element.parents('.mappluginsContent');
+            var container = element.parents('.mapplugins');
+            var content = element.parents('.mappluginsContent');
             // TODO take this into use in all UI plugins so we can hide unused containers...
             if (detachOnly) {
                 element.detach();
@@ -2199,9 +2181,9 @@ Oskari.clazz.define(
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layerId) {
-            var me = this,
-                sandbox = me._sandbox,
-                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            var me = this;
+            var sandbox = me._sandbox;
+            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 // not found
                 return null;
@@ -2317,10 +2299,10 @@ Oskari.clazz.define(
          * @param {Object} params
          */
         handleMapLayerUpdateRequest: function (layerId, forced, params) {
-            var me = this,
-            	sandbox = me.getSandbox(),
-            	layerPlugins = me.getLayerPlugins(),
-            	layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            var me = this;
+            var sandbox = me.getSandbox();
+            var layerPlugins = me.getLayerPlugins();
+            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 // couldn't find layer to update
                 return;

@@ -32,6 +32,9 @@ function() {},
         if(!stats) {
             return;
         }
+        if(!stats.classificationPlugin) {
+            stats.createClassificationView(enabled);
+        }
         if(enabled) {
             stats.classificationPlugin.makeTransparent(true);
         } else {
