@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     var me = this;
 
     this.paramHandler.on('Data.Loaded', function ( data ) {
+        me.spinner.stop();
         me.trigger('indicator.changed', data.regionSet.length > 0);
         me._createUi(data.datasrc, data.indicators, data.selectors, data.regionSet, data.values);
     });
@@ -43,8 +44,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this._anchorEl.append(cont);
         this.container = cont;
 
-        // me.spinner.insertTo(cont.parent().parent());
-        // me.spinner.start();
         Object.keys( values ).forEach( function ( selected, index ) {
             var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
             var label = (locale.parameters[selected]) ? locale.parameters[selected] : selected.id;
@@ -91,9 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
      */
     indicatorSelected: function (el, datasrc, indId, elements) {
         var me = this;
-        var locale = me.instance.getLocalization();
-        var errorService = me.service.getErrorService();
-        var panelLoc = locale.panels.newSearch;
+
         elements = elements || {};
         this._anchorEl = el;
         this.clean();
@@ -108,6 +105,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             }
             return;
         }
+         me.spinner.insertTo(el.parent());
+         me.spinner.start();
         //get the data to create ui with
         me.paramHandler.getData( datasrc, indId, elements );
     },

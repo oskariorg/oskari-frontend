@@ -25,7 +25,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         var panelLoc = locale.panels.newSearch;
 
         this.service.getIndicatorMetadata(datasrc, indId, function (err, indicator) {
-            //me.spinner.stop();
             if (elements.dataLabelWithTooltips) {
                 elements.dataLabelWithTooltips.find('.tooltip').hide();
             }
