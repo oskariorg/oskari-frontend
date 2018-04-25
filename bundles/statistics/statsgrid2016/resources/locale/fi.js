@@ -30,8 +30,8 @@ Oskari.registerLocalization(
         "panels": {
             "newSearch": {
                 "title": "AINEISTOHAKU",
-                "datasourceTitle": "Aineiston tarjoaja",
-                "indicatorTitle": "Aineisto",
+                "datasourceTitle": "Tietolähde",
+                "indicatorTitle": "Indikaattori",
                 "selectDatasourcePlaceholder": "Valitse tietolähde",
                 "selectIndicatorPlaceholder": "Valitse aineisto",
                 "noResults": "Yhtään hakutulosta ei löytynyt, haulla",

@@ -30,7 +30,7 @@ Oskari.registerLocalization(
         "panels": {
             "newSearch": {
                 "title": "SEARCH DATA",
-                "datasourceTitle": "Data provider",
+                "datasourceTitle": "Data source",
                 "indicatorTitle": "Data",
                 "selectDatasourcePlaceholder": "Select data source",
                 "selectIndicatorPlaceholder": "Select data",
