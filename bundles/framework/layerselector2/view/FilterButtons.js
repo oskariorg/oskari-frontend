@@ -171,7 +171,7 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             var me = this;
             this.rootElement.empty();
             this.filterButtons.forEach( function ( button ) {
-                if ( _.include(me.renderableButtons, button.name) || button.name === "newest" ) {
+                if ( _.include(me.renderableButtons, button.name) ) {
                     me.rootElement.append( button.element.clone(true) );
                 }
             });
