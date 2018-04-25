@@ -35,6 +35,8 @@ Oskari.registerLocalization({
                 "basket-next" : "Nästa",
                 "basket-send" : "Ladda data",
                 "insert-email-for-download" : "Fyll i din e-postadress för nedladdning",
+                "privacy-policy" : "Dataskyddsbeskrivning",
+                "privacy-policy-url" : "https://www.liikennevirasto.fi/yhteystiedot/kansalaisen-tietosuoja-liikenneviraston-palveluissa",
                 "basket-user-email" : "E-postadress",
                 "basket-user-email-sure" : "Bekräfta e-postadress",
                 "check-form-error-huom" : "Observera",
