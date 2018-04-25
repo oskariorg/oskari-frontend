@@ -167,6 +167,7 @@ function () {
             if(event.getExtension().getName() !==this.getName()){
                 return;
             }
+            var state = event.getViewState();
             if (state === "attach" || state === "restore"){
                 this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             } else if (state === "close" || state === "minimize"){
