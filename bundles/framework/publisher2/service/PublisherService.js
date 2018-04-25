@@ -11,14 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
      */
     function (sandbox) {
         this.__sandbox = sandbox;
-        this.mapToolStyle = null;
     }, {
-        setMapToolStyle: function (style) {
-            this.mapToolStyle = style;
-        },
-        getMapToolStyle: function () {
-            return this.mapToolStyle;
-        },
         /**
          * @method getLayersWithoutPublishRights
          * Checks currently selected layers and returns a subset of the list
