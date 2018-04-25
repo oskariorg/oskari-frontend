@@ -147,10 +147,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var target = this.outputSystem;
 
             return options = {
-                sourceCrs: input.getSrsSelection(),
-                sourceElevationCrs: input.getElevationSelection(),
-                targetCrs: target.getSrsSelection(),
-                targetElevationCrs: target.getElevationSelection()
+                sourceCrs: input.getSrs(),
+                sourceElevationCrs: input.getElevation(),
+                targetCrs: target.getSrs(),
+                targetElevationCrs: target.getElevation()
             }
         },
         showMessage: function (title, message){
