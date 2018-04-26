@@ -926,66 +926,43 @@ Oskari.clazz.define(
             }
             var layerTree = me.templates.layerTree.clone();
 
-            var addLayers = function(groupElId, layers, groupId, orders, tools) {
-                layers.forEach(function(l) {
-                    var layer = l;
-                    if (l.id) {
-                        layer = me.sb.findMapLayerFromAllAvailable(l.id);
-                    }
-                    if(layer) {
-                        var opts = {
-                            a_attr: {
-                                'data-group-id': groupId,
-                                'data-layer-id': layer.getId(),
-                                'data-tools-visible': tools
-                            }
-                        };
-
-                        orders.push({
-                            index: layer.getOrderNumber() || 0,
-                            conf: me._getJsTreeObject(jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
-                                'layer',
-                                opts)
-                        });
-                    }
-                });
-            };
-
-            var addSubgroups = function(type, groupId, subGroups, orders) {
-                subGroups.forEach(function(subgroup) {
-                    var subgroupChildren = [];
-                    var subgroupOrders = [];
+            var getLayerConf = function(layer,group) {
+                if(layer) {
                     var opts = {
                         a_attr: {
-                            class: (!subgroup.selectable) ? 'no-checkbox' : '',
-                            'data-group-id': subgroup.getId(),
-                            'data-parent-group-id': groupId
+                            'data-group-id': group.getId(),
+                            'data-layer-id': layer.getId(),
+                            'data-tools-visible': (typeof group.isToolsVisible == 'function') ? group.isToolsVisible() : true
                         }
                     };
 
-                    addLayers(type + '-' + subgroup.getId(), subgroup.getLayers(), subgroup.getId(), subgroupOrders);
-                    addSubgroups('subgroup-subgroup', subgroup.getId(), subgroup.getGroups(), subgroupOrders);
+                    return me._getJsTreeObject(jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
+                            'layer',
+                            opts);
+                }
+                return null;
+            };
 
-                    // sort
-                    subgroupOrders.sort(function compare(a, b) {
-                        if (a.index < b.index)
-                            return -1;
-                        if (a.index > b.index)
-                            return 1;
-                        return 0;
-                    });
+            var getSubgroupConf = function(maplayerGroup, parentGroup, groupPrefix) {
+                if(maplayerGroup) {
+                    var subgroupChildren = [];
 
-                    subgroupOrders.forEach(function(order) {
-                        subgroupChildren.push(order.conf);
-                    });
-                    orders.push({
-                        index: subgroup.orderNumber,
-                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' <span class="layer-count"></span>',
-                            type,
-                            opts, subgroupChildren)
-                    });
+                    var opts = {
+                        a_attr: {
+                            class: (!maplayerGroup.hasSelectable()) ? 'no-checkbox' : '',
+                            'data-group-id': maplayerGroup.getId(),
+                            'data-parent-group-id': parentGroup.getId()
+                        }
+                    };
 
-                });
+                    addChildren(maplayerGroup,subgroupChildren, groupPrefix+'subgroup-');
+
+                    return me._getJsTreeObject(me.sb.getLocalizedProperty(maplayerGroup.getName()) + ' <span class="layer-count"></span>',
+                            groupPrefix + 'subgroup',
+                            opts, subgroupChildren);
+                }
+                return null;
+
             };
 
             me.tabPanel.getContainer().append(layerTree);
@@ -998,6 +975,24 @@ Oskari.clazz.define(
             }
 
             me.layerGroups = groups;
+
+            var addChildren = function(group, groupChildren, groupPrefix) {
+                var childrens = group.getChildren();
+                childrens.forEach(function(children){
+                    if(children.type==='layer') {
+                        var layerConf = getLayerConf(me.sb.findMapLayerFromAllAvailable(children.id), group);
+                        if (layerConf) {
+                            groupChildren.push(layerConf);
+                        }
+                    }
+                    else {
+                        var groupConf = getSubgroupConf(me._mapLayerService.getAllLayerGroups(children.id), group, groupPrefix);
+                        if (groupConf) {
+                            groupChildren.push(groupConf);
+                        }
+                    }
+                });
+            };
 
             groups.forEach(function(group) {
                 var groupOrders = [];
@@ -1013,26 +1008,7 @@ Oskari.clazz.define(
                     extraOpts.a_attr.class = 'no-checkbox';
                 }
 
-                //Loop through group layers
-                addLayers('group-' + group.getId(), group.getLayers(), group.getId(), groupOrders, group.isToolsVisible());
-
-
-                if (group.getGroups().length > 0) {
-                    addSubgroups('subgroup', group.getId(), group.getGroups(), groupOrders);
-                }
-
-                // sort
-                groupOrders.sort(function compare(a, b) {
-                    if (a.index < b.index)
-                        return -1;
-                    if (a.index > b.index)
-                        return 1;
-                    return 0;
-                });
-
-                groupOrders.forEach(function(order) {
-                    groupChildren.push(order.conf);
-                });
+                addChildren(group, groupChildren, '');
 
                 var groupObject = me._getJsTreeObject(group.getTitle() + ' <span class="layer-count"></span>',
                     'group', extraOpts, groupChildren, group.isToolsVisible());
