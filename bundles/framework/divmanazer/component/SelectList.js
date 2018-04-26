@@ -187,7 +187,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       }
       return this.element.find( 'select' ).val();
     },
-
+    getAllOptions: function () {
+      return this.element.find('option');
+    },
     /** @method adjustChosen
     *   adjusts the chosen direction according to the screen
     */

@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     this.paramHandler.on('Data.Loaded', function ( data ) {
         me.spinner.stop();
         me.trigger('indicator.changed', data.regionSet.length > 0);
+        me.trigger('regionsets.loaded', data.regionSet);
         me._createUi(data.datasrc, data.indicators, data.selectors, data.regionSet, data.values);
     });
 }, {
@@ -80,6 +81,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         };
 
         me.trigger('indicator.changed', regionsets.length > 0);
+    },
+    regionsetSelected: function (datasrc, regionsets) {
+        this.paramHandler.testRegionset( datasrc, regionsets );
     },
     /**
      * @method  @public indicatorSelected  handle indicator selected

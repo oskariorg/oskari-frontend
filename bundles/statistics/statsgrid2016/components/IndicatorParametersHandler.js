@@ -148,5 +148,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
             }
             me.trigger('Data.Loaded', data);
         });
+    },
+    testRegionset: function ( datasrc, regionsets ) {
+        regionsets = regionsets.map( function (id)  { return Number(id) } );
+        this.service.getIndicatorList( datasrc, function ( err, indicator ) {
+            indicator.indicators.forEach( function (ind) {
+                if ( _.intersection(ind.regionsets, regionsets).length === 0 ) {
+                    //regionset not supported
+                }
+            })
+        });
     }
 });

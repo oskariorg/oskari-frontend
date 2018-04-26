@@ -138,7 +138,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             allow_single_deselect: true,
             disable_search_threshold: 10,
             no_results_text: locale.panels.newSearch.noResults,
-            width: '100%'
+            width: '100%',
+            multi: true
         };
 
         var regionSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
@@ -179,9 +180,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                     dataLabelWithTooltips: dataLabelWithTooltips
                 });
         });
-
+        regionsetSelector.on('change', function (evt) {
+            var i = indicSelect.getAllOptions();
+            var ds = select.getAllOptions();
+            me._params.regionsetSelected( select.getValue(), regionSelect.getValue() );
+            // disable options from ds and indicators that don't support selected regionset
+        });
         me._params.on('indicator.changed', function (enabled) {
             me.trigger('indicator.changed', enabled);
+        });
+        me._params.on('regionsets.loaded', function (regionsets) {
+            if (!this.regionSelector) {
+                this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.instance.getLocalization());
+            }
+            var options = this.regionSelector.__getOptions(regionsets);
+            regionSelect.updateOptions(options);
         });
 
         this.service.on('StatsGrid.DatasourceEvent', function (evt) {
