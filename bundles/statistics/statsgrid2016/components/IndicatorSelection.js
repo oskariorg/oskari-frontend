@@ -130,6 +130,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         indicatorSelector.append(indicDropdown);
         indicSelect.adjustChosen();
 
+        //Regionsets
+        main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
+        var regionsetSelector = main.find('.stats-rs-selector');
+        var regionOptions = {
+            placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
+            allow_single_deselect: true,
+            disable_search_threshold: 10,
+            no_results_text: locale.panels.newSearch.noResults,
+            width: '100%'
+        };
+
+        var regionSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var regionDropdown = regionSelect.create(undefined, regionOptions);
+        regionDropdown.css({width: '100%'});
+        regionsetSelector.append(regionDropdown);
+        regionSelect.adjustChosen();
+
         // Refine data label and tooltips
         var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({title: panelLoc.refineSearchLabel, tooltip1: panelLoc.refineSearchTooltip1 || '', tooltip2: panelLoc.refineSearchTooltip2 || ''}));
         main.append(dataLabelWithTooltips);
