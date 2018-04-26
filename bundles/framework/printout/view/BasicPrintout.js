@@ -552,29 +552,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          */
         _printMap: function (selections, features) {
             var me = this;
-            var url = Oskari.urls.getRoute('GetPrint');
-            var maplinkArgs = selections.maplinkArgs;
-            var pageSizeArgs = '&pageSize=' + selections.pageSize;
-            var pageTitleArgs = '&pageTitle=' + encodeURIComponent(selections.pageTitle);
+            // base url + layers/location
+            var url = Oskari.urls.getRoute('GetPrint') + '&' + selections.maplinkArgs;
+            // page size
+            url = url + '&pageSize=' + selections.pageSize;
+            // title for PDF
+            url = url + '&pageTitle=' + encodeURIComponent(selections.pageTitle);
             var contentOptions = [];
 
-            var layoutArgs = me._getLayoutParams(selections.pageSize);
             Object.keys(me.contentOptionsMap).forEach(function (optKey) {
                 if (selections[optKey]) {
                     contentOptions.push('&' + optKey + '=true');
                 }
             });
-            var contentOptionArgs = contentOptions.join('');
-            var formatArgs = '&format=' + selections.format;
-            var parameters = maplinkArgs + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + layoutArgs;
+            // ??
+            url = url + contentOptions.join('');
+            // png/pdf
+            url = url + '&format=' + selections.format;
+            // additional layout params for PDF?
+            url = url + me._getLayoutParams(selections.pageSize);
 
             // TODO: what what in the what now? Pretty sure saveFile isn't used or implemented on the server, but keeping it for now just to be on the safe side
             if (selections.saveFile) {
-                parameters = parameters + '&saveFile=' + selections.saveFile;
+                url = url + '&saveFile=' + selections.saveFile;
             }
-
-            url = url + parameters;
-
             // We need to use the POST method if there's GeoJSON or tile data.
             if (me.instance.geoJson || !jQuery.isEmptyObject(me.instance.tileData) || me.instance.tableJson) {
                 var stringifiedJson = me._stringifyGeoJson(me.instance.geoJson);
