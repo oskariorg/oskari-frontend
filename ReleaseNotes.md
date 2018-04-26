@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.46.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/11?closed=1
+
+- publisher now remembers the original tool style and no longer resets to default style on exit
+- fixed layer/group sorting issues on the hierarchichal layerselector
+- fixed a JS error on layer removal
+- fixed an issue where adding imported datasets/userlayers to the map zoomed to the extent of the layer always. Now it just zooms on initial import and when clicking the layer on personaldata listing. This fixes an issue where embedded maps could start from the dataset extent instead of the original saved center point.
+
 ## 1.46.1
 
 For a full list of changes see:
