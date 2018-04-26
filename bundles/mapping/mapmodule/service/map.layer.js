@@ -194,6 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         removeLayer: function (layerId, suppressEvent) {
             var layer = this.findMapLayer(layerId);
             var parentLayer = null;
+            var sandbox = this.getSandbox();
 
             if (!layer) {
                 // not found in layers OR sublayers!
@@ -201,7 +202,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
             // remove the layer from map state
-            this.getSandbox().getMap().removeLayer(layerId);
+            sandbox.getMap().removeLayer(layerId);
             // default to all layers
             var layerList = this._loadedLayersList;
             if (layer.getParentId() !== -1) {
@@ -227,18 +228,17 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             this._newestLayers = null;
 
             if (layer && suppressEvent !== true) {
-                var notify = this.getSandbox().notifyAll;
                 var mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
 
                 // notify components of layer removal
                 if (parentLayer) {
                     // notify a collection layer has been updated
-                    notify(mapLayerEvent(parentLayer.getId(), 'update'));
+                    sandbox.notifyAll(mapLayerEvent(parentLayer.getId(), 'update'));
                 } else {
                     // free up the layerId if actual removal
                     this._reservedLayerIds[layerId] = false;
                     // notify a layer has been removed
-                    notify(mapLayerEvent(layer.getId(), 'remove'));
+                    sandbox.notifyAll(mapLayerEvent(layer.getId(), 'remove'));
                 }
             }
         },
