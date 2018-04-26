@@ -705,7 +705,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     layerGroups = group;
                 }
             }
-            return (id) ? layerGroups : layerGroups || this._layerGroups;
+            return (id) ? layerGroups : this._layerGroups;
         },
 
         /**
