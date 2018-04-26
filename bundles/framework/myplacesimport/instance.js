@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     this.defaultConf = {
         name: 'MyPlacesImport',
         sandbox: 'sandbox',
-        stateful: true,
+        stateful: false,
         flyoutClazz: 'Oskari.mapframework.bundle.myplacesimport.Flyout'
     };
     this.buttonGroup = 'myplaces';
