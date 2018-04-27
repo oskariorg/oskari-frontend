@@ -155,7 +155,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
 
         indicatorSelector.on('change', function () {
-            me._params.indicatorSelected(selectionsContainer,
+            me._params.attachTo(selectionsContainer);
+            me._params.indicatorSelected(
                 select.getValue(),
                 indicSelect.getValue(),
                 {
