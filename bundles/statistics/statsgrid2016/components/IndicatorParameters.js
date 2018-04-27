@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     this.paramHandler = Oskari.clazz.create( 'Oskari.statistics.statsgrid.IndicatorParameterHandler', this.service, this.instance.getLocalization() );
     this._values = {};
     this._selections = [];
-    this._anchorEl = null;
+    this.parentElement = null;
     Oskari.makeObservable(this);
     var me = this;
 
@@ -35,6 +35,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.container.remove();
         this.container = null;
     },
+    /**
+     * @method  @public  attachTo 
+     * @description pass in the element to which the parameters will be attached to
+     */
+    attachTo: function ( parentElement ) {
+        this.parentElement = parentElement;
+    },
     _createUi: function ( datasrc, indId, selections, regionsets, values) {
         var me = this;
         var locale = me.instance.getLocalization();
@@ -42,7 +49,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         var panelLoc = locale.panels.newSearch;
 
         var cont = jQuery(this.__templates.main());
-        this._anchorEl.append(cont);
+        this.parentElement.append(cont);
         this.container = cont;
 
         Object.keys( values ).forEach( function ( selected, index ) {
@@ -91,16 +98,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     },
     /**
      * @method  @public indicatorSelected  handle indicator selected
-     * @param  {Object} el       jQuery element
      * @param  {Integer} datasrc indicator datasource
      * @param  {String} indId    indicator id
      * @param  {Object} elements elements
      */
-    indicatorSelected: function (el, datasrc, indId, elements) {
+    indicatorSelected: function ( datasrc, indId, elements ) {
         var me = this;
 
         elements = elements || {};
-        this._anchorEl = el;
         this.clean();
 
         if (!this.regionSelector) {
@@ -113,7 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             }
             return;
         }
-         me.spinner.insertTo(el.parent());
+         me.spinner.insertTo(this.parentElement.parent());
          me.spinner.start();
         //get the data to create ui with
         me.paramHandler.getData( datasrc, indId, elements );
