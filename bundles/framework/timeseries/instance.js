@@ -52,11 +52,28 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             me._timeseriesLayerService.registerLayerType('wms', function (layerId) {
                 return Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.WMSAnimator', sandbox, layerId);
             });
-
+            me._registerForLayerFiltering();
             Oskari.on('app.start', function () {
                 me._timeseriesService.on('activeChanged', me._updateControl.bind(me));
                 me._timeseriesLayerService.updateTimeseriesLayers();
             });
+        },
+        /**
+         * @method _registerForLayerFiltering
+         * Registers for creation of ui filter button 
+         * @private
+         */
+        _registerForLayerFiltering: function () {
+            var me = this,
+                loc = Oskari.getMsg.bind(null, 'timeseries'),
+                layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+
+            layerlistService.registerLayerlistFilterButton( loc("layerFilter.timeseries"),
+                loc("layerFilter.tooltip"), {
+                    active: 'layer-timeseries',
+                    deactive: 'layer-timeseries-disabled'
+                },
+                'timeseries');
         },
         /**
          * @method _updateControl

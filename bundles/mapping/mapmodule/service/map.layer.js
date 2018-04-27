@@ -68,6 +68,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return !!me.getNewestLayers(20).find(function (newLayer) {
                     return layer.getId() === newLayer.getId();
                 });
+            },
+            'timeseries': function (layer) {
+                return layer.hasTimeseries();
             }
         };
 
@@ -97,6 +100,19 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         getSandbox: function () {
             return this._sandbox;
+        },
+        getActiveFilters: function () {
+            var me = this;
+            var registeredFilters = [];
+            Object.keys(this.layerFilters).forEach( function( key ) {
+                if ( me.filterHasLayers(key) ) {
+                    registeredFilters.push( key );
+                }
+            });
+            return registeredFilters;
+        },
+        filterHasLayers: function (filter) {
+            return this.getFilteredLayers(filter).length !== 0;
         },
         /**
          * @method addLayer
