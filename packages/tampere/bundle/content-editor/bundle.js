@@ -34,6 +34,9 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
             "src": "../../../../bundles/tampere/content-editor/request/ShowContentEditorRequestHandler.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/tampere/content-editor/service/OskariEventNotifierService.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../libraries/datepicker/resources/locale/datepicker-fi.js"
         }, {
             "type": "text/javascript",

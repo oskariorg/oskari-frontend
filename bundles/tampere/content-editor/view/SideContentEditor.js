@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 this._dialog = null;
             }
         },
-         startNewDrawing: function (config) {
+        startNewDrawing: function (config) {
             this.sendDrawRequest(config);
         },
         /**
@@ -110,9 +110,24 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         sendDrawRequest: function (config) {
             var me = this,
                 conf = jQuery.extend(true, {}, config);
-
-            var startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(conf);
-            this.instance.sandbox.request(this, startRequest);
+                //TODO: HEIKKI
+            //console.log(config);
+           //console.log(me.allClickedFeatures);
+            var geojson = new OpenLayers.Format.GeoJSON();
+            var feature = geojson.write(me.allClickedFeatures);
+            console.log(feature);
+            /*var asGeoJSON = geojson.read(feature);
+            console.log(asGeoJSON);*/
+            me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', ['contenteditordrawing', 'Point'], {
+                /*label: "ASDF",
+                buffer: 200,*/
+                allowMultipleDrawing: true
+                /*drawControl: true,
+                modifyControl: true*/
+                //,geojson: feature
+            });
+            /*var startRequest = this.instance.sandbox.getRequestBuilder('DrawTools.StartDrawingRequest')(conf);
+            this.instance.sandbox.request(this, startRequest);*/
         },
         /**
          * @method sendStopDrawRequest
@@ -124,9 +139,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var me = this;
             //var toolbarRequest = me.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             //me.sandbox.request(me, toolbarRequest);
+            me.sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['contenteditordrawing']);
 
-            var request = this.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
-            this.instance.sandbox.request(this, request);
+            /*var request = this.instance.sandbox.getRequestBuilder('DrawTools.StopDrawingRequest')(isCancel);
+            this.instance.sandbox.request(this, request);*/
         },
         setGeometryType: function (geometryType) {
             this._parseLayerGeometryResponse(geometryType);
@@ -209,7 +225,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
             }
             me.getLayerGeometryType();
-            me.sendStopDrawRequest(true);
+            //me.sendStopDrawRequest(true);
             var layer = me._getLayerById(me.layerId);
             var fields = layer.getFields().slice();
             var featureData = [[]];
@@ -281,10 +297,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             me.getFieldsTypes();
             me.mainPanel = content;
             var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-            drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', {id: 'ContentEditorDrawPlugin',multipart: true});
+            /*drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin', {id: 'ContentEditorDrawPlugin',multipart: true});
             mapModule.registerPlugin(drawPlugin);
             mapModule.startPlugin(drawPlugin);
-            this.drawPlugin = drawPlugin;
+            this.drawPlugin = drawPlugin;*/
 
             container.append(content);
             $(".icon-close").on('click', function(){
@@ -633,9 +649,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             me.highlightFeaturesIds = [];
-            for (var i = 0; i < data.features.length; i++) {
-                if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != ""))
-                me.highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
+            if(data.features) {
+                for (var i = 0; i < data.features.length; i++) {
+                    if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != ""))
+                    me.highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
+                }
             }
 
             this._highlighGeometries(me.highlightFeaturesIds, layer, true);
@@ -1151,8 +1169,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         drawMode: 'area'
                     });
                     me.sendStopDrawRequest(true);
+                    var geometry = (me.clickedGeometryNumber != null ? me.layerGeometries.geometry.components[me.clickedGeometryNumber] : me.layerGeometries.geometry);
                     me.startNewDrawing({
-                        geometry: (me.clickedGeometryNumber != null ? me.layerGeometries.geometry.components[me.clickedGeometryNumber] : me.layerGeometries.geometry)
+                        geometry: geometry
                     });
                 });
             } else {

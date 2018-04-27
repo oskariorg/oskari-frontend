@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
+        this.notifierService = null;
         this.localization = null;
         this.sideContentEditor = null;
         this.disabledLayers = null;
@@ -77,6 +78,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             me.sandbox = sandbox;
 
             this.localization = Oskari.getLocalization(this.getName());
+
+            // create the OskariEventNotifierService for handling Oskari events.
+            /*var notifierService = Oskari.clazz.create('Oskari.tampere.bundle.content-editor.OskariEventNotifierService');
+            me.sandbox.registerService(notifierService);
+            me.notifierService = notifierService;
+            me.notifierService.eventHandlers.forEach(function(eventName){
+                console.log(eventName);
+                me.sandbox.registerForEventByName(me.notifierService, eventName);
+            });*/
+
             sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -198,12 +209,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     this.sideContentEditor._handleInfoResult(evt.getData());
                 }
             },
-            'DrawPlugin.FinishedDrawingEvent': function(evt) {
+            /*'DrawPlugin.FinishedDrawingEvent': function(evt) {
+                console.log(evt);
                 if ('ContentEditorDrawPlugin' !== evt.getCreatorId()) {
                     return;
                 }
                 this.sideContentEditor.prepareRequest(evt.getDrawing());
-            },
+            },*/
             WFSFeatureGeometriesEvent: function(evt) {
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor.ParseWFSFeatureGeometries(evt);
@@ -228,6 +240,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     // ajax call for all layers
                     this.__setupLayerTools();
                 }
+            },
+            'DrawingEvent': function(event){
+                console.log(event);
             }
         },
         /**
