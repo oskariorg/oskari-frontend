@@ -4,13 +4,7 @@
 (function (Oskari) {
     var _log = Oskari.log('StatsGrid.StatisticsService');
 
-    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
-
-    /**
-     * @method create called automatically on construction
-     * @static
-     */
-    function (sandbox, locale) {
+    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
         this.sandbox = sandbox;
         this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
@@ -284,13 +278,13 @@
                 setTimeout(function () {
                     me.cache.remove(cacheKey);
                     // try again after 10 seconds
-                    me.getIndicatorList(ds, function (err, newList) {
+                    me.getIndicatorList(ds, function (err, newResponse) {
                         if (err) {
                             // Don't call callback with err as we will be trying again.
                             _log.warn('Error updating indicator list.');
                             return;
                         }
-                        if (newList.indicators.length === previousList.length) {
+                        if (!newResponse.complete && newResponse.indicators.length === previousList.length) {
                             // same list size??? somethings propably wrong
                             _log.warn('Same indicator list as in previous try. There might be some problems with the service');
                             return;
