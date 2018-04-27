@@ -83,7 +83,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         me.trigger('indicator.changed', regionsets.length > 0);
     },
     regionsetSelected: function (datasrc, regionsets) {
-        this.paramHandler.testRegionset( datasrc, regionsets );
+        var data = {
+            ds: this.paramHandler.testRegionsetDatasources( datasrc, regionsets ),
+            ind: this.paramHandler.testRegionsetIndicators( datasrc, regionsets )
+        }
+       return data;
     },
     /**
      * @method  @public indicatorSelected  handle indicator selected

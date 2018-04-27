@@ -149,14 +149,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
             me.trigger('Data.Loaded', data);
         });
     },
-    testRegionset: function ( datasrc, regionsets ) {
+    testRegionsetDatasources: function ( datasrc, regionsets ) {
+        regionsets = regionsets.map( function (id)  { return Number(id) } );
+        var unsupportedDatasets = [];
+
+        this.service.datasources.forEach( function (ds) {
+            if( _.intersection(ds.regionsets, regionsets).length === 0 ) {
+                unsupportedDatasets.push(ds);
+            }
+        });
+        return unsupportedDatasets;
+    },
+    testRegionsetIndicators: function ( datasrc, regionsets ) {
+        var unsupportedIndicators = [];
         regionsets = regionsets.map( function (id)  { return Number(id) } );
         this.service.getIndicatorList( datasrc, function ( err, indicator ) {
             indicator.indicators.forEach( function (ind) {
                 if ( _.intersection(ind.regionsets, regionsets).length === 0 ) {
-                    //regionset not supported
+                    unsupportedIndicators.push(ind);
                 }
             })
         });
+        return unsupportedIndicators;
     }
 });

@@ -181,10 +181,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 });
         });
         regionsetSelector.on('change', function (evt) {
-            var i = indicSelect.getAllOptions();
-            var ds = select.getAllOptions();
-            me._params.regionsetSelected( select.getValue(), regionSelect.getValue() );
-            // disable options from ds and indicators that don't support selected regionset
+            var unsupportedSelections = me._params.regionsetSelected( select.getValue(), regionSelect.getValue() );
+            unsupportedSelections.ind.forEach( function (ind) {
+                indicSelect.disableOption(ind.id);
+            });
+            unsupportedSelections.ds.forEach( function (ind) {
+                select.disableOption(ind.id);
+            });
         });
         me._params.on('indicator.changed', function (enabled) {
             me.trigger('indicator.changed', enabled);

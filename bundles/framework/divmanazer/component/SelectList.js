@@ -143,6 +143,13 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         tobeRemoved.remove();
         chosen.trigger('chosen:updated');
     },
+    disableOption: function ( id ) {
+      var chosen = this.element.find('select');
+      var valueOption = this.element.find('select option[value=' + id + ']')
+      valueOption.attr('disabled', true);
+
+      chosen.trigger('chosen:updated');
+    },
     /** @method updateOptions
     *   updates an already defined chosen with new data
     *   @param {data} data to apply
