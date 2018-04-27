@@ -29,7 +29,7 @@ function(instance) {
     init: function() {},
 
     requestUrlBuilder: function ( crs ) {
-        var urlBase = "action?action_route=CoordinateTransformation";
+        var urlBase = Oskari.urls.getRoute('CoordinateTransformation');
         var urlParameterString = "";
 
         if( crs.sourceCrs ) {
