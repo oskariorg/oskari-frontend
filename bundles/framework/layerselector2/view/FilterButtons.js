@@ -1,8 +1,7 @@
 Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
-    function ( element ) {
+    function ( element, layerListService ) {
         var me = this;
-        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-        this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+        this.layerlistService = layerListService;
         this.filterTemplate = jQuery('<div class="filter filter-border">'+
                                             '<center><div class="filter-icon">'+
                                             '</div><div class="filter-text"></div></center>'+
@@ -171,7 +170,7 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             var me = this;
             this.rootElement.empty();
             this.filterButtons.forEach( function ( button ) {
-                if ( _.include(me.renderableButtons, button.name) ) {
+                if (me.renderableButtons.indexOf(button.name) !== -1) {
                     me.rootElement.append( button.element.clone(true) );
                 }
             });

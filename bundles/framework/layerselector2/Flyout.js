@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         createFilterButtons: function () {
             var me = this;
             this.layerTabs.forEach( function ( tab ) {
-                var filterButton = Oskari.clazz.create("Oskari.layerselector2.view.FilterButtons", tab.getTabPanel().getContainer().find('.layerselector2-layer-filter') );
+                var filterButton = Oskari.clazz.create("Oskari.layerselector2.view.FilterButtons", tab.getTabPanel().getContainer().find('.layerselector2-layer-filter'), me.layerlistService );
                 me.filterComponents.push(filterButton);
 
                 filterButton.on('FilterActivate', function (currentFilter) {
@@ -119,10 +119,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 
             });
         },
-        setActiveFilter: function () {
+        setActiveFilter: function (filter) {
             var me = this;
             this.filterComponents.forEach( function ( component ) {
-                component.activateFilter( me._currentFilter );
+                component.activateFilter( filter );
             });
         },
         updateFilters: function () {
@@ -244,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             // Add filter tab change listener
             me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
                 if (me._currentFilter) {
-                    me.setActiveFilter();
+                    me.setActiveFilter(me._currentFilter);
                 }
             });
             me.tabContainer.insertTo(cel);
