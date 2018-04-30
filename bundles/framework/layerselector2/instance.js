@@ -219,10 +219,12 @@ Oskari.clazz.define(
                 } else if (event.getOperation() === 'add') {
                     layer = mapLayerService.findMapLayer(layerId);
                     flyout.handleLayerAdded(layer);
+                    flyout.updateFilters();
                     // refresh layer count
                     tile.refresh();
                 } else if (event.getOperation() === 'remove') {
                     flyout.handleLayerRemoved(layerId);
+                    flyout.updateFilters();
                     // refresh layer count
                     tile.refresh();
                 } else if (event.getOperation() === 'sticky') {

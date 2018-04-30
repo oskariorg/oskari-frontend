@@ -41,8 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          * Selects the view to show based on user (guest/loggedin)
          */
         lazyRender: function () {
-            var me = this,
-                flyout = jQuery(this.container);
+            var flyout = jQuery(this.container);
             flyout.empty();
 
             // check if the user is logged in
@@ -73,5 +72,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          * @property {String[]} protocol
          * @static
          */
-        "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
+        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     });

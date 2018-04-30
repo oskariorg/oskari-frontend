@@ -7,7 +7,7 @@ Oskari = (function () {
     var _markers = [];
     var _urls = {};
     var getUrl = function (key) {
-        return _urls[key] || 'N/A';
+        return _urls[key];
     }
 
     return {
@@ -70,7 +70,7 @@ Oskari = (function () {
              * @return {String} url to use when making API calls
              */
             getRoute: function (route) {
-                var url = getUrl('api');
+                var url = getUrl('api') || '/action?';
                 if (route) {
                     // TODO: check if url ends with ? or &
                     return url + 'action_route=' + route;

@@ -43,7 +43,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 grid = Oskari.clazz.create('Oskari.userinterface.component.Grid'),
-                addMLrequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+                addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest'),
+                mapMoveByContentReqBuilder = Oskari.requestBuilder('MapModulePlugin.MapMoveByLayerContentRequest');
 
             grid.setVisibleFields(this.visibleFields);
             // set up the link from name field
@@ -53,6 +54,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 link.append(name).bind('click', function () {
                     // add myplacesimport layer to map on name click
                     var request = addMLrequestBuilder(data.id);
+                    sandbox.request(me.instance, request);
+                    request = mapMoveByContentReqBuilder(data.id, true);
                     sandbox.request(me.instance, request);
                     return false;
                 });

@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             mode: me._element.find('select.classify-mode').val(),
             type: me._element.find('select.color-set').val(),
             name: me._colorSelect.getValue(),
-            reverseColors: me._element.find('#legend-flip-colors').attr('checked'),
+            reverseColors: me._element.find('#legend-flip-colors').is(':checked'),
             mapStyle: me._element.find('select.map-style').val(),
             // only used for points vector
             min: range[0],
@@ -302,8 +302,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         if (!service.hasMapMode('vector')) {
             me._element.find('.visible-on-vector').remove();
         }
-
-        me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+        if (!me._colorSelect) {
+            me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+        }
         me._element.find('.classification-colors.value').append(me._colorSelect.getElement());
 
         var stateService = me.service.getStateService();
@@ -352,9 +353,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         this.setEnabled(this.__enabled);
 
         me._colorSelect.setHandler(updateClassification);
-        me._element.find('select').bind('change', updateClassification);
+        me._element.find('select').on('change', updateClassification);
 
-        me._element.find('#legend-flip-colors').change(function () {
+        me._element.find('#legend-flip-colors').on('change', function () {
             updateClassification();
         });
         return me._element;
