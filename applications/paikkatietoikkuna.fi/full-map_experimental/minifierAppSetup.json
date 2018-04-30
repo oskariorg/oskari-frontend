@@ -9,28 +9,7 @@
                     }
                 }
             }
-		},
-		{
-			"bundlename": "layerselector2",
-			"metadata": {
-				"Import-Bundle": {
-					"layerselector2": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
-				}
-			}
-		}, 
-		{
-			"bundlename": "layerselection2",
-			"metadata": {
-				"Import-Bundle": {
-					"layerselection2": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
-				}
-			}
-		},
-		{
+		},	{
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
@@ -51,6 +30,61 @@
 					}
                 }
             }
+		}, {
+			"bundlename": "divmanazer",
+			"metadata": {
+				"Import-Bundle": {
+					"divmanazer": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+	        "bundlename" : "drawtools",
+	        "bundleinstancename" : "drawtools",
+	        "metadata" : {
+	            "Import-Bundle" : {
+	                "drawtools" : {
+	                    "bundlePath" : "../../../packages/mapping/ol3/"
+	                }
+	            }
+	        }
+	    }, {
+			"bundlename": "toolbar",
+			"metadata": {
+				"Import-Bundle": {
+					"toolbar": {
+						"bundlePath": "../../../packages/mapping/ol3/"
+					}
+				}
+			}
+		}, {
+			"bundlename": "statehandler",
+			"metadata": {
+				"Import-Bundle": {
+					"statehandler": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"bundlename": "layerselector2",
+			"metadata": {
+				"Import-Bundle": {
+					"layerselector2": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		},	{
+			"bundlename": "layerselection2",
+			"metadata": {
+				"Import-Bundle": {
+					"layerselection2": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				}
+			}
 		}
 	]
 }
