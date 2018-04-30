@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
             if (request.getName() === 'EnableMapKeyboardMovementRequest') {
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.KeyboardPan));
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.KeyboardZoom));
-                _.forEach(interactions, function (interaction) {
+                interactions.forEach(function (interaction) {
                     if (interaction) {
                         interaction.setActive(true);
                     }
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
             } else if (request.getName() === 'DisableMapKeyboardMovementRequest') {
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.KeyboardPan));
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.KeyboardZoom));
-                _.forEach(interactions, function (interaction) {
+                interactions.forEach(function (interaction) {
                     if (interaction) {
                         interaction.setActive(false);
                     }
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.MouseWheelZoom));
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.DoubleClickZoom));
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.DragZoom));
-                _.forEach(interactions, function (interaction) {
+                interactions.forEach(function (interaction) {
                     if (interaction) {
                         interaction.setActive(true);
                     }
@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.MouseWheelZoom));
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.DoubleClickZoom));
                 interactions.push(this.getMapModule().getInteractionInstance(ol.interaction.DragZoom));
-                _.forEach(interactions, function (interaction) {
+                interactions.forEach(function (interaction) {
                     if (interaction) {
                         interaction.setActive(false);
                     }
