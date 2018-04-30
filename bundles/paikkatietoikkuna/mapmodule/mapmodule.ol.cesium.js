@@ -13,23 +13,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      *
      * @param {String} id
      *      Unigue ID for this map
-     * @param {Array} map options, example data:
-     *  {
-     *      resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
-     *      units : "m",
-     *      maxExtent : {
-     *          left : 0,
-     *          bottom : 0,
-     *          right : 10000000,
-     *          top : 10000000
-     *      },
-     *      srsName : "EPSG:3067"
-     *  }
      */
-
     function (id, imageUrl, options, mapDivId) {
-        this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
-
+        this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
      }, {
         /**
          * @method _initImpl
@@ -47,10 +33,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Creates Openlayers 3 map implementation
          * @return {ol.Map}
          */
-        createMap: function() {
-
+        createMap: function () {
             var me = this;
-            var sandbox = me._sandbox;
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
@@ -62,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
             var interactions = ol.interaction.defaults({
                 altShiftDragRotate: false,
-                pinchRotate:false
+                pinchRotate: false
             });
 
             var map = new ol.Map({
@@ -76,10 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             var projection = ol.proj.get(me.getProjection());
-            projection.setExtent(this.__boundsToArray(this.getMaxExtent()));
-
             map.setView(new ol.View({
-                extent: projection.getExtent(),
                 projection: projection,
                 // actual startup location is set with MapMoveRequest later on
                 // still these need to be set to prevent errors
@@ -90,56 +71,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             me._setupMapEvents(map);
 
-
-            /*
-            var projection = ol.proj.get('EPSG:3857');
-            var projectionExtent = projection.getExtent();
-            var resolutions = new Array(14);
-            var matrixIds = new Array(14);
-            var size = ol.extent.getWidth(projectionExtent) / 256;
-            for (var z = 0; z < 14; ++z) {
-              // generate resolutions and matrixIds arrays for this WMTS
-              resolutions[z] = size / Math.pow(2, z);
-              matrixIds[z] = z;
-            }
-
-            var map2d = new ol.Map({
-                controls: controls,
-                interactions: interactions,
-                loadTilesWhileInteracting: true,
-                loadTilesWhileAnimating: true,
-                moveTolerance: 2,
-                layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.WMTS({
-                            attributions: 'Tiles © NLS Finland',
-                            url: 'https://karttamoottori.maanmittauslaitos.fi/maasto/wmts?',
-                            layer: 'taustakartta',
-                            matrixSet: 'WGS84_Pseudo-Mercator',
-                            format: 'image/png',
-                            projection: projection,
-                            tileGrid: new ol.tilegrid.WMTS({
-                                origin: ol.extent.getTopLeft(projectionExtent),
-                                resolutions: resolutions,
-                                matrixIds: matrixIds
-                            }),
-                        style: 'default',
-                        wrapX: true
-                    })
-                  })
-                ],
-                target: this.getMapElementId(),
-                view: new ol.View({
-                  center: [2776364.850631, 8437424.930231],
-                  zoom: 3
-                })
-              });
-
-            */
-
             var olcsMap = new olcs.OLCesium({
                 map: map,
-                time() {
+                time () {
                     return Cesium.JulianDate.now();
                 }
             });
@@ -151,11 +85,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Add map event handlers
          * @method @private _setupMapEvents
          */
-        _setupMapEvents: function(map){
+        _setupMapEvents: function (map) {
             var me = this;
             var sandbox = me._sandbox;
 
-            map.on('moveend', function(evt) {
+            map.on('moveend', function (evt) {
                 me.notifyMoveEnd();
             });
 
@@ -165,8 +99,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
                 var CtrlPressed = evt.originalEvent.ctrlKey;
                 var lonlat = {
-                  lon : evt.coordinate[0],
-                  lat : evt.coordinate[1]
+                  lon: evt.coordinate[0],
+                  lat: evt.coordinate[1]
                 };
                 var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
                 sandbox.notifyAll(mapClickedEvent);
@@ -178,9 +112,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('pointermove', function (evt) {
-
                 clearTimeout(this.mouseMoveTimer);
-                this.mouseMoveTimer = setTimeout(function() {
+                this.mouseMoveTimer = setTimeout(function () {
                     // No mouse move in 1000 ms - mouse move paused
                     var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], true);
                     sandbox.notifyAll(hoverEvent);
@@ -205,7 +138,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 ------------------------------------------------------------------> */
         getInteractionInstance: function (interactionName) {
             var interactions = this.getMap().getInteractions().getArray();
-            var interactionInstance = interactions.filter(function(interaction) {
+            var interactionInstance = interactions.filter(function (interaction) {
               return interaction instanceof interactionName;
             })[0];
             return interactionInstance;
@@ -217,9 +150,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param  {Object | Array} bounds bounds object or OL3 array
          * @return {Array}          Ol3 presentation of bounds
          */
-        __boundsToArray : function(bounds) {
+        __boundsToArray: function (bounds) {
             var extent = bounds || [];
-            if(!isNaN(bounds.left) && !isNaN(bounds.top) && !isNaN(bounds.right) && !isNaN(bounds.bottom)) {
+            if (!isNaN(bounds.left) && !isNaN(bounds.top) && !isNaN(bounds.right) && !isNaN(bounds.bottom)) {
               extent = [
                     bounds.left,
                     bounds.bottom,
@@ -228,13 +161,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return extent;
         },
+
         /**
          * Produces an dataurl for PNG-image from the map contents.
          * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
          * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
          */
         getScreenshot : function( callback, numOfTries ) {
-          if( typeof callback != 'function' ) {
+          if( typeof callback !== 'function' ) {
             return;
           }
           if( typeof numOfTries === 'undefined' ) {
@@ -704,6 +638,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var list = map.getLayers();
             list.remove(layer);
             list.push(layer);
+        },
+        /**
+         * Set
+         * @param {boolean} mode drawing mode on or off!
+         */
+        setDrawingMode: function (mode) {
+            this.isDrawing = !!mode;
+            this.getMap().olcsMap.setEnabled(!this.isDrawing);
         },
         /**
          * @param {ol.layer.Layer} layer ol3 specific!
