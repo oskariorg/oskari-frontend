@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     this.paramHandler.on('Data.Loaded', function ( data ) {
         me.spinner.stop();
         me.trigger('indicator.changed', data.regionset.length > 0);
-        me._createUi( data.datasrc, data.indicators, data.selectors, data.regionset, data.values );
+        me._createUi( data.datasrc, data.indicators, data.selectors, data.regionset );
     });
 }, {
     __templates: {
@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         //get the data to create ui with
         me.paramHandler.getData( datasrc, indId, elements );
     },
-    _createUi: function ( datasrc, indId, selections, regionsets, values) {
+    _createUi: function ( datasrc, indId, selections, regionsets) {
         var me = this;
         var locale = me.locale;
         var errorService = me.service.getErrorService();
@@ -77,8 +77,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         var cont = jQuery(this.__templates.main());
         this.parentElement.append(cont);
         this.container = cont;
-
-        Object.keys( values ).forEach( function ( selected, index ) {
+        Object.keys( selections ).forEach( function ( selected, index ) {
             var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
             var label = (locale.parameters[selected]) ? locale.parameters[selected] : selected.id;
             var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
@@ -89,7 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 width: '100%'
             };
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selected);
-            var dropdown = values !== null ? select.create( values[selected], options) : select.create(selections, options);
+            var dropdown = selections !== null ? select.create( selections[selected], options) : select.create(selections, options);
             dropdown.css( {width: '205px'} );
             select.adjustChosen();
             select.selectFirstValue();
@@ -105,6 +104,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         me.regionSelector.setWidth(205);
         // try to select the current regionset as default selection
         regionSelect.value(me.service.getStateService().getRegionset());
+        regionSelect.container.addClass('margintop');
         cont.append(regionSelect.container);
 
         me._values = {

@@ -36,8 +36,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 return;
             }
 
-            // selections
-            var selections = [];
             var combinedValues = {};
 
             indicator.selectors.forEach(function (selector, index) {
@@ -55,7 +53,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                         title: optName
                     };
                     combinedValues[selector.id].push(valObject);
-                    selections.push(valObject);
                 });
             });
 
@@ -63,19 +60,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
             }
 
-            // Add margin if there is selections
-            if (indicator.selectors.length > 0) {
-                //regionSelect.container.addClass('margintop');
-            } else {
-                errorService.show(locale.errors.title, locale.errors.indicatorMetadataIsEmpty);
-            }
-
             var data = {
                 datasrc: me.datasource,
+                selectors: combinedValues,
                 indicators: me.indicators,
-                selectors: selections,
-                regionset: indicator.regionsets,
-                values: combinedValues
+                regionset: indicator.regionsets
             }
             if ( typeof cb === 'function') {
                 cb(data);
@@ -92,29 +81,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         var regionsets = [];
         var deferredArray = [];
 
+        function addMissingElements(list, newValues, propertyName) {
+            if(!list) {
+                return [].concat(newValues);
+            }
+            return list.concat(newValues.filter(function (value) {
+                return !list.some(function(existingItem) {
+                    if(propertyName) {
+                        return existingItem[propertyName] === value[propertyName];
+                    }
+                    return existingItem === value;
+                })
+            }));
+        }
+    
         indicators.forEach( function (indId) {
             var deferred = new jQuery.Deferred();
             me.handleSingleIndicator(indId, function (value) {
-
-                if (value.regionset.length === 0) {
-                    errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
-                } else {
-                    regionsets =  regionsets.concat(value.regionset);
-                }
-
-                Object.keys(value.values).forEach( function(key) {
-                    if ( !combinedValues[key] ) {
-                        combinedValues[key] = value.values[key];
-                    } else {
-                        value.values[key].forEach( function (val) {
-                            var inArray =  combinedValues[key].some( function (obj) {
-                                return obj.id === val.id;
-                            });
-                            if ( !inArray ) {
-                                combinedValues[key].push(val);
-                            } else { console.log("value exits" + val);}
-                        })
-                    }
+                // include missing regionsets
+                regionsets = addMissingElements(regionsets, value.regionset);
+                Object.keys(value.selectors).forEach( function(selectorName) {
+                    combinedValues[selectorName] = addMissingElements(combinedValues[selectorName], value.selectors[selectorName], 'id');
                 });
                 deferred.resolve();
             });
@@ -126,9 +113,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         var data = {
             datasrc: me.datasource,
             indicators: me.indicators,
-            selectors: null,
-            regionset: regionsets,
-            values: combinedValues
+            selectors: combinedValues,
+            regionset: regionsets
         }
         me.trigger('Data.Loaded', data);
     });
