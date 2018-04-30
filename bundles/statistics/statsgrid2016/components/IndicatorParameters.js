@@ -1,9 +1,9 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (instance, sandbox) {
-    this.instance = instance;
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (locale, sandbox) {
+    this.locale = locale;
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-    this.paramHandler = Oskari.clazz.create( 'Oskari.statistics.statsgrid.IndicatorParameterHandler', this.service, this.instance.getLocalization() );
+    this.paramHandler = Oskari.clazz.create( 'Oskari.statistics.statsgrid.IndicatorParameterHandler', this.service, this.locale );
     this._values = {};
     this._selections = [];
     this.parentElement = null;
@@ -41,9 +41,36 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     attachTo: function ( parentElement ) {
         this.parentElement = parentElement;
     },
+      /**
+     * @method  @public indicatorSelected  handle indicator selected
+     * @param  {Integer} datasrc indicator datasource
+     * @param  {String} indId    indicator id
+     * @param  {Object} elements elements
+     */
+    indicatorSelected: function ( datasrc, indId, elements ) {
+        var me = this;
+
+        elements = elements || {};
+        this.clean();
+
+        if (!this.regionSelector) {
+            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
+        }
+
+        if (!indId && indId === '') {
+            if (elements.dataLabelWithTooltips) {
+                elements.dataLabelWithTooltips.find('.tooltip').show();
+            }
+            return;
+        }
+         me.spinner.insertTo(this.parentElement.parent());
+         me.spinner.start();
+        //get the data to create ui with
+        me.paramHandler.getData( datasrc, indId, elements );
+    },
     _createUi: function ( datasrc, indId, selections, regionsets, values) {
         var me = this;
-        var locale = me.instance.getLocalization();
+        var locale = me.locale;
         var errorService = me.service.getErrorService();
         var panelLoc = locale.panels.newSearch;
 
@@ -88,33 +115,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
 
         me.trigger('indicator.changed', regionsets.length > 0);
     },
-    /**
-     * @method  @public indicatorSelected  handle indicator selected
-     * @param  {Integer} datasrc indicator datasource
-     * @param  {String} indId    indicator id
-     * @param  {Object} elements elements
-     */
-    indicatorSelected: function ( datasrc, indId, elements ) {
-        var me = this;
-
-        elements = elements || {};
-        this.clean();
-
-        if (!this.regionSelector) {
-            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.instance.getLocalization());
-        }
-
-        if (!indId && indId === '') {
-            if (elements.dataLabelWithTooltips) {
-                elements.dataLabelWithTooltips.find('.tooltip').show();
-            }
-            return;
-        }
-         me.spinner.insertTo(this.parentElement.parent());
-         me.spinner.start();
-        //get the data to create ui with
-        me.paramHandler.getData( datasrc, indId, elements );
-    },
+  
     getValues: function () {
         var me = this;
         var values = {

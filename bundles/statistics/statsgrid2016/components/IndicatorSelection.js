@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-    this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance, this.instance.getSandbox());
+    this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
     Oskari.makeObservable(this);
 }, {
