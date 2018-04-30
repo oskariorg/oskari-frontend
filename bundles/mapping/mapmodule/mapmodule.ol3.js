@@ -29,9 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      */
 
     function (id, imageUrl, options, mapDivId) {
-        this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
-
-     }, {
+        this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
+    }, {
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
@@ -48,10 +47,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Creates Openlayers 3 map implementation
          * @return {ol.Map}
          */
-        createMap: function() {
-
+        createMap: function () {
             var me = this;
-            var sandbox = me._sandbox;
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
@@ -62,7 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
             var interactions = ol.interaction.defaults({
                 altShiftDragRotate: false,
-                pinchRotate:false
+                pinchRotate: false
             });
             var map = new ol.Map({
                 keyboardEventTarget: document,
@@ -95,11 +92,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Add map event handlers
          * @method @private _setupMapEvents
          */
-        _setupMapEvents: function(map){
+        _setupMapEvents: function (map) {
             var me = this;
             var sandbox = me._sandbox;
 
-            map.on('moveend', function(evt) {
+            map.on('moveend', function (evt) {
                 me.notifyMoveEnd();
             });
 
@@ -109,8 +106,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
                 var CtrlPressed = evt.originalEvent.ctrlKey;
                 var lonlat = {
-                  lon : evt.coordinate[0],
-                  lat : evt.coordinate[1]
+                    lon: evt.coordinate[0],
+                    lat: evt.coordinate[1]
                 };
                 var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
                 sandbox.notifyAll(mapClickedEvent);
@@ -122,9 +119,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('pointermove', function (evt) {
-
                 clearTimeout(this.mouseMoveTimer);
-                this.mouseMoveTimer = setTimeout(function() {
+                this.mouseMoveTimer = setTimeout(function () {
                     // No mouse move in 1000 ms - mouse move paused
                     var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], true);
                     sandbox.notifyAll(hoverEvent);
@@ -138,12 +134,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return true;
         },
 
-/* OL3 specific - check if this can be done in a common way
+        /* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
         getInteractionInstance: function (interactionName) {
             var interactions = this.getMap().getInteractions().getArray();
-            var interactionInstance = interactions.filter(function(interaction) {
-              return interaction instanceof interactionName;
+            var interactionInstance = interactions.filter(function (interaction) {
+                return interaction instanceof interactionName;
             })[0];
             return interactionInstance;
         },
@@ -154,10 +150,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param  {Object | Array} bounds bounds object or OL3 array
          * @return {Array}          Ol3 presentation of bounds
          */
-        __boundsToArray : function(bounds) {
+        __boundsToArray: function (bounds) {
             var extent = bounds || [];
-            if(!isNaN(bounds.left) && !isNaN(bounds.top) && !isNaN(bounds.right) && !isNaN(bounds.bottom)) {
-              extent = [
+            if (!isNaN(bounds.left) && !isNaN(bounds.top) && !isNaN(bounds.right) && !isNaN(bounds.bottom)) {
+                extent = [
                     bounds.left,
                     bounds.bottom,
                     bounds.right,
@@ -170,52 +166,52 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
          * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
          */
-        getScreenshot : function( callback, numOfTries ) {
-          if( typeof callback != 'function' ) {
-            return;
-          }
-          if( typeof numOfTries === 'undefined' ) {
-            numOfTries = 5;
-          }
-          clearTimeout(this.screenshotTimer);
-          var me = this;
-
-          if( this.isLoading() ) {
-            if( numOfTries < 0 ) {
-              callback("");
-              return;
+        getScreenshot: function (callback, numOfTries) {
+            if (typeof callback !== 'function') {
+                return;
             }
-            this.screenshotTimer = setTimeout( function() {
-              me.getScreenshot( callback, numOfTries-- );
-            }, 1000 );
-            return;
-          }
-          try {
-            var imageData = null;
-            me.getMap().once('postcompose', function(event) {
-                var canvas = event.context.canvas;
-                imageData = canvas.toDataURL('image/png');
-            });
-            me.getMap().renderSync();
-            callback(imageData);
-          } catch( err ) {
-            me.getSandbox().printWarn('Error producing a screenshot' + err);
-            callback("");
-          }
+            if (typeof numOfTries === 'undefined') {
+                numOfTries = 5;
+            }
+            clearTimeout(this.screenshotTimer);
+            var me = this;
+
+            if (this.isLoading()) {
+                if (numOfTries < 0) {
+                    callback('');
+                    return;
+                }
+                this.screenshotTimer = setTimeout(function () {
+                    me.getScreenshot(callback, numOfTries--);
+                }, 1000);
+                return;
+            }
+            try {
+                var imageData = null;
+                me.getMap().once('postcompose', function (event) {
+                    var canvas = event.context.canvas;
+                    imageData = canvas.toDataURL('image/png');
+                });
+                me.getMap().renderSync();
+                callback(imageData);
+            } catch (err) {
+                me.getSandbox().printWarn('Error producing a screenshot' + err);
+                callback('');
+            }
         },
 
-        getMeasurementResult: function(geometry){
-            var olGeom = this.getOLGeometryFromGeoJSON(geometry),
-                sum = 0;
-            if (olGeom.getType() === "LineString"){
+        getMeasurementResult: function (geometry) {
+            var olGeom = this.getOLGeometryFromGeoJSON(geometry);
+            var sum = 0;
+            if (olGeom.getType() === 'LineString') {
                 return olGeom.getLength();
-            }else if (olGeom.getType() === "MultiLineString"){
+            } else if (olGeom.getType() === 'MultiLineString') {
                 var lineStrings = olGeom.getLineStrings();
-                for (var i = 0; i < lineStrings.length; i++){
+                for (var i = 0; i < lineStrings.length; i++) {
                     sum += lineStrings[i].getLength();
                 }
                 return sum;
-            }else if (olGeom.getType() === "Polygon" || olGeom.getType() === "MultiPolygon"){
+            } else if (olGeom.getType() === 'Polygon' || olGeom.getType() === 'MultiPolygon') {
                 return olGeom.getArea();
             }
         },
@@ -233,38 +229,38 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {String}
          *
          */
-        //TODO: move to util
-        formatMeasurementResult: function(measurement, drawMode) {
+        // TODO: move to util
+        formatMeasurementResult: function (measurement, drawMode) {
             var result,
                 unit,
                 decimals;
-            if (typeof measurement !== 'number'){
+            if (typeof measurement !== 'number') {
                 return;
             }
 
             if (drawMode === 'area') {
                 // 1 000 000 m² === 1 km²
                 if (measurement >= 1000000) {
-                    result = measurement / 1000000; //(Math.round(measurement) / 1000000);
+                    result = measurement / 1000000; // (Math.round(measurement) / 1000000);
                     decimals = 3;
                     unit = ' km²';
-                } else if (measurement < 10000){
-                    result = measurement;//(Math.round(100 * measurement) / 100);
+                } else if (measurement < 10000) {
+                    result = measurement;// (Math.round(100 * measurement) / 100);
                     decimals = 0;
                     unit = ' m²';
                 } else {
-                    result = measurement/10000; //(Math.round(100 * measurement) / 100);
+                    result = measurement / 10000; // (Math.round(100 * measurement) / 100);
                     decimals = 2;
                     unit = ' ha';
                 }
             } else if (drawMode === 'line') {
                 // 1 000 m === 1 km
                 if (measurement >= 1000) {
-                    result =  measurement/ 1000; //(Math.round(measurement) / 1000);
+                    result = measurement / 1000; // (Math.round(measurement) / 1000);
                     decimals = 3;
                     unit = ' km';
                 } else {
-                    result = measurement; //(Math.round(100 * measurement) / 100);
+                    result = measurement; // (Math.round(100 * measurement) / 100);
                     decimals = 1;
                     unit = ' m';
                 }
@@ -286,47 +282,46 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Check if given coordinate is in the current viewport
          */
         isLonLatInViewport: function (lonlatArray, extendSize) {
-            var extendSize = typeof extendSize === 'number' ? extendSize : 0,
-                currentExtent = this.getCurrentExtent(),
-                mapSize = this.getSize(),
-                view = this.getMap().getView(),
-                width = mapSize.width + extendSize,
-                height = mapSize.height + extendSize,
-                extent = view.calculateExtent([width, height]);
+            // normalize optional param
+            extendSize = typeof extendSize === 'number' ? extendSize : 0;
+            var mapSize = this.getSize();
+            var view = this.getMap().getView();
+            var width = mapSize.width + extendSize;
+            var height = mapSize.height + extendSize;
+            var extent = view.calculateExtent([width, height]);
 
-            return ol.extent.containsCoordinate(extent,lonlatArray);
+            return ol.extent.containsCoordinate(extent, lonlatArray);
         },
 
-/*<------------- / OL3 specific ----------------------------------- */
+        /* <------------- / OL3 specific ----------------------------------- */
 
-
-/* Impl specific - found in ol2 AND ol3 modules
+        /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
-        getPixelFromCoordinate : function(lonlat) {
+        getPixelFromCoordinate: function (lonlat) {
             lonlat = this.normalizeLonLat(lonlat);
             var px = this.getMap().getPixelFromCoordinate([lonlat.lon, lonlat.lat]);
             return {
-                x : px[0],
-                y : px[1]
+                x: px[0],
+                y: px[1]
             };
         },
 
-        getMapCenter: function() {
+        getMapCenter: function () {
             var center = this.getMap().getView().getCenter();
             return {
-                lon : center[0],
-                lat : center[1]
+                lon: center[0],
+                lat: center[1]
             };
         },
 
-        getMapZoom: function() {
+        getMapZoom: function () {
             // Touch devices zoom level (after pinch zoom) may contains decimals
             // for this reason zoom need rounded to nearest integer.
             // Tested with Android pinch zoom.
             return Math.round(this.getMap().getView().getZoom());
         },
 
-        getSize: function() {
+        getSize: function () {
             var size = this.getMap().getSize();
             return {
                 width: size[0],
@@ -370,7 +365,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // TODO: we have isValidLonLat(); maybe use it here
             lonlat = this.normalizeLonLat(lonlat);
             this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
-            if(zoom === null ||zoom === undefined) {
+            if (zoom === null || zoom === undefined) {
                 zoom = this.getMapZoom();
             }
             this.getMap().getView().setZoom(zoom);
@@ -384,7 +379,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method getCurrentExtent
          * @return {Object} current extent
          */
-        getCurrentExtent: function() {
+        getCurrentExtent: function () {
             var ol3 = this.getMap();
             var extent = ol3.getView().calculateExtent(ol3.getSize());
             return {
@@ -400,7 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {String} srs projection srs, if not defined used map srs
          * @return {String} projection units. 'degrees' or 'm'
          */
-        getProjectionUnits: function(srs){
+        getProjectionUnits: function (srs) {
             var me = this;
             var units = null;
             srs = srs || me.getProjection();
@@ -408,7 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             try {
                 var proj = ol.proj.get(srs);
                 units = proj.getUnits(); // return 'degrees' or 'm'
-            } catch(err){
+            } catch (err) {
                 var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
                 log.warn('Cannot get map units for "' + srs + '"-projection!');
             }
@@ -429,11 +424,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
          */
         panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
-            var view = this.getMap().getView(),
-                centerCoords = view.getCenter(),
-                centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
-                newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
-                newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels);
+            var view = this.getMap().getView();
+            var centerCoords = view.getCenter();
+            var centerPixels = this.getMap().getPixelFromCoordinate(centerCoords);
+            var newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY];
+            var newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels);
 
             view.animate({
                 duration: 100,
@@ -459,10 +454,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs, targetSRS) {
-            if(!targetSRS) {
+            if (!targetSRS) {
                 targetSRS = this.getProjection();
             }
-            if(!srs || targetSRS === srs) {
+            if (!srs || targetSRS === srs) {
                 return pLonlat;
             }
 
@@ -470,11 +465,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var isTargetSRSDefined = ol.proj.get(targetSRS);
 
             if (isSRSDefined && isTargetSRSDefined) {
-              var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, targetSRS);
-                  return {
-                      lon : transformed[0],
-                      lat : transformed[1]
-                  };
+                var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, targetSRS);
+                return {
+                    lon: transformed[0],
+                    lat: transformed[1]
+                };
             }
 
             var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
@@ -485,34 +480,31 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method orderLayersByZIndex
          * Orders layers by Z-indexes.
          */
-        orderLayersByZIndex: function() {
-            this.getMap().getLayers().getArray().sort(function(a, b){
-                return a.getZIndex()-b.getZIndex();
+        orderLayersByZIndex: function () {
+            this.getMap().getLayers().getArray().sort(function (a, b) {
+                return a.getZIndex() - b.getZIndex();
             });
         },
 
-        calculatePixelsInScale: function(mmMeasures, plotScale) {
-            var units = this.getMap().getView().getProjection().getUnits(),
-                view = this.getMap().getView(),
-                centerCoords = view.getCenter(),
-                tempCoords = [],
-                tempPixels,
-                centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
-                mpu = ol.proj.METERS_PER_UNIT[units],
-                scaleCoef = plotScale/1000;
-                pixels = [];
+        calculatePixelsInScale: function (mmMeasures, plotScale) {
+            var units = this.getMap().getView().getProjection().getUnits();
+            var view = this.getMap().getView();
+            var centerCoords = view.getCenter();
+            var tempCoords = [];
+            var tempPixels;
+            var centerPixels = this.getMap().getPixelFromCoordinate(centerCoords);
+            var mpu = ol.proj.METERS_PER_UNIT[units];
+            var scaleCoef = plotScale / 1000;
+            var pixels = [];
 
             for (var i = 0; i < mmMeasures.length; ++i) {
                 // mm measure in metres  e.g. in 1:10 000  10 mm  is 100 000 mm (100 m)
-                var in_m = mmMeasures[i] * scaleCoef * mpu;
+                var inMeters = mmMeasures[i] * scaleCoef * mpu;
                 // Use coordinates to get pixel size
-                tempCoords[0] = centerCoords[0] + in_m;
+                tempCoords[0] = centerCoords[0] + inMeters;
                 tempCoords[1] = centerCoords[1];
                 tempPixels = this.getMap().getPixelFromCoordinate(tempCoords);
-
-                pix = tempPixels[0] - centerPixels[0];
-
-                pixels.push(pix);
+                pixels.push(tempPixels[0] - centerPixels[0]);
             }
             return pixels;
         },
@@ -522,111 +514,110 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param mmMeasures    unit mm
          * return fixScale or MapScale
          */
-        calculateFitScale4Measures: function(mmMeasures) {
-            var map = this.getMap(),
-                units = map.getView().getProjection().getUnits(),
-                mapScale = this._sandbox.getMap().getScale(),
-                extent = map.getView().calculateExtent(map.getSize()),
-                mpu = ol.proj.METERS_PER_UNIT[units],
-                margin = 10.0;
-                scaleCoef = mapScale/1000;
+        calculateFitScale4Measures: function (mmMeasures) {
+            var map = this.getMap();
+            var units = map.getView().getProjection().getUnits();
+            var mapScale = this._sandbox.getMap().getScale();
+            var extent = map.getView().calculateExtent(map.getSize());
+            var mpu = ol.proj.METERS_PER_UNIT[units];
+            var margin = 10.0;
+            var scaleCoef = mapScale / 1000;
 
-            if(mmMeasures.length !== 2){
+            if (mmMeasures.length !== 2) {
                 return mapScale;
             }
 
-            if(mmMeasures[0] > mmMeasures[1]){
-                //landscape
+            if (mmMeasures[0] > mmMeasures[1]) {
+                // landscape
                 // fit width scale
                 var view_width = extent[2] - extent[0];
-                var paper_width =  mmMeasures[0] * scaleCoef * mpu;
-                if(paper_width > view_width){
-                    return Math.round((view_width/(paper_width + margin)) * mapScale);
+                var paper_width = mmMeasures[0] * scaleCoef * mpu;
+                if (paper_width > view_width) {
+                    return Math.round((view_width / (paper_width + margin)) * mapScale);
                 }
             } else {
-                //portrait
+                // portrait
                 var view_height = extent[3] - extent[1];
-                var paper_height =  mmMeasures[1] * scaleCoef * mpu;
-                if(paper_height > view_height){
-                    return Math.round((view_height/(paper_height + margin)) * mapScale);
+                var paper_height = mmMeasures[1] * scaleCoef * mpu;
+                if (paper_height > view_height) {
+                    return Math.round((view_height / (paper_height + margin)) * mapScale);
                 }
             }
 
             return mapScale;
-
         },
-        //TODO: check LayersPlugin.ol3 getGeometryCenter
-        getCentroidFromGeoJSON: function(geojson){
+        // TODO: check LayersPlugin.ol3 getGeometryCenter
+        getCentroidFromGeoJSON: function (geojson) {
             var olGeom = this.getOLGeometryFromGeoJSON(geojson);
             var olBounds = olGeom.getExtent();
-            var x = olBounds[0] + (olBounds[2]-olBounds[0])/2;
-            var y = olBounds[1] + (olBounds[3]-olBounds[1])/2;
+            var x = olBounds[0] + (olBounds[2] - olBounds[0]) / 2;
+            var y = olBounds[1] + (olBounds[3] - olBounds[1]) / 2;
             return {lon: x, lat: y};
         },
-        getClosestPointFromGeoJSON: function(geojson) {
+        getClosestPointFromGeoJSON: function (geojson) {
             // TODO?? getInteriorPoint() for polygon --> placeform, attention text,..
             var olGeom = this.getOLGeometryFromGeoJSON(geojson);
             var olBounds = olGeom.getExtent();
-            var x = olBounds[0] + (olBounds[2]-olBounds[0])/2;
-            var y = olBounds[1] + (olBounds[3]-olBounds[1])/2;
-            var coord = olGeom.getClosestPoint([x,y]);
+            var x = olBounds[0] + (olBounds[2] - olBounds[0]) / 2;
+            var y = olBounds[1] + (olBounds[3] - olBounds[1]) / 2;
+            var coord = olGeom.getClosestPoint([x, y]);
             return {lon: coord[0], lat: coord[1]};
         },
-        //TODO: check LayersPlugin.ol3 getGeometryBounds
-        getBoundsFromGeoJSON: function(geojson){
+        // TODO: check LayersPlugin.ol3 getGeometryBounds
+        getBoundsFromGeoJSON: function (geojson) {
             var olGeom = this.getOLGeometryFromGeoJSON(geojson);
             var extent = olGeom.getExtent();
             return {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
         },
-/* --------- /Impl specific --------------------------------------> */
+        /* --------- /Impl specific --------------------------------------> */
 
-/* Impl specific - PRIVATE
+        /* Impl specific - PRIVATE
 ------------------------------------------------------------------> */
-        _calculateScalesImpl: function(resolutions) {
-            var units = this.getMap().getView().getProjection().getUnits(),
-                mpu = ol.proj.METERS_PER_UNIT[units];
+        _calculateScalesImpl: function (resolutions) {
+            var units = this.getMap().getView().getProjection().getUnits();
+            var mpu = ol.proj.METERS_PER_UNIT[units];
 
             for (var i = 0; i < resolutions.length; ++i) {
                 var scale = resolutions[i] * mpu * 39.37 * this._dpi;
-                    scale = Math.round(scale);
+                scale = Math.round(scale);
 
                 this._mapScales.push(scale);
             }
         },
-        _updateSizeImpl : function() {
+        _updateSizeImpl: function () {
             this.getMap().updateSize();
         },
-        _setZoomLevelImpl : function(newZoomLevel) {
+        _setZoomLevelImpl: function (newZoomLevel) {
             this.getMap().getView().setZoom(newZoomLevel);
         },
-/* --------- /Impl specific - PRIVATE ----------------------------> */
+        /* --------- /Impl specific - PRIVATE ----------------------------> */
 
-/* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
+        /* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
 ------------------------------------------------------------------> */
 
         /**
          * @param {ol.layer.Layer} layer ol3 specific!
          * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
          */
-        addLayer: function(layerImpl, toBottom) {
-            if(!layerImpl) {
+        addLayer: function (layerImpl, toBottom) {
+            if (!layerImpl) {
                 return;
             }
             this.getMap().addLayer(layerImpl);
             // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
-            if(toBottom === true) {
+            if (toBottom === true) {
                 this.setLayerIndex(layerImpl, 0);
             }
         },
         /**
          * @param {ol.layer.Layer} layer ol3 specific!
          */
-        removeLayer : function(layerImpl) {
-            if(!layerImpl) {
+        removeLayer: function (layerImpl) {
+            if (!layerImpl) {
                 return;
             }
             this.getMap().removeLayer(layerImpl);
-            if(typeof layerImpl.destroy === 'function') {
+            if (typeof layerImpl.destroy === 'function') {
                 layerImpl.destroy();
             }
         },
@@ -636,7 +627,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *
          * @param {ol.layer.Layer} layer The new topmost layer
          */
-        bringToTop: function(layer) {
+        bringToTop: function (layer) {
             var map = this.getMap();
             var list = map.getLayers();
             list.remove(layer);
@@ -645,7 +636,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @param {ol.layer.Layer} layer ol3 specific!
          */
-        setLayerIndex: function(layerImpl, index) {
+        setLayerIndex: function (layerImpl, index) {
             var layerColl = this.getMap().getLayers();
             var layerIndex = this.getLayerIndex(layerImpl);
 
@@ -654,7 +645,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             /* insert at */
 
             if (index === layerIndex) {
-                return;
+
             } else if (index === layerColl.getLength()) {
                 /* to top */
                 layerColl.removeAt(layerIndex);
@@ -663,18 +654,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 /* must adjust change */
                 layerColl.removeAt(layerIndex);
                 layerColl.insertAt(index - 1, layerImpl);
-
             } else {
                 layerColl.removeAt(layerIndex);
                 layerColl.insertAt(index, layerImpl);
             }
-
         },
 
         /**
          * @param {ol.layer.Layer} layer ol3 specific!
          */
-        getLayerIndex: function(layerImpl) {
+        getLayerIndex: function (layerImpl) {
             var layerColl = this.getMap().getLayers();
             var layerArr = layerColl.getArray();
 
@@ -688,13 +677,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @param {ol.control.Control} layer ol3 specific!
          */
-        _addMapControlImpl: function(ctl) {
+        _addMapControlImpl: function (ctl) {
             this.getMap().addControl(ctl);
         },
         /**
          * @param {ol.control.Control} layer ol3 specific!
          */
-        _removeMapControlImpl: function(ctl) {
+        _removeMapControlImpl: function (ctl) {
             this.getMap().removeControl(ctl);
         },
 
@@ -702,34 +691,33 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Creates style based on JSON
          * @return {ol.style.Style} style ol3 specific!
          */
-        getStyle: function(styleDef) {
+        getStyle: function (styleDef) {
             var me = this;
-            style = jQuery.extend(true, {}, styleDef);
+            var style = jQuery.extend(true, {}, styleDef);
             var olStyle = {};
-            if(Oskari.util.keyExists(style, 'fill.color')) {
+            if (Oskari.util.keyExists(style, 'fill.color')) {
                 var color = style.fill.color;
-                if(Oskari.util.keyExists(style, 'image.opacity')) {
+                if (Oskari.util.keyExists(style, 'image.opacity')) {
                     var rgb = null;
-                    // check if color is hex
                     if (color.charAt(0) === '#') {
+                        // check if color is hex
                         rgb = Oskari.util.hexToRgb(color);
-                        color = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+style.image.opacity+')';
-                    }
-                    // else check at if color is rgb
-                    else if(color.indexOf('rgb(') > -1){
+                        color = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + style.image.opacity + ')';
+                    } else if (color.indexOf('rgb(') > -1) {
+                        // else check at if color is rgb
                         var hexColor = '#' + Oskari.util.rgbToHex(color);
                         rgb = Oskari.util.hexToRgb(hexColor);
-                        color = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+style.image.opacity+')';
+                        color = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + style.image.opacity + ')';
                     }
                 }
                 olStyle.fill = new ol.style.Fill({
-                  color: color
+                    color: color
                 });
             }
-            if(style.stroke) {
-            	olStyle.stroke = me.__getStrokeStyle(style);
+            if (style.stroke) {
+                olStyle.stroke = me.__getStrokeStyle(style);
             }
-            if(style.image) {
+            if (style.image) {
                 olStyle.image = me.__getImageStyle(style);
             }
             if (style.text) {
@@ -746,26 +734,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Object} style json
          * @return {ol.style.Stroke}
          */
-        __getStrokeStyle: function(styleDef) {
+        __getStrokeStyle: function (styleDef) {
             var stroke = {};
-            if(styleDef.stroke.width === 0) {
+            if (styleDef.stroke.width === 0) {
                 return null;
             }
-            if(styleDef.stroke.color) {
+            if (styleDef.stroke.color) {
                 stroke.color = styleDef.stroke.color;
             }
 
-            if(styleDef.stroke.width) {
+            if (styleDef.stroke.width) {
                 stroke.width = styleDef.stroke.width;
             }
-            if(styleDef.stroke.lineDash) {
-                if(_.isArray(styleDef.stroke.lineDash)) {
+            if (styleDef.stroke.lineDash) {
+                if (_.isArray(styleDef.stroke.lineDash)) {
                     stroke.lineDash = styleDef.stroke.lineDash;
                 } else {
                     stroke.lineDash = [styleDef.stroke.lineDash];
                 }
             }
-            if(styleDef.stroke.lineCap) {
+            if (styleDef.stroke.lineCap) {
                 stroke.lineCap = styleDef.stroke.lineCap;
             }
             return new ol.style.Stroke(stroke);
@@ -776,63 +764,58 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {Object} style json
          * @return {ol.style.Circle}
          */
-        __getImageStyle: function(styleDef) {
-            var me = this,
-                image = {},
-                size;
+        __getImageStyle: function (styleDef) {
+            var me = this;
+            var image = {};
+            var size = this._defaultMarker.size;
 
-            if (styleDef.image && styleDef.image.sizePx){
+            if (styleDef.image && styleDef.image.sizePx) {
                 size = styleDef.image.sizePx;
-            } else if (styleDef.image && styleDef.image.size){
+            } else if (styleDef.image && styleDef.image.size) {
                 size = this.getPixelForSize(styleDef.image.size);
-            } else {
-                size = this._defaultMarker.size;
             }
 
-            if(typeof size !== 'number'){
+            if (typeof size !== 'number') {
                 size = this._defaultMarker.size;
             }
 
             styleDef.image.size = size;
 
-            if(me.isSvg(styleDef.image)) {
+            if (me.isSvg(styleDef.image)) {
                 var svg = me.getSvg(styleDef.image);
-                image = new ol.style.Icon({
+                return new ol.style.Icon({
                     src: svg,
                     size: [size, size],
                     imgSize: [size, size],
                     opacity: styleDef.image.opacity || 1
                 });
-                return image;
-            }
-            else if(styleDef.image && styleDef.image.shape) {
-                var offsetX = (!isNaN(style.image.offsetX)) ? style.image.offsetX : 16;
-                var offsetY = (!isNaN(style.image.offsetY)) ? style.image.offsetY : 16;
-                image = new ol.style.Icon({
-                    src: style.image.shape,
+            } else if (styleDef.image && styleDef.image.shape) {
+                var offsetX = (!isNaN(styleDef.image.offsetX)) ? styleDef.image.offsetX : 16;
+                var offsetY = (!isNaN(styleDef.image.offsetY)) ? styleDef.image.offsetY : 16;
+                return new ol.style.Icon({
+                    src: styleDef.image.shape,
                     anchorYUnits: 'pixels',
                     anchorXUnits: 'pixels',
                     anchorOrigin: 'bottom-left',
-                    anchor: [offsetX,offsetY],
+                    anchor: [offsetX, offsetY],
                     opacity: styleDef.image.opacity || 1
                 });
-                return image;
             }
 
-            if(styleDef.image.radius) {
+            if (styleDef.image.radius) {
                 image.radius = styleDef.image.radius;
             } else {
                 image.radius = 1;
             }
-            if(styleDef.snapToPixel) {
+            if (styleDef.snapToPixel) {
                 image.snapToPixel = styleDef.snapToPixel;
             }
-            if(Oskari.util.keyExists(styleDef.image, 'fill.color')) {
+            if (Oskari.util.keyExists(styleDef.image, 'fill.color')) {
                 image.fill = new ol.style.Fill({
                     color: styleDef.image.fill.color
                 });
             }
-            if(styleDef.stroke) {
+            if (styleDef.stroke) {
                 image.stroke = this.__getStrokeStyle(styleDef);
             }
             return new ol.style.Circle(image);
@@ -842,42 +825,42 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param  {Object} textStyleJSON text style definition
          * @return {ol.style.Text} parsed style or undefined if no param is given
          */
-        __getTextStyle : function(textStyleJSON) {
-            if(!textStyleJSON) {
+        __getTextStyle: function (textStyleJSON) {
+            if (!textStyleJSON) {
                 return;
             }
             var text = {};
-            if(textStyleJSON.scale) {
+            if (textStyleJSON.scale) {
                 text.scale = textStyleJSON.scale;
             }
-            if(textStyleJSON.offsetX) {
+            if (textStyleJSON.offsetX) {
                 text.offsetX = textStyleJSON.offsetX;
             }
-            if(textStyleJSON.offsetY) {
+            if (textStyleJSON.offsetY) {
                 text.offsetY = textStyleJSON.offsetY;
             }
-            if(textStyleJSON.rotation) {
+            if (textStyleJSON.rotation) {
                 text.rotation = textStyleJSON.rotation;
             }
-            if(textStyleJSON.textAlign) {
+            if (textStyleJSON.textAlign) {
                 text.textAlign = textStyleJSON.textAlign;
             }
-            if(textStyleJSON.textBaseline) {
+            if (textStyleJSON.textBaseline) {
                 text.textBaseline = textStyleJSON.textBaseline;
             }
-            if(textStyleJSON.font) {
+            if (textStyleJSON.font) {
                 text.font = textStyleJSON.font;
             }
-            if(Oskari.util.keyExists(textStyleJSON, 'fill.color')) {
+            if (Oskari.util.keyExists(textStyleJSON, 'fill.color')) {
                 text.fill = new ol.style.Fill({
                     color: textStyleJSON.fill.color
                 });
             }
-            if(textStyleJSON.stroke) {
+            if (textStyleJSON.stroke) {
                 text.stroke = this.__getStrokeStyle(textStyleJSON);
             }
             if (textStyleJSON.labelText) {
-                if(typeof textStyleJSON.labelText === 'number'){
+                if (typeof textStyleJSON.labelText === 'number') {
                     text.text = textStyleJSON.labelText.toString();
                 } else {
                     text.text = textStyleJSON.labelText;
@@ -889,16 +872,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
          * @param {String} wkt Well known text representation of the geometry
          */
-        getViewPortForGeometry: function(wkt) {
+        getViewPortForGeometry: function (wkt) {
             if (!wkt) {
                 return null;
             }
-            var me = this,
-                feature = me.getFeatureFromWKT(wkt),
-                centroid,
-                bounds,
-                mapBounds,
-                zoomToBounds = null;
+            var me = this;
+            var feature = me.getFeatureFromWKT(wkt);
+            var centroid;
+            var bounds;
+            var mapBounds;
+            var zoomToBounds = null;
 
             if (!feature) {
                 return;
@@ -910,7 +893,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 centroid = ol.extent.getCenter(bounds);
                 mapBounds = map.getView().calculateExtent(map.getSize());
 
-                //if both width and height are < mapbounds', no need to change the bounds. Otherwise use the feature's geometry's bounds.
+                // if both width and height are < mapbounds', no need to change the bounds. Otherwise use the feature's geometry's bounds.
                 if (ol.extent.getHeight(bounds) < ol.extent.getHeight(mapBounds) && ol.extent.getWidth(bounds) < ol.extent.getWidth(mapBounds)) {
                     zoomToBounds = null;
                 } else {
@@ -936,11 +919,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @method getFeatureFromWKT
          */
-        getFeatureFromWKT: function(wkt) {
-            var wktFormat = new ol.format.WKT(),
-                feature = wktFormat.readFeature(wkt);
-
-            return feature;
+        getFeatureFromWKT: function (wkt) {
+            var wktFormat = new ol.format.WKT();
+            return wktFormat.readFeature(wkt);
         },
         /**
          * @method getLayerTileUrls
@@ -948,7 +929,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {String[]}
          * Get urls of tile layer tiles.
          */
-        getLayerTileUrls: function(layerId) {
+        getLayerTileUrls: function (layerId) {
             var OLlayers = this.getOLMapLayers(layerId);
             var urls = [];
             var source = OLlayers[0].getSource();
@@ -957,42 +938,37 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return urls;
         },
-        getGeoJSONGeometryFromOL: function(feature) {
-            var olGeoJSON = new ol.format.GeoJSON(),
-                geojsonStr = olGeoJSON.writeFeature(feature),
-                geojson = JSON.parse(geojsonStr);
-            if (geojson.geometry){
+        getGeoJSONGeometryFromOL: function (feature) {
+            var olGeoJSON = new ol.format.GeoJSON();
+            var geojsonStr = olGeoJSON.writeFeature(feature);
+            var geojson = JSON.parse(geojsonStr);
+            if (geojson.geometry) {
                 return geojson.geometry;
-            } else {
-                return null;
             }
+            return null;
         },
 
-        getOLGeometryFromGeoJSON: function(geojson) {
-            var olGeoJSON = new ol.format.GeoJSON(),
-                olGeom,
-                olMultiGeom,
-                features,
-                olFeature;
-            //DrawTools (allowMultipleDrawing: multiGeom) returns FeatureCollection where features[0] is multigeom
-            //TODO: fix to handle common FeatureCollection
-            //TODO: FeatureCollection -> readFeatures() -> getGeometry()
-            if (geojson.type === "FeatureCollection"){
+        getOLGeometryFromGeoJSON: function (geojson) {
+            var olGeoJSON = new ol.format.GeoJSON();
+            var olGeom;
+            var features;
+            // DrawTools (allowMultipleDrawing: multiGeom) returns FeatureCollection where features[0] is multigeom
+            // TODO: fix to handle common FeatureCollection
+            // TODO: FeatureCollection -> readFeatures() -> getGeometry()
+            if (geojson.type === 'FeatureCollection') {
                 features = geojson.features;
                 olGeom = olGeoJSON.readGeometry(JSON.stringify(features[0].geometry));
-
-            } else if (geojson.geometry && geojson.type === "Feature"){
+            } else if (geojson.geometry && geojson.type === 'Feature') {
                 olGeom = olGeoJSON.readGeometry(JSON.stringify(geojson.geometry));
-            } else if (geojson.type && geojson.coordinates){ // geometry object
+            } else if (geojson.type && geojson.coordinates) { // geometry object
                 olGeom = olGeoJSON.readGeometry(JSON.stringify(geojson));
             }
-            if (olGeom){
+            if (olGeom) {
                 return olGeom;
-            } else {
-                return null;
             }
+            return null;
         }
-/* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
+        /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**
          * @property {String[]} protocol

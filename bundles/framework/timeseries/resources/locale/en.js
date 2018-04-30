@@ -27,6 +27,10 @@ Oskari.registerLocalization(
             "title": "Multiple layers with timeseries in use",
             "message": "You can only control the topmost layer.",
             "ok": "OK"
+        },
+        "layerFilter": {
+            "tooltip": "Show only layers with timeseries",
+            "timeseries": "Timeseries"
         }
     }
 });

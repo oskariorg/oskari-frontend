@@ -1,15 +1,45 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', function ( ) {
-
-    this.data = {
-        coordinates: []
-    };
-},
-{
+    this.inputCoords = []; //[[1324, 12424]]
+    this.resultCoords = []; //[[1324, 12424]]
+    this.mapCoords = []; //[{lon:123, lat:134}]
+    Oskari.makeObservable(this);
+}, {
     getName: function() {
         return 'Oskari.coordinatetransformation.CoordinateDataHandler';
     },
-    getCoordinateObject: function () {
-        return this.data;
+    getInputCoords: function () {
+        return this.inputCoords;
+    },
+    addInputCoord: function (coord){
+        this.inputCoords.push(coord);
+        //this.trigger('InputCoordAdded', coord);
+        this.trigger('InputCoordsChanged', this.inputCoords);
+    },
+    setInputCoords: function (coords, suppressEvent){
+        this.inputCoords = coords;
+        //don't render input table
+        if (suppressEvent !== true){
+            this.trigger('InputCoordsChanged', coords);
+        }
+    },
+    getResultCoords: function() {
+        return this.resultCoords;
+    },
+    setResultCoords: function (coords) {
+        this.resultCoords = coords;
+        this.trigger('ResultCoordsChanged', coords);
+    },
+    //lonlat
+    getMapCoords: function () {
+        return this.mapCoords;
+    },
+    //lonlat
+    setMapCoords: function (coords) {
+        this.mapCoords = coords;
+    },
+    //lonlat
+    addMapCoord: function (coord) {
+        this.mapCoords.push(coord);
     },
     /** 
      * @method validateData
@@ -76,12 +106,65 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         }
         return obj;
     },
+
+    //generic -> to helper??
+    //lonLatCoordToArray or addLonLatCoordToArray (array,..)
+    lonLatCoordToArray: function ( coord, lonFirst){
+        var arr = [];
+        if (typeof coord.lon !== 'number' && typeof coord.lat !== 'number'){
+            return arr;
+        }
+        if (lonFirst === true){
+            arr.push(coord.lon);
+            arr.push(coord.lat);
+        } else {
+            arr.push(coord.lat);
+            arr.push(coord.lon);
+        }
+        return arr;
+    },
+    //generic -> to helper??
+    arrayCoordToLonLat: function (coord, lonFirst){
+        var obj = {};
+        if (lonFirst === true){
+            obj.lon = coord[0];
+            obj.lat = coord[1];
+        }else{
+            obj.lat = coord[0];
+            obj.lon = coord[1];
+        }
+        return obj;
+    },
+    addMapCoordsToInput: function (addBln){
+        var me = this;
+        var coords = me.getMapCoords();
+        if (addBln === true){
+            for (var i = 0 ; i < coords.length ; i++ ) {
+                me.addInputCoord(me.lonLatCoordToArray(coords[i], true)); //TODO check mapsrs lonFirst
+            }
+        }
+        coords.length = 0;
+    },
+    clearCoords: function () {
+        this.inputCoords.length = 0;
+        this.mapCoords.length = 0;
+        this.resultCoords.length = 0;
+        this.trigger('InputCoordsChanged', this.inputCoords);
+        this.trigger('ResultCoordsChanged', this.resultCoords);
+    },
+    checkCoordsArrays: function(){
+        var input = this.inputCoords.length,
+            result = this.resultCoords.length;
+        if (input !== 0 && result !==0){
+            return input === output;
+        }
+    }
     /**
      * @method modifyCoordinateObject
      * @param {string} flag - coordinate array contains two objects, input & output - flag determines which one you interact with
      * @param {array} coordinates - an array containing objects with keys lon lat - one object for each coordinate pair
      * @description 
-     */
+     *
     modifyCoordinateObject: function ( flag, coordinates ) {
         var data = this.getCoordinateObject().coordinates;
         var me = this;
@@ -107,5 +190,5 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         } else {
             return;
         }
-    },
+    },*/
 });

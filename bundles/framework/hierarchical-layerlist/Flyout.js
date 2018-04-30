@@ -166,7 +166,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         _getLayerGroups: function(groupingMethod) {
             var me = this,
                 groupList = [],
-                groupModel = null,
                 n,
                 layer,
                 groupAttr;
@@ -179,12 +178,10 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
             layersCopy.forEach(function(layer){
                 var group = layer.getGroups()[0];
-                if(isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
+                if(group && isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
                     if(!notLoadedBackend[group.id]) {
                         notLoadedBackend[group.id] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
-                            groups: [],
                             id: group.id,
-                            layers: [],
                             name:{},
                             orderNumber: -1,
                             selectable: true,
@@ -192,7 +189,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                         });
                         notLoadedBackend[group.id].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.id].layers.push({id:layer.getId()});
+                    notLoadedBackend[group.id].getChildren().push({id:layer.getId(), type:'layer'});
+                    notLoadedBackend[group.id].layersModels.push(layer);
                 }
             });
 
@@ -204,14 +202,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
 
             allGroups.forEach(function(group) {
-                groupModel = Oskari.clazz.create(
+                var groupModel = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup',
                     group,
                     me.mapLayerService
                 );
+
                 groupList.push(groupModel);
             });
-
             return groupList;
         },
 

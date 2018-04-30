@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "Gögnin mín",
         "notLoggedIn": "Gögnin mín inniheldur notandasnið og allar fitjur sem þú hefur vistað, kortasýn, ívafin kort, vísbendingar, greiningar og gagnasett. <a href='/web/is/innskra'>Skráðu þig inn til að til að skoða gögnin þín</a>.",
         "notLoggedInText": "Skrá inn",
+        "register": "Skrá",
         "tabs": {
             "myviews": {
                 "title": "Kortasýnir mínar",

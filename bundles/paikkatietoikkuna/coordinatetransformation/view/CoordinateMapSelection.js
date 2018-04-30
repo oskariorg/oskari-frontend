@@ -2,10 +2,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
     function (instance) {
         var me = this;
         me.instance = instance;
-        me.loc = me.instance.getLocalization("flyout");
-        me.helper = me.instance.helper;
+        me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         me.mapSelectionContainer = null;
-        me.mapcoords = [];
         me.dialog = null;
     }, {
         getName: function() {
@@ -23,55 +21,40 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
         },
         show: function() {
             var me = this;
-
+            var helper = me.instance.getHelper();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(this.loc.dsInfo.success),
+            btn = dialog.createCloseButton(this.loc('actions.done')),
             cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(this.loc.dsInfo.cancel);
+            cancelBtn.setTitle(this.loc('actions.cancel'));
             btn.addClass('primary');
             me.dialog = dialog;
 
             cancelBtn.setHandler(function() {
-                me.helper.removeMarkers();
+                helper.removeMarkers();
                 dialog.close();
-                me.removeMapClickListener();
                 me.instance.toggleViews("transformation");
-                me.instance.getViews().transformation.isMapSelection = false;
-                me.mapcoords = [];
+                me.instance.setMapSelectionMode(false);
+                me.instance.addMapCoordsToInput(false);
             });
 
             btn.setHandler(function() {
-                me.instance.getViews().transformation.updateCoordinateData( 'input', me.mapcoords );
-                me.instance.getViews().transformation.isMapSelection = false;
-                me.removeMapClickListener();
-                me.instance.getViews().transformation.selectMapProjectionValues();
+                me.instance.setMapSelectionMode(false);
+                helper.removeMarkers();
+                dialog.close();
                 me.instance.toggleViews("transformation");
-                me.mapcoords = [];
+                me.instance.addMapCoordsToInput(true);
             });
 
-            dialog.show(this.loc.datasource.map, this.loc.dsInfo.mapinfo, [cancelBtn, btn]);
+            dialog.show(this.loc('mapMarkers.select.title'), this.loc('mapMarkers.select.info'), [cancelBtn, btn]);
             dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
-            this.mapClicksListener();
         },
-        getCoords: function ( coords ) {
+        /*getCoords: function ( coords ) {
             Object.keys( coords ).forEach( function ( key ) {
                 coords[key] = Math.round( coords[key] );
             });
             if( coords != null ) {
                 this.mapcoords.push( coords );
             }
-        },
-        removeMapClickListener: function () {
-            jQuery('#mapdiv').off('click');
-        },
-        mapClicksListener: function() {
-            var me = this;
-            if( me.instance.isMapSelectionMode() ) {
-                jQuery('#mapdiv').on("click", function () {});
-            } else {
-                return;
-            }
-        }
+        },*/
     }
 );
- 

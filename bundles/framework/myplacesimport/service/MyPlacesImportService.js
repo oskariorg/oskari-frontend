@@ -13,7 +13,7 @@ function(instance) {
 
     var ajaxUrl = this.sandbox.getAjaxUrl() + 'action_route=';
     var srsName = this.sandbox.getMap().getSrsName();
-    this.urls.create = ajaxUrl + 'CreateUserLayer&srs=' + srsName;
+    this.urls.create = ajaxUrl + 'CreateUserLayer&srs=' + srsName + '&sourceEpsg=' + srsName;
     this.urls.get = ajaxUrl + 'GetUserLayers&srs=' + srsName;
     this.urls.edit = (ajaxUrl + 'EditUserLayer');
     this.urls.getStyle = (ajaxUrl + 'GetUserLayerStyle');

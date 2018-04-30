@@ -1,30 +1,64 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemSelection',
-    function (view) {
-        this.instance = view;
-        this.loc = view.loc;
+    function (view, loc, type, options) {
+        this.view = view;
+        this.loc = loc;
+        this.options = options;
+        this.type = type;
         this.element = null;
         this.select = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', view );
         this.systemInfo = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
-        this.selectInstance = null;
-        this.dropdowns = null;
-        this.enableProjectionSystem = false;
+        this.selectInstances = {};
+        this.dropdowns = {};
+        //this.enableProjectionSystem = false;
+        this.selections;
         this._template = {
             systemWrapper: jQuery('<div class="coordinateSystemWrapper"></div>'),
             coordinateSystemSelection: _.template(
                 '<div class="transformation-system">' +
                     '<h5> ${ title }</h5>'+
-                    '<div class="system datum center-align" data-system="datum"><b class="dropdown_title"> ${ geodetic_datum }</b>  <div class="selectMountPoint"></div> <a href="#"><div class="infolink icon-info"></div></a> </div>' +
-                    '<div class="system coordinate center-align" data-system="coordinate"><b class="dropdown_title"> ${ coordinate_system }</b> <div class="selectMountPoint"></div>  <a href="#"><div class="infolink icon-info"></div></a> </div>' +
-                    '<div class="system projection center-align" style="display:none;" data-system="projection"> ${ map_projection } </b> <div class="selectMountPoint"></div> <a href="#"><div class="infolink icon-info"></div></a> </div>'+
-                    '<div class="system geodetic-coordinate center-align" data-system="geodetic-coordinate"><b class="dropdown_title"> ${ geodetic_coordinate_system } *</b> <div class="selectMountPoint"></div> <a href="#"><div class="infolink icon-info"></div></a> </div>' +
-                    '<div class="system elevation center-align" data-system="elevation"><b class="dropdown_title"> ${ elevation_system } </b> <div class="selectMountPoint"></div>  <a href="#"><div class="infolink icon-info"></div></a> </div> '+
+                    '<div class="system datum center-align" data-system="datum">' +
+                        '<b class="dropdown_title"> ${ geodetic_datum }</b>' +
+                        '<div class="selectMountPoint"></div>' +
+                        '<a href="#">' +
+                            '<div class="infolink icon-info"></div>' +
+                        '</a>' +
+                    '</div>' +
+                    '<div class="system coordinate center-align" data-system="coordinate">' +
+                        '<b class="dropdown_title"> ${ coordinate_system }</b>' +
+                        '<div class="selectMountPoint"></div>' +
+                        '<a href="#">' +
+                            '<div class="infolink icon-info"></div>' +
+                        '</a>' +
+                    '</div>' +
+                    '<div class="system projection center-align" data-system="projection">' +
+                        '<b class="dropdown_title"> ${ map_projection }</b>' +
+                        '<div class="selectMountPoint"></div>' +
+                        '<a href="#">' +
+                            '<div class="infolink icon-info"></div>' +
+                        '</a>' +
+                    '</div>'+
+                    '<div class="system geodetic-coordinate center-align" data-system="geodetic-coordinate">' +
+                        '<b class="dropdown_title"> ${ geodetic_coordinate_system } *</b>' +
+                        '<div class="selectMountPoint"></div>' +
+                        '<a href="#">' +
+                            '<div class="infolink icon-info"></div>' +
+                        '</a>' +
+                    '</div>' +
+                    '<div class="system elevation center-align" data-system="elevation">' +
+                        '<b class="dropdown_title"> ${ elevation_system } </b>' +
+                        '<div class="selectMountPoint"></div>' +
+                        '<a href="#">' +
+                            '<div class="infolink icon-info"></div>' +
+                        '</a>' +
+                    '</div>'+
                 '</div>'
-            ),
+            )
         }
         this.createUi();
+        Oskari.makeObservable(this);
     }, {
         getName: function() {
-            return 'Oskari.coordinatetransformation.view.SourceSelect';
+            return 'Oskari.coordinatetransformation.component.CoordinateSystemSelection';
         },
         setElement: function (el) {
             this.element = el;
@@ -33,33 +67,78 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             return this.element;
         },
         createUi: function () {
+            var me = this;
             var wrapper = this._template.systemWrapper.clone();
 
             var coordinateSystemSelection = this._template.coordinateSystemSelection({
-                title: this.loc.coordinatesystem.title,
-                geodetic_datum: this.loc.coordinatesystem.geodetic_datum,
-                coordinate_system: this.loc.coordinatesystem.coordinate_system,
-                map_projection: this.loc.coordinatesystem.map_projection,
-                geodetic_coordinate_system:this.loc.coordinatesystem.geodetic_coordinatesystem,
-                elevation_system:this.loc.coordinatesystem.heigth_system 
+                title: this.loc('flyout.coordinateSystem.title'),
+                geodetic_datum: this.loc('flyout.coordinateSystem.geodeticDatum.label'),
+                coordinate_system:  this.loc('flyout.coordinateSystem.coordinateSystem.label'),
+                map_projection:  this.loc('flyout.coordinateSystem.mapProjection.label'),
+                geodetic_coordinate_system: this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.label'),
+                elevation_system: this.loc('flyout.coordinateSystem.heightSystem.label')
             });
             wrapper.append(coordinateSystemSelection);
             this.setElement(wrapper);
-            this.createAndHandleSelect();
+
+            var json = this.options;
+            Object.keys( json ).forEach( function ( key ) {
+                var selector = "." + key;
+                var container = jQuery(wrapper.find(selector)).find(".selectMountPoint");
+                me.createDropdown (container, json[key], key);
+
+            });
+            // hide projection select
+            this.showProjectionSelect(false);
+            //init selections
+            this.storeSelectionValues();
             this.handleInfoLink();
+        },
+        createDropdown: function (container, json, key){
+            var me = this;
+            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', key);
+            var dropdown;
+            var options = {
+                    placeholder_text: json['DEFAULT'].title,
+                    allow_single_deselect : true,
+                    disable_search_threshold: 10,
+                    width: '100%'
+                };
+            var selections = [];
+            Object.keys( json ).forEach( function ( key ) {
+                var obj = json[key];
+                var valObj = {
+                    id : key,
+                    title : obj.title,
+                    cls: obj.cls
+                };
+                selections.push(valObj);
+            });
+            dropdown = select.create(selections, options);
+            dropdown.css({
+                width:'180px'
+            });
+            select.adjustChosen();
+            select.selectFirstValue();
+            dropdown.on('change', function(event) {
+                //event.stopPropagation();
+                me.handleSelectValueChange( select );
+            });
+            container.append(dropdown);
+            this.dropdowns[key] = dropdown;
+            this.selectInstances[key] = select;
         },
         /**
          * @method createAndHandleSelect
          * @desc creates an instance of the { Oskari.coordinatetransformation.component.select },
          * and fills it with data
-         */
+         *
         createAndHandleSelect: function () {
             var me = this;
             var wrapper = this.getElement();
             this.select.create();
             this.selectInstance = this.select.getSelectInstances();
             this.dropdowns = this.select.getDropdowns();
-
             Object.keys( this.dropdowns ).forEach( function( key ) {
                 var system = jQuery( wrapper.find( '.transformation-system' ).find( me.makeClassSelector(key) ).find('.selectMountPoint').append( me.dropdowns[key] ));
                 system.parent().on('change', { 'self': me }, function ( e ) {
@@ -68,13 +147,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     self.handleSelectValueChange(currentValue);
                 });
             });
-        },
+        },*/
+        //TODO
         handleInfoLink: function () {
             var me = this;
             this.getElement().find('.infolink').on('click', function ( event ) {
                 event.stopPropagation();
                 var key = this.parentElement.parentElement.dataset.system;
                 me.systemInfo.show( jQuery( this ), key );
+                //TODO showInfoPopup();
             });
         },
         /**
@@ -82,146 +163,194 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
          * @param {string} valueClass - class selector to show options for 
          * @param {string} keyToEmpty - optional param to empty only one specific key in the dropdown 
          */
-        updateDropdownOptions: function (dropdownId, valueId) {
-            if ( typeof valueId === 'string' ) {
+        updateDropdownOptions: function (dropdownId, selector) {
+            if ( typeof selector === 'string' && selector !=="") {
                 this.dropdowns[dropdownId].find( 'option' ).css('display', 'none');
-                this.dropdowns[dropdownId].find( valueId ).css('display', '');
+                this.dropdowns[dropdownId].find( selector ).css('display', '');
             } else {
                 this.dropdowns[dropdownId].find( 'option' ).css('display', '');
             }
         },
+        updateGoeCoordDropdown: function () {
+            var clsSelector = this.makeClassSelectorFromSelections();
+            this.updateDropdownOptions( "geodetic-coordinate", clsSelector );
+            this.resetSelectToPlaceholder("geodetic-coordinate");
+        },
         makeClassSelector: function (variable) {
+            if (variable === "DEFAULT" || variable === ""){
+                return "";
+            }
             return "." + variable;
+        },
+        makeClassSelectorFromSelections: function (){
+            var selects = this.selections;
+            return this.makeClassSelector(selects.coordinate)+
+                this.makeClassSelector(selects.projection)+
+                this.makeClassSelector(selects.datum);
         },
         /**
          * @method handleSelectValueChange
          * @param {string} currentValue - value of the dropdown we changed
          * @desc handle hiding and showing dropdown options based on user selection 
          */
-        handleSelectValueChange: function (currentValue) {
+        handleSelectValueChange: function (select) {
+            var currentValue = select.getValue();
+            var selectId = select.getId();
             var me = this;
-            var dropdowns = this.dropdowns;
-            var instances = this.selectInstance;
-            var datum = instances.datum.getValue();
-            var coordinate = instances.coordinate.getValue();
-            var projection = instances.projection.getValue();
-            var clsSelector = this.makeClassSelector;
-
-            var table;
-            // transform.js sets a data-type attribute to this element refactor to using Oskari.observable
-            var system = this.element.attr('data-type');
-            // which table we operate on
-            if ( system === 'coordinate-input' ) {
-                table = this.instance.inputTable; 
-            } else {
-                table = this.instance.outputTable;
+            this.storeSelectionValue(selectId, currentValue);
+            var clsSelector;
+            var disableElevSystem = false;
+            var showElevationRow = false;
+            //placeholder value is DEFAULT, removed value is ""
+            if (currentValue === ""){
+                currentValue = "DEFAULT";
             }
 
-            me.instance.startingSystem = true;
-            
-            if ( coordinate.indexOf("3D") > -1 ) {
-                table.handleDisplayingElevationRows(true);
-                instances.elevation.setEnabled( false );
-            } else {
-                table.handleDisplayingElevationRows(false);
-                instances.elevation.setEnabled( true );
-            }
-
-            switch ( currentValue ) {
-                case "DATUM_DEFAULT":
-                    this.enableProjectionSystem = false;
-                    this.resetSelectToPlaceholder();
+            switch ( selectId ) {
+                case "datum":
+                    clsSelector = this.makeClassSelector(currentValue);
+                    this.resetSelectsToPlaceholder();
+                    //Update all dropdowns
                     Object.keys( this.dropdowns ).forEach( function ( key ) {
-                        me.updateDropdownOptions( key ); 
+                        me.updateDropdownOptions( key, clsSelector );
                     });
+                    this.showProjectionSelect(false);
                     break;
-                case "DATUM_KKJ":
-                case "DATUM_EUREF-FIN":
-                    this.enableProjectionSystem = false;
-                    this.resetSelectToPlaceholder();
-                    Object.keys( this.dropdowns ).forEach( function ( key ) {
-                        me.updateDropdownOptions( key, clsSelector( currentValue) ); 
-                    });
+                case "coordinate":
+                    if (currentValue === "COORD_PROJ_2D") {
+                        this.showProjectionSelect(true);
+                    } else {
+                        this.showProjectionSelect(false);
+                    }
+                    if (currentValue === "COORD_GEOG_3D" || currentValue === "COORD_PROJ_3D"){
+                        disableElevSystem = true;
+                        showElevationRow = true;
+                    }
+                    this.updateGoeCoordDropdown();
                     break;
-                case "KOORDINAATISTO_MAANT_2D":
-                    this.enableProjectionSystem = false;
-                    var classSelector = clsSelector( datum ) + clsSelector( currentValue );
-                    this.updateDropdownOptions( "geodetic-coordinate", classSelector );
-                    instances["geodetic-coordinate"].resetToPlaceholder();
+                case "projection":
+                    showProjSystem = true;
+                    this.updateGoeCoordDropdown();
                     break;
-                case "KOORDINAATISTO_MAANT_3D":
-                case "KOORDINAATISTO_SUORAK_3D":
-                    this.enableProjectionSystem = false;
-                    this.updateDropdownOptions( "geodetic-coordinate", clsSelector( currentValue ) );
-                    instances["geodetic-coordinate"].resetToPlaceholder();
-                    table.handleDisplayingElevationRows(true);
+                case "elevation":
+                    if (currentValue !== "DEFAULT" ){
+                        showElevationRow = true;
+                    }
                     break;
-                case "KOORDINAATISTO_SUORAK_2D":
-                case "KKJ_KAISTA":
-                case "TM":
-                case "GK":
-                    this.enableProjectionSystem = true;
-                    this.updateDropdownOptions( "geodetic-coordinate", clsSelector( currentValue ) );
-                    instances["geodetic-coordinate"].resetToPlaceholder();
-                    break;
-                case "COORDSYS_DEFAULT":
-                    me.instance.startingSystem = true;
-                    break;
-                case "KORKEUSJ_N2000":
-                case "KORKEUSJ_N60":
-                case "KORKEUSJ_N43":
-                    table.handleDisplayingElevationRows(true);        
+                case "geodetic-coordinate":
+                    if (currentValue === "EPSG:4936" || currentValue === "EPSG:4937") { //3D
+                        disableElevSystem = true;
+                        showElevationRow = true;
+                    }
                     break;
                 default:
-                    break;
+                    return;
             }
-
-            var classSelector = clsSelector(datum);
-
-            if ( this.enableProjectionSystem ) {
-                dropdowns.projection.parent().parent().show();
-               if ( projection ) {
-                    classSelector += clsSelector(projection);
-                }
-            } else {
-                dropdowns.projection.parent().parent().hide();
-                instances.projection.resetToPlaceholder();
-
-                if ( coordinate ) {
-                    classSelector += clsSelector(coordinate);
-                }
-            }
-            dropdowns["geodetic-coordinate"].find(classSelector).show();
-            this.updateSelectValues( instances );
-            table.updateTitle( this.getSelectionValues() );
+            this.storeSelectionValues();
+            this.disableElevationSelection(disableElevSystem);
+            this.updateSelectValues();
+            this.trigger('CoordSystemChanged', this.type);
         },
-        /**
-         * @method getSelectionValues
-         * @description gets all values from all the selectList components associated with this class
-         * @return { Object } containing the values
-         */
-        getSelectionValues: function () {
+        disableElevationSelection: function (disable){
+            var select = this.selectInstances.elevation;
+            if (disable === true){
+                select.resetToPlaceholder();
+                select.setValue('DEFAULT');
+                select.setEnabled(false);
+            } else {
+                select.setEnabled(true);
+            }
+        },
+        disableInputSelections: function (disable){
+            var selects = this.selectInstances;
+            if (disable === true){
+                Object.keys( selects ).forEach( function ( key ) {
+                    selects[key].setEnabled(false);
+                });
+            }else{
+                Object.keys( selects ).forEach( function ( key ) {
+                    selects[key].setEnabled(true);
+                });
+            }
+        },
+        selectMapProjection: function (){
+            var mapSrs = Oskari.getSandbox().getMap().getSrsName();
+            var srsOptions = this.view.instance.getEpsgValues(mapSrs);
+            var selects = this.selectInstances;
+            if (srsOptions){
+                selects.datum.setValue(srsOptions.datum);
+                selects.coordinate.setValue(srsOptions.coord);
+                selects["geodetic-coordinate"].setValue(mapSrs);
+                this.resetSelectToPlaceholder("elevation");
+            }
+            this.storeSelectionValues();
+            this.updateSelectValues();
+            this.trigger('CoordSystemChanged', this.type);
+        },
+        showProjectionSelect: function (display){
+            var elem = jQuery(this.getElement()).find(".projection");
+            if (display === true){
+                jQuery(elem).css("display","");
+            } else {
+                jQuery(elem).css("display", "none");
+                this.resetSelectToPlaceholder("projection");
+            }
+        },
+        getSelections: function (){
+            return this.selections;
+        },
+        getSrs: function () {
+            return this.selections["geodetic-coordinate"];
+        },
+        getElevation: function () {
+            return this.selections.elevation;
+        },
+        storeSelectionValue: function (key, value){
+            if (value === "DEFAULT"){
+                this.selections[key] = ""; //TODO null or ""
+            } else {
+                this.selections[key] = value
+            }
+        },
+        storeSelectionValues: function () {
             var me = this;
             var values = {};
-            Object.keys( this.selectInstance ).forEach( function ( instance ) {
-                values[instance] = me.selectInstance[instance].getValue();
+            var value;
+            Object.keys( this.selectInstances ).forEach( function ( instance ) {
+                value = me.selectInstances[instance].getValue();
+                if (value === "DEFAULT"){
+                    values[instance] = ""; //TODO null or ""
+                } else {
+                    values[instance] = value
+                }
             });
-            return values;
+            me.selections = values;
         },
-        resetSelectToPlaceholder: function () {
-            //reset all but the datum
-            this.selectInstance.coordinate.resetToPlaceholder();
-            this.selectInstance.projection.resetToPlaceholder();
-            this.selectInstance["geodetic-coordinate"].resetToPlaceholder();
-            this.selectInstance.elevation.resetToPlaceholder();
-        },
-        updateSelectValues: function ( instances ) {
-            Object.keys( instances ).forEach( function ( key ) {
-                instances[key].update();
+        resetSelectsToPlaceholder: function (resetDatum) {
+            var selects = this.selectInstances;
+            Object.keys( selects ).forEach( function ( key ) {
+                if (key === "datum" && resetDatum !== true){
+                    return;
+                }
+                selects[key].resetToPlaceholder();
+                selects[key].setValue('DEFAULT'); //TODO
             });
         },
-        getSelectInstance: function () {
-            return this.selectInstance;
+        resetSelectToPlaceholder: function (key){
+            var select = this.selectInstances[key];
+            if (select){
+                select.resetToPlaceholder();
+                select.setValue('DEFAULT'); //TODO
+            }
+        },
+        updateSelectValues: function () {
+            var selects = this.selectInstances;
+            Object.keys( selects ).forEach( function ( key ) {
+                selects[key].update();
+            });
+        },
+        getSelectInstances: function () {
+            return this.selectInstances;
         },
     }
 );

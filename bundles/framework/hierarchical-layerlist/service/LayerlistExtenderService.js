@@ -19,7 +19,8 @@
                     check_callback: true,
                     themes: {
                         variant: 'large'
-                    }
+                    },
+                    dblclick_toggle: false
                 },
                 checkbox: {
                     keep_selected_style: false
@@ -44,6 +45,8 @@
                 },
                 search: {
                     show_only_matches: true,
+                    show_only_matches_children: true,
+                    close_opened_onclear: true,
                     search_callback: function(text, node) {
                         if (node.type == 'layer') {
                             var searchText = text.toLowerCase();
