@@ -9,16 +9,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     this.parentElement = null;
     Oskari.makeObservable(this);
     var me = this;
+    var errorService = this.service.getErrorService();
 
     this.paramHandler.on('Data.Loaded', function ( data ) {
         me.spinner.stop();
+        if ( Object.keys(data.selectors).length === 0 ) {
+            errorService.show(locale.erros.title, locale.errors.regionsetsIsEmpty);
+        }
         me.trigger('indicator.changed', data.regionset.length > 0);
         me._createUi( data.datasrc, data.indicators, data.selectors, data.regionset );
     });
 }, {
     __templates: {
         main: _.template('<div class="stats-ind-params"></div>'),
-        select: _.template('<div class="parameter"><div class="label" id=${id}>${label}</div><div class="clear"></div></div>'),
+        select: _.template('<div class="parameter margintop"><div class="label" id=${id}>${label}</div><div class="clear"></div></div>'),
         option: _.template('<option value="${id}">${name}</option>')
     },
 
@@ -93,9 +97,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             select.adjustChosen();
             select.selectFirstValue();
             tempSelect.find('.label').append(dropdown);
-            if (index > 0) {
-                dropdown.parent().addClass('margintop');
-            }
             cont.append(tempSelect);
             me._selections.push(select);
         });

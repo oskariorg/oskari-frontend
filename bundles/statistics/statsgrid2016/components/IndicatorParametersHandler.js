@@ -76,7 +76,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
     handleMultipleIndicators: function (datasrc, indicators, elements) {
         indicators = indicators.filter( function (n) { return n != "" } );
         var me = this;
-        var panelLoc = this.locale.panels.newSearch;
         var combinedValues = {};
         var regionsets = [];
         var deferredArray = [];
