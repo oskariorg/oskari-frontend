@@ -77,8 +77,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 regionset: indicator.regionsets,
                 values: combinedValues
             }
-            cb(data);
-            //me.trigger('Data.Loaded', data);
+            if ( typeof cb === 'function') {
+                cb(data);
+            } else {
+                me.trigger('Data.Loaded', data);
+            }
         });
     },
     handleMultipleIndicators: function (datasrc, indicators, elements) {
