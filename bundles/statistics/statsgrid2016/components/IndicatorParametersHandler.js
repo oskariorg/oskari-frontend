@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
     this._values = null;
     this.datasource = null;
     this.indicators = null;
+    this.elements = null;
 
     Oskari.makeObservable(this);
 }, {
@@ -11,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
         this.datasource = datasrc;
         this.indicators = indicators;
+        this.elements = elements;
 
         if ( Array.isArray( indicators ) ) {
             this.handleMultipleIndicators(datasrc, indicators, elements);
@@ -18,15 +20,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         }
         this.handleSingleIndicator(datasrc, indicators, elements);
     },
-    handleSingleIndicator: function(datasrc, indId, elements) {
+    handleSingleIndicator: function( indId, cb) {
         var me = this;
         var errorService = me.service.getErrorService();
         var locale = this.locale;
         var panelLoc = locale.panels.newSearch;
 
-        this.service.getIndicatorMetadata(datasrc, indId, function (err, indicator) {
-            if (elements.dataLabelWithTooltips) {
-                elements.dataLabelWithTooltips.find('.tooltip').hide();
+        this.service.getIndicatorMetadata(this.datasource, indId, function (err, indicator) {
+            if (me.elements.dataLabelWithTooltips) {
+                me.elements.dataLabelWithTooltips.find('.tooltip').hide();
             }
             if (err) {
                 // notify error!!
@@ -72,81 +74,60 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 datasrc: me.datasource,
                 indicators: me.indicators,
                 selectors: selections,
-                regionSet: indicator.regionsets,
+                regionset: indicator.regionsets,
                 values: combinedValues
             }
-
-            me.trigger('Data.Loaded', data);
+            cb(data);
+            //me.trigger('Data.Loaded', data);
         });
     },
     handleMultipleIndicators: function (datasrc, indicators, elements) {
         indicators = indicators.filter( function (n) { return n != "" } );
         var me = this;
         var panelLoc = this.locale.panels.newSearch;
-        var allSelectors = [];
-        var regionsSets = [];
+        var combinedValues = {};
+        var regionsets = [];
         var deferredArray = [];
 
-        indicators.forEach( function (indicatorId) {
+        indicators.forEach( function (indId) {
             var deferred = new jQuery.Deferred();
-            me.service.getIndicatorMetadata(datasrc, indicatorId, function (err, indicator) {
-                indicator.selectors.forEach( function (selector) {
-                    allSelectors.push(selector);
-                });
+            me.handleSingleIndicator(indId, function (value) {
 
-                if (indicator.regionsets.length === 0) {
+                if (value.regionset.length === 0) {
                     errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
                 } else {
-                   regionsSets =  regionsSets.concat(indicator.regionsets);
+                    regionsets =  regionsets.concat(value.regionset);
                 }
 
+                Object.keys(value.values).forEach( function(key) {
+                    if ( !combinedValues[key] ) {
+                        combinedValues[key] = value.values[key];
+                    } else {
+                        value.values[key].forEach( function (val) {
+                            var inArray =  combinedValues[key].some( function (obj) {
+                                return obj.id === val.id;
+                            });
+                            if ( !inArray ) {
+                                combinedValues[key].push(val);
+                            } else { console.log("value exits" + val);}
+                        })
+                    }
+                });
                 deferred.resolve();
             });
             deferredArray.push(deferred);
         });
-        // when all the deferreds have been resolved -> proceed with handling data
-        jQuery.when.apply( jQuery, deferredArray ).done( function() {
 
-            allSelectors.sort(function (a, b) {
-                return a.id > b.id ? 1 : -1;
-            });
+    jQuery.when.apply( jQuery, deferredArray ).done( function() {
 
-            var sharedSelectors = allSelectors;
-            for ( var i = 0; i < sharedSelectors.length-1; i++ ) {
-                if ( sharedSelectors[i].id === sharedSelectors[i+1].id ) {
-                    sharedSelectors.splice( 1, i )
-                }
-            }
-    
-            var combinedValues = {};
-            //get all the values from all the indicators and store them under their id key
-            allSelectors.forEach( function (key) {
-                key.allowedValues.forEach(function (val) {
-                    if ( !combinedValues[key.id] ) {
-                        combinedValues[key.id] = [];
-                    }
-                    var name = val.name || val.id || val;
-                    val.title = val.name;
-                    var optName = (panelLoc.selectionValues[key.id] && panelLoc.selectionValues[key.id][name]) ? panelLoc.selectionValues[key.id][name] : name;
-        
-                    var valObject = {
-                        id: val.id || val,
-                        title: optName
-                    };
-                    // check if selections contains the value already
-                    if ( !combinedValues[key.id].some(function(key) { return key.id === valObject.id && key.title === valObject.title; }) ) {
-                        combinedValues[key.id].push(valObject);
-                    } 
-                });
-            });
-            var data = {
-                datasrc: me.datasource,
-                indicators: me.indicators,
-                selectors: sharedSelectors,
-                regionSet: regionsSets,
-                values: combinedValues
-            }
-            me.trigger('Data.Loaded', data);
-        });
+        var data = {
+            datasrc: me.datasource,
+            indicators: me.indicators,
+            selectors: null,
+            regionset: regionsets,
+            values: combinedValues
+        }
+        me.trigger('Data.Loaded', data);
+    });
     }
 });
