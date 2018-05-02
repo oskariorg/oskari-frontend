@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
 
     this.paramHandler.on('Data.Loaded', function ( data ) {
         me.spinner.stop();
-        if ( Object.keys(data.selectors).length === 0 ) {
+        if ( Object.keys(data.regionset).length === 0 ) {
             errorService.show(locale.erros.title, locale.errors.regionsetsIsEmpty);
         }
         me.trigger('indicator.changed', data.regionset.length > 0);
@@ -125,6 +125,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             regionset: me._values.regionsetComponent.value(),
             selections: {}
         };
+        
         me._selections.forEach(function (select) {
             values.selections[select.getId()] = select.getValue();
         });
