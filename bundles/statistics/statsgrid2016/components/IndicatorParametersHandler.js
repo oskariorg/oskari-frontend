@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
     this._values = null;
     this.datasource = null;
     this.indicators = null;
+    this.elements = null;
 
     Oskari.makeObservable(this);
 }, {
@@ -11,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
         this.datasource = datasrc;
         this.indicators = indicators;
+        this.elements = elements;
 
         if ( Array.isArray( indicators ) ) {
             this.handleMultipleIndicators(datasrc, indicators, elements);
@@ -18,15 +20,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         }
         this.handleSingleIndicator(datasrc, indicators, elements);
     },
-    handleSingleIndicator: function(datasrc, indId, elements) {
+    handleSingleIndicator: function( indId, cb) {
         var me = this;
         var errorService = me.service.getErrorService();
         var locale = this.locale;
         var panelLoc = locale.panels.newSearch;
 
-        this.service.getIndicatorMetadata(datasrc, indId, function (err, indicator) {
-            if (elements.dataLabelWithTooltips) {
-                elements.dataLabelWithTooltips.find('.tooltip').hide();
+        this.service.getIndicatorMetadata(this.datasource, indId, function (err, indicator) {
+            if (me.elements.dataLabelWithTooltips) {
+                me.elements.dataLabelWithTooltips.find('.tooltip').hide();
             }
             if (err) {
                 // notify error!!
@@ -34,8 +36,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 return;
             }
 
-            // selections
-            var selections = [];
             var combinedValues = {};
 
             indicator.selectors.forEach(function (selector, index) {
@@ -53,7 +53,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                         title: optName
                     };
                     combinedValues[selector.id].push(valObject);
-                    selections.push(valObject);
                 });
             });
 
@@ -61,100 +60,74 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
             }
 
-            // Add margin if there is selections
-            if (indicator.selectors.length > 0) {
-                //regionSelect.container.addClass('margintop');
-            } else {
-                errorService.show(locale.errors.title, locale.errors.indicatorMetadataIsEmpty);
-            }
-
             var data = {
                 datasrc: me.datasource,
+                selectors: combinedValues,
                 indicators: me.indicators,
-                selectors: selections,
-                regionSet: indicator.regionsets,
-                values: combinedValues
+                regionset: indicator.regionsets
             }
-
-            me.trigger('Data.Loaded', data);
+            if ( typeof cb === 'function') {
+                cb(data);
+            } else {
+                me.trigger('Data.Loaded', data);
+            }
         });
     },
     handleMultipleIndicators: function (datasrc, indicators, elements) {
         indicators = indicators.filter( function (n) { return n != "" } );
         var me = this;
-        var panelLoc = this.locale.panels.newSearch;
-        var allSelectors = [];
-        var regionsSets = [];
+        var combinedValues = {};
+        var regionsets = [];
         var deferredArray = [];
 
-        indicators.forEach( function (indicatorId) {
+        function addMissingElements(list, newValues, propertyName) {
+            if(!list) {
+                return [].concat(newValues);
+            }
+            return list.concat(newValues.filter(function (value) {
+                return !list.some(function(existingItem) {
+                    if(propertyName) {
+                        return existingItem[propertyName] === value[propertyName];
+                    }
+                    return existingItem === value;
+                })
+            }));
+        }
+    
+        indicators.forEach( function (indId) {
             var deferred = new jQuery.Deferred();
-            me.service.getIndicatorMetadata(datasrc, indicatorId, function (err, indicator) {
-                indicator.selectors.forEach( function (selector) {
-                    allSelectors.push(selector);
+            me.handleSingleIndicator(indId, function (value) {
+                // include missing regionsets
+                regionsets = addMissingElements(regionsets, value.regionset);
+                Object.keys(value.selectors).forEach( function(selectorName) {
+                    combinedValues[selectorName] = addMissingElements(combinedValues[selectorName], value.selectors[selectorName], 'id');
                 });
-
-                if (indicator.regionsets.length === 0) {
-                    errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
-                } else {
-                   regionsSets =  regionsSets.concat(indicator.regionsets);
-                }
-
                 deferred.resolve();
             });
             deferredArray.push(deferred);
         });
-        // when all the deferreds have been resolved -> proceed with handling data
-        jQuery.when.apply( jQuery, deferredArray ).done( function() {
 
-            allSelectors.sort(function (a, b) {
-                return a.id > b.id ? 1 : -1;
-            });
-
-            var sharedSelectors = allSelectors;
-            for ( var i = 0; i < sharedSelectors.length-1; i++ ) {
-                if ( sharedSelectors[i].id === sharedSelectors[i+1].id ) {
-                    sharedSelectors.splice( 1, i )
-                }
-            }
-    
-            var combinedValues = {};
-            //get all the values from all the indicators and store them under their id key
-            allSelectors.forEach( function (key) {
-                key.allowedValues.forEach(function (val) {
-                    if ( !combinedValues[key.id] ) {
-                        combinedValues[key.id] = [];
-                    }
-                    var name = val.name || val.id || val;
-                    val.title = val.name;
-                    var optName = (panelLoc.selectionValues[key.id] && panelLoc.selectionValues[key.id][name]) ? panelLoc.selectionValues[key.id][name] : name;
-        
-                    var valObject = {
-                        id: val.id || val,
-                        title: optName
-                    };
-                    // check if selections contains the value already
-                    if ( !combinedValues[key.id].some(function(key) { return key.id === valObject.id && key.title === valObject.title; }) ) {
-                        combinedValues[key.id].push(valObject);
-                    } 
-                });
-            });
+    jQuery.when.apply( jQuery, deferredArray ).done( function() {
             var data = {
                 datasrc: me.datasource,
                 indicators: me.indicators,
-                selectors: sharedSelectors,
-                regionSet: regionsSets,
-                values: combinedValues
+                selectors: combinedValues,
+                regionset: regionsets
             }
             me.trigger('Data.Loaded', data);
         });
     },
     testRegionsetDatasources: function ( datasrc, regionsets ) {
+        if (regionsets === null) {
+            return;
+        }
         regionsets = regionsets.map( function (id)  { return Number(id) } );
         var unsupportedDatasets = [];
-
         this.service.datasources.forEach( function (ds) {
-            if( _.intersection(ds.regionsets, regionsets).length === 0 ) {
+            var unsupported = regionsets.some( function (iter) {
+                return ds.regionsets.indexOf(iter) === -1;
+            });
+            if ( unsupported ) {
                 unsupportedDatasets.push(ds);
             }
         });
@@ -164,11 +137,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         var unsupportedIndicators = [];
         regionsets = regionsets.map( function (id)  { return Number(id) } );
         this.service.getIndicatorList( datasrc, function ( err, indicator ) {
-            indicator.indicators.forEach( function (ind) {
-                if ( _.intersection(ind.regionsets, regionsets).length === 0 ) {
-                    unsupportedIndicators.push(ind);
-                }
-            })
+            var unsupported = regionsets.some( function (iter) {
+                return ind.regionsets.indexOf(iter) === -1;
+            });
+            if ( unsupported ) {
+                unsupportedDatasets.push(ind);
+            }
         });
         return unsupportedIndicators;
     }

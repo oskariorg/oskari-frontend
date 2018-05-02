@@ -86,6 +86,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             var newActiveIndicator = false;
 
             selectedIndicators.forEach( function( indicator ) {
+                if ( indicator === "" ) {
+                    return;
+                }
                 var added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections);
                 if ( added ) {
                     newActiveIndicator = indicator;

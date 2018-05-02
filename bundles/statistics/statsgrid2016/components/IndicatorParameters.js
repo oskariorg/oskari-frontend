@@ -1,25 +1,29 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (instance, sandbox) {
-    this.instance = instance;
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (locale, sandbox) {
+    this.locale = locale;
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-    this.paramHandler = Oskari.clazz.create( 'Oskari.statistics.statsgrid.IndicatorParameterHandler', this.service, this.instance.getLocalization() );
+    this.paramHandler = Oskari.clazz.create( 'Oskari.statistics.statsgrid.IndicatorParameterHandler', this.service, this.locale );
     this._values = {};
     this._selections = [];
-    this._anchorEl = null;
+    this.parentElement = null;
     Oskari.makeObservable(this);
     var me = this;
+    var errorService = this.service.getErrorService();
 
     this.paramHandler.on('Data.Loaded', function ( data ) {
         me.spinner.stop();
-        me.trigger('indicator.changed', data.regionSet.length > 0);
-        me.trigger('regionsets.loaded', data.regionSet);
-        me._createUi(data.datasrc, data.indicators, data.selectors, data.regionSet, data.values);
+        if ( Object.keys(data.regionset).length === 0 ) {
+            errorService.show(locale.erros.title, locale.errors.regionsetsIsEmpty);
+        }
+        me.trigger('indicator.changed', data.regionset.length > 0);
+        me.trigger('regionsets.loaded', data.regionset);
+        me._createUi( data.datasrc, data.indicators, data.selectors, data.regionset );
     });
 }, {
     __templates: {
         main: _.template('<div class="stats-ind-params"></div>'),
-        select: _.template('<div class="parameter"><div class="label" id=${id}>${label}</div><div class="clear"></div></div>'),
+        select: _.template('<div class="parameter margintop"><div class="label" id=${id}>${label}</div><div class="clear"></div></div>'),
         option: _.template('<option value="${id}">${name}</option>')
     },
 
@@ -35,17 +39,50 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.container.remove();
         this.container = null;
     },
-    _createUi: function ( datasrc, indId, selections, regionsets, values) {
+    /**
+     * @method  @public  attachTo 
+     * @description pass in the element to which the parameters will be attached to
+     */
+    attachTo: function ( parentElement ) {
+        this.parentElement = parentElement;
+    },
+      /**
+     * @method  @public indicatorSelected  handle indicator selected
+     * @param  {Integer} datasrc indicator datasource
+     * @param  {String} indId    indicator id
+     * @param  {Object} elements elements
+     */
+    indicatorSelected: function ( datasrc, indId, elements ) {
         var me = this;
-        var locale = me.instance.getLocalization();
+
+        elements = elements || {};
+        this.clean();
+
+        if (!this.regionSelector) {
+            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
+        }
+
+        if (!indId && indId === '') {
+            if (elements.dataLabelWithTooltips) {
+                elements.dataLabelWithTooltips.find('.tooltip').show();
+            }
+            return;
+        }
+         me.spinner.insertTo(this.parentElement.parent());
+         me.spinner.start();
+        //get the data to create ui with
+        me.paramHandler.getData( datasrc, indId, elements );
+    },
+    _createUi: function ( datasrc, indId, selections, regionsets) {
+        var me = this;
+        var locale = me.locale;
         var errorService = me.service.getErrorService();
         var panelLoc = locale.panels.newSearch;
 
         var cont = jQuery(this.__templates.main());
-        this._anchorEl.append(cont);
+        this.parentElement.append(cont);
         this.container = cont;
-
-        Object.keys( values ).forEach( function ( selected, index ) {
+        Object.keys( selections ).forEach( function ( selected, index ) {
             var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
             var label = (locale.parameters[selected]) ? locale.parameters[selected] : selected.id;
             var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
@@ -56,14 +93,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 width: '100%'
             };
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selected);
-            var dropdown = values !== null ? select.create( values[selected], options) : select.create(selections, options);
+            var dropdown = selections !== null ? select.create( selections[selected], options) : select.create(selections, options);
             dropdown.css( {width: '205px'} );
             select.adjustChosen();
             select.selectFirstValue();
             tempSelect.find('.label').append(dropdown);
-            if (index > 0) {
-                dropdown.parent().addClass('margintop');
-            }
             cont.append(tempSelect);
             me._selections.push(select);
         });
@@ -72,6 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         me.regionSelector.setWidth(205);
         // try to select the current regionset as default selection
         regionSelect.value(me.service.getStateService().getRegionset());
+        regionSelect.container.addClass('margintop');
         cont.append(regionSelect.container);
 
         me._values = {
@@ -89,22 +124,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         }
        return data;
     },
-    /**
+     /**
      * @method  @public indicatorSelected  handle indicator selected
-     * @param  {Object} el       jQuery element
      * @param  {Integer} datasrc indicator datasource
      * @param  {String} indId    indicator id
      * @param  {Object} elements elements
      */
-    indicatorSelected: function (el, datasrc, indId, elements) {
+    indicatorSelected: function ( datasrc, indId, elements ) {
         var me = this;
 
         elements = elements || {};
-        this._anchorEl = el;
         this.clean();
 
         if (!this.regionSelector) {
-            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.instance.getLocalization());
+            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
         }
 
         if (!indId && indId === '') {
@@ -113,11 +146,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             }
             return;
         }
-         me.spinner.insertTo(el.parent());
+         me.spinner.insertTo(this.parentElement.parent());
          me.spinner.start();
         //get the data to create ui with
         me.paramHandler.getData( datasrc, indId, elements );
     },
+
     getValues: function () {
         var me = this;
         var values = {
@@ -126,6 +160,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             regionset: me._values.regionsetComponent.value(),
             selections: {}
         };
+        
         me._selections.forEach(function (select) {
             values.selections[select.getId()] = select.getValue();
         });
