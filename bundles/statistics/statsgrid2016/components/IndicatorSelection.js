@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-    this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance, this.instance.getSandbox());
+    this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
     Oskari.makeObservable(this);
 }, {
@@ -121,7 +121,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             allow_single_deselect: true,
             disable_search_threshold: 10,
             no_results_text: locale.panels.newSearch.noResults,
-            width: '100%'
+            width: '100%',
+            multi: true
         };
         var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
         var indicDropdown = indicSelect.create(undefined, indicOptions);
@@ -154,7 +155,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
 
         indicatorSelector.on('change', function () {
-            me._params.indicatorSelected(selectionsContainer,
+            me._params.attachTo(selectionsContainer);
+            me._params.indicatorSelected(
                 select.getValue(),
                 indicSelect.getValue(),
                 {

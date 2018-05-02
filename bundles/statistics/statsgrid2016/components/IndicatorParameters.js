@@ -1,15 +1,28 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (instance, sandbox) {
-    this.instance = instance;
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (locale, sandbox) {
+    this.locale = locale;
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this.paramHandler = Oskari.clazz.create( 'Oskari.statistics.statsgrid.IndicatorParameterHandler', this.service, this.locale );
     this._values = {};
     this._selections = [];
+    this.parentElement = null;
     Oskari.makeObservable(this);
+    var me = this;
+    var errorService = this.service.getErrorService();
+
+    this.paramHandler.on('Data.Loaded', function ( data ) {
+        me.spinner.stop();
+        if ( Object.keys(data.regionset).length === 0 ) {
+            errorService.show(locale.erros.title, locale.errors.regionsetsIsEmpty);
+        }
+        me.trigger('indicator.changed', data.regionset.length > 0);
+        me._createUi( data.datasrc, data.indicators, data.selectors, data.regionset );
+    });
 }, {
     __templates: {
         main: _.template('<div class="stats-ind-params"></div>'),
-        select: _.template('<div class="parameter"><div class="label" id=${id}>${label}</div><div class="clear"></div></div>'),
+        select: _.template('<div class="parameter margintop"><div class="label" id=${id}>${label}</div><div class="clear"></div></div>'),
         option: _.template('<option value="${id}">${name}</option>')
     },
 
@@ -25,22 +38,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.container.remove();
         this.container = null;
     },
-
     /**
+     * @method  @public  attachTo 
+     * @description pass in the element to which the parameters will be attached to
+     */
+    attachTo: function ( parentElement ) {
+        this.parentElement = parentElement;
+    },
+      /**
      * @method  @public indicatorSelected  handle indicator selected
-     * @param  {Object} el       jQuery element
      * @param  {Integer} datasrc indicator datasource
      * @param  {String} indId    indicator id
      * @param  {Object} elements elements
      */
-    indicatorSelected: function (el, datasrc, indId, elements) {
+    indicatorSelected: function ( datasrc, indId, elements ) {
         var me = this;
-        var locale = me.instance.getLocalization();
-        var errorService = me.service.getErrorService();
-        var panelLoc = locale.panels.newSearch;
-        elements = elements || {};
 
+        elements = elements || {};
         this.clean();
+
+        if (!this.regionSelector) {
+            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
+        }
 
         if (!indId && indId === '') {
             if (elements.dataLabelWithTooltips) {
@@ -48,90 +67,56 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             }
             return;
         }
+         me.spinner.insertTo(this.parentElement.parent());
+         me.spinner.start();
+        //get the data to create ui with
+        me.paramHandler.getData( datasrc, indId, elements );
+    },
+    _createUi: function ( datasrc, indId, selections, regionsets) {
+        var me = this;
+        var locale = me.locale;
+        var errorService = me.service.getErrorService();
+        var panelLoc = locale.panels.newSearch;
 
         var cont = jQuery(this.__templates.main());
-        el.append(cont);
+        this.parentElement.append(cont);
         this.container = cont;
-
-        me.spinner.insertTo(cont.parent().parent());
-        me.spinner.start();
-        if (!this.regionSelector) {
-            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.instance.getLocalization());
-        }
-        this.service.getIndicatorMetadata(datasrc, indId, function (err, indicator) {
-            me.spinner.stop();
-            if (elements.dataLabelWithTooltips) {
-                elements.dataLabelWithTooltips.find('.tooltip').hide();
-            }
-            if (err) {
-                // notify error!!
-                errorService.show(locale.errors.title, locale.errors.indicatorMetadataError);
-                return;
-            }
-
-            // selections
-            me._selections = [];
-            indicator.selectors.forEach(function (selector, index) {
-                var placeholderText = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id].placeholder) ? panelLoc.selectionValues[selector.id].placeholder : panelLoc.defaultPlaceholder;
-                var label = (locale.parameters[selector.id]) ? locale.parameters[selector.id] : selector.id;
-                var tempSelect = jQuery(me.__templates.select({id: selector.id, label: label}));
-                var options = {
-                    placeholder_text: placeholderText,
-                    allow_single_deselect: true,
-                    disable_search_threshold: 10,
-                    width: '100%'
-                };
-                var selections = [];
-                var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selector.id);
-
-                selector.allowedValues.forEach(function (val) {
-                    var name = val.name || val.id || val;
-                    val.title = val.name;
-                    var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
-
-                    var valObject = {
-                        id: val.id || val,
-                        title: optName
-                    };
-                    selections.push(valObject);
-                });
-
-                var dropdown = select.create(selections, options);
-                dropdown.css({width: '205px'});
-                select.adjustChosen();
-                select.selectFirstValue();
-                tempSelect.find('.label').append(dropdown);
-                if (index > 0) {
-                    dropdown.parent().addClass('margintop');
-                }
-                cont.append(tempSelect);
-                me._selections.push(select);
-            });
-
-            if (indicator.regionsets.length === 0) {
-                errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
-            }
-            var regionSelect = me.regionSelector.create(indicator.regionsets);
-            me.regionSelector.setWidth(205);
-            // try to select the current regionset as default selection
-            regionSelect.value(me.service.getStateService().getRegionset());
-            cont.append(regionSelect.container);
-            // Add margin if there is selections
-            if (indicator.selectors.length > 0) {
-                regionSelect.container.addClass('margintop');
-            } else {
-                errorService.show(locale.errors.title, locale.errors.indicatorMetadataIsEmpty);
-            }
-
-            me._values = {
-                ds: datasrc,
-                ind: indId,
-                regionsetComponent: regionSelect
+        Object.keys( selections ).forEach( function ( selected, index ) {
+            var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
+            var label = (locale.parameters[selected]) ? locale.parameters[selected] : selected.id;
+            var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
+            var options = {
+                placeholder_text: placeholderText,
+                allow_single_deselect: true,
+                disable_search_threshold: 10,
+                width: '100%'
             };
-
-            me.trigger('indicator.changed', indicator.regionsets.length > 0);
+            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selected);
+            var dropdown = selections !== null ? select.create( selections[selected], options) : select.create(selections, options);
+            dropdown.css( {width: '205px'} );
+            select.adjustChosen();
+            select.selectFirstValue();
+            tempSelect.find('.label').append(dropdown);
+            cont.append(tempSelect);
+            me._selections.push(select);
         });
+
+        var regionSelect = me.regionSelector.create(regionsets);
+        me.regionSelector.setWidth(205);
+        // try to select the current regionset as default selection
+        regionSelect.value(me.service.getStateService().getRegionset());
+        regionSelect.container.addClass('margintop');
+        cont.append(regionSelect.container);
+
+        me._values = {
+            ds: datasrc,
+            ind: indId,
+            regionsetComponent: regionSelect
+        };
+
+        me.trigger('indicator.changed', regionsets.length > 0);
     },
+  
     getValues: function () {
         var me = this;
         var values = {
@@ -140,6 +125,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             regionset: me._values.regionsetComponent.value(),
             selections: {}
         };
+        
         me._selections.forEach(function (select) {
             values.selections[select.getId()] = select.getValue();
         });

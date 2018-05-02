@@ -24,8 +24,11 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       options.allowReset = options.allowReset === false ? options.allowReset : true;
       var select = this._selectTemplate.clone();
       this.element = select;
+      if ( options.multi ) {
+        select.find( 'select' ).attr('multiple', true);
+      }
       if ( data === undefined ) {
-        return this.makeChosen( select, options );
+          return this.makeChosen( select, options );
       }
 
       //append empty options so we can use the placeholder
@@ -50,7 +53,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         select.find('select').append(option);
 
       }
-      return this.makeChosen( select, options );
+        return this.makeChosen( select, options );
     },
     /**@method makeChosen
     *  applies jQuery chosen to specidied element
@@ -149,7 +152,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     getId: function () {
       return this.id;
     },
-
+    
     setValue: function ( value ) {
       if ( !this.element.find('select') ) {
         Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");
