@@ -80,13 +80,14 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             this.localization = Oskari.getLocalization(this.getName());
 
             // create the OskariEventNotifierService for handling Oskari events.
-            /*var notifierService = Oskari.clazz.create('Oskari.tampere.bundle.content-editor.OskariEventNotifierService');
+            var notifierService = Oskari.clazz.create('Oskari.tampere.bundle.content-editor.OskariEventNotifierService');
             me.sandbox.registerService(notifierService);
             me.notifierService = notifierService;
             me.notifierService.eventHandlers.forEach(function(eventName){
-                console.log(eventName);
-                me.sandbox.registerForEventByName(me.notifierService, eventName);
-            });*/
+                sandbox.registerForEventByName(me.notifierService, eventName);
+            });
+
+            me._bindOskariEvents();
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -113,7 +114,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 'ContentEditor.ShowContentEditorRequest',
                 me.showContentEditorRequestHandler
             );
-
+            sandbox.registerAsStateful(me.mediator.bundleId, me);
             this.__setupLayerTools();
         },
 
@@ -200,6 +201,21 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         },
 
         /**
+         * [_bindOskariEvents description]
+         * @return {[type]} [description]
+         */
+        _bindOskariEvents: function() {
+            var me = this;
+            me.notifierService.on('DrawingEvent', function(evt) {
+                if ('contenteditordrawing' !== evt.getId()) {
+                    return;
+                }
+                console.log(evt);
+                //this.sideContentEditor.prepareRequest(evt.getDrawing());
+            });
+        },
+
+        /**
          * @property {Object} eventHandlers
          * @static
          */
@@ -240,10 +256,12 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     // ajax call for all layers
                     this.__setupLayerTools();
                 }
-            },
-            'DrawingEvent': function(event){
-                console.log(event);
             }
+            /*,'DrawingEvent': function(event){
+                console.log(event);
+                var eventB = this.sandbox.getEventBuilder('DrawingEvent')(event.getId(), event.getGeoJson(), event.getData(), event.getIsFinished());
+                this.sandbox.notifyAll(eventB);
+            }*/
         },
         /**
          * @method stop

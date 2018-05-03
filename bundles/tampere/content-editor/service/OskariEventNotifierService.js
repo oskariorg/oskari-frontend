@@ -18,7 +18,7 @@
             __name: 'ContentEditor.OskariEventNotifierService',
             __qname: 'Oskari.tampere.bundle.content-editor.OskariEventNotifierService',
             // handled Oskari events
-            eventHandlers: ['DrawingEvent', 'DrawTools.StartDrawingRequest', 'DrawTools.StopDrawingRequest'],
+            eventHandlers: ['DrawingEvent'],
             /*******************************************************************************************************************************
             /* PUBLIC METHODS
             *******************************************************************************************************************************/
