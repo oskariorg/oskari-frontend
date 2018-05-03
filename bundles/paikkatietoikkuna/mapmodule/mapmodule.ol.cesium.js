@@ -16,7 +16,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      */
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
-     }, {
+        this._map3d = null;
+    }, {
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
@@ -30,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
         /**
          * @method createMap
-         * Creates Openlayers 3 map implementation
+         * Creates OlCesium map implementation
          * @return {ol.Map}
          */
         createMap: function () {
@@ -44,16 +45,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 attribution: false,
                 rotate: false
             });
-            var interactions = ol.interaction.defaults({
-                altShiftDragRotate: false,
-                pinchRotate: false
-            });
 
             var map = new ol.Map({
                 keyboardEventTarget: document,
                 target: this.getMapElementId(),
                 controls: controls,
-                interactions: interactions,
+                interactions: me._olInteractionDefaults,
                 loadTilesWhileInteracting: true,
                 loadTilesWhileAnimating: true,
                 moveTolerance: 2
@@ -71,15 +68,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             me._setupMapEvents(map);
 
-            var olcsMap = new olcs.OLCesium({
+            this._map3d = new olcs.OLCesium({
                 map: map,
                 time () {
                     return Cesium.JulianDate.now();
                 }
             });
 
-            map.olcsMap = olcsMap;
             return map;
+        },
+        /**
+         * Getter for OlCesium map instance.
+         */
+        getMap3d: function () {
+            return this._map3d;
         },
         /**
          * Add map event handlers
@@ -123,16 +125,56 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
         },
         _startImpl: function () {
-            this.getMap().olcsMap.setEnabled(true);
+            this.set3dEnabled(true);
 
             /*
              * This does not belong here.
              * Should set altitude from state on load.
              */
-            this.getMap().olcsMap.getCamera().setAltitude(1000000);
+            this.getMap3d().getCamera().setAltitude(1000000);
 
             return true;
         },
+        
+/* OlCesium specific
+------------------------------------------------------------------> */
+
+        /**
+         * Enable 3d view.
+         */
+        set3dEnabled: function (enable) {
+            if (enable === this.getMap3d().getEnabled()) {
+                return;
+            }
+            var map = this.getMap();
+            var interactions = null;
+            if (enable) {
+                // Remove all ol interactions before switching to 3d view.
+                // Editing interactions after ol map is hidden doesn't work.
+                interactions = map.getInteractions();
+                if (interactions) {
+                    var removals = [];
+                    interactions.forEach(function (cur) {
+                        removals.push(cur);
+                    });
+                    removals.forEach(function (cur) {
+                        map.removeInteraction(cur);
+                    });
+                }
+            } else {
+                // Add default interactions to 2d view.
+                interactions = ol.interaction.defaults({
+                    altShiftDragRotate: false,
+                    pinchRotate: false
+                });
+                interactions.forEach(function (cur) {
+                    map.addInteraction(cur);
+                });
+            }
+            this.getMap3d().setEnabled(enable);
+        },
+
+/*<------------- / OlCesium specific ----------------------------------- */
 
 /* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
@@ -161,7 +203,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return extent;
         },
-
 /*<------------- / OL3 specific ----------------------------------- */
 
 
@@ -257,7 +298,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {String} srs projection srs, if not defined used map srs
          * @return {String} projection units. 'degrees' or 'm'
          */
-        getProjectionUnits: function(srs){
+        getProjectionUnits: function (srs) {
             var me = this;
             var units = null;
             srs = srs || me.getProjection();
@@ -265,13 +306,46 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             try {
                 var proj = ol.proj.get(srs);
                 units = proj.getUnits(); // return 'degrees' or 'm'
-            } catch(err){
+            } catch (err) {
                 var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
                 log.warn('Cannot get map units for "' + srs + '"-projection!');
             }
             return units;
         },
+        /**
+         * @method panMapByPixels
+         * Pans the map by given amount of pixels.
+         * @param {Number} pX amount of pixels to pan on x axis
+         * @param {Number} pY amount of pixels to pan on y axis
+         * @param {Boolean} suppressStart true to NOT send an event about the map starting to move
+         *  (other components wont know that the map has started moving, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} suppressEnd true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
+         */
+        panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
+            var view = this.getMap().getView();
+            var centerCoords = view.getCenter();
+            var centerPixels = this.getMap().getPixelFromCoordinate(centerCoords);
+            var newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY];
+            var newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels);
 
+            view.animate({
+                duration: 100,
+                center: newCenterCoords
+            });
+
+            this.updateDomain();
+            // send note about map change
+            if (suppressStart !== true) {
+                this.notifyStartMove();
+            }
+            if (suppressEnd !== true) {
+                this.notifyMoveEnd();
+            }
+        },
         /**
          * @method transformCoordinates
          * Transforms coordinates from srs projection to the targerSRS projection.
@@ -382,7 +456,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setDrawingMode: function (mode) {
             this.isDrawing = !!mode;
-            this.getMap().olcsMap.setEnabled(!this.isDrawing);
+            this.set3dEnabled(!this.isDrawing);
         },
         /**
          * @param {ol.layer.Layer} layer ol3 specific!

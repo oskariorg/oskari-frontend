@@ -439,7 +439,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/MapMoveRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/controls/ToolSelectionHandler.js"
+                    "src": "../../../../bundles/paikkatietoikkuna/mapmodule/plugin/controls/ToolSelectionHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/MapLayerUpdateRequest.js"
