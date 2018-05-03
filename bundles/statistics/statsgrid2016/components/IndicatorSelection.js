@@ -169,10 +169,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
             me._populateIndicators(indicSelect, dsSelect.getValue());
 
-            var unsupportedSelections = me._params.datasourceSelected( dsSelect.getValue(), regionSelect.getValue() );
-            unsupportedSelections.forEach( function (ind) {
-                indicSelect.disableOption(ind.id);
-            });
+            if ( regionSelect.getValue() !== '' ) {
+                var unsupportedSelections = me._params.datasourceSelected( dsSelect.getValue(), regionSelect.getValue() );
+                unsupportedSelections.forEach( function (ind) {
+                    indicSelect.disableOption(ind.id);
+                });
+            }
 
         });
 

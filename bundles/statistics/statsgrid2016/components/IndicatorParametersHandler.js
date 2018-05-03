@@ -13,8 +13,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         this.datasource = datasrc;
         this.indicators = indicators;
         this.elements = elements;
-        this.regionsets = regionsets.map( function (id)  { return Number(id) } );
-
+        this.regionsets = null;
+        if ( regionsets !== null ) {
+            this.regionsets = regionsets.map( function (id)  { return Number(id) } );
+        }
 
         if ( Array.isArray( indicators ) ) {
             this.handleMultipleIndicators(datasrc, indicators, elements);
@@ -66,7 +68,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 datasrc: me.datasource,
                 selectors: combinedValues,
                 indicators: me.indicators,
-                regionset: me.regionsets
+                regionset: me.regionsets ? me.regionsets : indicator.regionsets
             }
             if ( typeof cb === 'function') {
                 cb(data);
@@ -114,7 +116,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 datasrc: me.datasource,
                 indicators: me.indicators,
                 selectors: combinedValues,
-                regionset: me.regionsets
+                regionset: me.regionsets ? me.regionsets : regionsets
             }
             me.trigger('Data.Loaded', data);
         });
