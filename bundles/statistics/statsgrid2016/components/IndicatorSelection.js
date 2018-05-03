@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         indicSelect.adjustChosen();
 
         //Regionsets
-        main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
+        main.prepend(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
         var regionsetSelector = main.find('.stats-rs-selector');
         var regionOptions = {
             placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
@@ -143,7 +143,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         };
 
         var regionSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        var regionDropdown = regionSelect.create(undefined, regionOptions);
+        var regionDropdown = regionSelect.create(this.service.getRegionsets(), regionOptions);
         regionDropdown.css({width: '100%'});
         regionsetSelector.append(regionDropdown);
         regionSelect.adjustChosen();
@@ -157,8 +157,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         main.append(selectionsContainer);
 
         dsSelector.on('change', function () {
-            me._params.clean();
-
             // If removed selection then need to be also update indicator selection
             if (dsSelect.getValue() === '') {
                 indicatorSelector.val(indicatorSelector.find('option:first').val());
@@ -170,6 +168,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             }
 
             me._populateIndicators(indicSelect, dsSelect.getValue());
+
+            var unsupportedSelections = me._params.datasourceSelected( dsSelect.getValue(), regionSelect.getValue() );
+            unsupportedSelections.forEach( function (ind) {
+                indicSelect.disableOption(ind.id);
+            });
+
         });
 
         indicatorSelector.on('change', function () {
@@ -177,12 +181,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             me._params.indicatorSelected(
                 dsSelect.getValue(),
                 indicSelect.getValue(),
+                regionSelect.getValue(),
                 {
                     dataLabelWithTooltips: dataLabelWithTooltips
                 });
         });
         regionsetSelector.on('change', function (evt) {
-            var unsupportedSelections = me._params.regionsetSelected( dsSelect.getValue(), regionSelect.getValue() );
+            var unsupportedSelections = me._params.regionsetSelected( regionSelect.getValue() );
 
             if ( !regionSelect.getValue() ) {
                 indicSelect.reset();
@@ -190,10 +195,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 return;
             }
 
-            unsupportedSelections.ind.forEach( function (ind) {
-                indicSelect.disableOption(ind.id);
-            });
-            unsupportedSelections.ds.forEach( function (ds) {
+            unsupportedSelections.forEach( function (ds) {
                 dsSelect.disableOption(ds.id);
             });
 
@@ -202,6 +204,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 if ( state.options.length - state.disabled.length === 1 ) {
                     var enabled = state.options.not(':disabled');
                     select.setValue( enabled.val() );
+                    select.element.trigger('change');
                 }
             }; 
             checkAvailableOptions(dsSelect);
@@ -211,16 +214,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me._params.on('indicator.changed', function (enabled) {
             me.trigger('indicator.changed', enabled);
         });
-        me._params.on('regionsets.loaded', function (regionsets) {
-            if (!this.regionSelector) {
-                this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.instance.getLocalization());
-            }
-            var options = this.regionSelector.__getOptions(regionsets);
-            regionSelect.updateOptions(options);
-        });
 
         this.service.on('StatsGrid.DatasourceEvent', function (evt) {
-            var currentDS = select.getValue();
+            var currentDS = dsSelect.getValue();
             if (currentDS !== evt.getDatasource()) {
                 return;
             }

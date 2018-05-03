@@ -8,11 +8,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
     Oskari.makeObservable(this);
 }, {
-    getData: function ( datasrc, indicators, elements ) {
+    getData: function ( datasrc, indicators, regionsets, elements ) {
 
         this.datasource = datasrc;
         this.indicators = indicators;
         this.elements = elements;
+        this.regionsets = regionsets.map( function (id)  { return Number(id) } );
+
 
         if ( Array.isArray( indicators ) ) {
             this.handleMultipleIndicators(datasrc, indicators, elements);
@@ -64,7 +66,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 datasrc: me.datasource,
                 selectors: combinedValues,
                 indicators: me.indicators,
-                regionset: indicator.regionsets
+                regionset: me.regionsets
             }
             if ( typeof cb === 'function') {
                 cb(data);
@@ -112,28 +114,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 datasrc: me.datasource,
                 indicators: me.indicators,
                 selectors: combinedValues,
-                regionset: regionsets
+                regionset: me.regionsets
             }
             me.trigger('Data.Loaded', data);
         });
     },
-    testRegionsetDatasources: function ( regionsets ) {
+    testDatasourcesRegionsets: function ( regionsets ) {
         regionsets = regionsets.map( function (id)  { return Number(id) } );
-        var unsupportedDatasets = [];
+        var unsupportedDatasources = [];
         this.service.datasources.forEach( function (ds) {
             var unsupported = regionsets.some( function (iter) {
                 return ds.regionsets.indexOf(iter) === -1;
             });
             if ( unsupported ) {
-                unsupportedDatasets.push(ds);
+                unsupportedDatasources.push(ds);
             }
         });
-        return unsupportedDatasets;
+        return unsupportedDatasources;
     },
-    testRegionsetIndicators: function ( datasrc, regionsets ) {
+    testIndicatorsRegionsets: function ( datasrc, regionsets ) {
         var unsupportedIndicators = [];
+
         regionsets = regionsets.map( function (id)  { return Number(id) } );
+
         this.service.getIndicatorList( datasrc, function ( err, indicator ) {
+
             indicator.indicators.forEach( function (ind) {
                 var unsupported = regionsets.some( function (iter) {
                     return ind.regionsets.indexOf(iter) === -1;
@@ -141,8 +146,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 if ( unsupported ) {
                     unsupportedIndicators.push(ind);
                 }
-            })
+            });
         });
+
         return unsupportedIndicators;
     }
 });

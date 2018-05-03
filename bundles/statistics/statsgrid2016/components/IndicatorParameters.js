@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     this.paramHandler.on('Data.Loaded', function ( data ) {
         me.spinner.stop();
         if ( Object.keys(data.regionset).length === 0 ) {
-            errorService.show(locale.erros.title, locale.errors.regionsetsIsEmpty);
+            errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
         }
         me.trigger('indicator.changed', data.regionset.length > 0);
         me.trigger('regionsets.loaded', data.regionset);
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
      * @param  {String} indId    indicator id
      * @param  {Object} elements elements
      */
-    indicatorSelected: function ( datasrc, indId, elements ) {
+    indicatorSelected: function ( datasrc, indId, regionsets, elements ) {
         var me = this;
 
         elements = elements || {};
@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
          me.spinner.insertTo(this.parentElement.parent());
          me.spinner.start();
         //get the data to create ui with
-        me.paramHandler.getData( datasrc, indId, elements );
+        me.paramHandler.getData( datasrc, indId, regionsets, elements );
     },
     _createUi: function ( datasrc, indId, selections, regionsets) {
         var me = this;
@@ -118,42 +118,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
 
         me.trigger('indicator.changed', regionsets.length > 0);
     },
-    regionsetSelected: function (datasrc, regionsets) {
+    datasourceSelected: function (datasrc, regionsets) {
         if (regionsets === null) {
             return;
         }
-        var data = {
-            ds: this.paramHandler.testRegionsetDatasources( regionsets ),
-            ind: this.paramHandler.testRegionsetIndicators( datasrc, regionsets )
-        }
-       return data;
+        return this.paramHandler.testIndicatorsRegionsets(datasrc, regionsets );
     },
-     /**
-     * @method  @public indicatorSelected  handle indicator selected
-     * @param  {Integer} datasrc indicator datasource
-     * @param  {String} indId    indicator id
-     * @param  {Object} elements elements
-     */
-    indicatorSelected: function ( datasrc, indId, elements ) {
-        var me = this;
-
-        elements = elements || {};
-        this.clean();
-
-        if (!this.regionSelector) {
-            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
-        }
-
-        if (!indId && indId === '') {
-            if (elements.dataLabelWithTooltips) {
-                elements.dataLabelWithTooltips.find('.tooltip').show();
-            }
+    regionsetSelected: function (regionsets) {
+        if (regionsets === null) {
             return;
         }
-         me.spinner.insertTo(this.parentElement.parent());
-         me.spinner.start();
-        //get the data to create ui with
-        me.paramHandler.getData( datasrc, indId, elements );
+        return this.paramHandler.testDatasourcesRegionsets( regionsets );
     },
 
     getValues: function () {
