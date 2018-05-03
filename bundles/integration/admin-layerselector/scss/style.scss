@@ -253,6 +253,10 @@ div.admin-layerselector {
             white-space: nowrap;
         }
 
+        .add-layer-capabilities-update-rate {
+            width: 200px;
+        }
+
     }
 
     div.create-layer {
@@ -306,10 +310,6 @@ div.admin-layerselector {
     .admin-edit-grouping-btn {
         float: right;
         margin: 5px 10px;
-    }
-
-    .add-layer-recheck {
-        margin-left: 25px;
     }
 
     button.admin-arrange-layers {
