@@ -1145,6 +1145,7 @@ define([
 
                 data.maplayerGroups = me.options.groupId;
                 data.groupId = form.find('#select-dataprovider').val();
+                data.capabilitiesUpdateRateSec = form.find('#add-layer-capabilities-update-rate').val();
 
                 if ((data.layerUrl !== me.model.getInterfaceUrl() && me.model.getInterfaceUrl()) ||
                     (data.layerName !== me.model.getLayerName() && me.model.getLayerName())) {

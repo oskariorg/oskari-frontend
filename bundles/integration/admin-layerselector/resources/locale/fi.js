@@ -45,6 +45,8 @@ Oskari.registerLocalization(
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "capabilitiesRemarks": "(*)  Nykyisen kartan koordinaatisto ei ole tuettuna palvelun capabilities tiedoissa",
+            "capabilitiesUpdateRateLabel": "Capabilities päivitystiheys",
+            "capabilitiesUpdateRateInfo": "Päivitystiheys sekunteina",
             "confirmResourceKeyChange": "Olet muuttanut Karttatason yksilöivä nimi- tai Rajapinnan osoite -kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
             "confirmDeleteLayerGroup": "Karttatasoryhmä poistetaan. Haluatko jatkaa?",
             "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
@@ -212,7 +214,7 @@ Oskari.registerLocalization(
         "ok": "OK",
         "close": "Sulje",
         "query": "Hae",
-        "recheckTitle": "Päivitä getCapabilities",
+        "recheckTitle": "Päivitä nyt",
         "recheckAllButton": "Päivitä kaikki getCapabilities",
         "recheckAll": "Haluatko hakea getCapabilities-määritykset kaikille karttatasoille? Toiminto saattaa kestää useita minuutteja.",
         "recheckAllSucceeded": "GetCapabilities päivitys onnistui {success, number} tasolle, epäonnistui {fail, number} tasolle. Lataa sivu uudelleen nähdäksesi päivittyneet tiedot.",
