@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
         }
         me.trigger('indicator.changed', data.regionset.length > 0);
-        me.trigger('regionsets.loaded', data.regionset);
         me._createUi( data.datasrc, data.indicators, data.selectors, data.regionset );
 
     });
