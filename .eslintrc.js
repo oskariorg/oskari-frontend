@@ -11,7 +11,9 @@ module.exports = {
       "MobileDetect": true,
       "DOMPurify": true,
       "_": true,
-      "ol": true
+      "ol": true,
+      "olcs": true,
+      "Cesium": true
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
   extends: 'standard',
