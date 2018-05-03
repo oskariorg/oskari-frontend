@@ -102,11 +102,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             cont.append(tempSelect);
             me._selections.push(select);
         });
-
         var regionSelect = me.regionSelector.create(regionsets);
         me.regionSelector.setWidth(205);
-        // try to select the current regionset as default selection
-        regionSelect.value(me.service.getStateService().getRegionset());
+        if ( regionsets.length === 1 ) {
+            regionSelect.value(regionsets[0]);
+        } else {
+            // try to select the current regionset as default selection
+            regionSelect.value(me.service.getStateService().getRegionset());
+        }
         regionSelect.container.addClass('margintop');
         cont.append(regionSelect.container);
 
