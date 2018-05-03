@@ -85,6 +85,17 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     update: function() {
       this.element.find('select').trigger('chosen:updated');
     },
+    state: function () {
+      var chosen = this.element.find('select');
+      var options = chosen.find('option').filter( function (option) {
+        return this.value !== "";
+      });
+      var disabled = chosen.find('option:disabled');
+      return {
+        'options': options,
+        'disabled': disabled
+      }
+    },
     /**  
      * @method _setEnabledImpl or disable select
      * @param { boolean } true = enable
@@ -123,11 +134,23 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         tobeRemoved.remove();
         chosen.trigger('chosen:updated');
     },
+    /** @method disableOption disables an options where value mathces id
+     *   @param { String } id string to find
+     */
     disableOption: function ( id ) {
       var chosen = this.element.find('select');
-      var valueOption = this.element.find('select option[value=' + id + ']')
+      var valueOption = this.element.find('select option[value=' + id + ']');
       valueOption.attr('disabled', true);
 
+      chosen.trigger('chosen:updated');
+    },
+    reset: function () {
+      var chosen = this.element.find('select');
+
+      var state = this.state();
+      for (var i = 0; i < state.disabled.length; i++) {
+        jQuery( state.disabled[i] ).attr('disabled', false)
+      }
       chosen.trigger('chosen:updated');
     },
     /** @method updateOptions
