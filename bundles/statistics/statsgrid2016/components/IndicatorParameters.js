@@ -119,8 +119,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         me.trigger('indicator.changed', regionsets.length > 0);
     },
     regionsetSelected: function (datasrc, regionsets) {
+        if (regionsets === null) {
+            return;
+        }
         var data = {
-            ds: this.paramHandler.testRegionsetDatasources( datasrc, regionsets ),
+            ds: this.paramHandler.testRegionsetDatasources( regionsets ),
             ind: this.paramHandler.testRegionsetIndicators( datasrc, regionsets )
         }
        return data;
