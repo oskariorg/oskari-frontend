@@ -43,13 +43,13 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         var dataKey = data[i];
         var option = this._option.clone();
 
-        if ( !dataKey.id && !dataKey.title ) {
+        if ( !dataKey.id && !dataKey.title || !dataKey.name ) {
           option.val( dataKey ).text( dataKey );
         }
         if(dataKey.cls) {
           option.addClass(dataKey.cls);
         }
-        option.val(dataKey.id).text(dataKey.title);
+        option.val(dataKey.id).text(dataKey.title || dataKey.name);
         select.find('select').append(option);
 
       }
@@ -87,6 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     },
     state: function () {
       var chosen = this.element.find('select');
+      //filter away the placeholder
       var options = chosen.find('option').filter( function (option) {
         return this.value !== "";
       });
@@ -151,6 +152,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       for (var i = 0; i < state.disabled.length; i++) {
         jQuery( state.disabled[i] ).attr('disabled', false)
       }
+      this.resetToPlaceholder();
       chosen.trigger('chosen:updated');
     },
     /** @method updateOptions
@@ -189,6 +191,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       }
       this.element.find('select').val( value );
       this.element.find('select').trigger('chosen:updated');
+      // this.element.find('select').trigger('change');
     },
     getValue: function () {
       if ( typeof this.element === 'undefined' ) {
