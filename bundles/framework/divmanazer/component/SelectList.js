@@ -191,7 +191,6 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       }
       this.element.find('select').val( value );
       this.element.find('select').trigger('chosen:updated');
-      // this.element.find('select').trigger('change');
     },
     getValue: function () {
       if ( typeof this.element === 'undefined' ) {
