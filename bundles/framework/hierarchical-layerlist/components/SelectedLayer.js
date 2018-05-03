@@ -181,7 +181,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
     _getBreadcrump: function() {
         var me = this;
         var groups = [];
-        debugger;
         var groupId = me.instance._selectedLayerGroupId[me._layer.getId()] || me.sb.findMapLayerFromAllAvailable(me._layer.getId()).getGroups()[0].id;
 
         // get breadcrump
