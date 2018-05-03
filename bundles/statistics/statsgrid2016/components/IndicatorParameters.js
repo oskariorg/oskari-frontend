@@ -74,6 +74,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         //get the data to create ui with
         me.paramHandler.getData( datasrc, indId, regionsets, elements );
     },
+    refresh: function ( datasrc, indId, regionsets ) {
+        this.clean();
+        this.paramHandler.getData( datasrc, indId, regionsets );
+    },
     _createUi: function ( datasrc, indId, selections, regionsets) {
         var me = this;
         var locale = me.locale;

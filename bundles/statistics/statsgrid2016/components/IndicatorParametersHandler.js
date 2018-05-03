@@ -29,10 +29,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         var errorService = me.service.getErrorService();
         var locale = this.locale;
         var panelLoc = locale.panels.newSearch;
+        var elements = me.elements || {};
 
         this.service.getIndicatorMetadata(this.datasource, indId, function (err, indicator) {
-            if (me.elements.dataLabelWithTooltips) {
-                me.elements.dataLabelWithTooltips.find('.tooltip').hide();
+            if (elements.dataLabelWithTooltips) {
+                elements.dataLabelWithTooltips.find('.tooltip').hide();
             }
             if (err) {
                 // notify error!!

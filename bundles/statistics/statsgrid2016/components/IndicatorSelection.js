@@ -157,6 +157,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         main.append(selectionsContainer);
 
         dsSelector.on('change', function () {
+            me._params.clean();
             // If removed selection then need to be also update indicator selection
             if (dsSelect.getValue() === '') {
                 indicatorSelector.val(indicatorSelector.find('option:first').val());
@@ -169,7 +170,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
             me._populateIndicators(indicSelect, dsSelect.getValue());
 
-            if ( regionSelect.getValue() !== '' ) {
+            if ( regionSelect.getValue() !== '' && regionSelect.getValue() !== null ) {
                 var unsupportedSelections = me._params.datasourceSelected( dsSelect.getValue(), regionSelect.getValue() );
                 unsupportedSelections.forEach( function (ind) {
                     indicSelect.disableOption(ind.id);
@@ -190,6 +191,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
         regionsetSelector.on('change', function (evt) {
             var unsupportedSelections = me._params.regionsetSelected( regionSelect.getValue() );
+            me._params.refresh( dsSelect.getValue(), indicSelect.getValue(), regionSelect.getValue() );
 
             if ( !regionSelect.getValue() ) {
                 indicSelect.reset();
