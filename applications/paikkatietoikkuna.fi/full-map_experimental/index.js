@@ -41,17 +41,6 @@ jQuery(document).ready(function () {
             }
 
             app.init(appSetup);
-
-            // setup env urls if they were not part of the appSetup
-            // TODO: remove once env has these
-            if (!Oskari.urls.getLocation('login')) {
-                Oskari.urls.set('login', '/auth');
-            }
-            if (!Oskari.urls.getLocation('register')) {
-                var lang = appSetup.env.lang || window.language;
-                Oskari.urls.set('register', 'https://omatili.maanmittauslaitos.fi/?lang=' + lang);
-            }
-
             app.startApplication(function () {
                 var sb = Oskari.getSandbox();
                 gfiParamHandler(sb);
