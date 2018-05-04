@@ -43,11 +43,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var toolbarNotReady = false;
             var wasVisible = this._visible;
             this._visible = visible;
-            if(!this.getElement() && visible) {
+            if (!this.getElement() && visible) {
                 toolbarNotReady = this.redrawUI(this.getMapModule().getMobileMode());
             }
-            // toggle element
-            if (this.getElement() && wasVisible !== visible) {
+            // toggle element - wasVisible might not be in sync with the UI if the elements are recreated - so always hide on setVisible(false)
+            if (this.getElement() && (wasVisible !== visible || !visible)) {
                 this.getElement().toggle(visible);
             }
             return toolbarNotReady;
