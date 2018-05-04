@@ -2,7 +2,8 @@
 
 ## 1.46.3
 
-Fixed JS errors when saving myplaces features.
+- Fixed JS errors when saving myplaces features.
+- Fixed an issue where featuredata button was shown on the UI when is should have stayed hidden after browser window resize.
 
 ## 1.46.2
 

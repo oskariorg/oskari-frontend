@@ -63,7 +63,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 el = jQuery('<div class="mapplugin featuredataplugin">' +
                     '<a href="JavaScript: void(0);"></a>' +
                     '</div>');
-
             var link = el.find('a');
             me._loc = Oskari.getLocalization('FeatureData2', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
             link.html(me._loc.title);
@@ -191,6 +190,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             var me = this;
             var conf = me._config || {};
 
+            me.setVisible(me._hasFeaturedataLayers());
+
             // Change the style if in the conf
             if (conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
@@ -198,8 +199,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 var toolStyle = me.getToolStyleFromMapModule();
                 me.changeToolStyle(toolStyle, me.getElement());
             }
-            // setVisible needs to be called after changeToolStyle() as that call will make the element visible
-            me.setVisible(me._hasFeaturedataLayers());
         },
         /**
          * @public @method changeToolStyle
