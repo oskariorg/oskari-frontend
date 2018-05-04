@@ -799,6 +799,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     if (!place) {
                         cb(false, null);
                         Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Cannot find place to update');
+                        return;
                     }
                 }
                 place.setName(Oskari.util.sanitize(feature.properties.name));
