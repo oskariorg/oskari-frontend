@@ -18,6 +18,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         this.localization = null;
         this.sideContentEditor = null;
         this.disabledLayers = null;
+        this.finishedDrawing = false;
     }, {
         /**
          * @static
@@ -207,11 +208,17 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         _bindOskariEvents: function() {
             var me = this;
             me.notifierService.on('DrawingEvent', function(evt) {
-                if ('contenteditordrawing' !== evt.getId()) {
+                console.log(evt);
+                if (me.getName() !== evt.getId()) {
                     return;
                 }
-                console.log(evt);
-                //this.sideContentEditor.prepareRequest(evt.getDrawing());
+                if(!evt.getIsFinished()) {
+                    return;
+                }
+                if(me.sideContentEditor.isRequestProcessing()) {
+                    return;
+                }
+                me.sideContentEditor.prepareRequest(evt.getGeoJson());
             });
         },
 
@@ -257,11 +264,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     this.__setupLayerTools();
                 }
             }
-            /*,'DrawingEvent': function(event){
-                console.log(event);
-                var eventB = this.sandbox.getEventBuilder('DrawingEvent')(event.getId(), event.getGeoJson(), event.getData(), event.getIsFinished());
-                this.sandbox.notifyAll(eventB);
-            }*/
         },
         /**
          * @method stop
