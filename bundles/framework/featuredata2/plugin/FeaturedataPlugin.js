@@ -188,20 +188,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * Updates the plugins interface (hides if no featuredata layer selected)
          */
         refresh: function () {
-            var me = this,
-                isVisible = me._hasFeaturedataLayers(),
-                conf = me._config;
-
-            me.setVisible(isVisible);
+            var me = this;
+            var conf = me._config || {};
 
             // Change the style if in the conf
-            if (conf && conf.toolStyle) {
+            if (conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
                 var toolStyle = me.getToolStyleFromMapModule();
                 me.changeToolStyle(toolStyle, me.getElement());
             }
-
+            // setVisible needs to be called after changeToolStyle() as that call will make the element visible
+            me.setVisible(me._hasFeaturedataLayers());
         },
         /**
          * @public @method changeToolStyle
