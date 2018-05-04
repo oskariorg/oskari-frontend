@@ -78,12 +78,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return map;
         },
         /**
-         * Getter for OlCesium map instance.
-         */
-        getMap3d: function () {
-            return this._map3d;
-        },
-        /**
          * Add map event handlers
          * @method @private _setupMapEvents
          */
@@ -125,56 +119,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
         },
         _startImpl: function () {
-            this.set3dEnabled(true);
-
-            /*
-             * This does not belong here.
-             * Should set altitude from state on load.
-             */
-            this.getMap3d().getCamera().setAltitude(1000000);
-
             return true;
         },
-        
-/* OlCesium specific
-------------------------------------------------------------------> */
-
-        /**
-         * Enable 3d view.
-         */
-        set3dEnabled: function (enable) {
-            if (enable === this.getMap3d().getEnabled()) {
-                return;
-            }
-            var map = this.getMap();
-            var interactions = null;
-            if (enable) {
-                // Remove all ol interactions before switching to 3d view.
-                // Editing interactions after ol map is hidden doesn't work.
-                interactions = map.getInteractions();
-                if (interactions) {
-                    var removals = [];
-                    interactions.forEach(function (cur) {
-                        removals.push(cur);
-                    });
-                    removals.forEach(function (cur) {
-                        map.removeInteraction(cur);
-                    });
-                }
-            } else {
-                // Add default interactions to 2d view.
-                interactions = ol.interaction.defaults({
-                    altShiftDragRotate: false,
-                    pinchRotate: false
-                });
-                interactions.forEach(function (cur) {
-                    map.addInteraction(cur);
-                });
-            }
-            this.getMap3d().setEnabled(enable);
-        },
-
-/*<------------- / OlCesium specific ----------------------------------- */
 
 /* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
@@ -700,6 +646,113 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return new ol.style.Text(text);
+        },
+        /**
+         * Enable 3d view.
+         */
+        set3dEnabled: function (enable) {
+            if (enable === this._map3d.getEnabled()) {
+                return;
+            }
+            var map = this.getMap();
+            var interactions = null;
+            if (enable) {
+                // Remove all ol interactions before switching to 3d view.
+                // Editing interactions after ol map is hidden doesn't work.
+                interactions = map.getInteractions();
+                if (interactions) {
+                    var removals = [];
+                    interactions.forEach(function (cur) {
+                        removals.push(cur);
+                    });
+                    removals.forEach(function (cur) {
+                        map.removeInteraction(cur);
+                    });
+                }
+            } else {
+                // Add default interactions to 2d view.
+                interactions = ol.interaction.defaults({
+                    altShiftDragRotate: false,
+                    pinchRotate: false
+                });
+                interactions.forEach(function (cur) {
+                    map.addInteraction(cur);
+                });
+            }
+            this._map3d.setEnabled(enable);
+        },
+        getCamera: function () {
+            var olcsCamera = this._map3d.getCamera();
+            return {
+                position: olcsCamera.getPosition(),
+                altitude: olcsCamera.getAltitude(),
+                heading: olcsCamera.getHeading(),
+                tilt: olcsCamera.getTilt()
+            }
+        },
+        setCamera: function (options) {
+            this.set3dEnabled(true);
+            if (options) {
+                var olcsCamera = this._map3d.getCamera();
+                if (options.position) {
+                    olcsCamera.setPosition(options.position);
+                }
+                if (!isNaN(options.altitude)) {
+                    olcsCamera.setAltitude(options.altitude);
+                }
+                if (!isNaN(options.heading)) {
+                    olcsCamera.setHeading(options.heading);
+                }
+                if (!isNaN(options.tilt)) {
+                    olcsCamera.setTilt(options.tilt);
+                }
+            }
+        },
+        /**
+         * Returns state for mapmodule including plugins that have getState() function
+         * @method getState
+         * @return {Object} properties for each pluginName
+         */
+        getState: function () {
+            var state = {
+                plugins: {}
+            };
+            var pluginName;
+
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
+                    state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
+                }
+            }
+            if (this._map3d.getEnabled()) {
+                state.camera = this.getCamera();
+            }
+            return state;
+        },
+        /**
+         * Returns state for mapmodule including plugins that have getStateParameters() function
+         * @method getStateParameters
+         * @return {String} link parameters for map state
+         */
+        getStateParameters: function () {
+            var params = '';
+            var pluginName;
+
+            if (this._map3d.getEnabled()) {
+                var cam = this.getCamera();
+                params +=
+                    'cam=' + cam.getPosition() +
+                    '_' + cam.getAltitude() +
+                    '_' + cam.getHeading() +
+                    '_' + cam.getTilt();
+            }
+
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
+                    params = params + this._pluginInstances[pluginName].getStateParameters();
+                }
+            }
+            return params;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
