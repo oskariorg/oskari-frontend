@@ -652,7 +652,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 categoryModel.setName(Oskari.util.sanitize(properties.category_name));
                 categoryModel.setUuid(properties.uuid);
                 categoryModel.setDefault(!!properties.default);
-                category.setPublic(!!properties.publisher_name);
+                categoryModel.setPublic(!!properties.publisher_name);
 
                 categoryModel.setDotSize(properties.dot_size);
                 categoryModel.setDotColor(me._formatColorFromServer(properties.dot_color));
