@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.46.3
+
+Fixed JS errors when saving myplaces features.
+
 ## 1.46.2
 
 For a full list of changes see:
