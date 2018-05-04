@@ -696,4 +696,20 @@ div.tab-material-controls div.title {
 .statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
     max-width:700px;
   }
+.stats-indicator-form {
+  min-height: 300px;
+  padding: 15px;
+}
+.stats-indicator-form-item {
+  width: 96%;
+  margin-bottom: 5px;
+}
+.stats-not-logged-in {
+  width: 100%;
+  height: 40px;
+  background-color: indianred;
+  margin-bottom: 8px;
+  padding: 5px;
+  max-width: 450px;
+}
 /*# sourceMappingURL=style.css.map */

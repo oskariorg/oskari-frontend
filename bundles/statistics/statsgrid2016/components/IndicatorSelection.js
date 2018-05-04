@@ -73,6 +73,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     getElement: function () {
         return this.element;
     },
+    handleAddUserIndidcator: function (datasourceId) {
+        var locale = this.instance.getLocalization();
+        if ( !this.userIndicatorFlyout ) {
+            this.userIndicatorFlyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.MyIndicator', this.service, locale, Number(datasourceId) );
+            this.userIndicatorFlyout.makeDraggable();
+            this.userIndicatorFlyout.setTitle(locale.userIndicators.flyoutTitle);
+        }
+        var me = this;
+        var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        btn.setTitle(locale.userIndicators.buttonTitle);
+        btn.insertTo( this.getElement() );
+
+        btn.setHandler(function (event) {
+            event.stopPropagation();
+            me.userIndicatorFlyout.toggle('user-indicator');
+        });
+    },
     /** **** PUBLIC METHODS ******/
 
     /**
@@ -140,6 +157,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         dsSelector.on('change', function () {
             me._params.clean();
+            if( select.getValue() === '5' ) {
+                me.handleAddUserIndidcator( select.getValue() );
+                return;
+            }
 
             // If removed selection then need to be also update indicator selection
             if (select.getValue() === '') {

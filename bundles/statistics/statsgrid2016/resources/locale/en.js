@@ -192,6 +192,12 @@ Oskari.registerLocalization(
             "name": "Areal division of thematic map",
             "inspireName": "Thematic map",
             "organizationName": "Thematic map"
+        },
+        "userIndicators": {
+            "buttonTitle": "",
+            "formName": "",
+            "formDescription": "",
+            "formDatasource": ""
         }
     }
 });
