@@ -584,14 +584,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     'stroke_dasharray': cat.getLineStyle(),
                     'stroke_linecap': cat.getLineCap(),
                     'stroke_linejoin': cat.getLineCorner(),
-                    'stroke_color': this._prefixColorForServer(cat.getLineColor()),
+                    'stroke_color': me._prefixColorForServer(cat.getLineColor()),
                     'border_width': cat.getAreaLineWidth(),
                     'border_dasharray': cat.getAreaLineStyle(),
                     'border_linejoin': cat.getAreaLineCorner(),
-                    'border_color': typeof cat.getAreaLineColor() === 'string' ? this._prefixColorForServer(cat.getAreaLineColor()) : null,
-                    'fill_color': typeof cat.getAreaFillColor() === 'string' ? this._prefixColorForServer(cat.getAreaFillColor()) : null,
+                    'border_color': typeof cat.getAreaLineColor() === 'string' ? me._prefixColorForServer(cat.getAreaLineColor()) : null,
+                    'fill_color': typeof cat.getAreaFillColor() === 'string' ? me._prefixColorForServer(cat.getAreaFillColor()) : null,
                     'fill_pattern': cat.getAreaFillStyle(),
-                    'dot_color': this._prefixColorForServer(cat.getDotColor()),
+                    'dot_color': me._prefixColorForServer(cat.getDotColor()),
                     'dot_size': cat.getDotSize(),
                     'dot_shape': cat.getDotShape()
                 };
@@ -795,7 +795,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     place.setCreateDate(feature.properties.created);
                     place.setUuid(feature.uuid);
                 } else {
-                    place = this.findMyPlace(id);
+                    place = me.findMyPlace(id);
                     if (!place) {
                         cb(false, null);
                         Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Cannot find place to update');
