@@ -803,10 +803,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (this._map3d.getEnabled()) {
                 var cam = this.getCamera();
                 params +=
-                    'cam=' + cam.getPosition() +
-                    '_' + cam.getAltitude() +
-                    '_' + cam.getHeading() +
-                    '_' + cam.getTilt();
+                    '&cam=' + cam.location.x +
+                    '_' + cam.location.y +
+                    '_' + cam.location.altitude +
+                    '_' + cam.orientation.heading +
+                    '_' + cam.orientation.pitch +
+                    '_' + cam.orientation.roll;
             }
 
             for (pluginName in this._pluginInstances) {
