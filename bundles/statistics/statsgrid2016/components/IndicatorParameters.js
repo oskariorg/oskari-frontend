@@ -77,6 +77,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     },
     refresh: function ( datasrc, indId, regionsetRestriction ) {
         this.clean();
+        // only refresh data if component has been initialized
         if ( this._initialized ) {
             this.paramHandler.getData( datasrc, indId, regionsetRestriction );
         }
