@@ -648,7 +648,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 
             okBtn.addClass('primary');
 
-            iframeCode = '<iframe src="' + url + '" style="border: none;';
+            iframeCode = '<iframe src="' + url + '" allow="geolocation" style="border: none;';
             if (width !== null && width !== undefined) {
                 iframeCode += ' width: ' + width + ';';
             }
