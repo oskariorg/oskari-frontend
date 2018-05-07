@@ -155,6 +155,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         // Refine data selections
         var selectionsContainer = jQuery(this.__templates.selections());
         main.append(selectionsContainer);
+        me._params.attachTo(selectionsContainer);
 
         dsSelector.on('change', function () {
             me._params.clean();
@@ -171,7 +172,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             me._populateIndicators(indicSelect, dsSelect.getValue());
 
             if ( regionSelect.getValue() !== '' && regionSelect.getValue() !== null ) {
-                var unsupportedSelections = me._params.datasourceSelected( dsSelect.getValue(), regionSelect.getValue() );
+                var unsupportedSelections = me.getUnsupportedIndicatorsList( dsSelect.getValue(), regionSelect.getValue() );
                 var ids = unsupportedSelections.map( function (iteration) {
                     return iteration.id;
                 });
@@ -181,7 +182,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
 
         indicatorSelector.on('change', function () {
-            me._params.attachTo(selectionsContainer);
             me._params.indicatorSelected(
                 dsSelect.getValue(),
                 indicSelect.getValue(),
@@ -191,7 +191,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 });
         });
         regionsetSelector.on('change', function (evt) {
-            var unsupportedSelections = me._params.regionsetSelected( regionSelect.getValue() );
+            var unsupportedSelections = me.getUnsupportedDatasetsList( regionSelect.getValue() );
             me._params.refresh( dsSelect.getValue(), indicSelect.getValue(), regionSelect.getValue() );
 
             if ( !regionSelect.getValue() ) {
@@ -242,5 +242,54 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var el = this.getElement();
         var indicSel = el.find('.stats-ind-selector');
         return indicSel;
+    },
+    /**
+     * @method  @public  getUnsupportedDatasets 
+     * @description returns a list of unsupported datasources for the currently selected regionset(s)
+     * @param regionsets regionsets
+     */
+    getUnsupportedDatasetsList: function ( regionsets ) {
+        if (regionsets === null) {
+            return;
+        }
+        regionsets = regionsets.map( function (id)  { return Number(id) } );
+        var unsupportedDatasources = [];
+        this.service.datasources.forEach( function (ds) {
+            var unsupported = regionsets.some( function (iter) {
+                return ds.regionsets.indexOf(iter) === -1;
+            });
+            if ( unsupported ) {
+                unsupportedDatasources.push(ds);
+            }
+        });
+        return unsupportedDatasources;
+    },
+    /**
+     * @method  @public  getUnsupportedIndicatorsList 
+     * @description returns a list of unsupported indicators for the currently selected datasource(s) & regionset(s)
+     * @param datasrc datasourceId
+     * @param regionsets regionsets
+     */
+    getUnsupportedIndicatorsList: function ( datasrc, regionsets ) {
+        if (regionsets === null) {
+            return;
+        }
+        var unsupportedIndicators = [];
+
+        regionsets = regionsets.map( function (id)  { return Number(id) } );
+
+        this.service.getIndicatorList( datasrc, function ( err, indicator ) {
+
+            indicator.indicators.forEach( function (ind) {
+                var unsupported = regionsets.some( function (iter) {
+                    return ind.regionsets.indexOf(iter) === -1;
+                });
+                if ( unsupported ) {
+                    unsupportedIndicators.push(ind);
+                }
+            });
+        });
+
+        return unsupportedIndicators;
     }
 });
