@@ -41,6 +41,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( 
         }
         this.element.empty();
     },
+    toggle: function () {
+        var form = this.getElement().find('#stats-user-indicator');
+        if( form.hasClass('oskari-hidden') ) {
+            form.removeClass('oskari-hidden');
+        } else {
+            form.addClass('oskari-hidden');
+        }
+    },
     createUi: function () {
         var me = this;
         this.clearUi();
@@ -70,6 +78,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( 
 
         indBtn.setHandler(function (event) {
             event.stopPropagation();
+            me.toggle();
             me.addIndicatorDataForm.toggle();
         });
 
