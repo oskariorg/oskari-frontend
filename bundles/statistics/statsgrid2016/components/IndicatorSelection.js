@@ -172,9 +172,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
             if ( regionSelect.getValue() !== '' && regionSelect.getValue() !== null ) {
                 var unsupportedSelections = me._params.datasourceSelected( dsSelect.getValue(), regionSelect.getValue() );
-                unsupportedSelections.forEach( function (ind) {
-                    indicSelect.disableOption(ind.id);
+                var ids = unsupportedSelections.map( function (iteration) {
+                    return iteration.id;
                 });
+                indicSelect.disableOptions(ids);
             }
 
         });
@@ -198,10 +199,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 dsSelect.reset();
                 return;
             }
-
-            unsupportedSelections.forEach( function (ds) {
-                dsSelect.disableOption(ds.id);
+            var ids = unsupportedSelections.map( function (iteration) {
+                return iteration.id;
             });
+            dsSelect.disableOptions(ids);
 
             var checkAvailableOptions = function (select) {
                 var state = select.state();

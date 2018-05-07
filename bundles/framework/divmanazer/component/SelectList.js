@@ -136,12 +136,16 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         chosen.trigger('chosen:updated');
     },
     /** @method disableOption disables an options where value mathces id
-     *   @param { String } id string to find
+     *   @param { Array } ids array if ids to find
      */
-    disableOption: function ( id ) {
+    disableOptions: function ( ids ) {
+      var me = this;
       var chosen = this.element.find('select');
-      var valueOption = this.element.find('select option[value=' + id + ']');
-      valueOption.attr('disabled', true);
+
+      ids.forEach(function (id) {
+        var valueOption = me.element.find('select option[value=' + id + ']');
+        valueOption.attr('disabled', true);
+      });
 
       chosen.trigger('chosen:updated');
     },
