@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     this._values = {};
     this._selections = [];
     this.parentElement = null;
+    this._initialized = false;
     Oskari.makeObservable(this);
     var me = this;
     var errorService = this.service.getErrorService();
@@ -54,6 +55,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
      */
     indicatorSelected: function ( datasrc, indId, regionsetRestriction, elements ) {
         var me = this;
+        this._initialized = true;
 
         elements = elements || {};
         this.clean();
@@ -75,7 +77,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     },
     refresh: function ( datasrc, indId, regionsetRestriction ) {
         this.clean();
-        this.paramHandler.getData( datasrc, indId, regionsetRestriction );
+        if ( this._initialized ) {
+            this.paramHandler.getData( datasrc, indId, regionsetRestriction );
+        }
     },
     _createUi: function ( datasrc, indId, selections, regionsets) {
         var me = this;
@@ -124,19 +128,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
 
         me.trigger('indicator.changed', regionsets.length > 0);
     },
-    datasourceSelected: function (datasrc, regionsets) {
-        if (regionsets === null) {
-            return;
-        }
-        return this.paramHandler.testIndicatorsRegionsets(datasrc, regionsets );
-    },
-    regionsetSelected: function (regionsets) {
-        if (regionsets === null) {
-            return;
-        }
-        return this.paramHandler.testDatasourcesRegionsets( regionsets );
-    },
-
     getValues: function () {
         var me = this;
         var values = {
