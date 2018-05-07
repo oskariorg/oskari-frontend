@@ -30,7 +30,7 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "tooltip": "Show only layers with timeseries",
-            "timeseries": "Timeseries"
+            "timeseries": "Time series"
         }
     }
 });
