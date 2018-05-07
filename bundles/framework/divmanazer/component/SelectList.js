@@ -79,7 +79,11 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     },
     resetToPlaceholder: function() {
       var chosen = this.element.find('select');
-      chosen.find('option:first-child').attr('selected', 'selected');
+      if ( chosen.attr('multiple') ) {
+        chosen.val('');
+      } else {
+        chosen.find('option:first-child').attr('selected', 'selected');
+      }
       this.update();
     },
     update: function() {
