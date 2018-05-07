@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 datasrc: me.datasource,
                 selectors: combinedValues,
                 indicators: me.indicators,
-                regionset: me.regionsets ? me.regionsets : indicator.regionsets
+                regionset: indicator.regionsets
             }
             if ( typeof cb === 'function') {
                 cb(data);
