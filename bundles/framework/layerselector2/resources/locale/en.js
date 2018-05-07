@@ -74,11 +74,9 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
         },

@@ -28,6 +28,10 @@ Oskari.registerLocalization(
             "message": "Voit ohjata vain päällimmäistä tasoa.",
             "ok": "OK"
         },
+        "layerFilter": {
+            "tooltip": "Näytä vain aikasarjalliset tasot.",
+            "timeseries": "Aikasarjalliset"
+        },
         "d3TimeDef": {
             "dateTime": "%A, %-d. %Bta %Y klo %X",
             "date": "%-d.%-m.%Y",
