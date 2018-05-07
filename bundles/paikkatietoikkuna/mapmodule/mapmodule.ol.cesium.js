@@ -17,6 +17,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
         this._map3d = null;
+        this._mapReady = false;
+        this._mapReadySubscribers = [];
     }, {
         /**
          * @method _initImpl
@@ -75,13 +77,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             });
 
+            var scene = this._map3d.getCesiumScene();
+            var updateReadyStatus = function () {
+                scene.postRender.removeEventListener(updateReadyStatus);
+                me._mapReady = true;
+                me._notifyMapReadySubscribers();
+            }
+            scene.postRender.addEventListener(updateReadyStatus);
+
             return map;
         },
         /**
-         * Getter for OlCesium map instance.
+         * Fire operations that have been waiting for the map to initialize.
          */
-        getMap3d: function () {
-            return this._map3d;
+        _notifyMapReadySubscribers: function () {
+            var me = this;
+            this._mapReadySubscribers.forEach(function (fireOperation) {
+                fireOperation.operation.apply(me, fireOperation.arguments);
+            });
         },
         /**
          * Add map event handlers
@@ -125,56 +138,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
         },
         _startImpl: function () {
-            this.set3dEnabled(true);
-
-            /*
-             * This does not belong here.
-             * Should set altitude from state on load.
-             */
-            this.getMap3d().getCamera().setAltitude(1000000);
-
             return true;
         },
-        
-/* OlCesium specific
-------------------------------------------------------------------> */
-
-        /**
-         * Enable 3d view.
-         */
-        set3dEnabled: function (enable) {
-            if (enable === this.getMap3d().getEnabled()) {
-                return;
-            }
-            var map = this.getMap();
-            var interactions = null;
-            if (enable) {
-                // Remove all ol interactions before switching to 3d view.
-                // Editing interactions after ol map is hidden doesn't work.
-                interactions = map.getInteractions();
-                if (interactions) {
-                    var removals = [];
-                    interactions.forEach(function (cur) {
-                        removals.push(cur);
-                    });
-                    removals.forEach(function (cur) {
-                        map.removeInteraction(cur);
-                    });
-                }
-            } else {
-                // Add default interactions to 2d view.
-                interactions = ol.interaction.defaults({
-                    altShiftDragRotate: false,
-                    pinchRotate: false
-                });
-                interactions.forEach(function (cur) {
-                    map.addInteraction(cur);
-                });
-            }
-            this.getMap3d().setEnabled(enable);
-        },
-
-/*<------------- / OlCesium specific ----------------------------------- */
 
 /* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
@@ -700,6 +665,158 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return new ol.style.Text(text);
+        },
+        /**
+         * Enable 3d view.
+         */
+        set3dEnabled: function (enable) {
+            if (enable === this._map3d.getEnabled()) {
+                return;
+            }
+            var map = this.getMap();
+            var interactions = null;
+            if (enable) {
+                // Remove all ol interactions before switching to 3d view.
+                // Editing interactions after ol map is hidden doesn't work.
+                interactions = map.getInteractions();
+                if (interactions) {
+                    var removals = [];
+                    interactions.forEach(function (cur) {
+                        removals.push(cur);
+                    });
+                    removals.forEach(function (cur) {
+                        map.removeInteraction(cur);
+                    });
+                }
+            } else {
+                // Add default interactions to 2d view.
+                interactions = ol.interaction.defaults({
+                    altShiftDragRotate: false,
+                    pinchRotate: false
+                });
+                interactions.forEach(function (cur) {
+                    map.addInteraction(cur);
+                });
+            }
+            this._map3d.setEnabled(enable);
+        },
+        /**
+         * Returns camera's position and orientation for state saving purposes.
+         */
+        getCamera: function () {
+            var view = {};
+            var olcsCam = this._map3d.getCamera();
+            var coords = olcsCam.getPosition();
+            view.location = {
+                x: coords[0],
+                y: coords[1],
+                altitude: olcsCam.getAltitude()
+            }
+            var sceneCam = this._map3d.getCesiumScene().camera;
+            view.orientation = {
+                heading: Cesium.Math.toDegrees(sceneCam.heading),
+                pitch: Cesium.Math.toDegrees(sceneCam.pitch),
+                roll: Cesium.Math.toDegrees(sceneCam.roll)
+            }
+            return view;
+        },
+        /**
+         * Turns on 3D view and positions the camera.
+         *
+         * Options example:
+         * Camera location in map projection coordinates (EPSG:3857)
+         * Orientation values in degrees
+         * {
+                location: {
+                    x: 2776460.39,
+                    y: 8432972.40,
+                    altitude: 1000.0 //meters
+                },
+                orientation: {
+                    heading: 90.0,  // east, default value is 0.0 (north)
+                    pitch: -90,     // default value (looking down)
+                    roll: 0.0       // default value
+                }
+         * }
+         */
+        setCamera: function (options) {
+            this.set3dEnabled(true);
+            if (this._mapReady) {
+                if (options) {
+                    var camera = this._map3d.getCesiumScene().camera;
+                    var view = {};
+                    if (options.location) {
+                        var pos = options.location;
+                        var lonlat = ol.proj.transform([pos.x, pos.y], this.getProjection(), 'EPSG:4326');
+                        view.destination = new Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], pos.altitude);
+                    }
+                    if (options.orientation) {
+                        view.orientation = {
+                            heading: this._toRadians(options.orientation.heading),
+                            pitch: this._toRadians(options.orientation.pitch),
+                            roll: this._toRadians(options.orientation.roll)
+                        }
+                    }
+                    camera.setView(view);
+                }
+            } else {
+                // Cesium is not ready yet. Fire after it has been initialized properly.
+                this._mapReadySubscribers.push({
+                    operation: this.setCamera,
+                    arguments: [options]
+                });
+            }
+        },
+        _toRadians: function (value) {
+            return !isNaN(value) ? Cesium.Math.toRadians(value) : undefined;
+        },
+        /**
+         * Returns state for mapmodule including plugins that have getState() function
+         * @method getState
+         * @return {Object} properties for each pluginName
+         */
+        getState: function () {
+            var state = {
+                plugins: {}
+            };
+            var pluginName;
+
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
+                    state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
+                }
+            }
+            if (this._map3d.getEnabled()) {
+                state.camera = this.getCamera();
+            }
+            return state;
+        },
+        /**
+         * Returns state for mapmodule including plugins that have getStateParameters() function
+         * @method getStateParameters
+         * @return {String} link parameters for map state
+         */
+        getStateParameters: function () {
+            var params = '';
+            var pluginName;
+
+            if (this._map3d.getEnabled()) {
+                var cam = this.getCamera();
+                params +=
+                    '&cam=' + cam.location.x +
+                    '_' + cam.location.y +
+                    '_' + cam.location.altitude +
+                    '_' + cam.orientation.heading +
+                    '_' + cam.orientation.pitch +
+                    '_' + cam.orientation.roll;
+            }
+
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
+                    params = params + this._pluginInstances[pluginName].getStateParameters();
+                }
+            }
+            return params;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {

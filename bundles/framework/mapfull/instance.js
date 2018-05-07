@@ -416,12 +416,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
-            if (state.hasOwnProperty('east') && ignoreLocation !== true) {
-               sandbox.getMap().moveTo(
-                    state.east,
-                    state.north,
-                    state.zoom
-                );
+            if (ignoreLocation !== true) {
+                if (state.hasOwnProperty('east')) {
+                    sandbox.getMap().moveTo(
+                        state.east,
+                        state.north,
+                        state.zoom
+                    );
+                }
+                if (state.hasOwnProperty('camera')) {
+                    try {
+                        mapmodule.setCamera(state.camera);
+                    } catch (ex) {
+                        Oskari.log(this.getName()).warn('Setting camera failed. Map module does not support 3d.');
+                    }
+                }
             }
 
             // mapmodule needed to set also param, because without it max zoomlevel check not working

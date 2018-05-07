@@ -14,19 +14,19 @@
             "metadata": {
                 "Import-Bundle": {
                     "mapwmts": {
-						"bundlePath": "/Oskari/packages/mapping/ol3/"
+						"bundlePath": "../../../packages/mapping/ol3/"
 					},
 					"mapmodule": {
-						"bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/"
+						"bundlePath": "../../../packages/paikkatietoikkuna/bundle/"
 					},
 					"mapfull": {
-						"bundlePath": "/Oskari/packages/framework/bundle/"
+						"bundlePath": "../../../packages/framework/bundle/"
 					},
 					"ui-components": {
-						"bundlePath": "/Oskari/packages/framework/bundle/"
+						"bundlePath": "../../../packages/framework/bundle/"
 					},
 					"oskariui": {
-						"bundlePath": "/Oskari/packages/framework/bundle/"
+						"bundlePath": "../../../packages/framework/bundle/"
 					}
                 }
             }
