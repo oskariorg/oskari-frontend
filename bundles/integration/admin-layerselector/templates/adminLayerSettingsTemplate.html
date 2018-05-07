@@ -385,7 +385,7 @@
                 <input type="text" id="add-layer-capabilities-update-rate" 
                     class="add-layer-capabilities-update-rate add-layer-input"
                     placeholder="<%= instance.getLocalization('admin').capabilitiesUpdateRateInfo %>"
-                    value="<%= model.getAdmin().capabilitiesUpdateRate %>" />
+                    value="<%= model.getCapabilitiesUpdateRate() %>" />
                 <% if (model.getId()) { %>
                 <button class="add-layer-recheck" 
                     title="<%= instance.getLocalization('recheckTitle') %>"><%= instance.getLocalization('recheckTitle') %></button>
