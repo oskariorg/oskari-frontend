@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
      * @param  {String} indId    indicator id
      * @param  {Object} elements elements
      */
-    indicatorSelected: function ( datasrc, indId, regionsets, elements ) {
+    indicatorSelected: function ( datasrc, indId, regionsetRestriction, elements ) {
         var me = this;
 
         elements = elements || {};
@@ -71,11 +71,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
          me.spinner.insertTo(this.parentElement.parent());
          me.spinner.start();
         //get the data to create ui with
-        me.paramHandler.getData( datasrc, indId, regionsets, elements );
+        me.paramHandler.getData( datasrc, indId, regionsetRestriction, elements );
     },
-    refresh: function ( datasrc, indId, regionsets ) {
+    refresh: function ( datasrc, indId, regionsetRestriction ) {
         this.clean();
-        this.paramHandler.getData( datasrc, indId, regionsets );
+        this.paramHandler.getData( datasrc, indId, regionsetRestriction );
     },
     _createUi: function ( datasrc, indId, selections, regionsets) {
         var me = this;
