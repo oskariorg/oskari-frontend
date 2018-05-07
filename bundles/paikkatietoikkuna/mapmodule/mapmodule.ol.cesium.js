@@ -17,6 +17,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
         this._map3d = null;
+        this._mapReady = false;
+        this._mapReadySubscribers = [];
     }, {
         /**
          * @method _initImpl
@@ -75,7 +77,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             });
 
+            var scene = this._map3d.getCesiumScene();
+            var updateReadyStatus = function () {
+                scene.postRender.removeEventListener(updateReadyStatus);
+                me._mapReady = true;
+                me._notifyMapReadySubscribers();
+            }
+            scene.postRender.addEventListener(updateReadyStatus);
+
             return map;
+        },
+        /**
+         * Fire operations that have been waiting for the map to initialize.
+         */
+        _notifyMapReadySubscribers: function () {
+            var me = this;
+            this._mapReadySubscribers.forEach(function (fireOperation) {
+                fireOperation.operation.apply(me, fireOperation.arguments);
+            });
         },
         /**
          * Add map event handlers
@@ -681,32 +700,75 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             this._map3d.setEnabled(enable);
         },
+        /**
+         * Returns camera's position and orientation for state saving purposes.
+         */
         getCamera: function () {
-            var olcsCamera = this._map3d.getCamera();
-            return {
-                position: olcsCamera.getPosition(),
-                altitude: olcsCamera.getAltitude(),
-                heading: olcsCamera.getHeading(),
-                tilt: olcsCamera.getTilt()
+            var view = {};
+            var olcsCam = this._map3d.getCamera();
+            var coords = olcsCam.getPosition();
+            view.location = {
+                x: coords[0],
+                y: coords[1],
+                altitude: olcsCam.getAltitude()
             }
+            var sceneCam = this._map3d.getCesiumScene().camera;
+            view.orientation = {
+                heading: Cesium.Math.toDegrees(sceneCam.heading),
+                pitch: Cesium.Math.toDegrees(sceneCam.pitch),
+                roll: Cesium.Math.toDegrees(sceneCam.roll)
+            }
+            return view;
         },
+        /**
+         * Turns on 3D view and positions the camera.
+         *
+         * Options example:
+         * Camera location in map projection coordinates (EPSG:3857)
+         * Orientation values in degrees
+         * {
+                location: {
+                    x: 2776460.39,
+                    y: 8432972.40,
+                    altitude: 1000.0 //meters
+                },
+                orientation: {
+                    heading: 90.0,  // east, default value is 0.0 (north)
+                    pitch: -90,     // default value (looking down)
+                    roll: 0.0       // default value
+                }
+         * }
+         */
         setCamera: function (options) {
             this.set3dEnabled(true);
-            if (options) {
-                var olcsCamera = this._map3d.getCamera();
-                if (options.position) {
-                    olcsCamera.setPosition(options.position);
+            if (this._mapReady) {
+                if (options) {
+                    var camera = this._map3d.getCesiumScene().camera;
+                    var view = {};
+                    if (options.location) {
+                        var pos = options.location;
+                        var lonlat = ol.proj.transform([pos.x, pos.y], this.getProjection(), 'EPSG:4326');
+                        view.destination = new Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], pos.altitude);
+                    }
+                    if (options.orientation) {
+                        view.orientation = {
+                            heading: this._toRadians(options.orientation.heading),
+                            pitch: this._toRadians(options.orientation.pitch),
+                            roll: this._toRadians(options.orientation.roll)
+                        }
+                    }
+                    camera.setView(view);
                 }
-                if (!isNaN(options.altitude)) {
-                    olcsCamera.setAltitude(options.altitude);
-                }
-                if (!isNaN(options.heading)) {
-                    olcsCamera.setHeading(options.heading);
-                }
-                if (!isNaN(options.tilt)) {
-                    olcsCamera.setTilt(options.tilt);
-                }
+            } else {
+                // Cesium is not ready yet. Fire after it has been initialized properly.
+                this._mapReadySubscribers.push({
+                    operation: this.setCamera,
+                    arguments: [options]
+                });
             }
+        },
+        _toRadians: function (value) {
+            return !isNaN(value) ? Cesium.Math.toRadians(value) : undefined;
         },
         /**
          * Returns state for mapmodule including plugins that have getState() function
