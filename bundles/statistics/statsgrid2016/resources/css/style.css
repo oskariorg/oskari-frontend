@@ -712,4 +712,14 @@ div.tab-material-controls div.title {
   padding: 5px;
   max-width: 450px;
 }
+.statsgrid-user-indicator-container div.accordion div.accordion_panel {
+  border:none;
+}
+.user-indicator-table {
+  width: 200px;
+}
+.user-indicator-table td:first-child {
+  text-align:center;
+  width: 17%;
+}
 /*# sourceMappingURL=style.css.map */
