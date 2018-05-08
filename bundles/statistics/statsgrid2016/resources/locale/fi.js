@@ -196,7 +196,7 @@ Oskari.registerLocalization(
         "userIndicators": {
             "flyoutTitle": "Lisää uusi indikaattori",
             "buttonTitle": "Lisää uusi indikaattori",
-            "buttonAddIndicator": "Lisää indikaattori",
+            "buttonAddIndicator": "Syötä dataa",
             "buttonSave": "Tallenna",
             "formName": "Nimi",
             "formDescription": "Kuvaus",

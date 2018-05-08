@@ -725,4 +725,9 @@ div.tab-material-controls div.title {
   text-align: center;
   width: 17%;
 }
+.user-indicator-specification {
+  color:white;
+  background-color: #000;
+  
+}
 /*# sourceMappingURL=style.css.map */

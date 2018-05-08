@@ -13,6 +13,13 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
                                   '</div>');
     this.element = null;
   },{
+    defaultOptions: {
+      placeholder_text: '',
+      allow_single_deselect: true,
+      disable_search_threshold: 10,
+      no_results_text: '',
+      width: '100%'
+    },
     /**@method create
     *  creates a select with data specified
     * @param {Object} data, needs to have the keys id and title to construct a list
@@ -21,6 +28,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     * @return {jQuery Element} a list with chosen applied
      */
     create: function( data, options ) {
+      options = options || this.defaultOptions;
       options.allowReset = options.allowReset === false ? options.allowReset : true;
       var select = this._selectTemplate.clone();
       this.element = select;
