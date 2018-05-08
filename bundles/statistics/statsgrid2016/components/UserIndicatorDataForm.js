@@ -21,8 +21,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorDataForm', functio
                                 '<div id="year">${yearPrefix}: ${year}</div>'+
                             '</div>'),
         row: _.template('<tr>' +
-                            '<td class="cell regionset" style=" border: 1px solid black ;">${regionset}</td>'+
-                            '<td class="cell uservalue" contenteditable=true style=" border: 1px solid black ;"></td>'+
+                            '<td class="region" style=" border: 1px solid black ;">${regionset}</td>'+
+                            '<td class="uservalue" contenteditable=true style=" border: 1px solid black ;"></td>'+
                         '</tr> '),
     },
     setElement: function (el) {
@@ -47,6 +47,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorDataForm', functio
     },
     refreshTable: function ( region, mountPoint, tableRef) {
         var me = this;
+
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        cancelBtn.setTitle("Peruuta");
+        cancelBtn.insertTo( mountPoint );
+        
         tableRef.empty();
         var header = this.__templates.header({
             regionPrefix: 'regionset',
@@ -64,6 +69,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorDataForm', functio
             tableRef.prepend(header);
             mountPoint.append(tableRef);
         });
+    },
+    getTableData: function () {
+        var table = this.getElement().find('table');
+        var data = [];
+        var makePair = function (elementArray) {
+            var pair = {};
+            for (var i = 0; i < elementArray.length; i++ ) {
+                pair[elementArray[i].className] = elementArray[i].innerText;
+            }
+            return pair;
+        };
+        table.find('tr').filter( function (index, element) {
+            elements = jQuery(element).find('td');
+            data.push( makePair(elements) );
+        });
+        return data;
     },
     toggle: function () {
         var form = this.getElement().find('#indicator-restriction-form');

@@ -50,6 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( 
             var key = element.attr("name");
             data[key] = element.val();
         });
+        data['values'] = this.addIndicatorDataForm.getTableData();
         return data;
     },
     clearUi: function () {
