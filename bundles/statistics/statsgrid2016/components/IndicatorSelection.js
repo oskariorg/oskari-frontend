@@ -132,7 +132,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         //Regionsets
         main.prepend(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
-        var regionsetSelector = main.find('.stats-rs-selector');
+        var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionOptions = {
             placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
             allow_single_deselect: true,
@@ -142,11 +142,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             multi: true
         };
 
-        var regionSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        var regionDropdown = regionSelect.create(this.service.getRegionsets(), regionOptions);
-        regionDropdown.css({width: '100%'});
-        regionsetSelector.append(regionDropdown);
-        regionSelect.adjustChosen();
+        var regionFilterSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var regionFilterDropdown = regionFilterSelect.create(this.service.getRegionsets(), regionOptions);
+        regionFilterDropdown.css({width: '100%'});
+        regionsetFilterElement.append(regionDropdown);
+        regionFilterSelect.adjustChosen();
 
         // Refine data label and tooltips
         var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({title: panelLoc.refineSearchLabel, tooltip1: panelLoc.refineSearchTooltip1 || '', tooltip2: panelLoc.refineSearchTooltip2 || ''}));
@@ -171,8 +171,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
             me._populateIndicators(indicSelect, dsSelect.getValue());
 
-            if ( regionSelect.getValue() !== '' && regionSelect.getValue() !== null ) {
-                var unsupportedSelections = me.getUnsupportedIndicatorsList( dsSelect.getValue(), regionSelect.getValue() );
+            if ( regionFilterSelect.getValue() !== '' && regionFilterSelect.getValue() !== null ) {
+                var unsupportedSelections = me.getUnsupportedIndicatorsList( dsSelect.getValue(), regionFilterSelect.getValue() );
                 var ids = unsupportedSelections.map( function (iteration) {
                     return iteration.id;
                 });
@@ -185,16 +185,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             me._params.indicatorSelected(
                 dsSelect.getValue(),
                 indicSelect.getValue(),
-                regionSelect.getValue(),
+                regionFilterSelect.getValue(),
                 {
                     dataLabelWithTooltips: dataLabelWithTooltips
                 });
         });
-        regionsetSelector.on('change', function (evt) {
-            var unsupportedSelections = me.getUnsupportedDatasetsList( regionSelect.getValue() );
-            me._params.refresh( dsSelect.getValue(), indicSelect.getValue(), regionSelect.getValue() );
+        regionsetFilterElement.on('change', function (evt) {
+            var unsupportedSelections = me.getUnsupportedDatasetsList( regionFilterSelect.getValue() );
+            me._params.refresh( dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue() );
 
-            if ( !regionSelect.getValue() ) {
+            if ( !regionFilterSelect.getValue() ) {
                 indicSelect.reset();
                 dsSelect.reset();
                 return;
@@ -252,11 +252,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         if (regionsets === null) {
             return;
         }
-        regionsets = regionsets.map( function (id)  { return Number(id) } );
         var unsupportedDatasources = [];
         this.service.datasources.forEach( function (ds) {
             var unsupported = regionsets.some( function (iter) {
-                return ds.regionsets.indexOf(iter) === -1;
+                return ds.regionsets.indexOf( Number(iter) ) === -1;
             });
             if ( unsupported ) {
                 unsupportedDatasources.push(ds);
@@ -276,13 +275,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         }
         var unsupportedIndicators = [];
 
-        regionsets = regionsets.map( function (id)  { return Number(id) } );
-
         this.service.getIndicatorList( datasrc, function ( err, indicator ) {
 
             indicator.indicators.forEach( function (ind) {
                 var unsupported = regionsets.some( function (iter) {
-                    return ind.regionsets.indexOf(iter) === -1;
+                    return ind.regionsets.indexOf( Number(iter) ) === -1;
                 });
                 if ( unsupported ) {
                     unsupportedIndicators.push(ind);

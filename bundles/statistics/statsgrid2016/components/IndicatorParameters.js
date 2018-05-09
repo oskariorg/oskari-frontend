@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     this._values = {};
     this._selections = [];
     this.parentElement = null;
-    this._initialized = false;
+
     Oskari.makeObservable(this);
     var me = this;
     var errorService = this.service.getErrorService();
@@ -55,7 +55,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
      */
     indicatorSelected: function ( datasrc, indId, regionsetRestriction, elements ) {
         var me = this;
-        this._initialized = true;
 
         elements = elements || {};
         this.clean();
@@ -78,7 +77,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     refresh: function ( datasrc, indId, regionsetRestriction ) {
         this.clean();
         // only refresh data if component has been initialized
-        if ( this._initialized ) {
+        if ( this.regionSelector ) {
             this.paramHandler.getData( datasrc, indId, regionsetRestriction );
         }
     },

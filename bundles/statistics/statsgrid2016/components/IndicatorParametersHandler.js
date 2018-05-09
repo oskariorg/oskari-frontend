@@ -8,14 +8,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
     Oskari.makeObservable(this);
 }, {
-    getData: function ( datasrc, indicators, regionsets, elements ) {
+    getData: function ( datasrc, indicators, regionsetRestriction, elements ) {
 
         this.datasource = datasrc;
         this.indicators = indicators;
         this.elements = elements;
         this.regionsets = null;
-        if ( regionsets !== null ) {
-            this.regionsets = regionsets.map( function (id)  { return Number(id) } );
+        if ( regionsetRestriction !== null ) {
+            this.regionsets = regionsetRestriction.map( function (id)  { return Number(id) } );
         }
 
         if ( Array.isArray( indicators ) ) {
