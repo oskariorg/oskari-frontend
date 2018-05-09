@@ -89,6 +89,30 @@ Oskari.clazz.define(
 
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
+
+            // Create indicators tab to personal data view
+            var tab = Oskari.clazz.create(
+                'Oskari.statistics.statsgrid.MyIndicatorsTab',
+                this
+            );
+            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+            panel.setTitle(tab.getTitle());
+            panel.setId(tab.getId());
+            tab.initContent();
+
+            // binds tab to events
+            if (tab.bindEvents) {
+                tab.bindEvents();
+            }
+            // Crete AddTabRequest
+            var title = tab.getTitle(),
+                content = tab.getContent(),
+                id = tab.getId(),
+                first = false,
+                reqName = 'PersonalData.AddTabRequest',
+                reqBuilder = sandbox.getRequestBuilder(reqName),
+                req = reqBuilder(title, content, first, id);
+            sandbox.request(this, req);
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
@@ -106,6 +130,9 @@ Oskari.clazz.define(
         },
         getFlyoutManager: function () {
             return this.flyoutManager;
+        },
+        getStatisticsService() {
+            return this.statsService;
         },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.

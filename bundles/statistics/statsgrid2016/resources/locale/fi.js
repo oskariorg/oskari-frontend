@@ -192,6 +192,29 @@ Oskari.registerLocalization(
             "name": "Teemakartan aluejako",
             "inspireName": "Teemakartta",
             "organizationName": "Teemakartta"
+        },
+        "tab": {
+            "title": "Indikaattorit",
+            "edit": "Muokkaa",
+            "delete": "Poista",
+            "grid": {
+                "name": "Nimi",
+                "edit": "Muokkaa",
+                "delete": "Poista"
+            },
+            "popup": {
+                "deletetitle": "Poista indikaattori",
+                "deletemsg": "Haluatko poistaa indikaattorin \"{name}\"?"
+            },
+            "button": {
+                "cancel": "Peruuta",
+                "ok": "OK"
+            },
+            "error": {
+                "title": "Virhe",
+                "generic": "Indikaattoria ei löytynyt",
+                "loadfailed": "Indikaattorien haku epäonnistui."
+            }
         }
     }
 });
