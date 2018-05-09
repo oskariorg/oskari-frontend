@@ -43,13 +43,13 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         var dataKey = data[i];
         var option = this._option.clone();
 
-        if ( !dataKey.id && !dataKey.title ) {
+        if ( !dataKey.id && !dataKey.title || !dataKey.name ) {
           option.val( dataKey ).text( dataKey );
         }
         if(dataKey.cls) {
           option.addClass(dataKey.cls);
         }
-        option.val(dataKey.id).text(dataKey.title);
+        option.val(dataKey.id).text(dataKey.title || dataKey.name);
         select.find('select').append(option);
 
       }
@@ -79,11 +79,27 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     },
     resetToPlaceholder: function() {
       var chosen = this.element.find('select');
-      chosen.find('option:first-child').attr('selected', 'selected');
+      if ( chosen.attr('multiple') ) {
+        chosen.val('');
+      } else {
+        chosen.find('option:first-child').attr('selected', 'selected');
+      }
       this.update();
     },
     update: function() {
       this.element.find('select').trigger('chosen:updated');
+    },
+    getOptions: function () {
+      var chosen = this.element.find('select');
+      //filter away the placeholder
+      var options = chosen.find('option').filter( function (option) {
+        return this.value !== "";
+      });
+      var disabled = chosen.find('option:disabled');
+      return {
+        'options': options,
+        'disabled': disabled
+      }
     },
     /**  
      * @method _setEnabledImpl or disable select
@@ -122,6 +138,30 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         });
         tobeRemoved.remove();
         chosen.trigger('chosen:updated');
+    },
+    /** @method disableOption disables an options where value mathces id
+     *   @param { Array } ids array if ids to find
+     */
+    disableOptions: function ( ids ) {
+      var me = this;
+      var chosen = this.element.find('select');
+
+      ids.forEach(function (id) {
+        var valueOption = me.element.find('select option[value=' + id + ']');
+        valueOption.attr('disabled', true);
+      });
+
+      chosen.trigger('chosen:updated');
+    },
+    reset: function () {
+      var chosen = this.element.find('select');
+
+      var state = this.getOptions();
+      for (var i = 0; i < state.disabled.length; i++) {
+        jQuery( state.disabled[i] ).attr('disabled', false)
+      }
+      this.resetToPlaceholder();
+      chosen.trigger('chosen:updated');
     },
     /** @method updateOptions
     *   updates an already defined chosen with new data
@@ -167,7 +207,6 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       }
       return this.element.find( 'select' ).val();
     },
-
     /** @method adjustChosen
     *   adjusts the chosen direction according to the screen
     */

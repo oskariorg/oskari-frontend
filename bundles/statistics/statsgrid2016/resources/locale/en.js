@@ -30,10 +30,12 @@ Oskari.registerLocalization(
         "panels": {
             "newSearch": {
                 "title": "SEARCH DATA",
-                "datasourceTitle": "Data provider",
-                "indicatorTitle": "Data",
+                "datasourceTitle": "Data source",
+                "indicatorTitle": "Variable",
+                "regionsetTitle": "Regionset",
                 "selectDatasourcePlaceholder": "Select data source",
                 "selectIndicatorPlaceholder": "Select data",
+                "selectRegionsetPlaceholder": "Select regionset",
                 "noResults": "No results found matching",
                 "refineSearchLabel": "Specify contents of the examined data",
                 "refineSearchTooltip1": "You will get more options after choosing data provider and data.",

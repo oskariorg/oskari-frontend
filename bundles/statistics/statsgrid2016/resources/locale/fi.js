@@ -30,10 +30,12 @@ Oskari.registerLocalization(
         "panels": {
             "newSearch": {
                 "title": "AINEISTOHAKU",
-                "datasourceTitle": "Aineiston tarjoaja",
-                "indicatorTitle": "Aineisto",
+                "datasourceTitle": "Tietolähde",
+                "indicatorTitle": "Muuttuja",
+                "regionsetTitle": "Aluejako",
                 "selectDatasourcePlaceholder": "Valitse tietolähde",
                 "selectIndicatorPlaceholder": "Valitse aineisto",
+                "selectRegionsetPlaceholder": "Valitse aluejako",
                 "noResults": "Yhtään hakutulosta ei löytynyt, haulla",
                 "refineSearchLabel": "Tarkenna tarkasteltavan aineiston sisältöä",
                 "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut aineiston tarjoajan ja aineiston.",
