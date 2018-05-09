@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             this._map3d = new olcs.OLCesium({
                 map: map,
-                time () {
+                time: function () {
                     return Cesium.JulianDate.now();
                 }
             });
