@@ -1,9 +1,11 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( service, locale, datasource ) {
     this.locale = locale;
     this.service = service;
+    this.datasource = datasource;
     this.addIndicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.UserIndicatorDataForm', service, locale, datasource);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     this.element = null;
+    Oskari.makeObservable(this);
     if ( !this.getElement() ) {
         this.createUi();
     }
@@ -103,7 +105,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( 
         btn.getButton().css('float','right');
         btn.setHandler(function (event) {
             event.stopPropagation();
-            me.getFormData();
+
+            me.service.saveIndicatorData( me.datasource, me.getFormData(), function (err) {
+                if (err) {
+                    return;
+                }
+            });
         });
 
         this.setElement(jMain);

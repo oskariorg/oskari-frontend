@@ -88,7 +88,34 @@
             ds.info = ds.info || {};
             this.datasources.push(ds);
         },
+        saveIndicatorData: function (ds, indicatorData, callback) {
+            if (!ds) {
+                callback('Datasource missing');
+                return;
+            }
+            var cacheKey = 'GetIndicatorList_' + ds;
 
+            if ( Oskari.user().isLoggedIn() ) {
+                jQuery.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+
+                    },
+                    url: this.sandbox.getAjaxUrl(''),
+                    success: function (pResp) {
+
+                        me.cache.respondToQueue(cacheKey, null, null);
+                        callback();
+                    },
+                    error: function (jqXHR, textStatus) {
+                        me.cache.respondToQueue(cacheKey, 'Error writing indicators');
+                    }
+                });
+            }
+            this.cache.addToQueue(cacheKey, indicatorData);
+
+        },
         getUILabels: function (indicator, callback) {
             var me = this;
             var locale = this.locale;

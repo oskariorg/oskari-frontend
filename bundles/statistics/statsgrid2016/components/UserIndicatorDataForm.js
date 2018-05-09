@@ -47,11 +47,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorDataForm', functio
     },
     refreshTable: function ( region, mountPoint, tableRef) {
         var me = this;
-
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        cancelBtn.setTitle("Peruuta");
-        cancelBtn.insertTo( mountPoint );
-        
+    
         tableRef.empty();
         var header = this.__templates.header({
             regionPrefix: 'regionset',
@@ -139,6 +135,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorDataForm', functio
         indBtn.insertTo( main );
         var table = me.createTable();
         this.setElement(main);
+
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        cancelBtn.setTitle("Peruuta");
+        cancelBtn.insertTo( main );
+
+        cancelBtn.setHandler( function (event) {
+            me.toggle();
+        });
 
         indBtn.setHandler(function (event) {
             event.stopPropagation();
