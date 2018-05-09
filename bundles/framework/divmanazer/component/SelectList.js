@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     update: function() {
       this.element.find('select').trigger('chosen:updated');
     },
-    state: function () {
+    getOptions: function () {
       var chosen = this.element.find('select');
       //filter away the placeholder
       var options = chosen.find('option').filter( function (option) {
@@ -156,7 +156,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     reset: function () {
       var chosen = this.element.find('select');
 
-      var state = this.state();
+      var state = this.getOptions();
       for (var i = 0; i < state.disabled.length; i++) {
         jQuery( state.disabled[i] ).attr('disabled', false)
       }

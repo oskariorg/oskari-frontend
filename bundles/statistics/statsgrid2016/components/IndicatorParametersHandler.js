@@ -8,7 +8,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
     Oskari.makeObservable(this);
 }, {
     getData: function ( datasrc, indicators, regionsetRestriction ) {
-
+        if ( indicators === null ) {
+            return;
+        }
         this.datasource = datasrc;
         this.indicators = indicators;
         this.regionsets = null;

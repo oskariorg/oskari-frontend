@@ -192,20 +192,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
         regionsetFilterElement.on('change', function (evt) {
             var unsupportedSelections = me.getUnsupportedDatasetsList( regionFilterSelect.getValue() );
-            me._params.refresh( dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue() );
 
             if ( !regionFilterSelect.getValue() ) {
                 indicSelect.reset();
                 dsSelect.reset();
-                return;
             }
-            var ids = unsupportedSelections.map( function (iteration) {
-                return iteration.id;
-            });
-            dsSelect.disableOptions(ids);
+            me._params.indicatorSelected( dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue() );
+            
+            if (unsupportedSelections) {
+                var ids = unsupportedSelections.map( function (iteration) {
+                    return iteration.id;
+                });
+                dsSelect.disableOptions(ids);    
+            }
 
             var checkAvailableOptions = function (select) {
-                var state = select.state();
+                var state = select.getOptions();
                 if ( state.options.length - state.disabled.length === 1 ) {
                     var enabled = state.options.not(':disabled');
                     select.setValue( enabled.val() );

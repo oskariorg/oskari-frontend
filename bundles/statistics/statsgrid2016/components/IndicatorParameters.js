@@ -13,6 +13,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     var errorService = this.service.getErrorService();
 
     this.paramHandler.on('Data.Loaded', function ( data ) {
+        if (me.elements.dataLabelWithTooltips) {
+            me.elements.dataLabelWithTooltips.find('.tooltip').hide();
+        }
         me.spinner.stop();
         if ( Object.keys(data.regionset).length === 0 ) {
             errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
@@ -56,33 +59,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     indicatorSelected: function ( datasrc, indId, regionsetRestriction, elements ) {
         var me = this;
 
-        elements = elements || {};
+        this.elements = elements || {};
         this.clean();
 
         if (!this.regionSelector) {
             this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
         }
 
-        if (!indId && indId === '') {
-            if (elements.dataLabelWithTooltips) {
-                elements.dataLabelWithTooltips.find('.tooltip').show();
+        if (!indId || indId === '') {
+            if (this.elements.dataLabelWithTooltips) {
+                this.elements.dataLabelWithTooltips.find('.tooltip').show();
             }
             return;
         }
-        if (elements.dataLabelWithTooltips) {
-            elements.dataLabelWithTooltips.find('.tooltip').hide();
+        if( !me.spinner.spinning ) {
+            me.spinner.insertTo(this.parentElement.parent());
+            me.spinner.start();
         }
-         me.spinner.insertTo(this.parentElement.parent());
-         me.spinner.start();
         //get the data to create ui with
-        me.paramHandler.getData( datasrc, indId, regionsetRestriction, elements );
-    },
-    refresh: function ( datasrc, indId, regionsetRestriction ) {
-        this.clean();
-        // only refresh data if component has been initialized
-        if ( this.regionSelector ) {
-            this.paramHandler.getData( datasrc, indId, regionsetRestriction );
-        }
+        me.paramHandler.getData( datasrc, indId, regionsetRestriction );
+
     },
     _createUi: function ( datasrc, indId, selections, regionsets) {
         var me = this;
