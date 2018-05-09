@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         indicatorSelector.append(indicDropdown);
         indicSelect.adjustChosen();
 
-        //Regionsets
+        // Regionsets
         main.prepend(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
         var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionOptions = {
@@ -149,7 +149,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         regionFilterSelect.adjustChosen();
 
         // Refine data label and tooltips
-        var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({title: panelLoc.refineSearchLabel, tooltip1: panelLoc.refineSearchTooltip1 || '', tooltip2: panelLoc.refineSearchTooltip2 || ''}));
+        var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({
+            title: panelLoc.refineSearchLabel,
+            tooltip1: panelLoc.refineSearchTooltip1 || '',
+            tooltip2: panelLoc.refineSearchTooltip2 || ''
+        }));
         main.append(dataLabelWithTooltips);
 
         // Refine data selections
@@ -171,54 +175,56 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
             me._populateIndicators(indicSelect, dsSelect.getValue());
 
-            if ( regionFilterSelect.getValue() !== '' && regionFilterSelect.getValue() !== null ) {
-                var unsupportedSelections = me.getUnsupportedIndicatorsList( dsSelect.getValue(), regionFilterSelect.getValue() );
-                var ids = unsupportedSelections.map( function (iteration) {
+            if (regionFilterSelect.getValue() !== '' && regionFilterSelect.getValue() !== null) {
+                var unsupportedSelections = me.getUnsupportedIndicatorsList(dsSelect.getValue(), regionFilterSelect.getValue());
+                var ids = unsupportedSelections.map(function (iteration) {
                     return iteration.id;
                 });
                 indicSelect.disableOptions(ids);
             }
-
         });
 
         indicatorSelector.on('change', function () {
+            var indId = indicSelect.getValue();
+            if (!indId || indId === '') {
+                dataLabelWithTooltips.find('.tooltip').show();
+                return;
+            }
             me._params.indicatorSelected(
                 dsSelect.getValue(),
                 indicSelect.getValue(),
-                regionFilterSelect.getValue(),
-                {
-                    dataLabelWithTooltips: dataLabelWithTooltips
-                });
+                regionFilterSelect.getValue());
         });
-        regionsetFilterElement.on('change', function (evt) {
-            var unsupportedSelections = me.getUnsupportedDatasetsList( regionFilterSelect.getValue() );
 
-            if ( !regionFilterSelect.getValue() ) {
+        regionsetFilterElement.on('change', function (evt) {
+            var unsupportedSelections = me.getUnsupportedDatasetsList(regionFilterSelect.getValue());
+
+            if (!regionFilterSelect.getValue()) {
                 indicSelect.reset();
                 dsSelect.reset();
             }
-            me._params.indicatorSelected( dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue() );
-            
+            me._params.indicatorSelected(dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue());
+
             if (unsupportedSelections) {
-                var ids = unsupportedSelections.map( function (iteration) {
+                var ids = unsupportedSelections.map(function (iteration) {
                     return iteration.id;
                 });
-                dsSelect.disableOptions(ids);    
+                dsSelect.disableOptions(ids);
             }
 
-            var checkAvailableOptions = function (select) {
+            var preselectSingleOption = function (select) {
                 var state = select.getOptions();
-                if ( state.options.length - state.disabled.length === 1 ) {
+                if (state.options.length - state.disabled.length === 1) {
                     var enabled = state.options.not(':disabled');
-                    select.setValue( enabled.val() );
+                    select.setValue(enabled.val());
                     select.element.trigger('change');
                 }
-            }; 
-            checkAvailableOptions(dsSelect);
-            checkAvailableOptions(indicSelect);
-
+            };
+            preselectSingleOption(dsSelect);
+            preselectSingleOption(indicSelect);
         });
         me._params.on('indicator.changed', function (enabled) {
+            dataLabelWithTooltips.find('.tooltip').hide();
             me.trigger('indicator.changed', enabled);
         });
 
@@ -246,49 +252,51 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         return indicSel;
     },
     /**
-     * @method  @public  getUnsupportedDatasets 
+     * @method  @public  getUnsupportedDatasets
      * @description returns a list of unsupported datasources for the currently selected regionset(s)
      * @param regionsets regionsets
      */
-    getUnsupportedDatasetsList: function ( regionsets ) {
+    getUnsupportedDatasetsList: function (regionsets) {
         if (regionsets === null) {
             return;
         }
         var unsupportedDatasources = [];
-        this.service.datasources.forEach( function (ds) {
-            var unsupported = regionsets.some( function (iter) {
-                return ds.regionsets.indexOf( Number(iter) ) === -1;
+        this.service.datasources.forEach(function (ds) {
+            var unsupported = regionsets.some(function (iter) {
+                return ds.regionsets.indexOf(Number(iter)) === -1;
             });
-            if ( unsupported ) {
+            if (unsupported) {
                 unsupportedDatasources.push(ds);
             }
         });
         return unsupportedDatasources;
     },
     /**
-     * @method  @public  getUnsupportedIndicatorsList 
+     * @method  @public  getUnsupportedIndicatorsList
      * @description returns a list of unsupported indicators for the currently selected datasource(s) & regionset(s)
      * @param datasrc datasourceId
      * @param regionsets regionsets
      */
-    getUnsupportedIndicatorsList: function ( datasrc, regionsets ) {
+    getUnsupportedIndicatorsList: function (datasrc, regionsets) {
         if (regionsets === null) {
             return;
         }
         var unsupportedIndicators = [];
 
-        this.service.getIndicatorList( datasrc, function ( err, indicator ) {
-
-            indicator.indicators.forEach( function (ind) {
-                var unsupported = regionsets.some( function (iter) {
-                    return ind.regionsets.indexOf( Number(iter) ) === -1;
+        this.service.getIndicatorList(datasrc, function (err, indicator) {
+            if (err) {
+                throw new Error('Couldnt get indicator list for ' + datasrc);
+            }
+            indicator.indicators.forEach(function (ind) {
+                var unsupported = regionsets.some(function (iter) {
+                    return ind.regionsets.indexOf(Number(iter)) === -1;
                 });
-                if ( unsupported ) {
+                if (unsupported) {
                     unsupportedIndicators.push(ind);
                 }
             });
         });
-
+        // FIXME: getIndicatorList() is async by nature -> this implementation only works if the data is cached.
         return unsupportedIndicators;
     }
 });
