@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
      * @param  {Object} select  jQuery element of selection
      * @param  {Integer} datasrc datasource
      */
-    _populateIndicators: function (select, datasrc) {
+    _populateIndicators: function (select, datasrc, regionsetRestrictions) {
         var me = this;
         var errorService = me.service.getErrorService();
         var locale = me.instance.getLocalization();
@@ -37,6 +37,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         if (!datasrc || datasrc === '') {
             return;
         }
+        var hasRegionSetRestriction = regionsetRestrictions !== '' && regionsetRestrictions !== null;
 
         this.service.getIndicatorList(datasrc, function (err, result) {
             var results = [];
@@ -47,17 +48,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 errorService.show(locale.errors.title, locale.errors.indicatorListError);
                 return;
             }
-
+            var disabledIndicatorIDs = [];
             result.indicators.forEach(function (ind) {
                 var resultObj = {
                     id: ind.id,
                     title: Oskari.getLocalized(ind.name)
                 };
                 results.push(resultObj);
+                if (hasRegionSetRestriction) {
+                    var doesntSupportRegionset = regionsetRestrictions.some(function (iter) {
+                        return ind.regionsets.indexOf(Number(iter)) === -1;
+                    });
+                    if (doesntSupportRegionset) {
+                        disabledIndicatorIDs.push(ind.id);
+                    }
+                }
             });
             var value = select.getValue();
             select.updateOptions(results);
             select.setValue(value);
+            if (hasRegionSetRestriction) {
+                select.disableOptions(disabledIndicatorIDs);
+            }
             if (result.complete) {
                 me.spinner.stop();
 
@@ -165,23 +177,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             me._params.clean();
             // If removed selection then need to be also update indicator selection
             if (dsSelect.getValue() === '') {
-                indicatorSelector.val(indicatorSelector.find('option:first').val());
-                indicatorSelector.trigger('change');
-                indicatorSelector.trigger('chosen:updated');
+                dataLabelWithTooltips.find('.tooltip').show();
+                indicatorSelector.reset();
             } else {
                 // else show spinner
                 me.spinner.start();
             }
 
-            me._populateIndicators(indicSelect, dsSelect.getValue());
-
-            if (regionFilterSelect.getValue() !== '' && regionFilterSelect.getValue() !== null) {
-                var unsupportedSelections = me.getUnsupportedIndicatorsList(dsSelect.getValue(), regionFilterSelect.getValue());
-                var ids = unsupportedSelections.map(function (iteration) {
-                    return iteration.id;
-                });
-                indicSelect.disableOptions(ids);
-            }
+            me._populateIndicators(indicSelect, dsSelect.getValue(), regionFilterSelect.getValue());
         });
 
         indicatorSelector.on('change', function () {
@@ -234,7 +237,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 return;
             }
             // update indicator list
-            me._populateIndicators(indicSelect, currentDS);
+            me._populateIndicators(indicSelect, currentDS, regionFilterSelect.getValue());
         });
         me.setElement(main);
         return main;
@@ -270,33 +273,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             }
         });
         return unsupportedDatasources;
-    },
-    /**
-     * @method  @public  getUnsupportedIndicatorsList
-     * @description returns a list of unsupported indicators for the currently selected datasource(s) & regionset(s)
-     * @param datasrc datasourceId
-     * @param regionsets regionsets
-     */
-    getUnsupportedIndicatorsList: function (datasrc, regionsets) {
-        if (regionsets === null) {
-            return;
-        }
-        var unsupportedIndicators = [];
-
-        this.service.getIndicatorList(datasrc, function (err, indicator) {
-            if (err) {
-                throw new Error('Couldnt get indicator list for ' + datasrc);
-            }
-            indicator.indicators.forEach(function (ind) {
-                var unsupported = regionsets.some(function (iter) {
-                    return ind.regionsets.indexOf(Number(iter)) === -1;
-                });
-                if (unsupported) {
-                    unsupportedIndicators.push(ind);
-                }
-            });
-        });
-        // FIXME: getIndicatorList() is async by nature -> this implementation only works if the data is cached.
-        return unsupportedIndicators;
     }
 });
