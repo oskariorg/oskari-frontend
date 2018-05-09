@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var regionFilterSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
         var regionFilterDropdown = regionFilterSelect.create(this.service.getRegionsets(), regionOptions);
         regionFilterDropdown.css({width: '100%'});
-        regionsetFilterElement.append(regionDropdown);
+        regionsetFilterElement.append(regionFilterDropdown);
         regionFilterSelect.adjustChosen();
 
         // Refine data label and tooltips

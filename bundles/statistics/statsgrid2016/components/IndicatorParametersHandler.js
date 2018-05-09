@@ -4,37 +4,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
     this._values = null;
     this.datasource = null;
     this.indicators = null;
-    this.elements = null;
 
     Oskari.makeObservable(this);
 }, {
-    getData: function ( datasrc, indicators, regionsetRestriction, elements ) {
+    getData: function ( datasrc, indicators, regionsetRestriction ) {
 
         this.datasource = datasrc;
         this.indicators = indicators;
-        this.elements = elements;
         this.regionsets = null;
         if ( regionsetRestriction !== null ) {
             this.regionsets = regionsetRestriction.map( function (id)  { return Number(id) } );
         }
 
         if ( Array.isArray( indicators ) ) {
-            this.handleMultipleIndicators(datasrc, indicators, elements);
+            this.handleMultipleIndicators(datasrc, indicators);
             return;
         }
-        this.handleSingleIndicator(datasrc, indicators, elements);
+        this.handleSingleIndicator(datasrc, indicators);
     },
     handleSingleIndicator: function( indId, cb) {
         var me = this;
         var errorService = me.service.getErrorService();
         var locale = this.locale;
         var panelLoc = locale.panels.newSearch;
-        var elements = me.elements || {};
 
         this.service.getIndicatorMetadata(this.datasource, indId, function (err, indicator) {
-            if (elements.dataLabelWithTooltips) {
-                elements.dataLabelWithTooltips.find('.tooltip').hide();
-            }
             if (err) {
                 // notify error!!
                 errorService.show(locale.errors.title, locale.errors.indicatorMetadataError);
@@ -78,7 +72,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
             }
         });
     },
-    handleMultipleIndicators: function (datasrc, indicators, elements) {
+    handleMultipleIndicators: function (datasrc, indicators) {
         indicators = indicators.filter( function (n) { return n != "" } );
         var me = this;
         var combinedValues = {};

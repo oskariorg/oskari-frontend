@@ -69,6 +69,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             }
             return;
         }
+        if (elements.dataLabelWithTooltips) {
+            elements.dataLabelWithTooltips.find('.tooltip').hide();
+        }
          me.spinner.insertTo(this.parentElement.parent());
          me.spinner.start();
         //get the data to create ui with
