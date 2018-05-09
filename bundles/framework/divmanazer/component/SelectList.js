@@ -134,14 +134,18 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         tobeRemoved.remove();
         chosen.trigger('chosen:updated');
     },
-    /** @method disableOption disables an options where value mathces id
+    /** @method disableOption disables an options where value matches id
      *   @param { Array } ids array if ids to find
      */
     disableOptions: function (ids) {
         var chosen = this.element.find('select');
+        var isDisabledOption = function (optionId) {
+            return ids.some(function (id) {
+                return '' + id === optionId;
+            });
+        }
         chosen.find('option').each(function (index, opt) {
-            // id's might be strings or numbers etc so truthy will have to do instead of !==
-            if (ids.indexOf(opt.value) != -1) {
+            if (isDisabledOption(opt.value)) {
                 jQuery(opt).attr('disabled', true);
             }
         });
