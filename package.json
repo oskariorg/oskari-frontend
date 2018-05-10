@@ -9,7 +9,8 @@
   "dependencies": {},
   "scripts": {
     "test": "eslint -c .eslintrc.js src/**/*.js",
-    "lintfix": "eslint -c .eslintrc.js src/**/*.js --fix"
+    "lintfix": "eslint -c .eslintrc.js src/**/*.js --fix",
+    "build": "webpack"
   },
   "devDependencies": {
     "eslint": "^4.6.1",
@@ -17,6 +18,7 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "webpack-cli": "^2.1.3"
   }
 }
