@@ -25,6 +25,10 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
             "src": "../../../../bundles/tampere/content-editor/instance.js"
         }, {
             "type": "text/javascript",
+            "expose": "turf",
+            "src": "../../../../libraries/turf/turf.min.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/tampere/content-editor/view/SideContentEditor.js"
         }, {
             "type": "text/javascript",

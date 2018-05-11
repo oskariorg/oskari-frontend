@@ -115,7 +115,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 'ContentEditor.ShowContentEditorRequest',
                 me.showContentEditorRequestHandler
             );
-            sandbox.registerAsStateful(me.mediator.bundleId, me);
             this.__setupLayerTools();
         },
 
@@ -208,14 +207,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         _bindOskariEvents: function() {
             var me = this;
             me.notifierService.on('DrawingEvent', function(evt) {
-                console.log(evt);
                 if (me.getName() !== evt.getId()) {
                     return;
                 }
                 if(!evt.getIsFinished()) {
-                    return;
-                }
-                if(me.sideContentEditor.isRequestProcessing()) {
                     return;
                 }
                 me.sideContentEditor.prepareRequest(evt.getGeoJson());
