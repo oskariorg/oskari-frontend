@@ -1,4 +1,5 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( service, locale, datasource ) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( flyout, service, locale, datasource ) {
+    this.parent = flyout;
     this.locale = locale;
     this.service = service;
     this.datasource = datasource;
@@ -44,15 +45,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( 
     isLoggedIn: function () {
         return Oskari.user().isLoggedIn();
     },
+    resetForm: function () {
+        var form = this.getElement().find('#stats-user-indicator');
+        form[0].reset();
+        this.addIndicatorDataForm.resetForm();
+    },
     getFormData: function () {
         var elements = this.getElement().find('.stats-indicator-form-item');
-        var data = {};
+        var data = {
+            indicators: []
+        };
+        var indicator = {};
         elements.filter( function (index, element) {
             element = jQuery(element);
             var key = element.attr("name");
-            data[key] = element.val();
+            indicator[key] = element.val();
         });
-        data['values'] = this.addIndicatorDataForm.getTableData();
+        indicator['values'] = this.addIndicatorDataForm.getTableData();
+        data["indicators"].push(indicator);
         return data;
     },
     clearUi: function () {
@@ -110,10 +120,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( 
                 if (err) {
                     return;
                 }
+                // send out event about new indicators
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                Oskari.getSandbox().notifyAll(eventBuilder(me.datasource));
+                me.displayInfo();
             });
         });
 
         this.setElement(jMain);
+    },
+    displayInfo: function () {
+        var me = this;
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton'),
+            title = "title",
+            content = "";
+        okBtn.setPrimary(true);
+        okBtn.setHandler(function() {
+            dialog.close(true);
+            me.parent.hide();
+            me.resetForm();
+        });
+        dialog.show(title, content, [okBtn]);
     },
     render: function (el) {
         el.append( this.getElement() );

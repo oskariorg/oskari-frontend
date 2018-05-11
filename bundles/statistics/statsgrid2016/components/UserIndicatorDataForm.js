@@ -31,7 +31,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorDataForm', functio
     getElement: function () {
         return this.element;
     },
-
+    resetForm: function () {
+        var form = this.getElement().find('#indicator-restriction-form');
+        form[0].reset();
+    },
     getFormData: function () {
         var elements = this.getElement().find('.stats-indicator-form-item');
         var data = {};
@@ -125,7 +128,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorDataForm', functio
             year: this.locale.userIndicators.formYear
         }));
 
-        var ds = this.service.getDatasource(this.datasourceid);
+        var ds = this.service.getDatasource(Number(this.datasourceid));
         var regions = this.createRegionSelector(ds.regionsets, form);
 
         main.prepend(form);

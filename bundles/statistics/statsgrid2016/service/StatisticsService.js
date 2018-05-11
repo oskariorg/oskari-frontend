@@ -113,7 +113,8 @@
                     }
                 });
             }
-            this.cache.addToQueue(cacheKey, indicatorData);
+            this.cache.put(cacheKey, indicatorData);
+            callback();
 
         },
         getUILabels: function (indicator, callback) {

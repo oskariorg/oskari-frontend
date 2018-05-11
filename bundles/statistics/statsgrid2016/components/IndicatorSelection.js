@@ -40,7 +40,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         this.service.getIndicatorList(datasrc, function (err, result) {
             var results = [];
-
             if (err) {
                 // notify error!!
                 Oskari.log('Oskari.statistics.statsgrid.IndicatorSelection').warn('Error getting indicator list');
@@ -76,7 +75,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     handleAddUserIndidcator: function (datasourceId) {
         var locale = this.instance.getLocalization();
         if ( !this.userIndicatorFlyout ) {
-            this.userIndicatorFlyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.MyIndicator', this.service, locale, Number(datasourceId) );
+            this.userIndicatorFlyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.MyIndicator', this.service, locale, datasourceId );
             this.userIndicatorFlyout.makeDraggable();
             this.userIndicatorFlyout.setTitle(locale.userIndicators.flyoutTitle);
         }
