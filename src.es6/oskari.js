@@ -3,12 +3,15 @@
  *
  * A set of methods to support loosely coupled classes and instances for the mapframework
  */
-import Sequence from './counter.es.js';
+import Sequence from './counter';
+import Logger from './logger';
 
 let _markers = [];
 
 let defaultSequence = new Sequence();
 let sequences = {};
+// keep track of existing loggers
+let loggers = {};
 
 let _urls= {};
 function getUrl (key) {
@@ -34,8 +37,15 @@ const Oskari = {
         }
         return sequences[type];
     },
+    log(name = 'Oskari') {
+        if (loggers[name]) {
+            return loggers[name];
+        }
+        var log = new Logger(name);
+        loggers[name] = log;
+        return log;
+    },
     _urls: {
-
             /**
              * Oskari.urls.set({
                   "map" : "https://my.map.com",

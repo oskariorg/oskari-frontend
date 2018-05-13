@@ -1,7 +1,12 @@
-import Oskari from '../src/oskari.es';
+import Oskari from '../src.es6/oskari';
 console.log(Oskari.seq().nextVal());
 console.log(Oskari.seq('moi').nextVal());
 console.log(Oskari.seq().nextVal());
 console.log(Oskari.seq('moi').nextVal());
 console.log(Oskari.seq('moi').nextVal());
 console.log(Oskari.seq('moi').nextVal());
+Oskari.log().debug('moi');
+Oskari.log().info('moi');
+Oskari.log().warn('moi');
+Oskari.log().error('moi');
+Oskari.log().deprecated('moi');
