@@ -227,13 +227,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     this.sideContentEditor._handleInfoResult(evt.getData());
                 }
             },
-            /*'DrawPlugin.FinishedDrawingEvent': function(evt) {
-                console.log(evt);
-                if ('ContentEditorDrawPlugin' !== evt.getCreatorId()) {
-                    return;
-                }
-                this.sideContentEditor.prepareRequest(evt.getDrawing());
-            },*/
             WFSFeatureGeometriesEvent: function(evt) {
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor.ParseWFSFeatureGeometries(evt);
