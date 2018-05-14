@@ -539,7 +539,7 @@ Oskari.clazz.define(
                 checkbox.bind(
                     'change',
                     function () {
-                        if (jQuery(this).attr('checked')) {
+                        if (jQuery(this).is(':checked')) {
                             // Set cookie not to show guided tour again
                             jQuery.cookie(
                                 'pti_tour_seen', '1', {
