@@ -63,10 +63,10 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/components/SelectedIndicatorsMenu.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/components/UserIndicatorForm.js"
+                "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorForm.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/components/UserIndicatorDataForm.js"
+                "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorDataForm.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Diagram.js"

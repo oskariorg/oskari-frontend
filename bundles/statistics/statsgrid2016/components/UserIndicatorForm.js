@@ -1,9 +1,9 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function (flyout, service, locale, datasourceId) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyout, service, locale, datasourceId) {
     this.parent = flyout;
     this.locale = locale;
     this.service = service;
     this.datasourceId = datasourceId;
-    this.addIndicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.UserIndicatorDataForm', service, locale, datasourceId);
+    this.addIndicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm', service, locale, datasourceId);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     this.element = null;
     Oskari.makeObservable(this);

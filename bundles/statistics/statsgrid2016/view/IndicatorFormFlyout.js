@@ -1,6 +1,6 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', function (service, locale, datasource) {
     this.element = null;
-    this.myIndicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.UserIndicatorForm', this, service, locale, datasource);
+    this.myIndicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorForm', this, service, locale, datasource);
     var me = this;
     this.on('show', function () {
         if (!me.getElement()) {

@@ -193,10 +193,6 @@ Oskari.registerLocalization(
             "organizationName": "Tematisk karta"
         },
         "userIndicators": {
-            "buttonTitle": "",
-            "formName": "",
-            "formDescription": "",
-            "formDatasource": ""
         }
     }
 });

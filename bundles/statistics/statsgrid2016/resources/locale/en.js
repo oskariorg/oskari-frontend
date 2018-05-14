@@ -196,10 +196,21 @@ Oskari.registerLocalization(
             "organizationName": "Thematic map"
         },
         "userIndicators": {
-            "buttonTitle": "",
-            "formName": "",
-            "formDescription": "",
-            "formDatasource": ""
+            "flyoutTitle": "Add new indicator",
+            "buttonTitle": "Add new indicator",
+            "buttonAddIndicator": "Add data",
+            "buttonSave": "Save",
+            "panelGeneric": {
+                "title": "Information",
+                "formName": "Name",
+                "formDescription": "Description",
+                "formDatasource": "Datasource"
+            },
+            "panelData": {
+                "title": "Statistical data",
+                "formYear": "Year"
+            },
+            "notLoggedInWarning": "Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data."
         }
     }
 });

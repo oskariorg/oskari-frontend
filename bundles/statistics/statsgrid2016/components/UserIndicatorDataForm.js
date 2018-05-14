@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorDataForm', function (service, locale, datasource) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (service, locale, datasource) {
     this.locale = locale;
     this.datasourceid = datasource;
     this.element = null;
