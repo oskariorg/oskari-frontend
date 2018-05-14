@@ -30,10 +30,12 @@ Oskari.registerLocalization(
         "panels": {
             "newSearch": {
                 "title": "SÖK DATA",
-                "datasourceTitle": "Dataleverantör",
+                "datasourceTitle": "Datakälla",
                 "indicatorTitle": "Datamängd",
+                "regionsetTitle": "Områdesindelning",
                 "selectDatasourcePlaceholder": "Välj datakälla",
                 "selectIndicatorPlaceholder": "Välj datamängd",
+                "selectRegionsetPlaceholder": "Välj områdesindelning",
                 "noResults": "Inga sökresultat hittades med",
                 "refineSearchLabel": "Precisera innehållet av datamängden du önskar att granska",
                 "refineSearchTooltip1": "Du får mera alternativ när du har först valt dataleverantören och datamängden.",
