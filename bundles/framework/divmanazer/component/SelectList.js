@@ -139,6 +139,12 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
      */
     disableOptions: function (ids) {
         var chosen = this.element.find('select');
+        
+        var state = this.getOptions();
+        for (var i = 0; i < state.disabled.length; i++) {
+            jQuery(state.disabled[i]).attr('disabled', false);
+        }
+
         var isDisabledOption = function (optionId) {
             return ids.some(function (id) {
                 return '' + id === optionId;
