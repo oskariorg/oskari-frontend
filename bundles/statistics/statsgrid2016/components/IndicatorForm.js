@@ -6,7 +6,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyou
     this.addIndicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm', service, locale, datasourceId);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     this.element = null;
-    Oskari.makeObservable(this);
     this.createUi();
 }, {
     __templates: {
@@ -18,9 +17,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyou
                             '   <textarea class="stats-indicator-form-item" name="description" form="stats-user-indicator" placeholder="${description}"></textarea> ' +
                             '   <input class="stats-indicator-form-item" type="text" name="datasource" placeholder="${source}"><br>' +
                             '</form>')
-    },
-    setElement: function (el) {
-        this.element = el;
     },
     getElement: function () {
         return this.element;
@@ -55,7 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyou
             indicator[key] = element.val();
         });
         // FIXME: no hard coded IDs!
-        indicator['id'] = 1;
+        // indicator['id'] = 1;
         indicator['values'] = this.addIndicatorDataForm.getTableData();
         data['indicators'].push(indicator);
         return data;
@@ -104,6 +100,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyou
             jMain.find('.stats-not-logged-in').removeClass('oskari-hidden');
         }
         me.addIndicatorDataForm.render(dataPanel);
+
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         btn.setTitle(this.locale('userIndicators.buttonSave'));
         btn.insertTo(jMain);
@@ -122,7 +119,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyou
             });
         });
 
-        this.setElement(jMain);
+        this.element = jMain;
     },
     displayInfo: function () {
         var me = this;
