@@ -21,8 +21,8 @@
         // possible values: wms, vector
         this._mapModes = ['vector'];
     }, {
-        __name: "StatsGrid.StatisticsService",
-        __qname: "Oskari.statistics.statsgrid.StatisticsService",
+        __name: 'StatsGrid.StatisticsService',
+        __qname: 'Oskari.statistics.statsgrid.StatisticsService',
 
         getQName: function () {
             return this.__qname;
@@ -422,7 +422,6 @@
                             filteredResponse[reg.id] = pResp[reg.id];
                         });
                         me.cache.respondToQueue(cacheKey, null, filteredResponse);
-
                     });
                 },
                 error: function (jqXHR, textStatus) {
@@ -458,7 +457,7 @@
             }
             var setId = this.getStateService().getRegionset();
             if (!setId) {
-                callback("No regionset selected");
+                callback('No regionset selected');
                 return;
             }
             var regionset = this.getRegionsets(setId);
@@ -546,7 +545,7 @@
                 callback('Datasource missing');
                 return;
             }
-            indicators.indicators.forEach( function (ind) {
+            indicators.indicators.forEach(function (ind) {
                 var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + ind.id;
                 me.cache.put(cacheKey, ind);
                 // me.getIndicatorMetadata(ds, ind.id, function (err, indicator) {
@@ -554,12 +553,12 @@
                 //         return;
                 //     }
 
-                // });   
+                // });
             });
 
             var cacheKey = 'GetIndicatorList_' + ds;
 
-            if ( Oskari.user().isLoggedIn() ) {
+            if (Oskari.user().isLoggedIn()) {
                 jQuery.ajax({
                     type: 'GET',
                     dataType: 'json',
@@ -568,7 +567,6 @@
                     },
                     url: this.sandbox.getAjaxUrl(''),
                     success: function (pResp) {
-
                         me.cache.respondToQueue(cacheKey, null, null);
                         callback();
                     },
@@ -579,7 +577,6 @@
             }
             this.cache.put(cacheKey, indicators);
             callback();
-
         }
 
     }, {

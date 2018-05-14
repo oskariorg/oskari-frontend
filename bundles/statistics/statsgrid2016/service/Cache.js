@@ -10,13 +10,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
     function () {
         this.cache = {};
     }, {
-        remove : function(key) {
+        remove: function (key) {
             this.cache[key] = null;
         },
-        put : function(key, value) {
+        put: function (key, value) {
             this.cache[key] = value;
         },
-        get : function(key) {
+        get: function (key) {
             return this.cache[key];
         },
         /**
@@ -29,10 +29,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
          *                        True means that request is already in progress and we shouldn't start another,
          *                         but wait for the response.
          */
-        addToQueue : function (key, callback) {
+        addToQueue: function (key, callback) {
             var queueKey = 'queue_' + key;
             var queue = this.get(queueKey);
-            if(!queue) {
+            if (!queue) {
                 queue = [];
             }
             queue.push(callback);
@@ -48,13 +48,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
          * @param  {String} err      Error message when there is one
          * @param  {Object} response pretty much anything that needs to be passed to the callbacks as result
          */
-        respondToQueue : function(key, err, response) {
-            if(!err) {
+        respondToQueue: function (key, err, response) {
+            if (!err) {
                 this.put(key, response);
             }
             var queueKey = 'queue_' + key;
             var callbacks = this.get(queueKey);
-            callbacks.forEach(function(cb) {
+            callbacks.forEach(function (cb) {
                 cb(err, response);
             });
             this.put(queueKey, null);
@@ -66,9 +66,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
          * @param  {Function} callback callback to call if there is a cached value
          * @return {Boolean}  True if cached response was found, callback-function was called and no further processing is needed.
          */
-        tryCachedVersion : function(cacheKey, callback) {
+        tryCachedVersion: function (cacheKey, callback) {
             var cached = this.get(cacheKey);
-            if(cached) {
+            if (cached) {
                 callback(null, cached);
                 return true;
             }
