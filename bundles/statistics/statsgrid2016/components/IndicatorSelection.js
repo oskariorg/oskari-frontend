@@ -85,9 +85,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         return this.element;
     },
     createAddIndicatorButton: function (datasourceId) {
-        var locale = this.instance.getLocalization();
+        var locale = Oskari.getMsg.bind(null, 'StatsGrid');
         if (!this.userIndicatorFlyout) {
-            this.userIndicatorFlyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.MyIndicator', this.service, locale, datasourceId);
+            this.userIndicatorFlyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', this.service, locale, datasourceId);
             this.userIndicatorFlyout.makeDraggable();
             this.userIndicatorFlyout.setTitle(locale.userIndicators.flyoutTitle);
         }

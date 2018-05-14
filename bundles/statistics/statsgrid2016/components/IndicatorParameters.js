@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         }
 
         if (!this.regionSelector) {
-            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
+            this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, Oskari.getMsg.bind(null, 'StatsGrid'));
         }
         if (!me.spinner.spinning) {
             me.spinner.insertTo(this.parentElement.parent());
