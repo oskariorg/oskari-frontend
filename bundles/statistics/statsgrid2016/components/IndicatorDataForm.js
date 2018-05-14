@@ -2,7 +2,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
     this.locale = locale;
     this.datasourceid = datasource;
     this.element = null;
-    this.regionselect = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', Oskari.getSandbox(), locale);
+    this.regionselect = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', service, locale);
     this.service = service;
     this.createUi();
 }, {
@@ -112,9 +112,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
             no_results_text: this.locale('panels.newSearch.noResults'),
             width: '100%'
         };
-        var allowedRegionsets = this.regionselect.__getOptions(regionsets);
         var regionSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        var regionDropdown = regionSelect.create(allowedRegionsets, regionOptions);
+        var regionDropdown = regionSelect.create(regionsets, regionOptions);
         regionDropdown.css({width: '100%'});
         element.append(regionDropdown);
         regionSelect.adjustChosen();

@@ -1,6 +1,5 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (sandbox, locale) {
-    this.sb = sandbox;
-    this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (service, locale) {
+    this.service = service;
     this.localization = {
         label: locale('parameters.regionset') || 'Regionset',
         noRegionset: locale('panels.newSearch.noRegionset'),

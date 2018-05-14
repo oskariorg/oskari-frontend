@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         if (!me.grid) {
             return;
         }
-        var regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, Oskari.getMsg.bind(null, 'StatsGrid'));
+        var regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.service, Oskari.getMsg.bind(null, 'StatsGrid'));
 
         me.grid.setColumnUIName('region', function (content) {
             var tableHeader = jQuery(me.__templates.tableHeader());
