@@ -61,6 +61,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.UserIndicatorForm', function ( 
             var key = element.attr("name");
             indicator[key] = element.val();
         });
+        indicator['id'] = 1;
         indicator['values'] = this.addIndicatorDataForm.getTableData();
         data["indicators"].push(indicator);
         return data;
