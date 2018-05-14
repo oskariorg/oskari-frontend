@@ -11,14 +11,23 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
                                   '</div>');
     this.element = null;
 }, {
-    /** @method create
-    *  creates a select with data specified
-    * @param {Object} data, needs to have the keys id and title to construct a list
-    *   * cls - optional param in data which sets a class to the list element so you can ex. toggle visible items in a dropdown based on class.
-    * @param {Object} options
-    * @return {jQuery Element} a list with chosen applied
+    defaultOptions: {
+      placeholder_text: '',
+      allow_single_deselect: true,
+      disable_search_threshold: 10,
+      no_results_text: '',
+      width: '100%'
+    },
+    /**
+     * @method create
+     *  creates a select with data specified
+     * @param {Object} data, needs to have the keys id and title to construct a list
+     *   * cls - optional param in data which sets a class to the list element so you can ex. toggle visible items in a dropdown based on class.
+     * @param {Object} options
+     * @return {jQuery Element} a list with chosen applied
      */
     create: function (data, options) {
+        options = options || this.defaultOptions;
         options.allowReset = options.allowReset === false ? options.allowReset : true;
         var select = this._selectTemplate.clone();
         this.element = select;
@@ -52,8 +61,8 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         return this.makeChosen(select, options);
     },
     /** @method makeChosen
-    *  applies jQuery chosen to specidied element
-    * @param {element} el
+     *  applies jQuery chosen to specidied element
+     * @param {element} el
      */
     makeChosen: function (el, options) {
         el.find('select').chosen({
@@ -66,8 +75,8 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         return el;
     },
     /** @method selectFirstValue
-    *   Select the first non-placeholder value
-    */
+     *   Select the first non-placeholder value
+     */
     selectFirstValue: function () {
         var chosen = this.element.find('select');
         chosen.find('option:nth-child(2)').attr('selected', 'selected');
@@ -230,8 +239,6 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
         });
     }
-},
-{
+}, {
     extend: ['Oskari.userinterface.component.FormComponent']
-}
-);
+});

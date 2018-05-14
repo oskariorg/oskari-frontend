@@ -191,6 +191,12 @@ Oskari.registerLocalization(
             "name": "Områdesindelning av tematiska kartan",
             "inspireName": "Tematisk karta",
             "organizationName": "Tematisk karta"
+        },
+        "userIndicators": {
+            "buttonTitle": "",
+            "formName": "",
+            "formDescription": "",
+            "formDatasource": ""
         }
     }
 });

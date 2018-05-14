@@ -88,7 +88,6 @@
             ds.info = ds.info || {};
             this.datasources.push(ds);
         },
-
         getUILabels: function (indicator, callback) {
             var me = this;
             var locale = this.locale;
@@ -540,6 +539,47 @@
                     });
                 });
             });
+        },
+        saveIndicatorData: function (ds, indicators, callback) {
+            var me = this;
+            if (!ds) {
+                callback('Datasource missing');
+                return;
+            }
+            indicators.indicators.forEach( function (ind) {
+                var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + ind.id;
+                me.cache.put(cacheKey, ind);
+                // me.getIndicatorMetadata(ds, ind.id, function (err, indicator) {
+                //     if (err) {
+                //         return;
+                //     }
+
+                // });   
+            });
+
+            var cacheKey = 'GetIndicatorList_' + ds;
+
+            if ( Oskari.user().isLoggedIn() ) {
+                jQuery.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+
+                    },
+                    url: this.sandbox.getAjaxUrl(''),
+                    success: function (pResp) {
+
+                        me.cache.respondToQueue(cacheKey, null, null);
+                        callback();
+                    },
+                    error: function (jqXHR, textStatus) {
+                        me.cache.respondToQueue(cacheKey, 'Error writing indicators');
+                    }
+                });
+            }
+            this.cache.put(cacheKey, indicators);
+            callback();
+
         }
 
     }, {

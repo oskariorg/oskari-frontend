@@ -696,4 +696,38 @@ div.tab-material-controls div.title {
 .statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
     max-width:700px;
   }
+.stats-indicator-form {
+  min-height: 300px;
+  padding: 15px;
+}
+.stats-indicator-form-item {
+  width: 96%;
+  margin-bottom: 5px;
+}
+.stats-not-logged-in {
+  width: 100%;
+  height: 40px;
+  background-color: indianred;
+  margin-bottom: 8px;
+  padding: 5px;
+  max-width: 450px;
+}
+.statsgrid-user-indicator-container div.accordion div.accordion_panel {
+  border:none;
+}
+.user-indicator-table {
+  width: 200px;
+}
+.user-indicator-table td {
+  text-align: center;
+}
+.user-indicator-table td:first-child {
+  text-align: center;
+  width: 17%;
+}
+.user-indicator-specification {
+  color:white;
+  background-color: #000;
+  
+}
 /*# sourceMappingURL=style.css.map */

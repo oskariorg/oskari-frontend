@@ -194,6 +194,17 @@ Oskari.registerLocalization(
             "name": "Teemakartan aluejako",
             "inspireName": "Teemakartta",
             "organizationName": "Teemakartta"
+        },
+        "userIndicators": {
+            "flyoutTitle": "Lisää uusi indikaattori",
+            "buttonTitle": "Lisää uusi indikaattori",
+            "buttonAddIndicator": "Syötä dataa",
+            "buttonSave": "Tallenna",
+            "formName": "Nimi",
+            "formDescription": "Kuvaus",
+            "formDatasource": "Lähde",
+            "notLoggedInWarning": "Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.",
+            "formYear": "Vuosi"
         }
     }
 });
