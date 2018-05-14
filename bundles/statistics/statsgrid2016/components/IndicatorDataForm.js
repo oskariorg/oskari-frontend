@@ -112,12 +112,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
             no_results_text: this.locale('panels.newSearch.noResults'),
             width: '100%'
         };
-        var regionSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        var regionDropdown = regionSelect.create(regionsets, regionOptions);
-        regionDropdown.css({width: '100%'});
-        element.append(regionDropdown);
-        regionSelect.adjustChosen();
-        return regionSelect;
+        var regionDropdown = this.regionselect.create(regionsets, regionOptions);
+        element.append(regionDropdown.container);
+        // TODO: CSS
+        regionDropdown.container.find('.oskari-select').css('display', 'block');
+        return regionDropdown;
     },
     createUi: function () {
         var me = this;
@@ -139,10 +138,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
         var table = me.createTable();
         this.setElement(main);
 
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        cancelBtn.setTitle('Peruuta');
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
         cancelBtn.insertTo(main);
-
         cancelBtn.setHandler(function (event) {
             me.toggle();
         });
@@ -150,7 +147,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
         indBtn.setHandler(function (event) {
             event.stopPropagation();
             me.toggle();
-            me.refreshTable(regions.getValue(), main, table);
+            me.refreshTable(regions.value(), main, table);
         });
     },
     render: function (panel) {
