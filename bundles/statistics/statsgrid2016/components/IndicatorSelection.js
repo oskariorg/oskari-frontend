@@ -191,12 +191,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         dsSelector.on('change', function () {
             me._params.clean();
-            // FIXME: hardcoded datasource ID!!!
-            if( dsSelect.getValue() === '5' ) {
+            // if datasource is of type "user" the user can add new indicators to it
+            if( me.service.getDatasource(Number(dsSelect.getValue()).type === 'user' ) {
                 me.handleAddUserIndidcator( dsSelect.getValue() );
                 return;
             }
-            // If removed selection then need to be also update indicator selection
+            // If selection was removed -> reset indicator selection
             if (dsSelect.getValue() === '') {
                 dataLabelWithTooltips.find('.tooltip').show();
                 indicatorSelector.reset();
