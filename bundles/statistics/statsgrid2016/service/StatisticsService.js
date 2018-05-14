@@ -77,7 +77,7 @@
                 return;
             }
             var me = this;
-            if (_.isArray(ds)) {
+            if (Array.isArray(ds)) {
                 // if(typeof ds === 'array') -> loop and add all
                 ds.forEach(function (item) {
                     me.addDatasource(item);
@@ -188,8 +188,8 @@
                 // wrap to an array
                 includeOnlyIds = [includeOnlyIds];
             }
-            if (_.isArray(includeOnlyIds)) {
-                var result = _.filter(list, function (reg) {
+            if (Array.isArray(includeOnlyIds)) {
+                var result = list.filter(function (reg) {
                     return includeOnlyIds.indexOf(reg.id) !== -1;
                 });
                 if (singleValue) {
