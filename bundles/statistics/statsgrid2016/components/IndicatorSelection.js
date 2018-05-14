@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     _populateIndicators: function (select, datasrc, regionsetRestrictions) {
         var me = this;
         var errorService = me.service.getErrorService();
-        var locale = me.instance.getLocalization();
+        var locale = Oskari.getMsg.bind(null, 'StatsGrid');
 
         if (!datasrc || datasrc === '') {
             return;
@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             if (err) {
                 // notify error!!
                 Oskari.log('Oskari.statistics.statsgrid.IndicatorSelection').warn('Error getting indicator list');
-                errorService.show(locale.errors.title, locale.errors.indicatorListError);
+                errorService.show(locale('errors.title'), locale('errors.indicatorListError'));
                 return;
             }
             var disabledIndicatorIDs = [];
@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 me.spinner.stop();
 
                 if (result.indicators.length === 0) {
-                    errorService.show(locale.errors.title, locale.errors.indicatorListIsEmpty);
+                    errorService.show(locale('errors.title'), locale('errors.indicatorListIsEmpty'));
                 }
             }
         });
@@ -89,11 +89,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         if (!this.userIndicatorFlyout) {
             this.userIndicatorFlyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', this.service, locale, datasourceId);
             this.userIndicatorFlyout.makeDraggable();
-            this.userIndicatorFlyout.setTitle(locale.userIndicators.flyoutTitle);
+            this.userIndicatorFlyout.setTitle(locale('userIndicators.flyoutTitle'));
         }
         var me = this;
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        btn.setTitle(locale.userIndicators.buttonTitle);
+        btn.setTitle(locale('userIndicators.buttonTitle'));
         btn.setHandler(function (event) {
             event.stopPropagation();
             me.userIndicatorFlyout.toggle('user-indicator');
