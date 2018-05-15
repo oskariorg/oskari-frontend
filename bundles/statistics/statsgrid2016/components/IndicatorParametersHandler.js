@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 datasrc: me.datasource,
                 indicators: me.indicators,
                 selectors: combinedValues,
-                regionset: me.regionsets ? me.regionsets : regionsets
+                regionset: regionsets
             }
             me.trigger('Data.Loaded', data);
         });

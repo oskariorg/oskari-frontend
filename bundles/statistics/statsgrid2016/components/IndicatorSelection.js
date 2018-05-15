@@ -56,10 +56,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 };
                 results.push(resultObj);
                 if (hasRegionSetRestriction) {
-                    var doesntSupportRegionset = regionsetRestrictions.some(function (iter) {
-                        return ind.regionsets.indexOf(Number(iter)) === -1;
+                    var supportsRegionset = regionsetRestrictions.some(function (iter) {
+                        return ind.regionsets.indexOf(Number(iter)) !== -1;
                     });
-                    if (doesntSupportRegionset) {
+                    if (!supportsRegionset) {
                         disabledIndicatorIDs.push(ind.id);
                     }
                 }
@@ -265,10 +265,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         }
  
         var unsupportedDatasources = [];
-        this.service.datasources.forEach( function (ds) {
-
+        this.service.datasources.forEach(function (ds) {
             var supported = regionsets.some(function (iter) {
-                return ds.regionsets.indexOf( Number(iter) ) !== -1;
+                return ds.regionsets.indexOf(Number(iter)) !== -1;
             });
             if (!supported) {
                 unsupportedDatasources.push(ds);
