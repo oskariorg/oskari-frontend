@@ -1,5 +1,5 @@
-// FIXME: Make this form generic in a sense that only the values for the table are sent as parameter
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (service, locale, datasource) {
+// FIXME: This component should manage the different year/regionset combinations listing + create the dataform when required.
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', function (service, locale, datasource) {
     this.locale = locale;
     this.datasourceid = datasource;
     this.element = null;
@@ -9,6 +9,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
 }, {
     __templates: {
         main: _.template('<div class="user-indicator-main"></div>'),
+        form: _.template('<form id="indicator-restriction-form">' +
+                            '   <input class="stats-indicator-form-item" type="text" name="year" placeholder="${year}"><br>' +
+                        '</form>'),
         insertTable: _.template('<table class="user-indicator-table">' +
                                         '<tbody></tbody>' +
                                 '</table>'),
@@ -21,8 +24,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
                             '<td class="uservalue" contenteditable=true style=" border: 1px solid black ;"></td>' +
                         '</tr> ')
     },
-    createForm: function () {
-
+    setElement: function (el) {
+        this.element = el;
     },
     getElement: function () {
         return this.element;
