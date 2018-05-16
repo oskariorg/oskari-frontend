@@ -140,10 +140,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     disableOptions: function (ids) {
         var chosen = this.element.find('select');
         
-        var state = this.getOptions();
-        for (var i = 0; i < state.disabled.length; i++) {
-            jQuery(state.disabled[i]).attr('disabled', false);
-        }
+        this.reset(true);
 
         var isDisabledOption = function (optionId) {
             return ids.some(function (id) {
@@ -157,15 +154,17 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         });
         chosen.trigger('chosen:updated');
     },
-    reset: function () {
+    reset: function (supressEvent) {
         var chosen = this.element.find('select');
 
         var state = this.getOptions();
         for (var i = 0; i < state.disabled.length; i++) {
             jQuery(state.disabled[i]).attr('disabled', false);
         }
-        this.resetToPlaceholder();
-        chosen.trigger('chosen:updated');
+        if (!supressEvent) {
+            this.resetToPlaceholder();
+            chosen.trigger('chosen:updated');
+        }
     },
     /** @method updateOptions
     *   updates an already defined chosen with new data

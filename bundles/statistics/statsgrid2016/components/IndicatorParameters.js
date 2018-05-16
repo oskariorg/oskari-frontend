@@ -69,7 +69,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             me.spinner.insertTo(this.parentElement.parent());
             me.spinner.start();
         }
-        this.regionsetRestrictions = regionsetRestriction;
+        this.regionsetRestrictions = regionsetRestriction.map(function (iter) {
+            return Number(iter);
+        });
         // get the data to create ui with
         me.paramHandler.getData(datasrc, indId, regionsetRestriction);
     },
@@ -100,12 +102,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             cont.append(tempSelect);
             me._selections.push(select);
         });
-        // map to numbers so we can filter
-        var numMap = me.regionsetRestrictions.map(function (iter) {
-            return Number(iter);
-        });
+
         var optionsToDisable = regionsets.filter(function (iter) {
-            if (numMap.indexOf(iter) === -1) {
+            if (me.regionsetRestrictions.indexOf(iter) === -1) {
                 return iter;
             }
         });
@@ -123,11 +122,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         select.disableOptions(optionsToDisable);
         
         var state = select.getOptions();
-        if (state.options.length - state.disabled.length === 1) {
-            var enabled = state.options.not(':disabled');
-            select.setValue(enabled.val());
-            select.element.trigger('change');
-        }
+        var enabled = state.options.not(':disabled').first();
+        select.setValue(enabled.val());
+        select.element.trigger('change');
 
         me._values = {
             ds: datasrc,
