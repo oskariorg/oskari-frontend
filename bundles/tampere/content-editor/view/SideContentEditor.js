@@ -73,6 +73,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.processGFIRequest = true;
         me.GFIFirstRequestProcessed = false;
         me.highlightFeaturesIds = [];
+        me.defaultClickDistanceThreshold = 0.05;
     }, {
         __name: 'ContentEditor',
         /**
@@ -1170,6 +1171,65 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             return toolContainer;
         },
         /**
+         * Returns the zoom based click tolerance threshold.
+         * @return {Number} the tolerance in kilometers.
+         */
+        _getZoomBasedClickToleranceThreshold: function() {
+            var me = this,
+                zoom = me.sandbox.getMap().getZoom(),
+                zoomBasedClickToleranceThreshold;
+            switch(zoom) {
+                case 1:
+                    zoomBasedClickToleranceThreshold = 6.9;
+                    break;
+                case 2:
+                    zoomBasedClickToleranceThreshold = 3.34;
+                    break;
+                case 3:
+                    zoomBasedClickToleranceThreshold = 1.79;
+                    break;
+                case 4:
+                    zoomBasedClickToleranceThreshold = 0.808;
+                    break;
+                case 5:
+                    zoomBasedClickToleranceThreshold = 0.405;
+                    break;
+                case 6:
+                    zoomBasedClickToleranceThreshold = 0.202;
+                    break;
+                case 7:
+                    zoomBasedClickToleranceThreshold = 0.111;
+                    break;
+                case 8:
+                    zoomBasedClickToleranceThreshold = 0.05;
+                    break;
+                case 9:
+                    zoomBasedClickToleranceThreshold = 0.0247;
+                    break;
+                case 10:
+                    zoomBasedClickToleranceThreshold = 0.01338;
+                    break;
+                case 11:
+                    zoomBasedClickToleranceThreshold = 0.0061;
+                    break;
+                case 12:
+                    zoomBasedClickToleranceThreshold = 0.00335;
+                    break;
+                case 13:
+                    zoomBasedClickToleranceThreshold = 0.00152;
+                    break;
+                case 14:
+                    zoomBasedClickToleranceThreshold = 0.000881;
+                    break;
+                case 15:
+                    zoomBasedClickToleranceThreshold = 0.00038;
+                    break;
+                default:
+                    zoomBasedClickToleranceThreshold = me.defaultClickDistanceThreshold;
+            }
+            return zoomBasedClickToleranceThreshold;
+        },
+        /**
          * Deduces the clicked geometry number from the layer given the geometry type and assign its index to a class variable clickedGeometryNumber.
          * @param  {String} geometryType the selected layer's geometry type
          */
@@ -1177,17 +1237,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var me = this;
             if (geometryType.indexOf("Multi") > -1) {
                 if (me.layerGeometries.geometry.getCoordinates() != undefined) {
-                    var exists = false;
                     for (var i = 0; i < me.layerGeometries.geometry.getCoordinates().length; i++) {
                         if(geometryType === "MultiPoint") {
                             var closestPoint = me.layerGeometries.geometry.getClosestPoint([me.clickCoords.x, me.clickCoords.y]);
-                            var distance = (
-                                Math.sqrt(
-                                    Math.pow((me.clickCoords.x - closestPoint[0]), 2) +
-                                    Math.pow((me.clickCoords.y - closestPoint[1]), 2)
-                                ) / me.sandbox.getMap().resolution
-                            );
-                            if(distance <= 2.8) {
+                            //Have to transform point and multipoint closest point for turf.
+                            var closestPointCoordinatesWGS84 = ol.proj.transform(closestPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            var clickedPointCoordinatesWGS84 = ol.proj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            var from = turf.point(closestPointCoordinatesWGS84);
+                            var to = turf.point(clickedPointCoordinatesWGS84);
+                            var distance = turf.distance(from, to);
+                            if(distance <= me._getZoomBasedClickToleranceThreshold()) {
                                 me.clickedGeometryNumber = i;
                                 break;
                             }
@@ -1197,9 +1256,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                                 break;
                             }
                         } else if(geometryType === "MultiLineString") {
-                            if(exists) {
-                                break;
-                            }
                             var lineStrings = me.layerGeometries.geometry.getLineStrings();
                             //Have to transform point and linestring for turf.
                             var clickedPointCoordinatesWGS84 = ol.proj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
@@ -1215,9 +1271,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                                 var line = turf.lineString(lineStringTransformed);
                                 //Get default distance in kilometers
                                 var distance = turf.pointToLineDistance(pt, line);
-                                if(distance <= 0.05) {
+                                if(distance <= me._getZoomBasedClickToleranceThreshold()) {
                                     me.clickedGeometryNumber = i;
-                                    exists = true;
+                                    break;
                                 }
                             }
                         }
