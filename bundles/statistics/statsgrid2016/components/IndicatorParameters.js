@@ -119,7 +119,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         }
         regionSelect.container.addClass('margintop');
         cont.append(regionSelect.container);
-        regionSelect.selectInstance.disableOptions(optionsToDisable);
+        var select = regionSelect.selectInstance;
+        select.disableOptions(optionsToDisable);
+        
+        var state = select.getOptions();
+        if (state.options.length - state.disabled.length === 1) {
+            var enabled = state.options.not(':disabled');
+            select.setValue(enabled.val());
+            select.element.trigger('change');
+        }
 
         me._values = {
             ds: datasrc,
