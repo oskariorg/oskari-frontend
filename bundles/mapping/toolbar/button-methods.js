@@ -248,15 +248,17 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
             // highlight the button
             button.addClass('selected');
+            var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);
 
-            if (btn.activeColour) {
-                button.css('background-color', btn.activeColour);
+            if (!btn.activeColour) {
+                btn.activeColour = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'dark' : 'light';
+            }
+            button.css('background-color', btn.activeColour);
 
-                if (btn.toggleChangeIcon === true) {
-                    // Remove button light and dark icons
-                    me._removeIconThemes(button, btn);
-                    me._changeButtonIconTheme(btn, button, btn.activeColour);
-                }
+            if (btn.toggleChangeIcon === true) {
+                // Remove button light and dark icons
+                me._removeIconThemes(button, btn);
+                me._changeButtonIconTheme(btn, button, btn.activeColour);
             }
         }
 
@@ -400,7 +402,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             if (btn.toggleChangeIcon === true) {
                 me._addButtonTheme(btn, button);
             }
-            me._addButtonTheme(btn, button);
         }
     },
     /**
