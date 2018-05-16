@@ -116,6 +116,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
     },
     toggleExtension: function (flyout, shown) {
         var element = this.getExtensions()[flyout];
+        if (!element) {
+            // flyout not part of tile
+            return;
+        }
 
         if (!shown) {
             element.removeClass('material-selected');
