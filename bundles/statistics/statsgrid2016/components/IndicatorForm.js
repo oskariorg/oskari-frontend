@@ -1,17 +1,13 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyout, service, locale, datasourceId) {
-    this.parent = flyout;
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (service, locale) {
+    // this.parent = flyout;
     this.locale = locale;
     this.service = service;
-    this.datasourceId = datasourceId;
-    this.addIndicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm', service, locale, datasourceId);
-    this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    // this.datasourceId = datasourceId;
+    // this.addIndicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', service, locale, datasourceId);
     this.element = null;
-    this.createUi();
+    // this.createUi();
 }, {
     __templates: {
-        main: _.template('<div class="stats-user-indicator-form">' +
-                            '<div class="stats-not-logged-in oskari-hidden">${warning}</div>' +
-                        '</div>'),
         form: _.template('<form class="stats-indicator-details">' +
                             '   <input class="stats-indicator-form-item" type="text" name="name" placeholder="${name}"><br>' +
                             '   <textarea class="stats-indicator-form-item" name="description" form="stats-user-indicator" placeholder="${description}"></textarea> ' +
@@ -21,18 +17,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyou
     getElement: function () {
         return this.element;
     },
-    /**
-     * Creates an accordion panel for legend and classification edit with eventlisteners on open/close
-     * @param  {String} title UI label
-     * @return {Oskari.userinterface.component.AccordionPanel} panel without content
-     */
-    _createAccordionPanel: function (title) {
-        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-        panel.setTitle(title);
-        return panel;
-    },
-    isLoggedIn: function () {
-        return Oskari.user().isLoggedIn();
+    createForm: function (datasourceId, indicatorId) {
+
     },
     resetForm: function () {
         var form = this.getElement().find('form.stats-indicator-details');
@@ -71,55 +57,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (flyou
         }
     },
     createUi: function () {
-        var me = this;
         this.clearUi();
 
-        var accordion = this._accordion;
-        var main = this.__templates.main({
-            warning: this.locale('userIndicators.notLoggedInWarning')
-        });
         var form = this.__templates.form({
             name: this.locale('userIndicators.panelGeneric.formName'),
             description: this.locale('userIndicators.panelGeneric.formDescription'),
             source: this.locale('userIndicators.panelGeneric.formDatasource')
         });
 
-        var panel = this._createAccordionPanel(this.locale('userIndicators.panelGeneric.title'));
-        var dataPanel = this._createAccordionPanel(this.locale('userIndicators.panelData.title'));
-        // panel.getHeader().remove();
-        panel.open();
-        accordion.addPanel(panel);
-        accordion.addPanel(dataPanel);
-
-        var jMain = jQuery(main);
-        var jForm = jQuery(form);
-        panel.setContent(jForm);
-        accordion.insertTo(jMain);
-
-        if (!this.isLoggedIn()) {
-            jMain.find('.stats-not-logged-in').removeClass('oskari-hidden');
-        }
-        me.addIndicatorDataForm.render(dataPanel);
-
-        var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        btn.setTitle(this.locale('userIndicators.buttonSave'));
-        btn.insertTo(jMain);
-        btn.getButton().css('float', 'right');
-        btn.setHandler(function (event) {
-            event.stopPropagation();
-
-            me.service.saveIndicatorData(me.datasourceId, me.getFormData(), function (err) {
-                if (err) {
-                    return;
-                }
-                // send out event about new indicators
-                var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
-                Oskari.getSandbox().notifyAll(eventBuilder(me.datasourceId));
-                me.displayInfo();
-            });
-        });
-
-        this.element = jMain;
+        this.element = jQuery(form);
     },
     displayInfo: function () {
         var me = this;

@@ -60,6 +60,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
         this.flyoutManager = flyoutManager;
 
         flyoutManager.flyoutInfo.forEach(function (flyout) {
+            if (flyout.hideTile) {
+                // skip creating link in tile
+                return;
+            }
             var tileExtension = jQuery(tpl({
                 id: flyout.id,
                 label: flyout.title

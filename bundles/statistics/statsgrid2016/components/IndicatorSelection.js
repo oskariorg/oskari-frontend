@@ -85,18 +85,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         return this.element;
     },
     createAddIndicatorButton: function (datasourceId) {
-        var locale = Oskari.getMsg.bind(null, 'StatsGrid');
-        if (!this.userIndicatorFlyout) {
-            this.userIndicatorFlyout = Oskari.clazz.create('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', this.service, locale, datasourceId);
-            this.userIndicatorFlyout.makeDraggable();
-            this.userIndicatorFlyout.setTitle(locale('userIndicators.flyoutTitle'));
-        }
         var me = this;
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        btn.setTitle(locale('userIndicators.buttonTitle'));
+        btn.setTitle(me.instance.getLocalization().userIndicators.buttonTitle);
         btn.setHandler(function (event) {
             event.stopPropagation();
-            me.userIndicatorFlyout.toggle('user-indicator');
+            var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
+            formFlyout.showForm(datasourceId);
         });
         return btn;
     },
