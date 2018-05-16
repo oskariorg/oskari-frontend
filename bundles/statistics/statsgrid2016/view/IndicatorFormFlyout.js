@@ -3,17 +3,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
     this.element = null;
     this.service = instance.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
-    this.myIndicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorForm', this.service, this.locale);
+    this.indicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorForm', this.locale);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     var me = this;
     me.on('close', function () {
-        me.myIndicatorForm.resetForm();
+        me.indicatorForm.resetForm();
     });
 }, {
     _templates: {
         main: _.template('<div class="stats-user-indicator-form">' +
                             '<div class="stats-not-logged-in">${warning}</div>' +
                         '</div>')
+    },
+    showForm: function (datasourceId, indicatorId) {
+        this.show();
+        this.createUi();
+        // TODO: pass indicator details instead of datasource/indicator id
+        this.indicatorForm.createForm(datasourceId, indicatorId);
+        // this.indicatorForm.render(this.getElement());
     },
     getElement: function () {
         return this.element;
@@ -30,6 +37,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var dataPanel = this._createAccordionPanel(this.locale('userIndicators.panelData.title'));
         // panel.getHeader().remove();
         genericInfoPanel.open();
+        genericInfoPanel.setContent(this.indicatorForm.createForm());
         accordion.addPanel(genericInfoPanel);
         accordion.addPanel(dataPanel);
         accordion.insertTo(this.element);
@@ -38,7 +46,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             // remove the warning about not able to save the data for logged in users
             this.element.find('.stats-not-logged-in').remove();
         }
-        
+
         var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
         btn.insertTo(this.element);
         btn.getButton().css('float', 'right');
@@ -58,13 +66,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         });
 
         this.setContent(this.element);
-    },
-    showForm: function (datasourceId, indicatorId) {
-        this.show();
-        this.createUi();
-        // TODO: pass indicator details instead of datasource/indicator id
-        this.myIndicatorForm.createForm(datasourceId, indicatorId);
-        // this.myIndicatorForm.render(this.getElement());
     },
     /**
      * Creates an accordion panel for legend and classification edit with eventlisteners on open/close
