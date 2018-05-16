@@ -1,11 +1,6 @@
 // FIXME: Make this form generic in a sense that only the values for the table are sent as parameter
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (service, locale, datasource) {
-    this.locale = locale;
-    this.datasourceid = datasource;
-    this.element = null;
-    this.regionselect = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', service, locale);
-    this.service = service;
-    this.createUi();
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function () {
+    this.element = this.createUi();
 }, {
     __templates: {
         main: _.template('<div class="user-indicator-main"></div>'),
@@ -21,54 +16,35 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
                             '<td class="uservalue" contenteditable=true style=" border: 1px solid black ;"></td>' +
                         '</tr> ')
     },
-    createForm: function () {
-
-    },
     getElement: function () {
         return this.element;
     },
-    resetForm: function () {
-        var form = this.getElement().find('#indicator-restriction-form');
-        form[0].reset();
+    createUi: function () {
+        if (this.getElement()) {
+            return this.getElement();
+        }
+        return jQuery(this.__templates.main());
     },
-    getFormData: function () {
-        var elements = this.getElement().find('.stats-indicator-form-item');
-        var data = {};
-        elements.filter(function (index, element) {
-            element = jQuery(element);
-            var key = element.attr('name');
-            data[key] = element.val();
-        });
-        return data;
-    },
-    createTable: function () {
-        return jQuery(this.__templates.insertTable());
-    },
-    refreshTable: function (region, mountPoint, tableRef) {
+    showTable: function (selectors, regions) {
         var me = this;
-
-        tableRef.empty();
+        this.getElement().empty();
         var header = this.__templates.header({
             regionPrefix: 'regionset',
             yearPrefix: 'year',
-            region: region,
-            year: me.getFormData().year
+            region: selectors.regionset,
+            year: selectors.year
         });
-        this.service.getRegions(Number(region), function (err, regionlist) {
-            if (err) {
-                // TODO: handle error
-                return;
-            }
-            regionlist.forEach(function (region) {
-                tableRef.append(me.__templates.row({
-                    regionset: region.name
-                }));
-            });
-            tableRef.prepend(header);
-            mountPoint.append(tableRef);
+        this.getElement().append(header);
+
+        var tableRef = jQuery(this.__templates.insertTable());
+        regions.forEach(function (region) {
+            tableRef.append(me.__templates.row({
+                regionset: region.name
+            }));
         });
+        this.getElement().append(tableRef);
     },
-    getTableData: function () {
+    getValues: function () {
         var table = this.getElement().find('table');
         var data = [];
         var makePair = function (elementArray) {
@@ -83,73 +59,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (s
             data.push(makePair(elements));
         });
         return data;
-    },
-    toggle: function () {
-        var form = this.getElement().find('#indicator-restriction-form');
-        var table = this.getElement().find('table');
-
-        if (form.hasClass('oskari-hidden')) {
-            form.removeClass('oskari-hidden');
-            table.addClass('oskari-hidden');
-        } else {
-            form.addClass('oskari-hidden');
-            table.removeClass('oskari-hidden');
-        }
-    },
-    clearUi: function () {
-        if (this.element === null) {
-            return;
-        }
-        this.element.empty();
-    },
-    createRegionSelector: function (regionsets, element) {
-        var regionOptions = {
-            placeholder_text: this.locale('panels.newSearch.selectRegionsetPlaceholder'),
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
-            no_results_text: this.locale('panels.newSearch.noResults'),
-            width: '100%'
-        };
-        var regionDropdown = this.regionselect.create(regionsets, regionOptions);
-        element.append(regionDropdown.container);
-        // TODO: CSS
-        regionDropdown.container.find('.oskari-select').css('display', 'block');
-        return regionDropdown;
-    },
-    createUi: function () {
-        var me = this;
-        this.clearUi();
-
-        var main = jQuery(this.__templates.main());
-        var form = jQuery(this.__templates.form({
-            year: this.locale('userIndicators.panelData.formYear')
-        }));
-
-        var ds = this.service.getDatasource(Number(this.datasourceid));
-        var regions = this.createRegionSelector(ds.regionsets, form);
-
-        main.prepend(form);
-
-        var indBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        indBtn.setTitle(this.locale('userIndicators.buttonAddIndicator'));
-        indBtn.insertTo(main);
-        var table = me.createTable();
-        this.setElement(main);
-
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-        cancelBtn.insertTo(main);
-        cancelBtn.setHandler(function (event) {
-            me.toggle();
-        });
-
-        indBtn.setHandler(function (event) {
-            event.stopPropagation();
-            me.toggle();
-            me.refreshTable(regions.value(), main, table);
-        });
-    },
-    render: function (panel) {
-        panel.setContent(this.getElement());
     }
-
 });

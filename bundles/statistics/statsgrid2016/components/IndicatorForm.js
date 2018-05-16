@@ -27,7 +27,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
         return this.element;
     },
     setValues: function (name, desc, source) {
-        // TODO: impl
+        // TODO: test impl
+        var elements = this.getElement().find('.stats-indicator-form-item');
+        elements.each(function (index, element) {
+            element = jQuery(element);
+            var key = element.attr('name');
+            if (key === 'name') {
+                element.val(name);
+            } else if (key === 'description') {
+                element.text(desc);
+            } else if (key === 'datasource') {
+                element.val(source);
+            }
+        });
     },
     getValues: function () {
         var elements = this.getElement().find('.stats-indicator-form-item');
