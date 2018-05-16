@@ -160,7 +160,7 @@
             }
             var found = null;
             this.datasources.forEach(function (ds) {
-                if (ds.id === id) {
+                if ('' + ds.id === '' + id) {
                     found = ds;
                 }
             });

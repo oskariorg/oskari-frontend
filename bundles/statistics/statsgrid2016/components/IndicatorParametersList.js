@@ -1,158 +1,96 @@
-// FIXME: This component should manage the different year/regionset combinations listing + create the dataform when required.
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', function (service, locale, datasource) {
+/**
+ * This component manage the different year/regionset combinations listing for indicator data.
+ * Also asks for selector values/regionset when user adds another dataset (selector combination for indicator)
+ */
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', function (locale) {
     this.locale = locale;
-    this.datasourceid = datasource;
     this.element = null;
-    this.regionselect = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', service, locale);
-    this.service = service;
+    this.addDatasetButton = null;
+    this.availableRegionsets = [];
+    // this.regionselect = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', service, locale);
     this.createUi();
+    Oskari.makeObservable(this);
 }, {
     __templates: {
-        main: _.template('<div class="user-indicator-main"></div>'),
-        form: _.template('<form id="indicator-restriction-form">' +
-                            '   <input class="stats-indicator-form-item" type="text" name="year" placeholder="${year}"><br>' +
-                        '</form>'),
-        insertTable: _.template('<table class="user-indicator-table">' +
-                                        '<tbody></tbody>' +
-                                '</table>'),
-        header: _.template('<div class="user-indicator-specification">' +
-                                '<div id="region">${regionPrefix}: ${region}</div>' +
-                                '<div id="year">${yearPrefix}: ${year}</div>' +
-                            '</div>'),
-        row: _.template('<tr>' +
-                            '<td class="region" style=" border: 1px solid black ;">${regionset}</td>' +
-                            '<td class="uservalue" contenteditable=true style=" border: 1px solid black ;"></td>' +
-                        '</tr> ')
-    },
-    setElement: function (el) {
-        this.element = el;
+        main: _.template('<div class="user-indicator-main"><ul></ul><div class="new-indicator-dataset-params"></div></div>'),
+        listItem: _.template('<li>${year} - ${regionset}</li>'),
+        form: '<form class="indicator-selectors-form"></form>',
+        input: _.template('<input class="stats-indicator-form-item" type="text" name="${name}" placeholder="${label}"><br />')
     },
     getElement: function () {
         return this.element;
     },
-    resetForm: function () {
-        var form = this.getElement().find('#indicator-restriction-form');
-        form[0].reset();
-    },
-    getFormData: function () {
-        var elements = this.getElement().find('.stats-indicator-form-item');
-        var data = {};
-        elements.filter(function (index, element) {
-            element = jQuery(element);
-            var key = element.attr('name');
-            data[key] = element.val();
-        });
-        return data;
-    },
-    createTable: function () {
-        return jQuery(this.__templates.insertTable());
-    },
-    refreshTable: function (region, mountPoint, tableRef) {
-        var me = this;
-
-        tableRef.empty();
-        var header = this.__templates.header({
-            regionPrefix: 'regionset',
-            yearPrefix: 'year',
-            region: region,
-            year: me.getFormData().year
-        });
-        this.service.getRegions(Number(region), function (err, regionlist) {
-            if (err) {
-                // TODO: handle error
-                return;
-            }
-            regionlist.forEach(function (region) {
-                tableRef.append(me.__templates.row({
-                    regionset: region.name
-                }));
-            });
-            tableRef.prepend(header);
-            mountPoint.append(tableRef);
-        });
-    },
-    getTableData: function () {
-        var table = this.getElement().find('table');
-        var data = [];
-        var makePair = function (elementArray) {
-            var pair = {};
-            for (var i = 0; i < elementArray.length; i++) {
-                pair[elementArray[i].className] = elementArray[i].innerText;
-            }
-            return pair;
-        };
-        table.find('tr').filter(function (index, element) {
-            var elements = jQuery(element).find('td');
-            data.push(makePair(elements));
-        });
-        return data;
-    },
-    toggle: function () {
-        var form = this.getElement().find('#indicator-restriction-form');
-        var table = this.getElement().find('table');
-
-        if (form.hasClass('oskari-hidden')) {
-            form.removeClass('oskari-hidden');
-            table.addClass('oskari-hidden');
-        } else {
-            form.addClass('oskari-hidden');
-            table.removeClass('oskari-hidden');
-        }
-    },
-    clearUi: function () {
-        if (this.element === null) {
-            return;
-        }
-        this.element.empty();
-    },
-    createRegionSelector: function (regionsets, element) {
-        var regionOptions = {
-            placeholder_text: this.locale('panels.newSearch.selectRegionsetPlaceholder'),
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
-            no_results_text: this.locale('panels.newSearch.noResults'),
-            width: '100%'
-        };
-        var regionDropdown = this.regionselect.create(regionsets, regionOptions);
-        element.append(regionDropdown.container);
-        // TODO: CSS
-        regionDropdown.container.find('.oskari-select').css('display', 'block');
-        return regionDropdown;
-    },
     createUi: function () {
+        if (this.getElement()) {
+            return this.getElement();
+        }
         var me = this;
-        this.clearUi();
 
         var main = jQuery(this.__templates.main());
-        var form = jQuery(this.__templates.form({
-            year: this.locale('userIndicators.panelData.formYear')
-        }));
-
-        var ds = this.service.getDatasource(Number(this.datasourceid));
-        var regions = this.createRegionSelector(ds.regionsets, form);
-
-        main.prepend(form);
+        this.element = main;
 
         var indBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         indBtn.setTitle(this.locale('userIndicators.buttonAddIndicator'));
         indBtn.insertTo(main);
-        var table = me.createTable();
-        this.setElement(main);
-
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-        cancelBtn.insertTo(main);
-        cancelBtn.setHandler(function (event) {
-            me.toggle();
-        });
+        this.addDatasetButton = indBtn;
 
         indBtn.setHandler(function (event) {
             event.stopPropagation();
-            me.toggle();
-            me.refreshTable(regions.value(), main, table);
+            me.requestIndicatorSelectors();
         });
+        return this.getElement();
     },
-    render: function (panel) {
-        panel.setContent(this.getElement());
-    }
+    setDatasets: function (datasets) {
+        var me = this;
+        var listEl = this.getElement().find('ul');
+        listEl.empty();
+        datasets.forEach(function (dataset) {
+            var item = me.__templates.listItem({
+                year: dataset.year,
+                regionset: dataset.regionset
+            });
+            // TODO: edit/delete
+            listEl.append(item);
+        })
+    },
+    setRegionsets: function (availableRegionsets) {
+        this.availableRegionsets = availableRegionsets;
+    },
+    resetIndicatorSelectors: function (showInsertButton) {
+        var formContainer = this.getElement().find('.new-indicator-dataset-params');
+        formContainer.empty();
+        this.addDatasetButton.setVisible(showInsertButton);
+        return formContainer;
+    },
+    requestIndicatorSelectors: function () {
+        var form = jQuery(this.__templates.form);
+        // TODO: year etc as params
+        var input = jQuery(this.__templates.input({
+            name: 'year',
+            label: this.locale('userIndicators.panelData.formYear')
+        }));
+        form.append(input);
+        var formContainer = this.resetIndicatorSelectors(false);
+        formContainer.append(form);
 
+        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        formContainer.append(select.create(this.availableRegionsets));
+        select.adjustChosen();
+
+        var me = this;
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+        cancelBtn.insertTo(formContainer);
+        cancelBtn.setHandler(function (event) {
+            me.resetIndicatorSelectors(true);
+        });
+        var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
+        showTableBtn.insertTo(formContainer);
+        showTableBtn.setHandler(function (event) {
+            me.resetIndicatorSelectors(true);
+            me.trigger('insert.data', {
+                year: input.val(),
+                regionset: Number(select.getValue())
+            });
+        });
+    }
 });

@@ -4,10 +4,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.element = null;
     this.service = instance.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
     this.indicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorForm', this.locale);
+    this.indicatorParamsList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', this.locale);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     var me = this;
     me.on('close', function () {
         me.indicatorForm.resetForm();
+    });
+    this.indicatorParamsList.on('insert.data', function (selectors) {
+        // TODO: Show data form
+        Oskari.log('IndicatorFormFlyout').info('Show data form for', selectors);
     });
 }, {
     _templates: {
@@ -20,6 +25,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.createUi();
         // TODO: pass indicator details instead of datasource/indicator id
         this.indicatorForm.createForm(datasourceId, indicatorId);
+        // TODO: pass existing datasets
+        this.indicatorParamsList.setDatasets([]);
+        // TODO: pass existing datasets
+        var datasrc = this.service.getDatasource(datasourceId);
+        var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
+        this.indicatorParamsList.setRegionsets(regionsetsForDatasource);
         // this.indicatorForm.render(this.getElement());
     },
     getElement: function () {
@@ -33,12 +44,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             warning: this.locale('userIndicators.notLoggedInWarning')
         }));
         var accordion = this._accordion;
-        var genericInfoPanel = this._createAccordionPanel(this.locale('userIndicators.panelGeneric.title'));
-        var dataPanel = this._createAccordionPanel(this.locale('userIndicators.panelData.title'));
-        // panel.getHeader().remove();
+        // generic info
+        var genericInfoPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        genericInfoPanel.setTitle(this.locale('userIndicators.panelGeneric.title'));
         genericInfoPanel.open();
         genericInfoPanel.setContent(this.indicatorForm.createForm());
         accordion.addPanel(genericInfoPanel);
+
+        // statistical data
+        var dataPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        dataPanel.setTitle(this.locale('userIndicators.panelData.title'));
+        dataPanel.setContent(this.indicatorParamsList.createUi());
         accordion.addPanel(dataPanel);
         accordion.insertTo(this.element);
 
@@ -54,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         btn.setHandler(function (event) {
             event.stopPropagation();
 
-            me.service.saveIndicatorData(me.datasourceId, me.getFormData(), function (err) {
+            me.service.saveIndicatorData(me.datasourceId, me.genericInfoPanel.getValues(), function (err) {
                 if (err) {
                     return;
                 }
@@ -66,16 +82,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         });
 
         this.setContent(this.element);
-    },
-    /**
-     * Creates an accordion panel for legend and classification edit with eventlisteners on open/close
-     * @param  {String} title UI label
-     * @return {Oskari.userinterface.component.AccordionPanel} panel without content
-     */
-    _createAccordionPanel: function (title) {
-        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-        panel.setTitle(title);
-        return panel;
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

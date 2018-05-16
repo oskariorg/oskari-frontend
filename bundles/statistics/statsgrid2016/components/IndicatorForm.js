@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
 }, {
     __templates: {
         form: _.template('<form class="stats-indicator-details">' +
+                            // should there be a datasource row here?
                             '   <input class="stats-indicator-form-item" type="text" name="name" placeholder="${name}"><br>' +
                             '   <textarea class="stats-indicator-form-item" name="description" form="stats-user-indicator" placeholder="${description}"></textarea> ' +
                             '   <input class="stats-indicator-form-item" type="text" name="datasource" placeholder="${source}"><br>' +
@@ -39,7 +40,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
         return data;
     },
     resetForm: function () {
-        var form = this.getElement().find('form.stats-indicator-details');
-        form[0].reset();
+        var form = this.getElement().find('form.stats-indicator-details')[0];
+        form.reset();
     }
 });
