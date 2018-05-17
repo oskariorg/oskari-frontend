@@ -75,10 +75,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 css: {}
             }
         };
-
         this.toolStyles = {
             'default': {
-                val: null
+                val: 'rounded-dark',
+                widthPlus: '22px',
+                widthMinus: '22px',
+                widthCenter: '22px',
+                heightPlus: '38px',
+                heightMinus: '28px',
+                heightCenter: 12,
+                heightCursor: '18px',
+                widthCursor: '17px'
             },
             'rounded-dark': {
                 val: 'rounded-dark',
