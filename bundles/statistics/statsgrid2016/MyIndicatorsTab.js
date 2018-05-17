@@ -15,7 +15,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         this.template = jQuery('<div class="indicatorsList volatile"></div>');
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
+        this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
         this.listContainer = undefined;
+        this._initContent();
     }, {
         /**
          * @method getName
@@ -35,7 +37,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         getContent: function () {
             return this.listContainer;
         },
-        initContent: function () {
+        _initContent: function () {
             this.listContainer = this.template.clone();
             this._refreshIndicatorsList();
         },
@@ -48,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          */
         _renderIndicatorsList: function (indicators) {
             if (!indicators) {
-                indicators = [];
+                indicators = [{name: "Test indicator"}];
             }
             this.listContainer.empty();
             this.indicatorData = indicators;
@@ -63,9 +65,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * Shows an error message on failure
          */
         _refreshIndicatorsList: function () {
-            var me = this,
-                service = me.instance.getStatisticsService();
-            this._renderIndicatorsList();
+            var me = this;
+            var service = me.instance.getStatisticsService();
+            var datasources = service.getDatasource();
+            var indicators = [];
+
+            if (datasources) {
+                datasources.forEach(function (ds) {
+                //    if (ds.type === 'USER') {
+                        service.getIndicatorList(ds.id, function (err, result) {
+                            if (err) {
+                                me.log.warn('Could not list own indicators for datasource with id: ' + ds.id);
+                            } else if (result) {
+                                indicators.push(result);
+                            }
+                        });
+                //    }
+                });
+            }
+            this._renderIndicatorsList(indicators);
             /*
             service.loadIndicators('UserStats', function (isSuccess, response) {
                 if (isSuccess) {
@@ -87,16 +105,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * @return {Object} matching indicator object or undefined if not found
          */
         _getIndicatorById: function (id) {
-            var me = this,
-                i;
-            for (i = 0; i < me.indicatorData.length; i += 1) {
-                if (me.indicatorData[i].id === id) {
-                    // found what we were looking for
-                    return me.indicatorData[i];
-                }
+            var matches = this.indicatorData.filter(function (indicator) {
+                return indicator.id === id;
+            });
+            if (matches.length > 0) {
+                return matches[0];
             }
             // couldn't find indicator -> show an error
-            me._showErrorMessage(me.loc('tab.error.generic'));
+            this._showErrorMessage(this.loc('tab.error.generic'));
         },
         /**
          * Shows a confirmation dialog on deleting a indicator
@@ -106,14 +122,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * @private
          */
         _confirmDelete: function (indicator) {
-            var me = this,
-                dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                okBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                ),
-                sandbox = me.instance.sandbox;
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
             okBtn.setTitle(me.loc('tab.delete'));
             okBtn.addClass('primary');
@@ -143,9 +154,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          *
          */
         _deleteIndicator: function (indicator) {
-            var me = this,
-                service = me.instance.getViewService();
-            service.deleteView(indicator, function (isSuccess) {
+            var me = this;
+            var service = me.instance.getStatisticsService();
+            service.deleteIndicator(indicator, function (isSuccess) {
                 if (isSuccess) {
                     me._refreshIndicatorsList();
                 } else {
@@ -162,10 +173,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          *
          */
         _showErrorMessage: function (msg) {
-            var dialog = Oskari.clazz.create(
-                'Oskari.userinterface.component.Popup'
-            );
-            // delete failed
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var button = dialog.createCloseButton(this.loc('tab.button.ok'));
             button.addClass('primary');
             dialog.show(this.loc('tab.error.title'), msg, [button]);
@@ -182,23 +190,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * @return {Oskari.userinterface.component.GridModel}
          */
         _getGridModel: function (indicators) {
-            var gridModel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.GridModel'
-                ),
-                i,
-                indicator,
-                data;
+            var me = this;
+            var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
             gridModel.setIdField('id');
-            for (i = 0; i < indicators.length; i += 1) {
-                indicator = indicators[i];
-                data = {
+            indicators.forEach(function (indicator) {
+                var data = {
                     'id': indicator.id,
                     'name': Oskari.util.sanitize(indicator.name),
-                    'edit': this.loc('tabs.indicator.edit'),
-                    'delete': this.loc('tab.delete')
+                    'edit': me.loc('tab.edit'),
+                    'delete': me.loc('tab.delete')
                 };
                 gridModel.addData(data);
-            }
+            });
             return gridModel;
         },
         /**
@@ -212,46 +215,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * @return {Oskari.userinterface.component.Grid}
          */
         _getGrid: function (model) {
-            var me = this,
-                instance = this.instance,
-                sandbox = instance.getSandbox(),
-                visibleFields = [
-                    'name',
-                    'edit',
-                    'delete'
-                ],
-                grid = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Grid'
-                );
+            var me = this;
+            var visibleFields = [
+                'name',
+                'edit',
+                'delete'
+            ];
+            var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
             grid.setDataModel(model);
             grid.setVisibleFields(visibleFields);
-
-            // set up the link from name field
-            var nameRenderer = function (name, data) {
-                var url = sandbox.createURL(data.url);
-                if (!url) {
-                    // no url, no link just plain text
-                    return name;
-                }
-                // create link
-                var link = me.templateLink.clone();
-                link.text(name);
-                link.bind('click', function () {
-                    if (!me.popupOpen) {
-                        // TODO show statslayer?
-                        return false;
-                    }
-                });
-                return link;
-            };
-            grid.setColumnValueRenderer('name', nameRenderer);
 
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
-                        //TODO open edit flyout
+                        // TODO open edit flyout
                         return false;
                     }
                 });
@@ -275,18 +254,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             grid.setColumnValueRenderer('delete', deleteRenderer);
 
             // setup localization
-            var i,
-                key,
-                path,
-                coluiname;
-
-            for (i = 0; i < visibleFields.length; ++i) {
-                key = visibleFields[i];
-                path = 'tab.grid.' + key;
-                coluiname = this.loc(path);
-                grid.setColumnUIName(key, coluiname || path);
-            }
-
+            visibleFields.forEach(function (field) {
+                var path = 'tab.grid.' + field;
+                var columnUIName = me.loc(path);
+                grid.setColumnUIName(field, columnUIName || path);
+            });
             return grid;
         },
 
@@ -295,9 +267,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * Register tab as eventlistener
          */
         bindEvents: function () {
-            var instance = this.instance,
-                sandbox = instance.getSandbox(),
-                p;
+            var sandbox = this.instance.getSandbox();
+            var p;
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
@@ -311,9 +282,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * Unregister tab as eventlistener
          */
         unbindEvents: function () {
-            var instance = this.instance,
-                sandbox = instance.getSandbox(),
-                p;
+            var sandbox = this.instance.getSandbox();
+            var p;
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {

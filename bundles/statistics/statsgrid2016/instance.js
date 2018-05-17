@@ -90,28 +90,25 @@ Oskari.clazz.define(
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
 
-            // Create indicators tab to personal data view
-            var tab = Oskari.clazz.create(
-                'Oskari.statistics.statsgrid.MyIndicatorsTab',
-                this
-            );
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-            panel.setTitle(tab.getTitle());
-            panel.setId(tab.getId());
-            tab.initContent();
-
-            // binds tab to events
-            if (tab.bindEvents) {
-                tab.bindEvents();
+            // Crete indicators tab to personal data view if personaldata bundle exists
+            var reqName = 'PersonalData.AddTabRequest';
+            if (sandbox.hasHandler(reqName)) {
+                me._addIndicatorsTabToPersonalData(sandbox);
+            } else {
+                // Wait for the application to load all bundles and try again
+                Oskari.on('app.start', function (details) {
+                    if (sandbox.hasHandler(reqName)) {
+                        me._addIndicatorsTabToPersonalData(sandbox);
+                    }
+                });
             }
-            // Crete AddTabRequest
-            var title = tab.getTitle(),
-                content = tab.getContent(),
-                id = tab.getId(),
-                first = false,
-                reqName = 'PersonalData.AddTabRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
-                req = reqBuilder(title, content, first, id);
+        },
+        _addIndicatorsTabToPersonalData: function (sandbox) {
+            var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.MyIndicatorsTab', this);
+            tab.bindEvents();
+            var addAsFirstTab = false;
+            var reqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest');
+            var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
             sandbox.request(this, req);
         },
         isEmbedded: function() {
