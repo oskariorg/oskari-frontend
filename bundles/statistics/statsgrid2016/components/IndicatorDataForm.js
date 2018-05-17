@@ -1,6 +1,10 @@
-// FIXME: Make this form generic in a sense that only the values for the table are sent as parameter
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function () {
+/**
+ * Generic form for feeding values for regions. Triggers events on cancel and save.
+ */
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (locale) {
+    this.locale = locale;
     this.element = this.createUi();
+    Oskari.makeObservable(this);
 }, {
     __templates: {
         main: _.template('<div class="user-indicator-main"></div>'),
@@ -8,12 +12,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function ()
                                         '<tbody></tbody>' +
                                 '</table>'),
         header: _.template('<div class="user-indicator-specification">' +
-                                '<div id="region">${regionPrefix}: ${region}</div>' +
-                                '<div id="year">${yearPrefix}: ${year}</div>' +
+                                '<div>${regionsetLabel}: ${regionset}</div>' +
+                                '<div>${yearLabel}: ${year}</div>' +
                             '</div>'),
-        row: _.template('<tr>' +
-                            '<td class="region" style=" border: 1px solid black ;">${regionset}</td>' +
-                            '<td class="uservalue" contenteditable=true style=" border: 1px solid black ;"></td>' +
+        row: _.template('<tr data-id="${regionId}">' +
+                            '<td class="region" style=" border: 1px solid black ;">${regionName}</td>' +
+                            '<td class="uservalue" contenteditable=true style=" border: 1px solid black ;">${value}</td>' +
                         '</tr> ')
     },
     getElement: function () {
@@ -25,13 +29,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function ()
         }
         return jQuery(this.__templates.main());
     },
+    clearUi: function () {
+        if (!this.getElement()) {
+            return;
+        }
+        this.getElement().empty();
+    },
     showTable: function (selectors, regions) {
         var me = this;
-        this.getElement().empty();
+        this.clearUi();
+        
         var header = this.__templates.header({
-            regionPrefix: 'regionset',
-            yearPrefix: 'year',
-            region: selectors.regionset,
+            regionsetLabel: this.locale('panels.newSearch.regionsetTitle'),
+            yearLabel: this.locale('parameters.year'),
+            regionset: selectors.regionset,
             year: selectors.year
         });
         this.getElement().append(header);
@@ -39,24 +50,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function ()
         var tableRef = jQuery(this.__templates.insertTable());
         regions.forEach(function (region) {
             tableRef.append(me.__templates.row({
-                regionset: region.name
+                regionId: region.id,
+                regionName: region.name,
+                value: region.value || ''
             }));
         });
         this.getElement().append(tableRef);
+
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+        cancelBtn.insertTo(this.getElement());
+        cancelBtn.setHandler(function () {
+            me.trigger('cancel');
+            me.clearUi();
+        });
+        var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
+        showTableBtn.insertTo(this.getElement());
+        showTableBtn.setHandler(function () {
+            me.trigger('save', me.getValues());
+        });
     },
     getValues: function () {
         var table = this.getElement().find('table');
         var data = [];
-        var makePair = function (elementArray) {
-            var pair = {};
-            for (var i = 0; i < elementArray.length; i++) {
-                pair[elementArray[i].className] = elementArray[i].innerText;
+        table.find('tr').each(function (index, element) {
+            var row = jQuery(element);
+            var columns = row.find('td');
+            var dataItem = {
+                id: row.attr('data-id'),
+                name: columns[0].innerText,
+                value: columns[1].innerText.trim()
+            };
+            if (dataItem.value !== '') {
+                // only include rows with values
+                data.push(dataItem);
             }
-            return pair;
-        };
-        table.find('tr').filter(function (index, element) {
-            var elements = jQuery(element).find('td');
-            data.push(makePair(elements));
         });
         return data;
     }

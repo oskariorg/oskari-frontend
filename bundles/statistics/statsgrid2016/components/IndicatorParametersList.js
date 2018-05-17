@@ -67,14 +67,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         // TODO: year etc as params
         var input = jQuery(this.__templates.input({
             name: 'year',
-            label: this.locale('userIndicators.panelData.formYear')
+            label: this.locale('parameters.year')
         }));
         form.append(input);
         var formContainer = this.resetIndicatorSelectors(false);
         formContainer.append(form);
 
+        formContainer.append(this.locale('panels.newSearch.selectRegionsetPlaceholder'));
         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        formContainer.append(select.create(this.availableRegionsets));
+        formContainer.append(select.create(this.availableRegionsets, {
+            allow_single_deselect: false,
+            placeholder_text: this.locale('panels.newSearch.selectRegionsetPlaceholder'),
+            width: '100%'
+        }));
+        select.selectFirstValue();
         select.adjustChosen();
 
         var me = this;

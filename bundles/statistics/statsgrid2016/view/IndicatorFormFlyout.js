@@ -5,18 +5,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.service = instance.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
     this.indicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorForm', this.locale);
     this.indicatorParamsList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', this.locale);
-    this.indicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm');
+    this.indicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm', this.locale);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     var me = this;
     me.on('close', function () {
         me.indicatorForm.resetForm();
     });
     this.indicatorParamsList.on('insert.data', function (selectors) {
-        Oskari.log('IndicatorFormFlyout').info('Show data form for', selectors);
         me.genericInfoPanel.close();
         me.dataPanel.close();
-        // TODO: fecth regions for data form
-        me.indicatorDataForm.showTable(selectors, []);
+
+        // overwrite id with name as it's displayed on the UI
+        var regionset = me.service.getRegionsets(selectors.regionset);
+        selectors.regionset = regionset.name;
+        // TODO: show spinner as getting regions might take a while?
+        me.service.getRegions(regionset.id, function (err, regions) {
+            if (err) {
+                return;
+            }
+            var formRegions = regions.map(function (region) {
+                // TODO: include existing values per region when editing existing dataset
+                return {
+                    id: region.id,
+                    name: region.name
+                }
+            });
+            me.indicatorDataForm.showTable(selectors, formRegions);
+        });
+    });
+    this.indicatorDataForm.on('save', function (data) {
+        // TODO: validate values
+        var isValidAndSaveSucceeded = true;
+        if (isValidAndSaveSucceeded) {
+            me.indicatorDataForm.clearUi();
+        }
+        Oskari.log('IndicatorFormFlyout').info('Save data form values', data);
     });
 }, {
     _templates: {

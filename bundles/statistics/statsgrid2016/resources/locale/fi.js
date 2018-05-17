@@ -198,7 +198,6 @@ Oskari.registerLocalization({
             'flyoutTitle': 'Lisää uusi indikaattori',
             'buttonTitle': 'Lisää uusi indikaattori',
             'buttonAddIndicator': 'Syötä dataa',
-            'buttonSave': 'Tallenna',
             'panelGeneric': {
                 'title': 'Tiedot',
                 'formName': 'Nimi',
@@ -206,8 +205,7 @@ Oskari.registerLocalization({
                 'formDatasource': 'Lähde'
             },
             'panelData': {
-                'title': 'Tilastotieto',
-                'formYear': 'Vuosi'
+                'title': 'Tilastotieto'
             },
             'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.'
         }

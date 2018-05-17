@@ -198,7 +198,6 @@ Oskari.registerLocalization({
             'flyoutTitle': 'Add new indicator',
             'buttonTitle': 'Add new indicator',
             'buttonAddIndicator': 'Add data',
-            'buttonSave': 'Save',
             'panelGeneric': {
                 'title': 'Information',
                 'formName': 'Name',
@@ -206,8 +205,7 @@ Oskari.registerLocalization({
                 'formDatasource': 'Datasource'
             },
             'panelData': {
-                'title': 'Statistical data',
-                'formYear': 'Year'
+                'title': 'Statistical data'
             },
             'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.'
         }
