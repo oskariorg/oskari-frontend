@@ -539,46 +539,73 @@
                 });
             });
         },
-        saveIndicatorData: function (ds, indicators, callback) {
+        saveIndicator: function (datasrc, data, callback) {
             var me = this;
-            if (!ds) {
+            if (!datasrc) {
                 callback('Datasource missing');
                 return;
             }
-            indicators.indicators.forEach(function (ind) {
-                var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + ind.id;
-                me.cache.put(cacheKey, ind);
-                // me.getIndicatorMetadata(ds, ind.id, function (err, indicator) {
-                //     if (err) {
-                //         return;
-                //     }
-
-                // });
-            });
-
-            var cacheKey = 'GetIndicatorList_' + ds;
-
-            if (Oskari.user().isLoggedIn()) {
-                jQuery.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    data: {
-
-                    },
-                    url: this.sandbox.getAjaxUrl(''),
-                    success: function (pResp) {
-                        me.cache.respondToQueue(cacheKey, null, null);
-                        callback();
-                    },
-                    error: function (jqXHR, textStatus) {
-                        me.cache.respondToQueue(cacheKey, 'Error writing indicators');
+            if (data.id) {
+                this.getIndicatorList(datasrc, function (err, indicators) {
+                    if (err) {
+                        callback(err);
+                        return;
                     }
+                    var existingIndicator = indicators.find(function (ind) {
+                        return '' + ind.id === '' + data.id;
+                    });
+                    if (!existingIndicator) {
+                        callback('Tried saving an indicator with id, but id didnt match existing indicator');
+                        return;
+                    }
+                    // TODO: call server and update name after success response
+                    // this probably updates the cache as well as mutable objects are being passed around
+                    existingIndicator.name = data.name;
+                    // possibly update "regionsets": [1851,1855] in listing cache
+                    // TODO: update metadata cache as well
+                    // TODO: send out a datasource event
                 });
+            } else {
+                // TODO: call server and update name after success response
+                var cacheKey = 'GetIndicatorList_' + datasrc;
+                var cachedList = me.cache.get(cacheKey) || [];
+                cachedList.push({
+                    id: 'RuntimeIndicator' + Oskari.seq.nextValue('RuntimeIndicator'),
+                    name: data.name,
+                    regionsets: []
+                });
+                me.cache.put(cacheKey, cachedList)
+                // TODO: update metadata cache as well
+                // TODO: send out a datasource event
             }
-            this.cache.put(cacheKey, indicators);
-            callback();
-        }
+            //var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + ind.id;
+            //me.cache.put(cacheKey, ind);
 
+            if (!Oskari.user().isLoggedIn()) {
+                // successfully saved for guest user
+                callback();
+                return;
+            }
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    datasource: datasrc,
+                    data: JSON.stringify(data)
+                },
+                url: Oskari.urls.getRoute(''),
+                success: function (pResp) {
+                    me.cache.respondToQueue(cacheKey, null, null);
+                    callback();
+                },
+                error: function (jqXHR, textStatus) {
+                    me.cache.respondToQueue(cacheKey, 'Error writing indicators');
+                    callback('Error saving data to server');
+                }
+            });
+        },
+        saveIndicatorDataset: function (indicator, callback) {
+        }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

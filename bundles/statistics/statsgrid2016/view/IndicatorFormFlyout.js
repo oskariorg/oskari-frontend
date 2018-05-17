@@ -10,28 +10,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     var me = this;
     me.on('close', function () {
         me.indicatorForm.resetForm();
+        me.indicatorDataForm.clearUi();
     });
+    // handle paramslist "add data button" -> show form with
     this.indicatorParamsList.on('insert.data', function (selectors) {
-        me.genericInfoPanel.close();
-        me.dataPanel.close();
-
-        // overwrite id with name as it's displayed on the UI
-        var regionset = me.service.getRegionsets(selectors.regionset);
-        selectors.regionset = regionset.name;
-        // TODO: show spinner as getting regions might take a while?
-        me.service.getRegions(regionset.id, function (err, regions) {
-            if (err) {
-                return;
-            }
-            var formRegions = regions.map(function (region) {
-                // TODO: include existing values per region when editing existing dataset
-                return {
-                    id: region.id,
-                    name: region.name
-                }
-            });
-            me.indicatorDataForm.showTable(selectors, formRegions);
-        });
+        me.showDatasetForm(selectors);
     });
     this.indicatorDataForm.on('save', function (data) {
         me.saveIndicatorDataset(data);
@@ -93,26 +76,55 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var me = this;
         btn.setHandler(function (event) {
             event.stopPropagation();
-            me.saveIndicator(me.genericInfoPanel.getValues());
+            me.saveIndicator(me.indicatorForm.getValues());
+            me.saveIndicatorDataset(me.indicatorDataForm.getValues());
         });
 
         this.element.append(this.indicatorDataForm.createUi());
         this.setContent(this.element);
     },
     /**
+     * Opens a form for user to add or edit data for indicators year/regionset
+     */
+    showDatasetForm: function (selectors) {
+        var me = this;
+        me.genericInfoPanel.close();
+        me.dataPanel.close();
+
+        // overwrite id with name as it's displayed on the UI
+        var regionset = me.service.getRegionsets(selectors.regionset);
+        selectors.regionset = regionset.name;
+        // TODO: show spinner as getting regions might take a while?
+        me.service.getRegions(regionset.id, function (err, regions) {
+            if (err) {
+                return;
+            }
+            var formRegions = regions.map(function (region) {
+                // TODO: include existing values per region when editing existing dataset
+                return {
+                    id: region.id,
+                    name: region.name
+                }
+            });
+            me.indicatorDataForm.showTable(selectors, formRegions);
+        });
+    },
+    /**
      * Saves the indicator name, description etc
      */
-    saveIndicator: function (data) {
+    saveIndicator: function (data, callback) {
         var me = this;
-        // gather possible indicator year/regionset data as well before saving
-        me.service.saveIndicatorData(me.datasourceId, data, function (err) {
+        // inject possible id for indicator
+        data.id = me.indicatorId;
+        me.service.saveIndicator(me.datasourceId, data, function (err) {
             if (err) {
-                // TODO: handle error!
+                callback(err);
                 return;
             }
             // send out event about new indicators
             var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
-            Oskari.getSandbox().notifyAll(eventBuilder(me.datasourceId));
+            me.instance.getSandbox().notifyAll(eventBuilder(me.datasourceId));
+            callback(null);
             me.displayInfo();
         });
     },
@@ -124,6 +136,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var isValidAndSaveSucceeded = true;
         if (isValidAndSaveSucceeded) {
             this.indicatorDataForm.clearUi();
+        }
+        if (!this.indicatorId) {
+            this.saveIndicator(me.indicatorForm.getValues());
         }
         // TODO: save dataset and in case of new indicator -> also the indicator before attaching the dataset to it
         Oskari.log('IndicatorFormFlyout').info('Save data form values', data);
