@@ -18,7 +18,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var me = this;
         if (!pId || !pGroup || !pConfig || !pConfig.callback) {
             // no config -> do nothing
-            me.sandbox.Oskari.log().debug('All parameters must be defined in AddToolButtonRequest');
+            Oskari.log('Toolbar').debug('All parameters must be defined in AddToolButtonRequest');
             return;
         }
         var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig);
