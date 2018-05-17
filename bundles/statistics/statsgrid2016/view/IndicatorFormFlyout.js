@@ -34,12 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         });
     });
     this.indicatorDataForm.on('save', function (data) {
-        // TODO: validate values
-        var isValidAndSaveSucceeded = true;
-        if (isValidAndSaveSucceeded) {
-            me.indicatorDataForm.clearUi();
-        }
-        Oskari.log('IndicatorFormFlyout').info('Save data form values', data);
+        me.saveIndicatorDataset(data);
     });
 }, {
     _templates: {
@@ -98,22 +93,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var me = this;
         btn.setHandler(function (event) {
             event.stopPropagation();
-            var data = me.genericInfoPanel.getValues();
-            // gather possible indicator year/regionset data as well before saving
-            me.service.saveIndicatorData(me.datasourceId, data, function (err) {
-                if (err) {
-                    // TODO: handle error!
-                    return;
-                }
-                // send out event about new indicators
-                var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
-                Oskari.getSandbox().notifyAll(eventBuilder(me.datasourceId));
-                me.displayInfo();
-            });
+            me.saveIndicator(me.genericInfoPanel.getValues());
         });
 
         this.element.append(this.indicatorDataForm.createUi());
         this.setContent(this.element);
+    },
+    /**
+     * Saves the indicator name, description etc
+     */
+    saveIndicator: function (data) {
+        var me = this;
+        // gather possible indicator year/regionset data as well before saving
+        me.service.saveIndicatorData(me.datasourceId, data, function (err) {
+            if (err) {
+                // TODO: handle error!
+                return;
+            }
+            // send out event about new indicators
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+            Oskari.getSandbox().notifyAll(eventBuilder(me.datasourceId));
+            me.displayInfo();
+        });
+    },
+    /**
+     * Adds/edits a year/regionset dataset for an indicator
+     */
+    saveIndicatorDataset: function (data) {
+        // TODO: validate values
+        var isValidAndSaveSucceeded = true;
+        if (isValidAndSaveSucceeded) {
+            this.indicatorDataForm.clearUi();
+        }
+        // TODO: save dataset and in case of new indicator -> also the indicator before attaching the dataset to it
+        Oskari.log('IndicatorFormFlyout').info('Save data form values', data);
     },
     displayInfo: function () {
         var me = this;

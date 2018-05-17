@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
     showTable: function (selectors, regions) {
         var me = this;
         this.clearUi();
-        
+
         var header = this.__templates.header({
             regionsetLabel: this.locale('panels.newSearch.regionsetTitle'),
             yearLabel: this.locale('parameters.year'),
