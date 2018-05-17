@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     this._values = {};
     this._selections = [];
     this.parentElement = null;
+    this.regionsetRestrictions = null;
 
     Oskari.makeObservable(this);
     var me = this;
@@ -19,6 +20,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         }
         me.trigger('indicator.changed', data.regionset.length > 0);
         me._createUi(data.datasrc, data.indicators, data.selectors, data.regionset);
+
     });
 }, {
     __templates: {
@@ -67,6 +69,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             me.spinner.insertTo(this.parentElement.parent());
             me.spinner.start();
         }
+        this.regionsetRestrictions = regionsetRestriction.map(function (iter) {
+            return Number(iter);
+        });
         // get the data to create ui with
         me.paramHandler.getData(datasrc, indId, regionsetRestriction);
     },
@@ -97,6 +102,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             cont.append(tempSelect);
             me._selections.push(select);
         });
+
+        var optionsToDisable = regionsets.filter(function (iter) {
+            if (me.regionsetRestrictions.indexOf(iter) === -1) {
+                return iter;
+            }
+        });
         var regionSelect = me.regionSelector.create(regionsets);
         me.regionSelector.setWidth(205);
         if (regionsets.length === 1) {
@@ -107,6 +118,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         }
         regionSelect.container.addClass('margintop');
         cont.append(regionSelect.container);
+        var select = regionSelect.selectInstance;
+        select.disableOptions(optionsToDisable);
+        
+        var state = select.getOptions();
+        var enabled = state.options.not(':disabled').first();
+        select.setValue(enabled.val());
+        select.element.trigger('change');
 
         me._values = {
             ds: datasrc,

@@ -56,10 +56,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 };
                 results.push(resultObj);
                 if (hasRegionSetRestriction) {
-                    var doesntSupportRegionset = regionsetRestrictions.some(function (iter) {
-                        return ind.regionsets.indexOf(Number(iter)) === -1;
+                    var supportsRegionset = regionsetRestrictions.some(function (iter) {
+                        return ind.regionsets.indexOf(Number(iter)) !== -1;
                     });
-                    if (doesntSupportRegionset) {
+                    if (!supportsRegionset) {
                         disabledIndicatorIDs.push(ind.id);
                     }
                 }
@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             // If removed selection then need to be also update indicator selection
             if (dsSelect.getValue() === '') {
                 dataLabelWithTooltips.find('.tooltip').show();
-                indicatorSelector.reset();
+                indicSelect.reset();
             } else {
                 // else show spinner
                 me.spinner.start();
@@ -263,12 +263,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         if (regionsets === null) {
             return;
         }
+ 
         var unsupportedDatasources = [];
         this.service.datasources.forEach(function (ds) {
-            var unsupported = regionsets.some(function (iter) {
-                return ds.regionsets.indexOf(Number(iter)) === -1;
+            var supported = regionsets.some(function (iter) {
+                return ds.regionsets.indexOf(Number(iter)) !== -1;
             });
-            if (unsupported) {
+            if (!supported) {
                 unsupportedDatasources.push(ds);
             }
         });
