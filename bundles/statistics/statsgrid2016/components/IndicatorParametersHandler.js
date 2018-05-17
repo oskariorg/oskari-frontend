@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         if (indicators === null) {
             return;
         }
+
         this.datasource = datasrc;
         this.indicators = indicators;
         this.regionsets = null;
@@ -113,8 +114,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 datasrc: me.datasource,
                 indicators: me.indicators,
                 selectors: combinedValues,
-                regionset: me.regionsets ? me.regionsets : regionsets
-            };
+                regionset: regionsets
+            }
             me.trigger('Data.Loaded', data);
         });
     }

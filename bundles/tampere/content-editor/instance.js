@@ -14,9 +14,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
+        this.notifierService = null;
         this.localization = null;
         this.sideContentEditor = null;
         this.disabledLayers = null;
+        this.finishedDrawing = false;
     }, {
         /**
          * @static
@@ -77,6 +79,17 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             me.sandbox = sandbox;
 
             this.localization = Oskari.getLocalization(this.getName());
+
+            // create the OskariEventNotifierService for handling Oskari events.
+            var notifierService = Oskari.clazz.create('Oskari.tampere.bundle.content-editor.OskariEventNotifierService');
+            me.sandbox.registerService(notifierService);
+            me.notifierService = notifierService;
+            me.notifierService.eventHandlers.forEach(function(eventName){
+                sandbox.registerForEventByName(me.notifierService, eventName);
+            });
+
+            me._bindOskariEvents();
+
             sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -102,7 +115,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 'ContentEditor.ShowContentEditorRequest',
                 me.showContentEditorRequestHandler
             );
-
             this.__setupLayerTools();
         },
 
@@ -189,6 +201,23 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         },
 
         /**
+         * [_bindOskariEvents description]
+         * @return {[type]} [description]
+         */
+        _bindOskariEvents: function() {
+            var me = this;
+            me.notifierService.on('DrawingEvent', function(evt) {
+                if (me.getName() !== evt.getId()) {
+                    return;
+                }
+                if(!evt.getIsFinished()) {
+                    return;
+                }
+                me.sideContentEditor.prepareRequest(evt.getGeoJson());
+            });
+        },
+
+        /**
          * @property {Object} eventHandlers
          * @static
          */
@@ -197,12 +226,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor._handleInfoResult(evt.getData());
                 }
-            },
-            'DrawPlugin.FinishedDrawingEvent': function(evt) {
-                if ('ContentEditorDrawPlugin' !== evt.getCreatorId()) {
-                    return;
-                }
-                this.sideContentEditor.prepareRequest(evt.getDrawing());
             },
             WFSFeatureGeometriesEvent: function(evt) {
                 if (this.sideContentEditor != null) {

@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.instance = instance;
         me.loc = localization;
         me.templates = {
-        		wrapper: '<div></div>',
+                wrapper: '<div></div>',
                 getinfoResultTable: '<table class="getinforesult_table"></table>',
                 tableRow: '<tr></tr>',
                 tableCell: '<td></td>',
@@ -73,6 +73,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.processGFIRequest = true;
         me.GFIFirstRequestProcessed = false;
         me.highlightFeaturesIds = [];
+        me.defaultClickDistanceThreshold = 0.05;
     }, {
         __name: 'ContentEditor',
         /**
@@ -99,21 +100,50 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 this._dialog = null;
             }
         },
-         startNewDrawing: function (config) {
-            this.sendDrawRequest(config);
+        startNewDrawing: function () {
+            this.sendDrawRequest();
         },
         /**
          * @method startNewDrawing
-         * Sends a StartDrawRequest with given params. Changes the panel controls to match the application state (new/edit)
-         * @param config params for StartDrawRequest
+         * Sends a StartDrawingRequest with given params. Changes the panel controls to match the application state (new/edit)
          */
-        sendDrawRequest: function (config) {
-            var me = this,
-                conf = jQuery.extend(true, {}, config);
-
-            var startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(conf);
-            this.instance.sandbox.request(this, startRequest);
+        sendDrawRequest: function () {
+            var me = this;
+            var geometry = null;
+            for(var i = 0; i < me.allClickedFeatures.length; ++i) {
+                if(me.allClickedFeatures[i].fid === me.currentEditFeatureFid) {
+                    geometry = me.allClickedFeatures[i].geometry;
+                }
+            }
+            if(geometry != null) {
+                var format = new ol.format.GeoJSON();
+                var geomAsGeoJSON = format.writeGeometry(geometry);
+                if (me.getDrawToolsGeometryType().indexOf("Multi") > -1) {
+                    me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.instance.getName(), me.getDrawToolsGeometryType(), {
+                        allowMultipleDrawing: 'multiGeom'
+                        ,geojson: geomAsGeoJSON
+                    }]);
+                } else {
+                    me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.instance.getName(), me.getDrawToolsGeometryType(), {
+                        allowMultipleDrawing: 'single'
+                        ,geojson: geomAsGeoJSON
+                    }]);
+                }
+            } else {
+                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.instance.getName(), me.getDrawToolsGeometryType(), {
+                    allowMultipleDrawing: true
+                }]);
+            }
         },
+        /**
+         * Returns the correct draw tools geometry type ie. replaces multigeometries with single geometries.
+         * @return {[type]} [description]
+         */
+        getDrawToolsGeometryType: function() {
+            var me = this;
+            return me.layerGeometryType.replace('Multi', '');
+        },
+
         /**
          * @method sendStopDrawRequest
          * Sends a StopDrawingRequest.
@@ -122,11 +152,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          */
         sendStopDrawRequest: function (isCancel) {
             var me = this;
-            //var toolbarRequest = me.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
-            //me.sandbox.request(me, toolbarRequest);
-
-            var request = this.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
-            this.instance.sandbox.request(this, request);
+            me.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [me.instance.getName(), true, true]);
         },
         setGeometryType: function (geometryType) {
             this._parseLayerGeometryResponse(geometryType);
@@ -151,10 +177,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         /**
          * @method parseFeatureFromClickedFeature
-         * Returns an OpenLayers feature or null.
-         *
-         *
-         * @return {OpenLayers.Feature.Vector}
          */
         parseFeatureFromClickedFeature: function(clickedGeometry) {
             this._addClickedFeature(clickedGeometry);
@@ -171,21 +193,18 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _findGeometryByFidFromLayer: function (fid) {
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(this.selectedLayerId);
             var geometries = layer.getClickedGeometries();
-            var wkt = new OpenLayers.Format.WKT();
+            var wkt = new ol.format.WKT();
             for(var j = 0; j < geometries.length; j++) {
                 if(geometries[j][0] === fid) {
-                    var feature = wkt.read(geometries[j][1]);
-                    var geometry = feature.geometry;
-                    return {fid: fid, geometry: geometry};
+                    return {fid: fid, geometry: wkt.readGeometry(geometries[j][1])};
                 }
             }
             return null;
         },
         _addClickedFeature: function (clickedFeature) {
             var me = this;
-            var wkt = new OpenLayers.Format.WKT();
-            var feature = wkt.read(clickedFeature[1]);
-            var geometry = feature.geometry;
+            var wkt = new ol.format.WKT();
+            var geometry = wkt.readGeometry(clickedFeature[1]);
             if (me.allClickedFeatures.length > 0) {
                 var isNewFeature = true;
                 for (var i = 0; i < me.allClickedFeatures.length; i++) {
@@ -194,9 +213,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         me.allClickedFeatures[i].geometry = geometry;
                     }
                 }
-
-                if (isNewFeature == true)
-                {
+                if (isNewFeature == true) {
                     me.allClickedFeatures.push({fid: clickedFeature[0], geometry: geometry});
                 }
             } else {
@@ -227,9 +244,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if (geometry != null) {
                 me.layerGeometries = geometry;
             }
-
-            me.setGeometryType(me.layerGeometries.geometry.id);
+            me.setGeometryType(me.layerGeometries.geometry.getType());
             me._addDrawTools();
+            me.currentEditFeatureFid = fid;
         },
         _showAddUnsavedInfoModal: function () {
             var me = this;
@@ -281,23 +298,19 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             me.getFieldsTypes();
             me.mainPanel = content;
             var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-            drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', {id: 'ContentEditorDrawPlugin',multipart: true});
-            mapModule.registerPlugin(drawPlugin);
-            mapModule.startPlugin(drawPlugin);
-            this.drawPlugin = drawPlugin;
 
             container.append(content);
-            $(".icon-close").on('click', function(){
+            container.find('.icon-close').on('click', function(){
                 me.sendStopDrawRequest(true);
             	me.instance.setEditorMode(false);
             });
 
             content.find('div.header h3').append(me.loc.title);
 
-            content.find('.content').append($("<div>" + me.loc.featureModifyInfo + "</div>"));
-            content.find('.content').append($("<div>" + me.loc.toolInfo + "</div>"));
-            content.find('.content').append($("<div>" + me.loc.geometryModifyInfo + "</div>"));
-            content.find('.content').append($("<div>" + me.loc.geometryDeleteInfo + "</div>"));
+            content.find('.content').append(jQuery("<div>" + me.loc.featureModifyInfo + "</div>"));
+            content.find('.content').append(jQuery("<div>" + me.loc.toolInfo + "</div>"));
+            content.find('.content').append(jQuery("<div>" + me.loc.geometryModifyInfo + "</div>"));
+            content.find('.content').append(jQuery("<div>" + me.loc.geometryDeleteInfo + "</div>"));
             var addFeatureButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addFeatureButton.setTitle(me.loc.buttons.addFeature);
             addFeatureButton.setHandler(function () {
@@ -308,13 +321,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me._addNewFeature();
                 }
             });
-            var addFeatureButtonContainer = $("<div />");
+            var addFeatureButtonContainer = jQuery("<div />");
 
             addFeatureButton.insertTo(addFeatureButtonContainer);
             content.find('.content').append(addFeatureButtonContainer);
             me._addDrawTools(content);
 
-            content.find('.content').append($("<div />").addClass("properties-container"));
+            content.find('.content').append(jQuery("<div />").addClass("properties-container"));
 
             if (!me._checkLayerVisibility(me.layerId)) {
             	me.isLayerVisible = false;
@@ -329,7 +342,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 type : 'GET',
                 data : {'layer_id':me.layerId},
                 dataType : 'text',
-                url : ajaxUrl + 'action_route=GetWFSLayerGeometryType',
+                url : Oskari.urls.getRoute('GetWFSLayerGeometryType'),
                 success : function(response) {
                     me._parseLayerGeometryResponse(response);
                     me._addDrawTools();
@@ -340,16 +353,15 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var me = this;
             jQuery.ajax({
                 type : 'GET',
-                url : ajaxUrl + 'action_route=GetWFSDescribeFeature&layer_id=' + me.layerId,
+                url : Oskari.urls.getRoute('GetWFSDescribeFeature') + '&layer_id=' + me.layerId,
                 success : function(response) {
                     me.fieldsTypes = response.propertyTypes;
                 }
             });
         },
-        _fillLayerGeometries: function(geometries)
-        {
+        _fillLayerGeometries: function(geometries) {
             if (this.layerGeometries != null && this.layerGeometries.geometry != null) {
-                var layerGeometries = JSON.parse(new OpenLayers.Format.GeoJSON().write(this.layerGeometries.geometry));
+                var layerGeometries = JSON.parse(new ol.format.GeoJSON().writeGeometry(this.layerGeometries.geometry));
                 if (layerGeometries != null) {
                     if (layerGeometries.type == "Point") {
                         geometries.type = "point";
@@ -392,11 +404,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     }
                 }
             }
-
-            //geometries.push({x:1,y:2});
         },
-        sendRequest: function (requestData, deleteFeature)
-        {
+        sendRequest: function (requestData, deleteFeature) {
             var me = this,
                 okButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 url = null,
@@ -404,11 +413,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             okButton.setTitle(me.loc.buttons.ok);
             if (me.operationMode === "create") {
-                url = ajaxUrl + 'action_route=InsertFeature';
+                url =  Oskari.urls.getRoute('InsertFeature');
             } else {
-                url = ajaxUrl + 'action_route=SaveFeature';
+                url =  Oskari.urls.getRoute('SaveFeature');
             }
-
             var dialog = {};
             if (deleteFeature == true) {
                 dialog.header = me.loc.geometryDelete.header;
@@ -419,15 +427,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 dialog.success = me.loc.featureUpdate.success;
                 dialog.error = me.loc.featureUpdate.error;
             }
-
             jQuery.ajax({
                 type : 'POST',
-                dataType : 'json',
-                beforeSend : function(x) {
-                    if(x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
                 data : {'featureData':JSON.stringify(requestData)},
                 url : url,
                 success : function(response) {
@@ -464,6 +465,47 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 }
             });
         },
+        /**
+         * Clones the geometries drawn for the request formed for backend.
+         * @param  {Object} requestData the request data for backend
+         * @param  {Object} geometries the OL geometries drawn.
+         */
+        _cloneGeometries: function(requestData, geometries) {
+            var me = this;
+            if(geometries.type === 'FeatureCollection') {
+                geometries.features.forEach(function(value){
+                    if(value.geometry.type === 'MultiPoint') {
+                        requestData.geometries.type = "multipoint";
+                        for(var j = 0; j < value.geometry.coordinates.length; ++j) {
+                            //Check that the edited feature does not get saved again.
+                            if(j!=me.clickedGeometryNumber) {
+                                requestData.geometries.data.push({x: value.geometry.coordinates[j][0], y: value.geometry.coordinates[j][1]});
+                            }
+                        }
+                    } else if(value.geometry.type === 'LineString') {
+                        requestData.geometries.type = "multilinestring";
+                        var tmpLineString = [];
+                        for (var j = 0; j < value.geometry.coordinates.length; ++j) {
+                            tmpLineString.push({x: value.geometry.coordinates[j][0], y: value.geometry.coordinates[j][1]});
+                        }
+                        requestData.geometries.data.push(tmpLineString);
+                    } else if(value.geometry.type === 'Polygon') {
+                        requestData.geometries.type = "multipolygon";
+                        var coordinatesMultiPolygon = value.geometry.coordinates;
+                        var tmpPolygon = [];
+                        for (var j = 0; j < coordinatesMultiPolygon.length; ++j) {
+                            var coordinatesPolygon = coordinatesMultiPolygon[j];
+                            var tmpLinearString = [];
+                            for(var k = 0; k < coordinatesPolygon.length; ++k) {
+                                tmpLinearString.push({x: coordinatesPolygon[k][0], y: coordinatesPolygon[k][1]});
+                            }
+                            tmpPolygon.push(tmpLinearString);
+                        }
+                        requestData.geometries.data.push(tmpPolygon);
+                    }
+                });
+            }
+        },
         prepareRequest: function (geometries, deleteFeature) {
             var me = this;
             var requestData = {};
@@ -474,48 +516,17 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 requestData.featureFields = featureData;
             }
 
-
             requestData.featureId = (me.operationMode == "edit" && me._getFeatureData().length > 0 ? me._getFeatureData()[0].value : null);
             requestData.layerId = me.selectedLayerId;
             requestData.srsName = this.sandbox.getMap().getSrsName();
             requestData.geometries = {};
             requestData.geometries.data = [];
             if (me.operationMode == "edit" || deleteFeature == true) {
-                me._fillLayerGeometries(requestData.geometries);
+                me._fillLayerGeometries(requestData.geometries, geometries);
             }
-
-            if (geometries != null)
-            {
-                if (geometries.id.indexOf("OpenLayers_Geometry_MultiPoint_") == 0) {
-                    requestData.geometries.type = "multipoint";
-                    for (var i = 0; i < geometries.components.length; i++) {
-                        requestData.geometries.data.push({x: geometries.components[i].x, y: geometries.components[i].y});
-                    }
-                } else if (geometries.id.indexOf("OpenLayers_Geometry_MultiLineString_") == 0) {
-                    requestData.geometries.type = "multilinestring";
-                    for (var i = 0; i < geometries.components.length; i++) {
-                        var tmpLineString = [];
-                        for (var j = 0; j < geometries.components[i].components.length; j++) {
-                            tmpLineString.push({x: geometries.components[i].components[j].x, y: geometries.components[i].components[j].y});
-                        }
-                        requestData.geometries.data.push(tmpLineString);
-                    }
-                } else if (geometries.id.indexOf("OpenLayers_Geometry_MultiPolygon_") == 0) {
-                    requestData.geometries.type = "multipolygon";
-                    for (var i = 0; i < geometries.components.length; i++) {
-                        var tmpPolygon = [];
-                        for (var j = 0; j < geometries.components[i].components.length; j++) {
-                            var tmpLinearString = [];
-                            for (var k = 0; k < geometries.components[i].components[j].components.length; k++) {
-                                tmpLinearString.push({x: geometries.components[i].components[j].components[k].x, y: geometries.components[i].components[j].components[k].y});
-                            }
-                            tmpPolygon.push(tmpLinearString);
-                        }
-                        requestData.geometries.data.push(tmpPolygon);
-                    }
-                }
+            if (geometries != null) {
+                me._cloneGeometries(requestData, geometries);
             }
-
             me.sendRequest(requestData, deleteFeature);
         },
         /**
@@ -633,9 +644,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             me.highlightFeaturesIds = [];
-            for (var i = 0; i < data.features.length; i++) {
-                if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != ""))
-                me.highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
+            if(data.features) {
+                for (var i = 0; i < data.features.length; i++) {
+                    if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != ""))
+                    me.highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
+                }
             }
 
             this._highlighGeometries(me.highlightFeaturesIds, layer, true);
@@ -662,19 +675,19 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 colourScheme,
                 font;
 
-            $('.content-draw-tools').removeClass('hide');
+            me.mainPanel.find('.content-draw-tools').removeClass('hide');
             fragments = this._formatWFSFeaturesForInfoBox(data, editableFeatureFid);
 
-            $(".properties-container").empty();
+            me.mainPanel.find(".properties-container").empty();
             if (fragments != null && fragments.length) {
                 contentData.html = this._renderFragments(fragments, editableFeatureFid);
                 contentData.layerId = fragments[0].layerId;
                 contentData.layerName = fragments[0].layerName;
                 contentData.featureId = data.features[0][0];
                 content.push(contentData);
-                $(".properties-container").append(contentData.html);
+                me.mainPanel.find(".properties-container").append(contentData.html);
                 me._setDatepickerLanguage();
-                $(".datepicker").datepicker({'dateFormat': "yy-mm-dd", 'changeMonth': true, 'changeYear': true, 'showButtonPanel': true}).attr('readonly', 'readonly');
+                me.mainPanel.find(".datepicker").datepicker({'dateFormat': "yy-mm-dd", 'changeMonth': true, 'changeYear': true, 'showButtonPanel': true}).attr('readonly', 'readonly');
             }
         },
         /**
@@ -695,7 +708,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             if(fields.length === 0) { //layer view is empty, get fields from DescribeFeatureType
                 fields = ["__fid"];
-                $.each(me.fieldsTypes, function(key, value) {
+                jQuery.each(me.fieldsTypes, function(key, value) {
                    if(value.indexOf('gml:') !== 0) { //skip geometry
                        fields.push(key);
                    }
@@ -761,7 +774,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 return '';
             }
             var even = true,
-                html = $(this.templates.getinfoResultTable),
+                html = jQuery(this.templates.getinfoResultTable),
                 row = null,
                 keyColumn = null,
                 valColumn = null,
@@ -786,7 +799,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     switch (vType) {
                     case 'string':
                         if (value.indexOf('http://') === 0) {
-                            valpres = $(this.templates.linkOutside);
+                            valpres = jQuery(this.templates.linkOutside);
                             valpres.attr('href', value);
                             valpres.append(value);
                         } else {
@@ -808,7 +821,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     case 'object':
                         // format array
                         if (jQuery.isArray(value)) {
-                            valueDiv = $(this.templates.wrapper);
+                            valueDiv = jQuery(this.templates.wrapper);
                             for (i = 0; i < value.length; i += 1) {
                                 innerTable = this._json2html(value[i]);
                                 valueDiv.append(innerTable);
@@ -823,28 +836,28 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     }
                     even = !even;
 
-                    row = $(this.templates.tableRow);
+                    row = jQuery(this.templates.tableRow);
                     // FIXME this is unnecessary, we can do this with a css selector.
                     if (!even) {
                         row.addClass('odd');
                     }
 
-                    keyColumn = $(this.templates.tableCell);
+                    keyColumn = jQuery(this.templates.tableCell);
                     keyColumn.append(key);
                     row.append(keyColumn);
 
-                    valColumn = $(this.templates.tableCell);
+                    valColumn = jQuery(this.templates.tableCell);
 					if (key == "__fid" || readonly) {
 						valColumn.append(value);
 					} else {
-                        valInput = $(this.templates.tableInput);
+                        valInput = jQuery(this.templates.tableInput);
                         switch (this.fieldsTypes[key])
                         {
                             case 'xsd:numeric':
                                 valInput.prop('type', 'number');
                                 valInput.on('blur', function (event) {
-                                    if ($.isNumeric($(this).val()) == false) {
-                                        $(this).addClass('field-invalid');
+                                    if (jQuery.isNumeric(jQuery(this).val()) == false) {
+                                        jQuery(this).addClass('field-invalid');
 
                                         var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                                         okButton.setTitle(me.loc.buttons.ok);
@@ -855,8 +868,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                                     }
                                 });
                                 valInput.on('keyup', function (event) {
-                                    if ($.isNumeric($(this).val())) {
-                                        $(this).removeClass('field-invalid');
+                                    if (jQuery.isNumeric(jQuery(this).val())) {
+                                        jQuery(this).removeClass('field-invalid');
                                     }
                                 });
                                 break;
@@ -864,8 +877,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             case 'xsd:decimal':
                                 valInput.prop('type', 'number').prop('step', 0.01);
                                 valInput.on('blur', function (event) {
-                                    if ($.isNumeric($(this).val()) == false) {
-                                        $(this).addClass('field-invalid');
+                                    if (jQuery.isNumeric(jQuery(this).val()) == false) {
+                                        jQuery(this).addClass('field-invalid');
 
                                         var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                                         okButton.setTitle(me.loc.buttons.ok);
@@ -876,8 +889,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                                     }
                                 });
                                 valInput.on('keyup', function (event) {
-                                    if ($.isNumeric($(this).val())) {
-                                        $(this).removeClass('field-invalid');
+                                    if (jQuery.isNumeric(jQuery(this).val())) {
+                                        jQuery(this).removeClass('field-invalid');
                                     }
                                 });
                                 break;
@@ -931,8 +944,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         _storeFormData: function () {
             var me = this;
-            $(".getinforesult_table tr input").each(function (index) {
-                me.currentData.features[0][index+1] = $(this).val();
+            me.mainPanel.find('.getinforesult_table tr input').each(function (index) {
+                me.currentData.features[0][index+1] = jQuery(this).val();
             });
         },
         /**
@@ -955,10 +968,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         wrapper.append(fragmentMarkup);
                     }
                 } else {
-                    var contentWrapper = $(me.templates.wrapper),
-                        headerWrapper = $(me.templates.header),
-                        titleWrapper = $(me.templates.headerTitle),
-                        actionButtonWrapper = $(me.templates.wrapper);
+                    var contentWrapper = jQuery(me.templates.wrapper),
+                        headerWrapper = jQuery(me.templates.header),
+                        titleWrapper = jQuery(me.templates.headerTitle),
+                        actionButtonWrapper = jQuery(me.templates.wrapper);
 
                     titleWrapper.append(fragmentTitle);
                     titleWrapper.attr('title', fragmentTitle);
@@ -979,11 +992,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             me._enableGFIRequestProcess();
                             me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                         });
-                        var drawToolsContainer = $("<div/>").addClass("content-draw-tools");
+                        var drawToolsContainer = jQuery("<div/>").addClass("content-draw-tools");
                         drawToolsContainer.append(me._addDrawTools());
                         contentWrapper.append(drawToolsContainer);
 
-                        var buttonsContainer = $("<div/>").addClass("content-editor-buttons");
+                        var buttonsContainer = jQuery("<div/>").addClass("content-editor-buttons");
                         saveButton.insertTo(buttonsContainer);
                         cancelButton.insertTo(buttonsContainer);
 
@@ -1044,17 +1057,18 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 delete fragment.isMyPlace;
 
                 return wrapper;
-            }, $(me.templates.wrapper));
+            }, jQuery(me.templates.wrapper));
         },
         _getFeatureData: function () {
             var result = [];
-            $('.edit-feature .getinforesult_table').first().find('tr').each(function () {
-                var key = $(this).find('td').eq(0).html();
+            var me = this;
+            me.mainPanel.find('.edit-feature .getinforesult_table').first().find('tr').each(function () {
+                var key = jQuery(this).find('td').eq(0).html();
                 var val = null;
-                if ($(this).find('td').eq(1).find("input").length > 0) {
-                    val = $(this).find('td').eq(1).find("input").val();
+                if (jQuery(this).find('td').eq(1).find("input").length > 0) {
+                    val = jQuery(this).find('td').eq(1).find("input").val();
                 } else {
-                    val = $(this).find('td').eq(1).html();
+                    val = jQuery(this).find('td').eq(1).html();
                 }
 
                 result.push({ "key": key, "value": val });
@@ -1063,23 +1077,23 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             return result;
         },
         _parseLayerGeometryResponse: function (response) {
-            if (response == "gml:MultiPointPropertyType" || response.indexOf("OpenLayers_Geometry_MultiPoint_") > -1)
+            if (response == "MultiPoint" || response == "gml:MultiPointPropertyType")
             {
                 this.layerGeometryType = "MultiPoint";
             }
-            else if (response.indexOf("OpenLayers_Geometry_Point_") > -1)
+            else if (response == "Point" || response == "gml:PointPropertyType")
             {
                 this.layerGeometryType = "Point";
             }
-            else if (response == "gml:MultiLineStringPropertyType" || response.indexOf("OpenLayers_Geometry_MultiLineString_") > -1)
+            else if (response == "MultiLineString" || response == "gml:MultiLineStringPropertyType")
             {
                 this.layerGeometryType = "MultiLineString";
             }
-            else if (response == "gml:MultiPolygonPropertyType" || response == "gml:MultiSurfacePropertyType" || response.indexOf("OpenLayers_Geometry_MultiPolygon_") > -1)
+            else if (response == "MultiPolygon" || response == "gml:MultiPolygonPropertyType" || response == "gml:MultiSurfacePropertyType")
             {
                 this.layerGeometryType = "MultiPolygon";
             }
-            else if (response.indexOf("OpenLayers_Geometry_Polygon_") > -1) {
+            else if (response == "Polygon" || response == "gml:PolygonPropertyType") {
                 this.layerGeometryType = "Polygon";
             }
             else if (response == "gml:GeometryPropertyType")
@@ -1089,77 +1103,54 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         _addDrawTools: function () {
             var me = this;
-            $(".content-draw-tools").empty();
-            var pointButton = $("<div />").addClass('add-point tool').attr('title', me.loc.tools.point);
+            me.mainPanel.find('.content-draw-tools').empty();
+            var pointButton = jQuery("<div />").addClass('add-point tool').attr('title', me.loc.tools.point);
             if (me.layerGeometryType == "MultiPoint" || me.layerGeometryType == "Point" || me.layerGeometryType == "GeometryPropertyType") {
                 pointButton.on('click', function() {
                         me.drawingActive = true;
-                        me.startNewDrawing({
-                            drawMode: 'point'
-                        });
+                        me.startNewDrawing();
                 });
             } else {
                 pointButton.addClass("disabled");
             }
 
-            var lineButton = $("<div />").addClass('add-line tool').attr('title', me.loc.tools.line);
+            var lineButton = jQuery("<div />").addClass('add-line tool').attr('title', me.loc.tools.line);
             if (me.layerGeometryType == "MultiLineString" || me.layerGeometryType == "GeometryPropertyType") {
                 lineButton.on('click', function() {
                         me.drawingActive = true;
-                        me.startNewDrawing({
-                            drawMode: 'line'
-                        });
+                        me.startNewDrawing();
                 });
             } else {
                 lineButton.addClass("disabled");
             }
 
-            var areaButton = $("<div />").addClass('add-area tool').attr('title', me.loc.tools.area);
+            var areaButton = jQuery("<div />").addClass('add-area tool').attr('title', me.loc.tools.area);
             if (me.layerGeometryType == "MultiPolygon" || me.layerGeometryType == "Polygon" || me.layerGeometryType == "GeometryPropertyType") {
                 areaButton.on('click', function() {
                         me.drawingActive = true;
-                        me.startNewDrawing({
-                            drawMode: 'area'
-                        });
+                        me.startNewDrawing();
                 });
             } else {
                 areaButton.addClass("disabled");
             }
 
-            var geomEditButton = $("<div />").addClass('selection-area tool').attr('title', me.loc.tools.geometryEdit);
+            var geomEditButton = jQuery("<div />").addClass('selection-area tool').attr('title', me.loc.tools.geometryEdit);
             if (me.layerGeometryType != null) {
 
                 geomEditButton.on('click', function() {
                     me.drawingActive = true;
                     me.drawToolType = "edit";
                     me.clickedGeometryNumber = null;
-                    if (me.layerGeometries.geometry.id.indexOf("Multi") > -1) {
-                        if (me.layerGeometries.geometry.components != undefined) {
-                            for (var i = 0; i < me.layerGeometries.geometry.components.length; i++) {
-                                if (me.layerGeometries.geometry.components[i].atPoint({lon:me.clickCoords.x,lat:me.clickCoords.y}, 2, 2))
-                                {
-                                    me.clickedGeometryNumber = i;
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        me.clickedGeometryNumber = null;
-                    }
-
-                    me.startNewDrawing({
-                        drawMode: 'area'
-                    });
-                    me.sendStopDrawRequest(true);
-                    me.startNewDrawing({
-                        geometry: (me.clickedGeometryNumber != null ? me.layerGeometries.geometry.components[me.clickedGeometryNumber] : me.layerGeometries.geometry)
-                    });
+                    var geometryType = me.layerGeometries.geometry.getType();
+                    me._getClickedGeometryNumber(geometryType);
+                    var geometry = (me.clickedGeometryNumber != null ? me.layerGeometries.geometry.getCoordinates()[me.clickedGeometryNumber] : me.layerGeometries.geometry);
+                    me.startNewDrawing();
                 });
             } else {
                 geomEditButton.addClass("disabled");
             }
 
-            var geomDeleteButton = $("<div />").addClass('selection-remove tool').attr('title', me.loc.tools.remove);
+            var geomDeleteButton = jQuery("<div />").addClass('selection-remove tool').attr('title', me.loc.tools.remove);
 
             if (me.operationMode === "create")  {
                 geomDeleteButton.addClass("disabled");
@@ -1170,14 +1161,127 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 });
             }
 
-            var toolContainer = $("<div />").addClass('toolrow');
+            var toolContainer = jQuery("<div />").addClass('toolrow');
             toolContainer.append(pointButton);
             toolContainer.append(lineButton);
             toolContainer.append(areaButton);
             toolContainer.append(geomEditButton);
             toolContainer.append(geomDeleteButton);
-            $('.content-draw-tools').append(toolContainer);
+            me.mainPanel.find('.content-draw-tools').append(toolContainer);
             return toolContainer;
+        },
+        /**
+         * Returns the zoom based click tolerance threshold.
+         * @return {Number} the tolerance in kilometers.
+         */
+        _getZoomBasedClickToleranceThreshold: function() {
+            var me = this,
+                zoom = me.sandbox.getMap().getZoom(),
+                zoomBasedClickToleranceThreshold;
+            switch(zoom) {
+                case 1:
+                    zoomBasedClickToleranceThreshold = 6.9;
+                    break;
+                case 2:
+                    zoomBasedClickToleranceThreshold = 3.34;
+                    break;
+                case 3:
+                    zoomBasedClickToleranceThreshold = 1.79;
+                    break;
+                case 4:
+                    zoomBasedClickToleranceThreshold = 0.808;
+                    break;
+                case 5:
+                    zoomBasedClickToleranceThreshold = 0.405;
+                    break;
+                case 6:
+                    zoomBasedClickToleranceThreshold = 0.202;
+                    break;
+                case 7:
+                    zoomBasedClickToleranceThreshold = 0.111;
+                    break;
+                case 8:
+                    zoomBasedClickToleranceThreshold = 0.05;
+                    break;
+                case 9:
+                    zoomBasedClickToleranceThreshold = 0.0247;
+                    break;
+                case 10:
+                    zoomBasedClickToleranceThreshold = 0.01338;
+                    break;
+                case 11:
+                    zoomBasedClickToleranceThreshold = 0.0061;
+                    break;
+                case 12:
+                    zoomBasedClickToleranceThreshold = 0.00335;
+                    break;
+                case 13:
+                    zoomBasedClickToleranceThreshold = 0.00152;
+                    break;
+                case 14:
+                    zoomBasedClickToleranceThreshold = 0.000881;
+                    break;
+                case 15:
+                    zoomBasedClickToleranceThreshold = 0.00038;
+                    break;
+                default:
+                    zoomBasedClickToleranceThreshold = me.defaultClickDistanceThreshold;
+            }
+            return zoomBasedClickToleranceThreshold;
+        },
+        /**
+         * Deduces the clicked geometry number from the layer given the geometry type and assign its index to a class variable clickedGeometryNumber.
+         * @param  {String} geometryType the selected layer's geometry type
+         */
+        _getClickedGeometryNumber: function(geometryType) {
+            var me = this;
+            if (geometryType.indexOf("Multi") > -1) {
+                if (me.layerGeometries.geometry.getCoordinates() != undefined) {
+                    for (var i = 0; i < me.layerGeometries.geometry.getCoordinates().length; i++) {
+                        if(geometryType === "MultiPoint") {
+                            var closestPoint = me.layerGeometries.geometry.getClosestPoint([me.clickCoords.x, me.clickCoords.y]);
+                            //Have to transform point and multipoint closest point for turf.
+                            var closestPointCoordinatesWGS84 = ol.proj.transform(closestPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            var clickedPointCoordinatesWGS84 = ol.proj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            var from = turf.point(closestPointCoordinatesWGS84);
+                            var to = turf.point(clickedPointCoordinatesWGS84);
+                            var distance = turf.distance(from, to);
+                            if(distance <= me._getZoomBasedClickToleranceThreshold()) {
+                                me.clickedGeometryNumber = i;
+                                break;
+                            }
+                        } else if(geometryType === "MultiPolygon") {
+                            if(me.layerGeometries.geometry.intersectsCoordinate([me.clickCoords.x, me.clickCoords.y])) {
+                                me.clickedGeometryNumber = i;
+                                break;
+                            }
+                        } else if(geometryType === "MultiLineString") {
+                            var lineStrings = me.layerGeometries.geometry.getLineStrings();
+                            //Have to transform point and linestring for turf.
+                            var clickedPointCoordinatesWGS84 = ol.proj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            var pt = turf.point(clickedPointCoordinatesWGS84);
+                            for(var j = 0; j < lineStrings.length; ++j) {
+                                var lineStringCoords = lineStrings[j].getCoordinates();
+                                var lineStringTransformed = [];
+                                for(var k = 0; k < lineStringCoords.length; ++k) {
+                                    var lineStringPoint = lineStringCoords[k];
+                                    var lineStringPointWGS84 = ol.proj.transform(lineStringPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                                    lineStringTransformed.push(lineStringPointWGS84);
+                                }
+                                var line = turf.lineString(lineStringTransformed);
+                                //Get default distance in kilometers
+                                var distance = turf.pointToLineDistance(pt, line);
+                                if(distance <= me._getZoomBasedClickToleranceThreshold()) {
+                                    me.clickedGeometryNumber = i;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                me.clickedGeometryNumber = null;
+            }
         },
         setClickCoords: function (coords) {
             this.clickCoords = coords;
@@ -1223,7 +1327,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     }
                 },
                 data : {'featureData':JSON.stringify(requestData)},
-                url : ajaxUrl + 'action_route=DeleteFeature',
+                url : Oskari.urls.getRoute('DeleteFeature'),
                 success : function(response) {
                     me._clearFeaturesList();
                     // remove old tiles
@@ -1300,21 +1404,23 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 };
                 var request = me.sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')("contentEditor", me.loc.deleteGeometryDialog.title, content, new OpenLayers.LonLat(featureGeometry.getCentroid().x, featureGeometry.getCentroid().y), options);
                 me.sandbox.request(me.getName(), request);
-                $("#delete-dialog").parent().parent().css('height', 'auto').css('padding-bottom', '30px');
+                jQuery("#delete-dialog").parent().parent().css('height', 'auto').css('padding-bottom', '30px');
             }
             me.operationMode = "edit";
         },
         _clearFeaturesList: function () {
-            $(".properties-container").empty();
+            var me = this;
+            me.mainPanel.find('.properties-container').empty();
         },
         _formIsValid: function () {
-            if ($(".properties-container input.field-invalid").length > 0) {
+            var me = this;
+            if (me.mainPanel.find('.properties-container input.field-invalid').length > 0) {
                 return false;
             }
             return true;
         },
         _setDatepickerLanguage: function () {
-            var storedLanguage = $.cookie('oskari.language');
+            var storedLanguage = jQuery.cookie('oskari.language');
             var lang = null;
             if (storedLanguage == null) {
                 var supportedLanguages = Oskari.getSupportedLanguages();
@@ -1333,7 +1439,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 lang = storedLanguage;
             }
 
-            $.datepicker.regional['fi'] = {
+            jQuery.datepicker.regional['fi'] = {
                 closeText: 'Sulje',
                 prevText: '&laquo;Edellinen',
                 nextText: 'Seuraava&raquo;',
@@ -1352,9 +1458,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 showMonthAfterYear: false,
                 yearSuffix: ''};
 
-            $.datepicker.setDefaults(
-                  $.extend(
-                    $.datepicker.regional[lang],
+            jQuery.datepicker.setDefaults(
+                  jQuery.extend(
+                    jQuery.datepicker.regional[lang],
                     {'dateFormat':'yy-mm-dd'}
                   )
                 );

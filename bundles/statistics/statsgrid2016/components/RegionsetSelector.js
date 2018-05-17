@@ -62,6 +62,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (s
                 jqSelect.val(value);
                 jqSelect.trigger('chosen:updated');
             },
+            selectInstance: select,
             field: jqSelect
         };
     },
