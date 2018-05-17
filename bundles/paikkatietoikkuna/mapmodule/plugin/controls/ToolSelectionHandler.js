@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
             var type = null;
             var id = null;
             var mapModule = me.publisherToolbarPlugin.getMapModule();
-            switch ( toolName ) {
+            switch (toolName) {
                 case 'map_control_tool_prev':
                     // custom history (TODO: more testing needed + do this with request
                     // instead of findRegisteredModuleInstance)

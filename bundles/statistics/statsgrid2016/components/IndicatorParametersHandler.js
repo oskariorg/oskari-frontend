@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         if ( indicators === null ) {
             return;
         }
+
         this.datasource = datasrc;
         this.indicators = indicators;
         this.regionsets = null;

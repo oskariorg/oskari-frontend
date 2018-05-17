@@ -3,7 +3,7 @@
  *
  * Handles the buttons for myplaces functionality
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.ButtonHandler',
 
     /**
      * @method create called automatically on construction
@@ -80,9 +80,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
         init: function () {
             var user = Oskari.user();
             // different tooltip for guests - "Please log in to use"
-            var guestPostfix = ' - ' + this.loc('guest.loginShort'),
-                tool,
-                tooltip;
+            var guestPostfix = ' - ' + this.loc('guest.loginShort');
+            var tool;
+            var tooltip;
             for (tool in this.buttons) {
                 if (this.buttons.hasOwnProperty(tool)) {
                     tooltip = this.loc('tools.' + tool + '.tooltip');
@@ -98,18 +98,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * implements Module protocol start methdod
          */
         start: function () {
-            var me = this,
-                sandbox = me.instance.sandbox,
-                p,
-                tool,
-                measureTool;
+            var me = this;
+            var sandbox = me.instance.sandbox;
+            var p;
+            var tool;
+            var measureTool;
             sandbox.register(me);
 
             // request toolbar to add buttons
             var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             var addAdditionalMeasureTools = me.instance.conf.measureTools === true;
 
-            var addMeasureTool = function(tool){
+            var addMeasureTool = function (tool) {
                 if (tool === 'line') {
                     measureTool = jQuery.extend(true, {}, me.buttons[tool]);
                     measureTool.callback = function () {
@@ -173,8 +173,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * Disables draw buttons
          */
         disableButtons: function () {
-            var sandbox = this.instance.sandbox,
-                stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+            var sandbox = this.instance.sandbox;
+            var stateReqBuilder = Oskari.requestBuilder('Toolbar.ToolButtonStateRequest');
             sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
         },
         /**
@@ -210,7 +210,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             if (!config.geometry) {
                 // show only when drawing new place
                 this._showDrawHelper(config.drawMode);
-
             }
         },
         /**
@@ -222,13 +221,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 this.dialog.close(true);
                 this.dialog = null;
             }
-            var me = this,
-                title = me.loc('tools.' + drawMode + '.title'),
-                message = me.loc('tools.' + drawMode + '.add'),
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var me = this;
+            var title = me.loc('tools.' + drawMode + '.title');
+            var message = me.loc('tools.' + drawMode + '.add');
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var buttons = [];
+            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             this.dialog = dialog;
-            var buttons = [],
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
 
             cancelBtn.setHandler(function () {
                 // ask toolbar to select default tool
@@ -289,14 +288,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -313,7 +310,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                     this.sendStopDrawRequest(true);
                     this.instance.enableGfi(true);
                     this.drawMode = null;
-                    if (this.dialog){
+                    if (this.dialog) {
                         this.dialog.close();
                     }
                 }
@@ -324,8 +321,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
              * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent} event
              */
             'DrawPlugin.SelectedDrawingEvent': function (event) {
-                if (this.instance.view.drawPluginId !== event.getCreatorId())
-                {
+                if (this.instance.view.drawPluginId !== event.getCreatorId()) {
                     return;
                 }
 
@@ -371,8 +367,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
                 var drawingMode = event.getDrawingMode();
                 if (drawingMode !== undefined && drawingMode !== null) {
-                    var areaDialogContent = this.loc('tools.' + drawingMode + '.next'),
-                        content = this.dialog.getJqueryContent();
+                    var areaDialogContent = this.loc('tools.' + drawingMode + '.next');
+                    var content = this.dialog.getJqueryContent();
                     if (content.find('div.infoText') !== areaDialogContent) {
                         content.find('div.infoText').html(areaDialogContent);
                         this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
@@ -385,9 +381,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                     return;
                 }
 
-                var geom = event.getDrawing(),
-                    mode = event.getDrawMode(),
-                    resultText = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geom, mode);
+                var geom = event.getDrawing();
+                var mode = event.getDrawMode();
+                var resultText = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geom, mode);
 
                 if (this.dialog) {
                     var content = this.dialog.getJqueryContent();
@@ -395,13 +391,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 }
             },
 
-            'InfoBox.InfoBoxEvent': function(event){
-                var popupId = this.instance.getMainView().getPopupId(),
-                    sandbox = this.instance.getSandbox(),
-                    form = this.instance.getMainView().getForm(),
-                    keyBoardRequest;
+            'InfoBox.InfoBoxEvent': function (event) {
+                var popupId = this.instance.getMainView().getPopupId();
+                var sandbox = this.instance.getSandbox();
+                var form = this.instance.getMainView().getForm();
+                var keyBoardRequest;
 
-                if (event.getId() == popupId){
+                if (event.getId() === popupId) {
                     this.instance.enableGfi(true);
                     this.sendStopDrawRequest(true);
                     if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
