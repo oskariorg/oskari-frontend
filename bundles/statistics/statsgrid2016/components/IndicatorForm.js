@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
         return data;
     },
     resetForm: function () {
-        var form = this.getElement().find('form.stats-indicator-details')[0];
-        form.reset();
+        // the element is a form
+        this.getElement()[0].reset();
     }
 });

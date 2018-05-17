@@ -3,6 +3,7 @@
  */
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (locale) {
     this.locale = locale;
+    this.selectors = {};
     this.element = this.createUi();
     Oskari.makeObservable(this);
 }, {
@@ -35,15 +36,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         }
         this.getElement().empty();
     },
-    showTable: function (selectors, regions) {
+    showTable: function (selectors, regions, labels) {
         var me = this;
         this.clearUi();
+        labels = labels || {};
+        this.selectors = selectors || {};
 
         var header = this.__templates.header({
             regionsetLabel: this.locale('panels.newSearch.regionsetTitle'),
             yearLabel: this.locale('parameters.year'),
-            regionset: selectors.regionset,
-            year: selectors.year
+            regionset: labels[selectors.regionset] || selectors.regionset,
+            year: labels[selectors.year] || selectors.year
         });
         this.getElement().append(header);
 
@@ -56,6 +59,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             }));
         });
         this.getElement().append(tableRef);
+        // Focus on the first input cell
+        tableRef.find('tr td.uservalue')[0].focus();
 
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
         cancelBtn.insertTo(this.getElement());
@@ -71,7 +76,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
     },
     getValues: function () {
         var table = this.getElement().find('table');
-        var data = [];
+        var data = {
+            selectors: this.selectors,
+            values: []
+        };
         table.find('tr').each(function (index, element) {
             var row = jQuery(element);
             var columns = row.find('td');
@@ -80,9 +88,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                 name: columns[0].innerText,
                 value: columns[1].innerText.trim()
             };
-            if (dataItem.value !== '') {
-                // only include rows with values
-                data.push(dataItem);
+            if (dataItem.value !== '' && !Number.isNaN(dataItem.value)) {
+                // only include rows with values and cast value to number as legend expects it to be a number
+                dataItem.value = Number(dataItem.value);
+                data.values.push(dataItem);
             }
         });
         return data;

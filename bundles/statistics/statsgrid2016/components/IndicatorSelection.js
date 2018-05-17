@@ -84,15 +84,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     getElement: function () {
         return this.element;
     },
-    createAddIndicatorButton: function (datasourceId) {
-        var me = this;
+    createAddIndicatorButton: function () {
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        btn.setTitle(me.instance.getLocalization().userIndicators.buttonTitle);
-        btn.setHandler(function (event) {
-            event.stopPropagation();
-            var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
-            formFlyout.showForm(datasourceId);
-        });
+        btn.setTitle(this.instance.getLocalization().userIndicators.buttonTitle);
         return btn;
     },
     /** **** PUBLIC METHODS ******/
@@ -183,6 +177,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         main.append(selectionsContainer);
         me._params.attachTo(selectionsContainer);
 
+        var btnAddIndicator = me.createAddIndicatorButton();
+        btnAddIndicator.insertTo(main);
+
         dsSelector.on('change', function () {
             me._params.clean();
             // If selection was removed -> reset indicator selection
@@ -196,11 +193,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
             me._populateIndicators(indicSelect, dsSelect.getValue(), regionFilterSelect.getValue());
 
+            btnAddIndicator.setHandler(function (event) {
+                event.stopPropagation();
+                var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
+                formFlyout.showForm(dsSelect.getValue());
+            });
             // if datasource is of type "user" the user can add new indicators to it
-            if (me.service.getDatasource(Number(dsSelect.getValue())).type === 'user') {
-                var btn = me.createAddIndicatorButton(dsSelect.getValue());
-                btn.insertTo(me.getElement());
-            }
+            btnAddIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
         });
 
         indicatorSelector.on('change', function () {
