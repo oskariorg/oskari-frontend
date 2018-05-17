@@ -16,7 +16,8 @@ Oskari.registerLocalization(
         "edit": {
             "popup": {
                 "title": "Päivitetään upotettua karttaa…",
-                "msg": "Päivitetään upotetun kartan tietoja…"
+                "msg": "Päivitetään upotetun kartan tietoja…",
+                "editPublished": "Avataan upotettua karttaa muokattavaksi. Odota hetki, ole hyvä!"
             }
         },
         "BasicView": {

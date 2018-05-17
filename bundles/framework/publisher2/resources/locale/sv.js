@@ -16,7 +16,8 @@ Oskari.registerLocalization(
         "edit": {
             "popup": {
                 "title": "Öppna den inbäddade kartan för redigering",
-                "msg": "Den tidigare inbäddade kartans uppgifter uppdateras"
+                "msg": "Den tidigare inbäddade kartans uppgifter uppdateras",
+                "editPublished": "Öppning tidigare inbäddade kartan för redigering. Var god vänta."
             }
         },
         "BasicView": {

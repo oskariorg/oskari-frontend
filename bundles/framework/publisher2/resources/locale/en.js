@@ -16,7 +16,8 @@ Oskari.registerLocalization(
         "edit": {
             "popup": {
                 "title": "Opening embedded map…",
-                "msg": "Updating embedded map…"
+                "msg": "Updating embedded map…",
+                "editPublished": "Opening embedded map for editing. Please wait a moment!"
             }
         },
         "BasicView": {

@@ -23,6 +23,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         this.defaultConf = conf;
         this.publisher = null;
         this.customTileRef = null;
+        this.loc = Oskari.getMsg.bind(null, 'Publisher2');
+        this.editWithUuidUrlParameterHandled = false;
     }, {
         /**
          * @static
@@ -101,13 +103,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var loc = this.getLocalization();
 
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
-            // create and register request handler
-            var reqHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
-                function (data) {
-                    me.setPublishMode(true, data);
-                });
-            sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             // Let's add publishable filter to layerlist if user is logged in
             if (Oskari.user().isLoggedIn()) {
@@ -129,7 +124,146 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                         'publishable');
                 }
             }
+
+            var openPublisherEditor;
+            // check from url parameters if publisher should be opened.
+            var uuid = me._checkEditWithUuidUrlParameter();
+            if (uuid) {
+                openPublisherEditor = me._openPublisherForEditingFactory();
+
+                Oskari.on('app.start', function (details) {
+                    me._sendEditRequest(uuid);
+                });
+            }
+
+            openPublisherEditor = openPublisherEditor || function (data) {
+                me.setPublishMode(true, data);
+            };
+            // create and register request handler
+            var reqHandler = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
+                openPublisherEditor
+            );
+            sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
+
             this._registerForGuidedTour();
+        },
+        /**
+         * @private @method _checkEditWithUuidUrlParameter
+         * Checks if "editPublished" url parameter exists.
+         * @return {String} uuid for the map view to edit or undefined if not found.
+         */
+        _checkEditWithUuidUrlParameter: function () {
+            var publishedMapUuid;
+            // remove question mark from the url
+            var queryString = location.search.substr(1);
+            // split url parameters to "key=value" strings
+            queryString.split('&').forEach(function (item) {
+                if (!publishedMapUuid) {
+                    // separate key and value
+                    var tmp = item.split('=');
+                    if (tmp.length === 2 && tmp[0] === 'editPublished') {
+                        publishedMapUuid = tmp[1];
+                    }
+                }
+            });
+            return publishedMapUuid;
+        },
+        /**
+         * @private @method _openPublisherForEditingFactory
+         * Factory function to create a callback function for PublishMapEditorRequestHandler.
+         * Callback function waits for required layers to load and opens the publisher.
+         * @return {function} callback function for PublishMapEditorRequestHandler
+         */
+        _openPublisherForEditingFactory: function () {
+            var me = this;
+            // Create an info popup. This might take a while since we have to wait for the map layers to load.
+            var msgDialog = this._showOpeningPublisherMsg();
+
+            return function (data) {
+                if (me.editWithUuidUrlParameterHandled) {
+                    me.setPublishMode(true, data);
+                    return;
+                }
+
+                // Layers loaded check is only needed when opening the publisher on startup.
+                me.editWithUuidUrlParameterHandled = true;
+
+                // Check that the data contains selected layers configuration
+                var dataHasLayersConfig =
+                    data &&
+                    data.configuration &&
+                    data.configuration.mapfull &&
+                    data.configuration.mapfull.state &&
+                    data.configuration.mapfull.state.selectedLayers;
+
+                if (dataHasLayersConfig) {
+                    var selectedLayers = data.configuration.mapfull.state.selectedLayers;
+                    var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                    var timeoutInMillis = 1000; // one second;
+                    var maxTries = 30;
+                    var numTries = 0;
+
+                    // Interval checks if layers have been loaded.
+                    var intervalId = setInterval(function () {
+                        var layerIds = selectedLayers.map(function (l) { return l.id; });
+                        var layersFound = mapLayerService.hasLayers(layerIds);
+
+                        // try until we get the layers...
+                        if (layersFound) {
+                            if (msgDialog) {
+                                msgDialog.close();
+                            }
+                            clearInterval(intervalId);
+                            me.setPublishMode(true, data);
+                            return;
+                        }
+                        numTries++;
+
+                        // ...or the max try count is reached
+                        if (numTries === maxTries) {
+                            clearInterval(intervalId);
+                            msgDialog.fadeout();
+                            // TODO error message here;
+                        }
+                    }, timeoutInMillis);
+                } else {
+                    msgDialog.fadeout();
+                    // TODO error message here;
+                }
+            };
+        },
+        /**
+         * @private @method _showOpeningPublisherMsg
+         * Notify user that we are getting ready to open his map view for editing.
+         * @return {Oskari.userinterface.component.Popup} The popup dialog for closing it later on.
+         */
+        _showOpeningPublisherMsg: function () {
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.show(
+                me.loc('edit.popup.title'),
+                me.loc('edit.popup.editPublished')
+            );
+            dialog.makeModal();
+            return dialog;
+        },
+        /**
+         * @private @method _sendEditRequest
+         * Sends Publisher.PublishMapEditorRequest with given uuid.
+         *
+         * @param uuid {String} Uuid for the view to edit.
+         */
+        _sendEditRequest: function (uuid) {
+            var publishMapEditorRequestBuilder = this.sandbox.getRequestBuilder(
+                'Publisher.PublishMapEditorRequest'
+            );
+            if (publishMapEditorRequestBuilder) {
+                var req = publishMapEditorRequestBuilder({
+                    uuid: uuid
+                });
+                this.sandbox.request(this, req);
+            }
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
