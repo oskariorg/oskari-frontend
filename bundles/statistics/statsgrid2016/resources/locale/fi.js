@@ -207,7 +207,8 @@ Oskari.registerLocalization({
             'panelData': {
                 'title': 'Tilastotieto'
             },
-            'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.'
+            'notLoggedInWarning': 'Oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Tiedot menetetään jos sivu ladataan uudestaan.',
+            'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.'
         }
     }
 });

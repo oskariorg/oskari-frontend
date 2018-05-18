@@ -612,12 +612,14 @@
             var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
             me.sandbox.notifyAll(eventBuilder(datasrc));
 
-            if (!Oskari.user().isLoggedIn()) {
-                // successfully saved for guest user
-                callback(null, {
-                    id: indicatorId
-                });
-                return;
+            // FOR NOW SAVING THE DATA IS NOT SUPPORTED FOR ANYONE
+            //if (!Oskari.user().isLoggedIn()) {
+            // successfully saved for guest user
+            callback(null, {
+                id: indicatorId
+            });
+            /*
+            return;
             }
             jQuery.ajax({
                 type: 'POST',
@@ -636,6 +638,7 @@
                     callback('Error saving data to server');
                 }
             });
+            */
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
             var me = this;
@@ -736,7 +739,7 @@
                 var dataCacheKey = 'GetIndicatorData_' + datasrc + '_' + indicatorId + '_' + regionset + serialized;
                 me.cache.put(dataCacheKey, data);
                 _log.info('Saved data with key', dataCacheKey, data);
-                
+
                 callback();
             });
         }

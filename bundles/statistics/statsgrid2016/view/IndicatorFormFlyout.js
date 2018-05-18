@@ -72,10 +72,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.element = jQuery(this._templates.main({
             warning: this.locale('userIndicators.notLoggedInWarning')
         }));
+        /*
+        // FOR NOW SAVING THE DATA IS NOT SUPPORTED FOR ANYONE
         if (Oskari.user().isLoggedIn()) {
             // remove the warning about not able to save the data for logged in users
             this.element.find('.stats-not-logged-in').remove();
         }
+        */
 
         // generic info
         var genericInfoPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
