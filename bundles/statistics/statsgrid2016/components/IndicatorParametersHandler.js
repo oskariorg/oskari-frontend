@@ -7,17 +7,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
     Oskari.makeObservable(this);
 }, {
-    getData: function (datasrc, indicators, regionsetRestriction) {
+    getData: function (datasrc, indicators) {
         if (indicators === null) {
             return;
         }
 
         this.datasource = datasrc;
         this.indicators = indicators;
-        this.regionsets = null;
-        if (regionsetRestriction !== null) {
-            this.regionsets = regionsetRestriction.map(function (id) { return Number(id); });
-        }
 
         if (Array.isArray(indicators)) {
             this.handleMultipleIndicators(datasrc, indicators);

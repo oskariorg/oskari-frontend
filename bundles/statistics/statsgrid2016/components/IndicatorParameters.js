@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         var me = this;
 
         this.clean();
-        
+
         if (!this.regionSelector) {
             this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.service, Oskari.getMsg.bind(null, 'StatsGrid'));
         }
@@ -66,14 +66,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             me.spinner.insertTo(this.parentElement.parent());
             me.spinner.start();
         }
-        if (!regionsetRestriction) {
-            return;
-        }
-        this.regionsetRestrictions = regionsetRestriction.map(function (iter) {
+        this.regionsetRestrictions = (regionsetRestriction || []).map(function (iter) {
             return Number(iter);
         });
         // get the data to create ui with
-        me.paramHandler.getData(datasrc, indId, regionsetRestriction);
+        me.paramHandler.getData(datasrc, indId);
     },
     _createUi: function (datasrc, indId, selections, regionsets) {
         var me = this;
@@ -104,7 +101,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         });
 
         var optionsToDisable = regionsets.filter(function (iter) {
-            if (me.regionsetRestrictions.indexOf(iter) === -1) {
+            if (me.regionsetRestrictions.length && me.regionsetRestrictions.indexOf(iter) === -1) {
                 return iter;
             }
         });
