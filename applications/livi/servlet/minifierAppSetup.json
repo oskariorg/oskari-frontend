@@ -4,39 +4,36 @@
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
-					"mapmyplaces": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					},
-					"maparcgis": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					},
-					"mapmodule": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					},
-					"oskariui": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"mapwfs2": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					},
-					"mapstats": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					},
-					"mapuserlayers": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					},
-					"ui-components": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"mapanalysis": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					},
-					"mapfull": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"mapwmts": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					}
+				"mapwmts": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				},
+				"mapmodule-plugin": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				},
+				"ui-components": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				},
+				"mapfull": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				},
+				"oskariui": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				},
+				"mapwfs2": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				},
+				"mapuserlayers": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				},
+				"mapstats": {
+					"bundlePath": "../../../packages/mapping/ol2/"
+				},
+				"mapmyplaces": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				},
+				"mapanalysis": {
+					"bundlePath": "../../../packages/framework/bundle/"
+				}
                 }
             }
 		}, {
@@ -49,21 +46,11 @@
 				}
 			}
 		}, {
-	        "bundlename" : "drawtools",
-	        "bundleinstancename" : "drawtools",
-	        "metadata" : {
-	            "Import-Bundle" : {
-	                "drawtools" : {
-	                    "bundlePath" : "../../../packages/mapping/ol3/"
-	                }
-	            }
-	        }
-	    }, {
 			"bundlename": "toolbar",
 			"metadata": {
 				"Import-Bundle": {
 					"toolbar": {
-						"bundlePath": "../../../packages/mapping/ol3/"
+						"bundlePath": "../../../packages/framework/bundle/"
 					}
 				}
 			}
@@ -81,7 +68,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"infobox": {
-						"bundlePath": "../../../packages/mapping/ol3/"
+						"bundlePath": "../../../packages/framework/bundle/"
 					}
 				}
 			}
@@ -178,10 +165,10 @@
 				}
 			}
 		}, {
-			"bundlename": "myplaces3",
+			"bundlename": "myplaces2",
 			"metadata": {
 				"Import-Bundle": {
-					"myplaces3": {
+					"myplaces2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
 				}
@@ -244,15 +231,6 @@
 				}
 			}
 		}, {
-            "bundlename": "analyse",
-            "metadata": {
-                "Import-Bundle": {
-                    "analyse": {
-                        "bundlePath": "../../../packages/analysis/ol3/"
-                    }
-                }
-            }
-        }, {
         	"bundlename": "admin-layerrights",
         	"metadata": {
         		"Import-Bundle": {
@@ -289,37 +267,10 @@
 				}
 			}
 		}, {
-			"bundlename" : "heatmap",
-			"metadata" : {
-				"Import-Bundle" : {
-					"heatmap" : {
-						"bundlePath" : "../../../packages/mapping/ol3/"
-					}
-				}
-			}
-		}, {
 			"bundlename" : "coordinatetool",
 			"metadata" : {
 				"Import-Bundle" : {
 					"coordinatetool" : {
-						"bundlePath" : "../../../packages/framework/bundle/"
-					}
-				}
-			}
-		}, {
-			"bundlename" : "routingUI",
-			"metadata" : {
-				"Import-Bundle" : {
-					"routingUI" : {
-						"bundlePath" : "../../../packages/framework/bundle/"
-					}
-				}
-			}
-		}, {
-			"bundlename" : "routingService",
-			"metadata" : {
-				"Import-Bundle" : {
-					"routingService" : {
 						"bundlePath" : "../../../packages/framework/bundle/"
 					}
 				}
@@ -343,24 +294,6 @@
 		        }
 		    }
 		}, {
-            		"bundlename": "timeseries",
-            		"metadata": {
-              		  "Import-Bundle": {
-                    		"timeseries": {
-                        	 "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                }
-            }
-        }, {
-	       		"bundlename": "maprotator",
-	        	"metadata": {
-	            	  "Import-Bundle": {
-	                "maprotator": {
-	                    "bundlePath": "../../../packages/mapping/ol3/"
-	                }
-	            }
-	        }
-	    }, {
 		    	"bundlename" : "appsetup",
 		   	"metadata" : {
 		          "Import-Bundle" : {
