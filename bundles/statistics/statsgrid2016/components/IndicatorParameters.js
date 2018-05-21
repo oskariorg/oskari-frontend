@@ -69,6 +69,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             me.spinner.insertTo(this.parentElement.parent());
             me.spinner.start();
         }
+        if (!regionsetRestriction) {
+            return;
+        }
         this.regionsetRestrictions = regionsetRestriction.map(function (iter) {
             return Number(iter);
         });
