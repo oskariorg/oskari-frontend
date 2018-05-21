@@ -179,6 +179,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         var btnAddIndicator = me.createAddIndicatorButton();
         btnAddIndicator.insertTo(main);
+        btnAddIndicator.setVisible(false);
 
         dsSelector.on('change', function () {
             me._params.clean();
