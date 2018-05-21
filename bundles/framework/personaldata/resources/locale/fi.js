@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Omat tiedot",
         "desc": "Omat tiedot",
-        "notLoggedIn": "Kirjautuneena käyttäjävä voit tarkistaa täällä käyttäjätietosi sekä omat kohteesi, karttanäkymäsi, upotetut karttasi, indikaattorisi, analyysisi ja aineistosi.",
+        "notLoggedIn": "Kirjautuneena käyttäjänä voit tarkistaa täällä käyttäjätietosi sekä omat kohteesi, karttanäkymäsi, upotetut karttasi, indikaattorisi, analyysisi ja aineistosi.",
         "notLoggedInText": "Kirjaudu sisään",
         "register": "Rekisteröidy",
         "projectionError": {

@@ -58,10 +58,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         var me = this;
 
         this.clean();
-        if (!indId || indId === '') {
-            return;
-        }
-
+        
         if (!this.regionSelector) {
             this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.service, Oskari.getMsg.bind(null, 'StatsGrid'));
         }
@@ -122,12 +119,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         regionSelect.container.addClass('margintop');
         cont.append(regionSelect.container);
         var select = regionSelect.selectInstance;
-        select.disableOptions(optionsToDisable);
-        
-        var state = select.getOptions();
-        var enabled = state.options.not(':disabled').first();
-        select.setValue(enabled.val());
-        select.element.trigger('change');
+        if (select) {
+            select.disableOptions(optionsToDisable);
+            var state = select.getOptions();
+            var enabled = state.options.not(':disabled').first();
+            select.setValue(enabled.val());
+            select.element.trigger('change');
+        }
 
         me._values = {
             ds: datasrc,
