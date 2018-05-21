@@ -189,7 +189,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         indicatorSelector.on('change', function () {
             var indId = indicSelect.getValue();
-            if (!indId || indId === '') {
+            // second check is for placeholder
+            if (!indId || (indId.length === 1 && indId[0] === '')) {
                 dataLabelWithTooltips.find('.tooltip').show();
                 return;
             }
