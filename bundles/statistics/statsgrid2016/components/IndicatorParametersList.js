@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         main: _.template('<div class="user-indicator-main"><ul></ul><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
         listItem: _.template('<li>${year} - ${regionset}</li>'),
         form: '<form class="indicator-selectors-form" style="width: 25%"></form>',
-        input: _.template('<input type="text" style="width: 100%" name="${name}" placeholder="${label}"><br />')
+        input: _.template('<input type="text" style="width: 80%" name="${name}" placeholder="${label}"><br />')
     },
     getElement: function () {
         return this.element;
@@ -72,10 +72,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         form.append(input);
         var formContainer = this.resetIndicatorSelectors(false);
         formContainer.append(form);
-
-        //formContainer.append(this.locale('panels.newSearch.selectRegionsetPlaceholder'));
+        var regionsetContainer = jQuery('<div></div>');
+        regionsetContainer.append(this.locale('panels.newSearch.selectRegionsetPlaceholder'));
         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        formContainer.append(select.create(this.availableRegionsets, {
+        regionsetContainer.append(select.create(this.availableRegionsets, {
             allow_single_deselect: false,
             placeholder_text: this.locale('panels.newSearch.selectRegionsetPlaceholder'),
             width: '100%'
@@ -83,14 +83,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         select.selectFirstValue();
         select.adjustChosen();
 
+        formContainer.append(regionsetContainer);
+        var btnContainer = jQuery('<div style="display:flex"></div>');
+        formContainer.append(btnContainer);
+
         var me = this;
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-        cancelBtn.insertTo(formContainer);
+        cancelBtn.insertTo(btnContainer);
         cancelBtn.setHandler(function (event) {
             me.resetIndicatorSelectors(true);
         });
         var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
-        showTableBtn.insertTo(formContainer);
+        showTableBtn.insertTo(btnContainer);
         showTableBtn.setHandler(function (event) {
             me.resetIndicatorSelectors(true);
             me.trigger('insert.data', {

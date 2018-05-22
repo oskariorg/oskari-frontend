@@ -100,6 +100,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
         btn.insertTo(this.element);
         jQuery(btn.getElement()).css({
+            'margin-right': '3%',
             'float': 'right',
             'clear': 'both'
         });
