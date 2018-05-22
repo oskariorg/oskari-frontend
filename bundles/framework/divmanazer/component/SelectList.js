@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
      */
     disableOptions: function (ids) {
         var chosen = this.element.find('select');
-        
+
         this.reset(true);
 
         var isDisabledOption = function (optionId) {
@@ -212,7 +212,14 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't get value, no element set");
             return;
         }
-        return this.element.find('select').val();
+        var value = this.element.find('select').val();
+        if (Array.isArray(value)) {
+            // cleanup empty placeholder value to an empty array
+            return value.filter(function (item) {
+                return item !== '';
+            })
+        }
+        return value;
     },
     /** @method adjustChosen
     *   adjusts the chosen direction according to the screen
