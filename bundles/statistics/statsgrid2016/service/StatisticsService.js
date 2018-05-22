@@ -621,14 +621,20 @@
             /*
             return;
             }
+            */
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
                 data: {
+                    // my indicators datasource id
                     datasource: datasrc,
-                    data: JSON.stringify(data)
+                    id: data.id,
+                    name: data.name,
+                    desc: data.description,
+                    // textual name for the source the data is from
+                    source: data.datasource
                 },
-                url: Oskari.urls.getRoute('N/A'),
+                url: Oskari.urls.getRoute('SaveIndicator'),
                 success: function (pResp) {
                     callback(null, {
                         id: indicatorId
@@ -638,7 +644,6 @@
                     callback('Error saving data to server');
                 }
             });
-            */
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
             var me = this;
@@ -741,6 +746,27 @@
                 _log.info('Saved data with key', dataCacheKey, data);
 
                 callback();
+                // send to server
+                jQuery.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        datasource: datasrc,
+                        id: indicatorId,
+                        selectors: JSON.stringify(selectors),
+                        regionset: regionset,
+                        data: JSON.stringify(data)
+                    },
+                    url: Oskari.urls.getRoute('AddIndicatorData'),
+                    success: function (pResp) {
+                        callback(null, {
+                            id: indicatorId
+                        });
+                    },
+                    error: function (jqXHR, textStatus) {
+                        callback('Error saving data to server');
+                    }
+                });
             });
         }
     }, {
