@@ -188,7 +188,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             // If selection was removed -> reset indicator selection
             if (dsSelect.getValue() === '') {
                 dataLabelWithTooltips.find('.tooltip').show();
+                indicSelect.updateOptions([]);
                 indicSelect.reset();
+                btnAddIndicator.setVisible(false);
                 return;
             }
 
@@ -218,8 +220,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         regionsetFilterElement.on('change', function (evt) {
             if (!regionFilterSelect.getValue()) {
-                me._params.clean();
-                indicSelect.reset();
                 dsSelect.reset();
                 return;
             }
