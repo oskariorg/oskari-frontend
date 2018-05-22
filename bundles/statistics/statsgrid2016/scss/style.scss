@@ -1026,3 +1026,48 @@ div.tab-material-controls div.title {
 .statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
     max-width:700px;
   }
+
+  // user indicator form
+
+.stats-indicator-form {
+min-height: 18.75em;
+padding: 0.9375em;
+}
+.stats-indicator-form-item {
+width: 96%;
+margin-bottom: 0.3125em;
+}
+.stats-not-logged-in {
+width: 100%;
+height: 2.5em;
+background-color: indianred;
+margin-bottom: 0.5em;
+padding: 0.3125em;
+max-width: 31.25em; // 500px
+}
+.stats-user-indicator-form div.accordion div.accordion_panel {
+border:none;
+}
+.stats-user-indicator-form div.accordion div.accordion_panel.open {
+border:none;
+}
+.user-indicator-main {
+    max-width: 31.25em;
+}
+.user-indicator-table td {
+text-align: center;
+}
+.user-indicator-table td:first-child {
+text-align: center;
+width: 17%;
+}
+.user-indicator-specification {
+padding: 0.3125em;
+color:white;
+background-color: #000; 
+}
+.new-indicator-dataset-params {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}

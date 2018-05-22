@@ -7,25 +7,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
     Oskari.makeObservable(this);
 }, {
-    getData: function ( datasrc, indicators, regionsetRestriction ) {
-        if ( indicators === null ) {
+    getData: function (datasrc, indicators) {
+        if (indicators === null) {
             return;
         }
 
         this.datasource = datasrc;
         this.indicators = indicators;
-        this.regionsets = null;
-        if ( regionsetRestriction !== null ) {
-            this.regionsets = regionsetRestriction.map( function (id)  { return Number(id) } );
-        }
 
-        if ( Array.isArray( indicators ) ) {
+        if (Array.isArray(indicators)) {
             this.handleMultipleIndicators(datasrc, indicators);
             return;
         }
         this.handleSingleIndicator(datasrc, indicators);
     },
-    handleSingleIndicator: function( indId, cb) {
+    handleSingleIndicator: function (indId, cb) {
         var me = this;
         var errorService = me.service.getErrorService();
         var locale = this.locale;
@@ -42,7 +38,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
             indicator.selectors.forEach(function (selector, index) {
                 selector.allowedValues.forEach(function (val) {
-                    if ( !combinedValues[selector.id] ) {
+                    if (!combinedValues[selector.id]) {
                         combinedValues[selector.id] = [];
                     }
 
@@ -67,8 +63,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 selectors: combinedValues,
                 indicators: me.indicators,
                 regionset: indicator.regionsets
-            }
-            if ( typeof cb === 'function') {
+            };
+            if (typeof cb === 'function') {
                 cb(data);
             } else {
                 me.trigger('Data.Loaded', data);
@@ -76,32 +72,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         });
     },
     handleMultipleIndicators: function (datasrc, indicators) {
-        indicators = indicators.filter( function (n) { return n != "" } );
+        indicators = indicators.filter(function (n) { return n != ''; });
         var me = this;
         var combinedValues = {};
         var regionsets = [];
         var deferredArray = [];
 
-        function addMissingElements(list, newValues, propertyName) {
-            if(!list) {
+        function addMissingElements (list, newValues, propertyName) {
+            if (!list) {
                 return [].concat(newValues);
             }
             return list.concat(newValues.filter(function (value) {
-                return !list.some(function(existingItem) {
-                    if(propertyName) {
+                return !list.some(function (existingItem) {
+                    if (propertyName) {
                         return existingItem[propertyName] === value[propertyName];
                     }
                     return existingItem === value;
-                })
+                });
             }));
         }
-    
-        indicators.forEach( function (indId) {
+
+        indicators.forEach(function (indId) {
             var deferred = new jQuery.Deferred();
             me.handleSingleIndicator(indId, function (value) {
                 // include missing regionsets
                 regionsets = addMissingElements(regionsets, value.regionset);
-                Object.keys(value.selectors).forEach( function(selectorName) {
+                Object.keys(value.selectors).forEach(function (selectorName) {
                     combinedValues[selectorName] = addMissingElements(combinedValues[selectorName], value.selectors[selectorName], 'id');
                 });
                 deferred.resolve();
@@ -109,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
             deferredArray.push(deferred);
         });
 
-    jQuery.when.apply( jQuery, deferredArray ).done( function() {
+        jQuery.when.apply(jQuery, deferredArray).done(function () {
             var data = {
                 datasrc: me.datasource,
                 indicators: me.indicators,

@@ -54,6 +54,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function (sandb
         var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
         checkbox.setTitle(this.locale.openDiagramCheckbox);
         checkbox.setChecked(false);
+        checkbox.addClass('t_diagram');
         return checkbox;
     },
     /**
@@ -64,6 +65,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function (sandb
         var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
         checkbox.setTitle(this.locale.openTableCheckbox);
         checkbox.setChecked(false);
+        checkbox.addClass('t_table');
         return checkbox;
     },
     /**
@@ -78,6 +80,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function (sandb
         checkbox.setHandler(function () {
             me._toggleSelectedLayersVisibility(checkbox.isChecked());
         });
+        checkbox.addClass('t_hidelayers');
         return checkbox;
     },
     /**
