@@ -330,7 +330,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     'background-image': '',
                     'width': '',
                     'height': '',
-                    'margin-left': ''
+                    'margin-left': '2px'
                 });
 
                 me._desktopStyles = {
@@ -353,8 +353,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 minus.css(me._desktopStyles.minus.css);
 
                 slider.css({
-                    'height': sliderHeight + 'px',
-                    'width': '16px'
+                    'height': sliderHeight + 'px'
                 });
             } else {
                 bar.css({

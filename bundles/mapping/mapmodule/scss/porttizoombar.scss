@@ -1,18 +1,18 @@
 div.pzbDiv {
     div.pzbDiv-plus {
-        background-image: url('../images/zoombar_plus_patched.png');
+        background-image: url('../images/zoombar_plus-rounded-dark.png');
         cursor: pointer;
         cursor: zoom-in;
-        width: 18px;
-        height: 34px;
+        width: 22px;
+        height: 38px;
     }
 
     div.pzbDiv-minus {
-        background-image: url('../images/zoombar_minus-patched.png');
+        background-image: url('../images/zoombar_minus-rounded-dark.png');
         cursor: pointer;
         cursor: zoom-out;
-        width: 18px;
-        height: 23px;
+        width: 22px;
+        height: 28px;
     }
 
     div.ui-slider-vertical {
