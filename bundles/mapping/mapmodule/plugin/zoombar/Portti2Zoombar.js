@@ -160,9 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             var el = jQuery(
                 '<div class="oskariui mapplugin pzbDiv zoombar">' +
                 '  <div class="pzbDiv-plus"></div>' +
-                '  <div class="slider-top"></div>' +
                 '  <div class="slider"></div>' +
-                '  <div class="slider-bottom"></div>' +
                 '  <div class="pzbDiv-minus"></div>' +
                 '</div>'
             );
@@ -311,8 +309,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             var zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png';
             var zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png';
             var bar = div.find('.ui-slider-vertical');
-            var top = div.find('.slider-top');
-            var bottom = div.find('.slider-bottom');
             var cursor = div.find('.ui-slider-handle');
             var plus = div.find('.pzbDiv-plus');
             var minus = div.find('.pzbDiv-minus');
