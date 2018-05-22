@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     /**
      * @method  @public indicatorSelected  handle indicator selected
      * @param  {Integer} datasrc indicator datasource
-     * @param  {String} indId    indicator id
+     * @param  {String|String[]} indId    indicator id
      * @param  {Object} elements elements
      */
     indicatorSelected: function (datasrc, indId, regionsetRestriction) {
@@ -59,6 +59,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
 
         this.clean();
 
+        if (!datasrc || !indId || !indId.length || !indId[0]) {
+            return;
+        }
         if (!this.regionSelector) {
             this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.service, Oskari.getMsg.bind(null, 'StatsGrid'));
         }

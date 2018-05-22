@@ -39,6 +39,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         }
         var hasRegionSetRestriction = regionsetRestrictions !== '' && regionsetRestrictions !== null;
 
+        // start spinner
+        me.spinner.start();
         this.service.getIndicatorList(datasrc, function (err, result) {
             var results = [];
             if (err) {
@@ -189,8 +191,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 indicSelect.reset();
                 return;
             }
-            // else show spinner
-            me.spinner.start();
 
             me._populateIndicators(indicSelect, dsSelect.getValue(), regionFilterSelect.getValue());
 
@@ -206,10 +206,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         indicatorSelector.on('change', function () {
             var indId = indicSelect.getValue();
             // second check is for placeholder
-            if (!indId || (indId.length === 1 && indId[0] === '')) {
+            if (!indId || !indId.length) {
                 dataLabelWithTooltips.find('.tooltip').show();
-                return;
             }
+            // this will show the params or clean them depending if values exist
             me._params.indicatorSelected(
                 dsSelect.getValue(),
                 indicSelect.getValue(),
@@ -218,6 +218,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         regionsetFilterElement.on('change', function (evt) {
             if (!regionFilterSelect.getValue()) {
+                me._params.clean();
                 indicSelect.reset();
                 dsSelect.reset();
                 return;
