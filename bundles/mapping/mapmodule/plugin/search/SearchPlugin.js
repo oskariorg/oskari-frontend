@@ -656,7 +656,7 @@ Oskari.clazz.define(
             if (/dark/.test(styleName)) {
                 closeResults.addClass('icon-close-white');
                 closeResults.css({
-                    'margin-top': '8px'
+                    'margin-top': '10px'
                 });
                 inputField.css({
                     'color': '#ddd'

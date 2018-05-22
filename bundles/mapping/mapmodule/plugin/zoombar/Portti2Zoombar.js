@@ -75,7 +75,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 css: {}
             }
         };
-
         this.toolStyles = {
             'default': {
                 val: null
@@ -157,16 +156,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var me = this,
-                el = jQuery(
-                    '<div class="oskariui mapplugin pzbDiv zoombar">' +
-                    '  <div class="pzbDiv-plus"></div>' +
-                    '  <div class="slider"></div>' +
-                    '  <div class="pzbDiv-minus"></div>' +
-                    '</div>'
-                ),
-                mapModule = me.getMapModule(),
-                sliderEl = el.find('div.slider');
+            var me = this;
+            var el = jQuery(
+                '<div class="oskariui mapplugin pzbDiv zoombar">' +
+                '  <div class="pzbDiv-plus"></div>' +
+                '  <div class="slider"></div>' +
+                '  <div class="pzbDiv-minus"></div>' +
+                '</div>'
+            );
+            var mapModule = me.getMapModule();
+            var sliderEl = el.find('div.slider');
 
             sliderEl.attr('id', 'pzb-slider-' + me.getName());
 
@@ -303,25 +302,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             } else if (!style.hasOwnProperty("widthCenter")) {
                 style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
             }
-
-            var imgUrl = this.getImagePath(),
-                styleName = style.val,
-                zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
-                zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
-                zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png',
-                zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png',
-                bar = div.find('.ui-slider-vertical'),
-                cursor = div.find('.ui-slider-handle'),
-                plus = div.find('.pzbDiv-plus'),
-                minus = div.find('.pzbDiv-minus'),
-                slider = div.find('div.slider'),
-                mapModule = me.getMapModule();
+            var imgUrl = this.getImagePath();
+            var styleName = style.val;
+            var zoombarImg = imgUrl + 'zoombar-' + styleName + '.png';
+            var zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png';
+            var zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png';
+            var zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png';
+            var bar = div.find('.ui-slider-vertical');
+            var cursor = div.find('.ui-slider-handle');
+            var plus = div.find('.pzbDiv-plus');
+            var minus = div.find('.pzbDiv-minus');
+            var slider = div.find('div.slider');
 
             // FIXME get rid of this, rounded style should be fixed instead
             // Used to get the cursor to the right position since
             // it's off by 2 pixels with the 'rounded' style.
-            var isRounded = styleName && styleName.match(/^rounded/),
-                sliderHeight = this.getMapModule().getMaxZoomLevel() * style.heightCenter;
+            var isRounded = styleName && styleName.match(/^rounded/);
+            var sliderHeight = this.getMapModule().getMaxZoomLevel() * style.heightCenter;
 
             if (style.val === null) {
                 bar.css({
@@ -333,7 +330,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     'background-image': '',
                     'width': '',
                     'height': '',
-                    'margin-left': ''
+                    'margin-left': '2px'
                 });
 
                 me._desktopStyles = {
