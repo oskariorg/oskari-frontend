@@ -207,6 +207,10 @@ Oskari.registerLocalization({
             'panelData': {
                 'title': 'Tilastotieto'
             },
+            'dialog': {
+                'successTitle': 'Tallennettu',
+                'successMsg': 'Tiedot tallennettu. Lisää indikaattori kartalle aineistohaun kautta.'
+            },
             'notLoggedInWarning': 'Oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Tiedot menetetään jos sivu ladataan uudestaan.',
             'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.'
         }

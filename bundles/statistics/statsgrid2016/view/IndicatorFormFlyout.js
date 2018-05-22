@@ -114,7 +114,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                     Oskari.log('IndicatorFormFlyout').error(err);
                     return;
                 }
-                // TODO: saved indicator notification?
                 var dataForm = me.indicatorDataForm.getValues();
                 if (dataForm.values.length) {
                     me.saveIndicatorData(dataForm, function (err, someData) {
@@ -230,9 +229,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var me = this;
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-        // TODO: localize
-        var title = 'Saved';
-        var content = 'Indicator was saved';
+        // TODO: add a button to show the added indicator on map or just show it right away?
+        // TODO: add the name of the indicator and/or year/regionset that was added/modified?
+        var title = this.locale('userIndicators.dialog.successTitle');
+        var content = this.locale('userIndicators.dialog.successMsg');
         okBtn.setPrimary(true);
         okBtn.setHandler(function () {
             dialog.close(true);
