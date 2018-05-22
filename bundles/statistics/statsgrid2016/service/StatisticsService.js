@@ -88,6 +88,11 @@
             ds.info = ds.info || {};
             this.datasources.push(ds);
         },
+        getUserDatasource: function () {
+            return this.datasources.find(function (src) {
+                return src.type === 'user';
+            })
+        },
         getUILabels: function (indicator, callback) {
             var me = this;
             var locale = this.locale;
