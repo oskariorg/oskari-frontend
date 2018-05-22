@@ -280,20 +280,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             var viewProjection = data.state.mapfull.state.srs;
             return viewProjection === currentProjection;
         },
-        constructUrlWithUuid: function (srs) {
-            var views = Oskari.app.getSystemDefaultViews();
+        constructUrlWithUuid: function (srs, publisherUuid) {
             var uuid;
-            views.forEach( function (view) {
-                if ( view.srsName === srs ) {
+            var views = Oskari.app.getSystemDefaultViews();
+            views.forEach(function (view) {
+                if (view.srsName === srs) {
                     uuid = view.uuid;
-                    return;
                 }
             });
             var url = window.location.origin;
             if (window.location.pathname && window.location.pathname.length) {
                 url += window.location.pathname;
             }
-            url += "?uuid="+uuid;
+            url += '?uuid=' + uuid;
+            if (publisherUuid) {
+                url += '&editPublished=' + publisherUuid;
+            }
             return url;
         },
         /**
@@ -460,17 +462,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             };
             grid.setColumnValueRenderer('html', htmlRenderer);
 
-            //sending a request to publisher for editing view
+            // sending a request to publisher for editing view
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 var srs = data.state.mapfull.state.srs;
+                var publisherUuid = data.uuid;
                 link.text(name);
                 link.bind('click', function () {
-
-                    var supported = me._isCurrentProjectionSupportedForView( data );
+                    var supported = me._isCurrentProjectionSupportedForView(data);
                     if (!supported) {
-                        me.createProjectionChangeDialog( function() {
-                            window.location.href = me.constructUrlWithUuid(srs);
+                        me.createProjectionChangeDialog(function () {
+                            window.location.href = me.constructUrlWithUuid(srs, publisherUuid);
                         });
                         return;
                     }
@@ -480,7 +482,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                         if (resp.status) {
                             editRequestSender(data);
                         } else {
-                            me._confirmSetState(function() {
+                            me._confirmSetState(function () {
                                 editRequestSender(data);
                             }, resp.msg === 'missing');
                         }
