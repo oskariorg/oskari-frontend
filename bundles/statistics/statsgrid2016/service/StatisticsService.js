@@ -636,6 +636,7 @@
                 },
                 url: Oskari.urls.getRoute('SaveIndicator'),
                 success: function (pResp) {
+                    _log.info('SaveIndicator', pResp);
                     callback(null, {
                         id: indicatorId
                     });
@@ -759,6 +760,7 @@
                     },
                     url: Oskari.urls.getRoute('AddIndicatorData'),
                     success: function (pResp) {
+                        _log.info('AddIndicatorData', pResp);
                         callback(null, {
                             id: indicatorId
                         });
