@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var infoDialog;
             var openingOnAppStart = false;
             // check from url parameters if publisher should be opened to edit some specific view.
-            var uuid = me._getEditUuidUrlParameter();
+            var uuid = Oskari.util.getRequestParam('editPublished');
             if (uuid) {
                 // Create an info popup. Opening publisher might take a while since we have to wait for the map layers to load.
                 infoDialog = me._showOpeningPublisherMsg();
@@ -151,28 +151,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             this._registerForGuidedTour();
-        },
-        /**
-         * @private @method _getEditUuidUrlParameter
-         * Checks if "editPublished" url parameter exists.
-         * Parameter contains view uuid as value indicating that the view should be opened for editing.
-         * @return {String} uuid for the map view to edit or undefined if not found.
-         */
-        _getEditUuidUrlParameter: function () {
-            var publishedMapUuid;
-            // remove question mark from the url
-            var queryString = location.search.substr(1);
-            // split url parameters to "key=value" strings
-            queryString.split('&').forEach(function (item) {
-                if (!publishedMapUuid) {
-                    // separate key and value
-                    var tmp = item.split('=');
-                    if (tmp.length === 2 && tmp[0] === 'editPublished') {
-                        publishedMapUuid = tmp[1];
-                    }
-                }
-            });
-            return publishedMapUuid;
         },
         /**
          * @private @method _openPublisherForEditingCbFactory
@@ -247,15 +225,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @param uuid {String} Uuid for the view to edit.
          */
         _sendEditRequest: function (uuid) {
-            var publishMapEditorRequestBuilder = this.sandbox.getRequestBuilder(
-                'Publisher.PublishMapEditorRequest'
-            );
-            if (publishMapEditorRequestBuilder) {
-                var req = publishMapEditorRequestBuilder({
-                    uuid: uuid
-                });
-                this.sandbox.request(this, req);
-            }
+            var requestBuilder = Oskari.requestBuilder('Publisher.PublishMapEditorRequest');
+            this.sandbox.request(this, requestBuilder({
+                uuid: uuid
+            }));
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
