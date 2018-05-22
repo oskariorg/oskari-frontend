@@ -17,7 +17,14 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Päivitetään upotettua karttaa…",
                 "msg": "Päivitetään upotetun kartan tietoja…",
-                "editPublished": "Avataan upotettua karttaa muokattavaksi. Odota hetki, ole hyvä!"
+                "published": {
+                    "msg": "Avataan upotettua karttaa muokattavaksi. Odota hetki, ole hyvä!",
+                    "error": {
+                        "title": "Virhe",
+                        "common": "Upotetun kartan avaaminen epäonnistui.",
+                        "login": "Kirjaudu sisään muokataksesi karttajulkaisua."
+                    }
+                }
             }
         },
         "BasicView": {

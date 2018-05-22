@@ -17,7 +17,14 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Öppna den inbäddade kartan för redigering",
                 "msg": "Den tidigare inbäddade kartans uppgifter uppdateras",
-                "editPublished": "Öppning tidigare inbäddade kartan för redigering. Var god vänta."
+                "published": {
+                    "msg": "Öppnar tidigare inbäddade kartan för redigering. Var god vänta!",
+                    "error": {
+                        "title": "Fel",
+                        "common": "Öppnande av inbäddad kartan misslyckades.",
+                        "login": "Logga in för att redigera inbäddade kartan."
+                    }
+                }
             }
         },
         "BasicView": {
