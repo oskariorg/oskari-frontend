@@ -770,6 +770,12 @@
                     }
                 });
             });
+        },
+        /**
+         * selectors and regionset are optional -> will only delete dataset from indicator if given
+         */
+        deleteIndicator: function (datasrc, indicator, selectors, regionset) {
+            // TODO: flush indicator from cache and call server
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
