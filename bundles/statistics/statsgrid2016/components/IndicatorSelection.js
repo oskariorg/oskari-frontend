@@ -183,6 +183,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         btnAddIndicator.insertTo(main);
         btnAddIndicator.setVisible(false);
 
+        var btnEditIndicator = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
+        btnEditIndicator.setPrimary(false);
+        btnEditIndicator.insertTo(main);
+        btnEditIndicator.setVisible(false);
+
         dsSelector.on('change', function () {
             me._params.clean();
             // If selection was removed -> reset indicator selection
@@ -191,6 +196,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 indicSelect.updateOptions([]);
                 indicSelect.reset();
                 btnAddIndicator.setVisible(false);
+                btnEditIndicator.setVisible(false);
                 return;
             }
 
@@ -210,6 +216,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             // second check is for placeholder
             if (!indId || !indId.length) {
                 dataLabelWithTooltips.find('.tooltip').show();
+            } else {
+                // if datasource is of type "user" the user can add new indicators to it
+                btnEditIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
+                btnEditIndicator.setHandler(function (event) {
+                    event.stopPropagation();
+                    var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
+                    formFlyout.showForm(dsSelect.getValue(), indId);
+                });
             }
             // this will show the params or clean them depending if values exist
             me._params.indicatorSelected(
