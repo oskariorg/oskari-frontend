@@ -319,17 +319,16 @@ div.oskari-flyout {
       stroke-width: 0; }
   div.oskari-flyout.statsgrid-diagram-flyout .oskari-datacharts {
     position: relative;
-    height:700px;
+    height: 700px;
     padding: 16px; }
-      div.oskari-flyout.statsgrid-diagram-flyout .chart-controls {
-        display:flex;
-        justify-content: center;
-        align-items: center;
+  div.oskari-flyout.statsgrid-diagram-flyout .chart-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding-bottom: 2%; }
-      div.oskari-flyout.statsgrid-diagram-flyout .chart-controls .dropdown {
-        display: flex;
-        max-width: 100%;
-      }
+    div.oskari-flyout.statsgrid-diagram-flyout .chart-controls .dropdown {
+      display: flex;
+      max-width: 100%; }
 
 /* ********************************************
  * Statsgrid legend
@@ -340,34 +339,60 @@ div.oskari-flyout {
   text-align: left;
   /* Float right to not overlap with other plugins */
   float: right; }
-  .statsgrid-legend-plugin-transparent {
-    color:#FFFFFF;
-    text-shadow:
-      -1px -1px 0 #000,
-      1px -1px 0 #000,
-      -1px 1px 0 #000,
-      1px 1px 0 #000;
-    pointer-events: auto;
-    text-align: left;
-    /* Float right to not overlap with other plugins */
-    float: right; }
-    .statsgrid-legend-plugin-transparent .geostats-legend-counter {
-      color: #ffffff;
-    }
-    .statsgrid-legend-plugin-transparent .accordion .accordion_panel {
-      background-color: transparent;
-    }
-    .statsgrid-legend-plugin-transparent .accordion .accordion_panel.open {
-      background-color: transparent;
-    }
-    .statsgrid-legend-plugin-transparent .dropdown {
-        text-shadow: none;
-        color: #000;
-    }
-    .statsgrid-legend-plugin-transparent .statsgrid-svg-legend {
-      text-shadow: none;
-      color: #000;
-  }
+
+.statsgrid-legend-plugin-transparent {
+  color: #FFFFFF;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  pointer-events: auto;
+  text-align: left;
+  /* Float right to not overlap with other plugins */
+  float: right; }
+
+.statsgrid-legend-plugin-transparent .geostats-legend-counter {
+  color: #ffffff; }
+
+.statsgrid-legend-plugin-transparent .accordion .accordion_panel {
+  background-color: transparent; }
+
+.statsgrid-legend-plugin-transparent .accordion .accordion_panel.open {
+  background-color: transparent; }
+
+.statsgrid-legend-plugin-transparent .dropdown {
+  text-shadow: none;
+  color: #000; }
+
+.statsgrid-legend-plugin-transparent .statsgrid-svg-legend {
+  text-shadow: none;
+  color: #000; }
+
+.active-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px; }
+
+.active-header > .title {
+  width: 90%;
+  font-weight: bold; }
+
+.active-legend {
+  height: 100%; }
+
+.edit-legend {
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  margin-left: 2px;
+  margin-right: -2px;
+  right: 0 !important;
+  background-image: url(../images/edit-dark.png); }
+
+.edit-active {
+  height: 16px;
+  width: 16px;
+  right: 0 !important;
+  background-image: url(../images/edit-hover.png); }
+
 .statsgrid-legend-container {
   background-color: #FFFFFF;
   width: 300px;
@@ -402,81 +427,53 @@ div.oskari-flyout {
     margin-left: 8px; }
   .statsgrid-legend-container div.accordion div.geostats-legend div {
     margin: 2px 6px 2px 2px; }
-  .statsgrid-legend-container .classification > .accordion .accordion_panel {
+  .statsgrid-legend-container > .classification .accordion .accordion_panel {
     border: 0px;
     overflow: visible; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .header .headerIcon {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .header .headerIcon {
       margin: 0;
       margin-left: 4px; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .header .headerText {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .header .headerText {
       font-size: 12px;
       padding: 0;
       font-weight: normal; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .classification-options .numeric-value .oskari-formcomponent {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .content .classifications .classification-options .numeric-value .oskari-formcomponent {
       margin-bottom: 4px;
       margin-top: 8px; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .label {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .content .classifications .label {
       font-weight: bold; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications select {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .content .classifications select {
       width: 96%;
       font-size: 12px;
       padding: 1px 2px; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .min {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .min {
       float: left; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .max {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .max {
       float: right;
       margin-right: 4%; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .clear {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .clear {
       clear: both; }
-    .statsgrid-legend-container .classification > .accordion .accordion_panel .content .classifications .point-size .point-range {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .content .classifications .point-size .point-range {
       width: 90%;
       background-image: url(../images/opacity_slider_long.png);
       background-repeat: no-repeat; }
-    .statsgrid-legend-container  .classification > .accordion .accordion_panel .oskari-color-selection {
+    .statsgrid-legend-container > .classification .accordion .accordion_panel .oskari-color-selection {
       z-index: 10; }
   .statsgrid-legend-container .statsgrid-svg {
     float: left; }
-  .statsgrid-svg-legend {
+  .statsgrid-legend-container .statsgrid-svg-legend {
     margin: 0 auto;
-    width:50%;
-  }
+    width: 50%; }
   .statsgrid-legend-container .statsgrid-range {
     float: left; }
   .statsgrid-legend-container .statsgrid-counter {
     float: left; }
   .statsgrid-legend-container .clear {
     clear: both; }
-  .legend-transparent {
-    background-color: transparent;
-  }
-  .active-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-  }
-  .active-header > .title {
-    width: 90%;
-    font-weight: bold;
-  }
-  .active-legend {
-    height:100%;
-  }
-  .edit-legend {
-    cursor: pointer;
-    height: 16px;
-    width: 16px;
-    margin-left: 2px;
-    margin-right: -2px;
-    right: 0 !important;
-    background-image: url(../images/edit-dark.png);
-  }
-  .edit-active {
-    height: 16px;
-    width: 16px;
-    right: 0 !important;
-    background-image: url(../images/edit-hover.png);
-  }
+
+.legend-transparent {
+  background-color: transparent; }
+
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend .popup-body > div.content {
   margin: 0px; }
@@ -514,18 +511,6 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .table.active {
       background-color: #ffffff;
       background-image: url("../images/table_light.png"); }
-  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .clear {
-    clear: both; }
-
-.statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
-  overflow-x: hidden;
-  overflow-y: auto; }
-
-  /** Diagram styles **/
-  div.mapplugins .statsgrid-published-diagram {
-      border: 1px solid rgba(0, 0, 0, 0.2);
-      float: right;
-      margin: 10px !important; }
   div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .diagram {
     background-color: #3c3c3c;
     float: left;
@@ -534,12 +519,17 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     background-image: url("../images/tile-diagram-dark.png");
     cursor: pointer;
     background-repeat: no-repeat;
-    background-position: center;    
-  }
-  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .active {
+    background-position: center; }
+    div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .diagram.active {
       background-color: #ffffff;
       background-image: url("../images/tile-diagram-light.png");
       background-repeat: no-repeat; }
+  div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .clear {
+    clear: both; }
+
+.statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
+  overflow-x: hidden;
+  overflow-y: auto; }
 
 /* ********************************************
  * Statsgrid tile styles
@@ -676,24 +666,64 @@ div.tab-material-controls div.title {
 .oskari-flyout.statsgrid-filter-flyout .tabsHeader {
   padding-top: 2em !important; }
 
-  .chart {
-    display: flex;
-    justify-content: center;
-}
-.axisLabel.sticky {
-    font-weight: bold;
-    color:#F6F6F6;
-    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-    overflow: hidden;
-     z-index: 3; 
-    max-height: 100%;
-}
+.chart {
+  display: flex;
+  justify-content: center; }
+
 .axisLabel {
-    margin-top: -5px;
-    position: absolute;
-    opacity: 0.8;
-}
+  margin-top: -5px;
+  position: absolute;
+  opacity: 0.8; }
+
+.sticky {
+  font-weight: bold;
+  color: #F6F6F6;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  overflow: hidden;
+  z-index: 3;
+  max-height: 100%; }
+
 .statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
-    max-width:700px;
-  }
-/*# sourceMappingURL=style.css.map */
+  max-width: 700px; }
+
+.stats-indicator-form {
+  min-height: 18.75em;
+  padding: 0.9375em; }
+
+.stats-indicator-form-item {
+  width: 96%;
+  margin-bottom: 0.3125em; }
+
+.stats-not-logged-in {
+  width: 100%;
+  height: 2.5em;
+  background-color: indianred;
+  margin-bottom: 0.5em;
+  padding: 0.3125em;
+  max-width: 31.25em; }
+
+.stats-user-indicator-form div.accordion div.accordion_panel {
+  border: none; }
+
+.stats-user-indicator-form div.accordion div.accordion_panel.open {
+  border: none; }
+
+.user-indicator-main {
+  max-width: 31.25em; }
+
+.user-indicator-table td {
+  text-align: center; }
+
+.user-indicator-table td:first-child {
+  text-align: center;
+  width: 17%; }
+
+.user-indicator-specification {
+  padding: 0.3125em;
+  color: white;
+  background-color: #000; }
+
+.new-indicator-dataset-params {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }

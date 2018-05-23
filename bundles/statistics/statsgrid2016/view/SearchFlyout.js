@@ -79,20 +79,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             var values = selectionComponent.getValues();
             var selectedIndicators = values.indicator;
             // indicator loop check Array.isArray
-            if( !Array.isArray(values.indicator) ) {
+            if (!Array.isArray(values.indicator)) {
                 selectedIndicators = [values.indicator];
             }
 
             var newActiveIndicator = false;
 
-            selectedIndicators.forEach( function( indicator ) {
-                if ( indicator === "" ) {
+            selectedIndicators.forEach(function (indicator) {
+                if (indicator === '') {
                     return;
                 }
                 var added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections);
-                if ( added ) {
+                if (added) {
                     newActiveIndicator = indicator;
-                } 
+                }
             });
 
             if (newActiveIndicator !== false) {
