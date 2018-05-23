@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
     },
     createForm: function () {
         if (this.getElement()) {
+            this.resetForm();
             return this.getElement();
         }
         var form = this.__templates.form({
@@ -54,5 +55,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
     resetForm: function () {
         // the element is a form
         this.getElement()[0].reset();
+        this.getElement().find('textarea').text('');
     }
 });
