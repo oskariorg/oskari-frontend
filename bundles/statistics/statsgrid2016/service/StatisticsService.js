@@ -3,6 +3,7 @@
  */
 (function (Oskari) {
     var _log = Oskari.log('StatsGrid.StatisticsService');
+    var _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper');
 
     Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
         this.sandbox = sandbox;
@@ -221,7 +222,7 @@
                 return;
             }
             var me = this;
-            var cacheKey = 'GetRegions_' + regionset;
+            var cacheKey = _cacheHelper.getRegionsKey(regionset);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -266,7 +267,7 @@
                 callback('Datasource missing');
                 return;
             }
-            var cacheKey = 'GetIndicatorList_' + ds;
+            var cacheKey = _cacheHelper.getIndicatorListKey(ds);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -338,7 +339,7 @@
                 return;
             }
             var me = this;
-            var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + indicator;
+            var cacheKey = _cacheHelper.getIndicatorMetadataKey(ds, indicator);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -388,13 +389,8 @@
                 regionset: regionset,
                 selectors: JSON.stringify(params || {})
             };
-            var serialized = '';
-            if (typeof params === 'object') {
-                serialized = '_' + Object.keys(params).sort().map(function (key) {
-                    return key + '=' + JSON.stringify(params[key]);
-                }).join(':');
-            }
-            var cacheKey = 'GetIndicatorData_' + ds + '_' + indicator + '_' + regionset + serialized;
+
+            var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
             _log.info('Getting data with key', cacheKey);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
@@ -561,7 +557,7 @@
             var indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
             var updateMetadataCache = function () {
                 // only inject when guest user, otherwise flush from cache
-                var metadataCacheKey = 'GetIndicatorMetadata_' + datasrc + '_' + indicatorId;
+                var metadataCacheKey = _cacheHelper.getIndicatorMetadataKey(datasrc, indicatorId);
                 // flush/update indicator metadata from cache
                 var metadata = me.cache.get(metadataCacheKey) || {
                     'public': true,
@@ -599,7 +595,7 @@
                 });
             } else {
                 // TODO: call server and update name after success response
-                var indicatorListCacheKey = 'GetIndicatorList_' + datasrc;
+                var indicatorListCacheKey = _cacheHelper.getIndicatorListKey(datasrc);
                 var cachedListResponse = me.cache.get(indicatorListCacheKey) || {
                     complete: true,
                     indicators: []
@@ -701,7 +697,7 @@
                 }
 
                 // only inject when guest user, otherwise flush from cache
-                var metadataCacheKey = 'GetIndicatorMetadata_' + datasrc + '_' + indicatorId;
+                var metadataCacheKey = _cacheHelper.getIndicatorMetadataKey(datasrc, indicatorId);
                 // flush/update indicator metadata from cache
                 var metadata = me.cache.get(metadataCacheKey) || {
                     'public': true,
@@ -741,13 +737,7 @@
                 });
                 me.cache.put(metadataCacheKey, metadata);
 
-                var serialized = '';
-                if (typeof selectors === 'object') {
-                    serialized = '_' + Object.keys(actualSelectors).sort().map(function (key) {
-                        return key + '=' + JSON.stringify(actualSelectors[key]);
-                    }).join(':');
-                }
-                var dataCacheKey = 'GetIndicatorData_' + datasrc + '_' + indicatorId + '_' + regionset + serialized;
+                var dataCacheKey = _cacheHelper.getIndicatorDataKey(datasrc, indicatorId, selectors, regionset);
                 me.cache.put(dataCacheKey, data);
                 _log.info('Saved data with key', dataCacheKey, data);
 
@@ -783,7 +773,28 @@
          */
         deleteIndicator: function (datasrc, indicatorId, selectors, regionset, callback) {
             var clearCache = function () {
-                // TODO: flush indicator from cache
+                if (!selectors && !regionset) {
+                    // removed the whole indicator: flush indicator from cache
+
+                    this.cache.flushKeysStartingWith(_cacheHelper.getIndicatorDataKeyPrefix(datasrc, indicatorId));
+                    var indicatorListCacheKey = _cacheHelper.getIndicatorListKey(datasrc);
+                    var cachedListResponse = this.cache.get(indicatorListCacheKey) || {
+                        complete: true,
+                        indicators: []
+                    };
+                    // only inject when guest user, otherwise flush from cache
+                    var listIndex = cachedListResponse.indicators.findIndex(function (ind) {
+                        return ind.id === indicatorId;
+                    });
+                    if (listIndex !== -1) {
+                        cachedListResponse.indicators.splice(listIndex, 1);
+                    }
+                    this.cache.put(indicatorListCacheKey, cachedListResponse);
+                    var metadataCacheKey = _cacheHelper.getIndicatorMetadataKey(datasrc, indicatorId);
+                    this.cache.remove(metadataCacheKey);
+                } else {
+                    // TODO: MODIFY indicator in caches
+                }
             }
             if (!Oskari.user().isLoggedIn()) {
                 // just flush cache
