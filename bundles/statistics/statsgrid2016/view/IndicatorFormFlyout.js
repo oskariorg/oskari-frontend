@@ -15,6 +15,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList.on('insert.data', function (selectors) {
         me.showDatasetForm(selectors);
     });
+    this.indicatorParamsList.on('delete.data', function (selectors) {
+        me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset);
+    });
     this.indicatorDataForm.on('cancel', function () {
         me.genericInfoPanel.open();
         me.dataPanel.open();
@@ -45,13 +48,37 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.show();
         this.createUi();
         this.indicatorForm.createForm();
-        // TODO: call this.indicatorForm.setValues() based on datasourceId, indicatorId
-        // TODO: pass existing datasets
-        this.indicatorParamsList.setDatasets([]);
         // pass available regionsets if user wants to add another year/regionset dataset
         var datasrc = this.service.getDatasource(datasourceId);
         var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
         this.indicatorParamsList.setRegionsets(regionsetsForDatasource);
+
+        if (!indicatorId) {
+            return;
+        }
+        // call this.indicatorForm.setValues() based on datasourceId, indicatorId passing existing datasets
+        var me = this;
+        this.service.getIndicatorMetadata(datasourceId, indicatorId, function (err, ind) {
+            if (err) {
+                // TODO: handle error properly
+                Oskari.log('IndicatorFormFlyout').error(err);
+                return;
+            }
+            me.indicatorForm.setValues(ind.name, ind.description, ind.source);
+            var datasets = [];
+            ind.selectors.forEach(function (sel) {
+                ind.regionsets.forEach(function (regionset) {
+                    sel.allowedValues.forEach(function (value) {
+                        var data = {};
+                        data[sel.id] = value.id;
+                        data.regionset = regionset;
+                        datasets.push(data);
+                    });
+                });
+            });
+            me.indicatorParamsList.setDatasets(datasets); // [{ year : 2017, regionset: 1850}]
+        });
+
     },
     getElement: function () {
         return this.element;
@@ -60,6 +87,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.datasourceId = null;
         this.indicatorId = null;
         this.indicatorForm.resetForm();
+        this.indicatorParamsList.setDatasets();
         this.indicatorDataForm.clearUi();
     },
     /**
@@ -145,6 +173,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var regionset = me.service.getRegionsets(selectors.regionset);
         var labels = {};
         labels[selectors.regionset] = regionset.name;
+
         // TODO: show spinner as getting regions might take a while?
         me.service.getRegions(regionset.id, function (err, regions) {
             if (err) {
@@ -152,14 +181,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 Oskari.log('IndicatorFormFlyout').error(err);
                 return;
             }
-            var formRegions = regions.map(function (region) {
-                // TODO: include existing values per region when editing existing dataset
-                return {
-                    id: region.id,
-                    name: region.name
+            var showDataForm = function (regions, data) {
+                data = data || {};
+                var formRegions = regions.map(function (region) {
+                    // TODO: include existing values per region when editing existing dataset
+                    return {
+                        id: region.id,
+                        name: region.name,
+                        value: data[region.id]
+                    }
+                });
+                me.indicatorDataForm.showTable(selectors, formRegions, labels);
+            }
+            if (!me.indicatorId) {
+                // not editing an indicator -> just show an empty form with regions
+                showDataForm(regions);
+                return;
+            }
+            // try getting existing values for regions
+            me.service.getIndicatorData(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err, data) {
+                if (err) {
+                    // Dataset might not exist or network failure. Either way show an empty form
+                    Oskari.log('IndicatorFormFlyout').error(err);
+                    showDataForm(regions);
+                    return;
                 }
+                // everything ok, setup existing values for regions on form
+                showDataForm(regions, data);
             });
-            me.indicatorDataForm.showTable(selectors, formRegions, labels);
         });
     },
     /**
