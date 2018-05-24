@@ -44,17 +44,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         var me = this;
         var listEl = this.getElement().find('ul');
         listEl.empty();
+        if (!datasets) {
+            return;
+        }
         datasets.forEach(function (dataset) {
+            // TODO: formatting/nice UI
             var item = me.__templates.listItem({
+                year: me.locale('parameters.year') + ' ' + dataset.year,
+                regionset: me.getRegionsetName(dataset.regionset)
+            });
+            // TODO: add edit/delete links
+            /* for edit:
+            me.trigger('insert.data', {
                 year: dataset.year,
                 regionset: dataset.regionset
             });
-            // TODO: edit/delete
+            for delete:
+            me.trigger('delete.data', {
+                year: dataset.year,
+                regionset: dataset.regionset
+            });
+            */
             listEl.append(item);
         })
     },
     setRegionsets: function (availableRegionsets) {
         this.availableRegionsets = availableRegionsets;
+    },
+    getRegionsetName: function (id) {
+        var regionset = this.availableRegionsets.find(function (regionset) {
+            return regionset.id === id;
+        });
+        if (regionset) {
+            return regionset.name;
+        }
+        return id;
     },
     resetIndicatorSelectors: function (showInsertButton) {
         var formContainer = this.getElement().find('.new-indicator-dataset-params');

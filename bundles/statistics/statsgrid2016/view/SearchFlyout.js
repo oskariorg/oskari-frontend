@@ -70,6 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         btn.addClass('margintopLarge');
+        btn.setPrimary(true);
         btn.setTitle(locale.panels.newSearch.addButtonTitle);
         btn.setEnabled(false);
         btn.insertTo(container);

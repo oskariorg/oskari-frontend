@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
     },
     createForm: function () {
         if (this.getElement()) {
+            this.resetForm();
             return this.getElement();
         }
         var form = this.__templates.form({
@@ -27,17 +28,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
         return this.element;
     },
     setValues: function (name, desc, source) {
-        // TODO: test impl
         var elements = this.getElement().find('.stats-indicator-form-item');
         elements.each(function (index, element) {
             element = jQuery(element);
             var key = element.attr('name');
             if (key === 'name') {
-                element.val(name);
+                element.val(Oskari.getLocalized(name) || '');
             } else if (key === 'description') {
-                element.text(desc);
+                element.val(Oskari.getLocalized(desc) || '');
             } else if (key === 'datasource') {
-                element.val(source);
+                element.val(Oskari.getLocalized(source) || '');
             }
         });
     },
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
         return data;
     },
     resetForm: function () {
-        // the element is a form
-        this.getElement()[0].reset();
+        // set empty values
+        this.setValues();
     }
 });
