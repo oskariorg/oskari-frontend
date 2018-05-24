@@ -3,12 +3,13 @@
  */
 (function (Oskari) {
     var _log = Oskari.log('StatsGrid.StatisticsService');
-    var _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper');
+    var _cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
+    var _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', _cache);
 
     Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
         this.sandbox = sandbox;
         this.locale = locale;
-        this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
+        this.cache = _cache;
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
