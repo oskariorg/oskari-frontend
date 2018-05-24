@@ -626,7 +626,6 @@
             /*
             return;
             }
-            */
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -650,6 +649,7 @@
                     callback('Error saving data to server');
                 }
             });
+            */
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
             var me = this;
@@ -752,6 +752,7 @@
                 _log.info('Saved data with key', dataCacheKey, data);
 
                 callback();
+                /*
                 // send to server
                 jQuery.ajax({
                     type: 'POST',
@@ -774,6 +775,7 @@
                         callback('Error saving data to server');
                     }
                 });
+                */
             });
         },
         /**
