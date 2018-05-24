@@ -781,10 +781,39 @@
         /**
          * selectors and regionset are optional -> will only delete dataset from indicator if given
          */
-        deleteIndicator: function (datasrc, indicator, selectors, regionset, callback) {
-            // TODO: flush indicator from cache and call server
-            // "great success"
-            callback(null);
+        deleteIndicator: function (datasrc, indicatorId, selectors, regionset, callback) {
+            var clearCache = function () {
+                // TODO: flush indicator from cache
+            }
+            if (!Oskari.user().isLoggedIn()) {
+                // just flush cache
+                clearCache();
+                callback();
+                return;
+            }
+
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    // currently server only expects id, year and regionset, but for future proofing let's send all the data
+                    // TODO: change server to use datasource, id, selectors and regionset (remove year from params)
+                    datasource: datasrc,
+                    id: indicatorId,
+                    selectors: JSON.stringify(selectors),
+                    year: selectors.year,
+                    regionset: regionset
+                },
+                url: Oskari.urls.getRoute('DeleteIndicator'),
+                success: function (pResp) {
+                    _log.info('DeleteIndicator', pResp);
+                    clearCache();
+                    callback();
+                },
+                error: function (jqXHR, textStatus) {
+                    callback('Error on server');
+                }
+            });
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
