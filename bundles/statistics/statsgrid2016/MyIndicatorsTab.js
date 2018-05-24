@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
+        this.service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
         this.listContainer = undefined;
         this._initContent();
     }, {
@@ -39,7 +40,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         },
         _initContent: function () {
             this.listContainer = this.template.clone();
-            this._refreshIndicatorsList();
+            // this._refreshIndicatorsList();
         },
         /**
          * @private @method _renderIndicatorsList
@@ -50,7 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          */
         _renderIndicatorsList: function (indicators) {
             if (!indicators) {
-                indicators = [{name: "Test indicator"}];
+                indicators = [];
             }
             this.listContainer.empty();
             this.indicatorData = indicators;
@@ -66,33 +67,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          */
         _refreshIndicatorsList: function () {
             var me = this;
-            var service = me.instance.getStatisticsService();
-            var datasources = service.getDatasource();
-            var indicators = [];
-
-            if (datasources) {
-                datasources.forEach(function (ds) {
-                //    if (ds.type === 'USER') {
-                        service.getIndicatorList(ds.id, function (err, result) {
-                            if (err) {
-                                me.log.warn('Could not list own indicators for datasource with id: ' + ds.id);
-                            } else if (result) {
-                                indicators.push(result);
-                            }
-                        });
-                //    }
-                });
-            }
-            this._renderIndicatorsList(indicators);
-            /*
-            service.loadIndicators('UserStats', function (isSuccess, response) {
-                if (isSuccess) {
+            me.service.getIndicatorList(me.service.getUserDatasource().id, function (err, response) {
+                if (err) {
+                    me.log.warn('Could not list own indicators in personal data tab');
+                } else if (response && response.complete) {
                     me._renderIndicatorsList(response.indicators);
-                } else {
-                    me._showErrorMessage(me.loc('tab.error.loadfailed'));
                 }
             });
-            */
         },
 
         /**
@@ -112,7 +93,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
                 return matches[0];
             }
             // couldn't find indicator -> show an error
-            this._showErrorMessage(this.loc('tab.error.generic'));
+            this._showErrorMessage(this.loc('tab.error.notfound'));
         },
         /**
          * Shows a confirmation dialog on deleting a indicator
@@ -156,11 +137,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         _deleteIndicator: function (indicator) {
             var me = this;
             var service = me.instance.getStatisticsService();
-            service.deleteIndicator(indicator, function (isSuccess) {
-                if (isSuccess) {
-                    me._refreshIndicatorsList();
-                } else {
+            service.deleteIndicator(service.getUserDatasource().id, indicator.id, null, null, function (err, response) {
+                if (err) {
                     me._showErrorMessage(me.loc('tab.error.notdeleted'));
+                } else {
+                    me._refreshIndicatorsList();
                 }
             });
         },
@@ -297,9 +278,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          */
         eventHandlers: {
             /**
-             * @method StatsGrid.IndicatorEvent
+             * @method StatsGrid.UserIndicatorEvent
              */
-            'StatsGrid.IndicatorEvent': function (event) {
+            'StatsGrid.UserIndicatorEvent': function (event) {
                 this._refreshIndicatorsList();
             }
         },

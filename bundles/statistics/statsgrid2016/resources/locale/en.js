@@ -205,7 +205,7 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',
-                'deletemsg': 'You are deleting the indicator \'{name}\'. Do you want to delete the indicator?'
+                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?'
             },
             'button': {
                 'cancel': 'Cancel',
@@ -213,8 +213,7 @@ Oskari.registerLocalization({
             },
             'error': {
                 'title': 'Error',
-                'generic': 'The indicator was not found.',
-                'loadfailed': 'The indicators could not be retrieved.'
+                'notfound': 'The indicator was not found.'
             }
         },
         'userIndicators': {

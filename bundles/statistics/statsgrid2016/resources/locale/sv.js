@@ -192,6 +192,7 @@ Oskari.registerLocalization({
             'organizationName': 'Tematisk karta'
         },
         'tab': {
+            'title': 'Indikatorer',
             'edit': 'Redigera',
             'delete': 'Ta bort',
             'grid': {
@@ -199,9 +200,17 @@ Oskari.registerLocalization({
                 'edit': 'Redigera',
                 'delete': 'Ta bort'
             },
+            'popup': {
+                'deletetitle': 'Ta bort indikatorn',
+                'deletemsg': 'Vill du ta bord indikatorn "{name}"?'
+            },
             'button': {
                 'cancel': 'Avbryt',
                 'ok': 'OK'
+            },
+            'error': {
+                'title': 'Fel',
+                'notfound': 'Indikator saknas'
             }
         },
         'userIndicators': {

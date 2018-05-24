@@ -128,9 +128,6 @@ Oskari.clazz.define(
         getFlyoutManager: function () {
             return this.flyoutManager;
         },
-        getStatisticsService() {
-            return this.statsService;
-        },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
          * @param  {Number} ds         datasource id

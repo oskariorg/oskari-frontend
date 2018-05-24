@@ -2,6 +2,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.instance = instance;
     this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
     this.element = null;
+    this.sandbox = instance.sandbox;
     this.service = instance.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
     this.indicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorForm', this.locale);
     this.indicatorParamsList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', this.locale);
@@ -183,6 +184,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             // update the indicator id we are operating on
             me.indicatorId = indicator.id;
             Oskari.log('IndicatorFormFlyout').info('Saved indicator', data, 'Indicator: ' + indicator.id);
+
+            // notify
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.UserIndicatorEvent');
+            var removed = false;
+            me.sandbox.notifyAll(eventBuilder(indicator, removed));
+
             callback(null, indicator);
         });
     },

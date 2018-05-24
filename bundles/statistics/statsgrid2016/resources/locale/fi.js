@@ -213,8 +213,7 @@ Oskari.registerLocalization({
             },
             'error': {
                 'title': 'Virhe',
-                'generic': 'Indikaattoria ei löytynyt',
-                'loadfailed': 'Indikaattorien haku epäonnistui.'
+                'notfound': 'Indikaattoria ei löytynyt'
             }
         },
         'userIndicators': {
