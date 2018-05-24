@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', this.locale);
     this.indicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm', this.locale);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    this.addClass('statsgrid-user-indicator-flyout');
     var me = this;
     me.on('hide', function () {
         me.reset();
@@ -100,7 +101,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
         btn.insertTo(this.element);
         jQuery(btn.getElement()).css({
-            'margin-right': '3%',
             'float': 'right',
             'clear': 'both'
         });
@@ -168,8 +168,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     saveIndicator: function (data, callback) {
         var me = this;
         // TODO: validate values
-        var isValid = true;
-        if (!isValid) {
+        var isValid = function (data) {
+            if (typeof (data.name) !== 'string' || data.name.length === 0) {
+                return false;
+            }
+            return true;
+        }
+
+        if (!isValid(data)) {
             callback('Input not valid');
             return;
         }

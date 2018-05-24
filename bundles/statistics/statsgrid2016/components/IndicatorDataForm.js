@@ -61,7 +61,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         this.getElement().append(tableRef);
         // Focus on the first input cell
         tableRef.find('tr td.uservalue')[0].focus();
-
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
         cancelBtn.insertTo(this.getElement());
         cancelBtn.setHandler(function () {
@@ -90,6 +89,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             };
             if (dataItem.value !== '' && !Number.isNaN(dataItem.value)) {
                 // only include rows with values and cast value to number as legend expects it to be a number
+                dataItem.value = dataItem.value.replace(/,/g, '.');
                 dataItem.value = Number(dataItem.value);
                 data.values.push(dataItem);
             }
