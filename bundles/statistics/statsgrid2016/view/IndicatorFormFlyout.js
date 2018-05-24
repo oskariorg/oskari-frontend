@@ -16,7 +16,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         me.showDatasetForm(selectors);
     });
     this.indicatorParamsList.on('delete.data', function (selectors) {
-        me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset);
+        me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
+            if (err) {
+                // TODO: handle error properly
+                Oskari.log('IndicatorFormFlyout').error('Error deleting dataset', err);
+                return;
+            }
+            // refresh the dataset listing on form
+            me.updateDatasetList();
+        });
     });
     this.indicatorDataForm.on('cancel', function () {
         me.genericInfoPanel.open();
@@ -56,9 +64,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         if (!indicatorId) {
             return;
         }
+        this.updateDatasetList();
+    },
+    updateDatasetList: function () {
         // call this.indicatorForm.setValues() based on datasourceId, indicatorId passing existing datasets
         var me = this;
-        this.service.getIndicatorMetadata(datasourceId, indicatorId, function (err, ind) {
+        this.service.getIndicatorMetadata(me.datasourceId, me.indicatorId, function (err, ind) {
             if (err) {
                 // TODO: handle error properly
                 Oskari.log('IndicatorFormFlyout').error(err);
@@ -78,7 +89,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             });
             me.indicatorParamsList.setDatasets(datasets); // [{ year : 2017, regionset: 1850}]
         });
-
     },
     getElement: function () {
         return this.element;

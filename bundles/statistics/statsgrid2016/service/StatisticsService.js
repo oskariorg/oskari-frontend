@@ -781,8 +781,10 @@
         /**
          * selectors and regionset are optional -> will only delete dataset from indicator if given
          */
-        deleteIndicator: function (datasrc, indicator, selectors, regionset) {
+        deleteIndicator: function (datasrc, indicator, selectors, regionset, callback) {
             // TODO: flush indicator from cache and call server
+            // "great success"
+            callback(null);
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
