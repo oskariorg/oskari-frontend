@@ -36,6 +36,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         }
         this.getElement().empty();
     },
+    fillTable: function (data) {
+        var table = this.getElement().find('.user-indicator-table');
+        data.forEach(function (iteration) {
+            table.find('tr').filter(function (index, tr) {
+                if (tr.innerText.trim() === iteration.name) {
+                    jQuery(tr).find('td.uservalue').text(iteration.value);
+                }
+            });
+        });
+    },
     showTable: function (selectors, regions, labels) {
         var me = this;
         this.clearUi();

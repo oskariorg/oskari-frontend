@@ -131,6 +131,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         importClipboard.insertTo(btnContainer);
         importClipboard.setTitle('Tuo leikepöydältä');
         importClipboard.setHandler(function (event) {
+            me.trigger('insert.data', {
+                year: input.val(),
+                regionset: Number(me.select.getValue())
+            });
             me.openImportPopup();
         });
     },
@@ -170,7 +174,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         var updateValue = function (name, value) {
             validRows.push({
                 'name': name,
-                'id': name,
                 'value': value
             });
         };
