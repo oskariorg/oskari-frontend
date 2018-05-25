@@ -110,28 +110,6 @@ table {
 .language-link:hover {
 	color: #FFFFFF;
 }  
- /*
-.logoplugin .icon {
-    background-image: url('/Oskari/applications/livi/servlet/images/livilogo107.png') !important;
-    display: inline-block;
-    height: 25px;
-    width: 25px;
-    vertical-align: bottom;
-    cursor: pointer;
-    float:left;
-}
-
-.logoplugin .terms {
-    float:left;
-    display: block; !important
-    vertical-align: bottom;
-}
-
-*/
-
-.logoplugin .data-sources {
-    float:left;
-}
   
 /*Sivupalkin v‰rityksen muuttaminen*/
 #maptools {
@@ -146,33 +124,17 @@ table {
   div.toolrow div.tool.selected, div.toolrow div.tool:hover:not(.disabled), div.toolrow div.tool:active:not(.disabled) {
   background-color: #3db7e4 !important;
 }
+        
+div.mapplugin.backgroundLayerSelectionPlugin div.content ul li {
+	width: 150px !important;
+}
 
-/*Kuvan lis‰‰minen sivupalkkiin*/
-#livi-logo {
-				height:107px !important;
-				width:107px !important;
-				margin-left:30px !important;
-				margin-top:5px !important;
-				padding-bottom:5px !important;
-				background:url("/Oskari/applications/livi/servlet/images/livilogo107.png") no-repeat;
-				cursor:pointer;
-			}  
-						
-<div id="livi-logo">
-        <img src="/Oskari/applications/livi/servlet/images/livilogo107.png" alt="LV" width="107" height="107">
-    </div>  
-    
-<div id="language">
-            <c:if test="${language == 'fi'}">
-                <a href="./?lang=sv">PÂ svenska</a> -
-                <a href="./?lang=en">In English</a>
-            </c:if>
-            <c:if test="${language == 'sv'}">
-                <a href="./?lang=fi">Suomeksi</a> -
-                <a href="./?lang=en">In English</a>
-            </c:if>
-            <c:if test="${language == 'en'}">
-                <a href="./?lang=fi">Suomeksi</a> -
-                <a href="./?lang=sv">PÂ svenska</a>
-            </c:if>
-        </div>
+div.mapplugin.backgroundLayerSelectionPlugin div.content div.currentSelection {
+	width: 160px !important;
+}
+
+/*Piilotetaan mml-logo alapalkista*/
+.logoplugin .icon {
+height: 0px !important;
+width: 0px !important;
+} 
