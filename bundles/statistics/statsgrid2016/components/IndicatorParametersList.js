@@ -95,11 +95,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             name: 'year',
             label: this.locale('parameters.year')
         }));
-        form.append(input);
+        //form.append(input);
         var formContainer = this.resetIndicatorSelectors(false);
         formContainer.append(form);
-        var regionsetContainer = jQuery('<div></div>');
-        regionsetContainer.append(this.locale('panels.newSearch.selectRegionsetPlaceholder'));
+        var userChoiceContainer = jQuery('<div style="display:flex"></div>');
+        userChoiceContainer.append(input);
+        formContainer.append(userChoiceContainer);
+        var regionsetContainer = jQuery('<div style="display:flex;flex-direction:column"></div>');
+        regionsetContainer.append('<div>' + this.locale('panels.newSearch.selectRegionsetPlaceholder') + '</div>');
         regionsetContainer.append(this.select.create(this.availableRegionsets, {
             allow_single_deselect: false,
             placeholder_text: this.locale('panels.newSearch.selectRegionsetPlaceholder'),
@@ -107,8 +110,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         }));
         this.select.selectFirstValue();
         this.select.adjustChosen();
-
-        formContainer.append(regionsetContainer);
+        userChoiceContainer.append(regionsetContainer);
+        formContainer.append(userChoiceContainer);
         var btnContainer = jQuery('<div style="display:flex"></div>');
         formContainer.append(btnContainer);
 
