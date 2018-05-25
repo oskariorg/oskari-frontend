@@ -165,21 +165,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         cancelBtn.setHandler(function () {
             popup.close(true);
         });
-        popup.show('Tuo leikepöydältä', content, [cancelBtn, okBtn]);
+        popup.show(me.locale('userIndicators.import.title'), content, [cancelBtn, okBtn]);
     },
-    parseUserData: function (data) {
-        var data = data.val();
+    parseUserData: function (textarea) {
+        var data = textarea.val();
         var validRows = [];
-        // update form regions / municipalities
-        var updateValue = function (name, value) {
-            validRows.push({
-                'name': name,
-                'value': value
-            });
-        };
+
         var lines = data.match(/[^\r\n]+/g);
-        var updated = 0;
-        var unrecognized = [];
         // loop through all the lines and parse municipalities (name or code)
         _.each(lines, function (line) {
             var area,
@@ -191,15 +183,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
                 area = matches[1];
                 value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
             }
-            // update municipality values
-            if (updateValue(jQuery.trim(area), jQuery.trim(value))) {
-                updated += 1;
-            } else if (value && value.length > 0) {
-                unrecognized.push({
-                    region: area,
-                    value: value
-                });
-            }
+            validRows.push({
+                'name': area.trim(),
+                'value': value
+            });
         });
         return validRows;
     }
