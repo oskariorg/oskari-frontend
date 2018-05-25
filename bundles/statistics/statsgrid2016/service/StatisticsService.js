@@ -555,73 +555,28 @@
                 callback('Data missing');
                 return;
             }
-            var indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
-            var updateMetadataCache = function () {
-                // only inject when guest user, otherwise flush from cache
-                var metadataCacheKey = _cacheHelper.getIndicatorMetadataKey(datasrc, indicatorId);
-                // flush/update indicator metadata from cache
-                var metadata = me.cache.get(metadataCacheKey) || {
-                    'public': true,
-                    'id': indicatorId,
-                    'name': {},
-                    'description': {},
-                    'source': {},
-                    'regionsets': [],
-                    'selectors': []
-                };
-                metadata.name[Oskari.getLang()] = data.name;
-                metadata.description[Oskari.getLang()] = data.description;
-                metadata.source[Oskari.getLang()] = data.datasource;
-                me.cache.put(metadataCacheKey, metadata);
-            };
-
-            if (data.id) {
-                this.getIndicatorList(datasrc, function (err, response) {
-                    if (err) {
-                        callback(err);
-                        return;
-                    }
-                    var existingIndicator = response.indicators.find(function (ind) {
-                        return '' + ind.id === '' + data.id;
-                    });
-                    if (!existingIndicator) {
-                        callback('Tried saving an indicator with id, but id didnt match existing indicator');
-                        return;
-                    }
-                    // TODO: call server and update name after success response
-                    // this probably updates the cache as well as mutable objects are being passed around
-                    existingIndicator.name = data.name;
-                    // possibly update "regionsets": [1851,1855] in listing cache
-                    updateMetadataCache();
+            var responseHandler = function (err, indicatorId) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                // send out event about new/updated indicators
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                me.sandbox.notifyAll(eventBuilder(datasrc));
+                callback(null, {
+                    ds: datasrc,
+                    id: indicatorId
                 });
-            } else {
-                // TODO: call server and update name after success response
-                var indicatorListCacheKey = _cacheHelper.getIndicatorListKey(datasrc);
-                var cachedListResponse = me.cache.get(indicatorListCacheKey) || {
-                    complete: true,
-                    indicators: []
-                };
-                // only inject when guest user, otherwise flush from cache
-                cachedListResponse.indicators.push({
-                    id: indicatorId,
-                    name: data.name,
-                    regionsets: []
-                });
-                me.cache.put(indicatorListCacheKey, cachedListResponse);
-                updateMetadataCache();
             }
-            // send out event about new/updated indicators
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
-            me.sandbox.notifyAll(eventBuilder(datasrc));
 
             // FOR NOW SAVING THE DATA IS NOT SUPPORTED FOR ANYONE
-            //if (!Oskari.user().isLoggedIn()) {
-            // successfully saved for guest user
-            callback(null, {
-                id: indicatorId
-            });
-            /*
-            return;
+            if (!Oskari.user().isLoggedIn()) {
+                // successfully saved for guest user
+                var indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
+                _cacheHelper.updateIndicatorInCache(datasrc, indicatorId, data, function (err) {
+                    responseHandler(err, indicatorId);
+                });
+                return;
             }
             jQuery.ajax({
                 type: 'POST',
@@ -638,15 +593,15 @@
                 url: Oskari.urls.getRoute('SaveIndicator'),
                 success: function (pResp) {
                     _log.info('SaveIndicator', pResp);
-                    callback(null, {
-                        id: indicatorId
+                    _cacheHelper.updateIndicatorInCache(datasrc, pResp.id, data, function (err) {
+                        // send out event about new/updated indicators
+                        responseHandler(err, pResp.id);
                     });
                 },
                 error: function (jqXHR, textStatus) {
-                    callback('Error saving data to server');
+                    responseHandler('Error saving data to server');
                 }
             });
-            */
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
             var me = this;
