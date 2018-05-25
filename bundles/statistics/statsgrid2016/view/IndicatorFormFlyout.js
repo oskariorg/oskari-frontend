@@ -16,6 +16,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList.on('insert.data', function (selectors) {
         me.showDatasetForm(selectors);
     });
+    this.indicatorParamsList.on('import.user.data', function (data) {
+        var selectors = data.selectors;
+        var regionset = me.service.getRegionsets(selectors.regionset);
+        var labels = {};
+        labels[selectors.regionset] = regionset.name;
+
+        me.indicatorDataForm.showTable(selectors, data.data, labels);
+    });
     this.indicatorParamsList.on('delete.data', function (selectors) {
         me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
             if (err) {

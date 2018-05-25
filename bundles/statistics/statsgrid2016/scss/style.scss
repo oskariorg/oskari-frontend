@@ -1066,7 +1066,7 @@ border:none;
  }
  .user-indicator-main > table > tbody {
     overflow: auto;
-    height: 33em;
+    max-height: 33em;
     display: block;
 }
 .user-indicator-table td {
