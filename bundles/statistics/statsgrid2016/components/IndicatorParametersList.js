@@ -96,6 +96,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         form.append(input);
         var formContainer = this.resetIndicatorSelectors(false);
         formContainer.append(form);
+        // focus on the year input
+        input.focus();
+
+        // create regionset selection
         var regionsetContainer = jQuery('<div></div>');
         regionsetContainer.append(this.locale('panels.newSearch.selectRegionsetPlaceholder'));
         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
@@ -108,6 +112,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         select.adjustChosen();
 
         formContainer.append(regionsetContainer);
+
+        // create buttons
         var btnContainer = jQuery('<div style="display:flex"></div>');
         formContainer.append(btnContainer);
 
