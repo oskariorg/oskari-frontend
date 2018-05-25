@@ -37,15 +37,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
             // only inject when guest user, otherwise flush from cache
             var metadataCacheKey = me.getIndicatorMetadataKey(datasrc, indicatorId);
             // flush/update indicator metadata from cache
-            var metadata = me.cache.get(metadataCacheKey) || {
-                'public': true,
-                'id': indicatorId,
-                'name': {},
-                'description': {},
-                'source': {},
-                'regionsets': [],
-                'selectors': []
-            };
+            var metadata = me.cache.get(metadataCacheKey) || me.__getCachedMetadataSkeleton(indicatorId);
+            // update indicator fields
             metadata.name[Oskari.getLang()] = data.name;
             metadata.description[Oskari.getLang()] = data.description;
             metadata.source[Oskari.getLang()] = data.datasource;
@@ -89,8 +82,77 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
             updateMetadataCache();
         }
     },
-    updateIndicatorDataCache: function () {
+    updateIndicatorDataCache: function (datasrc, indicatorId, selectors, regionset, data, callback) {
+        var me = this;
+        this.service.getIndicatorList(datasrc, function (err, response) {
+            // find the indicator that's being edited
+            if (err) {
+                callback(err);
+                return;
+            }
+            var existingIndicator = response.indicators.find(function (ind) {
+                return '' + ind.id === '' + indicatorId;
+            });
+            if (!existingIndicator) {
+                callback('Tried saving dataset for an indicator, but id didn\'t match existing indicator');
+                return;
+            }
+            // this updates the cache as well as mutable objects are being passed around
+            if (existingIndicator.regionsets.indexOf(regionset) === -1) {
+                // add regionset for indicator if it's a new one
+                existingIndicator.regionsets.push(regionset);
+            }
 
+            // only inject when guest user, otherwise flush from cache
+            var metadataCacheKey = me.getIndicatorMetadataKey(datasrc, indicatorId);
+            // flush/update indicator metadata from cache
+            var metadata = me.cache.get(metadataCacheKey) || me.__getCachedMetadataSkeleton(indicatorId);
+            // update regionsets
+            metadata.regionsets = existingIndicator.regionsets;
+            Object.keys(selectors).forEach(function (selectorId) {
+                var selectorValue = selectors[selectorId];
+                var existingSelector = metadata.selectors.find(function (item) {
+                    return item.id === selectorId;
+                });
+                if (!existingSelector) {
+                    metadata.selectors.push({
+                        id: selectorId,
+                        name: selectorId,
+                        allowedValues: [{
+                            'name': selectorValue,
+                            'id': selectorValue
+                        }]
+                    });
+                } else {
+                    var existingValue = existingSelector.allowedValues.find(function (item) {
+                        return '' + item.id === '' + selectorId;
+                    });
+                    if (!existingValue) {
+                        existingSelector.allowedValues.push({
+                            'name': selectorValue,
+                            'id': selectorValue
+                        });
+                    }
+                }
+            });
+            me.cache.put(metadataCacheKey, metadata);
+
+            var dataCacheKey = me.getIndicatorDataKey(datasrc, indicatorId, selectors, regionset);
+            me.cache.put(dataCacheKey, data);
+
+            callback();
+        });
+    },
+    __getCachedMetadataSkeleton: function (indicatorId) {
+        return {
+            'public': true,
+            'id': indicatorId,
+            'name': {},
+            'description': {},
+            'source': {},
+            'regionsets': [],
+            'selectors': []
+        };
     },
     clearCacheOnDelete: function (datasrc, indicatorId, selectors, regionset) {
         if (!selectors && !regionset) {

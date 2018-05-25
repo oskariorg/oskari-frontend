@@ -569,7 +569,6 @@
                 });
             }
 
-            // FOR NOW SAVING THE DATA IS NOT SUPPORTED FOR ANYONE
             if (!Oskari.user().isLoggedIn()) {
                 // successfully saved for guest user
                 var indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
@@ -578,6 +577,7 @@
                 });
                 return;
             }
+            // send data to server for logged in users
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -604,7 +604,6 @@
             });
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
-            var me = this;
             if (typeof callback !== 'function') {
                 return;
             }
@@ -628,100 +627,34 @@
             var actualSelectors = {};
             Object.keys(selectors).forEach(function (selectorId) {
                 if (selectorId !== 'regionset') {
-                    // skip regionset
+                    // filter out regionset
                     actualSelectors[selectorId] = selectors[selectorId];
                 }
             });
-            selectors = actualSelectors;
-            this.getIndicatorList(datasrc, function (err, response) {
-                if (err) {
-                    callback(err);
-                    return;
+            if (!Oskari.user().isLoggedIn()) {
+                // successfully saved for guest user
+                _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                return;
+            }
+            // send data to server for logged in users
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    datasource: datasrc,
+                    id: indicatorId,
+                    selectors: JSON.stringify(actualSelectors),
+                    regionset: regionset,
+                    data: JSON.stringify(data)
+                },
+                url: Oskari.urls.getRoute('AddIndicatorData'),
+                success: function (pResp) {
+                    _log.info('AddIndicatorData', pResp);
+                    _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback('Error saving data to server');
                 }
-                var existingIndicator = response.indicators.find(function (ind) {
-                    return '' + ind.id === '' + indicatorId;
-                });
-                if (!existingIndicator) {
-                    callback('Tried saving dataset for an indicator, but id didnt match existing indicator');
-                    return;
-                }
-                // TODO: call server and update name after success response
-                // this probably updates the cache as well as mutable objects are being passed around
-                if (existingIndicator.regionsets.indexOf(regionset) === -1) {
-                    // add new regionset for indicator
-                    existingIndicator.regionsets.push(regionset);
-                }
-
-                // only inject when guest user, otherwise flush from cache
-                var metadataCacheKey = _cacheHelper.getIndicatorMetadataKey(datasrc, indicatorId);
-                // flush/update indicator metadata from cache
-                var metadata = me.cache.get(metadataCacheKey) || {
-                    'public': true,
-                    'id': indicatorId,
-                    'name': {},
-                    'description': {},
-                    'source': {},
-                    'regionsets': [],
-                    'selectors': []
-                };
-                metadata.regionsets = existingIndicator.regionsets;
-                Object.keys(selectors).forEach(function (selectorId) {
-                    var selectorValue = selectors[selectorId];
-                    var existingSelector = metadata.selectors.find(function (item) {
-                        return item.id === selectorId;
-                    });
-                    if (!existingSelector) {
-                        metadata.selectors.push({
-                            id: selectorId,
-                            name: selectorId,
-                            allowedValues: [{
-                                'name': selectorValue,
-                                'id': selectorValue
-                            }]
-                        });
-                    } else {
-                        var existingValue = existingSelector.allowedValues.find(function (item) {
-                            return '' + item.id === '' + selectorId;
-                        });
-                        if (!existingValue) {
-                            existingSelector.allowedValues.push({
-                                'name': selectorValue,
-                                'id': selectorValue
-                            });
-                        }
-                    }
-                });
-                me.cache.put(metadataCacheKey, metadata);
-
-                var dataCacheKey = _cacheHelper.getIndicatorDataKey(datasrc, indicatorId, selectors, regionset);
-                me.cache.put(dataCacheKey, data);
-                _log.info('Saved data with key', dataCacheKey, data);
-
-                callback();
-                /*
-                // send to server
-                jQuery.ajax({
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        datasource: datasrc,
-                        id: indicatorId,
-                        selectors: JSON.stringify(selectors),
-                        regionset: regionset,
-                        data: JSON.stringify(data)
-                    },
-                    url: Oskari.urls.getRoute('AddIndicatorData'),
-                    success: function (pResp) {
-                        _log.info('AddIndicatorData', pResp);
-                        callback(null, {
-                            id: indicatorId
-                        });
-                    },
-                    error: function (jqXHR, textStatus) {
-                        callback('Error saving data to server');
-                    }
-                });
-                */
             });
         },
         /**
