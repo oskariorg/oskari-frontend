@@ -94,8 +94,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             label: this.locale('parameters.year')
         }));
         form.append(input);
-        // focus on the year input
-        input.focus();
         var formContainer = this.resetIndicatorSelectors(false);
         formContainer.append(form);
         // focus on the year input
