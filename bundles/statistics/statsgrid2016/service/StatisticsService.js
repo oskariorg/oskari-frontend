@@ -3,13 +3,13 @@
  */
 (function (Oskari) {
     var _log = Oskari.log('StatsGrid.StatisticsService');
-    var _cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
-    var _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', _cache);
+    var _cacheHelper = null;
 
     Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
         this.sandbox = sandbox;
         this.locale = locale;
-        this.cache = _cache;
+        this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
+        _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
@@ -773,33 +773,9 @@
          * selectors and regionset are optional -> will only delete dataset from indicator if given
          */
         deleteIndicator: function (datasrc, indicatorId, selectors, regionset, callback) {
-            var clearCache = function () {
-                if (!selectors && !regionset) {
-                    // removed the whole indicator: flush indicator from cache
-
-                    this.cache.flushKeysStartingWith(_cacheHelper.getIndicatorDataKeyPrefix(datasrc, indicatorId));
-                    var indicatorListCacheKey = _cacheHelper.getIndicatorListKey(datasrc);
-                    var cachedListResponse = this.cache.get(indicatorListCacheKey) || {
-                        complete: true,
-                        indicators: []
-                    };
-                    // only inject when guest user, otherwise flush from cache
-                    var listIndex = cachedListResponse.indicators.findIndex(function (ind) {
-                        return ind.id === indicatorId;
-                    });
-                    if (listIndex !== -1) {
-                        cachedListResponse.indicators.splice(listIndex, 1);
-                    }
-                    this.cache.put(indicatorListCacheKey, cachedListResponse);
-                    var metadataCacheKey = _cacheHelper.getIndicatorMetadataKey(datasrc, indicatorId);
-                    this.cache.remove(metadataCacheKey);
-                } else {
-                    // TODO: MODIFY indicator in caches
-                }
-            }
             if (!Oskari.user().isLoggedIn()) {
                 // just flush cache
-                clearCache();
+                _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                 callback();
                 return;
             }
@@ -819,7 +795,7 @@
                 url: Oskari.urls.getRoute('DeleteIndicator'),
                 success: function (pResp) {
                     _log.info('DeleteIndicator', pResp);
-                    clearCache();
+                    _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                     callback();
                 },
                 error: function (jqXHR, textStatus) {
