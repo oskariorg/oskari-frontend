@@ -724,7 +724,7 @@ div.tab-material-controls div.title {
 
 .user-indicator-main > table > tbody {
   overflow: auto;
-  height: 33em;
+  max-height: 33em;
   display: block; }
 
 .user-indicator-table td {
@@ -743,3 +743,16 @@ div.tab-material-controls div.title {
   display: flex;
   justify-content: space-between;
   align-items: center; }
+
+.user-indicator-import > textarea {
+  width: 300px;
+  height: 150px; }
+
+.regionset-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: -8px; }
+
+.userchoice-container {
+  display: flex;
+  justify-content: space-evenly; }

@@ -401,16 +401,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         setState: function (state, ignoreLocation) {
-            var me = this,
-                mapmodule = me.getMapModule(),
-                mapModuleName = mapmodule.getName(),
-                rbAdd,
-                len,
-                i,
-                layer,
-                sandbox =  me.getSandbox(),
-                rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest'),
-                rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+            var me = this;
+            var mapmodule = me.getMapModule();
+            var mapModuleName = mapmodule.getName();
+            var rbAdd;
+            var len;
+            var i;
+            var layer;
+            var sandbox = me.getSandbox();
+            var rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
+            var rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
             me._teardownState(mapmodule);
 
@@ -424,6 +424,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                         state.zoom
                     );
                 }
+                // set 3D camera position
                 if (state.hasOwnProperty('camera')) {
                     try {
                         mapmodule.setCamera(state.camera);
@@ -445,7 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     layer = state.selectedLayers[i];
 
                     var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-                    if(oskariLayer) {
+                    if (oskariLayer) {
                         oskariLayer.setVisible(!layer.hidden);
                     }
                     sandbox.request(
