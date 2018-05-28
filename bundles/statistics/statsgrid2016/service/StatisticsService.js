@@ -667,22 +667,24 @@
                 callback();
                 return;
             }
-
+            var me = this;
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    // currently server only expects id, year and regionset, but for future proofing let's send all the data
-                    // TODO: change server to use datasource, id, selectors and regionset (remove year from params)
                     datasource: datasrc,
                     id: indicatorId,
                     selectors: JSON.stringify(selectors),
-                    year: selectors.year,
                     regionset: regionset
                 },
                 url: Oskari.urls.getRoute('DeleteIndicator'),
                 success: function (pResp) {
                     _log.info('DeleteIndicator', pResp);
+                    if (!selectors) {
+                        // if selectors/regionset is missing -> trigger a DatasourceEvent as the indicator listing changes
+                        var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                        me.sandbox.notifyAll(eventBuilder(datasrc));
+                    }
                     _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                     callback();
                 },
