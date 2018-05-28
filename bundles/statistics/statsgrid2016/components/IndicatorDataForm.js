@@ -40,9 +40,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
     fillTable: function (data) {
         var table = this.getElement().find('.user-indicator-table');
         data.forEach(function (iteration) {
-            table.find('tr').filter(function (index, tr) {
+            table.find('tr').map(function (index, tr) {
                 if (tr.innerText.trim() === iteration.name || tr.dataset.id === iteration.name) {
-                    jQuery(tr).find('td.uservalue').text(iteration.value);
+                    var uservalue = jQuery(tr).find('td.uservalue');
+
+                    if (uservalue.html() !== '') {
+                        uservalue.empty();
+                    }
+                    uservalue.text(iteration.value);
                 }
             });
         });
@@ -80,7 +85,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         });
         var importClipboard = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
         importClipboard.insertTo(this.getElement());
-        importClipboard.setTitle('Tuo leikepöydältä');
+        importClipboard.setTitle(this.locale('userIndicators.import.title'));
         importClipboard.setHandler(function (event) {
             me.openImportPopup();
         });
