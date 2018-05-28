@@ -212,10 +212,10 @@ Oskari.registerLocalization({
                 'successMsg': 'Tiedot tallennettu. Lisää indikaattori kartalle aineistohaun kautta.'
             },
             'import': {
-                'title': 'Tuo leikepöyältä',
+                'title': 'Tuo leikepöydältä',
                 'placeholder': 'Kopioi tähän indikaattorin tiedot. Yhdellä rivillä on alue ja sitä vastaava arvo. Alue merkitään joko nimellä tai tunnisteella. Erottimeksi puolipiste. Tiedot voivat olla seuraavissa muodoissa: \n' +
                 'Esimerkki 1: Helsinki;1234 \n' +
-                'Esimerkki 2: 009;5678'
+                'Esimerkki 2: 011;5678'
             },
             'notLoggedInWarning': 'Oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Tiedot menetetään jos sivu ladataan uudestaan.',
             'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.'
