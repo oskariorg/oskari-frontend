@@ -320,15 +320,15 @@ Oskari.registerLocalization(
             }
         },
         "fileInput": {
-            "fileUpload": "Drag {files, plural, one {a file} other {files}} here or",
-            "link":"select by browsing",
-            "uploading":"Loading",
-            "success":"Sucess",
-            "error":"Error!",
-            "invalidType": "Filformat är inte tillåtet.",
-            "multipleNotAllowed": "Only single file is allowed to be uploaded.",
+            "fileUpload": "Dra {files, plural, one {fil} other {filerna}} hit, eller",
+            "link":"välj genom att bläddra.",
+            "uploading":"Laddar",
+            "success":"Lyckades",
+            "error":"Fel!",
+            "invalidType": "Filformatet är inte tillåtet.",
+            "multipleNotAllowed": "Endast en fil kan laddas upp.",
             "fileSize": "Den valda filen är för stor. Den högsta tillåtna storleken är {size, number} Mb.",
-            "noFiles": "Ingen fil vald"
+            "noFiles": "Ingen fil vald."
         }
     }
 });

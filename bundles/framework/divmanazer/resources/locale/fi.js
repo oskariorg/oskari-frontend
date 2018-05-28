@@ -335,7 +335,7 @@ Oskari.registerLocalization(
         },
         "fileInput": {
             "fileUpload": "Raahaa {files, plural, one {tiedosto} other {tiedostot}} tähän tai",
-            "link":"valitse selaamalla",
+            "link":"valitse selaamalla.",
             "uploading":"Ladataan",
             "success":"Valmis",
             "error":"Virhe!",

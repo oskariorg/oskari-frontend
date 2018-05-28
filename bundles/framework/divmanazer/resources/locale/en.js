@@ -335,14 +335,14 @@ Oskari.registerLocalization(
         },
         "fileInput": {
             "fileUpload": "Drag {files, plural, one {a file} other {files}} here or",
-            "link":"select by browsing",
+            "link":"select by browsing.",
             "uploading":"Loading",
             "success":"Sucess",
             "error":"Error!",
             "invalidType": "File format is not allowed.",
             "multipleNotAllowed": "Only single file is allowed to be uploaded.",
             "fileSize": "The selected file is too large. It can be at most {size, number} Mb.",
-            "noFiles": "No file selected"
+            "noFiles": "No file selected."
         }
     }
 });
