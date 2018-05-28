@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         var table = this.getElement().find('.user-indicator-table');
         data.forEach(function (iteration) {
             table.find('tr').each(function (index, tr) {
-                if (tr.innerText.trim() === iteration.name || tr.dataset.id === iteration.name) {
+                if (tr.innerText.trim().toLowerCase() === iteration.name.toLowerCase() || tr.dataset.id === iteration.name) {
                     var uservalue = jQuery(tr).find('td.uservalue');
                     uservalue.text(iteration.value);
                 }
