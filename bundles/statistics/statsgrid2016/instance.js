@@ -90,17 +90,20 @@ Oskari.clazz.define(
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
 
-            // Crete indicators tab to personal data view if personaldata bundle exists
-            var reqName = 'PersonalData.AddTabRequest';
-            if (sandbox.hasHandler(reqName)) {
-                me._addIndicatorsTabToPersonalData(sandbox);
-            } else {
-                // Wait for the application to load all bundles and try again
-                Oskari.on('app.start', function (details) {
-                    if (sandbox.hasHandler(reqName)) {
-                        me._addIndicatorsTabToPersonalData(sandbox);
-                    }
-                });
+            // Check that user has own indicators datasource
+            if (statsService.getUserDatasource()) {
+                // Crete indicators tab to personal data view if personaldata bundle exists
+                var reqName = 'PersonalData.AddTabRequest';
+                if (sandbox.hasHandler(reqName)) {
+                    me._addIndicatorsTabToPersonalData(sandbox);
+                } else {
+                    // Wait for the application to load all bundles and try again
+                    Oskari.on('app.start', function (details) {
+                        if (sandbox.hasHandler(reqName)) {
+                            me._addIndicatorsTabToPersonalData(sandbox);
+                        }
+                    });
+                }
             }
         },
         _addIndicatorsTabToPersonalData: function (sandbox) {
