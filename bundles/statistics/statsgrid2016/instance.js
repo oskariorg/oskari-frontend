@@ -104,12 +104,14 @@ Oskari.clazz.define(
             }
         },
         _addIndicatorsTabToPersonalData: function (sandbox) {
-            var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.MyIndicatorsTab', this);
-            tab.bindEvents();
-            var addAsFirstTab = false;
-            var reqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest');
-            var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
-            sandbox.request(this, req);
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
+            if (typeof reqBuilder === 'function') {
+                var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.MyIndicatorsTab', this);
+                tab.bindEvents();
+                var addAsFirstTab = false;
+                var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
+                sandbox.request(this, req);
+            }
         },
         isEmbedded: function () {
             return jQuery('#contentMap').hasClass('published');
