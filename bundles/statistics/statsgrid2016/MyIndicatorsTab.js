@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
         this.service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
+        this.userDsId = this.service.getUserDatasource().id;
         this.listContainer = undefined;
         this._initContent();
     }, {
@@ -40,7 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         },
         _initContent: function () {
             this.listContainer = this.template.clone();
-            // this._refreshIndicatorsList();
+            this._refreshIndicatorsList();
         },
         /**
          * @private @method _renderIndicatorsList
@@ -67,7 +68,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          */
         _refreshIndicatorsList: function () {
             var me = this;
-            me.service.getIndicatorList(me.service.getUserDatasource().id, function (err, response) {
+            me.service.getIndicatorList(me.userDsId, function (err, response) {
                 if (err) {
                     me.log.warn('Could not list own indicators in personal data tab');
                 } else if (response && response.complete) {
@@ -136,13 +137,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          */
         _deleteIndicator: function (indicator) {
             var me = this;
-            var service = me.instance.getStatisticsService();
-            service.deleteIndicator(service.getUserDatasource().id, indicator.id, null, null, function (err, response) {
+            this.service.deleteIndicator(me.userDsId, indicator.id, null, null, function (err, response) {
                 if (err) {
                     me._showErrorMessage(me.loc('tab.error.notdeleted'));
-                } else {
-                    me._refreshIndicatorsList();
                 }
+                // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
             });
         },
 
@@ -211,7 +210,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
                 link.text(name);
                 link.bind('click', function () {
                     if (!me.popupOpen) {
-                        // TODO open edit flyout
+                        var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
+                        formFlyout.showForm(me.userDsId, data.id);
                         return false;
                     }
                 });
@@ -278,10 +278,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          */
         eventHandlers: {
             /**
-             * @method StatsGrid.UserIndicatorEvent
+             * @method StatsGrid.DatasourceEvent
              */
-            'StatsGrid.UserIndicatorEvent': function (event) {
-                this._refreshIndicatorsList();
+            'StatsGrid.DatasourceEvent': function (event) {
+                if (event.getDatasource() === this.userDsId) {
+                    this._refreshIndicatorsList();
+                }
             }
         },
 

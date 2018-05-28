@@ -250,11 +250,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             me.indicatorId = indicator.id;
             Oskari.log('IndicatorFormFlyout').info('Saved indicator', data, 'Indicator: ' + indicator.id);
 
-            // notify
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.UserIndicatorEvent');
-            var removed = false;
-            me.sandbox.notifyAll(eventBuilder(indicator, removed));
-
             callback(null, indicator);
         });
     },
