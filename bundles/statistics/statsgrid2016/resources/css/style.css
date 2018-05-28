@@ -747,3 +747,12 @@ div.tab-material-controls div.title {
 .user-indicator-import > textarea {
   width: 300px;
   height: 150px; }
+
+.regionset-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: -8px; }
+
+.userchoice-container {
+  display: flex;
+  justify-content: space-evenly; }

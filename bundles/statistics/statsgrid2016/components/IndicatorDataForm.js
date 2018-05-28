@@ -40,13 +40,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
     fillTable: function (data) {
         var table = this.getElement().find('.user-indicator-table');
         data.forEach(function (iteration) {
-            table.find('tr').map(function (index, tr) {
+            table.find('tr').each(function (index, tr) {
                 if (tr.innerText.trim() === iteration.name || tr.dataset.id === iteration.name) {
                     var uservalue = jQuery(tr).find('td.uservalue');
-
-                    if (uservalue.html() !== '') {
-                        uservalue.empty();
-                    }
                     uservalue.text(iteration.value);
                 }
             });
@@ -131,7 +127,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         okBtn.setHandler(function () {
             var textarea = content.find('textarea');
             var data = me.parseUserData(textarea);
-            me.trigger('import.user.data', data);
+            me.fillTable(data);
             popup.close(true);
         });
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
@@ -146,7 +142,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
 
         var lines = data.match(/[^\r\n]+/g);
         // loop through all the lines and parse municipalities (name or code)
-        _.each(lines, function (line) {
+        lines.forEach(function (line) {
             var area,
                 value;
 
