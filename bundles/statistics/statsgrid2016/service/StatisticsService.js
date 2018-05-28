@@ -630,11 +630,17 @@
                 type: 'POST',
                 dataType: 'json',
                 data: {
+                    // my indicators datasource id
                     datasource: datasrc,
-                    data: JSON.stringify(data)
+                    id: data.id,
+                    name: data.name,
+                    desc: data.description,
+                    // textual name for the source the data is from
+                    source: data.datasource
                 },
-                url: Oskari.urls.getRoute('N/A'),
+                url: Oskari.urls.getRoute('SaveIndicator'),
                 success: function (pResp) {
+                    _log.info('SaveIndicator', pResp);
                     callback(null, {
                         id: indicatorId
                     });
@@ -746,7 +752,39 @@
                 _log.info('Saved data with key', dataCacheKey, data);
 
                 callback();
+                /*
+                // send to server
+                jQuery.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        datasource: datasrc,
+                        id: indicatorId,
+                        selectors: JSON.stringify(selectors),
+                        regionset: regionset,
+                        data: JSON.stringify(data)
+                    },
+                    url: Oskari.urls.getRoute('AddIndicatorData'),
+                    success: function (pResp) {
+                        _log.info('AddIndicatorData', pResp);
+                        callback(null, {
+                            id: indicatorId
+                        });
+                    },
+                    error: function (jqXHR, textStatus) {
+                        callback('Error saving data to server');
+                    }
+                });
+                */
             });
+        },
+        /**
+         * selectors and regionset are optional -> will only delete dataset from indicator if given
+         */
+        deleteIndicator: function (datasrc, indicator, selectors, regionset, callback) {
+            // TODO: flush indicator from cache and call server
+            // "great success"
+            callback(null);
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

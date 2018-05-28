@@ -1026,7 +1026,13 @@ div.tab-material-controls div.title {
 .statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
     max-width:700px;
   }
-
+  .statsgrid-user-indicator-flyout {
+    height:auto;
+  }
+  .statsgrid-user-indicator-flyout .oskari-flyoutcontentcontainer {
+    overflow:unset;
+    max-height:100%;
+  }
   // user indicator form
 
 .stats-indicator-form {
@@ -1052,7 +1058,16 @@ border:none;
 border:none;
 }
 .user-indicator-main {
+    padding: 0.3125em;
     max-width: 31.25em;
+}
+.user-indicator-main > table {
+    display: table;
+ }
+ .user-indicator-main > table > tbody {
+    overflow: auto;
+    height: 33em;
+    display: block;
 }
 .user-indicator-table td {
 text-align: center;
