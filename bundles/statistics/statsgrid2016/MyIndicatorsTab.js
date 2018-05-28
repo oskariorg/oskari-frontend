@@ -11,12 +11,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
      */
     function (instance) {
         this.instance = instance;
-        this.template = jQuery('<div class="indicatorsList volatile"></div>');
+        this.template = jQuery('<div class="indicatorsPanel"><div class="indicatorsList volatile"></div></div>');
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
         this.service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
         this.userDsId = this.service.getUserDatasource().id;
+        this.content = undefined;
         this.listContainer = undefined;
         this._initContent();
     }, {
@@ -36,13 +37,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             return 'indicators';
         },
         getContent: function () {
-            return this.listContainer;
+            return this.content;
         },
         _initContent: function () {
-            this.listContainer = this.template.clone();
+            this.content = this.template.clone();
+            this.listContainer = this.content.find('.indicatorsList');
+            this._createAddIndicatorButton();
             this._refreshIndicatorsList();
         },
-
+        _createAddIndicatorButton: function () {
+            var me = this;
+            var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            btn.setTitle(this.loc('userIndicators.buttonTitle'));
+            btn.insertTo(this.content);
+            btn.setHandler(function (event) {
+                event.stopPropagation();
+                var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
+                formFlyout.showForm(me.userDsId);
+            });
+            return btn;
+        },
         /**
          * @private @method _renderIndicatorsList
          * Renders given indicators list. Removes previous listing.
@@ -153,7 +167,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             button.addClass('primary');
             dialog.show(this.loc('tab.error.title'), msg, [button]);
         },
-        
+
         /**
          * @private @method _getGridModel
          * Wraps backends indicators object data array to
@@ -282,7 +296,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
                 }
             }
         },
-        
+
         /**
          * @method onEvent
          *
