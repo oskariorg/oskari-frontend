@@ -16,8 +16,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         main: _.template('<div class="user-indicator-main"><ul></ul><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
         listItem: _.template('<li>${year} - ${regionset}</li>'),
         form: '<form class="indicator-selectors-form" style="width: 25%"></form>',
-        input: _.template('<input type="text" style="width: 80%" id="year-input" name="${name}" placeholder="${label}"><br />'),
-        import: _.template('<div class="user-indicator-import"><textarea placeholder="${placeholder}"></textarea></div>')
+        input: _.template('<input type="text" style="width: 80%" id="year-input" name="${name}" placeholder="${label}"><br />')
     },
     getElement: function () {
         return this.element;
@@ -95,7 +94,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             name: 'year',
             label: this.locale('parameters.year')
         }));
-        //form.append(input);
         var formContainer = this.resetIndicatorSelectors(false);
         formContainer.append(form);
         var userChoiceContainer = jQuery('<div style="display:flex"></div>');
@@ -130,67 +128,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
                 regionset: Number(me.select.getValue())
             });
         });
-        var importClipboard = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
-        importClipboard.insertTo(btnContainer);
-        importClipboard.setTitle('Tuo leikepöydältä');
-        importClipboard.setHandler(function (event) {
-            me.trigger('insert.data', {
-                year: input.val(),
-                regionset: Number(me.select.getValue())
-            });
-            me.openImportPopup();
-        });
-    },
-    openImportPopup: function () {
-        var me = this;
-        var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        popup.makeDraggable();
-        var content = jQuery(this.__templates.import({
-            placeholder: me.locale('userIndicators.import.placeholder')
-        }));
-        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-
-        okBtn.setPrimary(true);
-        okBtn.setHandler(function () {
-            var textarea = content.find('textarea');
-            var data = me.parseUserData(textarea);
-            var input = me.getElement().find('#year-input');
-            me.trigger('import.user.data', {
-                'data': data,
-                'selectors': {
-                    'year': input.val(),
-                    'regionset': Number(me.select.getValue())
-                }
-            });
-            popup.close(true);
-        });
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-        cancelBtn.setHandler(function () {
-            popup.close(true);
-        });
-        popup.show(me.locale('userIndicators.import.title'), content, [cancelBtn, okBtn]);
-    },
-    parseUserData: function (textarea) {
-        var data = textarea.val();
-        var validRows = [];
-
-        var lines = data.match(/[^\r\n]+/g);
-        // loop through all the lines and parse municipalities (name or code)
-        _.each(lines, function (line) {
-            var area,
-                value;
-
-            // separator can be tabulator, comma or colon
-            var matches = line.match(/([^\t;,]+) *[\t;,]+ *(.*)/);
-            if (matches && matches.length === 3) {
-                area = matches[1];
-                value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
-            }
-            validRows.push({
-                'name': area.trim(),
-                'value': value
-            });
-        });
-        return validRows;
     }
 });

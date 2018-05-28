@@ -16,10 +16,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList.on('insert.data', function (selectors) {
         me.showDatasetForm(selectors);
     });
-    this.indicatorParamsList.on('import.user.data', function (data) {
-        var selectors = data.selectors;
-        me.showDatasetForm(selectors);
-        me.indicatorDataForm.fillTable(data.data);
+    this.indicatorDataForm.on('import.user.data', function (data) {
+        me.indicatorDataForm.fillTable(data);
     });
     this.indicatorParamsList.on('delete.data', function (selectors) {
         me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
@@ -31,6 +29,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             // refresh the dataset listing on form
             me.updateDatasetList();
         });
+    });
+    this.indicatorParamsList.on('clear', function () {
+        me.indicatorDataForm.clearUi();
     });
     this.indicatorDataForm.on('cancel', function () {
         me.genericInfoPanel.open();
