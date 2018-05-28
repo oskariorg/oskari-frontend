@@ -7,8 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
      * @method create called automatically on construction
      * @static
      * @param {Oskari.statistics.statsgrid.StatsGridBundleInstance}
-     * instance
-     *      reference to component that created the tile
+     * instance reference to component that created the tile
      */
     function (instance) {
         this.instance = instance;
@@ -43,12 +42,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             this.listContainer = this.template.clone();
             this._refreshIndicatorsList();
         },
+
         /**
          * @private @method _renderIndicatorsList
          * Renders given indicators list. Removes previous listing.
          *
          * @param {Object[]} indicators object array as returned by backend service
-         *
          */
         _renderIndicatorsList: function (indicators) {
             if (!indicators) {
@@ -64,7 +63,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         /**
          * @private @method _refreshIndicatorsList
          * Fetches indicators from backend and renders the response.
-         * Shows an error message on failure
          */
         _refreshIndicatorsList: function () {
             var me = this;
@@ -83,7 +81,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * Shows an error message if no matches found.
          *
          * @param {Number} id indicator id
-         *
          * @return {Object} matching indicator object or undefined if not found
          */
         _getIndicatorById: function (id) {
@@ -96,12 +93,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             // couldn't find indicator -> show an error
             this._showErrorMessage(this.loc('tab.error.notfound'));
         },
+
         /**
+         * @private @method _confirmDelete
          * Shows a confirmation dialog on deleting a indicator
          *
-         * @method _confirmDelete
          * @param {Object} indicator data object for the indicator to delete
-         * @private
          */
         _confirmDelete: function (indicator) {
             var me = this;
@@ -133,7 +130,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * success and shows an error message on fail
          *
          * @param {Object} indicator data object
-         *
          */
         _deleteIndicator: function (indicator) {
             var me = this;
@@ -150,7 +146,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
          * Shows an error dialog to the user with given message
          *
          * @param {String} msg message to show on popup
-         *
          */
         _showErrorMessage: function (msg) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -158,7 +153,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             button.addClass('primary');
             dialog.show(this.loc('tab.error.title'), msg, [button]);
         },
-
+        
         /**
          * @private @method _getGridModel
          * Wraps backends indicators object data array to
@@ -184,6 +179,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             });
             return gridModel;
         },
+
         /**
          * @private @method _getGrid
          * Creates Oskari.userinterface.component.Grid and populates it with
@@ -286,7 +282,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
                 }
             }
         },
-
+        
         /**
          * @method onEvent
          *
