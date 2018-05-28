@@ -192,6 +192,28 @@ Oskari.registerLocalization({
             'organizationName': 'Tematisk karta'
         },
         'userIndicators': {
-        }
+            'flyoutTitle': '',
+            'buttonTitle': '',
+            'buttonAddIndicator': 'Ange värden',
+            'panelGeneric': {
+                'title': 'Information',
+                'formName': 'Namn',
+                'formDescription': 'Beskrivning',
+                'formDatasource': 'Källa'
+            },
+            'panelData': {
+                'title': 'Statistisk information'
+            },
+            'dialog': {
+                'successTitle': 'Sparad',
+                'successMsg': ''
+            },
+            'import': {
+                'title': '',
+                'placeholder': ''
+            }
+        },
+        'notLoggedInWarning': '',
+        'notLoggedInWarningAfterServerImpl': ''
     }
 });
