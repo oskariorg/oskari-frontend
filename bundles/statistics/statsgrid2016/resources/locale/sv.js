@@ -213,7 +213,6 @@ Oskari.registerLocalization({
                 'placeholder': ''
             }
         },
-        'notLoggedInWarning': '',
-        'notLoggedInWarningAfterServerImpl': ''
+        'notLoggedInWarning': ''
     }
 });
