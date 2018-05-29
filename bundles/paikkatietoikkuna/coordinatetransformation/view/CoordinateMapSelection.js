@@ -23,26 +23,26 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             var me = this;
             var helper = me.instance.getHelper();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(this.loc('actions.done')),
-            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                btn = dialog.createCloseButton(this.loc('actions.done')),
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.loc('actions.cancel'));
             btn.addClass('primary');
             me.dialog = dialog;
 
             cancelBtn.setHandler(function() {
                 helper.removeMarkers();
-                dialog.close();
                 me.instance.toggleViews("transformation");
                 me.instance.setMapSelectionMode(false);
                 me.instance.addMapCoordsToInput(false);
+                dialog.close();
             });
 
             btn.setHandler(function() {
                 me.instance.setMapSelectionMode(false);
                 helper.removeMarkers();
-                dialog.close();
                 me.instance.toggleViews("transformation");
                 me.instance.addMapCoordsToInput(true);
+                dialog.close();
             });
 
             dialog.show(this.loc('mapMarkers.select.title'), this.loc('mapMarkers.select.info'), [cancelBtn, btn]);

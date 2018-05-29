@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
         me._template = {
             sourceWrapper: jQuery('<div class="sourceWrapper"></div>'),
             source: _.template(
-                '<div class="coordinate-datasource"> </br> ' +
+                '<div class="coordinate-datasource">' +
                     '<h4>${title}</h4>'+
                     '<form>'+
                         '<input type="radio" id="clipboard" name="load" value="keyboard">' +
