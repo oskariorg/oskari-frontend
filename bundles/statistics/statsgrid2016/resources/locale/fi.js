@@ -194,6 +194,28 @@ Oskari.registerLocalization({
             'inspireName': 'Teemakartta',
             'organizationName': 'Teemakartta'
         },
+        'tab': {
+            'title': 'Indikaattorit',
+            'edit': 'Muokkaa',
+            'delete': 'Poista',
+            'grid': {
+                'name': 'Nimi',
+                'edit': 'Muokkaa',
+                'delete': 'Poista'
+            },
+            'popup': {
+                'deletetitle': 'Poista indikaattori',
+                'deletemsg': 'Haluatko poistaa indikaattorin "{name}"?'
+            },
+            'button': {
+                'cancel': 'Peruuta',
+                'ok': 'OK'
+            },
+            'error': {
+                'title': 'Virhe',
+                'notfound': 'Indikaattoria ei löytynyt'
+            }
+        },
         'userIndicators': {
             'flyoutTitle': 'Lisää uusi indikaattori',
             'buttonTitle': 'Lisää uusi indikaattori',
