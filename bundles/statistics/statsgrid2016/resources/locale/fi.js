@@ -149,7 +149,9 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'Aineiston valinnat on tyhjä.',
             'regionsetsIsEmpty': 'Aluevalintoja ei saatu valitulle aineistolle.',
             'regionsDataError': 'Alueen arvojen haussa tapahtui virhe.',
-            'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.'
+            'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.',
+            'datasetSave': 'Virhe tallennetaessa aineistoa.',
+            'datasetDelete': 'Virhe poistaessa aineistoa.'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',

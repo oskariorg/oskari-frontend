@@ -146,7 +146,9 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'Inga datamängder har valts.',
             'regionsetsIsEmpty': 'Områdesindelningarna kunde inte hämtas för den valda datamängden.',
             'regionsDataError': 'Ett fel uppstod vid sökningen av områdets värden.',
-            'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.'
+            'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.',
+            'datasetSave': 'Ett fel uppstod vid sparning av data.',
+            'datasetDelete': 'Ett fel uppstod vid radering av data.'
         },
         'datacharts': {
             'flyout': 'Sökta datamängden',

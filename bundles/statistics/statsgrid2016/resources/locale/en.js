@@ -149,7 +149,9 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'There are no selections for the data.',
             'regionsetsIsEmpty': 'Area selections could not be fetched for chosen data.',
             'regionsDataError': 'Error occurred in area value search.',
-            'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.'
+            'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.',
+            'datasetSave': 'Error saving dataset.',
+            'datasetDelete': 'Error deleting dataset.'
         },
         'datacharts': {
             'flyout': 'Searched data',
