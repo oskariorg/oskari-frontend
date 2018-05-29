@@ -151,7 +151,9 @@ Oskari.registerLocalization({
             'regionsDataError': 'Alueen arvojen haussa tapahtui virhe.',
             'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.',
             'datasetSave': 'Virhe tallennetaessa aineistoa.',
-            'datasetDelete': 'Virhe poistaessa aineistoa.'
+            'datasetDelete': 'Virhe poistaessa aineistoa.',
+            'indicatorSave': 'Virhe tallenettaessa muuttujaa.',
+            'indicatorDelete': 'Virhe poistaessa muuttujaa.'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',
