@@ -162,9 +162,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
         };
     },
     clearCacheOnDelete: function (datasrc, indicatorId, selectors, regionset) {
+        var metadataCacheKey = this.getIndicatorMetadataKey(datasrc, indicatorId);
         if (!selectors && !regionset) {
             // removed the whole indicator: flush indicator from cache
-
             this.cache.flushKeysStartingWith(this.getIndicatorDataKeyPrefix(datasrc, indicatorId));
             var indicatorListCacheKey = this.getIndicatorListKey(datasrc);
             var cachedListResponse = this.cache.get(indicatorListCacheKey) || {
@@ -179,10 +179,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
                 cachedListResponse.indicators.splice(listIndex, 1);
             }
             this.cache.put(indicatorListCacheKey, cachedListResponse);
-            var metadataCacheKey = this.getIndicatorMetadataKey(datasrc, indicatorId);
             this.cache.remove(metadataCacheKey);
-        } else {
-            // TODO: MODIFY indicator in caches
+        } else if (Oskari.user().isLoggedIn()) {
+            // flush the cache for logged in user so it gets reloaded from the server
+            // for guests this will show some erronous info, but it's a beast to track which
+            //  year/regionsets actually have data and can be removed
+            this.cache.remove(metadataCacheKey)
         }
     }
 });
