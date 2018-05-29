@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
 }, {
     __templates: {
         main: _.template('<div class="user-indicator-main"><ul></ul><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
-        listItem: _.template('<li>${year} - ${regionset}</li>'),
+        listItem: _.template('<li class="user-dataset">${year} - ${regionset}</li>'),
         form: '<form class="indicator-selectors-form" style="width: 25%"></form>',
         input: _.template('<input type="text" style="width: 40%; height: 1.6em" name="${name}" placeholder="${label}"><br />')
     },
@@ -29,7 +29,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
 
         var main = jQuery(this.__templates.main());
         this.element = main;
-
         var indBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         indBtn.setTitle(this.locale('userIndicators.buttonAddIndicator'));
         indBtn.insertTo(main);
@@ -39,6 +38,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             event.stopPropagation();
             me.requestIndicatorSelectors();
         });
+
         return this.getElement();
     },
     setDatasets: function (datasets) {
@@ -46,13 +46,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         var listEl = this.getElement().find('ul');
         listEl.empty();
         if (!datasets) {
+            this.addDatasetButton.show();
             return;
         }
+        this.addDatasetButton.hide();
         datasets.forEach(function (dataset) {
             // TODO: formatting/nice UI
-            var item = me.__templates.listItem({
+            var item = jQuery(me.__templates.listItem({
                 year: me.locale('parameters.year') + ' ' + dataset.year,
                 regionset: me.getRegionsetName(dataset.regionset)
+            }));
+            item.on('click', function (evt) {
+                me.trigger('insert.data', {
+                    year: dataset.year,
+                    regionset: Number(dataset.regionset)
+                });
             });
             // TODO: add edit/delete links
             /* for edit:

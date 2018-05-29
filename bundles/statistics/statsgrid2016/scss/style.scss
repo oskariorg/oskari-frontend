@@ -1099,3 +1099,11 @@ background-color: #000;
     display:flex;
     justify-content: space-evenly;
   }
+  .user-dataset:hover {
+      cursor: pointer;
+      font-size:1.0625em;
+      background: #FDF8D9;
+  }
+  .user-dataset {
+      border-bottom: 1px solid #ccc;
+  }
