@@ -115,6 +115,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
                     return item.id === selectorId;
                 });
                 if (!existingSelector) {
+                    // new selector -> add it with the only allowed value (the one we are inserting)
                     metadata.selectors.push({
                         id: selectorId,
                         name: selectorId,
@@ -124,10 +125,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
                         }]
                     });
                 } else {
+                    // there's an existing one, check if the value we are adding is new or not
                     var existingValue = existingSelector.allowedValues.find(function (item) {
-                        return '' + item.id === '' + selectorId;
+                        if (typeof item !== 'object') {
+                            // allowed value might be a simple value instead of an object
+                            return '' + item === '' + selectorValue;
+                        }
+                        return '' + item.id === '' + selectorValue;
                     });
                     if (!existingValue) {
+                        // only need to modify the values if it's a new value for the selector
                         existingSelector.allowedValues.push({
                             'name': selectorValue,
                             'id': selectorValue
