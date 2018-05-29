@@ -28,45 +28,62 @@ function(instance) {
      */
     init: function() {},
 
-    requestUrlBuilder: function ( crs ) {
+    requestUrlBuilder: function ( crs, transformType, exportSettings ) {
         var urlBase = Oskari.urls.getRoute('CoordinateTransformation');
-        var urlParameterString = "";
+        var urlParameterString =
+            "&sourceCrs=" + crs.sourceCrs +
+            "&targetCrs=" + crs.targetCrs +
+            "&targetDimension=" + crs.targetDimension +
+            "&sourceDimension=" + crs.sourceDimension +
+            "&transformType=" + transformType;
 
-        if( crs.sourceCrs ) {
-            urlParameterString += "&sourceCrs=" + crs.sourceCrs;
-        }
         if( crs.sourceElevationCrs ) {
             urlParameterString += "&sourceHeightCrs=" + crs.sourceElevationCrs;
-        }
-        if( crs.targetCrs ) {
-            urlParameterString += "&targetCrs=" + crs.targetCrs;
         }
         if( crs.targetElevationCrs ) {
             urlParameterString += "&targetHeightCrs=" + crs.targetElevationCrs;
         }
+        if (exportSettings){
+            urlParameterString += "&exportSettings=" + JSON.stringify(exportSettings);
+        }
         return urlBase + urlParameterString;
     },
-    formDataBuilder: function (file, settings){
+    formDataBuilder: function (file, importSettings, exportSettings){
         var file = file;
         var settings = settings;
         var formData = new FormData();
-        //formData.append('sourceCrs', crs.source);
-        //formData.append('sourceElevationCrs', crs.sourceElevation);
-        //formData.append('targetCrs', crs.target);
-        //formData.append('targetElevationCrs', crs.targetElevation);
-        //
-        if (settings.export){
-            formData.append('exportSettings', settings.export);
+        if (exportSettings){
+            formData.append('exportSettings', JSON.stringify(exportSettings));
         }
-        if (settings.import){
-            formData.append('importSettings', settings.import);
+        if (importSettings){
+            formData.append('importSettings', JSON.stringify(importSettings));
         }
         formData.append('coordFile', file);
         return formData;
 
     },
+    handleError: function(callback, jqXHR){
+        if (typeof callback !== "function"){
+            return;
+        }
+        var resp,
+            text,
+            code;
+        try {
+            resp = JSON.parse(jqXHR.responseText);
+            text = resp.error;
+            if(resp.info) {
+                code = resp.info.error;
+            }
+        } catch(err) {
+            Oskari.log(this.getName()).warn('Error whilst parsing json, error');
+        }
+        callback(text, code);
+    },
     transformArrayToArray: function(coords, crs, successCb, errorCb ) {
-        var url = this.requestUrlBuilder( crs );
+        var me = this;
+        var url = this.requestUrlBuilder( crs, "A2A" );
+
         jQuery.ajax({
             contentType: "application/json",
             type: "POST",
@@ -75,13 +92,13 @@ function(instance) {
             success: function(response) {
                 successCb(response);
             },
-            error: function(){
-                errorCb(); //TODO errorCodes??
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
             }
         });
     },
     transformFileToArray: function (file, crs, fileSettings, successCb, errorCb){
-        var url = this.requestUrlBuilder( crs);
+        var url = this.requestUrlBuilder( crs, "F2A");
         var formData = this.formDataBuilder(file, fileSettings);
          jQuery.ajax({
             contentType: false, //multipart/form-data
@@ -93,13 +110,13 @@ function(instance) {
             success: function(response) {
                 successCb(response);
             },
-            error: function(){
-                errorCb(); //TODO errorCodes??
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
             }
         });
     },
     transformArrayToFile: function(coords, crs, fileSettings, successCb, errorCb ) {
-        var url = this.requestUrlBuilder( crs );
+        var url = this.requestUrlBuilder( crs, "A2F", fileSettings);
         jQuery.ajax({
             contentType: "application/json",
             type: "POST",
@@ -108,14 +125,14 @@ function(instance) {
             success: function(response) {
                 successCb(response);
             },
-            error: function(){
-                errorCb(); //TODO errorCodes??
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
             }
         });
     },
-    transformFileToFile: function(file, crs, fileSettings, successCb, errorCb ) {
-        var url = this.requestUrlBuilder( crs );
-        var formData = this.formDataBuilder(file, fileSettings);
+    transformFileToFile: function(file, crs, importSettings, exportSettings, successCb, errorCb ) {
+        var url = this.requestUrlBuilder( crs , "F2F");
+        var formData = this.formDataBuilder(file, importSettings, exportSettings);
         jQuery.ajax({
             contentType: false, //multipart/form-data
             type: "POST",
@@ -126,8 +143,8 @@ function(instance) {
             success: function(response) {
                 successCb(response);
             },
-            error: function(){
-                errorCb(); //TODO errorCodes??
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
             }
         });
     }/*
