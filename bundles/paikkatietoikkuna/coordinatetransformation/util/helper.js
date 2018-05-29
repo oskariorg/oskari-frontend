@@ -5,83 +5,191 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function(instance)
     this.sb = Oskari.getSandbox();
     this.removeMarkersReq = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
     this.addMarkerReq = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
+    this.mapmodule = this.sb.findRegisteredModuleInstance('MainMapModule');
+    this.mapSrs = this.sb.getMap().getSrsName();
+    this.mapEpsgValues = this.getEpsgValues(this.mapSrs);
 }, {
     getName: function() {
         return 'Oskari.coordinatetransformation.helper';
     },
     init: function () {},
-    addMarkerForCoords: function (coords, lonFirst, showLabel, color) {
+    addMarkerForCoords: function (lonlat, label, color) {
         var color = color || "ff0000";
-
-        var x,
-            y;
-        if ( lonFirst === true ) {
-            lon = coords[0];
-            lat = coords[1];
-        } else {
-            lon = coords[1];
-            lat = coords[0];
-        }
-
         if ( this.addMarkerReq ) {
                 var data = {
-                    x: lon,
-                    y: lat,
+                    x: lonlat.lon,
+                    y: lonlat.lat,
                     color: color,
                     shape: 3
                 };
-                if ( showLabel === true ) { //lonFirst labels
-                    data.msg = "lon: "+ lon+ "; lat: "+ lat; //TODO handle offset
+                if (label) {
+                    data.msg = label;
                 }
             var request = this.addMarkerReq(data);
             this.sb.request('MainMapModule', request);
         }
     },
-    showMarkersOnMap: function (coords, addExisting){ //TODO
-        var me = this;
-        // ---
-        var color;
+    showMarkersOnMap: function (coords, addExisting, srs){
+        var me = this,
+            color,
+            epsgValues,
+            lonlat,
+            label,
+            transform;
+
         if (addExisting === true){
             color = "#ffe5e5";
         }
-        // ---
-        coords.forEach( function ( coord ) {
-            me.addMarkerForCoords(coord, true, true, color);
+
+        if (srs !== this.mapSrs){
+            transform = true;
+            epsgValues = this.getEpsgValues(srs);
+        } else {
+            transform = false;
+            epsgValues = this.mapEpsgValues;
+        }
+        coords.some( function ( coord ) {
+            lonlat = me.getLonLatObj(coord, epsgValues.lonFirst);
+            label = me.getLabelForMarker(lonlat, epsgValues);
+            if (transform){
+                try{
+                    lonlat = me.mapmodule.transformCoordinates(lonlat, srs, me.mapSrs);
+                } catch (error){
+                    me.showPopup(me.loc('mapMarkers.show.errorTitle'), me.loc('mapMarkers.show.transformError'));
+                    return true;
+                }
+            }
+            me.addMarkerForCoords(lonlat, label, color);
         });
     },
-
+    getLonLatObj: function (coord, lonFirst){
+        var lonlat = {};
+        if (lonFirst === true){
+            lonlat.lon = coord[0];
+            lonlat.lat = coord[1];
+        } else {
+            lonlat.lon = coord[1];
+            lonlat.lat = coord[0];
+        }
+        return lonlat;
+    },
+    getLabelForMarker: function(lonlat, epsgValues){
+        var epsgValues = epsgValues || this.mapEpsgValues,
+            lonLabel,
+            latLabel;
+        if (epsgValues.coord === "COORD_GEOG_2D" || epsgValues.coord === "COORD_GEOG_3D"){ //TODO isgeog
+            lonLabel = this.loc('mapMarkers.show.lon');
+            latLabel = this.loc('mapMarkers.show.lat');
+        } else {
+            lonLabel = this.loc('mapMarkers.show.east');
+            latLabel = this.loc('mapMarkers.show.north');
+        }
+        //TODO do we need to localize decimal separator for label
+        // Oskari.getDecimalSeparator();
+        //lon = coords[].replace('.', Oskari.getDecimalSeparator());
+        if (epsgValues.lonFirst){
+            return lonLabel + ": " + lonlat.lon + ", "+ latLabel +": " + lonlat.lat;
+        } else {
+            return latLabel + ": " + lonlat.lat + ", " + lonLabel + ": " + lonlat.lon;
+        }
+    },
     removeMarkers: function () {
         if( this.removeMarkersReq ) {
             this.sb.request('MainMapModule', this.removeMarkersReq());
         }
     },
-    //if valid return true else return localized errorMsg
-    validateSelectionsForTransform: function (crs, file, inputData){
-        var error = "";//= true;
+    validateCrsSelections: function (crs){
+        var error = "";
         //source crs and target crs should be always selected
         if (!crs.sourceCrs || !crs.targetCrs){
             error += this.loc('flyout.transform.validateErrors.crs') + " ";
         }
-        //TODO check if source or target is 3D
-        if (crs.sourceElevationCrs && !crs.targetElevationCrs){
-            error += this.loc('flyout.transform.validateErrors.targetHeight') + " ";
+        if (error.length !== 0){
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'), error);
+            return false;
         }
-        if (crs.targetElevationCrs && !crs.sourceElevationCrs){
-            error += this.loc('flyout.transform.validateErrors.sourceHeight') + " ";
-        }
-        if (!file && inputData === false){ //TODO better checking file / inputcoords
-            error +=  this.loc('flyout.transform.validateErrors.noInputData') + " ";
-        }
-        //if (file && !file.filename){ //TODO better checking file / inputcoords
-        //    error +=  this.loc('flyout.transform.validateErrors.noInputFile') + " ";
-        //}
-
-        if (error.length === 0){
-            return true
-        }
-        return error;
+        return true;
     },
+    validateFileSelections: function (settings, requireFileName){
+        var error = "";
+        if (settings.decimalSeparator === "," && settings.coordinateSeparator === "comma"){
+            error += this.loc('flyout.transform.validateErrors.doubleComma');
+        }
+        if (requireFileName === true && settings.fileName === ""){
+            error += this.loc('flyout.transform.validateErrors.noFileName');
+        }
+        if (error.length !== 0){
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'), error);
+            return false;
+        }
+        return true;
+    },
+    checkDimensions: function (crs, callback){
+        var ok = true,
+            message;
+        if (crs.sourceDimension === 2 && crs.targetDimension === 3){
+            message = this.loc('flyout.transform.warnings.2DTo3D');
+        } else if (crs.sourceDimension === 3 && crs.targetDimension === 2){
+            message = this.loc('flyout.transform.warnings.3DTo2D');
+        } else {
+            callback();
+            return;
+        }
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            cancelBtn = dialog.createCloseButton(this.loc('actions.cancel')),
+            okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(this.loc('actions.ok'));
+        okBtn.addClass('primary');
 
+        okBtn.setHandler(function() {
+            callback();
+            dialog.close();
+        });
+        dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
+    },
+    showPopup: function (title, message){
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            btn = dialog.createCloseButton(this.loc('actions.close'));
+        dialog.show(title, message, [btn]);
+    },
+    getEpsgValues: function (srs) {
+        return this.getOptionsJSON()["geodetic-coordinate"][srs];
+    },
+    isGeogSystem: function(srs){
+        var epsgValues = this.getEpsgValues(srs);
+        if (epsgValues.coord === "COORD_GEOG_2D" || epsgValues.coord === "COORD_GEOG_3D"){
+            return true;
+        } else {
+            return false;
+        }
+    },
+    is3DSystem: function (srs){ //or is3DSelection(crsSettings) 3D or 2D + height
+        var epsgValues = this.getEpsgValues(srs);
+        if (epsgValues.coord === "COORD_PROJ_3D" || epsgValues.coord === "COORD_GEOG_3D"){
+            return true;
+        } else {
+            return false;
+        }
+    },
+    isCoordInBounds: function (srs, coord){
+        var epsgValues = this.getEpsgValues(srs),
+            x,
+            y;
+        if (!epsgValues){
+            return;
+        }
+        if (epsgValues.lonFirst === true){
+            x = coord[0];
+            y = coord[1];
+        } else {
+            x = coord[1];
+            y = coord[0];
+        }
+        return this.mapmodule.isPointInExtent(epsgValues.bounds, x, y);
+    },
+    getDimension: function(){
+        //TODO from instance
+    },
     getOptionsJSON: function() {
          return {
             "datum": {

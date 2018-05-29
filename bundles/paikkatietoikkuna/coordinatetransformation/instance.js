@@ -36,7 +36,7 @@ function () {
         this.coordSystemOptions = null;
         this.dimensions = {
             input: 2,
-            result: 2
+            output: 2
         };
 }, {
     __name: 'coordinatetransformation',
@@ -64,6 +64,9 @@ function () {
     getDimension: function (type){
         return this.dimensions[type];
     },
+    getDimensions: function (){
+        return this.dimensions;
+    },
     /**
      * @method afterStart
      */
@@ -80,14 +83,15 @@ function () {
     },
     bindListeners: function (){
         var me = this;
+        var dimensions = this.getDimensions();
         this.dataHandler.on('InputCoordAdded', function (coords) {
-            me.views.transformation.inputTable.render(coords);
+            me.views.transformation.inputTable.render(coords, dimensions.input);
         });
         this.dataHandler.on('InputCoordsChanged', function (coords) {
-            me.views.transformation.inputTable.render(coords);
+            me.views.transformation.inputTable.render(coords, dimensions.input);
         });
         this.dataHandler.on('ResultCoordsChanged', function (coords) {
-            me.views.transformation.outputTable.render(coords);
+            me.views.transformation.outputTable.render(coords, dimensions.output);
         });
     },
 
@@ -156,12 +160,15 @@ function () {
             if (!this.isMapSelection) {
                 return;
             }
-            var lonlat = event._lonlat;
-            var coordArray = this.dataHandler.lonLatCoordToArray(lonlat, true); //TODO check mapSrs lonFirst
-
+            var label;
+            var lonlat = {
+                lon: parseInt(event._lonlat.lon),
+                lat: parseInt(event._lonlat.lat)
+            }
             //add coords to map coords
             this.dataHandler.addMapCoord(lonlat);
-            this.helper.addMarkerForCoords(coordArray, true, true); //TODO check mapSrs lonFirst
+            label = this.helper.getLabelForMarker(lonlat);
+            this.helper.addMarkerForCoords(lonlat, label);
         },
         'userinterface.ExtensionUpdatedEvent': function (event) {
             if(event.getExtension().getName() !==this.getName()){
