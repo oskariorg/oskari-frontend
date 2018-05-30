@@ -46,10 +46,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         var listEl = this.getElement().find('ul');
         listEl.empty();
         if (!datasets) {
-            this.addDatasetButton.show();
             return;
         }
-        this.addDatasetButton.hide();
         datasets.forEach(function (dataset) {
             // TODO: formatting/nice UI
             var item = jQuery(me.__templates.listItem({
