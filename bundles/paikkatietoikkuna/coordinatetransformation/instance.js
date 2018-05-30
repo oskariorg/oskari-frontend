@@ -33,7 +33,7 @@ function () {
         this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         this.isMapSelection = false;
         this.sandbox = Oskari.getSandbox();
-        this.coordSystemOptions = null;
+        //TODO should dimensions be handled by dataHandler
         this.dimensions = {
             input: 2,
             output: 2
@@ -50,16 +50,7 @@ function () {
         return this.transformationService;
     },
     setDimension: function (type, srs, elevation){
-        var srsValues = this.getEpsgValues(srs),
-            dimension;
-        if (srsValues && (srsValues.coord === "COORD_PROJ_3D" || srsValues.coord === "COORD_GEOG_3D")){
-            dimension = 3;
-        } else if (elevation !== ""){
-            dimension = 3;
-        } else {
-            dimension = 2;
-        }
-        this.dimensions[type] = dimension;
+        this.dimensions[type] = this.helper.getDimension(srs, elevation);
     },
     getDimension: function (type){
         return this.dimensions[type];
@@ -71,12 +62,9 @@ function () {
      * @method afterStart
      */
     afterStart: function () {
+        this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper');
         this.transformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
-        //this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper', this);
         this.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler' );
-        this.coordSystemOptions = this.helper.getOptionsJSON();
-        this.helper.createCls(this.coordSystemOptions);
         this.instantiateViews();
         this.createUi();
         this.bindListeners();
@@ -94,13 +82,6 @@ function () {
             me.views.transformation.outputTable.render(coords, dimensions.output);
         });
     },
-
-    getcoordSystemOptions: function () {
-        return this.coordSystemOptions;
-    },
-    getEpsgValues: function (srs) {
-        return this.coordSystemOptions["geodetic-coordinate"][srs];
-    },
     getPlugins: function() {
         return this.plugins;
     },
@@ -110,12 +91,9 @@ function () {
     getHelper: function () {
         return this.helper;
     },
-    hasInputCoords: function () { //TODO to handler
-        return this.dataHandler.getInputCoords().length !== 0;
-    },
     instantiateViews: function () {
         this.views = {
-            transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this, this.getcoordSystemOptions()),
+            transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this, this.helper, this.dataHandler),
             MapSelection: Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateMapSelection', this),
             mapmarkers: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapmarkers', this)
         }

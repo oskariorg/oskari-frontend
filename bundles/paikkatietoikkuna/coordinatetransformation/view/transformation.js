@@ -1,12 +1,12 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
-    function (instance, coordSystemOptions) {
+    function (instance, helper, dataHandler) {
         var me = this;
         me.instance = instance;
         me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         me.conversionContainer = null
         me.sourceSelection = null; //TODO move
-        me.helper = me.instance.getHelper();
-
+        me.helper = helper;
+        me.dataHandler = dataHandler;
         me.fileInput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', {
             'allowMultipleFiles': false,
             'maxFileSize': 50,
@@ -18,8 +18,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc, "input" );
         me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc, "output");
 
-        me.inputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this,  me.loc, "input", coordSystemOptions);
-        me.outputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this,  me.loc, "output", coordSystemOptions);
+        me.inputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this,  me.loc, "input", me.helper);
+        me.outputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this,  me.loc, "output", me.helper);
 
         me.sourceSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.SourceSelect', me.loc );
 
@@ -171,10 +171,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             srs = selections['geodetic-coordinate'];
             heightSystem = selections.elevation;
             this.instance.setDimension(type, srs, heightSystem);
-            epsgValues = this.instance.getEpsgValues(srs);
+            epsgValues = this.helper.getEpsgValues(srs);
             if (epsgValues){
                 table.updateHeader(epsgValues, heightSystem);
-                if (epsgValues.coord === "COORD_GEOG_2D" || epsgValues.coord === "COORD_GEOG_3D"){ //TODO helper isGeogSystem(srs)
+                if (this.helper.isGeogSystem(srs)){
                     fileHandler.setShowFormatRow(true);
                 } else {
                     fileHandler.setShowFormatRow(false);
@@ -208,11 +208,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }
         },
         resetFlyout: function (blnSystems) {
-            var me = this;
-            me.instance.getDataHandler().clearCoords();
+            this.dataHandler.clearCoords();
             if(blnSystems){
-                me.inputSystem.resetSelections(true);
-                me.outputSystem.resetSelections(true);
+                this.inputSystem.resetAllSelections();
+                this.outputSystem.resetAllSelections();
             }
         },
         /**
@@ -222,7 +221,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         handleRadioButtons: function () {
             var me = this;
             jQuery('input[type=radio][name=load]').click(function(evt) {
-                if (me.sourceSelection !== this.value && me.instance.hasInputCoords()){
+                if (me.sourceSelection !== this.value && me.dataHandler.hasInputCoords()){
                     var selectCb = function(){
                         jQuery(evt.target).prop("checked", true);
                         me.handleSourceSelection(evt.target.value);
@@ -247,7 +246,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 keyboardInfoElement.hide();
                 mapSelectInfoElement.hide();
                 this.fileInput.setVisible(true);
-                me.inputSystem.disableInputSelections(false);
+                me.inputSystem.disableAllSelections(false);
                 me.bindInputTableHandler(false);
             }
             else if (value == 'keyboard') {
@@ -255,7 +254,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 this.fileInput.setVisible(false);
                 mapSelectInfoElement.hide();
                 keyboardInfoElement.show();
-                me.inputSystem.disableInputSelections(false);
+                me.inputSystem.disableAllSelections(false);
                 me.bindInputTableHandler(true);
             }
             else if (value == 'map') {
@@ -264,7 +263,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 this.fileInput.setVisible(false);
                 mapSelectInfoElement.show();
                 me.inputSystem.selectMapProjection();
-                me.inputSystem.disableInputSelections(true);
+                me.inputSystem.disableAllSelections(true);
                 me.bindInputTableHandler(false);
             }
         },
@@ -308,7 +307,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 }*/
             });
             //update input coordinates and don't render input table
-            me.instance.getDataHandler().setInputCoords(inputCoords, true);
+            me.dataHandler.setInputCoords(inputCoords, true);
             me.inputTable.handleTableSize(inputCoords.length);
         },
 
@@ -338,9 +337,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             jQuery('.selectFromMap').on("click", function() {
                 me.instance.setMapSelectionMode(true);
-                if (me.instance.hasInputCoords()){
+                if (me.dataHandler.hasInputCoords()){
                     inputSrs = me.inputSystem.getSrs();
-                    inputCoords = me.instance.getDataHandler().getInputCoords();
+                    inputCoords = me.dataHandler.getInputCoords();
                     me.helper.showMarkersOnMap(inputCoords, true, inputSrs);
                 }
                 me.instance.toggleViews("MapSelection");
@@ -350,7 +349,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 me.confirmResetFlyout(false); //don't reset coord systems
             });
             container.find('.show').on("click", function () {
-                inputCoords = me.instance.getDataHandler().getInputCoords();
+                inputCoords = me.dataHandler.getInputCoords();
                 inputSrs = me.inputSystem.getSrs();
                 me.helper.showMarkersOnMap(inputCoords, false, inputSrs);
                 me.instance.toggleViews("mapmarkers");
@@ -385,8 +384,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     return;
                 }
             } else {
-                if (this.instance.hasInputCoords()){
-                    coords = this.instance.getDataHandler().getInputCoords();
+                if (this.dataHandler.hasInputCoords()){
+                    coords = this.dataHandler.getInputCoords();
                 } else {
                     this.showMessage(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.noInputData'));
                     return;
@@ -411,8 +410,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     return;
                 }
             } else {
-                if (this.instance.hasInputCoords()){
-                    coords = this.instance.getDataHandler().getInputCoords();
+                if (this.dataHandler.hasInputCoords()){
+                    coords = this.dataHandler.getInputCoords();
                 } else {
                     this.showMessage(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.noInputData'));
                     return;
@@ -430,16 +429,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             //TODO check that response dimension matches
             var dimension = response.dimension;
             var hasMoreCoordinates = response.hasMoreCoordinates;
-            this.instance.getDataHandler().setResultCoords(coords);
+            this.dataHandler.setResultCoords(coords);
             if (inputCoords){
-                this.instance.getDataHandler().setInputCoords(inputCoords);
+                this.dataHandler.setInputCoords(inputCoords);
             }
             if (hasMoreCoordinates === true){
                 this.showMessage(this.loc('flyout.transform.responseFile.title'), this.loc('flyout.transform.responseFile.hasMoreCoordinates', {maxCoordsToArray: 100}));
             }
         },
-        handleFileResponse: function (){
-            //TODO
+        handleFileResponse: function (data, filename, type){
+            //TODO exportToFile should be moved from fileInput to helper
+            this.fileInput.exportToFile(data, filename, type);
         },
         handleErrorResponse: function (error, errorCode){
             var errors = this.loc('flyout.transform.responseErrors');

@@ -230,7 +230,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         },*/
         updateHeader: function (epsgValues, elevSystem) {
             this.getElements().header.remove();
-            if (!epsgValues){
+            if (!epsgValues.coord){
                 return;
             }
             var x = "",
