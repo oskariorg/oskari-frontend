@@ -83,7 +83,6 @@ function(instance) {
     transformArrayToArray: function(coords, crs, successCb, errorCb ) {
         var me = this;
         var url = this.requestUrlBuilder( crs, "A2A" );
-
         jQuery.ajax({
             contentType: "application/json",
             type: "POST",
@@ -98,6 +97,7 @@ function(instance) {
         });
     },
     transformFileToArray: function (file, crs, fileSettings, successCb, errorCb){
+        var me = this;
         var url = this.requestUrlBuilder( crs, "F2A");
         var formData = this.formDataBuilder(file, fileSettings);
          jQuery.ajax({
@@ -116,14 +116,17 @@ function(instance) {
         });
     },
     transformArrayToFile: function(coords, crs, fileSettings, successCb, errorCb ) {
+        var me = this;
         var url = this.requestUrlBuilder( crs, "A2F", fileSettings);
         jQuery.ajax({
             contentType: "application/json",
             type: "POST",
             url: url,
             data: JSON.stringify(coords),
-            success: function(response) {
-                successCb(response);
+            success: function(response, textStatus, jqXHR) {
+                var type = jqXHR.getResponseHeader('Content-Type');
+                var filename = me.getFileNameFromResponse(jqXHR);
+                successCb(response, filename, type);
             },
             error: function(jqXHR){
                 me.handleError(errorCb, jqXHR);
@@ -131,6 +134,7 @@ function(instance) {
         });
     },
     transformFileToFile: function(file, crs, importSettings, exportSettings, successCb, errorCb ) {
+        var me = this;
         var url = this.requestUrlBuilder( crs , "F2F");
         var formData = this.formDataBuilder(file, importSettings, exportSettings);
         jQuery.ajax({
@@ -140,17 +144,27 @@ function(instance) {
             processData: false,
             url: url,
             data: formData,
-            success: function(response) {
-                successCb(response);
+            success: function(response, textStatus, jqXHR) {
+                var type = jqXHR.getResponseHeader('Content-Type');
+                var filename = me.getFileNameFromResponse(jqXHR);
+                successCb(response, filename, type);
             },
             error: function(jqXHR){
                 me.handleError(errorCb, jqXHR);
             }
         });
-    }/*
-    _handleResponse: function(response, cb) {
-        cb(response);
-    }*/
+    },
+    getFileNameFromResponse: function (xhr){
+        var disposition = xhr.getResponseHeader('Content-Disposition');
+        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        if (disposition){
+            var matches = filenameRegex.exec(disposition);
+            if (matches[1]){
+                return matches[1];
+            }
+        }
+        return "results.txt";
+    }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']
 });
