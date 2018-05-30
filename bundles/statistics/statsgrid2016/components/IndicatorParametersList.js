@@ -27,8 +27,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         tableRow: _.template(
             '<tr> '+
                 '<td class="user-dataset">${year} - ${regionset}</td> ' +
-                '<td><a href="#">${edit}</a></td> ' +
-                '<td><a href="#">${delete}</a></td> '+
+                '<td class="user-dataset-edit"><a href="#">${edit}</a></td> ' +
+                '<td class="user-dataset-delet"><a href="#">${delete}</a></td> '+
             '</tr>'
         ),
         form: '<div class="userchoice-container"></div>',
@@ -86,24 +86,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
                 edit: me.locale('modify.edit'),
                 delete: me.locale('modify.delete')
             }));
-            item.on('click', function (evt) {
+            item.find('.user-dataset-edit').on('click', function (evt) {
                 me.trigger('insert.data', {
                     year: dataset.year,
                     regionset: Number(dataset.regionset)
                 });
             });
-            // TODO: add edit/delete links
-            /* for edit:
-            me.trigger('insert.data', {
-                year: dataset.year,
-                regionset: dataset.regionset
+            item.find('.user-dataset-delete').on('click', function (evt) {
+                me.trigger('delete.data', {
+                    year: dataset.year,
+                    regionset: Number(dataset.regionset)
+                });
             });
-            for delete:
-            me.trigger('delete.data', {
-                year: dataset.year,
-                regionset: dataset.regionset
-            });
-            */
             table.find('tbody').append(item);
         })
     },
