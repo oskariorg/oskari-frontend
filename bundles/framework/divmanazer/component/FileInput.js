@@ -120,9 +120,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function () {
             // }
             // return this.getElement();
         },
-        exportToFile: function ( data, filename ) {
+        //TODO should these be in different place
+        exportToFile: function ( data, filename, type ) {
             var me = this;
-            var blob = new Blob([data], {type: 'text'});
+            var blob = new Blob([data], {type: type});
             if( window.navigator.msSaveOrOpenBlob ) {
                 window.navigator.msSaveBlob(blob, filename);
             }
