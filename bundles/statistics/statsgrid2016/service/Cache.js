@@ -19,6 +19,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
         get: function (key) {
             return this.cache[key];
         },
+        getKeysStartingWith: function (prefix) {
+            return Object.keys(this.cache).filter(function (key) {
+                return key.indexOf(prefix) === 0;
+            });
+        },
+        flushKeysStartingWith: function (prefix) {
+            var me = this;
+            this.getKeysStartingWith(prefix).forEach(function (key) {
+                me.remove(key);
+            });
+        },
         /**
          * Adds a callback to a response queue.
          * When multiple calls are made to same resource we only want to send one request,

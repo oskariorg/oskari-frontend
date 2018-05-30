@@ -240,8 +240,7 @@ Oskari.registerLocalization({
                 'Exempel 1: Helsinki;1234 \n' +
                 'Exempel 2: 011;5678'
             },
-            'notLoggedInWarning': 'Den skapade indikatorn kan användas endast under denna session. Vid omladdning av sidan kommer data att förloras.',
-            'notLoggedInWarningAfterServerImpl': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.'
+            'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.'
         }
     }
 });

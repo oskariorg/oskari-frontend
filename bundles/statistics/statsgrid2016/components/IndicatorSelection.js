@@ -219,10 +219,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             } else {
                 // if datasource is of type "user" the user can add new indicators to it
                 btnEditIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
+
+                btnEditIndicator.setEnabled(indId.length === 1);
                 btnEditIndicator.setHandler(function (event) {
                     event.stopPropagation();
                     var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
-                    formFlyout.showForm(dsSelect.getValue(), indId);
+                    formFlyout.showForm(dsSelect.getValue(), indId[0]);
                 });
             }
             // this will show the params or clean them depending if values exist

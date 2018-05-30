@@ -83,7 +83,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 ind.regionsets.forEach(function (regionset) {
                     sel.allowedValues.forEach(function (value) {
                         var data = {};
-                        data[sel.id] = value.id;
+                        if (typeof value === 'object') {
+                            data[sel.id] = value.id;
+                        } else {
+                            data[sel.id] = value;
+                        }
                         data.regionset = regionset;
                         datasets.push(data);
                     });

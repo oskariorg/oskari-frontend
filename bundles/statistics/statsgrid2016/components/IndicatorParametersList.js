@@ -14,8 +14,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
 }, {
     __templates: {
         main: _.template('<div class="user-indicator-main"><ul></ul><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
-        listItem: _.template('<li class="user-dataset">${year} - ${regionset}</li>'),
-        form: '<form class="indicator-selectors-form" style="width: 25%"></form>',
+        listItem: _.template('<li>${year} - ${regionset}</li>'),
+        form: '<div class="userchoice-container"></div>',
         input: _.template('<input type="text" style="width: 40%; height: 1.6em" name="${name}" placeholder="${label}"><br />')
     },
     getElement: function () {
@@ -100,9 +100,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             label: this.locale('parameters.year')
         }));
         var formContainer = this.resetIndicatorSelectors(false);
-        var userChoiceContainer = jQuery('<div class="userchoice-container"></div>');
+        var userChoiceContainer = jQuery(this.__templates.form);
         userChoiceContainer.append(input);
         formContainer.append(userChoiceContainer);
+
+        // focus on the year input
+        input.focus();
+
         var regionsetContainer = jQuery('<div class="regionset-container"></div>');
         regionsetContainer.append('<div>' + this.locale('panels.newSearch.selectRegionsetPlaceholder') + '</div>');
         regionsetContainer.append(this.select.create(this.availableRegionsets, {
@@ -113,7 +117,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         this.select.selectFirstValue();
         this.select.adjustChosen();
         userChoiceContainer.append(regionsetContainer);
-        formContainer.append(userChoiceContainer);
+
+        // create buttons
         var btnContainer = jQuery('<div style="display:flex"></div>');
         formContainer.append(btnContainer);
 
