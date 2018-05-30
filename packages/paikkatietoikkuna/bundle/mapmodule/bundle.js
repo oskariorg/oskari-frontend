@@ -34,21 +34,6 @@ Oskari.clazz.define(
                     "src": "../../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js"
                 },
                 /*
-                 * Cesium
-                 */
-                {
-                    "type": "text/javascript",
-                    "expose" : "Cesium",
-                    "src": "../../../../libraries/ol-cesium/Cesium/Cesium.js"
-                },
-                /*
-                 * Ol-Cesium
-                 */
-                {
-                    "type": "text/javascript",
-                    "src": "../../../../libraries/ol-cesium/olcesium.js"
-                },
-                /*
                  * Abstract base
                  */
                 {

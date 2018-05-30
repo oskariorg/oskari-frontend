@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     'value': {
         'tile': {
             'title': 'Tematiska kartor',
-            'search': 'Sök data',
+            'search': 'Materialsökning',
             'table': 'Tabell',
             'diagram': 'Stapeldiagram'
         },
@@ -194,9 +194,31 @@ Oskari.registerLocalization({
             'inspireName': 'Tematisk karta',
             'organizationName': 'Tematisk karta'
         },
+        'tab': {
+            'title': 'Indikatorer',
+            'edit': 'Redigera',
+            'delete': 'Ta bort',
+            'grid': {
+                'name': 'Namn',
+                'edit': 'Redigera',
+                'delete': 'Ta bort'
+            },
+            'popup': {
+                'deletetitle': 'Ta bort indikatorn',
+                'deletemsg': 'Vill du ta bord indikatorn "{name}"?'
+            },
+            'button': {
+                'cancel': 'Avbryt',
+                'ok': 'OK'
+            },
+            'error': {
+                'title': 'Fel',
+                'notfound': 'Indikator saknas'
+            }
+        },
         'userIndicators': {
-            'flyoutTitle': '',
-            'buttonTitle': '',
+            'flyoutTitle': 'Skapa indikator',
+            'buttonTitle': 'Skapa indikator',
             'buttonAddIndicator': 'Ange värden',
             'panelGeneric': {
                 'title': 'Information',
@@ -209,14 +231,17 @@ Oskari.registerLocalization({
             },
             'dialog': {
                 'successTitle': 'Sparad',
-                'successMsg': ''
+                'successMsg': 'Informationen sparad. Granska indikatorn genom att tillägga den på kartan vid materialsökningen.'
             },
             'import': {
-                'title': '',
-                'placeholder': ''
-            }
-        },
-        'notLoggedInWarning': '',
-        'notLoggedInWarningAfterServerImpl': ''
+                'title': 'Hämta från urklipp',
+                'placeholder': 'Ange värden från urklippet här. En rad motsvarar ett område och dess värde. Område betäcknas med namn eller id. Separera värden med semikolon.\n' +
+                'Värden kan tilläggas i följande form: \n' +
+                'Exempel 1: Helsinki;1234 \n' +
+                'Exempel 2: 011;5678'
+            },
+            'notLoggedInWarning': 'Den skapade indikatorn kan användas endast under denna session. Vid omladdning av sidan kommer data att förloras.',
+            'notLoggedInWarningAfterServerImpl': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.'
+        }
     }
 });

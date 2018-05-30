@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         this._map3d = null;
         this._mapReady = false;
         this._mapReadySubscribers = [];
+        this._lastKnownZoomLevel = null;
     }, {
         /**
          * @method _initImpl
@@ -174,22 +175,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
 
-        getMapCenter: function() {
+        getMapCenter: function () {
             var center = this.getMap().getView().getCenter();
             return {
-                lon : center[0],
-                lat : center[1]
+                lon: center[0],
+                lat: center[1]
             };
         },
 
-        getMapZoom: function() {
-            // Touch devices zoom level (after pinch zoom) may contains decimals
-            // for this reason zoom need rounded to nearest integer.
-            // Tested with Android pinch zoom.
-            return Math.round(this.getMap().getView().getZoom());
+        getMapZoom: function () {
+            var zoomlevel = this.getMap().getView().getZoom();
+            if (typeof (zoomlevel) === 'undefined') {
+                // Cesium view has been zoomed outside ol zoomlevels.
+                zoomlevel = this._lastKnownZoomLevel;
+            } else {
+                this._lastKnownZoomLevel = Math.round(zoomlevel);
+            }
+            return Math.round(zoomlevel);
         },
 
-        getSize: function() {
+        getSize: function () {
             var size = this.getMap().getSize();
             return {
                 width: size[0],
@@ -758,6 +763,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                         }
                     }
                     camera.setView(view);
+                    this._map3d.getCamera().updateView();
+                    this.updateDomain();
                 }
             } else {
                 // Cesium is not ready yet. Fire after it has been initialized properly.
