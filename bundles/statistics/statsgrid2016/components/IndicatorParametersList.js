@@ -16,7 +16,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         main: _.template('<div class="user-indicator-main"><table><thead></thead><tbody></tbody></table><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
         tableHeader: _.template('<tr><th>${title}</th> <th>${edit}</th> <th>${delete}</th> </tr>'),
         tableRow: _.template('<tr> <td>class="user-dataset">${year} - ${regionset}</td> <td><a href="#">${edit}</a></td> <td><<a href="#">${delete}</a>/td></tr>'),
-        tableRow: _.template('<tr> <td>class="user-dataset">${year} - ${regionset}</td> <td><a href="#">${edit}</a></td> <td></td></tr>'),
         form: '<div class="userchoice-container"></div>',
         input: _.template('<input type="text" style="width: 40%; height: 1.6em" name="${name}" placeholder="${label}"><br />')
     },
