@@ -124,7 +124,7 @@ Oskari.registerLocalization(
                 "transformError": "Muunna koordinaatit ennen sijaintien näyttämistä kartalla.",
                 "lon": "Lon",
                 "lat": "Lat",
-                "north": "N", //or P
+                "north": "N",
                 "east": "E"
             },
             "select":{
@@ -167,10 +167,11 @@ Oskari.registerLocalization(
                     "mac": "MacOS"
                 },
                 "delimeters":{
-                    "point": "Piste",
-                    "comma": "Pilkku",
+                    "point": "Punkt",
+                    "comma": "Kommatecken",
                     "tab": "Tabulaattori",
-                    "space" : "Välilyönti"
+                    "space": "Utslutning",
+                    "semicolon": "Semikolon"
                 }
             },
             "export": {

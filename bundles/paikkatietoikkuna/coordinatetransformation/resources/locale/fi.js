@@ -170,7 +170,8 @@ Oskari.registerLocalization(
                     "point": "Piste",
                     "comma": "Pilkku",
                     "tab": "Tabulaattori",
-                    "space" : "Välilyönti"
+                    "space": "Välilyönti",
+                    "semicolon": "Puolipiste"
                 }
             },
             "export": {
