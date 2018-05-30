@@ -356,6 +356,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 return a.getZIndex()-b.getZIndex();
             });
         },
+        isPointInExtent: function (extent, x, y){
+            var extent = new OpenLayers.Bounds(extent);
+            return extent.contains(x,y);
+        },
+
 /* --------- /Impl specific --------------------------------------> */
 
 
