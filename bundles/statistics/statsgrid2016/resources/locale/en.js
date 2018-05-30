@@ -240,7 +240,13 @@ Oskari.registerLocalization({
                 'title': '',
                 'placeholder': ''
             },
-            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.'
+            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
+            'notLoggedInWarningAfterServerImpl': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
+            'modify': {
+                'title': 'Indicator',
+                'edit': 'Edit',
+                'delete': 'Delete'
+            }
         }
     }
 });
