@@ -13,9 +13,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     Oskari.makeObservable(this);
 }, {
     __templates: {
-        main: _.template('<div class="user-indicator-main"><table><thead></thead><tbody></tbody></table><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
-        //tableHeader: _.template('<tr> <th> ${title} </th> <th> ${edit} </th> <th> ${delete} </th> </tr>'),
-        tableRow: _.template('<tr> <td class="user-dataset">${year} - ${regionset}</td> <td><a href="#">${edit}</a></td> <td><<a href="#">${delete}</a>/td></tr>'),
+        main: _.template('<div class="user-indicator-main"><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
+        table: '<table><tbody></tbody></table>',
+        tableHeader: _.template(
+            '<thead>'+
+                '<tr>' +
+                    '<th> ${title} </th> ' +
+                    '<th> ${edit} </th> ' +
+                    '<th> ${delete} </th> ' +
+                '</tr>'+
+            '</thead>'
+        ),
+        tableRow: _.template(
+            '<tr> '+
+                '<td class="user-dataset">${year} - ${regionset}</td> ' +
+                '<td><a href="#">${edit}</a></td> ' +
+                '<td><a href="#">${delete}</a></td> '+
+            '</tr>'
+        ),
         form: '<div class="userchoice-container"></div>',
         input: _.template('<input type="text" style="width: 40%; height: 1.6em" name="${name}" placeholder="${label}"><br />')
     },
@@ -44,13 +59,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     },
     createTable: function () {
         var me = this;
-        var table = this.getElement().find('table');
-        // var theader = this.__templates.tableHeader({
-        //     title: me.locale('modify.title'),
-        //     edit: me.locale('modify.edit'),
-        //     delete: me.locale('modify.delete')
-        // });
-        // table.find('thead').append(theader);
+        var main = this.getElement().find('.user-indicator-main');
+        var table = main.append( this.__templates.table() );
+        var theader = this.__templates.tableHeader({
+            title: me.locale('modify.title'),
+            edit: me.locale('modify.edit'),
+            delete: me.locale('modify.delete')
+        });
+        table.append(theader);
         return table;
     },
     setDatasets: function (datasets) {
