@@ -71,6 +71,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                                 '<option value="tab">${tab}</option>'+
                                                 '<option value="space">${space}</option>'+
                                                 '<option value="comma">${comma}</option>'+
+                                                '<option value="semicolon">${semicolon}</option>'+
                                             '</select>'+
                                         '</div>' +
                                         '<div class="infolink icon-info"></div>' +
@@ -140,6 +141,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 radian: this.loc('fileSettings.options.degreeFormat.radian'),
                 point: this.loc('fileSettings.options.delimeters.point'),
                 comma: this.loc('fileSettings.options.delimeters.comma'),
+                semicolon: this.loc('fileSettings.options.delimeters.semicolon'),
                 tab: this.loc('fileSettings.options.delimeters.tab'),
                 space: this.loc('fileSettings.options.delimeters.space'),
                 writeHeader: this.loc('fileSettings.options.writeHeader'),
