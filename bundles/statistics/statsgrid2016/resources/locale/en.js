@@ -237,8 +237,7 @@ Oskari.registerLocalization({
                 'title': '',
                 'placeholder': ''
             },
-            'notLoggedInWarning': 'The indicator data is only available for this session. The data will be lost once the page is reloaded.',
-            'notLoggedInWarningAfterServerImpl': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.'
+            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.'
         }
     }
 });
