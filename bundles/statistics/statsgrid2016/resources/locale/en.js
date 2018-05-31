@@ -245,7 +245,7 @@ Oskari.registerLocalization({
             'modify': {
                 'title': 'Indicator',
                 'edit': 'Edit',
-                'delete': 'Delete'
+                'remove': 'Remove'
             }
         }
     }

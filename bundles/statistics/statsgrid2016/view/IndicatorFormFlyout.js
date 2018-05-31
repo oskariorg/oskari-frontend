@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList.on('delete.data', function (selectors) {
         me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
             if (err) {
-                me.errorService.show(me.locale.errors.title, me.locale.errors.datasetDelete);
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetDelete'));
                 return;
             }
             // refresh the dataset listing on form
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorDataForm.on('save', function (data) {
         me.saveIndicatorData(data, function (err, notReallySureWhatThisCouldBe) {
             if (err) {
-                me.errorService.show(me.locale.errors.title, me.locale.errors.datasetSave);
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetSave'));
                 return;
             }
             // TODO: update paramsList?
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var locale = this.locale;
         this.service.getIndicatorMetadata(me.datasourceId, me.indicatorId, function (err, ind) {
             if (err) {
-                me.errorService.show(locale.errors.title, locale.errors.indicatorMetadataError);
+                me.errorService.show(locale('errors.title'), locale('errors.indicatorMetadataError'));
                 return;
             }
             me.indicatorForm.setValues(ind.name, ind.description, ind.source);
@@ -153,14 +153,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             event.stopPropagation();
             me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
                 if (err) {
-                    me.errorService.show(me.locale.errors.title, me.locale.errors.indicatorSave);
+                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                     return;
                 }
                 var dataForm = me.indicatorDataForm.getValues();
                 if (dataForm.values.length) {
                     me.saveIndicatorData(dataForm, function (err, someData) {
                         if (err) {
-                            me.errorService.show(me.locale.errors.title, me.locale.errors.indicatorSave);
+                            me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         // TODO: show spinner as getting regions might take a while?
         me.service.getRegions(regionset.id, function (err, regions) {
             if (err) {
-                me.errorService.show(locale.errors.title, locale.errors.regionsDataError);
+                me.errorService.show(locale('errors.title'), locale('errors.regionsDataError'));
                 return;
             }
             var showDataForm = function (regions, data) {

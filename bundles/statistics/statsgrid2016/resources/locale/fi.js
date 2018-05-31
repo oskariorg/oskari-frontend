@@ -246,9 +246,9 @@ Oskari.registerLocalization({
             'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
             'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
             'modify': {
-                'title': 'Muuttuja',
+                'title': 'Indikaattori',
                 'edit': 'Muokkaa',
-                'delete': 'Poista'
+                'remove': 'Poista'
             }
         }
     }

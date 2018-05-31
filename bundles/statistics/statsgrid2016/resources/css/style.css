@@ -757,11 +757,9 @@ div.tab-material-controls div.title {
   display: flex;
   justify-content: space-evenly; }
 
-.user-dataset:hover {
-  cursor: pointer;
-  font-size: 1.0625em;
-  background: #FDF8D9; }
-
 .user-dataset {
-  padding: 1px;
-  border-bottom: 1px solid #ccc; }
+  text-align: center;
+  padding: 1px; }
+
+.user-dataset-edit, .user-dataset-delete {
+  text-align: center; }

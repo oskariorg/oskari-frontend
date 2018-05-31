@@ -13,22 +13,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     Oskari.makeObservable(this);
 }, {
     __templates: {
-        main: _.template('<div class="user-indicator-main"><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
+        main: _.template('<div class="user-indicator-main"><div class="my-indicator"></div><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
         table: '<table><tbody></tbody></table>',
         tableHeader: _.template(
-            '<thead>'+
+            '<thead>' +
                 '<tr>' +
                     '<th> ${title} </th> ' +
                     '<th> ${edit} </th> ' +
-                    '<th> ${delete} </th> ' +
-                '</tr>'+
-            '</thead>'
+                    '<th> ${remove} </th> ' +
+                '</tr>' +
+             '</thead>'
         ),
         tableRow: _.template(
-            '<tr> '+
-                '<td class="user-dataset">${year} - ${regionset}</td> ' +
-                '<td class="user-dataset-edit"><a href="#">${edit}</a></td> ' +
-                '<td class="user-dataset-delet"><a href="#">${delete}</a></td> '+
+            '<tr> ' +
+                '<td class="user-dataset"> ${year} - ${regionset} </td> ' +
+                '<td class="user-dataset-edit"> <a href="#"> ${edit} </a> </td> ' +
+                '<td class="user-dataset-delete"> <a href="#"> ${remove} </a> </td> ' +
             '</tr>'
         ),
         form: '<div class="userchoice-container"></div>',
@@ -59,32 +59,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     },
     createTable: function () {
         var me = this;
-        var main = this.getElement().find('.user-indicator-main');
-        var table = main.append( this.__templates.table() );
+        var myIndicator = this.getElement().find('.my-indicator');
+        var table = jQuery(this.__templates.table);
         var theader = this.__templates.tableHeader({
-            title: me.locale('modify.title'),
-            edit: me.locale('modify.edit'),
-            delete: me.locale('modify.delete')
+            title: me.locale('userIndicators.modify.title'),
+            edit: me.locale('userIndicators.modify.edit'),
+            remove: me.locale('userIndicators.modify.remove')
         });
         table.append(theader);
-        return table;
+        myIndicator.append(table);
+        return myIndicator.find('table');
     },
     setDatasets: function (datasets) {
         var me = this;
-        var table = this.createTable();
-        var body = table.find('tbody');
-        // var listEl = this.getElement().find('ul');
-        table.empty();
         if (!datasets) {
             return;
         }
+        var table = this.createTable();
+        table.find('tbody').empty();
         datasets.forEach(function (dataset) {
             // TODO: formatting/nice UI
             var item = jQuery(me.__templates.tableRow({
                 year: me.locale('parameters.year') + ' ' + dataset.year,
                 regionset: me.getRegionsetName(dataset.regionset),
-                edit: me.locale('modify.edit'),
-                delete: me.locale('modify.delete')
+                edit: me.locale('userIndicators.modify.edit'),
+                remove: me.locale('userIndicators.modify.remove')
             }));
             item.find('.user-dataset-edit').on('click', function (evt) {
                 me.trigger('insert.data', {
@@ -99,7 +98,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
                 });
             });
             table.find('tbody').append(item);
-        })
+        });
     },
     setRegionsets: function (availableRegionsets) {
         this.availableRegionsets = availableRegionsets;
