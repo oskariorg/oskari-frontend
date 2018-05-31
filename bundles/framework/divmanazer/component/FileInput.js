@@ -157,22 +157,17 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         },
         updateFileList: function (){
             var fileNameElem = this.getElement().find('.box__uploaded');
-            var fileNames;
             var files = this.files;
-            if (files.length === 0){
-                fileNameElem.text("");
-            } else {
-                fileNames = files[0].name;
-                for (var i = 1; i < files.length; i++){
-                    fileNames += ", " + files[i].name;
-                }
-                fileNameElem.text(fileNames);
-            }
+
+            var fileNames = files.map(function (file) {
+                return file.name;
+            }).join(', ');
+
+            fileNameElem.text(fileNames);
         },
         validateFile: function (file){
             var valid = true;
             var opts = this.options;
-            var maxFileSi
             //if allowed file type is defined and not empty list then check that file type is allowed
             if (opts.allowedFileTypes && opts.allowedFileTypes.length !==0 && !opts.allowedFileTypes.includes(file.type)){
                 valid = false;
@@ -223,7 +218,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
          */
         createUi: function() {
             var allowedFiles = this.getAcceptedTypesString();
-            var classes;
             var fileInput;
             var fileUpload;
             var opts = this.options;
@@ -238,11 +232,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             }
 
             if (this.isAdvancedUpload){
-                classes = "oskari-fileinput advanced-upload";
                 fileInput = jQuery(this._template.fileBox({
                     link: this.loc('fileInput.link'),
                     allowedFiles: allowedFiles,
-                    classes: classes,
+                    classes: "oskari-fileinput advanced-upload",
                     fileupload: fileUpload,
                     allowMultiple: allowMultiple,
                     uploading: this.loc('fileInput.uploading'),
@@ -252,9 +245,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 this.setElement(fileInput);
                 this.bindAdvancedUpload();
             } else {
-                classes = "oskari-fileinput basic-upload"
                 fileInput = jQuery(this._template.basicInput({
-                    classes: classes,
+                    classes: "oskari-fileinput basic-upload",
                     allowMultiple: allowMultiple,
                     allowedFiles: allowedFiles
                 }));
