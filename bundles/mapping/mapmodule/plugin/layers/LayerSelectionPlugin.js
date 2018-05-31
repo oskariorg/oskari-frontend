@@ -170,10 +170,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
             var header = this.getElement().find('div.header');
             header.unbind('click');
-            if (this.inLayerToolsEditMode() && me.popup.isVisible()) {
-                me.popup.getJqueryContent().detach();
-                me.popup.close(true);
-                me.popup = null;
+            if (this.inLayerToolsEditMode() && this.popup.isVisible()) {
+                this.popup.getJqueryContent().detach();
+                this.popup.close(true);
+                this.popup = null;
             } else {
                 this._bindHeader(header);
             }
