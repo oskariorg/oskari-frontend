@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
     this.addClass('statsgrid-user-indicator-flyout');
     var me = this;
+    this.errorService = this.service.getErrorService();
     me.on('hide', function () {
         me.reset();
     });
@@ -20,8 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList.on('delete.data', function (selectors) {
         me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
             if (err) {
-                // TODO: handle error properly
-                Oskari.log('IndicatorFormFlyout').error('Error deleting dataset', err);
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetDelete'));
                 return;
             }
             // refresh the dataset listing on form
@@ -36,8 +36,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorDataForm.on('save', function (data) {
         me.saveIndicatorData(data, function (err, notReallySureWhatThisCouldBe) {
             if (err) {
-                // TODO: handle error properly
-                Oskari.log('IndicatorFormFlyout').error('Error saving dataset', err);
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetSave'));
                 return;
             }
             // TODO: update paramsList?
@@ -72,10 +71,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     updateDatasetList: function () {
         // call this.indicatorForm.setValues() based on datasourceId, indicatorId passing existing datasets
         var me = this;
+        var locale = this.locale;
         this.service.getIndicatorMetadata(me.datasourceId, me.indicatorId, function (err, ind) {
             if (err) {
-                // TODO: handle error properly
-                Oskari.log('IndicatorFormFlyout').error(err);
+                me.errorService.show(locale('errors.title'), locale('errors.indicatorMetadataError'));
                 return;
             }
             me.indicatorForm.setValues(ind.name, ind.description, ind.source);
@@ -154,15 +153,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             event.stopPropagation();
             me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
                 if (err) {
-                    // TODO: handle error properly
-                    Oskari.log('IndicatorFormFlyout').error(err);
+                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                     return;
                 }
                 var dataForm = me.indicatorDataForm.getValues();
                 if (dataForm.values.length) {
                     me.saveIndicatorData(dataForm, function (err, someData) {
                         if (err) {
-                            // TODO: handle error properly
+                            me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
@@ -182,6 +180,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      */
     showDatasetForm: function (selectors) {
         var me = this;
+        var locale = this.locale;
         me.genericInfoPanel.close();
         me.dataPanel.close();
 
@@ -193,8 +192,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         // TODO: show spinner as getting regions might take a while?
         me.service.getRegions(regionset.id, function (err, regions) {
             if (err) {
-                // TODO: handle error properly
-                Oskari.log('IndicatorFormFlyout').error(err);
+                me.errorService.show(locale('errors.title'), locale('errors.regionsDataError'));
                 return;
             }
             var showDataForm = function (regions, data) {

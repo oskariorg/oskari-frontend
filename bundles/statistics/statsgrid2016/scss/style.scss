@@ -1099,3 +1099,10 @@ background-color: #000;
     display:flex;
     justify-content: space-evenly;
   }
+.user-dataset {
+    text-align: center;
+    padding: 1px; 
+}
+.user-dataset-edit, .user-dataset-delete {
+    text-align: center;
+}

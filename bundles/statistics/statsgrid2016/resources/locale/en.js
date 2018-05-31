@@ -149,7 +149,10 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'There are no selections for the data.',
             'regionsetsIsEmpty': 'Area selections could not be fetched for chosen data.',
             'regionsDataError': 'Error occurred in area value search.',
-            'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.'
+            'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.',
+            'datasetSave': 'Error saving dataset.',
+            'datasetDelete': 'Error deleting dataset.',
+            'indicatorSave': 'Error saving indicator'
         },
         'datacharts': {
             'flyout': 'Searched data',
@@ -237,7 +240,13 @@ Oskari.registerLocalization({
                 'title': '',
                 'placeholder': ''
             },
-            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.'
+            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
+            'notLoggedInWarningAfterServerImpl': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
+            'modify': {
+                'title': 'Indicator',
+                'edit': 'Edit',
+                'remove': 'Remove'
+            }
         }
     }
 });

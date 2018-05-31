@@ -13,8 +13,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     Oskari.makeObservable(this);
 }, {
     __templates: {
-        main: _.template('<div class="user-indicator-main"><ul></ul><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
-        listItem: _.template('<li>${year} - ${regionset}</li>'),
+        main: _.template('<div class="user-indicator-main"><div class="my-indicator"></div><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
+        table: '<table><tbody></tbody></table>',
+        tableHeader: _.template(
+            '<thead>' +
+                '<tr>' +
+                    '<th> ${title} </th> ' +
+                    '<th> ${edit} </th> ' +
+                    '<th> ${remove} </th> ' +
+                '</tr>' +
+             '</thead>'
+        ),
+        tableRow: _.template(
+            '<tr> ' +
+                '<td class="user-dataset"> ${year} - ${regionset} </td> ' +
+                '<td class="user-dataset-edit"> <a href="#"> ${edit} </a> </td> ' +
+                '<td class="user-dataset-delete"> <a href="#"> ${remove} </a> </td> ' +
+            '</tr>'
+        ),
         form: '<div class="userchoice-container"></div>',
         input: _.template('<input type="text" style="width: 40%; height: 1.6em" name="${name}" placeholder="${label}"><br />')
     },
@@ -29,7 +45,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
 
         var main = jQuery(this.__templates.main());
         this.element = main;
-
         var indBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         indBtn.setTitle(this.locale('userIndicators.buttonAddIndicator'));
         indBtn.insertTo(main);
@@ -39,35 +54,53 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             event.stopPropagation();
             me.requestIndicatorSelectors();
         });
+
         return this.getElement();
+    },
+    createTable: function () {
+        var me = this;
+        var myIndicator = this.getElement().find('.my-indicator');
+
+        var table = jQuery(this.__templates.table);
+        var theader = this.__templates.tableHeader({
+            title: me.locale('userIndicators.modify.title'),
+            edit: me.locale('userIndicators.modify.edit'),
+            remove: me.locale('userIndicators.modify.remove')
+        });
+        myIndicator.empty();
+        table.append(theader);
+        myIndicator.append(table);
+        return myIndicator.find('table');
     },
     setDatasets: function (datasets) {
         var me = this;
-        var listEl = this.getElement().find('ul');
-        listEl.empty();
         if (!datasets) {
             return;
         }
+        var table = this.createTable();
+        table.find('tbody').empty();
         datasets.forEach(function (dataset) {
             // TODO: formatting/nice UI
-            var item = me.__templates.listItem({
+            var item = jQuery(me.__templates.tableRow({
                 year: me.locale('parameters.year') + ' ' + dataset.year,
-                regionset: me.getRegionsetName(dataset.regionset)
+                regionset: me.getRegionsetName(dataset.regionset),
+                edit: me.locale('userIndicators.modify.edit'),
+                remove: me.locale('userIndicators.modify.remove')
+            }));
+            item.find('.user-dataset-edit').on('click', function (evt) {
+                me.trigger('insert.data', {
+                    year: dataset.year,
+                    regionset: Number(dataset.regionset)
+                });
             });
-            // TODO: add edit/delete links
-            /* for edit:
-            me.trigger('insert.data', {
-                year: dataset.year,
-                regionset: dataset.regionset
+            item.find('.user-dataset-delete').on('click', function (evt) {
+                me.trigger('delete.data', {
+                    year: dataset.year,
+                    regionset: Number(dataset.regionset)
+                });
             });
-            for delete:
-            me.trigger('delete.data', {
-                year: dataset.year,
-                regionset: dataset.regionset
-            });
-            */
-            listEl.append(item);
-        })
+            table.find('tbody').append(item);
+        });
     },
     setRegionsets: function (availableRegionsets) {
         this.availableRegionsets = availableRegionsets;

@@ -149,7 +149,11 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'Aineiston valinnat on tyhjä.',
             'regionsetsIsEmpty': 'Aluevalintoja ei saatu valitulle aineistolle.',
             'regionsDataError': 'Alueen arvojen haussa tapahtui virhe.',
-            'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.'
+            'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.',
+            'datasetSave': 'Virhe tallennetaessa aineistoa.',
+            'datasetDelete': 'Virhe poistaessa aineistoa.',
+            'indicatorSave': 'Virhe tallenettaessa muuttujaa.',
+            'indicatorDelete': 'Virhe poistaessa muuttujaa.'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',
@@ -239,7 +243,13 @@ Oskari.registerLocalization({
                 'Esimerkki 1: Helsinki;1234 \n' +
                 'Esimerkki 2: 011;5678'
             },
-            'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.'
+            'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
+            'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
+            'modify': {
+                'title': 'Indikaattori',
+                'edit': 'Muokkaa',
+                'remove': 'Poista'
+            }
         }
     }
 });

@@ -146,7 +146,10 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'Inga datamängder har valts.',
             'regionsetsIsEmpty': 'Områdesindelningarna kunde inte hämtas för den valda datamängden.',
             'regionsDataError': 'Ett fel uppstod vid sökningen av områdets värden.',
-            'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.'
+            'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.',
+            'datasetSave': 'Ett fel uppstod vid sparning av data.',
+            'datasetDelete': 'Ett fel uppstod vid radering av data.',
+            'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.'
         },
         'datacharts': {
             'flyout': 'Sökta datamängden',
@@ -237,7 +240,13 @@ Oskari.registerLocalization({
                 'Exempel 1: Helsinki;1234 \n' +
                 'Exempel 2: 011;5678'
             },
-            'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.'
+            'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
+            'notLoggedInWarningAfterServerImpl': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
+            'modify': {
+                'title': 'Indikator',
+                'edit': 'Redigera',
+                'remove': 'Ta bort'
+            }
         }
     }
 });
