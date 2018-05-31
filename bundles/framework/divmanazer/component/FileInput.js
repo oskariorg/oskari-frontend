@@ -36,8 +36,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 '<input type="file" class="basic__file" accept="<%= allowedFiles %>" <%= allowMultiple %> />' +
             '</div>')
     }
-    this.isAdvancedUpload = this.canUseAdvancedUpload();
-    this.createUi();
+    this.isAdvancedUpload = this._canUseAdvancedUpload();
+    this._createUi();
 }, {
         getElement: function () {
             return this.element;
@@ -52,21 +52,21 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             this.options = options;
         },
         /**
-         * @method canUseAdvancedUpload
+         * @method _canUseAdvancedUpload
          *
          * Checks if the browser supports drag and drop events aswell as formdata & filereader
          * @return {boolean} true if supported 
          */
-        canUseAdvancedUpload: function() {
+        _canUseAdvancedUpload: function() {
             var div = document.createElement('div');
             return ( ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div) )
                         && 'FormData' in window && 'FileReader' in window;
          },
         /**
-         * @method bindAdvancedUpload
+         * @method _bindAdvancedUpload
          * Checks for drag and drop events and select
          */
-        bindAdvancedUpload: function() {
+        _bindAdvancedUpload: function() {
             var me = this;
             var elem = this.getElement();
             var link = elem.find('a');
@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 elem.removeClass('is-dragover');
             })
             .on('drop', function(e) {
-                me.handleFileList(e.originalEvent.dataTransfer.files);
+                me._handleFileList(e.originalEvent.dataTransfer.files);
             });
 
             link.click(function(){
@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             });
 
             input.change(function(e){
-                me.handleFileList(e.target.files);
+                me._handleFileList(e.target.files);
             });
 
             /*
@@ -114,15 +114,15 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             this.setElement( form.parent() );
             */
         },
-        bindBasicUpload: function() {
+        _bindBasicUpload: function() {
             var me = this;
             var elem = this.getElement();
             var input = elem.find('input[type="file"]');
             input.change(function(e){
-                me.handleFileList(e.target.files);
+                me._handleFileList(e.target.files);
             });
         },
-        handleFileList: function (fileList){
+        _handleFileList: function (fileList){
             var me = this;
             var opts = this.options;
             var files = fileList;
@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             if (opts.allowMultipleFiles === true){
                 Object.keys( files ).forEach( function ( key ) {
                     file = files[key];
-                    if (me.validateFile(file) === true){
+                    if (me._validateFile(file) === true){
                         me.files.push(file);
                     } else {
                         //TODO or keep valid files
@@ -141,10 +141,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 });
             } else {
                 if (files.length > 1){
-                    this.showPopup(this.loc('fileInput.error'),this.loc('fileInput.multipleNotAllowed'));
+                    this._showPopup(this.loc('fileInput.error'),this.loc('fileInput.multipleNotAllowed'));
                 } else {
                     file = files[0];
-                    if (file && this.validateFile(file) === true){
+                    if (file && this._validateFile(file) === true){
                         this.files = [file];
                     } else {
                         this.files = [];
@@ -152,10 +152,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 }
             }
             if (this.isAdvancedUpload){
-                this.updateFileList();
+                this._updateFileList();
             }
         },
-        updateFileList: function (){
+        _updateFileList: function (){
             var fileNameElem = this.getElement().find('.box__uploaded');
             var files = this.files;
 
@@ -165,18 +165,18 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
 
             fileNameElem.text(fileNames);
         },
-        validateFile: function (file){
+        _validateFile: function (file){
             var valid = true;
             var opts = this.options;
             //if allowed file type is defined and not empty list then check that file type is allowed
             if (opts.allowedFileTypes && opts.allowedFileTypes.length !==0 && !opts.allowedFileTypes.includes(file.type)){
                 valid = false;
-                this.showPopup(this.loc('fileInput.error'), this.loc('fileInput.invalidType'));
+                this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.invalidType'));
             }
             //if max file size is defined check that file isn't too large
             if (opts.maxFileSize && file.size > opts.maxFileSize * 1048576){
                 valid = false;
-                this.showPopup(this.loc('fileInput.error'), this.loc('fileInput.fileSize', {size: opts.maxFileSize}));
+                this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.fileSize', {size: opts.maxFileSize}));
             }
             return valid;
         },
@@ -184,7 +184,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             var files = this.files;
             var opts = this.options;
             if (files.length === 0){
-                this.showPopup(this.loc('fileInput.error'), this.loc('fileInput.noFiles'));
+                this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.noFiles'));
                 return null;
             } else if (opts.allowMultipleFiles !== true) {
                 return files[0]; //or should we use getFile() for single file (allowMultiple false)
@@ -196,7 +196,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
          * @method readFilesInBrowser
          * Checks for drag and drop events, on submit makes ajax request
          */
-        readFilesInBrowser: function ( files, cb ) {
+         //TODO do we need this??
+        _readFilesInBrowser: function ( files, cb ) {
             var files = files; // FileList object
 
             for (var i = 0, f; f = files[i]; i++) {
@@ -216,8 +217,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
          * @method create
          * Creates the element for handlign drag and drop
          */
-        createUi: function() {
-            var allowedFiles = this.getAcceptedTypesString();
+        _createUi: function() {
+            var allowedFiles = this._getAcceptedTypesString();
             var fileInput;
             var fileUpload;
             var opts = this.options;
@@ -243,7 +244,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                     error: this.loc('fileInput.error')
                 }));
                 this.setElement(fileInput);
-                this.bindAdvancedUpload();
+                this._bindAdvancedUpload();
             } else {
                 fileInput = jQuery(this._template.basicInput({
                     classes: "oskari-fileinput basic-upload",
@@ -251,10 +252,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                     allowedFiles: allowedFiles
                 }));
                 this.setElement(fileInput);
-                this.bindBasicUpload(fileInput);
+                this._bindBasicUpload(fileInput);
             }
         },
-        getAcceptedTypesString: function (){
+        _getAcceptedTypesString: function (){
             var allowedFiles = this.options.allowedFileTypes;
             var accepted = "";
             if (allowedFiles && allowedFiles.length > 0){
@@ -289,7 +290,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 document.body.removeChild(elem);
             }
         },*/
-        showPopup: function (title, msg){
+        _showPopup: function (title, msg){
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 btn = dialog.createCloseButton(this.loc('buttons.close'));
             dialog.show(title, msg, [btn]);
