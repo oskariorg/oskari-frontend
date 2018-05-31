@@ -384,7 +384,7 @@ Oskari.clazz.define(
         _setZoomLevelImpl: Oskari.AbstractFunc('_setZoomLevelImpl'),
         /* --------- /Impl specific - PRIVATE ----------------------------> */
 
-        /* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
+        /* Impl specific - found in ol2, ol3 and olCesium modules BUT parameters and/or return value differ!!
 ------------------------------------------------------------------> */
         addLayer: Oskari.AbstractFunc('addLayer'),
         removeLayer: Oskari.AbstractFunc('removeLayer'),
@@ -394,6 +394,9 @@ Oskari.clazz.define(
         _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
         _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
         getStyle: Oskari.AbstractFunc('getStyle'),
+        set3dEnabled: Oskari.AbstractFunc('set3dEnabled'),
+        getCamera: Oskari.AbstractFunc('getCamera'),
+        setCamera: Oskari.AbstractFunc('setCamera'),
         /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
         /* ---------------- SHARED FUNCTIONS --------------- */
@@ -785,6 +788,7 @@ Oskari.clazz.define(
             return layerResolutions;
         },
         /* --------------- /MAP ZOOM ------------------------ */
+
 
         /* --------------- MAP STATE ------------------------ */
 

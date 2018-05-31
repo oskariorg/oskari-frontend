@@ -194,6 +194,28 @@ Oskari.registerLocalization({
             'inspireName': 'Thematic map',
             'organizationName': 'Thematic map'
         },
+        'tab': {
+            'title': 'Indicators',
+            'edit': 'Edit',
+            'delete': 'Delete',
+            'grid': {
+                'name': 'Name',
+                'edit': 'Edit',
+                'delete': 'Delete'
+            },
+            'popup': {
+                'deletetitle': 'Delete Indicator',
+                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?'
+            },
+            'button': {
+                'cancel': 'Cancel',
+                'ok': 'OK'
+            },
+            'error': {
+                'title': 'Error',
+                'notfound': 'The indicator was not found.'
+            }
+        },
         'userIndicators': {
             'flyoutTitle': 'Add new indicator',
             'buttonTitle': 'Add new indicator',
@@ -211,8 +233,11 @@ Oskari.registerLocalization({
                 'successTitle': 'Saved',
                 'successMsg': 'The data has been saved. Add the indicator to the map using the statistics search functionality.'
             },
-            'notLoggedInWarning': 'The indicator data is only available for this session. The data will be lost once the page is reloaded.',
-            'notLoggedInWarningAfterServerImpl': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.'
+            'import': {
+                'title': '',
+                'placeholder': ''
+            },
+            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.'
         }
     }
 });

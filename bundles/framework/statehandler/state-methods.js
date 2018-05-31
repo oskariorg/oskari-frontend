@@ -55,11 +55,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         if (startupState) {
             me.useState(startupState);
         } else {
+            var data = {
+                uuid: Oskari.app.getUuid(),
+                noSavedState: true
+            }
             jQuery.ajax({
-                dataType: "json",
-                type: "GET",
+                dataType: 'json',
+                data: data,
+                type: 'GET',
                 // noSavedState=true parameter tells we dont want the state saved in session
-                url: me.sandbox.getAjaxUrl() + 'action_route=GetAppSetup&noSavedState=true',
+                url: Oskari.urls.getRoute('GetAppSetup'),
                 success: function (data) {
                     if (data && data.configuration) {
                         me._setStartupState(data.configuration);

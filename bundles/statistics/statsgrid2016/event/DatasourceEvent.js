@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.DatasourceEvent',
      * @static
      */
     function (datasource) {
-        this.datasource = datasource;
+        this.datasource = parseInt(datasource);
     }, {
         /**
          * @method getName
