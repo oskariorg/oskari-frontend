@@ -60,12 +60,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     createTable: function () {
         var me = this;
         var myIndicator = this.getElement().find('.my-indicator');
+
         var table = jQuery(this.__templates.table);
         var theader = this.__templates.tableHeader({
             title: me.locale('userIndicators.modify.title'),
             edit: me.locale('userIndicators.modify.edit'),
             remove: me.locale('userIndicators.modify.remove')
         });
+        myIndicator.empty();
         table.append(theader);
         myIndicator.append(table);
         return myIndicator.find('table');
