@@ -85,27 +85,50 @@ Oskari.registerLocalization(
                 "confirmClear": "Haluatko tyhjentää taulukot?"
             },
             "transform": {
+                "warnings": {
+                    "title": "Huomio!",
+                    "3DTo2D": "Valitsemissasi lähtötiedoissa on mukana korkeusarvoja, mutta tulostiedoissa ei. Tuloskoordinaatteihin ei siis tule korkeusarvoja mukaan. Haluatko jatkaa?",
+                    "2DTo3D": "Valitsemissasi lähtötiedoissa ei ole korkeusarvoja, mutta tulostiedoissa on. Lähtöaineiston korkeusarvoiksi lisätään 0 ja korkeusjärjestelmäksi N2000. Haluatko jatkaa?"
+                },
                 "validateErrors": {
                     "title": "Virhe!",
                     "crs": "Geodeettinen koordinaattijärjestelmä pitää olla valittuna sekä lähtö- että tulostiedoissa.",
                     "sourceHeight": "Lähtötietojen korkeusjärjestelmää ei ole valittu.",
                     "targetHeight": "Tulostietojen korkeusjärjestelmää ei ole valittu.",
                     "noInputData": "Ei muunnettavia koordinaatteja.",
-                    "noInputFile": "Lähtöaineiston sisältävää tiedostoa ei ole valittu."
+                    "noInputFile": "Lähtöaineiston sisältävää tiedostoa ei ole valittu.",
+                    "noFileName": "Anna tiedostonimi.",
+                    "doubleComma": "Desimaali- ja koordinaattierotin eivät voi molemmat olla pilkkuja."
                 },
                 "responseErrors": {
                     "title": "Virhe muunnoksessa!",
-                    "errorMsg": "Koordinaattimuunnos epäonnistui..."
+                    "generic": "Koordinaattimuunnos epäonnistui...",
+                    "invalid_coord": "Koordinaatti virheellinen. Tarkasta, että muunnettavat koordinaatit on oikeassa muodossa sekä geodeettinen koordinaatti- ja kokeusjärjestelmä ovat oikein.",
+                    "invalid_number": "Koordinaatti virheellinen. Tarkasta..",
+                    "no_coordinates": "Ei koordinaatteja",
+                    "invalid_file_settings": "Invalid file settings",
+                    "no_file": "No file entry",
+                    "invalid_coord_length": "Tiedostossa virheellinen koordinaatti. Tarkasta, että otsakerivit, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä ovat määritetty oikein."
+                },
+                "responseFile": {
+                    "title": "Huomio!",
+                    "hasMoreCoordinates": "Lähtöaineistosta ei voida muuntaa taulukkoon yli {maxCoordsToArray, number} koordinaattia. Jos haluat muuntaa kaikki koordinaatit, käytä Vie tulokset tiedostoon -toimintoa."
                 }
             }
         },
         "mapMarkers":{
             "show":{
                 "title": "Näytä sijainnit kartalla",
-                "info" : "Tarkastele muunnettuja koordinaatteja kartalla."
+                "info": "Tarkastele muunnettuja koordinaatteja kartalla.",
+                "errorTitle": "Virhe sijaintien näyttämisessä",
+                "transformError": "Muunna koordinaatit ennen sijaintien näyttämistä kartalla.",
+                "lon": "Lon",
+                "lat": "Lat",
+                "north": "N",
+                "east": "E"
             },
             "select":{
-                "title": "Näytä sijainnit kartalla",
+                "title": "Valitse sijainnit kartalta",
                 "info": "Valitse yksi tai useampia pisteitä kartalta klikkaamalla."
             }
         },
@@ -122,16 +145,34 @@ Oskari.registerLocalization(
         },
         "fileSettings": {
             "options": {
-                "degree": "Aste",
-                "gradian": "Gooni (graadi)",
-                "radian": "Radiaani",
-                "point": "Piste",
-                "comma": "Pilkku",
-                "format": "Kulman muoto/yksikkö",
                 "decimalSeparator": "Desimaalierotin",
+                "coordinateSeparator": "Koordinaattierotin",
                 "headerCount": "Otsakerivien määrä",
+                "decimalCount": "Desimaalien tarkkuus",
                 "reverseCoords": "Koordinaatit käänteisesti",
-                "useId": "Käytä tunnistetta"
+                "useId": "Käytä tunnistetta",
+                "writeHeader": "Kirjoita otsakerivi tiedostoon",
+                "useCardinals": "Käytä kardinaaleja (N,E,W,S)",
+                "lineEnds": "Tulosteeseen rivin loput",
+                "degreeFormat":{
+                    "label": "Kulman muoto/yksikkö",
+                    "degree": "Aste",
+                    "gradian": "Gooni (graadi)",
+                    "radian": "Radiaani"
+                },
+                "lineSeparator": {
+                    "label": "Rivin erotin",
+                    "win": "Windows / DOS",
+                    "unix": "Unix",
+                    "mac": "MacOS"
+                },
+                "delimeters":{
+                    "point": "Piste",
+                    "comma": "Pilkku",
+                    "tab": "Tabulaattori",
+                    "space": "Välilyönti",
+                    "semicolon": "Puolipiste"
+                }
             },
             "export": {
                 "title": "Aineiston muodostaminen",

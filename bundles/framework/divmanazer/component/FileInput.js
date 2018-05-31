@@ -257,14 +257,16 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         },
         _getAcceptedTypesString: function (){
             var allowedFiles = this.options.allowedFileTypes;
-            var accepted = "";
-            if (allowedFiles && allowedFiles.length > 0){
-                accepted = allowedFiles[0];
-                for (var i = 1 ; i < allowedFiles.length; i++){
-                    accepted += "," + allowedFiles[i];
-                }
+            var acceptedTypes;
+            if (Array.isArray(allowedFiles)){
+                acceptedTypes = allowedFiles.map(function (type) {
+                    return type;
+                }).join(',');
+            } else {
+                //if not defined in option, accept all
+                acceptedTypes = "";
             }
-            return accepted;
+            return acceptedTypes;
         },
         setVisible: function (visible) {
             var elem = this.getElement();
@@ -274,10 +276,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 elem.css("display", "");
             }
         },
-        /* Do we need this??
-        exportToFile: function ( data, filename ) {
+        //TODO should these be in different place
+        exportToFile: function ( data, filename, type ) {
             var me = this;
-            var blob = new Blob([data], {type: 'text'});
+            var blob = new Blob([data], {type: type});
             if( window.navigator.msSaveOrOpenBlob ) {
                 window.navigator.msSaveBlob(blob, filename);
             }
@@ -289,7 +291,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 elem.click();        
                 document.body.removeChild(elem);
             }
-        },*/
+        },
         _showPopup: function (title, msg){
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 btn = dialog.createCloseButton(this.loc('buttons.close'));

@@ -117,7 +117,6 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         if (enableFlag) {
             chosen.prop('disabled', false);
         } else {
-            this.resetToPlaceholder();
             chosen.prop('disabled', true);
         }
         chosen.trigger('chosen:updated');

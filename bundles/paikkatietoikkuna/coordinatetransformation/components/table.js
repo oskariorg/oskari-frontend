@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             var isEmpty = true;
             var elevationCells = me.getElements().rows.find('.elevation');
             if ( dimension === 2 ) {
-                elevationCells.attr("contenteditable", false); //TODO always??
+                //elevationCells.attr("contenteditable", false); //TODO always??
                 //check if elevationcells have value, if true don't hide but grey out
                 /*elevationCells.each( function (key, val) {
                     var element = jQuery( val );
@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                     elevationCells.addClass('oskari-hidden');
                 //}
             } else {
-                elevationCells.attr("contenteditable", true); //TODO always??
+                //elevationCells.attr("contenteditable", true); //TODO always??
 
                 /*if ( elevationCells.hasClass('cell-disabled') ) {
                     elevationCells.removeClass('cell-disabled');
@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
          * @method render
          * @param { Array } coords, array of coordinate arrays
          */
-        render: function ( coords ) {
+        render: function ( coords, dimension) {
             var table = this.getElements().table;
             var row,
                 rowData = {},
@@ -140,13 +140,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 coord = coords[i];
                 rowData.col1 = coord[0];
                 rowData.col2 = coord[1];
-                if (coord[2]){
+                if (dimension === 3){
                     rowData.elev = coord[2];
                 }
                 row = this.template.row({coords:rowData});
                 table.prepend(row);
             }
             this.handleTableSize(coords.length, true);
+            this.handleDisplayingElevationRows(dimension)
             //table.trigger('RowCountChanged');
         },
         displayNumberOfDataRows: function ( number ) {
@@ -229,7 +230,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         },*/
         updateHeader: function (epsgValues, elevSystem) {
             this.getElements().header.remove();
-            if (!epsgValues){
+            if (!epsgValues.coord){
                 return;
             }
             var x = "",
