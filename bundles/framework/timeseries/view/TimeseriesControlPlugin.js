@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
         me._d3TimeDef = Oskari.getLocalization('timeseries').d3TimeDef;
         me._widthMargin = conf.widthMargin || 130;
+        me._topMargin = conf.topMargin || 0;
         me._waitingForFrame = false;
 
         me._delegate = delegate;
@@ -287,6 +288,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._element.append(aux);
             } else {
                 me._setWidth(me.getSandbox().getMap().getWidth(), true);
+                me._applyTopMargin(this._topMargin);
                 me._element.prepend(aux);
                 me._initMenus();
                 me._makeDraggable();
@@ -314,6 +316,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 this._timelineWidth = targetWidth;
                 if (!suppressUpdate) {
                     this._updateTimelines(this._inMobileMode);
+                }
+            }
+        },
+        /**
+         * @method _applyTopMargin
+         * @private
+         *
+         * @param  {number | string} topMargin Top margin for control as number representing px or css syntax using "px" or "%".
+         */
+        _applyTopMargin: function (topMargin) {
+            if (!this._inMobileMode) {
+                if (typeof topMargin === 'string') {
+                    if (topMargin.includes('%')) {
+                        var mapHeight = this.getSandbox().getMap().getHeight() || 200;
+                        var percetageFromTop = topMargin.substr(0, topMargin.length - 1);
+                        if (!isNaN(percetageFromTop)) {
+                            var margin = mapHeight / 100 * percetageFromTop;
+                            this._element.css('margin-top', margin + 'px');
+                        }
+                    } else {
+                        this._element.css('margin-top', topMargin);
+                    }
+                } else if (typeof topMargin === 'number') {
+                    this._element.css('margin-top', margin + 'px');
                 }
             }
         },
@@ -605,9 +631,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param {Oskari.Sandbox} sandbox
          */
         _stopPluginImpl: function (sandbox) {
-            this._setAnimationState(false);
-            this.removeFromPluginContainer(this.getElement());
-        },
+            if (this._element) {
+                this._setAnimationState(false);
+                this.removeFromPluginContainer(this.getElement());
+            }
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]

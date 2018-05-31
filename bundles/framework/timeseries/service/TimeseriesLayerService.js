@@ -63,6 +63,15 @@ Oskari.clazz.define(
                     series.delegate.destroy();
                     this.updateTimeseriesLayers();
                 }
+            },
+            'MapLayerVisibilityChangedEvent': function (event) {
+                if (!event.getMapLayer().isVisible()) {
+                    var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
+                    if (series) {
+                        series.delegate.destroy();
+                    }
+                }
+                this.updateTimeseriesLayers();
             }
         },
         /**

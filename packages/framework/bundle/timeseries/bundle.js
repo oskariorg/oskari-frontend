@@ -33,7 +33,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundle"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/timeseries/view/TimeseriesControlPlugin.js"
-            },{
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/timeseries/publisher/TimeseriesTool.js"
+            }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/timeseries/WMSAnimator.js"
             }, {
