@@ -118,10 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var dsSelector = main.find('.stats-ds-selector');
         var options = {
             placeholder_text: locale.panels.newSearch.selectDatasourcePlaceholder,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
-            no_results_text: locale.panels.newSearch.noResults,
-            width: '100%'
+            no_results_text: locale.panels.newSearch.noResults
         };
         var dsSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
         var dropdown = dsSelect.create(sources, options);
@@ -136,10 +133,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me.spinner.insertTo(indicatorSelector);
         var indicOptions = {
             placeholder_text: locale.panels.newSearch.selectIndicatorPlaceholder,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
             no_results_text: locale.panels.newSearch.noResults,
-            width: '100%',
             multi: true
         };
         var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
@@ -153,10 +147,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionOptions = {
             placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
             no_results_text: locale.panels.newSearch.noResults,
-            width: '100%',
             multi: true
         };
 

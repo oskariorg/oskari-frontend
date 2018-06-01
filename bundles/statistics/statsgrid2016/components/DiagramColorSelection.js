@@ -22,10 +22,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DiagramColorSelection', functio
         }];
         var dropdownOptions = {
             placeholder_text: this.loc.datacharts.chooseColor,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
             no_results_text: 'locale.panels.newSearch.noResults',
-            width: '100%'
         };
         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
         var dropdown = select.create(selections, dropdownOptions);

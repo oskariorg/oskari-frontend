@@ -35,13 +35,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
             }
 
             var combinedValues = {};
-
             indicator.selectors.forEach(function (selector, index) {
                 selector.allowedValues.forEach(function (val) {
                     if (!combinedValues[selector.id]) {
-                        combinedValues[selector.id] = [];
+                        combinedValues[selector.id] = {
+                            values: [],
+                            time: indicator.time || false
+                        };
                     }
-
                     var name = val.name || val.id || val;
                     val.title = val.name;
                     var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
@@ -50,7 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                         id: val.id || val,
                         title: optName
                     };
-                    combinedValues[selector.id].push(valObject);
+                    combinedValues[selector.id]['values'].push(valObject);
                 });
             });
 
@@ -72,7 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         });
     },
     handleMultipleIndicators: function (datasrc, indicators) {
-        indicators = indicators.filter(function (n) { return n != ''; });
+        indicators = indicators.filter(function (n) { return n !== ''; });
         var me = this;
         var combinedValues = {};
         var regionsets = [];
@@ -80,8 +81,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
         function addMissingElements (list, newValues, propertyName) {
             if (!list) {
-                return [].concat(newValues);
+                return jQuery.extend({}, newValues);
             }
+            if (list.hasOwnProperty('values')) {
+                list = list['values'];
+                newValues = newValues['values'];
+            }
+            // TODO: THIS IS BROKEN NOW, FIX TO USE OBJECT
             return list.concat(newValues.filter(function (value) {
                 return !list.some(function (existingItem) {
                     if (propertyName) {
