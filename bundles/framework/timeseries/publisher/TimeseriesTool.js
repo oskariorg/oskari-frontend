@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
                     showControl: true,
                     location: this.allowedLocations[0],
                     widthMargin: 200,
-                    topMargin: '10%'
+                    topMargin: '90px'
                 }
             };
         },
