@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                     if (!combinedValues[selector.id]) {
                         combinedValues[selector.id] = {
                             values: [],
-                            time: indicator.time || false
+                            time: selector.time || false
                         };
                     }
                     var name = val.name || val.id || val;
@@ -81,13 +81,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
 
         function addMissingElements (list, newValues, propertyName) {
             if (!list) {
-                return jQuery.extend({}, newValues);
+                return [].concat(newValues);
             }
-            if (list.hasOwnProperty('values')) {
-                list = list['values'];
-                newValues = newValues['values'];
-            }
-            // TODO: THIS IS BROKEN NOW, FIX TO USE OBJECT
+
             return list.concat(newValues.filter(function (value) {
                 return !list.some(function (existingItem) {
                     if (propertyName) {
@@ -97,14 +93,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 });
             }));
         }
-
         indicators.forEach(function (indId) {
             var deferred = new jQuery.Deferred();
             me.handleSingleIndicator(indId, function (value) {
                 // include missing regionsets
                 regionsets = addMissingElements(regionsets, value.regionset);
                 Object.keys(value.selectors).forEach(function (selectorName) {
-                    combinedValues[selectorName] = addMissingElements(combinedValues[selectorName], value.selectors[selectorName], 'id');
+                    if (!combinedValues[selectorName]) {
+                        combinedValues[selectorName] = {
+                            values: [],
+                            time: !!value.selectors[selectorName].time
+                        };
+                    }
+                    combinedValues[selectorName].values = addMissingElements(combinedValues[selectorName].values, value.selectors[selectorName].values, 'id');
                 });
                 deferred.resolve();
             });
@@ -117,7 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 indicators: me.indicators,
                 selectors: combinedValues,
                 regionset: regionsets
-            }
+            };
             me.trigger('Data.Loaded', data);
         });
     }
