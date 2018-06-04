@@ -85,12 +85,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             }
 
             var newActiveIndicator = false;
-
+            
             selectedIndicators.forEach(function (indicator) {
+                var added;
                 if (indicator === '') {
                     return;
                 }
-                var added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections);
+                if (Array.isArray(values.selections.year)) {
+                    values.selections.year.forEach(function (year) {
+                        var current = jQuery.extend(true, {}, values.selections);
+                        current['year'] = year;
+                        added = me.service.getStateService().addIndicator(values.datasource, indicator, current);
+                    });
+                } else {
+                    added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections);
+                }
                 if (added) {
                     newActiveIndicator = indicator;
                 }
