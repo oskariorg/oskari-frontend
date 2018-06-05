@@ -70,14 +70,6 @@ Oskari.clazz.define(
             return type + '-' + id;
         },
         /**
-         * @method forceNextUpdate
-         * Causes 'activeChanged' to trigger next time timeseries layers update.
-         */
-        forceNextUpdate: function () {
-            this._oldActive = null;
-            this._updateScheduled = false;
-        },
-        /**
          * @method registerTimeseries
          * Register new timeseries enabled thing that should get control UI
          * @param {String} id id of timeseries. Should be unique within "type"
