@@ -65,6 +65,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             me._registerForLayerFiltering();
             Oskari.on('app.start', function () {
                 me._timeseriesService.on('activeChanged', me._updateControl.bind(me));
+                me._timeseriesService.forceNextUpdate();
                 me._timeseriesLayerService.updateTimeseriesLayers();
             });
         },
