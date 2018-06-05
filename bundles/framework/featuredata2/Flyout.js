@@ -770,7 +770,11 @@ Oskari.clazz.define(
                         parseInt(tabContent.css('padding-bottom') || 0) +
                         (flyout.find('.exporter').height() || 0) + 10;
 
-                    tabContent.css('height', (parent.height() - paddings) + 'px');
+                    if (parent.height() === null) {
+                        tabContent.css('max-height', '100%');
+                    } else {
+                        tabContent.css('height', (parent.height() - paddings) + 'px');
+                    }
                     flyout.css('max-width', mapdiv.width().toString() + 'px');
                 }
                 if (me.resizable) {
