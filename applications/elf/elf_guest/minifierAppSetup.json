@@ -9,64 +9,37 @@
                     }
                 }
             }
-        },
-        {
-            "bundlename": "oskariui",
-            "metadata": {
-                "Import-Bundle": {
-                    "oskariui": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                }
-            }
         }, {
-            "bundlename": "openlayers-default-theme",
-            "metadata": {
-                "Import-Bundle": {
-                    "openlayers-default-theme": {
-                        "bundlePath": "../../../packages/openlayers/bundle/"
-                    },
-                    "openlayers-full-map": {
-                        "bundlePath": "../../../packages/openlayers/bundle/"
-                    }
-                }
-            }
-        },
-        {
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
-                    "mapwmts": {
+                    "mapmyplaces": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "maparcgis": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "mapmodule": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "oskariui": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
                     "mapwfs2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapmyplaces": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
                     "mapuserlayers": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "maparcgis": {
-                        "bundlePath": "../../../packages/arcgis/bundle/"
-                    },
-                    "mapmodule-plugin": {
+                    "ui-components": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
                     "mapfull": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
-                    "ui-components": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapanalysis": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapstats": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                    "mapwmts": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
-
                 }
             }
         }, {
@@ -79,11 +52,21 @@
                 }
             }
         }, {
+            "bundlename" : "drawtools",
+            "bundleinstancename" : "drawtools",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "drawtools" : {
+                        "bundlePath" : "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
             "bundlename": "toolbar",
             "metadata": {
                 "Import-Bundle": {
                     "toolbar": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -101,7 +84,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "infobox": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/mapping/ol3/"
                     }
                 }
             }
@@ -119,7 +102,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "metadatacatalogue": {
-                        "bundlePath": "../../../packages/catalogue/bundle/"
+                        "bundlePath": "../../../packages/catalogue/"
                     }
                 }
             }
@@ -205,10 +188,10 @@
                 }
             }
         }, {
-            "bundlename": "myplaces2",
+            "bundlename": "myplaces3",
             "metadata": {
                 "Import-Bundle": {
-                    "myplaces2": {
+                    "myplaces3": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
                 }
