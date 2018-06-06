@@ -11,9 +11,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
      */
     function (instance, config, locale, mapmodule, sandbox) {
         var me = this;
-        me._locale = locale;
+        me._locale = locale || Oskari.getMsg.bind('display', 'coordinatetool');
         me._config = config || {};
-        me._mapmodule = mapmodule;
+        me._mapmodule = mapmodule || Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         me._sandbox = sandbox;
         me._instance = instance;
         me._messageDialog = null;
@@ -171,9 +171,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 me._dialog = dialog;
             }
-            var btn = me._dialog.createCloseButton(loc.checkValuesDialog.button);
+            var btn = me._dialog.createCloseButton(loc('display.checkValuesDialog.button'));
             btn.addClass('primary');
-            me._dialog.show(loc.checkValuesDialog.title, loc.checkValuesDialog.message, [btn]);
+            me._dialog.show(loc('display.checkValuesDialog.title'), loc('display.checkValuesDialog.message'), [btn]);
         },
         /**
          * Show popup.
@@ -182,12 +182,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _showPopup: function() {
             var me = this,
                 loc = me._locale,
-                popupTitle = loc.popup.title,
+                popupTitle = loc('display.popup.title'),
                 popupContent = me._templates.popupContent.clone(),
                 crs = me.getMapModule().getProjection(),
-                crsDefaultText = loc.crs.default,
+                crsDefaultText = loc('display.crs.default'),
                 popupName = 'xytoolpopup',
-                crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs),
+                crsText = loc('display.crs.'+crs) || crsDefaultText.replace('{crs}', crs),
                 popupLocation,
                 isMobile = Oskari.util.isMobile(),
                 mapmodule = me.getMapModule(),
@@ -217,11 +217,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._lonLabel = popupContent.find('.lon-label');
             var showLatLon = me._labelMetricOrDegrees();
 
-            popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
-            popupContent.find('.mousecoordinates-label').html(loc.popup.showMouseCoordinates);
+            popupContent.find('.coordinatetool__popup__content').html(loc('display.popup.info'));
+            popupContent.find('.mousecoordinates-label').html(loc('display.popup.showMouseCoordinates'));
 
             var centerToCoordsBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            centerToCoordsBtn.setTitle(loc.popup.searchButton);
+            centerToCoordsBtn.setTitle(loc('display.popup.searchButton'));
             centerToCoordsBtn.setHandler(function () {
                 // Check valid
                 if(me._validLonLatInputs()) {
@@ -243,7 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._centerToCoordsBtn = centerToCoordsBtn;
             if(me._markersSupported()) {
                 var addMarkerBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                addMarkerBtn.setTitle(loc.popup.addMarkerButton);
+                addMarkerBtn.setTitle(loc('display.popup.addMarkerButton'));
                 buttons.push(addMarkerBtn);
 
                 addMarkerBtn.setHandler(function() {
@@ -426,7 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var reverseGeoCheckbox = geocodeController.find('input.reverseGeoCheckbox');
             var reverseGeocodeLabel = geocodeController.find('div.reverseGeocode-label');
             reverseGeocodeLabel.hide();
-            geocodeController.find('label.reverseGeocodeInfoText').html(me._locale.reversegeocode.moreInfo);
+            geocodeController.find('label.reverseGeocodeInfoText').html(me._locale('display.reversegeocode.moreInfo'));
             reverseGeoCheckbox.bind('change', function() {
                 if (this.checked) {
                   reverseGeocodeLabel.show();
@@ -449,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * Add marker according to the coordinates given in coordinate popup.
          * @method  @private _addMarker
          */
-        _addMarker: function(data, messageData){
+        _addMarker: function (data, messageData) {
             var me = this,
                 loc = me._locale,
                 reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
@@ -469,7 +469,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 data = data || me._coordinateTransformationExtension.transformCoordinates(inputLonLatData, me._previousProjection, me.getMapModule().getProjection());
             } catch(err) {
                 // Cannot transform coordinates in _coordinateTransformationExtension.transformCoordinates -function
-                me._showMessage(loc.cannotTransformCoordinates.title, loc.cannotTransformCoordinates.message);
+                me._showMessage(loc('cannotTransformCoordinates.title'), loc('cannotTransformCoordinates.message'));
                 return;
             }
 
@@ -542,7 +542,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param  {Object} data       data
          * @param  {Boolean} showMarker show marker
          */
-        _getTransformedCoordinatesFromServer: function(data, showMarker, swapProjections, centerMap, markerMessageData){
+        _getTransformedCoordinatesFromServer: function (data, showMarker, swapProjections, centerMap, markerMessageData) {
             var me = this,
                 loc = me._locale,
                 fromProj = me._projectionSelect.val(),
@@ -562,7 +562,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._progressSpinner.stop();
                 },
                 errorCb = function() {
-                    me._showMessage(loc.cannotTransformCoordinates.title, loc.cannotTransformCoordinates.message);
+                    me._showMessage(loc('display.cannotTransformCoordinates.title'), loc('cannotTransformCoordinates.message'));
                     me._progressSpinner.stop();
                 };
 
@@ -621,14 +621,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var me = this,
                 el = me._templates.coordinatetool.clone();
 
-            me._locale = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
-
-            el.attr('title', me._locale.tooltip.tool);
+            el.attr('title', me._locale('display.tooltip.tool'));
 
             // Bind event listeners
             // XY icon click
             el.unbind('click');
-            el.bind('click', function(event){
+            el.bind('click', function(event) {
                 if (me._sandbox.mapMode !== "mapPublishMode") {
                     me._toggleToolState();
                     event.stopPropagation();
@@ -645,10 +643,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @method  @public isOpen
          * @return {Boolean} is popup open
          */
-        isOpen: function(){
+        isOpen: function () {
             return this._toolOpen;
         },
-        teardownUI : function() {
+        teardownUI : function () {
             //remove old element
             this.removeFromPluginContainer(this.getElement());
             if (this._popup) {
@@ -866,7 +864,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         me._updateEmergencyCallMessage(responseDataTo4326);
                     },
                     function(error) {
-                        me._coordinateTransformationExtension._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
+                        me._coordinateTransformationExtension._showMessage(me._locale('display.cannotTransformCoordinates.title'), me._locale('cannotTransformCoordinates.message'));
                 });
             }
             // Else if coordinates are from 'EPSG:4326' then use these
@@ -885,11 +883,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var minutesY = ''  + parseFloat(degmin.minutesY.replace(me._decimalSeparator,'.')).toFixed(3);
             minutesY = minutesY.replace('.', me._decimalSeparator);
 
-            coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label').html(me._locale.coordinatesTransform.emergencyCallLabel);
-            coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label-and').html(me._locale.coordinatesTransform.emergencyCallLabelAnd);
-            coordinateDisplayEmergencyCall.find('span.degreesX').html(me._locale.compass.i +' ' + degmin.degreesX);
+            coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label').html(me._locale('display.coordinatesTransform.emergencyCallLabel'));
+            coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label-and').html(me._locale('display.coordinatesTransform.emergencyCallLabelAnd'));
+            coordinateDisplayEmergencyCall.find('span.degreesX').html(me._locale('display.compass.i') + ' ' + degmin.degreesX);
             coordinateDisplayEmergencyCall.find('span.minutesX').html(minutesX);
-            coordinateDisplayEmergencyCall.find('span.degreesY').html(me._locale.compass.p + ' ' + degmin.degreesY);
+            coordinateDisplayEmergencyCall.find('span.degreesY').html(me._locale('compass.p') + ' ' + degmin.degreesY);
             coordinateDisplayEmergencyCall.find('span.minutesY').html(minutesY);
             coordinateDisplayEmergencyCall.show();
             me._checkPopupPosition();
@@ -899,13 +897,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @method  @private _updateReverseGeocode
          * @param  {Object} data lon and lat object {lonlat: { lat: 0, lon: 0}}
          */
-        _updateReverseGeocode: function(data){
+        _updateReverseGeocode: function(data) {
             var me = this,
-                locale = me._locale.reversegeocode,
+                locale = me._locale('display.reversegeocode'),
                 service = me._instance.getService(),
                 popup = me._getPopup();
 
-            if(me._toolOpen !== true || me._reverseGeocodeNotImplementedError === true) {
+            if (me._toolOpen !== true || me._reverseGeocodeNotImplementedError === true) {
                 return;
             }
 
@@ -920,7 +918,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     var hasResponse = (response && response.length > 0) ? true : false;
 
                     // type title is not found in locales
-                    if (hasResponse && me._reverseGeocodeLabel && locale[response[0].channelId]){
+                    if (hasResponse && me._reverseGeocodeLabel && locale[response[0].channelId]) {
                         me._reverseGeocodeLabel.html('');
                         for (var i = 0; i < response.length; i++) {
                             var r = response[i];
@@ -1187,11 +1185,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           }
           if(me._latLabel !== null && me._lonLabel !== null){
             if(showDegrees){
-              me._latLabel.html(loc.compass.lat + ':');
-              me._lonLabel.html(loc.compass.lon + ':');
+              me._latLabel.html(loc('display.compass.lat') + ':');
+              me._lonLabel.html(loc('display.compass.lon') + ':');
             } else {
-              me._latLabel.html(loc.compass.n + ':');
-              me._lonLabel.html(loc.compass.e + ':');
+              me._latLabel.html(loc('display.compass.n') + ':');
+              me._lonLabel.html(loc('display.compass.e') + ':');
             }
           }
           return showDegrees;
@@ -1203,7 +1201,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _allowDegrees: function(checkedProjection){
             var me = this;
-
+            var mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule')
             var selectedProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
             var projection = checkedProjection || selectedProjection;
             var conf = me._config;

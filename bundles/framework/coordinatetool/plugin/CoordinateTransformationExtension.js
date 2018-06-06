@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if (keys && keys.length > 1) {
                 me._popupContent.find('.srs').append(me._templates.projectionTransformSelect.clone());
 
-                me._popupContent.find('.coordinatetool-projection-change-header').html(me._locale.coordinatesTransform.header);
+                me._popupContent.find('.coordinatetool-projection-change-header').html(me._locale('display.coordinatesTransform.header'));
                 me._projectionSelect =  me._popupContent.find('.projection-select');
                 me._populateCoordinatesTransformSelect(me._projectionSelect);
                 me._projectionSelect.on('change', function(event) {
@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     };
 
                     var errorCb = function(){
-                        me._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
+                        me._showMessage(me._locale('display.cannotTransformCoordinates.title'), me._locale('cannotTransformCoordinates.message'));
                     };
 
                     //getting precise transformed coordinates from server
@@ -85,8 +85,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             _.each(projections, function(key) {
                 var option = me._templates.projectionSelectOption.clone();
                 option.val(key);
-                if(me._locale.coordinatesTransform.projections[key]) {
-                   option.html(me._locale.coordinatesTransform.projections[key]);
+                if(me._locale('display.coordinatesTransform.projections.' + key)) {
+                   option.html(me._locale('display.coordinatesTransform.projections.' + key));
                 } else {
                    option.html(key);
                 }

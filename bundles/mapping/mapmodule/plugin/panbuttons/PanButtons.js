@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     show: true,
                     callback: function (el) {
                         if (!me.inLayerToolsEditMode()) {
-                            var requestBuilder = me.getSandbox().getRequestBuilder(
+                            var requestBuilder = Oskari.requestBuilder(
                                 'StateHandler.SetStateRequest'
                             );
                             if (requestBuilder) {
