@@ -31,11 +31,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         var me = this;
         var getOptions = function (options) {
             // extend default options to create new object where we concat passed values
-            var combinedOptions = jQuery.extend(true, {}, me.defaultOptions);
-            Object.keys(options).forEach(function (key) {
-                combinedOptions[key] = options[key];
-            });
-            return combinedOptions;
+            return jQuery.extend(true, {}, me.defaultOptions, options);
         };
         var options = getOptions(modifiedOptions);
 
