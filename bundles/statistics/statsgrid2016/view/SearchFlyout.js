@@ -91,10 +91,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 if (indicator === '') {
                     return;
                 }
-                if (Array.isArray(values.selections.year)) {
-                    values.selections.year.forEach(function (year) {
+                if (Array.isArray(values.selections.time)) {
+                    values.selections.time.forEach(function (time) {
                         var current = jQuery.extend(true, {}, values.selections);
-                        current['year'] = year;
+                        current['time'] = time;
                         added = me.service.getStateService().addIndicator(values.datasource, indicator, current);
                     });
                 } else {

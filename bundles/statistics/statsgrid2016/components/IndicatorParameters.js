@@ -92,6 +92,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                     placeholder_text: placeholderText,
                     multi: true
                 };
+                // assign the time describing property as "time" in the object
+                var old = selected;
+                selected = 'time';
+                Object.defineProperty(selections, selected, Object.getOwnPropertyDescriptor(selections, old));
+                delete selections[old];
             } else {
                 options = {
                     placeholder_text: placeholderText
