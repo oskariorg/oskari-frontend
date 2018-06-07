@@ -92,9 +92,9 @@ function() {
                 me._checkLayerSelections();
             }, 300);
         } else if(me.__started === true) {
+            me.__plugin.teardownUI();
             me.__plugin.stopPlugin(me.__sandbox);
         }
-
 
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
@@ -350,6 +350,7 @@ function() {
             }
         }
         if(me.__plugin) {
+            me.__plugin.teardownUI();
             if(me.__sandbox){
                 me.__plugin.stopPlugin(me.__sandbox);
             }
