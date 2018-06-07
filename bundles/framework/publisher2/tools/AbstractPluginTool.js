@@ -104,6 +104,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
             me.__started = true;
         } else {
             if(me.__started === true) {
+                me.__plugin.teardownUI();
                 me.__plugin.stopPlugin(me.__sandbox);
             }
         }
