@@ -10,7 +10,7 @@ Oskari.registerLocalization(
         "register": "Rekisteröidy",
         "projectionError": {
             "title" : "Projektiot eivät ole yhteensopivia",
-            "msg": "Vaihdetaan projektiota karttajulkaisun muokkauksen mahdollistamiseksi.",
+            "msg": "Sivu ladataan uudelleen projektion vaihtamiseksi.",
             "ok": "OK",
             "cancel": "Peruuta"
         },
