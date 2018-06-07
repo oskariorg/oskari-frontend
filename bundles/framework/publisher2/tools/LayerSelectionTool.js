@@ -92,6 +92,7 @@ function() {
                 me._checkLayerSelections();
             }, 300);
         } else if(me.__started === true) {
+            me.__plugin.teardownUI();
             me.__plugin.stopPlugin(me.__sandbox);
         }
 
