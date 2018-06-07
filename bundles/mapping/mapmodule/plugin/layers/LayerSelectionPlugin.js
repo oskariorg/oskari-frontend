@@ -19,25 +19,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._defaultLocation = 'top left';
         me._index = 70;
         me._name = 'LayerSelectionPlugin';
+        me._toolOpen = false;
 
         me.initialSetup = true;
         me.templates = {};
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-layerselection': {
                     iconCls: 'mobile-layers',
                     tooltip: '',
                     sticky: true,
                     show: true,
                     callback: function () {
-                        if (me.popup && me.popup.isVisible()) {
-                            var sandbox = me.getSandbox();
-                            sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
-                            me.popup.close(true);
-                            me.popup = null;
-                        } else {
-                            me.openSelection(true);
-                        }
+                        me._toggleToolState();
                     },
                     toggleChangeIcon: true
                 }
@@ -45,6 +39,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             buttonGroup: 'mobile-toolbar'
         };
     }, {
+        _toggleToolState: function () {
+            var el = this.getElement();
+
+            if (this._toolOpen) {
+                if (el) {
+                    el.removeClass('active');
+                }
+                this._toolOpen = false;
+                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+                this.popup.close(true);
+            } else {
+                if (el) {
+                    el.addClass('active');
+                }
+                this.openSelection(true);
+                this._toolOpen = true;
+            }
+        },
         /**
          * @private @method _initImpl
          * Interface method for the module protocol. Initializes the request
@@ -609,6 +621,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
                     me.popup.onClose(function() {
                         me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-layerselection'].iconCls);
+                        me._toolOpen = false;
                     });
                     var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                     me.popup.setColourScheme({
@@ -733,6 +746,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (this.popup) {
                 this.popup.close(true);
             }
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -776,17 +791,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return true;
             }
             this.teardownUI();
-            me._element = me._createControlElement();
             if (!toolbarNotReady && mapInMobileMode) {
-                me.changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
+                me._element = me._createControlElement();
+                me.changeToolStyle(null, me._element);
                 me.refresh();
                 this.addToPluginContainer(me._element);
             }
         },
-
 
         refresh: function () {
             var me = this,
