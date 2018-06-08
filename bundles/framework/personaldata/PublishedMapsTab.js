@@ -446,7 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 link.bind('click', function () {
                     var supported = me._isCurrentProjectionSupportedForView(data);
                     if (!supported) {
-                        me.createProjectionChangeDialog('edit', function () {
+                        me.createProjectionChangeDialog(function () {
                             window.location.href = me.constructUrlWithUuid(srs, null, data);
                         });
                         return false;
