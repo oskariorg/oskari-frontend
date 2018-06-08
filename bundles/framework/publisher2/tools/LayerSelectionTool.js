@@ -349,7 +349,6 @@ function() {
             }
         }
         if(me.__plugin) {
-            me.__plugin.teardownUI();
             if(me.__sandbox){
                 me.__plugin.stopPlugin(me.__sandbox);
             }
