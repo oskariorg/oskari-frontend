@@ -12,11 +12,12 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     this.element = null;
 }, {
     defaultOptions: {
-      placeholder_text: '',
-      allow_single_deselect: true,
-      disable_search_threshold: 10,
-      no_results_text: '',
-      width: '100%'
+        placeholder_text: '',
+        allow_single_deselect: true,
+        disable_search_threshold: 10,
+        no_results_text: '',
+        multi: false,
+        width: '100%'
     },
     /**
      * @method create
@@ -26,8 +27,10 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
      * @param {Object} options
      * @return {jQuery Element} a list with chosen applied
      */
-    create: function (data, options) {
-        options = options || this.defaultOptions;
+    create: function (data, modifiedOptions) {
+        var me = this;
+        var options = jQuery.extend(true, {}, me.defaultOptions, modifiedOptions);
+
         options.allowReset = options.allowReset === false ? options.allowReset : true;
         var select = this._selectTemplate.clone();
         this.element = select;

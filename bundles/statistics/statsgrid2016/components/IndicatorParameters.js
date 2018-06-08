@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         }
         me.trigger('indicator.changed', data.regionset.length > 0);
         me._createUi(data.datasrc, data.indicators, data.selectors, data.regionset);
-
     });
 }, {
     __templates: {
@@ -87,14 +86,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
             var label = (locale.parameters[selected]) ? locale.parameters[selected] : selected.id;
             var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
-            var options = {
-                placeholder_text: placeholderText,
-                allow_single_deselect: true,
-                disable_search_threshold: 10,
-                width: '100%'
-            };
+            var options;
+            if (selections[selected].time) {
+                options = {
+                    placeholder_text: placeholderText,
+                    multi: true
+                };
+            } else {
+                options = {
+                    placeholder_text: placeholderText
+                };
+            }
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selected);
-            var dropdown = selections !== null ? select.create(selections[selected], options) : select.create(selections, options);
+            var dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
             dropdown.css({width: '205px'});
             select.adjustChosen();
             select.selectFirstValue();
