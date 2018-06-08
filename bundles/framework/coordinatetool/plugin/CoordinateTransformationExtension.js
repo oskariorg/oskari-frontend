@@ -58,15 +58,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     coordinateToolPlugin._labelMetricOrDegrees(nowSelected);
                     coordinateToolPlugin._changeCoordinateContainerVisibility(coordinateToolPlugin._allowDegrees(nowSelected));
 
-                    var successCb = function(newLonLat) {
-                         coordinateToolPlugin._updateLonLat(newLonLat);
+                    var successCb = function (newLonLat) {
+                        coordinateToolPlugin._updateLonLat(newLonLat);
                     };
 
-                    var errorCb = function(){
+                    var errorCb = function () {
                         me._showMessage(me._locale('display.cannotTransformCoordinates.title'), me._locale('cannotTransformCoordinates.message'));
                     };
 
-                    //getting precise transformed coordinates from server
+                    // getting precise transformed coordinates from server
                     me.getTransformedCoordinatesFromServer(usersInputs, coordinateToolPlugin._previousProjection, me._projectionSelect.val(), successCb, errorCb);
                     coordinateToolPlugin._previousProjection = nowSelected;
                 });
@@ -79,21 +79,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @method @private _populateCoordinatesTransformSelect
          * @param {Object} popupContent
          */
-         _populateCoordinatesTransformSelect: function(select) {
-            var me = this,
-                projections = me._config.supportedProjections;
+        _populateCoordinatesTransformSelect: function (select) {
+            var me = this;
+            var projections = me._config.supportedProjections || [];
             projections.forEach(function (key) {
                 var option = me._templates.projectionSelectOption.clone();
                 option.val(key);
-                if(me._locale('display.coordinatesTransform.projections.' + key)) {
-                   option.html(me._locale('display.coordinatesTransform.projections.' + key));
+                if (me._locale('display.coordinatesTransform.projections.' + key)) {
+                    option.html(me._locale('display.coordinatesTransform.projections.' + key));
                 } else {
-                   option.html(key);
+                    option.html(key);
                 }
                 select.append(option);
             });
-         },
-         /**
+        },
+        /**
          * @method @private _showMessage show message
          * @param  {String} title   mesage title
          * @param  {String} message mesage

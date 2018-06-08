@@ -1200,7 +1200,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _allowDegrees: function(checkedProjection){
             var me = this;
-            var mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var selectedProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
             var projection = checkedProjection || selectedProjection;
             var conf = me._config;
