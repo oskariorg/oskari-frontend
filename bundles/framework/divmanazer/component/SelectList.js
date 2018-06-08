@@ -29,11 +29,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
      */
     create: function (data, modifiedOptions) {
         var me = this;
-        var getOptions = function (options) {
-            // extend default options to create new object where we concat passed values
-            return jQuery.extend(true, {}, me.defaultOptions, options);
-        };
-        var options = getOptions(modifiedOptions);
+        var options = jQuery.extend(true, {}, me.defaultOptions, modifiedOptions);
 
         options.allowReset = options.allowReset === false ? options.allowReset : true;
         var select = this._selectTemplate.clone();

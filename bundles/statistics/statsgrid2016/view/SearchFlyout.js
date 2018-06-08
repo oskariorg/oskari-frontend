@@ -91,13 +91,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 if (indicator === '') {
                     return;
                 }
-                if (Array.isArray(values.selections.time)) {
-                    values.selections.time.forEach(function (time) {
-                        var current = jQuery.extend(true, {}, values.selections);
-                        current['time'] = time;
-                        added = me.service.getStateService().addIndicator(values.datasource, indicator, current);
-                    });
-                } else {
+                Object.keys(values.selections).forEach(function (key) {
+                    var selection = values.selections[key];
+                    if (Array.isArray(selection) && selection.length > 1) {
+                        selection.forEach(function (item) {
+                            var current = jQuery.extend(true, {}, values.selections);
+                            current[key] = item;
+                            added = me.service.getStateService().addIndicator(values.datasource, indicator, current);
+                        });
+                    }
+                });
+                if (!added) {
                     added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections);
                 }
                 if (added) {
