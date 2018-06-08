@@ -88,13 +88,12 @@ function() {
         if(enabled === true) {
             me.__plugin.startPlugin(me.__sandbox);
             me.__started = true;
-            setTimeout(function(){
+            setTimeout(function() {
                 me._checkLayerSelections();
             }, 300);
         } else if(me.__started === true) {
             me.__plugin.stopPlugin(me.__sandbox);
         }
-
 
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);

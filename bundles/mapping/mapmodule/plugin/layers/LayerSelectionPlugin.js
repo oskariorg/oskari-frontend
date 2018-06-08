@@ -23,21 +23,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me.initialSetup = true;
         me.templates = {};
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-layerselection': {
                     iconCls: 'mobile-layers',
                     tooltip: '',
                     sticky: true,
                     show: true,
                     callback: function () {
-                        if (me.popup && me.popup.isVisible()) {
-                            var sandbox = me.getSandbox();
-                            sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
-                            me.popup.close(true);
-                            me.popup = null;
-                        } else {
-                            me.openSelection(true);
-                        }
+                        me._toggleToolState();
                     },
                     toggleChangeIcon: true
                 }
@@ -45,6 +38,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             buttonGroup: 'mobile-toolbar'
         };
     }, {
+        _toggleToolState: function () {
+            var el = this.getElement();
+
+            if (this.popup && this.popup.isVisible()) {
+                if (el) {
+                    el.removeClass('active');
+                }
+                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+                this.popup.close(true);
+            } else {
+                if (el) {
+                    el.addClass('active');
+                }
+                this.openSelection(true);
+            }
+        },
         /**
          * @private @method _initImpl
          * Interface method for the module protocol. Initializes the request
@@ -733,6 +742,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (this.popup) {
                 this.popup.close(true);
             }
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -776,17 +787,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return true;
             }
             this.teardownUI();
-            me._element = me._createControlElement();
             if (!toolbarNotReady && mapInMobileMode) {
-                me.changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
+                me._element = me._createControlElement();
+                me.changeToolStyle(null, me._element);
                 me.refresh();
                 this.addToPluginContainer(me._element);
             }
         },
-
 
         refresh: function () {
             var me = this,
@@ -932,6 +942,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     }
                 }
             }
+        },
+        /**
+         * @method _stopPluginImpl BasicMapModulePlugin method override
+         * @param {Oskari.Sandbox} sandbox
+         */
+        _stopPluginImpl: function (sandbox) {
+            this.teardownUI();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     show: true,
                     callback: function (el) {
                         if (!me.inLayerToolsEditMode()) {
-                            var requestBuilder = me.getSandbox().getRequestBuilder(
+                            var requestBuilder = Oskari.requestBuilder(
                                 'StateHandler.SetStateRequest'
                             );
                             if (requestBuilder) {
@@ -239,6 +239,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 me.refresh();
                 this.addToPluginContainer(me._element);
             }
+        },
+        teardownUI: function () {
+            this.removeFromPluginContainer(this.getElement());
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+        },
+        /**
+         * @method _stopPluginImpl BasicMapModulePlugin method override
+         * @param {Oskari.Sandbox} sandbox
+         */
+        _stopPluginImpl: function (sandbox) {
+            this.teardownUI();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
