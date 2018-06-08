@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          _populateCoordinatesTransformSelect: function(select) {
             var me = this,
                 projections = me._config.supportedProjections;
-            _.each(projections, function(key) {
+            projections.forEach(function (key) {
                 var option = me._templates.projectionSelectOption.clone();
                 option.val(key);
                 if(me._locale('display.coordinatesTransform.projections.' + key)) {

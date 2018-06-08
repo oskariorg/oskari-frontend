@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
      */
     function (instance, config, locale, mapmodule, sandbox) {
         var me = this;
-        me._locale = locale || Oskari.getMsg.bind('display', 'coordinatetool');
+        me._locale = locale || Oskari.getMsg.bind(null, 'coordinatetool');
         me._config = config || {};
         me._mapmodule = mapmodule || Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         me._sandbox = sandbox;
@@ -141,14 +141,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          *
          * @return {Object} jQuery popup object
          */
-        _getPopup: function(){
+        _getPopup: function() {
             return this._popup;
         },
         /**
          * @method  @private _validLonLatInputs validate inputs
          * @return {Boolean} is inputs valid true/false
          */
-        _validLonLatInputs: function(){
+        _validLonLatInputs: function() {
             var me = this;
             if(me._lonInput && me._latInput) {
                 var lon = me._lonInput.val(),
@@ -163,11 +163,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * @method  @private _showCoordinatesNotValidMessage show coordinates are not vlaid message
          */
-        _showCoordinatesNotValidMessage: function(){
+        _showCoordinatesNotValidMessage: function() {
             var me = this;
             var loc = me._locale;
 
-            if(!me._dialog) {
+            if (!me._dialog) {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 me._dialog = dialog;
             }
@@ -185,9 +185,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 popupTitle = loc('display.popup.title'),
                 popupContent = me._templates.popupContent.clone(),
                 crs = me.getMapModule().getProjection(),
-                crsDefaultText = loc('display.crs.default'),
+                crsDefaultText = loc('display.crs.default', {crs: crs});
                 popupName = 'xytoolpopup',
-                crsText = loc('display.crs.'+crs) || crsDefaultText.replace('{crs}', crs),
                 popupLocation,
                 isMobile = Oskari.util.isMobile(),
                 mapmodule = me.getMapModule(),
@@ -296,7 +295,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             if(!me._getPreciseTransform) {
-                popupContent.find('.srs').html(crsText);
+                popupContent.find('.srs').html(crsDefaultText);
             }
 
             me._popup.createCloseIcon();
@@ -1201,7 +1200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _allowDegrees: function(checkedProjection){
             var me = this;
-            var mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule')
+            var mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var selectedProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
             var projection = checkedProjection || selectedProjection;
             var conf = me._config;
