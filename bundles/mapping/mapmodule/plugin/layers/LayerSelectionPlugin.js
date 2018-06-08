@@ -19,7 +19,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._defaultLocation = 'top left';
         me._index = 70;
         me._name = 'LayerSelectionPlugin';
-        me._toolOpen = false;
 
         me.initialSetup = true;
         me.templates = {};
@@ -42,11 +41,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         _toggleToolState: function () {
             var el = this.getElement();
 
-            if (this._toolOpen) {
+            if (this.popup && this.popup.isVisible()) {
                 if (el) {
                     el.removeClass('active');
                 }
-                this._toolOpen = false;
                 this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                 this.popup.close(true);
             } else {
@@ -54,7 +52,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     el.addClass('active');
                 }
                 this.openSelection(true);
-                this._toolOpen = true;
             }
         },
         /**
@@ -621,7 +618,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
                     me.popup.onClose(function() {
                         me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-layerselection'].iconCls);
-                        me._toolOpen = false;
                     });
                     var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                     me.popup.setColourScheme({
