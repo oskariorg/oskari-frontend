@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 }
                 Object.keys(values.selections).forEach(function (key) {
                     var selection = values.selections[key];
-                    if (Array.isArray(selection) && selection.length > 1) {
+                    if (Array.isArray(selection)) {
                         selection.forEach(function (item) {
                             var current = jQuery.extend(true, {}, values.selections);
                             current[key] = item;
