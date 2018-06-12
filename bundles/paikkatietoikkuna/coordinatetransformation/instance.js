@@ -138,15 +138,16 @@ function () {
             if (!this.isMapSelection) {
                 return;
             }
+            var lonlat = event.getLonLat();
             var label;
-            var lonlat = {
-                lon: parseInt(event._lonlat.lon),
-                lat: parseInt(event._lonlat.lat)
+            var roundedLonLat = {
+                lon: parseInt(lonlat.lon),
+                lat: parseInt(lonlat.lat)
             }
             //add coords to map coords
-            this.dataHandler.addMapCoord(lonlat);
-            label = this.helper.getLabelForMarker(lonlat);
-            this.helper.addMarkerForCoords(lonlat, label);
+            this.dataHandler.addMapCoord(roundedLonLat);
+            label = this.helper.getLabelForMarker(roundedLonLat);
+            this.helper.addMarkerForCoords(roundedLonLat, label);
         },
         'userinterface.ExtensionUpdatedEvent': function (event) {
             if(event.getExtension().getName() !==this.getName()){
