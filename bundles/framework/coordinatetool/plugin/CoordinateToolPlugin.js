@@ -185,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 popupTitle = loc('display.popup.title'),
                 popupContent = me._templates.popupContent.clone(),
                 crs = me.getMapModule().getProjection(),
-                crsDefaultText = loc('display.crs.default', {crs: crs});
+                crsDefaultText = loc('display.crs.default', {crs: crs}),
                 popupName = 'xytoolpopup',
                 popupLocation,
                 isMobile = Oskari.util.isMobile(),
