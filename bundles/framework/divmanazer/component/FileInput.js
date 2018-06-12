@@ -168,8 +168,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         _validateFile: function (file){
             var valid = true;
             var opts = this.options;
-            //if allowed file type is defined and not empty list then check that file type is allowed
-            if (opts.allowedFileTypes && opts.allowedFileTypes.length !==0 && !opts.allowedFileTypes.includes(file.type)){
+
+            if (this._checkFileType(file.type) === false ){
                 valid = false;
                 this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.invalidType'));
             }
@@ -268,6 +268,20 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             }
             return acceptedTypes;
         },
+        /**
+         * @method _checkFileType
+         * if options allowedFileTypes is defined and not empty list then check that file type is allowed
+         */
+        _checkFileType: function (fileType) {
+            var types = this.options.allowedFileTypes;
+            if (!Array.isArray(types) || types.length === 0){
+                return true;
+            }
+            return types.some(function(type) {
+                return type === fileType;
+            });
+        },
+
         setVisible: function (visible) {
             var elem = this.getElement();
             if (visible === false){
