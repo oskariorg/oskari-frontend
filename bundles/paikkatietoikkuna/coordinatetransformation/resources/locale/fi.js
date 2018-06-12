@@ -104,11 +104,12 @@ Oskari.registerLocalization(
                     "title": "Virhe muunnoksessa!",
                     "generic": "Koordinaattimuunnos epäonnistui...",
                     "invalid_coord": "Koordinaatti virheellinen. Tarkasta, että muunnettavat koordinaatit on oikeassa muodossa sekä geodeettinen koordinaatti- ja kokeusjärjestelmä ovat oikein.",
-                    "invalid_number": "Koordinaatti virheellinen. Tarkasta..",
-                    "no_coordinates": "Ei koordinaatteja",
-                    "invalid_file_settings": "Invalid file settings",
-                    "no_file": "No file entry",
-                    "invalid_coord_length": "Tiedostossa virheellinen koordinaatti. Tarkasta, että otsakerivit, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä ovat määritetty oikein."
+                    "invalid_number": "Koordinaatti virheellinen. Tarkasta..", //can we get row number from file
+                    "no_coordinates": "Ei koordinaatteja (pitäisi tulla käytännössä vain tiedostojen kanssa).",
+                    "invalid_file_settings": "Tiedoston asetukset virheelliset.", //can't be user's fault
+                    "no_file": "Lähetetystä pyynnöstä ei löytynyt tiedostoa.", //can't be user's fault
+                    "invalid_coord_length": "Tiedostosta ei saatu muodostettua koordinaattia annetuilla asetuksilla. Tarkasta, että koordinaatti erotin, otsakerivien määrä, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä (dimensio) valinnat vastaavat tiedoston sisältöä.",
+                    "invalid_coord_in_row": "Tiedostossa virheellinen koordinaatti rivillä xx."
                 },
                 "responseFile": {
                     "title": "Huomio!",
@@ -138,6 +139,7 @@ Oskari.registerLocalization(
             "showMarkers": "Näytä sijainnit kartalla",
             "export": "Vie tulokset tiedostoon",
             "select": "Valitse",
+            "selectFromMap": "Siirry valitsemaan.",
             "cancel": "Peruuta",
             "done": "Valmis",
             "ok": "Ok",
