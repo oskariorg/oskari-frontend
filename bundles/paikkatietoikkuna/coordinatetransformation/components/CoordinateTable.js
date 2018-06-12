@@ -194,16 +194,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
         setIsEditable: function ( editable ) {
             this.isEditable = editable;
             var rows = this.getElements().rows;
-            if( editable ) {
-                rows.each( function () {
-                    jQuery(this).find('.cellContent').attr("contenteditable", true);
-                });
-            }
-            else {
-                rows.each( function () {
-                    jQuery(this).find('.cellContent').attr("contenteditable", false);
-                });
-            }
+            rows.each( function () {
+                jQuery(this).find('.cellContent').attr("contenteditable", editable);
+            });
         },
         emptyTableCells: function() {
             var isEditable = this.isEditable;
@@ -213,12 +206,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                 jQuery(rows[i]).find(".cellContent").each(function(){
                     cell = jQuery(this);
                     cell.text("");//empty();
-                    cell.removeClass("invalid-coord"); //TODO row
-                    if (isEditable){
-                        cell.attr("contenteditable", true);
-                    } else {
-                        cell.attr("contenteditable", false);
-                    }
+                    cell.removeClass("invalid-coord");
+                    cell.attr("contenteditable", isEditable);
                 });
             }
         },
