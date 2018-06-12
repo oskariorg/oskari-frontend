@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                             '</div>'),
         row: _.template('<tr data-id="${regionId}">' +
                             '<td class="region" style=" border: 1px solid black ;">${regionName}</td>' +
-                            '<td class="uservalue" contenteditable=true style=" border: 1px solid black ;">${value}</td>' +
+                            '<td class="uservalue" style=" border: 1px solid black ;"> <div style="width:100%; height:100%;" contenteditable="true"> ${value} </div></td>' +
                         '</tr> '),
         import: _.template('<div class="user-indicator-import"><textarea placeholder="${placeholder}"></textarea></div>')
     },
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                 name: columns[0].innerText,
                 value: columns[1].innerText.trim()
             };
-            if (dataItem.value !== '' && !Number.isNaN(dataItem.value)) {
+            if (dataItem.value !== '' && !isNaN(dataItem.value)) {
                 // only include rows with values and cast value to number as legend expects it to be a number
                 dataItem.value = dataItem.value.replace(/,/g, '.');
                 dataItem.value = Number(dataItem.value);
