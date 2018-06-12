@@ -1,14 +1,9 @@
 div.grid-tools {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    height: 34px;
     position: static;
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 6px;
 }
-
 div.grid-tools div.column-selector-placeholder {
     border-style: none;
     float: right;
