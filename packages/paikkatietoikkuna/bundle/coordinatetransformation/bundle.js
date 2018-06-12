@@ -42,7 +42,7 @@ Oskari.clazz.define("Oskari.coordinatetransformation.bundle", function () {
             "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/components/table.js"
+            "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/components/CoordinateTable.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/components/select.js"

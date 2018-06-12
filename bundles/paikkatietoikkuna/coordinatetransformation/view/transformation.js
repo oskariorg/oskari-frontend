@@ -15,9 +15,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.importFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.helper, me.loc, "import");
         me.exportFileHandler = Oskari.clazz.create('Oskari.coordinatetransformation.view.FileHandler', me.helper, me.loc, "export");
 
-        me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc, "input" );
-        me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.table', this, me.loc, "output");
-
+        me.inputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateTable', this, me.loc, "input" );
+        me.outputTable = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateTable', this, me.loc, "output");
+        me.bindTableHoverListeners();
         me.inputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this,  me.loc, "input", me.helper);
         me.outputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this,  me.loc, "output", me.helper);
 
@@ -33,19 +33,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             me.onSystemSelectionChange(type);
         });
         me._template = {
-            wrapper: jQuery('<div class="transformation-wrapper"></div>'),
-            system: jQuery('<div class="systems"></div>'),
-            title: _.template('<h4 class="header"><%= title %></h4>'),            
+            wrapper: jQuery('<div class="transformation-wrapper"></div>'), //TODO flyout container
+            systems: jQuery('<div class="coordinate-systems-wrapper"></div>'),
+            tables: jQuery('<div class="coordinate-tables-wrapper"></div>'),
+            divider: jQuery('<div class="auto-margin-divider"></div>'),
+            title: _.template('<h4 class="header"><%= title %></h4>'), //TODO move
+            //TODO oskari btn
             transformButton: _.template(
                 '<div class="transformation-button" style="display:inline-block;">' +
-                    '<input class="primary" id="transform" type="button" value="<%= convert %> >>">' +
+                    '<input class="primary" type="button" value="<%= convert %> >>">' +
                 '</div>'
             ),
+            //TODO oskari btn
             utilRow: _.template(
-                '<div class="util-row">' +
+                '<div class="util-row-wrapper">' +
                     '<input class="clear" type="button" value="<%= clear %> ">' +
                     '<input class="show" type="button" value="<%= show %> ">' +
-                     '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %> ">' +
+                    '<input class="export primary" type="button" value="<%= fileexport %> ">' +
                 '</div>'
             )
         }
@@ -74,7 +78,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             });
                                                             
             var wrapper = this._template.wrapper.clone();
-            var system = this._template.system.clone();
+            var systems = this._template.systems.clone();
             if ( this.sourceSelect.getElement() ) {
                 wrapper.append( this.sourceSelect.getElement() );
             }
@@ -82,28 +86,41 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 var element = this.inputSystem.getElement();
                 element.attr('data-type', 'coordinate-input');
                 element.prepend( inputTitle );
-                system.append( element );
+                systems.append( element );
             }
+            systems.append( this._template.divider.clone());
             if ( this.outputSystem.getElement() ) { //TODO move
                 var element = this.outputSystem.getElement();
                 element.attr('data-type', 'coordinate-output');
                 element.prepend( resultTitle );
-                system.append( element );
+                systems.append( element );
             }
-            wrapper.append(system);
+            wrapper.append(systems);
 
             this.fileInput.setVisible(false);
             wrapper.find( '.datasource-info' ).append( this.fileInput.getElement() );
-
-            wrapper.append( inputTable );
-            wrapper.append( transformButton );
-            wrapper.append( targetTable );
+            var tables = this._template.tables.clone();
+            tables.append( inputTable );
+            tables.append( transformButton );
+            tables.append( targetTable );
+            wrapper.append( tables );
             wrapper.append( utilRow );
 
             jQuery(container).append(wrapper);
 
             this.handleButtons();
             this.handleRadioButtons();
+        },
+        bindTableHoverListeners: function(){
+            var me = this;
+            this.inputTable.on('HighlightTableRow', function(data){
+                me.inputTable.highlightRow (data);
+                me.outputTable.highlightRow (data);
+            });
+            this.outputTable.on('HighlightTableRow', function(data){
+                me.inputTable.highlightRow (data);
+                me.outputTable.highlightRow (data);
+            });
         },
         setVisible: function ( visible ) {
             if( !visible ) {
@@ -278,6 +295,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 jQuery(tableElem).find('.oskari-table-content').off("focusout", me.inputTableHandler);
             }
         },
+
+        //TODO to table
         inputTableHandler: function (event){
             var me = event.data.meRef;
             var dimension = me.instance.getDimension("input");
@@ -310,9 +329,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             me.dataHandler.setInputCoords(inputCoords, true);
             me.inputTable.handleTableSize(inputCoords.length);
         },
-
+        //TODO to table
         handleCell: function(coord, cell){ //or handleRow
-            var cell = jQuery(cell);
+            var cell = jQuery(cell).find('.cellContent');
             var cellValue = cell.html().replace(',', '.');
             var num = parseFloat(cellValue);
             if (isNaN(num)){ //do not update input coords
@@ -360,7 +379,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     me.helper.checkDimensions(me.getCrsOptions(), me.handleExport.bind(me));
                 }
             });
-            container.find('#transform').on("click", function () {
+            container.find('.transformation-button input').on("click", function () {
                 validCrsSelects = me.helper.validateCrsSelections (me.getCrsOptions());
                 if (validCrsSelects === true){
                     me.helper.checkDimensions(me.getCrsOptions(), me.transformToTable.bind(me));
