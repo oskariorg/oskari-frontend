@@ -10,39 +10,39 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this.selectInstances = {};
         this.dropdowns = {};
         this._template = {
-            systemWrapper: jQuery('<div class="coordinateSystemWrapper"></div>'),
+            systemWrapper: jQuery('<div class="coordinate-system-wrapper"></div>'),
             coordinateSystemSelection: _.template(
                 '<div class="transformation-system">' +
                     '<h5> ${ title }</h5>'+
-                    '<div class="system datum center-align" data-system="datum">' +
+                    '<div class="system datum selection-wrapper" data-system="datum">' +
                         '<b class="dropdown_title"> ${ geodetic_datum }</b>' +
                         '<div class="selectMountPoint"></div>' +
                         '<a href="#">' +
                             '<div class="infolink icon-info"></div>' +
                         '</a>' +
                     '</div>' +
-                    '<div class="system coordinate center-align" data-system="coordinate">' +
+                    '<div class="system coordinate selection-wrapper" data-system="coordinate">' +
                         '<b class="dropdown_title"> ${ coordinate_system }</b>' +
                         '<div class="selectMountPoint"></div>' +
                         '<a href="#">' +
                             '<div class="infolink icon-info"></div>' +
                         '</a>' +
                     '</div>' +
-                    '<div class="system projection center-align" data-system="projection">' +
+                    '<div class="system projection selection-wrapper" data-system="projection">' +
                         '<b class="dropdown_title"> ${ map_projection }</b>' +
                         '<div class="selectMountPoint"></div>' +
                         '<a href="#">' +
                             '<div class="infolink icon-info"></div>' +
                         '</a>' +
                     '</div>'+
-                    '<div class="system geodetic-coordinate center-align" data-system="geodetic-coordinate">' +
+                    '<div class="system geodetic-coordinate selection-wrapper" data-system="geodetic-coordinate">' +
                         '<b class="dropdown_title"> ${ geodetic_coordinate_system } *</b>' +
                         '<div class="selectMountPoint"></div>' +
                         '<a href="#">' +
                             '<div class="infolink icon-info"></div>' +
                         '</a>' +
                     '</div>' +
-                    '<div class="system elevation center-align" data-system="elevation">' +
+                    '<div class="system elevation selection-wrapper" data-system="elevation">' +
                         '<b class="dropdown_title"> ${ elevation_system } </b>' +
                         '<div class="selectMountPoint"></div>' +
                         '<a href="#">' +
@@ -67,6 +67,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         createUi: function () {
             var me = this;
             var wrapper = this._template.systemWrapper.clone();
+            wrapper.addClass(this.type);
 
             var coordinateSystemSelection = this._template.coordinateSystemSelection({
                 title: this.loc('flyout.coordinateSystem.title'),
