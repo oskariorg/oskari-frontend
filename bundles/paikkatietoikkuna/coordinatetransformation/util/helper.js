@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         if (settings.decimalSeparator === "," && settings.coordinateSeparator === "comma"){
             error += this.loc('flyout.transform.validateErrors.doubleComma');
         }
-        if (requireFileName === true && settings.fileName === ""){
+        if (requireFileName === true && !settings.fileName && settings.fileName === ""){
             error += this.loc('flyout.transform.validateErrors.noFileName');
         }
         if (error.length !== 0){

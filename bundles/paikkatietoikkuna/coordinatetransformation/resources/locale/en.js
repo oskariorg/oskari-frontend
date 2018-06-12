@@ -108,7 +108,8 @@ Oskari.registerLocalization(
                     "no_coordinates": "Ei koordinaatteja",
                     "invalid_file_settings": "Invalid file settings",
                     "no_file": "No file entry",
-                    "invalid_coord_length": "Tiedostossa virheellinen koordinaatti. Tarkasta, että otsakerivit, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä ovat määritetty oikein."
+                    "invalid_coord_length": "Tiedostossa virheellinen koordinaatti. Tarkasta, että otsakerivit, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä ovat määritetty oikein.",
+                    "invalid_coord_in_row": "Tiedostossa virheellinen koordinaatti rivillä xx."
                 },
                 "responseFile": {
                     "title": "Attention!",
@@ -138,6 +139,7 @@ Oskari.registerLocalization(
             "showMarkers": "Näytä sijainnit kartalla",
             "export": "Vie tulokset tiedostoon",
             "select": "Välj",
+            "selectFromMap": "Siirry valitsemaan.",
             "cancel": "Peruuta",
             "done": "Valmis",
             "ok": "Ok",

@@ -9,21 +9,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         me.settings;
         me.showFormatRow = true;
         me._template = {
-            settings: _.template('<div class="oskari-coordinate-form">' +
+            settings: _.template('<div class="coordinatetransformation-file-form">' +
                                     '<% if (obj.export === true) { %> '+
-                                        '<div class="fileRow">' +
+                                        '<div class="selection-wrapper fileName">' +
                                             '<b class="title">${fileName}</b>' +
-                                            '<input id="filename" type="text">' +
-                                        '</div>'+
-                                        '<div class="decimalCountLine"> '+
-                                            '<b class="title">${decimalCount}</b>'+
-                                            '<input id="decimals" type="number" value="0" min="0" max = "20" required> '+
+                                            '<input type="text">' +
                                             '<div class="infolink icon-info"></div>' +
                                         '</div>'+
-                                        '<div class="lineSeparatorRow"> '+
+                                        '<div class="selection-wrapper decimalCount"> '+
+                                            '<b class="title">${decimalCount}</b>'+
+                                            '<input type="number" value="0" min="0" max = "20" required> '+
+                                            '<div class="infolink icon-info"></div>' +
+                                        '</div>'+
+                                        '<div class="selection-wrapper lineSeparator"> '+
                                             '<b class="title">${lineSeparator}</b> '+
                                             '<div class="settingsSelect">'+
-                                                '<select id="lineSeparator">'+
+                                                '<select>'+
                                                     '<option value="win">Windows / DOS</option>'+
                                                     '<option value="unix">Unix</option>'+
                                                     '<option value="mac">MacOS</option>'+
@@ -32,16 +33,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                             '<div class="infolink icon-info"></div>' +
                                         '</div>'+
                                     '<% } else { %>'+
-                                        '<div class="headerLineCount"> '+
+                                        '<div class="selection-wrapper headerLineCount"> '+
                                             '<b class="title">${headerCount}</b>'+
-                                            '<input id="headerrow" type="number" value="0" min="0" required> '+
+                                            '<input type="number" value="0" min="0" required> '+
                                             '<div class="infolink icon-info"></div>' +
                                         '</div>'+
                                     '<% } %> ' +
-                                    '<div class="formatRow"> '+
+                                    '<div class="selection-wrapper unitFormat"> '+
                                         '<b class="title">${format}</b> '+
                                         '<div class="settingsSelect">'+
-                                            '<select id="unit">'+
+                                            '<select>'+
                                                 '<option value="degree">${degree}</option>'+
                                                 '<option value="gradian">${gradian}</option>'+
                                                 '<option value="radian">${radian}</option>'+
@@ -54,20 +55,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '</div>'+
                                         '<div class="infolink icon-info"></div>' +
                                     '</div>'+
-                                    '<div class="decimalSeparator"> '+
+                                    '<div class="selection-wrapper decimalSeparator"> '+
                                         '<b class="title">${decimalSeparator}</b> '+
                                         '<div class="settingsSelect">'+
-                                            '<select id="decimalSeparator">'+
+                                            '<select>'+
                                                 '<option value=".">${point}</option>'+
                                                 '<option value=",">${comma}</option>'+
                                             '</select>'+
                                         '</div>' +
                                         '<div class="infolink icon-info"></div>' +
                                     '</div>' +
-                                    '<div class="coordinateSeparator"> '+
+                                    '<div class="selection-wrapper coordinateSeparator"> '+
                                         '<b class="title">${coordinateSeparator}</b> '+
                                         '<div class="settingsSelect">'+
-                                            '<select id="coordinateSeparator">'+
+                                            '<select>'+
                                                 '<option value="tab">${tab}</option>'+
                                                 '<option value="space">${space}</option>'+
                                                 '<option value="comma">${comma}</option>'+
@@ -76,29 +77,29 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '</div>' +
                                         '<div class="infolink icon-info"></div>' +
                                     '</div>' +
-                                    '<label class="lbl">' +
-                                        '<input id="prefixId" class="chkbox" type="checkbox">' +
+                                    '<label class="lbl prefixId">' +
+                                        '<input class="chkbox" type="checkbox">' +
                                         '<span>${prefixId}</span>' +
                                         '<div class="infolink icon-info"></div>' +
                                     '</label>'+
-                                    '<label class="lbl">' +
-                                        '<input id="reversecoordinates" class="chkbox" type="checkbox">' +
+                                    '<label class="lbl reverseCoordinates">' +
+                                        '<input class="chkbox" type="checkbox">' +
                                         '<span>${reverseCoords}</span>' +
                                         '<div class="infolink icon-info"></div>' +
                                     '</label> '+
                                     '<% if (obj.export === true) { %> '+
-                                        '<label class="lbl">' +
-                                            '<input id="writeHeader" class="chkbox" type="checkbox">' +
+                                        '<label class="lbl writeHeader">' +
+                                            '<input class="chkbox" type="checkbox">' +
                                             '<span>${writeHeader}</span>' +
                                             '<div class="infolink icon-info"></div>' +
                                         '</label>'+
-                                        '<label class="lbl">' +
-                                            '<input id="lineEnds" class="chkbox" type="checkbox">' +
+                                        '<label class="lbl lineEnds">' +
+                                            '<input class="chkbox" type="checkbox">' +
                                             '<span>${lineEnds}</span>' +
                                             '<div class="infolink icon-info"></div>' +
                                         '</label>'+
-                                        '<label class="lbl">' +
-                                            '<input id="useCardinals" class="chkbox" type="checkbox">' +
+                                        '<label class="lbl useCardinals">' +
+                                            '<input class="chkbox" type="checkbox">' +
                                             '<span>${useCardinals}</span>' +
                                             '<div class="infolink icon-info"></div>' +
                                         '</label>'+
@@ -174,18 +175,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             //var element = jQuery('.oskari-coordinate-form');
             var element = this.getElement();
             var settings = {
-                fileName: element.find('#filename').val(),
-                unit: element.find('#unit option:checked').val(),
-                decimalSeparator: element.find('#decimalSeparator option:checked').val(),
-                coordinateSeparator: element.find('#coordinateSeparator option:checked').val(),
-                prefixId: element.find('#prefixId').is(":checked"),
-                axisFlip: element.find('#reversecoordinates').is(":checked"),
-                headerLineCount: element.find('#headerrow').val(),
-                lineSeparator: element.find("#lineSeparator").val(),
-                decimalCount: element.find('#decimals').val(),
-                writeHeader: element.find('#writeHeader').is(":checked"),
-                writeLineEndings: element.find('#lineEnds').is(":checked"),
-                writeCardinals: element.find('#useCardinals').is(":checked")
+                fileName: element.find('.fileName input').val(),
+                unit: element.find('.unitFormat option:checked').val(),
+                decimalSeparator: element.find('.decimalSeparator option:checked').val(),
+                coordinateSeparator: element.find('.coordinateSeparator option:checked').val(),
+                prefixId: element.find('.prefixId input').is(":checked"),
+                axisFlip: element.find('.reverseCoordinates input').is(":checked"),
+                headerLineCount: element.find('.headerLineCount input').val(),
+                lineSeparator: element.find(".lineSeparator option:checked").val(),
+                decimalCount: element.find('.decimalCount input').val(),
+                writeHeader: element.find('.writeHeader input').is(":checked"),
+                writeLineEndings: element.find('.lineEnds').is(":checked"),
+                writeCardinals: element.find('.useCardinals input').is(":checked")
             }
             return settings;
         },

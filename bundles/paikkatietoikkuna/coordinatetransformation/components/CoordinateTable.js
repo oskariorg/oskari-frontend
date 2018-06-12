@@ -1,50 +1,58 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function( view, loc, type ) { //CoordinateTable
-    this.transformView = view;
+Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable', function( view, loc, type ) {
     this.loc = loc;
     this.type = type;
+    Oskari.makeObservable(this);
     this.container = null;
     this.defaultTableRows = 10;
     this.isEditable = false;
     this.template = {
-            tableWrapper: _.template('<div class="table"></div>'),
-            rowcounter: _.template('<div class="rowcount"><span class="row-counter">0</span> ${rows} </div>'),
-            header: _.template('<div class="oskari-table-header">'+
-                                        '<table id="oskari-tbl-header" cellpadding="0" cellspacing="0" border="0">'+
-                                            '<thead>'+
-                                                '<tr>' +
-                                                    '<th>${col1}</th>'+
-                                                    '<th>${col2}</th>'+
-                                                    '<th class="elevation">${elev}</th>'+
-                                                '</tr>'+
-                                             '</thead>'+
-                                        ' </table>'+
-                                     '</div>'),
-            row: _.template('<tr>' +
-                                    '<td class="cell" style=" border: 1px solid black ;">${coords.col1}</td>'+
-                                    '<td class="cell" headers="east" style=" border: 1px solid black ;">${coords.col2}</td>'+
-                                    '<td class="cell elevation oskari-hidden" style=" border: 1px solid black;">${coords.elev}</td>'+
-                                    '<td class="cell control"> <div class="removerow"></div></td>'+
-                                '</tr> '),
-            table:_.template('<div class="coordinatefield-table" style="display:inline-block;">' +
+            tableWrapper: _.template('<div class="coordinate-table-wrapper <%= type %>">' +
                                         '<h5> <%= title %> </h5>' +
-                                        '<div class="oskari-table-content">'+
-                                         '<div style="width:100%; overflow:auto;">'+
-                                            '<table class="hoverable oskari-coordinate-table" style="border: 1px solid black;" cellpadding="0" cellspacing="0" border="0">'+
-                                                '<tbody></tbody'+
-                                            '</table>'+
-                                         '</div>'+
-                                        '</div>'+
-                                    '</div>')
+                                        '<div class="oskari-table-header"></div>'+
+                                        '<div class="oskari-table-content"></div>'+
+                                    '</div>'
+                                    ),
+            rowcounter: _.template('<div class="rowcount"><span class="row-counter">0</span> ${rows} </div>'),
+            header: _.template('<table class="oskari-tbl-header" cellpadding="0" cellspacing="0" border="0">'+
+                                '<thead>'+
+                                    '<tr>' +
+                                        '<th>${col1}</th>'+
+                                        '<th>${col2}</th>'+
+                                        '<th class="elevation">${elev}</th>'+
+                                    '</tr>'+
+                                 '</thead>'+
+                            '</table>'
+                             ),
+            row: _.template('<tr>' +
+                                '<td class="cell">' +
+                                    '<div class="cellContent">${coords.col1}</div>' + 
+                                '</td>'+
+                                '<td class="cell">' +
+                                    '<div class="cellContent">${coords.col2}</div>' +
+                                '</td>'+
+                                '<td class="cell elevation oskari-hidden">' +
+                                    '<div class="cellContent">${coords.elev}</div>' +
+                                '</td>'+
+                                '<td class="cell control">' +
+                                    '<div class="removerow"></div>' +
+                                '</td>'+
+                            '</tr> '
+                            ),
+            table:_.template('<table class="hoverable oskari-coordinate-table two-dimensions" cellpadding="0" cellspacing="0" border="0">'+
+                                '<tbody></tbody'+
+                            '</table>'
+                            )
     }
+    var me =this;
 },  {   
         getContainer: function () {
             return jQuery(this.container);
         },
-        getElements: function () {
+        getElements: function () { //TODO: store references
             var elements = {
                 "table": this.getContainer().find( '.oskari-coordinate-table' ),
                 "rows": this.getContainer().find( ".oskari-coordinate-table tr" ),
-                "header": this.getContainer().find( ".oskari-table-header" )
+                "header": this.getContainer().find( ".oskari-tbl-header" )
             }
         return elements;
         },
@@ -59,7 +67,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         handleDisplayingElevationRows: function ( dimension ) {
             var me = this;
             var isEmpty = true;
-            var elevationCells = me.getElements().rows.find('.elevation');
+            var elevationCells = this.getElements().rows.find('.elevation');
+            var table = this.getElements().table;
             if ( dimension === 2 ) {
                 //elevationCells.attr("contenteditable", false); //TODO always??
                 //check if elevationcells have value, if true don't hide but grey out
@@ -74,6 +83,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                     elevationCells.addClass('cell-disabled');
                 } else {*/
                     elevationCells.addClass('oskari-hidden');
+                    table.addClass('two-dimensions');
+                    table.removeClass('three-dimensions');
                 //}
             } else {
                 //elevationCells.attr("contenteditable", true); //TODO always??
@@ -84,33 +95,60 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                     return;
                 } else {*/
                     elevationCells.removeClass('oskari-hidden');
+                    table.addClass('three-dimensions');
+                    table.removeClass('two-dimensions');
                 //}
             }
         },
+        //bind to all rows if row is not given
+        bindHoverRow: function(row){
+            var me = this;
+            var data = {};
+            var rows = row || this.getElements().rows;
+            rows.on('mouseenter', function(){
+                data.index = jQuery(this).index();
+                data.highlight = true;
+                me.trigger('HighlightTableRow', data);
+            });
+            rows.on('mouseleave', function(){
+                data.index = jQuery(this).index();
+                data.highlight = false;
+                me.trigger('HighlightTableRow', data);
+            });
+        },
+        highlightRow: function (data){
+            var index = data.index + 1;
+            var selector = 'tr:nth-child(' + index + ')';
+            var table = this.getElements().table;
+            if (data.highlight){
+                table.find(selector).addClass('highlighted');
+            } else {
+                table.find(selector).removeClass('highlighted');  
+            }     
+        },
         create: function () {
             var me = this;
-            var rowcounter = this.template.rowcounter({
-                rows: this.loc('flyout.coordinateTable.rows')
-            });
             var title;
             if (this.type === "input"){
                 title = this.loc('flyout.coordinateTable.input');
             } else {
                 title = this.loc('flyout.coordinateTable.output');
             }
-            var table = this.template.table({
-                title: title
-            });
+            var tableWrapper = jQuery(this.template.tableWrapper({
+                title: title,
+                type: this.type
+            }));
+            var rowcounter = this.template.rowcounter({
+                rows: this.loc('flyout.coordinateTable.rows')
+            });            
+            var table = this.template.table();
                 /*title: "title",
                 north:this.loc('flyout.coordinateTable.north'),
                 east:this.loc('flyout.coordinateTable.east'),
                 ellipse_elevation: ""
             });*/
-
-            var tableWrapper = this.template.tableWrapper();
-            tableWrapper = jQuery(tableWrapper);
-            tableWrapper.append(table);
-            tableWrapper.find('.coordinatefield-table h5').append(rowcounter);
+            tableWrapper.find('.oskari-table-content').append(table);
+            tableWrapper.find('h5').append(rowcounter);
 
             this.setElement( tableWrapper );
 
@@ -123,7 +161,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                //tableRef.append(this.template.row( { coords: coords } ) );
                this.addEmptyRow();
             }
-
             return this.getContainer();
         },
         /**
@@ -143,11 +180,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 if (dimension === 3){
                     rowData.elev = coord[2];
                 }
-                row = this.template.row({coords:rowData});
+                row = jQuery(this.template.row({coords:rowData}));
+                this.bindHoverRow(row);
                 table.prepend(row);
             }
             this.handleTableSize(coords.length, true);
-            this.handleDisplayingElevationRows(dimension)
+            this.handleDisplayingElevationRows(dimension);
             //table.trigger('RowCountChanged');
         },
         displayNumberOfDataRows: function ( number ) {
@@ -156,29 +194,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
         setIsEditable: function ( editable ) {
             this.isEditable = editable;
             var rows = this.getElements().rows;
-            if( !editable ) {
-                rows.each( function () {
-                    jQuery(this).find('td').attr("contenteditable", false);
-                });
-            }
-            else {
-                rows.each( function () {
-                    jQuery(this).find('td').attr("contenteditable", true);
-                });
-            }
+            rows.each( function () {
+                jQuery(this).find('.cellContent').attr("contenteditable", editable);
+            });
         },
         emptyTableCells: function() {
             var isEditable = this.isEditable;
             var cell;
             var rows = this.getElements().rows;
             for (var i = 0; i < rows.length; i++ ) {
-                jQuery(rows[i]).find("td").each(function(){
+                jQuery(rows[i]).find(".cellContent").each(function(){
                     cell = jQuery(this);
                     cell.text("");//empty();
                     cell.removeClass("invalid-coord");
-                    if (isEditable){
-                        cell.attr("contenteditable", true);
-                    }
+                    cell.attr("contenteditable", isEditable);
                 });
             }
         },
@@ -204,13 +233,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
             //this.getElements().table.trigger('RowCountChanged');
         },
         addEmptyRow: function(){
-            var newRow = this.template.row({coords: {}});
+            var newRow = jQuery(this.template.row({coords: {}}));
             /*if(this.isEditable){
                 jQuery(newRow).find('td').attr("contenteditable", true);
             } else {
                jQuery(newRow).find('td').attr("contenteditable", false);
             }*/
             this.getElements().table.append(newRow);
+            this.bindHoverRow(newRow);
         },
         /*bindRowCountListener: function () {
             var me = this;
@@ -278,7 +308,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.table', function(
                 } else {
                     header.find('th').addClass('three');
                 }
-            header.insertBefore( this.getContainer().find(".oskari-table-content") );
+            this.getContainer().find(".oskari-table-header").append(header);
         },
         handleClipboardPasteEvent: function () {
             var me = this;
