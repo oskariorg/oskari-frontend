@@ -52,26 +52,34 @@ Oskari.clazz.define(
          */
         __eventHandlers: {
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
-                this.updateTimeseriesLayers();
-            },
-            'AfterMapLayerAddEvent': function (event) {
-                this.updateTimeseriesLayers();
-            },
-            'AfterMapLayerRemoveEvent': function (event) {
-                var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
-                if (series) {
-                    series.delegate.destroy();
+                if (event.getMapLayer().hasTimeseries()) {
                     this.updateTimeseriesLayers();
                 }
             },
-            'MapLayerVisibilityChangedEvent': function (event) {
-                if (!event.getMapLayer().isVisible()) {
+            'AfterMapLayerAddEvent': function (event) {
+                if (event.getMapLayer().hasTimeseries()) {
+                    this.updateTimeseriesLayers();
+                }
+            },
+            'AfterMapLayerRemoveEvent': function (event) {
+                if (event.getMapLayer().hasTimeseries()) {
                     var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
                     if (series) {
                         series.delegate.destroy();
+                        this.updateTimeseriesLayers();
                     }
                 }
-                this.updateTimeseriesLayers();
+            },
+            'MapLayerVisibilityChangedEvent': function (event) {
+                if (event.getMapLayer().hasTimeseries()) {
+                    if (!event.getMapLayer().isVisible()) {
+                        var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
+                        if (series) {
+                            series.delegate.destroy();
+                        }
+                    }
+                    this.updateTimeseriesLayers();
+                }
             }
         },
         /**

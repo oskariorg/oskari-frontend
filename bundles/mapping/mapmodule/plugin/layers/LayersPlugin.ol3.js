@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         this._visibilityPollingInterval = 1500;
         this._visibilityCheckOrder = 0;
         this._previousTimer = null;
+        this._lastVisibilityCheckResult = {};
     }, {
     _createEventHandlers: function () {
         var me = this;
@@ -201,9 +202,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         for (i = 0; i < layers.length; ++i) {
             layer = layers[i];
 
-            if (layer.isVisible()) {
+            var visible = layer.isVisible();
+            var previousVisibility = this._lastVisibilityCheckResult[layer.getId()];
+            if (typeof previousVisibility !== 'undefined' && visible !== previousVisibility) {
                 this.notifyLayerVisibilityChanged(layer);
             }
+            this._lastVisibilityCheckResult[layer.getId()] = visible;
         }
         this._visibilityCheckScheduled = false;
     },
