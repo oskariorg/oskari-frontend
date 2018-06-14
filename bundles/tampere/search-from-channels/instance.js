@@ -877,10 +877,20 @@ Oskari.clazz.define(
 
             if(isSelected){
                       
-            bounds = source.getExtent();                        
-            center = ol.extent.getCenter(bounds);            
-            
-            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center[0], center[1],bounds);
+            bounds = source.getExtent();
+            center = ol.extent.getCenter(bounds);
+
+            var topLeft =  ol.extent.getTopLeft(bounds);
+            var bottomRight =  ol.extent.getBottomRight(bounds); 
+
+            var zoom = {
+                top: topLeft[1],
+                left: topLeft[0],
+                right: bottomRight[0],
+                bottom: bottomRight[1]
+            }
+
+            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center[0], center[1], zoom);            
             me.sandbox.request(me, mapmoveRequest);
 
             }else{
