@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
             return this._element;
         },
         updateProgressBar: function (goal, current) {
-            if (goal === 0) {
+            if (goal <= 0) {
                 return;
             }
             var width = (current / goal * 100).toFixed(1);

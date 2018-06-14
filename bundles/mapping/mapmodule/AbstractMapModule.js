@@ -929,18 +929,19 @@ Oskari.clazz.define(
                     return;
                 }
 
-                if (oskariLayer.getOptions().singleTile) {
-                    done = oskariLayer.loadingDone();
-                    tilesLoaded += oskariLayer.loaded;
-                    this.progBar.updateProgressBar(1, tilesLoaded);
-                } else {
-                    layers.forEach(function (layer) {
+                layers.forEach(function (layer) {
+                    if (layer.getOptions().singleTile) {
+                        var layerDone = layer.loadingDone();
+                        if (layerDone) {
+                            me.progBar.updateProgressBar(1, layer.loaded);
+                        }
+                    } else {
                         tilesLoaded += layer.loaded;
                         pendingTiles += layer.tilesToLoad;
-                    });
-                    done = oskariLayer.loadingDone();
-                    this.progBar.updateProgressBar(pendingTiles - 1, tilesLoaded);
-                }
+                    }
+                });
+                done = oskariLayer.loadingDone();
+                this.progBar.updateProgressBar(pendingTiles - 1, tilesLoaded);
             }
             this.loadtimer = setTimeout(function () {
                 var eventBuilder = Oskari.eventBuilder('ProgressEvent');
