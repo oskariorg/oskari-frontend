@@ -863,15 +863,20 @@ Oskari.clazz.define(
                 }
             }
         },
-        isLoading: function () {
-            var oskariLayers = this.getSandbox().getMap().getLayers();
+        isLoading: function (id) {
             var loading = false;
-            oskariLayers.forEach(function (layer) {
-                if (loading) {
-                    return;
-                }
-                loading = layer.getLoadingState().loading > 0;
-            });
+            if (typeof id === 'undefined') {
+                var oskariLayers = this.getSandbox().getMap().getLayers();
+                oskariLayers.forEach(function (layer) {
+                    if (loading) {
+                        return;
+                    }
+                    loading = layer.getLoadingState().loading > 0;
+                });
+            } else {
+                var oskariLayer = this.getSandbox().getMap().getSelectedLayer(id);
+                loading = oskariLayer.getLoadingState().loading > 0;
+            }
             return loading;
         },
         /**
@@ -884,7 +889,6 @@ Oskari.clazz.define(
             if (typeof errors === 'undefined') {
                 errors = false;
             }
-            var done = false;
             var me = this;
             var layers = this.getSandbox().findAllSelectedMapLayers();
             var oskariLayer = this.getSandbox().getMap().getSelectedLayer(layerId);
@@ -928,24 +932,18 @@ Oskari.clazz.define(
                     return;
                 }
                 layers.forEach(function (layer) {
-                    if (layer.hasTimeseries() || layer.getOptions().singleTile) {
-                        var layerDone = layer.loadingDone(0);
-                        if (layerDone) {
-                            if (!me.progBar.isUpdating()) {
-                                me.progBar.updateProgressBar(1, layer.loaded);
-                            }
-                        }
-                    } else {
+                    if (!layer.getOptions().singleTile) {
                         tilesLoaded += layer.loaded;
                         pendingTiles += layer.tilesToLoad;
+                        layer.loadingDone();
                     }
                 });
-                done = oskariLayer.loadingDone();
-                this.progBar.updateProgressBar(pendingTiles - 1, tilesLoaded);
+                //oskariLayer.loadingDone();
+                this.progBar.update(pendingTiles - 1, tilesLoaded);
             }
             this.loadtimer = setTimeout(function () {
                 var eventBuilder = Oskari.eventBuilder('ProgressEvent');
-                var event = eventBuilder(done, layerId);
+                var event = eventBuilder(me.isLoading(layerId), layerId);
                 me._sandbox.notifyAll(event);
             }, 50);
         },

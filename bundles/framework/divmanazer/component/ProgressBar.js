@@ -8,8 +8,37 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
         this._progressBar = jQuery('<div class="oskari-progressbar"></div>');
         this._element = null;
         this._updating = false;
+        for (var p in this.__eventHandlers) {
+            if (this.__eventHandlers.hasOwnProperty(p)) {
+                Oskari.getSandbox().registerForEventByName(this, p);
+            }
+        }
     }, {
         defaultColor: 'rgba( 0, 40, 190, 0.4 )',
+        __name: 'ProgressBar',
+        getName: function () {
+            return this.__name;
+        },
+        __eventHandlers: {
+            'ProgressEvent': function (event) {
+                var me = this;
+                var oskariLayer = Oskari.getSandbox().getMap().getSelectedLayer(event._id);
+
+                if (event._status) {
+                    if (oskariLayer.getOptions().singleTile) {
+                        oskariLayer.loadingDone(0);
+                        me.update(1, oskariLayer.loaded);
+                    }
+                }
+            }
+        },
+        onEvent: function (event) {
+            var handler = this.__eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
         /** @method create
           *  creates a progressbar with data specified
           * @param {Object} progress, how much into our goal
@@ -32,7 +61,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
             content.append(this._element);
             return this._element;
         },
-        updateProgressBar: function (goal, current) {
+        update: function (goal, current) {
             if (goal <= 0) {
                 return;
             }
@@ -58,6 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
             setTimeout(function () {
                 me._element.css({ visibility: 'hidden', width: 0, background: me.defaultColor });
             }, 400);
-        }
+        },
+        
 
     });
