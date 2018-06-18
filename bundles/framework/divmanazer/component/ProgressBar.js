@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
     function () {
         this._progressBar = jQuery('<div class="oskari-progressbar"></div>');
         this._element = null;
+        this._updating = false;
     }, {
         defaultColor: 'rgba( 0, 40, 190, 0.4 )',
         /** @method create
@@ -35,14 +36,19 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
             if (goal <= 0) {
                 return;
             }
+            this._updating = true;
             var width = (current / goal * 100).toFixed(1);
             this._element.css({ width: width + '%' });
             if (width >= 100.0) {
                 this.hide();
+                this._updating = false;
             }
         },
         setColor: function (color) {
             this._element.css({ background: color });
+        },
+        isUpdating: function () {
+            return this._updating;
         },
         show: function () {
             this._element.css({ visibility: 'visible' });

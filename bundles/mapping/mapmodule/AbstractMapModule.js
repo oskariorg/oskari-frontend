@@ -183,7 +183,6 @@ Oskari.clazz.define(
             }
 
             me._map = me.createMap();
-
             if (me._options.crosshair) {
                 me.toggleCrosshair(true);
             }
@@ -928,12 +927,13 @@ Oskari.clazz.define(
                     this.notifyErrors(errors, oskariLayer);
                     return;
                 }
-
                 layers.forEach(function (layer) {
-                    if (layer.getOptions().singleTile) {
-                        var layerDone = layer.loadingDone();
+                    if (layer.hasTimeseries() || layer.getOptions().singleTile) {
+                        var layerDone = layer.loadingDone(0);
                         if (layerDone) {
-                            me.progBar.updateProgressBar(1, layer.loaded);
+                            if (!me.progBar.isUpdating()) {
+                                me.progBar.updateProgressBar(1, layer.loaded);
+                            }
                         }
                     } else {
                         tilesLoaded += layer.loaded;
