@@ -86,8 +86,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
             var me = this;
             setTimeout(function () {
                 me._element.css({ visibility: 'hidden', width: 0, background: me.defaultColor });
-            }, 400);
-        },
-        
+            }, 1000);
+        }
 
     });
