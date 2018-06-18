@@ -27,6 +27,9 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
                 if (event._status) {
                     if (oskariLayer.getOptions().singleTile) {
                         oskariLayer.loadingDone(0);
+                        if (!me.isUpdating()) {
+                            me.show();
+                        }
                         me.update(1, oskariLayer.loaded);
                     }
                 }
