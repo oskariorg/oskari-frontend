@@ -46,19 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         var caps = this.getCapabilities(url);
         if(caps) {
             // return with cached capabilities
-            var config = me.__getLayerConfig(caps, layer);
-            var wmtsOptions = ol.source.WMTS.optionsFromCapabilities(caps, config);
-            if(config.url) {
-                // override capabilities url with the configured one
-                wmtsOptions.urls = [config.url];
-            }
-            var wmtsLayer = new ol.layer.Tile({
-                source: new ol.source.WMTS(wmtsOptions),
-                transparent: true,
-                opacity: layer.getOpacity()/100,
-                visible: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible()
-            });
-            success(wmtsLayer);
+            success(this.__creteWMTSLayer(caps, layer));
             return;
         }
 
@@ -130,26 +118,32 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         _.each(this.requestsMap[url], function(args) {
             if(!invokeFailure) {
                 var layer = args[0];
-                var config = me.__getLayerConfig(caps, layer);
-                var options = ol.source.WMTS.optionsFromCapabilities(caps, config);
-                //this doesn't get merged automatically by ol3
-                options.crossOrigin = config.crossOrigin;
-                if(config.url) {
-                    // override capabilities url with the configured one
-                    options.urls = [config.url];
-                }
-
-                var wmtsLayer = new ol.layer.Tile({
-                    opacity: layer.getOpacity() / 100.0,
-                    source : new ol.source.WMTS(options)
-                });
-                args[1](wmtsLayer);
+                args[1](this.__creteWMTSLayer(caps, layer));
             }
             else if (args.length > 2 && typeof args[2] === 'function') {
                 args[2]();
             }
         });
     },
+    __creteWMTSLayer: function (caps, layer){
+        var config = me.__getLayerConfig(caps, layer);
+        var options = ol.source.WMTS.optionsFromCapabilities(caps, config);
+        //this doesn't get merged automatically by ol3
+        options.crossOrigin = config.crossOrigin;
+        if(config.url) {
+            // override capabilities url with the configured one
+            options.urls = [config.url];
+        }
+        var wmtsLayer = new ol.layer.Tile({
+            source : new ol.source.WMTS(options),
+            opacity: layer.getOpacity() / 100.0,
+            transparent: true,
+            visible: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible()
+        });
+        return wmtsLayer;
+    },
+
+
     __getLayerConfig : function(caps, layer) {
 
             // default params and options
