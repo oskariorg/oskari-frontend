@@ -28,19 +28,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             me.updateDatasetList();
         });
     });
-
+    this.indicatorParamsList.on('cancel', function () {
+        me.dataPanel.close();
+        me.indicatorParamsList.requestIndicatorSelectors();
+    });
     this.indicatorDataForm.on('cancel', function () {
         me.genericInfoPanel.open();
         me.dataPanel.open();
+        me.indicatorParamsList.requestIndicatorSelectors();
     });
     this.indicatorDataForm.on('save', function (data) {
-        me.saveIndicatorData(data, function (err, notReallySureWhatThisCouldBe) {
+        me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
             if (err) {
-                me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetSave'));
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                 return;
             }
-            // TODO: update paramsList?
-            me.indicatorDataForm.clearUi();
+            if (data.values.length) {
+                me.saveIndicatorData(data, function (err, someData) {
+                    if (err) {
+                        me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                        Oskari.log('IndicatorFormFlyout').error(err);
+                        return;
+                    }
+                    me.displayInfo();
+                });
+            } else {
+                me.displayInfo();
+            }
         });
     });
 }, {
@@ -140,37 +154,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.dataPanel = dataPanel;
         this._accordion.addPanel(dataPanel);
         this._accordion.insertTo(this.element);
-
-        var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
-        btn.insertTo(this.element);
-        jQuery(btn.getElement()).css({
-            'float': 'right',
-            'clear': 'both'
-        });
-
-        var me = this;
-        btn.setHandler(function (event) {
-            event.stopPropagation();
-            me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
-                if (err) {
-                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                    return;
-                }
-                var dataForm = me.indicatorDataForm.getValues();
-                if (dataForm.values.length) {
-                    me.saveIndicatorData(dataForm, function (err, someData) {
-                        if (err) {
-                            me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                            Oskari.log('IndicatorFormFlyout').error(err);
-                            return;
-                        }
-                        me.displayInfo();
-                    });
-                } else {
-                    me.displayInfo();
-                }
-            });
-        });
 
         this.element.append(this.indicatorDataForm.createUi());
         this.setContent(this.element);
@@ -305,7 +288,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         okBtn.setPrimary(true);
         okBtn.setHandler(function () {
             dialog.close(true);
-            me.hide();
+            me.genericInfoPanel.close();
+            me.dataPanel.open();
+            me.indicatorParamsList.requestIndicatorSelectors();
+            me.indicatorDataForm.clearUi();
+            me.updateDatasetList();
         });
         dialog.show(title, content, [okBtn]);
     }

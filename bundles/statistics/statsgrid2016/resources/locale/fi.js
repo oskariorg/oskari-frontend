@@ -221,11 +221,11 @@ Oskari.registerLocalization({
             }
         },
         'userIndicators': {
-            'flyoutTitle': 'Lisää uusi indikaattori',
+            'flyoutTitle': 'Omat indikaattorit',
             'buttonTitle': 'Lisää uusi indikaattori',
             'buttonAddIndicator': 'Syötä dataa',
             'panelGeneric': {
-                'title': 'Tiedot',
+                'title': 'Indikaattorin tiedot',
                 'formName': 'Nimi',
                 'formDescription': 'Kuvaus',
                 'formDatasource': 'Lähde'

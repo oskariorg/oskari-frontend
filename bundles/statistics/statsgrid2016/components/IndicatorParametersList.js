@@ -18,9 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         tableHeader: _.template(
             '<thead>' +
                 '<tr>' +
-                    '<th> ${title} </th> ' +
-                    '<th> ${edit} </th> ' +
-                    '<th> ${remove} </th> ' +
+                    '<th style="float:left"> ${title} </th> ' +
                 '</tr>' +
              '</thead>'
         ),
@@ -45,15 +43,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
 
         var main = jQuery(this.__templates.main());
         this.element = main;
-        var indBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        indBtn.setTitle(this.locale('userIndicators.buttonAddIndicator'));
-        indBtn.insertTo(main);
-        this.addDatasetButton = indBtn;
-
-        indBtn.setHandler(function (event) {
-            event.stopPropagation();
-            me.requestIndicatorSelectors();
-        });
+        me.requestIndicatorSelectors();
 
         return this.getElement();
     },
@@ -63,9 +53,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
 
         var table = jQuery(this.__templates.table);
         var theader = this.__templates.tableHeader({
-            title: me.locale('userIndicators.modify.title'),
-            edit: me.locale('userIndicators.modify.edit'),
-            remove: me.locale('userIndicators.modify.remove')
+            title: me.locale('userIndicators.modify.title')
         });
         myIndicator.empty();
         table.append(theader);
@@ -117,7 +105,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     resetIndicatorSelectors: function (showInsertButton) {
         var formContainer = this.getElement().find('.new-indicator-dataset-params');
         formContainer.empty();
-        this.addDatasetButton.setVisible(showInsertButton);
         return formContainer;
     },
     requestIndicatorSelectors: function () {
@@ -154,6 +141,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         cancelBtn.insertTo(btnContainer);
         cancelBtn.setHandler(function (event) {
             me.resetIndicatorSelectors(true);
+            me.trigger('cancel');
         });
         var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
         showTableBtn.insertTo(btnContainer);

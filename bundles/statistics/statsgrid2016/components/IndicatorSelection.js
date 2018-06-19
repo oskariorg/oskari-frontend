@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me._params.attachTo(selectionsContainer);
 
         var btnAddIndicator = me.createAddIndicatorButton();
-        btnAddIndicator.insertTo(main);
+        btnAddIndicator.insertTo(main.find('.stats-ind-selector'));
         btnAddIndicator.setVisible(false);
 
         var btnEditIndicator = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
@@ -200,6 +200,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             });
             // if datasource is of type "user" the user can add new indicators to it
             btnAddIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
+            if (dsSelect.getValue().type === 'user') {
+                indicDropdown.css({width: '70%'});
+            } else {
+                indicDropdown.css({width: '100%'});
+            }
         });
 
         indicatorSelector.on('change', function () {

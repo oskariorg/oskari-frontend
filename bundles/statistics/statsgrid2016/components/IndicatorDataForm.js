@@ -85,9 +85,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         importClipboard.setHandler(function (event) {
             me.openImportPopup();
         });
-        var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
-        showTableBtn.insertTo(this.getElement());
-        showTableBtn.setHandler(function () {
+        var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+        saveBtn.insertTo(this.getElement());
+        jQuery(saveBtn.getElement()).css({
+            'float': 'right',
+            'clear': 'both'
+        });
+        saveBtn.setHandler(function () {
             me.trigger('save', me.getValues());
         });
     },

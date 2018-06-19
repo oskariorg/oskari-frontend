@@ -342,7 +342,10 @@ div.oskari-flyout {
 
 .statsgrid-legend-plugin-transparent {
   color: #FFFFFF;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-shadow: -1px -1px 0 #000,
+ 1px -1px 0 #000,
+ -1px 1px 0 #000,
+ 1px 1px 0 #000;
   pointer-events: auto;
   text-align: left;
   /* Float right to not overlap with other plugins */
@@ -700,11 +703,15 @@ div.tab-material-controls div.title {
 .stats-indicator-form-item {
   width: 96%;
   margin-bottom: 0.3125em; }
+.stats-ind-selector {
+  display: flex;
+  align-items: baseline;
+}
 
 .stats-not-logged-in {
   width: 100%;
-  height: 2.5em;
-  background-color: indianred;
+  min-height: 2.5em;
+  background-color: #FABBBB;
   margin-bottom: 0.5em;
   padding: 0.3125em;
   max-width: 31.25em; }
@@ -737,7 +744,7 @@ div.tab-material-controls div.title {
 .user-indicator-specification {
   padding: 0.3125em;
   color: white;
-  background-color: #000; }
+  background-color: #888888; }
 
 .new-indicator-dataset-params {
   display: flex;

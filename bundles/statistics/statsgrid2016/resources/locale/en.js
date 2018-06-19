@@ -224,7 +224,7 @@ Oskari.registerLocalization({
             'buttonTitle': 'Add new indicator',
             'buttonAddIndicator': 'Add data',
             'panelGeneric': {
-                'title': 'Information',
+                'title': 'Indicator data',
                 'formName': 'Name',
                 'formDescription': 'Description',
                 'formDatasource': 'Datasource'
