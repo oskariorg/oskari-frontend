@@ -46,10 +46,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         var caps = this.getCapabilities(url);
         if(caps) {
             // return with cached capabilities
-            success(this.__creteWMTSLayer(caps, layer));
+            success(this.__createWMTSLayer(caps, layer));
             return;
         }
-
         // gather capabilities requests
         // make ajax call just once and invoke all callbacks once finished
         var triggerAjaxBln = false;
@@ -118,15 +117,15 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         _.each(this.requestsMap[url], function(args) {
             if(!invokeFailure) {
                 var layer = args[0];
-                args[1](this.__creteWMTSLayer(caps, layer));
+                args[1](me.__createWMTSLayer(caps, layer));
             }
             else if (args.length > 2 && typeof args[2] === 'function') {
                 args[2]();
             }
         });
     },
-    __creteWMTSLayer: function (caps, layer){
-        var config = me.__getLayerConfig(caps, layer);
+    __createWMTSLayer: function (caps, layer) {
+        var config = this.__getLayerConfig(caps, layer);
         var options = ol.source.WMTS.optionsFromCapabilities(caps, config);
         //this doesn't get merged automatically by ol3
         options.crossOrigin = config.crossOrigin;
