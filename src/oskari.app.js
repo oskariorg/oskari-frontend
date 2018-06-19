@@ -15,15 +15,7 @@ jQuery.ajaxSetup({ cache: false });
     }
     // /CSRF
 
-    /* legacy Bundle_facade */
-    /**
-     * @class Oskari.Bundle_facade
-     * Highlevel interface to bundle management Work in progress
-     *
-     * @param {} bundleManager
-     *
-     */
-    var Bundle_facade = function () {
+    var App = function () {
         /**
          * @property appSetup
          * application startup sequence
@@ -34,7 +26,6 @@ jQuery.ajaxSetup({ cache: false });
          * @property appConfig
          * application configuration (state) for instances
          * this is injected to instances before 'start' is called
-         *
          */
         this.appConfig = {};
     };
@@ -42,7 +33,7 @@ jQuery.ajaxSetup({ cache: false });
     /**
      * FACADE will have only a couple of methods which trigger alotta operations
      */
-    Bundle_facade.prototype = {
+    App.prototype = {
         /**
          * @public @method getBundleInstanceConfigurationByName
          * Returns configuration for instance by bundleinstancename
@@ -161,7 +152,7 @@ jQuery.ajaxSetup({ cache: false });
          *   }
          */
         setApplicationSetup: function (setup) {
-            if(window.console && window.console.warn) {
+            if (window.console && window.console.warn) {
                 console.warn('Oskari.app.setApplicationSetup() is deprecated. Use Oskari.app.init() instead.');
             }
             this.init(setup);
@@ -170,7 +161,7 @@ jQuery.ajaxSetup({ cache: false });
          * Returns the identifier for this appsetup (if loaded from oskari-server/db)
          * @return {String}
          */
-        getUuid: function() {
+        getUuid: function () {
             var env = this.getApplicationSetup().env || {};
             var app = env.app || {};
             return app.uuid;
@@ -179,7 +170,7 @@ jQuery.ajaxSetup({ cache: false });
          * Returns appsetup type like "user", "published" etc
          * @return {String}
          */
-        getType: function() {
+        getType: function () {
             var env = this.getApplicationSetup().env || {};
             var app = env.app || {};
             return app.type;
@@ -189,12 +180,17 @@ jQuery.ajaxSetup({ cache: false });
          * Returns false if it's a non-public personal view of a user.
          * @return {Boolean}
          */
-        isPublic: function() {
+        isPublic: function () {
             var env = this.getApplicationSetup().env || {};
             var app = env.app || {};
             return !!app.public;
         },
-
+        /**
+         * Returns the token for xsrf
+         */
+        getXSRFToken: function () {
+            return csrfToken;
+        },
         /**
          * @public @method getApplicationSetup
          * @return {Object} Application setup
@@ -240,5 +236,5 @@ jQuery.ajaxSetup({ cache: false });
             return this.appSetup.env.defaultApps || [];
         }
     };
-    o.app = new Bundle_facade();
+    o.app = new App();
 }(Oskari));
