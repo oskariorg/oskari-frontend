@@ -10,7 +10,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
     this.options = options || {
         'allowMultipleFiles': false,
         'maxFileSize': 10, //MB
-        'allowedFileTypes': [] // all types
+        'allowedFileTypes': [], // all types
+        'showNoFile': true //shows error popup when getFiles() is called and file isn't given
     }
     this.visible = true;
 
@@ -19,7 +20,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                     //'<form method="post" action="" enctype="multipart/form-data" class="box">'+
                         '<div class="box__input">'+
                             '<input type="file" class="box__file" accept="<%= allowedFiles %>" />'+
-                            '<label><%= fileupload %> ' +
+                            '<label><%= fileupload %>'+
+                                '&nbsp;' +
                                 //'<label for="file" style="cursor: pointer;">' +
                                 '<a href="javascript:void(0);"><%= link %></a>' +
                                 //'</label>' +
@@ -184,7 +186,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             var files = this.files;
             var opts = this.options;
             if (files.length === 0){
-                this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.noFiles'));
+                if (opts.showNoFile !== false){
+                    this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.noFiles'));
+                }
                 return null;
             } else if (opts.allowMultipleFiles !== true) {
                 return files[0]; //or should we use getFile() for single file (allowMultiple false)
