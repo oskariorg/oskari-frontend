@@ -263,7 +263,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         this.service.on('StatsGrid.DatasourceEvent', function (evt) {
             var currentDS = dsSelect.getValue();
-            if (currentDS !== evt.getDatasource()) {
+            var ds;
+
+            if (!isNaN(evt.getDatasource())) {
+                ds = evt.getDatasource().toString();
+            } else {
+                ds = evt.getDatasource();
+            }
+            if (currentDS !== ds) {
                 return;
             }
             // update indicator list
