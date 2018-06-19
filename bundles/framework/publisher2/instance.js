@@ -305,13 +305,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.publisher.render(map);
             } else {
                 Oskari.setLang(me.oskariLang);
-
-                // Reset timeseries control plugin configurations if bundle exists.
-                if (me.sandbox.hasHandler('Timeseries.ConfigurationRequest')) {
-                    var requestBuilder = Oskari.requestBuilder('Timeseries.ConfigurationRequest');
-                    this.sandbox.request(this, requestBuilder());
-                }
-
                 if (me.publisher) {
                     // show flyout?
                     // TODO: move to default flyout/extension as "mode functionality"?

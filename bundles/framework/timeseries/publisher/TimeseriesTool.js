@@ -49,8 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
          */
         _updateTimeseriesPluginConfig: function () {
             var requestBuilder = Oskari.requestBuilder('Timeseries.ConfigurationRequest');
-            var publisherModule = this.__sandbox.findRegisteredModuleInstance('Publisher2');
-            this.__sandbox.request(publisherModule, requestBuilder(this.controlConfig));
+            this.__sandbox.request('Publisher2', requestBuilder(this.controlConfig));
         },
         /**
         * Get tool object.
@@ -119,6 +118,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
             } else {
                 // Don't include timeseries at all
                 return null;
+            }
+        },
+        /**
+        * Stop tool.
+        * @method stop
+        * @public
+        */
+        stop: function () {
+            if (this.controlConfig) {
+                this.controlConfig = null;
+                this._updateTimeseriesPluginConfig();
+                var active = this._getTimeseriesService().getActiveTimeseries();
+                this.service.trigger('activeChanged', active);
             }
         }
     }, {
