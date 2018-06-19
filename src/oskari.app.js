@@ -7,7 +7,22 @@ jQuery.ajaxSetup({ cache: false });
         return;
     }
     // Cross-site request forgery protection with cookie based token
-    var csrfToken = jQuery.cookie('XSRF-TOKEN');
+    function getCookie (cname) {
+        var name = cname + '=';
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        var result = ca.map(function (cook) {
+            return cook.trim();
+        }).filter(function (cook) {
+            return cook.indexOf(name) === 0;
+        }).map(function (cook) {
+            return cook.substring(name.length, cook.length);
+        });
+        if (result.length > 0) {
+            return result[0];
+        }
+    }
+    var csrfToken = getCookie('XSRF-TOKEN');
     if (csrfToken) {
         jQuery(document).ajaxSend(function (e, xhr, options) {
             xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
