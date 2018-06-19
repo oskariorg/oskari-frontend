@@ -812,7 +812,7 @@ Oskari.clazz.define(
                 },
                 stroke: {
                   color: '#FF0000',
-                  width: 10
+                  width: 1
                 },
                 text : {
                   scale : 1.3,
@@ -822,8 +822,7 @@ Oskari.clazz.define(
                   stroke : {
                     color : 'rgba(255,255,255,0.8)',
                     width : 2
-                  },
-                  labelProperty: 'test_property'
+                  }
                 }
               };
               return featureStyle;
