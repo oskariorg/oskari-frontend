@@ -6,6 +6,15 @@ jQuery.ajaxSetup({ cache: false });
         // can't add loader if no Oskari ref
         return;
     }
+    // Cross-site request forgery protection with cookie based token
+    var csrfToken = jQuery.cookie('XSRF-TOKEN');
+    if (csrfToken) {
+        jQuery(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
+        });
+    }
+    // /CSRF
+
     /* legacy Bundle_facade */
     /**
      * @class Oskari.Bundle_facade
@@ -224,7 +233,7 @@ jQuery.ajaxSetup({ cache: false });
         },
 
         /**
-         * @method getSystemDefaultViews 
+         * @method getSystemDefaultViews
          * @return {Object[]} default view objects Array
          */
         getSystemDefaultViews: function () {
