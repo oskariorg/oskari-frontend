@@ -2,12 +2,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
     function () {
     }, {
         index: 0,
-        allowedLocations: ['top center', 'top right', 'top left'],
+        allowedLocations: ['top center'],
         lefthanded: 'top center',
         righthanded: 'top center',
         allowedSiblings: [],
         groupedSiblings: false,
         activeTimeseries: null,
+        controlConfig: {
+            showControl: true,
+            location: 'top center',
+            widthMargin: 200,
+            topMargin: '90px'
+        },
         /**
          * Initialize tool
          * @params {} state data
@@ -15,13 +21,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
          * @public
          */
         init: function (pdata) {
-            this.setEnabled(true);
+            if (pdata && pdata.configuration && pdata.configuration.timeseries &&
+                pdata.configuration.timeseries.conf &&
+                pdata.configuration.timeseries.conf.plugins) {
+                // Update control configuration according to app setup
+                var plugin = pdata.configuration.timeseries.conf.plugins.find(function (plugin) {
+                    return plugin.id === 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
+                });
+                if (plugin) {
+                    this.controlConfig = plugin.config;
+                }
+            }
+            // Apply configuration
+            this.setEnabled(this.controlConfig.showControl);
         },
         _getTimeseriesService: function () {
             if (!this.service) {
                 this.service = this.__sandbox.getService('Oskari.mapframework.bundle.timeseries.TimeseriesService');
             }
             return this.service;
+        },
+        /**
+         * Sends configuration request to timeseries module
+         *
+         * @method _updateTimeseriesPluginConfig
+         * @private
+         */
+        _updateTimeseriesPluginConfig: function () {
+            var requestBuilder = Oskari.requestBuilder('Timeseries.ConfigurationRequest');
+            var publisherModule = this.__sandbox.findRegisteredModuleInstance('Publisher2');
+            this.__sandbox.request(publisherModule, requestBuilder(this.controlConfig));
         },
         /**
         * Get tool object.
@@ -33,13 +62,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin',
-                title: 'TimeseriesControlPlugin',
-                config: {
-                    showControl: true,
-                    location: this.allowedLocations[0],
-                    widthMargin: 200,
-                    topMargin: '90px'
-                }
+                title: 'TimeseriesControlPlugin'
             };
         },
         /**
@@ -50,24 +73,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
         * @param {Boolean} enabled is tool enabled or not
         */
         setEnabled: function (enabled) {
-            var tool = this.getTool();
-
-            // state actually hasn't changed -> do nothing
-            if (this.state.enabled !== undefined && this.state.enabled !== null && enabled === this.state.enabled) {
-                return;
-            }
-
             this.state.enabled = enabled;
-            if (enabled) {
-                var active = this._getTimeseriesService().getActiveTimeseries();
-                if (active) {
-                    active.conf = jQuery.extend(true, active.conf || {}, tool.config);
-                }
-                this.service.trigger('activeChanged', active);
-            } else {
-                // removes the control plugin
-                this.service.trigger('activeChanged', null);
-            }
+
+            // Set control visibility by updating it's config.
+            this.controlConfig.showControl = enabled;
+            this._updateTimeseriesPluginConfig();
+
+            // Apply changed configuration.
+            var active = this._getTimeseriesService().getActiveTimeseries();
+            this.service.trigger('activeChanged', active);
 
             var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
             this.__sandbox.notifyAll(event);
@@ -97,12 +111,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
                     configuration: {
                         timeseries: {
                             conf: {
-                                plugins: [{ id: this.getTool().id, config: this.getTool().config }]
+                                plugins: [{ id: this.getTool().id, config: this.controlConfig }]
                             }
                         }
                     }
                 };
             } else {
+                // Don't include timeseries at all
                 return null;
             }
         }
