@@ -59,9 +59,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     });
 }, {
     _templates: {
-        main: _.template('<div class="stats-user-indicator-form">' +
-                            '<div class="stats-not-logged-in">${warning}</div>' +
-                        '</div>')
+        main: '<div class="stats-user-indicator-form"></div>',
+        notLoggedIn: _.template('<div class="stats-not-logged-in">${warning}</div>')
     },
     /**
      * Main external API function - shows the form for given indicator
@@ -124,19 +123,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Internal function to create the baseline UI
      */
     createUi: function () {
+        var me = this;
         if (this.getElement()) {
             return;
         }
-        this.element = jQuery(this._templates.main({
-            warning: this.locale('userIndicators.notLoggedInWarning')
-        }));
-        /*
-        // FOR NOW SAVING THE DATA IS NOT SUPPORTED FOR ANYONE
-        if (Oskari.user().isLoggedIn()) {
-            // remove the warning about not able to save the data for logged in users
-            this.element.find('.stats-not-logged-in').remove();
+        this.element = jQuery(this._templates.main);
+
+        if (!Oskari.user().isLoggedIn()) {
+            var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var content = jQuery(this._templates.notLoggedIn({
+                warning: this.locale('userIndicators.notLoggedInWarning')
+            }));
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+
+            okBtn.setPrimary(true);
+            okBtn.setHandler(function () {
+                popup.close(true);
+            });
+            popup.show(me.locale('userIndicators.notLoggedInTitle'), content, [okBtn]);
         }
-        */
 
         // generic info
         var genericInfoPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');

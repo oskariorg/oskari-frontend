@@ -690,7 +690,8 @@ div.tab-material-controls div.title {
   max-width: 700px; }
 
 .statsgrid-user-indicator-flyout {
-  height: auto; }
+  height: auto;
+  min-width: 365px; }
 
 .statsgrid-user-indicator-flyout .oskari-flyoutcontentcontainer {
   overflow: unset;

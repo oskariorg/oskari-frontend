@@ -245,10 +245,13 @@ Oskari.registerLocalization({
                 'Esimerkki 1: Helsinki;1234 \n' +
                 'Esimerkki 2: 011;5678'
             },
+            'notLoggedInTitle': 'Varoitus',
             'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
             'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
             'modify': {
-                'title': 'Indikaattori'
+                'title': 'Indikaattori',
+                'edit': 'Muokkaa',
+                'remove': 'Poista'
             }
         }
     }
