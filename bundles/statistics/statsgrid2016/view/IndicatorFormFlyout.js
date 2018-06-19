@@ -75,6 +75,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var datasrc = this.service.getDatasource(datasourceId);
         var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
         this.indicatorParamsList.setRegionsets(regionsetsForDatasource);
+        this.indicatorParamsList.requestIndicatorSelectors();
 
         if (!indicatorId) {
             return;
