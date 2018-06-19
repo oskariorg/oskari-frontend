@@ -50,7 +50,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                     return plugin.id === 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
                 });
                 if (plugin) {
-                    this._controlPluginConf = plugin.config;
+                    this._setControlPluginConfiguration(plugin.config);
                 }
             }
 
@@ -71,6 +71,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 me._timeseriesLayerService.updateTimeseriesLayers();
                 me._timeseriesService.on('activeChanged', me._updateControl.bind(me));
             });
+            sandbox.requestHandler('Timeseries.ConfigurationRequest', me);
         },
         /**
          * @method _registerForLayerFiltering
@@ -90,6 +91,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                     'timeseries'
                 );
             }
+        },
+        /**
+         * @method _setControlPluginConfiguration
+         */
+        _setControlPluginConfiguration: function (conf) {
+            this._controlPluginConf = conf || {};
         },
         /**
          * @method _updateControl
@@ -118,7 +125,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             this._removeControlPlugin();
             var mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
             var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', delegate, conf);
-            mapModule.registerPlugin(controlPlugin);
+            controlPlugin.setMapModule(mapModule);
             mapModule.startPlugin(controlPlugin);
             this._controlPlugin = controlPlugin;
         },
@@ -135,6 +142,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             mapModule.stopPlugin(this._controlPlugin);
             mapModule.unregisterPlugin(this._controlPlugin);
             this._controlPlugin = null;
+        },
+        /**
+         * @method handleRequest
+         *
+         * Request handler for control plugin configuration.
+         */
+        handleRequest: function (core, request) {
+            if (request.getName() === 'Timeseries.ConfigurationRequest') {
+                this._setControlPluginConfiguration(request.getConfiguration());
+            }
         },
         /**
          * @method stop

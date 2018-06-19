@@ -305,7 +305,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.publisher.render(map);
             } else {
                 Oskari.setLang(me.oskariLang);
-
                 if (me.publisher) {
                     // show flyout?
                     // TODO: move to default flyout/extension as "mode functionality"?
