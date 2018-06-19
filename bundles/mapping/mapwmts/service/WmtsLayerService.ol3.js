@@ -46,7 +46,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         var caps = this.getCapabilities(url);
         if(caps) {
             // return with cached capabilities
-            var wmtsOptions = ol.source.WMTS.optionsFromCapabilities(caps, me.__getLayerConfig(caps, layer));
+            var config = me.__getLayerConfig(caps, layer);
+            var wmtsOptions = ol.source.WMTS.optionsFromCapabilities(caps, config);
+            if(config.url) {
+                // override capabilities url with the configured one
+                wmtsOptions.urls = [config.url];
+            }
             var wmtsLayer = new ol.layer.Tile({
                 source: new ol.source.WMTS(wmtsOptions),
                 transparent: true,
