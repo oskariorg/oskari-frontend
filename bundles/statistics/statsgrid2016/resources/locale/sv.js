@@ -149,7 +149,9 @@ Oskari.registerLocalization({
             'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.',
             'datasetSave': 'Ett fel uppstod vid sparning av data.',
             'datasetDelete': 'Ett fel uppstod vid radering av data.',
-            'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.'
+            'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
+            'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
+            'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.'
         },
         'datacharts': {
             'flyout': 'Sökta datamängden',
@@ -243,9 +245,7 @@ Oskari.registerLocalization({
             'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
             'notLoggedInWarningAfterServerImpl': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
             'modify': {
-                'title': 'Indikator',
-                'edit': 'Redigera',
-                'remove': 'Ta bort'
+                'title': 'Indikator'
             }
         }
     }

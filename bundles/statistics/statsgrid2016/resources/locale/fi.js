@@ -153,7 +153,9 @@ Oskari.registerLocalization({
             'datasetSave': 'Virhe tallennetaessa aineistoa.',
             'datasetDelete': 'Virhe poistaessa aineistoa.',
             'indicatorSave': 'Virhe tallenettaessa muuttujaa.',
-            'indicatorDelete': 'Virhe poistaessa muuttujaa.'
+            'indicatorDelete': 'Virhe poistaessa muuttujaa.',
+            'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
+            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',
@@ -246,9 +248,7 @@ Oskari.registerLocalization({
             'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
             'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
             'modify': {
-                'title': 'Indikaattori',
-                'edit': 'Muokkaa',
-                'remove': 'Poista'
+                'title': 'Indikaattori'
             }
         }
     }

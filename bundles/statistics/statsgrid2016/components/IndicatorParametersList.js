@@ -8,6 +8,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     this.addDatasetButton = null;
     this.availableRegionsets = [];
     this.select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+    this.service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.errorService = this.service.getErrorService();
     // this.regionselect = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', service, locale);
     this.createUi();
     Oskari.makeObservable(this);
@@ -146,11 +148,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
         showTableBtn.insertTo(btnContainer);
         showTableBtn.setHandler(function (event) {
-            me.resetIndicatorSelectors(true);
-            me.trigger('insert.data', {
-                year: input.val(),
-                regionset: Number(me.select.getValue())
-            });
+            var errors = false;
+
+            (function () {
+                if (input.val().length === 0) {
+                    me.errorService.show(me.locale('errors.title'), me.locale('errors.myIndicatorYearInput'));
+                    errors = true;
+                }
+                if (!me.select.getValue()) {
+                    me.errorService.show(me.locale('errors.title'), me.locale('errors.myIndicatorRegionselect'));
+                    errors = true;
+                }
+            })();
+
+            if (!errors) {
+                me.resetIndicatorSelectors(true);
+                me.trigger('insert.data', {
+                    year: input.val(),
+                    regionset: Number(me.select.getValue())
+                });
+            }
+
         });
     }
 });
