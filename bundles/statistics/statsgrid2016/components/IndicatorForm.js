@@ -29,11 +29,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
     },
     setValues: function (name, desc, source) {
         var elements = this.getElement().find('.stats-indicator-form-item');
-        elements.each(function (index, element) {
-            element = jQuery(element);
+        elements.each(function (index, el) {
+            var element = jQuery(el);
             var key = element.attr('name');
             if (key === 'name') {
                 element.val(Oskari.getLocalized(name) || '');
+                el.focus();
             } else if (key === 'description') {
                 element.val(Oskari.getLocalized(desc) || '');
             } else if (key === 'datasource') {
