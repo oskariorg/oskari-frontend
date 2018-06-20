@@ -4,7 +4,6 @@
  * Simple progressbar
  */
 Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
-
   function(){
     this._progressBar = jQuery( '<div class="oskari-progressbar"></div>' );
     this._element = null;

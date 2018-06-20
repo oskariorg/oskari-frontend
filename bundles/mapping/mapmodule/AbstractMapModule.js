@@ -183,6 +183,7 @@ Oskari.clazz.define(
             }
 
             me._map = me.createMap();
+
             if (me._options.crosshair) {
                 me.toggleCrosshair(true);
             }
