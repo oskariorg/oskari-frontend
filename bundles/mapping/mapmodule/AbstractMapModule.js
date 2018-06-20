@@ -889,6 +889,7 @@ Oskari.clazz.define(
             if (typeof errors === 'undefined') {
                 errors = false;
             }
+            var done = false;
             var me = this;
             var layers = this.getSandbox().findAllSelectedMapLayers();
             var oskariLayer = this.getSandbox().getMap().getSelectedLayer(layerId);
@@ -935,24 +936,11 @@ Oskari.clazz.define(
                     tilesLoaded = 0;
                     pendingTiles = 0;
                     this.notifyErrors(errors, oskariLayer);
-
-
-                if (oskariLayer.getOptions().singleTile) {
-                    done = oskariLayer.loadingDone();
-                    tilesLoaded += oskariLayer.loaded;
-                    this.progBar.updateProgressBar(1, tilesLoaded);
-                } else {
-                    layers.forEach(function (layer) {
-                        tilesLoaded += layer.loaded;
-                        pendingTiles += layer.tilesToLoad;
-                    });
-                    done = oskariLayer.loadingDone();
-                    this.progBar.updateProgressBar(pendingTiles - 1, tilesLoaded);
                 }
             }
             this.loadtimer = setTimeout(function () {
                 var eventBuilder = Oskari.eventBuilder('ProgressEvent');
-                var event = eventBuilder(me.isLoading(layerId), layerId);
+                var event = eventBuilder(done, layerId);
                 me._sandbox.notifyAll(event);
             }, 50);
         },
