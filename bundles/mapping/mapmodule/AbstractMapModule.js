@@ -936,6 +936,18 @@ Oskari.clazz.define(
                     pendingTiles = 0;
                     this.notifyErrors(errors, oskariLayer);
 
+
+                if (oskariLayer.getOptions().singleTile) {
+                    done = oskariLayer.loadingDone();
+                    tilesLoaded += oskariLayer.loaded;
+                    this.progBar.updateProgressBar(1, tilesLoaded);
+                } else {
+                    layers.forEach(function (layer) {
+                        tilesLoaded += layer.loaded;
+                        pendingTiles += layer.tilesToLoad;
+                    });
+                    done = oskariLayer.loadingDone();
+                    this.progBar.updateProgressBar(pendingTiles - 1, tilesLoaded);
                 }
             }
             this.loadtimer = setTimeout(function () {

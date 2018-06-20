@@ -1,5 +1,4 @@
-/**
-
+/*
  * @class Oskari.userinterface.component.ProgressBar
  *
  * Simple progressbar
