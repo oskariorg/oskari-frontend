@@ -64,13 +64,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     },
     setDatasets: function (datasets) {
         var me = this;
-        if (!datasets) {
+        this.getElement().find('.my-indicator').empty();
+        if (!datasets || !datasets.length) {
             return;
         }
         var table = this.createTable();
         table.find('tbody').empty();
+        var isLoggedIn = Oskari.user().isLoggedIn();
         datasets.forEach(function (dataset) {
-            // TODO: formatting/nice UI
             var item = jQuery(me.__templates.tableRow({
                 year: me.locale('parameters.year') + ' ' + dataset.year,
                 regionset: me.getRegionsetName(dataset.regionset),
@@ -83,12 +84,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
                     regionset: Number(dataset.regionset)
                 });
             });
-            item.find('.user-dataset-delete').on('click', function (evt) {
-                me.trigger('delete.data', {
-                    year: dataset.year,
-                    regionset: Number(dataset.regionset)
+            // delete is only shown for logged in users to prevent issues with cached data
+            if (isLoggedIn) {
+                item.find('.user-dataset-delete').on('click', function (evt) {
+                    me.trigger('delete.data', {
+                        year: dataset.year,
+                        regionset: Number(dataset.regionset)
+                    });
                 });
-            });
+            }
             table.find('tbody').append(item);
         });
     },
@@ -103,9 +107,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             return regionset.name;
         }
         return id;
-    },
-    resetMyIndicatorTable: function () {
-        this.getElement().find('.my-indicator').empty();
     },
     resetIndicatorSelectors: function () {
         var formContainer = this.getElement().find('.new-indicator-dataset-params');
@@ -122,9 +123,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         var userChoiceContainer = jQuery(this.__templates.form);
         userChoiceContainer.append(input);
         formContainer.append(userChoiceContainer);
-
-        // focus on the year input
-        input.focus();
 
         var regionsetContainer = jQuery('<div class="regionset-container"></div>');
         regionsetContainer.append('<div>' + this.locale('panels.newSearch.selectRegionsetPlaceholder') + '</div>');

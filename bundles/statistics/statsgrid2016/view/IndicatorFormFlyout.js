@@ -73,7 +73,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.indicatorId = indicatorId;
         this.show();
         this.createUi();
-        this.indicatorForm.createForm();
+        // set empty values to focus on name field
+        this.indicatorForm.setValues();
         // pass available regionsets if user wants to add another year/regionset dataset
         var datasrc = this.service.getDatasource(datasourceId);
         var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
@@ -121,7 +122,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.indicatorId = null;
         this.indicatorForm.resetForm();
         this.indicatorParamsList.setDatasets();
-        this.indicatorParamsList.resetMyIndicatorTable();
         this.indicatorDataForm.clearUi();
     },
     /**
