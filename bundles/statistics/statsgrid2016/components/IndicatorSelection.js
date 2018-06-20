@@ -199,12 +199,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 formFlyout.showForm(dsSelect.getValue());
             });
             // if datasource is of type "user" the user can add new indicators to it
-            btnAddIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
-            if (dsSelect.getValue().type === 'user') {
-                indicDropdown.css({width: '70%'});
-            } else {
-                indicDropdown.css({width: '100%'});
-            }
+            var type = me.service.getDatasource(Number(dsSelect.getValue())).type;
+            btnAddIndicator.setVisible(type === 'user');
+            jQuery(btnAddIndicator.getElement()).css({
+                'width': '60%',
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis',
+                'white-space': 'nowrap'
+            });
         });
 
         indicatorSelector.on('change', function () {

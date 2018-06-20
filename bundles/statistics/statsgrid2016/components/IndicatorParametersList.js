@@ -104,6 +104,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         }
         return id;
     },
+    resetMyIndicatorTable: function () {
+        this.getElement().find('.my-indicator').empty();
+    },
     resetIndicatorSelectors: function (showInsertButton) {
         var formContainer = this.getElement().find('.new-indicator-dataset-params');
         formContainer.empty();

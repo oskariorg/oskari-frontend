@@ -114,6 +114,7 @@ div.oskari-flyout {
   div.oskari-flyout.statsgrid-search-flyout {
     /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
     max-width: 700px;
+    min-width: 400px;
     /* Chosen fixes */ }
     div.oskari-flyout.statsgrid-search-flyout .statsgrid-search-container {
       padding: 16px; }

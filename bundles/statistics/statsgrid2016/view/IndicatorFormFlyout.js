@@ -66,6 +66,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Main external API function - shows the form for given indicator
      */
     showForm: function (datasourceId, indicatorId) {
+        if (this.isVisible()) {
+            this.reset();
+        }
         this.datasourceId = datasourceId;
         this.indicatorId = indicatorId;
         this.show();
@@ -118,6 +121,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.indicatorId = null;
         this.indicatorForm.resetForm();
         this.indicatorParamsList.setDatasets();
+        this.indicatorParamsList.resetMyIndicatorTable();
         this.indicatorDataForm.clearUi();
     },
     /**
