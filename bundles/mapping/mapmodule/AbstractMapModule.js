@@ -910,14 +910,20 @@ Oskari.clazz.define(
                 if (wasFirstTile) {
                     this.progBar.show();
                     layers.forEach(function (layer) {
-                        layer.resetLoadingState();
+                        oskariLayer.resetLoadingState();
                     });
                 }
             } else {
                 var tilesLoaded = 0;
                 var pendingTiles = 0;
-
-                if (errors) {
+                if (!errors) {
+                    layers.forEach(function (layer) {
+                        tilesLoaded += layer.loaded;
+                        pendingTiles += layer.tilesToLoad;
+                    });
+                    done = oskariLayer.loadingDone();
+                    this.progBar.updateProgressBar(pendingTiles - 1, tilesLoaded);
+                } else {
                     this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
                     oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
                     errors = oskariLayer.getLoadingState().errors;
@@ -929,17 +935,8 @@ Oskari.clazz.define(
                     tilesLoaded = 0;
                     pendingTiles = 0;
                     this.notifyErrors(errors, oskariLayer);
-                    return;
+
                 }
-                layers.forEach(function (layer) {
-                    if (!layer.getOptions().singleTile) {
-                        tilesLoaded += layer.loaded;
-                        pendingTiles += layer.tilesToLoad;
-                        layer.loadingDone();
-                    }
-                });
-                //oskariLayer.loadingDone();
-                this.progBar.update(pendingTiles - 1, tilesLoaded);
             }
             this.loadtimer = setTimeout(function () {
                 var eventBuilder = Oskari.eventBuilder('ProgressEvent');
