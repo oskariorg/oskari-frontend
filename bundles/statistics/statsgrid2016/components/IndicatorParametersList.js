@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         }
         return id;
     },
-    resetIndicatorSelectors: function () {
+    removeAddDatasetForm: function () {
         var formContainer = this.getElement().find('.new-indicator-dataset-params');
         formContainer.empty();
         return formContainer;
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             name: 'year',
             label: this.locale('parameters.year')
         }));
-        var formContainer = this.resetIndicatorSelectors();
+        var formContainer = this.removeAddDatasetForm();
         var userChoiceContainer = jQuery(this.__templates.form);
         userChoiceContainer.append(input);
         formContainer.append(userChoiceContainer);
@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             }
 
             if (!errors) {
-                me.resetIndicatorSelectors();
+                me.removeAddDatasetForm();
                 me.trigger('insert.data', {
                     year: input.val(),
                     regionset: Number(me.select.getValue())
