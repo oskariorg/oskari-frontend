@@ -244,7 +244,6 @@ Oskari.registerLocalization({
             },
             'notLoggedInTitle': 'Varning',
             'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
-            'notLoggedInWarningAfterServerImpl': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
             'modify': {
                 'title': 'Indikator',
                 'edit': 'Redigera',

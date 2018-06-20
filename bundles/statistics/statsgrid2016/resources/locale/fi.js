@@ -152,7 +152,7 @@ Oskari.registerLocalization({
             'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.',
             'datasetSave': 'Virhe tallennetaessa aineistoa.',
             'datasetDelete': 'Virhe poistaessa aineistoa.',
-            'indicatorSave': 'Virhe tallenettaessa muuttujaa.',
+            'indicatorSave': 'Virhe tallennettaessa muuttujaa.',
             'indicatorDelete': 'Virhe poistaessa muuttujaa.',
             'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
             'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.'
@@ -247,7 +247,6 @@ Oskari.registerLocalization({
             },
             'notLoggedInTitle': 'Varoitus',
             'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
-            'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
             'modify': {
                 'title': 'Indikaattori',
                 'edit': 'Muokkaa',
