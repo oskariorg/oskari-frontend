@@ -142,12 +142,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         formContainer.append(btnContainer);
 
         var me = this;
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-        cancelBtn.insertTo(btnContainer);
-        cancelBtn.setHandler(function (event) {
-            me.resetIndicatorSelectors();
-            me.trigger('cancel');
-        });
         var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
         showTableBtn.insertTo(btnContainer);
         showTableBtn.setHandler(function (event) {
