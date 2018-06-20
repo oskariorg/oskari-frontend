@@ -28,34 +28,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             me.updateDatasetList();
         });
     });
-    this.indicatorParamsList.on('cancel', function () {
-        me.dataPanel.close();
-        me.indicatorParamsList.requestIndicatorSelectors();
-    });
+
     this.indicatorDataForm.on('cancel', function () {
         me.genericInfoPanel.open();
         me.dataPanel.open();
-        me.indicatorParamsList.requestIndicatorSelectors();
-    });
-    this.indicatorDataForm.on('save', function (data) {
-        me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
-            if (err) {
-                me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                return;
-            }
-            if (data.values.length) {
-                me.saveIndicatorData(data, function (err, someData) {
-                    if (err) {
-                        me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                        Oskari.log('IndicatorFormFlyout').error(err);
-                        return;
-                    }
-                    me.displayInfo();
-                });
-            } else {
-                me.displayInfo();
-            }
-        });
+        me.indicatorParamsList.showAddDatasetForm();
     });
 }, {
     _templates: {
@@ -79,7 +56,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var datasrc = this.service.getDatasource(datasourceId);
         var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
         this.indicatorParamsList.setRegionsets(regionsetsForDatasource);
-        this.indicatorParamsList.requestIndicatorSelectors();
+        this.indicatorParamsList.showAddDatasetForm();
 
         if (!indicatorId) {
             return;
@@ -139,13 +116,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             var content = jQuery(this._templates.notLoggedIn({
                 warning: this.locale('userIndicators.notLoggedInWarning')
             }));
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-
-            okBtn.setPrimary(true);
-            okBtn.setHandler(function () {
-                popup.close(true);
-            });
-            popup.show(me.locale('userIndicators.notLoggedInTitle'), content, [okBtn]);
+            popup.show(me.locale('userIndicators.notLoggedInTitle'), content);
         }
 
         // generic info
@@ -166,6 +137,38 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this._accordion.insertTo(this.element);
 
         this.element.append(this.indicatorDataForm.createUi());
+
+        me.indicatorDataForm.getButtons().forEach(function (btn) {
+            btn.insertTo(me.element);
+        });
+
+        var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+        saveBtn.insertTo(this.element);
+        jQuery(saveBtn.getElement()).css({
+            'float': 'right',
+            'clear': 'both'
+        });
+        saveBtn.setHandler(function () {
+            me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
+                if (err) {
+                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                    return;
+                }
+                var data = me.indicatorDataForm.getValues();
+                if (data.values.length) {
+                    me.saveIndicatorData(data, function (err, someData) {
+                        if (err) {
+                            me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                            Oskari.log('IndicatorFormFlyout').error(err);
+                            return;
+                        }
+                        me.displayInfo();
+                    });
+                } else {
+                    me.displayInfo();
+                }
+            });
+        });
         this.setContent(this.element);
     },
     /**
@@ -196,10 +199,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                         id: region.id,
                         name: region.name,
                         value: data[region.id]
-                    }
+                    };
                 });
                 me.indicatorDataForm.showTable(selectors, formRegions, labels);
-            }
+            };
             if (!me.indicatorId) {
                 // not editing an indicator -> just show an empty form with regions
                 showDataForm(regions);
@@ -229,7 +232,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 return false;
             }
             return true;
-        }
+        };
 
         if (!isValid(data)) {
             callback('Input not valid');
@@ -300,7 +303,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             dialog.close(true);
             me.genericInfoPanel.close();
             me.dataPanel.open();
-            me.indicatorParamsList.requestIndicatorSelectors();
+            me.indicatorParamsList.showAddDatasetForm();
             me.indicatorDataForm.clearUi();
             me.updateDatasetList();
         });
