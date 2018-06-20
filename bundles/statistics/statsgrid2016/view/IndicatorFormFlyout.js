@@ -118,6 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 warning: this.locale('userIndicators.notLoggedInWarning')
             }));
             popup.show(me.locale('userIndicators.notLoggedInTitle'), content);
+            popup.fadeout();
         }
 
         // generic info
