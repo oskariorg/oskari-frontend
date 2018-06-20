@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me._params.attachTo(selectionsContainer);
 
         var btnAddIndicator = me.createAddIndicatorButton();
-        btnAddIndicator.insertTo(main);
+        btnAddIndicator.insertTo(main.find('.stats-ind-selector'));
         btnAddIndicator.setVisible(false);
 
         var btnEditIndicator = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
@@ -199,7 +199,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 formFlyout.showForm(dsSelect.getValue());
             });
             // if datasource is of type "user" the user can add new indicators to it
-            btnAddIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
+            var type = me.service.getDatasource(Number(dsSelect.getValue())).type;
+            btnAddIndicator.setVisible(type === 'user');
+            jQuery(btnAddIndicator.getElement()).css({
+                'width': '60%',
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis',
+                'white-space': 'nowrap'
+            });
         });
 
         indicatorSelector.on('change', function () {
@@ -258,7 +265,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         this.service.on('StatsGrid.DatasourceEvent', function (evt) {
             var currentDS = dsSelect.getValue();
-            if (currentDS !== evt.getDatasource()) {
+            var ds;
+
+            if (!isNaN(evt.getDatasource())) {
+                ds = evt.getDatasource().toString();
+            } else {
+                ds = evt.getDatasource();
+            }
+            if (currentDS !== ds) {
                 return;
             }
             // update indicator list

@@ -864,15 +864,20 @@ Oskari.clazz.define(
                 }
             }
         },
-        isLoading: function () {
-            var oskariLayers = this.getSandbox().getMap().getLayers();
+        isLoading: function (id) {
             var loading = false;
-            oskariLayers.forEach(function (layer) {
-                if (loading) {
-                    return;
-                }
-                loading = layer.getLoadingState().loading > 0;
-            });
+            if (typeof id === 'undefined') {
+                var oskariLayers = this.getSandbox().getMap().getLayers();
+                oskariLayers.forEach(function (layer) {
+                    if (loading) {
+                        return;
+                    }
+                    loading = layer.getLoadingState().loading > 0;
+                });
+            } else {
+                var oskariLayer = this.getSandbox().getMap().getSelectedLayer(id);
+                loading = oskariLayer.getLoadingState().loading > 0;
+            }
             return loading;
         },
         /**
