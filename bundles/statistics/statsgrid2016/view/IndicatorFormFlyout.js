@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorDataForm.on('cancel', function () {
         me.genericInfoPanel.open();
         me.dataPanel.open();
-        me.indicatorParamsList.showAddDatasetForm();
+        me.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
     });
 }, {
     _templates: {
@@ -56,7 +56,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var datasrc = this.service.getDatasource(datasourceId);
         var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
         this.indicatorParamsList.setRegionsets(regionsetsForDatasource);
-        this.indicatorParamsList.showAddDatasetForm();
+        this.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
+        this.saveBtn.setPrimary(!!this.indicatorId);
 
         if (!indicatorId) {
             return;
@@ -143,6 +144,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         });
 
         var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+        this.saveBtn = saveBtn;
         saveBtn.insertTo(this.element);
         jQuery(saveBtn.getElement()).css({
             'float': 'right',
@@ -202,6 +204,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                     };
                 });
                 me.indicatorDataForm.showTable(selectors, formRegions, labels);
+                me.saveBtn.setPrimary(true);
             };
             if (!me.indicatorId) {
                 // not editing an indicator -> just show an empty form with regions
@@ -303,7 +306,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             dialog.close(true);
             me.genericInfoPanel.close();
             me.dataPanel.open();
-            me.indicatorParamsList.showAddDatasetForm();
+            me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
             me.indicatorDataForm.clearUi();
             me.updateDatasetList();
         });

@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         formContainer.empty();
         return formContainer;
     },
-    showAddDatasetForm: function () {
+    showAddDatasetForm: function (newIndicator) {
         // TODO: year etc as params
         var input = jQuery(this.__templates.input({
             name: 'year',
@@ -141,6 +141,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
 
         var me = this;
         var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
+        showTableBtn.setPrimary(!!newIndicator);
         showTableBtn.insertTo(btnContainer);
         showTableBtn.setHandler(function (event) {
             var errors = false;
