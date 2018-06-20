@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     resetMyIndicatorTable: function () {
         this.getElement().find('.my-indicator').empty();
     },
-    resetIndicatorSelectors: function (showInsertButton) {
+    resetIndicatorSelectors: function () {
         var formContainer = this.getElement().find('.new-indicator-dataset-params');
         formContainer.empty();
         return formContainer;
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             name: 'year',
             label: this.locale('parameters.year')
         }));
-        var formContainer = this.resetIndicatorSelectors(false);
+        var formContainer = this.resetIndicatorSelectors();
         var userChoiceContainer = jQuery(this.__templates.form);
         userChoiceContainer.append(input);
         formContainer.append(userChoiceContainer);
@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
         cancelBtn.insertTo(btnContainer);
         cancelBtn.setHandler(function (event) {
-            me.resetIndicatorSelectors(true);
+            me.resetIndicatorSelectors();
             me.trigger('cancel');
         });
         var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
@@ -153,25 +153,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         showTableBtn.setHandler(function (event) {
             var errors = false;
 
-            (function () {
-                if (input.val().length === 0) {
-                    me.errorService.show(me.locale('errors.title'), me.locale('errors.myIndicatorYearInput'));
-                    errors = true;
-                }
-                if (!me.select.getValue()) {
-                    me.errorService.show(me.locale('errors.title'), me.locale('errors.myIndicatorRegionselect'));
-                    errors = true;
-                }
-            })();
+            if (input.val().length === 0) {
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.myIndicatorYearInput'));
+                errors = true;
+            }
+            if (!me.select.getValue()) {
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.myIndicatorRegionselect'));
+                errors = true;
+            }
 
             if (!errors) {
-                me.resetIndicatorSelectors(true);
+                me.resetIndicatorSelectors();
                 me.trigger('insert.data', {
                     year: input.val(),
                     regionset: Number(me.select.getValue())
                 });
             }
-
         });
     }
 });
