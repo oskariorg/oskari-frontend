@@ -30,7 +30,7 @@ Oskari.registerLocalization({
             'newSearch': {
                 'title': 'AINEISTOHAKU',
                 'datasourceTitle': 'Tietolähde',
-                'indicatorTitle': 'Muuttuja',
+                'indicatorTitle': 'Indikaattori',
                 'regionsetTitle': 'Aluejako',
                 'selectDatasourcePlaceholder': 'Valitse tietolähde',
                 'selectIndicatorPlaceholder': 'Valitse aineisto',

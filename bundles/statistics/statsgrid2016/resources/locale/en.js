@@ -30,7 +30,7 @@ Oskari.registerLocalization({
             'newSearch': {
                 'title': 'SEARCH DATA',
                 'datasourceTitle': 'Data source',
-                'indicatorTitle': 'Variable',
+                'indicatorTitle': 'Indicator',
                 'regionsetTitle': 'Regionset',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
