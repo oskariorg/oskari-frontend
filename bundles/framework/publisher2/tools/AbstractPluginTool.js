@@ -161,6 +161,16 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         return true;
     },
     /**
+    * Is this tool available.
+    * @method isDisabled
+    * @public
+    *
+    * @returns {Boolean} is tool disabled
+    */
+   isDisabled: function (data) {
+        return false;
+    },
+    /**
     * Is started.
     * @method isStarted
     * @public
