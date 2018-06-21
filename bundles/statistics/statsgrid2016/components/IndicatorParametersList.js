@@ -92,6 +92,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
                         regionset: Number(dataset.regionset)
                     });
                 });
+            } else {
+                item.find('.user-dataset-delete').hide();
             }
             table.find('tbody').append(item);
         });
