@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             me.clearUi();
             me.trigger('cancel');
         });
+        jQuery(cancelBtn.getElement()).css({'margin-left': '6px'});
         this.buttons.push(cancelBtn);
 
         var importClipboard = Oskari.clazz.create('Oskari.userinterface.component.Button');
