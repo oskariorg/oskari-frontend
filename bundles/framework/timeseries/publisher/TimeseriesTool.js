@@ -8,12 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
         allowedSiblings: [],
         groupedSiblings: false,
         activeTimeseries: null,
-        controlConfig: {
-            showControl: true,
-            location: 'top center',
-            widthMargin: 200,
-            topMargin: '90px'
-        },
+        controlConfig: {},
         /**
          * Initialize tool
          * @params {} state data
@@ -21,6 +16,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
          * @public
          */
         init: function (pdata) {
+            this.controlConfig = {
+                showControl: true,
+                location: 'top center',
+                widthMargin: 200,
+                topMargin: '90px'
+            }
             if (pdata && pdata.configuration && pdata.configuration.timeseries &&
                 pdata.configuration.timeseries.conf &&
                 pdata.configuration.timeseries.conf.plugins) {
@@ -31,6 +32,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
                 if (plugin) {
                     this.controlConfig = plugin.config;
                 }
+            }
+            // hide timeseries control if tool is disabled
+            if (this.isDisabled()) {
+                this.controlConfig.showControl = false;
             }
             // Apply configuration
             this.setEnabled(this.controlConfig.showControl);
@@ -86,14 +91,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
             this.__sandbox.notifyAll(event);
         },
         /**
-        * Is displayed.
-        * @method isDisplayed
+        * Is this tool disabled.
+        * @method isDisabled
         * @public
         *
-        * @returns {Boolean} is tool displayed
+        * @returns {Boolean} is tool disabled
         */
-        isDisplayed: function (data) {
-            return typeof this._getTimeseriesService().getActiveTimeseries() !== 'undefined';
+       isDisabled: function (data) {
+            return typeof this._getTimeseriesService().getActiveTimeseries() === 'undefined';
         },
         /**
         * Get values.
@@ -126,11 +131,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
         * @public
         */
         stop: function () {
-            if (this.controlConfig) {
-                this.controlConfig = null;
-                this._updateTimeseriesPluginConfig();
-                var active = this._getTimeseriesService().getActiveTimeseries();
-                this.service.trigger('activeChanged', active);
+            var me = this;
+            if (me.controlConfig) {
+                me.controlConfig = null;
+                me._updateTimeseriesPluginConfig();
             }
         }
     }, {

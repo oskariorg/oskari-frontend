@@ -45,6 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
         me._isMobileVisible = true;
         me._inMobileMode = false;
+        me._isStopped = false;
 
         me._mobileDefs = {
             buttons: {
@@ -285,6 +286,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _buildUI: function (isMobile) {
             var me = this;
+            if (me._isStopped) {
+                return;
+            }
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
             var aux = '<div class="timeseries-aux"></div>';
@@ -640,6 +644,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param {Oskari.Sandbox} sandbox
          */
         _stopPluginImpl: function (sandbox) {
+            this._isStopped = true;
             if (this._element) {
                 this._setAnimationState(false);
                 this.removeFromPluginContainer(this.getElement());

@@ -125,7 +125,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             this._removeControlPlugin();
             var mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
             var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', delegate, conf);
-            controlPlugin.setMapModule(mapModule);
+            mapModule.registerPlugin(controlPlugin);
             mapModule.startPlugin(controlPlugin);
             this._controlPlugin = controlPlugin;
         },
