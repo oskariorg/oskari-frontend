@@ -8,7 +8,7 @@ module.exports = function(source) {
             define: function(id, constructor, methods, metadata) {
                 if (metadata.source && metadata.source.scripts) {
                     metadata.source.scripts.forEach(script => {
-                        dependencies.push(script.src);
+                        dependencies.push(script);
                     });
                 }
                 // TODO: load locales
@@ -20,5 +20,10 @@ module.exports = function(source) {
     }
     eval(source);
 
-    return source + '\n' + dependencies.map(d => `import '${d}'`).join('\n');
+    return source + '\n' + dependencies.map(d => {
+        if (d.expose) {
+            return `import 'expose-loader?${d.expose}!${d.src}'`;
+        }
+        return `import '${d.src}'`;
+    }).join('\n');
 }
