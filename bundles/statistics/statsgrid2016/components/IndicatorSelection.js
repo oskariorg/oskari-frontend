@@ -73,8 +73,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             }
             if (result.complete) {
                 me.spinner.stop();
-
-                if (result.indicators.length === 0) {
+                var isUserDatasource = '' + me.service.getUserDatasource().id === '' + datasrc;
+                if (!isUserDatasource && result.indicators.length === 0) {
+                    // show notification about empty indicator list for non-myindicators datasource
                     errorService.show(locale('errors.title'), locale('errors.indicatorListIsEmpty'));
                 }
             }
