@@ -30,7 +30,7 @@ Oskari.registerLocalization({
             'newSearch': {
                 'title': 'SEARCH DATA',
                 'datasourceTitle': 'Data source',
-                'indicatorTitle': 'Variable',
+                'indicatorTitle': 'Indicator',
                 'regionsetTitle': 'Regionset',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
@@ -152,7 +152,9 @@ Oskari.registerLocalization({
             'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.',
             'datasetSave': 'Error saving dataset.',
             'datasetDelete': 'Error deleting dataset.',
-            'indicatorSave': 'Error saving indicator'
+            'indicatorSave': 'Error saving indicator',
+            'myIndicatorYearInput': 'Year field cannot be empty.',
+            'myIndicatorRegionselect': 'Regionselect cannot be empty.'
         },
         'datacharts': {
             'flyout': 'Searched data',
@@ -224,7 +226,7 @@ Oskari.registerLocalization({
             'buttonTitle': 'Add new indicator',
             'buttonAddIndicator': 'Add data',
             'panelGeneric': {
-                'title': 'Information',
+                'title': 'Indicator data',
                 'formName': 'Name',
                 'formDescription': 'Description',
                 'formDatasource': 'Datasource'
@@ -240,8 +242,8 @@ Oskari.registerLocalization({
                 'title': '',
                 'placeholder': ''
             },
+            'notLoggedInTitle': 'Warning',
             'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
-            'notLoggedInWarningAfterServerImpl': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
             'modify': {
                 'title': 'Indicator',
                 'edit': 'Edit',

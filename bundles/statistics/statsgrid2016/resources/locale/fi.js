@@ -30,7 +30,7 @@ Oskari.registerLocalization({
             'newSearch': {
                 'title': 'AINEISTOHAKU',
                 'datasourceTitle': 'Tietolähde',
-                'indicatorTitle': 'Muuttuja',
+                'indicatorTitle': 'Indikaattori',
                 'regionsetTitle': 'Aluejako',
                 'selectDatasourcePlaceholder': 'Valitse tietolähde',
                 'selectIndicatorPlaceholder': 'Valitse aineisto',
@@ -152,8 +152,10 @@ Oskari.registerLocalization({
             'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.',
             'datasetSave': 'Virhe tallennetaessa aineistoa.',
             'datasetDelete': 'Virhe poistaessa aineistoa.',
-            'indicatorSave': 'Virhe tallenettaessa muuttujaa.',
-            'indicatorDelete': 'Virhe poistaessa muuttujaa.'
+            'indicatorSave': 'Virhe tallennettaessa muuttujaa.',
+            'indicatorDelete': 'Virhe poistaessa muuttujaa.',
+            'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
+            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',
@@ -221,11 +223,11 @@ Oskari.registerLocalization({
             }
         },
         'userIndicators': {
-            'flyoutTitle': 'Lisää uusi indikaattori',
+            'flyoutTitle': 'Omat indikaattorit',
             'buttonTitle': 'Lisää uusi indikaattori',
             'buttonAddIndicator': 'Syötä dataa',
             'panelGeneric': {
-                'title': 'Tiedot',
+                'title': 'Indikaattorin tiedot',
                 'formName': 'Nimi',
                 'formDescription': 'Kuvaus',
                 'formDatasource': 'Lähde'
@@ -243,8 +245,8 @@ Oskari.registerLocalization({
                 'Esimerkki 1: Helsinki;1234 \n' +
                 'Esimerkki 2: 011;5678'
             },
+            'notLoggedInTitle': 'Varoitus',
             'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
-            'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
             'modify': {
                 'title': 'Indikaattori',
                 'edit': 'Muokkaa',

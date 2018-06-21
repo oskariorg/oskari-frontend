@@ -32,36 +32,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorDataForm.on('cancel', function () {
         me.genericInfoPanel.open();
         me.dataPanel.open();
-    });
-    this.indicatorDataForm.on('save', function (data) {
-        me.saveIndicatorData(data, function (err, notReallySureWhatThisCouldBe) {
-            if (err) {
-                me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetSave'));
-                return;
-            }
-            // TODO: update paramsList?
-            me.indicatorDataForm.clearUi();
-        });
+        me.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
     });
 }, {
     _templates: {
-        main: _.template('<div class="stats-user-indicator-form">' +
-                            '<div class="stats-not-logged-in">${warning}</div>' +
-                        '</div>')
+        main: '<div class="stats-user-indicator-form"></div>',
+        notLoggedIn: _.template('<div class="stats-not-logged-in">${warning}</div>')
     },
     /**
      * Main external API function - shows the form for given indicator
      */
     showForm: function (datasourceId, indicatorId) {
+        if (this.isVisible()) {
+            this.reset();
+        }
         this.datasourceId = datasourceId;
         this.indicatorId = indicatorId;
         this.show();
         this.createUi();
-        this.indicatorForm.createForm();
+        // set empty values to focus on name field
+        this.indicatorForm.setValues();
         // pass available regionsets if user wants to add another year/regionset dataset
         var datasrc = this.service.getDatasource(datasourceId);
         var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
         this.indicatorParamsList.setRegionsets(regionsetsForDatasource);
+        this.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
+        this.saveBtn.setPrimary(!!this.indicatorId);
 
         if (!indicatorId) {
             return;
@@ -110,19 +106,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Internal function to create the baseline UI
      */
     createUi: function () {
+        var me = this;
         if (this.getElement()) {
             return;
         }
-        this.element = jQuery(this._templates.main({
-            warning: this.locale('userIndicators.notLoggedInWarning')
-        }));
-        /*
-        // FOR NOW SAVING THE DATA IS NOT SUPPORTED FOR ANYONE
-        if (Oskari.user().isLoggedIn()) {
-            // remove the warning about not able to save the data for logged in users
-            this.element.find('.stats-not-logged-in').remove();
+        this.element = jQuery(this._templates.main);
+
+        if (!Oskari.user().isLoggedIn()) {
+            var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var content = jQuery(this._templates.notLoggedIn({
+                warning: this.locale('userIndicators.notLoggedInWarning')
+            }));
+            popup.show(me.locale('userIndicators.notLoggedInTitle'), content);
+            popup.fadeout();
         }
-        */
 
         // generic info
         var genericInfoPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -141,24 +138,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this._accordion.addPanel(dataPanel);
         this._accordion.insertTo(this.element);
 
-        var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
-        btn.insertTo(this.element);
-        jQuery(btn.getElement()).css({
+        this.element.append(this.indicatorDataForm.createUi());
+
+        me.indicatorDataForm.getButtons().forEach(function (btn) {
+            btn.insertTo(me.element);
+        });
+
+        var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+        this.saveBtn = saveBtn;
+        saveBtn.insertTo(this.element);
+        jQuery(saveBtn.getElement()).css({
             'float': 'right',
             'clear': 'both'
         });
-
-        var me = this;
-        btn.setHandler(function (event) {
-            event.stopPropagation();
+        saveBtn.setHandler(function () {
             me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
                 if (err) {
                     me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                     return;
                 }
-                var dataForm = me.indicatorDataForm.getValues();
-                if (dataForm.values.length) {
-                    me.saveIndicatorData(dataForm, function (err, someData) {
+                var data = me.indicatorDataForm.getValues();
+                if (data.values.length) {
+                    me.saveIndicatorData(data, function (err, someData) {
                         if (err) {
                             me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                             Oskari.log('IndicatorFormFlyout').error(err);
@@ -171,8 +172,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 }
             });
         });
-
-        this.element.append(this.indicatorDataForm.createUi());
         this.setContent(this.element);
     },
     /**
@@ -203,10 +202,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                         id: region.id,
                         name: region.name,
                         value: data[region.id]
-                    }
+                    };
                 });
                 me.indicatorDataForm.showTable(selectors, formRegions, labels);
-            }
+                me.saveBtn.setPrimary(true);
+            };
             if (!me.indicatorId) {
                 // not editing an indicator -> just show an empty form with regions
                 showDataForm(regions);
@@ -236,7 +236,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 return false;
             }
             return true;
-        }
+        };
 
         if (!isValid(data)) {
             callback('Input not valid');
@@ -305,7 +305,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         okBtn.setPrimary(true);
         okBtn.setHandler(function () {
             dialog.close(true);
-            me.hide();
+            me.genericInfoPanel.close();
+            me.dataPanel.open();
+            me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
+            me.indicatorDataForm.clearUi();
+            me.updateDatasetList();
         });
         dialog.show(title, content, [okBtn]);
     }
