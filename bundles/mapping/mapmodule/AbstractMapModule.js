@@ -906,20 +906,18 @@ Oskari.clazz.define(
                 var wasFirstTile = oskariLayer.loadingStarted();
                 if (wasFirstTile) {
                     this.progBar.show();
-                    layers.forEach(function (layer) {
-                        oskariLayer.resetLoadingState();
-                    });
+                    oskariLayer.resetLoadingState(1);
                 }
             } else {
                 var tilesLoaded = 0;
                 var pendingTiles = 0;
                 if (!errors) {
+                    done = oskariLayer.loadingDone();
                     layers.forEach(function (layer) {
                         tilesLoaded += layer.loaded;
                         pendingTiles += layer.tilesToLoad;
                     });
-                    done = oskariLayer.loadingDone();
-                    this.progBar.updateProgressBar(pendingTiles - 1, tilesLoaded);
+                    this.progBar.updateProgressBar(pendingTiles, tilesLoaded);
                 } else {
                     this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
                     oskariLayer.loadingError(oskariLayer.getLoadingState().loading);

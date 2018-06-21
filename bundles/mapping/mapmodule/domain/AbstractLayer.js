@@ -479,10 +479,11 @@ Oskari.clazz.define(
             };
             return state;
         },
-        resetLoadingState: function () {
+        resetLoadingState: function (tilesToLoad) {
+            var toBeLoaded = tilesToLoad || 0;
             this.loaded = 0;
             this.errors = 0;
-            this.tilesToLoad = 0;
+            this.tilesToLoad = toBeLoaded;
         },
         /**
          * @method addSubLayer
