@@ -39,6 +39,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         }
         this.container.remove();
         this.container = null;
+        this._selections = [];
     },
     /**
      * @method  @public  attachTo
@@ -52,8 +53,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
      * @param  {Integer} datasrc indicator datasource
      * @param  {String|String[]} indId    indicator id
      * @param  {Object} elements elements
+     * @param  {Boolean} series search series
      */
-    indicatorSelected: function (datasrc, indId, regionsetRestriction) {
+    indicatorSelected: function (datasrc, indId, regionsetRestriction, series) {
         var me = this;
 
         this.clean();
@@ -71,6 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.regionsetRestrictions = (regionsetRestriction || []).map(function (iter) {
             return Number(iter);
         });
+        this.searchSeries = series;
         // get the data to create ui with
         me.paramHandler.getData(datasrc, indId);
     },
@@ -85,26 +88,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         Object.keys(selections).forEach(function (selected, index) {
             var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
             var label = (locale.parameters[selected]) ? locale.parameters[selected] : selected.id;
-            var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
-            var options;
-            if (selections[selected].time) {
-                options = {
-                    placeholder_text: placeholderText,
-                    multi: true
-                };
+            var options = {
+                placeholder_text: placeholderText
+            };
+
+            var dropdown;
+            if (me.searchSeries && selections[selected].time) {
+                // create time span select
+                options.id = selected;
+                options.values = selections[selected].values;
+                options.title = label;
+                var spanSelect = Oskari.clazz.create('Oskari.statistics.statsgrid.SpanSelect', locale, options);
+                cont.append(spanSelect.getElement());
+                me._selections.push(spanSelect);
             } else {
-                options = {
-                    placeholder_text: placeholderText
-                };
+                if (selections[selected].time) {
+                    options.multi = true;
+                }
+                var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
+                var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selected);
+                dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
+                dropdown.css({width: '205px'});
+                select.adjustChosen();
+                select.selectFirstValue();
+                tempSelect.find('.label').append(dropdown);
+                cont.append(tempSelect);
+                me._selections.push(select);
             }
-            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selected);
-            var dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
-            dropdown.css({width: '205px'});
-            select.adjustChosen();
-            select.selectFirstValue();
-            tempSelect.find('.label').append(dropdown);
-            cont.append(tempSelect);
-            me._selections.push(select);
         });
 
         var optionsToDisable = regionsets.filter(function (iter) {
@@ -134,7 +144,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         me._values = {
             ds: datasrc,
             ind: indId,
-            regionsetComponent: regionSelect
+            regionsetComponent: regionSelect,
+            series: this.searchSeries
         };
 
         me.trigger('indicator.changed', regionsets.length > 0);
@@ -145,6 +156,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             datasource: me._values.ds,
             indicator: me._values.ind,
             regionset: me._values.regionsetComponent.value(),
+            series: me._values.series,
             selections: {}
         };
 

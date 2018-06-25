@@ -29,9 +29,11 @@ Oskari.registerLocalization({
         'panels': {
             'newSearch': {
                 'title': 'SEARCH DATA',
+                'seriesTitle': 'Timeseries',
                 'datasourceTitle': 'Data source',
                 'indicatorTitle': 'Indicator',
                 'regionsetTitle': 'Regionset',
+                'seriesLabel': 'Get as timeseries',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
                 'selectRegionsetPlaceholder': 'Select regionset',
@@ -89,7 +91,9 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Gender',
             'year': 'Year',
-            'regionset': 'Area'
+            'regionset': 'Area',
+            'from': 'from',
+            'to': 'to'
         },
         'datatable': 'Table',
         'published': {

@@ -29,9 +29,11 @@ Oskari.registerLocalization({
         'panels': {
             'newSearch': {
                 'title': 'AINEISTOHAKU',
+                'seriesTitle': 'Aikasarja',
                 'datasourceTitle': 'Tietolähde',
                 'indicatorTitle': 'Indikaattori',
                 'regionsetTitle': 'Aluejako',
+                'seriesLabel': 'Hae aikasarjana',
                 'selectDatasourcePlaceholder': 'Valitse tietolähde',
                 'selectIndicatorPlaceholder': 'Valitse aineisto',
                 'selectRegionsetPlaceholder': 'Valitse aluejako',
@@ -89,7 +91,9 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Sukupuoli',
             'year': 'Vuosi',
-            'regionset': 'Aluevalinta'
+            'regionset': 'Aluevalinta',
+            'from': 'alkaen',
+            'to': 'päättyen'
         },
         'datatable': 'Taulukko',
         'published': {
