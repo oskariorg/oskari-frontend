@@ -319,7 +319,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                         //set selected values checked
                         if (me.selectedOptionsUi[toolName]) {
-                            selectTool.find('input').attr('checked', 'checked');
+                            selectTool.find('input').attr('checked', true);
                             if (toolName === "history") {
                                 tool.__plugin.addToolButton("history_back");
                                 tool.__plugin.addToolButton("history_forward");

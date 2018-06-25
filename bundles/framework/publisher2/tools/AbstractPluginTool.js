@@ -107,10 +107,8 @@ function(sandbox, mapmodule, localization, instance, handlers) {
                 me.stop();
             }
         }
-        if (!Oskari.util.isMobile()) {
             var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
             sandbox.notifyAll(event);   
-        }
     },
 
     isEnabled: function () {

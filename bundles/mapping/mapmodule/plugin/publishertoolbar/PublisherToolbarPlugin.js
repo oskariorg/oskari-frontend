@@ -307,6 +307,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function(mapInMobileMode, forced) {
+            var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -324,7 +325,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             this.teardownUI();
 
-            me._element = me._createControlElement(mapInMobileMode);
+            me._element = me._createControlElement(isMobile);
 
             var changeToolStyle = function(toolstyle, div){
                 var div = div || me.getElement(),
@@ -355,7 +356,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             };
 
-            if (!toolbarNotReady && mapInMobileMode) {
+            if (!toolbarNotReady && isMobile) {
                 changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
