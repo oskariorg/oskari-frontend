@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._suppressEvents = false;
 
         this._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-zoom-in': {
                     iconCls: 'mobile-zoom-in',
                     tooltip: '',
@@ -43,8 +43,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         var mapModule = me.getMapModule();
                         var currentZoom = mapModule.getMapZoom();
                         var maxZoomLevel = mapModule.getMaxZoomLevel();
-                        if(currentZoom<maxZoomLevel) {
-                            me.getMapModule().setZoomLevel(currentZoom+1);
+                        if (currentZoom < maxZoomLevel) {
+                            me.getMapModule().setZoomLevel(currentZoom + 1);
                         }
                     }
                 },
@@ -56,8 +56,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     callback: function (el) {
                         var mapModule = me.getMapModule();
                         var currentZoom = mapModule.getMapZoom();
-                        if(currentZoom>0) {
-                            me.getMapModule().setZoomLevel(currentZoom-1);
+                        if (currentZoom > 0) {
+                            me.getMapModule().setZoomLevel(currentZoom - 1);
                         }
                     }
                 }
@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 max: mapModule.getMaxZoomLevel(),
                 value: mapModule.getMapZoom(),
                 slide: function (event, ui) {
-                   me.getMapModule().setZoomLevel(ui.value);
+                    me.getMapModule().setZoomLevel(ui.value);
                 }
             });
 
@@ -220,15 +220,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          *
          */
         refresh: function () {
-            var me = this,
-                conf = me.getConfig();
+            var me = this;
+            var conf = me.getConfig();
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
                 var toolStyle = me.getToolStyleFromMapModule();
                 if (!toolStyle) {
-                    toolStyle = "default";
+                    toolStyle = 'default';
                 }
                 if (toolStyle !== null && toolStyle !== undefined) {
                     me.changeToolStyle(me.toolStyles[toolStyle], me.getElement());
@@ -249,7 +249,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (me._slider) {
                 // disable events in "onChange"
                 me._suppressEvents = true;
-                /*me._slider.setValue(value);*/
                 me._slider.slider('value', value);
                 me._suppressEvents = false;
             }
@@ -298,9 +297,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 return;
             }
             if (!style) {
-                style = this.toolStyles["default"];
-            } else if (!style.hasOwnProperty("widthCenter")) {
-                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
+                style = this.toolStyles['default'];
+            } else if (!style.hasOwnProperty('widthCenter')) {
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles['default'];
             }
             var imgUrl = this.getImagePath();
             var styleName = style.val;
@@ -414,6 +413,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
             var me = this;
             var mobileDefs = this.getMobileDefs();
+            this.teardownUI();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
@@ -421,7 +421,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (!forced && toolbarNotReady) {
                 return true;
             }
-            this.teardownUI();
 
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
