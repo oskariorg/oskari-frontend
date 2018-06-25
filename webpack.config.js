@@ -7,6 +7,7 @@ module.exports = {
   entry: './applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
   output: {
     path: path.resolve(__dirname, 'dist/poc/full-map/'),
+    publicPath: 'Oskari/dist/poc/full-map/',
     filename: 'oskari.min.js'
   },
   module: {
