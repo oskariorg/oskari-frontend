@@ -3,10 +3,19 @@ const fs = require('fs');
 const localeFile = /\/locale\/.{2}\.js$/;
 
 class LocalizationPlugin {
+    constructor() {
+        this.startTime = Date.now();
+        this.prevTimestamps = new Map();
+    }
     apply(compiler) {
         compiler.hooks.emit.tapAsync('LocalizationPlugin', (compilation, callback) => {
 
-            const localeFiles = Array.from(compilation.fileDependencies).filter(path => localeFile.test(path));
+            const localeFiles = Array.from(compilation.fileDependencies)
+                .filter(path => localeFile.test(path))
+                .filter(path => {
+                    return (this.prevTimestamps.get(path) || this.startTime) < (compilation.fileTimestamps.get(path) || Infinity);
+                });
+            this.prevTimestamps = compilation.fileTimestamps;
 
             const parsed = new Map();
             const Oskari = {
