@@ -276,7 +276,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                         }
                         tool.config.location.classes = tools[i][layout];
                         var plugin = tools[i].getPlugin();
-                        if (plugin && plugin.setLocation && !Oskari.util.isMobile()) {
+                        if (plugin && plugin.setLocation) {
                             plugin.setLocation(tool.config.location.classes);
                         }
                     }
