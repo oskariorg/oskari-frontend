@@ -1,3 +1,4 @@
+const path = require('path');
 
 module.exports = function(source) {
 
@@ -5,13 +6,22 @@ module.exports = function(source) {
 
     const Oskari = {
         clazz: {
-            define: function(id, constructor, methods, metadata) {
-                if (metadata.source && metadata.source.scripts) {
+            define: (id, constructor, methods, metadata) => {
+                if (!metadata.source) {
+                    return;
+                }
+
+                if (metadata.source.scripts) {
                     metadata.source.scripts.forEach(script => {
                         dependencies.push(script);
                     });
                 }
-                // TODO: load locales
+                
+                if (metadata.source.locales) {
+                    metadata.source.locales.forEach(l => {
+                        this.addDependency(path.join(this.context, l.src));
+                    })
+                }
             }
         },
         bundle_manager: {

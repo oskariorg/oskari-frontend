@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const LocalizationPlugin = require('./tools/localizationPlugin.js');
 
 module.exports = {
   mode: 'development',
@@ -56,7 +57,10 @@ module.exports = {
       }
     ]
   },
-  plugins: [new webpack.IgnorePlugin(/^\.\/locale$/)],
+  plugins: [
+    new webpack.IgnorePlugin(/^\.\/locale$/),
+    new LocalizationPlugin()  
+  ],
   resolveLoader: {
     modules: [ 'node_modules' ],
     extensions: [ '.js', '.json' ],
