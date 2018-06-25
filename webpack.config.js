@@ -10,6 +10,12 @@ module.exports = {
     publicPath: 'Oskari/dist/poc/full-map/',
     filename: 'oskari.min.js'
   },
+  devServer: {
+    proxy: [{
+      context: ['**', '!Oskari/dist/poc/full-map/**'],
+      target: 'http://localhost:8080',
+    }]
+  },
   module: {
     rules: [
       {
@@ -60,12 +66,12 @@ module.exports = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/),
-    new LocalizationPlugin()  
+    new LocalizationPlugin()
   ],
   resolveLoader: {
-    modules: [ 'node_modules' ],
-    extensions: [ '.js', '.json' ],
-    mainFields: [ 'loader', 'main' ],
+    modules: ['node_modules'],
+    extensions: ['.js', '.json'],
+    mainFields: ['loader', 'main'],
     alias: {
       'bundle-loader': path.resolve('./tools/bundleLoader.js')
     }
