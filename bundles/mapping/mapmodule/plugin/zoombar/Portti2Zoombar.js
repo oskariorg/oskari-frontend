@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 max: mapModule.getMaxZoomLevel(),
                 value: mapModule.getMapZoom(),
                 slide: function (event, ui) {
-                   me.getMapModule().setZoomLevel(ui.value);
+                me.getMapModule().setZoomLevel(ui.value);
                 }
             });
 
@@ -414,6 +414,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
             var me = this;
             var mobileDefs = this.getMobileDefs();
+            this.teardownUI();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
@@ -421,7 +422,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (!forced && toolbarNotReady) {
                 return true;
             }
-            this.teardownUI();
 
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
