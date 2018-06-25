@@ -296,6 +296,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 me.popup.close(true);
                 me.popup = null;
             }
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -702,7 +704,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
-
         }
 
     }, {
