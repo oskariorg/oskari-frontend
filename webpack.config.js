@@ -4,17 +4,34 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const LocalizationPlugin = require('./webpack/localizationPlugin');
 
+const exampleCommand = 'npm run build -- --env.appdef=44.6:applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json';
+
 module.exports = (env, argv) => {
   const isProd = argv.mode === 'production';
+
+  if (!env || !env.appdef) {
+    throw new Error('Must give "appdef" env variable, eg.: ' + exampleCommand);
+  }
+
+  const parts = env.appdef.split(':');
+
+  if (parts.length > 2) {
+    throw new Error('Format for "appdef" is "version:pathToMinifierAppSetup", eg.: ' + exampleCommand);
+  }
+
+  const version = parts.length > 1 ? parts[0] : 'devapp';
+  const appsetupPath = parts.length > 1 ? parts[1] : parts[0];
+  const appsetupDir = path.dirname(appsetupPath);
+  const appName = appsetupDir.split('/').pop();
 
   // Common config for both prod & dev
   const config = {
     mode: isProd ? 'production' : 'development',
-    entry: './applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
+    entry: path.resolve(__dirname, appsetupPath),
     devtool: isProd ? 'source-map' : 'cheap-eval-source-map',
     output: {
-      path: path.resolve(__dirname, 'dist/poc/full-map/'),
-      publicPath: 'Oskari/dist/poc/full-map/',
+      path: path.resolve(__dirname, `dist/${version}/${appName}/`),
+      publicPath: `Oskari/dist/${version}/${appName}/`,
       filename: 'oskari.min.js'
     },
     module: {
@@ -53,8 +70,8 @@ module.exports = (env, argv) => {
       new LocalizationPlugin(),
       new CopyWebpackPlugin(
         [
-          { from: '*.js', context: 'applications/paikkatietoikkuna.fi/full-map/' },
-          { from: 'css/**', context: 'applications/paikkatietoikkuna.fi/full-map/' },
+          { from: '*.js', context: appsetupDir },
+          { from: 'css/**', context: appsetupDir },
           { from: 'resources/icons.css' },
           { from: 'resources/icons.png' }
         ]
@@ -83,7 +100,7 @@ module.exports = (env, argv) => {
   } else {
     config.devServer = {
       proxy: [{
-        context: ['**', '!Oskari/dist/poc/full-map/**'],
+        context: ['**', `!Oskari/dist/${version}/${appName}/**`],
         target: 'http://localhost:8080',
       }]
     };

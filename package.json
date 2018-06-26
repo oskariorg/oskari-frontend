@@ -11,7 +11,8 @@
     "test": "eslint -c .eslintrc.js src/**/*.js",
     "lintfix": "eslint -c .eslintrc.js src/**/*.js --fix",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "paikkis:dev": "webpack-dev-server --env.appdef=applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.5.2",
