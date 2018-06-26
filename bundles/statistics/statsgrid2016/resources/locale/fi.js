@@ -219,7 +219,8 @@ Oskari.registerLocalization({
             },
             'error': {
                 'title': 'Virhe',
-                'notfound': 'Indikaattoria ei löytynyt'
+                'notfound': 'Indikaattoria ei löytynyt',
+                'notdeleted': 'Indikaattorin poisto epäonnistui'
             }
         },
         'userIndicators': {

@@ -207,7 +207,7 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Ta bort indikatorn',
-                'deletemsg': 'Vill du ta bord indikatorn "{name}"?'
+                'deletemsg': 'Vill du ta bort indikatorn "{name}"?'
             },
             'button': {
                 'cancel': 'Avbryt',
@@ -215,7 +215,8 @@ Oskari.registerLocalization({
             },
             'error': {
                 'title': 'Fel',
-                'notfound': 'Indikator saknas'
+                'notfound': 'Indikator saknas',
+                'notdeleted': 'Borttagning av indikatorn misslyckades'
             }
         },
         'userIndicators': {

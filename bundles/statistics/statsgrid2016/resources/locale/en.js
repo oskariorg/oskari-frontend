@@ -218,7 +218,8 @@ Oskari.registerLocalization({
             },
             'error': {
                 'title': 'Error',
-                'notfound': 'The indicator was not found.'
+                'notfound': 'The indicator was not found.',
+                'notdeleted': 'The indicator was not removed.'
             }
         },
         'userIndicators': {
