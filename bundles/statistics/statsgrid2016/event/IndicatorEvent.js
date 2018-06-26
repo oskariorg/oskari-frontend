@@ -8,10 +8,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.IndicatorEvent',
      * @method create called automatically on construction
      * @static
      */
-    function (datasource, indicator, selections, removed) {
+    function (datasource, indicator, selections, series, removed) {
         this.datasource = datasource;
         this.indicator = indicator;
         this.selections = selections;
+        this.series = series;
         this.wasAdded = !removed;
     }, {
         /**
@@ -49,6 +50,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.IndicatorEvent',
          */
         getSelections: function () {
             return this.selections || {};
+        },
+        /**
+         * Selections that user selected for indicator
+         * @return {Object} key is selection id, value is the selected value
+         */
+        getSeries: function () {
+            return this.series;
         }
     }, {
         'protocol': ['Oskari.mapframework.event.Event']

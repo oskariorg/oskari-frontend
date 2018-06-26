@@ -10,7 +10,8 @@
         this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
-        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
+        this.series = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesService', sandbox);
+        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox, this.series);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
@@ -371,9 +372,12 @@
          * Calls callback with a list of indicators for the datasource.
          * @param  {Number}   ds        datasource id
          * @param  {Number}   indicator indicator id
+         * @param  {Object}   params    indicator selections
+         * @param  {Object}   series    serie keys
+         * @param  {Object}   regionset regionset
          * @param  {Function} callback  function to call with error or results
          */
-        getIndicatorData: function (ds, indicator, params, regionset, callback) {
+        getIndicatorData: function (ds, indicator, params, series, regionset, callback) {
             if (typeof callback !== 'function') {
                 // log error message
                 return;
@@ -381,6 +385,10 @@
             if (!ds || !indicator || !regionset) {
                 // log error message
                 callback('Datasource, regionset or indicator missing');
+                return;
+            }
+            if (series && series.values.indexOf(params[series.id]) === -1) {
+                callback('Requested dataset is out of range');
                 return;
             }
             var me = this;
@@ -510,6 +518,7 @@
                         id: ind.indicator,
                         name: 'N/A',
                         selections: ind.selections,
+                        series: ind.series,
                         hash: ind.hash
                     };
                     response.indicators.push(metadata);
@@ -526,7 +535,7 @@
                         }
                     });
 
-                    me.getIndicatorData(ind.datasource, ind.indicator, ind.selections, setId, function (err, indicatorData) {
+                    me.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, setId, function (err, indicatorData) {
                         count++;
                         if (err) {
                             errors++;

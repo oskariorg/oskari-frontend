@@ -1,7 +1,10 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, options) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, id, label, values, options) {
     this.locale = locale;
     this.element = null;
-    this.selectOptions = options;
+    this.id = id;
+    this.label = label;
+    this.values = this._sort(values);
+    this.options = options;
     this.selections = {
         from: null,
         to: null
@@ -13,26 +16,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, 
         select: _.template('<div class="label">${label}</div>')
     },
     getId: function () {
-        return this.selectOptions.id;
+        return this.id;
     },
     getElement: function () {
         return this.element;
     },
+    _sort: function (values) {
+        if (!Array.isArray(values)) {
+            values = [values];
+        }
+        return values.sort(this._sortDesc);
+    },
+    _sortDesc: function (val1, val2) {
+        return val2.id - val1.id;
+    },
     _createUI: function () {
         var cont = jQuery(this.__templates.main());
-        var lblFrom = this.selectOptions.title + ' ' + this.locale.parameters.from;
-        var lblTo = this.selectOptions.title + ' ' + this.locale.parameters.to;
+        var lblFrom = this.label + ' ' + this.locale.parameters.from;
+        var lblTo = this.label + ' ' + this.locale.parameters.to;
         var tempFrom = jQuery(this.__templates.select({label: lblFrom}));
         var tempTo = jQuery(this.__templates.select({label: lblTo}));
 
-        var options = {
-            placeholder_text: this.selectOptions.placeholder_text
-        }
-        var from = Oskari.clazz.create('Oskari.userinterface.component.SelectList', this.selectOptions.id + '_from');
-        var to = Oskari.clazz.create('Oskari.userinterface.component.SelectList', this.selectOptions.id + '_to');
+        var from = Oskari.clazz.create('Oskari.userinterface.component.SelectList', this.id + '_from');
+        var to = Oskari.clazz.create('Oskari.userinterface.component.SelectList', this.id + '_to');
 
         var widthDef = {width: '205px'};
-        var dropdown = to.create(this.selectOptions.values, options);
+        var dropdown = to.create(this.values, this.options);
         dropdown.css(widthDef);
         to.adjustChosen();
         to.selectFirstValue();
@@ -41,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, 
         cont.prepend(tempTo);
         this.selections.to = to;
 
-        dropdown = from.create(this.selectOptions.values, options);
+        dropdown = from.create(this.values, this.options);
         dropdown.css(widthDef);
         from.adjustChosen();
         from.selectLastValue();
@@ -54,8 +63,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, 
     },
     getValue: function () {
         var me = this;
-        if (me.selectOptions.values) {
-            var filtered = this.selectOptions.values.filter(function (option) {
+        if (me.values) {
+            var filtered = me.values.filter(function (option) {
                 var value = option.id;
                 var ok = true;
                 var from = me.selections.from ? me.selections.from.getValue() : false;
@@ -71,6 +80,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, 
                 return ok;
             }).map(function (option) {
                 return option.id;
+            }).sort(function (a, b) {
+                return a - b;
             });
             return filtered;
         }
