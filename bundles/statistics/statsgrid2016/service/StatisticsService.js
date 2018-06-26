@@ -668,15 +668,19 @@
                 return;
             }
             var me = this;
+            var data = {
+                datasource: datasrc,
+                id: indicatorId
+            };
+            if (selectors && typeof selectors === 'object') {
+                // only remove dataset from indicator, not the whole indicator
+                data.selectors = JSON.stringify(selectors);
+                data.regionset = regionset;
+            }
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
-                data: {
-                    datasource: datasrc,
-                    id: indicatorId,
-                    selectors: JSON.stringify(selectors),
-                    regionset: regionset
-                },
+                data: data,
                 url: Oskari.urls.getRoute('DeleteIndicator'),
                 success: function (pResp) {
                     _log.info('DeleteIndicator', pResp);
