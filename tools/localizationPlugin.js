@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const localeFile = /\/locale\/.{2}\.js$/;
+const localeFile = /\/locale\/(.{2})\.js$/;
 
 class LocalizationPlugin {
     constructor() {
@@ -11,10 +11,19 @@ class LocalizationPlugin {
         compiler.hooks.emit.tapAsync('LocalizationPlugin', (compilation, callback) => {
 
             const localeFiles = Array.from(compilation.fileDependencies)
-                .filter(path => localeFile.test(path))
+                .filter(path => localeFile.test(path));
+            const changedLanguages = new Set();
+            localeFiles
                 .filter(path => {
                     return (this.prevTimestamps.get(path) || this.startTime) < (compilation.fileTimestamps.get(path) || Infinity);
+                })
+                .forEach(path => {
+                    const lang = this.langFromPath(path);
+                    if (lang) {
+                        changedLanguages.add(lang);
+                    }
                 });
+
             this.prevTimestamps = compilation.fileTimestamps;
 
             const parsed = new Map();
@@ -33,12 +42,14 @@ class LocalizationPlugin {
                     agg.push(loc);
                 }
             }
-            localeFiles.forEach(filePath => {
-                const source = fs.readFileSync(filePath, 'utf8');
-                eval(source);
-            });
+            localeFiles
+                .filter(path => changedLanguages.has(this.langFromPath(path)))
+                .forEach(path => {
+                    const source = fs.readFileSync(path, 'utf8');
+                    eval(source);
+                });
 
-            
+
             for (let entry of parsed.entries()) {
                 let fileContent = entry[1].map(def => `Oskari.registerLocalization(${JSON.stringify(def)});`).join('\n');
                 compilation.assets[`oskari_lang_${entry[0]}.js`] = {
@@ -53,6 +64,11 @@ class LocalizationPlugin {
 
             callback();
         });
+    }
+
+    langFromPath(path) {
+        const match = path.match(localeFile);
+        return match ? match[1] : null;
     }
 }
 
