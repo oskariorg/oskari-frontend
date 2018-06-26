@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
-const LocalizationPlugin = require('./tools/localizationPlugin.js');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const LocalizationPlugin = require('./webpack/localizationPlugin');
 
 module.exports = {
   entry: './applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
@@ -42,7 +43,7 @@ module.exports = {
         test: /\/minifierAppSetup\.json$/,
         use: [
           {
-            loader: path.resolve('./tools/minifierLoader.js')
+            loader: path.resolve('./webpack/minifierLoader.js')
           }
         ]
       }
@@ -50,14 +51,22 @@ module.exports = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/),
-    new LocalizationPlugin()
+    new LocalizationPlugin(),
+    new CopyWebpackPlugin(
+      [
+        { from: '*.js', context: 'applications/paikkatietoikkuna.fi/full-map/' },
+        { from: 'css/**', context: 'applications/paikkatietoikkuna.fi/full-map/' },
+        { from: 'resources/icons.css' },
+        { from: 'resources/icons.png' }
+      ]
+    )
   ],
   resolveLoader: {
     modules: ['node_modules'],
     extensions: ['.js', '.json'],
     mainFields: ['loader', 'main'],
     alias: {
-      'bundle-loader': path.resolve('./tools/bundleLoader.js')
+      'bundle-loader': path.resolve('./webpack/bundleLoader.js')
     }
   }
 };
