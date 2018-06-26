@@ -17,14 +17,14 @@ Oskari.clazz.define(
         var me = this;
         me._toolbar = toolbar;
 
-        var loc = me._toolbar.getLocalization('measure'),
-            title = loc.title;
+        var loc = me._toolbar.getLocalization('measure');
+        var title = loc.title;
         me._title = title;
         me._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         me._dialog.addClass('oskari-measurement');
 
-        var buttons = [],
-            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        var buttons = [];
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
         cancelBtn.setTitle(loc.close);
 
@@ -51,8 +51,8 @@ Oskari.clazz.define(
          * @method _showMeasurementResults
          */
         _showMeasurementResults: function (value) {
-            var me = this,
-                dialog = me._dialog;
+            var me = this;
+            var dialog = me._dialog;
 
             // show measurements in toolbar's content container
             if (me._toolbar.conf.hasContentContainer) {
@@ -61,9 +61,10 @@ Oskari.clazz.define(
                 // if there is no content container, show the data in dialog
                 if (!me._dialogShown) {
                     dialog.show(me._title, '', me._buttons);
+                    dialog.makeDraggable();
                     var cancelBtn = me._buttons[0];
                     cancelBtn.setHandler(function () {
-                        if(me._toolbar.currentMeasureTool){
+                        if (me._toolbar.currentMeasureTool) {
                             me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [me._toolbar.currentMeasureTool, true]);
                         }
                         me._dialogShown = false;
@@ -83,19 +84,17 @@ Oskari.clazz.define(
                 me._content.html(value);
             }
         },
-
-
         /**
          * @method update
          * implements Module protocol update method
          */
         _showResultsInPlugin: function (value) {
-            var me = this,
-                toolContainerRequest;
+            var me = this;
+            var toolContainerRequest;
             if (!me.toolContentDivData) {
                 var cancelBtn = me._buttons[0];
                 cancelBtn.setHandler(function () {
-                    if(me._toolbar.currentMeasureTool){
+                    if (me._toolbar.currentMeasureTool) {
                         me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [me._toolbar.currentMeasureTool, false]);
                     }
                     // ask toolbar to select default tool
@@ -125,9 +124,8 @@ Oskari.clazz.define(
          * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
          */
         _hideResultsInPlugin: function (isCancel) {
-            var me = this,
-                toolContainerRequest = Oskari.requestBuilder(
-                    'Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
+            var me = this;
+            var toolContainerRequest = Oskari.requestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
             me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
             me.toolContentDivData = null;
         }

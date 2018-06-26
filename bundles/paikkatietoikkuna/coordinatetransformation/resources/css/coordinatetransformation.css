@@ -1,86 +1,23 @@
 .coordinatetransformation-flyout {
-    top:0;
-}
-.transformation-wrapper {
-    max-width: 50em !important;
-    display: flex;
-    flex-flow: row wrap;
-}
-.transformation-wrapper #rowwidth {
-    max-width: 100px !important;
+    /*
+    top: 0px; !important;
+    min-width: 640px;
+    max-width: 900px;
+    */
 }
 
-.transformation-wrapper .center-align {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.coordinatetransformation-flyout .header {
-    font-size: 15px;
-    line-height: 22px;
-    padding-bottom: 0.5em;
-}
-.coordinateconversion-field {
-    height:auto;
-    /* display: inline-block; */
-}
- .coordinatefield-input {
-    float:left;
-} 
+.coordinatetransformation-flyout h4, h5 {
+    padding-bottom: 0px;
 
-.coordinatefield-result {
-    float:left;
-    width: 20em !important;
-}
-.coordinatetransformation-flyout .transformation-button {
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    float:left;
-    margin-top: 6.25rem;
-}
-.transformation-wrapper .util-row{
-    clear: left;
-    width: 100%;
-    padding-top: 1em;
-}
-.transformation-wrapper .util-row.show.clear{
-    float:left;
-}
-.transformation-wrapper .coordinate-datasource {
-    width: 100%;
-}
-.transformation-wrapper .sourceWrapper {
-    padding-bottom: 1em;
-}
-.coordinatetransformation-flyout .export, .rowcount {
-    float:right;
 }
 
-.coordinatetransformation-flyout .heightsystem {
-    background-color: lightgray;
-}
-.coordinatetransformation-flyout #transform {
-    font-size:80%;
-    vertical-align: middle;
-}
-
-.coordinatetransformation-flyout .keyboardinfo {
-    margin-top:2%;
-    margin-left:3%;
-    font-size:0.95em;
-}
-.coordinatetransformation-flyout .mapinfo {
-    margin-top:2%;
-    margin-left:3%;
-    font-size:0.95em;
-}
+/* Custom radio button */
 .coordinatetransformation-flyout input[type="radio"] {
     display:none;
 }
 .coordinatetransformation-flyout input[type="radio"] + label {
-    color: black;
-    font-family:Arial, sans-serif;
     font-size:14px;
+    margin-right: 20px;
 }
 .coordinatetransformation-flyout input[type="radio"] + label span {
     display:inline-block;
@@ -99,7 +36,6 @@
 .coordinatetransformation-flyout input[type="radio"]:checked + label span{
      background-color:black;
 }
-
 .coordinatetransformation-flyout input[type="radio"] + label span,
 .coordinatetransformation-flyout input[type="radio"]:checked + label span {
   -webkit-transition:background-color 0.4s linear;
@@ -107,80 +43,134 @@
   -moz-transition:background-color 0.4s linear;
   transition:background-color 0.4s linear;
 }
-/*
-* SYSTEM SELCTOR
-*/
+
+/* Source selection */
+.coordinatetransformation-flyout .datasource-wrapper {
+    width: 75%;
+    padding-bottom: 12px;
+}
+
+.coordinatetransformation-flyout .datasource-info {
+    height: 62px;
+}
+.coordinatetransformation-flyout .coordinateconversion-mapinfo a {
+    font-weight: 700;
+}
+.coordinatetransformation-flyout .coordinate-datasource{
+    padding-bottom: 6px;
+}
+.coordinatetransformation-flyout .keyboardinfo, .mapinfo {
+    padding-top: 6px;
+    padding-left: 12px;
+    font-size: 13px;
+}
+
+/* Coordinate system selections */
+.coordinatetransformation-flyout .coordinate-systems-wrapper {
+    display: flex;
+    padding-bottom: 12px;
+}
+.coordinatetransformation-flyout .coordinate-system-wrapper {
+    min-width: 360px;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.coordinatetransformation-flyout .auto-margin-divider {
+    width: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    /* or source: margin-right: 20; target: margin-left: auto;*/
+}
+.coordinatetransformation-flyout .selection-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 360px;
+}
+
 .transformation-wrapper .selectMountPoint {
     margin-left: auto;
 }
-.transformation-wrapper .systems {
-    display: inline-flex;
-}
-.coordinateSystemWrapper:last-child {
-    margin-left: 2em;
-}
 .transformation-wrapper .system {
-    padding-top: 0.875em; 
+    padding-top: 12px;
 }
 .transformation-system {
     display: inline-block;
     font-size: 12px;
     padding-left: 3px;
 }
-/*
-*TABLE
-*/
+/* Coordinate tables  */
+.coordinatetransformation-flyout .coordinate-tables-wrapper {
+    display: flex;
+    padding-bottom: 12px;
+}
 .coordinatetransformation-flyout .oskari-coordinate-table {
-    height: 80%;
+    border: 1px solid black;
     overflow-y: scroll;
+    line-height: 1em;
+    table-layout: fixed;
+    margin-bottom: 0px;
+}
+.coordinatetransformation-flyout .transformation-button {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+.coordinatetransformation-flyout .transformation-button input {
+    font-size:80%;
 }
 .coordinatetransformation-flyout .oskari-table-content {
-    float:left;
-    width: 20em !important;
-    height: 20em;
+    width: 320px;
+    height: 285px;
     overflow: auto;
-    margin-top: 0px;
-    border: 1px solid rgba(255,255,255,0.3);
 }
-.coordinatetransformation-flyout .oskari-table-content-target {
+.coordinatetransformation-flyout .rowcount {
     float:right;
-    width: 20em !important;
-    height: 20em;
-    overflow: hidden;
-    margin-top: 0px;
-    border: 1px solid rgba(255,255,255,0.3);
 }
 .coordinatetransformation-flyout .oskari-table-header {
-    color: black;
-    width: 20em !important;
+    min-height: 36px;
 }
 .coordinatetransformation-flyout .oskari-tbl-header {
     margin-bottom: 0;
     table-layout: fixed;
     word-wrap: break-word;
+    width: 320px;
 }
-
-.coordinatefield-table th three {
-  text-align: left;
-  font-weight: 500;
-  font-size: calc(0.55rem + 0.28vh);
-  width: 33% !important;
-}
-.coordinatefield-table th two {
-  text-align: left;
-  font-weight: 500;
-  font-size: calc(0.55rem + 0.28vh);
-  width: 50% !important;
-}
-.coordinatetransformation-flyout td {
-    background: #FAFAFA;
-}
-.coordinatetransformation-flyout .cell {
+.coordinate-table-wrapper th {
     text-align: center;
-    height: 1em;
 }
-.coordinatetransformation-flyout .cell.invalid-coord {
-    border: 2px solid red !important; /*TODO */
+.coordinate-table-wrapper th.three {
+    width: 33% !important;
+}
+.coordinate-table-wrapper th.two {
+    height: 36px;
+    vertical-align: bottom;
+    width: 50% !important;
+}
+.coordinatetransformation-flyout td { /*.cell*/
+    background: #FAFAFA;
+    border: 1px solid black;
+    padding: 0px;
+}
+.coordinatetransformation-flyout table.two-dimensions td {
+    width: 50%;
+}
+.coordinatetransformation-flyout table.three-dimensions td {
+    width: 33%;
+}
+.coordinatetransformation-flyout .cellContent {
+    text-align: center;
+    height: 12px;
+    padding-bottom: 7px;
+    padding-top: 8px;
+    overflow: hidden;
+}
+.coordinatetransformation-flyout .invalid-coord {
+    border: 1px solid red;
+    padding-bottom: 6px;
+    padding-top: 7px;
 }
 .coordinatetransformation-flyout .cell.control {
     border: inherit; 
@@ -195,6 +185,7 @@
 /*
 * TABLE HOVER
 */
+/*
 .coordinatetransformation-flyout .hoverable {
   background: white;
   border-radius:3px;
@@ -208,10 +199,12 @@
   animation: float 5s infinite;
 }
 .coordinatetransformation-flyout .hoverable td { 
-    padding:7px; border:#4e95f4 1px solid;
+    padding: 0px;
+    border:#4e95f4 1px solid;
     width:33% !important;
-}
-/* Define the hover highlight color for the table row */
+}*/
+
+/*
 .coordinatetransformation-flyout .hoverable tr:hover {
   background:#4E5066;
   color:#FFFFFF;
@@ -221,6 +214,12 @@
 .coordinatetransformation-flyout tr:hover td {
   background:#4E5066;
   color:#FFFFFF;
+  border-top: 1px solid #22262e;
+  border-bottom: 1px solid #22262e;
+}*/
+.coordinatetransformation-flyout table .highlighted td {
+  background:#4E5066;
+  color: #FFFFFF;
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
@@ -234,74 +233,93 @@
 }
 .coordinatetransformation-flyout .dropdown_title {
     font-weight: bold;
-    word-break: break-word;
-    max-width:12em !important;
-}
-.coordinatetransformation-flyout .infolink {
-    float:right;
-    height: 1.3em;
-    width: 1.3em;
+    /*max-width:12em !important;*/
 }
 
-@media screen and (max-width: 640px) {
-    .transformation-wrapper {
-        max-width: 27em !important;
+/* Util row */
+.util-row-wrapper {
+    display: flex;
+}
+.util-row-wrapper input[type="button"] {
+    font-size: 13px;
+}
+.util-row-wrapper input[type="button"].export {
+    margin-left: auto;
+}
+
+/* File settings form */
+.coordinatetransformation-file-form {
+    min-width: 400px;
+    display: flex;
+    flex-flow: column wrap;
+    padding: 10px 15px 0px;
+}
+
+.coordinatetransformation-file-form .selection-wrapper {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+}
+.coordinatetransformation-file-form input:not(.chkbox) {
+    margin-left: auto;
+    width: 150px;
+}
+.coordinatetransformation-file-form .settingsSelect {
+    margin-left: auto;
+    margin-right: 12px;
+    width: 150px;
+}
+.coordinatetransformation-file-form select {
+    width: 162px;
+    font-size: 13px;
+}
+.coordinatetransformation-file-form label {
+    display:flex;
+    width: 300px;
+    margin-left: auto;
+    align-items: center;
+    padding-bottom: 6px;
+}
+
+@media screen and (max-width: 1000px) {
+    .coordinatetransformation-flyout {
+        max-width: 560px;
+    }
+    .coordinatetransformation-flyout .datasource-wrapper{
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .coordinatetransformation-flyout .coordinate-systems-wrapper {
+        flex-direction: column;
+        width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+        /*align-items: center;
+        flex-wrap: wrap;*/
+    }
+    .coordinatetransformation-flyout .coordinate-system-wrapper.input {
+        margin-bottom: 12px;
+    }
+    .coordinatetransformation-flyout .coordinate-tables-wrapper {
+        flex-direction: column;
+        width: 322px;
+        margin-left: auto;
+        margin-right: auto;
+        /*align-items: center;
+        flex-wrap: wrap;*/
+    }
+    .coordinate-tables-wrapper .transformation-button {
+        margin-top: 12px;
+        margin-bottom: 12px;
+    }
+    .coordinate-tables-wrapper .transformation-button input{
+        width: 320px;
     }
 
-    #targetcoordsystem {
-        margin-left: 0;
-        clear:both;
-        order:4;
-    }
-    #inputcoordsystem {
-        order:2;
-    }
-    .coordinatefield-input {
-        order:3;
-    }
-    .coordinatefield-result {
-        order:6;
-    }
-    .transformation-button {
-        order:5;
-        clear:both;
-        /* margin-top: 6.25rem; */
-    }
-    .coordinate-datasource {
-        order:1;
-    }
-    .util-row {
-        order: 7;
-    }
-}
-@media screen and (max-width: 785px) {
-    .transformation-wrapper {
-        max-width: 27em !important;
-    }
-    #targetcoordsystem {
-        margin-left: 0;
-        clear:both;
-        order:4;
-    }
-    #inputcoordsystem {
-        order:2;
-    }
-    .coordinatefield-input {
-        order:3;
-    }
-    .coordinatefield-result {
-        order:6;
-    }
-    .transformation-button {
-        order:5;
-        clear:both;
-        /* margin-top: 6.25rem; */
-    }
-    .coordinate-datasource {
-        order:1;
-    }
-    .util-row {
-        order: 7;
+    .coordinatetransformation-flyout .util-row-wrapper {
+        font-size: 12px;
     }
 
 }

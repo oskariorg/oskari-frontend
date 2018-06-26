@@ -15,6 +15,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         this._controlPlugin;
         this._timeseriesService;
         this._timeseriesLayerService;
+        this._controlPluginConf;
     }, {
         __name: 'timeseries',
         /**
@@ -44,6 +45,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             var sandboxName = (me.conf ? me.conf.sandbox : null) || 'sandbox';
             var sandbox = me._sandbox = Oskari.getSandbox(sandboxName);
 
+            if (me.conf && me.conf.plugins) {
+                var plugin = me.conf.plugins.find(function (plugin) {
+                    return plugin.id === 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
+                });
+                if (plugin) {
+                    this._setControlPluginConfiguration(plugin.config);
+                }
+            }
+
             me._timeseriesService = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesService');
             sandbox.registerService(me._timeseriesService);
 
@@ -54,9 +64,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             });
             me._registerForLayerFiltering();
             Oskari.on('app.start', function () {
-                me._timeseriesService.on('activeChanged', me._updateControl.bind(me));
+                var active = me._timeseriesService.getActiveTimeseries();
+                if (active) {
+                    me._updateControl(active);
+                }
                 me._timeseriesLayerService.updateTimeseriesLayers();
+                me._timeseriesService.on('activeChanged', me._updateControl.bind(me));
             });
+            sandbox.requestHandler('Timeseries.ConfigurationRequest', me);
         },
         /**
          * @method _registerForLayerFiltering
@@ -64,16 +79,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          * @private
          */
         _registerForLayerFiltering: function () {
-            var me = this,
-                loc = Oskari.getMsg.bind(null, 'timeseries'),
-                layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
-
-            layerlistService.registerLayerlistFilterButton( loc("layerFilter.timeseries"),
-                loc("layerFilter.tooltip"), {
-                    active: 'layer-timeseries',
-                    deactive: 'layer-timeseries-disabled'
-                },
-                'timeseries');
+            var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+            if (layerlistService) {
+                var loc = Oskari.getMsg.bind(null, 'timeseries');
+                layerlistService.registerLayerlistFilterButton(
+                    loc('layerFilter.timeseries'),
+                    loc('layerFilter.tooltip'), {
+                        active: 'layer-timeseries',
+                        deactive: 'layer-timeseries-disabled'
+                    },
+                    'timeseries'
+                );
+            }
+        },
+        /**
+         * @method _setControlPluginConfiguration
+         */
+        _setControlPluginConfiguration: function (conf) {
+            this._controlPluginConf = conf || {};
         },
         /**
          * @method _updateControl
@@ -83,10 +106,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          */
         _updateControl: function (active) {
             if (active) {
-                this._createControlPlugin(active.delegate, active.conf);
-            } else {
-                this._removeControlPlugin();
+                var conf = jQuery.extend(true, {}, this._controlPluginConf || {}, active.conf);
+                if (typeof conf.showControl === 'undefined' || conf.showControl) {
+                    this._createControlPlugin(active.delegate, conf);
+                    return;
+                }
             }
+            this._removeControlPlugin();
         },
         /**
          * @method _createControlPlugin
@@ -116,6 +142,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             mapModule.stopPlugin(this._controlPlugin);
             mapModule.unregisterPlugin(this._controlPlugin);
             this._controlPlugin = null;
+        },
+        /**
+         * @method handleRequest
+         *
+         * Request handler for control plugin configuration.
+         */
+        handleRequest: function (core, request) {
+            if (request.getName() === 'Timeseries.ConfigurationRequest') {
+                this._setControlPluginConfiguration(request.getConfiguration());
+            }
         },
         /**
          * @method stop

@@ -334,6 +334,18 @@
 
                 return '';
             },
+
+            /**
+             * Returns capabilities update rate in seconds
+             * @returns {Number} update rate
+             */
+            getCapabilitiesUpdateRate: function() {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.capabilitiesUpdateRate;
+                }
+                return null;
+            },
             /**
              * Returns style legend url
              * @param styleName  style name

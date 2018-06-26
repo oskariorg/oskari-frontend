@@ -70,6 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         btn.addClass('margintopLarge');
+        btn.setPrimary(true);
         btn.setTitle(locale.panels.newSearch.addButtonTitle);
         btn.setEnabled(false);
         btn.insertTo(container);
@@ -77,11 +78,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         btn.setHandler(function (event) {
             event.stopPropagation();
             var values = selectionComponent.getValues();
+            var selectedIndicators = values.indicator;
+            // indicator loop check Array.isArray
+            if (!Array.isArray(values.indicator)) {
+                selectedIndicators = [values.indicator];
+            }
 
-            var added = me.service.getStateService().addIndicator(values.datasource, values.indicator, values.selections);
-            if (added === false) {
+            var newActiveIndicator = false;
+            
+            selectedIndicators.forEach(function (indicator) {
+                var added;
+                if (indicator === '') {
+                    return;
+                }
+                Object.keys(values.selections).forEach(function (key) {
+                    var selection = values.selections[key];
+                    if (Array.isArray(selection)) {
+                        selection.forEach(function (item) {
+                            var current = jQuery.extend(true, {}, values.selections);
+                            current[key] = item;
+                            added = me.service.getStateService().addIndicator(values.datasource, indicator, current);
+                        });
+                    }
+                });
+                if (!added) {
+                    added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections);
+                }
+                if (added) {
+                    newActiveIndicator = indicator;
+                }
+            });
+
+            if (newActiveIndicator !== false) {
                 // already added, set as active instead
-                var hash = me.service.getStateService().getHash(values.datasource, values.indicator.selections);
+                var hash = me.service.getStateService().getHash(values.datasource, newActiveIndicator, values.selections);
                 me.service.getStateService().setActiveIndicator(hash);
             }
             me.service.getStateService().setRegionset(values.regionset);

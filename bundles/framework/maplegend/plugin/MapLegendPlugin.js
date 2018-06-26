@@ -120,7 +120,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._popup.addClass('maplegend__popup');
                 me._popup.addClass('mobile-popup');
             }
-            return false;
         },
         /**
          * @public @method changeToolStyle
@@ -378,8 +377,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         },
         teardownUI: function() {
             //detach old element from screen
-            this.getElement().detach();
-            this.removeFromPluginContainer(this.getElement());
+            if (this.getElement() !== undefined) {
+                this.getElement().detach();
+                this.removeFromPluginContainer(this.getElement());
+            }
             var mobileDefs = this.getMobileDefs();
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },

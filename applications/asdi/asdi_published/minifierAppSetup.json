@@ -85,6 +85,15 @@
             }
         }
     }, {
+        "bundlename" : "timeseries",
+        "metadata" : {
+            "Import-Bundle" : {
+                "timeseries" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }, {
         "bundlename" : "rpc",
         "metadata" : {
             "Import-Bundle" : {

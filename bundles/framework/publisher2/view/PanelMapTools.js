@@ -135,6 +135,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 if (tool.isEnabled()) {
                     ui.find('input').prop('checked','checked');
                 }
+                if (tool.isDisabled()) {
+                    ui.find('input').prop('disabled','disabled');
+                }
 
                 contentPanel.append(ui);
 

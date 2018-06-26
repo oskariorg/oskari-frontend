@@ -280,21 +280,67 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             var viewProjection = data.state.mapfull.state.srs;
             return viewProjection === currentProjection;
         },
-        constructUrlWithUuid: function (srs) {
-            var views = Oskari.app.getSystemDefaultViews();
+        /**
+         * @method constructUrlWithUuid
+         * @param {string} srs Srs name to find corresponding default view uuid
+         * @param {string} editUuid Uuid specifying which view should be opened in the publisher (optional)
+         * @param {object} viewData Data containing config for the geoportal view (optional)
+         *
+         * Constructs an url to open one of system's default views with parameters.
+         *
+         * @return {string} url
+         */
+        constructUrlWithUuid: function (srs, editUuid, viewData) {
+            var sandbox = this.instance.getSandbox();
             var uuid;
-            views.forEach( function (view) {
-                if ( view.srsName === srs ) {
+            var views = Oskari.app.getSystemDefaultViews();
+            views.forEach(function (view) {
+                if (view.srsName === srs) {
                     uuid = view.uuid;
-                    return;
                 }
             });
-            var url = window.location.origin;
-            if (window.location.pathname && window.location.pathname.length) {
-                url += window.location.pathname;
+            var url = sandbox.createURL('/?uuid=' + uuid, false);
+            if (viewData) {
+                url += this._getMapStateParameters(viewData);
             }
-            url += "?uuid="+uuid;
+            if (editUuid) {
+                url += '&editPublished=' + editUuid;
+            }
             return url;
+        },
+        /**
+         * @method _getMapStateParameters
+         * @param {object} view data containing config for the view.
+         * @private
+         *
+         * To get view's url parameters for map link.
+         *
+         * @return {string} url parameters
+         */
+        _getMapStateParameters: function (view) {
+            var mapStateParams = '';
+            if (view && view.state && view.state.mapfull && view.state.mapfull.state) {
+                var state = view.state.mapfull.state;
+                // Set zoom and location
+                mapStateParams += '&zoomLevel=' + state.zoom + '&coord=' + state.east + '_' + state.north;
+                // Set layer parameters
+                if (state.selectedLayers) {
+                    var layerParams = '&mapLayers=';
+                    state.selectedLayers.forEach(function (layer) {
+                        if (layerParams !== '') {
+                            layerParams += ',';
+                        }
+                        layerParams += layer.id + '+' + layer.opacity;
+                        if (layer.style) {
+                            layerParams += '+' + layer.style;
+                        } else {
+                            layerParams += '+';
+                        }
+                    });
+                    mapStateParams += layerParams;
+                }
+            }
+            return mapStateParams;
         },
         /**
          * @method createProjectionChangeDialog
@@ -398,17 +444,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 var srs = data.state.mapfull.state.srs;
                 link.text(name);
                 link.bind('click', function () {
-
-                    var supported = me._isCurrentProjectionSupportedForView( data );
+                    var supported = me._isCurrentProjectionSupportedForView(data);
                     if (!supported) {
-                        me.createProjectionChangeDialog( function() {
-                            window.open(
-                                me.constructUrlWithUuid(srs),
-                                'Published',
-                                'location=1,status=1,scrollbars=yes,width=850,height=800'
-                            );
+                        me.createProjectionChangeDialog(function () {
+                            window.location.href = me.constructUrlWithUuid(srs, null, data);
                         });
-                        return;
+                        return false;
                     }
 
                     if (!me.popupOpen) {
@@ -450,8 +491,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 var link = me.templateLink.clone();
                 link.text(name);
                 link.bind('click', function () {
-                    var view = me._getViewById(data.id),
-                        size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
+                    var view = me._getViewById(data.id);
+                    var size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
                     if (!me.popupOpen) {
                         me._showIframeCodePopup(url, size, view.name);
                     }
@@ -460,19 +501,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             };
             grid.setColumnValueRenderer('html', htmlRenderer);
 
-            //sending a request to publisher for editing view
+            // sending a request to publisher for editing view
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 var srs = data.state.mapfull.state.srs;
+                var embeddedMapUuid = data.uuid;
                 link.text(name);
                 link.bind('click', function () {
-
-                    var supported = me._isCurrentProjectionSupportedForView( data );
+                    var supported = me._isCurrentProjectionSupportedForView(data);
                     if (!supported) {
-                        me.createProjectionChangeDialog( function() {
-                            window.location.href = me.constructUrlWithUuid(srs);
+                        me.createProjectionChangeDialog(function () {
+                            window.location.href = me.constructUrlWithUuid(srs, embeddedMapUuid, data);
                         });
-                        return;
+                        return false;
                     }
 
                     if (!me.popupOpen) {
@@ -480,7 +521,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                         if (resp.status) {
                             editRequestSender(data);
                         } else {
-                            me._confirmSetState(function() {
+                            me._confirmSetState(function () {
                                 editRequestSender(data);
                             }, resp.msg === 'missing');
                         }
@@ -648,7 +689,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 
             okBtn.addClass('primary');
 
-            iframeCode = '<iframe src="' + url + '" style="border: none;';
+            iframeCode = '<iframe src="' + url + '" allow="geolocation" style="border: none;';
             if (width !== null && width !== undefined) {
                 iframeCode += ' width: ' + width + ';';
             }

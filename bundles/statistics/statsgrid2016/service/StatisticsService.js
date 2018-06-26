@@ -3,11 +3,13 @@
  */
 (function (Oskari) {
     var _log = Oskari.log('StatsGrid.StatisticsService');
+    var _cacheHelper = null;
 
     Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
         this.sandbox = sandbox;
         this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
+        _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
@@ -21,8 +23,8 @@
         // possible values: wms, vector
         this._mapModes = ['vector'];
     }, {
-        __name: "StatsGrid.StatisticsService",
-        __qname: "Oskari.statistics.statsgrid.StatisticsService",
+        __name: 'StatsGrid.StatisticsService',
+        __qname: 'Oskari.statistics.statsgrid.StatisticsService',
 
         getQName: function () {
             return this.__qname;
@@ -77,7 +79,7 @@
                 return;
             }
             var me = this;
-            if (_.isArray(ds)) {
+            if (Array.isArray(ds)) {
                 // if(typeof ds === 'array') -> loop and add all
                 ds.forEach(function (item) {
                     me.addDatasource(item);
@@ -88,7 +90,11 @@
             ds.info = ds.info || {};
             this.datasources.push(ds);
         },
-
+        getUserDatasource: function () {
+            return this.datasources.find(function (src) {
+                return src.type === 'user';
+            })
+        },
         getUILabels: function (indicator, callback) {
             var me = this;
             var locale = this.locale;
@@ -161,7 +167,7 @@
             }
             var found = null;
             this.datasources.forEach(function (ds) {
-                if (ds.id === id) {
+                if ('' + ds.id === '' + id) {
                     found = ds;
                 }
             });
@@ -189,8 +195,8 @@
                 // wrap to an array
                 includeOnlyIds = [includeOnlyIds];
             }
-            if (_.isArray(includeOnlyIds)) {
-                var result = _.filter(list, function (reg) {
+            if (Array.isArray(includeOnlyIds)) {
+                var result = list.filter(function (reg) {
                     return includeOnlyIds.indexOf(reg.id) !== -1;
                 });
                 if (singleValue) {
@@ -217,7 +223,7 @@
                 return;
             }
             var me = this;
-            var cacheKey = 'GetRegions_' + regionset;
+            var cacheKey = _cacheHelper.getRegionsKey(regionset);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -262,7 +268,7 @@
                 callback('Datasource missing');
                 return;
             }
-            var cacheKey = 'GetIndicatorList_' + ds;
+            var cacheKey = _cacheHelper.getIndicatorListKey(ds);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -334,7 +340,7 @@
                 return;
             }
             var me = this;
-            var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + indicator;
+            var cacheKey = _cacheHelper.getIndicatorMetadataKey(ds, indicator);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -384,13 +390,9 @@
                 regionset: regionset,
                 selectors: JSON.stringify(params || {})
             };
-            var serialized = '';
-            if (typeof params === 'object') {
-                serialized = '_' + Object.keys(params).sort().map(function (key) {
-                    return key + '=' + JSON.stringify(params[key]);
-                }).join(':');
-            }
-            var cacheKey = 'GetIndicatorData_' + ds + '_' + indicator + '_' + regionset + serialized;
+
+            var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
+            _log.info('Getting data with key', cacheKey);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -423,7 +425,6 @@
                             filteredResponse[reg.id] = pResp[reg.id];
                         });
                         me.cache.respondToQueue(cacheKey, null, filteredResponse);
-
                     });
                 },
                 error: function (jqXHR, textStatus) {
@@ -459,7 +460,7 @@
             }
             var setId = this.getStateService().getRegionset();
             if (!setId) {
-                callback("No regionset selected");
+                callback('No regionset selected');
                 return;
             }
             var regionset = this.getRegionsets(setId);
@@ -540,8 +541,158 @@
                     });
                 });
             });
-        }
+        },
+        saveIndicator: function (datasrc, data, callback) {
+            var me = this;
+            if (typeof callback !== 'function') {
+                return;
+            }
+            if (!datasrc) {
+                callback('Datasource missing');
+                return;
+            }
+            if (!data) {
+                callback('Data missing');
+                return;
+            }
+            var responseHandler = function (err, indicatorId) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                // send out event about new/updated indicators
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                me.sandbox.notifyAll(eventBuilder(datasrc));
+                callback(null, {
+                    ds: datasrc,
+                    id: indicatorId
+                });
+            }
 
+            if (!Oskari.user().isLoggedIn()) {
+                // successfully saved for guest user
+                var indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
+                _cacheHelper.updateIndicatorInCache(datasrc, indicatorId, data, function (err) {
+                    responseHandler(err, indicatorId);
+                });
+                return;
+            }
+            // send data to server for logged in users
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    // my indicators datasource id
+                    datasource: datasrc,
+                    id: data.id,
+                    name: data.name,
+                    desc: data.description,
+                    // textual name for the source the data is from
+                    source: data.datasource
+                },
+                url: Oskari.urls.getRoute('SaveIndicator'),
+                success: function (pResp) {
+                    _log.info('SaveIndicator', pResp);
+                    _cacheHelper.updateIndicatorInCache(datasrc, pResp.id, data, function (err) {
+                        // send out event about new/updated indicators
+                        responseHandler(err, pResp.id);
+                    });
+                },
+                error: function (jqXHR, textStatus) {
+                    responseHandler('Error saving data to server');
+                }
+            });
+        },
+        saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
+            if (typeof callback !== 'function') {
+                return;
+            }
+            if (!datasrc) {
+                callback('Datasource missing');
+                return;
+            }
+            if (!indicatorId) {
+                callback('Indicator missing');
+                return;
+            }
+            if (!selectors) {
+                callback('Selectors missing');
+                return;
+            }
+            if (!data) {
+                callback('Data missing');
+                return;
+            }
+            var regionset = selectors.regionset;
+            var actualSelectors = {};
+            Object.keys(selectors).forEach(function (selectorId) {
+                if (selectorId !== 'regionset') {
+                    // filter out regionset
+                    actualSelectors[selectorId] = selectors[selectorId];
+                }
+            });
+            if (!Oskari.user().isLoggedIn()) {
+                // successfully saved for guest user
+                _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                return;
+            }
+            // send data to server for logged in users
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    datasource: datasrc,
+                    id: indicatorId,
+                    selectors: JSON.stringify(actualSelectors),
+                    regionset: regionset,
+                    data: JSON.stringify(data)
+                },
+                url: Oskari.urls.getRoute('AddIndicatorData'),
+                success: function (pResp) {
+                    _log.info('AddIndicatorData', pResp);
+                    _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback('Error saving data to server');
+                }
+            });
+        },
+        /**
+         * selectors and regionset are optional -> will only delete dataset from indicator if given
+         */
+        deleteIndicator: function (datasrc, indicatorId, selectors, regionset, callback) {
+            if (!Oskari.user().isLoggedIn()) {
+                // just flush cache
+                _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
+                callback();
+                return;
+            }
+            var me = this;
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    datasource: datasrc,
+                    id: indicatorId,
+                    selectors: JSON.stringify(selectors),
+                    regionset: regionset
+                },
+                url: Oskari.urls.getRoute('DeleteIndicator'),
+                success: function (pResp) {
+                    _log.info('DeleteIndicator', pResp);
+                    if (!selectors) {
+                        // if selectors/regionset is missing -> trigger a DatasourceEvent as the indicator listing changes
+                        var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                        me.sandbox.notifyAll(eventBuilder(datasrc));
+                    }
+                    _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
+                    callback();
+                },
+                error: function (jqXHR, textStatus) {
+                    callback('Error on server');
+                }
+            });
+        }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

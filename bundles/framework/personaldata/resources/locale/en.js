@@ -10,7 +10,7 @@ Oskari.registerLocalization(
         "register": "Register",
         "projectionError": {
             "title" : "Projections are incompatible",
-            "msg": "Projection will be changed, so that the published map can be edited",
+            "msg": "The page reloads to change the projection",
             "ok": "OK",
             "cancel": "Cancel"
         },

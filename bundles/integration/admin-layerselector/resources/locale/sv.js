@@ -45,6 +45,8 @@ Oskari.registerLocalization(
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "capabilitiesRemarks": "(*)  Kart CRS är inte understödja i service capabilities",
+            "capabilitiesUpdateRateLabel": "Capabilities uppdateringsfrekvens",
+            "capabilitiesUpdateRateInfo": "Uppdateringsfrekvens i sekunder",
             "confirmResourceKeyChange": "Du har ändrat gränssnittjänstens unik namn- eller URL-address. För säkerhets skull, nuvarande rättigheter till kartlager ska raderas. Fortsätt?",
             "confirmDeleteLayerGroup": "Kartlagergrupp blir raderad. Fortsätt?",
             "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
@@ -212,7 +214,7 @@ Oskari.registerLocalization(
         "ok": "OK",
         "close": "Stäng",
         "query": "Hämta",
-        "recheckTitle": "Hämta getCapabilities",
+        "recheckTitle": "Hämta nu",
         "recheckAllButton": "Hämta alla getCapabilities",
         "recheckAll": "Vill du hämta getCapabilites för alla kartlager? Operationen kan ta många minuter.",
         "recheckAllSucceeded": "Uppdatering lyckades för {success, number} lager, misslyckades för {fail, number} lager. Uppdatera sidan för att se uppdaterade data.",

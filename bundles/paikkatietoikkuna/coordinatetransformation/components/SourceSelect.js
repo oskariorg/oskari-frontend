@@ -4,9 +4,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
         me.loc = loc;
         this.element = null;
         me._template = {
-            sourceWrapper: jQuery('<div class="sourceWrapper"></div>'),
+            sourceWrapper: jQuery('<div class="datasource-wrapper"></div>'),
             source: _.template(
-                '<div class="coordinate-datasource"> </br> ' +
+                '<div class="coordinate-datasource">' +
                     '<h4>${title}</h4>'+
                     '<form>'+
                         '<input type="radio" id="clipboard" name="load" value="keyboard">' +
@@ -31,13 +31,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 '<div class="datasource-info">' +
                     '<div class="coordinateconversion-keyboardinfo" style=display:none;">'+
                         '<div class="keyboardinfo">' +
-                            '<i>${keyboardupload}<i>' +
+                            '<i>${keyboardupload}</i>' +
                         '</div>'+
                     '</div>' +
                     '<div class="coordinateconversion-mapinfo" style=display:none;">'+
                         '<div class="mapinfo">'+
-                            '<i>${mapInfo}<i> </br>'+
-                            '<input type="button" class="selectFromMap" name="load" value="${mapButton}">' +
+                            '<i>${mapInfo} </i>' +
+                            '<a href="javascript:void(0);" class="selectFromMap">${mapButton}</a>' +
+                            //'<input type="button" class="selectFromMap" name="load" value="${mapButton}">' +
                         '</div>' +
                     '</div>' +
                 '</div>'
@@ -70,11 +71,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             var info = this._template.info({ 
                 keyboardupload:this.loc('flyout.dataSource.keyboard.info'),
                 mapInfo: this.loc('flyout.dataSource.map.info'),
-                mapButton: this.loc('actions.select')
+                mapButton: this.loc('actions.selectFromMap')
             });
             wrapper.append(source);
             wrapper.append(info);
-            wrapper.find('.selectFromMap').addClass('primary');
+            //wrapper.find('.selectFromMap').addClass('primary');
             this.setElement(wrapper);
         }
     }

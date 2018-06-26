@@ -16,7 +16,15 @@ Oskari.registerLocalization(
         "edit": {
             "popup": {
                 "title": "Öppna den inbäddade kartan för redigering",
-                "msg": "Den tidigare inbäddade kartans uppgifter uppdateras"
+                "msg": "Den tidigare inbäddade kartans uppgifter uppdateras",
+                "published": {
+                    "msg": "Öppnar tidigare inbäddade kartan för redigering. Var god vänta!",
+                    "error": {
+                        "title": "Fel",
+                        "common": "Öppnande av inbäddad kartan misslyckades.",
+                        "login": "Logga in för att redigera inbäddade kartan."
+                    }
+                }
             }
         },
         "BasicView": {
@@ -54,6 +62,7 @@ Oskari.registerLocalization(
                 "label": "Verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
                 "ScaleBarPlugin": "Skalstock",
+                "TimeseriesControlPlugin": "Tidseriespelare",
                 "IndexMapPlugin": "Indexkarta",
                 "PanButtons": "Panoreringsverktyg",
                 "Portti2Zoombar": "Skalans glidreglage",

@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
 
                             var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
                             sandbox.request(me, toolbarRequest);
-
+                            me._resetMobileIcon(this.getElement(), this._mobileDefs.buttons['mobile-featuredata'].iconCls);
                             me._flyoutOpen = undefined;
                             var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
                             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
@@ -63,7 +63,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 el = jQuery('<div class="mapplugin featuredataplugin">' +
                     '<a href="JavaScript: void(0);"></a>' +
                     '</div>');
-
             var link = el.find('a');
             me._loc = Oskari.getLocalization('FeatureData2', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
             link.html(me._loc.title);
@@ -188,20 +187,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * Updates the plugins interface (hides if no featuredata layer selected)
          */
         refresh: function () {
-            var me = this,
-                isVisible = me._hasFeaturedataLayers(),
-                conf = me._config;
+            var me = this;
+            var conf = me._config || {};
 
-            me.setVisible(isVisible);
+            me.setVisible(me._hasFeaturedataLayers());
 
             // Change the style if in the conf
-            if (conf && conf.toolStyle) {
+            if (conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
                 var toolStyle = me.getToolStyleFromMapModule();
                 me.changeToolStyle(toolStyle, me.getElement());
             }
-
         },
         /**
          * @public @method changeToolStyle

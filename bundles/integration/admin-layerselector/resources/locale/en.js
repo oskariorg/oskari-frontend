@@ -45,6 +45,8 @@ Oskari.registerLocalization(
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "capabilitiesRemarks": "(*)  Current map CRS is not supported in the service capabilities",
+            "capabilitiesUpdateRateLabel": "Capabilities update rate",
+            "capabilitiesUpdateRateInfo": "Update rate in seconds",
             "confirmResourceKeyChange": "You have changed the unique name or  the interface address for this map layer. For security reasons the user rights for this map layer will be removed and you must set them again. Do you want to continue?",
             "confirmDeleteLayerGroup": "The map layer group will be removed. Do you want to continue?",
             "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",
@@ -212,7 +214,7 @@ Oskari.registerLocalization(
         "ok": "OK",
         "close": "Close",
         "query": "Query",
-        "recheckTitle": "Re-check capabilities",
+        "recheckTitle": "Re-check now",
         "recheckAllButton": "Re-check all capabilities",
         "recheckAll": "Do you want to query getCapabilites for all layers? The operation can take many minutes.",
         "recheckAllSucceeded": "Capabilites update succeeded for {success, number} layers, failed for {fail, number} layers. Reload page to see updated data.",

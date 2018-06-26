@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.Filter',
      * @method create called automatically on construction
      * @static
      */
-    function ( filter ) {
+    function (filter) {
         this.filter = filter;
     }, {
         /**
@@ -14,10 +14,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.Filter',
          * Returns event name
          * @return {String} The event name.
          */
-        getName : function () {
-            return "StatsGrid.Filter";
+        getName: function () {
+            return 'StatsGrid.Filter';
         },
-        getFilter : function () {
+        getFilter: function () {
             return this.filter;
         }
     }, {

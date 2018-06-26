@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         this.defaultConf = conf;
         this.publisher = null;
         this.customTileRef = null;
+        this.loc = Oskari.getMsg.bind(null, 'Publisher2');
     }, {
         /**
          * @static
@@ -101,13 +102,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var loc = this.getLocalization();
 
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
-            // create and register request handler
-            var reqHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
-                function (data) {
-                    me.setPublishMode(true, data);
-                });
-            sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             // Let's add publishable filter to layerlist if user is logged in
             if (Oskari.user().isLoggedIn()) {
@@ -129,7 +123,112 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                         'publishable');
                 }
             }
+
+            var infoDialog;
+            var openingOnAppStart = false;
+            // check from url parameters if publisher should be opened to edit some specific view.
+            var uuid = Oskari.util.getRequestParam('editPublished');
+            if (uuid) {
+                // Create an info popup. Opening publisher might take a while since we have to wait for the map layers to load.
+                infoDialog = me._showOpeningPublisherMsg();
+                // Create edit request handler callback
+                openingOnAppStart = true;
+                // Send request on app start
+                Oskari.on('app.start', function (details) {
+                    if (Oskari.user().isLoggedIn()) {
+                        me._sendEditRequest(uuid);
+                    } else {
+                        infoDialog.close();
+                        me._showOpeningPublisherErrorMsg('login');
+                    }
+                });
+            }
+            // create and register request handler
+            var reqHandler = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
+                me._openPublisherForEditingCbFactory(infoDialog, openingOnAppStart)
+            );
+            sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
+
             this._registerForGuidedTour();
+        },
+        /**
+         * @private @method _openPublisherForEditingCbFactory
+         * Factory function to create a callback function for PublishMapEditorRequestHandler.
+         * Callback function waits for required layers to load and opens the publisher.
+         * @return {Oskari.userinterface.component.Popup} infoDialog for closing when callback finishes (optional)
+         * @return {Boolean} openingOnAppStart (optional)
+         * @return {function} callback function for PublishMapEditorRequestHandler
+         */
+        _openPublisherForEditingCbFactory: function (infoDialog, openingOnAppStart) {
+            var me = this;
+            var layerCheckDone = false;
+            return function (data) {
+                if (openingOnAppStart && !layerCheckDone) {
+                    // Check that the data contains selected layers configuration
+                    var dataHasLayersConfig =
+                        data &&
+                        data.configuration &&
+                        data.configuration.mapfull &&
+                        data.configuration.mapfull.state &&
+                        data.configuration.mapfull.state.selectedLayers;
+
+                    if (dataHasLayersConfig) {
+                        var selectedLayers = data.configuration.mapfull.state.selectedLayers;
+                        var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                        var timeoutInMillis = 1000; // one second;
+                        var maxTries = 30;
+                        var numTries = 0;
+
+                        // Interval checks if layers have been loaded.
+                        var intervalId = setInterval(function () {
+                            var layerIds = selectedLayers.map(function (l) { return l.id; });
+                            var layersFound = mapLayerService.hasLayers(layerIds);
+
+                            // try until we get the layers...
+                            if (layersFound) {
+                                if (infoDialog) {
+                                    infoDialog.close();
+                                }
+                                clearInterval(intervalId);
+                                me.setPublishMode(true, data);
+                                return;
+                            }
+                            numTries++;
+
+                            // ...or the max try count is reached
+                            if (numTries === maxTries) {
+                                clearInterval(intervalId);
+                                if (infoDialog) {
+                                    infoDialog.fadeout();
+                                }
+                                me._showOpeningPublisherErrorMsg();
+                            }
+                        }, timeoutInMillis);
+                    } else {
+                        if (infoDialog) {
+                            infoDialog.fadeout();
+                        }
+                        me._showOpeningPublisherErrorMsg();
+                    }
+                    // Perform layer check only once when opening the publisher on startup.
+                    layerCheckDone = true;
+                } else {
+                    me.setPublishMode(true, data);
+                }
+            };
+        },
+        /**
+         * @private @method _sendEditRequest
+         * Sends Publisher.PublishMapEditorRequest with given uuid.
+         *
+         * @param uuid {String} Uuid for the view to edit.
+         */
+        _sendEditRequest: function (uuid) {
+            var requestBuilder = Oskari.requestBuilder('Publisher.PublishMapEditorRequest');
+            this.sandbox.request(this, requestBuilder({
+                uuid: uuid
+            }));
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
@@ -206,7 +305,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.publisher.render(map);
             } else {
                 Oskari.setLang(me.oskariLang);
-
                 if (me.publisher) {
                     // show flyout?
                     // TODO: move to default flyout/extension as "mode functionality"?
@@ -260,10 +358,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @private
          */
         _showEditNotification: function () {
-            var loc = this.getLocalization('edit');
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(loc.popup.title, loc.popup.msg);
+            dialog.show(this.loc('edit.popup.title'), this.loc('edit.popup.msg'));
             dialog.fadeout();
+        },
+        /**
+         * @private @method _showOpeningPublisherMsg
+         * Notify user that we are getting ready to open his map view for editing.
+         * @return {Oskari.userinterface.component.Popup} The popup dialog for closing it later on.
+         */
+        _showOpeningPublisherMsg: function () {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.show(this.loc('edit.popup.title'), this.loc('edit.popup.published.msg'));
+            dialog.makeModal();
+            return dialog;
+        },
+        /**
+         * @private @method _showOpeningPublisherErrorMsg
+         * Notify user that editing url specified view failed.
+         * @param {String} errorKey Localization key for the error message (optional)
+         */
+        _showOpeningPublisherErrorMsg: function (errorKey) {
+            errorKey = 'edit.popup.published.error.' + (errorKey || 'common');
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.show(this.loc('edit.popup.published.error.title'), this.loc(errorKey));
+            setTimeout(function () { dialog.fadeout(); }, 3000);
         },
         /**
          * @method hasPublishRight

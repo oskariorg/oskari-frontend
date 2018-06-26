@@ -30,7 +30,7 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "tooltip": "Näytä vain aikasarjalliset tasot.",
-            "timeseries": "Aikasarjalliset"
+            "timeseries": "Aikasarjatasot"
         },
         "d3TimeDef": {
             "dateTime": "%A, %-d. %Bta %Y klo %X",

@@ -16,7 +16,15 @@ Oskari.registerLocalization(
         "edit": {
             "popup": {
                 "title": "Päivitetään upotettua karttaa…",
-                "msg": "Päivitetään upotetun kartan tietoja…"
+                "msg": "Päivitetään upotetun kartan tietoja…",
+                "published": {
+                    "msg": "Avataan upotettua karttaa muokattavaksi. Odota hetki, ole hyvä!",
+                    "error": {
+                        "title": "Virhe",
+                        "common": "Upotetun kartan avaaminen epäonnistui.",
+                        "login": "Kirjaudu sisään muokataksesi karttajulkaisua."
+                    }
+                }
             }
         },
         "BasicView": {
@@ -55,6 +63,7 @@ Oskari.registerLocalization(
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
                 "ScaleBarPlugin": "Mittakaavajana",
+                "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
                 "PanButtons": "Kartan liikuttaminen nuolipainikkeilla",
                 "Portti2Zoombar": "Mittakaavasäädin",

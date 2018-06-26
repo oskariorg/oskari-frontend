@@ -33,10 +33,10 @@ function () {
         this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         this.isMapSelection = false;
         this.sandbox = Oskari.getSandbox();
-        this.coordSystemOptions = null;
+        //TODO should dimensions be handled by dataHandler
         this.dimensions = {
             input: 2,
-            result: 2
+            output: 2
         };
 }, {
     __name: 'coordinatetransformation',
@@ -50,52 +50,37 @@ function () {
         return this.transformationService;
     },
     setDimension: function (type, srs, elevation){
-        var srsValues = this.getEpsgValues(srs),
-            dimension;
-        if (srsValues && (srsValues.coord === "COORD_PROJ_3D" || srsValues.coord === "COORD_GEOG_3D")){
-            dimension = 3;
-        } else if (elevation !== ""){
-            dimension = 3;
-        } else {
-            dimension = 2;
-        }
-        this.dimensions[type] = dimension;
+        this.dimensions[type] = this.helper.getDimension(srs, elevation);
     },
     getDimension: function (type){
         return this.dimensions[type];
+    },
+    getDimensions: function (){
+        return this.dimensions;
     },
     /**
      * @method afterStart
      */
     afterStart: function () {
+        this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper');
         this.transformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
-        //this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper', this);
         this.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler' );
-        this.coordSystemOptions = this.helper.getOptionsJSON();
-        this.helper.createCls(this.coordSystemOptions);
         this.instantiateViews();
         this.createUi();
         this.bindListeners();
     },
     bindListeners: function (){
         var me = this;
+        var dimensions = this.getDimensions();
         this.dataHandler.on('InputCoordAdded', function (coords) {
-            me.views.transformation.inputTable.render(coords);
+            me.views.transformation.inputTable.render(coords, dimensions.input);
         });
         this.dataHandler.on('InputCoordsChanged', function (coords) {
-            me.views.transformation.inputTable.render(coords);
+            me.views.transformation.inputTable.render(coords, dimensions.input);
         });
         this.dataHandler.on('ResultCoordsChanged', function (coords) {
-            me.views.transformation.outputTable.render(coords);
+            me.views.transformation.outputTable.render(coords, dimensions.output);
         });
-    },
-
-    getcoordSystemOptions: function () {
-        return this.coordSystemOptions;
-    },
-    getEpsgValues: function (srs) {
-        return this.coordSystemOptions["geodetic-coordinate"][srs];
     },
     getPlugins: function() {
         return this.plugins;
@@ -106,12 +91,9 @@ function () {
     getHelper: function () {
         return this.helper;
     },
-    hasInputCoords: function () { //TODO to handler
-        return this.dataHandler.getInputCoords().length !== 0;
-    },
     instantiateViews: function () {
         this.views = {
-            transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this, this.getcoordSystemOptions()),
+            transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this, this.helper, this.dataHandler),
             MapSelection: Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateMapSelection', this),
             mapmarkers: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapmarkers', this)
         }
@@ -156,12 +138,16 @@ function () {
             if (!this.isMapSelection) {
                 return;
             }
-            var lonlat = event._lonlat;
-            var coordArray = this.dataHandler.lonLatCoordToArray(lonlat, true); //TODO check mapSrs lonFirst
-
+            var lonlat = event.getLonLat();
+            var label;
+            var roundedLonLat = {
+                lon: parseInt(lonlat.lon),
+                lat: parseInt(lonlat.lat)
+            }
             //add coords to map coords
-            this.dataHandler.addMapCoord(lonlat);
-            this.helper.addMarkerForCoords(coordArray, true, true); //TODO check mapSrs lonFirst
+            this.dataHandler.addMapCoord(roundedLonLat);
+            label = this.helper.getLabelForMarker(roundedLonLat);
+            this.helper.addMarkerForCoords(roundedLonLat, label);
         },
         'userinterface.ExtensionUpdatedEvent': function (event) {
             if(event.getExtension().getName() !==this.getName()){

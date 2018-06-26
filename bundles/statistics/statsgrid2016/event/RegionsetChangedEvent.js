@@ -18,21 +18,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.RegionsetChangedEvent',
          * Returns event name
          * @return {String} The event name.
          */
-        getName : function () {
-            return "StatsGrid.RegionsetChangedEvent";
+        getName: function () {
+            return 'StatsGrid.RegionsetChangedEvent';
         },
         /**
          * Regionset id
          * @return {Number}
          */
-        getRegionset : function() {
+        getRegionset: function () {
             return this.regionset;
         },
         /**
          * Regionset id for previously selected regionset
          * @return {Number}
          */
-        getPrevious : function() {
+        getPrevious: function () {
             return this.previousSet;
         }
     }, {

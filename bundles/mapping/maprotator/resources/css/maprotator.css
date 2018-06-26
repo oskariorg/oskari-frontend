@@ -1,9 +1,63 @@
-.compass {
-  cursor: pointer;
-  width:35px;
-  height:35px;
-  background-image: url('../images/north_circle_dark.png');
+div.mapplugin.maprotator {
   border-radius: 50%;
-  margin-bottom: 8.5px !important;
-  clear: both;
-}
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  position: relative;
+  margin: 0 auto;
+  z-index: 15000;
+  margin-bottom: 10px !important;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  -o-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  /* default and rounded-dark theme */
+  /* rounded-light theme */
+  /* sharp-dark theme */
+  /* sharp-light theme */
+  /* 3d-dark theme */
+  /* 3d-light theme */ }
+  div.mapplugin.maprotator div.icon {
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    background-size: 32px;
+    position: relative; }
+  div.mapplugin.maprotator.toolstyle-default, div.mapplugin.maprotator.toolstyle-rounded-dark {
+    background-color: rgba(20, 20, 20, 0.8); }
+    div.mapplugin.maprotator.toolstyle-default div.icon, div.mapplugin.maprotator.toolstyle-rounded-dark div.icon {
+      background-image: url("../images/north_nobg_light.png"); }
+  div.mapplugin.maprotator.toolstyle-rounded-light {
+    background-color: rgba(255, 255, 255, 0.9); }
+    div.mapplugin.maprotator.toolstyle-rounded-light div.icon {
+      background-image: url("../images/north_nobg_dark.png"); }
+  div.mapplugin.maprotator.toolstyle-sharp-dark {
+    border-radius: 0;
+    background-color: rgba(20, 20, 20, 0.8); }
+    div.mapplugin.maprotator.toolstyle-sharp-dark div.icon {
+      background-image: url("../images/north_nobg_light.png"); }
+  div.mapplugin.maprotator.toolstyle-sharp-light {
+    border-radius: 0;
+    background-color: rgba(255, 255, 255, 0.9); }
+    div.mapplugin.maprotator.toolstyle-sharp-light div.icon {
+      background-image: url("../images/north_nobg_dark.png"); }
+  div.mapplugin.maprotator.toolstyle-3d-dark {
+    border-radius: 5px;
+    background: rgba(20, 20, 20, 0.8);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(0.8, #4c4a4d));
+    background: -o-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(0.8, #4c4a4d));
+    background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(0.8, #4c4a4d));
+    background: gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(0.8, #4c4a4d)); }
+    div.mapplugin.maprotator.toolstyle-3d-dark div.icon {
+      background-image: url("../images/north_nobg_light.png"); }
+  div.mapplugin.maprotator.toolstyle-3d-light {
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB));
+    background: -o-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB));
+    background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB));
+    background: gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB)); }
+    div.mapplugin.maprotator.toolstyle-3d-light div.icon {
+      background-image: url("../images/north_nobg_dark.png"); }
