@@ -3,18 +3,11 @@ const webpack = require('webpack');
 const LocalizationPlugin = require('./tools/localizationPlugin.js');
 
 module.exports = {
-  mode: 'development',
   entry: './applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
   output: {
     path: path.resolve(__dirname, 'dist/poc/full-map/'),
     publicPath: 'Oskari/dist/poc/full-map/',
     filename: 'oskari.min.js'
-  },
-  devServer: {
-    proxy: [{
-      context: ['**', '!Oskari/dist/poc/full-map/**'],
-      target: 'http://localhost:8080',
-    }]
   },
   module: {
     rules: [
@@ -34,22 +27,13 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(ttf)$/,
+        test: /\.(ttf|png|jpg|gif)$/,
         use: [
           {
             loader: 'file-loader',
-            options: {}
+            options: {
+              outputPath: 'assets/'
+            }
           }
         ]
       },
