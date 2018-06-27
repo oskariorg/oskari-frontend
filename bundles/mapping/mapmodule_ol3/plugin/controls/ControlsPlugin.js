@@ -74,7 +74,7 @@ Oskari.clazz.define(
                 },
                 'Toolbar.ToolSelectedEvent': function (event) {
                     if (event._toolId !== 'zoombox') {
-                        this.disableMouseDragZoom();
+                        this._clearLifetimeInteractions();
                     }
                 },
                 'Publisher2.ToolEnabledChangedEvent': function (event) {
