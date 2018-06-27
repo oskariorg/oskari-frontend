@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.47.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/13?closed=1
+
+- Fix for user generated statistical indicator removal.
+- Fix for loading progressbar for layers using single tile loading.
+- Fix for coordinatetool localization handling.
+
 ## 1.47.0
 
 For a full list of changes see:
