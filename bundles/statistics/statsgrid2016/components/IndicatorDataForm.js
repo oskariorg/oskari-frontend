@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         });
         this.getElement().append(tableRef);
         // Focus on the first input cell
-        tableRef.find('tr td.uservalue')[0].focus();
+        tableRef.find('tr td.uservalue div')[0].focus();
 
         this.buttons.forEach(function (btn) {
             btn.setVisible(true);

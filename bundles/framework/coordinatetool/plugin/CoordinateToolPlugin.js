@@ -886,7 +886,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label-and').html(me._locale('display.coordinatesTransform.emergencyCallLabelAnd'));
             coordinateDisplayEmergencyCall.find('span.degreesX').html(me._locale('display.compass.i') + ' ' + degmin.degreesX);
             coordinateDisplayEmergencyCall.find('span.minutesX').html(minutesX);
-            coordinateDisplayEmergencyCall.find('span.degreesY').html(me._locale('compass.p') + ' ' + degmin.degreesY);
+            coordinateDisplayEmergencyCall.find('span.degreesY').html(me._locale('display.compass.p') + ' ' + degmin.degreesY);
             coordinateDisplayEmergencyCall.find('span.minutesY').html(minutesY);
             coordinateDisplayEmergencyCall.show();
             me._checkPopupPosition();

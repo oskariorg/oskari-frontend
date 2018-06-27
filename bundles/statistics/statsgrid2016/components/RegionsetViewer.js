@@ -224,12 +224,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     _bindToEvents: function () {
         var me = this;
         var state = me.service.getStateService();
-
-        me.service.on('StatsGrid.IndicatorEvent', function (event) {
-            // if indicator is removed/added
-            me.render();
-        });
-
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             // Always show the active indicator
             me.render(state.getRegion());
