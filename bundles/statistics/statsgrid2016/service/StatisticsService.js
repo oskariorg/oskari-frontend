@@ -392,7 +392,7 @@
             };
 
             var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
-            _log.info('Getting data with key', cacheKey);
+            _log.debug('Getting data with key', cacheKey);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -592,7 +592,7 @@
                 },
                 url: Oskari.urls.getRoute('SaveIndicator'),
                 success: function (pResp) {
-                    _log.info('SaveIndicator', pResp);
+                    _log.debug('SaveIndicator', pResp);
                     _cacheHelper.updateIndicatorInCache(datasrc, pResp.id, data, function (err) {
                         // send out event about new/updated indicators
                         responseHandler(err, pResp.id);
@@ -649,7 +649,7 @@
                 },
                 url: Oskari.urls.getRoute('AddIndicatorData'),
                 success: function (pResp) {
-                    _log.info('AddIndicatorData', pResp);
+                    _log.debug('AddIndicatorData', pResp);
                     _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
                 },
                 error: function (jqXHR, textStatus) {
@@ -683,13 +683,13 @@
                 data: data,
                 url: Oskari.urls.getRoute('DeleteIndicator'),
                 success: function (pResp) {
-                    _log.info('DeleteIndicator', pResp);
+                    _log.debug('DeleteIndicator', pResp);
+                    _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                     if (!selectors) {
                         // if selectors/regionset is missing -> trigger a DatasourceEvent as the indicator listing changes
                         var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
                         me.sandbox.notifyAll(eventBuilder(datasrc));
                     }
-                    _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                     callback();
                 },
                 error: function (jqXHR, textStatus) {
