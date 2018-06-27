@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                 '_bundle': '../../../Oskari/bundles/integration/admin-layerselector'
             }
         };
-        require.config(requirementsConfig);
+        window.require.config(requirementsConfig);
     },
 
     /**
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                 return;
             }
             var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateHeader.html';
-            require([file], function(header) {
+            window.require([file], function(header) {
                 type.headerTemplate = _.template(header);
             }, function() {
                 me.log.warn('No admin header template for layertype: ' + type.id + " file was: " + file);
@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                 return;
             }
             var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateFooter.html';
-            require([file], function(footer) {
+            window.require([file], function(footer) {
                 type.footerTemplate = _.template(footer);
             }, function() {
                 me.log.warn('No admin footer template for layertype: ' + type.id + " file was: " + file);
@@ -207,7 +207,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             }
 
             var groupDetails = me.layerService.getAllLayerGroups(groupId);
-            require(['_bundle/views/adminLayerSettingsView', '_bundle/views/adminLayerSettingsView'], function(adminLayerSettingsView, sublayerView) {
+            window.require(['_bundle/views/adminLayerSettingsView', '_bundle/views/adminLayerSettingsView'], function(adminLayerSettingsView, sublayerView) {
                 // create layer settings view for adding or editing layer
                 var settings = new adminLayerSettingsView({
                     model: layerModel,
