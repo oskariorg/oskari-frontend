@@ -92,7 +92,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
             return;
         }
-
         me.state.enabled = enabled;
         if(!me.__plugin && enabled) {
             me.__plugin = Oskari.clazz.create(tool.id, tool.config);
@@ -104,7 +103,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
             me.__started = true;
         } else {
             if(me.__started === true) {
-                me.stop();
+                me.__plugin.stopPlugin(me.__sandbox);
             }
         }
             var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(me);

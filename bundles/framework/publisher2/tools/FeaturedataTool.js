@@ -41,7 +41,7 @@ function() {
     init: function(data) {
         var me = this;
         if (data.configuration[me.bundleName]) {
-            me.setEnabled(false);
+            me.setEnabled(true);
         }
     },
     /**
