@@ -772,6 +772,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function(mapInMobileMode, forced) {
+            var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -787,7 +788,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return true;
             }
             this.teardownUI();
-            if (!toolbarNotReady && mapInMobileMode) {
+            if (!toolbarNotReady && isMobile) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
