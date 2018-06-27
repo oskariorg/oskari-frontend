@@ -29,11 +29,11 @@ Oskari.registerLocalization({
         'panels': {
             'newSearch': {
                 'title': 'SEARCH DATA',
-                'seriesTitle': 'Timeseries',
+                'seriesTitle': 'Time series',
                 'datasourceTitle': 'Data source',
                 'indicatorTitle': 'Indicator',
                 'regionsetTitle': 'Regionset',
-                'seriesLabel': 'Get data as timeseries',
+                'seriesLabel': 'Get data as time series',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
                 'selectRegionsetPlaceholder': 'Select regionset',
