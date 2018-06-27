@@ -207,7 +207,8 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Ta bort indikatorn',
-                'deletemsg': 'Vill du ta bort indikatorn "{name}"?'
+                'deletemsg': 'Vill du ta bort indikatorn "{name}"?',
+                'deleteSuccess': 'Indikatorn borttagen'
             },
             'button': {
                 'cancel': 'Avbryt',

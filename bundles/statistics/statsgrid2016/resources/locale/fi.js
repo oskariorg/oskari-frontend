@@ -211,7 +211,8 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Poista indikaattori',
-                'deletemsg': 'Haluatko poistaa indikaattorin "{name}"?'
+                'deletemsg': 'Haluatko poistaa indikaattorin "{name}"?',
+                'deleteSuccess': 'Indikaattori poistettu'
             },
             'button': {
                 'cancel': 'Peruuta',

@@ -210,7 +210,8 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',
-                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?'
+                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?',
+                'deleteSuccess': 'Indicator removed'
             },
             'button': {
                 'cancel': 'Cancel',
