@@ -35,6 +35,14 @@ module.exports = (env, argv) => {
           ]
         },
         {
+          test: /\.scss$/,
+          use: [
+            "style-loader", // creates style nodes from JS strings
+            { loader: "css-loader", options: { minimize: true } },
+            "sass-loader" // compiles Sass to CSS
+          ]
+        },
+        {
           test: /\.(ttf|png|jpg|gif)$/,
           use: [
             {
