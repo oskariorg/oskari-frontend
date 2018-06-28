@@ -3,21 +3,12 @@ const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const LocalizationPlugin = require('./webpack/localizationPlugin');
-
-const exampleCommand = 'npm run build -- --env.appdef=44.6:applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json';
+const parseParams = require('./webpack/parseParams.js');
 
 module.exports = (env, argv) => {
   const isProd = argv.mode === 'production';
 
-  if (!env || !env.appdef) {
-    throw new Error('Must give "appdef" env variable, eg.: ' + exampleCommand);
-  }
-
-  const parts = env.appdef.split(':');
-
-  if (parts.length > 2) {
-    throw new Error('Format for "appdef" is "version:pathToMinifierAppSetup", eg.: ' + exampleCommand);
-  }
+  const parts = parseParams(env);
 
   const version = parts.length > 1 ? parts[0] : 'devapp';
   const appsetupPath = parts.length > 1 ? parts[1] : parts[0];
@@ -56,7 +47,7 @@ module.exports = (env, argv) => {
         },
         {
           type: 'javascript/auto',
-          test: /\/minifierAppSetup\.json$/,
+          test: path.resolve(__dirname, appsetupPath),
           use: [
             {
               loader: path.resolve('./webpack/minifierLoader.js')
@@ -66,7 +57,7 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
-      new webpack.IgnorePlugin(/^\.\/locale$/),
+      new webpack.IgnorePlugin(/^\.\/locale$/), // moment.js fix
       new LocalizationPlugin(),
       new CopyWebpackPlugin(
         [
