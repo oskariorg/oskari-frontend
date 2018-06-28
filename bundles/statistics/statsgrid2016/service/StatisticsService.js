@@ -10,7 +10,8 @@
         this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
-        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
+        this.series = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesService', sandbox);
+        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox, this.series);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
@@ -371,9 +372,12 @@
          * Calls callback with a list of indicators for the datasource.
          * @param  {Number}   ds        datasource id
          * @param  {Number}   indicator indicator id
+         * @param  {Object}   params    indicator selections
+         * @param  {Object}   series    serie keys
+         * @param  {Object}   regionset regionset
          * @param  {Function} callback  function to call with error or results
          */
-        getIndicatorData: function (ds, indicator, params, regionset, callback) {
+        getIndicatorData: function (ds, indicator, params, series, regionset, callback) {
             if (typeof callback !== 'function') {
                 // log error message
                 return;
@@ -381,6 +385,10 @@
             if (!ds || !indicator || !regionset) {
                 // log error message
                 callback('Datasource, regionset or indicator missing');
+                return;
+            }
+            if (series && series.values.indexOf(params[series.id]) === -1) {
+                callback('Requested dataset is out of range');
                 return;
             }
             var me = this;
@@ -392,7 +400,7 @@
             };
 
             var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
-            _log.info('Getting data with key', cacheKey);
+            _log.debug('Getting data with key', cacheKey);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -510,6 +518,7 @@
                         id: ind.indicator,
                         name: 'N/A',
                         selections: ind.selections,
+                        series: ind.series,
                         hash: ind.hash
                     };
                     response.indicators.push(metadata);
@@ -526,7 +535,7 @@
                         }
                     });
 
-                    me.getIndicatorData(ind.datasource, ind.indicator, ind.selections, setId, function (err, indicatorData) {
+                    me.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, setId, function (err, indicatorData) {
                         count++;
                         if (err) {
                             errors++;
@@ -592,7 +601,7 @@
                 },
                 url: Oskari.urls.getRoute('SaveIndicator'),
                 success: function (pResp) {
-                    _log.info('SaveIndicator', pResp);
+                    _log.debug('SaveIndicator', pResp);
                     _cacheHelper.updateIndicatorInCache(datasrc, pResp.id, data, function (err) {
                         // send out event about new/updated indicators
                         responseHandler(err, pResp.id);
@@ -649,7 +658,7 @@
                 },
                 url: Oskari.urls.getRoute('AddIndicatorData'),
                 success: function (pResp) {
-                    _log.info('AddIndicatorData', pResp);
+                    _log.debug('AddIndicatorData', pResp);
                     _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
                 },
                 error: function (jqXHR, textStatus) {
@@ -668,24 +677,28 @@
                 return;
             }
             var me = this;
+            var data = {
+                datasource: datasrc,
+                id: indicatorId
+            };
+            if (selectors && typeof selectors === 'object') {
+                // only remove dataset from indicator, not the whole indicator
+                data.selectors = JSON.stringify(selectors);
+                data.regionset = regionset;
+            }
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
-                data: {
-                    datasource: datasrc,
-                    id: indicatorId,
-                    selectors: JSON.stringify(selectors),
-                    regionset: regionset
-                },
+                data: data,
                 url: Oskari.urls.getRoute('DeleteIndicator'),
                 success: function (pResp) {
-                    _log.info('DeleteIndicator', pResp);
+                    _log.debug('DeleteIndicator', pResp);
+                    _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                     if (!selectors) {
                         // if selectors/regionset is missing -> trigger a DatasourceEvent as the indicator listing changes
                         var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
                         me.sandbox.notifyAll(eventBuilder(datasrc));
                     }
-                    _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                     callback();
                 },
                 error: function (jqXHR, textStatus) {

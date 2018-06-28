@@ -150,8 +150,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             this.service.deleteIndicator(me.userDsId, indicator.id, null, null, function (err, response) {
                 if (err) {
                     me._showErrorMessage(me.loc('tab.error.notdeleted'));
+                } else {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    dialog.show(me.loc('tab.popup.deletetitle'), me.loc('tab.popup.deleteSuccess'));
+                    dialog.fadeout();
+                    // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
                 }
-                // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
             });
         },
 

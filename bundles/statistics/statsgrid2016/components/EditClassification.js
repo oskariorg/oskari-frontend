@@ -210,7 +210,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._colorSelect.refresh();
 
         // disable invalid choices
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function (err, data) {
+        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
             if (err) {
                 // propably nothing to tell the user at this point. There will be some invalid choices available on the form
                 return;
