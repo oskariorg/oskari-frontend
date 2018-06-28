@@ -73,7 +73,7 @@ module.exports = (env, argv) => {
       extensions: ['.js', '.json'],
       mainFields: ['loader', 'main'],
       alias: {
-        'bundle-loader': path.resolve('./webpack/bundleLoader.js')
+        'oskaribundle-loader': path.resolve('./webpack/oskariBundleLoader.js')
       }
     }
   };
