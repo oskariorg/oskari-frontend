@@ -29,9 +29,11 @@ Oskari.registerLocalization({
         'panels': {
             'newSearch': {
                 'title': 'SEARCH DATA',
+                'seriesTitle': 'Time series',
                 'datasourceTitle': 'Data source',
                 'indicatorTitle': 'Indicator',
                 'regionsetTitle': 'Regionset',
+                'seriesLabel': 'Get data as time series',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
                 'selectRegionsetPlaceholder': 'Select regionset',
@@ -89,7 +91,9 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Gender',
             'year': 'Year',
-            'regionset': 'Area'
+            'regionset': 'Area',
+            'from': 'from',
+            'to': 'to'
         },
         'datatable': 'Table',
         'published': {
@@ -210,7 +214,8 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',
-                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?'
+                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?',
+                'deleteSuccess': 'Indicator removed'
             },
             'button': {
                 'cancel': 'Cancel',
@@ -218,7 +223,8 @@ Oskari.registerLocalization({
             },
             'error': {
                 'title': 'Error',
-                'notfound': 'The indicator was not found.'
+                'notfound': 'The indicator was not found.',
+                'notdeleted': 'The indicator was not removed.'
             }
         },
         'userIndicators': {

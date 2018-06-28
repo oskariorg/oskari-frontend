@@ -29,9 +29,11 @@ Oskari.registerLocalization({
         'panels': {
             'newSearch': {
                 'title': 'SÖK DATA',
+                'seriesTitle': 'Tidsserie',
                 'datasourceTitle': 'Datakälla',
                 'indicatorTitle': 'Datamängd',
                 'regionsetTitle': 'Områdesindelning',
+                'seriesLabel': 'Hämta som en tidsserie',
                 'selectDatasourcePlaceholder': 'Välj datakälla',
                 'selectIndicatorPlaceholder': 'Välj datamängd',
                 'selectRegionsetPlaceholder': 'Välj områdesindelning',
@@ -86,7 +88,9 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Kön',
             'year': 'År',
-            'regionset': 'Områdesindelning'
+            'regionset': 'Områdesindelning',
+            'from': 'från',
+            'to': 'tills'
         },
         'datatable': 'Tabell',
         'published': {
@@ -207,7 +211,8 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Ta bort indikatorn',
-                'deletemsg': 'Vill du ta bord indikatorn "{name}"?'
+                'deletemsg': 'Vill du ta bort indikatorn "{name}"?',
+                'deleteSuccess': 'Indikatorn borttagen'
             },
             'button': {
                 'cancel': 'Avbryt',
@@ -215,7 +220,8 @@ Oskari.registerLocalization({
             },
             'error': {
                 'title': 'Fel',
-                'notfound': 'Indikator saknas'
+                'notfound': 'Indikator saknas',
+                'notdeleted': 'Borttagning av indikatorn misslyckades'
             }
         },
         'userIndicators': {

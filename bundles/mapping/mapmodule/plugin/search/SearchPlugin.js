@@ -746,6 +746,7 @@ Oskari.clazz.define(
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
         redrawUI: function (mapInMobileMode, modeChanged) {
+            var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -758,7 +759,7 @@ Oskari.clazz.define(
             //remove old element
             this.teardownUI();
 
-            if (mapInMobileMode) {
+            if (isMobile) {
                 //remove old element
                 this.removeFromPluginContainer(this.getElement(), true);
 
