@@ -182,7 +182,12 @@ Oskari.clazz.define(
         eventHandlers: {
             'StatsGrid.IndicatorEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
-                this.notifyDataProviderInfo(evt.getDatasource(), evt.getIndicator(), evt.getSelections(), evt.isRemoved());
+                this.notifyDataProviderInfo(
+                    evt.getDatasource(),
+                    evt.getIndicator(),
+                    evt.getSelections(),
+                    evt.getSeries(),
+                    evt.isRemoved());
             },
             'StatsGrid.RegionsetChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -197,6 +202,9 @@ Oskari.clazz.define(
                 this.statsService.notifyOskariEvent(evt);
             },
             'StatsGrid.DatasourceEvent': function (evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
+            'StatsGrid.ParameterChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
             'StatsGrid.Filter': function (evt) {
@@ -329,7 +337,7 @@ Oskari.clazz.define(
 
             if (state.indicators) {
                 state.indicators.forEach(function (ind) {
-                    service.addIndicator(ind.ds, ind.id, ind.selections, ind.classification);
+                    service.addIndicator(ind.ds, ind.id, ind.selections, ind.series, ind.classification);
                 });
             }
 
@@ -359,6 +367,7 @@ Oskari.clazz.define(
                     ds: ind.datasource,
                     id: ind.indicator,
                     selections: ind.selections,
+                    series: ind.series,
                     classification: service.getClassificationOpts(ind.hash)
                 });
             });
