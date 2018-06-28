@@ -12,7 +12,8 @@
     "lintfix": "eslint -c .eslintrc.js src/**/*.js --fix",
     "build": "webpack --mode production",
     "start": "webpack-dev-server",
-    "paikkis:dev": "webpack-dev-server --env.appdef=applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json"
+    "paikkis:dev": "webpack-dev-server --env.appdef=applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json",
+    "asdi:dev": "webpack-dev-server --env.appdef=applications/asdi/asdi_guest/minifierAppSetup.json"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.5.2",
