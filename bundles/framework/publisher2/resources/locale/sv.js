@@ -62,6 +62,7 @@ Oskari.registerLocalization(
                 "label": "Verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
                 "ScaleBarPlugin": "Skalstock",
+                "TimeseriesControlPlugin": "Tidseriespelare",
                 "IndexMapPlugin": "Indexkarta",
                 "PanButtons": "Panoreringsverktyg",
                 "Portti2Zoombar": "Skalans glidreglage",

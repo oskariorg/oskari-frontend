@@ -30,7 +30,7 @@ Oskari.registerLocalization({
             'newSearch': {
                 'title': 'SEARCH DATA',
                 'datasourceTitle': 'Data source',
-                'indicatorTitle': 'Variable',
+                'indicatorTitle': 'Indicator',
                 'regionsetTitle': 'Regionset',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
@@ -149,7 +149,12 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'There are no selections for the data.',
             'regionsetsIsEmpty': 'Area selections could not be fetched for chosen data.',
             'regionsDataError': 'Error occurred in area value search.',
-            'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.'
+            'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.',
+            'datasetSave': 'Error saving dataset.',
+            'datasetDelete': 'Error deleting dataset.',
+            'indicatorSave': 'Error saving indicator',
+            'myIndicatorYearInput': 'Year field cannot be empty.',
+            'myIndicatorRegionselect': 'Regionselect cannot be empty.'
         },
         'datacharts': {
             'flyout': 'Searched data',
@@ -194,12 +199,34 @@ Oskari.registerLocalization({
             'inspireName': 'Thematic map',
             'organizationName': 'Thematic map'
         },
+        'tab': {
+            'title': 'Indicators',
+            'edit': 'Edit',
+            'delete': 'Delete',
+            'grid': {
+                'name': 'Name',
+                'edit': 'Edit',
+                'delete': 'Delete'
+            },
+            'popup': {
+                'deletetitle': 'Delete Indicator',
+                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?'
+            },
+            'button': {
+                'cancel': 'Cancel',
+                'ok': 'OK'
+            },
+            'error': {
+                'title': 'Error',
+                'notfound': 'The indicator was not found.'
+            }
+        },
         'userIndicators': {
             'flyoutTitle': 'Add new indicator',
             'buttonTitle': 'Add new indicator',
             'buttonAddIndicator': 'Add data',
             'panelGeneric': {
-                'title': 'Information',
+                'title': 'Indicator data',
                 'formName': 'Name',
                 'formDescription': 'Description',
                 'formDatasource': 'Datasource'
@@ -211,8 +238,17 @@ Oskari.registerLocalization({
                 'successTitle': 'Saved',
                 'successMsg': 'The data has been saved. Add the indicator to the map using the statistics search functionality.'
             },
-            'notLoggedInWarning': 'The indicator data is only available for this session. The data will be lost once the page is reloaded.',
-            'notLoggedInWarningAfterServerImpl': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.'
+            'import': {
+                'title': '',
+                'placeholder': ''
+            },
+            'notLoggedInTitle': 'Warning',
+            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
+            'modify': {
+                'title': 'Indicator',
+                'edit': 'Edit',
+                'remove': 'Remove'
+            }
         }
     }
 });

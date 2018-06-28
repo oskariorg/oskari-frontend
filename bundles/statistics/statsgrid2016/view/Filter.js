@@ -87,10 +87,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
         ];
 
         var options = {
-            placeholder_text: this.loc.conditionPlaceholder,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
-            width: '100%'
+            placeholder_text: this.loc.conditionPlaceholder
         };
         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
         var dropdown = select.create(conditions, options);

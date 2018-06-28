@@ -22,6 +22,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
             this.trigger('InputCoordsChanged', coords);
         }
     },
+    hasInputCoords: function () {
+        return this.inputCoords.length !== 0;
+    },
     getResultCoords: function() {
         return this.resultCoords;
     },

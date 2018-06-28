@@ -3,11 +3,13 @@
  */
 (function (Oskari) {
     var _log = Oskari.log('StatsGrid.StatisticsService');
+    var _cacheHelper = null;
 
     Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
         this.sandbox = sandbox;
         this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
+        _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
@@ -221,7 +223,7 @@
                 return;
             }
             var me = this;
-            var cacheKey = 'GetRegions_' + regionset;
+            var cacheKey = _cacheHelper.getRegionsKey(regionset);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -266,7 +268,7 @@
                 callback('Datasource missing');
                 return;
             }
-            var cacheKey = 'GetIndicatorList_' + ds;
+            var cacheKey = _cacheHelper.getIndicatorListKey(ds);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -338,7 +340,7 @@
                 return;
             }
             var me = this;
-            var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + indicator;
+            var cacheKey = _cacheHelper.getIndicatorMetadataKey(ds, indicator);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -388,13 +390,8 @@
                 regionset: regionset,
                 selectors: JSON.stringify(params || {})
             };
-            var serialized = '';
-            if (typeof params === 'object') {
-                serialized = '_' + Object.keys(params).sort().map(function (key) {
-                    return key + '=' + JSON.stringify(params[key]);
-                }).join(':');
-            }
-            var cacheKey = 'GetIndicatorData_' + ds + '_' + indicator + '_' + regionset + serialized;
+
+            var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
             _log.info('Getting data with key', cacheKey);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
@@ -558,95 +555,55 @@
                 callback('Data missing');
                 return;
             }
-            var indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
-            var updateMetadataCache = function () {
-                // only inject when guest user, otherwise flush from cache
-                var metadataCacheKey = 'GetIndicatorMetadata_' + datasrc + '_' + indicatorId;
-                // flush/update indicator metadata from cache
-                var metadata = me.cache.get(metadataCacheKey) || {
-                    'public': true,
-                    'id': indicatorId,
-                    'name': {},
-                    'description': {},
-                    'source': {},
-                    'regionsets': [],
-                    'selectors': []
-                };
-                metadata.name[Oskari.getLang()] = data.name;
-                metadata.description[Oskari.getLang()] = data.description;
-                metadata.source[Oskari.getLang()] = data.datasource;
-                me.cache.put(metadataCacheKey, metadata);
-            };
-
-            if (data.id) {
-                this.getIndicatorList(datasrc, function (err, response) {
-                    if (err) {
-                        callback(err);
-                        return;
-                    }
-                    var existingIndicator = response.indicators.find(function (ind) {
-                        return '' + ind.id === '' + data.id;
-                    });
-                    if (!existingIndicator) {
-                        callback('Tried saving an indicator with id, but id didnt match existing indicator');
-                        return;
-                    }
-                    // TODO: call server and update name after success response
-                    // this probably updates the cache as well as mutable objects are being passed around
-                    existingIndicator.name = data.name;
-                    // possibly update "regionsets": [1851,1855] in listing cache
-                    updateMetadataCache();
+            var responseHandler = function (err, indicatorId) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                // send out event about new/updated indicators
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                me.sandbox.notifyAll(eventBuilder(datasrc));
+                callback(null, {
+                    ds: datasrc,
+                    id: indicatorId
                 });
-            } else {
-                // TODO: call server and update name after success response
-                var indicatorListCacheKey = 'GetIndicatorList_' + datasrc;
-                var cachedListResponse = me.cache.get(indicatorListCacheKey) || {
-                    complete: true,
-                    indicators: []
-                };
-                // only inject when guest user, otherwise flush from cache
-                cachedListResponse.indicators.push({
-                    id: indicatorId,
-                    name: data.name,
-                    regionsets: []
-                });
-                me.cache.put(indicatorListCacheKey, cachedListResponse);
-                updateMetadataCache();
             }
-            // send out event about new/updated indicators
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
-            me.sandbox.notifyAll(eventBuilder(datasrc));
 
-            // FOR NOW SAVING THE DATA IS NOT SUPPORTED FOR ANYONE
-            //if (!Oskari.user().isLoggedIn()) {
-            // successfully saved for guest user
-            callback(null, {
-                id: indicatorId
-            });
-            /*
-            return;
+            if (!Oskari.user().isLoggedIn()) {
+                // successfully saved for guest user
+                var indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
+                _cacheHelper.updateIndicatorInCache(datasrc, indicatorId, data, function (err) {
+                    responseHandler(err, indicatorId);
+                });
+                return;
             }
+            // send data to server for logged in users
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
                 data: {
+                    // my indicators datasource id
                     datasource: datasrc,
-                    data: JSON.stringify(data)
+                    id: data.id,
+                    name: data.name,
+                    desc: data.description,
+                    // textual name for the source the data is from
+                    source: data.datasource
                 },
-                url: Oskari.urls.getRoute('N/A'),
+                url: Oskari.urls.getRoute('SaveIndicator'),
                 success: function (pResp) {
-                    callback(null, {
-                        id: indicatorId
+                    _log.info('SaveIndicator', pResp);
+                    _cacheHelper.updateIndicatorInCache(datasrc, pResp.id, data, function (err) {
+                        // send out event about new/updated indicators
+                        responseHandler(err, pResp.id);
                     });
                 },
                 error: function (jqXHR, textStatus) {
-                    callback('Error saving data to server');
+                    responseHandler('Error saving data to server');
                 }
             });
-            */
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
-            var me = this;
             if (typeof callback !== 'function') {
                 return;
             }
@@ -670,82 +627,70 @@
             var actualSelectors = {};
             Object.keys(selectors).forEach(function (selectorId) {
                 if (selectorId !== 'regionset') {
-                    // skip regionset
+                    // filter out regionset
                     actualSelectors[selectorId] = selectors[selectorId];
                 }
             });
-            selectors = actualSelectors;
-            this.getIndicatorList(datasrc, function (err, response) {
-                if (err) {
-                    callback(err);
-                    return;
+            if (!Oskari.user().isLoggedIn()) {
+                // successfully saved for guest user
+                _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                return;
+            }
+            // send data to server for logged in users
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    datasource: datasrc,
+                    id: indicatorId,
+                    selectors: JSON.stringify(actualSelectors),
+                    regionset: regionset,
+                    data: JSON.stringify(data)
+                },
+                url: Oskari.urls.getRoute('AddIndicatorData'),
+                success: function (pResp) {
+                    _log.info('AddIndicatorData', pResp);
+                    _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback('Error saving data to server');
                 }
-                var existingIndicator = response.indicators.find(function (ind) {
-                    return '' + ind.id === '' + indicatorId;
-                });
-                if (!existingIndicator) {
-                    callback('Tried saving dataset for an indicator, but id didnt match existing indicator');
-                    return;
-                }
-                // TODO: call server and update name after success response
-                // this probably updates the cache as well as mutable objects are being passed around
-                if (existingIndicator.regionsets.indexOf(regionset) === -1) {
-                    // add new regionset for indicator
-                    existingIndicator.regionsets.push(regionset);
-                }
-
-                // only inject when guest user, otherwise flush from cache
-                var metadataCacheKey = 'GetIndicatorMetadata_' + datasrc + '_' + indicatorId;
-                // flush/update indicator metadata from cache
-                var metadata = me.cache.get(metadataCacheKey) || {
-                    'public': true,
-                    'id': indicatorId,
-                    'name': {},
-                    'description': {},
-                    'source': {},
-                    'regionsets': [],
-                    'selectors': []
-                };
-                metadata.regionsets = existingIndicator.regionsets;
-                Object.keys(selectors).forEach(function (selectorId) {
-                    var selectorValue = selectors[selectorId];
-                    var existingSelector = metadata.selectors.find(function (item) {
-                        return item.id === selectorId;
-                    });
-                    if (!existingSelector) {
-                        metadata.selectors.push({
-                            id: selectorId,
-                            name: selectorId,
-                            allowedValues: [{
-                                'name': selectorValue,
-                                'id': selectorValue
-                            }]
-                        });
-                    } else {
-                        var existingValue = existingSelector.allowedValues.find(function (item) {
-                            return '' + item.id === '' + selectorId;
-                        });
-                        if (!existingValue) {
-                            existingSelector.allowedValues.push({
-                                'name': selectorValue,
-                                'id': selectorValue
-                            });
-                        }
-                    }
-                });
-                me.cache.put(metadataCacheKey, metadata);
-
-                var serialized = '';
-                if (typeof selectors === 'object') {
-                    serialized = '_' + Object.keys(actualSelectors).sort().map(function (key) {
-                        return key + '=' + JSON.stringify(actualSelectors[key]);
-                    }).join(':');
-                }
-                var dataCacheKey = 'GetIndicatorData_' + datasrc + '_' + indicatorId + '_' + regionset + serialized;
-                me.cache.put(dataCacheKey, data);
-                _log.info('Saved data with key', dataCacheKey, data);
-
+            });
+        },
+        /**
+         * selectors and regionset are optional -> will only delete dataset from indicator if given
+         */
+        deleteIndicator: function (datasrc, indicatorId, selectors, regionset, callback) {
+            if (!Oskari.user().isLoggedIn()) {
+                // just flush cache
+                _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                 callback();
+                return;
+            }
+            var me = this;
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    datasource: datasrc,
+                    id: indicatorId,
+                    selectors: JSON.stringify(selectors),
+                    regionset: regionset
+                },
+                url: Oskari.urls.getRoute('DeleteIndicator'),
+                success: function (pResp) {
+                    _log.info('DeleteIndicator', pResp);
+                    if (!selectors) {
+                        // if selectors/regionset is missing -> trigger a DatasourceEvent as the indicator listing changes
+                        var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                        me.sandbox.notifyAll(eventBuilder(datasrc));
+                    }
+                    _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
+                    callback();
+                },
+                error: function (jqXHR, textStatus) {
+                    callback('Error on server');
+                }
             });
         }
     }, {

@@ -159,10 +159,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         var me = this;
         var dropdownOptions = {
             placeholder_text: this.loc.datacharts.sorting.desc,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
-            no_results_text: 'locale.panels.newSearch.noResults',
-            width: '100%'
+            no_results_text: 'locale.panels.newSearch.noResults'
         };
         // hardcoded
         var sortTypes = [

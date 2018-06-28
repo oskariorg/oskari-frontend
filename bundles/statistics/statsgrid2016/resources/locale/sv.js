@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     'value': {
         'tile': {
             'title': 'Tematiska kartor',
-            'search': 'Sök data',
+            'search': 'Materialsökning',
             'table': 'Tabell',
             'diagram': 'Stapeldiagram'
         },
@@ -146,7 +146,12 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'Inga datamängder har valts.',
             'regionsetsIsEmpty': 'Områdesindelningarna kunde inte hämtas för den valda datamängden.',
             'regionsDataError': 'Ett fel uppstod vid sökningen av områdets värden.',
-            'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.'
+            'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.',
+            'datasetSave': 'Ett fel uppstod vid sparning av data.',
+            'datasetDelete': 'Ett fel uppstod vid radering av data.',
+            'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
+            'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
+            'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.'
         },
         'datacharts': {
             'flyout': 'Sökta datamängden',
@@ -191,7 +196,59 @@ Oskari.registerLocalization({
             'inspireName': 'Tematisk karta',
             'organizationName': 'Tematisk karta'
         },
+        'tab': {
+            'title': 'Indikatorer',
+            'edit': 'Redigera',
+            'delete': 'Ta bort',
+            'grid': {
+                'name': 'Namn',
+                'edit': 'Redigera',
+                'delete': 'Ta bort'
+            },
+            'popup': {
+                'deletetitle': 'Ta bort indikatorn',
+                'deletemsg': 'Vill du ta bord indikatorn "{name}"?'
+            },
+            'button': {
+                'cancel': 'Avbryt',
+                'ok': 'OK'
+            },
+            'error': {
+                'title': 'Fel',
+                'notfound': 'Indikator saknas'
+            }
+        },
         'userIndicators': {
+            'flyoutTitle': 'Skapa indikator',
+            'buttonTitle': 'Skapa indikator',
+            'buttonAddIndicator': 'Ange värden',
+            'panelGeneric': {
+                'title': 'Information',
+                'formName': 'Namn',
+                'formDescription': 'Beskrivning',
+                'formDatasource': 'Källa'
+            },
+            'panelData': {
+                'title': 'Statistisk information'
+            },
+            'dialog': {
+                'successTitle': 'Sparad',
+                'successMsg': 'Informationen sparad. Granska indikatorn genom att tillägga den på kartan vid materialsökningen.'
+            },
+            'import': {
+                'title': 'Hämta från urklipp',
+                'placeholder': 'Ange värden från urklippet här. En rad motsvarar ett område och dess värde. Område betäcknas med namn eller id. Separera värden med semikolon.\n' +
+                'Värden kan tilläggas i följande form: \n' +
+                'Exempel 1: Helsinki;1234 \n' +
+                'Exempel 2: 011;5678'
+            },
+            'notLoggedInTitle': 'Varning',
+            'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
+            'modify': {
+                'title': 'Indikator',
+                'edit': 'Redigera',
+                'remove': 'Ta bort'
+            }
         }
     }
 });

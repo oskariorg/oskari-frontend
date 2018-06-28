@@ -104,7 +104,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
             me.__started = true;
         } else {
             if(me.__started === true) {
-                me.__plugin.stopPlugin(me.__sandbox);
+                me.stop();
             }
         }
         var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
@@ -159,6 +159,16 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     */
     isDisplayed: function() {
         return true;
+    },
+    /**
+    * Is this tool available.
+    * @method isDisabled
+    * @public
+    *
+    * @returns {Boolean} is tool disabled
+    */
+   isDisabled: function (data) {
+        return false;
     },
     /**
     * Is started.

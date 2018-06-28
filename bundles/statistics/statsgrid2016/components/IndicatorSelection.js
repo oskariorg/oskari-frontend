@@ -73,8 +73,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             }
             if (result.complete) {
                 me.spinner.stop();
-
-                if (result.indicators.length === 0) {
+                var isUserDatasource = '' + me.service.getUserDatasource().id === '' + datasrc;
+                if (!isUserDatasource && result.indicators.length === 0) {
+                    // show notification about empty indicator list for non-myindicators datasource
                     errorService.show(locale('errors.title'), locale('errors.indicatorListIsEmpty'));
                 }
             }
@@ -118,10 +119,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var dsSelector = main.find('.stats-ds-selector');
         var options = {
             placeholder_text: locale.panels.newSearch.selectDatasourcePlaceholder,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
-            no_results_text: locale.panels.newSearch.noResults,
-            width: '100%'
+            no_results_text: locale.panels.newSearch.noResults
         };
         var dsSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
         var dropdown = dsSelect.create(sources, options);
@@ -136,10 +134,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me.spinner.insertTo(indicatorSelector);
         var indicOptions = {
             placeholder_text: locale.panels.newSearch.selectIndicatorPlaceholder,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
             no_results_text: locale.panels.newSearch.noResults,
-            width: '100%',
             multi: true
         };
         var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
@@ -153,10 +148,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionOptions = {
             placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
-            allow_single_deselect: true,
-            disable_search_threshold: 10,
             no_results_text: locale.panels.newSearch.noResults,
-            width: '100%',
             multi: true
         };
 
@@ -180,8 +172,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me._params.attachTo(selectionsContainer);
 
         var btnAddIndicator = me.createAddIndicatorButton();
-        btnAddIndicator.insertTo(main);
+        btnAddIndicator.insertTo(main.find('.stats-ind-selector'));
         btnAddIndicator.setVisible(false);
+
+        var btnEditIndicator = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
+        btnEditIndicator.setPrimary(false);
+        btnEditIndicator.insertTo(main);
+        btnEditIndicator.setVisible(false);
 
         dsSelector.on('change', function () {
             me._params.clean();
@@ -191,6 +188,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 indicSelect.updateOptions([]);
                 indicSelect.reset();
                 btnAddIndicator.setVisible(false);
+                btnEditIndicator.setVisible(false);
                 return;
             }
 
@@ -202,7 +200,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 formFlyout.showForm(dsSelect.getValue());
             });
             // if datasource is of type "user" the user can add new indicators to it
-            btnAddIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
+            var type = me.service.getDatasource(Number(dsSelect.getValue())).type;
+            btnAddIndicator.setVisible(type === 'user');
+            jQuery(btnAddIndicator.getElement()).css({
+                'width': '60%',
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis',
+                'white-space': 'nowrap'
+            });
         });
 
         indicatorSelector.on('change', function () {
@@ -210,6 +215,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             // second check is for placeholder
             if (!indId || !indId.length) {
                 dataLabelWithTooltips.find('.tooltip').show();
+            } else {
+                // if datasource is of type "user" the user can add new indicators to it
+                btnEditIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
+
+                btnEditIndicator.setEnabled(indId.length === 1);
+                btnEditIndicator.setHandler(function (event) {
+                    event.stopPropagation();
+                    var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
+                    formFlyout.showForm(dsSelect.getValue(), indId[0]);
+                });
             }
             // this will show the params or clean them depending if values exist
             me._params.indicatorSelected(
@@ -251,7 +266,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         this.service.on('StatsGrid.DatasourceEvent', function (evt) {
             var currentDS = dsSelect.getValue();
-            if (currentDS !== evt.getDatasource()) {
+            var ds;
+
+            if (!isNaN(evt.getDatasource())) {
+                ds = evt.getDatasource().toString();
+            } else {
+                ds = evt.getDatasource();
+            }
+            if (currentDS !== ds) {
                 return;
             }
             // update indicator list

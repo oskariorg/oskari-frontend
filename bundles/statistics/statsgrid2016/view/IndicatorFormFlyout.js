@@ -7,7 +7,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', this.locale);
     this.indicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm', this.locale);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    this.addClass('statsgrid-user-indicator-flyout');
     var me = this;
+    this.errorService = this.service.getErrorService();
     me.on('hide', function () {
         me.reset();
     });
@@ -15,43 +17,80 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList.on('insert.data', function (selectors) {
         me.showDatasetForm(selectors);
     });
+
+    this.indicatorParamsList.on('delete.data', function (selectors) {
+        me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
+            if (err) {
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetDelete'));
+                return;
+            }
+            // refresh the dataset listing on form
+            me.updateDatasetList();
+        });
+    });
+
     this.indicatorDataForm.on('cancel', function () {
         me.genericInfoPanel.open();
         me.dataPanel.open();
-    });
-    this.indicatorDataForm.on('save', function (data) {
-        me.saveIndicatorData(data, function (err, notReallySureWhatThisCouldBe) {
-            if (err) {
-                // TODO: handle error properly
-                Oskari.log('IndicatorFormFlyout').error('Error saving dataset', err);
-                return;
-            }
-            // TODO: update paramsList?
-            me.indicatorDataForm.clearUi();
-        });
+        me.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
     });
 }, {
     _templates: {
-        main: _.template('<div class="stats-user-indicator-form">' +
-                            '<div class="stats-not-logged-in">${warning}</div>' +
-                        '</div>')
+        main: '<div class="stats-user-indicator-form"></div>',
+        notLoggedIn: _.template('<div class="stats-not-logged-in">${warning}</div>')
     },
     /**
      * Main external API function - shows the form for given indicator
      */
     showForm: function (datasourceId, indicatorId) {
+        if (this.isVisible()) {
+            this.reset();
+        }
         this.datasourceId = datasourceId;
         this.indicatorId = indicatorId;
         this.show();
         this.createUi();
-        this.indicatorForm.createForm();
-        // TODO: call this.indicatorForm.setValues() based on datasourceId, indicatorId
-        // TODO: pass existing datasets
-        this.indicatorParamsList.setDatasets([]);
+        // set empty values to focus on name field
+        this.indicatorForm.setValues();
         // pass available regionsets if user wants to add another year/regionset dataset
         var datasrc = this.service.getDatasource(datasourceId);
         var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
         this.indicatorParamsList.setRegionsets(regionsetsForDatasource);
+        this.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
+        this.saveBtn.setPrimary(!!this.indicatorId);
+
+        if (!indicatorId) {
+            return;
+        }
+        this.updateDatasetList();
+    },
+    updateDatasetList: function () {
+        // call this.indicatorForm.setValues() based on datasourceId, indicatorId passing existing datasets
+        var me = this;
+        var locale = this.locale;
+        this.service.getIndicatorMetadata(me.datasourceId, me.indicatorId, function (err, ind) {
+            if (err) {
+                me.errorService.show(locale('errors.title'), locale('errors.indicatorMetadataError'));
+                return;
+            }
+            me.indicatorForm.setValues(ind.name, ind.description, ind.source);
+            var datasets = [];
+            ind.selectors.forEach(function (sel) {
+                ind.regionsets.forEach(function (regionset) {
+                    sel.allowedValues.forEach(function (value) {
+                        var data = {};
+                        if (typeof value === 'object') {
+                            data[sel.id] = value.id;
+                        } else {
+                            data[sel.id] = value;
+                        }
+                        data.regionset = regionset;
+                        datasets.push(data);
+                    });
+                });
+            });
+            me.indicatorParamsList.setDatasets(datasets); // [{ year : 2017, regionset: 1850}]
+        });
     },
     getElement: function () {
         return this.element;
@@ -60,25 +99,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.datasourceId = null;
         this.indicatorId = null;
         this.indicatorForm.resetForm();
+        this.indicatorParamsList.setDatasets();
         this.indicatorDataForm.clearUi();
     },
     /**
      * Internal function to create the baseline UI
      */
     createUi: function () {
+        var me = this;
         if (this.getElement()) {
             return;
         }
-        this.element = jQuery(this._templates.main({
-            warning: this.locale('userIndicators.notLoggedInWarning')
-        }));
-        /*
-        // FOR NOW SAVING THE DATA IS NOT SUPPORTED FOR ANYONE
-        if (Oskari.user().isLoggedIn()) {
-            // remove the warning about not able to save the data for logged in users
-            this.element.find('.stats-not-logged-in').remove();
+        this.element = jQuery(this._templates.main);
+
+        if (!Oskari.user().isLoggedIn()) {
+            var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var content = jQuery(this._templates.notLoggedIn({
+                warning: this.locale('userIndicators.notLoggedInWarning')
+            }));
+            popup.show(me.locale('userIndicators.notLoggedInTitle'), content);
+            popup.fadeout();
         }
-        */
 
         // generic info
         var genericInfoPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -97,28 +138,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this._accordion.addPanel(dataPanel);
         this._accordion.insertTo(this.element);
 
-        var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
-        btn.insertTo(this.element);
-        jQuery(btn.getElement()).css({
-            'margin-right': '3%',
+        this.element.append(this.indicatorDataForm.createUi());
+
+        me.indicatorDataForm.getButtons().forEach(function (btn) {
+            btn.insertTo(me.element);
+        });
+
+        var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+        this.saveBtn = saveBtn;
+        saveBtn.insertTo(this.element);
+        jQuery(saveBtn.getElement()).css({
             'float': 'right',
             'clear': 'both'
         });
-
-        var me = this;
-        btn.setHandler(function (event) {
-            event.stopPropagation();
+        saveBtn.setHandler(function () {
             me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
                 if (err) {
-                    // TODO: handle error properly
-                    Oskari.log('IndicatorFormFlyout').error(err);
+                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                     return;
                 }
-                var dataForm = me.indicatorDataForm.getValues();
-                if (dataForm.values.length) {
-                    me.saveIndicatorData(dataForm, function (err, someData) {
+                var data = me.indicatorDataForm.getValues();
+                if (data.values.length) {
+                    me.saveIndicatorData(data, function (err, someData) {
                         if (err) {
-                            // TODO: handle error properly
+                            me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
@@ -129,8 +172,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 }
             });
         });
-
-        this.element.append(this.indicatorDataForm.createUi());
         this.setContent(this.element);
     },
     /**
@@ -138,6 +179,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      */
     showDatasetForm: function (selectors) {
         var me = this;
+        var locale = this.locale;
         me.genericInfoPanel.close();
         me.dataPanel.close();
 
@@ -145,21 +187,42 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var regionset = me.service.getRegionsets(selectors.regionset);
         var labels = {};
         labels[selectors.regionset] = regionset.name;
+
         // TODO: show spinner as getting regions might take a while?
         me.service.getRegions(regionset.id, function (err, regions) {
             if (err) {
-                // TODO: handle error properly
-                Oskari.log('IndicatorFormFlyout').error(err);
+                me.errorService.show(locale('errors.title'), locale('errors.regionsDataError'));
                 return;
             }
-            var formRegions = regions.map(function (region) {
-                // TODO: include existing values per region when editing existing dataset
-                return {
-                    id: region.id,
-                    name: region.name
+            var showDataForm = function (regions, data) {
+                data = data || {};
+                var formRegions = regions.map(function (region) {
+                    // TODO: include existing values per region when editing existing dataset
+                    return {
+                        id: region.id,
+                        name: region.name,
+                        value: data[region.id]
+                    };
+                });
+                me.indicatorDataForm.showTable(selectors, formRegions, labels);
+                me.saveBtn.setPrimary(true);
+            };
+            if (!me.indicatorId) {
+                // not editing an indicator -> just show an empty form with regions
+                showDataForm(regions);
+                return;
+            }
+            // try getting existing values for regions
+            me.service.getIndicatorData(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err, data) {
+                if (err) {
+                    // Dataset might not exist or network failure. Either way show an empty form
+                    Oskari.log('IndicatorFormFlyout').error(err);
+                    showDataForm(regions);
+                    return;
                 }
+                // everything ok, setup existing values for regions on form
+                showDataForm(regions, data);
             });
-            me.indicatorDataForm.showTable(selectors, formRegions, labels);
         });
     },
     /**
@@ -168,8 +231,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     saveIndicator: function (data, callback) {
         var me = this;
         // TODO: validate values
-        var isValid = true;
-        if (!isValid) {
+        var isValid = function (data) {
+            if (typeof (data.name) !== 'string' || data.name.length === 0) {
+                return false;
+            }
+            return true;
+        };
+
+        if (!isValid(data)) {
             callback('Input not valid');
             return;
         }
@@ -236,7 +305,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         okBtn.setPrimary(true);
         okBtn.setHandler(function () {
             dialog.close(true);
-            me.hide();
+            me.genericInfoPanel.close();
+            me.dataPanel.open();
+            me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
+            me.indicatorDataForm.clearUi();
+            me.updateDatasetList();
         });
         dialog.show(title, content, [okBtn]);
     }

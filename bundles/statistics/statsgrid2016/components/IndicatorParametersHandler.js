@@ -35,13 +35,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
             }
 
             var combinedValues = {};
-
             indicator.selectors.forEach(function (selector, index) {
                 selector.allowedValues.forEach(function (val) {
                     if (!combinedValues[selector.id]) {
-                        combinedValues[selector.id] = [];
+                        combinedValues[selector.id] = {
+                            values: [],
+                            time: selector.time || false
+                        };
                     }
-
                     var name = val.name || val.id || val;
                     val.title = val.name;
                     var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
@@ -50,7 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                         id: val.id || val,
                         title: optName
                     };
-                    combinedValues[selector.id].push(valObject);
+                    combinedValues[selector.id]['values'].push(valObject);
                 });
             });
 
@@ -72,7 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
         });
     },
     handleMultipleIndicators: function (datasrc, indicators) {
-        indicators = indicators.filter(function (n) { return n != ''; });
+        indicators = indicators.filter(function (n) { return n !== ''; });
         var me = this;
         var combinedValues = {};
         var regionsets = [];
@@ -82,6 +83,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
             if (!list) {
                 return [].concat(newValues);
             }
+
             return list.concat(newValues.filter(function (value) {
                 return !list.some(function (existingItem) {
                     if (propertyName) {
@@ -91,14 +93,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 });
             }));
         }
-
         indicators.forEach(function (indId) {
             var deferred = new jQuery.Deferred();
             me.handleSingleIndicator(indId, function (value) {
                 // include missing regionsets
                 regionsets = addMissingElements(regionsets, value.regionset);
                 Object.keys(value.selectors).forEach(function (selectorName) {
-                    combinedValues[selectorName] = addMissingElements(combinedValues[selectorName], value.selectors[selectorName], 'id');
+                    if (!combinedValues[selectorName]) {
+                        combinedValues[selectorName] = {
+                            values: [],
+                            time: !!value.selectors[selectorName].time
+                        };
+                    }
+                    combinedValues[selectorName].values = addMissingElements(combinedValues[selectorName].values, value.selectors[selectorName].values, 'id');
                 });
                 deferred.resolve();
             });
@@ -111,7 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameterHandler', fun
                 indicators: me.indicators,
                 selectors: combinedValues,
                 regionset: regionsets
-            }
+            };
             me.trigger('Data.Loaded', data);
         });
     }

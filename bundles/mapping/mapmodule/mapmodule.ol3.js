@@ -569,6 +569,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var extent = olGeom.getExtent();
             return {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
         },
+        isPointInExtent: function (extent, x, y){
+            return ol.extent.containsXY(extent, x, y);
+        },
         /* --------- /Impl specific --------------------------------------> */
 
         /* Impl specific - PRIVATE

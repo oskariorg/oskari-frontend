@@ -30,7 +30,7 @@ Oskari.registerLocalization({
             'newSearch': {
                 'title': 'AINEISTOHAKU',
                 'datasourceTitle': 'Tietolähde',
-                'indicatorTitle': 'Muuttuja',
+                'indicatorTitle': 'Indikaattori',
                 'regionsetTitle': 'Aluejako',
                 'selectDatasourcePlaceholder': 'Valitse tietolähde',
                 'selectIndicatorPlaceholder': 'Valitse aineisto',
@@ -149,7 +149,13 @@ Oskari.registerLocalization({
             'indicatorMetadataIsEmpty': 'Aineiston valinnat on tyhjä.',
             'regionsetsIsEmpty': 'Aluevalintoja ei saatu valitulle aineistolle.',
             'regionsDataError': 'Alueen arvojen haussa tapahtui virhe.',
-            'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.'
+            'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.',
+            'datasetSave': 'Virhe tallennetaessa aineistoa.',
+            'datasetDelete': 'Virhe poistaessa aineistoa.',
+            'indicatorSave': 'Virhe tallennettaessa muuttujaa.',
+            'indicatorDelete': 'Virhe poistaessa muuttujaa.',
+            'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
+            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',
@@ -194,12 +200,34 @@ Oskari.registerLocalization({
             'inspireName': 'Teemakartta',
             'organizationName': 'Teemakartta'
         },
+        'tab': {
+            'title': 'Indikaattorit',
+            'edit': 'Muokkaa',
+            'delete': 'Poista',
+            'grid': {
+                'name': 'Nimi',
+                'edit': 'Muokkaa',
+                'delete': 'Poista'
+            },
+            'popup': {
+                'deletetitle': 'Poista indikaattori',
+                'deletemsg': 'Haluatko poistaa indikaattorin "{name}"?'
+            },
+            'button': {
+                'cancel': 'Peruuta',
+                'ok': 'OK'
+            },
+            'error': {
+                'title': 'Virhe',
+                'notfound': 'Indikaattoria ei löytynyt'
+            }
+        },
         'userIndicators': {
-            'flyoutTitle': 'Lisää uusi indikaattori',
+            'flyoutTitle': 'Omat indikaattorit',
             'buttonTitle': 'Lisää uusi indikaattori',
             'buttonAddIndicator': 'Syötä dataa',
             'panelGeneric': {
-                'title': 'Tiedot',
+                'title': 'Indikaattorin tiedot',
                 'formName': 'Nimi',
                 'formDescription': 'Kuvaus',
                 'formDatasource': 'Lähde'
@@ -211,8 +239,19 @@ Oskari.registerLocalization({
                 'successTitle': 'Tallennettu',
                 'successMsg': 'Tiedot tallennettu. Lisää indikaattori kartalle aineistohaun kautta.'
             },
-            'notLoggedInWarning': 'Oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Tiedot menetetään jos sivu ladataan uudestaan.',
-            'notLoggedInWarningAfterServerImpl': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.'
+            'import': {
+                'title': 'Tuo leikepöydältä',
+                'placeholder': 'Kopioi tähän indikaattorin tiedot. Yhdellä rivillä on alue ja sitä vastaava arvo. Alue merkitään joko nimellä tai tunnisteella. Erottimeksi puolipiste. Tiedot voivat olla seuraavissa muodoissa: \n' +
+                'Esimerkki 1: Helsinki;1234 \n' +
+                'Esimerkki 2: 011;5678'
+            },
+            'notLoggedInTitle': 'Varoitus',
+            'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
+            'modify': {
+                'title': 'Indikaattori',
+                'edit': 'Muokkaa',
+                'remove': 'Poista'
+            }
         }
     }
 });

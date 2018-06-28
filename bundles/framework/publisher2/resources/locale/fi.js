@@ -63,6 +63,7 @@ Oskari.registerLocalization(
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
                 "ScaleBarPlugin": "Mittakaavajana",
+                "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
                 "PanButtons": "Kartan liikuttaminen nuolipainikkeilla",
                 "Portti2Zoombar": "Mittakaavasäädin",
