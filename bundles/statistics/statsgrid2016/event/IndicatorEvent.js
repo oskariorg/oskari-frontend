@@ -52,8 +52,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.IndicatorEvent',
             return this.selections || {};
         },
         /**
-         * Selections that user selected for indicator
-         * @return {Object} key is selection id, value is the selected value
+         * Series data for the indicator.
+         * Data contains an selection id and possible values for the selection.
+         * @return {Object} series data
          */
         getSeries: function () {
             return this.series;
