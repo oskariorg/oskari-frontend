@@ -33,23 +33,24 @@ module.exports = (env, argv) => {
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['es2015']
+              presets: ['es2015'],
+              plugins: ['transform-remove-strict-mode']
             }
           }
         },
         {
           test: /\.css$/,
           use: [
-            "style-loader", // creates style nodes from JS strings
-            { loader: "css-loader", options: { minimize: true } },
+            'style-loader', // creates style nodes from JS strings
+            { loader: 'css-loader', options: { minimize: true } },
           ]
         },
         {
           test: /\.scss$/,
           use: [
-            "style-loader", // creates style nodes from JS strings
-            { loader: "css-loader", options: { minimize: true } },
-            "sass-loader" // compiles Sass to CSS
+            'style-loader', // creates style nodes from JS strings
+            { loader: 'css-loader', options: { minimize: true } },
+            'sass-loader' // compiles Sass to CSS
           ]
         },
         {
