@@ -18,10 +18,10 @@ module.exports = (env, argv) => {
   // Common config for both prod & dev
   const config = {
     mode: isProd ? 'production' : 'development',
-    entry: path.resolve(__dirname, appsetupPath),
+    entry: path.resolve(appsetupPath),
     devtool: isProd ? 'source-map' : 'cheap-eval-source-map',
     output: {
-      path: path.resolve(__dirname, `dist/${version}/${appName}/`),
+      path: path.resolve(`dist/${version}/${appName}/`),
       publicPath: `Oskari/dist/${version}/${appName}/`,
       filename: 'oskari.min.js'
     },
@@ -58,7 +58,7 @@ module.exports = (env, argv) => {
           test: path.resolve(__dirname, appsetupPath),
           use: [
             {
-              loader: path.resolve('./webpack/minifierLoader.js')
+              loader: path.resolve(__dirname, './webpack/minifierLoader.js')
             }
           ]
         }
@@ -81,7 +81,7 @@ module.exports = (env, argv) => {
       extensions: ['.js', '.json'],
       mainFields: ['loader', 'main'],
       alias: {
-        'oskaribundle-loader': path.resolve('./webpack/oskariBundleLoader.js')
+        'oskaribundle-loader': path.resolve(__dirname, './webpack/oskariBundleLoader.js')
       }
     }
   };
