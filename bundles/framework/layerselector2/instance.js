@@ -131,13 +131,18 @@ Oskari.clazz.define(
 
             successCB = function () {
                 // massive update so just recreate the whole ui
-                //me.plugins['Oskari.userinterface.Flyout'].populateLayers();
+                // me.plugins['Oskari.userinterface.Flyout'].populateLayers();
                 // added through maplayerevent
             };
             failureCB = function () {
                 alert(me.getLocalization('errors').loadFailed);
             };
-            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB);
+            var options = {};
+            if (me.conf && me.conf.forceProxy) {
+                // forces proxy for all layers
+                options.forceProxy = me.conf.forceProxy;
+            }
+            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB, options);
 
             this._registerForGuidedTour();
         },
