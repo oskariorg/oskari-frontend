@@ -31,7 +31,7 @@ module.exports = function (source) {
                             return;
                         }
 
-                        console.log('Replacing CSS with SCSS:', scssAbsolutePath);
+                        console.log('Using SCSS instead of CSS:', scssAbsolutePath);
                         script.src = scssPath;
                     });
                 }

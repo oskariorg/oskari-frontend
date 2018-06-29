@@ -28,6 +28,16 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
+          test: /(?<!min)\.js$/,
+          exclude: /node_modules(?!\/oskari-frontend)|libraries/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['es2015']
+            }
+          }
+        },
+        {
           test: /\.css$/,
           use: [
             "style-loader", // creates style nodes from JS strings
