@@ -156,7 +156,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 icon.attr('title', tooltips['type-wms']);
             }
             if (layer.hasTimeseries()) {
-                secondaryIcon.addClass('layer-timeseries-dark');
+                secondaryIcon.addClass('layer-timeseries-disabled');
                 secondaryIcon.attr('title', tooltips['type-timeseries']);
             }
 

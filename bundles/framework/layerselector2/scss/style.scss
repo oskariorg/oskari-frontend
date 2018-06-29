@@ -71,6 +71,14 @@ div.layerselector2 {
             background-repeat: no-repeat;
         }
 
+        div.layer-icon-secondary {
+            float: left;
+        }
+
+        div.layer-icon-secondary.layer-timeseries-disabled {
+            margin-right: 2px;
+        }
+
         div.layer-info {
             width: 16px;
             height: 16px;
