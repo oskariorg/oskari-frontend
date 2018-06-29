@@ -6,7 +6,6 @@
     "Oskari"
   ],
   "main": "grunt.js",
-  "dependencies": {},
   "scripts": {
     "test": "eslint -c .eslintrc.js src/**/*.js",
     "lintfix": "eslint -c .eslintrc.js src/**/*.js --fix",
@@ -15,7 +14,7 @@
     "paikkis:dev": "webpack-dev-server --env.appdef=applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json",
     "asdi:dev": "webpack-dev-server --env.appdef=applications/asdi/asdi_guest/minifierAppSetup.json"
   },
-  "devDependencies": {
+  "dependencies": {
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
     "eslint": "^4.6.1",
