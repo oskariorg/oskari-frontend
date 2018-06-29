@@ -55,7 +55,7 @@ module.exports = (env, argv) => {
         },
         {
           type: 'javascript/auto',
-          test: path.resolve(__dirname, appsetupPath),
+          test: path.resolve(appsetupPath),
           use: [
             {
               loader: path.resolve(__dirname, './webpack/minifierLoader.js')
