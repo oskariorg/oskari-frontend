@@ -71,8 +71,8 @@ module.exports = (env, argv) => {
         [
           { from: '*.js', context: appsetupDir },
           { from: 'css/**', context: appsetupDir },
-          { from: 'resources/icons.css' },
-          { from: 'resources/icons.png' }
+          { from: 'resources/icons.css', context: __dirname },
+          { from: 'resources/icons.png', context: __dirname }
         ]
       )
     ],
