@@ -246,7 +246,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
          * Module protocol method
          */
         getName: function () {
-            return this.getConfiguration().name || 'findbycoordinates'; // FIXME – this is insane
+            return this.getConfiguration().name;
         },
 
         /**
