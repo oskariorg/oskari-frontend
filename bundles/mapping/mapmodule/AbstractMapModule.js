@@ -705,9 +705,25 @@ Oskari.clazz.define(
             }
         },
         /**
+         * @method setScale
+         * Sets the maps resolution to given absolute number
+         * @param {Number} newResolution absolute resolution
+         * @param {Boolean} suppressEvent true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        setResolution: function (newResolution, suppressEvent) {
+            this._setResolutionImpl(newResolution);
+            this.updateDomain();
+            if (suppressEvent !== true) {
+                // send note about map change
+                this.notifyMoveEnd();
+            }
+        },
+        /**
          * @method zoomToScale
          * Pans the map to the given position.
-         * @param {float} scale the new scale
+         * @param {Float} scale the new scale
          * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
          *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
          * @param {Boolean} suppressEnd true to NOT send an event about the map move
@@ -716,11 +732,33 @@ Oskari.clazz.define(
          */
         zoomToScale: function (scale, closest, suppressEnd) {
             var resolution = this.getResolutionForScale(scale);
+            if(!closest) {
+                // get exact resolution
+                resolution = this.getExactResolition(scale);
+                this.setResolution(resolution, suppressEnd);
+                return;
+            }
             var zoom = this.getResolutionArray().indexOf(resolution);
             if (zoom !== -1) {
                 this.setZoomLevel(zoom, suppressEnd);
             }
         },
+
+        /**
+         * Gets exact resolution
+         * @method getExactResolition
+         * @param  {Float}           scale the new scale
+         * @return {Float}           exact resolution
+         */
+        getExactResolition: function(scale) {
+            if(typeof this._getExactResolutionImpl === 'function') {
+                return this._getExactResolutionImpl(scale);
+            }
+
+            return this.getResolutionForScale(scale);
+        },
+
+
         /**
          * @method getResolutionForScale
          * Calculate max resolution for the scale

@@ -45,6 +45,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             me.sizeOptionsMap[opt.id] = opt;
         });
 
+        me.mapmodule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+
+        me.scaleOptionsMap = {
+            mapscale: {
+                label: 'Kartan mittakaava',
+                selected: true
+            },
+            usedefinedscale: {
+                label: 'Valitse mittakaava',
+                selected: false,
+                scales: me.instance.conf.scaleSelection || me.mapmodule.getScaleArray()
+            }
+        };
+
         /* format options listed in localisations */
         me.formatOptions = me.loc.format.options;
         me.formatOptionsMap = {};
@@ -88,7 +102,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             formatOptionTool: '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
             title: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
             option: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
-            sizeOptionTool: '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>'
+            sizeOptionTool: '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>',
+            scaleOptionTool: '<div class="tool ">' + '<input type="radio" name="scale" />' + '<label></label></div>',
+            scaleSelection: '<div class="scaleselection">' + '<select name="scaleselect" />' + '</div>'
         },
         /**
          * @public @method render
@@ -122,6 +138,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var settingsPanel = me._createSettingsPanel();
             accordion.addPanel(settingsPanel);
+
+            var scalePanel = me._createScalePanel();
+            accordion.addPanel(scalePanel);
 
             var previewPanel = me._createPreviewPanel();
             previewPanel.open();
@@ -293,7 +312,124 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (mapmodule.getProjectionUnits() !== 'm') {
                 me.contentOptionDivs.pageScale.css('display', 'none');
             }
+
             return panel;
+        },
+
+        /**
+         * @private @method _createSizePanel
+         * Creates the size selection panel for printout
+         *
+         *
+         * @return {jQuery} Returns the created panel
+         */
+        _createScalePanel: function () {
+            var me = this;
+            var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            panel.addClass('define_scale');
+            var contentPanel = panel.getContainer();
+            var tooltipCont = me.template.help.clone();
+
+            panel.setTitle('Määritä mittakaava'/*me.loc.size.label*/);
+            tooltipCont.attr('title', 'Määritä tulostuksessa käytettävä mittakaava'/*me.loc.size.tooltip*/);
+            contentPanel.append(tooltipCont);
+
+            Object.keys(me.scaleOptionsMap).forEach(function (key) {
+                var option = me.scaleOptionsMap[key];
+                var toolContainer = me.template.scaleOptionTool.clone();
+                var label = option.label;
+
+                toolContainer.find('label').append(label).attr({
+                    'for': option.key,
+                    'class': 'printout_radiolabel'
+                });
+                if (option.selected) {
+                    toolContainer.find('input').attr('checked', 'checked');
+                }
+                contentPanel.append(toolContainer);
+                toolContainer.find('input').attr({
+                    'value': key,
+                    'name': 'scale',
+                    'id': key
+                });
+                toolContainer.find('input').change(function () {
+                    if(option.scales) {
+                        contentPanel.find('.scale-'+key).show();
+                        me._updateScaleToSelected(true);
+
+                        me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest', [['zoom']]);
+                        me.instance.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['zoom']]);
+
+                    } else {
+                        contentPanel.find('.scaleselection').hide();
+                        me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest', [['zoom']]);
+                        me.instance.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['zoom']]);
+                    }
+
+                    // reset previous setting
+                    Object.keys(me.scaleOptionsMap).forEach(function (k) {
+                        var opt = me.scaleOptionsMap[k];
+                        opt.selected = false;
+                    });
+                    option.selected = true;
+
+                    me._cleanMapPreview();
+                    me._updateMapPreview();
+                });
+
+                if(option.scales) {
+                    var selection = me.template.scaleSelection.clone();
+                    selection.addClass('scale-'+key);
+                    var currentScale = me.mapmodule.getMapScale();
+
+                    var optionEl = jQuery('<option></option>');
+                    option.scales.forEach(function(scale){
+                        var el = optionEl.clone();
+                        el.attr('value', scale);
+                        el.html('1:'+scale);
+                        if(scale===currentScale) {
+                            el.attr('selected',true);
+                        }
+                        selection.find('select').append(el);
+                    });
+
+                    selection.find('select').change(function(){
+                        var el = jQuery(this);
+                        var selectedScale = el.val();
+                        me.mapmodule.zoomToScale(selectedScale, false);
+                        me._cleanMapPreview();
+                        me._updateMapPreview();
+                    });
+                    contentPanel.append(selection);
+                    selection.toggle(!!option.selected);
+                }
+            });
+
+            return panel;
+        },
+
+        /**
+         * Update selected scale to option
+         * @method  _updateScaleToSelected
+         * @private
+         */
+        _updateScaleToSelected: function(selectFirst){
+            var me = this;
+            Object.keys(me.scaleOptionsMap).forEach(function (key) {
+                var option = me.scaleOptionsMap[key];
+                var selection = me.mainPanel.find('.scale-'+key);
+                if(option.scales && option.scales.findIndex(
+                    function(s) {
+                        return s === me.mapmodule.getMapScale();
+                    }) > -1) {
+                    selection.find('select').val(me.mapmodule.getMapScale());
+                }
+                // else select first option
+                else if(selectFirst === true){
+                    selection.find('select').val(selection.find('select option:first').val());
+                    selection.find('select').trigger('change');
+                }
+            });
         },
 
         /**
@@ -475,6 +611,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 }
             }
 
+            if(me.scaleOptionsMap.usedefinedscale.selected) {
+                selections.scaleText = '1:'+jQuery('div.basic_printout select[name=scaleselect]').val();
+            }
+
             return selections;
         },
 
@@ -576,6 +716,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (selections.saveFile) {
                 url = url + '&saveFile=' + selections.saveFile;
             }
+
+            if (selections.scaleText) {
+                url = url + '&scaleText=' + selections.scaleText;
+            }
+
+
             // We need to use the POST method if there's GeoJSON or tile data.
             if (me.instance.geoJson || !jQuery.isEmptyObject(me.instance.tileData) || me.instance.tableJson) {
                 var stringifiedJson = me._stringifyGeoJson(me.instance.geoJson);
@@ -774,6 +920,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          *
          */
         refresh: function (isUpdate) {
+            var me = this;
+
+            // always  update current maps scale
+            me._updateScaleToSelected();
+
             if (isUpdate) {
                 this._updateMapPreview();
             } else {
