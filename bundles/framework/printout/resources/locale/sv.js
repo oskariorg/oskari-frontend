@@ -125,6 +125,12 @@ Oskari.registerLocalization(
                 "nohelp": "Ingen hjälp finns tillgänglig.",
                 "saveFailed": "Utskriften av kartvyn lyckades inte. Försök igen senare.",
                 "nameIllegalCharacters": "Namnet innehåller otillåtna tecken. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg och bindestreck."
+            },
+            "scale": {
+                "label": "Skala",
+                "tooltip": "Ange skalan som ska användas för utskrift",
+                "mapScale": "Använd kartskalan",
+                "definedScale": "Välj en skala"
             }
         },
         "StartView": {

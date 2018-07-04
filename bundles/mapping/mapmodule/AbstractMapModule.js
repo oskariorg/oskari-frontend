@@ -714,7 +714,11 @@ Oskari.clazz.define(
          */
         setResolution: function (newResolution, suppressEvent) {
             this._setResolutionImpl(newResolution);
+            this._resolution = newResolution;
             this.updateDomain();
+            var sandbox = this.getSandbox();
+            sandbox.getMap().setResolution(newResolution);
+
             if (suppressEvent !== true) {
                 // send note about map change
                 this.notifyMoveEnd();
@@ -734,7 +738,7 @@ Oskari.clazz.define(
             var resolution = this.getResolutionForScale(scale);
             if(!closest) {
                 // get exact resolution
-                resolution = this.getExactResolition(scale);
+                resolution = this.getExactResolution(scale);
                 this.setResolution(resolution, suppressEnd);
                 return;
             }
@@ -746,11 +750,11 @@ Oskari.clazz.define(
 
         /**
          * Gets exact resolution
-         * @method getExactResolition
+         * @method getExactResolution
          * @param  {Float}           scale the new scale
          * @return {Float}           exact resolution
          */
-        getExactResolition: function(scale) {
+        getExactResolution: function(scale) {
             if(typeof this._getExactResolutionImpl === 'function') {
                 return this._getExactResolutionImpl(scale);
             }

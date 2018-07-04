@@ -49,13 +49,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
         me.scaleOptionsMap = {
             mapscale: {
-                label: 'Kartan mittakaava',
+                label: me.loc.scale.mapScale,
                 selected: true
             },
             usedefinedscale: {
-                label: 'Valitse mittakaava',
+                label: me.loc.scale.definedScale,
                 selected: false,
-                scales: me.instance.conf.scaleSelection || me.mapmodule.getScaleArray()
+                scales: me.instance.conf.scaleSelection || me.mapmodule.getScaleArray().reverse()
             }
         };
 
@@ -120,6 +120,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             me.mainPanel = content;
             content.find('div.header h3').append(me.loc.title);
+            content.find('div.header div.icon-close').on('click', function(){
+                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                me.instance.sandbox.postRequestByName('EnableMapMouseMovementRequest');
+            });
 
             container.append(content);
             var contentDiv = content.find('div.content');
@@ -330,8 +334,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var contentPanel = panel.getContainer();
             var tooltipCont = me.template.help.clone();
 
-            panel.setTitle('Määritä mittakaava'/*me.loc.size.label*/);
-            tooltipCont.attr('title', 'Määritä tulostuksessa käytettävä mittakaava'/*me.loc.size.tooltip*/);
+            panel.setTitle(me.loc.scale.label);
+            tooltipCont.attr('title', me.loc.scale.tooltip);
             contentPanel.append(tooltipCont);
 
             Object.keys(me.scaleOptionsMap).forEach(function (key) {
@@ -540,8 +544,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             cancelBtn.setHandler(function () {
                 me.instance.setPublishMode(false);
+
                 // Send print canceled event
                 me.instance.sendCanceledEvent('cancel');
+
+                // enable navigations
+                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                me.instance.sandbox.postRequestByName('EnableMapMouseMovementRequest');
             });
             cancelBtn.insertTo(buttonCont);
 
@@ -588,16 +597,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var size = container.find('input[name=size]:checked').val();
             var selectedFormat = (format !== null && format !== undefined) ? format : container.find('input[name=format]:checked').val();
             var title = container.find('.printout_title_field').val();
+            var resolution = sandbox.getMap().getResolution();
+            var scaleText = null;
+            var scale = jQuery('div.basic_printout select[name=scaleselect]').val();
+
+            var useConfiguredScale = false;
+            if(me.instance.conf.scaleSelection && me.scaleOptionsMap.usedefinedscale.selected) {
+                useConfiguredScale = true;
+                resolution = me.mapmodule.getExactResolution(scale);
+            }
+
             var maplinkArgs = sandbox.generateMapLinkParameters({
-                'srs': sandbox.getMap().getSrsName(),
-                'resolution': sandbox.getMap().getResolution()
+                srs: sandbox.getMap().getSrsName(),
+                resolution: resolution,
+                useConfiguredScale: useConfiguredScale
             });
+
             var selections = {
                 pageTitle: title,
                 pageSize: size,
                 maplinkArgs: maplinkArgs,
                 format: selectedFormat || 'application/pdf'
             };
+
+            if(me.scaleOptionsMap.usedefinedscale.selected) {
+                selections.scaleText = '1:' + scale;
+            }
 
             if (!size) {
                 var firstSizeOption = container.find('input[name=size]').first();
@@ -610,11 +635,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     selections[p] = me.contentOptionDivs[p].find('input').prop('checked');
                 }
             }
-
-            if(me.scaleOptionsMap.usedefinedscale.selected) {
-                selections.scaleText = '1:'+jQuery('div.basic_printout select[name=scaleselect]').val();
-            }
-
             return selections;
         },
 
