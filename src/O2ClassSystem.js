@@ -588,14 +588,14 @@
         },
 
         /**
-         * @public @method getESConstructor
+         * @public @method get
          * Returns the EcmaScript native constructor for Oskari class
          *
          * @param  {string} className Class name
          *
          * @return {Function}           Class constructor
          */
-        getESConstructor: function (className) {
+        get: function (className) {
             var classInfo = this._checkClassName(className);
             return classInfo._esConstructor;
         },
