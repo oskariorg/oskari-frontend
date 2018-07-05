@@ -41,8 +41,6 @@ var files = [
     '../src/oskari.app.js',
     '../src/BasicBundle.js',
     // deprecated functions
-    '../src/deprecated/module_spec.js',
-    '../src/deprecated/builder_api.js',
     '../src/deprecated/deprecated.core.js',
     '../src/deprecated/deprecated.sandbox.js'
 ];
