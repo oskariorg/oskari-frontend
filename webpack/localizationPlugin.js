@@ -1,6 +1,14 @@
 const fs = require('fs');
+const path = require('path');
 
-const localeFile = /\/locale\/(.{2})\.js$/;
+const fileRex = /^(.{2})\.js$/;
+
+function isLocaleFile(filePath) {
+    if (path.basename(path.dirname(filePath)) !== 'locale') {
+        return false;
+    }
+    return fileRex.test(path.basename(filePath));
+}
 
 class LocalizationPlugin {
     constructor() {
@@ -11,7 +19,7 @@ class LocalizationPlugin {
         compiler.hooks.emit.tapAsync('LocalizationPlugin', (compilation, callback) => {
 
             const localeFiles = Array.from(compilation.fileDependencies)
-                .filter(path => localeFile.test(path));
+                .filter(isLocaleFile);
             const changedLanguages = new Set();
             localeFiles
                 .filter(path => {
@@ -66,8 +74,8 @@ class LocalizationPlugin {
         });
     }
 
-    langFromPath(path) {
-        const match = path.match(localeFile);
+    langFromPath(filePath) {
+        const match = path.basename(filePath).match(fileRex);
         return match ? match[1] : null;
     }
 }
