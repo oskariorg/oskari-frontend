@@ -7,20 +7,10 @@
         this.packages = {};
         this.protocols = {};
         this.inheritance = {};
-        this.aspects = {};
         this.classcache = {};
-        this.globals = {};
     };
 
     O2ClassSystem.prototype = {
-
-        /**
-         * @public @method purge
-         */
-        purge: function () {
-            // TODO implement & document?
-            return undefined;
-        },
 
         /**
          * @public @method protocol
@@ -182,22 +172,6 @@
         },
 
         /**
-         * @private @method _super
-         *
-         * @param  {string} supCat
-         * @param  {string} supMet
-         *
-         * @return
-         */
-        _super: function (supCat, supMet) {
-            var me = this;
-
-            return function () {
-                return me._._superCategory[supCat][supMet].apply(me, arguments);
-            };
-        },
-
-        /**
          * @private @method _createESConstructor
          * 
          * Creates a EcmaScript native constructor from Oskari classInfo
@@ -274,7 +248,6 @@
                 };
                 classInfo._esConstructor = this._createESConstructor(classInfo);
                 classDefinition.prototype._ = classInfo;
-                classDefinition.prototype._super = this._super;
                 this.inheritance[className] = composition;
                 packageDefinition[classQName.sp] = classInfo;
             }
@@ -357,7 +330,6 @@
                     _composition: composition
                 };
                 classDefinition.prototype._ = classInfo;
-                classDefinition.prototype._super = this._super;
                 this.inheritance[className] = composition;
                 packageDefinition[classQName.sp] = classInfo;
             }
@@ -653,75 +625,13 @@
          * @return {function}           Class builder
          */
         builder: function (className) {
-            var classInfo;
-
-            if (className === null || className === undefined) {
-                throw new TypeError('builder(): Missing className');
+            var classInfo = this._checkClassName(className);
+            if (!classInfo._builder) {
+                classInfo._builder = function() {
+                    return this.createWithClassInfo(classInfo, arguments);
+                }.bind(this);
             }
-
-            classInfo = this._getClassInfo(className);
-            if (!classInfo) {
-                throw 'Class "' + className + '" does not exist';
-            }
-            return this.getBuilderFromClassInfo(classInfo);
-        },
-
-        /**
-         * @public @method getBuilderFromClassInfo
-         * Implements Oskari frameworks support for cached class instance
-         * builders.
-         *
-         * @param  {Object}   classInfo ClassInfo
-         *
-         * @return {function}           Class builder
-         */
-        getBuilderFromClassInfo: function (classInfo) {
-            if (classInfo === null || classInfo === undefined) {
-                throw new TypeError(
-                    'getBuilderFromClassInfo(): Missing classInfo'
-                );
-            }
-
-            if (classInfo._builder) {
-                return classInfo._builder;
-            }
-            classInfo._builder = function () {
-                var classInstance = new classInfo._class(),
-                    constructors = classInfo._constructors,
-                    i,
-                    instanceArguments = arguments;
-
-                if (constructors) {
-                    for (i = 0; i < constructors.length; i += 1) {
-                        constructors[i].apply(classInstance, instanceArguments);
-                    }
-                } else {
-                    classInfo._constructor.apply(
-                        classInstance,
-                        instanceArguments
-                    );
-                }
-                return classInstance;
-            };
             return classInfo._builder;
-        },
-
-        /**
-         * @private @method _global
-         *
-         * @param {string} key   Key
-         * @param          value Value
-         *
-         * @return
-         */
-        _global: function (key, value) {
-            if (key === undefined) {
-                return this.globals;
-            }
-            if (value !== undefined) {
-                this.globals[key] = value;
-            }
-            return this.globals[key];
         }
     };
     o.clazz = new O2ClassSystem();
