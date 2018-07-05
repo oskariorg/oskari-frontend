@@ -211,7 +211,7 @@
             function esConstructor () {
                 var args = me._slicer.call(arguments);
                 var constructors = classInfo._constructors || [classInfo._constructor];
-                me._applyConstructors(this, constructors, args);
+                return me._applyConstructors(this, constructors, args);
             }
             esConstructor.prototype = classInfo._class.prototype;
             return esConstructor;
