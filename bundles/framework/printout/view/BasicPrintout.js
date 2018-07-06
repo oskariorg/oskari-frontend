@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             usedefinedscale: {
                 label: me.loc.scale.definedScale,
                 selected: false,
-                scales: me.instance.conf.scaleSelection || me.mapmodule.getScaleArray().reverse()
+                scales: me.instance.conf.scales || me.mapmodule.getScaleArray().reverse()
             }
         };
 
@@ -143,8 +143,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var settingsPanel = me._createSettingsPanel();
             accordion.addPanel(settingsPanel);
 
-            var scalePanel = me._createScalePanel();
-            accordion.addPanel(scalePanel);
+            if(me.instance.conf.scaleSelection) {
+                var scalePanel = me._createScalePanel();
+                accordion.addPanel(scalePanel);
+            }
 
             var previewPanel = me._createPreviewPanel();
             previewPanel.open();
@@ -321,8 +323,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         },
 
         /**
-         * @private @method _createSizePanel
-         * Creates the size selection panel for printout
+         * @private @method _createScalePanel
+         * Creates the scale selection panel for printout
          *
          *
          * @return {jQuery} Returns the created panel
