@@ -81,6 +81,41 @@
         },
 
         /**
+         * @private @method _ensureClassInfo
+         * Returns classInfo if it exists, creates it if not, and returns it
+         *
+         * @param  {string} className Class name
+         * @param  {Function} constructor Class constructor to be associated with classInfo if it's created
+         *
+         * @return {Object}           ClassInfo
+         */
+        _ensureClassInfo: function(className, constructor) {
+            var classQName = this._getClassQName(className);
+            var packageDefinition = this._getPackageDefinition(classQName.pkg);
+            var classInfo = packageDefinition[classQName.sp];
+
+            if (!classInfo) {
+                var classDefinition = this._createEmptyClassDefinition();
+                var composition = {
+                    className: className,
+                    superClass: null,
+                    subClass: null
+                };
+                classInfo = {
+                    _class: classDefinition,
+                    _constructor: constructor,
+                    _category: {},
+                    _composition: composition
+                };
+                classInfo._esConstructor = this._createESConstructor(classInfo);
+                this.inheritance[className] = composition;
+                classDefinition.prototype._ = classInfo;
+                packageDefinition[classQName.sp] = classInfo;
+            }
+            return classInfo;
+        },
+
+        /**
          * @private @method _cloneProperties
          *
          * @param {Object}          from
@@ -204,11 +239,7 @@
          * @return {Object}                    ClassInfo
          */
         define: function (className, classConstructor, prototype, metadata) {
-            var classDefinition,
-                classQName,
-                composition,
-                packageDefinition,
-                classInfo,
+            var classQName,
                 e,
                 extnds,
                 superClass;
@@ -228,29 +259,8 @@
                 throw new TypeError('define(): Prototype is not an object');
             }
 
-            classQName = this._getClassQName(className);
-            packageDefinition = this._getPackageDefinition(classQName.pkg);
-            classInfo = packageDefinition[classQName.sp];
+            var classInfo = this._ensureClassInfo(className, classConstructor);
 
-            if (!classInfo) {
-                classDefinition = this._createEmptyClassDefinition();
-                composition = {
-                    className: className,
-                    superClass: null,
-                    subClass: null
-                };
-
-                classInfo = {
-                    _class: classDefinition,
-                    _constructor: classConstructor,
-                    _category: {},
-                    _composition: composition
-                };
-                classInfo._esConstructor = this._createESConstructor(classInfo);
-                classDefinition.prototype._ = classInfo;
-                this.inheritance[className] = composition;
-                packageDefinition[classQName.sp] = classInfo;
-            }
             // update constrcutor
             if (classConstructor) {
                 classInfo._constructor = classConstructor;
@@ -262,6 +272,7 @@
             }
             // update metadata
             if (metadata) {
+                classQName = this._getClassQName(className);
                 extnds = metadata.extend;
                 for (e = 0; extnds && e < extnds.length; e += 1) {
                     superClass = this.lookup(extnds[e]);
@@ -300,39 +311,14 @@
          * @return {Object}              ClassInfo
          */
         category: function (className, categoryName, prototype) {
-            var classDefinition,
-                classInfo,
-                classQName,
-                composition,
-                packageDefinition,
-                prot;
+            var prot;
 
             if (className === null || className === undefined) {
                 throw new TypeError('category(): Missing className');
             }
 
-            classQName = this._getClassQName(className);
-            packageDefinition = this._getPackageDefinition(classQName.pkg);
-            classInfo = packageDefinition[classQName.sp];
+            var classInfo = this._ensureClassInfo(className, null);
 
-            if (!classInfo) {
-                classDefinition = this._createEmptyClassDefinition();
-                composition = {
-                    className: className,
-                    superClass: null,
-                    subClass: null
-                };
-                // TODO why do we set categoryName as constructor?
-                classInfo = {
-                    _class: classDefinition,
-                    _constructor: categoryName,
-                    _category: {},
-                    _composition: composition
-                };
-                classDefinition.prototype._ = classInfo;
-                this.inheritance[className] = composition;
-                packageDefinition[classQName.sp] = classInfo;
-            }
             prot = classInfo._class.prototype;
             this._cloneProperties(prototype, prot);
             if (prototype) {
@@ -351,39 +337,12 @@
          *
          * @return {Object}             ClassInfo
          */
-        lookup: function (className, constructor) {
-            var classDefinition,
-                classQName,
-                composition,
-                packageDefinition,
-                classInfo;
-
+        lookup: function (className) {
             if (className === null || className === undefined) {
                 throw new TypeError('lookup(): Missing className');
             }
-            // TODO constructor seems to be undefined all the time?
 
-            classQName = this._getClassQName(className);
-            packageDefinition = this._getPackageDefinition(classQName.pkg);
-            classInfo = packageDefinition[classQName.sp];
-
-            if (!classInfo) {
-                classDefinition = this._createEmptyClassDefinition();
-                composition = {
-                    className: className,
-                    superClass: null,
-                    subClass: null
-                };
-                classInfo = {
-                    _class: classDefinition,
-                    _constructor: constructor,
-                    _category: {},
-                    _composition: composition
-                };
-                this.inheritance[className] = composition;
-                packageDefinition[classQName.sp] = classInfo;
-            }
-            return classInfo;
+            return this._ensureClassInfo(className, null);
         },
 
         /**
