@@ -6,9 +6,7 @@ import 'expose-loader?DOMPurify!../libraries/dompurify/purify_0.8.0.min.js';
 import 'imports-loader?this=>window!../libraries/intl-messageformat/intl-messageformat-with-locales-2.1.0.js';
 import '../src/polyfills.js';
     // Oskari global
-import '../src/oskari.js';
-import '../src/counter.js';
-import '../src/logger.js';
+import '../src/oskari.es6.js';
 import '../src/store.js';
 import '../src/events.js';
 import '../src/util.js';
