@@ -196,7 +196,7 @@
                     return;
                 }
                 // load all bundlePaths mentioned in sequence-block
-                require(paths, function () {
+                window.require(paths, function () {
                     // if loaded undefined - find from Oskari.instalBundle register with id
                     for (var i = 0; i < arguments.length; ++i) {
                         if (typeof arguments[i] !== 'undefined') {
@@ -321,7 +321,7 @@
                         }
                     });
                 }
-                require(files, function () {
+                window.require(files, function () {
                     for (var i = 0; i < arguments.length; ++i) {
                         if (typeof arguments[i] !== 'undefined') {
                             // this would be a linked file.js with amd support
