@@ -19,7 +19,7 @@ module.exports = (env, argv) => {
   const config = {
     mode: isProd ? 'production' : 'development',
     entry: path.resolve(appsetupPath),
-    devtool: isProd ? 'source-map' : 'cheap-eval-source-map',
+    devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
     output: {
       path: path.resolve(`dist/${version}/${appName}/`),
       publicPath: `Oskari/dist/${version}/${appName}/`,
