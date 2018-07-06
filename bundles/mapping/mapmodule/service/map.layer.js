@@ -554,21 +554,23 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * and parses it to internal layer objects by calling #createMapLayer() and #addLayer()
          * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
          * @param {Function} callbackFailure method to be called when something went wrong
+         * @param {Object} options (optional) extra options like forceProxy.
          */
-        loadAllLayerGroupsAjax: function (callbackSuccess, callbackFailure) {
+        loadAllLayerGroupsAjax: function (callbackSuccess, callbackFailure, options) {
             var me = this;
             // Used to bypass browsers' cache especially in IE, which seems to cause
             // problems with displaying publishing permissions in some situations.
             var timeStamp = new Date().getTime();
-
+            var queryData = {
+                timestamp: timeStamp,
+                srs: me.getSandbox().getMap().getSrsName(),
+                lang: Oskari.getLang()
+            };
+            jQuery.extend(queryData, options || {});
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
-                data: {
-                    timestamp: timeStamp,
-                    srs: me.getSandbox().getMap().getSrsName(),
-                    lang: Oskari.getLang()
-                },
+                data: queryData,
                 url: Oskari.urls.getRoute('GetHierarchicalMapLayerGroups'),
                 success: function (pResp) {
                     me._loadAllLayerGroupsAjaxCallBack(pResp, callbackSuccess);
