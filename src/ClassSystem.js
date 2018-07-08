@@ -15,6 +15,18 @@
         }
     }
 
+    function defineCheck(className, classConstructor) {
+        checkClassName(className);
+        if (typeof classConstructor !== 'function') {
+            throw new Error('Class constructor must be function.');
+        }
+        var classInfo = ensureClassInfo(className);
+        if (classInfo.classConstructor) {
+            throw new Error('Class "' + className + '" already defined. Use Oskari.clazz.category(...) to add methods to existing class.');
+        }
+        return classInfo;
+    }
+
     function checkFinalized(classInfo) {
         if (!classInfo.finalized) {
             throw new Error('Definitions missing for "' + className + '"! Make sure class and its super classes are loaded.');
@@ -108,9 +120,8 @@
 
     function createWithClassInfo(classInfo, instanceArguments) {
         checkFinalized(classInfo);
-        var instance = Object.create(classInfo.classPrototype);
-        var returned = classInfo.classConstructor.apply(instance, instanceArguments);
-        return returned || instance;
+        var instance = new (Function.prototype.bind.apply(classInfo.classConstructor, [null].concat(instanceArguments)))();
+        return instance;
     }
 
     o.clazz = {
@@ -125,16 +136,8 @@
          * @param  {Object}   metadata         Optional metadata for the class
          */
         define: function(className, classConstructor, classPrototype, metadata) {
-            checkClassName(className);
-            if (typeof classConstructor !== 'function') {
-                throw new Error('Class constructor must be function.');
-            }
+            var classInfo = defineCheck(className, classConstructor);
 
-            var classInfo = ensureClassInfo(className);
-            
-            if (classInfo.classConstructor) {
-                throw new Error('Class "' + className + '" already defined. Use Oskari.clazz.category(...) to add methods to existing class.');
-            }
             classInfo.classConstructor = classConstructor;
 
             if (classPrototype) {
@@ -147,6 +150,26 @@
                 return; // super class will finalize this classInfo later on
             }
             finalize(classInfo);
+        },
+        /**
+         * @public @method defineES Registers a ES6 class definition or ES5 constructor function.
+         *
+         * @param  {string}   className        Class name
+         * @param  {function} classConstructor Class constructor function
+         * @param  {Object}   metadata         Optional metadata for the class
+         */
+        defineES: function(className, classConstructor, metadata) {
+            var classInfo = defineCheck(className, classConstructor);
+            if (metadata && metadata.extend) {
+                throw new Error('ES classes cannot extend via metadata. Use: class MyClass extends BaseClass {...}');
+            }
+            processMetadata(classInfo, metadata);
+
+            classInfo.classConstructor = classConstructor;
+            cloneProperties(classInfo.classPrototype, classConstructor.prototype);
+            classInfo.classPrototype = classConstructor.prototype;
+            classInfo.finalized = true;
+            classInfo.subClasses.forEach(finalize);
         },
         /**
          * @public @method create
@@ -198,7 +221,7 @@
         builder: function(className) {
             var classInfo = getClassInfo(className);
             return function(){
-                return createWithClassInfo(classInfo, arguments);
+                return createWithClassInfo(classInfo, Array.prototype.slice.call(arguments));
             }
         },
         /**
