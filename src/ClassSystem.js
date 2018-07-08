@@ -114,6 +114,16 @@
     }
 
     o.clazz = {
+        /**
+         * @public @method define Registers a class definition.
+         *
+         * @param  {string}   className        Class name
+         * @param  {function} classConstructor Class constructor function
+         * @param  {Object}   prototype        A property object containing
+         *                                     methods and definitions for the
+         *                                     class prototype
+         * @param  {Object}   metadata         Optional metadata for the class
+         */
         define: function(className, classConstructor, classPrototype, metadata) {
             checkClassName(className);
             if (typeof classConstructor !== 'function') {
@@ -138,32 +148,79 @@
             }
             finalize(classInfo);
         },
+        /**
+         * @public @method create
+         * Creates a class instance
+         *
+         * @param  {string} className Class name
+         *
+         * @return {Object}           Class instance
+         */
         create: function(className) {
             var instanceArguments = Array.prototype.slice.call(arguments, 1);
             var classInfo = getClassInfo(className);
             return createWithClassInfo(classInfo, instanceArguments);
         },
+        /**
+         * @public @method get
+         * Returns the EcmaScript native constructor for Oskari class
+         *
+         * @param  {string} className Class name
+         *
+         * @return {function}         Class constructor
+         */
         get: function(className) {
             var classInfo = getClassInfo(className);
             checkFinalized(classInfo);
             return classInfo.classConstructor;
         },
+        /**
+         * @public @method category
+         * Adds a group of methods to class prototype
+         *
+         * @param  {string} className    Class name
+         * @param  {string} categoryName Category name (not used. For backwards compatibility)
+         * @param  {Object} prototype    Prototype
+         */
         category: function (className, categoryName, classPrototype) {
             checkClassName(className);
             var classInfo = ensureClassInfo(className);
             cloneProperties(classPrototype, classInfo.classPrototype);
-            debugger;
         },
+        /**
+         * @public @method builder
+         * Returns factory function for creating class instances
+         *
+         * @param  {string}   className Class name
+         *
+         * @return {function}           Class builder
+         */
         builder: function (className) {
             var classInfo = getClassInfo(className);
             return function(){
                 return createWithClassInfo(classInfo, arguments);
             }
         },
+        /**
+         * @public @method getMetadata
+         * Returns metadata for the class
+         *
+         * @param  {string} className Class name
+         *
+         * @return {Object}           Class metadata
+         */
         getMetadata: function(className) {
             var classInfo = getClassInfo(className);
             return {meta: classInfo.metadata};
         },
+        /**
+         * @public @method protocol
+         * Get classInfo for classes that implement given protocol
+         *
+         * @param  {string} protocolName Protocol name
+         *
+         * @return {Object}              Object with className as keys and classInfo as values
+         */
         protocol: function (protocolName) {
             return protocols[protocolName];
         },
