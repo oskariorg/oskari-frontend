@@ -74,7 +74,7 @@
             if (!protocols[pt]) {
                 protocols[pt] = {};
             }
-            protocols[pt][classInfo.className] = {_class:{get prototype(){return classInfo.classPrototype;}}};
+            protocols[pt][classInfo.className] = classInfo;
         })
     }
 
@@ -182,7 +182,7 @@
          * @param  {string} categoryName Category name (not used. For backwards compatibility)
          * @param  {Object} prototype    Prototype
          */
-        category: function (className, categoryName, classPrototype) {
+        category: function(className, categoryName, classPrototype) {
             checkClassName(className);
             var classInfo = ensureClassInfo(className);
             cloneProperties(classPrototype, classInfo.classPrototype);
@@ -195,7 +195,7 @@
          *
          * @return {function}           Class builder
          */
-        builder: function (className) {
+        builder: function(className) {
             var classInfo = getClassInfo(className);
             return function(){
                 return createWithClassInfo(classInfo, arguments);
@@ -211,7 +211,7 @@
          */
         getMetadata: function(className) {
             var classInfo = getClassInfo(className);
-            return {meta: classInfo.metadata};
+            return classInfo.metadata;
         },
         /**
          * @public @method protocol
@@ -219,10 +219,21 @@
          *
          * @param  {string} protocolName Protocol name
          *
-         * @return {Object}              Object with className as keys and classInfo as values
+         * @return {string[]}              ClassNames implementing protocol
          */
-        protocol: function (protocolName) {
-            return protocols[protocolName];
+        protocol: function(protocolName) {
+            return Object.keys(protocols[protocolName] || {});
         },
+        /**
+         * @private @method _getClassInfo
+         * Returns classInfo for the class. For use in Oskari core only!
+         *
+         * @param  {string} className Class name
+         *
+         * @return {Object}           ClassInfo
+         */
+        _getClassInfo: function(className) {
+            return getClassInfo(className);
+        }
     }
 })(Oskari);
