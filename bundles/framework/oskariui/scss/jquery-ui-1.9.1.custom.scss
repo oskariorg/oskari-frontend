@@ -128,5 +128,5 @@ body .oskariui .ui-tooltip { border-width: 2px; }
 .oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }
 
 /* Overlays */
-.oskariui .ui-widget-overlay { background: #5c5c5c url(images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .8; filter: unquote("alpha(opacity=80);"); }
-.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .6; filter: unquote("alpha(opacity=60);"); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }
+.oskariui .ui-widget-overlay { opacity: .8; filter: unquote("alpha(opacity=80);"); }
+.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; opacity: .6; filter: unquote("alpha(opacity=60);"); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }

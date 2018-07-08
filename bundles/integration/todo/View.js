@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
 
         /* _bundle - path conf is set in bundle loader based on bundle.js */
 
-        require(["_bundle/views/todoView"], function(ToDoView) {
+        window.require(["_bundle/views/todoView"], function(ToDoView) {
 
             // Finally, we kick things off by creating the **App**.
             me.view = new ToDoView({

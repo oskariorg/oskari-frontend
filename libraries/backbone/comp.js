@@ -11,7 +11,7 @@
 
   // Save a reference to the global object (`window` in the browser, `exports`
   // on the server).
-  var root = this;
+  var root = window || this;
 
   // Save the previous value of the `Backbone` variable, so that it can be
   // restored later on, if `noConflict` is used.
@@ -23,21 +23,11 @@
   var slice = array.slice;
   var splice = array.splice;
 
-  // The top-level namespace. All public Backbone classes and modules will
-  // be attached to this. Exported for both CommonJS and the browser.
-  var Backbone;
-  if (typeof exports !== 'undefined') {
-    Backbone = exports;
-  } else {
-    Backbone = root.Backbone = {};
-  }
+  var Backbone = root.Backbone = {};
 
   // Current version of the library. Keep in sync with `package.json`.
   Backbone.VERSION = '0.9.9';
 
-  // Require Underscore, if we're on the server, and it's not already present.
-  var _ = root._;
-  if (!_ && (typeof require !== 'undefined')) _ = require('underscore');
 
   // For Backbone's purposes, jQuery, Zepto, or Ender owns the `$` variable.
   Backbone.$ = root.jQuery || root.Zepto || root.ender;
