@@ -24,7 +24,7 @@ var files = [
     '../src/i18n.js',
     '../src/message_types.js',
     // class system
-    '../src/O2ClassSystem.js',
+    '../src/classSystem.js',
     '../src/bundle_manager.js',
 
     // user and sandbox
