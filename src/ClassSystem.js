@@ -2,6 +2,8 @@
     var info = {};
     var protocols = {};
 
+    var classTip = ' Use: class MyClass extends BaseClass {...}';
+
     function cloneProperties(source, target) {
         Object.keys(source).forEach(function(propName){
             target[propName] = source[propName];
@@ -33,6 +35,12 @@
         }
     }
 
+    function subClassingCheck(classInfo) {
+        if (classInfo.superClass && !classInfo.superClass.allowSubClass) {
+            throw new Error('Not possible to extend ES class via metadata. Check class "' + classInfo.className + '".' + classTip);
+        }
+    }
+
     function getClassInfo(className) {
         checkClassName(className)
         var classInfo = info[className];
@@ -52,6 +60,7 @@
                 metadata: null,
                 superClass: null,
                 subClasses: [],
+                allowSubClass: true, // ES6 classes cannot be subclassed with ES5 constructors
                 finalized: false // is ready to be instantiated? true, when all classes in super class chain have been registered
             }
             info[className] = classInfo;
@@ -69,7 +78,7 @@
             return true;
         }
         if (!Array.isArray(metadata.extend) || metadata.extend.length > 1) {
-            throw new Error('Invalid extend. Only single inheritance is supported: {extend: ["Super.Cass.Name"]}');
+            throw new Error('Invalid extend in class "' + classInfo.className + '". Only single inheritance is supported: {extend: ["Super.Class.Name"]}');
         }
         var superClass = ensureClassInfo(metadata.extend[0]);
         superClass.subClasses.push(classInfo);
@@ -91,6 +100,7 @@
     }
 
     function finalize(classInfo) {
+        subClassingCheck(classInfo);
         attachConstructor(classInfo);
         attachPrototype(classInfo)
 
@@ -161,7 +171,7 @@
         defineES: function(className, classConstructor, metadata) {
             var classInfo = defineCheck(className, classConstructor);
             if (metadata && metadata.extend) {
-                throw new Error('ES classes cannot extend via metadata. Use: class MyClass extends BaseClass {...}');
+                throw new Error('ES classes cannot extend via metadata. Check class "' + className + '".' + classTip);
             }
             processMetadata(classInfo, metadata);
 
@@ -169,7 +179,8 @@
             cloneProperties(classInfo.classPrototype, classConstructor.prototype);
             classInfo.classPrototype = classConstructor.prototype;
             classInfo.finalized = true;
-            classInfo.subClasses.forEach(finalize);
+            classInfo.allowSubClass = false;
+            classInfo.subClasses.forEach(finalize); // finalize will throw if any subClasses have been registered
         },
         /**
          * @public @method create
