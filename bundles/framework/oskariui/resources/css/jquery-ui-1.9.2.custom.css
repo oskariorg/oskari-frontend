@@ -160,8 +160,8 @@ body .oskariui .ui-tooltip { border-width: 2px; }
 .oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }
 
 /* Overlays */
-.oskariui .ui-widget-overlay { background: #5c5c5c url("images/ui-bg_flat_50_5c5c5c_40x100.png") 50% 50% repeat-x; opacity: .8;filter:Alpha(Opacity=80); }
-.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url("images/ui-bg_flat_30_cccccc_40x100.png") 50% 50% repeat-x; opacity: .6;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }
+.oskariui .ui-widget-overlay {  opacity: .8;filter:Alpha(Opacity=80); }
+.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px;  opacity: .6;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }
 
 .ui-datepicker { width: 17em; padding: .2em .2em 0; display: none; }
 .ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
@@ -228,40 +228,34 @@ body .oskariui .ui-tooltip { border-width: 2px; }
 
 #ui-datepicker-div.ui-widget-content {
     border: 1px solid #aaaaaa;
-    background: #ffffff url("images/ui-bg_flat_75_ffffff_40x100.png") 50% 50% repeat-x;
     color: #222222;
 }
 
 #ui-datepicker-div .ui-widget-header {
     border: 1px solid #aaaaaa;
-    background: #cccccc url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") 50% 50% repeat-x;
     color: #222222;
     font-weight: bold;
 }
 
 #ui-datepicker-div .ui-state-default, #ui-datepicker-div .ui-widget-content .ui-state-default, #ui-datepicker-div .ui-widget-header .ui-state-default {
     border: 1px solid #d3d3d3;
-    background: #e6e6e6 url("images/ui-bg_glass_75_e6e6e6_1x400.png") 50% 50% repeat-x;
     font-weight: normal;
     color: #555555;
 }
 
 #ui-datepicker-div .ui-state-highlight, #ui-datepicker-div .ui-widget-content .ui-state-highlight, #ui-datepicker-div .ui-widget-header .ui-state-highlight {
     border: 1px solid #fcefa1;
-    background: #fbf9ee url("images/ui-bg_glass_55_fbf9ee_1x400.png") 50% 50% repeat-x;
     color: #363636;
 }
 
 #ui-datepicker-div .ui-state-hover, #ui-datepicker-div .ui-widget-content .ui-state-hover, #ui-datepicker-div .ui-widget-header .ui-state-hover, #ui-datepicker-div .ui-state-focus, #ui-datepicker-div .ui-widget-content .ui-state-focus, #ui-datepicker-div .ui-widget-header .ui-state-focus {
     border: 1px solid #999999;
-    background: #dadada url("images/ui-bg_glass_75_dadada_1x400.png") 50% 50% repeat-x;
     font-weight: normal;
     color: #212121;
 }
 
 #ui-datepicker-div .ui-state-active, #ui-datepicker-div .ui-widget-content .ui-state-active, #ui-datepicker-div .ui-widget-header .ui-state-active {
     border: 1px solid #aaaaaa;
-    background: #ffffff url("images/ui-bg_glass_65_ffffff_1x400.png") 50% 50% repeat-x;
     font-weight: normal;
     color: #212121;
 }
