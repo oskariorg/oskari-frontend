@@ -7,10 +7,20 @@
         this.packages = {};
         this.protocols = {};
         this.inheritance = {};
+        this.aspects = {};
         this.classcache = {};
+        this.globals = {};
     };
 
     O2ClassSystem.prototype = {
+
+        /**
+         * @public @method purge
+         */
+        purge: function () {
+            // TODO implement & document?
+            return undefined;
+        },
 
         /**
          * @public @method protocol
@@ -172,23 +182,19 @@
         },
 
         /**
-         * @private @method _createESConstructor
-         * 
-         * Creates a EcmaScript native constructor from Oskari classInfo
+         * @private @method _super
          *
-         * @param  {Object} classInfo classInfo
+         * @param  {string} supCat
+         * @param  {string} supMet
          *
-         * @return {Function} Ecma Script native constructor
+         * @return
          */
-        _createESConstructor: function (classInfo) {
+        _super: function (supCat, supMet) {
             var me = this;
-            function esConstructor () {
-                var args = me._slicer.call(arguments);
-                var constructors = classInfo._constructors || [classInfo._constructor];
-                return me._applyConstructors(this, constructors, args);
-            }
-            esConstructor.prototype = classInfo._class.prototype;
-            return esConstructor;
+
+            return function () {
+                return me._._superCategory[supCat][supMet].apply(me, arguments);
+            };
         },
 
         /**
@@ -246,8 +252,8 @@
                     _category: {},
                     _composition: composition
                 };
-                classInfo._esConstructor = this._createESConstructor(classInfo);
                 classDefinition.prototype._ = classInfo;
+                classDefinition.prototype._super = this._super;
                 this.inheritance[className] = composition;
                 packageDefinition[classQName.sp] = classInfo;
             }
@@ -330,6 +336,7 @@
                     _composition: composition
                 };
                 classDefinition.prototype._ = classInfo;
+                classDefinition.prototype._super = this._super;
                 this.inheritance[className] = composition;
                 packageDefinition[classQName.sp] = classInfo;
             }
@@ -522,29 +529,6 @@
         _slicer: Array.prototype.slice,
 
         /**
-         * @private @method _checkClassName
-         * Check is className is valid and return class info
-         *
-         * @param  {string} className className
-         * 
-         * @return {Object}           ClassInfo
-         */
-        _checkClassName: function (className) {
-            if (className === null || className === undefined) {
-                throw new TypeError('create(): Missing className');
-            }
-
-            var classInfo = this._getClassInfo(className);
-            if (!classInfo) {
-                // If this error is thrown,
-                // the class definition is missing.
-                // Ensure the file has been loaded before use
-                throw new Error('Class "' + className + '" does not exist');
-            }
-            return classInfo;
-        },
-
-        /**
          * @public @method create
          * Creates a class instance
          *
@@ -553,23 +537,49 @@
          * @return {Object}           Class instance
          */
         create: function (className) {
-            var classInfo = this._checkClassName(className);
-            var instanceArguments = this._slicer.call(arguments, 1);
+            var classInfo,
+                classInstance,
+                constructors,
+                i,
+                instanceArguments;
 
-            return this.createWithClassInfo(classInfo, instanceArguments);
-        },
+            if (className === null || className === undefined) {
+                throw new TypeError('create(): Missing className');
+            }
 
-        /**
-         * @public @method get
-         * Returns the EcmaScript native constructor for Oskari class
-         *
-         * @param  {string} className Class name
-         *
-         * @return {Function}           Class constructor
-         */
-        get: function (className) {
-            var classInfo = this._checkClassName(className);
-            return classInfo._esConstructor;
+            instanceArguments = this._slicer.apply(arguments, [1]);
+            classInfo = this._getClassInfo(className);
+            if (!classInfo) {
+                // If this error is thrown,
+                // the class definition is missing.
+                // Ensure the file has been loaded before use
+                throw 'Class "' + className + '" does not exist';
+            }
+            classInstance = new classInfo._class();
+            constructors = classInfo._constructors;
+
+            if (constructors) {
+                // Class is extended, call super constructors first?
+                for (i = 0; i < constructors.length; i += 1) {
+                    // If an error occurs below, the constructor is missing.
+                    // Ensure the file has been loaded before use.
+                    // Note! check extends classes as well, those might also be
+                    // missing.
+                    if (constructors[i] === null || constructors[i] === undefined) {
+                        throw new Error('Class ' + className + ' is missing super constructor ' + (i + 1) + '/' + constructors.length);
+                    }
+                    var returned = constructors[i].apply(classInstance, instanceArguments);
+                    if (returned) {
+                        classInstance = returned;
+                    }
+                }
+            } else {
+                var returned = classInfo._constructor.apply(classInstance, instanceArguments);
+                if (returned) {
+                    classInstance = returned;
+                }
+            }
+            return classInstance;
         },
 
         /**
@@ -581,36 +591,30 @@
          * @return {Object}                   Class instance
          */
         createWithClassInfo: function (classInfo, instanceArguments) {
-            var classInstance = new classInfo._class();
-            var constructors = classInfo._constructors || [classInfo._constructor];
+            var classInstance,
+                constructors,
+                i;
 
-            return this._applyConstructors(classInstance, constructors, instanceArguments);
-        },
-
-        /**
-         * @private @method _applyConstructors
-         * Apply class constructors
-         *
-         * @param  {Object} classInstance class instance
-         * @param {[]} constructors constructor functions
-         * 
-         * @return {Object}           instance
-         */
-        _applyConstructors: function (classInstance, constructors, instanceArguments) {
-            var i;
-
-            for (i = 0; i < constructors.length; i += 1) {
-                // If an error occurs below, the constructor is missing.
-                // Ensure the file has been loaded before use.
-                // Note! check extends classes as well, those might also be
-                // missing.
-                if (constructors[i] === null || constructors[i] === undefined) {
-                    throw new Error('Class ' + className + ' is missing super constructor ' + (i + 1) + '/' + constructors.length);
+            if (classInfo === null || classInfo === undefined) {
+                throw new TypeError('createWithClassInfo(): Missing classInfo');
+            }
+            // TODO check instanceArguments?
+            classInstance = new classInfo._class();
+            constructors = classInfo._constructors;
+            if (constructors) {
+                for (i = 0; i < constructors.length; i += 1) {
+                    if (constructors[i] === null ||
+                            constructors[i] === undefined) {
+                        throw new Error(
+                            'createWithClassInfo(): Undefined constructor in ' +
+                                'class "' + classInfo._composition.className +
+                                '"'
+                        );
+                    }
+                    constructors[i].apply(classInstance, instanceArguments);
                 }
-                var returned = constructors[i].apply(classInstance, instanceArguments);
-                if (returned) {
-                    classInstance = returned;
-                }
+            } else {
+                classInfo._constructor.apply(classInstance, instanceArguments);
             }
             return classInstance;
         },
@@ -625,13 +629,75 @@
          * @return {function}           Class builder
          */
         builder: function (className) {
-            var classInfo = this._checkClassName(className);
-            if (!classInfo._builder) {
-                classInfo._builder = function() {
-                    return this.createWithClassInfo(classInfo, arguments);
-                }.bind(this);
+            var classInfo;
+
+            if (className === null || className === undefined) {
+                throw new TypeError('builder(): Missing className');
             }
+
+            classInfo = this._getClassInfo(className);
+            if (!classInfo) {
+                throw 'Class "' + className + '" does not exist';
+            }
+            return this.getBuilderFromClassInfo(classInfo);
+        },
+
+        /**
+         * @public @method getBuilderFromClassInfo
+         * Implements Oskari frameworks support for cached class instance
+         * builders.
+         *
+         * @param  {Object}   classInfo ClassInfo
+         *
+         * @return {function}           Class builder
+         */
+        getBuilderFromClassInfo: function (classInfo) {
+            if (classInfo === null || classInfo === undefined) {
+                throw new TypeError(
+                    'getBuilderFromClassInfo(): Missing classInfo'
+                );
+            }
+
+            if (classInfo._builder) {
+                return classInfo._builder;
+            }
+            classInfo._builder = function () {
+                var classInstance = new classInfo._class(),
+                    constructors = classInfo._constructors,
+                    i,
+                    instanceArguments = arguments;
+
+                if (constructors) {
+                    for (i = 0; i < constructors.length; i += 1) {
+                        constructors[i].apply(classInstance, instanceArguments);
+                    }
+                } else {
+                    classInfo._constructor.apply(
+                        classInstance,
+                        instanceArguments
+                    );
+                }
+                return classInstance;
+            };
             return classInfo._builder;
+        },
+
+        /**
+         * @private @method _global
+         *
+         * @param {string} key   Key
+         * @param          value Value
+         *
+         * @return
+         */
+        _global: function (key, value) {
+            if (key === undefined) {
+                return this.globals;
+            }
+            if (value !== undefined) {
+                this.globals[key] = value;
+            }
+            return this.globals[key];
         }
     };
     o.clazz = new O2ClassSystem();
