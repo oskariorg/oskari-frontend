@@ -18,7 +18,10 @@ module.exports = (env, argv) => {
   // Common config for both prod & dev
   const config = {
     mode: isProd ? 'production' : 'development',
-    entry: path.resolve(appsetupPath),
+    entry: [
+      path.resolve(__dirname, './webpack/oskari-core.js'),
+      path.resolve(appsetupPath)
+    ],
     devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
     output: {
       path: path.resolve(`dist/${version}/${appName}/`),
