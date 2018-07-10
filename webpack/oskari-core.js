@@ -30,5 +30,7 @@ import '../src/loader.js';
 import '../src/oskari.app.js';
 import '../src/BasicBundle.js';
     // deprecated functions
+import '../src/deprecated/module_spec.js';
+import '../src/deprecated/builder_api.js';
 import '../src/deprecated/deprecated.core.js';
 import '../src/deprecated/deprecated.sandbox.js'
