@@ -18,20 +18,42 @@ module.exports = (env, argv) => {
   // Common config for both prod & dev
   const config = {
     mode: isProd ? 'production' : 'development',
-    entry: path.resolve(__dirname, appsetupPath),
-    devtool: isProd ? 'source-map' : 'cheap-eval-source-map',
+    entry: [
+      path.resolve(__dirname, './webpack/oskari-core.js'),
+      path.resolve(appsetupPath)
+    ],
+    devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
     output: {
-      path: path.resolve(__dirname, `dist/${version}/${appName}/`),
+      path: path.resolve(`dist/${version}/${appName}/`),
       publicPath: `Oskari/dist/${version}/${appName}/`,
       filename: 'oskari.min.js'
     },
     module: {
       rules: [
         {
+          test: /(?<!min)\.js$/,
+          exclude: /node_modules(?!\/oskari-frontend)|libraries/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['es2015'],
+              plugins: ['transform-remove-strict-mode']
+            }
+          }
+        },
+        {
           test: /\.css$/,
           use: [
-            "style-loader", // creates style nodes from JS strings
-            { loader: "css-loader", options: { minimize: true } },
+            'style-loader', // creates style nodes from JS strings
+            { loader: 'css-loader', options: { minimize: true } },
+          ]
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            'style-loader', // creates style nodes from JS strings
+            { loader: 'css-loader', options: { minimize: true } },
+            'sass-loader' // compiles Sass to CSS
           ]
         },
         {
@@ -47,10 +69,10 @@ module.exports = (env, argv) => {
         },
         {
           type: 'javascript/auto',
-          test: path.resolve(__dirname, appsetupPath),
+          test: path.resolve(appsetupPath),
           use: [
             {
-              loader: path.resolve('./webpack/minifierLoader.js')
+              loader: path.resolve(__dirname, './webpack/minifierLoader.js')
             }
           ]
         }
@@ -63,8 +85,8 @@ module.exports = (env, argv) => {
         [
           { from: '*.js', context: appsetupDir },
           { from: 'css/**', context: appsetupDir },
-          { from: 'resources/icons.css' },
-          { from: 'resources/icons.png' }
+          { from: 'resources/icons.css', context: __dirname },
+          { from: 'resources/icons.png', context: __dirname }
         ]
       )
     ],
@@ -73,7 +95,7 @@ module.exports = (env, argv) => {
       extensions: ['.js', '.json'],
       mainFields: ['loader', 'main'],
       alias: {
-        'bundle-loader': path.resolve('./webpack/bundleLoader.js')
+        'oskaribundle-loader': path.resolve(__dirname, './webpack/oskariBundleLoader.js')
       }
     }
   };
