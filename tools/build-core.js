@@ -24,7 +24,7 @@ var files = [
     '../src/i18n.js',
     '../src/message_types.js',
     // class system
-    '../src/classSystem.js',
+    '../src/class_system.js',
     '../src/bundle_manager.js',
 
     // user and sandbox
