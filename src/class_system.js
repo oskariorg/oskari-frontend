@@ -249,7 +249,7 @@
         },
         /**
          * @public @method protocol
-         * Get classInfo for classes that implement given protocol
+         * Get list of classNames that implement given protocol
          *
          * @param  {string} protocolName Protocol name
          *
