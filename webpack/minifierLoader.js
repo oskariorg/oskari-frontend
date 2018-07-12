@@ -11,5 +11,5 @@ module.exports = function(source) {
         });
     });
 
-    return bundles.map(b => `import 'bundle-loader!${b}'`).join('\n');
+    return bundles.map(b => `import 'oskaribundle-loader!${b}'`).join('\n');
 }

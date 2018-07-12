@@ -264,8 +264,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
             this.plugins['Oskari.userinterface.Tile'] = t;
         },
         setDefaultTile: function (txt) {
-            var tileCls = Oskari.cls().extend('Oskari.userinterface.extension.DefaultTile');
-            var tile = tileCls.create(this, {
+            var tile = Oskari.clazz.create('Oskari.userinterface.extension.DefaultTile', this, {
                 title: txt || ''
             });
             this.plugins['Oskari.userinterface.Tile'] = tile;
@@ -275,14 +274,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
             return this.plugins['Oskari.userinterface.Flyout'];
         },
         setDefaultFlyout: function (txt) {
-            var flyoutCls = Oskari.cls()
-                .extend('Oskari.userinterface.extension.DefaultFlyout');
-
-            flyoutCls.setTitle = function () {
-
-            };
-
-            var flyout = flyoutCls.create(this, {
+            var flyout = Oskari.clazz.create('Oskari.userinterface.extension.DefaultFlyout', this, {
                 title: txt || ''
             });
 
