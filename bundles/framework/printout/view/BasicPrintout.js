@@ -340,6 +340,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             tooltipCont.attr('title', me.loc.scale.tooltip);
             contentPanel.append(tooltipCont);
 
+            var unsupportedLayersDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okButton = unsupportedLayersDialog.createCloseButton('OK');
+            okButton.addClass('primary');
+
+            var getUnsupportedLayers = function() {
+                var layerNames = [];
+                var layers = me.instance.sandbox.findAllSelectedMapLayers().filter(function(l) {
+                    return l.getLayerType() === 'wmts';
+                });
+                layers.forEach(function(layer){
+                    layerNames.push(layer.getName());
+                });
+                return layerNames;
+            };
+
             Object.keys(me.scaleOptionsMap).forEach(function (key) {
                 var option = me.scaleOptionsMap[key];
                 var toolContainer = me.template.scaleOptionTool.clone();
@@ -365,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
                         me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest', [['zoom']]);
                         me.instance.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['zoom']]);
-
+                        // check if selected layers contains wmts layers
                     } else {
                         contentPanel.find('.scaleselection').hide();
                         me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest', [['zoom']]);
@@ -378,7 +393,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                         opt.selected = false;
                     });
                     option.selected = true;
-
+                    var unsupportedLayers = getUnsupportedLayers();
+                    if(unsupportedLayers.length>0 && option.scales) {
+                        var message = '<div>' + me.loc.scale.unsupportedLayersMessage + ':</div><ul>';
+                        unsupportedLayers.forEach(function(layerName){
+                            message += '<li>' + layerName + '</li>';
+                        });
+                        message += '</ul>';
+                        unsupportedLayersDialog.show(me.loc.scale.unsupportedLayersTitle, message, [okButton]);
+                    }
                     me._cleanMapPreview();
                     me._updateMapPreview();
                 });
@@ -600,19 +623,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var selectedFormat = (format !== null && format !== undefined) ? format : container.find('input[name=format]:checked').val();
             var title = container.find('.printout_title_field').val();
             var resolution = sandbox.getMap().getResolution();
-            var scaleText = null;
-            var scale = jQuery('div.basic_printout select[name=scaleselect]').val();
 
-            var useConfiguredScale = false;
+            var scale = jQuery('div.basic_printout select[name=scaleselect]').val();
+            var scaleText = '';
+
             if(me.instance.conf.scaleSelection && me.scaleOptionsMap.usedefinedscale.selected) {
-                useConfiguredScale = true;
                 resolution = me.mapmodule.getExactResolution(scale);
+                scaleText = '1:' + scale;
             }
 
             var maplinkArgs = sandbox.generateMapLinkParameters({
                 srs: sandbox.getMap().getSrsName(),
                 resolution: resolution,
-                useConfiguredScale: useConfiguredScale
+                scaleText: scaleText
             });
 
             var selections = {
@@ -621,10 +644,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 maplinkArgs: maplinkArgs,
                 format: selectedFormat || 'application/pdf'
             };
-
-            if(me.scaleOptionsMap.usedefinedscale.selected) {
-                selections.scaleText = '1:' + scale;
-            }
 
             if (!size) {
                 var firstSizeOption = container.find('input[name=size]').first();

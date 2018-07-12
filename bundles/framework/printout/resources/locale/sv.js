@@ -130,7 +130,9 @@ Oskari.registerLocalization(
                 "label": "Skala",
                 "tooltip": "Ange skalan som ska användas för utskrift",
                 "mapScale": "Använd kartskalan",
-                "definedScale": "Välj en skala"
+                "definedScale": "Välj en skala",
+                "unsupportedLayersMessage": "Följande kartläggare visas inte på utskriften",
+                "unsupportedLayersTitle": "Utskriften visar inte alla lager"
             }
         },
         "StartView": {

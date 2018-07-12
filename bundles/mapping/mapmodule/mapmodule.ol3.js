@@ -626,7 +626,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
         _getExactResolutionImpl: function(scale){
             var units = this.getMap().getView().getProjection().getUnits();
-            var dpi = 25.4 / 0.28;
+            var dpiTest = jQuery('<div></div>');
+            dpiTest.css({
+                height: '1in',
+                width: '1in',
+                position: 'absolute',
+                left: '-100%',
+                top: '-100%'
+            });
+            jQuery('body').append(dpiTest);
+
+            var dpi = dpiTest.height();
+            dpiTest.remove();
             var mpu = ol.proj.METERS_PER_UNIT[units];
             var resolution = scale/(mpu * 39.37 * dpi);
             return resolution;

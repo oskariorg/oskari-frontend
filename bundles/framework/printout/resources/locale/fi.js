@@ -130,7 +130,9 @@ Oskari.registerLocalization(
                 "label": "Mittakaava",
                 "tooltip": "Määritä tulostuksessa käytettävä mittakaava",
                 "mapScale": "Käytä kartan mittakaavaa",
-                "definedScale": "Valitse mittakaava"
+                "definedScale": "Valitse mittakaava",
+                "unsupportedLayersMessage": "Seuraavat tasot eivät tulostu mittakaava valinnalla",
+                "unsupportedLayersTitle": "Tulosteessa ei näy kaikki tasot"
             }
         },
         "StartView": {

@@ -715,7 +715,6 @@ Oskari.clazz.define(
         setResolution: function (newResolution, suppressEvent) {
             this._setResolutionImpl(newResolution);
             this._resolution = newResolution;
-            this.updateDomain();
             var sandbox = this.getSandbox();
             sandbox.getMap().setResolution(newResolution);
 
@@ -759,7 +758,7 @@ Oskari.clazz.define(
                 return this._getExactResolutionImpl(scale);
             }
 
-            return this.getResolutionForScale(scale);
+            throw 'Not implemented _getExactResolutionImpl function.';
         },
 
 
