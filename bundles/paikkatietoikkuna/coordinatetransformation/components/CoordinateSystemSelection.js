@@ -12,42 +12,32 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this._template = {
             systemWrapper: jQuery('<div class="coordinate-system-wrapper"></div>'),
             coordinateSystemSelection: _.template(
+                '<h4> ${ title }</h4>'+
                 '<div class="transformation-system">' +
-                    '<h5> ${ title }</h5>'+
-                    '<div class="system datum selection-wrapper" data-system="datum">' +
+                    '<div class="system datum selection-wrapper">' +
                         '<b class="dropdown_title"> ${ geodetic_datum }</b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="geodeticDatum" title="${tooltip.geodeticDatum}"></div>' +
                     '</div>' +
-                    '<div class="system coordinate selection-wrapper" data-system="coordinate">' +
+                    '<div class="system coordinate selection-wrapper">' +
                         '<b class="dropdown_title"> ${ coordinate_system }</b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="coordinateSystem" title="${tooltip.coordinateSystem}"></div>' +
                     '</div>' +
-                    '<div class="system projection selection-wrapper" data-system="projection">' +
+                    '<div class="system projection selection-wrapper">' +
                         '<b class="dropdown_title"> ${ map_projection }</b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="mapProjection" title="${tooltip.mapProjection}"></div>' +
                     '</div>'+
-                    '<div class="system geodetic-coordinate selection-wrapper" data-system="geodetic-coordinate">' +
+                    '<div class="system geodetic-coordinate selection-wrapper">' +
                         '<b class="dropdown_title"> ${ geodetic_coordinate_system } *</b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="geodeticCoordinateSystem" title="${tooltip.geodeticCoordinateSystem}"></div>' +
                     '</div>' +
-                    '<div class="system elevation selection-wrapper" data-system="elevation">' +
+                    '<div class="system elevation selection-wrapper">' +
                         '<b class="dropdown_title"> ${ elevation_system } </b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="heightSystem" title="${tooltip.heightSystem}"></div>' +
                     '</div>'+
                 '</div>'
             )
@@ -67,15 +57,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         createUi: function () {
             var me = this;
             var wrapper = this._template.systemWrapper.clone();
+            var title;
             wrapper.addClass(this.type);
+            if (this.type === "input"){
+                title = this.loc('flyout.coordinateSystem.input.title');
+            } else {
+                title = this.loc('flyout.coordinateSystem.output.title');
+            }
 
             var coordinateSystemSelection = this._template.coordinateSystemSelection({
-                title: this.loc('flyout.coordinateSystem.title'),
+                title: title,
                 geodetic_datum: this.loc('flyout.coordinateSystem.geodeticDatum.label'),
                 coordinate_system:  this.loc('flyout.coordinateSystem.coordinateSystem.label'),
                 map_projection:  this.loc('flyout.coordinateSystem.mapProjection.label'),
                 geodetic_coordinate_system: this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.label'),
-                elevation_system: this.loc('flyout.coordinateSystem.heightSystem.label')
+                elevation_system: this.loc('flyout.coordinateSystem.heightSystem.label'),
+                tooltip: this.getTooltips()
             });
             wrapper.append(coordinateSystemSelection);
             this.setElement(wrapper);
@@ -117,7 +114,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             });
             dropdown = select.create(selections, options);
             dropdown.css({
-                width:'180px'
+                width:'180px' //TODO to css
             });
             select.adjustChosen();
 
@@ -154,10 +151,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var me = this;
             this.getElement().find('.infolink').on('click', function ( event ) {
                 event.stopPropagation();
-                var key = this.parentElement.parentElement.dataset.system;
+                var key = this.dataset.system;
                 me.systemInfo.show( jQuery( this ), key );
-                //TODO showInfoPopup();
             });
+        },
+        getTooltips: function (){
+            return {
+                geodeticDatum: this.loc('infoPopup.geodeticDatum.info'),
+                coordinateSystem: this.loc('infoPopup.coordinateSystem.info'),
+                mapProjection: this.loc('infoPopup.mapProjection.content'),
+                geodeticCoordinateSystem: this.loc('infoPopup.geodeticCoordinateSystem.info'),
+                heightSystem: this.loc('infoPopup.heightSystem.info')
+            }
         },
         /**
          * @method updateDropdownOptions
