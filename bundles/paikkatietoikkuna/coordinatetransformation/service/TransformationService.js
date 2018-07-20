@@ -48,17 +48,19 @@ function(instance) {
         }
         return urlBase + urlParameterString;
     },
-    formDataBuilder: function (file, importSettings, exportSettings){
+    formDataBuilder: function (importSettings, exportSettings){
         var file = file;
         var settings = settings;
         var formData = new FormData();
-        if (exportSettings){
-            formData.append('exportSettings', JSON.stringify(exportSettings));
+        if (exportSettings && exportSettings.selects){
+            formData.append('exportSettings', JSON.stringify(exportSettings.selects));
         }
-        if (importSettings){
-            formData.append('importSettings', JSON.stringify(importSettings));
+        if (importSettings && importSettings.selects){
+            formData.append('importSettings', JSON.stringify(importSettings.selects));
         }
-        formData.append('coordFile', file);
+        if(importSettings.file){
+            formData.append('coordFile', importSettings.file);
+        }
         return formData;
 
     },
@@ -96,10 +98,10 @@ function(instance) {
             }
         });
     },
-    transformFileToArray: function (file, crs, fileSettings, successCb, errorCb){
+    transformFileToArray: function (crs, fileSettings, successCb, errorCb){
         var me = this;
         var url = this.requestUrlBuilder( crs, "F2A");
-        var formData = this.formDataBuilder(file, fileSettings);
+        var formData = this.formDataBuilder(fileSettings);
          jQuery.ajax({
             contentType: false, //multipart/form-data
             type: "POST",
@@ -133,10 +135,10 @@ function(instance) {
             }
         });
     },
-    transformFileToFile: function(file, crs, importSettings, exportSettings, successCb, errorCb ) {
+    transformFileToFile: function(crs, importSettings, exportSettings, successCb, errorCb ) {
         var me = this;
         var url = this.requestUrlBuilder( crs , "F2F");
-        var formData = this.formDataBuilder(file, importSettings, exportSettings);
+        var formData = this.formDataBuilder(importSettings, exportSettings);
         jQuery.ajax({
             contentType: false, //multipart/form-data
             type: "POST",
