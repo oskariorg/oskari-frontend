@@ -9,6 +9,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
     this.epsgValues = this.getGeodeticCoordinateOptions();
     this.elevationSystems = this.getElevationOptions();
     this.mapEpsgValues = this.getEpsgValues(this.mapSrs);
+    this._templates = {
+        content: jQuery('<div class="coordinatetransformation-helper-popup">' +
+                            '<div class="error-message"></div>' +
+                            '<ul class="error-list"></ul>' +
+                        '</div>'),
+        listItem: jQuery('<li></li>')
+    }
 }, {
     getName: function() {
         return 'Oskari.coordinatetransformation.helper';
@@ -100,30 +107,62 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
     },
     validateCrsSelections: function (crs){
-        var error = "";
         //source crs and target crs should be always selected
         if (!crs.sourceCrs || !crs.targetCrs){
-            error += this.loc('flyout.transform.validateErrors.crs') + " ";
-        }
-        if (error.length !== 0){
-            this.showPopup(this.loc('flyout.transform.validateErrors.title'), error);
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.crs'));
             return false;
         }
         return true;
     },
-    validateFileSelections: function (settings, requireFileName){
-        var error = "";
-        if (settings.decimalSeparator === "," && settings.coordinateSeparator === "comma"){
-            error += this.loc('flyout.transform.validateErrors.doubleComma');
+    validateFileSelections: function (settings){
+        if (Object.keys(settings).length === 0) {
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'),this.loc('flyout.transform.validateErrors.noFileSettings'));
+            return false;
         }
-        if (requireFileName === true && !settings.fileName && settings.fileName === ""){
-            error += this.loc('flyout.transform.validateErrors.noFileName');
+
+        var selects = settings.selects;
+        //var type = settings.type;
+        //var file = settings.file;
+        var errors = [];
+        if (selects.decimalSeparator === "," && selects.coordinateSeparator === "comma"){
+            errors.push(this.loc('flyout.transform.validateErrors.doubleComma'));
         }
-        if (error.length !== 0){
-            this.showPopup(this.loc('flyout.transform.validateErrors.title'), error);
+        if (settings.type === "import"){
+            if (!settings.file ){ // && settings.file.constructor !== File
+                errors.push(this.loc('flyout.transform.validateErrors.noInputFile'));
+            }
+            if (!(parseInt(selects.headerLineCount)>=0)){
+                errors.push(this.loc('flyout.transform.validateErrors.headerCount'));
+            }
+        } else if (settings.type === "export") {
+            if (!selects.fileName && selects.fileName === ""){
+                errors.push(this.loc('flyout.transform.validateErrors.noFileName'));
+            }
+            if (!(parseInt(selects.decimalCount)>=0)){
+                errors.push(this.loc('flyout.transform.validateErrors.decimalCount'));
+            }
+        }
+
+        if (errors.length !== 0){
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'),this.loc('flyout.transform.validateErrors.message'), errors);
             return false;
         }
         return true;
+    },
+    exportToFile: function ( data, filename, type ) {
+        var me = this;
+        var blob = new Blob([data], {type: type});
+        if( window.navigator.msSaveOrOpenBlob ) {
+            window.navigator.msSaveBlob(blob, filename);
+        }
+        else {
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = filename;
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
     },
     checkDimensions: function (crs, callback){
         var ok = true,
@@ -148,10 +187,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         });
         dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
     },
-    showPopup: function (title, message){
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+    showPopup: function (title, message, errorList){
+        var me = this,
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             btn = dialog.createCloseButton(this.loc('actions.close'));
-        dialog.show(title, message, [btn]);
+        if (errorList && errorList.length !== 0){
+            var content = this._templates.content.clone();
+            content.find('.error-message').html(message);
+            var list = content.find('.error-list');
+            errorList.forEach(function (error){
+                var listItem = me._templates.listItem.clone();
+                listItem.text(error);
+                list.append(listItem);
+            });
+            dialog.show(title, content, [btn]);
+        } else {
+            dialog.show(title, message, [btn]);
+        }
     },
     getEpsgValues: function (srs) {
         if (srs && this.epsgValues.hasOwnProperty(srs)){
