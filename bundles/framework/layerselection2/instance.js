@@ -221,7 +221,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                 if (event._creator !== this.getName()) {
                     // Layer order has been changed by someone else, resort layers
                     this.plugins['Oskari.userinterface.Tile'].refresh();
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerOrderChanged(event.getMovedMapLayer(), event.getFromPosition(), event.getToPosition());
                 }
             }
         },
