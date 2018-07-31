@@ -110,7 +110,11 @@ $flyoutPadding: 16px;
             font-weight: bold;
         }
     }
-
+    .icon-warning-light {
+        top: 88%;
+        position: absolute;
+        cursor: pointer;   
+    }
     .icon {
         position: absolute;
         top:5px;

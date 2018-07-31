@@ -67,6 +67,11 @@
     top: 5px; }
     .statsgrid-grid-table-header-content .header .title {
       font-weight: bold; }
+      .icon-warning-light {
+        top: 88%;
+        position: absolute;
+        cursor: pointer;   
+    }
   .statsgrid-grid-table-header-content .icon {
     position: absolute;
     top: 5px;
@@ -705,10 +710,10 @@ div.tab-material-controls div.title {
 .stats-indicator-form-item {
   width: 96%;
   margin-bottom: 0.3125em; }
+
 .stats-ind-selector {
   display: flex;
-  align-items: baseline;
-}
+  align-items: baseline; }
 
 .stats-not-logged-in {
   width: 100%;
