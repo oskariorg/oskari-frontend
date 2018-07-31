@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             scene.postRender.addEventListener(updateReadyStatus);
 
             // Load sample 3D tiles
-            this._addSampleTileset();
+            // this._addSampleTileset();
 
             return map;
         },
@@ -420,6 +420,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(typeof layerImpl.destroy === 'function') {
                 layerImpl.destroy();
             }
+        },
+        /**
+         * @param {Cesium.Cesium3DTileset} tileset Cesium 3D Tiles tileset
+         */
+        add3DLayer: function (tileset) {
+            this._map3d.getCesiumScene().primitives.add(tileset);
+        },
+        /**
+         * @param {Cesium.Cesium3DTileset} tileset Cesium 3D Tiles tileset
+         */
+        remove3DLayer: function (tileset) {
+            return tileset && tileset.destroy();
         },
         /**
          * Brings map layer to top

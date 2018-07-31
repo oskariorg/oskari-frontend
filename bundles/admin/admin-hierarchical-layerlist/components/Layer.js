@@ -33,6 +33,10 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         id: "arcgis93layer",
         localeKey: "arcgis93",
         footer: false
+    }, {
+        id: "tiles3dlayer",
+        localeKey: "tiles3d",
+        footer: false
     }];
     this._init();
     this._setupSupportedLayerTypes();

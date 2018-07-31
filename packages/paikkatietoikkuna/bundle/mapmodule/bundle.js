@@ -60,6 +60,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/Plugin.js"
                 },
                 /*
+                /*
                  * domain
                  */
                 {
