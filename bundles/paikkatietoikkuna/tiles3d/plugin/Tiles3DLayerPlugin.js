@@ -48,6 +48,15 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
          */
         _extendCesium3DTileset: function () {
             var proto = Cesium.Cesium3DTileset.prototype;
+            proto._color = '#ffd2a6';
+
+            proto.setInitialStyle = function (layer) {
+                var opacity = layer.getOpacity();
+                if (opacity > 1) {
+                    opacity = opacity / 100.0;
+                }
+                this.setOpacity(opacity);
+            };
             proto.setVisible = function (visible) {
                 this.show = visible === true;
             };
@@ -56,8 +65,6 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             };
             proto.setOpacity = function (opacity) {
                 if (!isNaN(opacity)) {
-                    this._color = this._color || '#FFFFFF';
-
                     var colorDef = 'color("' + this._color + '", ' + opacity + ')';
                     this._opacity = opacity;
                     if (this.style) {
@@ -72,7 +79,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             };
             proto.getOpacity = function () {
                 if (this._opacity === null || this._opacity === undefined) {
-                    return 100;
+                    return 1;
                 }
                 return this._opacity;
             };
@@ -91,6 +98,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 dynamicScreenSpaceErrorFactor: 4.0,
                 dynamicScreenSpaceErrorHeightFalloff: 0.25
             });
+            tileset.setInitialStyle(layer);
 
             this.getMapModule().add3DLayer(tileset);
             layer.setQueryable(false);
