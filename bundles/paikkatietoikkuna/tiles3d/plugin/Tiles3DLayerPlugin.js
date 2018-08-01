@@ -39,7 +39,43 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                     'tiles3dlayer',
                     'Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer'
                 );
+                this._extendCesium3DTileset();
             }
+        },
+        /**
+         * @private @method _extendCesium3DTileset
+         * Extend Cesium3DTileset with ol layer functions.
+         */
+        _extendCesium3DTileset: function () {
+            var proto = Cesium.Cesium3DTileset.prototype;
+            proto.setVisible = function (visible) {
+                this.show = visible === true;
+            };
+            proto.isVisible = proto.getVisible = function () {
+                return this.show === true;
+            };
+            proto.setOpacity = function (opacity) {
+                if (!isNaN(opacity)) {
+                    this._color = this._color || '#FFFFFF';
+
+                    var colorDef = 'color("' + this._color + '", ' + opacity + ')';
+                    this._opacity = opacity;
+                    if (this.style) {
+                        this.style.color = colorDef;
+                        this.makeStyleDirty();
+                    } else {
+                        this.style = new Cesium.Cesium3DTileStyle({
+                            color: colorDef
+                        });
+                    }
+                }
+            };
+            proto.getOpacity = function () {
+                if (this._opacity === null || this._opacity === undefined) {
+                    return 100;
+                }
+                return this._opacity;
+            };
         },
         /**
          * Adds a single 3d tileset to this map
