@@ -106,6 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
 
         /**
+         * Se
          * Sets the current classification and sends out event notifying about the change
          * @param {String} indicatorHash indicator hash
          * @param {Object} classification classification
@@ -249,10 +250,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @return {Object} false if indicator is already selected or an object describing the added indicator (includes parameters as an object)
          */
         addIndicator: function (datasrc, indicator, selections, series, classification) {
-            if (series) {
-                this.seriesService.addSeries(series);
-                selections[series.id] = this.seriesService.getValue();
-            }
             var ind = {
                 datasource: Number(datasrc),
                 indicator: indicator,
@@ -269,6 +266,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             });
             if (found) {
                 return false;
+            }
+            if (series) {
+                this.seriesService.addSeries(datasrc, indicator, selections, series);
+                ind.selections[series.id] = this.seriesService.getValue();
             }
             this.indicators.push(ind);
 

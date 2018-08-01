@@ -62,6 +62,9 @@
         notifyOskariEvent: function (event) {
             this.trigger(event.getName(), event);
         },
+        getSeriesService: function () {
+            return this.series;
+        },
         getStateService: function () {
             return this.state;
         },

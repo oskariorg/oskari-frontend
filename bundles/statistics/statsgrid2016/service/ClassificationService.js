@@ -69,9 +69,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
          * }
          * @param  {Object} indicatorData data to classify. Keys are available for groups, values are used for classification
          * @param  {Object} options       optional instructions for classification
+         * @param  {geostats} groupStats precalculated geostats | optional
          * @return {Object}               result with values and helper functions
          */
-        getClassification: function (indicatorData, options) {
+        getClassification: function (indicatorData, options, groupStats) {
             var me = this;
             if (typeof indicatorData !== 'object') {
                 throw new Error('Data expected as object with region/value as keys/values.');
@@ -91,21 +92,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
 
             var stats = new geostats(list);
-            stats.silent = true;
+
+            stats.silent = false;
             stats.setPrecision(opts.precision);
 
             var response = {};
-
-            if (opts.method === 'jenks') {
-                // Luonnolliset välit
-                response.bounds = stats.getJenks(opts.count);
-            } else if (opts.method === 'quantile') {
-                // Kvantiilit
-                response.bounds = stats.getQuantile(opts.count);
-            } else if (opts.method === 'equal') {
-                // Tasavälit
-                response.bounds = stats.getEqInterval(opts.count);
+            if (groupStats) {
+                if (opts.method === 'jenks') {
+                    response.bounds = groupStats.getJenks(opts.count);
+                } else if (opts.method === 'quantile') {
+                    response.bounds = groupStats.getQuantile(opts.count);
+                } else if (opts.method === 'equal') {
+                    response.bounds = groupStats.getEqInterval(opts.count);
+                }
+                stats.setClassManually(groupStats.bounds);
+            } else {
+                if (opts.method === 'jenks') {
+                    // Luonnolliset välit
+                    response.bounds = stats.getJenks(opts.count);
+                } else if (opts.method === 'quantile') {
+                    // Kvantiilit
+                    response.bounds = stats.getQuantile(opts.count);
+                } else if (opts.method === 'equal') {
+                    // Tasavälit
+                    response.bounds = stats.getEqInterval(opts.count);
+                }
             }
+
             response.ranges = stats.ranges;
             response.stats = {
                 min: stats.min(),
