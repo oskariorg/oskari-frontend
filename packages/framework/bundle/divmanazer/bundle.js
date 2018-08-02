@@ -338,7 +338,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                  "src": "../../../../libraries/semantic-ui-dropdown/dropdown.min.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../libraries/semantic-ui/semantic.min.css"
+                "src": "../../../../libraries/semantic-ui-dropdown/semantic.min.css"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../libraries/semantic-ui-dropdown/transition.min.js"
