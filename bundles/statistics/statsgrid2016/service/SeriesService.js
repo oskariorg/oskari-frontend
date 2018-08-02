@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
      * @static
      */
     function (sandbox) {
+        this._log = Oskari.log('StatsGrid.SeriesService');
         this.sandbox = sandbox;
         this.setFrameInterval(2000);
         this.selectedValue = null;
@@ -145,11 +146,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             var me = this;
             var collectedValues = [];
             var collectedCount = 0;
-            var collectSeriesData = function (seriesValue) {
+
+            var collectDataCallbackFactory = function (seriesValue) {
                 return function (err, data) {
                     collectedCount++;
                     if (err) {
-                        // notify?
+                        me._log.warn('Collecting series data failed for value: ' + seriesValue);
                     } else {
                         for (var key in data) {
                             if (data.hasOwnProperty(key)) {
@@ -160,29 +162,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                             }
                         }
                     }
+                    // Completing the last call
                     if (collectedCount === series.values.length) {
-                        collectCompleted();
+                        var hash = me.getStateService().getHash(datasrc, indicator, selections, series);
+                        me.seriesStats[hash] = new geostats(collectedValues);
                     }
                 };
             };
 
-            var collectCompleted = function () {
-                var hash = me.getStateService().getHash(datasrc, indicator, selections, series);
-                me.seriesStats[hash] = new geostats(collectedValues);
-                // notify classification to update legend etc?
-            };
-
+            // Get data for each selection in the series
             series.values.forEach(function (val) {
                 var params = {};
                 params[series.id] = val;
-                params = jQuery.extend({}, params, selections);
+                params = jQuery.extend({}, selections, params);
                 me.getStatisticsService().getIndicatorData(
                     datasrc,
                     indicator,
                     params,
                     series,
                     me.getStateService().getRegionset(),
-                    collectSeriesData(val));
+                    collectDataCallbackFactory(val));
             });
         }
     }, {

@@ -270,6 +270,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             if (series) {
                 this.seriesService.addSeries(datasrc, indicator, selections, series);
                 ind.selections[series.id] = this.seriesService.getValue();
+                // Discontinuos mode is problematic for series data,
+                // because each class has to get at least one hit -> set distinct mode.
+                ind.classification = jQuery.extend({}, indicator.classification || {}, {mode: 'distinct'});
             }
             this.indicators.push(ind);
 
