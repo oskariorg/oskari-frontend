@@ -1,5 +1,7 @@
 /**
  * @class Oskari.userinterface.component.Multiselect
+ * 
+ * https://semantic-ui.com/modules/dropdown.html#behavior
  */
 Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
 
@@ -16,6 +18,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
         getElement: function () {
             return this.element;
         },
+        getValue: function () {
+            return this.element.find('.ui.dropdown').dropdown('get value');
+        },
         create: function (options, placeholder) {
             var list = jQuery(this.multiselect);
             var arr = [];
@@ -31,6 +36,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
             this.element = list;
             this.element.find('.ui.dropdown').dropdown({
                 placeholder: placeholder,
+                useLabels: false,
                 values: arr
             });
 
