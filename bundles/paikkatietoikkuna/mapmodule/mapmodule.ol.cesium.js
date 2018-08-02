@@ -79,6 +79,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             var scene = this._map3d.getCesiumScene();
+            scene.terrainProvider = new Cesium.CesiumTerrainProvider({
+                url: 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/'
+            });
+
             var updateReadyStatus = function () {
                 scene.postRender.removeEventListener(updateReadyStatus);
                 me._mapReady = true;
