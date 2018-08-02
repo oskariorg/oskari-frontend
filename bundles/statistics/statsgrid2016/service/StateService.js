@@ -106,7 +106,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
 
         /**
-         * Se
          * Sets the current classification and sends out event notifying about the change
          * @param {String} indicatorHash indicator hash
          * @param {Object} classification classification
