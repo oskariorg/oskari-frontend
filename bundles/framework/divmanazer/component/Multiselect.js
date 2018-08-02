@@ -16,17 +16,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
         getElement: function () {
             return this.element;
         },
-        create: function (options) {
+        create: function (options, placeholder) {
             var list = jQuery(this.multiselect);
             var arr = [];
-            options.forEach(function (option) {
-                arr.push({
-                    name: option.name,
-                    value: option.id
+            if (options) {
+                options.forEach(function (option) {
+                    arr.push({
+                        name: option.name,
+                        value: option.id
+                    });
                 });
-            });
+            }
+
             this.element = list;
             this.element.find('.ui.dropdown').dropdown({
+                placeholder: placeholder,
                 values: arr
             });
 
@@ -36,7 +40,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
             this.element.append(checkbox.getElement());
             var me = this;
             checkbox.setHandler(function () {
-                debugger;
                 if (checkbox.isChecked()) {
                     me.selectAll();
                 } else {
@@ -45,7 +48,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
             });
         },
         clear: function () {
-            this.element.dropdown('clear');
+            this.element.find('.ui.dropdown').dropdown('clear');
         },
         selectAll: function () {
             var options = this.element.find('.ui.dropdown > .menu > .item').toArray().map(function (item) {

@@ -2,9 +2,6 @@
     position: relative;
     font-family: Arial;  
 }
-.oskari-multiselect select {
-    //display: none;
-}
 
 .select-selected {
     background-color: dodgerblue;

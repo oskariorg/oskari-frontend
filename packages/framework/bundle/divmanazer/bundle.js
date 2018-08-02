@@ -335,16 +335,13 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../libraries/d3/d3.min.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../libraries/semantic-ui/semantic.min.js"
+                 "src": "../../../../libraries/semantic-ui-dropdown/dropdown.min.js"
             }, {
                 "type": "text/css",
                 "src": "../../../../libraries/semantic-ui/semantic.min.css"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../libraries/semantic-ui-dropdown/transition.min.js"
-            }, {
-                "type": "text/css",
-                "src": "../../../../libraries/semantic-ui-dropdown/transition.min.css"
             }, {
                 // NOTE! EXTERNAL LIBRARY!
                 "type" : "text/javascript",
