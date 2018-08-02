@@ -289,9 +289,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/resources/css/selectlist.css"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/framework/divmanazer/resources/css/multiselect.css"
-            }, {
-                "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/css/badge.css"
             }, {
                 "type": "text/css",
