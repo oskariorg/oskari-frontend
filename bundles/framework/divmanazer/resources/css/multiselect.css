@@ -1,0 +1,26 @@
+.oskari-multiselect {
+    position: relative;
+    font-family: Arial;  
+}
+.oskari-multiselect select {
+    //display: none;
+}
+
+.select-selected {
+    background-color: dodgerblue;
+}
+/*style items (options):*/
+.select-items {
+    position: absolute;
+    background-color: white;
+    top: 100%;
+    box-shadow: 5px 10px #888888;
+    border: 1px solid #888888;
+    left: 0;
+    right: 0;
+    z-index: 99;
+  }
+  /*hide the items when the select box is closed:*/
+  .select-hide {
+    display: none;
+  }

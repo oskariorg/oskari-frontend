@@ -1,0 +1,19 @@
+{
+  "name": "semantic/dropdown",
+  "description": "Single component release of dropdown",
+  "homepage": "http://www.semantic-ui.com",
+  "authors": [{
+    "name": "Jack Lukic",
+    "email": "jacklukic@gmail.com",
+    "web": "http://www.jacklukic.com",
+    "role": "Creator"
+  }],
+  "keywords": [
+    "semantic",
+    "ui",
+    "css",
+    "framework"
+  ],
+  "license": "MIT",
+  "version": "2.3.3"
+}

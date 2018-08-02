@@ -1,0 +1,29 @@
+{
+  "name": "semantic-ui-transition",
+  "description": "Transition - Semantic UI",
+  "homepage": "http://www.semantic-ui.com",
+  "author": {
+    "name": "Jack Lukic",
+    "web": "http://www.jacklukic.com"
+  },
+  "ignore": [
+    "docs",
+    "node",
+    "server",
+    "spec",
+    "src",
+    "test"
+  ],
+  "keywords": [
+    "semantic",
+    "ui",
+    "css3",
+    "framework"
+  ],
+  "license": [
+    "http://semantic-ui.mit-license.org/"
+  ],
+  "main": [
+    "transition.css"
+  ]
+}
