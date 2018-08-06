@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         var select = this._selectTemplate.clone();
         this.element = select;
         if (options.multi) {
-            select.find('select').attr('multiple', true);
+            select.find('select').prop('multiple', true);
         }
         if (data === undefined) {
             return this.makeChosen(select, options);
@@ -82,15 +82,15 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
      */
     selectFirstValue: function () {
         var chosen = this.element.find('select');
-        chosen.find('option:nth-child(2)').attr('selected', 'selected');
+        chosen.find('option:nth-child(2)').prop('selected', 'selected');
         this.update();
     },
     resetToPlaceholder: function () {
         var chosen = this.element.find('select');
-        if (chosen.attr('multiple')) {
+        if (chosen.prop('multiple')) {
             chosen.val('');
         } else {
-            chosen.find('option:first-child').attr('selected', 'selected');
+            chosen.find('option:first-child').prop('selected', 'selected');
         }
         this.update();
     },
@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         }
         chosen.find('option').each(function (index, opt) {
             if (isDisabledOption(opt.value)) {
-                jQuery(opt).attr('disabled', true);
+                jQuery(opt).prop('disabled', true);
             }
         });
         chosen.trigger('chosen:updated');
