@@ -5,6 +5,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
+    this.selectClassRef = [];
+    this.resetInProgress = false;
     Oskari.makeObservable(this);
 }, {
     __templates: {
@@ -93,7 +95,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         return btn;
     },
     /** **** PUBLIC METHODS ******/
-
+    clearSelections: function (selectInstance) {
+        this.resetInProgress = true;
+        var refCount = 0;
+        this._params.clean();
+        this.selectClassRef.forEach(function (ref) {
+            ref.reset();
+            refCount++;
+        });
+        if (refCount === this.selectClassRef.length) {
+            this.resetInProgress = false;
+        }
+},
     /**
      * @method  @public getPanelContent get panel content
      * @return {Object} jQuery element
@@ -180,13 +193,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         btnEditIndicator.insertTo(main);
         btnEditIndicator.setVisible(false);
 
-        dsSelector.on('change', function () {
+        me.selectClassRef.push(dsSelect);
+        me.selectClassRef.push(indicSelect);
+        me.selectClassRef.push(regionFilterSelect);
+
+        dsSelector.on('change', function (event) {
             me._params.clean();
             // If selection was removed -> reset indicator selection
             if (dsSelect.getValue() === '') {
                 dataLabelWithTooltips.find('.tooltip').show();
                 indicSelect.updateOptions([]);
-                indicSelect.reset();
+                if (!me.resetInProgress) {
+                    me.indicSelect.reset();
+                }
                 btnAddIndicator.setVisible(false);
                 btnEditIndicator.setVisible(false);
                 return;
@@ -235,13 +254,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         regionsetFilterElement.on('change', function (evt) {
             if (!regionFilterSelect.getValue()) {
-                dsSelect.reset();
+                me.clearSelections();
                 return;
             }
             var unsupportedSelections = me.getUnsupportedDatasetsList(regionFilterSelect.getValue());
             me._params.indicatorSelected(dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue());
-
-            if (unsupportedSelections) {
+            if (unsupportedSelections && !me.resetInProgress) {
                 var ids = unsupportedSelections.map(function (iteration) {
                     return iteration.id;
                 });
