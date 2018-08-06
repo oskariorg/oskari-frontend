@@ -126,6 +126,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             }
         });
 
+        var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        clearBtn.addClass('margintopLarge');
+        clearBtn.setPrimary(true);
+        clearBtn.setTitle(locale.panels.newSearch.clearButtonTitle);
+        clearBtn.insertTo(container);
+
+        clearBtn.setHandler(function (event) {
+            event.stopPropagation();
+            selectionComponent.clearSelections();
+        });
+
         selectionComponent.on('indicator.changed', function (enabled) {
             btn.setEnabled(enabled);
         });
