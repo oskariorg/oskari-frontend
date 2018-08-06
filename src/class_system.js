@@ -68,19 +68,24 @@
         return classInfo;
     }
 
-    function processMetadata(classInfo, metadata) {
+    function processMetadata (classInfo, metadata) {
         if (!metadata) {
             return true;
         }
         classInfo.metadata = metadata;
         processProtocols(classInfo, metadata.protocol);
-        if (!metadata.extend) {
+        if (!metadata.extend || !metadata.extend.length) {
             return true;
         }
-        if (!Array.isArray(metadata.extend) || metadata.extend.length > 1) {
-            throw new Error('Invalid extend in class "' + classInfo.className + '". Only single inheritance is supported: {extend: ["Super.Class.Name"]}');
+        var superClassName = metadata.extend;
+        if (Array.isArray(superClassName)) {
+            if (superClassName.length > 1) {
+                throw new Error('Invalid extend in class "' + classInfo.className + '". Only single inheritance is supported: {extend: "Super.Class.Name"}');
+            } else {
+                superClassName = metadata.extend[0];
+            }
         }
-        var superClass = ensureClassInfo(metadata.extend[0]);
+        var superClass = ensureClassInfo(superClassName);
         superClass.subClasses.push(classInfo);
         classInfo.superClass = superClass;
 
