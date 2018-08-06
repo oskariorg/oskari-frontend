@@ -91,7 +91,7 @@
         if (!classProtocols) {
             return;
         }
-        classProtocols.forEach(function(pt){
+        classProtocols.forEach(function (pt){
             if (!protocols[pt]) {
                 protocols[pt] = {};
             }
@@ -153,7 +153,7 @@
             if (classPrototype) {
                 cloneProperties(classPrototype, classInfo.classPrototype);
             }
-            
+
             var isSuperChainComplete = processMetadata(classInfo, metadata);
 
             if (!isSuperChainComplete) {
@@ -231,7 +231,7 @@
          */
         builder: function(className) {
             var classInfo = getClassInfo(className);
-            return function(){
+            return function() {
                 return createWithClassInfo(classInfo, Array.prototype.slice.call(arguments));
             }
         },
@@ -256,7 +256,7 @@
          * @return {string[]}              ClassNames implementing protocol
          */
         protocol: function(protocolName) {
-            return Object.keys(protocols[protocolName] || {});
+            return Object.keys(protocols[protocolName] || []);
         },
         /**
          * @private @method _getClassInfo
