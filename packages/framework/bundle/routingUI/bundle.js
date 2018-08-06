@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance
+ * @class Oskari.mapframework.bundle.routingUI.RoutingUIBundle
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance",
+Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.RoutingUIBundle",
     function () {}, {
     "create": function () {
         return Oskari.clazz.create("Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance");
@@ -78,4 +78,4 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
 
 });
 
-Oskari.bundle_manager.installBundleClass("routingUI", "Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance");
+Oskari.bundle_manager.installBundleClass("routingUI", "Oskari.mapframework.bundle.routingUI.RoutingUIBundle");

@@ -13,7 +13,7 @@ import '../src/util.js';
 import '../src/i18n.js';
 import '../src/message_types.js';
     // class system
-import '../src/O2ClassSystem.js';
+import '../src/class_system.js';
 import '../src/bundle_manager.js';
 
     // user and sandbox
