@@ -335,7 +335,19 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                  "src": "../../../../libraries/semantic-ui-dropdown/dropdown.min.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../libraries/semantic-ui-dropdown/semantic.min.css"
+                "src": "../../../../libraries/semantic-ui-dropdown/dropdown.min.css"
+            }, {
+                "type": "text/css",
+                "src": "../../../../libraries/semantic-ui-dropdown/label.min.css"
+            }, {
+                "type": "text/css",
+                "src": "../../../../libraries/semantic-ui-dropdown/icon.min.css"
+            }, {
+                "type": "text/css",
+                "src": "../../../../libraries/semantic-ui-dropdown/search.min.css"
+            }, {
+                "type": "text/css",
+                "src": "../../../../libraries/semantic-ui-dropdown/transition.min.css"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../libraries/semantic-ui-dropdown/transition.min.js"

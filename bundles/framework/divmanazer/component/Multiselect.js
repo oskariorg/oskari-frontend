@@ -21,8 +21,34 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
         getValue: function () {
             return this.element.find('.ui.dropdown').dropdown('get value');
         },
-        create: function (options, placeholder) {
+        setValue: function (value) {
+            return this.element.find('.ui.dropdown').dropdown('set value', value);
+        },
+        create: function (options, placeholder, checkboxBoolean) {
             var list = jQuery(this.multiselect);
+            var arr = this.getArrayFromOptions(options);
+
+            this.element = list;
+            this.element.find('.ui.dropdown').dropdown({
+                placeholder: placeholder,
+                values: arr
+            });
+            if (checkboxBoolean) {
+                var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+                checkbox.setTitle('Select all');
+                checkbox.setChecked(false);
+                this.element.append(checkbox.getElement());
+                var me = this;
+                checkbox.setHandler(function () {
+                    if (checkbox.isChecked()) {
+                        me.selectAll();
+                    } else {
+                        me.reset();
+                    }
+                });
+            }
+        },
+        getArrayFromOptions: function (options) {
             var arr = [];
             if (options) {
                 options.forEach(function (option) {
@@ -32,29 +58,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
                     });
                 });
             }
-
-            this.element = list;
-            this.element.find('.ui.dropdown').dropdown({
-                placeholder: placeholder,
-                useLabels: false,
-                values: arr
-            });
-
-            var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-            checkbox.setTitle('Select all');
-            checkbox.setChecked(false);
-            this.element.append(checkbox.getElement());
-            var me = this;
-            checkbox.setHandler(function () {
-                if (checkbox.isChecked()) {
-                    me.selectAll();
-                } else {
-                    me.clear();
-                }
-            });
+            return arr;
         },
-        clear: function () {
+        updateOptions: function (options) {
+            var arr = this.getArrayFromOptions(options);
+            this.element.find('.ui.dropdown').dropdown({ values: arr });
+        },
+        reset: function () {
             this.element.find('.ui.dropdown').dropdown('clear');
+        },
+        limitSelectionAmount: function (number) {
+            this.element.find('.ui.dropdown').dropdown({
+                maxSelections: number
+            });
         },
         selectAll: function () {
             var options = this.element.find('.ui.dropdown > .menu > .item').toArray().map(function (item) {

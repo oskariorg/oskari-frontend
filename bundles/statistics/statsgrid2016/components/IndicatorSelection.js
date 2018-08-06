@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             result.indicators.forEach(function (ind) {
                 var resultObj = {
                     id: ind.id,
-                    title: Oskari.getLocalized(ind.name)
+                    name: Oskari.getLocalized(ind.name)
                 };
                 results.push(resultObj);
                 if (hasRegionSetRestriction) {
@@ -117,8 +117,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
         var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionDropdown = Oskari.clazz.create('Oskari.userinterface.component.Multiselect');
-        regionDropdown.create(this.service.getRegionsets(), locale.panels.newSearch.selectRegionsetPlaceholder);
+        regionDropdown.create(this.service.getRegionsets(), locale.panels.newSearch.selectRegionsetPlaceholder, true);
         regionsetFilterElement.append(regionDropdown.getElement());
+        regionDropdown.limitSelectionAmount(2);
 
         var datasources = this.service.getDatasource();
         var sources = [];
@@ -187,8 +188,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             // If selection was removed -> reset indicator selection
             if (dsSelect.getValue() === '') {
                 dataLabelWithTooltips.find('.tooltip').show();
-                indicSelect.updateOptions([]);
-                indicSelect.reset();
+                indicDropdown.updateOptions([]);
+                indicDropdown.reset();
                 btnAddIndicator.setVisible(false);
                 btnEditIndicator.setVisible(false);
                 return;

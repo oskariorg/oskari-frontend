@@ -691,6 +691,7 @@ div.tab-material-controls div.title {
   max-width: 700px; }
 
 .statsgrid-user-indicator-flyout {
+  top:30px;
   height: auto;
   min-width: 365px; }
 
