@@ -124,7 +124,7 @@
                 // Oskari.bundle is the new registry for requirejs loader
                 Oskari.bundle(biid, {
                     clazz: clazz,
-                    metadata: cs.getMetadata(className).meta
+                    metadata: cs.getMetadata(className)
                 });
             }
         },
