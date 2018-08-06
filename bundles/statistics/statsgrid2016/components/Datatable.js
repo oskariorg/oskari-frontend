@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                         if (me._sortOrder.item === ind.hash) {
                             me._sortOrder = me._defaultSortOrder;
                         }
-                        me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
+                        me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections, ind.series);
                     });
                 } else {
                     // Else remove close icon
@@ -359,14 +359,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
      * @method  @private handleIndicatorAdded Handle indicator added
      * @param  {Integer} datasrc    datasource
      * @param  {String} indId      indicator id
-     * @param  {Object} selections seelctions
+     * @param  {Object} selections selections
+     * @param  {Object} series series
      */
-    _handleIndicatorAdded: function (datasrc, indId, selections) {
+    _handleIndicatorAdded: function (datasrc, indId, selections, series) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
-        log.debug('Indicator added ', src, indId, selections);
+        log.debug('Indicator added ', src, indId, selections, series);
         var state = this.service.getStateService();
-        var hash = this.service.getStateService().getHash(datasrc, indId, selections);
+        var hash = this.service.getStateService().getHash(datasrc, indId, selections, series);
 
         state.setActiveIndicator(hash);
         this._handleRegionsetChanged(this.getCurrentRegionset());
@@ -401,6 +402,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         this.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             log.debug('Region changed! ', event.getRegionset());
             me._handleRegionsetChanged(event.getRegionset());
+        });
+        this.service.on('StatsGrid.ParameterChangedEvent', function (event) {
+            log.debug('Indicator parameter changed! ');
+            me._handleRegionsetChanged();
         });
 
         this.service.on('StatsGrid.RegionSelectedEvent', function (event) {
@@ -587,7 +592,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             return;
         }
         list.forEach(function (ind) {
-            me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, me.getCurrentRegionset(), function (err, indicatorData) {
+            me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, me.getCurrentRegionset(), function (err, indicatorData) {
                 count++;
                 if (err) {
                     if (count === list.length) {

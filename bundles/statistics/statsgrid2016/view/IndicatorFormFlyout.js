@@ -213,7 +213,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 return;
             }
             // try getting existing values for regions
-            me.service.getIndicatorData(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err, data) {
+            me.service.getIndicatorData(me.datasourceId, me.indicatorId, { year: selectors.year }, null, selectors.regionset, function (err, data) {
                 if (err) {
                     // Dataset might not exist or network failure. Either way show an empty form
                     Oskari.log('IndicatorFormFlyout').error(err);

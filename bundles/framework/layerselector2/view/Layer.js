@@ -22,6 +22,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     '<div class="layer-tools">'+
                     '   <div class="layer-not-supported icon-warning-light" title="" ></div>' +
                     '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' +
+                    '   <div class="layer-icon-secondary"></div>'+
                     '   <div class="layer-icon"></div>'+
                     '   <div class="layer-info"></div>'+
                     '</div>' +
@@ -131,6 +132,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 mapLayerId,
                 layerInfo;
 
+            var secondaryIcon = tools.find('div.layer-icon-secondary');
+
             icon.addClass(layer.getIconClassname());
 
             if (layer.isBaseLayer()) {
@@ -152,7 +155,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             } else if (layer.isLayerOfType('VECTOR')) {
                 icon.attr('title', tooltips['type-wms']);
             }
-
+            if (layer.hasTimeseries()) {
+                secondaryIcon.addClass('layer-timeseries-disabled');
+                secondaryIcon.attr('title', tooltips['type-timeseries']);
+            }
 
             if (!layer.getMetadataIdentifier()) {
                 subLayers = layer.getSubLayers();

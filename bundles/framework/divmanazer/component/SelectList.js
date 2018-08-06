@@ -85,6 +85,14 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         chosen.find('option:nth-child(2)').prop('selected', 'selected');
         this.update();
     },
+    /** @method selectLastValue
+     *   Select the last value
+     */
+    selectLastValue: function () {
+        var chosen = this.element.find('select');
+        chosen.find('option:last-child').attr('selected', 'selected');
+        this.update();
+    },
     resetToPlaceholder: function () {
         var chosen = this.element.find('select');
         if (chosen.prop('multiple')) {

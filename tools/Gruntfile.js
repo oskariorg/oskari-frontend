@@ -367,7 +367,7 @@ module.exports = function (grunt) {
                 src: '**/*.scss',
                 dest: '../bundles/',
                 rename: function (dest, src) {
-                    var target = dest + src.replace('/scss/', '/resources/css/');
+                    var target = dest + src.replace('/scss/', '/css/');
                     grunt.log.writeln('Target: ' + target);
                     return target;
                 },
