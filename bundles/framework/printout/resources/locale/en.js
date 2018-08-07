@@ -131,7 +131,7 @@ Oskari.registerLocalization(
                 "tooltip": "Specify the scale to be used for printing",
                 "mapScale": "Use the map scale",
                 "definedScale": "Select a scale",
-                "unsupportedLayersMessage": "The following maplayers not show on the printout",
+                "unsupportedLayersMessage": "The following maplayers are not shown on the printout",
                 "unsupportedLayersTitle": "The printout does not show all layers"
             }
         },
