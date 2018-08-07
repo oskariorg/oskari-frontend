@@ -249,10 +249,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @return {Object} false if indicator is already selected or an object describing the added indicator (includes parameters as an object)
          */
         addIndicator: function (datasrc, indicator, selections, series, classification) {
-            if (series) {
-                this.seriesService.addSeries(series);
-                selections[series.id] = this.seriesService.getValue();
-            }
             var ind = {
                 datasource: Number(datasrc),
                 indicator: indicator,
@@ -269,6 +265,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             });
             if (found) {
                 return false;
+            }
+            if (series) {
+                this.seriesService.addSeries(datasrc, indicator, selections, series);
+                ind.selections[series.id] = this.seriesService.getValue();
+                // Discontinuos mode is problematic for series data,
+                // because each class has to get at least one hit -> set distinct mode.
+                ind.classification = jQuery.extend({}, indicator.classification || {}, {mode: 'distinct'});
             }
             this.indicators.push(ind);
 

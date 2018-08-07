@@ -196,7 +196,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
         me._element.find('select.amount-class').val(classification.count);
 
-        me._element.find('select.classify-mode').val(classification.mode);
+        var mode = me._element.find('select.classify-mode');
+        mode.val(classification.mode);
         me._element.find('select.color-set').val(classification.type);
         me._element.find('#legend-flip-colors').attr('checked', classification.reverseColors);
         // update color selection values
@@ -225,6 +226,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                     }
                 });
             }
+
+            // Discontinuous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
+            // Disabling it for data series.
+            var modeOpts = mode.find('option');
+            modeOpts.each(function (index, opt) {
+                opt = jQuery(opt);
+                if (opt.val() === 'discontinuous') {
+                    opt.attr('disabled', ind.series !== undefined);
+                }
+            });
         });
         var min = classification.min || me._rangeSlider.defaultValues[0];
         var max = classification.max || me._rangeSlider.defaultValues[1];
@@ -247,7 +258,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
         }
     },
-
     /**
      * @method  @public getSelectedValues gets selected values
      * @return {Object} selected values object

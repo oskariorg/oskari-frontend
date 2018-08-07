@@ -183,7 +183,8 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                     return;
                 }
                 var classification = state.getClassificationOpts(ind.hash);
-                var classify = service.getClassificationService().getClassification(data, classification);
+                var groupStats = service.getSeriesService().getSeriesStats(ind.hash);
+                var classify = service.getClassificationService().getClassification(data, classification, groupStats);
                 if(!classify) {
                     me.__updateLayerParams(mapLayer, {
                         VIS_NAME: layer.getLayerName(),

@@ -245,7 +245,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                     return;
                 }
                 var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
-                var classification = service.getClassificationService().getClassification(data, classificationOpts);
+                var groupStats = service.getSeriesService().getSeriesStats(activeIndicator.hash);
+                var classification = service.getClassificationService().getClassification(data, classificationOpts, groupStats);
                 if (!classification) {
                     me.log.warn('Error getting indicator classification', data);
                     callback(me.__templates.error({ msg: locale('legend.noEnough') }));

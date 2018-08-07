@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
      * @static
      */
     function (sandbox) {
+        this._log = Oskari.log('StatsGrid.SeriesService');
         this.sandbox = sandbox;
         this.setFrameInterval(2000);
         this.selectedValue = null;
@@ -15,6 +16,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
         this.values = [];
         this.isAnimating = false;
         this.animatingHandle = null;
+        this.seriesStats = {};
     }, {
         getStateService: function () {
             if (!this.stateService) {
@@ -107,7 +109,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                 this.isAnimating = false;
             }
         },
-        addSeries: function (series) {
+        addSeries: function (datasrc, indicator, selections, series) {
             var me = this;
             if (Array.isArray(series.values)) {
                 series.values.forEach(function (val) {
@@ -119,6 +121,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                 if (!me.selectedValue && me.values.length > 0) {
                     me.selectedValue = me.values[0];
                 }
+                me._collectSeriesGroupStats(datasrc, indicator, selections, series);
             }
         },
         updateSeriesValues: function () {
@@ -129,8 +132,57 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             }).sort(this._sortAsc);
             this.values = values;
         },
+        getSeriesStats: function (hash) {
+            return this.seriesStats[hash];
+        },
         _sortAsc: function (a, b) {
             return a - b;
+        },
+        /**
+         * @private _collectSeriesGroupStats
+         * Collect all values for the series to gather stats for classification
+         */
+        _collectSeriesGroupStats: function (datasrc, indicator, selections, series) {
+            var me = this;
+            var collectedValues = [];
+            var collectedCount = 0;
+
+            var collectDataCallbackFactory = function (seriesValue) {
+                return function (err, data) {
+                    collectedCount++;
+                    if (err) {
+                        me._log.warn('Collecting series data failed for value: ' + seriesValue);
+                    } else {
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                var value = data[key];
+                                if (value !== undefined && value !== null) {
+                                    collectedValues.push(value);
+                                }
+                            }
+                        }
+                    }
+                    // Completing the last call
+                    if (collectedCount === series.values.length) {
+                        var hash = me.getStateService().getHash(datasrc, indicator, selections, series);
+                        me.seriesStats[hash] = new geostats(collectedValues);
+                    }
+                };
+            };
+
+            // Get data for each selection in the series
+            series.values.forEach(function (val) {
+                var params = {};
+                params[series.id] = val;
+                params = jQuery.extend({}, selections, params);
+                me.getStatisticsService().getIndicatorData(
+                    datasrc,
+                    indicator,
+                    params,
+                    series,
+                    me.getStateService().getRegionset(),
+                    collectDataCallbackFactory(val));
+            });
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
