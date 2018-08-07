@@ -26,7 +26,7 @@ Configuration is available for print preview service urls, legend styling parame
                   }
               },
               "scaleSelection": true,         (show scale selection)
-              "scales": [500,1000,10000,25000,50000,100000] (define custom scales for scale selection, if not defined then used map scales)
+              "scales": [500,1000,10000,25000,50000,100000] (define custom scales for scale selection, if not defined defaults to map scales)
 
 
 ## Requests the bundle sends out
