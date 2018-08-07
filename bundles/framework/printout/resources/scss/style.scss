@@ -53,6 +53,22 @@ div.printout {
         left: 0;
         z-index: 1500;
         width: 255px;
+
+        .content {
+            .accordion {
+                .accordion_panel {
+                    &.define_scale {
+                        div.scaleselection {
+                            margin-left: 38px;
+
+                            select {
+                                width: 170px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     div.basic_publisher div.content {
