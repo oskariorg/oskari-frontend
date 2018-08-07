@@ -86,7 +86,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             scene.postRender.addEventListener(updateReadyStatus);
 
+            // Load sample 3D tiles
+            this._addSampleTileset();
+
             return map;
+        },
+        _addSampleTileset: function () {
+            var sampleTiles = new Cesium.Cesium3DTileset({
+                url: '/3dtiles/helsinki/',
+                dynamicScreenSpaceError: true,
+                dynamicScreenSpaceErrorDensity: 0.00278,
+                dynamicScreenSpaceErrorFactor: 4.0,
+                dynamicScreenSpaceErrorHeightFalloff: 0.25
+            });
+            this._map3d.getCesiumScene().primitives.add(sampleTiles);
         },
         /**
          * Fire operations that have been waiting for the map to initialize.

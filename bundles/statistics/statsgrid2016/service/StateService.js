@@ -7,12 +7,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
      * @method create called automatically on construction
      * @static
      */
-    function (sandbox) {
+    function (sandbox, seriesService) {
         this.sandbox = sandbox;
+        this.seriesService = seriesService;
         this.indicators = [];
         this.regionset = null;
         this.activeIndicator = null;
         this.activeRegion = null;
+        this.selectedSeriesValue = null;
         this._defaults = {
             classification: {
                 count: 5,
@@ -135,7 +137,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var indicator = this.getIndicator(indicatorHash) || {};
             return jQuery.extend({}, this._defaults.classification, indicator.classification || {});
         },
-
         /**
          * Returns an wanted indicator.
          * @param  {String} indicatorHash indicator hash
@@ -242,16 +243,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param  {Number} datasrc    datasource id
          * @param  {Number} indicator  indicator id
          * @param  {Object} selections object containing the parameters for the indicator
+         * @param  {Object} series object containing series values
          * @param {Object} classification indicator classification
          *
          * @return {Object} false if indicator is already selected or an object describing the added indicator (includes parameters as an object)
          */
-        addIndicator: function (datasrc, indicator, selections, classification) {
+        addIndicator: function (datasrc, indicator, selections, series, classification) {
+            if (series) {
+                this.seriesService.addSeries(series);
+                selections[series.id] = this.seriesService.getValue();
+            }
             var ind = {
                 datasource: Number(datasrc),
                 indicator: indicator,
                 selections: selections,
-                hash: this.getHash(datasrc, indicator, selections),
+                series: series,
+                hash: this.getHash(datasrc, indicator, selections, series),
                 classification: classification
             };
             var found = false;
@@ -267,7 +274,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
 
             // notify
             var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
-            this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
+            this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections, ind.series));
 
             return ind;
         },
@@ -277,12 +284,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param  {Number} datasrc    datasource id
          * @param  {Number} indicator  indicator id
          * @param  {Object} selections object containing the parameters for the indicator
+         * @param  {Object} series object containing series values for the indicator
          * @return {Object}            an object describing the removed indicator (includes parameters as an object)
          */
-        removeIndicator: function (datasrc, indicator, selections) {
+        removeIndicator: function (datasrc, indicator, selections, series) {
             var me = this;
             var newIndicators = [];
-            var hash = this.getHash(datasrc, indicator, selections);
+            var hash = this.getHash(datasrc, indicator, selections, series);
             var removedIndicator = null;
             this.indicators.forEach(function (ind) {
                 if (ind.hash !== hash) {
@@ -303,7 +311,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
             // notify
             var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
-            this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, true));
+            this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, series, true));
 
             // if no indicators then reset active region
             if (this.indicators.length === 0) {
@@ -319,12 +327,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param  {Number} datasrc    datasource id
          * @param  {Number} indicator  indicator id
          * @param  {Object} selections object containing the parameters for the indicator
+         * @param  {Object} series object containing series values for the indicator
          * @return {String}            an unique id for the parameters
          */
-        getHash: function (datasrc, indicator, selections) {
+        getHash: function (datasrc, indicator, selections, series) {
             var hash = datasrc + '_' + indicator;
+            var seriesKey = '';
+            if (typeof series === 'object') {
+                seriesKey = series.id;
+                hash += '_' + series.id + '=' + series.values[0] + '-' + series.values[series.values.length - 1];
+            }
             if (typeof selections === 'object') {
-                hash = hash + '_' + Object.keys(selections).sort().map(function (key) {
+                hash = hash + '_' + Object.keys(selections).filter(function (key) {
+                    // exclude series selection
+                    return seriesKey !== key;
+                }).sort().map(function (key) {
                     return key + '=' + JSON.stringify(selections[key]);
                 }).join(':');
             }

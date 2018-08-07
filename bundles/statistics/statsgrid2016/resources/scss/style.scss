@@ -167,6 +167,7 @@ div.oskari-flyout {
         }
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
         max-width: 700px;
+        min-width: 400px;
 
         label span {
             /* Indicator selection form */
@@ -1028,6 +1029,7 @@ div.tab-material-controls div.title {
   }
   .statsgrid-user-indicator-flyout {
     height:auto;
+    min-width: 365px;
   }
   .statsgrid-user-indicator-flyout .oskari-flyoutcontentcontainer {
     overflow:unset;
@@ -1043,10 +1045,13 @@ padding: 0.9375em;
 width: 96%;
 margin-bottom: 0.3125em;
 }
+.stats-ind-selector {
+    display: flex;
+    align-items: baseline;
+}
 .stats-not-logged-in {
 width: 100%;
-height: 2.5em;
-background-color: indianred;
+min-height: 2.5em;
 margin-bottom: 0.5em;
 padding: 0.3125em;
 max-width: 31.25em; // 500px
@@ -1079,12 +1084,12 @@ width: 17%;
 .user-indicator-specification {
 padding: 0.3125em;
 color:white;
-background-color: #000; 
+background-color: #888888; 
 }
 .new-indicator-dataset-params {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
 }
 .user-indicator-import > textarea {
     width: 300px;

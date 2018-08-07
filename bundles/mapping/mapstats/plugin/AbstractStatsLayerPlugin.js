@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
             }
 
 
-            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
+            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function(err, data) {
                 if(err) {
                     Oskari.log('AbstractStatsLayerPlugin').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
                     me.__updateLayerParams(mapLayer, {

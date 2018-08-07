@@ -233,35 +233,36 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         var currentRegionset = stateService.getRegionset();
         var locale = this.locale;
 
-        this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, currentRegionset, function (err, data) {
-            if (err) {
-                me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
-                callback(me.__templates.error({ msg: locale('legend.noEnough') }));
-                return;
-            }
-            var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
-            var classification = service.getClassificationService().getClassification(data, classificationOpts);
+        this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator,
+            activeIndicator.selections, activeIndicator.series, currentRegionset, function (err, data) {
+                if (err) {
+                    me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
+                    callback(me.__templates.error({ msg: locale('legend.noEnough') }));
+                    return;
+                }
+                var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
+                var classification = service.getClassificationService().getClassification(data, classificationOpts);
 
-            if (!classification) {
-                me.log.warn('Error getting indicator classification', data);
-                callback(me.__templates.error({ msg: locale('legend.noEnough') }));
-                return;
-            }
-            if (classificationOpts.count !== classification.getGroups().length) {
-                // classification count changed!! -> show error + re-render
-                classificationOpts.count = classification.getGroups().length;
-                callback(me.__templates.error({ msg: locale('legend.noEnough') }));
-                stateService.setClassification(activeIndicator.hash, classificationOpts);
-                return;
-            }
-            var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
-            var legend = classification.createLegend(colors);
+                if (!classification) {
+                    me.log.warn('Error getting indicator classification', data);
+                    callback(me.__templates.error({ msg: locale('legend.noEnough') }));
+                    return;
+                }
+                if (classificationOpts.count !== classification.getGroups().length) {
+                    // classification count changed!! -> show error + re-render
+                    classificationOpts.count = classification.getGroups().length;
+                    callback(me.__templates.error({ msg: locale('legend.noEnough') }));
+                    stateService.setClassification(activeIndicator.hash, classificationOpts);
+                    return;
+                }
+                var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
+                var legend = classification.createLegend(colors);
 
-            if (!legend) {
-                legend = '<div>' + locale('legend.cannotCreateLegend') + '</div>';
-            }
-            callback(legend, classificationOpts);
-        });
+                if (!legend) {
+                    legend = '<div>' + locale('legend.cannotCreateLegend') + '</div>';
+                }
+                callback(legend, classificationOpts);
+            });
     },
     _updateLegend: function () {
         var state = this.service.getStateService();

@@ -76,11 +76,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
 
             if (keys && keys.length > 1) {
                 me._popup.dialog.find('.actions').after(me._templates.projectionSelect.clone());
-                me._popup.dialog.find('.coordinatetool-projection-change-header').html(me._locale.projectionChange.header);
-                me._popup.dialog.find('.projection-label').html(me._locale.projectionChange.projection);
-                me._popup.dialog.find('.projection-change-confirmation-message').html(me._locale.projectionChange.confirmationMessage);
-                me._popup.dialog.find('.projection-change-button-cancel').html(me._locale.projectionChange.buttons.cancel);
-                me._popup.dialog.find('.projection-change-button-ok').html(me._locale.projectionChange.buttons.ok);
+                me._popup.dialog.find('.coordinatetool-projection-change-header').html(me._locale('display.projectionChange.header'));
+                me._popup.dialog.find('.projection-label').html(me._locale('display.projectionChange.projection'));
+                me._popup.dialog.find('.projection-change-confirmation-message').html(me._locale('display.projectionChange.confirmationMessage'));
+                me._popup.dialog.find('.projection-change-button-cancel').html(me._locale('display.projectionChange.buttons.cancel'));
+                me._popup.dialog.find('.projection-change-button-ok').html(me._locale('display.projectionChange.buttons.ok'));
 
                 me._projectionSelect =  me._popup.dialog.find('.projection-select');
                 me._populateProjectionSelect(me._projectionSelect);

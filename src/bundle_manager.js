@@ -124,40 +124,9 @@
                 // Oskari.bundle is the new registry for requirejs loader
                 Oskari.bundle(biid, {
                     clazz: clazz,
-                    metadata: cs.getMetadata(className).meta
+                    metadata: cs.getMetadata(className)
                 });
             }
-        },
-
-        /**
-         * @public @method installBundleClassInfo
-         * Installs a bundle defined as Oskari native Class
-         *
-         * @param {string} biid      Bundle implementation ID
-         * @param {Object} classInfo ClassInfo
-         *
-         */
-        installBundleClassInfo: function (biid, classInfo) {
-            var bundleDefinition = cs.getBuilderFromClassInfo(classInfo);
-            var bundleMetadata = classInfo._metadata;
-            var sourceFiles = {};
-
-            if (biid === null || biid === undefined) {
-                throw new TypeError('installBundleClassInfo(): Missing biid');
-            }
-
-            if (classInfo === null || classInfo === undefined) {
-                throw new TypeError(
-                    'installBundleClassInfo(): Missing classInfo'
-                );
-            }
-
-            this._install(
-                biid,
-                bundleDefinition,
-                sourceFiles,
-                bundleMetadata
-            );
         },
 
         /**
