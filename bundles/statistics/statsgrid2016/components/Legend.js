@@ -96,22 +96,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
 
             // create inidicator dropdown if we have more than one indicator
             if (me.service.getStateService().getIndicators().length > 1) {
-                var edit = me.__templates.edit.clone();
                 var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
                 indicatorMenu.render(headerContainer);
                 indicatorMenu.setWidth('94%');
-                headerContainer.append(edit);
-                me._createEditClassificationListener();
             } else {
                 me._getLabels(activeIndicator, function (labels) {
                     var header = me.__templates.activeHeader({
                         label: labels.label
                     });
-                    var edit = me.__templates.edit.clone();
                     headerContainer.empty();
                     headerContainer.append(header);
-                    headerContainer.append(edit);
-                    me._createEditClassificationListener();
                 }); // _getLabels
             }
             if (!classificationOpts) {
@@ -120,6 +114,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                 me._renderDone();
                 return;
             }
+            var edit = me.__templates.edit.clone();
+            headerContainer.append(edit);
+            me._createEditClassificationListener();
             // legend
             legendContainer.html(legendUI);
         }); // _createLegend
@@ -237,12 +234,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             activeIndicator.selections, activeIndicator.series, currentRegionset, function (err, data) {
                 if (err) {
                     me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
-                    callback(me.__templates.error({ msg: locale('legend.noEnough') }));
+                    callback(me.__templates.error({ msg: locale('legend.noData') }));
+                    return;
+                }
+                if (!data) {
+                    me.log.warn('Error getting indicator classification', data);
+                    callback(me.__templates.error({ msg: locale('legend.noData') }));
                     return;
                 }
                 var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
                 var classification = service.getClassificationService().getClassification(data, classificationOpts);
-
                 if (!classification) {
                     me.log.warn('Error getting indicator classification', data);
                     callback(me.__templates.error({ msg: locale('legend.noEnough') }));
@@ -297,6 +298,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             // Always show the active indicator - also handles "no indicator selected"
+            // if the selected indicator has no data & edit panel is open -> close it
+            var current = event.current;
+            me.service.getIndicatorData(current.datasource, current.indicator,
+                current.selections, current.series, me.service.getStateService().getRegionset(), function (err, data) {
+                    if (err) {}
+                    if (!data) {
+                        me._accordion.getPanels().forEach(function (panel) {
+                            if (panel.isOpen()) {
+                                panel.close();
+                            }
+                        });
+                    };
+                });
             me.render();
         });
 
