@@ -83,6 +83,7 @@ Oskari.registerLocalization({
             'title': 'Classification',
             'noActive': 'Data was not selected, select data to see map classification.',
             'noEnough': 'The data is too small to be classified, try different data or change limitings.',
+            'noData': 'Data is not available for the selected point in time.',
             'cannotCreateLegend': 'Legend cannot be created by chosen values, try different values.'
         },
         'diagram': {

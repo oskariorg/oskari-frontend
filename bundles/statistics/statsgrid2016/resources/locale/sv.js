@@ -83,6 +83,7 @@ Oskari.registerLocalization({
             'title': 'Klassificering',
             'noActive': 'Inga valda datamängder, välj datamängd för att se kartans klassificering.',
             'noEnough': 'Datamängden är för liten för att klassificeras, försök en annan datamängd eller avgränsning.',
+            'noData': 'Ingen data vid den valda tidspunkten.',
             'cannotCreateLegend': 'Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden.'
         },
         'parameters': {

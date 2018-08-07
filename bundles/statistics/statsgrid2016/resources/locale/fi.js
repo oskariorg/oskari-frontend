@@ -83,6 +83,7 @@ Oskari.registerLocalization({
             'title': 'Luokittelu',
             'noActive': 'Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.',
             'noEnough': 'Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.',
+            'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',
             'cannotCreateLegend': 'Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla.'
         },
         'diagram': {
