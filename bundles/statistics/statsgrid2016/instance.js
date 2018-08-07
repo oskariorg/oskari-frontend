@@ -188,6 +188,20 @@ Oskari.clazz.define(
                     evt.getSelections(),
                     evt.getSeries(),
                     evt.isRemoved());
+
+                if (!this.isEmbedded() && this.statsService.getStateService().getIndicators().length !== 0) {
+                    if (this.classificationPlugin) {
+                        this.classificationPlugin.redrawUI();
+                    } else {
+                        this.createClassficationView(true);
+                    }
+                    return;
+                }
+                if (this.statsService.getStateService().getIndicators().length === 0) {
+                    if (this.classificationPlugin) {
+                        this.classificationPlugin.teardownUI();
+                    }
+                }
             },
             'StatsGrid.RegionsetChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -231,9 +245,6 @@ Oskari.clazz.define(
                     me.createClassficationView(false);
                 } else {
                     me.getTile().showExtensions();
-                    if (!me.isEmbedded()) {
-                        me.createClassficationView(true);
-                    }
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
