@@ -69,6 +69,7 @@ Oskari.registerLocalization({
         'statsgrid': {
             'title': 'HÄMTADE DATAMÄNGDER',
             'noResults': 'Inga valda datamängder',
+            'noValues': 'Inga värden i den valda datamängden',
             'areaSelection': {
                 'title': 'OMRÅDESINDELNING',
                 'info': 'Omdefiniera den önskade områdesindelningen från rullgardinsmenyn.'

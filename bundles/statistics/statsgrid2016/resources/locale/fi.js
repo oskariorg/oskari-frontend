@@ -69,6 +69,7 @@ Oskari.registerLocalization({
         'statsgrid': {
             'title': 'HAETUT AINEISTOT',
             'noResults': 'Ei valittuja aineistoja',
+            'noValues': 'Ei arvoja valitulla aineistolla',
             'areaSelection': {
                 'title': 'ALUEJAKO',
                 'info': 'Määritä uudelleen millä alueilla haluat tarkastella aineistoja valitsemalla alasvetovalikosta'

@@ -69,6 +69,7 @@ Oskari.registerLocalization({
         'statsgrid': {
             'title': 'SEARCHED DATA',
             'noResults': 'No data selected',
+            'noValues': 'No values for the selected data',
             'areaSelection': {
                 'title': 'AREAL DIVISION',
                 'info': 'Redefine areal division for data from dropdown list'
