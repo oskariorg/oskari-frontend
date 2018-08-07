@@ -352,6 +352,34 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.notifyMoveEnd();
             }
         },
+
+        /**
+         * @method getResolutionForScale
+         * Calculate resolution for the scale
+         * If scale is not defined return -1
+         * @param {Number} scale
+         * @return {Number[]} calculated resolution
+         */
+        getResolutionForScale: function (scale) {
+            if (!scale && scale !== 0) {
+                return -1;
+            }
+            var resIndex = -1;
+            var scaleList = this.getScaleArray();
+            for (var i = 1; i < scaleList.length; i += 1) {
+                if ((scale > scaleList[i]) && (scale <= scaleList[i - 1])) {
+                    // resolutions are in the same order as scales so just use them
+                    resIndex = i - 1;
+                    break;
+                }
+            }
+            // Is scale out of scale ranges
+            if (resIndex === -1) {
+                resIndex = scale < scaleList[scaleList.length - 1] ? scaleList.length - 1 : 0;
+            }
+            return this.getResolutionArray()[resIndex];
+        },
+
         /**
          * @method centerMap
          * Moves the map to the given position and zoomlevel.
@@ -592,6 +620,27 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
         _setZoomLevelImpl: function (newZoomLevel) {
             this.getMap().getView().setZoom(newZoomLevel);
+        },
+        _setResolutionImpl: function (newResolution) {
+            this.getMap().getView().setResolution(newResolution);
+        },
+        _getExactResolutionImpl: function(scale){
+            var units = this.getMap().getView().getProjection().getUnits();
+            var dpiTest = jQuery('<div></div>');
+            dpiTest.css({
+                height: '1in',
+                width: '1in',
+                position: 'absolute',
+                left: '-100%',
+                top: '-100%'
+            });
+            jQuery('body').append(dpiTest);
+
+            var dpi = dpiTest.height();
+            dpiTest.remove();
+            var mpu = ol.proj.METERS_PER_UNIT[units];
+            var resolution = scale/(mpu * 39.37 * dpi);
+            return resolution;
         },
         /* --------- /Impl specific - PRIVATE ----------------------------> */
 

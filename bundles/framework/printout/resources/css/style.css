@@ -2,12 +2,10 @@
 @font-face {
   font-family: "Liberation Sans";
   src: url("../fonts/LiberationSans-Regular.ttf"); }
-
 @font-face {
   font-family: "Liberation Sans";
   src: url("../fonts/LiberationSans-Bold.ttf");
   font-weight: bold; }
-
 div.notLoggedIn {
   padding: 10px; }
 
@@ -16,7 +14,6 @@ div.printout div.startview div.error ul li {
 
 #contentMap.mapPrintoutMode {
   margin-left: 252px; }
-
 #contentMap div.basic_printout {
   background: white;
   position: absolute;
@@ -25,7 +22,10 @@ div.printout div.startview div.error ul li {
   left: 0;
   z-index: 1500;
   width: 255px; }
-
+  #contentMap div.basic_printout .content .accordion .accordion_panel.define_scale div.scaleselection {
+    margin-left: 38px; }
+    #contentMap div.basic_printout .content .accordion .accordion_panel.define_scale div.scaleselection select {
+      width: 170px; }
 #contentMap div.basic_publisher div.content {
   padding: 10px; }
 
@@ -76,21 +76,16 @@ div.basic_printout > div.header {
   padding: 5px 10px; }
   div.basic_printout > div.header div.icon-close {
     float: right; }
-
 div.basic_printout > div.content {
   overflow: auto;
   height: 89%; }
-
 div.basic_printout div.tool {
   margin: 5px; }
-
 div.basic_printout div.tool input,
 div.basic_printout div.printout_settings_cont input {
   margin-right: 10px; }
-
 div.basic_printout div.preview img {
-    width: 100%;
-}
+  width: 100%; }
 div.basic_printout div.preview-portrait {
   margin: 8px;
   padding: 5px;
@@ -107,7 +102,6 @@ div.basic_printout div.preview-portrait {
   -moz-box-shadow: 0 0 8px #D0D0D0;
   box-shadow: 0 0 8px #D0D0D0;
   cursor: pointer; }
-
 div.basic_printout div.preview-landscape {
   margin: 8px;
   padding: 5px;
@@ -124,11 +118,11 @@ div.basic_printout div.preview-landscape {
   -moz-box-shadow: 0 0 8px #D0D0D0;
   box-shadow: 0 0 8px #D0D0D0;
   cursor: pointer; }
-
 div.basic_printout div.location {
   height: 30px; }
-
 div.basic_printout div.previewNotes {
   margin-left: 8px;
   margin-right: 8px;
   margin-bottom: 2px; }
+
+/*# sourceMappingURL=style.css.map */

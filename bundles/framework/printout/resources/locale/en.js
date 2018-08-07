@@ -125,6 +125,14 @@ Oskari.registerLocalization(
                 "nohelp": "There is no help available.",
                 "saveFailed": "Printing the map view not succeeded. Please try again later.",
                 "nameIllegalCharacters": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
+            },
+            "scale": {
+                "label": "Scale",
+                "tooltip": "Specify the scale to be used for printing",
+                "mapScale": "Use the map scale",
+                "definedScale": "Select a scale",
+                "unsupportedLayersMessage": "The following maplayers are not shown on the printout",
+                "unsupportedLayersTitle": "The printout does not show all layers"
             }
         },
         "StartView": {

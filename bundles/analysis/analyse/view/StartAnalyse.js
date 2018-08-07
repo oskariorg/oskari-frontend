@@ -3399,7 +3399,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 .prop('disabled', true);
 
             paramsCont
-                .find('##oskari_analyse_select')
+                .find('#oskari_analyse_select')
                 .prop('disabled', true);
 
             paramsCont
