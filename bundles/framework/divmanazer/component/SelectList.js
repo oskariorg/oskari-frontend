@@ -176,15 +176,12 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         chosen.trigger('chosen:updated');
     },
     reset: function (supressEvent) {
-        var chosen = this.element.find('select');
-
         var state = this.getOptions();
         for (var i = 0; i < state.disabled.length; i++) {
             jQuery(state.disabled[i]).attr('disabled', false);
         }
         if (!supressEvent) {
             this.resetToPlaceholder();
-            chosen.trigger('chosen:updated');
         }
     },
     /** @method updateOptions
@@ -211,7 +208,6 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     getId: function () {
         return this.id;
     },
-
     setValue: function (value) {
         if (!this.element.find('select')) {
             Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");
