@@ -112,6 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                 // didn't get classification options so not enough data to classify or other error
                 container.find('.edit-legend').hide();
                 container.find('.legend-noactive').empty();
+                legendContainer.empty();
                 container.append(legendUI);
                 me._renderDone();
                 return;
