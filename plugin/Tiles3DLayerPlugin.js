@@ -1,6 +1,6 @@
 /**
- * @class Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin
- * Provides functionality to draw Stats layers on the map
+ * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
+ * Provides functionality to draw 3D tiles on the map
  */
 Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin',
 
@@ -8,12 +8,11 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
      * @method create called automatically on construction
      * @static
      */
-
     function () {
     }, {
         __name: 'Tiles3DLayerPlugin',
         _clazz: 'Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin',
-        layerType: 'tiles3d',
+        layertype: 'tiles3d',
 
         /**
          * Checks if the layer can be handled by this plugin
@@ -25,7 +24,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             if (!layer) {
                 return false;
             }
-            return layer.isLayerOfType(this.layerType);
+            return layer.isLayerOfType(this.layertype);
         },
         /**
          * @private @method _initImpl
@@ -48,6 +47,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
          */
         _extendCesium3DTileset: function () {
             var proto = Cesium.Cesium3DTileset.prototype;
+            // Set light brown default color;
             proto._color = '#ffd2a6';
 
             proto.setInitialStyle = function (layer) {
@@ -91,6 +91,8 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
          * @param {Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer} layer
          */
         addMapLayerToMap: function (layer) {
+            // Common settings for the dynamicScreenSpaceError optimization
+            // copied from Cesium.Cesium3DTileset api doc.
             var tileset = new Cesium.Cesium3DTileset({
                 url: layer.getLayerUrls(),
                 dynamicScreenSpaceError: true,
@@ -100,7 +102,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             });
             tileset.setInitialStyle(layer);
 
-            this.getMapModule().add3DLayer(tileset);
+            this.getMapModule().addLayer(tileset);
             layer.setQueryable(false);
 
             // store reference to layers
