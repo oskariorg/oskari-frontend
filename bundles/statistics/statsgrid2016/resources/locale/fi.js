@@ -42,6 +42,7 @@ Oskari.registerLocalization({
                 'refineSearchTooltip1': 'Saat näkyviin vaihtoehtoja kun olet ensin valinnut aineiston tarjoajan ja aineiston.',
                 'refineSearchTooltip2': '',
                 'addButtonTitle': 'Hae aineiston tiedot',
+                'clearButtonTitle': 'Tyhjennä',
                 'defaultPlaceholder': 'Valitse arvo',
                 'selectionValues': {
                     'sex': {

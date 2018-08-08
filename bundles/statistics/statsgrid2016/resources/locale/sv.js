@@ -42,6 +42,7 @@ Oskari.registerLocalization({
                 'refineSearchTooltip1': 'Du får mera alternativ när du har först valt dataleverantören och datamängden.',
                 'refineSearchTooltip2': '',
                 'addButtonTitle': 'Hämta datamängdens uppgifter',
+                'clearButtonTitle': 'Töm',
                 'defaultPlaceholder': 'Välj värde',
                 'selectionValues': {
                     'sex': {
