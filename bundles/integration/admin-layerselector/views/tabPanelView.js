@@ -104,6 +104,10 @@ define([
                     id: "arcgis93layer",
                     localeKey: "arcgis93",
                     footer: false
+                }, {
+                    id: "tiles3dlayer",
+                    localeKey: "tiles3d",
+                    footer: false
                 }];
                 // filter out ones that are not registered in current appsetup
                 var sandbox = this.instance.sandbox,
