@@ -5,6 +5,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
+    this.selectClassRef = [];
     Oskari.makeObservable(this);
 }, {
     __templates: {
@@ -93,7 +94,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         return btn;
     },
     /** **** PUBLIC METHODS ******/
-
+    clearSelections: function (selectInstance) {
+        this._params.clean();
+        this.selectClassRef.forEach(function (ref) {
+            ref.reset();
+        });
+    },
     /**
      * @method  @public getPanelContent get panel content
      * @return {Object} jQuery element
@@ -197,6 +203,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 seriesInput.isChecked());
         });
 
+        me.selectClassRef.push(regionFilterSelect);
+
         dsSelector.on('change', function () {
             me._params.clean();
             // If selection was removed -> reset indicator selection
@@ -252,11 +260,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
 
         regionsetFilterElement.on('change', function (evt) {
-            if (!regionFilterSelect.getValue()) {
+            if (regionFilterSelect.getValue().length === 0) {
                 dsSelect.reset();
                 return;
             }
             var unsupportedSelections = me.getUnsupportedDatasetsList(regionFilterSelect.getValue());
+
             me._params.indicatorSelected(dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue(), seriesInput.isChecked());
 
             if (unsupportedSelections) {

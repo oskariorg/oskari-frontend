@@ -42,6 +42,7 @@ Oskari.registerLocalization({
                 'refineSearchTooltip1': 'You will get more options after choosing data provider and data.',
                 'refineSearchTooltip2': '',
                 'addButtonTitle': 'Get contents of data',
+                'clearButtonTitle': 'Clear',
                 'defaultPlaceholder': 'Select value',
                 'selectionValues': {
                     'sex': {

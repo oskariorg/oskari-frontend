@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">' +
-                '<div class="header"><span class="title"></span> </div>' +
+                '<div class="header"><span class="title"></span> </br> </div>' +
                 '<div class="icon icon-close-dark"></div>' +
                 '<div style="clear:both;"></div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
@@ -269,11 +269,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                     tableHeader.find('.header').append(labels.full).attr('title', labels.full);
                 });
                 me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, me.getCurrentRegionset(), function (err, data) {
-                    if (err) {}
+                    if (err || !data) {
+                        tableHeader.append('<div class="icon-warning-light"></div>');
+                        tableHeader.find('.icon-warning-light').attr('title', gridLoc.noValues);
+                        return;
+                    }
                     var isUndefined = function (element) {
                         return data[element] === undefined;
                     };
-                    if (Object.keys(data).some(isUndefined)) {
+                    if (Object.keys(data).every(isUndefined)) {
                         tableHeader.append('<div class="icon-warning-light"></div>');
                         tableHeader.find('.icon-warning-light').attr('title', gridLoc.noValues);
                     }

@@ -112,6 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                 // didn't get classification options so not enough data to classify or other error
                 container.find('.edit-legend').hide();
                 container.find('.legend-noactive').empty();
+                legendContainer.empty();
                 container.append(legendUI);
                 me._renderDone();
                 return;
@@ -303,17 +304,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             // Always show the active indicator - also handles "no indicator selected"
             // if the selected indicator has no data & edit panel is open -> close it
             var current = event.current;
-            me.service.getIndicatorData(current.datasource, current.indicator,
-                current.selections, current.series, me.service.getStateService().getRegionset(), function (err, data) {
-                    if (err) {}
-                    if (!data) {
-                        me._accordion.getPanels().forEach(function (panel) {
-                            if (panel.isOpen()) {
-                                panel.close();
-                            }
-                        });
-                    };
-                });
+            if (current) {
+                me.service.getIndicatorData(current.datasource, current.indicator,
+                    current.selections, current.series, me.service.getStateService().getRegionset(), function (err, data) {
+                        if (err) {}
+                        if (!data) {
+                            me._accordion.getPanels().forEach(function (panel) {
+                                if (panel.isOpen()) {
+                                    panel.close();
+                                }
+                            });
+                        };
+                    });
+            }
             me.render();
         });
 
