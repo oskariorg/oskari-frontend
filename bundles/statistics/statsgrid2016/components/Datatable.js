@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">' +
-                '<div class="header"><span class="title"></span> </div>' +
+                '<div class="header"><span class="title"></span> </br> </div>' +
                 '<div class="icon icon-close-dark"></div>' +
                 '<div style="clear:both;"></div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
