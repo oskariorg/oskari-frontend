@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
                 return element.value === undefined;
             };
 
-            if (data.some(isUndefined)) {
+            if (data.every(isUndefined)) {
                 me.clearChart();
                 me._renderDone();
                 me.element.html(me.loc.statsgrid.noValues);
