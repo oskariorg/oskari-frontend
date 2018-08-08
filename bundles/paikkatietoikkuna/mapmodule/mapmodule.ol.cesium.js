@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         this._mapReadySubscribers = [];
         this._lastKnownZoomLevel = null;
     }, {
+        __TERRAIN_SERVICE_URL: 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/',
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
@@ -80,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var scene = this._map3d.getCesiumScene();
             scene.terrainProvider = new Cesium.CesiumTerrainProvider({
-                url: 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/'
+                url: this.__TERRAIN_SERVICE_URL
             });
 
             var updateReadyStatus = function () {
@@ -90,20 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             scene.postRender.addEventListener(updateReadyStatus);
 
-            // Load sample 3D tiles
-            // this._addSampleTileset();
-
             return map;
-        },
-        _addSampleTileset: function () {
-            var sampleTiles = new Cesium.Cesium3DTileset({
-                url: '/3dtiles/helsinki/',
-                dynamicScreenSpaceError: true,
-                dynamicScreenSpaceErrorDensity: 0.00278,
-                dynamicScreenSpaceErrorFactor: 4.0,
-                dynamicScreenSpaceErrorHeightFalloff: 0.25
-            });
-            this._map3d.getCesiumScene().primitives.add(sampleTiles);
         },
         /**
          * Fire operations that have been waiting for the map to initialize.
@@ -400,42 +388,38 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 ------------------------------------------------------------------> */
 
         /**
-         * @param {ol.layer.Layer} layer ol3 specific!
+         * @param {Object} layerImpl ol.layer.Layer or Cesium.Cesium3DTileset, olcs specific!
          * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
          */
-        addLayer: function(layerImpl, toBottom) {
-            if(!layerImpl) {
+        addLayer: function (layerImpl, toBottom) {
+            if (!layerImpl) {
                 return;
             }
-            this.getMap().addLayer(layerImpl);
-            // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
-            if(toBottom === true) {
-                this.setLayerIndex(layerImpl, 0);
+            if (layerImpl instanceof Cesium.Cesium3DTileset) {
+                this._map3d.getCesiumScene().primitives.add(layerImpl);
+            } else {
+                this.getMap().addLayer(layerImpl);
+                // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
+                if (toBottom === true) {
+                    this.setLayerIndex(layerImpl, 0);
+                }
             }
         },
         /**
-         * @param {ol.layer.Layer} layer ol3 specific!
+         * @param {Object} layerImpl ol.layer.Layer or Cesium.Cesium3DTileset, olcs specific!
          */
-        removeLayer : function(layerImpl) {
-            if(!layerImpl) {
+        removeLayer: function (layerImpl) {
+            if (!layerImpl) {
                 return;
             }
-            this.getMap().removeLayer(layerImpl);
-            if(typeof layerImpl.destroy === 'function') {
+            if (layerImpl instanceof Cesium.Cesium3DTileset) {
                 layerImpl.destroy();
+            } else {
+                this.getMap().removeLayer(layerImpl);
+                if (typeof layerImpl.destroy === 'function') {
+                    layerImpl.destroy();
+                }
             }
-        },
-        /**
-         * @param {Cesium.Cesium3DTileset} tileset Cesium 3D Tiles tileset
-         */
-        add3DLayer: function (tileset) {
-            this._map3d.getCesiumScene().primitives.add(tileset);
-        },
-        /**
-         * @param {Cesium.Cesium3DTileset} tileset Cesium 3D Tiles tileset
-         */
-        remove3DLayer: function (tileset) {
-            return tileset && tileset.destroy();
         },
         /**
          * Brings map layer to top
@@ -456,6 +440,33 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         setDrawingMode: function (mode) {
             this.isDrawing = !!mode;
             this.set3dEnabled(!this.isDrawing);
+        },
+        /**
+         * @method afterRearrangeSelectedMapLayerEvent
+         * @private
+         * Handles AfterRearrangeSelectedMapLayerEvent.
+         * Changes the layer order in Openlayers to match the selected layers list in
+         * Oskari. Ignores Cesium 3D Tilesets.
+         */
+        afterRearrangeSelectedMapLayerEvent: function () {
+            var me = this;
+            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var layerIndex = 0;
+
+            // setup new order based on the order we get from sandbox
+            _.each(layers, function (layer) {
+                if (!layer) {
+                    return;
+                }
+                var olLayers = me.getOLMapLayers(layer.getId());
+                _.each(olLayers, function (layerImpl) {
+                    if (!(layerImpl instanceof Cesium.Cesium3DTileset)) {
+                        me.setLayerIndex(layerImpl, layerIndex++);
+                    }
+                });
+            });
+
+            this.orderLayersByZIndex();
         },
         /**
          * @param {ol.layer.Layer} layer ol3 specific!
