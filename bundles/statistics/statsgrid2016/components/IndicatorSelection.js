@@ -6,7 +6,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
     this.selectClassRef = [];
-    this.resetInProgress = false;
     Oskari.makeObservable(this);
 }, {
     __templates: {
@@ -96,17 +95,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     },
     /** **** PUBLIC METHODS ******/
     clearSelections: function (selectInstance) {
-        this.resetInProgress = true;
-        var refCount = 0;
         this._params.clean();
         this.selectClassRef.forEach(function (ref) {
             ref.reset();
-            refCount++;
         });
-        if (refCount === this.selectClassRef.length) {
-            this.resetInProgress = false;
-        }
-},
+    },
     /**
      * @method  @public getPanelContent get panel content
      * @return {Object} jQuery element
@@ -210,8 +203,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 seriesInput.isChecked());
         });
 
-        me.selectClassRef.push(dsSelect);
-        me.selectClassRef.push(indicSelect);
         me.selectClassRef.push(regionFilterSelect);
 
         dsSelector.on('change', function () {
@@ -220,9 +211,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             if (dsSelect.getValue() === '') {
                 dataLabelWithTooltips.find('.tooltip').show();
                 indicSelect.updateOptions([]);
-                if (!me.resetInProgress) {
-                    me.indicSelect.reset();
-                }
+                indicSelect.reset();
                 btnAddIndicator.setVisible(false);
                 btnEditIndicator.setVisible(false);
                 return;
@@ -271,15 +260,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
 
         regionsetFilterElement.on('change', function (evt) {
-            if (!regionFilterSelect.getValue()) {
-                me.clearSelections();
+            if (regionFilterSelect.getValue().length === 0) {
+                dsSelect.reset();
                 return;
             }
             var unsupportedSelections = me.getUnsupportedDatasetsList(regionFilterSelect.getValue());
 
             me._params.indicatorSelected(dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue(), seriesInput.isChecked());
 
-            if (unsupportedSelections && !me.resetInProgress) {
+            if (unsupportedSelections) {
                 var ids = unsupportedSelections.map(function (iteration) {
                     return iteration.id;
                 });
