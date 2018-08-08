@@ -2273,12 +2273,12 @@ Oskari.clazz.define(
             var layerIndex = 0;
 
             // setup new order based on the order we get from sandbox
-            _.each(layers, function (layer) {
+            layers.forEach(function (layer) {
                 if (!layer) {
                     return;
                 }
                 var olLayers = me.getOLMapLayers(layer.getId());
-                _.each(olLayers, function (layerImpl) {
+                olLayers.forEach(function (layerImpl) {
                     me.setLayerIndex(layerImpl, layerIndex++);
                 });
             });
