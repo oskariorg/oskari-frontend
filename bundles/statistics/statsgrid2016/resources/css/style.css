@@ -325,7 +325,6 @@ div.oskari-flyout {
       stroke-width: 0; }
   div.oskari-flyout.statsgrid-diagram-flyout .oskari-datacharts {
     position: relative;
-    height: 700px;
     padding: 16px; }
   div.oskari-flyout.statsgrid-diagram-flyout .chart-controls {
     display: flex;
