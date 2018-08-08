@@ -1,5 +1,5 @@
 /**
- * @class Oskari.arcgis.bundle.maparcgis.domain.ArcGisLayer
+ * @class Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer
  *
  * 3D-tile tileset layer
  */
