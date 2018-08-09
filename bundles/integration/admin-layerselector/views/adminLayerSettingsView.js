@@ -913,7 +913,7 @@ define([
                     type: 'POST',
                     data: data,
                     dataType: 'json',
-                    url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
+                    url: Oskari.urls.getRoute('SaveLayer'),
                     success: function(resp) {
                         var success = true;
                         me.progressSpinner.stop();
@@ -1223,7 +1223,7 @@ define([
                             cursor: 'wait'
                         });
                     },
-                    url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
+                    url: Oskari.urls.getRoute('SaveLayer'),
                     success: function(resp) {
                         jQuery('body').css('cursor', '');
                         if (!me.model.getId()) {
