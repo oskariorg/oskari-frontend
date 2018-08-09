@@ -280,7 +280,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var me = this;
             jQuery.ajax({
                 url: Oskari.urls.getRoute('AcceptPublishedTermsOfUse'),
-                type: 'GET',
+                type: 'POST',
                 error: function () {
                     this.success(false);
                 },

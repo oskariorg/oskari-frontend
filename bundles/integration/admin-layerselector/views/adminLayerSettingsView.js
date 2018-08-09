@@ -830,11 +830,11 @@ define([
                     dialog.close();
 
                     jQuery.ajax({
-                        type: 'GET',
+                        type: 'POST',
                         data: {
                             layer_id: me.model.getId()
                         },
-                        url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
+                        url: Oskari.urls.getRoute('DeleteLayer'),
                         success: function(resp) {
                             if (!resp) {
                                 if (addLayerDiv.hasClass('show-edit-layer')) {
@@ -1256,12 +1256,12 @@ define([
                 var sandbox = me.options.instance.getSandbox();
                 // make AJAX call
                 jQuery.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     dataType: 'json',
                     data: {
                         layer_id: me.model.getId()
                     },
-                    url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
+                    url: Oskari.urls.getRoute('DeleteLayer'),
                     success: function(resp) {
                         accordion.trigger({
                             type: 'adminAction',
