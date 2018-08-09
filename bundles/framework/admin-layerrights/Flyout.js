@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
      *        instance reference to component that created the tile
      */
     function(instance) {
-        
+
         var me = this;
         me.instance = instance;
         me.container = null;
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {String} the name for the component
          */
         getName: function() {
-            
+
             return 'Oskari.framework.bundle.admin-layerrights.Flyout';
         },
 
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Interface method implementation
          */
         setEl: function(el, width, height) {
-            
+
             this.container = el[0];
             if (!jQuery(this.container).hasClass('admin-layerrights')) {
                 jQuery(this.container).addClass('admin-layerrights');
@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * that will be used to create the UI
          */
         startPlugin: function() {
-            
+
 
             this.template = jQuery(
                 '<div class="admin-layerrights">\n' +
@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Interface method implementation, does nothing atm
          */
         stopPlugin: function() {
-            
+
         },
 
         /**
@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {String} localized text for the title of the flyout
          */
         getTitle: function() {
-            
+
             return this.instance.getLocalization('title');
         },
 
@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * flyout
          */
         getDescription: function() {
-            
+
             return this.instance.getLocalization('desc');
         },
 
@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Interface method implementation, does nothing atm
          */
         getOptions: function() {
-            
+
         },
 
         /**
@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {Object} state
          */
         setState: function(state) {
-            
+
             this.state = state;
         },
 
@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {Object} state
          */
         getState: function() {
-            
+
             if (!this.state) {
                 return {};
             }
@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Save layer rights
          */
         doSave: function() {
-            
+
             var me = this,
                 changedPermissions = me.extractSelections();
 
@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             };
             jQuery.ajax({
                 type: 'POST',
-                url: ajaxUrl + 'action_route=SaveLayerPermission',
+                url: Oskari.urls.getRoute('SaveLayerPermission'),
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 data: saveData,
@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} content
          */
         setContent: function(content) {
-            
+
             // TODO add filters (provider/theme etc.)
             var me = this,
                 flyout = jQuery(this.container),
@@ -296,7 +296,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {String} Permissions table
          */
         createLayerRightGrid: function(layerRightsJSON) {
-            
+
             var me = this,
                 table = me._templates.table.clone(),
                 thead = table.find('thead'),
@@ -393,7 +393,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {Object} Dirty table rows
          */
         extractSelections: function() {
-            
+
             var me = this,
                 data = [],
                 container = jQuery(me.container),
@@ -475,7 +475,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} externalType
          */
         updatePermissionsTable: function(activeRole, externalType) {
-            
+
             var me = this;
             me.progressSpinner.start();
 
@@ -538,7 +538,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} selectedId
          */
         getExternalIdsAjaxRequest: function(externalType, selectedId) {
-            
+
             var me = this;
 
             //ajaxRequestGoing = true;
@@ -559,7 +559,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} selectedId
          */
         makeExternalIdsSelect: function(result, externalType, selectedId) {
-            
+
             var externalIdSelect = jQuery(this.container).find("select.admin-layerrights-role"),
                 optionEl,
                 d,

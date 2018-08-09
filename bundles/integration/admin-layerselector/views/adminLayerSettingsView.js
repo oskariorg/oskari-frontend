@@ -70,7 +70,7 @@ define([
 
                 jQuery.ajax({
                     type: 'PUT',
-                    url: Oskari.getSandbox().getAjaxUrl('SaveOrganization'),
+                    url: Oskari.urls.getRoute('SaveOrganization'),
                     data: data,
                     error: function() {
                         var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
