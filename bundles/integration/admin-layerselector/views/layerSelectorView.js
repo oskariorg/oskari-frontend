@@ -235,7 +235,7 @@ define([
                         data: {
                             srs: me.instance.getSandbox().getMap().getSrsName()
                         },
-                        url: me.instance.getSandbox().getAjaxUrl('UpdateCapabilities'),
+                        url: Oskari.urls.getRoute('UpdateCapabilities'),
                         success: function (resp) {
                             xhr = null;
                             var successCount = resp.success.length;

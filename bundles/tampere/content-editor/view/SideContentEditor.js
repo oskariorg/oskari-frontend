@@ -441,13 +441,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me._highlighGeometries([], layer, true);
                     wfsLayerPlugin.deleteTileCache(me.layerId, layer.getCurrentStyle().getName());
                     // wfsLayerPlugin.refreshLayer(me.layerId);
-                    var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
+                    var evt = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
                     me.sendStopDrawRequest(true);
 
                     okButton.setHandler(function () {
                         setTimeout(function() {
-                            var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                            var visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                                 request = visibilityRequestBuilder(me.layerId, true);
                             me.sandbox.request(me.instance.getName(), request);
                         }, 500);
