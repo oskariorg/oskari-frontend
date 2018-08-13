@@ -14,9 +14,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
         this.stateService = null;
         this.statisticsService = null;
         this.values = [];
-        this.isAnimating = false;
+        this.animating = false;
         this.animatingHandle = null;
         this.seriesStats = {};
+        this._setValueInProgress = false;
+        this._throttleValue = Oskari.util.throttle(this._setValue.bind(this), 500);
     }, {
         getStateService: function () {
             if (!this.stateService) {
@@ -37,14 +39,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             this.frameInterval = interval;
             this._throttleAnimation = Oskari.util.throttle(this.next.bind(this), interval);
         },
+        getFrameInterval: function () {
+            return this.frameInterval;
+        },
+        getValues: function () {
+            return this.values.slice();
+        },
+        getSelectedIndex: function () {
+            return this.values.indexOf(this.selectedValue);
+        },
         getValue: function () {
             return this.selectedValue;
+        },
+        setValue: function (selected) {
+            return this._throttleValue(selected);
         },
         /**
          * Sets selected value for series layers
          * @param {String} selected indicator selection value
          */
-        setValue: function (selected) {
+        _setValue: function (selected) {
+            this._setValueInProgress = true;
             this.selectedValue = selected;
 
             var service = this.getStateService();
@@ -66,48 +81,56 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                     service.setActiveIndicator(activeInd.hash);
                 }
             }
+
+            this._setValueInProgress = false;
+
+            if (this.animating) {
+                this._throttleAnimation();
+            }
         },
         next: function () {
+            if (this._setValueInProgress) {
+                return false;
+            }
             var selectedIndex = this.values.indexOf(this.selectedValue);
             var nextIndex = 0;
             if (selectedIndex > -1) {
                 nextIndex = selectedIndex + 1;
             }
             if (nextIndex > this.values.length - 1) {
-                if (this.isAnimating) {
-                    this.stopAnimation();
+                if (this.animating) {
+                    this.setAnimating(false);
                 }
                 return false;
             }
             this.setValue(this.values[nextIndex]);
-            if (this.isAnimating) {
-                this._throttleAnimation();
-            }
             return true;
         },
         previous: function () {
+            if (this._setValueInProgress) {
+                return false;
+            }
             var selectedIndex = this.values.indexOf(this.selectedValue);
             var nextIndex = 0;
             if (selectedIndex > -1) {
                 nextIndex = selectedIndex - 1;
             }
-            if (nextIndex > this.values.length - 1 || nextIndex < 0) {
-                if (this.isAnimating) {
-                    this.stopAnimation();
-                }
+            if (nextIndex < 0) {
                 return false;
             }
             this.setValue(this.values[nextIndex]);
             return true;
         },
-        startAnimation: function () {
-            this.isAnimating = true;
-            this._throttleAnimation();
-        },
-        stopAnimation: function () {
-            if (this.isAnimating) {
-                this.isAnimating = false;
+        setAnimating: function (shouldAnimate) {
+            if (shouldAnimate !== this.animating) {
+                this.animating = shouldAnimate;
+                if (this.animating) {
+                    this._throttleAnimation();
+                }
             }
+        },
+        isAnimating: function () {
+            return this.animating;
         },
         addSeries: function (datasrc, indicator, selections, series) {
             var me = this;

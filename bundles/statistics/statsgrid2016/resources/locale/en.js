@@ -88,6 +88,14 @@ Oskari.registerLocalization({
             'noData': 'Data is not available for the selected point in time.',
             'cannotCreateLegend': 'Legend cannot be created by chosen values, try different values.'
         },
+        'series': {
+            'speed': {
+                'label': 'Animation speed',
+                'fast': 'Fast',
+                'normal': 'Normal',
+                'slow': 'Slow'
+            }
+        },
         'diagram': {
             'title': 'Diagram'
         },
