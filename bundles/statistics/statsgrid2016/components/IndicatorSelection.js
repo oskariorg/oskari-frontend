@@ -119,7 +119,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var regionDropdown = Oskari.clazz.create('Oskari.userinterface.component.Multiselect');
         regionDropdown.create(this.service.getRegionsets(), locale.panels.newSearch.selectRegionsetPlaceholder, true);
         regionsetFilterElement.append(regionDropdown.getElement());
-        regionDropdown.limitSelectionAmount(2);
 
         var datasources = this.service.getDatasource();
         var sources = [];

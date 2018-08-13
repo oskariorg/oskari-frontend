@@ -10,6 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
                                 '<div class="ui multiple selection fluid dropdown"> ' +
                                 '    <div class="text"></div>' +
                                 '    <i class="dropdown icon"></i>' +
+                                '          <div class="menu"></div>' +
                                 '</div>' +
                             '</div>';
         this.element = null;
@@ -19,10 +20,38 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
             return this.element;
         },
         getValue: function () {
-            return this.element.find('.ui.dropdown').dropdown('get value');
+            return this.element.find('.menu').dropdown('get value');
         },
         setValue: function (value) {
-            return this.element.find('.ui.dropdown').dropdown('set value', value);
+            return this.element.find('.menu').dropdown('set value', value);
+        },
+        getOptions: function () {
+            var main = this.element.find('.main');
+            // filter away the placeholder
+            var options = main.find('.item').filter(function (item) {
+                return this.value !== '';
+            });
+            var disabled = main.find('option:disabled');
+            return {
+                'options': options,
+                'disabled': disabled
+            };
+        },
+        disableOptions: function (ids) {
+            var main = this.element.find('.main');
+
+            this.reset(true);
+    
+            var isDisabledOption = function (optionId) {
+                return ids.some(function (id) {
+                    return '' + id === optionId;
+                });
+            }
+            main.find('.item').each(function (index, opt) {
+                if (isDisabledOption(opt.value)) {
+                    jQuery(opt).attr('disabled', true);
+                }
+            });
         },
         create: function (options, placeholder, checkboxBoolean) {
             var list = jQuery(this.multiselect);
@@ -31,7 +60,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Multiselect',
             this.element = list;
             this.element.find('.ui.dropdown').dropdown({
                 placeholder: placeholder,
-                values: arr
+                values: arr,
+                performance: true
             });
             if (checkboxBoolean) {
                 var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
