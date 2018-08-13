@@ -22,9 +22,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ControlsTool',
                 me.__plugin.startPlugin(me.__sandbox);
                 me.__started = true;
             }
-
-            var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
-            sandbox.notifyAll(event);
         },
         getInstance: function () {
             return Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getPluginInstances(this.pluginName);

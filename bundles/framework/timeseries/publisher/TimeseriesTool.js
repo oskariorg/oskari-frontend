@@ -86,9 +86,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
             // Apply changed configuration.
             var active = this._getTimeseriesService().getActiveTimeseries();
             this.service.trigger('activeChanged', active);
-
-            var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
-            this.__sandbox.notifyAll(event);
         },
         /**
         * Is this tool disabled.

@@ -186,8 +186,8 @@ function() {
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
         }
-        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
-        sandbox.notifyAll(event);
+        // var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
+        // sandbox.notifyAll(event);
     },
 
     isEnabled: function () {

@@ -106,8 +106,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
                 me.stop();
             }
         }
-            var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
-            sandbox.notifyAll(event);   
     },
 
     isEnabled: function () {
