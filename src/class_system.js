@@ -261,7 +261,7 @@
          * @return {string[]}              ClassNames implementing protocol
          */
         protocol: function(protocolName) {
-            return Object.keys(protocols[protocolName] || []);
+            return Object.keys(protocols[protocolName] || {});
         },
         /**
          * @private @method _getClassInfo
