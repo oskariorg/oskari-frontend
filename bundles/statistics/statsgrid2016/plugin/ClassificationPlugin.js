@@ -149,7 +149,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var height = this.getSandbox().getMap().getHeight();
             var headerHeight = element.find('.active-header').first().height();
             if (Oskari.util.isMobile()) {
-                debugger;
                 this._popup.getJqueryContent().find('.accordion').css({
                     'overflow': 'auto',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
