@@ -78,7 +78,7 @@ Oskari.clazz.define(
                     }
                 },
                 'Publisher2.ToolEnabledChangedEvent': function (event) {
-                    if (event.getTool().getTool().id === this._clazz) {
+                    if (event.getTool().id === this._clazz) {
                         if (!event._tool.isEnabled()) {
                             this.disableDragPan();
                         } else {
