@@ -99,6 +99,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             map.on('moveend', function (evt) {
                 me.notifyMoveEnd();
             });
+            map.on('movestart', function (evt) {
+                me.notifyStartMove();
+            });
 
             map.on('singleclick', function (evt) {
                 if (me.getDrawingMode()) {
