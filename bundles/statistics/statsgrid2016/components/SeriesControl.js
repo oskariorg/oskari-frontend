@@ -20,10 +20,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             '</div>')
     };
     this._lineWidth = 500;
-
-    this._renderState = {
-        panels: {}
-    };
+    this._minWidth = 290;
     this._uiState = {
         values: [],
         currentSeriesIndex: undefined
@@ -67,12 +64,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             '</div>');
 
         template.find('.stats-series-playpause').on('click', function (e) {
-            me._setAnimationState(!me.seriesService.isAnimating());
+            var shouldAnimate = !me.seriesService.isAnimating();
+            me.seriesService.setAnimating(shouldAnimate);
+            me._setAnimationState(me.seriesService.isAnimating());
         });
         template.find('.stats-series-back').on('click', this._doSingleStep.bind(this, false));
         template.find('.stats-series-forward').on('click', this._doSingleStep.bind(this, true));
 
         controlPanel.append(template);
+        me._setAnimationState(me.seriesService.isAnimating());
 
         var speedPanel = jQuery('<div class="stats-series-speed"></div>');
         var speedLabel = jQuery('<label>' + me.loc('series.speed.label') + '</label>');
@@ -84,8 +84,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         speedSelect.append(speedOpts);
         speedSelect.val(me.seriesService.getFrameInterval());
         speedSelect.change(function () {
-            me._setAnimationState(false);
+            me.seriesService.setAnimating(false);
             me.seriesService.setFrameInterval(parseInt(speedSelect.val()));
+            me._setAnimationState(false);
         });
         speedPanel.append(speedLabel);
         speedPanel.append(speedSelect);
@@ -93,6 +94,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         controlPanel.append(speedPanel);
 
         var valueDisplay = jQuery('<div class="stats-series-value"></div>');
+        valueDisplay.html(me.seriesService.getValue());
         controlPanel.append(valueDisplay);
     },
     /**
@@ -115,16 +117,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         forward ? this.seriesService.next() : this.seriesService.previous();
     },
     render: function (el) {
-        var me = this;
-
-        me._element = jQuery(me.__templates.main());
-        me._initControls();
-        me._updateLineSegments();
-
-        if (el) {
-            // attach container to parent if provided, otherwise updates UI in the current parent
-            el.append(me._element);
+        this._element = jQuery(this.__templates.main());
+        this._initControls();
+        if (Oskari.util.isMobile()) {
+            this.setWidth(this._minWidth);
         }
+        this._updateLineSegments();
+        el.append(this._element);
     },
     /**
      * @method _setAnimationState Set animating / not animating state
@@ -134,7 +133,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
     _setAnimationState: function (shouldAnimate) {
         this._element.find('.stats-series-playpause').toggleClass('pause', shouldAnimate);
         this._element.find('.stats-series-back, .stats-series-forward').toggleClass('disabled', shouldAnimate);
-        this.seriesService.setAnimating(shouldAnimate);
     },
     /**
      * @method setWidth Set timeline width and update them if needed
@@ -147,7 +145,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         container.css('max-width', width + 'px');
         container.css('width', width + 'px');
         this._lineWidth = width;
-        this._updateLineSegments(this._inMobileMode);
+        this._updateLineSegments();
     },
     /**
      * @method _updateLineSegments Update line segments SVG
@@ -219,7 +217,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
 
             if (deepUpdate) {
                 var serieValue = me._uiState.values[me._uiState.currentSeriesIndex];
-                me.seriesService.setValue(serieValue);
+                me.seriesService.setSelectedValue(serieValue);
             }
         }
 
@@ -231,6 +229,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             .attr('height', 40)
             .on('click', null) // remove old event handlers
             .on('click', function (e) {
+                me.seriesService.setAnimating(false);
                 me._setAnimationState(false);
                 var newX = d3.mouse(this)[0];
                 valueFromMouse(newX, true);
@@ -270,7 +269,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
     _bindToEvents: function () {
         var me = this;
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
-            me._updateSeriesIndex(me.seriesService.getSelectedIndex());
+            me._setAnimationState(me.seriesService.isAnimating());
+            if (event.current) {
+                var values = event.current.series && event.current.series.values;
+                if (values) {
+                    var seriesChanged = '' + values !== '' + me._uiState.values;
+                    if (seriesChanged) {
+                        // series changed, update service
+                        me.seriesService.setValues(values || []);
+                        me._updateLineSegments();
+                        me._updateSeriesIndex(me.seriesService.getSelectedIndex());
+                        if (me.seriesService.isAnimating()) {
+                            me.seriesService.setAnimating(false);
+                            me._setAnimationState(false);
+                        }
+                    } else {
+                        me._updateSeriesIndex(me.seriesService.getSelectedIndex());
+                    }
+                }
+            }
         });
     }
 });

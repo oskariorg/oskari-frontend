@@ -214,14 +214,15 @@ Oskari.clazz.define(
                 this.statsService.notifyOskariEvent(evt);
                 if (evt.current && evt.current.series) {
                     if (this.seriesControlPlugin) {
-                        // this.seriesControlPlugin.redrawUI();
-                        // TODO setvisible
+                        if (!this.seriesControlPlugin.getElement()) {
+                            this.seriesControlPlugin.redrawUI(Oskari.util.isMobile(), false);
+                        }
                     } else {
                         this.createSeriesControl();
                     }
                 } else {
                     if (this.seriesControlPlugin) {
-                        this.seriesControlPlugin.teardownUI();
+                        this.seriesControlPlugin.stopPlugin();
                     }
                 }
             },
@@ -447,7 +448,7 @@ Oskari.clazz.define(
             mapModule.registerPlugin(this.seriesControlPlugin);
             mapModule.startPlugin(this.seriesControlPlugin);
             if (Oskari.util.isMobile() && this.seriesControlPlugin.hasUI()) {
-                mapModule.redrawPluginUIs(true);
+                // mapModule.redrawPluginUIs(true);
             }
         }
 

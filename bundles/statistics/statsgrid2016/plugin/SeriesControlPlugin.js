@@ -19,75 +19,83 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             main: jQuery('<div class="mapplugin statsgrid-series-control-plugin"></div>')
         };
 
+        me._isMobileVisible = true;
+
         me._mobileDefs = {
             buttons: {
-                'mobile-classification': {
-                    
+                'mobile-stats-series': {
+                    iconCls: 'mobile-timeseries',
+                    tooltip: '',
+                    sticky: true,
+                    toggleChangeIcon: true,
+                    show: true,
+                    selected: true,
+                    callback: function () {
+                        if (me._isMobileVisible) {
+                            me.teardownUI();
+
+                            var el = jQuery(me.getMapModule().getMobileDiv())
+                                .find('.mobile-timeseries');
+
+                            me._resetMobileIcon(el, 'mobile-timeseries');
+                        } else {
+                            me._isMobileVisible = true;
+                            me._buildUI();
+                        }
+                    }
                 }
             },
             buttonGroup: 'mobile-toolbar'
         };
         me.log = Oskari.log('Oskari.statistics.statsgrid.SeriesControlPlugin');
 
-        this.__seriesControl = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesControl', sandbox, this._locale);
+        me._seriesControl = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesControl', sandbox, this._locale);
     }, {
-        _setLayerToolsEditModeImpl: function () {
-            if (!this.getElement()) {
-                return;
+        redrawUI: function (mapInMobileMode, forced) {
+            var sandbox = this.getSandbox();
+            var mobileDefs = this.getMobileDefs();
+
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarReady = !this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if (!forced && !toolbarReady) {
+                return true;
             }
-            if (!this.inLayerToolsEditMode()) {
-                this.setLocation(
-                    this.getElement().parents('.mapplugins').attr(
-                        'data-location'
-                    )
-                );
+            this.teardownUI();
+
+            if (toolbarReady && mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')('mobile-stats-series', 'mobileToolbar-mobile-toolbar');
+                sandbox.request(this, toolbarRequest);
             }
+            if (!mapInMobileMode) {
+                this._buildUI();
+            }
+            return false;
+        },
+        teardownUI: function () {
+            this._isMobileVisible = false;
+            this.removeFromPluginContainer(this.getElement());
+            this.element = null;
+        },
+        _buildUI: function () {
+            this.addToPluginContainer(this._createControlElement());
+            this._makeDraggable();
+            this._enableResize();
         },
         _createControlElement: function () {
             if (this.element !== null) {
                 return this.element;
             }
             this.element = this._templates.main.clone();
-            this.__seriesControl.render(this.element);
+            this._seriesControl.render(this.element);
             return this.element;
         },
-        redrawUI: function (mapInMobileMode, forced) {
-            var mobileDefs = this.getMobileDefs();
-
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
-            this.teardownUI();
-
-            if (!toolbarNotReady && mapInMobileMode) {
-                // create mobile
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                return false;
-            }
-            this.addToPluginContainer(this._createControlElement());
-            this._makeDraggable();
-            this._enableResize();
-            return false;
-        },
-        teardownUI: function (stopping) {
-            var element = this.getElement();
-            // detach old element from screen
-            if (element) {
-                element.detach();
-                this.removeFromPluginContainer(element, !stopping);
-                this.element = null;
-            }
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-        },
         _makeDraggable: function () {
-            this.getElement().prepend('<div class="statsseries-handle oskari-flyoutheading"></div>');
+            this.getElement().prepend('<div class="stats-series-handle oskari-flyoutheading"></div>');
             this.getElement().draggable({
                 scroll: false,
-                handle: '.statsseries-handle'
+                handle: '.stats-series-handle'
             });
         },
         /**
@@ -142,7 +150,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
                     var newWidth = e.pageX - position.left - mouseOffsetX;
                     element.css('max-width', newWidth.toString() + 'px');
                     element.css('width', newWidth.toString() + 'px');
-                    me.__seriesControl.setWidth(newWidth);
+                    me._seriesControl.setWidth(newWidth);
                 }
             });
             element.append(resizer);
@@ -151,15 +159,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             return this.element;
         },
         stopPlugin: function () {
-            this.teardownUI(true);
-        },
-        _createEventHandlers: function () {
-            return {
-                // 'StatsGrid.ActiveIndicatorChangedEvent' : function(evt) {
-                // },
-                MapSizeChangedEvent: function () {
-                }
-            };
+            this.teardownUI();
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
