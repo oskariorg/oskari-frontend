@@ -36,7 +36,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 contentHeight,
                 reasonableHeight,
                 focusedButton = -1,
-                screenWidth = window.innerWidth;
+                screenWidth = window.innerWidth,
+                screenHeight = window.innerHeight;
             this.setTitle(title);
             this.setContent(message);
 
@@ -68,6 +69,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 contentDiv.height(reasonableHeight);
                 contentDiv.css('overflow-y', 'auto');
             }
+
             // center on screen
             me.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
             me.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
@@ -77,15 +79,43 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             this._isVisible = true;
 
-            var map = Oskari.getSandbox().getMap();
-            if(map && contentDiv.width() > screenWidth) {
+            if(contentDiv.width() > screenWidth) {
                 this.dialog.css('max-width', screenWidth + 'px');
+            }
+            if (this.dialog.outerHeight(true) > screenHeight){
+                contentDiv.css({
+                    'max-height': this._getMaxHeights().content + 'px',
+                    'overflow-y': 'auto'
+                });
             }
 
             this._bringMobilePopupToTop();
 
             me.__notifyListeners('show');
 
+        },
+        /**
+         * @method _getMaxHeights
+         * Calculates max heights for popup and content.
+         * @param {boolean} fromMapDiv calculates from mapdiv instead of window (optional)
+         */
+        _getMaxHeights: function (fromMapDiv){
+            var headerHeight = this.dialog.find('.popupHeader').first().outerHeight(true);
+            var actionsHeight = this.dialog.find('.actions').outerHeight(true);
+            var contentsMargin = 20;
+            var popupMargins = 4;
+            var margin = 20;
+            var height;
+            if (fromMapDiv === true){
+                height = Oskari.getSandbox().getMap().getHeight();
+            } else {
+                height = window.innerHeight;
+            }
+
+            return {
+                content: height - headerHeight - actionsHeight - contentsMargin - margin - popupMargins,
+                popup: height - margin
+            }
         },
 
         /**
@@ -347,6 +377,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.dialog.css('top',popupTop+'px');
             }
         },
+        adjustHeight: function() {
+            this.dialog.find('.content').css({
+                'max-height': this._getMaxHeights().content,
+                'overflow-y': 'auto'
+            });
+        },
         /**
          * @method resetPosition
          * Resets any previous locations and centers the popup on screen
@@ -554,17 +590,42 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         _handleMapSizeChanges: function(size) {
             var me = this,
-                popup = me.dialog;
-
-            // if dialog ends up offscreen, move it back to the screen
-            if (parseInt(popup[0].style.left) > (size.width - popup.width())) {
+                popup = me.dialog,
+                wWidth = window.innerWidth,
+                wHeight = window.innerHeight,
+                pWidth = popup.outerWidth(true),
+                pHeight = popup.outerHeight(true),
+                left = parseInt(popup[0].style.left),
+                top = parseInt(popup[0].style.top),
+                cHeight = popup.find('.content').outerHeight(true);
+            // if content can be higher then adjust height
+            if (cHeight < this._getMaxHeights().content){
+                this.adjustHeight();
+            }
+            /*
+            //reset if left or top is out of the screen
+            if (left < 0){
+                popup.css('left','0px');
+            }
+            if (top < 0){
+                popup.css('top','0px');
+            }
+            */
+            // set max-height if popup would go out of screen
+            // else if dialog ends up offscreen, move it back to the screen
+            if(popup.outerHeight(true) > wHeight){
+                this.adjustHeight();
+                popup.css('top', '10px');
+            } else if (top > (wHeight - pHeight)) {
                 popup.css({
-                    'left': (size.width - popup.width() - 10) + 'px'
+                    'top': (wHeight - pHeight - 10) + 'px'
                 });
             }
-            if (parseInt(popup[0].style.top) > (size.width - popup.height())) {
+
+            // if dialog ends up offscreen, move it back to the screen
+            if (left > (wWidth - pWidth)) {
                 popup.css({
-                    'top': (size.width - popup.height() - 10) + 'px'
+                    'left': (wWidth - pWidth - 10) + 'px'
                 });
             }
         }
