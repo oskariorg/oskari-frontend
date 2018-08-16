@@ -88,6 +88,14 @@ Oskari.registerLocalization({
             'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',
             'cannotCreateLegend': 'Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla.'
         },
+        'series': {
+            'speed': {
+                'label': 'Animaationopeus',
+                'fast': 'Nopea',
+                'normal': 'Normaali',
+                'slow': 'Hidas'
+            }
+        },
         'diagram': {
             'title': 'Diagram'
         },

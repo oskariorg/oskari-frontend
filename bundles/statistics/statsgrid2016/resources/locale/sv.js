@@ -88,6 +88,14 @@ Oskari.registerLocalization({
             'noData': 'Ingen data vid den valda tidspunkten.',
             'cannotCreateLegend': 'Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden.'
         },
+        'series': {
+            'speed': {
+                'label': 'Animeringshastighet',
+                'fast': 'Snabb',
+                'normal': 'Normal',
+                'slow': 'Långsam'
+            }
+        },
         'parameters': {
             'sex': 'Kön',
             'year': 'År',

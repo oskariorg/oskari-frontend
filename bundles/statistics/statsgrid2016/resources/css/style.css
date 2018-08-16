@@ -67,11 +67,10 @@
     top: 5px; }
     .statsgrid-grid-table-header-content .header .title {
       font-weight: bold; }
-      .icon-warning-light {
-        top: 88%;
-        position: absolute;
-        cursor: pointer;   
-    }
+  .statsgrid-grid-table-header-content .icon-warning-light {
+    top: 88%;
+    position: absolute;
+    cursor: pointer; }
   .statsgrid-grid-table-header-content .icon {
     position: absolute;
     top: 5px;

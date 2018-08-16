@@ -165,7 +165,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             datasource: me._values.ds,
             indicator: me._values.ind,
             regionset: me._values.regionsetComponent.value(),
-            series: me._values.series,
+            series: {
+                id: me._values.series.id
+            },
             selections: {}
         };
 

@@ -23,6 +23,9 @@
 
         // possible values: wms, vector
         this._mapModes = ['vector'];
+
+        // Make series service listen for changes
+        this.series.bindToEvents(this);
     }, {
         __name: 'StatsGrid.StatisticsService',
         __qname: 'Oskari.statistics.statsgrid.StatisticsService',

@@ -27,6 +27,7 @@ Oskari.clazz.define(
         this.togglePlugin = null;
         this.diagramPlugin = null;
         this.classificationPlugin = null;
+        this.seriesControlPlugin = null;
 
         this.regionsetViewer = null;
         this.flyoutManager = null;
@@ -211,6 +212,20 @@ Oskari.clazz.define(
             },
             'StatsGrid.ActiveIndicatorChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
+                
+                if (evt.current && evt.current.series) {
+                    if (this.seriesControlPlugin) {
+                        if (!this.seriesControlPlugin.getElement()) {
+                            this.seriesControlPlugin.redrawUI(Oskari.util.isMobile(), false);
+                        }
+                    } else {
+                        this.createSeriesControl();
+                    }
+                } else {
+                    if (this.seriesControlPlugin) {
+                        this.seriesControlPlugin.stopPlugin();
+                    }
+                }
             },
             'StatsGrid.ClassificationChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -424,6 +439,15 @@ Oskari.clazz.define(
                 return;
             }
             this.classificationPlugin.enableClassification(enabled);
+        },
+        createSeriesControl: function () {
+            var sandbox = this.getSandbox();
+            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+
+            this.seriesControlPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesControlPlugin', this, {}, locale, sandbox);
+            mapModule.registerPlugin(this.seriesControlPlugin);
+            mapModule.startPlugin(this.seriesControlPlugin);
         }
 
     }, {
