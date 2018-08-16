@@ -118,7 +118,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         forward ? this.seriesService.next() : this.seriesService.previous();
     },
     render: function (el) {
-        debugger;
         this._element = jQuery(this.__templates.main());
         this._initControls();
         if (Oskari.util.isMobile()) {
