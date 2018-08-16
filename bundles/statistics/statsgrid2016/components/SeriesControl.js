@@ -17,6 +17,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
                 '</svg>' +
                 '<div class="value-controls">' +
                 '</div>' +
+            '</div>'),
+        stepper: _.template(
+            '<div class="stats-series-stepper">' +
+                '<div class="stats-series-back"></div>' +
+                '<div class="stats-series-playpause"></div>' +
+                '<div class="stats-series-forward"></div>' +
             '</div>')
     };
     this._lineWidth = 500;
@@ -56,26 +62,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         var me = this;
         var controlPanel = me._element.find('.value-controls');
 
-        var template = jQuery(
-            '<div class="stats-series-stepper">' +
-                '<div class="stats-series-back"></div>' +
-                '<div class="stats-series-playpause"></div>' +
-                '<div class="stats-series-forward"></div>' +
-            '</div>');
+        var stepper = jQuery(this.__templates.stepper());
 
-        template.find('.stats-series-playpause').on('click', function (e) {
+        stepper.find('.stats-series-playpause').on('click', function (e) {
             var shouldAnimate = !me.seriesService.isAnimating();
             me.seriesService.setAnimating(shouldAnimate);
             me._setAnimationState(me.seriesService.isAnimating());
         });
-        template.find('.stats-series-back').on('click', this._doSingleStep.bind(this, false));
-        template.find('.stats-series-forward').on('click', this._doSingleStep.bind(this, true));
+        stepper.find('.stats-series-back').on('click', this._doSingleStep.bind(this, false));
+        stepper.find('.stats-series-forward').on('click', this._doSingleStep.bind(this, true));
 
-        controlPanel.append(template);
+        controlPanel.append(stepper);
         me._setAnimationState(me.seriesService.isAnimating());
 
         var speedPanel = jQuery('<div class="stats-series-speed"></div>');
-        var speedLabel = jQuery('<label>' + me.loc('series.speed.label') + '</label>');
+        var speedLabel = jQuery('<label>').text(me.loc('series.speed.label'));
         var speedSelect = jQuery('<select></select>');
         var speedOpts = '';
         me._generateSelectOptions('series.speed.', me.__speedOptions).forEach(function (opt) {
@@ -117,6 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         forward ? this.seriesService.next() : this.seriesService.previous();
     },
     render: function (el) {
+        debugger;
         this._element = jQuery(this.__templates.main());
         this._initControls();
         if (Oskari.util.isMobile()) {
@@ -135,13 +137,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         this._element.find('.stats-series-back, .stats-series-forward').toggleClass('disabled', shouldAnimate);
     },
     /**
-     * @method setWidth Set timeline width and update them if needed
+     * @method setWidth Set component width and redraw series axis
      * @private
      * @param  {Number} width control width in px
-     * @param {Boolean} suppressUpdate true if no timelines update should be done
      */
     setWidth: function (width) {
-        var container = jQuery('.statsgrid-series-control-container');
+        var container = this._element.find('.statsgrid-series-control-container');
         container.css('max-width', width + 'px');
         container.css('width', width + 'px');
         this._lineWidth = width;
@@ -259,9 +260,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         this._updateValueDisplay(this._uiState.currentSeriesIndex);
     },
     _updateValueDisplay: function (index) {
-        var display = jQuery('.stats-series-value');
+        var display = this._element.find('.stats-series-value');
         var value = this._uiState.values[index];
-        display.html(value);
+        display.text(value);
     },
     /**
      * Listen to events that require re-rendering the UI

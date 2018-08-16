@@ -42,19 +42,19 @@
     padding-bottom: 0;
 }
 
-.line-svg g.drag-handle circle{
+.statsgrid-series-control-plugin .line-svg g.drag-handle circle{
   fill: #6baed6;
   stroke: #4f819e;
   stroke-width: 1px;
 }
-.line-svg g.axis line, g.axis path {
+.statsgrid-series-control-plugin .line-svg g.axis line, g.axis path {
   stroke: #333;
 }
-.line-svg g.axis text {
+.statsgrid-series-control-plugin .line-svg g.axis text {
   fill: #333;
   stroke: none;
 }
-.line-svg g.tick text.bold {
+.statsgrid-series-control-plugin .line-svg g.tick text.bold {
   font-weight: 600;
 }
 .stats-series-menus label.oskari-select {
@@ -169,11 +169,11 @@
   text-align: left;
   font-size: 13px;
 }
-svg.line-svg {
+svg.statsgrid-series-control-plugin .line-svg {
   display: block;
   overflow: hidden;
 }
-svg.line-svg text {
+svg.statsgrid-series-control-plugin .line-svg text {
   font-family: "Open Sans", Arial, sans-serif;
 }
 
