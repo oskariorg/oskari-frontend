@@ -15,8 +15,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         this.linkToTermsOfUse = jQuery('<div class="registerInfo2"></div>');
         this.loginbarTemplate = jQuery('<div class="registerLoginBar"></div>');
         this.loginTemplate = jQuery('<div class="registerLinks"><a id="loginLink">' + this.loc.login + '</a>' +
-                                    " - " + '<a id="registerLink">' + this.loc.register + '</a></div>');
-        this.loggedInTemplate = jQuery('<div class="loggedIn">' +  Oskari.user().getName() + '</br><a href="/logout">' + this.loc.logout + '</a></div>');
+                                    ' - ' + '<a id="registerLink">' + this.loc.register + '</a></div>');
+        this.loggedInTemplate = jQuery('<div class="loggedIn">' + Oskari.user().getName() + '</br>' +
+            '<form action="/logout" method="POST"><input type="hidden" name="_csrf" value=""/></form>' +
+            '<a href="/logout">' + this.loc.logout + '</a></div>');
     },
     {
         /**
@@ -40,6 +42,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             me.loginbar = me.loginbarTemplate.clone();
             me.loginContainer = jQuery(me.loginContainerId);
             if (Oskari.user().isLoggedIn()) {
+                var logoutForm = me.loggedInTemplate.find('form');
+                logoutForm.find('input').val(Oskari.app.getXSRFToken());
+                me.loggedInTemplate.find('a').click(function (e) {
+                    e.stopPropagation();
+                    logoutForm.submit();
+                    return false;
+                });
                 me.loginbar.append(me.loggedInTemplate);
             } else {
                 me.loginbar.append(me.loginTemplate);
