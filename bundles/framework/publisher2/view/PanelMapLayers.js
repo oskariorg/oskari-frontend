@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             },
             'Publisher2.ToolEnabledChangedEvent': function (event) {
                 var me = this;
-                if (event && event.getTool() && event.getTool() && event.getTool().id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
+                if (event && event.getTool() && event.getTool().getTool() && event.getTool().getTool().id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
                     if (event.getTool().state.enabled === true) {
                         me._plugin = event.getTool().getPlugin();
                         //update the plugin's baselayer info in case some of the layers have that ticked.
