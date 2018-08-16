@@ -152,9 +152,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             regionsetComponent: regionSelect
         };
         if (me.searchSeries && seriesSelection) {
-            me._values.series = {
-                id: seriesSelection
-            };
+            me._values.seriesId = seriesSelection;
         }
 
         me.trigger('indicator.changed', regionsets.length > 0);
@@ -165,11 +163,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             datasource: me._values.ds,
             indicator: me._values.ind,
             regionset: me._values.regionsetComponent.value(),
-            series: {
-                id: me._values.series.id
-            },
             selections: {}
         };
+        if (me._values.seriesId) {
+            values.series = {
+                id: me._values.seriesId
+            };
+        }
 
         me._selections.forEach(function (select) {
             if (values.series && values.series.id === select.getId()) {
