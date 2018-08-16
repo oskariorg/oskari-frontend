@@ -515,18 +515,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          *
          */
         setEnabled: function (isEnabled) {
-            var me = this;
-            var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (isEnabled) {
                 this._enablePreview();
             } else {
                 this._editToolLayoutOff();
                 this._disablePreview();
             }
-            var publisherTools = me._createToolGroupings();
+            var publisherTools = this._createToolGroupings();
             _.each(publisherTools.tools, function (tool) {
                 var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(tool);
-                me.instance.sandbox.notifyAll(event);
+                this.instance.sandbox.notifyAll(event);
             });
         },
 
