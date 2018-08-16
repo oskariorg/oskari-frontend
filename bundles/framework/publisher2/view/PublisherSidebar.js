@@ -115,7 +115,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 me.panels.push(panel);
                 accordion.addPanel(panel.getPanel());
             });
-
             var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
             me.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
@@ -522,6 +521,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 this._editToolLayoutOff();
                 this._disablePreview();
             }
+            var publisherTools = this._createToolGroupings();
+            _.each(publisherTools.tools, function (tool) {
+                var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(tool);
+                this.instance.sandbox.notifyAll(event);
+            });
         },
 
         /**
