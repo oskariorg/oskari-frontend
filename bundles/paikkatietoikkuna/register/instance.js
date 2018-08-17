@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             var me = this;
 
             var conf = me.getConfiguration() || {};
-            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/?lang=' + Oskari.getLang();
+            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/user/new/paikkatietoikkuna?lang=' + Oskari.getLang();
             me.loginUrl = conf.loginUrl || '/auth';
 
             me.loginbar = me.loginbarTemplate.clone();
