@@ -300,6 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     me.getLocalization('BasicView'),
                     data
                 );
+
                 // call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
                 me.publisher.render(map);

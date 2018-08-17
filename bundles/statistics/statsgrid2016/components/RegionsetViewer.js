@@ -27,15 +27,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         }
         var errorService = service.getErrorService();
 
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function (err, data) {
+        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
             if (err) {
                 Oskari.log('RegionsetViewer').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
                 return;
             }
 
             var classification = state.getClassificationOpts(ind.hash);
+            var groupStats = service.getSeriesService().getSeriesStats(ind.hash);
 
-            var classify = service.getClassificationService().getClassification(data, classification);
+            var classify = service.getClassificationService().getClassification(data, classification, groupStats);
 
             if (!classify) {
                 Oskari.log('RegionsetViewer').warn('Error getting classification', data, classification);

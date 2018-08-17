@@ -85,24 +85,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             }
 
             var newActiveIndicator = false;
-            
+
             selectedIndicators.forEach(function (indicator) {
                 var added;
                 if (indicator === '') {
                     return;
                 }
-                Object.keys(values.selections).forEach(function (key) {
-                    var selection = values.selections[key];
-                    if (Array.isArray(selection)) {
-                        selection.forEach(function (item) {
-                            var current = jQuery.extend(true, {}, values.selections);
-                            current[key] = item;
-                            added = me.service.getStateService().addIndicator(values.datasource, indicator, current);
-                        });
-                    }
-                });
+                if (!values.series) {
+                    // Multiselect selections are not supported for series layer
+                    Object.keys(values.selections).forEach(function (key) {
+                        var selection = values.selections[key];
+                        if (Array.isArray(selection)) {
+                            selection.forEach(function (item) {
+                                var current = jQuery.extend(true, {}, values.selections);
+                                current[key] = item;
+                                added = me.service.getStateService().addIndicator(values.datasource, indicator, current);
+                            });
+                        }
+                    });
+                }
                 if (!added) {
-                    added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections);
+                    added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections, values.series);
                 }
                 if (added) {
                     newActiveIndicator = indicator;
@@ -111,7 +114,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
             if (newActiveIndicator !== false) {
                 // already added, set as active instead
-                var hash = me.service.getStateService().getHash(values.datasource, newActiveIndicator, values.selections);
+                var hash = me.service.getStateService().getHash(values.datasource, newActiveIndicator, values.selections, values.series);
                 me.service.getStateService().setActiveIndicator(hash);
             }
             me.service.getStateService().setRegionset(values.regionset);
@@ -124,6 +127,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             if (extraValues.openDiagram) {
                 me.instance.getFlyoutManager().open('diagram');
             }
+        });
+
+        var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        clearBtn.addClass('margintopLarge');
+        clearBtn.setTitle(locale.panels.newSearch.clearButtonTitle);
+        clearBtn.insertTo(container);
+
+        clearBtn.setHandler(function (event) {
+            event.stopPropagation();
+            selectionComponent.clearSelections();
         });
 
         selectionComponent.on('indicator.changed', function (enabled) {

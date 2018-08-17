@@ -67,6 +67,10 @@
     top: 5px; }
     .statsgrid-grid-table-header-content .header .title {
       font-weight: bold; }
+  .statsgrid-grid-table-header-content .icon-warning-light {
+    top: 88%;
+    position: absolute;
+    cursor: pointer; }
   .statsgrid-grid-table-header-content .icon {
     position: absolute;
     top: 5px;
@@ -320,7 +324,6 @@ div.oskari-flyout {
       stroke-width: 0; }
   div.oskari-flyout.statsgrid-diagram-flyout .oskari-datacharts {
     position: relative;
-    height: 700px;
     padding: 16px; }
   div.oskari-flyout.statsgrid-diagram-flyout .chart-controls {
     display: flex;
@@ -705,10 +708,10 @@ div.tab-material-controls div.title {
 .stats-indicator-form-item {
   width: 96%;
   margin-bottom: 0.3125em; }
+
 .stats-ind-selector {
   display: flex;
-  align-items: baseline;
-}
+  align-items: baseline; }
 
 .stats-not-logged-in {
   width: 100%;

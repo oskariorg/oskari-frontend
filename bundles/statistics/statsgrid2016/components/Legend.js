@@ -96,30 +96,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
 
             // create inidicator dropdown if we have more than one indicator
             if (me.service.getStateService().getIndicators().length > 1) {
-                var edit = me.__templates.edit.clone();
                 var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
                 indicatorMenu.render(headerContainer);
                 indicatorMenu.setWidth('94%');
-                headerContainer.append(edit);
-                me._createEditClassificationListener();
             } else {
                 me._getLabels(activeIndicator, function (labels) {
                     var header = me.__templates.activeHeader({
                         label: labels.label
                     });
-                    var edit = me.__templates.edit.clone();
                     headerContainer.empty();
                     headerContainer.append(header);
-                    headerContainer.append(edit);
-                    me._createEditClassificationListener();
                 }); // _getLabels
             }
             if (!classificationOpts) {
                 // didn't get classification options so not enough data to classify or other error
+                container.find('.edit-legend').hide();
+                container.find('.legend-noactive').empty();
+                legendContainer.empty();
                 container.append(legendUI);
                 me._renderDone();
                 return;
             }
+            var edit = me.__templates.edit.clone();
+            headerContainer.append(edit);
+            me._createEditClassificationListener();
             // legend
             legendContainer.html(legendUI);
         }); // _createLegend
@@ -233,35 +233,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         var currentRegionset = stateService.getRegionset();
         var locale = this.locale;
 
-        this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, currentRegionset, function (err, data) {
-            if (err) {
-                me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
-                callback(me.__templates.error({ msg: locale('legend.noEnough') }));
-                return;
-            }
-            var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
-            var classification = service.getClassificationService().getClassification(data, classificationOpts);
+        this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator,
+            activeIndicator.selections, activeIndicator.series, currentRegionset, function (err, data) {
+                if (err) {
+                    me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
+                    callback(me.__templates.error({ msg: locale('legend.noData') }));
+                    return;
+                }
+                if (!data) {
+                    me.log.warn('Error getting indicator classification', data);
+                    callback(me.__templates.error({ msg: locale('legend.noData') }));
+                    return;
+                }
+                var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
+                var groupStats = service.getSeriesService().getSeriesStats(activeIndicator.hash);
+                var classification = service.getClassificationService().getClassification(data, classificationOpts, groupStats);
+                if (!classification) {
+                    me.log.warn('Error getting indicator classification', data);
+                    callback(me.__templates.error({ msg: locale('legend.noEnough') }));
+                    return;
+                }
+                if (classificationOpts.count !== classification.getGroups().length) {
+                    // classification count changed!! -> show error + re-render
+                    classificationOpts.count = classification.getGroups().length;
+                    callback(me.__templates.error({ msg: locale('legend.noEnough') }));
+                    stateService.setClassification(activeIndicator.hash, classificationOpts);
+                    return;
+                }
+                var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
+                var legend = classification.createLegend(colors);
 
-            if (!classification) {
-                me.log.warn('Error getting indicator classification', data);
-                callback(me.__templates.error({ msg: locale('legend.noEnough') }));
-                return;
-            }
-            if (classificationOpts.count !== classification.getGroups().length) {
-                // classification count changed!! -> show error + re-render
-                classificationOpts.count = classification.getGroups().length;
-                callback(me.__templates.error({ msg: locale('legend.noEnough') }));
-                stateService.setClassification(activeIndicator.hash, classificationOpts);
-                return;
-            }
-            var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
-            var legend = classification.createLegend(colors);
-
-            if (!legend) {
-                legend = '<div>' + locale('legend.cannotCreateLegend') + '</div>';
-            }
-            callback(legend, classificationOpts);
-        });
+                if (!legend) {
+                    legend = '<div>' + locale('legend.cannotCreateLegend') + '</div>';
+                }
+                callback(legend, classificationOpts);
+            });
     },
     _updateLegend: function () {
         var state = this.service.getStateService();
@@ -296,6 +302,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             // Always show the active indicator - also handles "no indicator selected"
+            // if the selected indicator has no data & edit panel is open -> close it
+            var current = event.current;
+            if (current) {
+                me.service.getIndicatorData(current.datasource, current.indicator,
+                    current.selections, current.series, me.service.getStateService().getRegionset(), function (err, data) {
+                        if (err) {}
+                        if (!data) {
+                            me._accordion.getPanels().forEach(function (panel) {
+                                if (panel.isOpen()) {
+                                    panel.close();
+                                }
+                            });
+                        };
+                    });
+            }
             me.render();
         });
 

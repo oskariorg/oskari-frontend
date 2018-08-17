@@ -29,9 +29,11 @@ Oskari.registerLocalization({
         'panels': {
             'newSearch': {
                 'title': 'SÖK DATA',
+                'seriesTitle': 'Tidsserie',
                 'datasourceTitle': 'Datakälla',
                 'indicatorTitle': 'Datamängd',
                 'regionsetTitle': 'Områdesindelning',
+                'seriesLabel': 'Hämta som en tidsserie',
                 'selectDatasourcePlaceholder': 'Välj datakälla',
                 'selectIndicatorPlaceholder': 'Välj datamängd',
                 'selectRegionsetPlaceholder': 'Välj områdesindelning',
@@ -40,6 +42,7 @@ Oskari.registerLocalization({
                 'refineSearchTooltip1': 'Du får mera alternativ när du har först valt dataleverantören och datamängden.',
                 'refineSearchTooltip2': '',
                 'addButtonTitle': 'Hämta datamängdens uppgifter',
+                'clearButtonTitle': 'Töm',
                 'defaultPlaceholder': 'Välj värde',
                 'selectionValues': {
                     'sex': {
@@ -67,6 +70,7 @@ Oskari.registerLocalization({
         'statsgrid': {
             'title': 'HÄMTADE DATAMÄNGDER',
             'noResults': 'Inga valda datamängder',
+            'noValues': 'Inga värden i den valda datamängden',
             'areaSelection': {
                 'title': 'OMRÅDESINDELNING',
                 'info': 'Omdefiniera den önskade områdesindelningen från rullgardinsmenyn.'
@@ -81,12 +85,23 @@ Oskari.registerLocalization({
             'title': 'Klassificering',
             'noActive': 'Inga valda datamängder, välj datamängd för att se kartans klassificering.',
             'noEnough': 'Datamängden är för liten för att klassificeras, försök en annan datamängd eller avgränsning.',
+            'noData': 'Ingen data vid den valda tidspunkten.',
             'cannotCreateLegend': 'Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden.'
+        },
+        'series': {
+            'speed': {
+                'label': 'Animeringshastighet',
+                'fast': 'Snabb',
+                'normal': 'Normal',
+                'slow': 'Långsam'
+            }
         },
         'parameters': {
             'sex': 'Kön',
             'year': 'År',
-            'regionset': 'Områdesindelning'
+            'regionset': 'Områdesindelning',
+            'from': 'från',
+            'to': 'tills'
         },
         'datatable': 'Tabell',
         'published': {

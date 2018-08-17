@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
             }
 
 
-            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
+            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function(err, data) {
                 if(err) {
                     Oskari.log('AbstractStatsLayerPlugin').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
                     me.__updateLayerParams(mapLayer, {
@@ -183,7 +183,8 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                     return;
                 }
                 var classification = state.getClassificationOpts(ind.hash);
-                var classify = service.getClassificationService().getClassification(data, classification);
+                var groupStats = service.getSeriesService().getSeriesStats(ind.hash);
+                var classify = service.getClassificationService().getClassification(data, classification, groupStats);
                 if(!classify) {
                     me.__updateLayerParams(mapLayer, {
                         VIS_NAME: layer.getLayerName(),

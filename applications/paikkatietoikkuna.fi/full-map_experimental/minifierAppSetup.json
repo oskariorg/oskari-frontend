@@ -27,6 +27,9 @@
 					},
 					"oskariui": {
 						"bundlePath": "../../../packages/framework/bundle/"
+					},
+					"map3dtiles": {
+						"bundlePath": "../../../packages/paikkatietoikkuna/bundle/"
 					}
                 }
             }

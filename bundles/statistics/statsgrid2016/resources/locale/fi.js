@@ -29,9 +29,11 @@ Oskari.registerLocalization({
         'panels': {
             'newSearch': {
                 'title': 'AINEISTOHAKU',
+                'seriesTitle': 'Aikasarja',
                 'datasourceTitle': 'Tietolähde',
                 'indicatorTitle': 'Indikaattori',
                 'regionsetTitle': 'Aluejako',
+                'seriesLabel': 'Hae aikasarjana',
                 'selectDatasourcePlaceholder': 'Valitse tietolähde',
                 'selectIndicatorPlaceholder': 'Valitse aineisto',
                 'selectRegionsetPlaceholder': 'Valitse aluejako',
@@ -40,6 +42,7 @@ Oskari.registerLocalization({
                 'refineSearchTooltip1': 'Saat näkyviin vaihtoehtoja kun olet ensin valinnut aineiston tarjoajan ja aineiston.',
                 'refineSearchTooltip2': '',
                 'addButtonTitle': 'Hae aineiston tiedot',
+                'clearButtonTitle': 'Tyhjennä',
                 'defaultPlaceholder': 'Valitse arvo',
                 'selectionValues': {
                     'sex': {
@@ -67,6 +70,7 @@ Oskari.registerLocalization({
         'statsgrid': {
             'title': 'HAETUT AINEISTOT',
             'noResults': 'Ei valittuja aineistoja',
+            'noValues': 'Ei arvoja valitulla aineistolla',
             'areaSelection': {
                 'title': 'ALUEJAKO',
                 'info': 'Määritä uudelleen millä alueilla haluat tarkastella aineistoja valitsemalla alasvetovalikosta'
@@ -81,7 +85,16 @@ Oskari.registerLocalization({
             'title': 'Luokittelu',
             'noActive': 'Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.',
             'noEnough': 'Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.',
+            'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',
             'cannotCreateLegend': 'Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla.'
+        },
+        'series': {
+            'speed': {
+                'label': 'Animaationopeus',
+                'fast': 'Nopea',
+                'normal': 'Normaali',
+                'slow': 'Hidas'
+            }
         },
         'diagram': {
             'title': 'Diagram'
@@ -89,7 +102,9 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Sukupuoli',
             'year': 'Vuosi',
-            'regionset': 'Aluevalinta'
+            'regionset': 'Aluevalinta',
+            'from': 'alkaen',
+            'to': 'päättyen'
         },
         'datatable': 'Taulukko',
         'published': {

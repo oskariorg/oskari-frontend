@@ -28,7 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         this._visibilityPollingInterval = 1500;
         this._visibilityCheckOrder = 0;
         this._previousTimer = null;
-        this._lastVisibilityCheckResult = {};
     }, {
     _createEventHandlers: function () {
         var me = this;
@@ -201,13 +200,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             layer;
         for (i = 0; i < layers.length; ++i) {
             layer = layers[i];
-
-            var visible = layer.isVisible();
-            var previousVisibility = this._lastVisibilityCheckResult[layer.getId()];
-            if (typeof previousVisibility !== 'undefined' && visible !== previousVisibility) {
+            if (layer.isVisible()) {
                 this.notifyLayerVisibilityChanged(layer);
             }
-            this._lastVisibilityCheckResult[layer.getId()] = visible;
         }
         this._visibilityCheckScheduled = false;
     },
@@ -251,11 +246,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             // show non-baselayer if in scale, in geometry and layer visible
             if (mapLayer && !mapLayer.getVisible()) {
                 mapLayer.setVisible(true);
+            } else {
+                return; //suppress event
             }
         } else {
             // otherwise hide non-baselayer
             if (mapLayer && mapLayer.getVisible()) {
                 mapLayer.setVisible(false);
+            } else {
+                return; //suppress event
             }
         }
         var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);

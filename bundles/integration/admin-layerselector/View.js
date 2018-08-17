@@ -152,8 +152,8 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             requirementsConfig =
                 confRequirementsConfig || this.requirementsConfig;
 
-        require.config(requirementsConfig);
-        require(['_bundle/views/layerSelectorView'], function (LayerSelectorView) {
+        window.require.config(requirementsConfig);
+        window.require(['_bundle/views/layerSelectorView'], function (LayerSelectorView) {
 
             // Finally, we kick things off by creating the **App**.
             // We need to pass container element for the view and

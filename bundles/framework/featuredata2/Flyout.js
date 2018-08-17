@@ -502,7 +502,7 @@ Oskari.clazz.define(
 
             // Modify layout for the resizer image
             flyout.find('div.oskari-flyoutcontent').css('padding-bottom', '5px');
-            if (jQuery('div.flyout-resizer').length === 0) {
+            if (flyout.find('div.flyout-resizer').length === 0) {
                 flyout.append(resizer);
             }
         },
