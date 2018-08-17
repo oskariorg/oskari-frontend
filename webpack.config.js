@@ -112,6 +112,7 @@ module.exports = (env, argv) => {
     };
   } else {
     config.devServer = {
+      port: 8081,
       proxy: [{
         context: ['**', `!Oskari/dist/${version}/${appName}/**`],
         target: 'http://localhost:8080',
