@@ -162,10 +162,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             selectFromTop.find('input').prop('checked', true);
             selectFromAll.find('span').html(this.loc.selectAll);
 
-            selectFromTop.bind('click', function () {
+            selectFromTop.on('click', function () {
                 me.WFSLayerService.setSelectFromAllLayers(false);
             });
-            selectFromAll.bind('click', function () {
+            selectFromAll.on('click', function () {
                 me.WFSLayerService.setSelectFromAllLayers(true);
             });
             content.append(selectOptions);
@@ -228,7 +228,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 btnContainer.attr("title", button.tooltip);
                 btnContainer.addClass(button.iconCls);
                 btnContainer.addClass("tool");
-                btnContainer.bind('click', function (evt, deselect) {
+                btnContainer.on('click', function (evt, deselect) {
                     me.removeButtonSelection(content);
                     if( deselect ) {
                         activeTool = null;

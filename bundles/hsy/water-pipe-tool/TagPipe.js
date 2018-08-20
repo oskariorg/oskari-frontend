@@ -373,12 +373,12 @@ Oskari.clazz.define(
 
                 listElspan.text(data[i].id);
                 listElaOnMap.text(me._getLocalization("show_on_map"));
-                listElaOnMap.bind("click", {feature: geojsonObject}, function(e){
+                listElaOnMap.on("click", {feature: geojsonObject}, function(e){
                     e.preventDefault();
                     me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null, true);
                 });
                 listElaSelect.text(me._getLocalization("select_tag_pipe"));
-                listElaSelect.bind("click", {feature: geojsonObject}, function(e){
+                listElaSelect.on("click", {feature: geojsonObject}, function(e){
                     e.preventDefault();
                     me._openForm(e, me, e.data.feature);
                     me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null, true);

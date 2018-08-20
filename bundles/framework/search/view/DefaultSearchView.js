@@ -343,7 +343,7 @@ Oskari.clazz.define(
                 var header = me.__templates.resultTableHeader({ title : headerItem.title });
                 header = jQuery(header);
                 var link = header.find('a');
-                link.bind('click',  function () {
+                link.on('click',  function () {
                     // clear table for sorted results
                     tableBody.empty();
                     // default to descending sort
@@ -452,7 +452,7 @@ Oskari.clazz.define(
                     popupId,
                     loc.title,
                     content,
-                    {   
+                    {
                         lon: result.lon,
                         lat: result.lat
                     },

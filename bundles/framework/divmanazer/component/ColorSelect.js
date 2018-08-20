@@ -144,15 +144,15 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             }
             var handlers = me._handlers();
 
-            me._selected.unbind('click');
-            me._selected.bind('click', handlers.selectHandler);
+            me._selected.off('click');
+            me._selected.on('click', handlers.selectHandler);
             var options = me._selection.find('.oskari-color-option');
-            options.unbind('click');
-            options.bind('click', handlers.colorClickHandler);
+            options.off('click');
+            options.on('click', handlers.colorClickHandler);
             options.hover(handlers.hoverIn, handlers.hoverOut);
 
-            me._element.find('.color-selection-arrow').unbind('click');
-            me._element.find('.color-selection-arrow').bind('click', handlers.selectHandler);
+            me._element.find('.color-selection-arrow').off('click');
+            me._element.find('.color-selection-arrow').on('click', handlers.selectHandler);
         },
 
 

@@ -90,7 +90,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 group: prefixedGroup
             };
         }
-        button.bind('click', function (event) {
+        button.on('click', function (event) {
             me._clickButton(pId, prefixedGroup);
         });
 

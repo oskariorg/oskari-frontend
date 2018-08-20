@@ -892,7 +892,7 @@ Oskari.clazz.define(
                 link.append(me.resultHeaders[i].title);
                 // Todo: Temporarily only the first column is sortable
                 if (i === 0) {
-                    link.bind('click', headerClosureMagic(me.resultHeaders[i]));
+                    link.on('click', headerClosureMagic(me.resultHeaders[i]));
                 }
                 tableHeaderRow.append(header);
             }
@@ -1070,7 +1070,7 @@ Oskari.clazz.define(
                                         else {
                                             callbackElement =  actionElement.first();
                                         }
-                                        callbackElement.css({'cursor':'pointer'}).bind('click', {metadata: row}, function(event){
+                                        callbackElement.css({'cursor':'pointer'}).on('click', {metadata: row}, function(event){
                                            action.callback(event.data.metadata);
                                         });
                                     }

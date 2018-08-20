@@ -83,7 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 sidebarTitle.append(me.loc.title);
             }
             // bind close from header (X)
-            container.find('div.header div.icon-close').bind(
+            container.find('div.header div.icon-close').on(
                 'click',
                 function () {
                     me.cancel();

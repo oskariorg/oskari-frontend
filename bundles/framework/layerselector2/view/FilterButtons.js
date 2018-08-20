@@ -35,8 +35,8 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
                 element: filterButton
             });
 
-            filterButton.unbind('click');
-            filterButton.bind('click', function(evt) {
+            filterButton.off('click');
+            filterButton.on('click', function(evt) {
                 var filterIcon = jQuery(evt.target).parent().find('.filter-icon.' + 'filter-' + filterName);
                 me.deactivateAllFilters(filterName);
                 if (filterIcon.hasClass(iconClassDeactive)) {

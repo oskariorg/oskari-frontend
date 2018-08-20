@@ -488,7 +488,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 input = this._field.find('input');
 
             clearButton.attr('id', id);
-            clearButton.bind('click', function () {
+            clearButton.on('click', function () {
                 input.val('');
                 input.trigger('change');
                 input.trigger('keyup');

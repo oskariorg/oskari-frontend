@@ -179,7 +179,7 @@ Oskari.clazz.define(
             var me = this,
                 linkElement = link || me.getElement().find('a'),
                 sandbox = me.getSandbox();
-            linkElement.bind('click', function () {
+            linkElement.on('click', function () {
                 var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
                 sandbox.notifyAll(event);
                 return false;

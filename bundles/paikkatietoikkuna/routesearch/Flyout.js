@@ -377,7 +377,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                                 .removeClass('disabled')
                                 .css('background-color', this.color)
                                 .prop('title', this.name)
-                                .unbind('click');
+                                .off('click');
                         } else {
                             el
                                 .attr('href', '#')
@@ -385,7 +385,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                                 .addClass('disabled')
                                 .css('background-color', '')
                                 .prop('title', me.locale.selectLocations)
-                                .click(
+                                .on('click',
                                     function (event) {
                                         event.preventDefault();
                                         return false;

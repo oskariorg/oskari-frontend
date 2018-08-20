@@ -153,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 return;
             }
 
-            linkElement.bind('click', function () {
+            linkElement.on('click', function () {
                 if(!me._flyoutOpen) {
                     if(me._mapStatusChanged) {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
@@ -256,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             if (!this.inLayerToolsEditMode()) {
                 this._bindLinkClick();
             } else {
-                this.getElement().find('a').unbind('click');
+                this.getElement().find('a').off('click');
             }
         },
 

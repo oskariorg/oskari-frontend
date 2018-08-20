@@ -115,14 +115,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     editLink.addClass('categoryOp');
                     editLink.addClass('edit');
                     editLink.append(this.loc('tab.editCategory'));
-                    editLink.bind('click', editLinkClosure(id));
+                    editLink.on('click', editLinkClosure(id));
                     panel.getContainer().append(editLink);
 
                     var deleteLink = this.linkTemplate.clone();
                     deleteLink.addClass('categoryOp');
                     deleteLink.addClass('delete');
                     deleteLink.append(this.loc('tab.deleteCategory'));
-                    deleteLink.bind('click', deletelinkClosure(id));
+                    deleteLink.on('click', deletelinkClosure(id));
                     panel.getContainer().append(deleteLink);
 
                 }
@@ -258,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                 link.append(linkIcon);
 
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._showPlace(data.geometry, data.categoryId);
                     return false;
                 });
@@ -269,7 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             var editRenderer = function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._editPlace(data);
                     return false;
                 });
@@ -280,7 +280,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             var deleteRenderer = function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._deletePlace(data);
                     return false;
                 });

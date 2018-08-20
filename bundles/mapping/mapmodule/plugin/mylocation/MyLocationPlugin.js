@@ -76,7 +76,7 @@ Oskari.clazz.define(
             }
             if (me.inLayerToolsEditMode()) {
                 // disable icon
-                me.getElement().unbind('click');
+                me.getElement().off('click');
             } else {
                 // enable icon
                 me.getElement().click(function () {

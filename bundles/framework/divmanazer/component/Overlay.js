@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             });
             me._setupSizeAndLocation();
             _.forEach(me._overlays, function (overlay) {
-                overlay.overlay.bind('click', function (event) {
+                overlay.overlay.on('click', function (event) {
                     event.preventDefault();
                 });
             });
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         bindClickToClose: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {
-                overlay.overlay.bind('click', function() {
+                overlay.overlay.on('click', function() {
                     me.close();
                 });
             });

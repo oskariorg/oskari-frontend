@@ -296,7 +296,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     layerContainer.find('div.layer-tool-remove').addClass('icon-close');
 
                     // FIXME create function outside loop. Just have to figure out a way to access the layer...
-                    layerContainer.find('div.layer-tool-remove').bind('click', function (e) {
+                    layerContainer.find('div.layer-tool-remove').on('click', function (e) {
                         var reqName = 'RemoveMapLayerRequest',
                             builder = sandbox.getRequestBuilder(reqName),
                             request = builder(jQuery(e.currentTarget).parents('.layer').attr('data-id')),
@@ -595,7 +595,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     'MapModulePlugin.MapLayerVisibilityRequest'
                 );
 
-            tools.find('div.layer-visibility a').bind('click', function () {
+            tools.find('div.layer-visibility a').on('click', function () {
                 // send request to hide map layer
                 var request = visibilityRequestBuilder(layer.getId(), false);
                 sandbox.request(me.instance.getName(), request);
@@ -644,7 +644,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 );
 
             msg.addClass('layer-msg-for-hidden');
-            msg.find('a').bind('click', function () {
+            msg.find('a').on('click', function () {
                 // send request to show map layer
                 var request = visibilityRequestBuilder(layer.getId(), true);
                 sandbox.request(me.instance.getName(), request);

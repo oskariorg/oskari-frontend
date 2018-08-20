@@ -555,7 +555,7 @@ Oskari.clazz.define(
 
             searchResultWindow.find('div.header h3').text(me.getLocalization('searchResults_header'));
 
-            searchResultWindow.find('div.header div.icon-close').bind(
+            searchResultWindow.find('div.header div.icon-close').on(
                 'click',
                 function () {
                     searchResultWindow.remove();
@@ -671,7 +671,7 @@ Oskari.clazz.define(
                         header = me.templates.templateResultTableHeader.clone();
                         link = header.find('a');
                         link.append(me.resultHeaders[i].title);
-                        link.bind('click', headerClosureMagic(me.resultHeaders[i], results));
+                        link.on('click', headerClosureMagic(me.resultHeaders[i], results));
                         tableHeaderRow.append(header);
                     }
 
@@ -936,7 +936,7 @@ Oskari.clazz.define(
                 titleCell = jQuery(cells[1]);
                 title = titleCell.find('a');
                 title.append(row.name);
-                title.bind('click', closureMagic(row));
+                title.on('click', closureMagic(row));
                 jQuery(cells[2]).append(row.village);
                 jQuery(cells[3]).append(row.type);
                 resultsTableBody.append(resultContainer);

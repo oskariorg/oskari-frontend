@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             var header = this.getElement().find('div.header');
-            header.unbind('click');
+            header.off('click');
             if (this.inLayerToolsEditMode() && this.popup.isVisible()) {
                 this.popup.getJqueryContent().detach();
                 this.popup.close(true);
@@ -291,14 +291,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 var layerId = el.attr('value');
                 var layer = sandbox.findMapLayerFromAllAvailable(layerId);
                 if(layer) {
-                    el.unbind('change');
+                    el.off('change');
                     me._bindCheckbox(el,layer);
                 }
             };
             me.layerContent.find('input[type=radio]').each(function(){
                 var input = jQuery(this);
-                input.unbind('change');
-                input.bind('change', function (evt) {
+                input.off('change');
+                input.on('change', function (evt) {
                     me._changedBaseLayer();
                 });
             });
@@ -379,7 +379,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             input.remove();
             input = me.templates.radiobutton.clone();
             input.attr('value', layer.getId());
-            input.bind('change', function (evt) {
+            input.on('change', function (evt) {
                 me._changedBaseLayer();
             });
 
@@ -687,7 +687,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         _bindHeader: function (header) {
             var me = this;
 
-            header.bind('click', function () {
+            header.on('click', function () {
                 if (me.popup && me.popup.isVisible()) {
                     me.popup.getJqueryContent().detach();
                     me.popup.close(true);

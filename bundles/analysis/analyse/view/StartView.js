@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                 var checkbox = this.checkboxTemplate.clone(),
                     label = this.labelTemplate.clone();
                 label.append(me.loc.infoseen.label);
-                checkbox.bind(
+                checkbox.on(
                     'change',
                     function () {
                         if (jQuery(this).prop('checked')) {

@@ -289,7 +289,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // buttons
             // close
-            container.find('div.header div.icon-close').bind(
+            container.find('div.header div.icon-close').on(
                 'click',
                 function () {
                     me.instance.setAnalyseMode(false);
@@ -2991,7 +2991,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 layer = me._getLayerByPrefixedId(layer_id, true);
 
-            tools.find('div.layer-info').bind('click', function () {
+            tools.find('div.layer-info').on('click', function () {
                 var rn = 'catalogue.ShowMetadataRequest',
                     uuid = layer.getMetadataIdentifier(),
                     additionalUuids = [],
@@ -3062,8 +3062,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             );
 
 
-            filterIcon.unbind('click');
-            filterIcon.bind('click', function () {
+            filterIcon.off('click');
+            filterIcon.on('click', function () {
                 var selectedFeatures = me.WFSLayerService.getSelectedFeatureIds(layer.getId()),
                     boolSelectedFeatures = (selectedFeatures !== undefined && selectedFeatures.length > 0),
                     boolSelectedGeometry = (me.contentPanel.selectedGeometry !== null);

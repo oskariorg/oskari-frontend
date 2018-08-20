@@ -374,10 +374,10 @@ Oskari.clazz.define(
                 messageContainer.find('label.message-label').html(this.loc.message.label);
                 var input = messageContainer.find('input.message-text');
                 input.attr('placeholder',this.loc.message.hint);
-                input.bind('input', function() {
+                input.on('input', function() {
                     me.values.message = jQuery(this).val();
                 });
-                input.keypress(function (evt) {
+                input.on('keypress' ,function (evt) {
                     if (evt.keyCode === 13) {
                         saveButtonHandler();
                     }

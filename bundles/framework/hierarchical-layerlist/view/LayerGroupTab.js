@@ -74,7 +74,7 @@ Oskari.clazz.define(
                 tool.attr('title', data.options.tooltip);
                 tool.addClass(data.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     tool.addClass('active');
                     data.handler(tool);
@@ -243,7 +243,7 @@ Oskari.clazz.define(
                 tool.attr('title', grouptool.options.tooltip);
                 tool.addClass(grouptool.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -272,7 +272,7 @@ Oskari.clazz.define(
                 tool.attr('title', subgrouptool.options.tooltip);
                 tool.addClass(subgrouptool.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -302,7 +302,7 @@ Oskari.clazz.define(
                 tool.attr('title', subgrouptool.options.tooltip);
                 tool.addClass(subgrouptool.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -332,7 +332,7 @@ Oskari.clazz.define(
                 tool.attr('title', layertool.options.tooltip);
                 tool.addClass(layertool.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');

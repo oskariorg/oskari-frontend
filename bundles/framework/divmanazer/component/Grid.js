@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (!data.size && me.additionalDataHandler) {
                 link = me.templatePopupLink.clone();
                 link.append(me.additionalDataHandler.title);
-                link.bind('click', function () {
+                link.on('click', function () {
                     // show userguide popup with data
                     me.additionalDataHandler.handler(link, content);
                     return false;
@@ -607,7 +607,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         }
                     }
                     if (me._fullFieldNames[i].type === 'default') {
-                        link.bind('click', headerClosureMagic(me._fullFieldNames[i].key));
+                        link.on('click', headerClosureMagic(me._fullFieldNames[i].key));
                         me.__attachHeaderTools(header, tools, me._fullFieldNames[i].key);
                     } else if (me._fullFieldNames[i].type === 'object') {
                         if (dataArray.length > 2) {
@@ -618,7 +618,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             header.addClass('base');
                         }
                         // Expand or close subtable
-                        link.bind('click', headerLinkClosureMagic);
+                        link.on('click', headerLinkClosureMagic);
                     }
 
                     if (me._fullFieldNames[i].visibility === 'hidden') {

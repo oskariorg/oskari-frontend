@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                              ),
             row: _.template('<tr>' +
                                 '<td class="cell">' +
-                                    '<div class="cellContent">${coords.col1}</div>' + 
+                                    '<div class="cellContent">${coords.col1}</div>' +
                                 '</td>'+
                                 '<td class="cell">' +
                                     '<div class="cellContent">${coords.col2}</div>' +
@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                             )
     }
     var me =this;
-},  {   
+},  {
         getContainer: function () {
             return jQuery(this.container);
         },
@@ -123,8 +123,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             if (data.highlight){
                 table.find(selector).addClass('highlighted');
             } else {
-                table.find(selector).removeClass('highlighted');  
-            }     
+                table.find(selector).removeClass('highlighted');
+            }
         },
         create: function () {
             var me = this;
@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             }));
             var rowcounter = this.template.rowcounter({
                 rows: this.loc('flyout.coordinateTable.rows')
-            });            
+            });
             var table = this.template.table();
                 /*title: "title",
                 north:this.loc('flyout.coordinateTable.north'),
@@ -246,7 +246,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             var me = this;
             var table = this.getElements().table;
 
-            table.bind('RowCountChanged', function (evt) {
+            table.on('RowCountChanged', function (evt) {
                 var rows = jQuery(evt.currentTarget).find('tr');
                 var number = 0;
                 for ( var i = 0; i < rows.length; i++ ) {

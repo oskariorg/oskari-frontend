@@ -62,7 +62,7 @@ Oskari.clazz.define(
                     layer = data.layer;
 
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     // add analysis layer to map on name click
                     if (!me.popupOpen) {
                         var request = addMLrequestBuilder(
@@ -81,7 +81,7 @@ Oskari.clazz.define(
                 var link = me.template.link.clone(),
                     layer = data.layer;
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     if (!me.popupOpen) {
                         // delete analysis layer
                         me._confirmDeleteAnalysis(data);
