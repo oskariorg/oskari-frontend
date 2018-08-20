@@ -309,7 +309,7 @@ Oskari.clazz.define(
                         var cellIndex = parseInt(this.id.substring(0, 2), 10);
                         var colorType = parseInt(this.id.substring(2, 3), 10);
                         if (jQuery('#color-checkbox-' + colorType).prop('checked')) {
-                            jQuery('#color-checkbox-' + colorType).attr('checked', false);
+                            jQuery('#color-checkbox-' + colorType).prop('checked', false);
                             jQuery('input.custom-color.' + me.colorTypes[colorType]).prop('disabled', true);
                         }
                         if (cellIndex === me.activeColorCell[colorType]) {
@@ -369,7 +369,7 @@ Oskari.clazz.define(
 
                 // If the default value is not included in the color cells
                 if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    colorCheckbox.attr('checked', true);
+                    colorCheckbox.prop('checked', true);
                 }
                 colorCheckbox.change(function () {
                     var colorTypeId = this.id.substring(this.id.length-1, this.id.length);
@@ -403,7 +403,7 @@ Oskari.clazz.define(
                 // select user colors checkbox
                 if (!statedChosenColor && me.values[cType] !== null) {
                     colorCheckbox.checked = true;
-                    content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
+                    content.find('input.color-source').prop('disabled', false).prop('checked', true);
                 }
 
                 content = dialogContent.find('.custom-colors-' + me.colorTypes[c]);
@@ -475,7 +475,7 @@ Oskari.clazz.define(
                     me.activeColorCell[index] = -1;
                     me.values[type + 'Color'] = null;
 
-                    jQuery('#color-checkbox-' + index).attr('checked', false);
+                    jQuery('#color-checkbox-' + index).prop('checked', false);
                     jQuery('input.custom-color.' + me.colorTypes[index]).prop('disabled', true);
 
                     if(type === 'fill'){

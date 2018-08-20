@@ -259,11 +259,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Boolean} blnEnabled true to enable, false to disable
          */
         setEnabled: function (blnEnabled) {
-            if (blnEnabled === true) {
-                this._field.find('input').removeAttr('disabled');
-            } else {
-                this._field.find('input').attr('disabled', 'disabled');
-            }
+            this._field.find('input').prop('disabled', !blnEnabled);
         },
 
         /**
@@ -409,7 +405,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if up is pressed on the input
          */
         bindUpKey: function (callback) {
-            
+
             var me = this,
                 input = this._field.find('input');
 
@@ -424,7 +420,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if down is pressed on the input
          */
         bindDownKey: function (callback) {
-            
+
             var me = this,
                 input = this._field.find('input');
 
@@ -442,7 +438,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if blur has happened for the input
          */
         bindOnBlur: function (callback) {
-            
+
             // all set, ready to bind requests
             var input = this._field.find('input');
             input.blur(function () {

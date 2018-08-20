@@ -245,7 +245,7 @@ Oskari.clazz.define(
                 colorCell.attr('id', id);
                 colorCell.click(function () {
                     if (jQuery('.color-source').prop('checked')) {
-                        jQuery('.color-source').attr('checked', false);
+                        jQuery('.color-source').prop('checked', false);
                         jQuery('input.custom-color').prop('disabled', true);
                     }
                     cellIndex = parseInt(this.id.substring(0, 2), 10);
@@ -305,7 +305,7 @@ Oskari.clazz.define(
             // select user colors checkbox
             if (!statedChosenColor) {
                 colorCheckbox.checked = true;
-                content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
+                content.find('input.color-source').prop('disabled', false).prop('checked', true);
             }
 
             content = dialogContent.find('.custom-colors');

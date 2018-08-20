@@ -362,10 +362,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     cell = me._templates.checkBox.clone();
                     cell.attr('data-right', permission.id);
                     cell.addClass(permission.name);
-                    if (allow === true) {
-                        cell.attr('checked', 'checked');
-                    }
-
+                    cell.prop('checked', !!allow);
                     cell.attr('title', tooltip);
 
                     dataCell.append(cell);

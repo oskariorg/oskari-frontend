@@ -159,7 +159,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 selectFromTop = jQuery(selectOptions).find('#select-from-top-layer'),
                 selectFromAll = jQuery(selectOptions).find('#select-from-all-layers');
             selectFromTop.find('span').html(this.loc.selectFromTop);
-            selectFromTop.find('input').attr('checked', true);
+            selectFromTop.find('input').prop('checked', true);
             selectFromAll.find('span').html(this.loc.selectAll);
 
             selectFromTop.bind('click', function () {

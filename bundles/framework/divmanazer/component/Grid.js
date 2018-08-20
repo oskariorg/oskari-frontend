@@ -816,7 +816,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     newColumn = me.templateColumnSelectorListItem.clone();
                     newColumn.addClass('column-selector-list-item');
                     checkboxInput = newColumn.find('input');
-                    checkboxInput.attr('checked', (me.visibleColumns.indexOf(field) !== -1));
+                    checkboxInput.prop('checked', (me.visibleColumns.indexOf(field) !== -1));
 
                     checkboxInput.addClass('column-selector-list-item');
                     checkboxInput.attr('data-id', field);

@@ -619,9 +619,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
             var input = tools.find('input.baselayer');
             input.attr('id', 'checkbox' + layer.getId());
-            if (isChecked) {
-                input.attr('checked', true);
-            }
+            input.prop('checked', !!isChecked);
             input.change(closureMagic(layer));
 
 

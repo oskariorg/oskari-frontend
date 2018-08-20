@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                 checkbox.bind(
                     'change',
                     function () {
-                        if (jQuery(this).attr('checked')) {
+                        if (jQuery(this).prop('checked')) {
                             // Set cookie not to show analyse info again
                             jQuery.cookie(
                                 'analyse_info_seen',
@@ -177,7 +177,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                         layerList.find('ul').append(layerListRadioElement);
 
                         if (layerList.find("input")[0].checked !== true) {
-                            layerList.find("input").attr('checked', true);
+                            layerList.find("input").prop('checked', true);
                             layersWithFeatures = _.map(WFSSelections, 'layerId');
                             me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerId);
                         }

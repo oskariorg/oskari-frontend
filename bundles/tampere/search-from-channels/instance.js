@@ -858,7 +858,7 @@ Oskari.clazz.define(
                     me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                     feature = format.readFeature(value.GEOMETRY);
                     source.addFeatures([feature]);
-                    olLayer.setSource(source);                   
+                    olLayer.setSource(source);
                     isSelected = true;
                 }else{
                     var row = tableBody.find("tr[name="+value.id+"]");
@@ -867,7 +867,7 @@ Oskari.clazz.define(
                         me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                         feature = format.readFeature(value.GEOMETRY);
                         source.addFeatures([feature]);
-                        olLayer.setSource(source);   
+                        olLayer.setSource(source);
                         isSelected = true;
                     }
                 }
@@ -875,12 +875,12 @@ Oskari.clazz.define(
             });
 
             if(isSelected){
-                      
+
             bounds = source.getExtent();
             center = ol.extent.getCenter(bounds);
 
             var topLeft =  ol.extent.getTopLeft(bounds);
-            var bottomRight =  ol.extent.getBottomRight(bounds); 
+            var bottomRight =  ol.extent.getBottomRight(bounds);
 
             var zoom = {
                 top: topLeft[1],
@@ -889,7 +889,7 @@ Oskari.clazz.define(
                 bottom: bottomRight[1]
             }
 
-            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center[0], center[1], zoom);            
+            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center[0], center[1], zoom);
             me.sandbox.request(me, mapmoveRequest);
 
             }else{
@@ -990,7 +990,7 @@ Oskari.clazz.define(
             var options = {
                 hidePrevious: true
             };
-            
+
             var rN = 'InfoBox.ShowInfoBoxRequest',
                 rB = sandbox.getRequestBuilder(rN),
                 request = rB(
@@ -1099,7 +1099,7 @@ Oskari.clazz.define(
                 newCheckboxDef = newCheckbox.find(':checkbox');
                 newCheckboxDef.attr('name', "channelChkBox");
                 newCheckboxDef.attr('value', dataField.id);
-                newCheckboxDef.attr('checked', !!dataField.isDefault);
+                newCheckboxDef.prop('checked', !!dataField.isDefault);
                 newCheckbox.find('label.searchFromChannelsTypeText').append(text);
                 newRow.find('.checkboxes').append(newCheckbox);
 

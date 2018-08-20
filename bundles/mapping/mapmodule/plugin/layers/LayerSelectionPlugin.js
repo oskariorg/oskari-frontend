@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             input = baseLayersDiv.find('input[value=' + layerId + ']');
-            input.attr('checked', 'checked');
+            input.prop('checked', true);
             this._changedBaseLayer();
         },
 
@@ -241,11 +241,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             input.attr('value', layer.getId());
 
-            if (layer.isVisible()) {
-                input.attr('checked', true);
-            } else {
-                input.attr('checked', false);
-            }
+            input.prop('checked', !!layer.isVisible());
             this._bindCheckbox(input, layer);
 
             div.find('span').before(input);
@@ -279,11 +275,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             input = div.find('input');
             if (blnVisible) {
                 if (!input.is(':checked')) {
-                    input.attr('checked', 'checked');
+                    input.prop('checked', true);
                 }
             } else {
                 if (input.is(':checked')) {
-                    input.removeAttr('checked');
+                    input.prop('checked', false);
                 }
             }
         },
@@ -403,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 header.append(myLoc.chooseDefaultBaseLayer);
                 baseLayersDiv.parent().find('.baseLayerHeader').remove();
                 baseLayersDiv.before(header);
-                input.attr('checked', 'checked');
+                input.prop('checked', true);
                 baseLayersDiv.show();
             }
             baseLayersDiv.append(div);
@@ -425,9 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             input.remove();
             input = this.templates.checkbox.clone();
             input.attr('value', layer.getId());
-            if (isActive) {
-                input.attr('checked', 'checked');
-            }
+            input.attr('checked', !!isActive);
             this._bindCheckbox(input, layer);
             div.find('span').before(input);
 
@@ -451,10 +445,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 var checked = baseLayers.find('input:checked');
                 if (checked.length === 0) {
                     // if the selected one was removed -> default to first
-                    jQuery(baseLayers.find('input').get(0)).attr(
-                        'checked',
-                        'checked'
-                    );
+                    jQuery(baseLayers.find('input').get(0)).prop('checked', true);
                     // notify baselayer change
                     this._changedBaseLayer();
                 }

@@ -40,7 +40,7 @@ function(layer, sandbox, localization) {
     },
     setSelected : function(isSelected) {
         // checking since we dont assume param is boolean
-        this.ui.find('input').attr('checked', (isSelected == true));
+        this.ui.find('input').prop('checked', (isSelected == true));
     },
 
     /**

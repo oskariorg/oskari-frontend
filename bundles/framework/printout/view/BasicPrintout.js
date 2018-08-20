@@ -218,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     'class': 'printout_radiolabel'
                 });
                 if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
+                    toolContainer.find('input').prop('checked', true);
                 }
                 contentPanel.append(toolContainer);
                 toolContainer.find('input').attr({
@@ -271,7 +271,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     'class': 'printout_radiolabel'
                 });
                 if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
+                    toolContainer.find('input').prop('checked', true);
                 }
                 format.append(toolContainer);
                 toolContainer.find('input').attr({
@@ -301,10 +301,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             /* CONTENT options from localisations files */
             me.contentOptions.forEach(function (dat) {
                 var opt = me.template.option.clone();
-                opt.find('input').attr({
-                    'id': dat.id,
-                    'checked': dat.checked
-                });
+                opt.find('input').attr('id', dat.id).prop('checked', !!dat.checked);
                 opt.find('label').html(dat.label).attr({
                     'for': dat.id,
                     'class': 'printout_checklabel'
@@ -364,9 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     'for': option.key,
                     'class': 'printout_radiolabel'
                 });
-                if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
+                toolContainer.find('input').prop('checked', !!option.selected);
                 contentPanel.append(toolContainer);
                 toolContainer.find('input').attr({
                     'value': key,
@@ -647,7 +642,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             if (!size) {
                 var firstSizeOption = container.find('input[name=size]').first();
-                firstSizeOption.attr('checked', 'checked');
+                firstSizeOption.prop('checked', true);
                 selections.pageSize = firstSizeOption.val();
             }
 

@@ -613,9 +613,9 @@ Oskari.clazz.define(
                 me._progressSpinner.start();
                 fragment.find("[name=id]").val(channel.id);
                 fragment.find("[name=choose-wfs-layer]").val(channel.wfsId).trigger("change");
-                fragment.find("[name=details-default]").attr('checked', channel.is_default);
+                fragment.find("[name=details-default]").prop('checked', channel.is_default);
                 // TODO: setup config properly
-                fragment.find("[name=details-isaddress]").attr('checked', !!channel.config.handler);
+                fragment.find("[name=details-isaddress]").prop('checked', !!channel.config.handler);
                 $.each(channel.locale, function(lang, text) {
                     fragment.find("[name=details-topic-"+lang+"]").val(text.name);
                     fragment.find("[name=details-desc-"+lang+"]").val(text.desc);

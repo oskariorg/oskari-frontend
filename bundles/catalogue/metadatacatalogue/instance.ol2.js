@@ -484,7 +484,7 @@ Oskari.clazz.define(
                         values = [];
                         for (j = 0; j < checkboxDefs.length; j += 1) {
                             checkboxDef = jQuery(checkboxDefs[j]);
-                            if (checkboxDef.is(':checked')) {
+                            if (checkboxDef.prop('checked')) {
                                 values.push(checkboxDef.val());
                             }
                         }
