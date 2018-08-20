@@ -392,7 +392,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         bindEnterKey: function (callback) {
             var me = this,
                 input = this._field.find('input');
-            input.keypress(function (event) {
+            input.on('keypress', function (event) {
                 if (me._isEnterPress(event)) {
                     callback(event);
                 }
@@ -409,7 +409,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             var me = this,
                 input = this._field.find('input');
 
-            input.keyup(function (event) {
+            input.on('keyup', function (event) {
                 callback(event);
             });
         },
@@ -424,7 +424,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             var me = this,
                 input = this._field.find('input');
 
-            input.keydown(function (event) {
+            input.on('keydown', function (event) {
                 if (me._isDownPress(event)) {
                     event.preventDefault();
                     callback(event);
@@ -441,7 +441,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
 
             // all set, ready to bind requests
             var input = this._field.find('input');
-            input.blur(function () {
+            input.on('blur', function () {
                 callback();
             });
 
@@ -459,7 +459,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             if (!blnImmediate) {
                 input.on('change', callback);
             } else {
-                input.keyup(callback);
+                input.on('keyup', callback);
             }
         },
         bindAutocompleteSelect: function (callback) {
@@ -520,10 +520,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             }
             // all set, ready to bind requests
             input = this._field.find('input');
-            input.focus(function () {
+            input.on('focus', function () {
                 sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             });
-            input.blur(function () {
+            input.on('blur', function () {
                 sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
         },

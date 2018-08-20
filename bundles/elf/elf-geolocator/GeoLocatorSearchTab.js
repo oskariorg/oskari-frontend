@@ -536,7 +536,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     select: function(event, ui) {
                         container.find('#countries').attr('country',ui.item.id);
                     }
-                }).focus(function (event) {
+                }).on('focus', function (event) {
                       event.preventDefault();
                       container.find('#countries').val('');
                       container.find('#countries').autocomplete('search', '');

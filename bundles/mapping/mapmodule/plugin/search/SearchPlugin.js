@@ -197,7 +197,7 @@ Oskari.clazz.define(
                 content = el || me.getElement();
 
             // Toggle map keyboard controls so the user can use arrowkeys in the search...
-            me._inputField.focus(function() {
+            me._inputField.on('focus', function() {
                 reqBuilder = sandbox.getRequestBuilder(
                     'DisableMapKeyboardMovementRequest'
                 );
@@ -206,7 +206,7 @@ Oskari.clazz.define(
                 }
                 //me._checkForKeywordClear();
             });
-            me._inputField.blur(function() {
+            me._inputField.on('blur', function() {
                 reqBuilder = sandbox.getRequestBuilder(
                     'EnableMapKeyboardMovementRequest'
                 );
@@ -216,7 +216,7 @@ Oskari.clazz.define(
                 //me._checkForKeywordInsert();
             });
 
-            me._inputField.keypress(function(event) {
+            me._inputField.on('keypress', function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._checkForEnter(event);
                 }

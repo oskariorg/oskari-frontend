@@ -94,7 +94,7 @@ Oskari.clazz.define(
                 '  <div class="icon-close"></div>' +
                 '</div>'
             );
-            me.templates.search.find('input').keypress(
+            me.templates.search.find('input').on('keypress',
                 function (event) {
                     if (event.keyCode === 10 || event.keyCode === 13) {
                         me._filterList(event, me);
