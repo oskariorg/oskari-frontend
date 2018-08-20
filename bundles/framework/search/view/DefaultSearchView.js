@@ -383,7 +383,7 @@ Oskari.clazz.define(
             _.each(locations, function(row) {
                 var resultRow = me.__templates.resultTableRow(row);
                 resultRow = jQuery(resultRow);
-                resultRow.find('a').click(function() {
+                resultRow.find('a').on('click', function() {
                     me._resultClicked(row);
                     return false;
                 });

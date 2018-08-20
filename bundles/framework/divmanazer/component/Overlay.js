@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         followResizing: function (useWindow) {
             var me = this;
             if (useWindow) {
-                jQuery(window).resize(function () {
+                jQuery(window).on('resize', function () {
                     me.resize();
                 });
             } else {

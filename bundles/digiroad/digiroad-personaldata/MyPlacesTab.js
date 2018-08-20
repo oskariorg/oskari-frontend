@@ -293,7 +293,7 @@ function(instance, localization) {
             link.append(linkIcon);
 
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._showPlace(data.geometry, me.restrictionsId);
                 return false;
             });

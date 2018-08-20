@@ -101,7 +101,7 @@ Oskari.clazz.define(
                     }
                 }
             );
-            me.templates.search.find('div.icon-close').click(
+            me.templates.search.find('div.icon-close').on('click',
                 function (event) {
                     jQuery(event.target)
                         .parent()
@@ -115,7 +115,7 @@ Oskari.clazz.define(
             );
             // jQuery doesn't clone handlers that aren't created with jQuery,
             // so we have to do this with jQuery...
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._filterList(event, me);
                 }
@@ -126,7 +126,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Button'
             );
             btn.setTitle(me._getLocalization('clear-marks-from-map'));
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._removeFeaturesFromMap(); //'MUSTACHE-ONPRINT', null, null
                     me.state.mustachePrintJSONarray = [];
@@ -160,7 +160,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             btn.addClass('show-tag-on-map primary');
             btn.setTitle(me._getLocalization('show-tagpipe-onmap'));
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     var target = jQuery(event.target),
                     item = target.parents('li'),
@@ -178,7 +178,7 @@ Oskari.clazz.define(
 
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
             btn.setName('edit');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._openForm(event, me);
                 }
@@ -617,7 +617,7 @@ Oskari.clazz.define(
 
             //calculate certain values into inputs
             if(me.state.calculateTagTypes.indexOf(tagType[0]) > -1){
-                form.find('.tag-pipe-calculate-btn').click(function(e) {
+                form.find('.tag-pipe-calculate-btn').on('click', function(e) {
                     e.preventDefault();
                     form.find("[name=tag-low-tag-height]").val(me._calculateTagHeight(form, tagType));
                     form.find("[name=tag-barrage-height]").val(me._calculateBarrageHeight(form, tagType));
@@ -646,7 +646,7 @@ Oskari.clazz.define(
 
             btn.setTitle(me._getLocalization('add_mustache_to_map'));
             btn.addClass("add-mustache-to-map start-mode");
-            jQuery(btn.getElement()).click(function (e) {
+            jQuery(btn.getElement()).on('click', function (e) {
                     var el = jQuery(this);
                     e.preventDefault();
 
@@ -690,7 +690,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.buttons.DeleteButton'
             );
             btn.addClass('delete-tagpipe hidden');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._deleteTagPipe(event, me);
                 }
@@ -699,7 +699,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.CancelButton'
             );
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._closeForm(jQuery(event.target).parents('form'));
                     me.state.mustacheActive = false;

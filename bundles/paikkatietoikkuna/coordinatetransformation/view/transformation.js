@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 show: this.loc('actions.showMarkers'),
                 fileexport: this.loc('actions.export')
             });
-                                                            
+
             var wrapper = this._template.wrapper.clone();
             var systems = this._template.systems.clone();
             if ( this.sourceSelect.getElement() ) {
@@ -237,7 +237,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
          */
         handleRadioButtons: function () {
             var me = this;
-            jQuery('input[type=radio][name=load]').click(function(evt) {
+            jQuery('input[type=radio][name=load]').on('click', function(evt) {
                 if (me.sourceSelection !== this.value && me.dataHandler.hasInputCoords()){
                     var selectCb = function(){
                         jQuery(evt.target).prop("checked", true);
@@ -472,4 +472,3 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         }
     }
 );
- 

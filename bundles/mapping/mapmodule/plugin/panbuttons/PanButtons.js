@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     me.getMapModule().panMapByPixels(0, 100, true);
                 }
             });
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     var radius = Math.round(0.5 * panbuttonDivImg[0].width),
                         pbOffset = panbuttonDivImg.offset(),

@@ -469,7 +469,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     }
                     window.setTimeout(
                         function () {
-                            tile.click(tileClick);
+                            tile.on('click', tileClick);
                         },
                         500
                     );
@@ -478,7 +478,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             title.append(plugin.getTitle());
             //status = tile.children('.oskari-tile-status');
 
-            tile.click(tileClick);
+            tile.on('click', tileClick);
 
             plugin.setEl(tile.get());
 
@@ -510,42 +510,42 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 help: flyouttools.children('.oskari-flyouttool-help')
             };
 
-            toolage.detach.click(function () {
+            toolage.detach.on('click', function () {
                 me.getSandbox().postRequestByName(
                     'userinterface.UpdateExtensionRequest',
                     [extension, 'detach']
                 );
 
             });
-            toolage.attach.click(function () {
+            toolage.attach.on('click', function () {
                 me.getSandbox().postRequestByName(
                     'userinterface.UpdateExtensionRequest',
                     [extension, 'attach']
                 );
 
             });
-            toolage.minimize.click(function () {
+            toolage.minimize.on('click', function () {
                 me.getSandbox().postRequestByName(
                     'userinterface.UpdateExtensionRequest',
                     [extension, 'minimize']
                 );
 
             });
-            toolage.restore.click(function () {
+            toolage.restore.on('click', function () {
                 me.getSandbox().postRequestByName(
                     'userinterface.UpdateExtensionRequest',
                     [extension, 'restore']
                 );
 
             });
-            toolage.close.click(function () {
+            toolage.close.on('click', function () {
                 me.getSandbox().postRequestByName(
                     'userinterface.UpdateExtensionRequest',
                     [extension, 'close']
                 );
 
             });
-            toolage.help.click(function () {
+            toolage.help.on('click', function () {
                 me.getSandbox().postRequestByName(
                     'userguide.ShowUserGuideRequest',
                     [{

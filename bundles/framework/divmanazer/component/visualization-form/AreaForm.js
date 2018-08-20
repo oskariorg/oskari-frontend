@@ -236,7 +236,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(styleBtnContainer);
                 }
                 // FIXME create function outside loop
-                styleBtnContainer.click(function () {
+                styleBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('lineStyle', newValue);
                     me.values.lineStyle = newValue;
@@ -255,7 +255,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(cornerBtnContainer);
                 }
                 // FIXME create function outside loop
-                cornerBtnContainer.click(function () {
+                cornerBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('lineCorner', newValue);
                     me.values.lineCorner = newValue;
@@ -305,7 +305,7 @@ Oskari.clazz.define(
                         id = '0' + id;
                     }
                     colorCell.attr('id', id);
-                    colorCell.click(function () {
+                    colorCell.on('click', function () {
                         var cellIndex = parseInt(this.id.substring(0, 2), 10);
                         var colorType = parseInt(this.id.substring(2, 3), 10);
                         if (jQuery('#color-checkbox-' + colorType).prop('checked')) {
@@ -461,7 +461,7 @@ Oskari.clazz.define(
             // remove color links
             ['line', 'fill'].forEach(function(type, index){
                 content = dialogContent.find('.remove-color-' + type);
-                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).click(function(e){
+                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).on('click', function(e){
                     e.preventDefault();
 
                     if (me.activeColorCell[index] > -1) {
@@ -497,7 +497,7 @@ Oskari.clazz.define(
                 if (i == me.values.fillStyle) {
                     this._styleSelectedButton(fillBtnContainer);
                 }
-                fillBtnContainer.click(function () {
+                fillBtnContainer.on('click', function () {
                     var newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
                     if (me.values.fillStyle === newValue) {
                         me.values.fillStyle = -1;

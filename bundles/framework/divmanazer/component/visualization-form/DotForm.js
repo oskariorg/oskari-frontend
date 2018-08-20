@@ -182,7 +182,7 @@ Oskari.clazz.define(
                 btnContainer.attr('id', i + 'marker');
                 btnContainer.attr('data-button-id', i);
 
-                btnContainer.click(function () {
+                btnContainer.on('click', function () {
                     btnHandler(parseInt(jQuery(this).attr('data-button-id')));
                 });
                 content.append(btnContainer);
@@ -243,7 +243,7 @@ Oskari.clazz.define(
                     id = '0' + id;
                 }
                 colorCell.attr('id', id);
-                colorCell.click(function () {
+                colorCell.on('click', function () {
                     if (jQuery('.color-source').prop('checked')) {
                         jQuery('.color-source').prop('checked', false);
                         jQuery('input.custom-color').prop('disabled', true);

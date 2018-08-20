@@ -177,7 +177,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             if (layer.getMetadataIdentifier() || subLmeta) {
                 layerInfo = tools.find('div.layer-info');
                 layerInfo.addClass('icon-info');
-                layerInfo.click(function () {
+                layerInfo.on('click', function () {
                     rn = 'catalogue.ShowMetadataRequest';
                     uuid = layer.getMetadataIdentifier();
                     additionalUuids = [];
@@ -211,12 +211,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             layerDiv.find('input').attr('id', 'oskari_layerselector2_layerlist_checkbox_layerid_' + layer.getId());
             layerDiv.find('.layer-title')
                 .append(layer.getName())
-                .click(function(){
+                .on('click', function(){
                     layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
                 })
                 .toggleClass('not-supported', !layer.isSupported(sandbox.getMap().getSrsName()));
 
-            layerDiv.find('input').change(function () {
+            layerDiv.find('input').on('change', function () {
                 checkbox = jQuery(this);
                 if (checkbox.is(':checked')) {
                     sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
@@ -245,7 +245,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     elBackendStatus.attr('title', tooltip);
                 }
             }
-            elBackendStatus.click(function () {
+            elBackendStatus.on('click', function () {
                 mapLayerId = layer.getId();
                 sandbox.postRequestByName('ShowMapLayerInfoRequest', [
                     mapLayerId

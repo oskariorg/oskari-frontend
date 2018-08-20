@@ -195,7 +195,7 @@ Oskari.clazz.define(
                     'title': loc.content.features.tooltips[tool],
                     'id': 'oskari_analysis_analyse_view_analyse_content_features_' + tool
                 });
-                toolDiv.click(function () {
+                toolDiv.on('click',function () {
                     //if selection tool is left active, deactivate it
                     me.deactivateSelectTools();
 
@@ -246,7 +246,7 @@ Oskari.clazz.define(
                 //disabled by default
                 drawFilterDiv.addClass('disabled');
                 drawFilterDiv.attr('title', me.loc.content.drawFilter.tooltip[drawFilter]);
-                drawFilterDiv.click(function () {
+                drawFilterDiv.on('click', function () {
                     //if selection tool is left active, deactivate it
                     me.deactivateSelectTools();
 

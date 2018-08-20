@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
             });
 
             saveBtn.addClass('primary');
-            saveBtn.click(function() {
+            saveBtn.on('click', function() {
                 var params = me._getFieldValues();
                 if (!params) {
                     me._showMessage(me.locale.errorPopup.title, me.locale.errorPopup.formValidationFailed);
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                     }
             });
 
-            cancelBtn.click(function() {
+            cancelBtn.on('click', function() {
                 me._resetForm();
                 me.instance.sandbox.postRequestByName(
                     'userinterface.UpdateExtensionRequest',

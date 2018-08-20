@@ -482,7 +482,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             me.progressSpinner.insertTo(previewContent);
 
             var previewImgDiv = previewContent.find('img');
-            previewImgDiv.click(function () {
+            previewImgDiv.on('click', function () {
                 me.showFullScaleMapPreview();
             });
             var previewSpan = previewContent.find('span');

@@ -437,7 +437,7 @@ Oskari.clazz.define(
             me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,true);
             advancedContainer.hide();
 
-            moreLessLink.click(function () {
+            moreLessLink.on('click', function () {
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
                     // open advanced/toggle link text
                     moreLessLink.html(me.getLocalization('showLess'));
@@ -699,7 +699,7 @@ Oskari.clazz.define(
             );
             btn.setTitle(me.getLocalization("show-all-on-map"));
             btn.addClass('show-on-map');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     jQuery(this).addClass('active');
                     me._zoomMapToResults(result, true, resultList.find('table.search_result'));
@@ -713,7 +713,7 @@ Oskari.clazz.define(
             );
             btn.setTitle(me.getLocalization("show-selected-on-map"));
             btn.addClass('show-on-map');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     jQuery(this).addClass('active');
                     me._zoomMapToResults(result, false, resultList.find('table.search_result'));
@@ -725,7 +725,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Button'
             );
             btn.setTitle(me.getLocalization("back-to-search"));
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                    me.toggleParentFlyout(me.optionPanel, searchResultWindow, mapDiv);
                 }

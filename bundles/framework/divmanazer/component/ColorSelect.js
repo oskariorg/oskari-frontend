@@ -149,7 +149,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             var options = me._selection.find('.oskari-color-option');
             options.off('click');
             options.on('click', handlers.colorClickHandler);
-            options.hover(handlers.hoverIn, handlers.hoverOut);
+            options.on('mouseenter', handlers.hoverIn);
+            options.on('mouseleave', handlers.hoverOut);
 
             me._element.find('.color-selection-arrow').off('click');
             me._element.find('.color-selection-arrow').on('click', handlers.selectHandler);

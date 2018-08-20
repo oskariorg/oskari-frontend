@@ -310,7 +310,7 @@ function() {
             if ('custom' === colours[i].val) {
                 customColourButton = jQuery('<button>' + me.__instance._localization.BasicView.layout.fields.colours.buttonLabel + '</button>');
 
-                customColourButton.click(function () {
+                customColourButton.on('click', function () {
                     colourInput.find('input[type=radio]').prop('checked', true);
                     me._createCustomColoursPopup();
                 });
@@ -319,7 +319,7 @@ function() {
         }
 
         // Things to do when the user changes the colour scheme:
-        content.find('input[name=colour]').change(function () {
+        content.find('input[name=colour]').on('change', function () {
             selectedColour = me._getItemByCode(jQuery(this).val(), me.initialValues.colours);
             // change the preview gfi
             me._changeGfiColours(selectedColour, content);

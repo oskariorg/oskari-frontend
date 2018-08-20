@@ -537,7 +537,7 @@ Oskari.clazz.define(
             // Link to advanced search
             var moreLessLink = this.templates.moreLessLink.clone();
             moreLessLink.html(me.getLocalization('showMore'));
-            moreLessLink.click(function () {
+            moreLessLink.on('click', function () {
                 var advancedContainer = metadataCatalogueContainer.find('div.advanced');
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
                     // open advanced/toggle link text
@@ -801,14 +801,14 @@ Oskari.clazz.define(
             var showLink = resultHeader.find('.showLink');
             showLink.hide();
             showLink.html(me.getLocalization('showSearch'));
-            showLink.click(function () {
+            showLink.on('click', function () {
                 jQuery('table.metadataSearchResult tr').show();
                 showLink.hide();
                 resultHeader.find('.filter-link').show();
             });
             var modifyLink = resultHeader.find('.modifyLink');
             modifyLink.html(me.getLocalization('modifySearch'));
-            modifyLink.click(function () {
+            modifyLink.on('click', function () {
                 resultPanel.empty();
                 optionPanel.show();
                 me._removeFeaturesFromMap();
@@ -1112,7 +1112,7 @@ Oskari.clazz.define(
                         if(row.geom && row.geom != null) {
                             jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
                             jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
-                            jQuery(cells[3]).find('div.showBbox').click(function () {
+                            jQuery(cells[3]).find('div.showBbox').on('click', function () {
                                 // If show info area is active, remove geom from map
                                 if(jQuery(this).hasClass('icon-info-area-active')){
                                     me._removeFeaturesFromMap();
@@ -1140,7 +1140,7 @@ Oskari.clazz.define(
                         // Show layer info icon
                         jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
                         jQuery(cells[4]).attr('title', me.resultHeaders[3].tooltip);
-                        jQuery(cells[4]).find('div.layerInfo').click(function () {
+                        jQuery(cells[4]).find('div.layerInfo').on('click', function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [{
                                 uuid: row.id
@@ -1150,7 +1150,7 @@ Oskari.clazz.define(
                         // Show remove icon
                         jQuery(cells[5]).addClass(me.resultHeaders[4].prop);
                         jQuery(cells[5]).attr('title', me.resultHeaders[4].tooltip);
-                        jQuery(cells[5]).find('div.resultRemove').click(function () {
+                        jQuery(cells[5]).find('div.resultRemove').on('click', function () {
                             jQuery('table.metadataSearchResult tr.res' + i).hide();
                             jQuery('div.metadataResultHeader a.showLink').show();
                             me._removeFeaturesFromMap('id', row.id);
@@ -1205,7 +1205,7 @@ Oskari.clazz.define(
             }
 
             // Click binding
-            layerLink.click(function () {
+            layerLink.on('click', function () {
                 visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
                 // Hide layer
                 if (jQuery(this).html() === hideText) {

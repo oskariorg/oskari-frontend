@@ -390,7 +390,7 @@ Oskari.clazz.define(
             // append this indicator
             indicatorCont.append(infoIcon);
             // show metadata
-            infoIcon.click(function(e) {
+            infoIcon.on('click', function(e) {
                 var desc = me.templates.description.clone(),
                     dialog = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'

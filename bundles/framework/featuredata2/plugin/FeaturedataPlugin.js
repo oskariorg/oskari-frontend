@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             me._loc = Oskari.getLocalization('FeatureData2', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
             link.html(me._loc.title);
             me._bindLinkClick(el);
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 event.stopPropagation();
             });
 

@@ -195,7 +195,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(styleBtnContainer);
                 }
                 // FIXME create function outside loop
-                styleBtnContainer.click(function () {
+                styleBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
                     me._selectButton('style', newValue);
                     me.values.style = newValue;
@@ -214,7 +214,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(capBtnContainer);
                 }
                 // FIXME create function outside loop
-                capBtnContainer.click(function () {
+                capBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('cap', newValue);
                     me.values.cap = newValue;
@@ -233,7 +233,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(cornerBtnContainer);
                 }
                 // FIXME create function outside loop
-                cornerBtnContainer.click(function () {
+                cornerBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('corner', newValue);
                     me.values.corner = newValue;
@@ -272,7 +272,7 @@ Oskari.clazz.define(
                     id = '0' + id;
                 }
                 colorCell.attr('id', id);
-                colorCell.click(function () {
+                colorCell.on('click', function () {
                     if (jQuery('.color-source').prop('checked')) {
                         jQuery('.color-source').prop('checked', false);
                         jQuery('input.custom-color').prop('disabled', true);

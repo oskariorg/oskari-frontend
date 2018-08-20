@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             accordion.addPanel(methodPanel);
             accordion.addPanel(settingsPanel);
             accordion.addPanel(outputPanel);
-            accordion.getContainer().find('.header-icon-info').click(
+            accordion.getContainer().find('.header-icon-info').on('click',
                 function (evt) {
                     evt.preventDefault();
                     return false;
@@ -468,7 +468,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'id': option.id
                 });
                 toolContainer.find('input').change(closureMagic(option));
-                toolContainer.find('input').click(clickMagic(option));
+                toolContainer.find('input').on('click', clickMagic(option));
 
             }
 
@@ -1113,7 +1113,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     };
 
                     icons.addClass('analyse-temp-feature');
-                    icons.click(removeLayer(datum.id));
+                    icons.on('click', removeLayer(datum.id));
                 } else {
                     removeLayer = function (id) {
                         return function () {
@@ -1126,7 +1126,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                     me.updateFilterIcon(datum.layerId, icons);
 
-                    icons.find('div.icon-close').click(removeLayer(datum.id));
+                    icons.find('div.icon-close').on('click', removeLayer(datum.id));
                     icons.find('.layer-icon').addClass('layer-' + datum.icon);
                 }
 

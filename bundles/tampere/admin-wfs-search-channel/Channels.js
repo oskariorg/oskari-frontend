@@ -41,7 +41,7 @@ Oskari.clazz.define(
                     }
                 }
             );
-            me.templates.search.find('div.icon-close').click(
+            me.templates.search.find('div.icon-close').on('click',
                 function (event) {
                     jQuery(event.target)
                         .parent()
@@ -55,7 +55,7 @@ Oskari.clazz.define(
             );
             // jQuery doesn't clone handlers that aren't created with jQuery,
             // so we have to do this with jQuery...
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._filterList(event, me);
                 }
@@ -109,7 +109,7 @@ Oskari.clazz.define(
                 }
             });
 
-            me.templates.form.find(".remove--param").click(function(event){
+            me.templates.form.find(".remove--param").on('click', function(event){
                 jQuery(this).parent().remove();
                 event.preventDefault;
             });
@@ -137,7 +137,7 @@ Oskari.clazz.define(
             );
             btn.setTitle(me._getLocalization("new-params-btn"));
             btn.addClass('btn--center new-params-btn');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     if(jQuery(this).parents('form').find("input[name=details-isaddress]").is(":checked") && jQuery(this).parents('form').find("select[name=choose-param-for-search]").length == 2){
                         me._openPopup(
@@ -165,7 +165,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.buttons.DeleteButton'
             );
             btn.addClass('delete--channel hidden');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._deleteChannel(event, me);
                 }
@@ -174,7 +174,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.CancelButton'
             );
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._closeForm(jQuery(event.target).parents('form'));
                 }
@@ -196,7 +196,7 @@ Oskari.clazz.define(
             );
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
             btn.setName('edit');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._openForm(event, me);
                 }

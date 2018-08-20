@@ -135,7 +135,7 @@ function(layer, sandbox, localization) {
 
         if(layer.getMetadataIdentifier()) {
             tools.find('div.layer-info').addClass('icon-info');
-            tools.find('div.layer-info').click(function() {
+            tools.find('div.layer-info').on('click', function() {
                   var rn = 'catalogue.ShowMetadataRequest';
                   var uuid = layer.getMetadataIdentifier();
                   sandbox.postRequestByName(rn, [
@@ -162,7 +162,7 @@ function(layer, sandbox, localization) {
          * backend status
          */
         var elBackendStatus = tools.find('.layer-backendstatus-icon');
-        elBackendStatus.click(function() {
+        elBackendStatus.on('click', function() {
             var mapLayerId = layer.getId();
             sandbox.postRequestByName('ShowMapLayerInfoRequest', [
                       mapLayerId

@@ -734,9 +734,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             };
             rows.on('click', rowClicked);
             // enable links to work normally (unbind row click on hover and rebind when mouse exits)
-            rows.find('a').hover(function () {
+            rows.find('a').on('mouseenter', function () {
                 jQuery(this).parents('tr').off('click');
-            }, function () {
+            });
+            rows.find('a').on('mouseleave', function () {
                 jQuery(this).parents('tr').on('click', rowClicked);
             });
 
@@ -773,14 +774,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector.append(columnSelector);
 
             // Open or close the checkbox dropdown list
-            me.visibleColumnSelector.click(function () {
+            me.visibleColumnSelector.on('click', function () {
                 if (columnSelector.css('visibility') !== 'hidden') {
                     columnSelector.css('visibility', 'hidden');
                 } else {
                     columnSelector.css('visibility', 'visible');
                 }
             });
-            columnSelectorClose.click(function (e) {
+            columnSelectorClose.on('click', function (e) {
                 e.stopPropagation();
                 columnSelector.css('visibility', 'hidden');
             });
@@ -838,7 +839,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
             columnSelectorList.attr('class', 'column-selector-list');
             columnSelector.append(columnSelectorList, columnSelectorClose);
-            columnSelectorClose.click(function (e) {
+            columnSelectorClose.on('click', function (e) {
                 e.stopPropagation();
                 columnSelector.css('visibility', 'hidden');
             });
@@ -857,7 +858,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             featureTable.css('cursor', 'e-resize');
 
             // Start resizing
-            featureTable.mousedown(function (e) {
+            featureTable.on('mousedown', function (e) {
                 start = jQuery(this);
                 pressed = true;
                 startX = e.pageX;
@@ -870,14 +871,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
 
             // Resize when mouse moves
-            jQuery(document).mousemove(function (e) {
+            jQuery(document).on('.mousemove', function (e) {
                 if (pressed) {
                     jQuery(start).width(startWidth + (e.pageX - startX));
                 }
             });
 
             // Stop resizing
-            jQuery(document).mouseup(function () {
+            jQuery(document).on('mouseup', function () {
                 if (pressed) {
                     jQuery(start).removeClass('resizing');
                     pressed = false;

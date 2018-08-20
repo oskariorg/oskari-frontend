@@ -148,7 +148,7 @@ Oskari.clazz.define(
             link.html(me._loc.refresh);
             el.attr('title', me._loc.refresh_title);
             me._bindLinkClick(link);
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 event.stopPropagation();
             });
             el.hide();

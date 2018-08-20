@@ -55,7 +55,7 @@ Oskari.clazz.define(
 
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
 
-            el.click(function () {
+            el.on('click', function () {
                 me._setupLocation();
             });
 
@@ -79,7 +79,7 @@ Oskari.clazz.define(
                 me.getElement().off('click');
             } else {
                 // enable icon
-                me.getElement().click(function () {
+                me.getElement().on('click', function () {
                     me._setupLocation();
                 });
             }

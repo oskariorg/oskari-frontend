@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             sliderEl.attr('id', 'pzb-slider-' + me.getName());
 
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     event.stopPropagation();
                 }
