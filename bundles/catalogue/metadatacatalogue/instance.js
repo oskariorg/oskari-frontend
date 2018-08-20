@@ -651,7 +651,7 @@ Oskari.clazz.define(
                         newCheckboxDef.attr('name', dataField.field);
                         newCheckboxDef.attr('value', value.val);
                         newCheckbox.find('label.metadataTypeText').append(text);
-                        newCheckbox.change(checkboxChange);
+                        newCheckbox.on('change', checkboxChange);
                         newRow.find('.checkboxes').append(newCheckbox);
                     }
                     // Dropdown list
@@ -673,7 +673,7 @@ Oskari.clazz.define(
                         newOption.text(text);
                         dropdownDef.append(newOption);
                     }
-                    newDropdown.find('.metadataDef').change(checkboxChange);
+                    newDropdown.find('.metadataDef').on('change', checkboxChange);
                     newRow.append(newDropdown);
                 }
                 // Conditional visibility

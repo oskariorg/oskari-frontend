@@ -245,7 +245,7 @@ Oskari.clazz.define(
             // Line width
             content = dialogContent.find('div.width');
             var widthSpinner = me.templateWidthValue.clone();
-            widthSpinner.change(function () {
+            widthSpinner.on('change', function () {
                 var newValue = parseInt(widthSpinner.val(), 10);
                 if (!isNaN(newValue)) {
                     me.values.width = newValue;
@@ -313,7 +313,7 @@ Oskari.clazz.define(
             if (me.activeColorCell === -1) {
                 colorCheckbox.prop('checked', true);
             }
-            colorCheckbox.change(function () {
+            colorCheckbox.on('change', function () {
                 jQuery('input.custom-color').prop('disabled', !this.checked);
                 var cell = me.activeColorCell.toString();
                 if (me.activeColorCell < 10) {
@@ -381,7 +381,7 @@ Oskari.clazz.define(
                 dialogContent.find('input.custom-color').prop('disabled', false);
             }
 
-            dialogContent.find('.custom-color').change(function () {
+            dialogContent.find('.custom-color').on('change', function () {
                 var values = [],
                     i,
                     intValue;

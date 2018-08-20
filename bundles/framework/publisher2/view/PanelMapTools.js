@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
 
                 contentPanel.append(ui);
 
-                ui.find('input').change(function() {
+                ui.find('input').on('change', function() {
                     var enabled = jQuery(this).is(':checked');
                     // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
                     tool.setEnabled(enabled);

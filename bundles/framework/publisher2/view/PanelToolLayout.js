@@ -205,7 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             for (i = 0; i < me.toolLayouts.length; i += 1) {
                 layoutContainer = me.templateLayout.clone();
                 input = layoutContainer.find('input');
-                input.val(me.toolLayouts[i]).change(changeListener);
+                input.val(me.toolLayouts[i]).on('change', changeListener);
                 // FIXME default to 0 index if activeToolLayout is not found
                 // First choice is active unless we have an active layout
                 if (me.activeToolLayout) {

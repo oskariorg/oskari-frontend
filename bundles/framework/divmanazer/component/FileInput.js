@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 input.trigger('click');
             });
 
-            input.change(function(e){
+            input.on('change', function(e){
                 me._handleFileList(e.target.files);
             });
 
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             var me = this;
             var elem = this.getElement();
             var input = elem.find('input[type="file"]');
-            input.change(function(e){
+            input.on('change', function(e){
                 me._handleFileList(e.target.files);
             });
         },

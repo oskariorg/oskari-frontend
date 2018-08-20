@@ -404,7 +404,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                         ).append(layer.getName());
                         input = layerContainer.find('input');
                         input.attr('id', 'checkbox' + layer.getId());
-                        input.change(closureMagic(layer));
+                        input.on('change', closureMagic(layer));
                         contentPanel.append(layerContainer);
                     }
                 }
@@ -620,7 +620,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             var input = tools.find('input.baselayer');
             input.attr('id', 'checkbox' + layer.getId());
             input.prop('checked', !!isChecked);
-            input.change(closureMagic(layer));
+            input.on('change', closureMagic(layer));
 
 
             return tools;

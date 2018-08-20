@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     'name': 'size',
                     'id': option.id
                 });
-                toolContainer.find('input').change(function () {
+                toolContainer.find('input').on('change', function () {
                     // reset previous setting
                     me.sizeOptions.forEach(function (opt) {
                         opt.selected = false;
@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     'name': 'format',
                     'id': option.id
                 });
-                toolContainer.find('input').change(function () {
+                toolContainer.find('input').on('change', function () {
                     // reset previous setting
                     me.formatOptions.forEach(function (opt) {
                         opt.selected = false;
@@ -368,7 +368,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     'name': 'scale',
                     'id': key
                 });
-                toolContainer.find('input').change(function () {
+                toolContainer.find('input').on('change', function () {
                     if(option.scales) {
                         contentPanel.find('.scale-'+key).show();
                         me._updateScaleToSelected(true);
@@ -417,7 +417,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                         selection.find('select').append(el);
                     });
 
-                    selection.find('select').change(function(){
+                    selection.find('select').on('change', function(){
                         var el = jQuery(this);
                         var selectedScale = el.val();
                         me.mapmodule.zoomToScale(selectedScale, false);

@@ -316,7 +316,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         _bindCheckbox: function (input, layer) {
             var me = this;
 
-            input.change(function () {
+            input.on('change', function () {
                 var checkbox = jQuery(this),
                     isChecked = checkbox.is(':checked');
                 if (isChecked) {

@@ -147,7 +147,7 @@ function(layer, sandbox, localization) {
         // setup id
         jQuery(layerDiv).attr('layer_id', layer.getId());
         jQuery(layerDiv).find('.layer-title').append(layer.getName());
-        jQuery(layerDiv).find('input').change(function() {
+        jQuery(layerDiv).find('input').on('change', function() {
             var checkbox = jQuery(this);
             var request = null;
             if(checkbox.is(':checked')) {

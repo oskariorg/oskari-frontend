@@ -467,7 +467,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'name': 'method',
                     'id': option.id
                 });
-                toolContainer.find('input').change(closureMagic(option));
+                toolContainer.find('input').on('change', closureMagic(option));
                 toolContainer.find('input').on('click', clickMagic(option));
 
             }
@@ -584,7 +584,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'name': 'params',
                     'id': option.id
                 });
-                toolContainer.find('input[name=params]').change(
+                toolContainer.find('input[name=params]').on('change',
                     closureMagic(option)
                 );
             });
@@ -650,7 +650,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._preselectProperties(featureListList);
             featureListList
                 .find('li')
-                .change(function () {
+                .on('change', function () {
                     me._checkPropertyList(featureListList);
                 });
         },
@@ -1074,7 +1074,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 opt.find('input')
                     .attr('id', datum.id)
                     .prop('checked', datum.checked)
-                    .change(function (e) {
+                    .on('change', function (e) {
                         var selectedlayer = me._getSelectedMapLayer();
                         me._refreshFields();
                         me._modifyAnalyseName();
@@ -1374,7 +1374,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'aggre',
                         'id': option.id
                     });
-                    toolContainer.find('input').change(closureMagic(option));
+                    toolContainer.find('input').on('change', closureMagic(option));
 
                     // Disable no data, if no no data
                     if (option.id === 'oskari_analyse_NoDataCnt') {
@@ -1397,7 +1397,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 showValuesCheckbox.find('label span').append(me.loc.showValuesCheckbox);
                 contentPanel.parent().append(showValuesCheckbox);
 
-                showValuesCheckbox.find('input').change(function () {
+                showValuesCheckbox.find('input').on('change', function () {
                     if (showValuesCheckbox.find('input')[0].checked) {
                         showDataInput.prop({'checked': false, 'disabled' : true});
                     } else {
@@ -1460,7 +1460,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'aggre',
                         'id': option.id
                     });
-                    toolContainer.find('input').change(closureMagic(option));
+                    toolContainer.find('input').on('change', closureMagic(option));
                 }
 
             },
@@ -1553,7 +1553,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'intersect',
                         'id': 'intersect_' + option.id
                     }).prop('checked', optionChecked);
-                    input.change(closureMagic(option));
+                    input.on('change', closureMagic(option));
                 });
 
                 // Show spatial operator choice
@@ -1587,7 +1587,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             'name': 'spatial',
                             'id': option.id
                         });
-                        toolContainer.find('input').change(
+                        toolContainer.find('input').on('change',
                             selectSpatial(option)
                         );
                     });
@@ -1788,7 +1788,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'id': 'difference_' + option.id
                     })
                     .prop('checked', !!option.selected)
-                    .change(closureMagic(option));
+                    .on('change', closureMagic(option));
                 }
 
                 // Second layer field selection
@@ -1875,7 +1875,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var modeToolContainer = me.template.radioToolOption.clone();
                 modeToolContainer.find('input').attr({'name':'spatial_join_mode', 'value': 'oskari_analyse_normal'}).prop('checked', true);
                 modeToolContainer.find('label span').append(loc.normalMode);
-                modeToolContainer.change(function () {
+                modeToolContainer.on('change', function () {
                     _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
                         input.setAttribute('type','checkbox');
                     });
@@ -1886,7 +1886,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var modeToolContainer2 = me.template.radioToolOption.clone();
                 modeToolContainer2.find('input').attr({'name': 'spatial_join_mode', 'value': 'oskari_analyse_aggregate'});
                 modeToolContainer2.find('label span').append(loc.aggregateMode);
-                modeToolContainer2.change(function () {
+                modeToolContainer2.on('change', function () {
                     _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
                         input.setAttribute('type','radio');
                         input.disabled = false;
@@ -1919,7 +1919,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         null,
                         true
                     );
-                    featureList.find('ul li').change(function () {
+                    featureList.find('ul li').on('change', function () {
                         limitSelection(false);
                     });
                     extraParams.append(featureList);
@@ -1943,7 +1943,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             null,
                             true
                         );
-                        featureList.find('ul li').change(function () {
+                        featureList.find('ul li').on('change', function () {
                             limitSelection(false);
                         });
                         limitSelection();
@@ -1981,7 +1981,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'id': 'difference_' + option.id
                     })
                     .prop('checked', !!option.selected)
-                    .change(closureMagic(option));
+                    .on('change', closureMagic(option));
                 }
 
                 // Second layer field selection
@@ -1996,7 +1996,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         null,
                         true
                     );
-                    featureList.find('ul li').change(function () {
+                    featureList.find('ul li').on('change', function () {
                         limitSelection(false);
                     });
                 }
@@ -2039,7 +2039,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             'name': 'spatial',
                             'id': option.id
                         });
-                        toolContainer.find('input').change(
+                        toolContainer.find('input').on('change',
                             selectSpatial(option)
                         );
                     });
@@ -2371,7 +2371,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
             );
 
-            dropdown.change(aggreMagic());
+            dropdown.on('change', aggreMagic());
             columnsContainer.append(dropdown);
         },
 
@@ -3360,7 +3360,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 .find('#oskari_analyse_all')
                 .prop('disabled', false)
                 .prop('checked', true)
-                .change();
+                .trigger('change');
         },
 
         _disableParamsIfNoList: function () {
@@ -3377,7 +3377,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             paramsCont
                 .find('#oskari_analyse_none')
                 .prop('checked', true)
-                .change();
+                .trigger('change');
         },
 
         _disableAllParamsSelection: function () {
@@ -3390,7 +3390,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             paramsCont
                 .find('#oskari_analyse_select')
                 .prop('checked', true)
-                .change();
+                .trigger('change');
         },
 
         /**

@@ -103,7 +103,7 @@ Oskari.clazz.define(
                 me.templates.form.find('.details--wrapper').append(me.templates.form.detailinputs);
             });
 
-            me.templates.form.find('input[name=details-isaddress]').change(function() {
+            me.templates.form.find('input[name=details-isaddress]').on('change', function() {
                 if(jQuery(this).is(":checked")) {
                     jQuery(this).parents("form").find(".remove--param").not(".hidden").parent("label").remove();
                 }
@@ -114,7 +114,7 @@ Oskari.clazz.define(
                 event.preventDefault;
             });
 
-             me.templates.form.find("select[name=choose-wfs-layer]").change(function(event) {
+             me.templates.form.find("select[name=choose-wfs-layer]").on('change', function(event) {
                  me.getWFSLayerColumns(jQuery(this).val(), jQuery(this).parents('fieldset'));
                  event.preventDefault;
              });

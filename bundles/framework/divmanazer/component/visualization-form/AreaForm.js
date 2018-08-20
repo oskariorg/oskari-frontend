@@ -268,7 +268,7 @@ Oskari.clazz.define(
             content = dialogContent.find('div.width');
             var widthSpinner = me.templateWidthValue.clone();
             widthSpinner.val(me.values.lineWidth !== null && me.values.lineWidth !== undefined ? me.values.lineWidth : 1);
-            widthSpinner.change(function () {
+            widthSpinner.on('change', function () {
                 var newValue = parseInt(widthSpinner.val(), 10);
                 if (!isNaN(newValue)) {
                     me.values.lineWidth = newValue;
@@ -371,7 +371,7 @@ Oskari.clazz.define(
                 if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
                     colorCheckbox.prop('checked', true);
                 }
-                colorCheckbox.change(function () {
+                colorCheckbox.on('change', function () {
                     var colorTypeId = this.id.substring(this.id.length-1, this.id.length);
                     var colorType = (colorTypeId === '0') ? 'lineColor' : 'fillColor';
                     jQuery('input.custom-color.' + me.colorTypes[colorTypeId]).prop('disabled', !this.checked);
@@ -455,7 +455,7 @@ Oskari.clazz.define(
                     dialogContent.find('input#' + c.toString() + 'green-value.custom-color').prop('disabled', false);
                     dialogContent.find('input#' + c.toString() + 'blue-value.custom-color').prop('disabled', false);
                 }
-                content.find('.custom-color').change(customColorChangeHandler.bind(null, c.toString()));
+                content.find('.custom-color').on('change', customColorChangeHandler.bind(null, c.toString()));
             }
 
             // remove color links

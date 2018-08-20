@@ -404,7 +404,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     hasOpts = true;
                 }
                 if (!sel.hasClass('binded')) {
-                    sel.change(function(e) {
+                    sel.on('change', function(e) {
                         var val = sel.find('option:selected').val();
                         layer.selectStyle(val);
                         var builder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),

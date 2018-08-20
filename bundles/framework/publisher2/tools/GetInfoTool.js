@@ -485,7 +485,7 @@ function() {
 
         this._prepopulateCustomColoursTemplate(template);
 
-        template.find('input[type=text]').change(function () {
+        template.find('input[type=text]').on('change', function () {
             // If the value is not a number or is out of range (0-255), set the value to proper value.
             rgbValue = jQuery(this).val();
             if (isNaN(rgbValue) || (rgbValue < me.minColourValue)) {

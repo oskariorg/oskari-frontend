@@ -833,7 +833,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     });
 
                     // Update visible fields after checkbox change
-                    checkboxInput.change(checkbocInputChange);
+                    checkboxInput.on('change', checkbocInputChange);
                     columnSelectorList.append(newColumn);
                 }
             });

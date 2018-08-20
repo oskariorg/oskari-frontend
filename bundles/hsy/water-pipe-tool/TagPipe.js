@@ -532,7 +532,7 @@ Oskari.clazz.define(
 
                     //add redirect select with options to container
                     direct.find('select').html(me._initFormRedirectSelect());
-                    direct.change(function(e){
+                    direct.on('change', function(e){
                         var el = jQuery(this),
                         value = el.find(":selected").val(),
                         form = me.container.find('form');

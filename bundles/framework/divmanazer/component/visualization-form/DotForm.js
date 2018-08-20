@@ -281,7 +281,7 @@ Oskari.clazz.define(
             content = dialogContent.find('.color-source-selector');
             var colorCheckbox = me.templateColorSource.clone();
 
-            colorCheckbox.change(function () {
+            colorCheckbox.on('change', function () {
                 var cell = me.activeColorCell.toString();
                 jQuery('input.custom-color').prop('disabled', !this.checked);
                 if (me.activeColorCell < 10) {
@@ -338,7 +338,7 @@ Oskari.clazz.define(
                 dialogContent.find('input.custom-color').prop('disabled', false);
             }
 
-            dialogContent.find('.custom-color').change(function () {
+            dialogContent.find('.custom-color').on('change', function () {
                 var values = [],
                     i,
                     intValue;
