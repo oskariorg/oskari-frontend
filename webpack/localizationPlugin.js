@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const merge = require('merge');
 
 const fileRex = /^(.{2})\.js$/;
 
@@ -35,32 +36,52 @@ class LocalizationPlugin {
             this.prevTimestamps = compilation.fileTimestamps;
 
             const parsed = new Map();
+            const allKeys = new Set();
             const Oskari = {
                 registerLocalization: (loc) => {
                     const lang = loc.lang;
                     if (!lang) {
                         throw new Error('Localization file has no "lang"!');
                     }
-                    let agg = [];
+                    let agg = new Map();
                     if (parsed.has(lang)) {
                         agg = parsed.get(lang);
                     } else {
                         parsed.set(lang, agg);
                     }
-                    agg.push(loc);
+                    agg.set(loc.key, loc);
+                    allKeys.add(loc.key);
                 }
             }
             localeFiles
-                .filter(path => changedLanguages.has(this.langFromPath(path)))
+                .filter(path => {
+                    const lang = this.langFromPath(path);
+                    return lang === 'en' || changedLanguages.has(lang); // Always process English as it might be needed as fallback
+                })
                 .forEach(path => {
                     const source = fs.readFileSync(path, 'utf8');
                     eval(source);
                 });
 
 
+            const english = parsed.get('en') || new Map();
             for (let entry of parsed.entries()) {
-                let fileContent = entry[1].map(def => `Oskari.registerLocalization(${JSON.stringify(def)});`).join('\n');
-                compilation.assets[`oskari_lang_${entry[0]}.js`] = {
+                const lang = entry[0];
+                const contents = entry[1];
+                
+                const keyContents = Array.from(allKeys)
+                    .filter(key => english.has(key) || contents.has(key))
+                    .map(key => {
+                        const fallback = english.get(key);
+                        const locForKey = contents.get(key);
+                        if (locForKey && fallback) {
+                            return merge.recursive(true, fallback, locForKey);
+                        }
+                        return locForKey || {lang: lang, key: key, value: fallback.value};
+                    });
+
+                let fileContent = keyContents.map(content => `Oskari.registerLocalization(${JSON.stringify(content)});`).join('\n');
+                compilation.assets[`oskari_lang_${lang}.js`] = {
                     source() {
                         return fileContent;
                     },
