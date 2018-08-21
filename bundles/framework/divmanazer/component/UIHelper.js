@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
             content.find('[helptags]').each(function (i, e) {
                 var btn = jQuery(e),
                     taglist = btn.attr("helptags");
-                btn.bind('click', function () {
+                btn.on('click', function () {
                     me.getHelpArticle(taglist, getCallback(btn));
                 });
             });

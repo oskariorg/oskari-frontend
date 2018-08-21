@@ -370,7 +370,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     }
                 });
 
-                jQuery(primaryButton.getElement()).attr('disabled', true);
+                jQuery(primaryButton.getElement()).prop('disabled', true);
             });
 
             popup.show(loc('recheckTitle'), content, [closeButton, primaryButton]);

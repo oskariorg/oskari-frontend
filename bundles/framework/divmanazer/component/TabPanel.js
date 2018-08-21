@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
             iconDiv.addClass(iconClass);
             this.header.find("a").after(iconDiv);
             if (_.isFunction(clickHandler)) {
-                iconDiv.bind('click', clickHandler);
+                iconDiv.on('click', clickHandler);
             }
         },
 

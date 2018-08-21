@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             accordion.addPanel(methodPanel);
             accordion.addPanel(settingsPanel);
             accordion.addPanel(outputPanel);
-            accordion.getContainer().find('.header-icon-info').click(
+            accordion.getContainer().find('.header-icon-info').on('click',
                 function (evt) {
                     evt.preventDefault();
                     return false;
@@ -289,7 +289,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // buttons
             // close
-            container.find('div.header div.icon-close').bind(
+            container.find('div.header div.icon-close').on(
                 'click',
                 function () {
                     me.instance.setAnalyseMode(false);
@@ -299,12 +299,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             contentDiv.append(me._getButtons());
 
             var inputs = me.mainPanel.find('input[type=text]');
-            inputs.focus(function () {
+            inputs.on('focus', function () {
                 me.instance.sandbox.postRequestByName(
                     'DisableMapKeyboardMovementRequest'
                 );
             });
-            inputs.blur(function () {
+            inputs.on('blur', function () {
                 me.instance.sandbox.postRequestByName(
                     'EnableMapKeyboardMovementRequest'
                 );
@@ -455,7 +455,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me._createLabel(option, toolContainer, 'method_radiolabel');
 
                 if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
+                    toolContainer.find('input').prop('checked', true);
                 }
                 tooltipCont = this.template.help.clone();
                 tooltipCont.attr('title', option.tooltip);
@@ -467,8 +467,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'name': 'method',
                     'id': option.id
                 });
-                toolContainer.find('input').change(closureMagic(option));
-                toolContainer.find('input').click(clickMagic(option));
+                toolContainer.find('input').on('change', closureMagic(option));
+                toolContainer.find('input').on('click', clickMagic(option));
 
             }
 
@@ -571,10 +571,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me._createLabel(option, toolContainer, 'params_radiolabel');
 
                 if (option.selected) {
-                    toolContainer.find('input[name=params]').attr(
-                        'checked',
-                        'checked'
-                    );
+                    toolContainer.find('input[name=params]').prop('checked', true);
                 }
 
                 if (option.id === 'oskari_analyse_select') {
@@ -587,7 +584,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'name': 'params',
                     'id': option.id
                 });
-                toolContainer.find('input[name=params]').change(
+                toolContainer.find('input[name=params]').on('change',
                     closureMagic(option)
                 );
             });
@@ -653,7 +650,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._preselectProperties(featureListList);
             featureListList
                 .find('li')
-                .change(function () {
+                .on('change', function () {
                     me._checkPropertyList(featureListList);
                 });
         },
@@ -800,10 +797,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             contentPanel.append(colorTitle);
 
             // Create random color picker checkbox
-            colorRandomizer.find('input[name=randomize_colors]').attr(
-                'checked',
-                'checked'
-            );
+            colorRandomizer.find('input[name=randomize_colors]').prop('checked',true);
             colorRandomizer.find('label').addClass('params_checklabel').find('span').html(
                 me.loc.output.random_color_label
             );
@@ -1078,11 +1072,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     removeLayer;
 
                 opt.find('input')
-                    .attr({
-                        'id': datum.id,
-                        'checked': datum.checked
-                    })
-                    .change(function (e) {
+                    .attr('id', datum.id)
+                    .prop('checked', datum.checked)
+                    .on('change', function (e) {
                         var selectedlayer = me._getSelectedMapLayer();
                         me._refreshFields();
                         me._modifyAnalyseName();
@@ -1121,7 +1113,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     };
 
                     icons.addClass('analyse-temp-feature');
-                    icons.click(removeLayer(datum.id));
+                    icons.on('click', removeLayer(datum.id));
                 } else {
                     removeLayer = function (id) {
                         return function () {
@@ -1134,7 +1126,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                     me.updateFilterIcon(datum.layerId, icons);
 
-                    icons.find('div.icon-close').click(removeLayer(datum.id));
+                    icons.find('div.icon-close').on('click', removeLayer(datum.id));
                     icons.find('.layer-icon').addClass('layer-' + datum.icon);
                 }
 
@@ -1343,7 +1335,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 contentPanel.append(bufferOptions);
 
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', false);
+                contentPanel.parent().find('input[name=showFeatureData]').prop('checked', false);
             },
 
             /**
@@ -1374,7 +1366,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr('name', 'aggre');
                     me._createLabel(option, toolContainer, 'params_radiolabel');
 
-                    toolContainer.find('input').attr('checked', 'checked');
+                    toolContainer.find('input').prop('checked', true);
 
                     contentPanel.append(toolContainer);
                     toolContainer.find('input').attr({
@@ -1382,22 +1374,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'aggre',
                         'id': option.id
                     });
-                    toolContainer.find('input').change(closureMagic(option));
+                    toolContainer.find('input').on('change', closureMagic(option));
 
                     // Disable no data, if no no data
                     if (option.id === 'oskari_analyse_NoDataCnt') {
                         if (me._getNoDataValue()) {
                             toolContainer.find('input').prop('disabled', false);
-                            toolContainer.find('input').attr('checked', 'checked');
+                            toolContainer.find('input').prop('checked', true);
                         } else {
-                            toolContainer.find('input').removeAttr('checked');
+                            toolContainer.find('input').prop('checked', false);
                             toolContainer.find('input').prop('disabled', true);
                         }
                     }
                 });
 
                 var showDataInput = contentPanel.parent().find('#showFeatureDataAfterAnalysis');
-                showDataInput.attr('checked', true);
+                showDataInput.prop('checked', true);
 
                 var showValuesCheckbox = me.template.checkboxLabel.clone();
                 showValuesCheckbox.addClass('show_data_in_popup');
@@ -1405,15 +1397,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 showValuesCheckbox.find('label span').append(me.loc.showValuesCheckbox);
                 contentPanel.parent().append(showValuesCheckbox);
 
-                showValuesCheckbox.find('input').change(function () {
+                showValuesCheckbox.find('input').on('change', function () {
                     if (showValuesCheckbox.find('input')[0].checked) {
-                        showDataInput.attr({'checked': false, 'disabled' : true});
+                        showDataInput.prop({'checked': false, 'disabled' : true});
                     } else {
-                        showDataInput.attr('disabled', false);
+                        showDataInput.prop('disabled', false);
                     }
                 });
 
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
+                contentPanel.parent().find('input[name=showFeatureData]').prop('checked', true);
 
                 if(me._getNoDataValue()){
                     toolContainer.append(me._param_footer);
@@ -1460,7 +1452,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr('name', 'aggre');
                     me._createLabel(option, toolContainer, 'params_radiolabel');
 
-                    toolContainer.find('input').attr('checked', 'checked');
+                    toolContainer.find('input').prop('checked', true);
 
                     contentPanel.append(toolContainer);
                     toolContainer.find('input').attr({
@@ -1468,17 +1460,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'aggre',
                         'id': option.id
                     });
-                    toolContainer.find('input').change(closureMagic(option));
+                    toolContainer.find('input').on('change', closureMagic(option));
                 }
 
             },
 
             union: function (me,contentPanel) {
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', false);
+                contentPanel.parent().find('input[name=showFeatureData]').prop('checked', false);
             },
 
             clip: function (me, contentPanel) {
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', false);
+                contentPanel.parent().find('input[name=showFeatureData]').prop('checked', false);
                 return me.extraParamBuilders.intersect(me, contentPanel, false);
             },
 
@@ -1517,7 +1509,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     targetLayerElem.html((targetLayer ? targetLayer.label : ''));
                     contentPanel.append(targetLayerElem);
                     me._addTitle(contentPanel, me.loc.spatial.intersectingLayer, me.loc.spatial.intersectingLayerTooltip);
-                    contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
+                    contentPanel.parent().find('input[name=showFeatureData]').prop('checked', true);
                 } else {
                     me._addTitle(contentPanel, me.loc.intersect.target, me.loc.intersect.targetLabelTooltip);
                     targetLayerElem.html((targetLayer ? targetLayer.label : ''));
@@ -1553,16 +1545,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
 
                     if (option.selected) {
-                        input.attr('checked', 'checked');
+                        input.prop('checked', true);
                     }
                     contentPanel.append(toolContainer);
                     input.attr({
                         'value': option.id,
                         'name': 'intersect',
-                        'id': 'intersect_' + option.id,
-                        'checked': optionChecked
-                    });
-                    input.change(closureMagic(option));
+                        'id': 'intersect_' + option.id
+                    }).prop('checked', optionChecked);
+                    input.on('change', closureMagic(option));
                 });
 
                 // Show spatial operator choice
@@ -1589,19 +1580,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             'params_radiolabel'
                         );
 
-                        if (option.selected) {
-                            toolContainer.find('input').attr(
-                                'checked',
-                                'checked'
-                            );
-                        }
+                        toolContainer.find('input').prop('checked', !!option.selected);
                         contentPanel.append(toolContainer);
                         toolContainer.find('input').attr({
                             'value': option.id,
                             'name': 'spatial',
                             'id': option.id
                         });
-                        toolContainer.find('input').change(
+                        toolContainer.find('input').on('change',
                             selectSpatial(option)
                         );
                     });
@@ -1661,9 +1647,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('label').append(label).attr({
                         'class': 'params_checklabel'
                     });
-                    if (option.selected) {
-                        toolContainer.find('input').attr('checked', 'checked');
-                    }
+                    toolContainer.find('input').prop('checked', !!option.selected);
                     contentPanel.append(toolContainer);
                     toolContainer.find('input').attr({
                         'value': option.id,
@@ -1671,7 +1655,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                 }
 
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', false);
+                contentPanel.parent().find('input[name=showFeatureData]').prop('checked', false);
             },
 
             /**
@@ -1709,7 +1693,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 contentPanel.append(extraParams);
 
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
+                contentPanel.parent().find('input[name=showFeatureData]').prop('checked', true);
             },
 
             /**
@@ -1801,9 +1785,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr({
                         'value': option.id,
                         'name': 'differenceLayer',
-                        'id': 'difference_' + option.id,
-                        'checked': (option.selected ? 'checked' : undefined)
-                    }).change(closureMagic(option));
+                        'id': 'difference_' + option.id
+                    })
+                    .prop('checked', !!option.selected)
+                    .on('change', closureMagic(option));
                 }
 
                 // Second layer field selection
@@ -1825,7 +1810,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 contentPanel.append(extraParams);
 
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
+                contentPanel.parent().find('input[name=showFeatureData]').prop('checked', true);
             },
 
             /**
@@ -1870,24 +1855,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                                 .slice(0, 10 - selectedFeatures);
 
                             selectedFeatures += newSelections.length;
-                            newSelections.prop(
-                                'checked',
-                                true
-                            );
+                            newSelections.prop('checked', true);
                         }
 
                         if (selectedFeatures === 10) {
                             // max amount of features selected, disable the rest
-                            features.filter(':not(:checked)').prop(
-                                'disabled',
-                                true
-                            );
+                            features.filter(':not(:checked)').prop('disabled', true);
                         } else {
                             // Features can still be selected
-                            features.prop(
-                                'disabled',
-                                false
-                            );
+                            features.prop('disabled', false);
                         }
                     };
 
@@ -1899,7 +1875,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var modeToolContainer = me.template.radioToolOption.clone();
                 modeToolContainer.find('input').attr({'name':'spatial_join_mode', 'value': 'oskari_analyse_normal'}).prop('checked', true);
                 modeToolContainer.find('label span').append(loc.normalMode);
-                modeToolContainer.change(function () {
+                modeToolContainer.on('change', function () {
                     _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
                         input.setAttribute('type','checkbox');
                     });
@@ -1910,7 +1886,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var modeToolContainer2 = me.template.radioToolOption.clone();
                 modeToolContainer2.find('input').attr({'name': 'spatial_join_mode', 'value': 'oskari_analyse_aggregate'});
                 modeToolContainer2.find('label span').append(loc.aggregateMode);
-                modeToolContainer2.change(function () {
+                modeToolContainer2.on('change', function () {
                     _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
                         input.setAttribute('type','radio');
                         input.disabled = false;
@@ -1943,7 +1919,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         null,
                         true
                     );
-                    featureList.find('ul li').change(function () {
+                    featureList.find('ul li').on('change', function () {
                         limitSelection(false);
                     });
                     extraParams.append(featureList);
@@ -1967,7 +1943,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             null,
                             true
                         );
-                        featureList.find('ul li').change(function () {
+                        featureList.find('ul li').on('change', function () {
                             limitSelection(false);
                         });
                         limitSelection();
@@ -2002,9 +1978,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     toolContainer.find('input').attr({
                         'value': option.id,
                         'name': 'differenceLayer',
-                        'id': 'difference_' + option.id,
-                        'checked': (option.selected ? 'checked' : undefined)
-                    }).change(closureMagic(option));
+                        'id': 'difference_' + option.id
+                    })
+                    .prop('checked', !!option.selected)
+                    .on('change', closureMagic(option));
                 }
 
                 // Second layer field selection
@@ -2019,7 +1996,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         null,
                         true
                     );
-                    featureList.find('ul li').change(function () {
+                    featureList.find('ul li').on('change', function () {
                         limitSelection(false);
                     });
                 }
@@ -2055,25 +2032,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             'params_radiolabel'
                         );
 
-                        if (option.selected) {
-                            toolContainer.find('input').attr(
-                                'checked',
-                                'checked'
-                            );
-                        }
+                        toolContainer.find('input').prop('checked', !!option.selected);
                         contentPanel.append(toolContainer);
                         toolContainer.find('input').attr({
                             'value': option.id,
                             'name': 'spatial',
                             'id': option.id
                         });
-                        toolContainer.find('input').change(
+                        toolContainer.find('input').on('change',
                             selectSpatial(option)
                         );
                     });
                 }
 
-                contentPanel.parent().find('input[name=showFeatureData]').attr('checked', true);
+                contentPanel.parent().find('input[name=showFeatureData]').prop('checked', true);
             }
         },
 
@@ -2164,11 +2136,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     if (jQuery(this).attr('name') === 'analyse-layer' + i + '-field-property') {
                         labels = me.mainPanel.find('input:radio[name="analyse-layer' + j + '-field-property"]').parent();
                         radios = labels.find('input:radio');
-                        radios.attr('checked', false);
+                        radios.prop('checked', false);
                         spans = labels.find('span');
                         text = jQuery(this).parent().find('span').text();
                         selIndex = spans.index(labels.find('span:contains("' + text + '")'));
-                        jQuery(radios[selIndex]).attr('checked', true);
+                        jQuery(radios[selIndex]).prop('checked', true);
                     }
                 }
             });
@@ -2195,7 +2167,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             for (i = 0; i < dataLayers.length; i += 1) {
                 paramLayer = jQuery('div.basic_analyse div.extra_params input[type=radio][name=intersect][value=' + jQuery(dataLayers[i]).attr('id') + ']');
                 for (j = 0; j < dataLayers.length; j += 1) {
-                    if (jQuery(dataLayers[i]).is(':checked')) {
+                    if (jQuery(dataLayers[i]).prop('checked')) {
                         paramLayer.prop('checked', false);
                         paramLayer.parent().hide();
                     } else {
@@ -2293,7 +2265,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Remove old content
             contentPanel.empty();
 
-            contentPanel.parent().find('#showFeatureDataAfterAnalysis').attr('disabled',false);
+            contentPanel.parent().find('#showFeatureDataAfterAnalysis').prop('disabled',false);
 
             if (contentPanel.parent().find('.show_data_in_popup')) {
                 contentPanel.parent().find('.show_data_in_popup').remove();
@@ -2399,7 +2371,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
             );
 
-            dropdown.change(aggreMagic());
+            dropdown.on('change', aggreMagic());
             columnsContainer.append(dropdown);
         },
 
@@ -3019,7 +2991,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 layer = me._getLayerByPrefixedId(layer_id, true);
 
-            tools.find('div.layer-info').bind('click', function () {
+            tools.find('div.layer-info').on('click', function () {
                 var rn = 'catalogue.ShowMetadataRequest',
                     uuid = layer.getMetadataIdentifier(),
                     additionalUuids = [],
@@ -3090,8 +3062,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             );
 
 
-            filterIcon.unbind('click');
-            filterIcon.bind('click', function () {
+            filterIcon.off('click');
+            filterIcon.on('click', function () {
                 var selectedFeatures = me.WFSLayerService.getSelectedFeatureIds(layer.getId()),
                     boolSelectedFeatures = (selectedFeatures !== undefined && selectedFeatures.length > 0),
                     boolSelectedGeometry = (me.contentPanel.selectedGeometry !== null);
@@ -3388,7 +3360,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 .find('#oskari_analyse_all')
                 .prop('disabled', false)
                 .prop('checked', true)
-                .change();
+                .trigger('change');
         },
 
         _disableParamsIfNoList: function () {
@@ -3405,7 +3377,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             paramsCont
                 .find('#oskari_analyse_none')
                 .prop('checked', true)
-                .change();
+                .trigger('change');
         },
 
         _disableAllParamsSelection: function () {
@@ -3418,7 +3390,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             paramsCont
                 .find('#oskari_analyse_select')
                 .prop('checked', true)
-                .change();
+                .trigger('change');
         },
 
         /**

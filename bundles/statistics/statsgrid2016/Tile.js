@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
                 label: flyout.title
             }));
             me.extendTile(tileExtension, flyout.id);
-            tileExtension.bind('click', function (event) {
+            tileExtension.on('click', function (event) {
                 event.stopPropagation();
                 flyoutManager.toggle(flyout.id);
             });

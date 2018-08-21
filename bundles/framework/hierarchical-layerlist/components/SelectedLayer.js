@@ -125,8 +125,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         tool.addClass(iconCls);
         tool.addClass('tool-' + toolId);
         if (typeof handler === 'function') {
-            tool.unbind('click');
-            tool.bind('click', function(evt) {
+            tool.off('click');
+            tool.on('click', function(evt) {
                 handler(evt);
             });
         }
@@ -153,7 +153,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         me._el.find('.visible a').html(visibilityText);
 
         if (!me._binded) {
-            me._el.find('.visible a').bind('click', function(evt) {
+            me._el.find('.visible a').on('click', function(evt) {
                 evt.stopPropagation();
                 me.sb.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [me._layer.getId(), !me._layer.isVisible()]);
             });
@@ -232,7 +232,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         var me = this;
         me._el.find('.icon-remove').attr('title', me.locale.tooltips.removeLayer);
         if (!me._binded) {
-            me._el.find('.icon-remove').bind('click', function(evt) {
+            me._el.find('.icon-remove').on('click', function(evt) {
                 evt.stopPropagation();
                 me.sb.postRequestByName('RemoveMapLayerRequest', [me._layer.getId()]);
             });
@@ -250,7 +250,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         toggleIcon.attr('title', me.locale.tooltips.openLayerTools);
 
         if (!me._binded) {
-            me._el.find('.layer-info').bind('mouseup', function() {
+            me._el.find('.layer-info').on('mouseup', function() {
                 if(me.tab.hasDragging()) {
                     return;
                 }
@@ -291,7 +291,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
             }
 
             if (!me._binded) {
-                sel.bind('change', function(e) {
+                sel.on('change', function(e) {
                     var val = sel.find('option:selected').val();
                     me._layer.selectStyle(val);
                     me.sb.postRequestByName('ChangeMapLayerStyleRequest', [me._layer.getId(), val]);
@@ -336,7 +336,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
                 }
             });
 
-            input.bind('change paste keyup', function() {
+            input.on('change paste keyup', function() {
                 layerOpacityChanged(jQuery(this).val());
             });
         }

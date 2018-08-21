@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 }
             } else if (!this.dialog.find('.close-icon')) {
                 // if no actions, the user can click on popup to close it
-                this.dialog.bind('click', function () {
+                this.dialog.on('click', function () {
                     me.close(true);
                 });
             } else {
@@ -231,7 +231,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this.dialog.find('.close-icon').on('click', function() {
                 me.close(true);
             });
-            this.dialog.unbind('click');
+            this.dialog.off('click');
 
         },
 

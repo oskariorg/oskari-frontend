@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
-                openLink.bind('click',
+                openLink.on('click',
                     function() {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'hierarchical-layerlist']);
                         openLink.hide();
@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                     });
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
-                closeLink.bind('click',
+                closeLink.on('click',
                     function() {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'hierarchical-layerlist']);
                         openLink.show();

@@ -266,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             if (sandbox.hasHandler('ShowProjectionChangerRequest')) {
                 // show link to change projection
                 footer = me.templateChangeUnsupported.clone();
-                footer.find('a').bind('click', function () {
+                footer.find('a').on('click', function () {
                     // send request to show projection changer
                     var request = sandbox.getRequestBuilder('ShowProjectionChangerRequest')();
                     sandbox.request(me.instance.getName(), request);
@@ -404,7 +404,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     hasOpts = true;
                 }
                 if (!sel.hasClass('binded')) {
-                    sel.change(function(e) {
+                    sel.on('change', function(e) {
                         var val = sel.find('option:selected').val();
                         layer.selectStyle(val);
                         var builder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),
@@ -488,7 +488,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     'oskari_layerselection_layercontainer_icon_close_layerId' + layerId
                 );
 
-                layerDiv.find('div.layer-tool-remove').bind(
+                layerDiv.find('div.layer-tool-remove').on(
                     'click',
                     function() {
                         var reqName = 'RemoveMapLayerRequest',
@@ -507,7 +507,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     'oskari_layerselection_layercontainer_icon_refresh_layerId' + layerId
                 );
                 layerDiv.find('.layer-tool-refresh').attr('title', loc.refresh_load.tooltip);
-                layerDiv.find('div.layer-tool-refresh').bind(
+                layerDiv.find('div.layer-tool-refresh').on(
                     'click',
                     function() {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
@@ -693,7 +693,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 requestBuilder = sandbox.getRequestBuilder(reqName);
 
             msg.addClass('layer-msg-for-outofscale');
-            msg.find('a').bind('click', function() {
+            msg.find('a').on('click', function() {
                 // send request to show map layer
                 var request = requestBuilder(layer.getId());
                 sandbox.request(me.instance.getName(), request);
@@ -720,7 +720,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
 
             msg.addClass('layer-msg-for-hidden');
-            msg.find('a').bind('click', function() {
+            msg.find('a').on('click', function() {
                 // send request to show map layer
                 var request = visibilityRequestBuilder(layer.getId(), true);
                 sandbox.request(me.instance.getName(), request);
@@ -747,7 +747,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 requestBuilder = sandbox.getRequestBuilder(reqName);
 
             msg.addClass('layer-msg-for-outofcontentarea');
-            msg.find('a').bind('click', function() {
+            msg.find('a').on('click', function() {
                 // send request to show map layer
                 var request = requestBuilder(layer.getId());
                 sandbox.request(me.instance.getName(), request);
@@ -783,7 +783,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 tools.find('div.layer-visibility').hide();
             }
 
-            tools.find('div.layer-visibility a').bind('click', function() {
+            tools.find('div.layer-visibility a').on('click', function() {
                 // send request to hide map layer
                 var request = visibilityRequestBuilder(layer.getId(), false);
                 sandbox.request(me.instance.getName(), request);
@@ -812,12 +812,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                         toolContainer.addClass(laytool.getIconCls());
                         toolContainer.attr('title', laytool.getTooltip());
                         tools.find('div.object-data').append(toolContainer);
-                        toolContainer.bind('click', closureMagic(laytool));
+                        toolContainer.on('click', closureMagic(laytool));
                     } else {
                         toolContainer = jQuery('<a href="JavaScript:void(0);"></a>');
                         toolContainer.append(laytool.getTitle());
                         tools.find('div.object-data').append(toolContainer);
-                        toolContainer.bind('click', closureMagic(laytool));
+                        toolContainer.on('click', closureMagic(laytool));
                     }
                 }
             }

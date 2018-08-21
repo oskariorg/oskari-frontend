@@ -222,7 +222,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     if (!me.popupOpen) {
                         var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
                         formFlyout.showForm(me.userDsId, data.id);
@@ -237,7 +237,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             var deleteRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var indicator = me._getIndicatorById(data.id);
                     if (indicator && !me.popupOpen) {
                         me._confirmDelete(indicator);

@@ -443,7 +443,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             }).prop('selected', 'selected');
 
             // Set the case-sensitive checkbox
-            div.find('input[name=case-sensitive]').attr('checked', analyseFilter.caseSensitive);
+            div.find('input[name=case-sensitive]').prop('checked', !!analyseFilter.caseSensitive);
 
             // Set the value of the value field ;)
             div.find('input[name=attribute-value]').val(analyseFilter.value);
@@ -753,7 +753,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             if (clickedFeatures) {
                 if (jQuery(popupContent).find('#clicked-features-selection-container').find('input[name=analysis-filter-radio]').is(':disabled')) {
                     filterValues.featureIds = false;
-                    jQuery(popupContent).find('#clicked-features-selection-container').find('input[name=analysis-filter-radio]').attr('checked', false);
+                    jQuery(popupContent).find('#clicked-features-selection-container').find('input[name=analysis-filter-radio]').prop('checked', false);
                 } else {
                     filterValues.featureIds = true;
                 }
@@ -763,7 +763,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                     filterValues.filterByGeometryMethod = false;
                     //uncheck the sub boxes
                     jQuery(popupContent).find('input[name=filter-by-geometry]').attr('checked', false);
-                    jQuery(popupContent).find('#filter-by-geometry-selection-container').find('input[name=analysis-filter-radio]').attr('checked', false);
+                    jQuery(popupContent).find('#filter-by-geometry-selection-container').find('input[name=analysis-filter-radio]').prop('checked', false);
                 } else {
                     filterValues.filterByGeometryMethod = filterByGeometry;
                 }

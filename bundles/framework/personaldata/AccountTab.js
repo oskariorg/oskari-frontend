@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
         this.instance = instance;
         this.template = jQuery('<div class="account"><table class="info oskari-grid"></table><div class="bottomlinks"></div></div>');
         this.fieldTemplate = jQuery('<tr class="dataField"><th class="label"></th><td class="value"></td></tr>');
-        this.linkTemplate = jQuery('<a href=""></a>&nbsp; ');
+        this.linkTemplate = jQuery('<span><a href=""></a>&nbsp; </span>');
         this.loc = Oskari.getMsg.bind(null, 'PersonalData');
     }, {
         getTitle: function () {

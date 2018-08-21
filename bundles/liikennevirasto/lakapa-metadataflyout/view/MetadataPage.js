@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                         tabs.append(tab);
                         if (t !== v) {
 
-                            tab.click({
+                            tab.on('click', {
                                 viewId: t
                             }, function (arg) {
                                 var data = arg.data;
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                         tab.append(text);
                         tabs.append(tab);
 
-                        tab.click({
+                        tab.on('click', ({
                             viewId: t,
                             target: target
                         }, function (arg) {
@@ -368,13 +368,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     });
 
                     el.attr('href', null);
-                    el.click({
-                        viewId: viewId,
-                        uuid: argMap.uuid
-                    }, function (arg) {
-                        var data = arg.data,
-                            uuid = data.uuid;
-                        me.showMetadata(uuid);
+                    el.on('click', function () {
+                        me.showMetadata(argMap.uuid);
                     });
                 });
                 /* HACK END */

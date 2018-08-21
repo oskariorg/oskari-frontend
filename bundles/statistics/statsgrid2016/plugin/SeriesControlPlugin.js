@@ -112,12 +112,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             resizer.addClass('flyout-resizer');
             resizer.removeClass('allowHover');
             resizer.addClass('icon-drag');
-            resizer.bind('dragstart', function (event) {
+            resizer.on('dragstart', function (event) {
                 event.preventDefault();
             });
 
             // Start resizing
-            resizer.mousedown(function (e) {
+            resizer.on('mousedown', function (e) {
                 if (me.resizing) {
                     return;
                 }
@@ -131,13 +131,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             });
 
             // End resizing
-            jQuery(document).mouseup(function () {
+            jQuery(document).on('mouseup', function () {
                 me.resizing = false;
                 me.resized = true;
             });
 
             // Resize the control element
-            jQuery(document).mousemove(function (e) {
+            jQuery(document).on('mousemove', function (e) {
                 if (!me.resizing) {
                     return;
                 }

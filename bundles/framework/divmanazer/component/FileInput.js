@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
          * @method _canUseAdvancedUpload
          *
          * Checks if the browser supports drag and drop events aswell as formdata & filereader
-         * @return {boolean} true if supported 
+         * @return {boolean} true if supported
          */
         _canUseAdvancedUpload: function() {
             var div = document.createElement('div');
@@ -87,11 +87,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 me._handleFileList(e.originalEvent.dataTransfer.files);
             });
 
-            link.click(function(){
+            link.on('click', function(){
                 input.trigger('click');
             });
 
-            input.change(function(e){
+            input.on('change', function(e){
                 me._handleFileList(e.target.files);
             });
 
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             var me = this;
             var elem = this.getElement();
             var input = elem.find('input[type="file"]');
-            input.change(function(e){
+            input.on('change', function(e){
                 me._handleFileList(e.target.files);
             });
         },
@@ -300,9 +300,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             else {
                 var elem = window.document.createElement('a');
                 elem.href = window.URL.createObjectURL(blob);
-                elem.download = filename;        
+                elem.download = filename;
                 document.body.appendChild(elem);
-                elem.click();        
+                elem.trigger( "click" );
                 document.body.removeChild(elem);
             }
         },

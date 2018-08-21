@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             // react to window resize with timer so app stays responsive
-            jQuery(window).resize(function () {
+            jQuery(window).on('resize', function () {
                 clearTimeout(me.resizeTimer);
                 me.resizeTimer = setTimeout(
                     function () {

@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
 
                   advancedContainer.append(newRow);
 
-                  filterRow.find("input.nearestcheck").change(function(){
+                  filterRow.find("input.nearestcheck").on('change', function(){
                     if(filterRow.find("input.nearestcheck").is(":checked")){
                       newCheckBoxRow.find("input.chk").prop('disabled', true);
                       countryInput.find("input.ui-autocomplete-input").prop('disabled', true);
@@ -536,7 +536,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     select: function(event, ui) {
                         container.find('#countries').attr('country',ui.item.id);
                     }
-                }).focus(function (event) {
+                }).on('focus', function (event) {
                       event.preventDefault();
                       container.find('#countries').val('');
                       container.find('#countries').autocomplete('search', '');

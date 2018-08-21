@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             }
             input.addClass('group-name');
             var el = jQuery(input.getElement());
-            el.find('input').bind('keyup', function() {
+            el.find('input').on('keyup', function() {
                 var inputEl = jQuery(this);
                 var value = inputEl.val().trim();
                 if (!value.length) {

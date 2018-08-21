@@ -359,7 +359,7 @@ Oskari.clazz.define(
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
-                openLink.bind('click',
+                openLink.on('click',
                     function () {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Search']);
                         openLink.hide();
@@ -367,7 +367,7 @@ Oskari.clazz.define(
                     });
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
-                closeLink.bind('click',
+                closeLink.on('click',
                     function () {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']);
                         openLink.show();

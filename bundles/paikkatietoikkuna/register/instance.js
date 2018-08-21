@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             if (Oskari.user().isLoggedIn()) {
                 var logoutForm = me.loggedInTemplate.find('form');
                 logoutForm.find('input').val(Oskari.app.getXSRFToken());
-                me.loggedInTemplate.find('a').click(function (e) {
+                me.loggedInTemplate.find('a').on('click', function (e) {
                     e.stopPropagation();
                     logoutForm.submit();
                     return false;
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             } else {
                 me.loginbar.append(me.loginTemplate);
                 me.loginbar.find('#loginLink').attr('href', me.loginUrl);
-                me.loginbar.find('#registerLink').click(function () {
+                me.loginbar.find('#registerLink').on('click', function () {
                     me.showRegisterPopup();
                 });
             }

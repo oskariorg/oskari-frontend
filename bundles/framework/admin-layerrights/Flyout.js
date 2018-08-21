@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             roleSelectLabel.html(this.instance.getLocalization('selectRole'));
             container.append(content);
 
-            roleSelect.change(function(event) {
+            roleSelect.on('change', function(event) {
                 me.activeRole = jQuery(event.currentTarget).val();
                 me.updatePermissionsTable(me.activeRole, "ROLE");
             });
@@ -362,10 +362,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     cell = me._templates.checkBox.clone();
                     cell.attr('data-right', permission.id);
                     cell.addClass(permission.name);
-                    if (allow === true) {
-                        cell.attr('checked', 'checked');
-                    }
-
+                    cell.prop('checked', !!allow);
                     cell.attr('title', tooltip);
 
                     dataCell.append(cell);
@@ -381,7 +378,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         },
         togglePermissionsColumn: function(thead, tbody) {
          var controlCell = thead.find('#checkboxCtrl');
-         controlCell.change(function() {
+         controlCell.on('change', function() {
            var checkboxes = tbody.find('input.'+ this.className);
              checkboxes.prop('checked', !checkboxes.prop('checked'));
          });
