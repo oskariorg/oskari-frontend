@@ -275,7 +275,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         var legendElement = this._element.find('.active-legend');
         legendElement.empty();
 
-        this._createLegend(ind.hash, function (legend) {
+        this._createLegend(ind, function (legend) {
             legendElement.append(legend);
         });
     },
