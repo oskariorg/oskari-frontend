@@ -102,6 +102,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                         '</select>' +
                     '</div>' +
                 '</div>' +
+
+                // decimal places
+                '<div class="decimal-place visible-map-style-choropleth visible-map-style-points">' +
+                    '<div class="label">' + this.locale('classify.map.decimalPlaces') + '</div>' +
+                    '<div class="decimal-place value">' +
+                        '<select class="decimal-place">' +
+                        '<option value="0">0</option>' +
+                        '<option value="1" selected="selected">1</option>' +
+                        '<option value="2">2</option>' +
+                        '<option value="3">3</option>' +
+                        '<option value="4">4</option>' +
+                        '<option value="5">5</option>' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
             '</div>' +
             '</div>')
 
@@ -210,6 +225,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._colorSelect.setValue(classification.name, true, true);
         me._colorSelect.refresh();
 
+        var decimalSelect = me._element.find('select.decimal-place');
+        decimalSelect.val(classification.decimalPlaces);
+
         // disable invalid choices
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
             if (err) {
@@ -277,7 +295,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             min: range[0],
             max: range[1],
             transparency: me._element.find('select.transparency-value').val(),
-            showValues: (me._showNumericValueCheckButton.getValue() === 'on')
+            showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
+            decimalPlaces: parseInt(me._element.find('select.decimal-place').val())
         };
 
         if (values.mapStyle !== 'points') {
