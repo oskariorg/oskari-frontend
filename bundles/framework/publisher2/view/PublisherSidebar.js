@@ -521,10 +521,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 this._editToolLayoutOff();
                 this._disablePreview();
             }
+            var sb = this.instance.sandbox;
             var publisherTools = this._createToolGroupings();
-            _.each(publisherTools.tools, function (tool) {
+            publisherTools.tools.forEach( function (tool) {
                 var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(tool);
-                this.instance.sandbox.notifyAll(event);
+                sb.notifyAll(event);
             });
         },
 

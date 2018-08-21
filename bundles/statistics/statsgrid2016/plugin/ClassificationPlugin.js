@@ -70,6 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 return this.element;
             }
             this.element = this._templates.main.clone();
+            this.element.css('z-index', 15001);
             this.__legend.render(this.element);
             return this.element;
         },
