@@ -18,6 +18,7 @@
 
         // pushed from instance
         this.datasources = [];
+        this.regionsets = [];
         // attach on, off, trigger functions
         Oskari.makeObservable(this);
 
@@ -180,23 +181,34 @@
             });
             return found;
         },
+        addRegionset: function (regionset) {
+            if (!regionset) {
+                // log error message
+                return;
+            }
+            var me = this;
+            if (Array.isArray(regionset)) {
+                // if(typeof regionset === 'array') -> loop and add all
+                regionset.forEach(function (item) {
+                    me.addRegionset(item);
+                });
+                return;
+            }
+            if (regionset.id && regionset.name) {
+                this.regionsets.push(regionset);
+            } else {
+                _log.info('Ignoring regionset without id or name:', regionset);
+            }
+        },
         /**
          * Returns regionsets that are available to user.
          * Based on maplayers of type STATS.
          */
         getRegionsets: function (includeOnlyIds) {
-            var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            var layers = service.getLayersOfType('STATS');
-            if (!layers || layers.length === 0) {
+            var list = this.regionsets || [];
+            if (!list || list.length === 0) {
                 return [];
             }
-            var list = [];
-            layers.forEach(function (regionset) {
-                list.push({
-                    id: regionset.getId(),
-                    name: regionset.getName()
-                });
-            });
             var singleValue = typeof includeOnlyIds === 'number' || typeof includeOnlyIds === 'string';
             if (singleValue) {
                 // wrap to an array

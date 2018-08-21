@@ -49,6 +49,8 @@ Oskari.clazz.define(
                 me.statsService.setMapModes(['wms', 'vector']);
             }
             statsService.addDatasource(conf.sources);
+            statsService.addRegionset(conf.regionsets);
+
 
             // initialize flyoutmanager
             this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService);
@@ -212,7 +214,7 @@ Oskari.clazz.define(
             },
             'StatsGrid.ActiveIndicatorChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
-                
+
                 if (evt.current && evt.current.series) {
                     if (this.seriesControlPlugin) {
                         if (!this.seriesControlPlugin.getElement()) {
