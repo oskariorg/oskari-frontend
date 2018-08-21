@@ -3,8 +3,8 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "Printout",
     "value": {
-        "title": "Tulosta karttanäkymä",
-        "flyouttitle": "Tulosta karttanäkymä",
+        "title": "Tulostus",
+        "flyouttitle": "Tulostus",
         "desc": "",
         "btnTooltip": "Tulosta nykyinen karttanäkymä png-kuvaksi tai pdf-tiedostoon.",
         "BasicView": {

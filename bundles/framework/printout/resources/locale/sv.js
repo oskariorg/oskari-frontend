@@ -99,8 +99,8 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Visa finska geoportal Paikkatietoikkuna logotyp i utskriften.",
-                        "tooltip": "Du kan dölja finska geoportal Paikkatietoikkuna logotyp vid behov.",
+                        "label": "Inkludera logotyp i utskriften.",
+                        "tooltip": "Du kan dölja logotyp vid behov.",
                         "checked": "kontrollerad"
                     },
                     {
