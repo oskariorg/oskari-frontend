@@ -3,8 +3,8 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Printout",
     "value": {
-        "title": "Print Map View",
-        "flyouttitle": "Print Map View",
+        "title": "Print",
+        "flyouttitle": "Print",
         "desc": "",
         "btnTooltip": "Print the current map view to a PNG image or a PDF file.",
         "BasicView": {
@@ -99,8 +99,8 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Show Finnish geoportal Paikkatietoikkuna's logo in the printout.",
-                        "tooltip": "You can hide Finnish geoportal Paikkatietoikkuna's logo if necessary.",
+                        "label": "Include the Oskari-logo",
+                        "tooltip": "You can hide the Oskari-logo if necessary.",
                         "checked": "checked"
                     },
                     {
@@ -111,7 +111,7 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "pageDate",
-                        "label": "Show a date in the map printout.",
+                        "label": "Include current date",
                         "tooltip": "You can add a date to the printout.",
                         "checked": "checked"
                     }
@@ -136,7 +136,7 @@ Oskari.registerLocalization(
             }
         },
         "StartView": {
-            "text": "You can print out the Map view you just created as a PNG image or a PDF file.",
+            "text": "You can make a print of your map in PDF and PNG formats.",
             "info": {
                 "maxLayers": "You can use at most eight map layers in the printout.",
                 "printoutProcessingTime": "Printing out the map view may take some time when multiple layers are selected."
