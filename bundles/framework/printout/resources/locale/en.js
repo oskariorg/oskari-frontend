@@ -99,8 +99,8 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Include the Oskari-logo",
-                        "tooltip": "You can hide the Oskari-logo if necessary.",
+                        "label": "Include logo",
+                        "tooltip": "You can hide the logo if necessary.",
                         "checked": "checked"
                     },
                     {
