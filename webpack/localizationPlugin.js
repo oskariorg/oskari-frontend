@@ -35,19 +35,21 @@ class LocalizationPlugin {
 
             this.prevTimestamps = compilation.fileTimestamps;
 
-            const parsed = new Map();
+            const langToLoc = new Map();
+            const langToOverride = new Map();
             const allKeys = new Set();
             const Oskari = {
-                registerLocalization: (loc) => {
+                registerLocalization: (loc, isOverride) => {
                     const lang = loc.lang;
                     if (!lang) {
                         throw new Error('Localization file has no "lang"!');
                     }
+                    const collection = isOverride ? langToOverride : langToLoc;
                     let agg = new Map();
-                    if (parsed.has(lang)) {
-                        agg = parsed.get(lang);
+                    if (collection.has(lang)) {
+                        agg = collection.get(lang);
                     } else {
-                        parsed.set(lang, agg);
+                        collection.set(lang, agg);
                     }
                     agg.set(loc.key, loc);
                     allKeys.add(loc.key);
@@ -64,20 +66,24 @@ class LocalizationPlugin {
                 });
 
 
-            const english = parsed.get('en') || new Map();
-            for (let entry of parsed.entries()) {
+            const englishLoc = langToLoc.get('en') || new Map();
+            for (let entry of langToLoc.entries()) {
                 const lang = entry[0];
-                const contents = entry[1];
+                const langLoc = entry[1];
+                const langOverride = langToOverride.get(lang) || new Map();
                 
                 const keyContents = Array.from(allKeys)
-                    .filter(key => english.has(key) || contents.has(key))
+                    .filter(key => englishLoc.has(key) || langLoc.has(key) || langOverride.has(key))
                     .map(key => {
-                        const fallback = english.get(key);
-                        const locForKey = contents.get(key);
-                        if (locForKey && fallback) {
-                            return merge.recursive(true, fallback, locForKey);
-                        }
-                        return locForKey || {lang: lang, key: key, value: fallback.value};
+                        const englishForKey = lang === 'en' ? {} : englishLoc.get(key) || {}; // don't merge English with itself
+                        const locForKey = langLoc.get(key) || {};
+                        const overrideForKey = langOverride.get(key) || {};
+
+                        const mergedEnglish = merge.recursive(true, englishForKey, locForKey);
+                        const mergedOverride = merge.recursive(true, mergedEnglish, overrideForKey);
+                        mergedOverride.lang = lang; // value for "lang" key might be from fallback. Ensuring it's correct
+
+                        return mergedOverride;
                     });
 
                 let fileContent = keyContents.map(content => `Oskari.registerLocalization(${JSON.stringify(content)});`).join('\n');
