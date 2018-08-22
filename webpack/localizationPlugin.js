@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const merge = require('merge');
 
 const fileRex = /^(.{2})\.js$/;
 
@@ -34,33 +35,59 @@ class LocalizationPlugin {
 
             this.prevTimestamps = compilation.fileTimestamps;
 
-            const parsed = new Map();
+            const langToLoc = new Map();
+            const langToOverride = new Map();
+            const allKeys = new Set();
             const Oskari = {
-                registerLocalization: (loc) => {
+                registerLocalization: (loc, isOverride) => {
                     const lang = loc.lang;
                     if (!lang) {
                         throw new Error('Localization file has no "lang"!');
                     }
-                    let agg = [];
-                    if (parsed.has(lang)) {
-                        agg = parsed.get(lang);
+                    const collection = isOverride ? langToOverride : langToLoc;
+                    let agg = new Map();
+                    if (collection.has(lang)) {
+                        agg = collection.get(lang);
                     } else {
-                        parsed.set(lang, agg);
+                        collection.set(lang, agg);
                     }
-                    agg.push(loc);
+                    agg.set(loc.key, loc);
+                    allKeys.add(loc.key);
                 }
             }
             localeFiles
-                .filter(path => changedLanguages.has(this.langFromPath(path)))
+                .filter(path => {
+                    const lang = this.langFromPath(path);
+                    return lang === 'en' || changedLanguages.has(lang); // Always process English as it might be needed as fallback
+                })
                 .forEach(path => {
                     const source = fs.readFileSync(path, 'utf8');
                     eval(source);
                 });
 
 
-            for (let entry of parsed.entries()) {
-                let fileContent = entry[1].map(def => `Oskari.registerLocalization(${JSON.stringify(def)});`).join('\n');
-                compilation.assets[`oskari_lang_${entry[0]}.js`] = {
+            const englishLoc = langToLoc.get('en') || new Map();
+            for (let entry of langToLoc.entries()) {
+                const lang = entry[0];
+                const langLoc = entry[1];
+                const langOverride = langToOverride.get(lang) || new Map();
+                
+                const keyContents = Array.from(allKeys)
+                    .filter(key => englishLoc.has(key) || langLoc.has(key) || langOverride.has(key))
+                    .map(key => {
+                        const englishForKey = lang === 'en' ? {} : englishLoc.get(key) || {}; // don't merge English with itself
+                        const locForKey = langLoc.get(key) || {};
+                        const overrideForKey = langOverride.get(key) || {};
+
+                        const mergedEnglish = merge.recursive(true, englishForKey, locForKey);
+                        const mergedOverride = merge.recursive(true, mergedEnglish, overrideForKey);
+                        mergedOverride.lang = lang; // value for "lang" key might be from fallback. Ensuring it's correct
+
+                        return mergedOverride;
+                    });
+
+                let fileContent = keyContents.map(content => `Oskari.registerLocalization(${JSON.stringify(content)});`).join('\n');
+                compilation.assets[`oskari_lang_${lang}.js`] = {
                     source() {
                         return fileContent;
                     },
