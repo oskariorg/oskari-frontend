@@ -1,6 +1,6 @@
     // libraries
 import 'script-loader!../libraries/requirejs/require-2.2.0.min.js';
-import '../libraries/requirejs/text-plugin-2.0.14.js';
+import 'script-loader!../libraries/requirejs/text-plugin-2.0.14.min.js';
 import '../libraries/mobile-detect/mobile-detect-1.3.2.js';
 import 'expose-loader?DOMPurify!../libraries/dompurify/purify_0.8.0.min.js';
 import 'imports-loader?this=>window!../libraries/intl-messageformat/intl-messageformat-with-locales-2.1.0.js';
