@@ -140,7 +140,7 @@ Oskari.registerLocalization({
                 'color': 'Färg',
                 'transparency': 'Genomskinlighet',
                 'showValues': 'Visa värden',
-                'decimalPlaces': 'Decimaltal'
+                'fractionDigits': 'Decimaltal'
             }
         },
         'colorset': {

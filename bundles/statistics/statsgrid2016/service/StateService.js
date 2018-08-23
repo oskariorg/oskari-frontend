@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 type: 'seq',
                 mode: 'discontinuous',
                 reverseColors: false,
-                decimalPlaces: 1
+                fractionDigits: 1
             }
         };
         this._timers = {};

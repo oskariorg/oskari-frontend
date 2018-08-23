@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
                 // decimal places
                 '<div class="decimal-place visible-map-style-choropleth visible-map-style-points">' +
-                    '<div class="label">' + this.locale('classify.map.decimalPlaces') + '</div>' +
+                    '<div class="label">' + this.locale('classify.map.fractionDigits') + '</div>' +
                     '<div class="decimal-place value">' +
                         '<select class="decimal-place">' +
                         '<option value="0">0</option>' +
@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._colorSelect.refresh();
 
         var decimalSelect = me._element.find('select.decimal-place');
-        decimalSelect.val(classification.decimalPlaces);
+        decimalSelect.val(classification.fractionDigits);
 
         // disable invalid choices
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
@@ -296,7 +296,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             max: range[1],
             transparency: me._element.find('select.transparency-value').val(),
             showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
-            decimalPlaces: parseInt(me._element.find('select.decimal-place').val())
+            fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
 
         if (values.mapStyle !== 'points') {
@@ -381,6 +381,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         me._colorSelect.setHandler(updateClassification);
         me._element.find('select').on('change', updateClassification);
+        me._element.find('select.decimal-place').on('change', function() {
+            var stateService = this.service.getStateService();
+            var indicator = stateService.getActiveIndicator();
+            stateService.setActiveIndicator(indicator.hash);
+        });
 
         me._element.find('#legend-flip-colors').on('change', function () {
             updateClassification();
