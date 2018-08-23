@@ -96,15 +96,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
                 groupStats.silent = true;
                 groupStats.setPrecision(opts.precision);
+
                 if (opts.count >= groupStats.serie.length) {
                     opts.count = groupStats.serie.length - 1;
                 }
-                if (opts.method === 'jenks') {
-                    response.bounds = groupStats.getJenks(opts.count);
-                } else if (opts.method === 'quantile') {
-                    response.bounds = groupStats.getQuantile(opts.count);
-                } else if (opts.method === 'equal') {
-                    response.bounds = groupStats.getEqInterval(opts.count);
+                if (!groupStats.method || groupStats.method !== opts.method) {
+                    if (opts.method === 'jenks') {
+                        response.bounds = groupStats.getJenks(opts.count);
+                    } else if (opts.method === 'quantile') {
+                        response.bounds = groupStats.getQuantile(opts.count);
+                    } else if (opts.method === 'equal') {
+                        response.bounds = groupStats.getEqInterval(opts.count);
+                    }
+                    groupStats.method = opts.method;
                 }
                 // Set bounds manually.
                 stats.setBounds(groupStats.bounds);
