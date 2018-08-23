@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.VectorLayerReq
         this._options = options;
     }, {
         /** @static @property __name request name */
-        __name: 'MapModulePlugin.VectorLayerRequest',
+        __name: 'VectorLayerRequest',
         /**
          * @method getName
          * @return {String} request name
