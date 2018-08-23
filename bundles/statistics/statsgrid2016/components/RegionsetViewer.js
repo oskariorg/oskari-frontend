@@ -240,54 +240,56 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         var service = this.service;
         var state = service.getStateService();
         var ind = state.getActiveIndicator();
-        if (ind) {
-            var regionId = state.getRegion();
-            var region = service.getRegionsets(regionId);
-            var classification = state.getClassificationOpts(ind.hash);
-            var highlightStrokeWidth = 4;
-
-            var hoverOptions = {
-                content: [
-                    {
-                        keyProperty: 'name',
-                        valueProperty: 'regionValue'
-                    }
-                ]
-            };
-
-            if (classification.mapStyle && classification.mapStyle === 'points') {
-                var colors = service.getColorService().getColorsForClassification(classification);
-                var fillColor = colors[0];
-                var ptStyle = this._getPointStyle(highlightStrokeWidth, fillColor);
-                hoverOptions.featureStyle = {
-                    image: {
-                        shape: {
-                            data: ptStyle.image.shape.data
-                        }
-                    },
-                    inherit: true
-                };
-            } else {
-                hoverOptions.featureStyle = {
-                    stroke: {
-                        width: highlightStrokeWidth
-                    },
-                    inherit: true,
-                    effect: 'darken'
-                };
-            }
-
-            this.sb.postRequestByName(
-                'VectorLayerRequest',
-                [
-                    this.LAYER_ID,
-                    {
-                        hover: hoverOptions,
-                        layerDescription: (region && region.name) ? region.name : null
-                    }
-                ]
-            );
+        if (!ind) {
+            return;
         }
+
+        var regionId = state.getRegion();
+        var region = service.getRegionsets(regionId);
+        var classification = state.getClassificationOpts(ind.hash);
+        var highlightStrokeWidth = 4;
+
+        var hoverOptions = {
+            content: [
+                {
+                    keyProperty: 'name',
+                    valueProperty: 'regionValue'
+                }
+            ]
+        };
+
+        if (classification.mapStyle && classification.mapStyle === 'points') {
+            var colors = service.getColorService().getColorsForClassification(classification);
+            var fillColor = colors[0];
+            var ptStyle = this._getPointStyle(highlightStrokeWidth, fillColor);
+            hoverOptions.featureStyle = {
+                image: {
+                    shape: {
+                        data: ptStyle.image.shape.data
+                    }
+                },
+                inherit: true
+            };
+        } else {
+            hoverOptions.featureStyle = {
+                stroke: {
+                    width: highlightStrokeWidth
+                },
+                inherit: true,
+                effect: 'darken'
+            };
+        }
+
+        this.sb.postRequestByName(
+            'VectorLayerRequest',
+            [
+                this.LAYER_ID,
+                {
+                    hover: hoverOptions,
+                    layerDescription: (region && region.name) ? region.name : null
+                }
+            ]
+        );
     },
     /**
      * Listen to events that require re-rendering the UI
