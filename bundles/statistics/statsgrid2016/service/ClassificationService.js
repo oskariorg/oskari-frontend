@@ -100,7 +100,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 if (opts.count >= groupStats.serie.length) {
                     opts.count = groupStats.serie.length - 1;
                 }
-                if (!groupStats.method || groupStats.method !== opts.method) {
+                var groupOpts = groupStats.classificationOptions || {};
+                var calculateBounds =
+                    (!groupOpts.method || groupOpts.method !== opts.method) ||
+                    (!groupOpts.count || groupOpts.count !== opts.count);
+
+                if (calculateBounds) {
                     if (opts.method === 'jenks') {
                         response.bounds = groupStats.getJenks(opts.count);
                     } else if (opts.method === 'quantile') {
@@ -108,7 +113,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     } else if (opts.method === 'equal') {
                         response.bounds = groupStats.getEqInterval(opts.count);
                     }
-                    groupStats.method = opts.method;
+                    groupOpts.method = opts.method;
+                    groupOpts.count = opts.count;
+                    groupStats.classificationOptions = groupOpts;
                 }
                 // Set bounds manually.
                 stats.setBounds(groupStats.bounds);
