@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     _initLayer: function () {
         var locale = this.instance.getLocalization();
         this.sb.postRequestByName(
-            'MapModulePlugin.VectorLayerRequest',
+            'VectorLayerRequest',
             [
                 this.LAYER_ID,
                 {
@@ -278,7 +278,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             }
 
             this.sb.postRequestByName(
-                'MapModulePlugin.VectorLayerRequest',
+                'VectorLayerRequest',
                 [
                     this.LAYER_ID,
                     {
