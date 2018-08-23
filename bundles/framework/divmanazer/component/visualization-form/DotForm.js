@@ -182,7 +182,7 @@ Oskari.clazz.define(
                 btnContainer.attr('id', i + 'marker');
                 btnContainer.attr('data-button-id', i);
 
-                btnContainer.click(function () {
+                btnContainer.on('click', function () {
                     btnHandler(parseInt(jQuery(this).attr('data-button-id')));
                 });
                 content.append(btnContainer);
@@ -243,9 +243,9 @@ Oskari.clazz.define(
                     id = '0' + id;
                 }
                 colorCell.attr('id', id);
-                colorCell.click(function () {
+                colorCell.on('click', function () {
                     if (jQuery('.color-source').prop('checked')) {
-                        jQuery('.color-source').attr('checked', false);
+                        jQuery('.color-source').prop('checked', false);
                         jQuery('input.custom-color').prop('disabled', true);
                     }
                     cellIndex = parseInt(this.id.substring(0, 2), 10);
@@ -281,7 +281,7 @@ Oskari.clazz.define(
             content = dialogContent.find('.color-source-selector');
             var colorCheckbox = me.templateColorSource.clone();
 
-            colorCheckbox.change(function () {
+            colorCheckbox.on('change', function () {
                 var cell = me.activeColorCell.toString();
                 jQuery('input.custom-color').prop('disabled', !this.checked);
                 if (me.activeColorCell < 10) {
@@ -305,7 +305,7 @@ Oskari.clazz.define(
             // select user colors checkbox
             if (!statedChosenColor) {
                 colorCheckbox.checked = true;
-                content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
+                content.find('input.color-source').prop('disabled', false).prop('checked', true);
             }
 
             content = dialogContent.find('.custom-colors');
@@ -338,7 +338,7 @@ Oskari.clazz.define(
                 dialogContent.find('input.custom-color').prop('disabled', false);
             }
 
-            dialogContent.find('.custom-color').change(function () {
+            dialogContent.find('.custom-color').on('change', function () {
                 var values = [],
                     i,
                     intValue;
@@ -374,10 +374,10 @@ Oskari.clazz.define(
                 messageContainer.find('label.message-label').html(this.loc.message.label);
                 var input = messageContainer.find('input.message-text');
                 input.attr('placeholder',this.loc.message.hint);
-                input.bind('input', function() {
+                input.on('input', function() {
                     me.values.message = jQuery(this).val();
                 });
-                input.keypress(function (evt) {
+                input.on('keypress' ,function (evt) {
                     if (evt.keyCode === 13) {
                         saveButtonHandler();
                     }

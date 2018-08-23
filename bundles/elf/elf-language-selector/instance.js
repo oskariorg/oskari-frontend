@@ -52,7 +52,7 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
             .attr({
                 'href': '#'
             })
-            .click(function (e) {
+            .on('click', function (e) {
                 e.preventDefault();
                 sandbox.postRequestByName(rn, [self, 'attach', rn]);
             });

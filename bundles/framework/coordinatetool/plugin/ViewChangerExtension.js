@@ -88,13 +88,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
                     me._toggleProjectionSelectionConfirmation(true);
                 });
 
-                me._popup.dialog.find('.projection-change-button-ok').unbind('click');
-                me._popup.dialog.find('.projection-change-button-ok').bind('click', function() {
+                me._popup.dialog.find('.projection-change-button-ok').off('click');
+                me._popup.dialog.find('.projection-change-button-ok').on('click', function() {
                     me._changeProjection(me._projectionSelect.val());
                 });
 
-                me._popup.dialog.find('.projection-change-button-cancel').unbind('click');
-                me._popup.dialog.find('.projection-change-button-cancel').bind('click', function() {
+                me._popup.dialog.find('.projection-change-button-cancel').off('click');
+                me._popup.dialog.find('.projection-change-button-cancel').on('click', function() {
                     me._toggleProjectionSelectionConfirmation(false);
                 });
 

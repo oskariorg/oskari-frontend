@@ -103,13 +103,13 @@ function(instance, localization) {
                 var editLink = this.linkTemplate.clone();
                 editLink.addClass('categoryOp');
                 editLink.append(this.loc.editCategory);
-                editLink.bind('click', editLinkClosure(id));
+                editLink.on('click', editLinkClosure(id));
                 panel.getContainer().append(editLink);
 
                 var deleteLink = this.linkTemplate.clone();
                 deleteLink.addClass('categoryOp');
                 deleteLink.append(this.loc.deleteCategory);
-                deleteLink.bind('click', deletelinkClosure(id));
+                deleteLink.on('click', deletelinkClosure(id));
                 panel.getContainer().append(deleteLink);
 
 /*
@@ -127,7 +127,7 @@ function(instance, localization) {
                     publishLink.attr('title', this.loc.publishCategory.privateTooltip);
                 }
                 publishLink.append(publishIcon);
-                publishLink.bind('click', publishLinkClosure(id, !isPublic));
+                publishLink.on('click', publishLinkClosure(id, !isPublic));
                 panel.getContainer().append(publishLink);
 */
             }
@@ -261,7 +261,7 @@ function(instance, localization) {
             link.append(linkIcon);
 
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._showPlace(data.geometry,data.categoryId);
                 return false;
             });
@@ -272,7 +272,7 @@ function(instance, localization) {
         var editRenderer = function(name, data) {
             var link = me.linkTemplate.clone();
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._editPlace(data);
                 return false;
             });
@@ -283,7 +283,7 @@ function(instance, localization) {
         var deleteRenderer = function(name, data) {
             var link = me.linkTemplate.clone();
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._deletePlace(data);
                 return false;
             });

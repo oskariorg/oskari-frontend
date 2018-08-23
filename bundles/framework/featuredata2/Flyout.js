@@ -367,7 +367,7 @@ Oskari.clazz.define(
                 if (!panel.grid) {
                    container.parent().find('.grid-tools').remove();
                 }
-                
+
                 return;
             }
             container.append(this.instance.getLocalization('loading'));
@@ -432,12 +432,12 @@ Oskari.clazz.define(
             var resizerHeight = 16;
             resizer.removeClass('allowHover');
             resizer.addClass('icon-drag');
-            resizer.bind('dragstart', function (event) {
+            resizer.on('dragstart', function (event) {
                 event.preventDefault();
             });
 
             // Start resizing
-            resizer.mousedown(function (e) {
+            resizer.on('mousedown', function (e) {
                 if (me.resizing) {
                     return;
                 }
@@ -451,13 +451,13 @@ Oskari.clazz.define(
             });
 
             // End resizing
-            jQuery(document).mouseup(function () {
+            jQuery(document).on('mouseup', function () {
                 me.resizing = false;
                 me.resized = true;
             });
 
             // Resize the featuredata2 flyout
-            jQuery(document).mousemove(function (e) {
+            jQuery(document).on('mousemove', function (e) {
                 if (!me.resizing) {
                     return;
                 }

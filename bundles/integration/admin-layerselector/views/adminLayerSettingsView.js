@@ -147,7 +147,7 @@ define([
                     input.setTitle(me.instance.locale('groupTitles.localePrefix') + ' ' + (loc[locale] || locale));
                     input.addClass('group-name');
                     var el = jQuery(input.getElement());
-                    el.find('input').bind('keyup', function() {
+                    el.find('input').on('keyup', function() {
                         var inputEl = jQuery(this);
                         var value = inputEl.val().trim();
                         if (value.length < 4) {

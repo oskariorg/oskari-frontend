@@ -511,7 +511,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             browseGraphics =
                 me._tabContainer.getElement().find('.browseGraphic');
-            browseGraphics.click(function () {
+            browseGraphics.on('click', function () {
                 jQuery(this).toggleClass('fullsize');
             });
 

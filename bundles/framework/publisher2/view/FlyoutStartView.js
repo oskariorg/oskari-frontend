@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 touContentLink.attr('href', url);
             } else {
                 // otherwise use tags to get article content
-                touContentLink.bind('click', function () {
+                touContentLink.on('click', function () {
                     me._showTermsOfUse();
                     return false;
                 });

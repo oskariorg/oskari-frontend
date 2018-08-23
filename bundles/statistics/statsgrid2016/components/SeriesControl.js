@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         });
         speedSelect.append(speedOpts);
         speedSelect.val(me.seriesService.getFrameInterval());
-        speedSelect.change(function () {
+        speedSelect.on('change', function () {
             me.seriesService.setAnimating(false);
             me.seriesService.setFrameInterval(parseInt(speedSelect.val()));
             me._setAnimationState(false);
@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         var scale = d3.scaleLinear()
             .domain([0, values.length - 1])
             .range([margin.left, this._lineWidth - margin.right]);
-        
+
         var ticks = scale.ticks(tickCount);
         ticks[ticks.length - 1] = scale.domain()[1];
 

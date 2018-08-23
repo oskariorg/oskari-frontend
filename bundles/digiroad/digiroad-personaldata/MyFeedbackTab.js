@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyFeedbackTab',
                 link.append(linkIcon);
 
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._showPlace(data.geometry, data.categoryId);
                     return false;
                 });
@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyFeedbackTab',
             var editRenderer = function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._editPlace(data);
                     return false;
                 });
@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyFeedbackTab',
             var deleteRenderer = function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._deletePlace(data);
                     return false;
                 });

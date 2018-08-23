@@ -70,7 +70,7 @@ Oskari.clazz.define(
         }
 
         // Disconnect when the page unloads
-        jQuery(window).unload(function () {
+        jQuery(window).on('beforeunload', function () {
             me.disconnect(); });
     }, {
         /**

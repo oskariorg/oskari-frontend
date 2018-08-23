@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             sortBy.find('.orderTitle').html(gridLoc.orderBy);
             var order = sortBy.find('.order');
 
-            sortBy.bind('click', function (evt) {
+            sortBy.on('click', function (evt) {
                 evt.stopPropagation();
 
                 me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
@@ -288,7 +288,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 // If not published then show close icon
                 if (me.indicatorRemovalEnabled) {
                     tableHeader.find('.icon').attr('data-ind-hash', ind.hash);
-                    tableHeader.find('.icon').bind('click', function () {
+                    tableHeader.find('.icon').on('click', function () {
                         log.debug('Removing indicator ', ind.hash);
 
                         // Set default sort order
@@ -306,7 +306,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 sortBy.find('.orderTitle').html(gridLoc.orderBy);
                 var order = sortBy.find('.order');
 
-                sortBy.bind('click', function (evt) {
+                sortBy.on('click', function (evt) {
                     evt.stopPropagation();
 
                     me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
@@ -353,7 +353,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                     order.addClass('desc');
                 }
 
-                tableHeader.bind('click', function () {
+                tableHeader.on('click', function () {
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 

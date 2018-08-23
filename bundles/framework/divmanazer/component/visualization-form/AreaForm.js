@@ -236,7 +236,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(styleBtnContainer);
                 }
                 // FIXME create function outside loop
-                styleBtnContainer.click(function () {
+                styleBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('lineStyle', newValue);
                     me.values.lineStyle = newValue;
@@ -255,7 +255,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(cornerBtnContainer);
                 }
                 // FIXME create function outside loop
-                cornerBtnContainer.click(function () {
+                cornerBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('lineCorner', newValue);
                     me.values.lineCorner = newValue;
@@ -268,7 +268,7 @@ Oskari.clazz.define(
             content = dialogContent.find('div.width');
             var widthSpinner = me.templateWidthValue.clone();
             widthSpinner.val(me.values.lineWidth !== null && me.values.lineWidth !== undefined ? me.values.lineWidth : 1);
-            widthSpinner.change(function () {
+            widthSpinner.on('change', function () {
                 var newValue = parseInt(widthSpinner.val(), 10);
                 if (!isNaN(newValue)) {
                     me.values.lineWidth = newValue;
@@ -305,11 +305,11 @@ Oskari.clazz.define(
                         id = '0' + id;
                     }
                     colorCell.attr('id', id);
-                    colorCell.click(function () {
+                    colorCell.on('click', function () {
                         var cellIndex = parseInt(this.id.substring(0, 2), 10);
                         var colorType = parseInt(this.id.substring(2, 3), 10);
                         if (jQuery('#color-checkbox-' + colorType).prop('checked')) {
-                            jQuery('#color-checkbox-' + colorType).attr('checked', false);
+                            jQuery('#color-checkbox-' + colorType).prop('checked', false);
                             jQuery('input.custom-color.' + me.colorTypes[colorType]).prop('disabled', true);
                         }
                         if (cellIndex === me.activeColorCell[colorType]) {
@@ -369,9 +369,9 @@ Oskari.clazz.define(
 
                 // If the default value is not included in the color cells
                 if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    colorCheckbox.attr('checked', true);
+                    colorCheckbox.prop('checked', true);
                 }
-                colorCheckbox.change(function () {
+                colorCheckbox.on('change', function () {
                     var colorTypeId = this.id.substring(this.id.length-1, this.id.length);
                     var colorType = (colorTypeId === '0') ? 'lineColor' : 'fillColor';
                     jQuery('input.custom-color.' + me.colorTypes[colorTypeId]).prop('disabled', !this.checked);
@@ -403,7 +403,7 @@ Oskari.clazz.define(
                 // select user colors checkbox
                 if (!statedChosenColor && me.values[cType] !== null) {
                     colorCheckbox.checked = true;
-                    content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
+                    content.find('input.color-source').prop('disabled', false).prop('checked', true);
                 }
 
                 content = dialogContent.find('.custom-colors-' + me.colorTypes[c]);
@@ -455,13 +455,13 @@ Oskari.clazz.define(
                     dialogContent.find('input#' + c.toString() + 'green-value.custom-color').prop('disabled', false);
                     dialogContent.find('input#' + c.toString() + 'blue-value.custom-color').prop('disabled', false);
                 }
-                content.find('.custom-color').change(customColorChangeHandler.bind(null, c.toString()));
+                content.find('.custom-color').on('change', customColorChangeHandler.bind(null, c.toString()));
             }
 
             // remove color links
             ['line', 'fill'].forEach(function(type, index){
                 content = dialogContent.find('.remove-color-' + type);
-                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).click(function(e){
+                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).on('click', function(e){
                     e.preventDefault();
 
                     if (me.activeColorCell[index] > -1) {
@@ -475,7 +475,7 @@ Oskari.clazz.define(
                     me.activeColorCell[index] = -1;
                     me.values[type + 'Color'] = null;
 
-                    jQuery('#color-checkbox-' + index).attr('checked', false);
+                    jQuery('#color-checkbox-' + index).prop('checked', false);
                     jQuery('input.custom-color.' + me.colorTypes[index]).prop('disabled', true);
 
                     if(type === 'fill'){
@@ -497,7 +497,7 @@ Oskari.clazz.define(
                 if (i == me.values.fillStyle) {
                     this._styleSelectedButton(fillBtnContainer);
                 }
-                fillBtnContainer.click(function () {
+                fillBtnContainer.on('click', function () {
                     var newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
                     if (me.values.fillStyle === newValue) {
                         me.values.fillStyle = -1;

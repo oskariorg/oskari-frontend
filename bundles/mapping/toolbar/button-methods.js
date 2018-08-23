@@ -90,20 +90,21 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 group: prefixedGroup
             };
         }
-        button.bind('click', function (event) {
+        button.on('click', function (event) {
             me._clickButton(pId, prefixedGroup);
         });
 
         var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[prefixedGroup]);
         // If created hover style then change icon styles
         if (toolbarConfig && toolbarConfig.createdHover === true) {
-            button.hover(function () {
+            button.on('mouseenter', function () {
                 var buttonEl = jQuery(this);
                 if (!buttonEl.hasClass('selected')) {
                     me._addHoverIcon(pConfig, toolbarConfig, button);
                 }
                 buttonEl.addClass('hover');
-            }, function () {
+            });
+            button.on('mouseleave', function () {
                 var buttonEl = jQuery(this);
                 buttonEl.removeClass('hover');
                 if (!buttonEl.hasClass('selected')) {

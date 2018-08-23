@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         var mode = me._element.find('select.classify-mode');
         mode.val(classification.mode);
         me._element.find('select.color-set').val(classification.type);
-        me._element.find('#legend-flip-colors').attr('checked', classification.reverseColors);
+        me._element.find('#legend-flip-colors').prop('checked', !!classification.reverseColors);
         // update color selection values
         var colors = service.getColorService().getDefaultSimpleColors();
         if (mapStyle === 'choropleth') {
@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 options.each(function (index, opt) {
                     opt = jQuery(opt);
                     if (opt.val() > validOptions.maxCount) {
-                        opt.attr('disabled', true);
+                        opt.prop('disabled', true);
                     }
                 });
             }
@@ -251,7 +251,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             modeOpts.each(function (index, opt) {
                 opt = jQuery(opt);
                 if (opt.val() === 'discontinuous') {
-                    opt.attr('disabled', ind.series !== undefined);
+                    opt.prop('disabled', ind.series !== undefined);
                 }
             });
         });

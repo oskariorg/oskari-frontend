@@ -163,13 +163,13 @@ Oskari.clazz.define(
 
         _checkVisibleFields: function (form, fields) {
             form.find('div.visibleFields input[type=checkbox]').each(function (i, elem) {
-                elem.removeAttr('checked');
+                elem.prop('checked', false);
                 var j,
                     fLen = fields ? fields.length : 0;
 
                 for (j = 0; j < fLen; j += 1) {
                     if (fields[j] === elem.attr('name')) {
-                        elem.attr('checked', 'checked');
+                        elem.prop('checked', true);
                     }
                 }
             });

@@ -280,8 +280,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             // showmousecoordinates checkbox change
-            popupContent.find('#mousecoordinates').unbind('change');
-            popupContent.find('#mousecoordinates').bind('change', function(){
+            popupContent.find('#mousecoordinates').off('change');
+            popupContent.find('#mousecoordinates').on('change', function(){
                 me._showMouseCoordinates = jQuery(this).prop('checked');
                 me._setDisabledInputs(me._showMouseCoordinates, false);
                 me._progressSpinner.stop();
@@ -374,12 +374,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._popup.adaptToMapSize(me._sandbox, popupName);
             // bind change events to listen popup size changes
             popupEl.find('input[type=checkbox]').each(function(){
-                jQuery(this).bind('change', function(){
+                jQuery(this).on('change', function(){
                     me._checkPopupPosition();
                 });
             });
             popupEl.find('select').each(function(){
-                jQuery(this).bind('change', function(){
+                jQuery(this).on('change', function(){
                     me._checkPopupPosition();
                 });
             });
@@ -424,7 +424,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var reverseGeocodeLabel = geocodeController.find('div.reverseGeocode-label');
             reverseGeocodeLabel.hide();
             geocodeController.find('label.reverseGeocodeInfoText').html(me._locale('display.reversegeocode.moreInfo'));
-            reverseGeoCheckbox.bind('change', function() {
+            reverseGeoCheckbox.on('change', function() {
                 if (this.checked) {
                   reverseGeocodeLabel.show();
                 }
@@ -622,8 +622,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             // Bind event listeners
             // XY icon click
-            el.unbind('click');
-            el.bind('click', function(event) {
+            el.off('click');
+            el.on('click', function(event) {
                 if (me._sandbox.mapMode !== "mapPublishMode") {
                     me._toggleToolState();
                     event.stopPropagation();

@@ -199,10 +199,10 @@ function() {
         input.attr('id', 'checkbox' + layer.getId());
 
         if (me.shouldPreselectLayer(layer.getId())) {
-            input.attr('checked', 'checked');
+            input.prop('checked', true);
             layer.selected = true;
         }
-        input.change(closureMagic(layer));
+        input.on('change', closureMagic(layer));
         me._backgroundLayerSelector.find('.layers').append(layerDiv);
     },
     /**

@@ -353,14 +353,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                 formValues = this.form.getValues();
 
             // Disable buttons to prevent duplicate jobs
-            jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').attr("disabled", "disabled");
+            jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop("disabled", true);
 
             // validation
             var errors = this._validateForm(formValues);
             if (errors.length !== 0) {
                 this._showValidationErrorMessage(errors);
                 // Enable buttons again
-                jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').removeAttr('disabled');
+                jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop('disabled', false);
                 return;
             }
             // validation passed -> go save stuff

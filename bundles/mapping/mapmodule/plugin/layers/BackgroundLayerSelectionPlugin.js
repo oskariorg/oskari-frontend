@@ -361,7 +361,7 @@ Oskari.clazz.define(
                         layer.getName()
                     );
                     list.append(listItem);
-                    listItem.bind('click', selectionUpdateHandler);
+                    listItem.on('click', selectionUpdateHandler);
                 }
             }
             // force update selection
@@ -390,7 +390,7 @@ Oskari.clazz.define(
                 el = me.errorTemplate.clone();
             } else {
                 el = me.template.clone();
-                el.find('div.currentSelection').bind(
+                el.find('div.currentSelection').on(
                     'click',
                     function () {
                         me._toggleSelection();

@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             grid.setColumnValueRenderer('name', function (name, data) {
                 var link = me.template.link.clone();
 
-                link.append(name).bind('click', function () {
+                link.append(name).on('click', function () {
                     // add myplacesimport layer to map on name click
                     var request = addMLrequestBuilder(data.id);
                     sandbox.request(me.instance, request);
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             grid.setColumnValueRenderer('edit', function (name, data) {
                 var link = me.template.link.clone();
 
-                link.append(me.loc('tab.grid.editButton')).bind('click', function () {
+                link.append(me.loc('tab.grid.editButton')).on('click', function () {
                     me._editUserLayer(data);
                     return false;
                 });
@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             grid.setColumnValueRenderer('remove', function (name, data) {
                 var link = me.template.link.clone();
 
-                link.append(me.loc('tab.grid.removeButton')).bind('click', function () {
+                link.append(me.loc('tab.grid.removeButton')).on('click', function () {
                     me._confirmDeleteUserLayer(data);
                     return false;
                 });

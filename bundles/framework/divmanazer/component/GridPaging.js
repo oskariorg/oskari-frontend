@@ -156,10 +156,10 @@ Oskari.clazz.category(
                         var groupIndex = groupHeader.attr('data-header-index');
 
                         // Bind events
-                        next.unbind('click');
-                        next.bind('click', nextHandler);
-                        previous.unbind('click');
-                        previous.bind('click', prevHandler);
+                        next.off('click');
+                        next.on('click', nextHandler);
+                        previous.off('click');
+                        previous.on('click', prevHandler);
 
                         if(me._currentPage[groupIndex]) {
                             groupHeader.attr('data-page', me._currentPage[groupIndex]);
