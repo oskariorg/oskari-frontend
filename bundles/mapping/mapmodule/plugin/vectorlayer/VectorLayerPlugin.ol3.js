@@ -786,7 +786,7 @@ Oskari.clazz.define(
                     sandbox,
                     me
                 ),
-                'MapModulePlugin.VectorLayerRequest': Oskari.clazz.create(
+                'VectorLayerRequest': Oskari.clazz.create(
                     'Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequestHandler',
                     sandbox,
                     me
