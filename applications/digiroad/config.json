@@ -67,9 +67,6 @@
                "id":"Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin"
             },
             {
-               "id":"Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
-            },
-            {
                "id":"Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
             },
             {
@@ -249,7 +246,7 @@
 
       },
       "conf":{
-        
+
       }
    },
    "digiroad-myplaces2": {
