@@ -45,9 +45,6 @@
 				"mapuserlayers": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
 				},
-				"mapstats": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
 				"mapmyplaces": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
 				},

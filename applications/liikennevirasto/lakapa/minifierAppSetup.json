@@ -1,4 +1,4 @@
-{ 
+{
   "startupSequence" : [
    {
       "instanceProps":{
@@ -70,9 +70,6 @@
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "request-base": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                },
-                "mapstats": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "core-map": {
@@ -293,7 +290,7 @@
    },
    {
         "instanceProps": {
-            
+
         },
         "title": "Lakapa metadata Flyout",
         "bundleinstancename": "lakapa-metadataflyout",
@@ -312,7 +309,7 @@
     },
     {
         "instanceProps": {
-            
+
         },
         "title": "Lakapa basket",
         "bundleinstancename": "lakapa-basket",
@@ -331,7 +328,7 @@
     },
     {
         "instanceProps": {
-            
+
         },
         "title": "Lakapa help",
         "bundleinstancename": "lakapa-help",
@@ -350,7 +347,7 @@
     },
 	{
 		"instanceProps": {
-			
+
 		},
 		"title": "LaKaPaSupportedBrowser",
 		"bundleinstancename": "lakapa-supported-browser",
@@ -369,7 +366,7 @@
 	},
     {
         "instanceProps": {
-            
+
         },
         "title": "LaKaPaShowFAQ",
         "bundleinstancename": "lakapa-show-faq",
@@ -388,7 +385,7 @@
     },
     {
         "instanceProps": {
-            
+
         },
         "title": "StartupInfo",
         "bundleinstancename": "lakapa-startup-info",
