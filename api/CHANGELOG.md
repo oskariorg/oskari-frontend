@@ -11,11 +11,11 @@ Some extra tags:
 
 ## 1.48.0
 
-### [mod] AddFeaturesToMapRequest
+### [mod] [rpc] AddFeaturesToMapRequest
 
 Deprecated following layer related options. Use VectorLayerRequest instead.
 
-```javascript   
+```javascript
     layerOptions,
     layerInspireName,
     layerOrganizationName,
