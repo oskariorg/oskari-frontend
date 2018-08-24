@@ -63,7 +63,8 @@ Oskari.clazz.define(
                     url: imgUrl,
                     params: {
                         'LAYERS': layer.getRenderingElement(),
-                        'FORMAT': 'image/png'
+                        'FORMAT': 'image/png',
+                        'VERSION': '1.1.1'
                     },
                     crossOrigin : layer.getAttributes('crossOrigin')
                 }),
