@@ -64,6 +64,7 @@ Oskari.clazz.define(
                     params: {
                         'LAYERS': layer.getRenderingElement(),
                         'FORMAT': 'image/png',
+                        // Avoid AxisOrder issues by not using WMS 1.3.0
                         'VERSION': '1.1.1'
                     },
                     crossOrigin : layer.getAttributes('crossOrigin')
