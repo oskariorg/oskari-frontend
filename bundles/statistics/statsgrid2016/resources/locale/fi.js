@@ -170,7 +170,8 @@ Oskari.registerLocalization({
             'indicatorSave': 'Virhe tallennettaessa muuttujaa.',
             'indicatorDelete': 'Virhe poistaessa muuttujaa.',
             'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
-            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.'
+            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
+            'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',
