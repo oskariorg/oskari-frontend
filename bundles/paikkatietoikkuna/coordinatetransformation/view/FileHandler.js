@@ -68,6 +68,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '<b class="title">${decimalSeparator}</b> '+
                                         '<div class="settingsSelect">'+
                                             '<select>'+
+                                                '<option value="" selected disabled>${choose}</option>'+
                                                 '<option value=".">${point}</option>'+
                                                 '<option value=",">${comma}</option>'+
                                             '</select>'+
@@ -78,6 +79,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '<b class="title">${coordinateSeparator}</b> '+
                                         '<div class="settingsSelect">'+
                                             '<select>'+
+                                                '<option value="" selected disabled>${choose}</option>'+
                                                 '<option value="tab">${tab}</option>'+
                                                 '<option value="space">${space}</option>'+
                                                 '<option value="comma">${comma}</option>'+
@@ -157,7 +159,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 writeHeader: this.loc('fileSettings.options.writeHeader'),
                 lineEnds: this.loc('fileSettings.options.lineEnds'),
                 useCardinals: this.loc('fileSettings.options.useCardinals'),
-                lineSeparator: this.loc('fileSettings.options.lineSeparator.label')
+                lineSeparator: this.loc('fileSettings.options.lineSeparator.label'),
+                choose: this.loc('fileSettings.options.choose')
             };
             if (this.type === "export"){
                 fileSettings.export = true;

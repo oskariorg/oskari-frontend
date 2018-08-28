@@ -127,6 +127,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         if (selects.decimalSeparator === "," && selects.coordinateSeparator === "comma"){
             errors.push(this.loc('flyout.transform.validateErrors.doubleComma'));
         }
+        if (selects.coordinateSeparator === ""){
+            errors.push(this.loc('flyout.transform.validateErrors.noCoordinateSeparator'));
+        }
+        if (selects.decimalSeparator === ""){
+            errors.push(this.loc('flyout.transform.validateErrors.noDecimalSeparator'));
+        }
         if (settings.type === "import"){
             if (!settings.file ){ // && settings.file.constructor !== File
                 errors.push(this.loc('flyout.transform.validateErrors.noInputFile'));
