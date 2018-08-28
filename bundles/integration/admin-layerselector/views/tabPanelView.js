@@ -104,6 +104,10 @@ define([
                     id: "arcgis93layer",
                     localeKey: "arcgis93",
                     footer: false
+                }, {
+                    id: "tiles3dlayer",
+                    localeKey: "tiles3d",
+                    footer: false
                 }];
                 // filter out ones that are not registered in current appsetup
                 var sandbox = this.instance.sandbox,
@@ -117,7 +121,7 @@ define([
                         return;
                     }
                     var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateHeader.html';
-                    require([file], function(header) {
+                    window.require([file], function(header) {
                         type.headerTemplate = _.template(header);
                     }, function() {
                         sandbox.printWarn('No admin header template for layertype: ' + type.id + " file was: " + file);
@@ -128,7 +132,7 @@ define([
                         return;
                     }
                     var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateFooter.html';
-                    require([file], function(footer) {
+                    window.require([file], function(footer) {
                         type.footerTemplate = _.template(footer);
                     }, function() {
                         sandbox.printWarn('No admin footer template for layertype: ' + type.id + " file was: " + file);

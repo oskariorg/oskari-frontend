@@ -9,6 +9,27 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.48.0
+
+### [mod] [rpc] AddFeaturesToMapRequest
+
+Deprecated following layer related options. Use VectorLayerRequest instead.
+
+```javascript
+    layerOptions,
+    layerInspireName,
+    layerOrganizationName,
+    showLayer,
+    opacity,
+    layerName,
+    layerDescription,
+    layerPermissions
+```
+
+### [add] [rpc] VectorLayerRequest
+
+Request to handle layer settings.
+
 ## 1.45.0
 
 ### [mod] [rpc] FeatureEvent

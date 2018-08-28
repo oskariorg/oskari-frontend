@@ -836,7 +836,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 return;
             }
             jQuery.ajax({
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 data: {
                     id: category.getId(),

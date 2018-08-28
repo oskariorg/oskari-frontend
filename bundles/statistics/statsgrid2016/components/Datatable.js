@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">' +
-                '<div class="header"><span class="title"></span> </div>' +
+                '<div class="header"><span class="title"></span> </br> </div>' +
                 '<div class="icon icon-close-dark"></div>' +
                 '<div style="clear:both;"></div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             sortBy.find('.orderTitle').html(gridLoc.orderBy);
             var order = sortBy.find('.order');
 
-            sortBy.bind('click', function (evt) {
+            sortBy.on('click', function (evt) {
                 evt.stopPropagation();
 
                 me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
@@ -268,20 +268,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 me.service.getUILabels(ind, function (labels) {
                     tableHeader.find('.header').append(labels.full).attr('title', labels.full);
                 });
+                me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, me.getCurrentRegionset(), function (err, data) {
+                    if (err || !data) {
+                        tableHeader.append('<div class="icon-warning-light"></div>');
+                        tableHeader.find('.icon-warning-light').attr('title', gridLoc.noValues);
+                        return;
+                    }
+                    var isUndefined = function (element) {
+                        return data[element] === undefined;
+                    };
+                    if (Object.keys(data).every(isUndefined)) {
+                        tableHeader.append('<div class="icon-warning-light"></div>');
+                        tableHeader.find('.icon-warning-light').attr('title', gridLoc.noValues);
+                    }
+                });
 
                 tableHeader.find('.icon').attr('title', gridLoc.removeSource);
 
                 // If not published then show close icon
                 if (me.indicatorRemovalEnabled) {
                     tableHeader.find('.icon').attr('data-ind-hash', ind.hash);
-                    tableHeader.find('.icon').bind('click', function () {
+                    tableHeader.find('.icon').on('click', function () {
                         log.debug('Removing indicator ', ind.hash);
 
                         // Set default sort order
                         if (me._sortOrder.item === ind.hash) {
                             me._sortOrder = me._defaultSortOrder;
                         }
-                        me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
+                        me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections, ind.series);
                     });
                 } else {
                     // Else remove close icon
@@ -292,7 +306,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 sortBy.find('.orderTitle').html(gridLoc.orderBy);
                 var order = sortBy.find('.order');
 
-                sortBy.bind('click', function (evt) {
+                sortBy.on('click', function (evt) {
                     evt.stopPropagation();
 
                     me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
@@ -339,7 +353,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                     order.addClass('desc');
                 }
 
-                tableHeader.bind('click', function () {
+                tableHeader.on('click', function () {
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
@@ -359,14 +373,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
      * @method  @private handleIndicatorAdded Handle indicator added
      * @param  {Integer} datasrc    datasource
      * @param  {String} indId      indicator id
-     * @param  {Object} selections seelctions
+     * @param  {Object} selections selections
+     * @param  {Object} series series
      */
-    _handleIndicatorAdded: function (datasrc, indId, selections) {
+    _handleIndicatorAdded: function (datasrc, indId, selections, series) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
-        log.debug('Indicator added ', src, indId, selections);
+        log.debug('Indicator added ', src, indId, selections, series);
         var state = this.service.getStateService();
-        var hash = this.service.getStateService().getHash(datasrc, indId, selections);
+        var hash = this.service.getStateService().getHash(datasrc, indId, selections, series);
 
         state.setActiveIndicator(hash);
         this._handleRegionsetChanged(this.getCurrentRegionset());
@@ -401,6 +416,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         this.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             log.debug('Region changed! ', event.getRegionset());
             me._handleRegionsetChanged(event.getRegionset());
+        });
+        this.service.on('StatsGrid.ParameterChangedEvent', function (event) {
+            log.debug('Indicator parameter changed! ');
+            me._handleRegionsetChanged();
         });
 
         this.service.on('StatsGrid.RegionSelectedEvent', function (event) {
@@ -587,7 +606,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             return;
         }
         list.forEach(function (ind) {
-            me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, me.getCurrentRegionset(), function (err, indicatorData) {
+            me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, me.getCurrentRegionset(), function (err, indicatorData) {
                 count++;
                 if (err) {
                     if (count === list.length) {

@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             var header = this.getElement().find('div.header');
-            header.unbind('click');
+            header.off('click');
             if (this.inLayerToolsEditMode() && this.popup.isVisible()) {
                 this.popup.getJqueryContent().detach();
                 this.popup.close(true);
@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             input = baseLayersDiv.find('input[value=' + layerId + ']');
-            input.attr('checked', 'checked');
+            input.prop('checked', true);
             this._changedBaseLayer();
         },
 
@@ -241,11 +241,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             input.attr('value', layer.getId());
 
-            if (layer.isVisible()) {
-                input.attr('checked', true);
-            } else {
-                input.attr('checked', false);
-            }
+            input.prop('checked', !!layer.isVisible());
             this._bindCheckbox(input, layer);
 
             div.find('span').before(input);
@@ -279,11 +275,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             input = div.find('input');
             if (blnVisible) {
                 if (!input.is(':checked')) {
-                    input.attr('checked', 'checked');
+                    input.prop('checked', true);
                 }
             } else {
                 if (input.is(':checked')) {
-                    input.removeAttr('checked');
+                    input.prop('checked', false);
                 }
             }
         },
@@ -295,14 +291,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 var layerId = el.attr('value');
                 var layer = sandbox.findMapLayerFromAllAvailable(layerId);
                 if(layer) {
-                    el.unbind('change');
+                    el.off('change');
                     me._bindCheckbox(el,layer);
                 }
             };
             me.layerContent.find('input[type=radio]').each(function(){
                 var input = jQuery(this);
-                input.unbind('change');
-                input.bind('change', function (evt) {
+                input.off('change');
+                input.on('change', function (evt) {
                     me._changedBaseLayer();
                 });
             });
@@ -320,7 +316,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         _bindCheckbox: function (input, layer) {
             var me = this;
 
-            input.change(function () {
+            input.on('change', function () {
                 var checkbox = jQuery(this),
                     isChecked = checkbox.is(':checked');
                 if (isChecked) {
@@ -383,7 +379,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             input.remove();
             input = me.templates.radiobutton.clone();
             input.attr('value', layer.getId());
-            input.bind('change', function (evt) {
+            input.on('change', function (evt) {
                 me._changedBaseLayer();
             });
 
@@ -403,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 header.append(myLoc.chooseDefaultBaseLayer);
                 baseLayersDiv.parent().find('.baseLayerHeader').remove();
                 baseLayersDiv.before(header);
-                input.attr('checked', 'checked');
+                input.prop('checked', true);
                 baseLayersDiv.show();
             }
             baseLayersDiv.append(div);
@@ -425,9 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             input.remove();
             input = this.templates.checkbox.clone();
             input.attr('value', layer.getId());
-            if (isActive) {
-                input.attr('checked', 'checked');
-            }
+            input.attr('checked', !!isActive);
             this._bindCheckbox(input, layer);
             div.find('span').before(input);
 
@@ -451,10 +445,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 var checked = baseLayers.find('input:checked');
                 if (checked.length === 0) {
                     // if the selected one was removed -> default to first
-                    jQuery(baseLayers.find('input').get(0)).attr(
-                        'checked',
-                        'checked'
-                    );
+                    jQuery(baseLayers.find('input').get(0)).prop('checked', true);
                     // notify baselayer change
                     this._changedBaseLayer();
                 }
@@ -696,7 +687,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         _bindHeader: function (header) {
             var me = this;
 
-            header.bind('click', function () {
+            header.on('click', function () {
                 if (me.popup && me.popup.isVisible()) {
                     me.popup.getJqueryContent().detach();
                     me.popup.close(true);
@@ -772,6 +763,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function(mapInMobileMode, forced) {
+            var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -787,7 +779,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return true;
             }
             this.teardownUI();
-            if (!toolbarNotReady && mapInMobileMode) {
+            if (!toolbarNotReady && isMobile) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 // TODO: redrawUI is basically refresh, move stuff here from refresh if needed

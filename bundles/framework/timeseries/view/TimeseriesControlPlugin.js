@@ -43,8 +43,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         this._uiState.currentTime = delegate.getCurrentTime();
         this._validSkipOptions = this._filterSkipOptions(this._uiState.times);
 
-        me._isMobileVisible = false;
+        me._isMobileVisible = true;
         me._inMobileMode = false;
+        me._isStopped = false;
 
         me._mobileDefs = {
             buttons: {
@@ -54,9 +55,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     sticky: true,
                     toggleChangeIcon: true,
                     show: true,
+                    selected: true,
                     callback: function () {
                         if (me._isMobileVisible) {
                             me.teardownUI();
+
+                            var el = jQuery(me.getMapModule().getMobileDiv())
+                                .find('.mobile-timeseries');
+
+                            me._resetMobileIcon(el, 'mobile-timeseries');
                         } else {
                             me._isMobileVisible = true;
                             me._buildUI(true);
@@ -265,6 +272,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')('mobile-timeseries', 'mobileToolbar-mobile-toolbar');
+                sandbox.request(me, toolbarRequest);
             }
             if (!mapInMobileMode) {
                 me._buildUI(mapInMobileMode);
@@ -277,6 +286,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _buildUI: function (isMobile) {
             var me = this;
+            if (me._isStopped) {
+                return;
+            }
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
             var aux = '<div class="timeseries-aux"></div>';
@@ -286,6 +298,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._setRange(times[0], times[times.length - 1]);
                 me._element.toggleClass('mobile', isMobile);
                 me._element.append(aux);
+                me._isMobileVisible = true;
             } else {
                 me._setWidth(me.getSandbox().getMap().getWidth(), true);
                 me._applyTopMargin(this._topMargin);
@@ -328,7 +341,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         _applyTopMargin: function (topMargin) {
             if (!this._inMobileMode) {
                 if (typeof topMargin === 'string') {
-                    if (topMargin.includes('%')) {
+                    if (topMargin.indexOf('%') !== -1) {
                         var mapHeight = this.getSandbox().getMap().getHeight() || 200;
                         var percetageFromTop = topMargin.substr(0, topMargin.length - 1);
                         if (!isNaN(percetageFromTop)) {
@@ -631,6 +644,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param {Oskari.Sandbox} sandbox
          */
         _stopPluginImpl: function (sandbox) {
+            this._isStopped = true;
             if (this._element) {
                 this._setAnimationState(false);
                 this.removeFromPluginContainer(this.getElement());

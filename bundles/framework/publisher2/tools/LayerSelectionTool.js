@@ -64,41 +64,6 @@ function() {
         }
     },
     /**
-    * Set enabled.
-    * @method setEnabled
-    * @public
-    *
-    * @param {Boolean} enabled is tool enabled or not
-    */
-    setEnabled : function(enabled) {
-        var me = this,
-            tool = me.getTool(),
-            sandbox = me.__sandbox;
-        //state actually hasn't changed -> do nothing
-        if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
-            return;
-        }
-
-        me.state.enabled = enabled;
-        if(!me.__plugin && enabled) {
-            me.__plugin = Oskari.clazz.create(tool.id, tool.config);
-            me.__mapmodule.registerPlugin(me.__plugin);
-        }
-
-        if(enabled === true) {
-            me.__plugin.startPlugin(me.__sandbox);
-            me.__started = true;
-            setTimeout(function() {
-                me._checkLayerSelections();
-            }, 300);
-        } else if(me.__started === true) {
-            me.__plugin.stopPlugin(me.__sandbox);
-        }
-
-        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
-        sandbox.notifyAll(event);
-    },
-    /**
      * Check layer selections
      * @method  @private _checkLayerSelections
      */
@@ -234,10 +199,10 @@ function() {
         input.attr('id', 'checkbox' + layer.getId());
 
         if (me.shouldPreselectLayer(layer.getId())) {
-            input.attr('checked', 'checked');
+            input.prop('checked', true);
             layer.selected = true;
         }
-        input.change(closureMagic(layer));
+        input.on('change', closureMagic(layer));
         me._backgroundLayerSelector.find('.layers').append(layerDiv);
     },
     /**
@@ -304,9 +269,14 @@ function() {
         me.data = data;
 
         if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
-            _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+            _.each(data.configuration.mapfull.conf.plugins, function (plugin) {
                 if (me.getTool().id === plugin.id) {
                     me.setEnabled(true);
+                    if (me.__started) {
+                        setTimeout(function () {
+                            me._checkLayerSelections();
+                        }, 300);
+                    }
                 }
             });
         }

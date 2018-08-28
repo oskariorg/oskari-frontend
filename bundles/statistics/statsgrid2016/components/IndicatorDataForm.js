@@ -6,6 +6,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
     this.selectors = {};
     this.element = this.createUi();
     Oskari.makeObservable(this);
+    this.buttons = [];
 }, {
     __templates: {
         main: _.template('<div class="user-indicator-main"></div>'),
@@ -31,10 +32,36 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         }
         return jQuery(this.__templates.main());
     },
+    getButtons: function () {
+        if (this.buttons.length) {
+            return this.buttons;
+        }
+        var me = this;
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+        cancelBtn.setVisible(false);
+        cancelBtn.setHandler(function () {
+            me.clearUi();
+            me.trigger('cancel');
+        });
+        jQuery(cancelBtn.getElement()).css({'margin-left': '6px'});
+        this.buttons.push(cancelBtn);
+
+        var importClipboard = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        importClipboard.setVisible(false);
+        importClipboard.setTitle(this.locale('userIndicators.import.title'));
+        importClipboard.setHandler(function (event) {
+            me.openImportPopup();
+        });
+        this.buttons.push(importClipboard);
+        return this.buttons;
+    },
     clearUi: function () {
         if (!this.getElement()) {
             return;
         }
+        this.buttons.forEach(function (btn) {
+            btn.setVisible(false);
+        });
         this.getElement().empty();
     },
     fillTable: function (data) {
@@ -72,23 +99,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         });
         this.getElement().append(tableRef);
         // Focus on the first input cell
-        tableRef.find('tr td.uservalue')[0].focus();
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-        cancelBtn.insertTo(this.getElement());
-        cancelBtn.setHandler(function () {
-            me.trigger('cancel');
-            me.clearUi();
-        });
-        var importClipboard = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
-        importClipboard.insertTo(this.getElement());
-        importClipboard.setTitle(this.locale('userIndicators.import.title'));
-        importClipboard.setHandler(function (event) {
-            me.openImportPopup();
-        });
-        var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
-        showTableBtn.insertTo(this.getElement());
-        showTableBtn.setHandler(function () {
-            me.trigger('save', me.getValues());
+        tableRef.find('tr td.uservalue div')[0].focus();
+
+        this.buttons.forEach(function (btn) {
+            btn.setVisible(true);
         });
     },
     getValues: function () {

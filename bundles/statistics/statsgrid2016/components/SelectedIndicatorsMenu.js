@@ -123,7 +123,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             if (!me._select) {
                 return;
             }
-            var hash = me.service.getStateService().getHash(event.getDatasource(), event.getIndicator(), event.getSelections());
+            var hash = me.service.getStateService().getHash(
+                event.getDatasource(),
+                event.getIndicator(),
+                event.getSelections(),
+                event.getSeries());
+
             if (event.isRemoved()) {
                 me._select.removeOption(hash);
                 return;
@@ -136,6 +141,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
                     }
                 });
             });
+        });
+        this.service.on('StatsGrid.ParameterChangedEvent', function (event) {
+            if (me._select) {
+                me._getIndicatorUILabels(function (options) {
+                    me._select.updateOptions(options);
+                });
+            }
         });
     }
 

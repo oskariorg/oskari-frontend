@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
             var link = jQuery(me.templates.link({
                 msg: value
             }));
-            link.click(function() {
+            link.on('click', function() {
                 me.__modifyView(rowData.id);
             });
             return link;

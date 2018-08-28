@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
 
             // TODO: check if added?
             // unbind change listener and remove ui
-            this.element.find('a').unbind('click');
+            this.element.find('a').off('click');
             this.element.remove();
             this.element = undefined;
         },
@@ -220,7 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
 
             var link = this.element.find('a');
             link.append(this.localization.link);
-            link.bind('click', function () {
+            link.on('click', function () {
                 me._openDialog();
                 return false;
             });
@@ -308,7 +308,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
                 var uuid = layer.getMetadataIdentifier();
                 if (uuid) {
                     var layerIcon = infoIcon.clone();
-                    layerIcon.bind('click', function () {
+                    layerIcon.on('click', function () {
                         me._getMetadataInfoCallback(layer);
                     });
                     layerItem.append(layerIcon);

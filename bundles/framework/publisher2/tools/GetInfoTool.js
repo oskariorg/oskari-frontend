@@ -186,8 +186,6 @@ function() {
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
         }
-        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
-        sandbox.notifyAll(event);
     },
 
     isEnabled: function () {
@@ -302,7 +300,7 @@ function() {
 
             // Set the selected colour or default to 'dark_grey' if non-existant.
             if (prevColour && prevColour.val === colours[i].val || (!prevColour && colours[i].val === 'dark_grey')) {
-                colourInput.find('input[type=radio]').attr('checked', 'checked');
+                colourInput.find('input[type=radio]').prop('checked', true);
                 me._changeGfiColours(colours[i], content);
             }
 
@@ -312,8 +310,8 @@ function() {
             if ('custom' === colours[i].val) {
                 customColourButton = jQuery('<button>' + me.__instance._localization.BasicView.layout.fields.colours.buttonLabel + '</button>');
 
-                customColourButton.click(function () {
-                    colourInput.find('input[type=radio]').attr('checked', 'checked');
+                customColourButton.on('click', function () {
+                    colourInput.find('input[type=radio]').prop('checked', true);
                     me._createCustomColoursPopup();
                 });
                 content.find('div#publisher-colour-inputs').append(customColourButton);
@@ -321,7 +319,7 @@ function() {
         }
 
         // Things to do when the user changes the colour scheme:
-        content.find('input[name=colour]').change(function () {
+        content.find('input[name=colour]').on('change', function () {
             selectedColour = me._getItemByCode(jQuery(this).val(), me.initialValues.colours);
             // change the preview gfi
             me._changeGfiColours(selectedColour, content);
@@ -440,7 +438,7 @@ function() {
         closeButton.setHandler(function () {
             me._collectCustomColourValues(content);
             // Change the preview gfi and send event only if currently checked
-            if (jQuery('div#publisher-colour-inputs input#custom').attr('checked')) {
+            if (jQuery('div#publisher-colour-inputs input#custom').prop('checked')) {
                 customColours = me._getItemByCode('custom', me.initialValues.colours);
                 // Change the colours of the preview popup
                 me._changeGfiColours(customColours);
@@ -487,7 +485,7 @@ function() {
 
         this._prepopulateCustomColoursTemplate(template);
 
-        template.find('input[type=text]').change(function () {
+        template.find('input[type=text]').on('change', function () {
             // If the value is not a number or is out of range (0-255), set the value to proper value.
             rgbValue = jQuery(this).val();
             if (isNaN(rgbValue) || (rgbValue < me.minColourValue)) {
@@ -518,9 +516,9 @@ function() {
         this._prepopulateRgbDiv(bgInputs, customColours.bg);
         this._prepopulateRgbDiv(titleInputs, customColours.title);
         this._prepopulateRgbDiv(headerInputs, customColours.header);
-        iconClsInputs.find('input[type=radio]').removeAttr('checked');
+        iconClsInputs.find('input[type=radio]').prop('checked', false);
         var iconCls = customColours.iconCls || 'icon-close-white';
-        iconClsInputs.find('input[value=' + iconCls + ']').attr('checked', 'checked');
+        iconClsInputs.find('input[value=' + iconCls + ']').prop('checked', true);
     },
 
     /**

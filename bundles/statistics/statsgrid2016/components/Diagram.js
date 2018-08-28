@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
 
         if (!this.hasIndicators()) {
             this.clearChart();
-            el.html(this.loc.statsgrid.noResults);
+            this.element.html(this.loc.statsgrid.noResults);
             return;
         } else if (this._chartElement) {
             // reattach possibly detached component
@@ -58,6 +58,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         this.getIndicatorData(this.getIndicator(), function (data) {
             if (!data) {
                 me._renderDone();
+                return;
+            }
+            var isUndefined = function (element) {
+                return element.value === undefined;
+            };
+
+            if (data.every(isUndefined)) {
+                me.clearChart();
+                me._renderDone();
+                me.element.html(me.loc.statsgrid.noValues);
                 return;
             }
             if (!me._chartElement) {

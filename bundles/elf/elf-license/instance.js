@@ -669,7 +669,7 @@ function () {
             dialogContent.find('.help').html(me._locale.dialog.help.info);
             jQuery.each(data.licenseModels, function(index, model){
                 var modelEl = me._templates.licenseModel.clone();
-                modelEl.bind('click', function(){
+                modelEl.on('click', function(){
                     me._showLicenseParams(model, data);
                 });
 

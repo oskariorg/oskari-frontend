@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
             me._calcSideLabelPositions();
 
             if(!me._addedResizeListener){
-                me.container.parents('.oskari-flyout').bind('DOMSubtreeModified', function(){
+                me.container.parents('.oskari-flyout').on('DOMSubtreeModified', function(){
                     clearTimeout(me._sidetoolTimer);
                     me._sidetoolTimer = setTimeout(function(){
                         me._calcSideLabelPositions();

@@ -403,7 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 // create link
                 var link = me.templateLink.clone();
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     if (!me.popupOpen) {
                         window.open(
                             url,
@@ -443,7 +443,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 var link = me.templateLink.clone();
                 var srs = data.state.mapfull.state.srs;
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var supported = me._isCurrentProjectionSupportedForView(data);
                     if (!supported) {
                         me.createProjectionChangeDialog(function () {
@@ -490,7 +490,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 var url = sandbox.createURL(data.url);
                 var link = me.templateLink.clone();
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     var size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
                     if (!me.popupOpen) {
@@ -507,7 +507,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 var srs = data.state.mapfull.state.srs;
                 var embeddedMapUuid = data.uuid;
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var supported = me._isCurrentProjectionSupportedForView(data);
                     if (!supported) {
                         me.createProjectionChangeDialog(function () {
@@ -536,7 +536,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             var deleteRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
                         me._confirmDelete(view);
@@ -552,7 +552,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             var publishRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
                         var newState = !view.isPublic;

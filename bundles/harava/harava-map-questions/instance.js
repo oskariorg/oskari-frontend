@@ -156,7 +156,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
 
                     jQuery(module.appendTo).before(me.templateToolbar.clone());
 
-                    jQuery(module.appendTo).prev().bind('click', function () {
+                    jQuery(module.appendTo).prev().on('click', function () {
                         me.toggleTools();
                     });
 
@@ -183,7 +183,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
                         questionToolContainer.attr('title', tooltip);
                         questionToolContainer.addClass('harava-question-tool-' + module.questionId);
                         questionToolContainer.addClass('harava-question-tool-' + question.type);
-                        questionToolContainer.bind('click',
+                        questionToolContainer.on('click',
                             function () {
                                 if (!jQuery(this).hasClass('disabled')) {
                                     me.activateControl('' + module.questionId + '', '' + question.id + '');

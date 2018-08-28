@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             // react to window resize with timer so app stays responsive
-            jQuery(window).resize(function () {
+            jQuery(window).on('resize', function () {
                 clearTimeout(me.resizeTimer);
                 me.resizeTimer = setTimeout(
                     function () {
@@ -302,7 +302,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
-            epsgConfs = _.keys(defs);
+            window.epsgConfs = _.keys(defs);
             _.forEach(epsgConfs, function (conf) {
                 if (!_.has(defaultDefs, conf)) {
                     defaultDefs[conf] = defs[conf];

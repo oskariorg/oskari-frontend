@@ -52,7 +52,7 @@ Oskari
                     button.attr('name', btn.name);
                     button.attr('text', btn.text);
                     button.attr('value', btn.text);
-                    button.bind('click', btn.onclick);
+                    button.on('click', btn.onclick);
                     if (btn.close !== false) {
                         button.addClass(this._args.closeClass);
                     }

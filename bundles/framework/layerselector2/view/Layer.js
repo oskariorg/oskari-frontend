@@ -11,7 +11,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
      */
 
     function (layer, sandbox, localization) {
-        
+
         this.sandbox = sandbox;
         this.localization = localization;
         this.layer = layer;
@@ -22,6 +22,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     '<div class="layer-tools">'+
                     '   <div class="layer-not-supported icon-warning-light" title="" ></div>' +
                     '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' +
+                    '   <div class="layer-icon-secondary"></div>'+
                     '   <div class="layer-icon"></div>'+
                     '   <div class="layer-info"></div>'+
                     '</div>' +
@@ -32,11 +33,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
          * @return {String} layer id
          */
         getId: function () {
-            
+
             return this.layer.getId();
         },
         setVisible: function (bln) {
-            
+
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             if (bln) {
@@ -46,17 +47,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             }
         },
         setSelected: function (isSelected) {
-            
+
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
-            this.ui.find('input').attr('checked', !!isSelected);
+            this.ui.find('input').prop('checked', !!isSelected);
         },
 
         /**
          * @method updateLayerContent
          */
         updateLayerContent: function (layer) {
-            
+
             /* set title */
             var newName = layer.getName(),
                 /* set/clear alert if required */
@@ -74,7 +75,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
             /* set sticky */
             if (layer.isSticky()) {
-                this.ui.find('input').attr('disabled', 'disabled');
+                this.ui.find('input').prop('disabled', true);
             }
 
             if (clsForPrevBackendStatus) {
@@ -100,7 +101,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
         },
         getContainer: function () {
-            
+
             return this.ui;
         },
         /**
@@ -110,7 +111,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
          */
         _createLayerContainer: function (layer) {
-            
+
             var me = this,
                 sandbox = me.sandbox,
                 // create from layer template
@@ -130,6 +131,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 elBackendStatus,
                 mapLayerId,
                 layerInfo;
+
+            var secondaryIcon = tools.find('div.layer-icon-secondary');
 
             icon.addClass(layer.getIconClassname());
 
@@ -152,7 +155,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             } else if (layer.isLayerOfType('VECTOR')) {
                 icon.attr('title', tooltips['type-wms']);
             }
-
+            if (layer.hasTimeseries()) {
+                secondaryIcon.addClass('layer-timeseries-disabled');
+                secondaryIcon.attr('title', tooltips['type-timeseries']);
+            }
 
             if (!layer.getMetadataIdentifier()) {
                 subLayers = layer.getSubLayers();
@@ -171,7 +177,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             if (layer.getMetadataIdentifier() || subLmeta) {
                 layerInfo = tools.find('div.layer-info');
                 layerInfo.addClass('icon-info');
-                layerInfo.click(function () {
+                layerInfo.on('click', function () {
                     rn = 'catalogue.ShowMetadataRequest';
                     uuid = layer.getMetadataIdentifier();
                     additionalUuids = [];
@@ -205,12 +211,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             layerDiv.find('input').attr('id', 'oskari_layerselector2_layerlist_checkbox_layerid_' + layer.getId());
             layerDiv.find('.layer-title')
                 .append(layer.getName())
-                .click(function(){
+                .on('click', function(){
                     layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
                 })
                 .toggleClass('not-supported', !layer.isSupported(sandbox.getMap().getSrsName()));
 
-            layerDiv.find('input').change(function () {
+            layerDiv.find('input').on('change', function () {
                 checkbox = jQuery(this);
                 if (checkbox.is(':checked')) {
                     sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
@@ -221,7 +227,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
             /* set sticky */
             if (layer.isSticky()) {
-                layerDiv.find('input').attr('disabled', 'disabled');
+                layerDiv.find('input').prop('disabled', true);
             }
 
             /*
@@ -239,7 +245,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     elBackendStatus.attr('title', tooltip);
                 }
             }
-            elBackendStatus.click(function () {
+            elBackendStatus.on('click', function () {
                 mapLayerId = layer.getId();
                 sandbox.postRequestByName('ShowMapLayerInfoRequest', [
                     mapLayerId

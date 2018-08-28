@@ -29,14 +29,14 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
             filterButton.attr('title', tooltip);
             filterButton.find('.filter-icon').addClass('filter-' + filterName);
             filterButton.find('.filter-icon').addClass(iconClassDeactive);
-        
+
             me.filterButtons.push({
                 name: filterName,
                 element: filterButton
             });
 
-            filterButton.unbind('click');
-            filterButton.bind('click', function(evt) {
+            filterButton.off('click');
+            filterButton.on('click', function(evt) {
                 var filterIcon = jQuery(evt.target).parent().find('.filter-icon.' + 'filter-' + filterName);
                 me.deactivateAllFilters(filterName);
                 if (filterIcon.hasClass(iconClassDeactive)) {
@@ -66,13 +66,16 @@ Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
                 return;
             }
             me.renderableButtons = activeFiltersList;
-            activeFiltersList.forEach( function( filter ) {
+            activeFiltersList.forEach(function (filter) {
                 var button = me.layerlistService.getLayerlistFilterButton(filter);
-                if ( me.filterIsCreated(button.id) ) {
+                if (!button) {
+                    return;
+                }
+                if (me.filterIsCreated(button.id)) {
                     me.render();
                     return;
                 }
-                me.createButton( button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id );
+                me.createButton(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
             });
         },
           /**

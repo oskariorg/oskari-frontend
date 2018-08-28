@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
         var me = this;
         var header = me.html.find('div.header');
 
-        header.click(function () {
+        header.on('click', function () {
             if (me.isOpen()) {
                 me.close();
             } else {

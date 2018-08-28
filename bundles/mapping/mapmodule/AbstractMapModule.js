@@ -705,9 +705,28 @@ Oskari.clazz.define(
             }
         },
         /**
+         * @method setScale
+         * Sets the maps resolution to given absolute number
+         * @param {Number} newResolution absolute resolution
+         * @param {Boolean} suppressEvent true to NOT send an event about the map move
+         *  (other components wont know that the map has moved, only use when chaining moves and
+         *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+         */
+        setResolution: function (newResolution, suppressEvent) {
+            this._setResolutionImpl(newResolution);
+            this._resolution = newResolution;
+            var sandbox = this.getSandbox();
+            sandbox.getMap().setResolution(newResolution);
+
+            if (suppressEvent !== true) {
+                // send note about map change
+                this.notifyMoveEnd();
+            }
+        },
+        /**
          * @method zoomToScale
          * Pans the map to the given position.
-         * @param {float} scale the new scale
+         * @param {Float} scale the new scale
          * @param {Boolean} closest find the zoom level that most closely fits the specified scale.
          *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
          * @param {Boolean} suppressEnd true to NOT send an event about the map move
@@ -716,11 +735,33 @@ Oskari.clazz.define(
          */
         zoomToScale: function (scale, closest, suppressEnd) {
             var resolution = this.getResolutionForScale(scale);
+            if(!closest) {
+                // get exact resolution
+                resolution = this.getExactResolution(scale);
+                this.setResolution(resolution, suppressEnd);
+                return;
+            }
             var zoom = this.getResolutionArray().indexOf(resolution);
             if (zoom !== -1) {
                 this.setZoomLevel(zoom, suppressEnd);
             }
         },
+
+        /**
+         * Gets exact resolution
+         * @method getExactResolution
+         * @param  {Float}           scale the new scale
+         * @return {Float}           exact resolution
+         */
+        getExactResolution: function(scale) {
+            if(typeof this._getExactResolutionImpl === 'function') {
+                return this._getExactResolutionImpl(scale);
+            }
+
+            throw 'Not implemented _getExactResolutionImpl function.';
+        },
+
+
         /**
          * @method getResolutionForScale
          * Calculate max resolution for the scale
@@ -864,15 +905,20 @@ Oskari.clazz.define(
                 }
             }
         },
-        isLoading: function () {
-            var oskariLayers = this.getSandbox().getMap().getLayers();
+        isLoading: function (id) {
             var loading = false;
-            oskariLayers.forEach(function (layer) {
-                if (loading) {
-                    return;
-                }
-                loading = layer.getLoadingState().loading > 0;
-            });
+            if (typeof id === 'undefined') {
+                var oskariLayers = this.getSandbox().getMap().getLayers();
+                oskariLayers.forEach(function (layer) {
+                    if (loading) {
+                        return;
+                    }
+                    loading = layer.getLoadingState().loading > 0;
+                });
+            } else {
+                var oskariLayer = this.getSandbox().getMap().getSelectedLayer(id);
+                loading = oskariLayer.getLoadingState().loading > 0;
+            }
             return loading;
         },
         /**
@@ -906,20 +952,18 @@ Oskari.clazz.define(
                 var wasFirstTile = oskariLayer.loadingStarted();
                 if (wasFirstTile) {
                     this.progBar.show();
-                    layers.forEach(function (layer) {
-                        oskariLayer.resetLoadingState();
-                    });
+                    oskariLayer.resetLoadingState(1);
                 }
             } else {
                 var tilesLoaded = 0;
                 var pendingTiles = 0;
                 if (!errors) {
+                    done = oskariLayer.loadingDone();
                     layers.forEach(function (layer) {
                         tilesLoaded += layer.loaded;
                         pendingTiles += layer.tilesToLoad;
                     });
-                    done = oskariLayer.loadingDone();
-                    this.progBar.updateProgressBar(pendingTiles - 1, tilesLoaded);
+                    this.progBar.updateProgressBar(pendingTiles, tilesLoaded);
                 } else {
                     this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
                     oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
@@ -1145,7 +1189,7 @@ Oskari.clazz.define(
             var mobileDiv = this.getMobileDiv();
             var toolbar = mobileDiv.find('.mobileToolbarContent');
 
-            if (mobileDiv.children().length === 0) {
+            if (toolbar.find('.toolbar_mobileToolbar').children().length === 0) {
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
             } else {
@@ -2270,12 +2314,12 @@ Oskari.clazz.define(
             var layerIndex = 0;
 
             // setup new order based on the order we get from sandbox
-            _.each(layers, function (layer) {
+            layers.forEach(function (layer) {
                 if (!layer) {
                     return;
                 }
                 var olLayers = me.getOLMapLayers(layer.getId());
-                _.each(olLayers, function (layerImpl) {
+                olLayers.forEach(function (layerImpl) {
                     me.setLayerIndex(layerImpl, layerIndex++);
                 });
             });

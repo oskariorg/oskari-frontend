@@ -55,7 +55,8 @@ Oskari.registerLocalization(
                 "wfs": "WFS Lager",
                 "wmts": "WMTS Lager",
                 "arcgis": "ArcGISCache Lager",
-                "arcgis93": "ArcGISRest Lager"
+                "arcgis93": "ArcGISRest Lager",
+                "tiles3d" : "3D Tiles Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
@@ -77,6 +78,8 @@ Oskari.registerLocalization(
             "interfaceVersionDesc": "Gränss&shy;nittets version",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
+            "tiles3d0_0": "3D Tiles 0.0",
+            "tiles3d1_0": "3D Tiles 1.0",
             "getInfo": "Sök data",
             "editWfs": "Editera WFS",
             "selectClass": "Välj tema",

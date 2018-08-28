@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 
             'customThemeLabel' : _.template('<div><span>${label}</span></div>'),
             'customThemeGroup' : _.template('<div class="colorpicker-group"><input id="customTheme" type="radio" name="colorThemes"></div>'),
-            
+
         },
 
         _createColorPickers: function() {
@@ -122,9 +122,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             // set latest selected color theme checked
             var selectedColorTheme = layer.getSelectedTheme();
             if (selectedColorTheme) {
-                jQuery(content).find("input[id="+ selectedColorTheme.id + "]").attr("checked", true);
+                jQuery(content).find("input[id="+ selectedColorTheme.id + "]").prop("checked", true);
             } else {
-                jQuery(content).find("input[id=theme1]").attr("checked", true);
+                jQuery(content).find("input[id=theme1]").prop("checked", true);
             }
 
             //set colors for colorboxes
@@ -163,14 +163,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                 dialog.close();
                 delete me.dialog;
             });
-            
+
             var colorPickerHandler = function() {
-                jQuery("input[id=customTheme]").attr("checked", true);
+                jQuery("input[id=customTheme]").prop("checked", true);
             }
             this._colorPickers[0].setHandler(colorPickerHandler);
             this._colorPickers[1].setHandler(colorPickerHandler);
             this._colorPickers[2].setHandler(colorPickerHandler);
-            
+
     		dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
             jQuery(dialog.dialog[0]).find(".actions").addClass("heatmap-actions");
     		dialog.makeDraggable();

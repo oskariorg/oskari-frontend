@@ -244,12 +244,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             this._loadDataConfig();
             this.toolContainer = toolContainer;
 
-            toolContainer.find('input').change(closureMagic(this));
+            toolContainer.find('input').on('change', closureMagic(this));
 
             //modifying an existing and this was already checked?
             var checkbox = toolContainer.find('input:checked');
             if (checkbox) {
-                checkbox.change();
+                checkbox.trigger('change');
             }
         },
 
@@ -319,7 +319,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                         //set selected values checked
                         if (me.selectedOptionsUi[toolName]) {
-                            selectTool.find('input').attr('checked', 'checked');
+                            selectTool.find('input').prop('checked', true);
                             if (toolName === "history") {
                                 tool.__plugin.addToolButton("history_back");
                                 tool.__plugin.addToolButton("history_forward");
@@ -332,7 +332,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                         options.append(selectTool);
 
                         //toggle tool
-                        selectTool.find('input').attr('id', 'tool-opt-' + toolName).change(_toggleToolOption(toolName));
+                        selectTool.find('input').attr('id', 'tool-opt-' + toolName).on('change', _toggleToolOption(toolName));
                     }
                 }
 
@@ -429,8 +429,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     //toggle toolbar tool. i.e. send requests
                     toolElement = toolButton.toolOption.find('input')
                         .attr('id', 'option-' + toolName)
-                        .attr('checked', isToolChecked)
-                        .change(function () {
+                        .prop('checked', !!isToolChecked)
+                        .on('change', function () {
                             var toolState = me.drawOptions[toolName];
                             isToolChecked = (toolState !== true);
                             me._toggleDrawToolButton(isToolChecked, toolName, groupName, toolButton);
@@ -508,7 +508,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             if (me.publishedmyplaces2Config.layer === null || me.publishedmyplaces2Config.layer === undefined) {
                 me.publishedmyplaces2Config.layer = myplaces[0].getId();
             }
-            layerSelect.change(function (e) {
+            layerSelect.on('change', function (e) {
                 var target = jQuery(e.target),
                     value = target.val();
 

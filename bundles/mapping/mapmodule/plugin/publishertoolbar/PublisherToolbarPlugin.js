@@ -227,7 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 // close toolbar
                 this.getElement().find('.' + this.toolbarContainer).hide();
                 // disable icon
-                this.getElement().find('div.icon').unbind('click');
+                this.getElement().find('div.icon').off('click');
             } else {
                 // enable icon
                 this._bindIcon();
@@ -296,6 +296,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 me.popup.close(true);
                 me.popup = null;
             }
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -305,6 +307,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function(mapInMobileMode, forced) {
+            var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -322,7 +325,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             this.teardownUI();
 
-            me._element = me._createControlElement(mapInMobileMode);
+            me._element = me._createControlElement(isMobile);
 
             var changeToolStyle = function(toolstyle, div){
                 var div = div || me.getElement(),
@@ -353,7 +356,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             };
 
-            if (!toolbarNotReady && mapInMobileMode) {
+            if (!toolbarNotReady && isMobile) {
                 changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
@@ -475,8 +478,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 el = me.getElement(),
                 icon = el.find('div.icon');
 
-            icon.unbind('click');
-            icon.bind('click', function () {
+            icon.off('click');
+            icon.on('click', function () {
                 if (me.popup && me.popup.isVisible()) {
                     me.popup.getJqueryContent().detach();
                     me.popup.close(true);
@@ -644,7 +647,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 }
             } else if (appendContentDiv) {
                 // if no actions, the user can click on tool content to close it
-                contentDiv.bind('click', function () {
+                contentDiv.on('click', function () {
                     me.resetToolContent();
                 });
             }
@@ -702,7 +705,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
-
         }
 
     }, {

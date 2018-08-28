@@ -1,5 +1,30 @@
 # Release Notes
 
+## 1.47.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/13?closed=1
+
+- Fix for user generated statistical indicator removal.
+- Fix for loading progressbar for layers using single tile loading.
+- Fix for coordinatetool localization handling.
+
+## 1.47.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/9?closed=1
+
+- Statistical maps now allow for filtering listings based on regionsets and adding more than one indicator at a time
+- Users can now use and save custom indicators for statistical maps
+- Fixes for statistical maps UI in geoportal
+- Layer filters in layer selector are now hidden when selecting the filter would result in empty layer listing
+- Geoportal map style is now properly reset after exiting publisher functionality (previously always reset to default style)
+- More plugins now support styling in publisher functionality
+- Timeseries functionality can now be included in embedded maps (when there's a layer providing timeseries data)
+- Publisher can now be opened automatically on startup (Usability improvement when having embedded maps in multiple projections)
+- Checking "Don't show this again" in guided tour now works again
+- Bugfixes on publisher, hierarchical layerselector and feature data table
+
 ## 1.46.3
 
 - Fixed JS errors when saving myplaces features.

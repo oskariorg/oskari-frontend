@@ -99,6 +99,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             map.on('moveend', function (evt) {
                 me.notifyMoveEnd();
             });
+            map.on('movestart', function (evt) {
+                me.notifyStartMove();
+            });
 
             map.on('singleclick', function (evt) {
                 if (me.getDrawingMode()) {
@@ -122,10 +125,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 clearTimeout(this.mouseMoveTimer);
                 this.mouseMoveTimer = setTimeout(function () {
                     // No mouse move in 1000 ms - mouse move paused
-                    var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], true);
+                    var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(
+                        evt.coordinate[0],
+                        evt.coordinate[1],
+                        true,
+                        evt.pixel[0],
+                        evt.pixel[1]
+                    );
                     sandbox.notifyAll(hoverEvent);
                 }, 1000);
-                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
+                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(
+                    evt.coordinate[0],
+                    evt.coordinate[1],
+                    false,
+                    evt.pixel[0],
+                    evt.pixel[1]);
                 sandbox.notifyAll(hoverEvent);
             });
         },
@@ -352,6 +366,34 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.notifyMoveEnd();
             }
         },
+
+        /**
+         * @method getResolutionForScale
+         * Calculate resolution for the scale
+         * If scale is not defined return -1
+         * @param {Number} scale
+         * @return {Number[]} calculated resolution
+         */
+        getResolutionForScale: function (scale) {
+            if (!scale && scale !== 0) {
+                return -1;
+            }
+            var resIndex = -1;
+            var scaleList = this.getScaleArray();
+            for (var i = 1; i < scaleList.length; i += 1) {
+                if ((scale > scaleList[i]) && (scale <= scaleList[i - 1])) {
+                    // resolutions are in the same order as scales so just use them
+                    resIndex = i - 1;
+                    break;
+                }
+            }
+            // Is scale out of scale ranges
+            if (resIndex === -1) {
+                resIndex = scale < scaleList[scaleList.length - 1] ? scaleList.length - 1 : 0;
+            }
+            return this.getResolutionArray()[resIndex];
+        },
+
         /**
          * @method centerMap
          * Moves the map to the given position and zoomlevel.
@@ -593,6 +635,27 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _setZoomLevelImpl: function (newZoomLevel) {
             this.getMap().getView().setZoom(newZoomLevel);
         },
+        _setResolutionImpl: function (newResolution) {
+            this.getMap().getView().setResolution(newResolution);
+        },
+        _getExactResolutionImpl: function(scale){
+            var units = this.getMap().getView().getProjection().getUnits();
+            var dpiTest = jQuery('<div></div>');
+            dpiTest.css({
+                height: '1in',
+                width: '1in',
+                position: 'absolute',
+                left: '-100%',
+                top: '-100%'
+            });
+            jQuery('body').append(dpiTest);
+
+            var dpi = dpiTest.height();
+            dpiTest.remove();
+            var mpu = ol.proj.METERS_PER_UNIT[units];
+            var resolution = scale/(mpu * 39.37 * dpi);
+            return resolution;
+        },
         /* --------- /Impl specific - PRIVATE ----------------------------> */
 
         /* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
@@ -700,6 +763,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var olStyle = {};
             if (Oskari.util.keyExists(style, 'fill.color')) {
                 var color = style.fill.color;
+                if (style.effect) {
+                    switch (style.effect) {
+                    case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
+                    case 'lighten' : color = Oskari.util.alterBrightness(color, 50); break;
+                    }
+                }
                 if (Oskari.util.keyExists(style, 'image.opacity')) {
                     var rgb = null;
                     if (color.charAt(0) === '#') {

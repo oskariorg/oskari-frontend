@@ -225,6 +225,46 @@ Oskari.util = (function () {
     };
 
     /**
+     * Returns a new color string for lighter or darker color than the original.
+     * @param {String} colorStr color to change
+     * @param {Number} amount amount of change. Positive number for lighter, negative for darker color.
+     */
+    util.alterBrightness = function (colorStr, amount) {
+        var usePound = false;
+
+        if (colorStr.indexOf('rgba') === 0) {
+            // Alpha is not supported
+            return colorStr;
+        }
+        if (colorStr.indexOf('rgb') === 0) {
+            colorStr = util.rgbToHex(colorStr);
+        }
+        if (colorStr[0] === '#') {
+            colorStr = colorStr.slice(1);
+            usePound = true;
+        }
+
+        var num = parseInt(colorStr, 16);
+
+        var red = (num >> 16) + amount;
+        if (red > 255) red = 255;
+        else if (red < 0) red = 0;
+
+        var blue = ((num >> 8) & 0x00FF) + amount;
+        if (blue > 255) blue = 255;
+        else if (blue < 0) blue = 0;
+
+        var green = (num & 0x0000FF) + amount;
+        if (green > 255) green = 255;
+        else if (green < 0) green = 0;
+
+        var color = (green | (blue << 8) | (red << 16)).toString(16);
+        // Pad with leading zeros
+        color = String('000000' + color).slice(-6);
+        return (usePound ? '#' : '') + color;
+    };
+
+    /**
     * Check, if nested key exists
     * @method keyExists
     * @params {Object}  object to check { "test" : { "this" : true }}

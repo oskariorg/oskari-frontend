@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 show: this.loc('actions.showMarkers'),
                 fileexport: this.loc('actions.export')
             });
-                                                            
+
             var wrapper = this._template.wrapper.clone();
             var systems = this._template.systems.clone();
             if ( this.sourceSelect.getElement() ) {
@@ -480,4 +480,3 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         }
     }
 );
- 

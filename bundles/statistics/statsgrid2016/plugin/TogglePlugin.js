@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
 
         var toolElement = jQuery('<div class=' + toolId + '></div>');
 
-        toolElement.bind('click', function () {
+        toolElement.on('click', function () {
             me.flyoutManager.toggle(toolId);
         });
         this.element.append(toolElement);

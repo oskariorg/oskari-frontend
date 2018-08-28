@@ -280,8 +280,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             // showmousecoordinates checkbox change
-            popupContent.find('#mousecoordinates').unbind('change');
-            popupContent.find('#mousecoordinates').bind('change', function(){
+            popupContent.find('#mousecoordinates').off('change');
+            popupContent.find('#mousecoordinates').on('change', function(){
                 me._showMouseCoordinates = jQuery(this).prop('checked');
                 me._setDisabledInputs(me._showMouseCoordinates, false);
                 me._progressSpinner.stop();
@@ -311,14 +311,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             var themeColours = mapmodule.getThemeColours();
             var popupCloseIcon = null;
-
             if (isMobile) {
                 var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
                 var topOffsetElement = jQuery('div.mobileToolbarDiv');
                 me._popup.addClass('coordinatetool__popup');
                 me._popup.addClass('mobile-popup');
                 me._popup.setColourScheme({"bgColour": "#e6e6e6"});
-                me._popup.createCloseIcon();
 
                 //hide mouse coordinates
                 popupContent.find('.mousecoordinates-div').hide();
@@ -358,7 +356,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 me._popup.show(popupTitle, popupContent, buttons);
                 me._popup.moveTo(me.getElement(), popupLocation, true);
-                me._popup.adaptToMapSize(me._sandbox, popupName);
                 popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
                 me._popup.setColourScheme({
                     'bgColour': themeColours.backgroundColour,
@@ -374,19 +371,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._showReverseGeocodeContainer(popupContent);
             }
 
-            if (!isMobile) {
-                // bind change events to listen popup size changes
-                popupEl.find('input[type=checkbox]').each(function(){
-                    jQuery(this).bind('change', function(){
-                        me._checkPopupPosition();
-                    });
+            me._popup.adaptToMapSize(me._sandbox, popupName);
+            // bind change events to listen popup size changes
+            popupEl.find('input[type=checkbox]').each(function(){
+                jQuery(this).on('change', function(){
+                    me._checkPopupPosition();
                 });
-                popupEl.find('select').each(function(){
-                    jQuery(this).bind('change', function(){
-                        me._checkPopupPosition();
-                    });
+            });
+            popupEl.find('select').each(function(){
+                jQuery(this).on('change', function(){
+                    me._checkPopupPosition();
                 });
-            }
+            });
 
             me.getEmergencyCallInfo();
         },
@@ -399,14 +395,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return;
             }
             var popupEl = me._popup.getJqueryContent().parent().parent();
-
             // Change top/bottom position if popup is not fully visible
             if(popupEl) {
                 var wHeight = jQuery(window).height();
-                var pHeight = popupEl.height();
+                var pHeight = popupEl.outerHeight(true);
                 var pPosition = popupEl.position();
                 if((pPosition.top + pHeight) > wHeight && (wHeight - pHeight) > 0) {
-                    popupEl.css('top', (wHeight - pHeight) + 'px');
+                    popupEl.css('top', (wHeight - pHeight - 10) + 'px');
+                } else if ((wHeight - pHeight) < 0) {
+                    me._popup.adjustHeight();
+                    popupEl.css('top', '10px');
                 }
             }
         },
@@ -426,7 +424,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var reverseGeocodeLabel = geocodeController.find('div.reverseGeocode-label');
             reverseGeocodeLabel.hide();
             geocodeController.find('label.reverseGeocodeInfoText').html(me._locale('display.reversegeocode.moreInfo'));
-            reverseGeoCheckbox.bind('change', function() {
+            reverseGeoCheckbox.on('change', function() {
                 if (this.checked) {
                   reverseGeocodeLabel.show();
                 }
@@ -624,8 +622,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             // Bind event listeners
             // XY icon click
-            el.unbind('click');
-            el.bind('click', function(event) {
+            el.off('click');
+            el.on('click', function(event) {
                 if (me._sandbox.mapMode !== "mapPublishMode") {
                     me._toggleToolState();
                     event.stopPropagation();
@@ -886,7 +884,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label-and').html(me._locale('display.coordinatesTransform.emergencyCallLabelAnd'));
             coordinateDisplayEmergencyCall.find('span.degreesX').html(me._locale('display.compass.i') + ' ' + degmin.degreesX);
             coordinateDisplayEmergencyCall.find('span.minutesX').html(minutesX);
-            coordinateDisplayEmergencyCall.find('span.degreesY').html(me._locale('compass.p') + ' ' + degmin.degreesY);
+            coordinateDisplayEmergencyCall.find('span.degreesY').html(me._locale('display.compass.p') + ' ' + degmin.degreesY);
             coordinateDisplayEmergencyCall.find('span.minutesY').html(minutesY);
             coordinateDisplayEmergencyCall.show();
             me._checkPopupPosition();

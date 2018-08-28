@@ -32,10 +32,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.telemetry.TelemetryBundleInstanc
             }
             me._pushEvent('Toolbar', el.attr('tool'));
         });
-        jQuery('#mapdiv .mapplugin.mylocationplugin').click(function (event) {
+        jQuery('#mapdiv .mapplugin.mylocationplugin').on('click', function (event) {
             me._pushEvent('Maptools', 'mylocationtool');
         });
-        jQuery('#mapdiv .mapplugin.coordinatetool').click(function (event) {
+        jQuery('#mapdiv .mapplugin.coordinatetool').on('click', function (event) {
             me._pushEvent('Maptools', 'coordinatetool');
         });
     },

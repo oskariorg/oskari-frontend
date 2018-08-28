@@ -29,9 +29,11 @@ Oskari.registerLocalization({
         'panels': {
             'newSearch': {
                 'title': 'SEARCH DATA',
+                'seriesTitle': 'Time series',
                 'datasourceTitle': 'Data source',
-                'indicatorTitle': 'Variable',
+                'indicatorTitle': 'Indicator',
                 'regionsetTitle': 'Regionset',
+                'seriesLabel': 'Get data as time series',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
                 'selectRegionsetPlaceholder': 'Select regionset',
@@ -40,6 +42,7 @@ Oskari.registerLocalization({
                 'refineSearchTooltip1': 'You will get more options after choosing data provider and data.',
                 'refineSearchTooltip2': '',
                 'addButtonTitle': 'Get contents of data',
+                'clearButtonTitle': 'Clear',
                 'defaultPlaceholder': 'Select value',
                 'selectionValues': {
                     'sex': {
@@ -67,6 +70,7 @@ Oskari.registerLocalization({
         'statsgrid': {
             'title': 'SEARCHED DATA',
             'noResults': 'No data selected',
+            'noValues': 'No values for the selected data',
             'areaSelection': {
                 'title': 'AREAL DIVISION',
                 'info': 'Redefine areal division for data from dropdown list'
@@ -81,7 +85,16 @@ Oskari.registerLocalization({
             'title': 'Classification',
             'noActive': 'Data was not selected, select data to see map classification.',
             'noEnough': 'The data is too small to be classified, try different data or change limitings.',
+            'noData': 'Data is not available for the selected point in time.',
             'cannotCreateLegend': 'Legend cannot be created by chosen values, try different values.'
+        },
+        'series': {
+            'speed': {
+                'label': 'Animation speed',
+                'fast': 'Fast',
+                'normal': 'Normal',
+                'slow': 'Slow'
+            }
         },
         'diagram': {
             'title': 'Diagram'
@@ -89,7 +102,9 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Gender',
             'year': 'Year',
-            'regionset': 'Area'
+            'regionset': 'Area',
+            'from': 'from',
+            'to': 'to'
         },
         'datatable': 'Table',
         'published': {
@@ -152,7 +167,9 @@ Oskari.registerLocalization({
             'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.',
             'datasetSave': 'Error saving dataset.',
             'datasetDelete': 'Error deleting dataset.',
-            'indicatorSave': 'Error saving indicator'
+            'indicatorSave': 'Error saving indicator',
+            'myIndicatorYearInput': 'Year field cannot be empty.',
+            'myIndicatorRegionselect': 'Regionselect cannot be empty.'
         },
         'datacharts': {
             'flyout': 'Searched data',
@@ -208,7 +225,8 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',
-                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?'
+                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?',
+                'deleteSuccess': 'Indicator removed'
             },
             'button': {
                 'cancel': 'Cancel',
@@ -216,7 +234,8 @@ Oskari.registerLocalization({
             },
             'error': {
                 'title': 'Error',
-                'notfound': 'The indicator was not found.'
+                'notfound': 'The indicator was not found.',
+                'notdeleted': 'The indicator was not removed.'
             }
         },
         'userIndicators': {
@@ -224,7 +243,7 @@ Oskari.registerLocalization({
             'buttonTitle': 'Add new indicator',
             'buttonAddIndicator': 'Add data',
             'panelGeneric': {
-                'title': 'Information',
+                'title': 'Indicator data',
                 'formName': 'Name',
                 'formDescription': 'Description',
                 'formDatasource': 'Datasource'
@@ -240,8 +259,8 @@ Oskari.registerLocalization({
                 'title': '',
                 'placeholder': ''
             },
+            'notLoggedInTitle': 'Warning',
             'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
-            'notLoggedInWarningAfterServerImpl': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
             'modify': {
                 'title': 'Indicator',
                 'edit': 'Edit',

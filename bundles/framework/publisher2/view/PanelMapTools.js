@@ -131,14 +131,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(tools, function(tool) {
                 var ui = jQuery(me.templates.tool({title : tool.getTitle() }));
                 //setup values when editing an existing map
-
-                if (tool.isEnabled()) {
-                    ui.find('input').prop('checked','checked');
-                }
+                ui.find('input').prop('checked', !!tool.isEnabled());
+                ui.find('input').prop('disabled', !!tool.isDisabled());
 
                 contentPanel.append(ui);
 
-                ui.find('input').change(function() {
+                ui.find('input').on('change', function() {
                     var enabled = jQuery(this).is(':checked');
                     // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
                     tool.setEnabled(enabled);
@@ -245,10 +243,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             // update tools
             _.each(me.tools, function(tool){
                 if(tool.isDisplayedInMode(mode) === true){
-                    cont.find('#tool-' + tool.getTool().id).attr('disabled', 'disabled');
-                    cont.find('#tool-' + tool.getTool().id).removeAttr('checked');
+                    cont.find('#tool-' + tool.getTool().id).prop('disabled', true);
+                    cont.find('#tool-' + tool.getTool().id).prop('checked', false);
                 } else {
-                    cont.find('#tool-' + tool.getTool().id).removeAttr('disabled');
+                    cont.find('#tool-' + tool.getTool().id).prop('disabled', false);
                 }
             });
         },

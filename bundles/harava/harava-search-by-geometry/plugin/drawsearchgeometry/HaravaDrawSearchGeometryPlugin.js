@@ -307,7 +307,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
                             if (Message && typeof Message.createMessage === "function" && typeof Message.showMessage === "function" && typeof Message.closeMessage === "function") {
                                 Message.createMessage(me._locale.tooltips.searchNotFound, me._locale.tooltips.searchNotFoundOkButton);
                                 Message.showMessage();
-                                $("#aMessage").click(function () {
+                                $("#aMessage").on('click', function () {
                                     Message.closeMessage();
                                     return false;
                                 });

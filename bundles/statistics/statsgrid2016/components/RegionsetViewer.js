@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this.LAYER_ID = 'STATS_LAYER';
 
     this._bindToEvents();
-
+    this._initLayer();
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
 }, {
 /** **** PUBLIC METHODS ******/
@@ -27,15 +27,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         }
         var errorService = service.getErrorService();
 
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function (err, data) {
+        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
             if (err) {
                 Oskari.log('RegionsetViewer').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
                 return;
             }
 
             var classification = state.getClassificationOpts(ind.hash);
+            var groupStats = service.getSeriesService().getSeriesStats(ind.hash);
 
-            var classify = service.getClassificationService().getClassification(data, classification);
+            var classify = service.getClassificationService().getClassification(data, classification, groupStats);
 
             if (!classify) {
                 Oskari.log('RegionsetViewer').warn('Error getting classification', data, classification);
@@ -76,7 +77,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                         });
 
                         if (wantedRegion && wantedRegion.length === 1) {
-                            optionalStyles.push(me._getFeatureStyle(classification, region, color, highlightRegion, iconSizePx));
+                            if (highlightRegion && (highlightRegion.toString() === region.toString())) {
+                                optionalStyles.push(me._getFeatureStyle(classification, region, color, true, iconSizePx));
+                            }
                             features.push(me._getFeature(classification, wantedRegion[0], data[wantedRegion[0].id].toString()));
                         }
                     });
@@ -93,15 +96,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                         'features': features
                     };
 
-                    var defaultFeatureStyle = {
-                        fill: {
-                            color: 'rgba(255,0,0,0.0)'
-                        },
-                        stroke: {
-                            color: '#000000',
-                            width: 1
-                        }
-                    };
+                    var defaultFeatureStyle = me._getFeatureStyle(classification, null, color, false, iconSizePx);
 
                     if (classification.showValues === true) {
                         var textColor = Oskari.util.isDarkColor('#' + color) ? '#ffffff' : '#000000';
@@ -119,23 +114,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                         };
                     }
 
-                    var region = service.getRegionsets(currentRegion);
-
                     var params = [geoJSON, {
                         clearPrevious: false,
                         featureStyle: defaultFeatureStyle,
                         optionalStyles: optionalStyles,
                         layerId: me.LAYER_ID,
                         prio: index,
-                        showLayer: true,
-                        opacity: classification.opacity || 100,
-                        layerName: locale.layer.name,
-                        layerInspireName: locale.layer.inspireName,
-                        layerOrganizationName: locale.layer.organizationName,
-                        layerDescription: (region && region.name) ? region.name : null,
-                        layerPermissions: {
-                            'publish': 'publication_permission_ok'
-                        }
+                        opacity: classification.opacity || 100
                     }];
 
                     sandbox.postRequestByName(
@@ -147,61 +132,74 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         });
     },
     /** **** PRIVATE METHODS ******/
-    _getFeatureStyle: function (classification, region, color, highlightRegion, size) {
+    _getFeatureStyle: function (classification, region, color, highlighted, size) {
         var me = this;
         var mapStyle = classification.mapStyle || 'choropleth';
         var style = null;
-        var strokeWidth = (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1;
-        var strokeColor = Oskari.util.isDarkColor('#' + color) ? '#ffffff' : '#000000';
+        var strokeWidth = highlighted ? 4 : 1;
         if (mapStyle === 'points') {
-            var svg = me._pointSymbol.clone();
-            svg.attr('width', 64);
-            svg.attr('height', 64);
-
-            var circle = svg.find('circle');
-            circle.attr('stroke', strokeColor);
-            circle.attr('stroke-width', strokeWidth);
-            circle.attr('fill', '#' + color);
-            circle.attr('cx', 32);
-            circle.attr('cy', 32);
-            circle.attr('r', 32 - strokeWidth);
-            style = {
-                property: {
-                    value: region,
-                    key: 'id'
-                },
-                image: {
-                    opacity: 1,
-                    shape: {
-                        data: svg.html(),
-                        x: 32,
-                        y: 0
-                    },
-                    sizePx: size
-                }
-            };
+            style = me._getPointStyle(strokeWidth, color, size);
         } else {
-            style = {
-                property: {
-                    value: region,
-                    key: 'id'
-                },
-                fill: {
-                    color: '#' + color
-                },
-                stroke: {
-                    color: '#000000',
-                    width: strokeWidth
-                },
-                image: {
-                    opacity: 1
-                }
-            };
+            style = me._getPolygonStyle(strokeWidth, color);
+        }
+        if (region) {
+            style.property = {
+                value: region,
+                key: 'id'
+            }
         }
         return style;
     },
 
+    _getPointStyle: function (strokeWidth, fillColor, size) {
+        var strokeColor = Oskari.util.isDarkColor('#' + fillColor) ? '#ffffff' : '#000000';
+        var svg = this._pointSymbol.clone();
+        svg.attr('width', 64);
+        svg.attr('height', 64);
+
+        var circle = svg.find('circle');
+        circle.attr('stroke', strokeColor);
+        circle.attr('stroke-width', strokeWidth);
+        circle.attr('fill', '#' + fillColor);
+        circle.attr('cx', 32);
+        circle.attr('cy', 32);
+        circle.attr('r', 32 - strokeWidth);
+        var style = {
+            image: {
+                opacity: 1,
+                shape: {
+                    data: svg.html(),
+                    x: 32,
+                    y: 0
+                },
+                sizePx: size
+            }
+        };
+        return style;
+    },
+
+    _getPolygonStyle: function (strokeWidth, fillColor) {
+        var style = {
+            fill: {
+                color: '#' + fillColor
+            },
+            stroke: {
+                color: '#000000',
+                width: strokeWidth
+            },
+            image: {
+                opacity: 1
+            }
+        };
+        return style;
+    },
+
     _getFeature: function (classification, region, label) {
+        var featureProperties = {
+            'id': region.id,
+            'name': region.name,
+            'regionValue': label
+        };
         if (classification.mapStyle === 'points') {
             return {
                 'type': 'Feature',
@@ -209,14 +207,89 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                     'type': 'Point',
                     'coordinates': [region.point.lon, region.point.lat]
                 },
-                'properties': {
-                    'id': region.id,
-                    'name': region.name,
-                    'regionValue': label
+                'properties': featureProperties
+            };
+        } else {
+            var geojson = jQuery.extend(true, {}, region.geojson);
+            geojson.properties = featureProperties;
+            return geojson;
+        }
+    },
+    /**
+     * Prepare vectorlayer for features.
+     */
+    _initLayer: function () {
+        var locale = this.instance.getLocalization();
+        this.sb.postRequestByName(
+            'VectorLayerRequest',
+            [
+                this.LAYER_ID,
+                {
+                    layerName: locale.layer.name,
+                    layerInspireName: locale.layer.inspireName,
+                    layerOrganizationName: locale.layer.organizationName,
+                    showLayer: true,
+                    layerPermissions: {
+                        'publish': 'publication_permission_ok'
+                    }
                 }
+            ]
+        );
+    },
+    _updateLayerProperties: function () {
+        var service = this.service;
+        var state = service.getStateService();
+        var ind = state.getActiveIndicator();
+        if (!ind) {
+            return;
+        }
+
+        var regionId = state.getRegion();
+        var region = service.getRegionsets(regionId);
+        var classification = state.getClassificationOpts(ind.hash);
+        var highlightStrokeWidth = 4;
+
+        var hoverOptions = {
+            content: [
+                {
+                    keyProperty: 'name',
+                    valueProperty: 'regionValue'
+                }
+            ]
+        };
+
+        if (classification.mapStyle && classification.mapStyle === 'points') {
+            var colors = service.getColorService().getColorsForClassification(classification);
+            var fillColor = colors[0];
+            var ptStyle = this._getPointStyle(highlightStrokeWidth, fillColor);
+            hoverOptions.featureStyle = {
+                image: {
+                    shape: {
+                        data: ptStyle.image.shape.data
+                    }
+                },
+                inherit: true
+            };
+        } else {
+            hoverOptions.featureStyle = {
+                stroke: {
+                    width: highlightStrokeWidth
+                },
+                inherit: true,
+                effect: 'darken'
             };
         }
-        return region.geojson;
+
+        this.sb.postRequestByName(
+            'VectorLayerRequest',
+            [
+                this.LAYER_ID,
+                {
+                    hover: hoverOptions,
+                    layerDescription: (region && region.name) ? region.name : null
+                }
+            ]
+        );
     },
     /**
      * Listen to events that require re-rendering the UI
@@ -224,19 +297,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     _bindToEvents: function () {
         var me = this;
         var state = me.service.getStateService();
-
-        me.service.on('StatsGrid.IndicatorEvent', function (event) {
-            // if indicator is removed/added
-            me.render();
-        });
-
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             // Always show the active indicator
+            me._updateLayerProperties();
             me.render(state.getRegion());
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             // Need to update the map
+            me._updateLayerProperties();
             me.render(state.getRegion());
         });
 
@@ -249,6 +318,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
             // Classification changed, need update map
+            me._updateLayerProperties();
             me.render(state.getRegion());
         });
 

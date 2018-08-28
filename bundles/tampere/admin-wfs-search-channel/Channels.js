@@ -34,14 +34,14 @@ Oskari.clazz.define(
                 '  <div class="icon-close"></div>' +
                 '</div>'
             );
-            me.templates.search.find('input').keypress(
+            me.templates.search.find('input').on('keypress',
                 function (event) {
                     if (event.keyCode === 10 || event.keyCode === 13) {
                         me._filterList(event, me);
                     }
                 }
             );
-            me.templates.search.find('div.icon-close').click(
+            me.templates.search.find('div.icon-close').on('click',
                 function (event) {
                     jQuery(event.target)
                         .parent()
@@ -55,7 +55,7 @@ Oskari.clazz.define(
             );
             // jQuery doesn't clone handlers that aren't created with jQuery,
             // so we have to do this with jQuery...
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._filterList(event, me);
                 }
@@ -103,18 +103,18 @@ Oskari.clazz.define(
                 me.templates.form.find('.details--wrapper').append(me.templates.form.detailinputs);
             });
 
-            me.templates.form.find('input[name=details-isaddress]').change(function() {
+            me.templates.form.find('input[name=details-isaddress]').on('change', function() {
                 if(jQuery(this).is(":checked")) {
                     jQuery(this).parents("form").find(".remove--param").not(".hidden").parent("label").remove();
                 }
             });
 
-            me.templates.form.find(".remove--param").click(function(event){
+            me.templates.form.find(".remove--param").on('click', function(event){
                 jQuery(this).parent().remove();
                 event.preventDefault;
             });
 
-             me.templates.form.find("select[name=choose-wfs-layer]").change(function(event) {
+             me.templates.form.find("select[name=choose-wfs-layer]").on('change', function(event) {
                  me.getWFSLayerColumns(jQuery(this).val(), jQuery(this).parents('fieldset'));
                  event.preventDefault;
              });
@@ -137,7 +137,7 @@ Oskari.clazz.define(
             );
             btn.setTitle(me._getLocalization("new-params-btn"));
             btn.addClass('btn--center new-params-btn');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     if(jQuery(this).parents('form').find("input[name=details-isaddress]").is(":checked") && jQuery(this).parents('form').find("select[name=choose-param-for-search]").length == 2){
                         me._openPopup(
@@ -165,7 +165,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.buttons.DeleteButton'
             );
             btn.addClass('delete--channel hidden');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._deleteChannel(event, me);
                 }
@@ -174,7 +174,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.CancelButton'
             );
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._closeForm(jQuery(event.target).parents('form'));
                 }
@@ -196,7 +196,7 @@ Oskari.clazz.define(
             );
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
             btn.setName('edit');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._openForm(event, me);
                 }
@@ -613,9 +613,9 @@ Oskari.clazz.define(
                 me._progressSpinner.start();
                 fragment.find("[name=id]").val(channel.id);
                 fragment.find("[name=choose-wfs-layer]").val(channel.wfsId).trigger("change");
-                fragment.find("[name=details-default]").attr('checked', channel.is_default);
+                fragment.find("[name=details-default]").prop('checked', channel.is_default);
                 // TODO: setup config properly
-                fragment.find("[name=details-isaddress]").attr('checked', !!channel.config.handler);
+                fragment.find("[name=details-isaddress]").prop('checked', !!channel.config.handler);
                 $.each(channel.locale, function(lang, text) {
                     fragment.find("[name=details-topic-"+lang+"]").val(text.name);
                     fragment.find("[name=details-desc-"+lang+"]").val(text.desc);

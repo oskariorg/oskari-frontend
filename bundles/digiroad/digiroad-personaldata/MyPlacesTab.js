@@ -208,7 +208,7 @@ function(instance, localization) {
             link.append(linkIcon);
 
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._showPlace(data.geometry);
                 return false;
             });
@@ -219,7 +219,7 @@ function(instance, localization) {
         var editRenderer = function(name, data) {
             var link = me.linkTemplate.clone();
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._editPlace(data);
                 return false;
             });
@@ -230,7 +230,7 @@ function(instance, localization) {
         var deleteRenderer = function(name, data) {
             var link = me.linkTemplate.clone();
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._deletePlace(data);
                 return false;
             });
@@ -293,7 +293,7 @@ function(instance, localization) {
             link.append(linkIcon);
 
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._showPlace(data.geometry, me.restrictionsId);
                 return false;
             });

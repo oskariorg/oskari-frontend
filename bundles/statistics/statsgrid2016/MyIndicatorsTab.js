@@ -150,8 +150,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             this.service.deleteIndicator(me.userDsId, indicator.id, null, null, function (err, response) {
                 if (err) {
                     me._showErrorMessage(me.loc('tab.error.notdeleted'));
+                } else {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    dialog.show(me.loc('tab.popup.deletetitle'), me.loc('tab.popup.deleteSuccess'));
+                    dialog.fadeout();
+                    // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
                 }
-                // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
             });
         },
 
@@ -218,7 +222,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     if (!me.popupOpen) {
                         var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
                         formFlyout.showForm(me.userDsId, data.id);
@@ -233,7 +237,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             var deleteRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.text(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var indicator = me._getIndicatorById(data.id);
                     if (indicator && !me.popupOpen) {
                         me._confirmDelete(indicator);

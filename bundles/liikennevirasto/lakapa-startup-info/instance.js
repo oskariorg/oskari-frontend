@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.StartupInfoBundleInsta
                 checkbox.bind(
                     'change',
                     function () {
-                        if (jQuery(this).attr('checked')) {
+                        if (jQuery(this).prop('checked')) {
                             // Set cookie not to show info again
                             jQuery.cookie(
                                 'lakapa_info_seen', '1', {

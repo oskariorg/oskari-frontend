@@ -70,7 +70,7 @@ define([
 
                 jQuery.ajax({
                     type: 'PUT',
-                    url: Oskari.getSandbox().getAjaxUrl('SaveOrganization'),
+                    url: Oskari.urls.getRoute('SaveOrganization'),
                     data: data,
                     error: function() {
                         var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -147,7 +147,7 @@ define([
                     input.setTitle(me.instance.locale('groupTitles.localePrefix') + ' ' + (loc[locale] || locale));
                     input.addClass('group-name');
                     var el = jQuery(input.getElement());
-                    el.find('input').bind('keyup', function() {
+                    el.find('input').on('keyup', function() {
                         var inputEl = jQuery(this);
                         var value = inputEl.val().trim();
                         if (value.length < 4) {
@@ -830,11 +830,11 @@ define([
                     dialog.close();
 
                     jQuery.ajax({
-                        type: 'GET',
+                        type: 'POST',
                         data: {
                             layer_id: me.model.getId()
                         },
-                        url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
+                        url: Oskari.urls.getRoute('DeleteLayer'),
                         success: function(resp) {
                             if (!resp) {
                                 if (addLayerDiv.hasClass('show-edit-layer')) {
@@ -913,7 +913,7 @@ define([
                     type: 'POST',
                     data: data,
                     dataType: 'json',
-                    url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
+                    url: Oskari.urls.getRoute('SaveLayer'),
                     success: function(resp) {
                         var success = true;
                         me.progressSpinner.stop();
@@ -1223,7 +1223,7 @@ define([
                             cursor: 'wait'
                         });
                     },
-                    url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
+                    url: Oskari.urls.getRoute('SaveLayer'),
                     success: function(resp) {
                         jQuery('body').css('cursor', '');
                         if (!me.model.getId()) {
@@ -1256,12 +1256,12 @@ define([
                 var sandbox = me.options.instance.getSandbox();
                 // make AJAX call
                 jQuery.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     dataType: 'json',
                     data: {
                         layer_id: me.model.getId()
                     },
-                    url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
+                    url: Oskari.urls.getRoute('DeleteLayer'),
                     success: function(resp) {
                         accordion.trigger({
                             type: 'adminAction',

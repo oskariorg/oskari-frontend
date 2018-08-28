@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                     '    </div>' +
                     '</div>');
 
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 event.stopPropagation();
             });
             // Store coordinate value elements so we can update them fast

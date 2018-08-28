@@ -80,6 +80,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
             cancelButton.setTitle(this.loc.buttons.cancel);
             cancelButton.setHandler(function () {
                 me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
+                me.instance.setPublishMode(false);
             });
             this.buttons.cancel = cancelButton;
 

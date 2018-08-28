@@ -5,6 +5,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
+    this.selectClassRef = [];
     Oskari.makeObservable(this);
 }, {
     __templates: {
@@ -73,8 +74,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             }
             if (result.complete) {
                 me.spinner.stop();
-
-                if (result.indicators.length === 0) {
+                var isUserDatasource = '' + me.service.getUserDatasource().id === '' + datasrc;
+                if (!isUserDatasource && result.indicators.length === 0) {
+                    // show notification about empty indicator list for non-myindicators datasource
                     errorService.show(locale('errors.title'), locale('errors.indicatorListIsEmpty'));
                 }
             }
@@ -92,7 +94,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         return btn;
     },
     /** **** PUBLIC METHODS ******/
-
+    clearSelections: function (selectInstance) {
+        this._params.clean();
+        this.selectClassRef.forEach(function (ref) {
+            ref.reset();
+        });
+    },
     /**
      * @method  @public getPanelContent get panel content
      * @return {Object} jQuery element
@@ -102,6 +109,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var main = jQuery(this.__templates.main());
         var locale = me.instance.getLocalization();
         var panelLoc = locale.panels.newSearch;
+
+        // Series checkbox
+        main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.seriesTitle, clazz: 'stats-series-selection'})));
+        var seriesInput = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+        seriesInput.setTitle(locale.panels.newSearch.seriesLabel);
+        seriesInput.setChecked(false);
+        seriesInput.addClass('stats-series-input');
+        var seriesSelection = main.find('.stats-series-selection');
+        seriesSelection.append(seriesInput.getElement());
+
+        // Regionsets
+        main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
+        var regionsetFilterElement = main.find('.stats-rs-selector');
+        var regionOptions = {
+            placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
+            no_results_text: locale.panels.newSearch.noResults,
+            multi: true
+        };
+
+        var regionFilterSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var regionFilterDropdown = regionFilterSelect.create(this.service.getRegionsets(), regionOptions);
+        regionFilterDropdown.css({width: '100%'});
+        regionsetFilterElement.append(regionFilterDropdown);
+        regionFilterSelect.adjustChosen();
 
         var datasources = this.service.getDatasource();
         var sources = [];
@@ -142,21 +173,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         indicatorSelector.append(indicDropdown);
         indicSelect.adjustChosen();
 
-        // Regionsets
-        main.prepend(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
-        var regionsetFilterElement = main.find('.stats-rs-selector');
-        var regionOptions = {
-            placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
-            no_results_text: locale.panels.newSearch.noResults,
-            multi: true
-        };
-
-        var regionFilterSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        var regionFilterDropdown = regionFilterSelect.create(this.service.getRegionsets(), regionOptions);
-        regionFilterDropdown.css({width: '100%'});
-        regionsetFilterElement.append(regionFilterDropdown);
-        regionFilterSelect.adjustChosen();
-
         // Refine data label and tooltips
         var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({
             title: panelLoc.refineSearchLabel,
@@ -171,13 +187,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me._params.attachTo(selectionsContainer);
 
         var btnAddIndicator = me.createAddIndicatorButton();
-        btnAddIndicator.insertTo(main);
+        btnAddIndicator.insertTo(main.find('.stats-ind-selector'));
         btnAddIndicator.setVisible(false);
 
         var btnEditIndicator = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
         btnEditIndicator.setPrimary(false);
         btnEditIndicator.insertTo(main);
         btnEditIndicator.setVisible(false);
+
+        seriesInput.setHandler(function () {
+            me._params.indicatorSelected(
+                dsSelect.getValue(),
+                indicSelect.getValue(),
+                regionFilterSelect.getValue(),
+                seriesInput.isChecked());
+        });
+
+        me.selectClassRef.push(regionFilterSelect);
 
         dsSelector.on('change', function () {
             me._params.clean();
@@ -199,7 +225,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 formFlyout.showForm(dsSelect.getValue());
             });
             // if datasource is of type "user" the user can add new indicators to it
-            btnAddIndicator.setVisible(me.service.getDatasource(Number(dsSelect.getValue())).type === 'user');
+            var type = me.service.getDatasource(Number(dsSelect.getValue())).type;
+            btnAddIndicator.setVisible(type === 'user');
+            jQuery(btnAddIndicator.getElement()).css({
+                'width': '60%',
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis',
+                'white-space': 'nowrap'
+            });
         });
 
         indicatorSelector.on('change', function () {
@@ -222,16 +255,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             me._params.indicatorSelected(
                 dsSelect.getValue(),
                 indicSelect.getValue(),
-                regionFilterSelect.getValue());
+                regionFilterSelect.getValue(),
+                seriesInput.isChecked());
         });
 
         regionsetFilterElement.on('change', function (evt) {
-            if (!regionFilterSelect.getValue()) {
+            if (regionFilterSelect.getValue().length === 0) {
                 dsSelect.reset();
                 return;
             }
             var unsupportedSelections = me.getUnsupportedDatasetsList(regionFilterSelect.getValue());
-            me._params.indicatorSelected(dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue());
+
+            me._params.indicatorSelected(dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue(), seriesInput.isChecked());
 
             if (unsupportedSelections) {
                 var ids = unsupportedSelections.map(function (iteration) {
@@ -258,7 +293,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         this.service.on('StatsGrid.DatasourceEvent', function (evt) {
             var currentDS = dsSelect.getValue();
-            if (currentDS !== evt.getDatasource()) {
+            var ds;
+
+            if (!isNaN(evt.getDatasource())) {
+                ds = evt.getDatasource().toString();
+            } else {
+                ds = evt.getDatasource();
+            }
+            if (currentDS !== ds) {
                 return;
             }
             // update indicator list

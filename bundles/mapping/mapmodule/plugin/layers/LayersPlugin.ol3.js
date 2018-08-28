@@ -200,7 +200,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             layer;
         for (i = 0; i < layers.length; ++i) {
             layer = layers[i];
-
             if (layer.isVisible()) {
                 this.notifyLayerVisibilityChanged(layer);
             }
@@ -247,11 +246,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             // show non-baselayer if in scale, in geometry and layer visible
             if (mapLayer && !mapLayer.getVisible()) {
                 mapLayer.setVisible(true);
+            } else {
+                return; //suppress event
             }
         } else {
             // otherwise hide non-baselayer
             if (mapLayer && mapLayer.getVisible()) {
                 mapLayer.setVisible(false);
+            } else {
+                return; //suppress event
             }
         }
         var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);

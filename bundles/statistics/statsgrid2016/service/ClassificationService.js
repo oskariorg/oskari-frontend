@@ -69,21 +69,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
          * }
          * @param  {Object} indicatorData data to classify. Keys are available for groups, values are used for classification
          * @param  {Object} options       optional instructions for classification
+         * @param  {geostats} groupStats precalculated geostats | optional
          * @return {Object}               result with values and helper functions
          */
-        getClassification: function (indicatorData, options) {
+        getClassification: function (indicatorData, options, groupStats) {
             var me = this;
             if (typeof indicatorData !== 'object') {
                 throw new Error('Data expected as object with region/value as keys/values.');
             }
             var opts = me._validateOptions(options);
             var list = me._getDataAsList(indicatorData);
-            if (list.length < 3) {
-                return;
-            }
-            if (opts.count >= list.length) {
-                opts.count = list.length - 1;
-            }
 
             if (me._hasNonNumericValues(list)) {
                 // geostats can handle this, but lets not support for now (gstats.getUniqueValues() used previously)
@@ -95,17 +90,55 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             stats.setPrecision(opts.precision);
 
             var response = {};
+            if (groupStats) {
+                if (groupStats.serie.length < 3) {
+                    return;
+                }
+                groupStats.silent = true;
+                groupStats.setPrecision(opts.precision);
 
-            if (opts.method === 'jenks') {
-                // Luonnolliset välit
-                response.bounds = stats.getJenks(opts.count);
-            } else if (opts.method === 'quantile') {
-                // Kvantiilit
-                response.bounds = stats.getQuantile(opts.count);
-            } else if (opts.method === 'equal') {
-                // Tasavälit
-                response.bounds = stats.getEqInterval(opts.count);
+                if (opts.count >= groupStats.serie.length) {
+                    opts.count = groupStats.serie.length - 1;
+                }
+                var groupOpts = groupStats.classificationOptions || {};
+                var calculateBounds =
+                    (!groupOpts.method || groupOpts.method !== opts.method) ||
+                    (!groupOpts.count || groupOpts.count !== opts.count);
+
+                if (calculateBounds) {
+                    if (opts.method === 'jenks') {
+                        response.bounds = groupStats.getJenks(opts.count);
+                    } else if (opts.method === 'quantile') {
+                        response.bounds = groupStats.getQuantile(opts.count);
+                    } else if (opts.method === 'equal') {
+                        response.bounds = groupStats.getEqInterval(opts.count);
+                    }
+                    groupOpts.method = opts.method;
+                    groupOpts.count = opts.count;
+                    groupStats.classificationOptions = groupOpts;
+                }
+                // Set bounds manually.
+                stats.setBounds(groupStats.bounds);
+                stats.setRanges();
+            } else {
+                if (list.length < 3) {
+                    return;
+                }
+                if (opts.count >= list.length) {
+                    opts.count = list.length - 1;
+                }
+                if (opts.method === 'jenks') {
+                    // Luonnolliset välit
+                    response.bounds = stats.getJenks(opts.count);
+                } else if (opts.method === 'quantile') {
+                    // Kvantiilit
+                    response.bounds = stats.getQuantile(opts.count);
+                } else if (opts.method === 'equal') {
+                    // Tasavälit
+                    response.bounds = stats.getEqInterval(opts.count);
+                }
             }
+
             response.ranges = stats.ranges;
             response.stats = {
                 min: stats.min(),
