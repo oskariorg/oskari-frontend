@@ -70,17 +70,17 @@ function(instance) {
         }
         var resp,
             text,
-            code;
+            errorInfo;
         try {
             resp = JSON.parse(jqXHR.responseText);
             text = resp.error;
             if(resp.info) {
-                code = resp.info.error;
+                errorInfo = resp.info;
             }
         } catch(err) {
             Oskari.log(this.getName()).warn('Error whilst parsing json, error');
         }
-        callback(text, code);
+        callback(errorInfo, text);
     },
     transformArrayToArray: function(coords, crs, successCb, errorCb ) {
         var me = this;

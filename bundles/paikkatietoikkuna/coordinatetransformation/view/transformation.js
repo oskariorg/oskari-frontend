@@ -477,13 +477,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             //TODO exportToFile should be moved from fileInput to helper
             this.helper.exportToFile(data, filename, type);
         },
-        handleErrorResponse: function (error, errorCode){
+        handleErrorResponse: function (errorInfo, errorText){
             var errors = this.loc('flyout.transform.responseErrors');
             var errorMsg = errors.generic;
-            if (errorCode && errors[errorCode]){
-                errorMsg = errors[errorCode];
-            } else if (error){
-                errorMsg += "<br> Error: " + error; //TODO adds backend msg. use only generic message, when localized messages are ready
+            var code = errorInfo.errorKey;
+            if (code && code === "invalid_coord_in_row") {
+                errorMsg = Oskari.getMsg('coordinatetransformation', 'flyout.transform.responseErrors.invalid_coord_in_row', {coordinate: errorInfo.line, rowIndex: errorInfo.lineIndex});
+            } else if (code && errors[code]) {
+                errorMsg = errors[code];
+            } else if (errorText){
+                errorMsg += "<br> Error: " + errorText; //TODO adds backend msg. use only generic message, when localized messages are ready
             }
             this.showMessage(this.loc('flyout.transform.responseErrors.title'), errorMsg);
         }
