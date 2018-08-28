@@ -170,9 +170,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
          * @param {string} keyToEmpty - optional param to empty only one specific key in the dropdown 
          */
         updateDropdownOptions: function (dropdownId, selector) {
+            var options;
             if ( typeof selector === 'string' && selector !=="") {
                 this.dropdowns[dropdownId].find( 'option' ).css('display', 'none');
-                this.dropdowns[dropdownId].find( selector ).css('display', '');
+                options = this.dropdowns[dropdownId].find( selector );
+                options.css('display', '');
+                if (dropdownId === "geodetic-coordinate" && options.length === 1) {
+                    this.selectInstances["geodetic-coordinate"].setValue(options.val());
+                    this.trigger('CoordSystemChanged', this.type);
+                }
             } else {
                 this.dropdowns[dropdownId].find( 'option' ).css('display', '');
             }
