@@ -218,6 +218,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             var btnText = this.type === "import" ? this.loc('actions.done') : this.loc('actions.export');
             var cancelBtn =  dialog.createCloseButton(this.loc('actions.cancel'));
             var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var decimalInput = elem.find('.decimalCount input');
             btn.addClass('primary');
             btn.setTitle(btnText);
             btn.setHandler(function() {
@@ -232,13 +233,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 }
                 dialog.close();
             });
-
             dialog.createCloseIcon();
             dialog.makeDraggable();
             if (this.showFormatRow === false){
                 formatRow.css("display","none");
+                decimalInput.val(4);
             } else {
                 formatRow.css("display","");
+                decimalInput.val(7);
             }
             this.bindInfoLinks();
             // HACK //
