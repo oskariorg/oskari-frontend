@@ -44,7 +44,7 @@ function(instance) {
             urlParameterString += "&targetHeightCrs=" + crs.targetElevationCrs;
         }
         if (exportSettings){
-            urlParameterString += "&exportSettings=" + JSON.stringify(exportSettings);
+            urlParameterString += "&exportSettings=" + JSON.stringify(exportSettings.selects);
         }
         return urlBase + urlParameterString;
     },
@@ -101,6 +101,25 @@ function(instance) {
     transformFileToArray: function (crs, fileSettings, successCb, errorCb){
         var me = this;
         var url = this.requestUrlBuilder( crs, "F2A");
+        var formData = this.formDataBuilder(fileSettings);
+         jQuery.ajax({
+            contentType: false, //multipart/form-data
+            type: "POST",
+            cache : false,
+            processData: false,
+            url: url,
+            data: formData,
+            success: function(response) {
+                successCb(response);
+            },
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
+            }
+        });
+    },
+    readFileToArray: function (crs, fileSettings, successCb, errorCb){
+        var me = this;
+        var url = this.requestUrlBuilder(crs, "F2R");
         var formData = this.formDataBuilder(fileSettings);
          jQuery.ajax({
             contentType: false, //multipart/form-data

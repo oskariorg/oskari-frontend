@@ -258,7 +258,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             if (value === 'file') {
                 me.inputTable.setIsEditable(false);
-                me.importFileHandler.showFileDialogue();
+                me.importFileHandler.showFileDialogue(me.readFileToArray.bind(me));
                 //keyboardInfoElement.hide();
                 //mapSelectInfoElement.hide();
                 //this.fileInput.setVisible(true);
@@ -394,6 +394,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         handleExport: function (){
             this.exportFileHandler.showFileDialogue(this.transformToFile.bind(this));
         },
+        readFileToArray: function (settings) {
+            var crsSettings = this.getCrsOptions();
+            var fileSettings = settings;
+            if (this.helper.validateFileSelections(fileSettings)){
+                this.instance.getService().readFileToArray(crsSettings, fileSettings, this.handleArrayResponse.bind( this ), this.handleErrorResponse.bind(this) );
+            }
+        },
         transformToTable: function () {
             var crsSettings = this.getCrsOptions();
             var source = this.sourceSelect.getSourceSelection();
@@ -451,12 +458,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }*/
         },
         handleArrayResponse: function (response) {
-            var coords = response.coordinates;
+            var resultCoords = response.resultCoordinates;
             var inputCoords = response.inputCoordinates;
             //TODO check that response dimension matches
             var dimension = response.dimension;
             var hasMoreCoordinates = response.hasMoreCoordinates;
-            this.dataHandler.setResultCoords(coords);
+            if (resultCoords){
+                this.dataHandler.setResultCoords(resultCoords);
+            }
             if (inputCoords){
                 this.dataHandler.setInputCoords(inputCoords);
             }
