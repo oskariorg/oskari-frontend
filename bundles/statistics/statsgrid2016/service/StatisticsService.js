@@ -152,7 +152,14 @@
                 }
 
                 var name = Oskari.getLocalized(ind.name);
-                var selectorsFormatted = '(' + preferredFormatting.join(' / ') + ')';
+                var selectorsFormatted;
+                if(indicator.series) {
+                    var range = String(indicator.series.values[0]) + ' - ' + String(indicator.series.values[indicator.series.values.length -1]);
+                    selectorsFormatted = range +' (' + preferredFormatting.join(' / ') + ')';
+                } else {
+                    selectorsFormatted = '(' + preferredFormatting.join(' / ') + ')';
+                }
+
                 callback({
                     indicator: name,
                     source: Oskari.getLocalized(ind.source),
