@@ -850,12 +850,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (this._map3d.getEnabled()) {
                 var cam = this.getCamera();
                 params +=
-                    '&cam=' + cam.location.x +
-                    '_' + cam.location.y +
-                    '_' + cam.location.altitude +
-                    '_' + cam.orientation.heading +
-                    '_' + cam.orientation.pitch +
-                    '_' + cam.orientation.roll;
+                    '&cam=' + cam.location.x.toFixed(0) +
+                    '_' + cam.location.y.toFixed(0) +
+                    '_' + cam.location.altitude.toFixed(0) +
+                    '_' + cam.orientation.heading.toFixed(2) +
+                    '_' + cam.orientation.pitch.toFixed(2) +
+                    '_' + cam.orientation.roll.toFixed(2);
             }
 
             for (pluginName in this._pluginInstances) {
