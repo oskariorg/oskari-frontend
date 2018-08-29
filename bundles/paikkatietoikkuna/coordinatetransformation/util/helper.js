@@ -211,6 +211,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             dialog.show(title, message, [btn]);
         }
     },
+    findEpsg: function(epsg) {
+        var epsgValues = {};
+        var srs;
+        if (epsg.length === 4 ){
+            srs = "EPSG:" + epsg;
+            epsgValues = this.getEpsgValues(srs);
+            if(epsgValues.title){
+                epsgValues.srs = srs;
+            }
+        }
+        return epsgValues;
+    },
     getEpsgValues: function (srs) {
         if (srs && this.epsgValues.hasOwnProperty(srs)){
             return this.epsgValues[srs];
