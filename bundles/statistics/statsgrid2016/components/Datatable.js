@@ -261,6 +261,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             return;
         }
         indicators.forEach(function (ind, id) {
+            var numberFormatter = Oskari.getNumberFormatter(ind.classification.fractionDigits);
+            me.grid.setColumnValueRenderer(ind.hash, function (value, data) {
+                return numberFormatter.format(data[ind.hash]);
+            });
             me.grid.setColumnUIName(ind.hash, function (content) {
                 var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
                 tableHeader.find('.title').html(gridLoc.source + ' ' + (id + 1) + ':');
@@ -441,7 +445,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             var current = event.getCurrent();
+            var previous = event.getPrevious();
             log.debug('Active indicator changed! ', current);
+            if (current === previous) { // No change, but event was sent to refresh components
+                me._handleRegionsetChanged();
+            }
             if (current && me.grid) {
                 me.grid.selectColumn(current.hash);
             }

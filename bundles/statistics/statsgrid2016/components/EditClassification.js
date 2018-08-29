@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._colorSelect.refresh();
 
         var decimalSelect = me._element.find('select.decimal-place');
-        decimalSelect.val(classification.fractionDigits);
+        decimalSelect.val(typeof classification.fractionDigits === 'number' ? classification.fractionDigits : 1);
 
         // disable invalid choices
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
@@ -382,7 +382,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._colorSelect.setHandler(updateClassification);
         me._element.find('select').on('change', updateClassification);
         me._element.find('select.decimal-place').on('change', function() {
-            var stateService = this.service.getStateService();
+            var stateService = me.service.getStateService();
             var indicator = stateService.getActiveIndicator();
             stateService.setActiveIndicator(indicator.hash);
         });

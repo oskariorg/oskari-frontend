@@ -22,8 +22,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 name: 'Blues',
                 type: 'seq',
                 mode: 'discontinuous',
-                reverseColors: false,
-                fractionDigits: 1
+                reverseColors: false
             }
         };
         this._timers = {};
