@@ -63,6 +63,29 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     '<input class="show" type="button" value="<%= show %> ">' +
                     '<input class="export primary" type="button" value="<%= fileexport %> ">' +
                 '</div>'
+            ),
+            filterSystems: _.template(
+                '<div class="systems-filter-wrapper">' +
+                    '<h4>${title}</h4>'+
+                    '<div class="coordinate-systems-filters">' +
+                        '<div class="source-select">'+
+                            '<input type="radio" id="filter-systems" name="filter-select" value="systems" checked>' +
+                            '<label for="filter-systems">' +
+                                '<span/>' +
+                                '${systems}' +
+                            '</label>'+
+                            //'<div class="infolink icon-info" data-source="systems" title="${systemsInfo}"></div>' +
+                        '</div>'+
+                        '<div class="source-select">'+
+                            '<input type="radio" id="filter-epsg" name="filter-select" value="epsg">' +
+                            '<label for="filter-epsg">' +
+                                '<span/>' +
+                                '${epsg}' +
+                            '</label>'+
+                            //'<div class="infolink icon-info" data-source="espg" title="${epsgInfo}"></div>' +
+                        '</div>'+
+                    '</div>'+
+                '</div>'
             )
         }
     }, {
@@ -90,10 +113,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             });
 
             var wrapper = this._template.wrapper.clone();
-            var systems = this._template.systems.clone();
+
             if ( this.sourceSelect.getElement() ) {
                 wrapper.append( this.sourceSelect.getElement() );
             }
+            var sourceFilter = this._template.filterSystems({
+                title: this.loc('flyout.filterSystems.title'),
+                systems: this.loc('flyout.filterSystems.systems'),
+                systemsInfo: this.loc('flyout.filterSystems.systemsInfo'),
+                epsg: this.loc('flyout.filterSystems.epsg'),
+                epsgInfo: this.loc('flyout.filterSystems.epsgInfo')
+            });
+            wrapper.append(sourceFilter);
+            var systems = this._template.systems.clone();
             if ( this.inputSystem.getElement() ) { //TODO move
                 //var element = this.inputSystem.getElement();
                 //element.attr('data-type', 'coordinate-input');
@@ -124,6 +156,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             //this.handleRadioButtons();
             // preselect radio button here beceause event listeners are not ready
             this.handleSourceSelection(this.sourceSelect.sources[0]);//me.sourceSelect.sourceSelection);
+            this.bindFilterRadioButtons();
         },
         bindTableHoverListeners: function(){
             var me = this;
@@ -134,6 +167,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             this.outputTable.on('HighlightTableRow', function(data){
                 me.inputTable.highlightRow (data);
                 me.outputTable.highlightRow (data);
+            });
+        },
+        bindFilterRadioButtons: function () {
+            var me = this;
+            var container = this.getContainer();
+            container.find('input[type=radio][name=filter-select]').on("change", function(evt) {
+                var value = this.value;
+                me.inputSystem.toggleFilter(value);
+                me.outputSystem.toggleFilter(value);
             });
         },
         setVisible: function ( visible ) {

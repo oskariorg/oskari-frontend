@@ -14,17 +14,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             coordinateSystemSelection: _.template(
                 '<h4> ${ title }</h4>'+
                 '<div class="transformation-system">' +
-                    '<div class="system datum selection-wrapper">' +
+                    '<div class="system epsgSearch selection-wrapper">' +
+                        '<b class="dropdown_title">${ epsg_search }</b>' +
+                        '<input type="text" placeholder="3067"/>' +
+                        '<div class="infolink icon-info" data-system="epsgSearch" title="${tooltip.epsgSearch}"></div>' +
+                    '</div>' +
+                    '<div class="system datum selection-wrapper system-filter">' +
                         '<b class="dropdown_title"> ${ geodetic_datum }</b>' +
                         '<div class="selectMountPoint"></div>' +
                         '<div class="infolink icon-info" data-system="geodeticDatum" title="${tooltip.geodeticDatum}"></div>' +
                     '</div>' +
-                    '<div class="system coordinate selection-wrapper">' +
+                    '<div class="system coordinate selection-wrapper system-filter">' +
                         '<b class="dropdown_title"> ${ coordinate_system }</b>' +
                         '<div class="selectMountPoint"></div>' +
                         '<div class="infolink icon-info" data-system="coordinateSystem" title="${tooltip.coordinateSystem}"></div>' +
                     '</div>' +
-                    '<div class="system projection selection-wrapper">' +
+                    '<div class="system projection selection-wrapper system-filter">' +
                         '<b class="dropdown_title"> ${ map_projection }</b>' +
                         '<div class="selectMountPoint"></div>' +
                         '<div class="infolink icon-info" data-system="mapProjection" title="${tooltip.mapProjection}"></div>' +
@@ -67,6 +72,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
 
             var coordinateSystemSelection = this._template.coordinateSystemSelection({
                 title: title,
+                epsg_search: this.loc('flyout.coordinateSystem.epsgSearch.label'),
                 geodetic_datum: this.loc('flyout.coordinateSystem.geodeticDatum.label'),
                 coordinate_system:  this.loc('flyout.coordinateSystem.coordinateSystem.label'),
                 map_projection:  this.loc('flyout.coordinateSystem.mapProjection.label'),
@@ -86,11 +92,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             });
             // hide projection select
             this.showProjectionSelect(false);
+            this.bindEpsgSearch();
+            this.showEpsgSearch(false);
             this.handleInfoLinks();
         },
-        createDropdown: function (container, json, key){
+        createDropdown: function (container, json, dropdownId){
             var me = this;
-            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', key);
+            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', dropdownId);
             var dropdown;
             var options = {
                     placeholder_text: json['DEFAULT'].title,
@@ -110,6 +118,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     title : obj.title,
                     cls: obj.cls
                 };
+                if (dropdownId === "geodetic-coordinate"){
+                    valObj.tooltip = key;
+                }
                 selections.push(valObj);
             });
             dropdown = select.create(selections, options);
@@ -122,8 +133,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 me.handleSelectValueChange( select );
             });
             container.append(dropdown);
-            this.dropdowns[key] = dropdown;
-            this.selectInstances[key] = select;
+            this.dropdowns[dropdownId] = dropdown;
+            this.selectInstances[dropdownId] = select;
         },
 
         /**
@@ -155,13 +166,61 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 me.systemInfo.show( jQuery( this ), key );
             });
         },
+        bindEpsgSearch: function () {
+            var me = this;
+            var inputElem = this.getElement().find('.epsgSearch input');
+            inputElem.on('input', function(evt){
+                var value = evt.target.value;
+                var epsgValues;
+                if (value.length === 4){
+                    epsgValues = me.helper.findEpsg(value);
+                    if (epsgValues.srs){
+                        me.selectInstances["geodetic-coordinate"].setValue(epsgValues.srs);
+                        me.trigger('CoordSystemChanged', me.type);
+                        inputElem.css('color', '#444');
+                    } else {
+                        inputElem.css('color', '#F00');
+                    }
+                }else{
+                    inputElem.css('color', '#999');
+                }
+            });
+        },
         getTooltips: function (){
             return {
                 geodeticDatum: this.loc('infoPopup.geodeticDatum.info'),
                 coordinateSystem: this.loc('infoPopup.coordinateSystem.info'),
                 mapProjection: this.loc('infoPopup.mapProjection.content'),
                 geodeticCoordinateSystem: this.loc('infoPopup.geodeticCoordinateSystem.info'),
-                heightSystem: this.loc('infoPopup.heightSystem.info')
+                heightSystem: this.loc('infoPopup.heightSystem.info'),
+                epsgSearch: this.loc('infoPopup.epsgSearch.info')
+            }
+        },
+        toggleFilter: function (filter) {
+            if (filter === "epsg"){
+                this.resetAllSelections();
+                this.showSystemFilters(false);
+                this.showEpsgSearch(true);
+            } else if (filter === "systems") {
+                this.showEpsgSearch(false);
+                this.showSystemFilters(true);
+                this.showProjectionSelect(false);
+            }
+        },
+        showEpsgSearch: function (display) {
+            var epsgSearch = this.getElement().find('.epsgSearch');
+            if (display){
+                epsgSearch.css('display', '');
+            } else {
+                epsgSearch.css('display', 'none');
+            }
+        },
+        showSystemFilters: function (display) {
+            var filterElems = this.getElement().find('.system-filter');
+            if (display){
+                filterElems.css('display', '');
+            } else {
+                filterElems.css('display', 'none');
             }
         },
         /**
@@ -239,14 +298,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         },
         disableAllSelections: function (disable){
             var selects = this.selectInstances;
+            var epsgSearch = this.getElement().find(".epsgSearch input");
             if (disable === true){
                 Object.keys( selects ).forEach( function ( key ) {
                     selects[key].setEnabled(false, true);
                 });
+                epsgSearch.prop('disabled', true);
             }else{
                 Object.keys( selects ).forEach( function ( key ) {
                     selects[key].setEnabled(true, true);
                 });
+                epsgSearch.prop('disabled', false);
             }
         },
         selectMapProjection: function (){
@@ -270,9 +332,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         showProjectionSelect: function (display){
             var elem = jQuery(this.getElement()).find(".projection");
             if (display === true){
-                jQuery(elem).css("display","");
+                elem.css("display","");
             } else {
-                jQuery(elem).css("display", "none");
+                elem.css("display", "none");
                 //TODO
                 //this.selectInstances.projection.resetSelectToPlaceholder();
                 this.selectInstances.projection.setValue("");
