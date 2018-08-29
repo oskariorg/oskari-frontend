@@ -13,10 +13,13 @@
 }
 
 /* Custom radio button */
+.coordinatetransformation-flyout input[type="radio"] {
+    display: none;
+}
 .coordinatetransformation-flyout .coordinate-datasources-wrapper {
     font-size: 14px;
 }
-.coordinatetransformation-flyout .coordinate-datasources-wrapper span {
+.coordinatetransformation-flyout .source-select span {
     background-color:whitesmoke;
     display:inline-block;
     width:12px;
@@ -31,8 +34,11 @@
     -moz-transition:background-color 0.4s linear;
     transition:background-color 0.4s linear;
 }
-.coordinatetransformation-flyout .coordinate-datasources-wrapper .selected span {
-     background-color:black;
+.coordinatetransformation-flyout .source-select.selected span {
+     background-color: black;
+}
+.coordinatetransformation-flyout input[type="radio"]:checked + label span {
+     background-color: black;
 }
 .coordinate-datasources-wrapper label {
     cursor: pointer;
@@ -52,7 +58,18 @@
 .coordinatetransformation-flyout .datasource-wrapper a {
     font-weight: 700;
 }
-
+/* Coordinate systems filter */
+.coordinatetransformation-flyout .systems-filter-wrapper {
+    width: 400px;
+    padding-bottom: 12px;
+}
+.coordinatetransformation-flyout .coordinate-systems-filters {
+    display: flex;
+}
+.coordinatetransformation-flyout .filter-select {
+    margin-right: auto;
+    display: flex;
+}
 
 /*
 .coordinatetransformation-flyout .datasource-info {
@@ -92,7 +109,27 @@
     flex-wrap: nowrap;
     width: 360px;
 }
-
+.coordinatetransformation-flyout .dropdown_title {
+    font-weight: bold;
+    /*max-width:12em !important;*/
+    width: 160px;
+}
+.coordinatetransformation-flyout .epsgSearch input {
+    color: #444;
+    line-height: 12px;
+    font-size: 12px;
+    width: 168px;
+    margin-left: auto;
+}
+.coordinatetransformation-flyout .geodetic-coordinate .chosen-default {
+    color: #444;
+}
+.coordinatetransformation-flyout .elevation .chosen-default {
+    color: #444;
+}
+.coordinatetransformation-flyout .epsgSearch {
+    margin-bottom: 40px;
+}
 .transformation-wrapper .selectMountPoint {
     margin-left: auto;
 }
@@ -233,11 +270,6 @@
     background-image: url('../images/icon-close.png');
     right:-5em;
     position: absolute;
-}
-.coordinatetransformation-flyout .dropdown_title {
-    font-weight: bold;
-    /*max-width:12em !important;
-    width: 160px*/
 }
 
 /* Util row */
