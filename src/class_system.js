@@ -31,7 +31,7 @@
 
     function checkFinalized(classInfo) {
         if (!classInfo.finalized) {
-            throw new Error('Definitions missing for "' + className + '"! Make sure class and its super classes are loaded.');
+            throw new Error('Definitions missing for "' + classInfo.className + '"! Make sure class and its super classes are loaded.');
         }
     }
 

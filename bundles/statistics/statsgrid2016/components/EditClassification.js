@@ -161,6 +161,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             // not rendered yet
             return;
         }
+        me._rangeSlider.element.slider();
+
         var service = me.service;
         var state = service.getStateService();
         var ind = state.getActiveIndicator();
