@@ -219,6 +219,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
             me._populateIndicators(indicSelect, dsSelect.getValue(), regionFilterSelect.getValue());
 
+            var unsupportedSelections = me.getUnsupportedRegionsets(dsSelect.getValue());
+            if (unsupportedSelections) {
+                var ids = unsupportedSelections.map(function (iteration) {
+                    return iteration.id;
+                });
+                regionFilterSelect.disableOptions(ids);
+            }
+
             btnAddIndicator.setHandler(function (event) {
                 event.stopPropagation();
                 var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
@@ -260,7 +268,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
 
         regionsetFilterElement.on('change', function (evt) {
-            if (regionFilterSelect.getValue().length === 0) {
+            if (regionFilterSelect.getValue() === null || regionFilterSelect.getValue().length === 0) {
                 dsSelect.reset();
                 return;
             }
@@ -320,6 +328,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var el = this.getElement();
         var indicSel = el.find('.stats-ind-selector');
         return indicSel;
+    },
+    getUnsupportedRegionsets: function (ds) {
+        var all = this.service.getRegionsets();
+        var supported = this.service.datasources.find(function (e) {
+            return e.id === Number(ds);
+        });
+
+        supported.regionsets.forEach(function (index) {
+            for (var i = 0; i < all.length; i++) {
+                if (all[i].id === index) {
+                    all.splice(i, 1);
+                }
+            }
+        });
+        return all;
     },
     /**
      * @method  @public  getUnsupportedDatasets
