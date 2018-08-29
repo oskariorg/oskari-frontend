@@ -9,9 +9,6 @@
                     "mapwfs2": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapstats": {
-                        "bundlePath": "../../../packages/mapping/ol3/"
-                    },
                     "mapanalysis": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },

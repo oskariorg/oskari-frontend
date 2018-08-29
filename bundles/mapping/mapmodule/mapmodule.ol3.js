@@ -125,10 +125,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 clearTimeout(this.mouseMoveTimer);
                 this.mouseMoveTimer = setTimeout(function () {
                     // No mouse move in 1000 ms - mouse move paused
-                    var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], true);
+                    var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(
+                        evt.coordinate[0],
+                        evt.coordinate[1],
+                        true,
+                        evt.pixel[0],
+                        evt.pixel[1]
+                    );
                     sandbox.notifyAll(hoverEvent);
                 }, 1000);
-                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
+                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(
+                    evt.coordinate[0],
+                    evt.coordinate[1],
+                    false,
+                    evt.pixel[0],
+                    evt.pixel[1]);
                 sandbox.notifyAll(hoverEvent);
             });
         },
@@ -752,6 +763,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var olStyle = {};
             if (Oskari.util.keyExists(style, 'fill.color')) {
                 var color = style.fill.color;
+                if (style.effect) {
+                    switch (style.effect) {
+                    case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
+                    case 'lighten' : color = Oskari.util.alterBrightness(color, 50); break;
+                    }
+                }
                 if (Oskari.util.keyExists(style, 'image.opacity')) {
                     var rgb = null;
                     if (color.charAt(0) === '#') {

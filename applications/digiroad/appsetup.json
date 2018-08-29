@@ -1,4 +1,4 @@
-{ 
+{
   "startupSequence" : [
    {
       "instanceProps":{
@@ -88,9 +88,6 @@
                "bundlePath": "../../packages/framework/bundle/"
             },
             "event-map": {
-               "bundlePath": "../../packages/framework/bundle/"
-            },
-            "mapstats": {
                "bundlePath": "../../packages/framework/bundle/"
             },
             "digiroad-featureselector": {
