@@ -262,9 +262,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         }
         indicators.forEach(function (ind, id) {
             var numberFormatter = Oskari.getNumberFormatter(ind.classification.fractionDigits);
-            me.grid.setColumnValueRenderer(ind.hash, function (value, data) {
-                return numberFormatter.format(data[ind.hash]);
-            });
+            me.grid.setColumnValueRenderer(ind.hash, numberFormatter.format);
             me.grid.setColumnUIName(ind.hash, function (content) {
                 var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
                 tableHeader.find('.title').html(gridLoc.source + ' ' + (id + 1) + ':');
