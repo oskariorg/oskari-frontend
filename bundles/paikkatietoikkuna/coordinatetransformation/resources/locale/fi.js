@@ -9,6 +9,11 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title":"Koordinaattimuunnos",
+            "filterSystems": {
+                "title": "Suodata koordinaattijärjestelmiä",
+                "epsg": "EPSG-koodilla",
+                "systems": "Datumilla ja koordinaatistolla"
+            },
             "coordinateSystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "input": {
@@ -18,6 +23,9 @@ Oskari.registerLocalization(
                     "title": "Tulos koordinaattijärjestelmän tiedot"
                 },
                 "noFilter": "Mikä tahansa",
+                "epsgSearch": {
+                    "label": "Hae EPSG-koodilla"
+                },
                 "geodeticDatum": {
                     "label": "Geodeettinen datumi"
                 },
@@ -76,7 +84,10 @@ Oskari.registerLocalization(
                     "decimalCount": "Desimaalien tarkkuus pitää olla 0 tai positiivnen kokonaisluku.",
                     "headerCount": "Otsakerivien määrä pitää olla 0 tai positiivinen kokonaisluku.",
                     "doubleComma": "Desimaali- ja koordinaattierotin eivät voi molemmat olla pilkkuja.",
-                    "noFileSettings": "Tiedosto asetuksia ei ole annettu."
+                    "noFileSettings": "Tiedosto asetuksia ei ole annettu.",
+                    "noCoordinateSeparator": "Koordinaattierotin pitää olla valittuna.",
+                    "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
+
                 },
                 "responseErrors": {
                     "title": "Virhe muunnoksessa!",
@@ -87,7 +98,7 @@ Oskari.registerLocalization(
                     "invalid_file_settings": "Tiedoston asetukset virheelliset.", //can't be user's fault
                     "no_file": "Lähetetystä pyynnöstä ei löytynyt tiedostoa.", //can't be user's fault
                     "invalid_coord_length": "Tiedostosta ei saatu muodostettua koordinaattia annetuilla asetuksilla. Tarkasta, että koordinaatti erotin, otsakerivien määrä, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä (dimensio) valinnat vastaavat tiedoston sisältöä.",
-                    "invalid_coord_in_row": "Tiedostossa virheellinen koordinaatti {coordinate} rivillä {rowIndex, number}."
+                    "invalid_coord_in_row": "Tiedostossa on rivillä: {rowIndex, number} virheellinen koordinaattirivi: {coordinate} <br> Tarkasta, että koordinaattierotin ja otsakerivien määrä valinnat vastaavat tiedoston sisältöä."
                 },
                 "responseFile": {
                     "title": "Huomio!",
@@ -153,6 +164,7 @@ Oskari.registerLocalization(
                 "writeHeader": "Kirjoita otsakerivi tiedostoon",
                 "useCardinals": "Käytä kardinaaleja (N,E,W,S)",
                 "lineEnds": "Tulosteeseen rivin loput",
+                "choose": "Valitse",
                 "degreeFormat":{
                     "label": "Kulman muoto/yksikkö",
                     "degree": "Aste",
@@ -183,44 +195,47 @@ Oskari.registerLocalization(
         },
         "infoPopup": {
             "description": "Kuvaus",
+            "epsgSearch": {
+                "title": "Haku EPSG-koodin perusteella",
+                "info": "Voit hakea geodeettisen koordinaattijärjestelmän EPSG-koodin avulla. Syötä koodi pelkkänä numerona esim. 3067.",
+                "listItems": []
+            },
             "geodeticDatum": {
                 "title": "Geodeettinen datumi",
-                "info": "Geodeettinen datumi: datumi, joka kuvaa kaksi- tai kolmiulotteisen koordinaatiston suhdetta Maahan.",
+                "info": "Datumi, joka kuvaa kaksi- tai kolmiulotteisen koordinaatiston suhdetta Maahan.",
                 "listItems" : [
-                    "Suhde voidaan luoda määrittelemällä joukolle pisteitä konventionaaliset koordinaattiarvot",
+                    "Datumi: parametri tai parametrijoukko, joka määrittelee koordinaatiston origon, mittakaavan ja orientaation.",
                     "Esimerkkejä geodeettisesta datumista ovat mm. EUREF-FIN ja kartastokoordinaattijärjestelmä."
                 ]
             },
             "coordinateSystem":{
                 "title": "Koordinaatisto",
-                "info": "Koordinaatisto: matemaattisten sääntöjen joukko, jolla määritellään se, miten pisteille annetaan koordinaatit.",
+                "info": "Matemaattisten sääntöjen joukko, jolla määritellään se, miten pisteille annetaan koordinaatit.",
                 "listItems" : [
-                    "Koordinaatisto voidaan hahmottaa koordinaattiakselien muodostamaksi mitta-akselistoksi.",
-                    "Erityyppisiä koordinaatistoja ovat esimerkiksi suorakulmainen koordinaatisto, tasokoordinaatisto, napakoordinaatisto, geodeettinen koordinaatisto, pallokoordinaatisto ja lieriökoordinaatisto.",
-                    "Geodesian alalla termi terrestrinen vertauskehys korvaa aiemmin käytetyn koordinaatisto-termin."
+                    "Erityyppisiä koordinaatistoja ovat esimerkiksi suorakulmainen koordinaatisto, tasokoordinaatisto, napakoordinaatisto, geodeettinen koordinaatisto, pallokoordinaatisto ja lieriökoordinaatisto."
                 ]
             },
             "mapProjection":{
                 "title": "Karttaprojektiojärjestelmä",
-                "info": "Karttaprojektiojärjestelmä: joukko sääntöjä, joiden avulla määrätään, kuinka haluttu alue kuvataan joukolla karttaprojektioita",
+                "info": "Joukko sääntöjä, joiden avulla määrätään, kuinka haluttu alue kuvataan joukolla karttaprojektioita",
                 "listItems" : [
+                    "Karttaprojektio: menetelmä, jolla maapallon kolmiulotteinen pinta kuvataan kaksiulotteiselle karttatasolle.",
                     "Säännöillä voidaan esimerkiksi sitoa käytettävät karttaprojektiot ja projektiokaistat. Projektiokaistojen osalta järjestelmä voi määrittää kaistoille esimerkiksi tunnisteet, keskimeridiaanien tai -paralleelien mittakaavan, leveyden, pituuden ja päällekkäisyyden."
                 ]
             },
             "geodeticCoordinateSystem":{
                 "title": "Geodeettinen koordinaattijärjestelmä",
-                "info": "Geodeettinen koordinaattijärjestelmä: koordinaattijärjestelmä, joka perustuu geodeettiseen datumiin.",
+                "info": "Koordinaattijärjestelmä, joka perustuu geodeettiseen datumiin.",
                 "listItems" : [
                     "Koordinaattijärjestelmä: järjestelmä, joka muodostuu datumin avulla reaalimaailmaan kiinnitetystä koordinaatistosta.",
-                    "Koordinaattijärjestelmän avulla kohteen sijainti voidaan ilmaista yksikäsitteisesti.",
-                    "Koordinaattijärjestelmä voi olla globaali, alueellinen (käytössä esim. yhden mantereen alueella) tai paikallinen (käytössä esim. yhden valtion tai kunnan alueella).",
                     "Suomen valtakunnallinen tasokoordinaattijärjestelmä on ETRS-TM35FIN."
                 ]
             },
             "heightSystem":{
                 "title":"Korkeusjärjestelmä",
-                "info": "Korkeusjärjestelmä: yksiulotteinen koordinaattijärjestelmä, joka perustuu korkeusdatumiin.",
+                "info": "Yksiulotteinen koordinaattijärjestelmä, joka perustuu korkeusdatumiin.",
                 "listItems" : [
+                    "Korkeusdatumi: datumi, joka määrittelee painovoimaan liittyvien korkeuksien tai syvyyksien suhteen Maahan.",
                     "Suomessa käytetään valtakunnallisissa töissä JHS 163-suosituksen mukaista N2000-korkeusjärjestelmää."
                 ]
             },
