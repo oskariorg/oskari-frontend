@@ -42,9 +42,12 @@ localeFilePaths.forEach(function(filePath){
             }
 
             if (!collection[dir]) {
-                collection[dir] = {};
+                collection[dir] = {content: {}};
             }
-            collection[dir][lang] = loc.value;
+            if (collection[dir].content[lang]) {
+                collection[dir].isMulti = true; // multiple calls to registerLocalization for language. Lang-overrides bundle does this.
+            }
+            collection[dir].content[lang] = loc.value;
         }
     };
 
@@ -53,12 +56,16 @@ localeFilePaths.forEach(function(filePath){
 });
 
 
-Object.keys(collection).forEach(function(dir){
-    var enContent = collection[dir].en || {};
-    var localeContent = collection[dir][locale] || {};
-    var output = merge.recursive(true, enContent, localeContent);
+Object.keys(collection)
+    .filter(function(dir){
+        return !collection[dir].isMulti;
+    })
+    .forEach(function(dir){
+        var enContent = collection[dir].content.en || {};
+        var localeContent = collection[dir].content[locale] || {};
+        var output = merge.recursive(true, enContent, localeContent);
 
-    var outputPath = path.join(__dirname, '..', 'locale', dir + '__' + locale + '.json');
-    ensureDirectoryExists(outputPath);
-    fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
-});
+        var outputPath = path.join(__dirname, '..', 'locale', dir + '__' + locale + '.json');
+        ensureDirectoryExists(outputPath);
+        fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
+    });
