@@ -11,7 +11,7 @@ if (!locale) {
 var jsonFilePaths = glob.sync('/locale/*' + locale + '.json', {root: path.join(__dirname, '..')});
 
 if (jsonFilePaths.length === 0) {
-    console.log('No locale JSON files found. Make sure you have something to inject under "locale" directory in repo root.')
+    console.log('No locale JSON files found for locale "' + locale + '". Make sure you have something to inject under "locale" directory in repo root.')
     process.exit(1);
 }
 
@@ -30,3 +30,5 @@ jsonFilePaths.forEach(function(filePath) {
     };
     eval(enContent);
 });
+
+console.log('Injected localization strings to locale files. Use git to inspect changes.');

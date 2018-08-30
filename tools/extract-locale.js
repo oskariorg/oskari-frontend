@@ -69,3 +69,5 @@ Object.keys(collection)
         ensureDirectoryExists(outputPath);
         fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
     });
+
+console.log('Extracted files succesfully to "locale" directory in repo root');
