@@ -330,7 +330,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         return indicSel;
     },
     getUnsupportedRegionsets: function (ds) {
-        var all = this.service.getRegionsets();
+        var all = this.service.regionsets.slice(0);
         var supported = this.service.datasources.find(function (e) {
             return e.id === Number(ds);
         });
