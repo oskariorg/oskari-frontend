@@ -212,6 +212,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 dataLabelWithTooltips.find('.tooltip').show();
                 indicSelect.updateOptions([]);
                 indicSelect.reset();
+                regionFilterSelect.reset(true);
                 btnAddIndicator.setVisible(false);
                 btnEditIndicator.setVisible(false);
                 return;

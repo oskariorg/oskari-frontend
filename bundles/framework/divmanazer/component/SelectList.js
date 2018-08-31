@@ -182,6 +182,8 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         }
         if (!supressEvent) {
             this.resetToPlaceholder();
+        } else {
+            this.element.find('select').trigger('chosen:updated');
         }
     },
     /** @method updateOptions
