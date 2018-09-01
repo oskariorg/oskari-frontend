@@ -65,10 +65,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
                 });
             }
             bottomLinks.forEach(function (data) {
-                var link = me.linkTemplate.clone();
+                var linkSpan = me.linkTemplate.clone();
+                var link = linkSpan.find('a');
                 link.attr('href', data.href);
                 link.html(data.label);
-                bottomLinksContainer.append(link);
+                bottomLinksContainer.append(linkSpan);
             });
 
             // attach handler to possible external element if found on the page
