@@ -135,6 +135,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         }));
         this.select.selectFirstValue();
         this.select.adjustChosen();
+
+        var unsupportedSelections = this.service.getUnsupportedRegionsets(this.service.getUserDatasource().id);
+        if (unsupportedSelections) {
+            var ids = unsupportedSelections.map(function (iteration) {
+                return iteration.id;
+            });
+            this.select.disableOptions(ids);
+        }
+        
         userChoiceContainer.append(regionsetContainer);
 
         // create buttons

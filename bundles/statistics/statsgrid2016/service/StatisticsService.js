@@ -723,6 +723,48 @@
                     callback('Error on server');
                 }
             });
+        },
+        /**
+         * @method  @public  getUnsupportedRegionsets
+         * @description returns a list of unsupported regionsets for the currently selected datasource
+         * @param datasource datasource
+         */
+        getUnsupportedRegionsets: function (ds) {
+            var all = this.regionsets.slice(0);
+            var supported = this.datasources.find(function (e) {
+                return e.id === Number(ds);
+            });
+            if (supported) {
+                supported.regionsets.forEach(function (index) {
+                    for (var i = 0; i < all.length; i++) {
+                        if (all[i].id === index) {
+                            all.splice(i, 1);
+                        }
+                    }
+                });
+                return all;
+            }
+        },
+        /**
+         * @method  @public  getUnsupportedDatasets
+         * @description returns a list of unsupported datasources for the currently selected regionset(s)
+         * @param regionsets regionsets
+         */
+        getUnsupportedDatasetsList: function (regionsets) {
+            if (regionsets === null) {
+                return;
+            }
+    
+            var unsupportedDatasources = [];
+            this.datasources.forEach(function (ds) {
+                var supported = regionsets.some(function (iter) {
+                    return ds.regionsets.indexOf(Number(iter)) !== -1;
+                });
+                if (!supported) {
+                    unsupportedDatasources.push(ds);
+                }
+            });
+            return unsupportedDatasources;
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

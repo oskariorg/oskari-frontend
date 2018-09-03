@@ -190,6 +190,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         btnAddIndicator.insertTo(main.find('.stats-ind-selector'));
         btnAddIndicator.setVisible(false);
 
+        btnAddIndicator.setHandler(function (event) {
+            event.stopPropagation();
+            var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
+            formFlyout.showForm(dsSelect.getValue());
+        });
+
         var btnEditIndicator = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
         btnEditIndicator.setPrimary(false);
         btnEditIndicator.insertTo(main);
@@ -220,19 +226,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
             me._populateIndicators(indicSelect, dsSelect.getValue(), regionFilterSelect.getValue());
 
-            var unsupportedSelections = me.getUnsupportedRegionsets(dsSelect.getValue());
-            if (unsupportedSelections) {
-                var ids = unsupportedSelections.map(function (iteration) {
-                    return iteration.id;
-                });
-                regionFilterSelect.disableOptions(ids);
-            }
-
-            btnAddIndicator.setHandler(function (event) {
-                event.stopPropagation();
-                var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
-                formFlyout.showForm(dsSelect.getValue());
-            });
             // if datasource is of type "user" the user can add new indicators to it
             var type = me.service.getDatasource(Number(dsSelect.getValue())).type;
             btnAddIndicator.setVisible(type === 'user');
@@ -273,7 +266,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 dsSelect.reset();
                 return;
             }
-            var unsupportedSelections = me.getUnsupportedDatasetsList(regionFilterSelect.getValue());
+            var unsupportedSelections = me.service.getUnsupportedDatasetsList(regionFilterSelect.getValue());
 
             me._params.indicatorSelected(dsSelect.getValue(), indicSelect.getValue(), regionFilterSelect.getValue(), seriesInput.isChecked());
 
@@ -329,41 +322,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var el = this.getElement();
         var indicSel = el.find('.stats-ind-selector');
         return indicSel;
-    },
-    getUnsupportedRegionsets: function (ds) {
-        var all = this.service.regionsets.slice(0);
-        var supported = this.service.datasources.find(function (e) {
-            return e.id === Number(ds);
-        });
-
-        supported.regionsets.forEach(function (index) {
-            for (var i = 0; i < all.length; i++) {
-                if (all[i].id === index) {
-                    all.splice(i, 1);
-                }
-            }
-        });
-        return all;
-    },
-    /**
-     * @method  @public  getUnsupportedDatasets
-     * @description returns a list of unsupported datasources for the currently selected regionset(s)
-     * @param regionsets regionsets
-     */
-    getUnsupportedDatasetsList: function (regionsets) {
-        if (regionsets === null) {
-            return;
-        }
-
-        var unsupportedDatasources = [];
-        this.service.datasources.forEach(function (ds) {
-            var supported = regionsets.some(function (iter) {
-                return ds.regionsets.indexOf(Number(iter)) !== -1;
-            });
-            if (!supported) {
-                unsupportedDatasources.push(ds);
-            }
-        });
-        return unsupportedDatasources;
     }
 });

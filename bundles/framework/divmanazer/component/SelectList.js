@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     disableOptions: function (ids) {
         var chosen = this.element.find('select');
 
-        this.reset(true);
+        this.reset();
 
         var isDisabledOption = function (optionId) {
             return ids.some(function (id) {
@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
                 jQuery(opt).prop('disabled', true);
             }
         });
-        chosen.trigger('chosen:updated');
+        this.update();
     },
     reset: function (supressEvent) {
         var state = this.getOptions();
