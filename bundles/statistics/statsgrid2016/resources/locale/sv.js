@@ -166,7 +166,8 @@ Oskari.registerLocalization({
             'datasetDelete': 'Ett fel uppstod vid radering av data.',
             'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
             'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
-            'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.'
+            'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
+            'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.'
         },
         'datacharts': {
             'flyout': 'Sökta datamängden',

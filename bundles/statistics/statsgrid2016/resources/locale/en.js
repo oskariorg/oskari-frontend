@@ -169,7 +169,8 @@ Oskari.registerLocalization({
             'datasetDelete': 'Error deleting dataset.',
             'indicatorSave': 'Error saving indicator',
             'myIndicatorYearInput': 'Year field cannot be empty.',
-            'myIndicatorRegionselect': 'Regionselect cannot be empty.'
+            'myIndicatorRegionselect': 'Regionselect cannot be empty.',
+            'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.'
         },
         'datacharts': {
             'flyout': 'Searched data',

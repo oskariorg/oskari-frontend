@@ -10,7 +10,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
         me._sandbox = sandbox;
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.SeriesControlPlugin';
-        me._defaultLocation = 'center top';
+        if (instance.isEmbedded()) {
+            this._defaultLocation = 'right top';
+        } else {
+            this._defaultLocation = 'center top';
+        }
         me._index = 5;
 
         me._name = 'SeriesControlPlugin';
