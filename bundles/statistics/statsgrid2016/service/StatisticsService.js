@@ -426,11 +426,19 @@
 
             var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
             _log.debug('Getting data with key', cacheKey);
-            if (this.cache.tryCachedVersion(cacheKey, callback)) {
+
+            function fractionInit(err, data) {
+                var hash = me.state.getHash(ds, indicator, params, series);
+                if (!err) {
+                    me._setInitialFractions(hash, data);
+                }
+                callback(err, data);
+            }
+            if (this.cache.tryCachedVersion(cacheKey, fractionInit)) {
                 // found a cached response
                 return;
             }
-            if (this.cache.addToQueue(cacheKey, callback)) {
+            if (this.cache.addToQueue(cacheKey, fractionInit)) {
                 // request already in progress
                 return;
             }
@@ -464,6 +472,28 @@
                     me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
                 }
             });
+        },
+        /**
+         * @method @private _setInitialFractions
+         * Sets initial fractionDigits for presentation of indicator
+         * Zero if indicator has only integers values, otherwise 1
+         * @param {String} indicatorHash
+         * @param {Object} data indicator data
+         */
+        _setInitialFractions: function(indicatorHash, data) {
+            var ind = this.state.getIndicator(indicatorHash);
+            if (!ind) {
+                return;
+            }
+            if (!ind.classification) {
+                ind.classification = this.state.getClassificationOpts(indicatorHash);
+            }
+            if (typeof ind.classification.fractionDigits !== 'number') {
+                var allInts = Object.keys(data).every(function(key){
+                    return data[key] % 1 === 0;
+                });
+                ind.classification.fractionDigits = allInts ? 0 : 1;
+            }
         },
         getSelectedIndicatorsRegions: function () {
             var me = this;

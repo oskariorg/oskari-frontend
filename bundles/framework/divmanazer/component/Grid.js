@@ -702,11 +702,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 row.attr('data-id', data[me.model.getIdField()]);
                 columnIndex = 0;
                 fieldNames.forEach(function(key) {
-                    if ( typeof data[key] === 'number' ) {
-                        value = me._loc('Grid.cellValue', {value: data[key]});
-                    } else {
-                        value = data[key];
-                    }
+                    value = data[key];
+
                     // Handle subtables
                     if (typeof value === 'object') {
                         columnIndex = me._createSubTable(
@@ -720,6 +717,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         renderer = me.valueRenderer[key];
                         if (renderer) {
                             value = renderer(value, data);
+                        } else if (typeof value === 'number') {
+                            value = me._loc('Grid.cellValue', {value: value});
                         }
                         cell.append(value);
                         row.append(cell);

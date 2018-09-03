@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
             var classification = state.getClassificationOpts(ind.hash);
             var groupStats = service.getSeriesService().getSeriesStats(ind.hash);
+            var numberFormatter = Oskari.getNumberFormatter(classification.fractionDigits);
 
             var classify = service.getClassificationService().getClassification(data, classification, groupStats);
 
@@ -80,7 +81,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                             if (highlightRegion && (highlightRegion.toString() === region.toString())) {
                                 optionalStyles.push(me._getFeatureStyle(classification, region, color, true, iconSizePx));
                             }
-                            features.push(me._getFeature(classification, wantedRegion[0], data[wantedRegion[0].id].toString()));
+                            features.push(me._getFeature(classification, wantedRegion[0], numberFormatter.format(data[wantedRegion[0].id])));
                         }
                     });
 

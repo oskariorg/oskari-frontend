@@ -142,7 +142,8 @@ Oskari.registerLocalization({
                 'max': 'Maksimi',
                 'color': 'Väri',
                 'transparency': 'Läpinäkyvyys',
-                'showValues': 'Näytä arvot'
+                'showValues': 'Näytä arvot',
+                'fractionDigits': 'Desimaalien lukumäärä'
             }
         },
         'colorset': {
