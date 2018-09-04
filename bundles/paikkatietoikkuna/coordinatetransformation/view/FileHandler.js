@@ -244,7 +244,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             this.bindInfoLinks();
             // HACK //
             //TODO handle listeners if fileinput is moved to file settings form instead of flyout
-            if(jQuery._data(this.fileInput.getElement().get(0), "events") === undefined){
+            if(this.type === "import" && jQuery._data(this.fileInput.getElement().get(0), "events") === undefined){
                 this.fileInput._bindAdvancedUpload();
             }
             dialog.show(title, elem, [cancelBtn, btn]);
