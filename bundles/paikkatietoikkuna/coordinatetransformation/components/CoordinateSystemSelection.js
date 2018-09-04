@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var options = {
                     placeholder_text: json['DEFAULT'].title,
                     allow_single_deselect : true,
-                    disable_search_threshold: 10,
+                    disable_search_threshold: 50,
                     width: '100%'
                 };
             var selections = [];
@@ -170,21 +170,27 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var me = this;
             var inputElem = this.getElement().find('.epsgSearch input');
             inputElem.on('input', function(evt){
-                var value = evt.target.value;
-                var epsgValues;
-                if (value.length === 4){
-                    epsgValues = me.helper.findEpsg(value);
-                    if (epsgValues.srs){
-                        me.selectInstances["geodetic-coordinate"].setValue(epsgValues.srs);
-                        me.trigger('CoordSystemChanged', me.type);
-                        inputElem.css('color', '#444');
-                    } else {
-                        inputElem.css('color', '#F00');
-                    }
-                }else{
-                    inputElem.css('color', '#999');
-                }
+                me.searchEpsg(inputElem, evt.target.value);
             });
+            inputElem.on('focus', function(evt){
+                inputElem.select();
+                me.searchEpsg(inputElem, evt.target.value);
+            });
+        },
+        searchEpsg: function(inputElem, value){
+            var epsgValues;
+            if (value.length === 4){
+                epsgValues = this.helper.findEpsg(value);
+                if (epsgValues.srs){
+                    this.selectInstances["geodetic-coordinate"].setValue(epsgValues.srs);
+                    this.trigger('CoordSystemChanged', this.type);
+                    inputElem.css('color', '#444');
+                } else {
+                    inputElem.css('color', '#F00');
+                }
+            }else{
+                inputElem.css('color', '#999');
+            }
         },
         getTooltips: function (){
             return {
@@ -196,9 +202,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 epsgSearch: this.loc('infoPopup.epsgSearch.info')
             }
         },
-        toggleFilter: function (filter) {
+        toggleFilter: function (filter, preventReset) {
             if (filter === "epsg"){
-                this.resetAllSelections();
+                if (preventReset !== true){
+                    this.resetFilters();
+                }
                 this.showSystemFilters(false);
                 this.showEpsgSearch(true);
             } else if (filter === "systems") {
@@ -213,6 +221,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 epsgSearch.css('display', '');
             } else {
                 epsgSearch.css('display', 'none');
+                epsgSearch.find('input').val('');
             }
         },
         showSystemFilters: function (display) {
@@ -359,10 +368,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             this.resetAndUpdateSelects(true);
             this.trigger('CoordSystemChanged', this.type);
         },
-        resetAndUpdateSelects: function (resetDatum) {
+        resetFilters: function (){
+            this.resetAndUpdateSelects(true, true);
+        },
+        resetAndUpdateSelects: function (resetDatum, skipCoordSys) {
             var selects = this.selectInstances;
             Object.keys( selects ).forEach( function ( key ) {
                 if (key === "datum" && resetDatum !== true){
+                    return;
+                }
+                if (key === "geodetic-coordinate" && skipCoordSys === true){
                     return;
                 }
                 //TODO

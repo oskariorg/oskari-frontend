@@ -157,6 +157,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             // preselect radio button here beceause event listeners are not ready
             this.handleSourceSelection(this.sourceSelect.sources[0]);//me.sourceSelect.sourceSelection);
             this.bindFilterRadioButtons();
+            this.bindTableScroll();
         },
         bindTableHoverListeners: function(){
             var me = this;
@@ -174,8 +175,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var container = this.getContainer();
             container.find('input[type=radio][name=filter-select]').on("change", function(evt) {
                 var value = this.value;
-                me.inputSystem.toggleFilter(value);
+                me.inputSystem.toggleFilter(value, me.sourceSelect.getSourceSelection() === "map");
                 me.outputSystem.toggleFilter(value);
+            });
+        },
+        bindTableScroll: function () {
+            var me = this;
+            this.inputTable.on("TableScroll", function(px){
+                me.outputTable.scrollTable(px);
+            });
+            this.outputTable.on("TableScroll", function(px){
+                me.inputTable.scrollTable(px);
             });
         },
         setVisible: function ( visible ) {
@@ -246,13 +256,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             if (epsgValues){
                 table.updateHeader(epsgValues, heightSystem);
                 if (this.helper.isGeogSystem(srs)){
-                    fileHandler.setShowFormatRow(true);
+                    fileHandler.setIsDegreeSystem(true);
                 } else {
-                    fileHandler.setShowFormatRow(false);
+                    fileHandler.setIsDegreeSystem(false);
                 }
             } else {
                 table.updateHeader(); //remove header
-                fileHandler.setShowFormatRow(true);
+                fileHandler.setIsDegreeSystem(true); //show degree systems options
 
             }
             dimension =  this.instance.getDimension(type);

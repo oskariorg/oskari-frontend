@@ -18,13 +18,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInform
     getElement: function() {
         return this.element;
     },
-    show: function( parentElement, key ) {
+    show: function( parentElement, key , skipInfo) {
         if (this.dialog){
             this.dialog.close(true);
             this.dialog = null;
         }
         var title = this._getTitle(key);
-        var content = this._createContent(key);
+        var content = this._createContent(key, skipInfo);
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var btn = dialog.createCloseButton(this.loc('actions.close'));
         btn.addClass('primary');
@@ -35,12 +35,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInform
         dialog.makeDraggable();
         this.dialog = dialog;
     },
-    _createContent: function (key) {
+    _createContent: function (key, skipInfo) {
         var me = this;
         var content = this._template.content.clone();
         var infoLoc = this.loc('infoPopup')[key];
         content.find('.info-description').html(this.loc('infoPopup.description'));
-        content.find('.info-content').html(infoLoc.info);
+        if (skipInfo !== true){
+            content.find('.info-content').html(infoLoc.info);
+        }
         if (Array.isArray(infoLoc.paragraphs) && infoLoc.paragraphs.length !== 0){
             infoLoc.paragraphs.forEach(function(item){
                 var paragraph = me._template.paragraph.clone();
