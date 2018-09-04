@@ -45,18 +45,29 @@
 }
 /* Source selection */
 .coordinatetransformation-flyout .datasource-wrapper {
-    width: 500px;
+    width: 600px;
     padding-bottom: 24px;
 }
 .coordinatetransformation-flyout .coordinate-datasources-wrapper {
     display: flex;
 }
-.coordinatetransformation-flyout .source-select {
+.coordinatetransformation-flyout .source-select-wrapper {
     margin-right: auto;
     display: flex;
 }
-.coordinatetransformation-flyout .datasource-wrapper a {
+.coordinatetransformation-flyout .source-select {
+    display: flex;
+    margin-right: auto;
+}
+.coordinatetransformation-flyout .source-select .action-link{
+    display: flex;
+}
+
+/*.coordinatetransformation-flyout .datasource-wrapper a {
     font-weight: 700;
+}*/
+.coordinatetransformation-flyout .source-select:not(.selected) .action-link {
+    display: none;
 }
 /* Coordinate systems filter */
 .coordinatetransformation-flyout .systems-filter-wrapper {
@@ -64,10 +75,6 @@
     padding-bottom: 12px;
 }
 .coordinatetransformation-flyout .coordinate-systems-filters {
-    display: flex;
-}
-.coordinatetransformation-flyout .filter-select {
-    margin-right: auto;
     display: flex;
 }
 
