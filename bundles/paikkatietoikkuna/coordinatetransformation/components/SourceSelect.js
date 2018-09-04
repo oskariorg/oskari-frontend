@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                         '<input type="radio" id="clipboard" name="load" value="keyboard">' +
                         '<label for="keyboard">' +
                             '<span/>' +
-                            '${clipboard}' +
+                            '${keyboard}' +
                         '</label>'+
                         '<div class="infolink icon-info" data-source="keyboard" title="${keyboardInfo}"></div>' +
                     '</div>'+
@@ -41,22 +41,26 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 '<div class="datasource-wrapper">'+
                     '<h4></h4>'+
                     '<div class="coordinate-datasources-wrapper"></div>' +
-                    '<div class="datasource-actions-wrapper"></div>' +
+                    //'<div class="datasource-actions-wrapper"></div>' +
                 '</div>'
             ),
             source2: _.template(
-                '<div class="source-select">'+
-                    //'<input type="radio" id="source-${type}" value="${type}">' +
-                    //'<label for="source-${type}">' +
-                    '<label>' +
-                        '<span/>' +
-                        '${label}' +
-                    '</label>'+
-                    '<div class="infolink icon-info" data-source="${type}" title="${tooltip}"></div>' +
-                    '<div class="action-link oskari-hidden">' +
-                        '<input class="primary" type="button" value="${action}"</input>' +
-                        //'<a href="javascript:void(0);">${action}</a>' +
+                '<div class="source-select-wrapper">'+
+                    '<div class="source-select">'+
+                        //'<input type="radio" id="source-${type}" value="${type}">' +
+                        //'<label for="source-${type}">' +
+                        '<label>' +
+                            '<span/>' +
+                            '${label}' +
+                        '</label>'+
+                        '<% if (obj.action) { %> '+
+                            '<div class="action-link">' +
+                                '<div>&nbsp-&nbsp</div>' +
+                                '<a href="javascript:void(0);">${action}</a>' +
+                            '</div>' +
+                        '<% } %>' +
                     '</div>' +
+                    '<div class="infolink icon-info" data-source="${type}" title="${tooltip}"></div>' +
                 '</div>'
             ),
             actions: _.template(
@@ -94,7 +98,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             /*var source = this._template.source({
                 title: this.loc('flyout.dataSource.title'),
                 file: this.loc('flyout.dataSource.file.label'),
-                clipboard: this.loc('flyout.dataSource.keyboard.label'),
+                keyboard: this.loc('flyout.dataSource.keyboard.label'),
                 //choose: this.loc('flyout.dataSource.file.label'),
                 map: this.loc('flyout.dataSource.map.label'),
                 keyboardInfo:this.loc('flyout.dataSource.keyboard.info'),
@@ -115,17 +119,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                     tooltip: loc[source].info,
                     action: loc[source].action
                 }));
-                me.bindClickHandler(elem, source);
-                me.sourceElems[source] = elem;
+                var sourceSelect = elem.find('.source-select');
+                me.bindClickHandler(sourceSelect, source);
+                me.sourceElems[source] = sourceSelect;
                 sourceWrapper.append(elem);
             });
             //wrapper.append(info);
             //wrapper.find('.selectFromMap').addClass('primary');
-            var actions = this._template.actions({
-                fileButton: this.loc('dataSource.file.action'),
-                mapButton: this.loc('dataSource.map.action')
-            });
-            container.find('.datasource-actions-wrapper').append(actions);
+            //var actions = this._template.actions({
+            //    fileButton: this.loc('dataSource.file.action'),
+            //    mapButton: this.loc('dataSource.map.action')
+            //});
+            //sourceWrapper.append(actions);
             this.setElement(container);
         },
         bindClickHandler: function (elem, value){
@@ -158,9 +163,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
          * @method handleRadioButtons
          * Inits the on change listeners for the radio buttons
          */
+         //TODO if source + radiobuttons are used then fix this -> trigger SourceSelectChange
         handleRadioButtons: function () {
             var me = this;
-            jQuery('input[type=radio][name=load]').click(function(evt) {
+            var elem = this.getElement();
+            elem.find('input[type=radio][name=load]').on("click", function(evt) {
                 if (me.sourceSelection !== this.value && me.dataHandler.hasInputCoords()){
                     var selectCb = function(){
                         jQuery(evt.target).prop("checked", true);
@@ -172,7 +179,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                     me.handleSourceSelection(this.value);
                 }
             });
-        },
+        }
 
     }
 );
