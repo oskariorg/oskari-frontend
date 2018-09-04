@@ -43,6 +43,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Main external API function - shows the form for given indicator
      */
     showForm: function (datasourceId, indicatorId) {
+        if (!datasourceId) {
+            this.errorService.show(this.locale('errors.title'), this.locale('errors.myIndicatorDatasource'));
+            return;
+        }
         if (this.isVisible()) {
             this.reset();
         }
