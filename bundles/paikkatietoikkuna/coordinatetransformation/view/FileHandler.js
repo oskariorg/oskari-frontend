@@ -7,15 +7,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         me.element = null;
         me.type = type; // import, export
         me.infoPopup = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
-        me.fileInput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', {
-            'allowMultipleFiles': false,
-            'maxFileSize': 50,
-            'allowedFileTypes': ["text/plain"],
-            'showNoFile': false
-        });
+        me.fileInput;
         me.settings = {};
         me.dialog;
-        me.showFormatRow = true;
+        me.degreeSystem = true; //show degree systems options by default
         me._template = {
             settings: _.template('<div class="coordinatetransformation-file-form">' +
                                     '<% if (obj.export === true) { %> '+
@@ -49,12 +44,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '</div>'+
                                     '<% } %> ' +
                                     '<div class="selection-wrapper unitFormat">'+
-                                        '<b class="title">${format}</b> '+
+                                        '<b class="title">${units.label}</b> '+
                                         '<div class="settingsSelect">'+
                                             '<select>'+
-                                                '<option value="degree">${degree}</option>'+
-                                                '<option value="gradian">${gradian}</option>'+
-                                                '<option value="radian">${radian}</option>'+
+                                                '<option value="degree">${units.degree}</option>'+
+                                                '<option value="gradian">${units.gradian}</option>'+
+                                                '<option value="radian">${units.radian}</option>'+
                                                 '<option value="DD">DD</option>'+
                                                 '<option value="DD MM SS">DD MM SS</option>'+
                                                 '<option value="DD MM">DD MM</option>'+
@@ -69,8 +64,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '<div class="settingsSelect">'+
                                             '<select>'+
                                                 '<option value="" selected disabled>${choose}</option>'+
-                                                '<option value=".">${point}</option>'+
-                                                '<option value=",">${comma}</option>'+
+                                                '<option value=".">${delimeters.point}</option>'+
+                                                '<option value=",">${delimeters.comma}</option>'+
                                             '</select>'+
                                         '</div>' +
                                         '<div class="infolink icon-info" data-selection="decimalSeparator"></div>' +
@@ -80,10 +75,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '<div class="settingsSelect">'+
                                             '<select>'+
                                                 '<option value="" selected disabled>${choose}</option>'+
-                                                '<option value="tab">${tab}</option>'+
-                                                '<option value="space">${space}</option>'+
-                                                '<option value="comma">${comma}</option>'+
-                                                '<option value="semicolon">${semicolon}</option>'+
+                                                '<option value="tab">${delimeters.tab}</option>'+
+                                                '<option value="space">${delimeters.space}</option>'+
+                                                '<option value="comma">${delimeters.comma}</option>'+
+                                                '<option value="semicolon">${delimeters.semicolon}</option>'+
                                             '</select>'+
                                         '</div>' +
                                         '<div class="infolink icon-info" data-selection="coordinateSeparator"></div>' +
@@ -130,10 +125,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             return 'Oskari.coordinatetransformation.view.FileHandler';
         },
         getSettings: function (){
+            // force unit to metric for non-degree systems
+            if (this.degreeSystem === false && this.settings.selects){
+                this.settings.selects.unit = "metric";
+            }
             return this.settings;
         },
-        setShowFormatRow: function (visible){
-            this.showFormatRow = !!visible;
+        setIsDegreeSystem: function (isDegree){
+            this.degreeSystem = !!isDegree;
         },
         create: function() {
             var fileSettings,
@@ -141,21 +140,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             fileSettings = {
                 export: false,
                 fileName: this.loc('fileSettings.export.fileName'),
-                format: this.loc('fileSettings.options.degreeFormat.label'),
                 decimalSeparator: this.loc('fileSettings.options.decimalSeparator'),
                 coordinateSeparator: this.loc('fileSettings.options.coordinateSeparator'),
                 prefixId: this.loc('fileSettings.options.useId'),
                 reverseCoords: this.loc('fileSettings.options.reverseCoords'),
                 headerCount: this.loc('fileSettings.options.headerCount'),
                 decimalCount: this.loc('fileSettings.options.decimalCount'),
-                degree: this.loc('fileSettings.options.degreeFormat.degree'),
-                gradian: this.loc('fileSettings.options.degreeFormat.gradian'),
-                radian: this.loc('fileSettings.options.degreeFormat.radian'),
-                point: this.loc('fileSettings.options.delimeters.point'),
-                comma: this.loc('fileSettings.options.delimeters.comma'),
-                semicolon: this.loc('fileSettings.options.delimeters.semicolon'),
-                tab: this.loc('fileSettings.options.delimeters.tab'),
-                space: this.loc('fileSettings.options.delimeters.space'),
+                units: this.loc('fileSettings.options.degreeFormat'),
+                delimeters: this.loc('fileSettings.options.delimeters'),
                 writeHeader: this.loc('fileSettings.options.writeHeader'),
                 lineEnds: this.loc('fileSettings.options.lineEnds'),
                 useCardinals: this.loc('fileSettings.options.useCardinals'),
@@ -167,10 +159,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             }
             element = jQuery(this._template.settings(fileSettings));
             if (this.type === "import"){
+                this.fileInput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', {
+                    'allowMultipleFiles': false,
+                    'maxFileSize': 50,
+                    'allowedFileTypes': ["text/plain", "text/csv"],
+                    'allowedFileExtensions': ["txt", "csv"],
+                    'showNoFile': false
+                });
                 element.find('.fileInput').append(this.fileInput.getElement());
-                //fileSettings.fileInput = this.fileInput.getElement();
             }
             this.setElement( element );
+            this.setTooltips();
         },
         /*createEventHandlers: function ( dialog ) {
             var me = this;
@@ -229,13 +228,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                     return;
                 }
                 if (typeof callback === "function"){
-                    callback(me.settings);
+                    callback(me.getSettings());
                 }
                 dialog.close();
             });
             dialog.createCloseIcon();
             dialog.makeDraggable();
-            if (this.showFormatRow === false){
+            if (this.degreeSystem === false){
                 formatRow.css("display","none");
                 decimalInput.val(4);
             } else {
@@ -258,7 +257,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             this.getElement().find('.infolink').on('click', function ( event ) {
                 event.preventDefault();
                 var key = this.dataset.selection;
-                me.infoPopup.show(jQuery(this), key);
+                me.infoPopup.show(jQuery(this), key, true);
+            });
+        },
+        setTooltips: function (){
+            var infoElems = this.getElement().find('.infolink');
+            var infoLoc = this.loc('infoPopup');
+            infoElems.each(function(){
+                var key = this.dataset.selection;
+                var tooltip = infoLoc[key].info;
+                if(tooltip){
+                    jQuery(this).prop('title', tooltip);
+                }
             });
         }/*,
         showInfoPopup: function(){
