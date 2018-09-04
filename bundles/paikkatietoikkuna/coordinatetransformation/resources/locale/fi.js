@@ -17,10 +17,10 @@ Oskari.registerLocalization(
             "coordinateSystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "input": {
-                    "title": "Lähtö koordinaattijärjestelmän tiedot"
+                    "title": "Lähtökoordinaattijärjestelmän tiedot"
                 },
                 "output": {
-                    "title": "Tulos koordinaattijärjestelmän tiedot"
+                    "title": "Tuloskoordinaattijärjestelmän tiedot"
                 },
                 "noFilter": "Mikä tahansa",
                 "epsgSearch": {
@@ -70,7 +70,8 @@ Oskari.registerLocalization(
                 "warnings": {
                     "title": "Huomio!",
                     "3DTo2D": "Valitsemissasi lähtötiedoissa on mukana korkeusarvoja, mutta tulostiedoissa ei. Tuloskoordinaatteihin ei siis tule korkeusarvoja mukaan. Haluatko jatkaa?",
-                    "2DTo3D": "Valitsemissasi lähtötiedoissa ei ole korkeusarvoja, mutta tulostiedoissa on. Lähtöaineiston korkeusarvoiksi lisätään 0 ja korkeusjärjestelmäksi N2000. Haluatko jatkaa?"
+                    "2DTo3D": "Valitsemissasi lähtötiedoissa ei ole korkeusarvoja, mutta tulostiedoissa on. Lähtöaineiston korkeusarvoiksi lisätään 0 ja korkeusjärjestelmäksi N2000. Haluatko jatkaa?",
+                    "xyz": "Lähtökoordinaattijärjestelmän valinnoissa ei ole korkeusjärjestelmää. Muunnos suorakulmaiseen 3D -järjestelmään ei ole mahdollinen."
                 },
                 "validateErrors": {
                     "title": "Virhe!",
@@ -87,7 +88,6 @@ Oskari.registerLocalization(
                     "noFileSettings": "Tiedosto asetuksia ei ole annettu.",
                     "noCoordinateSeparator": "Koordinaattierotin pitää olla valittuna.",
                     "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
-
                 },
                 "responseErrors": {
                     "title": "Virhe muunnoksessa!",
@@ -98,7 +98,7 @@ Oskari.registerLocalization(
                     "invalid_file_settings": "Tiedoston asetukset virheelliset.", //can't be user's fault
                     "no_file": "Lähetetystä pyynnöstä ei löytynyt tiedostoa.", //can't be user's fault
                     "invalid_coord_length": "Tiedostosta ei saatu muodostettua koordinaattia annetuilla asetuksilla. Tarkasta, että koordinaatti erotin, otsakerivien määrä, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä (dimensio) valinnat vastaavat tiedoston sisältöä.",
-                    "invalid_coord_in_row": "Tiedostossa on rivillä: {rowIndex, number} virheellinen koordinaattirivi: {coordinate} <br> Tarkasta, että koordinaattierotin ja otsakerivien määrä valinnat vastaavat tiedoston sisältöä."
+                    "invalid_coord_in_row": "Tiedostossa on rivillä: {rowIndex, number} virheellinen koordinaattirivi: {coordinate} <br> Tarkasta, että desimaali- ja koordinaattierotin sekä otsakerivien määrä valinnat vastaavat tiedoston sisältöä."
                 },
                 "responseFile": {
                     "title": "Huomio!",
@@ -112,17 +112,16 @@ Oskari.registerLocalization(
             "file": {
                 "label": "Tiedostosta",
                 "info":  "Valitse lähtöaineiston sisältävä tiedosto ja sen asetukset.",
-                "action": "Muokkaa"
+                "action": "muokkaa valintoja"
             },
             "keyboard": {
                 "label": "Näppäimistöltä",
-                "info": "Syötä lähtötiedot Muunnettavat koordinaatit -taulukkoon.",
-                "action": ""
+                "info": "Syötä lähtötiedot Muunnettavat koordinaatit -taulukkoon."
             },
             "map": {
                 "label": "Valitse sijainnit kartalta",
                 "info": "Valitse yksi tai useampi piste kartalta klikkaamalla.",
-                "action": "Valitse"
+                "action": "valitse lisää"
             }
         },
         "mapMarkers":{
@@ -147,7 +146,7 @@ Oskari.registerLocalization(
             "showMarkers": "Näytä sijainnit kartalla",
             "export": "Muunna tiedostoon",
             "select": "Valitse",
-            "selectFromMap": "Siirry valitsemaan.",
+            //"selectFromMap": "Siirry valitsemaan.",
             "cancel": "Peruuta",
             "done": "Valmis",
             "ok": "Ok",
@@ -163,7 +162,7 @@ Oskari.registerLocalization(
                 "useId": "Käytä tunnistetta",
                 "writeHeader": "Kirjoita otsakerivi tiedostoon",
                 "useCardinals": "Käytä kardinaaleja (N,E,W,S)",
-                "lineEnds": "Tulosteeseen rivin loput",
+                "lineEnds": "Rivin loput tulokseen",
                 "choose": "Valitse",
                 "degreeFormat":{
                     "label": "Kulman muoto/yksikkö",
@@ -247,15 +246,15 @@ Oskari.registerLocalization(
             },
             "decimalCount":{
                 "title":"Desimaalien määrä",
-                "info": "",
+                "info": "Tukokseen tulevien desimaalien määrä",
                 "paragraphs": [
-                    "Ominaisuuden avulla kerrotaan ohjelmalle kuinka monta desimaalia tulosteessa halutaan olevan."
+                    "Ominaisuuden avulla kerrotaan ohjelmalle kuinka monen desimaalin tarkkuudella koordinaatit halutaan tulokseen."
                 ],
                 "listItems" : []
             },
             "coordinateSeparator":{
                 "title":"Sarake-erotin",
-                "info": "",
+                "info": "Koordinaattien erottamiseen käytetty merkki",
                 "paragraphs": [
                     "Ominaisuuden avulla määritetään millainen merkkijono erottaa syötteessä koordinaattiarvot toisistaan.",
                     "Jos koordinaatteja edeltää jokin tunniste tai seuraa jokin merkkijono, tulee nämäkin olla erotettuna samalla erottimella."
@@ -264,16 +263,16 @@ Oskari.registerLocalization(
             },
             "headerLineCount":{
                 "title":"Otsakerivien määrä",
-                "info": "",
+                "info": "Montako riviä tiedoston alussa on ennen ensimmäistä koordinaattiriviä",
                 "paragraphs": [
-                    "Ominaisuuden avulla pystyy ohjelmalle kertomaan kuinka monta riviä tiedoston alusta ohitetaan.",
+                    "Ominaisuuden avulla pystyy ohjelmalle kertomaan kuinka monta riviä tiedoston alusta ohitetaan ennen ensimmäisen koordinaattirivin lukemista.",
                     "Ohittamisen syynä voi olla, että tiedoston alussa on esimerkiksi sanallinen kuvaus tiedoston sisällöstä."
                 ],
                 "listItems" : []
             },
             "unitFormat":{
                 "title":"Kulman muoto/yksikkö",
-                "info": "",
+                "info": "Maantieteellisen astemuotoisen koordinaatin yksikkö",
                 "paragraphs": [
                     "Ominaisuuden avulla kerrotaan ohjelmalle missä muodossa kulma-arvot ovat. Tuettuja kulmayksikköjä ovat: Aste, Gooni (graadi) ja Radiaani.",
                     "Lisäksi asteesta johdetut sexagesimaalimuodot ovat tuettuja. Jos näissä muodoissa esimerkiksi asteet, kaariminuutit ja kaarisekunnit ovat erotettuina, hyväksyy ohjelma erottimena tabulaattorin, pilkun ja puolipisteen, mutta ei välilyöntiä."
@@ -282,7 +281,7 @@ Oskari.registerLocalization(
             },
             "decimalSeparator":{
                 "title":"Desimaalierotin",
-                "info": "",
+                "info": "Desimaaliosan erottamiseen käytetty merkki",
                 "paragraphs": [
                     "Ominaisuuden avulla pystyy kertomaan mikä merkki toimii desimaalierotin.",
                     "Desimaalierottimen tulee poiketa koordinaattiarvot erottavasta merkistä. Kun koordinaattiarvot erottaa esimerkiksi pilkku sekä joukko välilyöntejä, niin desimaalierottimen on oltava piste!"
@@ -291,7 +290,7 @@ Oskari.registerLocalization(
             },
             "lineSeparator":{
                 "title":"Rivin erotin",
-                "info": "",
+                "info": "Tiedostossa rivinvaihtona käytetty merkki",
                 "paragraphs": [
                     "Ominaisuuden avulla kerrotaan ohjelmalle mitä merkkiä/merkkijonoa käytetään erottamaan toisistaan rivit (pisteet)."
                 ],
@@ -299,7 +298,7 @@ Oskari.registerLocalization(
             },
             "prefixId":{
                 "title":"Koordinaattiarvoja edeltää pisteen tunniste",
-                "info": "",
+                "info": "Koordinaattirivi alkaa tunnistetiedolla",
                 "paragraphs": [
                     "Ominaisuuden avulla pystyy ohjelmalle kertomaan, että jokaisen pisteen koordinaattiarvoja edeltää samalla rivillä pisteen tunniste (ID).",
                     "Pisteen tunnisteen tulee olla erotettuna koordinaattiarvoista samalla merkkijonolla kuin koordinaattiarvot ovat erotettuina toisistaan.",
@@ -309,7 +308,7 @@ Oskari.registerLocalization(
             },
             "reverseCoordinates":{
                 "title":"Koordinaatit käänteisesti",
-                "info": "",
+                "info": "X- ja Y-Koordinaattiakselien järjestys poikkeaa määritetystä järjestyksestä",
                 "paragraphs": [
                     "Ominaisuuden avulla pystyy määrittämään ovatko tiedoston pisteiden kaksi ensimmäistä koordinaattiarvoa käänteisessä järjestyksessä suhteessa koordinaatiston kuvailussa annettuun järjestykseen.",
                     "Esimerkiksi kkj:n koordinaatit ovat lähtökohtaisesti jäjestyksessä, jossa ensimmäisenä on x-koordinaatti ja sitä seuraa y-koordinaatti. x-akseli osoittaa pohjoiseen ja y-akseli itään. Kun valitsee käänteisen järjestyksen, tulee tiedostossa y-koordinaatin edeltää x-koordinaattia."
@@ -318,23 +317,25 @@ Oskari.registerLocalization(
             },
             "writeHeader":{
                 "title":"Otsakerivin tulostaminen tiedostoon",
-                "info": "",
+                "info": "Tuloksen alkuun otsakerivit mukaan",
                 "paragraphs": [
-                    "Ominaisuuden avulla käyttäjä voi kertoa haluaako tulostiedostoon metatietoa koordinaateista otsakeriville."
+                    "Ominaisuuden avulla käyttäjä voi kertoa haluaako tulostiedostoon metatietoa koordinaateista otsakeriville.",
+                    "Tiedostosta tiedostoon muunnoksessa alkuperäisen tiedoston mahdolliset otsakerivit tulevat myös mukaan"
                 ],
                 "listItems" : []
             },
             "lineEnds":{
-                "title":"Tulosteeseen rivin loput",
-                "info": "",
+                "title":"Rivin loput tulokseen",
+                "info": "Lähtötiedoston rivin loput lisätään tulostiedostoon",
                 "paragraphs": [
-                    "Ominaisuuden avulla pystyy kertomaan haluaako tulosteeseen kirjoitettavan myös jokaisella rivillä annetun pisteen koordinaatteja seuraavan merkkijonon."
+                    "Ominaisuuden avulla pystyy kertomaan haluaako tulokseen kirjoitettavan myös jokaisella rivillä annetun pisteen koordinaatteja seuraavan merkkijonon.",
+                    "Ominaisuus vaikuttaa vain tiedostosta tiedostoon muunnoksessa, jolloin tuodun tiedoston rivin loput lisätään myös tulostiedostoon."
                 ],
                 "listItems" : []
             },
             "useCardinals":{
                 "title":"Kardinaalien käyttö",
-                "info": "",
+                "info": "Koordinaattiarvojen perään lisätään ilmansuunnat (N, E, W tai S)",
                 "paragraphs": [
                     "Ominaisuudella määritetään kirjoitetaanko tulosteeseen koordinaattiarvojen perään niiden ilmansuunnat. Tällöin miinusmerkit poistetaan koordinaattiarvoista.",
                     "Ilmansuunnat annetaan kirjoittamalla joko N, E, W tai S koordinaattiarvon perään."

@@ -9,6 +9,11 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title":"Coordinate Transformation",
+            "filterSystems": {
+                "title": "Suodata koordinaattijärjestelmiä",
+                "epsg": "EPSG-koodilla",
+                "systems": "Datumilla ja koordinaatistolla"
+            },
             "coordinateSystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "input": {
@@ -18,6 +23,9 @@ Oskari.registerLocalization(
                     "title": "Tulos koordinaattijärjestelmän tiedot"
                 },
                 "noFilter": "Any option",
+                "epsgSearch": {
+                    "label": "Hae EPSG-koodilla"
+                },
                 "geodeticDatum": {
                     "label": "Geodeettinen datumi"
                 },
@@ -62,7 +70,8 @@ Oskari.registerLocalization(
                 "warnings": {
                     "title": "Huomio!",
                     "3DTo2D": "Valitsemissasi lähtötiedoissa on mukana korkeusarvoja, mutta tulostiedoissa ei. Tuloskoordinaatteihin ei siis tule korkeusarvoja mukaan. Haluatko jatkaa?",
-                    "2DTo3D": "Valitsemissasi lähtötiedoissa ei ole korkeusarvoja, mutta tulostiedoissa on. Lähtöaineiston korkeusarvoiksi lisätään 0 ja korkeusjärjestelmäksi N2000. Haluatko jatkaa?"
+                    "2DTo3D": "Valitsemissasi lähtötiedoissa ei ole korkeusarvoja, mutta tulostiedoissa on. Lähtöaineiston korkeusarvoiksi lisätään 0 ja korkeusjärjestelmäksi N2000. Haluatko jatkaa?",
+                    "xyz": "Lähtökoordinaattijärjestelmän valinnoissa ei ole korkeusjärjestelmää. Muunnos suorakulmaiseen 3D -järjestelmään ei ole mahdollinen."
                 },
                 "validateErrors": {
                     "title": "Virhe!",
@@ -76,7 +85,9 @@ Oskari.registerLocalization(
                     "decimalCount": "Desimaalien tarkkuus pitää olla 0 tai positiivnen kokonaisluku.",
                     "headerCount": "Otsakerivien määrä pitää olla 0 tai positiivinen kokonaisluku.",
                     "doubleComma": "Desimaali- ja koordinaattierotin eivät voi molemmat olla pilkkuja.",
-                    "noFileSettings": "Tiedosto asetuksia ei ole annettu."
+                    "noFileSettings": "Tiedosto asetuksia ei ole annettu.",
+                    "noCoordinateSeparator": "Koordinaattierotin pitää olla valittuna.",
+                    "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
                 },
                 "responseErrors": {
                     "title": "Virhe muunnoksessa!",
@@ -105,8 +116,7 @@ Oskari.registerLocalization(
             },
             "keyboard": {
                 "label": "Näppäimistöltä",
-                "info": "Syötä lähtötiedot Muunnettavat koordinaatit -taulukkoon.",
-                "action": ""
+                "info": "Syötä lähtötiedot Muunnettavat koordinaatit -taulukkoon."
             },
             "map": {
                 "label": "Valitse sijainnit kartalta",
@@ -131,16 +141,16 @@ Oskari.registerLocalization(
             }
         },
         "actions": {
-            "convert": "Muunna",
-            "clearTable": "Tyhjennä taulukot",
-            "showMarkers": "Näytä sijainnit kartalla",
-            "export": "Muunna tiedostoon",
-            "select": "Välj",
-            "selectFromMap": "Siirry valitsemaan.",
-            "cancel": "Peruuta",
-            "done": "Valmis",
+            "convert": "Transform",
+            "clearTable": "Clear tables",
+            "showMarkers": "Show markers on the map",
+            "export": "Transform to file",
+            "select": "Select",
+            //"selectFromMap": "Siirry valitsemaan.",
+            "cancel": "Cancel",
+            "done": "Done",
             "ok": "Ok",
-            "close": "Stäng"
+            "close": "Close"
         },
         "fileSettings": {
             "options": {
@@ -153,6 +163,7 @@ Oskari.registerLocalization(
                 "writeHeader": "Write a header",
                 "useCardinals": "Use cardinals (N,E,W,S)",
                 "lineEnds": "Line ends to output",
+                "choose": "Choose",
                 "degreeFormat":{
                     "label": "Angle pattern",
                     "degree": "Degree",
@@ -181,8 +192,13 @@ Oskari.registerLocalization(
                 "title": "Lähtöaineiston ominaisuudet"
             }
         },
-                "infoPopup": {
+        "infoPopup": {
             "description": "Kuvaus",
+            "epsgSearch": {
+                "title": "Haku EPSG-koodin perusteella",
+                "info": "Voit hakea geodeettisen koordinaattijärjestelmän EPSG-koodin avulla. Syötä koodi pelkkänä numerona esim. 3067.",
+                "listItems": []
+            },
             "geodeticDatum": {
                 "title": "Geodeettinen datumi",
                 "info": "Geodeettinen datumi: datumi, joka kuvaa kaksi- tai kolmiulotteisen koordinaatiston suhdetta Maahan.",

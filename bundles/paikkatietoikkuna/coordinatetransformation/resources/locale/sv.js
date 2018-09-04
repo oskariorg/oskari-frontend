@@ -9,6 +9,11 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title":"Coordinateconversion",
+            "filterSystems": {
+                "title": "Suodata koordinaattijärjestelmiä",
+                "epsg": "EPSG-koodilla",
+                "systems": "Datumilla ja koordinaatistolla"
+            },
             "coordinateSystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "input": {
@@ -18,6 +23,9 @@ Oskari.registerLocalization(
                     "title": "Till-system"
                 },
                 "noFilter": "Mikä tahansa",
+                "epsgSearch": {
+                    "label": "Hae EPSG-koodilla"
+                },
                 "geodeticDatum": {
                     "label": "Geodetiskt datum"
                 },
@@ -76,7 +84,9 @@ Oskari.registerLocalization(
                     "decimalCount": "Desimaalien tarkkuus pitää olla 0 tai positiivnen kokonaisluku.",
                     "headerCount": "Otsakerivien määrä pitää olla 0 tai positiivinen kokonaisluku.",
                     "doubleComma": "Desimaali- ja koordinaattierotin eivät voi molemmat olla pilkkuja.",
-                    "noFileSettings": "Tiedosto asetuksia ei ole annettu."
+                    "noFileSettings": "Tiedosto asetuksia ei ole annettu.",
+                    "noCoordinateSeparator": "Koordinaattierotin pitää olla valittuna.",
+                    "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
                 },
                 "responseErrors": {
                     "title": "Virhe muunnoksessa!",
@@ -105,8 +115,7 @@ Oskari.registerLocalization(
             },
             "keyboard": {
                 "label": "Näppäimistöltä",
-                "info": "Syötä lähtötiedot Muunnettavat koordinaatit -taulukkoon.",
-                "action": ""
+                "info": "Syötä lähtötiedot Muunnettavat koordinaatit -taulukkoon."
             },
             "map": {
                 "label": "Valitse sijainnit kartalta",
@@ -153,6 +162,7 @@ Oskari.registerLocalization(
                 "writeHeader": "Kirjoita otsakerivi tiedostoon",
                 "useCardinals": "Käytä kardinaaleja (N,E,W,S)",
                 "lineEnds": "Tulosteeseen rivin loput",
+                "choose": "Valitse",
                 "degreeFormat":{
                     "label": "Kulman muoto/yksikkö",
                     "degree": "Aste",
@@ -183,6 +193,11 @@ Oskari.registerLocalization(
         },
         "infoPopup": {
             "description": "Kuvaus",
+            "epsgSearch": {
+                "title": "Haku EPSG-koodin perusteella",
+                "info": "Voit hakea geodeettisen koordinaattijärjestelmän EPSG-koodin avulla. Syötä koodi pelkkänä numerona esim. 3067.",
+                "listItems": []
+            },
             "geodeticDatum": {
                 "title": "Geodetiskt datum",
                 "info": "Geodeettinen datumi: datumi, joka kuvaa kaksi- tai kolmiulotteisen koordinaatiston suhdetta Maahan.",
