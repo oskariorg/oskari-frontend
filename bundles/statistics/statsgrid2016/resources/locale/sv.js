@@ -139,7 +139,8 @@ Oskari.registerLocalization({
                 'max': 'Maximum',
                 'color': 'Färg',
                 'transparency': 'Genomskinlighet',
-                'showValues': 'Visa värden'
+                'showValues': 'Visa värden',
+                'fractionDigits': 'Decimaltal'
             }
         },
         'colorset': {
@@ -167,7 +168,8 @@ Oskari.registerLocalization({
             'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
             'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
             'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
-            'myIndicatorDatasource': 'Datakällan är tom.'
+            'myIndicatorDatasource': 'Datakällan är tom.',
+            'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.'
         },
         'datacharts': {
             'flyout': 'Sökta datamängden',

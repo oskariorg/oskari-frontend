@@ -19,6 +19,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             errorService.show(locale.errors.title, locale.errors.regionsetsIsEmpty);
         }
         me.trigger('indicator.changed', data.regionset.length > 0);
+        if (me.searchSeries) {
+            var keyWithTime = Object.keys(data.selectors).find(function (key) {
+                return data.selectors[key].time;
+            });
+            if (!keyWithTime || data.selectors[keyWithTime].values.length <= 1) {
+                me.searchSeries = false;
+                errorService.show(locale.errors.title, locale.errors.cannotDisplayAsSeries);
+            }
+        }
         me._createUi(data.datasrc, data.indicators, data.selectors, data.regionset);
     });
 }, {
@@ -88,7 +97,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         var seriesSelection = null;
         Object.keys(selections).forEach(function (selected, index) {
             var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
-            var label = (locale.parameters[selected]) ? locale.parameters[selected] : selected.id;
+            var label = (locale.parameters[selected]) ? locale.parameters[selected] : !selected.id ? String(selected) : selected.id;
             var options = {
                 placeholder_text: placeholderText
             };

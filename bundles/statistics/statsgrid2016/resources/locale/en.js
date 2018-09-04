@@ -142,7 +142,8 @@ Oskari.registerLocalization({
                 'max': 'Maximum',
                 'color': 'Color',
                 'transparency': 'Transparency',
-                'showValues': 'Show values'
+                'showValues': 'Show values',
+                'fractionDigits': 'Decimal places'
             }
         },
         'colorset': {
@@ -170,7 +171,8 @@ Oskari.registerLocalization({
             'indicatorSave': 'Error saving indicator',
             'myIndicatorYearInput': 'Year field cannot be empty.',
             'myIndicatorRegionselect': 'Regionselect cannot be empty.',
-            'myIndicatorDatasource': 'Datasource is empty.'
+            'myIndicatorDatasource': 'Datasource is empty.',
+            'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.'
         },
         'datacharts': {
             'flyout': 'Searched data',

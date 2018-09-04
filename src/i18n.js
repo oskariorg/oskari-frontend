@@ -305,4 +305,10 @@
         }
         return formatter.format(values);
     };
+    O.getNumberFormatter = function(fractionDigits) {
+        return new Intl.NumberFormat(oskariLang, {
+            minimumFractionDigits: fractionDigits,
+            maximumFractionDigits: fractionDigits
+        });
+    }
 }(Oskari));

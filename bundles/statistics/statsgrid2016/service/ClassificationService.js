@@ -79,6 +79,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
             var opts = me._validateOptions(options);
             var list = me._getDataAsList(indicatorData);
+            var formatter = Oskari.getNumberFormatter(opts.fractionDigits);
 
             if (me._hasNonNumericValues(list)) {
                 // geostats can handle this, but lets not support for now (gstats.getUniqueValues() used previously)
@@ -204,16 +205,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     return me._getPointsLegend(ranges, opts, colors[0], counter,
                         {
                             separator: stats.separator,
-                            precision: stats.precision,
-                            precisionflag: stats.precisionflag,
                             legendSeparator: stats.legendSeparator
-                        }
+                        },
+                        formatter
                     );
                 }
 
                 // Choropleth  legend
                 stats.setColors(colors);
-                return stats.getHtmlLegend(null, title || '', true, null, opts.mode);
+                return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
             };
             return response;
         },
@@ -245,7 +245,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             return size;
         },
-        _getPointsLegend: function (ranges, opts, color, counter, statsOpts) {
+        _getPointsLegend: function (ranges, opts, color, counter, statsOpts, formatter) {
             var me = this;
             var x = 0;
             var y = 0;
@@ -296,31 +296,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             svg.find('svg.texts').attr('y', fontSize);
             svg.find('svg.texts').attr('height', maxSize + fontSize);
 
-            // Fixes legend texts when mode is distinct
-            if (opts.mode === 'distinct') {
-                var isInt = function (n) {
-                    return typeof n === 'number' && parseFloat(n) === parseInt(n, 10) && !isNaN(n);
-                }; // 6 characters
-                ranges.forEach(function (range, index) {
-                    var tmp = range.split(statsOpts.separator);
-                    var startValue = parseFloat(tmp[0]).toFixed(statsOpts.precision);
-                    var endValue = parseFloat(tmp[1]).toFixed(statsOpts.precision);
-                    if (index !== 0) {
-                        if (isInt(startValue)) {
-                            startValue = parseInt(startValue) + 1;
-                            // format to float if necessary
-                            if (statsOpts.precisionflag === 'manual' && statsOpts.precision !== 0) startValue = parseFloat(startValue).toFixed(statsOpts.precision);
-                        } else {
-                            startValue = parseFloat(startValue) + (1 / Math.pow(10, statsOpts.precision));
-                            // strangely the formula above return sometimes long decimal values,
-                            // the following instruction fix it
-                            startValue = parseFloat(startValue).toFixed(statsOpts.precision);
-                        }
-                    }
-                    ranges[index] = startValue + statsOpts.separator + endValue;
-                });
-            }
-
             var legendValuesPosition = function (size, index) {
                 var step = (maxSize - minSize / 2) / (ranges.length - 1);
                 var y = (ranges.length - index - 1) * step;
@@ -343,8 +318,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 var svgMain = point.find('svg').first();
 
                 var tmp = range.split(statsOpts.separator);
-                var startValue = parseFloat(tmp[0]).toFixed(statsOpts.precision);
-                var endValue = parseFloat(tmp[1]).toFixed(statsOpts.precision);
+                var startValue = formatter.format(parseFloat(tmp[0]));
+                var endValue = formatter.format(parseFloat(tmp[1]));
 
                 var size = me.getPixelForSize(index,
                     {
@@ -418,8 +393,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             opts.count = opts.count || this.limits.count.def;
             opts.type = opts.type || 'seq';
 
-            // precision is an integer between 0-20. Will be computed automatically by geostats if no value is set
-            // opts.precision = opts.precision || 1;
             var range = this._colorService.getRange(opts.type, opts.mapStyle);
             if (opts.count < range.min) {
                 // no need to classify if partitioning to less than 2 groups

@@ -142,7 +142,8 @@ Oskari.registerLocalization({
                 'max': 'Maksimi',
                 'color': 'Väri',
                 'transparency': 'Läpinäkyvyys',
-                'showValues': 'Näytä arvot'
+                'showValues': 'Näytä arvot',
+                'fractionDigits': 'Desimaalien lukumäärä'
             }
         },
         'colorset': {
@@ -171,7 +172,8 @@ Oskari.registerLocalization({
             'indicatorDelete': 'Virhe poistaessa muuttujaa.',
             'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
             'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
-            'myIndicatorDatasource': 'Tietolähde on tyhjä.'
+            'myIndicatorDatasource': 'Tietolähde on tyhjä.',
+            'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',

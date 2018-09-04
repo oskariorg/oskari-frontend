@@ -599,6 +599,8 @@ define([
                 // This propably isn't the best way to get reference to inspire themes
                 var inspireGroups = this.instance.models.inspire.getGroupTitles();
                 me.$el.append(me.groupTemplate({
+                    dataProviders: me.getDataProviders(),
+                    maplayerGroups: me.options.groupId,
                     model: me.model,
                     instance: me.options.instance,
                     groupTitle: groupTitle,
