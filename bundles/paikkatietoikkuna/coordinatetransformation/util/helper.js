@@ -171,16 +171,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
     },
     checkDimensions: function (crs, callback){
-        var ok = true,
-            message;
-        if (crs.sourceDimension === 2 && crs.targetDimension === 3){
-            message = this.loc('flyout.transform.warnings.2DTo3D');
-        } else if (crs.sourceDimension === 3 && crs.targetDimension === 2){
-            message = this.loc('flyout.transform.warnings.3DTo2D');
-        } else {
-            callback();
-            return;
-        }
+        var message;
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             cancelBtn = dialog.createCloseButton(this.loc('actions.cancel')),
             okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -191,7 +182,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             callback();
             dialog.close();
         });
-        dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
+
+        if (crs.sourceDimension === 2 && crs.targetCrs === "EPSG:4936"){
+            message = this.loc('flyout.transform.warnings.xyz');
+            cancelBtn.setTitle(this.loc('actions.ok'));
+            dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn]);
+        } else if (crs.sourceDimension === 2 && crs.targetDimension === 3){
+            message = this.loc('flyout.transform.warnings.2DTo3D');
+            dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
+        } else if (crs.sourceDimension === 3 && crs.targetDimension === 2){
+            message = this.loc('flyout.transform.warnings.3DTo2D');
+            dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
+        } else {
+            callback();
+        }
     },
     showPopup: function (title, message, errorList){
         var me = this,
