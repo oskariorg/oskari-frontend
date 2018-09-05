@@ -171,6 +171,7 @@ Oskari.registerLocalization({
             'indicatorSave': 'Error saving indicator',
             'myIndicatorYearInput': 'Year field cannot be empty.',
             'myIndicatorRegionselect': 'Regionselect cannot be empty.',
+            'myIndicatorDatasource': 'Datasource is empty.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.'
         },
         'datacharts': {
