@@ -340,6 +340,7 @@ Oskari.registerLocalization(
             "success":"Sucess",
             "error":"Error!",
             "invalidType": "File format is not allowed.",
+            "allowedExtensions": "Allowed file extensions: {allowedExtensions}.",
             "multipleNotAllowed": "Only single file is allowed to be uploaded.",
             "fileSize": "The selected file is too large. It can be at most {size, number} Mb.",
             "noFiles": "No file selected."

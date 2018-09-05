@@ -12,42 +12,37 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this._template = {
             systemWrapper: jQuery('<div class="coordinate-system-wrapper"></div>'),
             coordinateSystemSelection: _.template(
+                '<h4> ${ title }</h4>'+
                 '<div class="transformation-system">' +
-                    '<h5> ${ title }</h5>'+
-                    '<div class="system datum selection-wrapper" data-system="datum">' +
+                    '<div class="system epsgSearch selection-wrapper">' +
+                        '<b class="dropdown_title">${ epsg_search }</b>' +
+                        '<input type="text" placeholder="3067"/>' +
+                        '<div class="infolink icon-info" data-system="epsgSearch" title="${tooltip.epsgSearch}"></div>' +
+                    '</div>' +
+                    '<div class="system datum selection-wrapper system-filter">' +
                         '<b class="dropdown_title"> ${ geodetic_datum }</b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="geodeticDatum" title="${tooltip.geodeticDatum}"></div>' +
                     '</div>' +
-                    '<div class="system coordinate selection-wrapper" data-system="coordinate">' +
+                    '<div class="system coordinate selection-wrapper system-filter">' +
                         '<b class="dropdown_title"> ${ coordinate_system }</b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="coordinateSystem" title="${tooltip.coordinateSystem}"></div>' +
                     '</div>' +
-                    '<div class="system projection selection-wrapper" data-system="projection">' +
+                    '<div class="system projection selection-wrapper system-filter">' +
                         '<b class="dropdown_title"> ${ map_projection }</b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="mapProjection" title="${tooltip.mapProjection}"></div>' +
                     '</div>'+
-                    '<div class="system geodetic-coordinate selection-wrapper" data-system="geodetic-coordinate">' +
+                    '<div class="system geodetic-coordinate selection-wrapper">' +
                         '<b class="dropdown_title"> ${ geodetic_coordinate_system } *</b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="geodeticCoordinateSystem" title="${tooltip.geodeticCoordinateSystem}"></div>' +
                     '</div>' +
-                    '<div class="system elevation selection-wrapper" data-system="elevation">' +
+                    '<div class="system elevation selection-wrapper">' +
                         '<b class="dropdown_title"> ${ elevation_system } </b>' +
                         '<div class="selectMountPoint"></div>' +
-                        '<a href="#">' +
-                            '<div class="infolink icon-info"></div>' +
-                        '</a>' +
+                        '<div class="infolink icon-info" data-system="heightSystem" title="${tooltip.heightSystem}"></div>' +
                     '</div>'+
                 '</div>'
             )
@@ -67,15 +62,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         createUi: function () {
             var me = this;
             var wrapper = this._template.systemWrapper.clone();
+            var title;
             wrapper.addClass(this.type);
+            if (this.type === "input"){
+                title = this.loc('flyout.coordinateSystem.input.title');
+            } else {
+                title = this.loc('flyout.coordinateSystem.output.title');
+            }
 
             var coordinateSystemSelection = this._template.coordinateSystemSelection({
-                title: this.loc('flyout.coordinateSystem.title'),
+                title: title,
+                epsg_search: this.loc('flyout.coordinateSystem.epsgSearch.label'),
                 geodetic_datum: this.loc('flyout.coordinateSystem.geodeticDatum.label'),
                 coordinate_system:  this.loc('flyout.coordinateSystem.coordinateSystem.label'),
                 map_projection:  this.loc('flyout.coordinateSystem.mapProjection.label'),
                 geodetic_coordinate_system: this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.label'),
-                elevation_system: this.loc('flyout.coordinateSystem.heightSystem.label')
+                elevation_system: this.loc('flyout.coordinateSystem.heightSystem.label'),
+                tooltip: this.getTooltips()
             });
             wrapper.append(coordinateSystemSelection);
             this.setElement(wrapper);
@@ -89,16 +92,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             });
             // hide projection select
             this.showProjectionSelect(false);
+            this.bindEpsgSearch();
+            this.showEpsgSearch(false);
             this.handleInfoLinks();
         },
-        createDropdown: function (container, json, key){
+        createDropdown: function (container, json, dropdownId){
             var me = this;
-            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', key);
+            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', dropdownId);
             var dropdown;
             var options = {
                     placeholder_text: json['DEFAULT'].title,
                     allow_single_deselect : true,
-                    disable_search_threshold: 10,
+                    disable_search_threshold: 50,
                     width: '100%'
                 };
             var selections = [];
@@ -113,11 +118,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     title : obj.title,
                     cls: obj.cls
                 };
+                if (dropdownId === "geodetic-coordinate"){
+                    valObj.tooltip = key;
+                }
                 selections.push(valObj);
             });
             dropdown = select.create(selections, options);
             dropdown.css({
-                width:'180px'
+                width:'180px' //TODO to css
             });
             select.adjustChosen();
 
@@ -125,8 +133,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 me.handleSelectValueChange( select );
             });
             container.append(dropdown);
-            this.dropdowns[key] = dropdown;
-            this.selectInstances[key] = select;
+            this.dropdowns[dropdownId] = dropdown;
+            this.selectInstances[dropdownId] = select;
         },
 
         /**
@@ -154,10 +162,75 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var me = this;
             this.getElement().find('.infolink').on('click', function ( event ) {
                 event.stopPropagation();
-                var key = this.parentElement.parentElement.dataset.system;
+                var key = this.dataset.system;
                 me.systemInfo.show( jQuery( this ), key );
-                //TODO showInfoPopup();
             });
+        },
+        bindEpsgSearch: function () {
+            var me = this;
+            var inputElem = this.getElement().find('.epsgSearch input');
+            inputElem.on('input', function(evt){
+                me.searchEpsg(inputElem, evt.target.value);
+            });
+            inputElem.on('focus', function(evt){
+                inputElem.select();
+                me.searchEpsg(inputElem, evt.target.value);
+            });
+        },
+        searchEpsg: function(inputElem, value){
+            var epsgValues;
+            if (value.length === 4){
+                epsgValues = this.helper.findEpsg(value);
+                if (epsgValues.srs){
+                    this.selectInstances["geodetic-coordinate"].setValue(epsgValues.srs);
+                    this.trigger('CoordSystemChanged', this.type);
+                    inputElem.css('color', '#444');
+                } else {
+                    inputElem.css('color', '#F00');
+                }
+            }else{
+                inputElem.css('color', '#999');
+            }
+        },
+        getTooltips: function (){
+            return {
+                geodeticDatum: this.loc('infoPopup.geodeticDatum.info'),
+                coordinateSystem: this.loc('infoPopup.coordinateSystem.info'),
+                mapProjection: this.loc('infoPopup.mapProjection.content'),
+                geodeticCoordinateSystem: this.loc('infoPopup.geodeticCoordinateSystem.info'),
+                heightSystem: this.loc('infoPopup.heightSystem.info'),
+                epsgSearch: this.loc('infoPopup.epsgSearch.info')
+            }
+        },
+        toggleFilter: function (filter, preventReset) {
+            if (filter === "epsg"){
+                if (preventReset !== true){
+                    this.resetFilters();
+                }
+                this.showSystemFilters(false);
+                this.showEpsgSearch(true);
+            } else if (filter === "systems") {
+                this.showEpsgSearch(false);
+                this.showSystemFilters(true);
+                this.showProjectionSelect(false);
+            }
+        },
+        showEpsgSearch: function (display) {
+            var epsgSearch = this.getElement().find('.epsgSearch');
+            if (display){
+                epsgSearch.css('display', '');
+            } else {
+                epsgSearch.css('display', 'none');
+                epsgSearch.find('input').val('');
+            }
+        },
+        showSystemFilters: function (display) {
+            var filterElems = this.getElement().find('.system-filter');
+            if (display){
+                filterElems.css('display', '');
+            } else {
+                filterElems.css('display', 'none');
+            }
         },
         /**
          * @method updateDropdownOptions
@@ -165,9 +238,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
          * @param {string} keyToEmpty - optional param to empty only one specific key in the dropdown 
          */
         updateDropdownOptions: function (dropdownId, selector) {
+            var options;
             if ( typeof selector === 'string' && selector !=="") {
                 this.dropdowns[dropdownId].find( 'option' ).css('display', 'none');
-                this.dropdowns[dropdownId].find( selector ).css('display', '');
+                options = this.dropdowns[dropdownId].find( selector );
+                options.css('display', '');
+                if (dropdownId === "geodetic-coordinate" && options.length === 1) {
+                    this.selectInstances["geodetic-coordinate"].setValue(options.val());
+                    this.trigger('CoordSystemChanged', this.type);
+                }
             } else {
                 this.dropdowns[dropdownId].find( 'option' ).css('display', '');
             }
@@ -228,14 +307,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         },
         disableAllSelections: function (disable){
             var selects = this.selectInstances;
+            var epsgSearch = this.getElement().find(".epsgSearch input");
             if (disable === true){
                 Object.keys( selects ).forEach( function ( key ) {
                     selects[key].setEnabled(false, true);
                 });
+                epsgSearch.prop('disabled', true);
             }else{
                 Object.keys( selects ).forEach( function ( key ) {
                     selects[key].setEnabled(true, true);
                 });
+                epsgSearch.prop('disabled', false);
             }
         },
         selectMapProjection: function (){
@@ -259,9 +341,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         showProjectionSelect: function (display){
             var elem = jQuery(this.getElement()).find(".projection");
             if (display === true){
-                jQuery(elem).css("display","");
+                elem.css("display","");
             } else {
-                jQuery(elem).css("display", "none");
+                elem.css("display", "none");
                 //TODO
                 //this.selectInstances.projection.resetSelectToPlaceholder();
                 this.selectInstances.projection.setValue("");
@@ -286,10 +368,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             this.resetAndUpdateSelects(true);
             this.trigger('CoordSystemChanged', this.type);
         },
-        resetAndUpdateSelects: function (resetDatum) {
+        resetFilters: function (){
+            this.resetAndUpdateSelects(true, true);
+        },
+        resetAndUpdateSelects: function (resetDatum, skipCoordSys) {
             var selects = this.selectInstances;
             Object.keys( selects ).forEach( function ( key ) {
                 if (key === "datum" && resetDatum !== true){
+                    return;
+                }
+                if (key === "geodetic-coordinate" && skipCoordSys === true){
                     return;
                 }
                 //TODO
