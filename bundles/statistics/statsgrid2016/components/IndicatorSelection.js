@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         if (!datasrc || datasrc === '') {
             return;
         }
-        var hasRegionSetRestriction = regionsetRestrictions !== '' && regionsetRestrictions !== null;
+        var hasRegionSetRestriction = Array.isArray(regionsetRestrictions) && regionsetRestrictions.length > 0;
 
         // start spinner
         me.spinner.start();
