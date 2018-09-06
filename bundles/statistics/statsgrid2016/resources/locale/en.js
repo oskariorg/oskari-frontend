@@ -259,8 +259,10 @@ Oskari.registerLocalization({
                 'successMsg': 'The data has been saved. Add the indicator to the map using the statistics search functionality.'
             },
             'import': {
-                'title': '',
-                'placeholder': ''
+                'title': 'Import from the clipboard',
+                'placeholder': 'Enter the indicators data here. Each row should contain a region and it\'s value. Enter the region\'s name or id. Use semicolon as a separator. Data can be imported in following formats: \n' +
+                'Sample 1: Helsinki;1234 \n' +
+                'Sample 2: 011;5678'
             },
             'notLoggedInTitle': 'Warning',
             'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
