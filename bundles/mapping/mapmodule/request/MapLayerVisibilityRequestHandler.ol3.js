@@ -1,6 +1,5 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler
- * Shows/hides the maplayer specified in the request in OpenLayers implementation.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler',
     /**
@@ -18,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
     }, {
         /**
          * @method handleRequest
-         * Shows/hides the maplayer specified in the request in OpenLayers implementation.
+         * Changes internal layer's visibility
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
          * @param {Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest} request
@@ -46,18 +45,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
         tryVectorLayers : function(id, blnVisible) {
             var module = this.layersPlugin.getMapModule();
             var plugin = module.getLayerPlugins('vectorlayer');
-            if(!plugin || typeof plugin.getLayerById !== 'function') {
+            if(!plugin || typeof plugin.setVisibleByLayerId !== 'function') {
                 return;
             }
-            var layer = plugin.getLayerById(id);
-            if(!layer) {
-                return;
-            }
-            this.setVisible(layer, blnVisible);
-        },
-        setVisible : function(layer, bln) {
-            // ol3 specific
-            layer.setVisible(bln);
+            plugin.setVisibleByLayerId(id, blnVisible);
         }
     }, {
         /**
