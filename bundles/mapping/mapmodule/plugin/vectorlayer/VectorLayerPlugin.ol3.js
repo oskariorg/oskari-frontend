@@ -472,9 +472,8 @@ Oskari.clazz.define(
          * @method prepareVectorLayer
          * @public
          * 
-         * Creates a new layer or updates an existing one if found by id.
+         * Creates a new layer or updates an existing one if found by options.layerId.
          *
-         * @param {String} id layer id
          * @param {Object} options layer properties
          * @return {Oskari.mapframework.domain.VectorLayer} layer object
          */
