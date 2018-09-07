@@ -607,7 +607,7 @@ Oskari.clazz.define(
                 me._features[options.layerId] = [];
             }
 
-            layer = me.prepareVectorLayer(options.layerId, options);
+            layer = me.prepareVectorLayer(options);
 
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
                 for (var key in geometry) {
@@ -675,6 +675,8 @@ Oskari.clazz.define(
                         zIndex++;
                     });
                 });
+            } else {
+                vectorSource.addFeatures(features);
             }
 
             // notify other components that features have been added

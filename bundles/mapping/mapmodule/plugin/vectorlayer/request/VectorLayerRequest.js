@@ -8,12 +8,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.VectorLayerReq
      * @method create called automatically on construction
      * @static
      *
-     * @param {String} layerId layer's id
      * @param {Object} options additional options
      */
-    function (layerId, options) {
+    function (options) {
         this._creator = null;
-        this._layerId = layerId;
         this._options = options;
     }, {
         /** @static @property __name request name */
@@ -24,13 +22,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.VectorLayerReq
          */
         getName: function () {
             return this.__name;
-        },
-        /**
-         * @method getId
-         * @return {String} layer id
-         */
-        getLayerId: function () {
-            return this._layerId;
         },
         /**
          * @method getOptions
