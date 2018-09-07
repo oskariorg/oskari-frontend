@@ -478,19 +478,19 @@ Oskari.clazz.define(
          * @param {Object} options layer properties
          * @return {Oskari.mapframework.domain.VectorLayer} layer object
          */
-        prepareVectorLayer: function (id, options) {
+        prepareVectorLayer: function (options) {
             options = options || {};
             var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            if (!id) {
-                id = 'VECTOR';
+            if (!options.layerId) {
+                options.layerId = 'VECTOR';
             }
-            var layer = this._findOskariLayer(id);
+            var layer = this._findOskariLayer(options.id);
             if (!layer) {
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
-                layer.setId(id);
+                layer.setId(options.layerId);
                 layer.setName(options.layerName || 'VECTOR');
                 layer.setGroups([{
-                    id: id,
+                    id: options.layerId,
                     name: options.layerInspireName || 'VECTOR'
                 }]);
                 layer.setOrganizationName(options.layerOrganizationName || 'VECTOR');
