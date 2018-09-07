@@ -39,18 +39,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             }
             layer.setVisible(request.getVisible());
 
-            // get openlayers layer objects from map
-            var module = this.layersPlugin.getMapModule();
-            var layerList = module.getOLMapLayers(layer.getId());
-            if(!layerList.length) {
-                return;
-            }
-            layerList.forEach(function(ol) {
-                me.setVisible(ol, layer.isVisible());
-            });
-
-            // notify other components
-            this.layersPlugin.notifyLayerVisibilityChanged(layer);
+            // layersplugin handles ol maplayers' visibility changes
+            // and notifies other components if layer's visibility has changed
+            this.layersPlugin.handleMapLayerVisibility(layer);
         },
         tryVectorLayers : function(id, blnVisible) {
             var module = this.layersPlugin.getMapModule();
