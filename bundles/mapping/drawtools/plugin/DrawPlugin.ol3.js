@@ -53,7 +53,6 @@ Oskari.clazz.define(
                 }
             }
         };
-        this.wgs84Sphere = new ol.Sphere(6378137);
         this._loc = Oskari.getLocalization('DrawTools');
     },
     {
@@ -717,10 +716,7 @@ Oskari.clazz.define(
                 var sourceProj = this.getMap().getView().getProjection();
                 if (sourceProj.getUnits() === "degrees") {
                     var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
-                    var coordinates = geom.getLinearRing(0).getCoordinates();
-                    if (coordinates.length > 0) {
-                        area = Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
-                    }
+                    area = ol.sphere.getArea(geom, {projection: 'EPSG:4326'});
                 } else {
                     area = geometry.getArea();
                 }
@@ -746,7 +742,7 @@ Oskari.clazz.define(
                     for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
                         var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
                         var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
-                        length += this.wgs84Sphere.haversineDistance(c1, c2);
+                        length += ol.sphere.getDistance(c1, c2);
                     }
                 } else {
                     length = geometry.getLength();

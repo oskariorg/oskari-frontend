@@ -187,16 +187,6 @@ ol.ImageTile.prototype.setState = function(state) {
 };
 
 /**
- * Workaround for obtaining a tilerange for a resolution and extent in wfslayerplugin
- * @api
- */
- ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndZoomWrapper = function(mapExtent, zoom) {
-    var tileRange = this.getTileRangeForExtentAndZ(mapExtent, zoom);
-    //return as array to avoid the closure compiler's dirty renaming deeds without having to expose the tilerange as well...
-    return [tileRange.minX, tileRange.minY, tileRange.maxX, tileRange.maxY];
-
- }
-/**
  * @param  {Array.<number>} boundsObj     tile bounds
  * @param  {string}         imageData     dataurl or actual url for image
  * @param  {ol.layer.Tile}     layer whose renderer will be fooled into thinking it's gotta redraw everything (ugly hack)

@@ -49,6 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         createMap: function () {
             var me = this;
+            ol.proj.proj4.register(window.proj4);
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
@@ -620,7 +621,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 ------------------------------------------------------------------> */
         _calculateScalesImpl: function (resolutions) {
             var units = this.getMap().getView().getProjection().getUnits();
-            var mpu = ol.proj.METERS_PER_UNIT[units];
+            var mpu = ol.proj.Units.METERS_PER_UNIT[units];
 
             for (var i = 0; i < resolutions.length; ++i) {
                 var scale = resolutions[i] * mpu * 39.37 * this._dpi;

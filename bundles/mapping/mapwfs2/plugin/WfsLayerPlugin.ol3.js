@@ -1126,13 +1126,7 @@ Oskari.clazz.define(
                 },
                 rowidx = 0,
                 colidx = 0;
-            var tileRangeExtentArray = tileGrid.getTileRangeForExtentAndZoomWrapper(mapExtent, z);
-            var tileRangeExtent = {
-                minX: tileRangeExtentArray[0],
-                minY: tileRangeExtentArray[1],
-                maxX: tileRangeExtentArray[2],
-                maxY: tileRangeExtentArray[3]
-            };
+            var tileRangeExtent = tileGrid.getTileRangeForExtentAndZ(mapExtent, z);
 
             for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
                 for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
