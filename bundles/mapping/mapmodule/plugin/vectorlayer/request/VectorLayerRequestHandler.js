@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.VectorLayerReq
          * @param {Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest} request request to handle
          */
         handleRequest: function (core, request) {
-            this.vectorLayerPlugin.prepareVectorLayer(request.getLayerId(), request.getOptions());
+            this.vectorLayerPlugin.prepareVectorLayer(request.getOptions());
         }
     }, {
         /**
