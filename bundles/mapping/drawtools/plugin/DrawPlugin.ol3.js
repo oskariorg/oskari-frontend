@@ -706,15 +706,15 @@ Oskari.clazz.define(
             };
 
             features.forEach(function (f) {
-                value.length += me.getLineLength(f.getGeometry());
+                value.length += me.getGeomLength(f.getGeometry());
                 if(me._featuresValidity[f.getId()]) {
-                    value.area += me.getPolygonArea(f.getGeometry());
+                    value.area += me.getGeomArea(f.getGeometry());
                 }
             });
             return value;
         },
         /**
-         * @method getPolygonArea
+         * @method getGeomArea
          * -  calculates area of given geometry
          *
          * @param {ol.geom.Geometry} geometry
@@ -723,14 +723,16 @@ Oskari.clazz.define(
          * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
          * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
-        getPolygonArea: function(geometry) {
+        getGeomArea: function(geometry) {
             var area = 0;
             if (geometry && geometry.getType()==='Polygon') {
                 var sourceProj = this.getMap().getView().getProjection();
                 if (sourceProj.getUnits() === "degrees") {
                     var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
                     var coordinates = geom.getLinearRing(0).getCoordinates();
-                    area = Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
+                    if (coordinates.length > 0) {
+                        area = Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
+                    }
                 } else {
                     area = geometry.getArea();
                 }
@@ -738,7 +740,7 @@ Oskari.clazz.define(
             return area;
         },
         /**
-         * @method getLineLength
+         * @method getGeomLength
          * -  calculates length of given geometry
          *
          * @param {ol.geom.Geometry} geometry
@@ -747,7 +749,7 @@ Oskari.clazz.define(
          * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
          * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
-        getLineLength: function(geometry) {
+        getGeomLength: function(geometry) {
             var length = 0;
             if(geometry && geometry.getType()==='LineString') {
                 var sourceProj = this.getMap().getView().getProjection();
@@ -1011,7 +1013,7 @@ Oskari.clazz.define(
                     overlay;
                 var geom = (me._sketch.getGeometry());
                 if (geom instanceof ol.geom.Polygon) {
-                    area = me.getPolygonArea(geom);
+                    area = me.getGeomArea(geom);
                     if(area < 10000) {
                         area = area.toFixed(0) + " m<sup>2</sup>";
                     } else if(area > 1000000) {
@@ -1032,7 +1034,7 @@ Oskari.clazz.define(
                         }
                     }
                 } else if (geom instanceof ol.geom.LineString) {
-                    length = me.getLineLength(geom);
+                    length = me.getGeomLength(geom);
                     if(length < 1000) {
                         length = length.toFixed(0) + " m";
                     } else {

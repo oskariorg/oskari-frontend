@@ -58,6 +58,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             if (dataKey.cls) {
                 option.addClass(dataKey.cls);
             }
+            if (dataKey.tooltip){
+                option.prop('title', dataKey.tooltip);
+            }
             option.val(dataKey.id).text(dataKey.title || dataKey.name);
             select.find('select').append(option);
         }
@@ -161,7 +164,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     disableOptions: function (ids) {
         var chosen = this.element.find('select');
 
-        this.reset(true);
+        this.reset();
 
         var isDisabledOption = function (optionId) {
             return ids.some(function (id) {
@@ -173,7 +176,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
                 jQuery(opt).prop('disabled', true);
             }
         });
-        chosen.trigger('chosen:updated');
+        this.update();
     },
     reset: function (supressEvent) {
         var state = this.getOptions();
@@ -182,6 +185,8 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         }
         if (!supressEvent) {
             this.resetToPlaceholder();
+        } else {
+            this.element.find('select').trigger('chosen:updated');
         }
     },
     /** @method updateOptions

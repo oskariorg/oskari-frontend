@@ -5,74 +5,101 @@
     max-width: 900px;
     */
 }
-
-.coordinatetransformation-flyout h4, h5 {
+.coordinatetransformation-flyout h4 {
+    padding-bottom: 6px;
+}
+.coordinatetransformation-flyout h5 {
     padding-bottom: 0px;
-
 }
 
 /* Custom radio button */
 .coordinatetransformation-flyout input[type="radio"] {
-    display:none;
+    display: none;
 }
-.coordinatetransformation-flyout input[type="radio"] + label {
-    font-size:14px;
-    margin-right: 20px;
+.coordinatetransformation-flyout .coordinate-datasources-wrapper {
+    font-size: 14px;
 }
-.coordinatetransformation-flyout input[type="radio"] + label span {
+.coordinatetransformation-flyout .source-select span {
+    background-color:whitesmoke;
     display:inline-block;
     width:12px;
     height:12px;
     margin:-1px 4px 0 0;
     vertical-align:middle;
-    cursor:pointer;
     -moz-border-radius:  50%;
     border-radius:  50%;
     border: 0.5px solid black;
+    -webkit-transition:background-color 0.4s linear;
+    -o-transition:background-color 0.4s linear;
+    -moz-transition:background-color 0.4s linear;
+    transition:background-color 0.4s linear;
 }
-.coordinatetransformation-flyout input[type="radio"] + label span {
-     background-color:whitesmoke;
+.coordinatetransformation-flyout .source-select.selected span {
+     background-color: black;
 }
-.coordinatetransformation-flyout input[type="radio"]:checked + label span{
-     background-color:black;
-}
-.coordinatetransformation-flyout input[type="radio"] + label span,
 .coordinatetransformation-flyout input[type="radio"]:checked + label span {
-  -webkit-transition:background-color 0.4s linear;
-  -o-transition:background-color 0.4s linear;
-  -moz-transition:background-color 0.4s linear;
-  transition:background-color 0.4s linear;
+     background-color: black;
 }
-
+.coordinate-datasources-wrapper label {
+    cursor: pointer;
+}
 /* Source selection */
 .coordinatetransformation-flyout .datasource-wrapper {
-    width: 75%;
-    padding-bottom: 12px;
+    width: 600px;
+    padding-bottom: 24px;
+}
+.coordinatetransformation-flyout .coordinate-datasources-wrapper {
+    display: flex;
+}
+.coordinatetransformation-flyout .source-select-wrapper {
+    margin-right: auto;
+    display: flex;
+}
+.coordinatetransformation-flyout .source-select {
+    display: flex;
+    margin-right: auto;
+}
+.coordinatetransformation-flyout .source-select .action-link{
+    display: flex;
 }
 
+/*.coordinatetransformation-flyout .datasource-wrapper a {
+    font-weight: 700;
+}*/
+.coordinatetransformation-flyout .source-select:not(.selected) .action-link {
+    display: none;
+}
+/* Coordinate systems filter */
+.coordinatetransformation-flyout .systems-filter-wrapper {
+    width: 400px;
+    padding-bottom: 12px;
+}
+.coordinatetransformation-flyout .coordinate-systems-filters {
+    display: flex;
+}
+
+/*
 .coordinatetransformation-flyout .datasource-info {
     height: 62px;
 }
-.coordinatetransformation-flyout .coordinateconversion-mapinfo a {
-    font-weight: 700;
-}
-.coordinatetransformation-flyout .coordinate-datasource{
+
+.coordinatetransformation-flyout .coordinate-datasource {
     padding-bottom: 6px;
 }
 .coordinatetransformation-flyout .keyboardinfo, .mapinfo {
     padding-top: 6px;
     padding-left: 12px;
     font-size: 13px;
-}
+}*/
 
 /* Coordinate system selections */
 .coordinatetransformation-flyout .coordinate-systems-wrapper {
     display: flex;
     padding-bottom: 12px;
 }
-.coordinatetransformation-flyout .coordinate-system-wrapper {
+.coordinatetransformation-flyout .transformation-system {
     min-width: 360px;
-    min-height: 260px;
+    min-height: 202px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -89,7 +116,27 @@
     flex-wrap: nowrap;
     width: 360px;
 }
-
+.coordinatetransformation-flyout .dropdown_title {
+    font-weight: bold;
+    /*max-width:12em !important;*/
+    width: 160px;
+}
+.coordinatetransformation-flyout .epsgSearch input {
+    color: #444;
+    line-height: 12px;
+    font-size: 12px;
+    width: 168px;
+    margin-left: auto;
+}
+.coordinatetransformation-flyout .geodetic-coordinate .chosen-default {
+    color: #444;
+}
+.coordinatetransformation-flyout .elevation .chosen-default {
+    color: #444;
+}
+.coordinatetransformation-flyout .epsgSearch {
+    margin-bottom: 40px;
+}
 .transformation-wrapper .selectMountPoint {
     margin-left: auto;
 }
@@ -231,10 +278,6 @@
     right:-5em;
     position: absolute;
 }
-.coordinatetransformation-flyout .dropdown_title {
-    font-weight: bold;
-    /*max-width:12em !important;*/
-}
 
 /* Util row */
 .util-row-wrapper {
@@ -273,6 +316,7 @@
 .coordinatetransformation-file-form select {
     width: 162px;
     font-size: 13px;
+    cursor: pointer;
 }
 .coordinatetransformation-file-form label {
     display:flex;
@@ -281,15 +325,40 @@
     align-items: center;
     padding-bottom: 6px;
 }
+.coordinatetransformation-file-form span, .chkbox {
+    cursor: pointer;
+}
+.coordinatetransformation-file-form .without-infolink {
+    padding-right: 16px;
+}
+/* Helper popup */
+.coordinatetransformation-helper-popup ul {
+    padding-left: 20px;
+}
+
+/* Coordinate System information */
+.oskari-coordinatesystem-info {
+    width: 500px;
+}
+.oskari-coordinatesystem-info p {
+    padding-bottom: 12px;
+}
+.oskari-coordinatesystem-info .info-list {
+    padding-left: 20px;
+    padding-bottom: 12px;
+}
 
 @media screen and (max-width: 1000px) {
     .coordinatetransformation-flyout {
         max-width: 560px;
     }
     .coordinatetransformation-flyout .datasource-wrapper{
-        width: 400px;
+        width: 360px;
         margin-left: auto;
         margin-right: auto;
+    }
+    .coordinatetransformation-flyout .coordinate-datasources-wrapper {
+        flex-direction: column;
     }
     .coordinatetransformation-flyout .coordinate-systems-wrapper {
         flex-direction: column;

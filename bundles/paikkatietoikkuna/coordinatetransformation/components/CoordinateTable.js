@@ -5,6 +5,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
     this.container = null;
     this.defaultTableRows = 10;
     this.isEditable = false;
+    this.scrollTimer = null;
     this.template = {
             tableWrapper: _.template('<div class="coordinate-table-wrapper <%= type %>">' +
                                         '<h5> <%= title %> </h5>' +
@@ -52,7 +53,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             var elements = {
                 "table": this.getContainer().find( '.oskari-coordinate-table' ),
                 "rows": this.getContainer().find( ".oskari-coordinate-table tr" ),
-                "header": this.getContainer().find( ".oskari-tbl-header" )
+                "header": this.getContainer().find( ".oskari-tbl-header" ),
+                "tableContent": this.getContainer().find('.oskari-table-content')
             }
         return elements;
         },
@@ -116,6 +118,21 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                 me.trigger('HighlightTableRow', data);
             });
         },
+        bindTableScroll: function () {
+            var me = this;
+            var content = this.getElements().tableContent;
+            content.on("scroll", function(evt){
+                clearTimeout(me.scrollTimer);
+                me.scrollTimer = setTimeout(function(){
+                    me.trigger("TableScroll", content.scrollTop());
+                }, 50);
+            });
+
+        },
+        scrollTable: function (value) {
+            var content = this.getElements().tableContent;
+            content.scrollTop(value);
+        },
         highlightRow: function (data){
             var index = data.index + 1;
             var selector = 'tr:nth-child(' + index + ')';
@@ -161,6 +178,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                //tableRef.append(this.template.row( { coords: coords } ) );
                this.addEmptyRow();
             }
+            this.bindTableScroll();
             return this.getContainer();
         },
         /**
