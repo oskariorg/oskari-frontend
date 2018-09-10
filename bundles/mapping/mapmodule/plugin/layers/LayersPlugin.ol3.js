@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         // stopped moving
         // after map move stopped -> activate a timer that will
         // do the check after _visibilityPollingInterval milliseconds
-        this._visibilityPollingInterval = 1500;
+        this._visibilityPollingInterval = 750;
         this._visibilityCheckOrder = 0;
         this._previousTimer = null;
     }, {
