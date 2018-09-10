@@ -237,51 +237,50 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * -  calculates area of given geometry
          *
          * @param {ol.geom.Geometry} geometry
-         * @return {String} area: measure result icluding 'km2'/'ha' text
+         * @return {Number} area in square meters
          *
          * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
          * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
         getGeomArea: function(geometry) {
-            var area = 0;
-            if (geometry && geometry.getType()==='Polygon') {
-                var sourceProj = this.getMap().getView().getProjection();
-                if (sourceProj.getUnits() === "degrees") {
-                    var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
-                    var coordinates = geom.getLinearRing(0).getCoordinates();
-                    if (coordinates.length > 0) {
-                        area = Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
-                    }
-                } else {
-                    area = geometry.getArea();
-                }
+            if (!geometry || geometry.getType() !== 'Polygon') {
+                return 0;
             }
-            return area;
+            var sourceProj = this.getMap().getView().getProjection();
+            if (sourceProj.getUnits() !== "degrees") {
+                return geometry.getArea();
+            }
+            var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
+            var coordinates = geom.getLinearRing(0).getCoordinates();
+            if (coordinates.length > 0) {
+                return Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
+            }
+            return 0;
         },
         /**
          * @method getGeomLength
          * -  calculates length of given geometry
          *
          * @param {ol.geom.Geometry} geometry
-         * @return {String} length: measure result icluding 'm'/'km' text
+         * @return {Number} length in meters
          *
          * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
          * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
         getGeomLength: function(geometry) {
             var length = 0;
-            if(geometry && geometry.getType()==='LineString') {
-                var sourceProj = this.getMap().getView().getProjection();
-                if (sourceProj.getUnits() === "degrees") {
-                    var coordinates = geometry.getCoordinates();
-                    for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
-                        var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
-                        var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
-                        length += this.wgs84Sphere.haversineDistance(c1, c2);
-                    }
-                } else {
-                    length = geometry.getLength();
-                }
+            if(!geometry || geometry.getType() !== 'LineString') {
+                return 0;
+            }
+            var sourceProj = this.getMap().getView().getProjection();
+            if (sourceProj.getUnits() !== "degrees") {
+                return geometry.getLength();
+            }
+            var coordinates = geometry.getCoordinates();
+            for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+                var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+                var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+                length += this.wgs84Sphere.haversineDistance(c1, c2);
             }
             return length;
         },
