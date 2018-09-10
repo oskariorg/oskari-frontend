@@ -622,7 +622,6 @@ Oskari.clazz.define(
             if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }
-
             var features = format.readFeatures(geometry);
             // add cursor if defined so
             if (options.cursor) {
@@ -843,6 +842,12 @@ Oskari.clazz.define(
                 return null;
             }
             return this._olLayers[id];
+        },
+        setVisibleByLayerId : function(id, visible) {
+            var layer = this.getLayerById(id);
+            if(layer) {
+                layer.setVisible(visible);
+            }
         },
         /**
          * Possible workaround for arranging the feature draw order within a layer
