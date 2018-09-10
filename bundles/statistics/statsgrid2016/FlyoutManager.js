@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         {
             id: 'indicatorForm',
             hideTile: true,
-            title: loc.userIndicators.flyoutTitle || 'Add asd',
+            title: loc.userIndicators.flyoutTitle || 'Add indicator',
             oskariClass: 'Oskari.statistics.statsgrid.view.IndicatorFormFlyout'
         }
     ];

@@ -141,8 +141,7 @@ div.basic_publisher ul.selectedLayersList {
   padding: 0;
   margin: 5px 0 0; }
   div.basic_publisher ul.selectedLayersList span {
-    position: absolute;
-    margin-left: -1.3em; }
+    position: absolute; }
 
 div.publisher div.startview div.content {
   margin-top: 5px; }

@@ -224,8 +224,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         this.sb.postRequestByName(
             'VectorLayerRequest',
             [
-                this.LAYER_ID,
                 {
+                    layerId: this.LAYER_ID,
                     layerName: locale.layer.name,
                     layerInspireName: locale.layer.inspireName,
                     layerOrganizationName: locale.layer.organizationName,
@@ -284,8 +284,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         this.sb.postRequestByName(
             'VectorLayerRequest',
             [
-                this.LAYER_ID,
                 {
+                    layerId: this.LAYER_ID,
                     hover: hoverOptions,
                     layerDescription: (region && region.name) ? region.name : null
                 }
