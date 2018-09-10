@@ -7,18 +7,26 @@ import olInteractionModify from 'ol/interaction/Modify';
 import * as olEventsCondition from 'ol/events/condition';
 import olOverlay from 'ol/Overlay';
 import olFeature from 'ol/Feature';
-import olGeomPolygon from 'ol/geom/Polygon';
 import olGeomPoint from 'ol/geom/Point';
+import olGeomMultiPoint from 'ol/geom/MultiPoint';
+import olGeomPolygon from 'ol/geom/Polygon';
 import olGeomMultiPolygon from 'ol/geom/MultiPolygon';
 import olGeomLineString from 'ol/geom/LineString';
-import olGeomMultiPoint from 'ol/geom/MultiPoint';
 import olGeomMultiLineString from 'ol/geom/MultiLineString';
 import olGeomCircle from 'ol/geom/Circle';
-import olFormatWKT from 'ol/format/WKT';
+import olGeomLinearRing from 'ol/geom/LinearRing';
+import olGeomGeometryCollection from 'ol/geom/GeometryCollection';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import * as olSphere from 'ol/sphere';
 import * as olProj from 'ol/proj';
 import olCollection from 'ol/Collection';
+import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
+import {BufferOp, BufferParameters} from 'jsts/org/locationtech/jts/operation/buffer';
+import isValidOp from 'jsts/org/locationtech/jts/operation/valid/IsValidOp';
+
+const olParser = new jstsOL3Parser();
+olParser.inject(olGeomPoint, olGeomLineString, olGeomLinearRing, olGeomPolygon, olGeomMultiPoint, olGeomMultiLineString, olGeomMultiPolygon, olGeomGeometryCollection);
+
 
 /**
  * @class Oskari.mapping.drawtools.plugin.DrawPlugin
@@ -963,9 +971,7 @@ Oskari.clazz.define(
                 // intersection is allowed or geometry isn't being drawn currently
                 return;
             }
-            var coord = geometry.getCoordinates()[0];
-            var lines = me.getJstsLines(coord);
-            if(!me.isValidJstsGeometry(lines)) {
+            if(geometry.getCoordinates()[0].length < 4 || !isValidOp.isValid(olParser.read(geometry))) {
                 // lines intersect -> problem!!
                 currentDrawing.setStyle(me._styles.intersect);
                 me._featuresValidity[currentDrawing.getId()] = false;
@@ -980,24 +986,6 @@ Oskari.clazz.define(
                 }
                 me._featuresValidity[currentDrawing.getId()] = true;
             }
-        },
-        /**
-         * @method isValidJstsGeometry
-         * -  checks if lines cross. If they do the geometry intersects itself and is not "valid"
-         * @param {Array} lines
-         * @return {boolean} true if lines don't cross (geometry is "valid")
-         */
-        isValidJstsGeometry : function(lines) {
-            var crosses = false;
-            lines.forEach(function(l) {
-                lines.forEach(function(li) {
-                    if (li !== l && li.crosses(l) === true) {
-                        crosses = true;
-                    }
-                });
-            });
-            // valid if lines don't cross
-            return !crosses;
         },
         /**
          * @method pointerMoveHandler - pointer moving handler for displaying
@@ -1086,26 +1074,6 @@ Oskari.clazz.define(
            me.getMap().on('pointermove', me.pointerMoveHandler, me);
            me.getMap().addInteraction(me._modify[me._id]);
         },
-         /**
-         * @method getJstsLines
-         * @param {Array} coord
-         * @return {Array} lines
-         */
-        getJstsLines: function(coord) {
-            var reader = new jsts.io.WKTReader();
-            var wktFormat = new olFormatWKT();
-            var lines = [], i = 0, ok;
-            while(i!==coord.length-1){
-                if(coord[i+1]){
-                    var line = new olGeomLineString([coord[i], coord[i+1]]);
-                    var jstsLine = reader.read(wktFormat.writeGeometry(line));
-                    lines.push(jstsLine);
-                        i++;
-                }
-            }
-            lines.push(reader.read(wktFormat.writeGeometry(new olGeomLineString([coord[coord.length-1], coord[0]]))));
-            return lines;
-        },
         /**
          * @method drawBufferedGeometry
          * -  adds buffered feature to the map
@@ -1191,15 +1159,10 @@ Oskari.clazz.define(
          * @return {olFeature} feature
          */
         getBufferedFeature: function(geometry, buffer, style, sides) {
-            var me = this;
-            var reader = new jsts.io.WKTReader();
-            var wktFormat = new olFormatWKT();
-            var wktFormatString = wktFormat.writeGeometry(geometry);
-            var input = reader.read(wktFormatString);
-            var bufferGeometry = input.buffer(buffer, sides);
-            var parser = new jsts.io.olParser();
+            var input = olParser.read(geometry);
+            var bufferGeometry = BufferOp.bufferOp(input, buffer, new BufferParameters(sides));
             bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
-            bufferGeometry = parser.write(bufferGeometry);
+            bufferGeometry = olParser.write(bufferGeometry);
             var feature = new olFeature({
                 geometry: bufferGeometry
             });

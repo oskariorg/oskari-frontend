@@ -1,10 +1,15 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olOverlay from 'ol/Overlay';
-import olGeomPolygon from 'ol/geom/Polygon';
+import {fromExtent} from 'ol/geom/Polygon';
 import olGeomLineString from 'ol/geom/LineString';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
+import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
+import {BufferOp} from 'jsts/org/locationtech/jts/operation/buffer';
+import * as olGeom from 'ol/geom';
+
+const olParser = new jstsOL3Parser(null, {geom: olGeom});
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorLayerPlugin
@@ -1050,13 +1055,9 @@ Oskari.clazz.define(
             if (buffer === 0) {
                 return extent;
             }
-            var geometry = olGeomPolygon.fromExtent(extent),
-                reader = new jsts.io.WKTReader(),
-                wktFormat = new olFormatWKT(),
-                wktFormatString = wktFormat.writeGeometry(geometry),
-                input = reader.read(wktFormatString),
-                bufferGeometry = input.buffer(buffer),
-                parser = new jsts.io.olParser();
+            var geometry = fromExtent(extent);
+            var input = olParser.read(geometry);
+            var bufferGeometry = BufferOp.bufferOp(input, buffer);
             bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
             bufferGeometry = parser.write(bufferGeometry);
             return bufferGeometry.getExtent();
