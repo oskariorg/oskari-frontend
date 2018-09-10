@@ -53,7 +53,6 @@ Oskari.clazz.define(
                 }
             }
         };
-        this.wgs84Sphere = new ol.Sphere(6378137);
         this._loc = Oskari.getLocalization('DrawTools');
     },
     {
@@ -105,10 +104,10 @@ Oskari.clazz.define(
          * @param {Object} options include:
          *                  {Number} buffer: buffer for drawing buffered line and dot. If not given or 0, will disable dragging.
          *                  {Object} style: styles for draw, modify and intersect mode. If options don't include custom style, sets default styles
-         *                  {Boolean/String} allowMultipleDrawing: true - multiple selection is allowed, 
-         *                                                         false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map. 
+         *                  {Boolean/String} allowMultipleDrawing: true - multiple selection is allowed,
+         *                                                         false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map.
          *                                                        'single' - selection will be removed before drawing a new selection.
-         *                                                        'multiGeom' - form multigeometry from drawn features. 
+         *                                                        'multiGeom' - form multigeometry from drawn features.
          *                                                         Default is false.
          *                  {Boolean} showMeasureOnMap: true - if measure result should be displayed on map near drawing feature. Default is false.
          *                  {Boolean} drawControl: true - will activate draw control, false - will not activate. Default is true.
@@ -130,7 +129,7 @@ Oskari.clazz.define(
             if(me._gfiTimeout){
                 clearTimeout(me._gfiTimeout);
             }
-            // set default accuracy for buffer. 
+            // set default accuracy for buffer.
             // bufferAccuracy is number of line segments used to represent a quadrant circle
             options.bufferAccuracy = options.bufferAccuracy || 10;
 
@@ -631,7 +630,7 @@ Oskari.clazz.define(
 
                     if(!me._featuresValidity[feature.getId()]) {
                         measures.area = me._loc.intersectionNotAllowed;
-                    } 
+                    }
                     jsonObject = me.formJsonObject(feature, measures, buffer);
                     geoJsonObject.features.push(jsonObject);
                 });
@@ -704,67 +703,14 @@ Oskari.clazz.define(
                 length : 0,
                 area : 0
             };
-
+            var mapmodule = this.getMapModule();
             features.forEach(function (f) {
-                value.length += me.getGeomLength(f.getGeometry());
+                value.length += mapmodule.getGeomLength(f.getGeometry());
                 if(me._featuresValidity[f.getId()]) {
-                    value.area += me.getGeomArea(f.getGeometry());
+                    value.area += mapmodule.getGeomArea(f.getGeometry());
                 }
             });
             return value;
-        },
-        /**
-         * @method getGeomArea
-         * -  calculates area of given geometry
-         *
-         * @param {ol.geom.Geometry} geometry
-         * @return {String} area: measure result icluding 'km2'/'ha' text
-         *
-         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
-         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
-         */
-        getGeomArea: function(geometry) {
-            var area = 0;
-            if (geometry && geometry.getType()==='Polygon') {
-                var sourceProj = this.getMap().getView().getProjection();
-                if (sourceProj.getUnits() === "degrees") {
-                    var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
-                    var coordinates = geom.getLinearRing(0).getCoordinates();
-                    if (coordinates.length > 0) {
-                        area = Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
-                    }
-                } else {
-                    area = geometry.getArea();
-                }
-            }
-            return area;
-        },
-        /**
-         * @method getGeomLength
-         * -  calculates length of given geometry
-         *
-         * @param {ol.geom.Geometry} geometry
-         * @return {String} length: measure result icluding 'm'/'km' text
-         *
-         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
-         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
-         */
-        getGeomLength: function(geometry) {
-            var length = 0;
-            if(geometry && geometry.getType()==='LineString') {
-                var sourceProj = this.getMap().getView().getProjection();
-                if (sourceProj.getUnits() === "degrees") {
-                    var coordinates = geometry.getCoordinates();
-                    for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
-                        var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
-                        var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
-                        length += this.wgs84Sphere.haversineDistance(c1, c2);
-                    }
-                } else {
-                    length = geometry.getLength();
-                }
-            }
-            return length;
         },
         /**
          * @method addVectorLayer
@@ -1012,8 +958,9 @@ Oskari.clazz.define(
                     length,
                     overlay;
                 var geom = (me._sketch.getGeometry());
+                var mapmodule = this.getMapModule();
                 if (geom instanceof ol.geom.Polygon) {
-                    area = me.getGeomArea(geom);
+                    area = mapmodule.getGeomArea(geom);
                     if(area < 10000) {
                         area = area.toFixed(0) + " m<sup>2</sup>";
                     } else if(area > 1000000) {
@@ -1034,7 +981,7 @@ Oskari.clazz.define(
                         }
                     }
                 } else if (geom instanceof ol.geom.LineString) {
-                    length = me.getGeomLength(geom);
+                    length = mapmodule.getGeomLength(geom);
                     if(length < 1000) {
                         length = length.toFixed(0) + " m";
                     } else {
