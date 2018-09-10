@@ -126,11 +126,14 @@ Oskari.clazz.define(
             // TODO : start draw control
             // use default style if options don't include custom style
             var me = this;
-
             me.drawMultiGeom = options.allowMultipleDrawing === 'multiGeom';
             if(me._gfiTimeout){
                 clearTimeout(me._gfiTimeout);
             }
+            // set default accuracy for buffer. 
+            // bufferAccuracy is number of line segments used to represent a quadrant circle
+            options.bufferAccuracy = options.bufferAccuracy || 10;
+
             //disable gfi
             me.getMapModule().setDrawingMode(true);
             // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
@@ -855,7 +858,7 @@ Oskari.clazz.define(
                  };
             } else if (shape === 'Circle' && !options.buffer) {
                 geometryType = 'Circle';
-                geometryFunction = ol.interaction.Draw.createRegularPolygon(400);
+                geometryFunction = ol.interaction.Draw.createRegularPolygon(50);
             } else if (shape === 'Polygon') {
                 geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
@@ -1107,7 +1110,7 @@ Oskari.clazz.define(
          * @param {Number} buffer
          */
         drawBufferedGeometry : function(geometry, buffer) {
-             var bufferedFeature = this.getBufferedFeature(geometry, buffer, this._styles.draw, 30);
+             var bufferedFeature = this.getBufferedFeature(geometry, buffer, this._styles.draw, this._options.bufferAccuracy);
              this.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
              this.getBufferedFeatureLayer().getSource().getFeaturesCollection().push(bufferedFeature);
         },
@@ -1304,7 +1307,7 @@ Oskari.clazz.define(
             features.forEach(function (f) {
                 var pointFeature = new ol.geom.Point(me._getFeatureCenter(f));
                 var buffer = requestedBuffer || me._getFeatureRadius(f); // requested buffer is used for circle radius
-                var bufferedFeature = me.getBufferedFeature(pointFeature, buffer, me._styles.draw, 100);
+                var bufferedFeature = me.getBufferedFeature(pointFeature, buffer, me._styles.draw, me._options.bufferAccuracy);
                 var id = me.generateNewFeatureId();
                 bufferedFeature.setId(id);
                 me._featuresValidity[id]=true;
