@@ -8,8 +8,11 @@ import olFormatGeoJSON from 'ol/format/GeoJSON';
 import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import {BufferOp} from 'jsts/org/locationtech/jts/operation/buffer';
 import * as olGeom from 'ol/geom';
+import LinearRing from 'ol/geom/LinearRing';
+import GeometryCollection from 'ol/geom/GeometryCollection';
 
-const olParser = new jstsOL3Parser(null, {geom: olGeom});
+const olParser = new jstsOL3Parser();
+olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorLayerPlugin
