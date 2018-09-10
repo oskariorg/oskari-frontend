@@ -126,11 +126,14 @@ Oskari.clazz.define(
             // TODO : start draw control
             // use default style if options don't include custom style
             var me = this;
-
             me.drawMultiGeom = options.allowMultipleDrawing === 'multiGeom';
             if(me._gfiTimeout){
                 clearTimeout(me._gfiTimeout);
             }
+            // set default accuracy for buffer. 
+            // bufferAccuracy is number of line segments used to represent a quadrant circle
+            options.bufferAccuracy = options.bufferAccuracy || 10;
+
             //disable gfi
             me.getMapModule().setDrawingMode(true);
             // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
@@ -473,7 +476,7 @@ Oskari.clazz.define(
         sendDrawingEvent: function(id, options) {
             var me = this,
                 features = null,
-                bufferedFeatures = null,
+                bufferedFeatures = [],
                 layerId = me.getLayerIdForFunctionality(id),
                 isFinished = false;
             var requestedBuffer = me.getOpts('buffer') || 0;
@@ -487,15 +490,25 @@ Oskari.clazz.define(
 
             if(requestedBuffer > 0) {
                 // TODO: check the ifs below if they should only be run if buffer is used
+                // TODO: doesn't work for multi drawing because buffered layer contains only currently drawn feature
                 bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
             }
 
             switch (me.getCurrentDrawShape()) {
                 case 'Point':
+                    if(requestedBuffer > 0) {
+                        me.addBufferPropertyToFeatures(features, requestedBuffer);
+                    }
+                    break;
                 case 'Circle':
                     // Do common stuff
-                    features = me.getCircleFeature(features);
-                    bufferedFeatures = me.getCircleAsPolygonFeature(features);
+                    // buffer is used for circle's radius
+                    if(requestedBuffer > 0) {
+                        features = me.getCircleAsPolygonFeature(features, requestedBuffer);
+                        bufferedFeatures = features; // or = [];
+                    } else {
+                        features = me.getCircleAsPolygonFeature(features);
+                    }
                     break;
                 case 'LineString':
                     if(requestedBuffer > 0) {
@@ -664,7 +677,6 @@ Oskari.clazz.define(
             var me = this,
                 geoJSONformatter = new ol.format.GeoJSON(),
                 jsonObject = geoJSONformatter.writeFeatureObject(feature);
-
             jsonObject.properties = {};
 
             if(measures.length) {
@@ -821,12 +833,13 @@ Oskari.clazz.define(
                    return geometry;
                  };
             } else if (shape === 'Point') {
-                 maxPoints = 2;
-                 geometryType = 'Point';
                  geometryFunction = function(coordinates, geometry) {
-                   if (!geometry) {
-                     geometry = new ol.geom.Circle(coordinates, options.buffer);
-                   }
+                    if (!geometry) {
+                        geometry = new ol.geom.Point(coordinates);
+                    }
+                    if (options.buffer > 0) {
+                        me.drawBufferedGeometry(geometry, options.buffer);
+                    }
                    me.pointerMoveHandler();
                    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                    return geometry;
@@ -847,7 +860,7 @@ Oskari.clazz.define(
                  };
             } else if (shape === 'Circle' && !options.buffer) {
                 geometryType = 'Circle';
-                geometryFunction = ol.interaction.Draw.createRegularPolygon(400);
+                geometryFunction = ol.interaction.Draw.createRegularPolygon(50);
             } else if (shape === 'Polygon') {
                 geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
@@ -1099,7 +1112,7 @@ Oskari.clazz.define(
          * @param {Number} buffer
          */
         drawBufferedGeometry : function(geometry, buffer) {
-             var bufferedFeature = this.getBufferedFeature(geometry, buffer, this._styles.draw, 30);
+             var bufferedFeature = this.getBufferedFeature(geometry, buffer, this._styles.draw, this._options.bufferAccuracy);
              this.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
              this.getBufferedFeatureLayer().getSource().getFeaturesCollection().push(bufferedFeature);
         },
@@ -1129,6 +1142,8 @@ Oskari.clazz.define(
                         if(options.buffer > 0) {
                             me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
                         }
+                    }else if (shape === "Point" && options.buffer > 0) {
+                        me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
                     } else if (shape === "Polygon" && options.selfIntersection !== false) {
                         me.checkIntersection(me._sketch.getGeometry());
                     }
@@ -1256,9 +1271,12 @@ Oskari.clazz.define(
          * @return {Number}     circle radius
          */
         _getFeatureRadius: function(feature) {
+            var type = feature.getGeometry().getType();
             // If circle ol geometry type is polygon then calculate radius
-            if(feature.getGeometry().getType() === 'Polygon') {
+            if(type === 'Polygon') {
                 return Math.sqrt(feature.getGeometry().getArea()/Math.PI);
+            } else if (type === 'Circle'){
+                return feature.getGeometry().getRadius();
             }
             // else if drawing point, radius is 0
             return 0;
@@ -1282,7 +1300,7 @@ Oskari.clazz.define(
          * @param {Array} features
          * @return {Array} polygonfeatures
          */
-        getCircleAsPolygonFeature: function(features) {
+        getCircleAsPolygonFeature: function(features, requestedBuffer) {
             var me = this;
             var polygonFeatures = [];
             if(!features) {
@@ -1290,7 +1308,8 @@ Oskari.clazz.define(
             }
             features.forEach(function (f) {
                 var pointFeature = new ol.geom.Point(me._getFeatureCenter(f));
-                var bufferedFeature = me.getBufferedFeature(pointFeature, me._getFeatureRadius(f), me._styles.draw, 100);
+                var buffer = requestedBuffer || me._getFeatureRadius(f); // requested buffer is used for circle radius
+                var bufferedFeature = me.getBufferedFeature(pointFeature, buffer, me._styles.draw, me._options.bufferAccuracy);
                 var id = me.generateNewFeatureId();
                 bufferedFeature.setId(id);
                 me._featuresValidity[id]=true;
