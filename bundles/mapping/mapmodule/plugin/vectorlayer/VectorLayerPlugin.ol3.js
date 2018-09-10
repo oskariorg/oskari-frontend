@@ -483,7 +483,7 @@ Oskari.clazz.define(
             if (!options.layerId) {
                 options.layerId = 'VECTOR';
             }
-            var layer = this._findOskariLayer(options.id);
+            var layer = this._findOskariLayer(options.layerId);
             if (!layer) {
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
                 layer.setId(options.layerId);
