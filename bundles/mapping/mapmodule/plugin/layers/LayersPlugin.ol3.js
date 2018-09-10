@@ -1,3 +1,5 @@
+import olFormatWKT from 'ol/format/WKT';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin
  *
@@ -94,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 return;
             }
 
-            var wkt = new ol.format.WKT();
+            var wkt = new olFormatWKT();
             var geometry = wkt.readGeometry(layerWKTGeom);
 
             if (geometry) {
@@ -133,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
     /**
      * @method getGeometryCenter
      *
-     * @param {ol.geom.Geometry} geometry
+     * @param {ol/geom/Geometry} geometry
      * @return {Object} centroid
      */
     getGeometryCenter: function (geometry) {
@@ -153,7 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
     /**
      * @method getGeometryBounds
      *
-     * @param {ol.geom.Geometry} geometry
+     * @param {ol/geom/Geometry} geometry
      * @return {Object} like OpenLayers bounds
      */
     getGeometryBounds: function (geometry) {

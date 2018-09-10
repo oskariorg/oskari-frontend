@@ -1,3 +1,25 @@
+import olSourceVector from 'ol/source/Vector';
+import olLayerVector from 'ol/layer/Vector';
+import olStyleStyle from 'ol/style/Style';
+import * as olExtent from 'ol/extent';
+import olInteractionDraw from 'ol/interaction/Draw';
+import olInteractionModify from 'ol/interaction/Modify';
+import * as olEventsCondition from 'ol/events/condition';
+import olOverlay from 'ol/Overlay';
+import olFeature from 'ol/Feature';
+import olGeomPolygon from 'ol/geom/Polygon';
+import olGeomPoint from 'ol/geom/Point';
+import olGeomMultiPolygon from 'ol/geom/MultiPolygon';
+import olGeomLineString from 'ol/geom/LineString';
+import olGeomMultiPoint from 'ol/geom/MultiPoint';
+import olGeomMultiLineString from 'ol/geom/MultiLineString';
+import olGeomCircle from 'ol/geom/Circle';
+import olFormatWKT from 'ol/format/WKT';
+import olFormatGeoJSON from 'ol/format/GeoJSON';
+import * as olSphere from 'ol/sphere';
+import * as olProj from 'ol/proj';
+import olCollection from 'ol/Collection';
+
 /**
  * @class Oskari.mapping.drawtools.plugin.DrawPlugin
  * Map engine specific implementation for draw tools
@@ -174,7 +196,7 @@ Oskari.clazz.define(
             var me = this;
             var optionalFeatureForEditing = options.geojson;
             if(optionalFeatureForEditing) {
-                var jsonFormat = new ol.format.GeoJSON();
+                var jsonFormat = new olFormatGeoJSON();
                 var featuresFromJson = jsonFormat.readFeatures(optionalFeatureForEditing);
                 //parse multi geometries to single geometries
                 if (me.drawMultiGeom){
@@ -222,7 +244,7 @@ Oskari.clazz.define(
                 feat,
                 feats = [];
             geometries.forEach(function (geom) {
-                    feat = new ol.Feature({geometry:geom});
+                    feat = new olFeature({geometry:geom});
                     feat.setId(me.generateNewFeatureId());
                     feats.push(feat);
                     if (checkIntersection){
@@ -250,7 +272,7 @@ Oskari.clazz.define(
         },
         /**
          * This is the layer for the current functionality
-         * @return {ol.Layer}
+         * @return {ol/Layer}
          */
         getCurrentDrawLayer : function () {
             return this.getLayer(this.getCurrentLayerId());
@@ -278,7 +300,7 @@ Oskari.clazz.define(
         /**
          * Returns the actual layer matching the given id
          * @param  {String} layerId
-         * @return {ol.Layer}
+         * @return {ol/Layer}
          */
         getLayer : function(layerId) {
             return this._drawLayers[layerId];
@@ -603,7 +625,7 @@ Oskari.clazz.define(
 
                 var multiGeometry = me.createMultiGeometry(geometries);
 
-                var feature = new ol.Feature({geometry: multiGeometry});
+                var feature = new olFeature({geometry: multiGeometry});
                 feature.setId(me.generateNewFeatureId());
 
                 jsonObject = me.formJsonObject(feature, measures, buffer);
@@ -633,19 +655,19 @@ Oskari.clazz.define(
                 switch (geometry.getType()) {
                     case 'Point':
                         if(!featureGeom) {
-                             featureGeom = new ol.geom.MultiPoint();
+                             featureGeom = new olGeomMultiPoint();
                         }
                         featureGeom.appendPoint(geometry);
                         break;
                     case 'LineString':
                         if(!featureGeom) {
-                             featureGeom = new ol.geom.MultiLineString();
+                             featureGeom = new olGeomMultiLineString();
                         }
                         featureGeom.appendLineString(geometry);
                         break;
                     case 'Polygon':
                         if(!featureGeom) {
-                             featureGeom = new ol.geom.MultiPolygon();
+                             featureGeom = new olGeomMultiPolygon();
                         }
                         featureGeom.appendPolygon(geometry);
                         break;
@@ -661,7 +683,7 @@ Oskari.clazz.define(
 
         formJsonObject: function (feature, measures, buffer) {
             var me = this,
-                geoJSONformatter = new ol.format.GeoJSON(),
+                geoJSONformatter = new olFormatGeoJSON(),
                 jsonObject = geoJSONformatter.writeFeatureObject(feature);
 
             jsonObject.properties = {};
@@ -704,7 +726,7 @@ Oskari.clazz.define(
          * @method getGeomArea
          * -  calculates area of given geometry
          *
-         * @param {ol.geom.Geometry} geometry
+         * @param {ol/geom/Geometry} geometry
          * @return {String} area: measure result icluding 'km2'/'ha' text
          *
          * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
@@ -716,7 +738,7 @@ Oskari.clazz.define(
                 var sourceProj = this.getMap().getView().getProjection();
                 if (sourceProj.getUnits() === "degrees") {
                     var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
-                    area = ol.sphere.getArea(geom, {projection: 'EPSG:4326'});
+                    area = olSphere.getArea(geom, {projection: 'EPSG:4326', radius: 6378137});
                 } else {
                     area = geometry.getArea();
                 }
@@ -727,7 +749,7 @@ Oskari.clazz.define(
          * @method getGeomLength
          * -  calculates length of given geometry
          *
-         * @param {ol.geom.Geometry} geometry
+         * @param {ol/geom/Geometry} geometry
          * @return {String} length: measure result icluding 'm'/'km' text
          *
          * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
@@ -740,9 +762,9 @@ Oskari.clazz.define(
                 if (sourceProj.getUnits() === "degrees") {
                     var coordinates = geometry.getCoordinates();
                     for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
-                        var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
-                        var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
-                        length += ol.sphere.getDistance(c1, c2);
+                        var c1 = olProj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+                        var c2 = olProj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+                        length += olSphere.getDistance(c1, c2, 6378137);
                     }
                 } else {
                     length = geometry.getLength();
@@ -758,9 +780,9 @@ Oskari.clazz.define(
          */
         addVectorLayer : function(layerId) {
             var me = this;
-            var vector = new ol.layer.Vector({
+            var vector = new olLayerVector({
               id: layerId,
-              source: new ol.source.Vector({features: new ol.Collection()}),
+              source: new olSourceVector({features: new olCollection()}),
               style: me._styles.draw
             });
             me.getMap().addLayer(vector);
@@ -792,7 +814,7 @@ Oskari.clazz.define(
             if (shape === 'LineString') {
                  geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
-                        geometry = new ol.geom.LineString(null);
+                        geometry = new olGeomLineString(null);
                     }
                     geometry.setCoordinates(coordinates);
                     if (options.buffer > 0) {
@@ -807,7 +829,7 @@ Oskari.clazz.define(
                  geometryType = 'LineString';
                  geometryFunction = function(coordinates, geometry) {
                    if (!geometry) {
-                     geometry = new ol.geom.Polygon(null);
+                     geometry = new olGeomPolygon(null);
                    }
                    var start = coordinates[0];
                    var end = coordinates[1];
@@ -821,7 +843,7 @@ Oskari.clazz.define(
                  geometryType = 'Point';
                  geometryFunction = function(coordinates, geometry) {
                    if (!geometry) {
-                     geometry = new ol.geom.Circle(coordinates, options.buffer);
+                     geometry = new olGeomCircle(coordinates, options.buffer);
                    }
                    me.pointerMoveHandler();
                    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
@@ -829,13 +851,13 @@ Oskari.clazz.define(
                  };
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
-                geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
+                geometryFunction = olInteractionDraw.createRegularPolygon(4);
             } else if (shape === 'Circle' && options.buffer > 0) {
                 geometryType = 'Point';
                 me._circleHasGeom = true;
                 geometryFunction = function(coordinates, geometry) {
                      if (!geometry) {
-                         geometry = new ol.geom.Circle(coordinates, options.buffer);
+                         geometry = new olGeomCircle(coordinates, options.buffer);
                      }
                      me.pointerMoveHandler();
                      me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
@@ -843,11 +865,11 @@ Oskari.clazz.define(
                  };
             } else if (shape === 'Circle' && !options.buffer) {
                 geometryType = 'Circle';
-                geometryFunction = ol.interaction.Draw.createRegularPolygon(400);
+                geometryFunction = olInteractionDraw.createRegularPolygon(400);
             } else if (shape === 'Polygon') {
                 geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
-                        geometry = new ol.geom.Polygon(null);
+                        geometry = new olGeomPolygon(null);
                     }
                     geometry.setCoordinates(makeClosedPolygonCoords(coordinates));
                     if(options.selfIntersection !== false) {
@@ -858,7 +880,7 @@ Oskari.clazz.define(
                     return geometry;
                  };
             }
-            var drawInteraction = new ol.interaction.Draw({
+            var drawInteraction = new olInteractionDraw({
               features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
               type: geometryType,
               style: me._styles.draw,
@@ -934,7 +956,7 @@ Oskari.clazz.define(
          /**
          * @method checkIntersection
          * -  checks if geometry intersects itself
-         * @param {ol.geom.ol.geom.Geometry} geometry
+         * @param {ol/geom/Geometry} geometry
          * @param {Object} options
          */
         checkIntersection: function (geometry) {
@@ -983,7 +1005,7 @@ Oskari.clazz.define(
         /**
          * @method pointerMoveHandler - pointer moving handler for displaying
          * - displays measurement result on feature
-         * @param {ol.MapBrowserEvent} evt
+         * @param {ol/MapBrowserEvent} evt
          */
         pointerMoveHandler: function(evt) {
             var me = this;
@@ -995,7 +1017,7 @@ Oskari.clazz.define(
                     length,
                     overlay;
                 var geom = (me._sketch.getGeometry());
-                if (geom instanceof ol.geom.Polygon) {
+                if (geom instanceof olGeomPolygon) {
                     area = me.getGeomArea(geom);
                     if(area < 10000) {
                         area = area.toFixed(0) + " m<sup>2</sup>";
@@ -1016,7 +1038,7 @@ Oskari.clazz.define(
                             output = me._loc.intersectionNotAllowed;
                         }
                     }
-                } else if (geom instanceof ol.geom.LineString) {
+                } else if (geom instanceof olGeomLineString) {
                     length = me.getGeomLength(geom);
                     if(length < 1000) {
                         length = length.toFixed(0) + " m";
@@ -1055,11 +1077,11 @@ Oskari.clazz.define(
             var me = this,
                 layer = me.getLayer(layerId);
             if(layer) {
-                me._modify[me._id] = new ol.interaction.Modify({
+                me._modify[me._id] = new olInteractionModify({
                    features: layer.getSource().getFeaturesCollection(),
                    style: me._styles.modify,
                    deleteCondition: function(event) {
-                       return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
+                       return olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event);
                    }
                });
            }
@@ -1074,17 +1096,17 @@ Oskari.clazz.define(
          */
         getJstsLines: function(coord) {
             var reader = new jsts.io.WKTReader();
-            var wktFormat = new ol.format.WKT();
+            var wktFormat = new olFormatWKT();
             var lines = [], i = 0, ok;
             while(i!==coord.length-1){
                 if(coord[i+1]){
-                    var line = new ol.geom.LineString([coord[i], coord[i+1]]);
+                    var line = new olGeomLineString([coord[i], coord[i+1]]);
                     var jstsLine = reader.read(wktFormat.writeGeometry(line));
                     lines.push(jstsLine);
                         i++;
                 }
             }
-            lines.push(reader.read(wktFormat.writeGeometry(new ol.geom.LineString([coord[coord.length-1], coord[0]]))));
+            lines.push(reader.read(wktFormat.writeGeometry(new olGeomLineString([coord[coord.length-1], coord[0]]))));
             return lines;
         },
         /**
@@ -1167,21 +1189,21 @@ Oskari.clazz.define(
          *
          * @param {Geometry} geometry
          * @param {Number} buffer
-         * @param {ol.style.Style} style
+         * @param {olStyleStyle} style
          * @param {Number} side amount of polygon
-         * @return {ol.Feature} feature
+         * @return {olFeature} feature
          */
         getBufferedFeature: function(geometry, buffer, style, sides) {
             var me = this;
             var reader = new jsts.io.WKTReader();
-            var wktFormat = new ol.format.WKT();
+            var wktFormat = new olFormatWKT();
             var wktFormatString = wktFormat.writeGeometry(geometry);
             var input = reader.read(wktFormatString);
             var bufferGeometry = input.buffer(buffer, sides);
             var parser = new jsts.io.olParser();
             bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
             bufferGeometry = parser.write(bufferGeometry);
-            var feature = new ol.Feature({
+            var feature = new olFeature({
                 geometry: bufferGeometry
             });
             feature.setStyle(style);
@@ -1236,19 +1258,19 @@ Oskari.clazz.define(
         },
         /**
          * @method  @private _getFeatureCenter get feature center coordinates.
-         * @param  {ol.feature} feature feature where need to get center point
+         * @param  {ol/feature} feature feature where need to get center point
          * @return {Array} coordinates array
          */
         _getFeatureCenter: function(feature) {
             // Circle has polygon or point ol type and it center need calculated different way
             if(feature.getGeometry().getType() === 'Polygon' || feature.getGeometry().getType() === 'Point') {
-                return ol.extent.getCenter(feature.getGeometry().getExtent());
+                return olExtent.getCenter(feature.getGeometry().getExtent());
             }
             return feature.getGeometry().getCenter();
         },
         /**
          * @method  @private _getFeatureRadius get circle/point geometry radius.
-         * @param  {ol.feature} feature fetarue where need to get circle radius
+         * @param  {ol/feature} feature fetarue where need to get circle radius
          * @return {Number}     circle radius
          */
         _getFeatureRadius: function(feature) {
@@ -1285,7 +1307,7 @@ Oskari.clazz.define(
                 return polygonFeatures;
             }
             features.forEach(function (f) {
-                var pointFeature = new ol.geom.Point(me._getFeatureCenter(f));
+                var pointFeature = new olGeomPoint(me._getFeatureCenter(f));
                 var bufferedFeature = me.getBufferedFeature(pointFeature, me._getFeatureRadius(f), me._styles.draw, 100);
                 var id = me.generateNewFeatureId();
                 bufferedFeature.setId(id);
@@ -1308,8 +1330,8 @@ Oskari.clazz.define(
                 return pointFeatures;
             }
             features.forEach(function (f) {
-                var feature = new ol.Feature({
-                      geometry:  new ol.geom.Point(me._getFeatureCenter(f))
+                var feature = new olFeature({
+                      geometry:  new olGeomPoint(me._getFeatureCenter(f))
                     });
                 me.addBufferPropertyToFeatures([feature], me._getFeatureRadius(f));
                 pointFeatures.push(feature);
@@ -1337,7 +1359,7 @@ Oskari.clazz.define(
            var me = this;
            var tooltipElement = document.createElement('div');
            tooltipElement.className =  tooltipClass + ' ' + id;
-           var tooltip = new ol.Overlay({
+           var tooltip = new olOverlay({
                element : tooltipElement,
                offset : [ 0, -5 ],
                positioning : 'bottom-center',

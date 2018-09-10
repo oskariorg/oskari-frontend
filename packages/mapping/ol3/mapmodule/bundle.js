@@ -34,14 +34,6 @@ Oskari.clazz.define(
                     "src": "../../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js"
                 },
                 /*
-                 * Openlayers 3
-                 */
-                {
-                    "type": "text/javascript",
-                    "expose" : "ol",
-                    "src": "../../../../libraries/ol3/ol-v4.4.2-oskari.js"
-                },
-                /*
                  * Abstract base
                  */
                 {
