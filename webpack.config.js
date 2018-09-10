@@ -116,6 +116,9 @@ module.exports = (env, argv) => {
       proxy: [{
         context: ['**', `!Oskari/dist/${version}/${appName}/**`],
         target: 'http://localhost:8080',
+        secure: false,
+        changeOrigin: true,
+        ws: true
       }]
     };
   }
