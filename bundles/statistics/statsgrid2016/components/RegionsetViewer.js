@@ -245,8 +245,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             return;
         }
 
-        var regionId = state.getRegion();
-        var region = service.getRegionsets(regionId);
+        var regionsetId = state.getRegionset();
+        var regionset = service.getRegionsets(regionsetId);
         var classification = state.getClassificationOpts(ind.hash);
         var highlightStrokeWidth = 4;
 
@@ -287,7 +287,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 {
                     layerId: this.LAYER_ID,
                     hover: hoverOptions,
-                    layerDescription: (region && region.name) ? region.name : null
+                    layerDescription: (regionset && regionset.name) ? regionset.name : null
                 }
             ]
         );
