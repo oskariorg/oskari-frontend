@@ -649,34 +649,25 @@ Oskari.clazz.define(
         },
 
         createMultiGeometry: function(geometries) {
-            var featureGeom = null;
-
-            var appendGeometry = function(geometry){
-                switch (geometry.getType()) {
-                    case 'Point':
-                        if(!featureGeom) {
-                             featureGeom = new olGeomMultiPoint();
-                        }
-                        featureGeom.appendPoint(geometry);
-                        break;
-                    case 'LineString':
-                        if(!featureGeom) {
-                             featureGeom = new olGeomMultiLineString();
-                        }
-                        featureGeom.appendLineString(geometry);
-                        break;
-                    case 'Polygon':
-                        if(!featureGeom) {
-                             featureGeom = new olGeomMultiPolygon();
-                        }
-                        featureGeom.appendPolygon(geometry);
-                        break;
-                }
-            };
-
-            geometries.forEach(function(geometry){
-                appendGeometry(geometry);
+            var coordinatesAgg = geometries.map(function(geometry) {
+                return geometry.getCoordinates();
             });
+
+            var featureGeom;
+
+            switch (geometries[0].getType()) {
+                case 'Point':
+                    featureGeom = new olGeomMultiPoint(coordinatesAgg);
+                    break;
+                case 'LineString':
+                    featureGeom = new olGeomMultiLineString(coordinatesAgg);
+                    break;
+                case 'Polygon':
+                    featureGeom = new olGeomMultiPolygon(coordinatesAgg);
+                    break;
+                default:
+                    throw new Error('Unsupported geometry type!');
+            }
 
             return featureGeom;
         },
@@ -814,9 +805,10 @@ Oskari.clazz.define(
             if (shape === 'LineString') {
                  geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
-                        geometry = new olGeomLineString(null);
+                        geometry = new olGeomLineString(coordinates);
+                    } else {
+                        geometry.setCoordinates(coordinates);
                     }
-                    geometry.setCoordinates(coordinates);
                     if (options.buffer > 0) {
                         me.drawBufferedGeometry(geometry, options.buffer);
                     }
@@ -828,12 +820,15 @@ Oskari.clazz.define(
                  maxPoints = 2;
                  geometryType = 'LineString';
                  geometryFunction = function(coordinates, geometry) {
-                   if (!geometry) {
-                     geometry = new olGeomPolygon(null);
-                   }
                    var start = coordinates[0];
                    var end = coordinates[1];
-                   geometry.setCoordinates([[start, [start[0], end[1]], end, [end[0], start[1]], start]]);
+                   var coords = [[start, [start[0], end[1]], end, [end[0], start[1]], start]];
+                   if (!geometry) {
+                     geometry = new olGeomPolygon(coords);
+                   } else {
+                     geometry.setCoordinates(coords);
+                   }
+                   
                    me.pointerMoveHandler();
                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                    return geometry;
@@ -868,10 +863,12 @@ Oskari.clazz.define(
                 geometryFunction = olInteractionDraw.createRegularPolygon(400);
             } else if (shape === 'Polygon') {
                 geometryFunction = function(coordinates, geometry) {
+                    var coords = makeClosedPolygonCoords(coordinates);
                     if (!geometry) {
-                        geometry = new olGeomPolygon(null);
+                        geometry = new olGeomPolygon(coords);
+                    } else {
+                        geometry.setCoordinates(coords);
                     }
-                    geometry.setCoordinates(makeClosedPolygonCoords(coordinates));
                     if(options.selfIntersection !== false) {
                         me.checkIntersection(geometry);
                     }
