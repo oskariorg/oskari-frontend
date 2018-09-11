@@ -1147,9 +1147,9 @@ Oskari.clazz.define(
          *
          * @param {Geometry} geometry
          * @param {Number} buffer
-         * @param {olStyleStyle} style
+         * @param {ol/style/Style} style
          * @param {Number} side amount of polygon
-         * @return {olFeature} feature
+         * @return {ol/Feature} feature
          */
         getBufferedFeature: function(geometry, buffer, style, sides) {
             var input = olParser.read(geometry);

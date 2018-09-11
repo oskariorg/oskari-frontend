@@ -775,7 +775,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * Creates style based on JSON
-         * @return {olStyleStyle} style ol3 specific!
+         * @return {ol/style/Style} style ol3 specific!
          */
         getStyle: function (styleDef) {
             var me = this;
@@ -824,7 +824,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Parses stroke style from json
          * @method __getStrokeStyle
          * @param {Object} style json
-         * @return {olStyleStroke}
+         * @return {ol/style/Stroke}
          */
         __getStrokeStyle: function (styleDef) {
             var stroke = {};
@@ -854,7 +854,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Parses image style from json
          * @method __getImageStyle
          * @param {Object} style json
-         * @return {olStyleCircle}
+         * @return {ol/style/Circle}
          */
         __getImageStyle: function (styleDef) {
             var me = this;

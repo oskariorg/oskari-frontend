@@ -335,7 +335,7 @@ Oskari.clazz.define(
          *
          * @param {String} identifier the feature attribute identifier
          * @param {String} value the feature identifier value
-         * @param {olLayerVector} layer object OR {String} layerId
+         * @param {ol/layer/Vector} layer object OR {String} layerId
          */
         removeFeaturesFromMap: function(identifier, value, layer) {
             var me = this,

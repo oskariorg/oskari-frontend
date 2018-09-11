@@ -17,7 +17,7 @@ Oskari.clazz.define(
 	     * Creates the feature layer where the drawn features are added to
 	     *
 	     * @method createFeatureLayer
-	     * @return {olLayerVector}
+	     * @return {ol/layer/Vector}
 	     */
 	    createFeatureLayer: function () {
 	        var me = this;
@@ -49,8 +49,8 @@ Oskari.clazz.define(
 
 	    /**
 	      * Create hover interaction for the given layer
-	      * @param {olLayerVector} layer
-	      * @return {olInteractionSelect} hoverInteraction
+	      * @param {ol/layer/Vector} layer
+	      * @return {ol/interaction/Select} hoverInteraction
 	    */
 	    createHoverInteraction: function (layer) {
 	    	var hoverInteraction = new olInteractionSelect({
@@ -77,8 +77,8 @@ Oskari.clazz.define(
 
 	    /**
 	      * Create select interaction for the given layer
-	      * @param {olLayerVector} layer
-	      * @return {olInteractionSelect} selectInteraction
+	      * @param {ol/layer/Vector} layer
+	      * @return {ol/interaction/Select} selectInteraction
 	    */
 	    createSelectInteraction: function (layer) {
 	    	var selectInteraction = new olInteractionSelect({

@@ -517,7 +517,7 @@ Oskari.clazz.define(
          * Adds the given geometry to the feature layer
          * and to the internal list of features.
          *
-         * @param {olFeature} feature to add
+         * @param {ol/Feature} feature to add
          * @param {String} mode geometry type
          * @param {String} name optional name for the temp feature
          *
