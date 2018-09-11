@@ -12,6 +12,7 @@
     "build": "webpack --mode production",
     "start": "webpack-dev-server --hot",
     "paikkis:dev": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json",
+    "paikkis:experimental": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi/full-map_experimental/minifierAppSetup.json",
     "asdi:dev": "webpack-dev-server --hot --env.appdef=applications/asdi/asdi_guest/minifierAppSetup.json"
   },
   "dependencies": {
@@ -27,6 +28,7 @@
     "jsts": "^2.0.0",
     "node-sass": "^4.9.0",
     "ol": "^5.2.0",
+    "ol-cesium": "^2.2.2",
     "sass-loader": "^7.0.3",
     "script-loader": "^0.7.2",
     "style-loader": "^0.21.0",

@@ -10,6 +10,7 @@ import {METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT} from 'ol/proj/Units';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
+import OLCesium from 'ol-cesium';
 
 /**
  * @class Oskari.mapframework.ui.module.common.MapModule
@@ -85,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             me._setupMapEvents(map);
 
-            this._map3d = new olcs.OLCesium({
+            this._map3d = new OLCesium({
                 map: map,
                 time: function () {
                     return Cesium.JulianDate.now();
