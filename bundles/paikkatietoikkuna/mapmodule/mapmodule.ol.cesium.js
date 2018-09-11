@@ -6,10 +6,10 @@ import olStyleIcon from 'ol/style/Icon';
 import olStyleText from 'ol/style/Text';
 import {defaults as olInteractionDefaults} from 'ol/interaction';
 import olView from 'ol/View';
-import * as olProjUnits from 'ol/proj/Units';
+import {METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT} from 'ol/proj/Units';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
-import * as olControl from 'ol/control';
+import {defaults as olControlDefaults} from 'ol/control';
 
 /**
  * @class Oskari.mapframework.ui.module.common.MapModule
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
             
-            var controls = olControl.defaults({
+            var controls = olControlDefaults({
                 zoom: false,
                 attribution: false,
                 rotate: false
@@ -380,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 ------------------------------------------------------------------> */
         _calculateScalesImpl: function(resolutions) {
             var units = this.getMap().getView().getProjection().getUnits(),
-                mpu = olProjUnits.METERS_PER_UNIT[units];
+                mpu = olProjUnitsMETERS_PER_UNIT[units];
 
             for (var i = 0; i < resolutions.length; ++i) {
                 var scale = resolutions[i] * mpu * 39.37 * this._dpi;
