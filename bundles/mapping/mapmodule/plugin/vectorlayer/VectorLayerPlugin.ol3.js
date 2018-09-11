@@ -2,7 +2,6 @@ import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olOverlay from 'ol/Overlay';
 import {fromExtent} from 'ol/geom/Polygon';
-import olGeom from 'ol/geom';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';

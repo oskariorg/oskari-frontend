@@ -1,5 +1,5 @@
 import olFeature from 'ol/Feature';
-import olGeom from 'ol/geom';
+import * as olGeom from 'ol/geom';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 

@@ -1,7 +1,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olFeature from 'ol/Feature';
-import olGeom from 'ol/geom';
+import * as olGeom from 'ol/geom';
 
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin

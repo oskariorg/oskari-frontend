@@ -2,7 +2,7 @@ import olLayerTile from 'ol/layer/Tile';
 import olLayerImage from 'ol/layer/Image';
 import olSourceTileImage from 'ol/source/TileImage';
 import olSourceImageStatic from 'ol/source/ImageStatic';
-import olGeom from 'ol/geom';
+import * as olGeom from 'ol/geom';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olTilegridTileGrid from 'ol/tilegrid/TileGrid';
 import * as olProj from 'ol/proj';
