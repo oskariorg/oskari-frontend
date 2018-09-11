@@ -42,11 +42,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
             tileInfos: {
             }
         };
-
-        this.__refreshTimer = null;
     }
-
-
     /**
      * Strip bbox for unique key because of some inaccucate cases
      * OL computation (init grid in tilesizes)  is inaccurate in last decimal
@@ -150,19 +146,11 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
             return tile;
         }
     };
-
-    /**
-     * @return  {ol/renderer/canvas/TileLayer}     canvasRenderer to force rerendering of tiles (ugly hack)
-     */
-    getCanvasRenderer(layer, map) {
-        return map.getRenderer().getLayerRenderer(layer);
-    }
-
     /**
      * @param  {Array.<number>} boundsObj     tile bounds
      * @param  {string}         imageData     dataurl or actual url for image
-     * @param  {ol/layer/Tile}     layer whose renderer will be fooled into thinking it's gotta redraw everything (ugly hack)
-     * @param  {ol/Map}     map from which to dig up the layerrenderer to hack (ugly hack)
+     * @param  {ol/layer/Tile}  layer 
+     * @param  {ol/Map}         map 
      * @param  {boolean}        boundaryTile  true if this an incomplete tile
      * @api
      */
@@ -206,17 +194,9 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
     };
 
     __fixTile(tile, imageData, layer, map) {
-        clearTimeout(this.__refreshTimer);
         tile.PLACEHOLDER = false;
         tile.getImage().src = imageData;
         tile.setState(olTileState.LOADED);
-
-        var me = this;
-        this.__refreshTimer = setTimeout(function () {
-            me.getCanvasRenderer(layer, map).resetRenderedCanvasTileRange();
-            me.changed();
-        }, 500);
-
     };
     /**
      * Note! Always uses the non-projected internal tile getter
