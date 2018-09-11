@@ -1,8 +1,5 @@
 import olFeature from 'ol/Feature';
-import olGeomPolygon from 'ol/geom/Polygon';
-import olGeomPoint from 'ol/geom/Point';
-import olGeomMultiPolygon from 'ol/geom/MultiPolygon';
-import olGeomLineString from 'ol/geom/LineString';
+import olGeom from 'ol/geom';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 
@@ -134,7 +131,7 @@ Oskari.clazz.define(
                 feature = wkt.readFeature(data),
                 geom = feature.getGeometry();
 
-            if (geom instanceof olGeomLineString || geom instanceof olGeomPolygon || geom instanceof olGeomMultiPolygon) {
+            if (geom instanceof olGeom.LineString || geom instanceof olGeom.Polygon || geom instanceof olGeom.MultiPolygon) {
                 return new olFeature({
                     geometry: geom
                 });
@@ -820,7 +817,7 @@ Oskari.clazz.define(
 
             return function (result) {
                 return function () {
-                    var geometry = new olGeomPoint(
+                    var geometry = new olGeom.Point(
                             result.lon, result.lat
                         ),
                         name = (result.name + ' (' + result.village + ')');

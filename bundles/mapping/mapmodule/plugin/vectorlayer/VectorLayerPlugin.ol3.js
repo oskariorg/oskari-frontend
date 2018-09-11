@@ -2,7 +2,7 @@ import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olOverlay from 'ol/Overlay';
 import {fromExtent} from 'ol/geom/Polygon';
-import olGeomLineString from 'ol/geom/LineString';
+import olGeom from 'ol/geom';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
@@ -1050,7 +1050,7 @@ Oskari.clazz.define(
          */
         getBufferedExtent: function(extent, percentage) {
             var me = this,
-                line = new olGeomLineString([
+                line = new olGeom.LineString([
                     [extent[0], extent[1]],
                     [extent[2], extent[3]]
                 ]),

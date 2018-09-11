@@ -1,7 +1,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olFeature from 'ol/Feature';
-import olGeomPoint from 'ol/geom/Point';
+import olGeom from 'ol/geom';
 
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin
@@ -546,7 +546,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             var markerLayer = this.getMarkersLayer();
             var markerStyle = this.getMapModule().getStyle(style);
-            var newMarker = new olFeature({id: data.id, geometry: new olGeomPoint([data.x, data.y])});
+            var newMarker = new olFeature({id: data.id, geometry: new olGeom.Point([data.x, data.y])});
 
             this._markerFeatures[data.id] = newMarker;
             this._markers[data.id] = data;

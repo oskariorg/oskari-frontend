@@ -2,7 +2,7 @@ import olLayerTile from 'ol/layer/Tile';
 import olLayerImage from 'ol/layer/Image';
 import olSourceTileImage from 'ol/source/TileImage';
 import olSourceImageStatic from 'ol/source/ImageStatic';
-import olGeomPoint from 'ol/geom/Point';
+import olGeom from 'ol/geom';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olTilegridTileGrid from 'ol/tilegrid/TileGrid';
 import * as olProj from 'ol/proj';
@@ -759,7 +759,7 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = event.getParams().ctrlKeyDown;
 
-            var point = new olGeomPoint([lonlat.lon, lonlat.lat]);
+            var point = new olGeom.Point([lonlat.lon, lonlat.lat]);
             var geojson = new olFormatGeoJSON(this.getMap().getView().getProjection());
             var pixelTolerance = 15;
             var json = {
