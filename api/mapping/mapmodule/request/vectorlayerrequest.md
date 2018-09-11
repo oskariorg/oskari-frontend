@@ -23,7 +23,7 @@ Options object
     layerDescription: 'Description text',
     layerPermissions: {
         'publish': 'publication_permission_ok'
-    }
+    },
     hover: null
 }
 ```

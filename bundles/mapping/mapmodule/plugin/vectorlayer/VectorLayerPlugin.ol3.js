@@ -487,25 +487,24 @@ Oskari.clazz.define(
          * @method prepareVectorLayer
          * @public
          * 
-         * Creates a new layer or updates an existing one if found by id.
+         * Creates a new layer or updates an existing one if found by options.layerId.
          *
-         * @param {String} id layer id
          * @param {Object} options layer properties
          * @return {Oskari.mapframework.domain.VectorLayer} layer object
          */
-        prepareVectorLayer: function (id, options) {
+        prepareVectorLayer: function (options) {
             options = options || {};
             var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            if (!id) {
-                id = 'VECTOR';
+            if (!options.layerId) {
+                options.layerId = 'VECTOR';
             }
-            var layer = this._findOskariLayer(id);
+            var layer = this._findOskariLayer(options.layerId);
             if (!layer) {
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
-                layer.setId(id);
+                layer.setId(options.layerId);
                 layer.setName(options.layerName || 'VECTOR');
                 layer.setGroups([{
-                    id: id,
+                    id: options.layerId,
                     name: options.layerInspireName || 'VECTOR'
                 }]);
                 layer.setOrganizationName(options.layerOrganizationName || 'VECTOR');
@@ -622,7 +621,7 @@ Oskari.clazz.define(
                 me._features[options.layerId] = [];
             }
 
-            layer = me.prepareVectorLayer(options.layerId, options);
+            layer = me.prepareVectorLayer(options);
 
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
                 for (var key in geometry) {
@@ -638,7 +637,6 @@ Oskari.clazz.define(
             if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }
-
             var features = format.readFeatures(geometry);
             // add cursor if defined so
             if (options.cursor) {
@@ -690,6 +688,8 @@ Oskari.clazz.define(
                         zIndex++;
                     });
                 });
+            } else {
+                vectorSource.addFeatures(features);
             }
 
             // notify other components that features have been added
@@ -857,6 +857,12 @@ Oskari.clazz.define(
                 return null;
             }
             return this._olLayers[id];
+        },
+        setVisibleByLayerId : function(id, visible) {
+            var layer = this.getLayerById(id);
+            if(layer) {
+                layer.setVisible(visible);
+            }
         },
         /**
          * Possible workaround for arranging the feature draw order within a layer

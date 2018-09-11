@@ -14,6 +14,7 @@ import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
+import * as olSphere from 'ol/sphere';
 
 import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
 
@@ -238,16 +239,64 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var olGeom = this.getOLGeometryFromGeoJSON(geometry);
             var sum = 0;
             if (olGeom.getType() === 'LineString') {
-                return olGeom.getLength();
+                return this.getGeomLength(olGeom);
             } else if (olGeom.getType() === 'MultiLineString') {
                 var lineStrings = olGeom.getLineStrings();
                 for (var i = 0; i < lineStrings.length; i++) {
-                    sum += lineStrings[i].getLength();
+                    sum += this.getGeomLength(lineStrings[i]);
                 }
                 return sum;
             } else if (olGeom.getType() === 'Polygon' || olGeom.getType() === 'MultiPolygon') {
-                return olGeom.getArea();
+                return this.getGeomArea(olGeom);
             }
+        },
+        /**
+         * @method getGeomArea
+         * -  calculates area of given geometry
+         *
+         * @param {ol/geom/Geometry} geometry
+         * @return {Number} area in square meters
+         *
+         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
+         */
+        getGeomArea: function(geometry) {
+            if (!geometry || geometry.getType() !== 'Polygon' || geometry.getType() === 'MultiPolygon') {
+                return 0;
+            }
+            var sourceProj = this.getMap().getView().getProjection();
+            if (sourceProj.getUnits() !== "degrees") {
+                return geometry.getArea();
+            }
+            var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
+            return Math.abs(olSphere.getArea(geom, {projection: 'EPSG:4326', radius: 6378137}));
+        },
+        /**
+         * @method getGeomLength
+         * -  calculates length of given geometry
+         *
+         * @param {ol/geom/Geometry} geometry
+         * @return {Number} length in meters
+         *
+         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
+         */
+        getGeomLength: function(geometry) {
+            var length = 0;
+            if(!geometry || geometry.getType() !== 'LineString') {
+                return 0;
+            }
+            var sourceProj = this.getMap().getView().getProjection();
+            if (sourceProj.getUnits() !== "degrees") {
+                return geometry.getLength();
+            }
+            var coordinates = geometry.getCoordinates();
+            for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+                var c1 = olProj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+                var c2 = olProj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+                length += olSphere.getDistance(c1, c2, 6378137);
+            }
+            return length;
         },
 
         /**

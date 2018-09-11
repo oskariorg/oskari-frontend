@@ -747,10 +747,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 contentType: 'application/json',
                 data: JSON.stringify({
                     'features': features,
-                    'srsName': this.srsName,
-                    'crs': this.srsName
+                    'srsName': this.srsName
                 }),
-                url: Oskari.urls.getRoute('MyPlacesFeatures'),
+                url: Oskari.urls.getRoute('MyPlacesFeatures') + '&crs=' + this.srsName,
                 success: function (response) {
                     if (response) {
                         if (me.skipLoading === true) {

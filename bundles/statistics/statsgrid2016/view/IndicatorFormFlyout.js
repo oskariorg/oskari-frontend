@@ -54,6 +54,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.indicatorId = indicatorId;
         this.show();
         this.createUi();
+
         // set empty values to focus on name field
         this.indicatorForm.setValues();
         // pass available regionsets if user wants to add another year/regionset dataset
@@ -63,10 +64,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
         this.saveBtn.setPrimary(!!this.indicatorId);
 
-        if (!indicatorId) {
-            return;
+        if (indicatorId) {
+            this.updateDatasetList();
         }
-        this.updateDatasetList();
     },
     updateDatasetList: function () {
         // call this.indicatorForm.setValues() based on datasourceId, indicatorId passing existing datasets
@@ -177,6 +177,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             });
         });
         this.setContent(this.element);
+        // options.pos.x/y is injected by FlyoutManager and without
+        // explicit call to move() the flyout opens in seemingly random locations (out of screen etc)
+        this.move(this.options.pos.x, this.options.pos.y, true);
     },
     /**
      * Opens a form for user to add or edit data for indicators year/regionset
