@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         error: _.template('<div class="legend-noactive">${ msg }</div>'),
         header: _.template('<div class="header"><div class="link">${ link }</div><div class="title">${ source }</div><div class="sourcename">${ label }</div></div>'),
         activeHeader: _.template('<div class="title">${label}</div>'),
-        edit: jQuery('<div class="edit-legend"></div>')
+        edit: _.template('<div class="edit-legend" title="${ tooltip }"></div>')
     };
     this._element = jQuery('<div class="statsgrid-legend-container"> ' +
         '<div class="active-header"></div>' +
@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                 me._renderDone();
                 return;
             }
-            var edit = me.__templates.edit.clone();
+            var edit = me.__templates.edit({ tooltip: me.locale('classify.editClassifyTitle') });
             headerContainer.append(edit);
             me._createEditClassificationListener();
             // legend
