@@ -32,7 +32,7 @@ Oskari.registerLocalization({
                 'seriesTitle': 'Time series',
                 'datasourceTitle': 'Data source',
                 'indicatorTitle': 'Indicator',
-                'regionsetTitle': 'Regionset',
+                'regionsetTitle': 'Regional division filter (optional)',
                 'seriesLabel': 'Get data as time series',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',

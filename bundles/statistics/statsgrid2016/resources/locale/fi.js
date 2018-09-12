@@ -32,7 +32,7 @@ Oskari.registerLocalization({
                 'seriesTitle': 'Aikasarja',
                 'datasourceTitle': 'Tietolähde',
                 'indicatorTitle': 'Indikaattori',
-                'regionsetTitle': 'Aluejako',
+                'regionsetTitle': 'Aluejakorajaus (valinnainen)',
                 'seriesLabel': 'Hae aikasarjana',
                 'selectDatasourcePlaceholder': 'Valitse tietolähde',
                 'selectIndicatorPlaceholder': 'Valitse aineisto',

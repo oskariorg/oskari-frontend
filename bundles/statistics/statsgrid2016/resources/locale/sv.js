@@ -32,7 +32,7 @@ Oskari.registerLocalization({
                 'seriesTitle': 'Tidsserie',
                 'datasourceTitle': 'Datakälla',
                 'indicatorTitle': 'Datamängd',
-                'regionsetTitle': 'Områdesindelning',
+                'regionsetTitle': 'Områdesindelning (frivillig)',
                 'seriesLabel': 'Hämta som en tidsserie',
                 'selectDatasourcePlaceholder': 'Välj datakälla',
                 'selectIndicatorPlaceholder': 'Välj datamängd',
