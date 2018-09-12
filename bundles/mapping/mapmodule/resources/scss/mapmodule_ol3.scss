@@ -179,9 +179,13 @@ div.mapplugins {
                     float: right;
                     margin: 0 0 0 $pluginMargin;
                 }
+                &.statsgrid-legend-plugin {
+                    position: absolute;
+                    left: -305px;
+                }
                 &.statsgrid-series-control-plugin {
-                    display: inline-block;
-                    margin-right: 10px;
+                    position: absolute;
+                    left: -815px;
                 }
 
             }
