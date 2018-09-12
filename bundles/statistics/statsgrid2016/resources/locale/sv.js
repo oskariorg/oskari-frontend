@@ -59,12 +59,6 @@ Oskari.registerLocalization({
                     }
                 },
                 'noRegionset': 'Ingen områdesindelning'
-            },
-            'extraFeatures': {
-                'title': 'Ytterligare egenskaper',
-                'hideMapLayers': 'Gömma andra kartlager',
-                'openTableCheckbox': 'Öppna tabell',
-                'openDiagramCheckbox': 'Öppna diagram'
             }
         },
         'statsgrid': {

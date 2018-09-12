@@ -3,8 +3,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.element = null;
     this.sandbox = this.instance.getSandbox();
     this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this._extraFeatures = Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures',
-        this.instance.getSandbox(), this.instance.getLocalization().panels.extraFeatures, this);
     var me = this;
     this.on('show', function () {
         if (!me.getElement()) {
@@ -25,9 +23,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         this.element.empty();
-    },
-    getExtraFeatures: function () {
-        return this._extraFeatures;
     },
     /**
      * @method lazyRender
@@ -58,7 +53,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         el.append(this.getNewSearchElement());
-        el.append(this.getExtraFeaturesElement());
     },
     getNewSearchElement: function () {
         var me = this;
@@ -118,15 +112,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 me.service.getStateService().setActiveIndicator(hash);
             }
             me.service.getStateService().setRegionset(values.regionset);
-
-            var extraValues = me.getExtraFeatures().getValues();
-
-            if (extraValues.openTable) {
-                me.instance.getFlyoutManager().open('table');
-            }
-            if (extraValues.openDiagram) {
-                me.instance.getFlyoutManager().open('diagram');
-            }
         });
 
         var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -143,14 +128,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             btn.setEnabled(enabled);
         });
 
-        return container;
-    },
-    getExtraFeaturesElement: function () {
-        var container = jQuery('<div class="extrafeatures"><div class="title"></div><div class="content"></div></div>');
-        var locale = this.instance.getLocalization();
-
-        container.find('.title').html(locale.panels.extraFeatures.title);
-        container.find('.content').append(this._extraFeatures.getPanelContent());
         return container;
     }
 }, {
