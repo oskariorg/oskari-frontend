@@ -754,6 +754,7 @@ div.oskari-flyout {
     .statsgrid-svg-legend {
         margin: 0 auto;
         width:50%;
+        overflow: hidden;
     }
     .statsgrid-range {
         float: left;

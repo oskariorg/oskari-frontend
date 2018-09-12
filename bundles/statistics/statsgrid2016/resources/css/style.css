@@ -470,7 +470,8 @@ div.oskari-flyout {
     float: left; }
   .statsgrid-legend-container .statsgrid-svg-legend {
     margin: 0 auto;
-    width: 50%; }
+    width: 50%;
+    overflow: hidden; }
   .statsgrid-legend-container .statsgrid-range {
     float: left; }
   .statsgrid-legend-container .statsgrid-counter {
