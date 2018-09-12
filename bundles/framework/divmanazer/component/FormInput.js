@@ -473,6 +473,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 source: results
             });
             input.autocomplete('search', input.val());
+            var widget = input.autocomplete('widget');
+            widget.css('z-index', '99999');
         },
         addClass: function(className) {
             var input = this._field.find('input');
