@@ -78,6 +78,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             disable_search_threshold: options.disable_search_threshold ? options.disable_search_threshold : 10,
             allow_single_deselect: options.allow_single_deselect ? options.allow_single_deselect : false
         });
+        // Fixes an issue where placeholder is cut off with the input field width set as pixel value even if options.width is %
+        // https://github.com/harvesthq/chosen/issues/1162
+        el.find('li.search-field input').css('width', '100%');
         return el;
     },
     /** @method selectFirstValue
