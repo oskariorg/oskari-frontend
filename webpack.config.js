@@ -120,7 +120,7 @@ module.exports = (env, argv) => {
         changeOrigin: true,
         ws: true
       }, {
-        context: ['**', `!/Oskari/dist/${version}/${appName}/**`],
+        context: ['**', `!/Oskari/dist/${version}/${appName}/**`, '!/Oskari/bundles/bundle.js'],
         target: 'http://localhost:8080',
         secure: false,
         changeOrigin: true
