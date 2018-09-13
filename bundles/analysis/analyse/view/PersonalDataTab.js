@@ -126,20 +126,22 @@ Oskari.clazz.define(
                 return;
             }
 
-            var olPolygon = geom[0],
-                bounds = olPolygon.getBounds(),
-                centroid = olPolygon.getCentroid(),
-                epsilon = 1.0,
-                rb = sandbox.getRequestBuilder('MapMoveRequest'),
-                req;
+            var olPolygon = geom[0];
+            var extent = olPolygon.getExtent();
+            var center = ol.extent.getCenter(extent);
+            var area = ol.extent.getArea(extent);
+            var epsilon = 1.0;
+            var rb = sandbox.getRequestBuilder('MapMoveRequest');
+            var req;
 
             if (rb) {
-                if (olPolygon.getArea() < epsilon) {
+                if (area < epsilon) {
                     // zoom to level 9 if a single point
-                    req = rb(centroid.x, centroid.y, 9);
+                    req = rb(center.x, center.y, 9);
                     sandbox.request(this.instance, req);
                 } else {
-                    req = rb(centroid.x, centroid.y, bounds);
+                    var bounds = {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
+                    req = rb(center.x, center.y, bounds);
                     sandbox.request(this.instance, req);
                 }
             }
