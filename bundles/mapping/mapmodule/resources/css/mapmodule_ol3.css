@@ -103,8 +103,12 @@ div.mapplugins {
     div.mapplugins.top.right .mapplugin.layerselection {
       margin-left: 0; }
     div.mapplugins.top.right .mapplugin.statsgrid-series-control-plugin {
-      display: inline-block;
-      margin-right: 10px;
+      position: absolute;
+      left: -815px;
+    }
+    div.mapplugins.top.right .mapplugin.statsgrid-legend-plugin, div.mapplugins.top.right .mapplugin.statsgrid-legend-plugin-transparent {
+      position: absolute;
+      left: -305px;
     }
     div.mapplugins.top.right .mapplugin.search {
       text-align: right; }

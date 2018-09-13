@@ -229,7 +229,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                     layerName: locale.layer.name,
                     layerInspireName: locale.layer.inspireName,
                     layerOrganizationName: locale.layer.organizationName,
-                    showLayer: true,
                     layerPermissions: {
                         'publish': 'publication_permission_ok'
                     }
@@ -287,6 +286,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 {
                     layerId: this.LAYER_ID,
                     hover: hoverOptions,
+                    showLayer: true,
                     layerDescription: (regionset && regionset.name) ? regionset.name : null
                 }
             ]

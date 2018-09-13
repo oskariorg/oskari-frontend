@@ -3,7 +3,7 @@
  *
  * Generic filter methods component
  */
-Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
+Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
 
     /**
      * @method create called automatically on construction
