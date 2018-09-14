@@ -32,6 +32,7 @@ function () {
         this.helper = null;
         this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         this.isMapSelection = false;
+        this.isRemoveMarkers = false;
         this.sandbox = Oskari.getSandbox();
         //TODO should dimensions be handled by dataHandler
         this.dimensions = {
@@ -119,6 +120,9 @@ function () {
             this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [true]);
         }
     },
+    setRemoveMarkers: function (isRemove) {
+        this.isRemoveMarkers = isRemove;
+    },
     addMapCoordsToInput: function (addBln){ //event??
         this.getDataHandler().addMapCoordsToInput(addBln);
     },
@@ -135,7 +139,7 @@ function () {
     },*/
     eventHandlers: {
         'MapClickedEvent': function ( event ) {
-            if (!this.isMapSelection) {
+            if (!this.isMapSelection || this.isRemoveMarkers) {
                 return;
             }
             var lonlat = event.getLonLat();
@@ -148,6 +152,15 @@ function () {
             this.dataHandler.addMapCoord(roundedLonLat);
             label = this.helper.getLabelForMarker(roundedLonLat);
             this.helper.addMarkerForCoords(roundedLonLat, label);
+        },
+        'MarkerClickEvent': function (event) {
+            if (!this.isMapSelection) {
+                return;
+            }
+            var markerId = event.getID();
+            if (this.isRemoveMarkers === true){
+                this.sandbox.postRequestByName('MapModulePlugin.RemoveMarkersRequest', [markerId]);
+            }
         },
         'userinterface.ExtensionUpdatedEvent': function (event) {
             if(event.getExtension().getName() !==this.getName()){
