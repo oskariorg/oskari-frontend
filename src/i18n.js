@@ -305,10 +305,14 @@
         }
         return formatter.format(values);
     };
-    O.getNumberFormatter = function(fractionDigits) {
-        return new Intl.NumberFormat(oskariLang, {
-            minimumFractionDigits: fractionDigits,
-            maximumFractionDigits: fractionDigits
-        });
+    O.getNumberFormatter = function (fractionDigits) {
+        var opts;
+        if (typeof fractionDigits !== 'undefined') {
+            opts = {
+                minimumFractionDigits: fractionDigits,
+                maximumFractionDigits: fractionDigits
+            };
+        }
+        return new Intl.NumberFormat(oskariLang, opts);
     }
 }(Oskari));
