@@ -127,6 +127,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         if (selects.decimalSeparator === "," && selects.coordinateSeparator === "comma"){
             errors.push(this.loc('flyout.transform.validateErrors.doubleComma'));
         }
+        if (selects.coordinateSeparator === "space" && (selects.unit === "DD MM SS" || selects.unit === "DD MM")){
+            errors.push(this.loc('flyout.transform.validateErrors.doubleSpace'));
+        }
         if (selects.coordinateSeparator === ""){
             errors.push(this.loc('flyout.transform.validateErrors.noCoordinateSeparator'));
         }
@@ -215,14 +218,30 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             dialog.show(title, message, [btn]);
         }
     },
-    findEpsg: function(epsg) {
-        var epsgValues = {};
+    /**
+     * Tries to find epsg values by number.
+     *
+     * @method findEpsg
+     * @param {String} epsgNumber
+     * @return {Object} epsgValues, return null if not found
+     */
+    findEpsg: function(epsgNumber) {
+        var epsgValues = null;
         var srs;
-        if (epsg.length === 4 ){
-            srs = "EPSG:" + epsg;
-            epsgValues = this.getEpsgValues(srs);
-            if(epsgValues.title){
-                epsgValues.srs = srs;
+        var compound;
+        if (epsgNumber.length === 4 || epsgNumber.length === 5 ){
+            srs = "EPSG:" + epsgNumber;
+            //check first if is's compound system
+            compound = this.getCompoundSystem(srs);
+            if (compound !== null){
+                epsgValues = this.getEpsgValues(compound.geodetic);
+                epsgValues.heigthSrs = compound.height;
+                epsgValues.srs = compound.geodetic;
+            } else {
+                epsgValues = this.getEpsgValues(srs);
+                if(epsgValues){
+                    epsgValues.srs = srs;
+                }
             }
         }
         return epsgValues;
@@ -231,7 +250,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         if (srs && this.epsgValues.hasOwnProperty(srs)){
             return this.epsgValues[srs];
         }
-        return {};
+        return null;
     },
     getMapEpsgValues: function () {
         var epsg = this.mapEpsgValues;
@@ -521,13 +540,48 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 "lonFirst": false
             },
             "EPSG:3067":{
-                "title": "ETRS-TM35FIN",
+                "title": "ETRS-TM35FIN", //(E,N)
                 "datum": "DATUM_EUREF-FIN",
                 "proj": "PROJECTION_TM",
                 "coord": "COORD_PROJ_2D",
                 "bounds": [-3669433.90, 4601644.86, 642319.78, 9362767.00],
                 "lonFirst": true
             },
+            //TODO: add when transformation service supports these
+            // and add possibility to search with 5 digits
+            /*"EPSG:5048":{
+                "title": "ETRS-TM35FIN (N,E)",
+                "datum": "DATUM_EUREF-FIN",
+                "proj": "PROJECTION_TM",
+                "coord": "COORD_PROJ_2D",
+                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
+                "lonFirst": false
+            },
+            "EPSG:25834":{
+                "title": "ETRS-TM34 (E,N)",
+                "datum": "DATUM_EUREF-FIN",
+                "proj": "PROJECTION_TM",
+                "coord": "COORD_PROJ_2D",
+                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
+                "lonFirst": true
+            },
+            "EPSG:25835":{
+                "title": "ETRS-TM35(E,N)",
+                "datum": "DATUM_EUREF-FIN",
+                "proj": "PROJECTION_TM",
+                "coord": "COORD_PROJ_2D",
+                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
+                "lonFirst": true
+            },
+            "EPSG:5048":{
+                "title": "ETRS-TM35FIN (E,N)",
+                "datum": "DATUM_EUREF-FIN",
+                "proj": "PROJECTION_TM",
+                "coord": "COORD_PROJ_2D",
+                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
+                "lonFirst": true
+            },
+            */
             "EPSG:4258":{
                 "title": "EUREF-FIN-GRS80",
                 "datum": "DATUM_EUREF-FIN",
@@ -629,6 +683,36 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"
             }
         }
+    },
+    getCompoundSystem: function (epsg){
+        switch(epsg) {
+            case "EPSG:3091": //YKJ + N60
+                return {
+                    geodetic: "EPSG:2393",
+                    height: "EPSG:5717"
+                };
+            case "EPSG:3092": //ETRS-TM35FIN (N,E) + N60
+                return {
+                    geodetic: "EPSG:3047", //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
+                    height: "EPSG:5717"
+                };
+            case "EPSG:3093": //ETRS-TM35FIN (N,E) + N2000
+                return {
+                    geodetic: "EPSG:3047", //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
+                    height: "EPSG:3900"
+                };
+            case "EPSG:7409": //ETRS89 + EVRF2000 (EUREF-FIN-GRS80 + N60)
+                return {
+                    geodetic: "EPSG:4258",
+                    height: "EPSG:5717"
+                };
+            case "EPSG:7423": //ETRS89 + EVRF2007 (EUREF-FIN-GRS80 + N2000)
+                return {
+                    geodetic: "EPSG:4258",
+                    height: "EPSG:3900"
+                };
+        }
+        return null;
     },
     createCls: function(json){
         Object.keys( json ).forEach( function ( key ) {

@@ -107,8 +107,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var transformButton = this._template.transformButton({ convert: this.loc('actions.convert') });
 
             var utilRow = this._template.utilRow({
-                clear: this.loc('actions.clearTable'),
-                show: this.loc('actions.showMarkers'),
+                clear: this.loc('flyout.coordinateTable.clearTables'),
+                show: this.loc('mapMarkers.show.title'),
                 fileexport: this.loc('actions.export')
             });
 
@@ -239,16 +239,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 table,
                 heightSystem,
                 dimension,
-                fileHandler;
+                fileHandler,
+                systemSelection;
             if (type === "input"){
-                selections = this.inputSystem.getSelections();
+                systemSelection = this.inputSystem;
                 table = this.inputTable;
                 fileHandler = this.importFileHandler;
             } else {
-                selections = this.outputSystem.getSelections();
+                systemSelection = this.outputSystem;
                 table = this.outputTable;
                 fileHandler = this.exportFileHandler;
             }
+            selections = systemSelection.getSelections();
             srs = selections['geodetic-coordinate'];
             heightSystem = selections.elevation;
             this.instance.setDimension(type, srs, heightSystem);
@@ -258,7 +260,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 if (this.helper.isGeogSystem(srs)){
                     fileHandler.setIsDegreeSystem(true);
                 } else {
+                    systemSelection.disableElevationSelection(false);
                     fileHandler.setIsDegreeSystem(false);
+                }
+                if (this.helper.is3DSystem(srs)){
+                    systemSelection.disableElevationSelection(true);
+                } else {
+                    systemSelection.disableElevationSelection(false);
                 }
             } else {
                 table.updateHeader(); //remove header
@@ -535,8 +543,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var code;
             if (errorInfo && errorInfo.errorKey){
                 code = errorInfo.errorKey;
-                if (code === "invalid_coord_in_row") {
-                    errorMsg = Oskari.getMsg('coordinatetransformation', 'flyout.transform.responseErrors.invalid_coord_in_row', {coordinate: errorInfo.line, rowIndex: errorInfo.lineIndex});
+                if (code === "invalid_coord_in_line") {
+                    errorMsg = Oskari.getMsg('coordinatetransformation', 'flyout.transform.responseErrors.invalid_coord_in_line', {line: errorInfo.line, index: errorInfo.lineIndex});
                 } else if (errors[code]) {
                     errorMsg = errors[code];
                 }
