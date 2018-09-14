@@ -77,14 +77,15 @@ Oskari.registerLocalization(
                     "title": "Virhe!",
                     "message": "Valinnoissa on puutteita tai virheitä. Ota huomioon seuraavat vaatimukset ja yritä uudelleen.",
                     "crs": "Geodeettinen koordinaattijärjestelmä pitää olla valittuna sekä lähtö- että tulostiedoissa.",
-                    "sourceHeight": "Lähtötietojen korkeusjärjestelmää ei ole valittu.",
-                    "targetHeight": "Tulostietojen korkeusjärjestelmää ei ole valittu.",
+                    //"sourceHeight": "Lähtötietojen korkeusjärjestelmää ei ole valittu.",
+                    //"targetHeight": "Tulostietojen korkeusjärjestelmää ei ole valittu.",
                     "noInputData": "Ei muunnettavia koordinaatteja.",
                     "noInputFile": "Lähtöaineiston sisältävä tiedosto pitää olla valittuna.",
                     "noFileName": "Muodostettavalle tiedostolle pitää antaa tiedostonimi.",
                     "decimalCount": "Desimaalien tarkkuus pitää olla 0 tai positiivnen kokonaisluku.",
                     "headerCount": "Otsakerivien määrä pitää olla 0 tai positiivinen kokonaisluku.",
                     "doubleComma": "Desimaali- ja koordinaattierotin eivät voi molemmat olla pilkkuja.",
+                    "doubleSpace": "Kulman muoto/yksikkö ei voi sisältää välilyöntejä, jos koordinaattierotin on Välilyönti.",
                     "noFileSettings": "Tiedosto asetuksia ei ole annettu.",
                     "noCoordinateSeparator": "Koordinaattierotin pitää olla valittuna.",
                     "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
@@ -94,11 +95,12 @@ Oskari.registerLocalization(
                     "generic": "Koordinaattimuunnos epäonnistui...",
                     "invalid_coord": "Koordinaatti virheellinen. Tarkasta, että muunnettavat koordinaatit on oikeassa muodossa sekä geodeettinen koordinaatti- ja kokeusjärjestelmä ovat oikein.",
                     "invalid_number": "Koordinaatti virheellinen. Tarkasta..", //can we get row number from file
+                    "invalid_coord_in_array": "Koordinaatti virheellinen. Tarkasta..", //can user input invalid coords in array??
                     "no_coordinates": "Ei koordinaatteja (pitäisi tulla käytännössä vain tiedostojen kanssa).",
                     "invalid_file_settings": "Tiedoston asetukset virheelliset.", //can't be user's fault
                     "no_file": "Lähetetystä pyynnöstä ei löytynyt tiedostoa.", //can't be user's fault
-                    "invalid_coord_length": "Tiedostosta ei saatu muodostettua koordinaattia annetuilla asetuksilla. Tarkasta, että koordinaatti erotin, otsakerivien määrä, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä (dimensio) valinnat vastaavat tiedoston sisältöä.",
-                    "invalid_coord_in_row": "Tiedostossa on rivillä: {rowIndex, number} virheellinen koordinaattirivi: {coordinate} <br> Tarkasta, että desimaali- ja koordinaattierotin sekä otsakerivien määrä valinnat vastaavat tiedoston sisältöä."
+                    "invalid_first_coord": "Tiedostosta ei saatu muodostettua koordinaattia annetuilla asetuksilla. Tarkasta, että koordinaatti erotin, otsakerivien määrä, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä (dimensio) valinnat vastaavat tiedoston sisältöä.",
+                    "invalid_coord_in_line": "Tiedostossa on rivillä: {index, number} virheellinen koordinaattirivi: {line} <br> Tarkasta, että kyseinen rivi on kelvollinen ja vastaa valintoja. Tarkasta myös, että desimaali- ja koordinaattierotin sekä otsakerivien määrä valinnat vastaavat tiedoston sisältöä."
                 },
                 "responseFile": {
                     "title": "Huomio!",
@@ -120,16 +122,16 @@ Oskari.registerLocalization(
             },
             "map": {
                 "label": "Valitse sijainnit kartalta",
-                "info": "Valitse yksi tai useampi piste kartalta klikkaamalla.",
+                "info": "Voit valita muunnettavia koordinaatteja kartalta sijainteja klikkaamalla.",
                 "action": "valitse lisää"
             }
         },
         "mapMarkers":{
             "show":{
                 "title": "Näytä sijainnit kartalla",
-                "info": "Tarkastele muunnettuja koordinaatteja kartalla.",
-                "errorTitle": "Virhe sijaintien näyttämisessä",
-                "transformError": "Muunna koordinaatit ennen sijaintien näyttämistä kartalla.",
+                "info": "Kartta on ETRS89-TM35FIN -projektiossa. Koordinaatit on sijoitettu kartalle kyseistä koordinaattijärjestelmää käyttäen. Sijaintimerkinnän yhteydessä näytään lähtö- ja/tai tuloskoordinaattijärjestelmän mukaiset koordinaatit lukemina. ",
+                //"errorTitle": "Virhe sijaintien näyttämisessä",
+                //"transformError": "Muunna koordinaatit ennen sijaintien näyttämistä kartalla.",
                 "lon": "Lon",
                 "lat": "Lat",
                 "north": "N",
@@ -137,13 +139,15 @@ Oskari.registerLocalization(
             },
             "select":{
                 "title": "Valitse sijainnit kartalta",
-                "info": "Valitse yksi tai useampia pisteitä kartalta klikkaamalla."
+                "info": "Valitse yksi tai useampi piste kartalta klikkaamalla. Kartta on {mapSrs} -projektiossa. Tämä koordinaattijärjestelmä valitaan automaattisesti eikä sitä voi muutta. Valinnoissa on syytä huomioida, että kartalta sijaintien valinta ei ole kovin tarkkaa ja valitut koordinaatit pyöristetään kokonaisluvuiksi.",
+                "add": "Lisää merkintöjä",
+                "remove": "Poista merkintöjä"
             }
         },
         "actions": {
             "convert": "Muunna",
-            "clearTable": "Tyhjennä taulukot",
-            "showMarkers": "Näytä sijainnit kartalla",
+            //"clearTable": "Tyhjennä taulukot",
+            //"showMarkers": "Näytä sijainnit kartalla",
             "export": "Muunna tiedostoon",
             "select": "Valitse",
             //"selectFromMap": "Siirry valitsemaan.",
