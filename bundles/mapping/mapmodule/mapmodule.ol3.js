@@ -40,6 +40,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _initImpl: function (sandbox, options, map) {
             // css references use olMap as selectors so we need to add it
             this.getMapEl().addClass('olMap');
+            // disables text-selection on map (fixes an issue in Chrome 69 where dblclick on map selects text and prevents dragging the map)
+            this.getMapEl().addClass('disable-select');
             return map;
         },
         /**
