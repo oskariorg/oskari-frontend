@@ -1,4 +1,3 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool',
 /**
  * Base-class for plugin based map tools for publisher bundle
  * @param  {[type]} sandbox      [description]
@@ -8,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool',
  * @param  {[type]} handlers     [description]
  * @return {[type]}              [description]
  */
-function(sandbox, mapmodule, localization, instance, handlers) {
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', function (sandbox, mapmodule, localization, instance, handlers) {
     this.__index = 0;
     this.__sandbox = sandbox;
     this.__mapmodule = mapmodule;
@@ -20,23 +19,23 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     // This is used to watch tool plugin start/stop changes. If plugin is started then change this value to true, if stopped then change to false.
     // If tool plugin is started then we can call stop plugin if unchecking this tools (otherwise we get error when sopping plugin).
     this.__started = false;
-    this.state= {
+    this.state = {
         // This variable is used to save tool state (is checked) and if it's true then we get tool json when saving published map.
         enabled: false,
-        mode:null
+        mode: null
     };
 }, {
     // override to change group
-    group : 'maptools',
+    group: 'maptools',
     // 'bottom left', 'bottom right' etc
     allowedLocations : [],
-    //default location in lefthanded / righthanded layouts. Override.
+    // default location in lefthanded / righthanded layouts. Override.
     lefthanded: '',
     righthanded: '',
     // List of plugin classes that can reside in same container(?) like 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'
-    allowedSiblings : [],
+    allowedSiblings: [],
     // ??
-    groupedSiblings : false,
+    groupedSiblings: false,
 
     /**
     * Initialize tool
@@ -44,26 +43,29 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     * @method init
     * @public
     */
-    init: function(pdata) {
-        var me = this,
-            data = pdata;
+    init: function (pdata) {
+        var me = this;
+        var data = pdata;
 
-        if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
-            _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+        if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
+            data.configuration.mapfull.conf.plugins.forEach(function (plugin) {
                 if (me.getTool().id === plugin.id) {
                     me.setEnabled(true);
                 }
             });
         }
     },
+    getSandbox: function () {
+        return this.__sandbox;
+    },
     /**
      * If the tool requires space for the UI next to the map return the required height/width
      * @return {Object} object with keys height and width used for map size calculation
      */
-    getAdditionalSize : function() {
+    getAdditionalSize: function () {
         return {
             height: 0,
-            width : 0
+            width: 0
         };
     },
     /**
@@ -73,7 +75,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Object} tool
     */
-    getTool: function(){
+    getTool: function () {
         // override
     },
     /**
@@ -83,26 +85,25 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-    setEnabled : function(enabled) {
-        var me = this,
-            tool = me.getTool(),
-            sandbox = me.__sandbox;
+    setEnabled: function (enabled) {
+        var me = this;
+        var tool = me.getTool();
 
-        //state actually hasn't changed -> do nothing
+        // state actually hasn't changed -> do nothing
         if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
             return;
         }
         me.state.enabled = enabled;
-        if(!me.__plugin && enabled) {
+        if (!me.__plugin && enabled) {
             me.__plugin = Oskari.clazz.create(tool.id, tool.config);
             me.__mapmodule.registerPlugin(me.__plugin);
         }
 
-        if(enabled === true) {
+        if (enabled === true) {
             me.__plugin.startPlugin(me.__sandbox);
             me.__started = true;
         } else {
-            if(me.__started === true) {
+            if (me.__started === true) {
                 me.stop();
             }
         }
@@ -119,7 +120,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Object} jQuery element
     */
-    getExtraOptions: function() {
+    getExtraOptions: function () {
         return null;
     },
     /**
@@ -129,7 +130,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {String} tool title
     */
-    getTitle: function() {
+    getTitle: function () {
         return this.__loc[this.getTool().title];
     },
     /**
@@ -141,7 +142,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Boolean} is displayed in wanted mode
     */
-    isDisplayedInMode: function(mode) {
+    isDisplayedInMode: function (mode) {
         return true;
     },
     /**
@@ -154,7 +155,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Boolean} is tool displayed
     */
-    isDisplayed: function() {
+    isDisplayed: function () {
         return true;
     },
     /**
@@ -174,7 +175,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Boolean} is the tool started.
     */
-    isStarted: function() {
+    isStarted: function () {
         return this.__started;
     },
     /**
@@ -184,7 +185,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Boolean} is the tool toggled on by default. Default value false, override where necessary.
     */
-    isDefaultTool: function() {
+    isDefaultTool: function () {
         return false;
     },
     /**
@@ -194,7 +195,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Boolean} is the tool displayed in the tools' panel
     */
-    isShownInToolsPanel: function() {
+    isShownInToolsPanel: function () {
         return true;
     },
 
@@ -205,7 +206,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {String} group id
     */
-    getGroup : function() {
+    getGroup: function () {
         return this.group;
     },
     /**
@@ -215,7 +216,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Integer} index
     */
-    getIndex : function() {
+    getIndex: function () {
         return this.index;
     },
     /**
@@ -225,7 +226,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Object} allowed locations array
     */
-    getAllowedLocations: function() {
+    getAllowedLocations: function () {
         return this.allowedLocations;
     },
     /**
@@ -253,7 +254,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     *
     * @returns {Object} errors object
     */
-    validate: function() {
+    validate: function () {
         // always valid
         return true;
     },
@@ -262,13 +263,13 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     * @method stop
     * @public
     */
-    stop: function(){
-        var me = this;
-        if(me.__plugin) {
-            if(me.__sandbox){
-                me.__plugin.stopPlugin(me.__sandbox);
-            }
-            me.__mapmodule.unregisterPlugin(me.__plugin);
+    stop: function () {
+        if (!this.__plugin) {
+            return;
         }
+        if (this.getSandbox()) {
+            this.__plugin.stopPlugin(this.getSandbox());
+        }
+        this.__mapmodule.unregisterPlugin(this.__plugin);
     }
 });
