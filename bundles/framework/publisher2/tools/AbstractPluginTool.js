@@ -1,11 +1,10 @@
 /**
  * Base-class for plugin based map tools for publisher bundle
- * @param  {[type]} sandbox      [description]
- * @param  {[type]} mapmodule    [description]
- * @param  {[type]} localization [description]
- * @param  {[type]} instance     [description]
- * @param  {[type]} handlers     [description]
- * @return {[type]}              [description]
+ * @param  {Oskari.Sandbox} sandbox
+ * @param  {Oskari.mapframework.ui.module.common.MapModule} mapmodule
+ * @param  {Object} localization Localization under publisher.BasicView
+ * @param  {Oskari.mapframework.bundle.publisher2.PublisherBundleInstance} instance
+ * @param  {Object} handlers     with Oskari event names as keys and handler functions as values
  */
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', function (sandbox, mapmodule, localization, instance, handlers) {
     this.__index = 0;
@@ -28,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     // override to change group
     group: 'maptools',
     // 'bottom left', 'bottom right' etc
-    allowedLocations : [],
+    allowedLocations: [],
     // default location in lefthanded / righthanded layouts. Override.
     lefthanded: '',
     righthanded: '',
@@ -165,7 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     *
     * @returns {Boolean} is tool disabled
     */
-   isDisabled: function (data) {
+    isDisabled: function (data) {
         return false;
     },
     /**
