@@ -259,7 +259,9 @@ Oskari.clazz.define(
                 }
                 if (wasClosed) {
                     me.getTile().hideExtensions();
-                    me.createClassficationView(false);
+                    if (!this.isEmbedded()) {
+                        me.createClassficationView(false);
+                    }
                 } else {
                     me.getTile().showExtensions();
                 }
@@ -300,6 +302,12 @@ Oskari.clazz.define(
             },
             AfterChangeMapLayerOpacityEvent: function (evt) {
                 this.statsService.notifyOskariEvent(evt);
+                // record opacity for published map etc
+                var ind = this.statsService.getStateService().getActiveIndicator();
+                if (!ind || !ind.classification) {
+                    return;
+                }
+                ind.classification.transparency = evt.getMapLayer().getOpacity();
             }
         },
 
