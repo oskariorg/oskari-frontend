@@ -259,7 +259,9 @@ Oskari.clazz.define(
                 }
                 if (wasClosed) {
                     me.getTile().hideExtensions();
-                    me.createClassficationView(false);
+                    if (!this.isEmbedded()) {
+                        me.createClassficationView(false);
+                    }
                 } else {
                     me.getTile().showExtensions();
                 }
