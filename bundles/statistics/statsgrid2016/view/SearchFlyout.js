@@ -79,27 +79,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             }
 
             var newActiveIndicator = false;
+            var activeSelections = values.selections;
 
             selectedIndicators.forEach(function (indicator) {
-                var added;
                 if (indicator === '') {
                     return;
                 }
+                var added;
+                var hasMultiselectValues = false;
                 if (!values.series) {
                     // Multiselect selections are not supported for series layer
                     Object.keys(values.selections).forEach(function (key) {
                         var selection = values.selections[key];
                         if (Array.isArray(selection)) {
+                            hasMultiselectValues = true;
                             selection.forEach(function (item) {
                                 var current = jQuery.extend(true, {}, values.selections);
                                 current[key] = item;
-                                added = me.service.getStateService().addIndicator(values.datasource, indicator, current);
+                                var newlyAdded = me.service.getStateService().addIndicator(values.datasource, indicator, current);
+                                if (newlyAdded) {
+                                    added = newlyAdded;
+                                    activeSelections = current;
+                                }
                             });
                         }
                     });
                 }
-                if (!added) {
-                    added = me.service.getStateService().addIndicator(values.datasource, indicator, values.selections, values.series);
+                if (!hasMultiselectValues) {
+                    added = me.service.getStateService().addIndicator(values.datasource, indicator, activeSelections, values.series);
                 }
                 if (added) {
                     newActiveIndicator = indicator;
@@ -108,7 +115,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
             if (newActiveIndicator !== false) {
                 // already added, set as active instead
-                var hash = me.service.getStateService().getHash(values.datasource, newActiveIndicator, values.selections, values.series);
+                var hash = me.service.getStateService().getHash(values.datasource, newActiveIndicator, activeSelections, values.series);
                 me.service.getStateService().setActiveIndicator(hash);
             }
             me.service.getStateService().setRegionset(values.regionset);

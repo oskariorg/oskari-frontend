@@ -336,7 +336,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getHash: function (datasrc, indicator, selections, series) {
             var hash = datasrc + '_' + indicator;
             var seriesKey = '';
-            if (typeof series === 'object') {
+            if (typeof series === 'object' && series !== null) {
                 seriesKey = series.id;
                 hash += '_' + series.id + '=' + series.values[0] + '-' + series.values[series.values.length - 1];
             }
