@@ -210,6 +210,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
 
         me.selectClassRef.push(regionFilterSelect);
+        me.selectClassRef.push(dsSelect);
 
         dsSelector.on('change', function () {
             me._params.clean();
@@ -263,7 +264,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         regionsetFilterElement.on('change', function (evt) {
             if (regionFilterSelect.getValue() === null || regionFilterSelect.getValue().length === 0) {
-                dsSelect.reset();
+                var keepSelectedValue = true;
+                dsSelect.reset(keepSelectedValue);
                 return;
             }
             var unsupportedSelections = me.service.getUnsupportedDatasetsList(regionFilterSelect.getValue());
