@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me.setValues(event.getCurrent());
     });
     me.service.on('AfterChangeMapLayerOpacityEvent', function (event) {
-        me.setLayerOpacityValue(event.getMapLayer());
+        me.setLayerOpacityValue(event.getMapLayer().getId(), event.getMapLayer().getOpacity());
     });
     this.__templates = {
         classification: jQuery('<div class="classifications">' +
@@ -148,17 +148,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._element.find('.visible-map-style-choropleth').hide();
         me._element.find('.visible-map-style-' + style).show();
     },
-    setLayerOpacityValue: function (layer) {
+    setLayerOpacityValue: function (layerId, opacity) {
         var me = this;
         if (me.hasSelectChange) {
             me.hasSelectChange = false;
             return;
         }
-        if (layer.getId() === me.LAYER_ID) {
+        if (layerId === me.LAYER_ID) {
             var transparencyEl = me._element.find('select.transparency-value');
             transparencyEl.find('option#hiddenvalue').remove();
-            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + layer.getOpacity() + ' %' + '</option>');
-            hiddenOption.attr('value', layer.getOpacity());
+            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + opacity + ' %' + '</option>');
+            hiddenOption.attr('value', opacity);
             hiddenOption.hide();
             hiddenOption.attr('selected', 'selected');
             transparencyEl.append(hiddenOption);
@@ -277,6 +277,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
 
         if (classification.transparency) {
+            this.setLayerOpacityValue(me.LAYER_ID, classification.transparency)
             me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
         }
     },

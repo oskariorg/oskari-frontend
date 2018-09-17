@@ -121,7 +121,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                         optionalStyles: optionalStyles,
                         layerId: me.LAYER_ID,
                         prio: index,
-                        opacity: classification.opacity || 100
+                        opacity: classification.transparency || 100
                     }];
 
                     sandbox.postRequestByName(
