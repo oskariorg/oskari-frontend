@@ -668,6 +668,7 @@
             });
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
+            var me = this;
             if (typeof callback !== 'function') {
                 return;
             }
@@ -698,6 +699,8 @@
             if (!Oskari.user().isLoggedIn()) {
                 // successfully saved for guest user
                 _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                // send out event about updated indicators
+                me.sandbox.notifyAll(Oskari.eventBuilder('StatsGrid.DatasourceEvent')(datasrc));
                 return;
             }
             // send data to server for logged in users
@@ -715,6 +718,8 @@
                 success: function (pResp) {
                     _log.debug('AddIndicatorData', pResp);
                     _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                    // send out event about updated indicators
+                    me.sandbox.notifyAll(Oskari.eventBuilder('StatsGrid.DatasourceEvent')(datasrc));
                 },
                 error: function (jqXHR, textStatus) {
                     callback('Error saving data to server');
