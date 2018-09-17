@@ -306,7 +306,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         if (values.mapStyle !== 'points') {
             delete values.min;
             delete values.max;
-            delete values.transparency;
         } else {
             delete values.type;
         }
@@ -385,7 +384,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         me._colorSelect.setHandler(updateClassification);
         me._element.find('select').on('change', updateClassification);
-        me._element.find('select.decimal-place').on('change', function() {
+        me._element.find('select.decimal-place').on('change', function () {
             var stateService = me.service.getStateService();
             var indicator = stateService.getActiveIndicator();
             stateService.setActiveIndicator(indicator.hash);
