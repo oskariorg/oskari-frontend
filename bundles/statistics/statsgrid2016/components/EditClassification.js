@@ -257,17 +257,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 }
             });
         });
-        var min = classification.min || me._rangeSlider.defaultValues[0];
-        var max = classification.max || me._rangeSlider.defaultValues[1];
-        var updateClassification = false;
+        if (mapStyle !== 'choropleth') {
+            var min = classification.min || me._rangeSlider.defaultValues[0];
+            var max = classification.max || me._rangeSlider.defaultValues[1];
+            var updateClassification = false;
 
-        if (max - min < classification.count * (me._rangeSlider.step || 1)) {
-            min = me._rangeSlider.defaultValues[0];
-            max = me._rangeSlider.defaultValues[1];
-            updateClassification = true;
+            if (max - min < classification.count * (me._rangeSlider.step || 1)) {
+                min = me._rangeSlider.defaultValues[0];
+                max = me._rangeSlider.defaultValues[1];
+                updateClassification = true;
+            }
+            me._rangeSlider.element.slider('values', [min, max]);
+            me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         }
-        me._rangeSlider.element.slider('values', [min, max]);
-        me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
 
         if (updateClassification) {
