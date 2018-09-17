@@ -1,5 +1,44 @@
 # Release Notes
 
+## 1.48.0
+
+### Webpack build
+
+It is now possible to build the front-end application code with Webpack. In the next release (1.49.0) this will be the only supported build method. 
+
+#### Preparations
+
+Make sure you have at least Node 8.x / NPM 5.x. Run `npm install` in the front-end repo root.
+
+#### Run in development
+
+Webpack dev server is used to serve the JS bundle and assets when running in local development. XHR calls will be proxied to the Java backend assumed to be running on localhost:8080.
+
+So that the server knows to look for the JS bundle and assets from the right place, we need to change the Oskari-server `oskari-ext.properties` and add 
+
+```
+# set development to false or comment it out to load using minified javascript
+development=false
+oskari.client.version=dist/devapp
+```
+
+To start Webpack dev server, we point it to the miniferAppSetup.json file for the application we want to start, here Sample app as example:
+`npm start -- --env.appdef=applications/sample/servlet/minifierAppSetup.json`
+
+When you see "Compiled successfully." in the terminal, you can open the app in the browser at localhost:8081.
+
+The dev server has automatic reloading enabled when you save changes to JS code and hot reloading for S/CSS without need for full browser reload.
+
+#### Build for production
+
+To build minifed JS and assets, run:
+`npm run build -- --env.appdef=1.48.0:applications/sample/servlet/minifierAppSetup.json`
+
+The number before the colon sets the directory name, here producing files under dist/1.48.0/servlet/
+
+Note: The 1.48.0 release of Oskari server still has a reference to bundles/bundle.js in the JSP. This file is no longer needed because it's part of the webpack bundle. Replace this file with an empty text file on the production server if you intend to use the webpack produced bundle. 
+
+
 ## 1.47.1
 
 For a full list of changes see:
