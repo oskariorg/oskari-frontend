@@ -31,8 +31,8 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /(?<!min)\.js$/,
-          exclude: /node_modules(?!\/oskari-frontend)|libraries/,
+          test: /\.js$/,
+          exclude: [/node_modules(?!\/oskari-frontend)/, /libraries/, /\.min\.js$/],
           use: {
             loader: 'babel-loader',
             options: {
