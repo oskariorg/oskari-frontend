@@ -199,10 +199,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var me = this;
 
             clearTimeout(me._timers.setActiveIndicator);
-            if (me.getActiveIndicator() && indicatorHash === me.getActiveIndicator().hash) {
-                // trying to reset the same indicator
-                return;
-            }
 
             // This must be on some way to discard set active indicator if calling repeatly.
             // Because of published map editing, active indicator is changed always when adding indicator.
