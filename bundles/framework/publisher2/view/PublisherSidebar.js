@@ -384,7 +384,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * Closes publisher without saving
          */
         cancel: function () {
-            this._editToolLayoutOff();
             this.instance.setPublishMode(false);
         },
         /**

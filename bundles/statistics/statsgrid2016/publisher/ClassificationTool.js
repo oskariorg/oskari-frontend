@@ -115,7 +115,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if (stats) {
             stats.enableClassification(true);
-            stats.createClassficationView(false);
         }
     }
 }, {
