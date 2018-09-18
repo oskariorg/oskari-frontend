@@ -93,6 +93,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             var legendContainer = container.find('.active-legend');
             headerContainer.empty();
             legendContainer.empty();
+            container.find('.legend-noactive').empty();
 
             // create inidicator dropdown if we have more than one indicator
             if (me.service.getStateService().getIndicators().length > 1) {
