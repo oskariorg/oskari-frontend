@@ -74,7 +74,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             }
             if (result.complete) {
                 me.spinner.stop();
-                var isUserDatasource = '' + me.service.getUserDatasource().id === '' + datasrc;
+                var userDatasource = me.service.getUserDatasource();
+                var isUserDatasource = !!userDatasource && '' + me.service.getUserDatasource().id === '' + datasrc;
                 if (!isUserDatasource && result.indicators.length === 0) {
                     // show notification about empty indicator list for non-myindicators datasource
                     errorService.show(locale('errors.title'), locale('errors.indicatorListIsEmpty'));
