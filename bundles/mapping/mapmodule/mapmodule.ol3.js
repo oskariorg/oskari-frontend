@@ -614,6 +614,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         isPointInExtent: function (extent, x, y){
             return ol.extent.containsXY(extent, x, y);
         },
+        getExtentForPointsArray: function (points){
+            var multiPoint = new ol.geom.MultiPoint(points);
+            return multiPoint.getExtent();
+        },
         /* --------- /Impl specific --------------------------------------> */
 
         /* Impl specific - PRIVATE
