@@ -104,6 +104,10 @@
     margin-left: auto;
     margin-right: auto;
 }
+/* Show coordinates on the map*/
+.showMapMarkers {
+    width: 400px;
+}
 
 /* Coordinate system selections */
 .coordinatetransformation-flyout .coordinate-systems-wrapper {

@@ -204,7 +204,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             return {
                 geodeticDatum: this.loc('infoPopup.geodeticDatum.info'),
                 coordinateSystem: this.loc('infoPopup.coordinateSystem.info'),
-                mapProjection: this.loc('infoPopup.mapProjection.content'),
+                mapProjection: this.loc('infoPopup.mapProjection.info'),
                 geodeticCoordinateSystem: this.loc('infoPopup.geodeticCoordinateSystem.info'),
                 heightSystem: this.loc('infoPopup.heightSystem.info'),
                 epsgSearch: this.loc('infoPopup.epsgSearch.info')
