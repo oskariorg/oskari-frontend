@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         //TODO to table
         handleCell: function(coord, cell){ //or handleRow
             var cell = jQuery(cell).find('.cellContent');
-            var cellValue = cell.html().replace(',', '.');
+            var cellValue = cell.text().replace(',', '.');
             var num = parseFloat(cellValue);
             if (isNaN(num)){ //do not update input coords
                 cell.addClass("invalid-coord");
@@ -418,7 +418,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var container = me.getContainer();
             var validCrsSelects;
 
-            jQuery('.selectFromMap').on("click", function() {
+            container.find('.selectFromMap').on("click", function() {
                 me.selectFromMap();
             });
 
@@ -426,10 +426,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 me.confirmResetTable();
             });
             container.find('.show').on("click", function () {
-                var inputCoords = me.dataHandler.getInputCoords();
-                var inputSrs = me.inputSystem.getSrs();
-                me.helper.showMarkersOnMap(inputCoords, false, inputSrs);
-                me.instance.toggleViews("mapmarkers");
+                me.showMarkersOnMap();
             });
             container.find('.export').on("click", function () {
                 validCrsSelects = me.helper.validateCrsSelections (me.getCrsOptions());
@@ -447,9 +444,49 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         selectFromMap: function(){
             this.instance.setMapSelectionMode(true);
             if (this.dataHandler.hasInputCoords()){
-                this.helper.showMarkersOnMap(this.dataHandler.getInputCoords(), true, this.inputSystem.getSrs());
+                this.dataHandler.populateMapCoordsAndMarkers();
             }
             this.instance.toggleViews("MapSelection");
+        },
+        showMarkersOnMap: function(){
+            var me = this;
+            var source = this.sourceSelect.getSourceSelection();
+            var srs = this.inputSystem.getSrs();
+            var transformCb = function (response){
+                var mapCoords;
+                var inputCoords;
+                //if response contains input coordinates then sync input table
+                if (response.inputCoordinates && !me.dataHandler.hasInputCoords()){ //or check lengths
+                    me.dataHandler.setInputCoords(response.inputCoordinates);
+                }
+                if (response.resultCoordinates){
+                    mapCoords = response.resultCoordinates;
+                    inputCoords = me.dataHandler.getInputCoords();
+                    me.helper.showMarkersOnMap(mapCoords, inputCoords, srs);
+                    me.instance.toggleViews("mapmarkers");
+                }
+                if (response.hasMoreCoordinates === true){
+                    me.showMessage(this.loc('flyout.transform.responseFile.title'), this.loc('flyout.transform.responseFile.hasMoreCoordinates', {maxCoordsToArray: 100}));
+                }
+            };
+            if (source === "file"){
+                if (srs === "") {
+                    this.helper.showPopup(this.loc('mapMarkers.show.title'), this.loc('mapMarkers.show.noSrs'));
+                    return;
+                }
+                this.transformToMapCoords(transformCb);
+            } else { //keyboard and map
+                if (!this.dataHandler.hasInputCoords()){
+                    this.helper.showPopup(this.loc('mapMarkers.show.title'), this.loc('mapMarkers.show.noCoordinates'));
+                    return;
+                }
+                if (srs === this.helper.mapSrs){
+                    this.helper.showMarkersOnMap(this.dataHandler.getInputCoords());
+                    this.instance.toggleViews("mapmarkers");
+                } else {
+                    this.transformToMapCoords(transformCb);
+                }
+            }
         },
         handleExport: function (){
             this.exportFileHandler.showFileDialogue(this.transformToFile.bind(this));
@@ -459,6 +496,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var fileSettings = settings;
             if (this.helper.validateFileSelections(fileSettings)){
                 this.instance.getService().readFileToArray(crsSettings, fileSettings, this.handleArrayResponse.bind( this ), this.handleErrorResponse.bind(this) );
+            }
+        },
+        transformToMapCoords: function (callback) {
+            var crsSettings = {
+                sourceCrs: this.inputSystem.getSrs(),
+                sourceDimension: this.instance.getDimensions().input,
+                targetCrs: this.helper.mapSrs,
+                targetDimension: 2
+            };
+
+            if (this.sourceSelect.getSourceSelection() === "file"){
+                var fileSettings = this.importFileHandler.getSettings();
+                if (this.helper.validateFileSelections(fileSettings)){
+                    this.instance.getService().transformFileToArray(crsSettings, fileSettings, callback, this.handleErrorResponse.bind(this) );
+                }
+            } else {
+                this.instance.getService().transformArrayToArray(this.dataHandler.getInputCoords(), crsSettings, callback, this.handleErrorResponse.bind(this));
             }
         },
         transformToTable: function () {

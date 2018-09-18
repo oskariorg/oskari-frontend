@@ -65,7 +65,7 @@ function () {
     afterStart: function () {
         this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper');
         this.transformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
-        this.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler' );
+        this.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler', this.helper);
         this.instantiateViews();
         this.createUi();
         this.bindListeners();
@@ -144,14 +144,15 @@ function () {
             }
             var lonlat = event.getLonLat();
             var label;
+            var markerId;
             var roundedLonLat = {
                 lon: parseInt(lonlat.lon),
                 lat: parseInt(lonlat.lat)
             }
             //add coords to map coords
-            this.dataHandler.addMapCoord(roundedLonLat);
+            markerId = this.dataHandler.addMapCoord(roundedLonLat);
             label = this.helper.getLabelForMarker(roundedLonLat);
-            this.helper.addMarkerForCoords(roundedLonLat, label);
+            this.helper.addMarkerForCoords(markerId, roundedLonLat, label);
         },
         'MarkerClickEvent': function (event) {
             if (!this.isMapSelection) {
@@ -159,6 +160,7 @@ function () {
             }
             var markerId = event.getID();
             if (this.isRemoveMarkers === true){
+                this.dataHandler.removeMapCoord(markerId);
                 this.sandbox.postRequestByName('MapModulePlugin.RemoveMarkersRequest', [markerId]);
             }
         },

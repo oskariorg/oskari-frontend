@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         return 'Oskari.coordinatetransformation.helper';
     },
     init: function () {},
-    addMarkerForCoords: function (lonlat, label, color) {
+    addMarkerForCoords: function (id, lonlat, label, color) {
         var color = color || "ff0000";
         if ( this.addMarkerReq ) {
                 var data = {
@@ -33,42 +33,60 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 if (label) {
                     data.msg = label;
                 }
-            var request = this.addMarkerReq(data);
+            var request = this.addMarkerReq(data, id);
             this.sb.request('MainMapModule', request);
         }
     },
-    showMarkersOnMap: function (coords, addExisting, srs){
-        var me = this,
-            color,
-            epsgValues,
-            lonlat,
-            label,
-            transform;
 
-        if (addExisting === true){
-            color = "#ffe5e5";
-        }
+    showMarkersOnMap: function (mapCoords, inputCoords, srs){
+        var coords = mapCoords;
+        var coordsForLabel = inputCoords;
+        var epsgValuesForLabel;
+        var label;
+        var addLabelFromInput = false;
+        var mapEpsgValues = this.getMapEpsgValues();
 
-        if (srs !== this.mapSrs){
-            transform = true;
-            epsgValues = this.getEpsgValues(srs);
-        } else {
-            transform = false;
-            epsgValues = this.mapEpsgValues;
+        if (srs) {
+            epsgValuesForLabel = this.getEpsgValues(srs);
         }
-        coords.some( function ( coord ) {
-            lonlat = me.getLonLatObj(coord, epsgValues.lonFirst);
-            label = me.getLabelForMarker(lonlat, epsgValues);
-            if (transform){
-                try{
-                    lonlat = me.mapmodule.transformCoordinates(lonlat, srs, me.mapSrs);
-                } catch (error){
-                    me.showPopup(me.loc('mapMarkers.show.errorTitle'), me.loc('mapMarkers.show.transformError'));
-                    return true;
-                }
+        if (coordsForLabel && epsgValuesForLabel && coords.length === coordsForLabel.length){
+            addLabelFromInput = true;
+        }
+        for (var i = 0; i < coords.length; i++){
+            lonlat = this.getLonLatObj(coords[i], mapEpsgValues.lonFirst);
+            if (addLabelFromInput){
+                labelLonLat = this.getLonLatObj(coordsForLabel[i], epsgValuesForLabel.lonFirst);
+                label = this.getLabelForMarker(labelLonLat, epsgValuesForLabel);
+            } else {
+                label = this.getLabelForMarker(lonlat, mapEpsgValues);
             }
-            me.addMarkerForCoords(lonlat, label, color);
-        });
+            this.addMarkerForCoords(null, lonlat, label); //null id -> generate
+        }
+        this.moveMapToMarkers(coords);
+    },
+    moveMapToMarkers: function(points){
+        var closestZoom = 6;
+        if (!Array.isArray(points) || points.length === 0 ){
+            return
+        } else if (points.length === 1 ){
+            var x;
+            var y;
+            var point = points[0];
+            if (this.mapEpsgValues.lonFirst){
+                x = point[0];
+                y = point[1];
+            }else{
+                x = point[1];
+                y = point[0];
+            }
+            this.sb.postRequestByName('MapMoveRequest', [x, y, closestZoom]);
+        } else {
+            var extent = this.mapmodule.getExtentForPointsArray(points);
+            this.mapmodule.zoomToExtent(extent);
+            if (this.mapmodule.getMapZoom() > closestZoom){
+                this.mapmodule.setZoomLevel(closestZoom);
+            }
+        }
     },
     getLonLatObj: function (coord, lonFirst){
         var lonlat = {};
