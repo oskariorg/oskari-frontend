@@ -264,6 +264,9 @@ Oskari.clazz.define(
                     }
                 } else {
                     me.getTile().showExtensions();
+                    if (!this.isEmbedded() && this.statsService.getStateService().getIndicators().length !== 0) {
+                        this.createClassficationView(true);
+                    }
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
@@ -419,7 +422,7 @@ Oskari.clazz.define(
             return state;
         },
         createClassficationView: function (enabled) {
-            var config = this.getConfiguration();
+            var config = jQuery.extend(true, {}, this.getConfiguration());
             var sandbox = this.getSandbox();
             var locale = Oskari.getMsg.bind(null, 'StatsGrid');
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -428,14 +431,19 @@ Oskari.clazz.define(
                 if (this.classificationPlugin) {
                     mapModule.unregisterPlugin(this.classificationPlugin);
                     mapModule.stopPlugin(this.classificationPlugin);
+                    this.classificationPlugin = null;
                 }
                 return;
             }
             if (!this.classificationPlugin) {
                 this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
             }
-            mapModule.registerPlugin(this.classificationPlugin);
-            mapModule.startPlugin(this.classificationPlugin);
+            if (mapModule.getPluginInstances()[this.classificationPlugin.getName()]) {
+                this.classificationPlugin.redrawUI();
+            } else {
+                mapModule.registerPlugin(this.classificationPlugin);
+                mapModule.startPlugin(this.classificationPlugin);
+            }
             // get the plugin order straight in mobile toolbar even for the tools coming in late
             if (Oskari.util.isMobile() && this.classificationPlugin.hasUI()) {
                 mapModule.redrawPluginUIs(true);
