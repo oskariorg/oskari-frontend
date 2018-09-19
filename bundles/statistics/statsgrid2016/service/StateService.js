@@ -193,16 +193,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         /**
          * Sets the active indicator and sends an event about the change
+         * Note! Timeseries relies on this so the event need to be sent even if the indicator doesn't change.
          * @param {String} indicatorHash the unique hash from selected indicators details. See getHash()
          */
         setActiveIndicator: function (indicatorHash) {
             var me = this;
 
             clearTimeout(me._timers.setActiveIndicator);
-            if (me.getActiveIndicator() && indicatorHash === me.getActiveIndicator().hash) {
-                // trying to reset the same indicator
-                return;
-            }
 
             // This must be on some way to discard set active indicator if calling repeatly.
             // Because of published map editing, active indicator is changed always when adding indicator.
