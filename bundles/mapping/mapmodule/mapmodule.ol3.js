@@ -245,20 +245,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
         getGeomArea: function(geometry) {
-            if (!geometry || geometry.getType() !== 'Polygon' || geometry.getType() === 'MultiPolygon') {
+            if (!geometry || (geometry.getType() !== 'Polygon' && geometry.getType() !== 'MultiPolygon')) {
                 return 0;
             }
             var sourceProj = this.getMap().getView().getProjection();
             if (sourceProj.getUnits() !== "degrees") {
                 return geometry.getArea();
             }
+            var me = this;
+            var area = 0;
             var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
-            // TODO: needs testing with multipolygon
-            var coordinates = geom.getLinearRing(0).getCoordinates();
-            if (coordinates.length > 0) {
-                return Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
-            }
-            return 0;
+            var polygons = geometry.getType() === 'MultiPolygon' ? geom.getPolygons() : [geom];
+            polygons.forEach(function (poly) {
+                var coordinates = poly.getLinearRing(0).getCoordinates();
+                if (coordinates.length > 0) {
+                    area += Math.abs(me.wgs84Sphere.geodesicArea(coordinates));
+                }
+            });
+            return area;
         },
         /**
          * @method getGeomLength
