@@ -127,7 +127,7 @@ Oskari.clazz.define(
             );
 
             //Let's extend UI
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
 
 
@@ -190,9 +190,7 @@ Oskari.clazz.define(
                 // already added
                 return;
             }
-            var reqBuilder = this.sandbox.getRequestBuilder(
-                'PersonalData.AddTabRequest'
-            );
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
 
             if (!reqBuilder) {
                 // request not ready
@@ -305,7 +303,7 @@ Oskari.clazz.define(
             );
             me.analyseHandler = null;
 
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(me);
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(me);
             sandbox.request(me, request);
 
             me.sandbox.unregisterStateful(me.mediator.bundleId);
@@ -396,9 +394,7 @@ Oskari.clazz.define(
         setAnalyseMode: function (blnEnabled) {
             var me = this,
                 map = jQuery('#contentMap'),
-                mapmodule = me.sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                ),
+                mapmodule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 tools = jQuery('#maptools');
 
 
@@ -406,12 +402,7 @@ Oskari.clazz.define(
                 map.addClass('mapAnalyseMode');
                 me.sandbox.mapMode = 'mapAnalyseMode';
                 // Hide flyout, it's not needed...
-                jQuery(me.plugins['Oskari.userinterface.Flyout'].container)
-                    .parent().parent().hide();
-                /* Why would we close analyse here?
-                // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
-                var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
-                me.sandbox.request(me.getName(), request);*/
+                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().hide();
 
                 // proceed with analyse view
                 if (!this.analyse) {
@@ -439,17 +430,15 @@ Oskari.clazz.define(
                 }
                 if (this.analyse) {
                     // Reset tile state
-                    var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+                    var request = Oskari.requestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                     me.sandbox.request(me.getName(), request);
                     this.analyse.setEnabled(false);
                     this.analyse.hide();
                 }
                 me.WFSLayerService.setAnalysisWFSLayerId(null);
             }
-            var reqBuilder = me.sandbox.getRequestBuilder(
-                'MapFull.MapSizeUpdateRequest'
-            );
-
+            // resize map to fit screen with expanded/normal sidebar
+            var reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
             if (reqBuilder) {
                 me.sandbox.request(me, reqBuilder(true));
             }
