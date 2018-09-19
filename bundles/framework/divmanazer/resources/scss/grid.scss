@@ -1,0 +1,232 @@
+$pagingArrowBorderSize: 8px;
+$pagingArrowActiveColor: #f0f0f0;
+$pagingArrowHoverColor: #ffd400;
+$pagingArrowDeactiveColor: transparent;
+
+div.grid-tools {
+    position: static;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 6px;
+
+    div.column-selector-placeholder {
+        border-style: none;
+        float: right;
+        opacity: 1.0;
+        margin-right: 0;
+        padding: 0;
+        right: 0;
+        width: 200px;
+        height: 30px;
+        max-width: 200px;
+        max-height: 35px;
+
+        div.column-selector-title {
+            margin-top: 10px;
+            margin-left: 2px;
+            cursor: pointer;
+
+            .title {
+                padding-left: 4px;
+                float: left;
+                width: 171px;
+                border: 1px solid #999;
+            }
+
+            .icon {
+                background-image: url(../images/desc_arrow.png);
+                background-repeat: no-repeat;
+                background-position: 6px 7px;
+                float: right;
+                width: 20px;
+                border-top: 1px solid #999;
+                border-bottom: 1px solid #999;
+                border-right: 1px solid #999;
+                height: 21px;
+            }
+        }
+
+        div.column-selector {
+            max-height: 40%;
+            width: 270px;
+            overflow: auto;
+            position: absolute;
+            visibility: hidden;
+            background-color: white;
+            margin-top: 22px;
+            margin-left: -72px;
+            margin-right: 5px;
+            padding: 0;
+            border: 1px solid;
+            z-index: 10001;
+
+            div.close-selector-button {
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                top: 5px;
+                right: 5px;
+            }
+
+            ul.column-selector-list {
+                list-style-type: none;
+                padding-right: 30px;
+            }
+
+            label.column-label {
+                padding-left: 5px;
+            }
+        }
+    }
+
+    div.exporter {
+        float: left;
+        text-align: left;
+    }
+}
+
+div.icon-menu {
+    position: absolute;
+    opacity: 1.0;
+    margin: 0;
+    cursor: pointer;
+    padding: 0;
+    width: 25px;
+    height: 8px;
+    max-width: 25px;
+    max-height: 7px;
+}
+
+input.csvExportButton {
+    margin: 3px 5px 2px 10px;
+}
+
+input.excelExportButton {
+    margin: 3px 10px 2px 5px;
+}
+
+table.oskari-grid {
+    [class*="span"] {
+        float: none;
+    }
+
+    td {
+        padding: 1px 5px 0 5px;
+    }
+
+    td, th {
+        min-height: 28px;
+        max-width: 110px;
+        overflow: hidden;
+        border: 1px solid #E6E6E6;
+        text-overflow: ellipsis;
+
+        &.hidden {
+            display: none;
+        }
+    }
+
+    th {
+        padding: 0px;
+        background-color: #F3F3F3;
+        position: relative;
+
+        a {
+            color: inherit;
+            line-height: 28px;
+            padding: 5px;
+        }
+
+        &.asc {
+            background-image: url("../images/asc_arrow.png");
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+
+        &.desc {
+            background-image: url("../images/desc_arrow.png");
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+
+        &.closedSubTable {
+            background-image: url("../images/icon-arrow-right.png");
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+
+        &.openSubTable {
+            background-image: url("../images/icon-arrow-left.png");
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+    }
+
+    tr.selected {
+        background-color: #FDF8D9;
+    }
+
+    > tr > th, > tbody > tr > th {
+        text-align: left;
+    }
+
+    tr:last-child td {
+        border: 1px solid #E6E6E6;
+    }
+
+    th.grouping {
+        div.paging {
+            cursor: pointer;
+            margin: 0;
+            width: 0;
+            height: 0;
+            border-top: $pagingArrowBorderSize solid transparent;
+            border-bottom: $pagingArrowBorderSize solid transparent;
+
+            &.previous {
+                float: left;
+                border-right: $pagingArrowBorderSize solid $pagingArrowActiveColor;
+
+                &:hover {
+                    border-right-color: $pagingArrowHoverColor;
+                }
+            }
+
+            &.next {
+                float: right;
+                border-left: $pagingArrowBorderSize solid $pagingArrowActiveColor;
+
+                &:hover {
+                    border-left-color: $pagingArrowHoverColor;
+                }
+            }
+
+            &.hidden {
+                border-right-color: $pagingArrowDeactiveColor;
+                border-left-color: $pagingArrowDeactiveColor;
+
+                &:hover {
+                    border-right-color: $pagingArrowDeactiveColor;
+                    border-left-color: $pagingArrowDeactiveColor;
+                }
+            }
+        }
+
+        div.title {
+            float: left;
+            margin-left: 4px;
+        }
+    }
+}
+
+.oskari-grid-export {
+    width: 340px;
+
+    fieldset.oskari-formcomponent {
+        float: left;
+
+        label {
+            width: 170px;
+        }
+    }
+}

@@ -7,9 +7,10 @@ Oskari.registerLocalization(
         "desc": "My Data",
         "notLoggedIn": "As a logged-in user you can see here your account information and all your saved places, map views, embedded maps, indicators, analysis and datasets.",
         "notLoggedInText": "Log in",
+        "register": "Register",
         "projectionError": {
             "title" : "Projections are incompatible",
-            "msg": "Projection will be changed, so that the published map can be edited",
+            "msg": "The page reloads to change the projection",
             "ok": "OK",
             "cancel": "Cancel"
         },

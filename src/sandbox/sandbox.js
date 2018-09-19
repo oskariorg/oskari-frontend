@@ -434,12 +434,6 @@
                     }
                     this._debugPopEvent();
                 }
-
-                // finally clean event memory
-                if (!retainEvent) {
-                    // FIXME only properties should be deleted
-                    delete event;
-                }
             },
 
             /**

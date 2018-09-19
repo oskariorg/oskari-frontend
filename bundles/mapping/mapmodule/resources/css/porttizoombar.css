@@ -1,15 +1,15 @@
 div.pzbDiv div.pzbDiv-plus {
-  background-image: url("../images/zoombar_plus_patched.png");
+  background-image: url("../images/zoombar_plus-rounded-dark.png");
   cursor: pointer;
   cursor: zoom-in;
-  width: 18px;
-  height: 34px; }
+  width: 22px;
+  height: 38px; }
 div.pzbDiv div.pzbDiv-minus {
-  background-image: url("../images/zoombar_minus-patched.png");
+  background-image: url("../images/zoombar_minus-rounded-dark.png");
   cursor: pointer;
   cursor: zoom-out;
-  width: 18px;
-  height: 23px; }
+  width: 22px;
+  height: 28px; }
 div.pzbDiv div.ui-slider-vertical {
   cursor: pointer; }
   div.pzbDiv div.ui-slider-vertical .ui-slider-handle {

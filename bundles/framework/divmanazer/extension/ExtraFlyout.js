@@ -78,12 +78,12 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 } else {
                     me.options.container.append(popup);
                 }
-                popup.find('.icon-close').bind('click', function(){
+                popup.find('.icon-close').on('click', function(){
                     me.hide();
                 });
                 me._popup = popup;
                 me.bringToTop();
-                me._popup.bind('click', function(){
+                me._popup.on('click', function(){
                     me.bringToTop();
                 });
                 me.hide(true);
@@ -272,7 +272,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             me._updateSideLabelPositions();
 
             if(!me._addedResizeListener){
-                me._popup.bind('DOMSubtreeModified', function(){
+                me._popup.on('DOMSubtreeModified', function(){
                     clearTimeout(me._sidetoolTimer);
                     me._sidetoolTimer = setTimeout(function(){
                         me._updateSideLabelPositions();

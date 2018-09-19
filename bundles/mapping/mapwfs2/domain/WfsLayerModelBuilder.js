@@ -9,7 +9,29 @@ Oskari.clazz.define(
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = sandbox;
         this.service = null;
+        this._registerForLayerFiltering();
     }, {
+        /**
+         * Add featuredata filter.
+         * @method  @public _registerForLayerFiltering
+         */
+        _registerForLayerFiltering: function() {
+            var me = this;
+            Oskari.on('app.start', function (details) {
+                var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+
+                if ( !layerlistService ) {
+                    return;
+                }
+                
+                layerlistService.registerLayerlistFilterButton(me.localization.layerFilter.featuredata,
+                    me.localization.layerFilter.tooltip, {
+                        active: 'layer-stats',
+                        deactive: 'layer-stats-disabled'
+                    },
+                    'featuredata');
+            });
+        },
         /**
          * parses any additional fields to model
          * @param {Oskari.mapframework.domain.WfsLayer} layer partially populated layer

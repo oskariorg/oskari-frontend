@@ -184,7 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                     // no functionality -> hide
                     tools.find('div.layer-description').hide();
                 } else {
-                    tools.find('div.icon-info').bind('click', function () {
+                    tools.find('div.icon-info').on('click', function () {
                         var rn = 'catalogue.ShowMetadataRequest';
 
                         sandbox.postRequestByName(rn, [{

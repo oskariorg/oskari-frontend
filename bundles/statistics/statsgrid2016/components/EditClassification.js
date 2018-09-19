@@ -12,97 +12,112 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me.setLayerOpacityValue(event.getMapLayer());
     });
     this.__templates = {
-        classification: jQuery('<div class="classifications">'+
-            '<div class="classification-options">'+
+        classification: jQuery('<div class="classifications">' +
+            '<div class="classification-options">' +
                 // map style
-                '<div class="classification-map-style visible-map-style-choropleth visible-map-style-points visible-on-vector">'+
-                    '<div class="label">'+ this.locale('classify.map.mapStyle') +'</div>'+
-                    '<div class="map-style value">'+
-                        '<select class="map-style">'+
-                            '<option value="choropleth" selected="selected">'+this.locale('classify.map.choropleth')+'</option>'+
-                            '<option value="points">'+this.locale('classify.map.points')+'</option>'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
+                '<div class="classification-map-style visible-map-style-choropleth visible-map-style-points visible-on-vector">' +
+                    '<div class="label">' + this.locale('classify.map.mapStyle') + '</div>' +
+                    '<div class="map-style value">' +
+                        '<select class="map-style">' +
+                            '<option value="choropleth" selected="selected">' + this.locale('classify.map.choropleth') + '</option>' +
+                            '<option value="points">' + this.locale('classify.map.points') + '</option>' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
 
                 // method
-                '<div class="classification-method visible-map-style-choropleth visible-map-style-points">'+
-                    '<div class="label">'+ this.locale('classify.classifymethod') +'</div>'+
-                    '<div class="method value">'+
-                        '<select class="method">'+
+                '<div class="classification-method visible-map-style-choropleth visible-map-style-points">' +
+                    '<div class="label">' + this.locale('classify.classifymethod') + '</div>' +
+                    '<div class="method value">' +
+                        '<select class="method">' +
                             // FIXME: use classificationService.getAvailableMethods()
-                            '<option value="jenks" selected="selected">'+this.locale('classify.methods.jenks')+'</option>'+
-                            '<option value="quantile">'+this.locale('classify.methods.quantile')+'</option>'+
-                            '<option value="equal">'+this.locale('classify.methods.equal')+'</option>'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
+                            '<option value="jenks" selected="selected">' + this.locale('classify.methods.jenks') + '</option>' +
+                            '<option value="quantile">' + this.locale('classify.methods.quantile') + '</option>' +
+                            '<option value="equal">' + this.locale('classify.methods.equal') + '</option>' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
 
                 // classes
-                '<div class="classification-count visible-map-style-choropleth visible-map-style-points">'+
+                '<div class="classification-count visible-map-style-choropleth visible-map-style-points">' +
                     // use colorService.getOptionsForType()
-                    '<div class="label">'+ this.locale('classify.classes') +'</div>'+
-                    '<div class="amount-class value">'+
-                        '<select class="amount-class">'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
+                    '<div class="label">' + this.locale('classify.classes') + '</div>' +
+                    '<div class="amount-class value">' +
+                        '<select class="amount-class">' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
 
                 // classify mode
-                '<div class="classification-mode visible-map-style-choropleth visible-map-style-points">'+
-                    '<div class="label">'+ this.locale('classify.mode') +'</div>'+
-                    '<div class="classify-mode value">'+
-                        '<select class="classify-mode">'+
+                '<div class="classification-mode visible-map-style-choropleth visible-map-style-points">' +
+                    '<div class="label">' + this.locale('classify.mode') + '</div>' +
+                    '<div class="classify-mode value">' +
+                        '<select class="classify-mode">' +
                             // FIXME: use classificationService.getAvailableModes()
-                            '<option value="distinct" selected="selected">'+ this.locale('classify.modes.distinct') +'</option>'+
-                            '<option value="discontinuous">'+ this.locale('classify.modes.discontinuous') +'</option>'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
+                            '<option value="distinct" selected="selected">' + this.locale('classify.modes.distinct') + '</option>' +
+                            '<option value="discontinuous">' + this.locale('classify.modes.discontinuous') + '</option>' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
 
                 // points size
-                '<div class="point-size oskariui visible-map-style-points visible-on-vector">'+
-                    '<div class="label">'+ this.locale('classify.map.pointSize') +'</div>'+
-                    '<div class="minmaxlabels"><div class="min">'+ this.locale('classify.map.min') +'</div><div class="max">'+ this.locale('classify.map.max') +'</div><div class="clear"></div></div>' +
-                    '<div class="point-range value">'+
-                    '</div>'+
-                '</div>'+
+                '<div class="point-size oskariui visible-map-style-points visible-on-vector">' +
+                    '<div class="label">' + this.locale('classify.map.pointSize') + '</div>' +
+                    '<div class="minmaxlabels"><div class="min">' + this.locale('classify.map.min') + '</div><div class="max">' + this.locale('classify.map.max') + '</div><div class="clear"></div></div>' +
+                    '<div class="point-range value">' +
+                    '</div>' +
+                '</div>' +
 
                 // numeric value
-                '<div class="numeric-value visible-map-style-points visible-on-vector">'+
-                '</div>'+
+                '<div class="numeric-value visible-map-style-points visible-on-vector">' +
+                '</div>' +
 
                 // colors
-                '<div class="classification-colors visible-map-style-choropleth visible-map-style-points">'+
-                    '<div class="label visible-map-style-choropleth">'+ this.locale('colorset.button') +'</div>'+
-                    '<div class="label visible-map-style-points">'+ this.locale('classify.map.color') +'</div>'+
-                    '<div class="classification-colors value">'+
+                '<div class="classification-colors visible-map-style-choropleth visible-map-style-points">' +
+                    '<div class="label visible-map-style-choropleth">' + this.locale('colorset.button') + '</div>' +
+                    '<div class="label visible-map-style-points">' + this.locale('classify.map.color') + '</div>' +
+                    '<div class="classification-colors value">' +
 
-                    '</div>'+
-                    '<span class="visible-map-style-choropleth flip-colors"><input id="legend-flip-colors" type="checkbox"/><label for="legend-flip-colors">'+this.locale('colorset.flipButton')+'<label></span>'+
-                '</div>'+
+                    '</div>' +
+                    '<span class="visible-map-style-choropleth flip-colors"><input id="legend-flip-colors" type="checkbox"/><label for="legend-flip-colors">' + this.locale('colorset.flipButton') + '<label></span>' +
+                '</div>' +
 
                 // transparency
-                '<div class="point-transparency visible-map-style-points visible-on-vector">'+
-                    '<div class="label">'+ this.locale('classify.map.transparency') +'</div>'+
-                    '<div class="transparency-value value">'+
-                        '<select class="transparency-value">'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
+                '<div class="point-transparency visible-map-style-points visible-on-vector">' +
+                    '<div class="label">' + this.locale('classify.map.transparency') + '</div>' +
+                    '<div class="transparency-value value">' +
+                        '<select class="transparency-value">' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
 
-                '<div class="classification-color-set visible-map-style-choropleth">'+
-                    '<div class="label">'+ this.locale('colorset.setselection') +'</div>'+
-                    '<div class="color-set value">'+
-                        '<select class="color-set">'+
+                '<div class="classification-color-set visible-map-style-choropleth">' +
+                    '<div class="label">' + this.locale('colorset.setselection') + '</div>' +
+                    '<div class="color-set value">' +
+                        '<select class="color-set">' +
                             // FIXME: use colorService getAvailableTypes()
-                            '<option value="seq" selected="selected">'+ this.locale('colorset.seq') +'</option>'+
-                            '<option value="qual">'+ this.locale('colorset.qual') +'</option>'+
-                            '<option value="div">'+ this.locale('colorset.div') +'</option>'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
-            '</div>'+
+                            '<option value="seq" selected="selected">' + this.locale('colorset.seq') + '</option>' +
+                            '<option value="qual">' + this.locale('colorset.qual') + '</option>' +
+                            '<option value="div">' + this.locale('colorset.div') + '</option>' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
+
+                // decimal places
+                '<div class="decimal-place visible-map-style-choropleth visible-map-style-points">' +
+                    '<div class="label">' + this.locale('classify.map.fractionDigits') + '</div>' +
+                    '<div class="decimal-place value">' +
+                        '<select class="decimal-place">' +
+                        '<option value="0">0</option>' +
+                        '<option value="1" selected="selected">1</option>' +
+                        '<option value="2">2</option>' +
+                        '<option value="3">3</option>' +
+                        '<option value="4">4</option>' +
+                        '<option value="5">5</option>' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
             '</div>')
 
     };
@@ -120,7 +135,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
     this._rangeSlider = {
         min: 10,
         max: 120,
-        defaultValues: [10,60],
+        defaultValues: [10, 60],
         step: 5,
         element: null
     };
@@ -142,13 +157,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         if (layer.getId() === me.LAYER_ID) {
             var transparencyEl = me._element.find('select.transparency-value');
             transparencyEl.find('option#hiddenvalue').remove();
-            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + layer.getOpacity() + ' %' +'</option>');
+            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + layer.getOpacity() + ' %' + '</option>');
             hiddenOption.attr('value', layer.getOpacity());
             hiddenOption.hide();
             hiddenOption.attr('selected', 'selected');
             transparencyEl.append(hiddenOption);
             transparencyEl.trigger('chosen:updated');
-
         }
     },
     /**
@@ -162,6 +176,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             // not rendered yet
             return;
         }
+        me._rangeSlider.element.slider();
+
         var service = me.service;
         var state = service.getStateService();
         var ind = state.getActiveIndicator();
@@ -197,9 +213,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
         me._element.find('select.amount-class').val(classification.count);
 
-        me._element.find('select.classify-mode').val(classification.mode);
+        var mode = me._element.find('select.classify-mode');
+        mode.val(classification.mode);
         me._element.find('select.color-set').val(classification.type);
-        me._element.find('#legend-flip-colors').attr('checked', classification.reverseColors);
+        me._element.find('#legend-flip-colors').prop('checked', !!classification.reverseColors);
         // update color selection values
         var colors = service.getColorService().getDefaultSimpleColors();
         if (mapStyle === 'choropleth') {
@@ -210,8 +227,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._colorSelect.setValue(classification.name, true, true);
         me._colorSelect.refresh();
 
+        var decimalSelect = me._element.find('select.decimal-place');
+        decimalSelect.val(typeof classification.fractionDigits === 'number' ? classification.fractionDigits : 1);
+
         // disable invalid choices
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function (err, data) {
+        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
             if (err) {
                 // propably nothing to tell the user at this point. There will be some invalid choices available on the form
                 return;
@@ -222,11 +242,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 options.each(function (index, opt) {
                     opt = jQuery(opt);
                     if (opt.val() > validOptions.maxCount) {
-                        opt.attr('disabled', true);
+                        opt.prop('disabled', true);
                     }
                 });
             }
 
+            // Discontinuous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
+            // Disabling it for data series.
+            var modeOpts = mode.find('option');
+            modeOpts.each(function (index, opt) {
+                opt = jQuery(opt);
+                if (opt.val() === 'discontinuous') {
+                    opt.prop('disabled', ind.series !== undefined);
+                }
+            });
         });
         var min = classification.min || me._rangeSlider.defaultValues[0];
         var max = classification.max || me._rangeSlider.defaultValues[1];
@@ -249,7 +278,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
         }
     },
-
     /**
      * @method  @public getSelectedValues gets selected values
      * @return {Object} selected values object
@@ -263,13 +291,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             mode: me._element.find('select.classify-mode').val(),
             type: me._element.find('select.color-set').val(),
             name: me._colorSelect.getValue(),
-            reverseColors: me._element.find('#legend-flip-colors').attr('checked'),
+            reverseColors: me._element.find('#legend-flip-colors').is(':checked'),
             mapStyle: me._element.find('select.map-style').val(),
             // only used for points vector
             min: range[0],
             max: range[1],
             transparency: me._element.find('select.transparency-value').val(),
-            showValues: (me._showNumericValueCheckButton.getValue() === 'on')
+            showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
+            fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
 
         if (values.mapStyle !== 'points') {
@@ -302,8 +331,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         if (!service.hasMapMode('vector')) {
             me._element.find('.visible-on-vector').remove();
         }
-
-        me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+        if (!me._colorSelect) {
+            me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+        }
         me._element.find('.classification-colors.value').append(me._colorSelect.getElement());
 
         var stateService = me.service.getStateService();
@@ -352,9 +382,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         this.setEnabled(this.__enabled);
 
         me._colorSelect.setHandler(updateClassification);
-        me._element.find('select').bind('change', updateClassification);
+        me._element.find('select').on('change', updateClassification);
+        me._element.find('select.decimal-place').on('change', function() {
+            var stateService = me.service.getStateService();
+            var indicator = stateService.getActiveIndicator();
+            stateService.setActiveIndicator(indicator.hash);
+        });
 
-        me._element.find('#legend-flip-colors').change(function () {
+        me._element.find('#legend-flip-colors').on('change', function () {
             updateClassification();
         });
         return me._element;
@@ -376,6 +411,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._element.find('select').prop('disabled', !enabled).trigger('chosen:updated');
         me._element.find('button').prop('disabled', !enabled);
         me._colorSelect.setEnabled(enabled);
-        me._element.find('.point-range').slider('option','disabled', !enabled);
+        me._element.find('.point-range').slider('option', 'disabled', !enabled);
     }
 });

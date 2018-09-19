@@ -625,15 +625,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * @param {Function} callback function receives a boolean parameter with true on successful operation
          */
         publishCategory: function (categoryId, makePublic, callback) {
-            var me = this,
-                category = me.findCategory(categoryId);
+            var me = this;
+            var category = me.findCategory(categoryId);
             if (!category) {
                 // category not found
                 callback(false);
+                return;
             }
             var ajaxUrl = me._sandbox.getAjaxUrl();
             jQuery.ajax({
-                type: "GET",
+                type: 'POST',
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {

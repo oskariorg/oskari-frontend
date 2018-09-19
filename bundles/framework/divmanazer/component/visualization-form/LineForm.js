@@ -195,7 +195,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(styleBtnContainer);
                 }
                 // FIXME create function outside loop
-                styleBtnContainer.click(function () {
+                styleBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
                     me._selectButton('style', newValue);
                     me.values.style = newValue;
@@ -214,7 +214,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(capBtnContainer);
                 }
                 // FIXME create function outside loop
-                capBtnContainer.click(function () {
+                capBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('cap', newValue);
                     me.values.cap = newValue;
@@ -233,7 +233,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(cornerBtnContainer);
                 }
                 // FIXME create function outside loop
-                cornerBtnContainer.click(function () {
+                cornerBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('corner', newValue);
                     me.values.corner = newValue;
@@ -245,7 +245,7 @@ Oskari.clazz.define(
             // Line width
             content = dialogContent.find('div.width');
             var widthSpinner = me.templateWidthValue.clone();
-            widthSpinner.change(function () {
+            widthSpinner.on('change', function () {
                 var newValue = parseInt(widthSpinner.val(), 10);
                 if (!isNaN(newValue)) {
                     me.values.width = newValue;
@@ -272,9 +272,9 @@ Oskari.clazz.define(
                     id = '0' + id;
                 }
                 colorCell.attr('id', id);
-                colorCell.click(function () {
+                colorCell.on('click', function () {
                     if (jQuery('.color-source').prop('checked')) {
-                        jQuery('.color-source').attr('checked', false);
+                        jQuery('.color-source').prop('checked', false);
                         jQuery('input.custom-color').prop('disabled', true);
                     }
                     cellIndex = parseInt(this.id.substring(0, 2), 10);
@@ -311,9 +311,9 @@ Oskari.clazz.define(
             var colorCheckbox = me.templateColorSource.clone();
             // If the default value is not included in the color cells
             if (me.activeColorCell === -1) {
-                colorCheckbox.attr('checked', true);
+                colorCheckbox.prop('checked', true);
             }
-            colorCheckbox.change(function () {
+            colorCheckbox.on('change', function () {
                 jQuery('input.custom-color').prop('disabled', !this.checked);
                 var cell = me.activeColorCell.toString();
                 if (me.activeColorCell < 10) {
@@ -337,7 +337,7 @@ Oskari.clazz.define(
             // select user colors checkbox
             if (!statedChosenColor) {
                 colorCheckbox.checked = true;
-                content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
+                content.find('input.color-source').prop('disabled', false).prop('checked', true);
             }
 
             content = dialogContent.find('.custom-colors');
@@ -381,7 +381,7 @@ Oskari.clazz.define(
                 dialogContent.find('input.custom-color').prop('disabled', false);
             }
 
-            dialogContent.find('.custom-color').change(function () {
+            dialogContent.find('.custom-color').on('change', function () {
                 var values = [],
                     i,
                     intValue;

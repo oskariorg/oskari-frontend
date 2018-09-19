@@ -92,7 +92,7 @@ define([
                 }
                 if (layer.getMetadataIdentifier()) {
                     tools.find('div.layer-info').addClass('icon-info');
-                    tools.find('div.layer-info').click(function () {
+                    tools.find('div.layer-info').on('click', function () {
                         var rn = 'catalogue.ShowMetadataRequest',
                             uuid = layer.getMetadataIdentifier(),
                             additionalUuids = [],

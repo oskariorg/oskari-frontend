@@ -219,10 +219,10 @@ Oskari.clazz.define(
                     jQuery('<label for="pti_tour_seen"></label>');
                 var label = labelTemplate.clone();
                 label.append(this._localization.tourseen.label);
-                checkbox.bind(
+                checkbox.on(
                     'change',
                     function () {
-                        if (jQuery(this).attr('checked')) {
+                        if ( jQuery(this).is(':checked') ) {
                             // Set cookie not to show guided tour again
                             jQuery.cookie(
                                 'pti_tour_seen', '1', {
@@ -249,7 +249,7 @@ Oskari.clazz.define(
                 dialog.resetPosition();
             }
         },
-        _moveGuideStep: function(delta, dialog){
+        _moveGuideStep: function(delta, dialog) {
             var currentStep = this._guideSteps[this.guideStep];
             if(currentStep.hide) {
                 currentStep.hide();

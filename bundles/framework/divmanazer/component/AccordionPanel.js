@@ -7,7 +7,6 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
 
     /**
      * @method create called automatically on construction
-     * TODO: close/open methods?
      * @static
      */
     function () {
@@ -25,10 +24,10 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
         this.content = null;
         this.html = this.template.clone();
 
-        var me = this,
-            header = me.html.find('div.header');
+        var me = this;
+        var header = me.html.find('div.header');
 
-        header.click(function () {
+        header.on('click', function () {
             if (me.isOpen()) {
                 me.close();
             } else {
@@ -121,6 +120,14 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
             header.attr('id', id);
         },
         /**
+         * @method addClass
+         * adds a class for the whole components container that enables easier styling/selector for UI tests
+         * @param {String} id id for the panel
+         */
+        addClass: function (cssClass) {
+            this.html.addClass(cssClass);
+        },
+        /**
          * @method setContent
          * Sets the panel content.
          * This can be also done with #getContainer()
@@ -136,8 +143,8 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
          * Destroys the panel/removes it from document
          */
         destroy: function () {
-            if( !this.html){
-              return;
+            if (!this.html) {
+                return;
             }
             this.html.remove();
         },

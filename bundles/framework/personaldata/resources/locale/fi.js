@@ -5,11 +5,12 @@ Oskari.registerLocalization(
     "value": {
         "title": "Omat tiedot",
         "desc": "Omat tiedot",
-        "notLoggedIn": "Kirjautuneena käyttäjävä voit tarkistaa täällä käyttäjätietosi sekä omat kohteesi, karttanäkymäsi, upotetut karttasi, indikaattorisi, analyysisi ja aineistosi.",
+        "notLoggedIn": "Kirjautuneena käyttäjänä voit tarkistaa täällä käyttäjätietosi sekä omat kohteesi, karttanäkymäsi, upotetut karttasi, indikaattorisi, analyysisi ja aineistosi.",
         "notLoggedInText": "Kirjaudu sisään",
+        "register": "Rekisteröidy",
         "projectionError": {
             "title" : "Projektiot eivät ole yhteensopivia",
-            "msg": "Vaihdetaan projektiota karttajulkaisun muokkauksen mahdollistamiseksi.",
+            "msg": "Sivu ladataan uudelleen projektion vaihtamiseksi.",
             "ok": "OK",
             "cancel": "Peruuta"
         },

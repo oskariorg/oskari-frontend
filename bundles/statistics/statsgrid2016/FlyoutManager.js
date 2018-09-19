@@ -5,35 +5,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     Oskari.makeObservable(this);
 
     this.flyoutInfo = [
-    {
-        id : 'search',
-        title: loc.tile.search,
-        oskariClass :'Oskari.statistics.statsgrid.view.SearchFlyout'
-    },
-    {
-        id : 'table',
-        title: loc.tile.table,
-        oskariClass :'Oskari.statistics.statsgrid.view.TableFlyout'
-    },
-    {
-        id : 'diagram',
-        title: loc.tile.diagram,
-        oskariClass :'Oskari.statistics.statsgrid.view.DiagramFlyout'
-    }
+        {
+            id: 'search',
+            title: loc.tile.search,
+            oskariClass: 'Oskari.statistics.statsgrid.view.SearchFlyout'
+        },
+        {
+            id: 'table',
+            title: loc.tile.table,
+            oskariClass: 'Oskari.statistics.statsgrid.view.TableFlyout'
+        },
+        {
+            id: 'diagram',
+            title: loc.tile.diagram,
+            oskariClass: 'Oskari.statistics.statsgrid.view.DiagramFlyout'
+        },
+        {
+            id: 'indicatorForm',
+            hideTile: true,
+            title: loc.userIndicators.flyoutTitle || 'Add indicator',
+            oskariClass: 'Oskari.statistics.statsgrid.view.IndicatorFormFlyout'
+        }
     ];
 }, {
     init: function () {
-        if(Object.keys(this.flyouts).length) {
+        if (Object.keys(this.flyouts).length) {
             // already initialized
             return;
         }
         var me = this;
-        var p = jQuery( "#mapdiv" );
+        var p = jQuery('#mapdiv');
         var position = p.position().left;
         var offset = 40;
 
-        var tile = me.instance.plugins['Oskari.userinterface.Tile'];
-        this.flyoutInfo.forEach(function(info) {
+        this.flyoutInfo.forEach(function (info) {
             var flyout = Oskari.clazz.create(info.oskariClass, info.title, {
                 width: 'auto',
                 pos: {
@@ -42,43 +47,43 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                 }
             }, me.instance);
             flyout.makeDraggable({
-                handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
-                scroll : false
+                handle: '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
+                scroll: false
             });
 
             flyout.bringToTop();
-            flyout.on('hide', function() {
+            flyout.on('hide', function () {
                 me.trigger('hide', info.id);
             });
             me.flyouts[info.id] = flyout;
             position = position + flyout.getSize().width;
         });
     },
-    open: function ( type ) {
+    open: function (type) {
         var me = this;
         var flyout = me.flyouts[type];
-        if(!flyout) {
+        if (!flyout) {
             return;
         }
         flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
         flyout.show();
         this.trigger('show', type);
     },
-    hide: function ( type ) {
+    hide: function (type) {
         var me = this;
         var flyout = me.flyouts[type];
-        if(!flyout) {
+        if (!flyout) {
             return;
         }
         flyout.hide();
     },
-    toggle: function ( type ) {
+    toggle: function (type) {
         var flyout = this.getFlyout(type);
-        if(!flyout) {
+        if (!flyout) {
             // unrecognized flyout
             return;
         }
-        if(flyout.isVisible()) {
+        if (flyout.isVisible()) {
             this.hide(type);
             return;
         }

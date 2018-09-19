@@ -573,11 +573,12 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         if(!category) {
             // category not found
             callback(false);
+            return;
         }
         var me = this;
         var ajaxUrl = this._sandbox.getAjaxUrl();
         jQuery.ajax({
-            type : "GET",
+            type : 'POST',
             dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {

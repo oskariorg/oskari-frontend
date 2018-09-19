@@ -10,7 +10,10 @@ module.exports = {
       "jQuery": true,
       "MobileDetect": true,
       "DOMPurify": true,
-      "_":true
+      "_": true,
+      "ol": true,
+      "olcs": true,
+      "Cesium": true
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
   extends: 'standard',

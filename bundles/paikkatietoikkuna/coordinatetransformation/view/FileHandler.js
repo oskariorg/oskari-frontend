@@ -1,56 +1,118 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
-    function (instance, loc) {
+    function (helper, loc, type) {
         var me = this;
-        me.instance = instance;
-        me.dataHandler = instance.dataHandler;
+        Oskari.makeObservable(this);
+        me.helper = helper;
         me.loc = loc;
-        me.element = {
-            import: null, 
-            export: null
-        }
-        me._userSelections = { import: null, export: null };
+        me.element = null;
+        me.type = type; // import, export
+        me.infoPopup = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
+        me.fileInput;
+        me.settings = {};
+        me.dialog;
+        me.degreeSystem = true; //show degree systems options by default
         me._template = {
-            import: _.template(' <div class="oskari-import" > </br> ' +
-                                    '<div class="formatrow"> <b class="title">${format}</b> <div class="file-select">'+
-                                    '<select id="angletype">'+
-                                        '<option value="degree">${degree}</option>'+
-                                        '<option value="gradian">${gradian}</option>'+
-                                        '<option value="radian">${radian}</option>'+
-                                        '</select></div>'+
-                                    '<label class="lbl"><input id="useid" class="chkbox" type="checkbox">${id}</label> </div>'+
-                                    '<div class="separatorrow"> <b class="title">${decimalseparator}</b> <div class="file-select">'+
-                                    '<select id="decimalseparator">'+
-                                        '<option value="point">${point}</option>'+
-                                        '<option value="comma">${comma}</option>'+
-                                    '</select>'+
+            settings: _.template('<div class="coordinatetransformation-file-form">' +
+                                    '<% if (obj.export === true) { %> '+
+                                        '<div class="selection-wrapper fileName without-infolink">' +
+                                            '<b class="title">${fileName}</b>' +
+                                            '<input type="text">' +
+                                            //'<div class="infolink icon-info" data-selection="fileName"></div>' +
+                                        '</div>'+
+                                        '<div class="selection-wrapper decimalCount">'+
+                                            '<b class="title">${decimalCount}</b>'+
+                                            '<input type="number" value="0" min="0" max = "20" required> '+
+                                            '<div class="infolink icon-info" data-selection="decimalCount"></div>' +
+                                        '</div>'+
+                                        '<div class="selection-wrapper lineSeparator">'+
+                                            '<b class="title">${lineSeparator}</b> '+
+                                            '<div class="settingsSelect">'+
+                                                '<select>'+
+                                                    '<option value="win">Windows / DOS</option>'+
+                                                    '<option value="unix">Unix</option>'+
+                                                    '<option value="mac">MacOS</option>'+
+                                                '</select>'+
+                                            '</div>'+
+                                            '<div class="infolink icon-info" data-selection="lineSeparator"></div>' +
+                                        '</div>'+
+                                    '<% } else { %>'+
+                                        '<div class="selection-wrapper fileInput without-infolink"></div>'+
+                                        '<div class="selection-wrapper headerLineCount">'+
+                                            '<b class="title">${headerCount}</b>'+
+                                            '<input type="number" value="0" min="0" required> '+
+                                            '<div class="infolink icon-info" data-selection="headerLineCount"></div>' +
+                                        '</div>'+
+                                    '<% } %> ' +
+                                    '<div class="selection-wrapper unitFormat">'+
+                                        '<b class="title">${units.label}</b> '+
+                                        '<div class="settingsSelect">'+
+                                            '<select>'+
+                                                '<option value="degree">${units.degree}</option>'+
+                                                '<option value="gradian">${units.gradian}</option>'+
+                                                '<option value="radian">${units.radian}</option>'+
+                                                '<option value="DD">DD</option>'+
+                                                '<option value="DD MM SS">DD MM SS</option>'+
+                                                '<option value="DD MM">DD MM</option>'+
+                                                '<option value="DDMMSS">DDMMSS</option>'+
+                                                '<option value="DDMM">DDMM</option>'+
+                                            '</select>'+
+                                        '</div>'+
+                                        '<div class="infolink icon-info" data-selection="unitFormat"></div>' +
+                                    '</div>'+
+                                    '<div class="selection-wrapper decimalSeparator">'+
+                                        '<b class="title">${decimalSeparator}</b> '+
+                                        '<div class="settingsSelect">'+
+                                            '<select>'+
+                                                '<option value="" selected disabled>${choose}</option>'+
+                                                '<option value=".">${delimeters.point}</option>'+
+                                                '<option value=",">${delimeters.comma}</option>'+
+                                            '</select>'+
+                                        '</div>' +
+                                        '<div class="infolink icon-info" data-selection="decimalSeparator"></div>' +
                                     '</div>' +
-                                    '<label class="lbl"> <input id="reversecoordinates" class="chkbox" type="checkbox"> ${reversecoords}</label> </div>' +
-                                    '<div class="headerrow">  <b class="title">${headercount}</b> <input id="headerrow" type="number"> </div>'+
-                                    '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
-                                    '<input id="overlay-btn" class="import" type="button" value="${done}" />' +
-                                '</div>'
-                                ),
-            export: _.template(' <div class="oskari-export">' +
-                                    '<div class="filerow"> <b class="title">${filename}</b> <input id="filename" type="text"> </div>'+
-                                    '<div class="formatrow"> <b class="title">${format}</b> <div class="file-select">'+
-                                    '<select id="angletype">'+
-                                        '<option value="degree">${degree}</option>'+
-                                        '<option value="gradian">${gradian}</option>'+
-                                        '<option value="radian">${radian}</option>'+
-                                        '</select></div>'+
-                                    '<label class="lbl"><input id="useid" class="chkbox" type="checkbox">${id}</label> </div>'+
-                                    '<div class="separatorrow"> <b class="title">${decimalseparator}</b> <div class="file-select">'+
-                                    '<select id="decimalseparator">'+
-                                        '<option value="point">${point}</option>'+
-                                        '<option value="comma">${comma}</option>'+
-                                    '</select>'+
+                                    '<div class="selection-wrapper coordinateSeparator">'+
+                                        '<b class="title">${coordinateSeparator}</b> '+
+                                        '<div class="settingsSelect">'+
+                                            '<select>'+
+                                                '<option value="" selected disabled>${choose}</option>'+
+                                                '<option value="tab">${delimeters.tab}</option>'+
+                                                '<option value="space">${delimeters.space}</option>'+
+                                                '<option value="comma">${delimeters.comma}</option>'+
+                                                '<option value="semicolon">${delimeters.semicolon}</option>'+
+                                            '</select>'+
+                                        '</div>' +
+                                        '<div class="infolink icon-info" data-selection="coordinateSeparator"></div>' +
                                     '</div>' +
-                                    '<label class="lbl"> <input id="reversecoordinates" class="chkbox" type="checkbox"> ${reversecoords}</label> </div>' +
-                                    '<div class="headerrow">  <b class="title">${headercount}</b> <input id="headerrow" type="number"> </div>'+
-                                    '<input id="overlay-btn" class="cancel" type="button" value="${cancel} " />' +
-                                    '<input id="overlay-btn" class="export" type="button" value="${fileexport}" />' +
-                                '</div>'
-                                ),
+                                    '<label class="lbl prefixId">' +
+                                        '<input class="chkbox" type="checkbox">' +
+                                        '<span>${prefixId}</span>' +
+                                        '<div class="infolink icon-info" data-selection="prefixId"></div>' +
+                                    '</label>'+
+                                    '<label class="lbl reverseCoordinates">' +
+                                        '<input class="chkbox" type="checkbox">' +
+                                        '<span>${reverseCoords}</span>' +
+                                        '<div class="infolink icon-info" data-selection="reverseCoordinates"></div>' +
+                                    '</label> '+
+                                    '<% if (obj.export === true) { %>'+
+                                        '<label class="lbl writeHeader">' +
+                                            '<input class="chkbox" type="checkbox">' +
+                                            '<span>${writeHeader}</span>' +
+                                            '<div class="infolink icon-info" data-selection="writeHeader"></div>' +
+                                        '</label>'+
+                                        '<label class="lbl lineEnds">' +
+                                            '<input class="chkbox" type="checkbox">' +
+                                            '<span>${lineEnds}</span>' +
+                                            '<div class="infolink icon-info" data-selection="lineEnds"></div>' +
+                                        '</label>'+
+                                        '<label class="lbl useCardinals">' +
+                                            '<input class="chkbox" type="checkbox">' +
+                                            '<span>${useCardinals}</span>' +
+                                            '<div class="infolink icon-info" data-selection="useCardinals"></div>' +
+                                        '</label>'+
+                                    '<% } %>' +
+                                '</div>' +
+                            '</div>'
+                                )
         } 
     }, {
         getElement: function() {
@@ -62,122 +124,177 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         getName: function() {
             return 'Oskari.coordinatetransformation.view.FileHandler';
         },
-        create: function() {
-            var me = this;
-            var fileexport = this._template.export({ title: me.loc.filesetting.export.title,
-                                                      filename:me.loc.filesetting.export.filename,
-                                                      format: me.loc.filesetting.general.format,
-                                                      decimalseparator: me.loc.filesetting.general.decimalseparator,
-                                                      id: me.loc.filesetting.general.id,
-                                                      reversecoords: me.loc.filesetting.general.reversecoords,
-                                                      headercount: me.loc.filesetting.general.headercount,
-                                                      cancel: me.loc.utils.cancel,
-                                                      fileexport: me.loc.utils.export,
-                                                      degree:me.loc.filesetting.general.degree,
-                                                      gradian:me.loc.filesetting.general.gradian,
-                                                      radian: me.loc.filesetting.general.radian,
-                                                      point: me.loc.filesetting.general.point,
-                                                      comma: me.loc.filesetting.general.comma
-                                                    });
-            var fileimport = this._template.import({   format: me.loc.filesetting.general.format,
-                                                      decimalseparator: me.loc.filesetting.general.decimalseparator,
-                                                      id: me.loc.filesetting.general.id,
-                                                      reversecoords: me.loc.filesetting.general.reversecoords,
-                                                      headercount: me.loc.filesetting.general.headercount,
-                                                      cancel: me.loc.utils.cancel,
-                                                      done: me.loc.utils.done,
-                                                      degree:me.loc.filesetting.general.degree,
-                                                      gradian:me.loc.filesetting.general.gradian,
-                                                      radian: me.loc.filesetting.general.radian,
-                                                      point: me.loc.filesetting.general.point,
-                                                      comma: me.loc.filesetting.general.comma 
-                                                    });
-
-            this.setElement( { import: fileimport, export: fileexport } );
-        },
-        /**
-         * @method getExportSettings
-         * {function} callback, send the settings back to callback-function
-         * {context} context in which to look for elements
-         */
-        getExportSettings: function (cb, ctx, caller) {
-            jQuery(ctx).find('.export').on("click", function () {
-                var el = jQuery(this).parent();
-                var settings = {
-                    filename: el.find('#filename').val(),
-                    angle: el.find('#angletype option:checked').val(),
-                    decimalseparator: el.find('#decimalseparator option:checked').val(),
-                    id: el.find('#useid').is(":checked"),
-                    reversecoordinates: el.find('#reversecoordinates').is(":checked"),
-                    headerrow: el.find('#headerrow').val(),
-                }
-                cb( settings );
-                if( caller ) {
-                    caller.close(true);
-                }
-            });
-            jQuery( ctx ).find('.cancel').on("click", function () {
-                if( caller ) {
-                    caller.close(true);
-                }
-            });
-        },
-        /**
-         * @method getImportSettings
-         * {function} callback, send the settings back to callback-function
-         * {context} context in which to look for elements
-         */
-        getImportSettings: function (cb, ctx, caller) {
-            jQuery( ctx ).find('.import').on("click", function () {
-            var el = jQuery(this).parent();
-            var settings = {
-                    angle: el.find('#angletype option:checked').val(),
-                    decimalseparator: el.find('#decimalseparator option:checked').val(),
-                    id: el.find('#useid').is(":checked"),
-                    reversecoordinates: el.find('#reversecoordinates').is(":checked"),
-                    headerrow: el.find('#headerrow').val(),
-                }
-                cb( settings );
-                if( caller ) {
-                    caller.close(true);
-                }
-            });
-            jQuery( ctx ).find('.cancel').on("click", function () {
-                if( caller ) {
-                    caller.close(true);
-                }
-            });
-        },
-        showFileDialogue: function( content, shouldExport ) {
-            var jc = jQuery(content);
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.makeDraggable();
-            dialog.createCloseIcon();
-            if( shouldExport ) {
-                dialog.show(this.loc.filesetting.export.title, jc);
-                this.file.getExportSettings( this.exportFile.bind(this), dialog.getJqueryContent(), dialog );
-            } else {
-                dialog.show(this.loc.filesetting.import.title, jc);
-                this.file.getImportSettings(  this.importSettings.bind(this), dialog.getJqueryContent(), dialog );
+        getSettings: function (){
+            // force unit to metric for non-degree systems
+            if (this.degreeSystem === false && this.settings.selects){
+                this.settings.selects.unit = "metric";
             }
+            return this.settings;
         },
-        importSettings: function ( settings ) {
-            this._userSelections = { "import": settings };
+        setIsDegreeSystem: function (isDegree){
+            this.degreeSystem = !!isDegree;
         },
+        create: function() {
+            var fileSettings,
+                element;
+            fileSettings = {
+                export: false,
+                fileName: this.loc('fileSettings.export.fileName'),
+                decimalSeparator: this.loc('fileSettings.options.decimalSeparator'),
+                coordinateSeparator: this.loc('fileSettings.options.coordinateSeparator'),
+                prefixId: this.loc('fileSettings.options.useId'),
+                reverseCoords: this.loc('fileSettings.options.reverseCoords'),
+                headerCount: this.loc('fileSettings.options.headerCount'),
+                decimalCount: this.loc('fileSettings.options.decimalCount'),
+                units: this.loc('fileSettings.options.degreeFormat'),
+                delimeters: this.loc('fileSettings.options.delimeters'),
+                writeHeader: this.loc('fileSettings.options.writeHeader'),
+                lineEnds: this.loc('fileSettings.options.lineEnds'),
+                useCardinals: this.loc('fileSettings.options.useCardinals'),
+                lineSeparator: this.loc('fileSettings.options.lineSeparator.label'),
+                choose: this.loc('fileSettings.options.choose')
+            };
+            if (this.type === "export"){
+                fileSettings.export = true;
+            }
+            element = jQuery(this._template.settings(fileSettings));
+            if (this.type === "import"){
+                this.fileInput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', {
+                    'allowMultipleFiles': false,
+                    'maxFileSize': 50,
+                    'allowedFileTypes': ["text/plain", "text/csv"],
+                    'allowedFileExtensions': ["txt", "csv"],
+                    'showNoFile': false
+                });
+                element.find('.fileInput').append(this.fileInput.getElement());
+            }
+            this.setElement( element );
+            this.setTooltips();
+        },
+        /*createEventHandlers: function ( dialog ) {
+            var me = this;
+            jQuery( '.oskari-coordinate-form' ).on('click', '.done', function () {
+                me.trigger('GetSettings', me.getFormSelections() );
+                dialog.close();
+            });
+
+            jQuery( '.oskari-coordinate-form' ).on('click', '.cancel', function () {
+                dialog.close();
+            });
+        },*/
+        /**
+         * @method getFormSelections
+         */
+        getFormSelections: function () {
+            //var element = jQuery('.oskari-coordinate-form');
+            var element = this.getElement();
+            var settings = {
+                fileName: element.find('.fileName input').val(),
+                unit: element.find('.unitFormat option:checked').val(),
+                decimalSeparator: element.find('.decimalSeparator option:checked').val(),
+                coordinateSeparator: element.find('.coordinateSeparator option:checked').val(),
+                prefixId: element.find('.prefixId input').is(":checked"),
+                axisFlip: element.find('.reverseCoordinates input').is(":checked"),
+                headerLineCount: element.find('.headerLineCount input').val(),
+                lineSeparator: element.find(".lineSeparator option:checked").val(),
+                decimalCount: element.find('.decimalCount input').val(),
+                writeHeader: element.find('.writeHeader input').is(":checked"),
+                writeLineEndings: element.find('.lineEnds').is(":checked"),
+                writeCardinals: element.find('.useCardinals input').is(":checked")
+            }
+            return settings;
+        },
+        showFileDialogue: function(callback) {
+            if (this.dialog){
+                this.dialog.close(true);
+                this.dialog = null;
+            }
+            var me = this;
+            var elem = this.getElement();
+            var formatRow = elem.find('.unitFormat');
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var title = this.type === "import" ? this.loc('fileSettings.import.title') : this.loc('fileSettings.export.title');
+            var btnText = this.type === "import" ? this.loc('actions.done') : this.loc('actions.export');
+            var cancelBtn =  dialog.createCloseButton(this.loc('actions.cancel'));
+            var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var decimalInput = elem.find('.decimalCount input');
+            btn.addClass('primary');
+            btn.setTitle(btnText);
+            btn.setHandler(function() {
+                me.settings.selects = me.getFormSelections();
+                me.settings.file = me.fileInput.getFiles();
+                me.settings.type = me.type;
+                if (me.helper.validateFileSelections(me.settings) === false){
+                    return;
+                }
+                if (typeof callback === "function"){
+                    callback(me.getSettings());
+                }
+                dialog.close();
+            });
+            dialog.createCloseIcon();
+            dialog.makeDraggable();
+            if (this.degreeSystem === false){
+                formatRow.css("display","none");
+                decimalInput.val(4);
+            } else {
+                formatRow.css("display","");
+                decimalInput.val(7);
+            }
+            this.bindInfoLinks();
+            // HACK //
+            //TODO handle listeners if fileinput is moved to file settings form instead of flyout
+            if(this.type === "import" && jQuery._data(this.fileInput.getElement().get(0), "events") === undefined){
+                this.fileInput._bindAdvancedUpload();
+            }
+            dialog.show(title, elem, [cancelBtn, btn]);
+            this.dialog = dialog;
+            //this.createEventHandlers( dialog );
+
+        },
+        bindInfoLinks: function () {
+            var me = this;
+            this.getElement().find('.infolink').on('click', function ( event ) {
+                event.preventDefault();
+                var key = this.dataset.selection;
+                me.infoPopup.show(jQuery(this), key, true);
+            });
+        },
+        setTooltips: function (){
+            var infoElems = this.getElement().find('.infolink');
+            var infoLoc = this.loc('infoPopup');
+            infoElems.each(function(){
+                var key = this.dataset.selection;
+                var tooltip = infoLoc[key].info;
+                if(tooltip){
+                    jQuery(this).prop('title', tooltip);
+                }
+            });
+        }/*,
+        showInfoPopup: function(){
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var btn = dialog.createCloseButton(this.loc('actions.ok'));
+            btn.addClass('primary');
+            btn.setHandler( function () {
+                dialog.close(true);
+            });
+            dialog.show("title", "info", [btn]);
+            dialog.moveTo(this);
+            dialog.makeDraggable();
+
+        },*/
+        /*
         exportFile: function ( settings ) {
-            var exportArray = [];
-            this.dataHandler.getCoordinateObject().forEach( function ( pair ) {
-                exportArray.push( pair.input );
-            });  
+            var exportArray = this.dataHandler.getOutputCoords();
+            //this.dataHandler.getCoordinateObject().forEach( function ( pair ) {
+            //    exportArray.push( pair.input );
+            //});
             if( exportArray.length !== 0 ) {
                 this.fileInput.exportToFile( exportArray, settings.filename+'.txt' );
             } else {
                 Oskari.log(this.getName()).warn("No transformed coordinates to write to file!");
             }
-        },
-        getUserFileSettingSelections: function () {
-            return this._userSelections;
-        }
+        }*/
     }
 );
  

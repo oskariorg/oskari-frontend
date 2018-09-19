@@ -16,54 +16,31 @@ Oskari.clazz.define(
      *
      */
     function () {
-        var me = this;
-        me._clazz =
-            'Oskari.mapframework.mapmodule.ControlsPlugin';
-        me._name = 'ControlsPlugin';
-        me.boxZoom = null;
-        me.removedInteractions = [];
+        this._clazz = 'Oskari.mapframework.mapmodule.ControlsPlugin';
+        this._name = 'ControlsPlugin';
+        this.removedInteractions = [];
+        this.addedInteractions = [];
     }, {
-        /**
-         * @public @method hasUI
-         * This plugin doesn't have a UI, BUT it is controllable in publisher so it is added to map
-         * when publisher starts -> always return true to NOT get second navControl on map when publisher starts
-         * FIXME this is clearly a hack
-         *
-         * @return {Boolean} true
-         */
-        hasUI: function () {
-            return true;
-        },
-
-        /**
-         * @private @method _startPluginImpl
-         * Interface method for the plugin protocol
-         *
-         *
-         */
         _startPluginImpl: function () {
-            var me = this;
-            me._createMapInteractions();
+            this._createMapInteractions();
         },
-
+        _stopPluginImpl: function () {
+            this._clearLifetimeInteractions();
+        },
         _createEventHandlers: function () {
             return {
-                /**
-                * @method Toolbar.ToolSelectedEvent
-                * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
-                */
                 'DrawingEvent': function (event) {
-                    if(event.getId() !== 'measureline' && event.getId() !== 'measurearea') {
+                    if (event.getId() !== 'measureline' && event.getId() !== 'measurearea') {
                         // this isn't about measurements, stop processing it
                         return;
                     }
 
-                    var me = this,
-                        measureValue,
-                        data = event.getData(),
-                        finished = event.getIsFinished(),
-                        geoJson = event.getGeoJson(),
-                        geomMimeType = 'application/json';
+                    var me = this;
+                    var measureValue;
+                    var data = event.getData();
+                    var finished = event.getIsFinished();
+                    var geoJson = event.getGeoJson();
+                    var geomMimeType = 'application/json';
 
                     if (data.showMeasureOnMap) {
                         return;
@@ -75,25 +52,19 @@ Oskari.clazz.define(
                     }
 
                     if (data.shape === 'LineString') {
-                        measureValue = data.lenght;
+                        measureValue = data.length;
                     } else if (data.shape === 'Polygon') {
-                         measureValue = data.area;
+                        measureValue = data.area;
                     }
-                    var reqBuilder = me.getSandbox().getRequestBuilder('ShowMapMeasurementRequest');
-                    if(reqBuilder) {
+                    var reqBuilder = Oskari.requestBuilder('ShowMapMeasurementRequest');
+                    if (reqBuilder) {
                         me.getSandbox().request(me, reqBuilder(measureValue, finished, geoJson, geomMimeType));
                     }
                 },
-                /**
-                 * @method Toolbar.ToolSelectedEvent
-                 * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
-                 */
-
                 'Toolbar.ToolSelectedEvent': function (event) {
-                    if ( event._toolId !== "zoombox" ) {
-                        this.disableMouseDragZoom();
+                    if (event._toolId !== 'zoombox') {
+                        this._clearLifetimeInteractions();
                     }
-                    return;
                 }
             };
         },
@@ -107,40 +78,52 @@ Oskari.clazz.define(
                     me.getSandbox(),
                     me
                 ),
-                'EnableMapKeyboardMovementRequest' : mapMovementHandler,
-                'DisableMapKeyboardMovementRequest' : mapMovementHandler,
-                'EnableMapMouseMovementRequest' : mapMovementHandler,
-                'DisableMapMouseMovementRequest' : mapMovementHandler
+                'EnableMapKeyboardMovementRequest': mapMovementHandler,
+                'DisableMapKeyboardMovementRequest': mapMovementHandler,
+                'EnableMapMouseMovementRequest': mapMovementHandler,
+                'DisableMapMouseMovementRequest': mapMovementHandler
             };
         },
-        disableMouseDragZoom: function () {
+        _clearLifetimeInteractions: function () {
             var me = this;
-            if ( this.boxZoom ) {
-                this.getMap().removeInteraction( this.boxZoom );
-            }
-            this.removedInteractions.forEach( function ( interaction ) {
-                me.getMap().addInteraction( interaction );
+            this.addedInteractions.forEach(function (interaction) {
+                me.getMap().removeInteraction(interaction);
+            });
+            this.removedInteractions.forEach(function (interaction) {
+                me.getMap().addInteraction(interaction);
             });
             this.removedInteractions = [];
+            this.addedInteractions = [];
         },
-        mouseDragZoomInteraction: function () {
+        disableDragPan: function () {
             var me = this;
-
-            me.getMap().getInteractions().forEach( function( interaction ) {
-                if ( interaction instanceof ol.interaction.DragPan || interaction instanceof ol.interaction.DragZoom ) {
-                    me.getMap().removeInteraction( interaction );
-                    me.removedInteractions.push( interaction );
+            var disable = me.getMap().getInteractions().getArray().filter(function (interaction) {
+                if (interaction instanceof ol.interaction.DragZoom) {
+                    return interaction;
+                }
+                if (interaction instanceof ol.interaction.DragPan) {
+                    return interaction;
                 }
             });
-            if ( !this.boxZoom ) {
-                this.boxZoom = new ol.interaction.DragZoom({
-                    condition: function ( mapBrowserEvent ) {
-                        return ol.events.condition.mouseOnly( mapBrowserEvent );
+            disable.forEach(function (toDisable) {
+                me.getMap().removeInteraction(toDisable);
+                me.removedInteractions.push(toDisable);
+            });
+        },
+        mouseDragZoomInteraction: function () {
+            var boxzoom = this.getMap().getInteractions().forEach(function (interaction) {
+                if (interaction instanceof ol.interaction.DragZoom) {
+                    return interaction;
+                }
+            });
+            if (!boxzoom) {
+                boxzoom = new ol.interaction.DragZoom({
+                    condition: function (mapBrowserEvent) {
+                        return ol.events.condition.mouseOnly(mapBrowserEvent);
                     }
                 });
             }
-
-            this.getMap().addInteraction( this.boxZoom );
+            this.getMap().addInteraction(boxzoom);
         },
         /**
          * @private @method _createMapControls
@@ -149,33 +132,34 @@ Oskari.clazz.define(
          *
          */
         _createMapInteractions: function () {
-            var me = this,
-            conf = me.getConfig();
+            var me = this;
+            var conf = me.getConfig();
             var mouseInteractionRemove = [];
             var kbInteractionRemove = [];
+            var interactions = me.getMap().getInteractions();
 
             // Map movement/keyboard control
             if (conf.keyboardControls === false) {
-              me.getMap().getInteractions().forEach( function( interaction ) {
-                if ( interaction instanceof ol.interaction.KeyboardPan || interaction instanceof ol.interaction.KeyboardZoom ) {
-                  kbInteractionRemove.push( interaction );
-                }
-              });
-              kbInteractionRemove.forEach( function ( interaction ) {
-                me.getMap().removeInteraction( interaction );
-              })
+                interactions.forEach(function (interaction) {
+                    if (interaction instanceof ol.interaction.KeyboardPan || interaction instanceof ol.interaction.KeyboardZoom) {
+                        kbInteractionRemove.push(interaction);
+                    }
+                });
+                kbInteractionRemove.forEach(function (interaction) {
+                    me.getMap().removeInteraction(interaction);
+                });
             }
 
             // mouse control
             if (conf.mouseControls === false) {
-              me.getMap().getInteractions().forEach(function(interaction){
-                if (interaction instanceof ol.interaction.DragPan ||interaction instanceof ol.interaction.MouseWheelZoom || interaction instanceof ol.interaction.DoubleClickZoom || interaction instanceof ol.interaction.DragZoom ){
-                  mouseInteractionRemove.push(interaction);
-                }
-              });
-              mouseInteractionRemove.forEach(function(interaction){
-                me.getMap().removeInteraction(interaction);
-              })
+                interactions.forEach(function (interaction) {
+                    if (interaction instanceof ol.interaction.DragPan || interaction instanceof ol.interaction.MouseWheelZoom || interaction instanceof ol.interaction.DoubleClickZoom || interaction instanceof ol.interaction.DragZoom) {
+                        mouseInteractionRemove.push(interaction);
+                    }
+                });
+                mouseInteractionRemove.forEach(function (interaction) {
+                    me.getMap().removeInteraction(interaction);
+                });
             }
         }
     }, {

@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
             if (this.panels.length === 1) {
                 // select first by default
                 this.select(panel);
-                headerContainer.bind('change', function () {
+                headerContainer.on('change', function () {
                     me.select(me.panels[this.selectedIndex]);
                 });
             }

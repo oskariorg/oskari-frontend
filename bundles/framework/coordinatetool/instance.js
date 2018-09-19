@@ -91,7 +91,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             me.setSandbox(sandbox);
             this.coordinateToolService = this.createService(sandbox, conf);
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var locale = this.getLocalization('display');
+            var locale = Oskari.getMsg.bind(null, 'coordinatetool');
             var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin', this, conf, locale, mapModule, sandbox);
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);

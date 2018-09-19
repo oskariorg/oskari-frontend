@@ -334,11 +334,16 @@ Oskari.registerLocalization(
             }
         },
         "fileInput": {
-            "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
-            "link":"valitse selaamalla",
+            "fileUpload": "Raahaa {files, plural, one {tiedosto} other {tiedostot}} tähän tai",
+            "link":"valitse selaamalla.",
             "uploading":"Ladataan",
             "success":"Valmis",
             "error":"Virhe!",
+            "invalidType": "Tiedostomuoto ei ole sallittu.",
+            "allowedExtensions": "Sallitut tiedostopäätteet: {allowedExtensions}.",
+            "multipleNotAllowed": "Anna vain yksi tiedosto.",
+            "fileSize": "Tiedoston koko on liian suuri. Suurin sallittu koko yksittäiselle tiedostolle on {size, number} Mt.",
+            "noFiles": "Ei tiedostoja."
         }
     }
 });

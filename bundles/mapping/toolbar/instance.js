@@ -165,7 +165,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 tbcontainer.removeClass('oskari-closed');
             }
             if (data.closeBoxCallback) {
-                tbcontainer.find(".oskariui-menutoolbar-closebox div").click(data.closeBoxCallback);
+                tbcontainer.find(".oskariui-menutoolbar-closebox div").on('click', data.closeBoxCallback);
             }
 
             return c;

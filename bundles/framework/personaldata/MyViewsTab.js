@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
               view.name = Oskari.util.sanitize(view.name);
               view.description = Oskari.util.sanitize(view.description);
             });
-            
+
             this.viewData = views;
 
             var model = this._getGridModel(views);
@@ -317,7 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var defaultViewRenderer = function (name, data) {
                 var input = me.templateDefaultGridView.clone();
                 input.prop('checked',data.isDefault);
-                input.bind('click', function () {
+                input.on('click', function () {
                     var view = me._getViewById(data.id);
                     var service = me.instance.getViewService();
 
@@ -351,7 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var nameRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     if(view.srsName !== sandbox.getMap().getSrsName()) {
                         window.location.href = view.url;
@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
                         me._editView(view);
@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var deleteRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
                         me._confirmDelete(view);
@@ -441,13 +441,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @private
          */
         _confirmDelete: function (view) {
-            var me = this,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(this.loc('tabs.myviews.delete'));
             okBtn.addClass('primary');
-
-            var sandbox = this.instance.sandbox;
             okBtn.setHandler(function () {
                 me._deleteView(view);
                 dialog.close();
@@ -469,15 +467,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @private
          */
         _deleteView: function (view) {
-            var me = this,
-                service = me.instance.getViewService();
+            var me = this;
+            var service = me.instance.getViewService();
             service.deleteView(view, function (isSuccess) {
                 if (isSuccess) {
-                    me._refreshViewsList();
+                    if (Oskari.app.getUuid() === view.uuid) {
+                        // Deleting the current map view. Load default view but don't lose user's layers.
+                        window.location.href = me._getDefaultViewUrlWithCurrentMapParams(view.srsName);
+                    } else {
+                        me._refreshViewsList();
+                    }
                 } else {
                     me._showErrorMessage(me.loc('tabs.myviews.error.notdeleted'));
                 }
             });
+        },
+        /**
+         * To get url for system's default view and maintaining user's layers and location.
+         *
+         * @method _getDefaultViewUrlWithCurrentMapParams
+         * @param {string} srsName EPSG code to specify which default view should be loaded.
+         * @private
+         *
+         * @return {string} url
+         */
+        _getDefaultViewUrlWithCurrentMapParams: function (srsName) {
+            var sandbox = this.instance.getSandbox();
+            var uuid;
+            var defaultViews = Oskari.app.getSystemDefaultViews();
+            defaultViews.forEach(function (defaultView) {
+                if (defaultView.srsName === srsName) {
+                    uuid = defaultView.uuid;
+                }
+            });
+            var url = sandbox.createURL('/?uuid=' + uuid, true);
+            url += sandbox.generateMapLinkParameters();
+            return url;
         },
         /**
          * Shows an error dialog to the user with given message

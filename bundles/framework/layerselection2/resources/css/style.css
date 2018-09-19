@@ -67,8 +67,7 @@ div.layerselection2 ul.selectedLayersList {
   padding: 0;
   margin: 0; }
   div.layerselection2 ul.selectedLayersList span {
-    position: absolute;
-    margin-left: -1.3em; }
+    position: absolute; }
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }

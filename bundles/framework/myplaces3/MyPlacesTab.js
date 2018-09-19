@@ -143,7 +143,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             var me = this;
             var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var center = mapModule.getCentroidFromGeoJSON(geometry);
-            var bounds = me._fitBounds(mapModule.getBoundsFromGeoJSON(geometry));
+            var bounds = mapModule.getBoundsFromGeoJSON(geometry);
             var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
@@ -267,7 +267,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 linkIcon.addClass('myplaces-' + shape);
                 link.append(linkIcon);
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._showPlace(data.geometry, data.categoryId);
                     return false;
                 });
@@ -277,7 +277,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             panel.grid.setColumnValueRenderer('edit', function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._editPlace(data);
                     return false;
                 });
@@ -287,7 +287,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             panel.grid.setColumnValueRenderer('delete', function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     me._deletePlace(data);
                     return false;
                 });
@@ -419,6 +419,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * @returns {*}  expanded bounds or as is
          * @private
          * TODO: maybe config for expansion frame size
+         * TODO: doesn't work correctly with degrees
+         * if this is used for single point to avoid zooming too close, should use zoomLevel with mapmoverequest
+         * or something like VectorLayerPlugin.ol3.js -> getBufferedExtent(extent, percentage)
          */
         _fitBounds: function (gbounds) {
             if (gbounds.bottom === gbounds.top && gbounds.left === gbounds.right) {

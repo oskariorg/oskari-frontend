@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             // react to window resize with timer so app stays responsive
-            jQuery(window).resize(function () {
+            jQuery(window).on('resize', function () {
                 clearTimeout(me.resizeTimer);
                 me.resizeTimer = setTimeout(
                     function () {
@@ -302,7 +302,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
-            epsgConfs = _.keys(defs);
+            window.epsgConfs = _.keys(defs);
             _.forEach(epsgConfs, function (conf) {
                 if (!_.has(defaultDefs, conf)) {
                     defaultDefs[conf] = defs[conf];
@@ -401,27 +401,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         setState: function (state, ignoreLocation) {
-            var me = this,
-                mapmodule = me.getMapModule(),
-                mapModuleName = mapmodule.getName(),
-                rbAdd,
-                len,
-                i,
-                layer,
-                sandbox =  me.getSandbox(),
-                rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest'),
-                rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+            var me = this;
+            var mapmodule = me.getMapModule();
+            var mapModuleName = mapmodule.getName();
+            var rbAdd;
+            var len;
+            var i;
+            var layer;
+            var sandbox = me.getSandbox();
+            var rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
+            var rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
             me._teardownState(mapmodule);
 
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
-            if (state.hasOwnProperty('east') && ignoreLocation !== true) {
-               sandbox.getMap().moveTo(
-                    state.east,
-                    state.north,
-                    state.zoom
-                );
+            if (ignoreLocation !== true) {
+                if (state.hasOwnProperty('east')) {
+                    sandbox.getMap().moveTo(
+                        state.east,
+                        state.north,
+                        state.zoom
+                    );
+                }
+                // set 3D camera position
+                if (state.hasOwnProperty('camera')) {
+                    try {
+                        mapmodule.setCamera(state.camera);
+                    } catch (ex) {
+                        Oskari.log(this.getName()).warn('Setting camera failed. Map module does not support 3d.');
+                    }
+                }
             }
 
             // mapmodule needed to set also param, because without it max zoomlevel check not working
@@ -436,7 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     layer = state.selectedLayers[i];
 
                     var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-                    if(oskariLayer) {
+                    if (oskariLayer) {
                         oskariLayer.setVisible(!layer.hidden);
                     }
                     sandbox.request(

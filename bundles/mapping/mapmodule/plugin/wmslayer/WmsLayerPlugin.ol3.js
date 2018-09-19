@@ -83,9 +83,7 @@ Oskari.clazz.define(
                 }
                 var layerImpl = null;
 
-
-                var projection = this.getMapModule().getProjection(),
-                    reverseProjection;
+                var reverseProjection;
                 if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
                     var projectionCode = this.getMapModule().getProjection();
                     //use reverse coordinate order for this layer!
@@ -93,30 +91,30 @@ Oskari.clazz.define(
                         reverseProjection = this._createReverseProjection(projectionCode);
                     }
                 }
-                if(layerOptions.singleTile === true) {
+                var sourceImpl = null;
+                var sourceOpts = {
+                    url: _layer.getLayerUrl(),
+                    params: defaultParams,
+                    crossOrigin: _layer.getAttributes('crossOrigin'),
+                    projection: reverseProjection ? reverseProjection : undefined
+                };
+                if (layerOptions.singleTile === true) {
+                    sourceImpl = ol.source.OskariImageWMS
+                        ? new ol.source.OskariImageWMS(sourceOpts) : new ol.source.ImageWMS(sourceOpts);
                     layerImpl = new ol.layer.Image({
-                        source: new ol.source.OskariImageWMS({
-                            url : _layer.getLayerUrl(),
-                            params : defaultParams,
-                            crossOrigin : _layer.getAttributes('crossOrigin'),
-                            projection: reverseProjection ? reverseProjection : undefined
-                        }),
+                        source: sourceImpl,
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
                     this._registerLayerEvents(layerImpl, _layer, 'image');
                 } else {
+                    sourceImpl = ol.source.OskariTileWMS
+                        ? new ol.source.OskariTileWMS(sourceOpts) : new ol.source.TileWMS(sourceOpts);
                     layerImpl = new ol.layer.Tile({
-                        source : new ol.source.OskariTileWMS({
-                            url : _layer.getLayerUrl(),
-                            params : defaultParams,
-                            crossOrigin : _layer.getAttributes('crossOrigin'),
-                            projection: reverseProjection ? reverseProjection : undefined
-                        }),
+                        source: sourceImpl,
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
-
                     this._registerLayerEvents(layerImpl, _layer, 'tile');
                 }
                 // Set min max Resolutions
@@ -159,14 +157,14 @@ Oskari.clazz.define(
          * @method @private _createReverseProjection Create a clone of the projection object with axis order neu
          *
          */
-        _createReverseProjection: function(projectionCode) {
+        _createReverseProjection: function (projectionCode) {
             var originalProjection = ol.proj.get(projectionCode);
 
             if (!originalProjection) {
                 return null;
             }
 
-            reverseProjection = new ol.proj.Projection({
+            var reverseProjection = new ol.proj.Projection({
                 "code": projectionCode,
                 "units": originalProjection.getUnits(),
                 "extent": originalProjection.getExtent(),

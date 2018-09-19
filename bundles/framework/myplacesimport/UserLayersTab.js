@@ -43,16 +43,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 grid = Oskari.clazz.create('Oskari.userinterface.component.Grid'),
-                addMLrequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+                addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest'),
+                mapMoveByContentReqBuilder = Oskari.requestBuilder('MapModulePlugin.MapMoveByLayerContentRequest');
 
             grid.setVisibleFields(this.visibleFields);
             // set up the link from name field
             grid.setColumnValueRenderer('name', function (name, data) {
                 var link = me.template.link.clone();
 
-                link.append(name).bind('click', function () {
+                link.append(name).on('click', function () {
                     // add myplacesimport layer to map on name click
                     var request = addMLrequestBuilder(data.id);
+                    sandbox.request(me.instance, request);
+                    request = mapMoveByContentReqBuilder(data.id, true);
                     sandbox.request(me.instance, request);
                     return false;
                 });
@@ -61,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             grid.setColumnValueRenderer('edit', function (name, data) {
                 var link = me.template.link.clone();
 
-                link.append(me.loc('tab.grid.editButton')).bind('click', function () {
+                link.append(me.loc('tab.grid.editButton')).on('click', function () {
                     me._editUserLayer(data);
                     return false;
                 });
@@ -70,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             grid.setColumnValueRenderer('remove', function (name, data) {
                 var link = me.template.link.clone();
 
-                link.append(me.loc('tab.grid.removeButton')).bind('click', function () {
+                link.append(me.loc('tab.grid.removeButton')).on('click', function () {
                     me._confirmDeleteUserLayer(data);
                     return false;
                 });

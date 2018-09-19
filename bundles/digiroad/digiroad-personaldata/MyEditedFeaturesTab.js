@@ -196,7 +196,7 @@ function(instance, localization) {
             //link.append(linkIcon);
 
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._showPlace(data.geometry);
                 return false;
             });
@@ -207,7 +207,7 @@ function(instance, localization) {
         var deleteRenderer = function(name, data) {
             var link = me.linkTemplate.clone();
             link.append(name);
-            link.bind('click', function() {
+            link.on('click', function() {
                 me._deletePlace(data);
                 return false;
             });

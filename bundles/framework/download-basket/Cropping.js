@@ -60,7 +60,7 @@ Oskari.clazz.define(
                     jQuery(croppingBtn.getElement()).data("croppingMode","polygon");
                 }
 
-                jQuery(croppingBtn.getElement()).click(function (event) {
+                jQuery(croppingBtn.getElement()).on('click', function (event) {
                     var el = jQuery(this);
                     var selectedLayers = me._buildLayerList();
                     //User has not selected any layers
@@ -122,7 +122,7 @@ Oskari.clazz.define(
             var moveToBasketBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             moveToBasketBtn.addClass('approve');
             moveToBasketBtn.setTitle(me._getLocalization('move-to-basket'));
-            jQuery(moveToBasketBtn.getElement()).click(function() {
+            jQuery(moveToBasketBtn.getElement()).on('click', function() {
                 me.addToBasket(map);
                 jQuery('.oskari__download-basket-temp-basket').hide();
                 me.removeAllFeaturesFromCroppingLayer(map);
@@ -133,7 +133,7 @@ Oskari.clazz.define(
             var clearTempBasket = Oskari.clazz.create('Oskari.userinterface.component.Button');
             clearTempBasket.addClass('primary');
             clearTempBasket.setTitle(me._getLocalization('temp-basket-empty'));
-            jQuery(clearTempBasket.getElement()).click(
+            jQuery(clearTempBasket.getElement()).on('click',
                 function (event) {
                     jQuery('.oskari__download-basket-temp-basket').hide();
                     me.removeAllFeaturesFromCroppingLayer(map);
@@ -542,7 +542,7 @@ Oskari.clazz.define(
             var me = this;
             var selectedLayers = me._buildLayerList();
             var croppedAreaFeatures = me.croppingVectorLayer.features;
-            
+
 
             //Finds layers that are active and loop cropping areas to them, collect are important values
             jQuery.each( selectedLayers, function( layer_key, layer_value ) {
@@ -550,7 +550,7 @@ Oskari.clazz.define(
                 	var basketObject = {};
                     basketObject.layerNameLang = layer_value.getName();
                     basketObject.layerName = layer_value.getLayerName();
-                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(),'id'); 
+                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(),'id');
                     basketObject.cropLayerName = feature_value.attributes.layerName;
                     basketObject.cropLayerNameLang = feature_value.attributes.layerNameLang;
                     basketObject.cropLayerUrl = feature_value.attributes.layerUrl;

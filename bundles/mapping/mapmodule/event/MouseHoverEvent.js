@@ -13,9 +13,15 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MouseHoverEvent',
      *            lon longitude on mouse location
      * @param {Number}
      *            lat latitude on mouse location
+     * @param {Boolean}
+     *            isPaused
+     * @param {Number}
+     *            pageX mouse location x
+     * @param {Number}
+     *            pageY mouse location y
      */
 
-    function (lon, lat, isPaused) {
+    function (lon, lat, isPaused, pageX, pageY) {
         this._creator = null;
 
         this._lon = lon;
@@ -23,6 +29,10 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MouseHoverEvent',
         this._lat = lat;
 
         this._paused = isPaused;
+
+        this._pageX = pageX;
+
+        this._pageY = pageY;
 
     }, {
         /** @static @property __name event name */

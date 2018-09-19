@@ -3,8 +3,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.element = null;
     this.sandbox = this.instance.getSandbox();
     this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this._extraFeatures = Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures',
-        this.instance.getSandbox(), this.instance.getLocalization().panels.extraFeatures, this);
     var me = this;
     this.on('show', function () {
         if (!me.getElement()) {
@@ -25,9 +23,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         this.element.empty();
-    },
-    getExtraFeatures: function () {
-        return this._extraFeatures;
     },
     /**
      * @method lazyRender
@@ -58,7 +53,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         el.append(this.getNewSearchElement());
-        el.append(this.getExtraFeaturesElement());
     },
     getNewSearchElement: function () {
         var me = this;
@@ -70,6 +64,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         btn.addClass('margintopLarge');
+        btn.setPrimary(true);
         btn.setTitle(locale.panels.newSearch.addButtonTitle);
         btn.setEnabled(false);
         btn.insertTo(container);
@@ -77,37 +72,69 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         btn.setHandler(function (event) {
             event.stopPropagation();
             var values = selectionComponent.getValues();
+            var selectedIndicators = values.indicator;
+            // indicator loop check Array.isArray
+            if (!Array.isArray(values.indicator)) {
+                selectedIndicators = [values.indicator];
+            }
 
-            var added = me.service.getStateService().addIndicator(values.datasource, values.indicator, values.selections);
-            if (added === false) {
+            var newActiveIndicator = false;
+            var activeSelections = values.selections;
+
+            selectedIndicators.forEach(function (indicator) {
+                if (indicator === '') {
+                    return;
+                }
+                var added;
+                var hasMultiselectValues = false;
+                if (!values.series) {
+                    // Multiselect selections are not supported for series layer
+                    Object.keys(values.selections).forEach(function (key) {
+                        var selection = values.selections[key];
+                        if (Array.isArray(selection)) {
+                            hasMultiselectValues = true;
+                            selection.forEach(function (item) {
+                                var current = jQuery.extend(true, {}, values.selections);
+                                current[key] = item;
+                                var newlyAdded = me.service.getStateService().addIndicator(values.datasource, indicator, current);
+                                if (newlyAdded) {
+                                    added = newlyAdded;
+                                    activeSelections = current;
+                                }
+                            });
+                        }
+                    });
+                }
+                if (!hasMultiselectValues) {
+                    added = me.service.getStateService().addIndicator(values.datasource, indicator, activeSelections, values.series);
+                }
+                if (added) {
+                    newActiveIndicator = indicator;
+                }
+            });
+
+            if (newActiveIndicator !== false) {
                 // already added, set as active instead
-                var hash = me.service.getStateService().getHash(values.datasource, values.indicator.selections);
+                var hash = me.service.getStateService().getHash(values.datasource, newActiveIndicator, activeSelections, values.series);
                 me.service.getStateService().setActiveIndicator(hash);
             }
             me.service.getStateService().setRegionset(values.regionset);
+        });
 
-            var extraValues = me.getExtraFeatures().getValues();
+        var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        clearBtn.addClass('margintopLarge');
+        clearBtn.setTitle(locale.panels.newSearch.clearButtonTitle);
+        clearBtn.insertTo(container);
 
-            if (extraValues.openTable) {
-                me.instance.getFlyoutManager().open('table');
-            }
-            if (extraValues.openDiagram) {
-                me.instance.getFlyoutManager().open('diagram');
-            }
+        clearBtn.setHandler(function (event) {
+            event.stopPropagation();
+            selectionComponent.clearSelections();
         });
 
         selectionComponent.on('indicator.changed', function (enabled) {
             btn.setEnabled(enabled);
         });
 
-        return container;
-    },
-    getExtraFeaturesElement: function () {
-        var container = jQuery('<div class="extrafeatures"><div class="title"></div><div class="content"></div></div>');
-        var locale = this.instance.getLocalization();
-
-        container.find('.title').html(locale.panels.extraFeatures.title);
-        container.find('.content').append(this._extraFeatures.getPanelContent());
         return container;
     }
 }, {

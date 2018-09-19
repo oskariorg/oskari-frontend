@@ -367,7 +367,7 @@ Oskari.clazz.define(
                 if (!panel.grid) {
                    container.parent().find('.grid-tools').remove();
                 }
-                
+
                 return;
             }
             container.append(this.instance.getLocalization('loading'));
@@ -432,12 +432,12 @@ Oskari.clazz.define(
             var resizerHeight = 16;
             resizer.removeClass('allowHover');
             resizer.addClass('icon-drag');
-            resizer.bind('dragstart', function (event) {
+            resizer.on('dragstart', function (event) {
                 event.preventDefault();
             });
 
             // Start resizing
-            resizer.mousedown(function (e) {
+            resizer.on('mousedown', function (e) {
                 if (me.resizing) {
                     return;
                 }
@@ -451,13 +451,13 @@ Oskari.clazz.define(
             });
 
             // End resizing
-            jQuery(document).mouseup(function () {
+            jQuery(document).on('mouseup', function () {
                 me.resizing = false;
                 me.resized = true;
             });
 
             // Resize the featuredata2 flyout
-            jQuery(document).mousemove(function (e) {
+            jQuery(document).on('mousemove', function (e) {
                 if (!me.resizing) {
                     return;
                 }
@@ -502,7 +502,7 @@ Oskari.clazz.define(
 
             // Modify layout for the resizer image
             flyout.find('div.oskari-flyoutcontent').css('padding-bottom', '5px');
-            if (jQuery('div.flyout-resizer').length === 0) {
+            if (flyout.find('div.flyout-resizer').length === 0) {
                 flyout.append(resizer);
             }
         },
@@ -770,7 +770,11 @@ Oskari.clazz.define(
                         parseInt(tabContent.css('padding-bottom') || 0) +
                         (flyout.find('.exporter').height() || 0) + 10;
 
-                    tabContent.css('height', (parent.height() - paddings) + 'px');
+                    if (parent.height() === null) {
+                        tabContent.css('max-height', '100%');
+                    } else {
+                        tabContent.css('height', (parent.height() - paddings) + 'px');
+                    }
                     flyout.css('max-width', mapdiv.width().toString() + 'px');
                 }
                 if (me.resizable) {

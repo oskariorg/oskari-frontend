@@ -259,11 +259,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Boolean} blnEnabled true to enable, false to disable
          */
         setEnabled: function (blnEnabled) {
-            if (blnEnabled === true) {
-                this._field.find('input').removeAttr('disabled');
-            } else {
-                this._field.find('input').attr('disabled', 'disabled');
-            }
+            this._field.find('input').prop('disabled', !blnEnabled);
         },
 
         /**
@@ -396,7 +392,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         bindEnterKey: function (callback) {
             var me = this,
                 input = this._field.find('input');
-            input.keypress(function (event) {
+            input.on('keypress', function (event) {
                 if (me._isEnterPress(event)) {
                     callback(event);
                 }
@@ -409,11 +405,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if up is pressed on the input
          */
         bindUpKey: function (callback) {
-            
+
             var me = this,
                 input = this._field.find('input');
 
-            input.keyup(function (event) {
+            input.on('keyup', function (event) {
                 callback(event);
             });
         },
@@ -424,11 +420,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if down is pressed on the input
          */
         bindDownKey: function (callback) {
-            
+
             var me = this,
                 input = this._field.find('input');
 
-            input.keydown(function (event) {
+            input.on('keydown', function (event) {
                 if (me._isDownPress(event)) {
                     event.preventDefault();
                     callback(event);
@@ -442,10 +438,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if blur has happened for the input
          */
         bindOnBlur: function (callback) {
-            
+
             // all set, ready to bind requests
             var input = this._field.find('input');
-            input.blur(function () {
+            input.on('blur', function () {
                 callback();
             });
 
@@ -463,7 +459,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             if (!blnImmediate) {
                 input.on('change', callback);
             } else {
-                input.keyup(callback);
+                input.on('keyup', callback);
             }
         },
         bindAutocompleteSelect: function (callback) {
@@ -492,7 +488,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 input = this._field.find('input');
 
             clearButton.attr('id', id);
-            clearButton.bind('click', function () {
+            clearButton.on('click', function () {
                 input.val('');
                 input.trigger('change');
                 input.trigger('keyup');
@@ -524,10 +520,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             }
             // all set, ready to bind requests
             input = this._field.find('input');
-            input.focus(function () {
+            input.on('focus', function () {
                 sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             });
-            input.blur(function () {
+            input.on('blur', function () {
                 sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
         },

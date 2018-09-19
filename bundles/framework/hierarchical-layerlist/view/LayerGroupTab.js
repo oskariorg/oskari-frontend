@@ -41,6 +41,7 @@ Oskari.clazz.define(
             layerFilter: jQuery('<div class="layer-filter hierarchical-layerlist-layer-filter">' +
                 '</div><div style="clear:both;"></div>'),
             layerTree: jQuery('<div class="hierarchical-layerlist-tree"></div>'),
+            noSearchResults: jQuery('<div class="hierarchical-layerlist-search-noresults"></div>'),
             layerContainer: jQuery('<span class="layer">' +
                 '<span class="layer-tools">' +
                 '   <span class="layer-backendstatus-icon backendstatus-unknown" title=""></span>' +
@@ -73,7 +74,7 @@ Oskari.clazz.define(
                 tool.attr('title', data.options.tooltip);
                 tool.addClass(data.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     tool.addClass('active');
                     data.handler(tool);
@@ -106,28 +107,25 @@ Oskari.clazz.define(
                 me.selectNodeFromTree(data.node, data.event);
             });
 
-
-
             me.service.on('order.changed', function(data) {
                 if (!data.ajax) {
-                    setTimeout(function() {
-                        me._updateAllTools();
-                    }, 200);
+                    me._updateAllTools();
                 }
             });
 
-            me.service.on('search', function(obj) {
-                setTimeout(function() {
-                    me._updateAllTools();
-                    me._updateLayerCountsAndGroupsVisibility(true);
-                }, 200);
+            me.service.on('search', function(data) {
+                // if nothing results found then hide jstree and show no results text
+                if (data.str.res.length == 0) {
+                    me.getJsTreeElement().hide();
+                    me.setNoResultMessageVisible(true);
+                } else {
+                    me.getJsTreeElement().show();
+                    me.setNoResultMessageVisible(false);
+                }
             });
 
             me.service.on('search.clear', function(obj) {
-                setTimeout(function() {
-                    me._updateAllTools();
-                    me._updateLayerCountsAndGroupsVisibility();
-                }, 200);
+                me.setNoResultMessageVisible(false);
             });
         },
 
@@ -162,6 +160,7 @@ Oskari.clazz.define(
                         if(childNode.type === 'layer' && childNode.state.hidden === false) {
                             count.visible++;
                         }
+
                         if(childNode.type === 'layer') {
                             count.all++;
                         }
@@ -185,7 +184,8 @@ Oskari.clazz.define(
                 groups.forEach(function(groupNode){
                     var countText = '';
                     var count = calculateLayerCounts(groupNode);
-                    if(count.all === 0 && !me.service.hasEmptyGroupsVisible()) {
+                    var node = jstree.get_node(groupNode);
+                    if((count.all === 0 && !me.service.hasEmptyGroupsVisible()) || node.state.hidden) {
                         jstree.hide_node(groupNode);
                     } else {
                         jstree.show_node(groupNode);
@@ -205,7 +205,6 @@ Oskari.clazz.define(
             updateLayerCounts('group');
             updateLayerCounts('subgroup');
             updateLayerCounts('subgroup-subgroup');
-
         },
 
         /**
@@ -215,10 +214,16 @@ Oskari.clazz.define(
          */
         _updateAllTools: function() {
             var me = this;
-            me._addGroupTools();
-            me._addSubgroupTools();
-            me._addSubgroupSubgroupTools();
-            me._addLayerTools();
+            // ugly timeout, need remove in future
+            // wait at js tree is rendered
+            clearTimeout(me.toolsTimeout);
+            me.toolsTimeout = setTimeout(function() {
+                me._addGroupTools();
+                me._addSubgroupTools();
+                me._addSubgroupSubgroupTools();
+                me._addLayerTools();
+            }, 200);
+
         },
         /**
          * Add group tools
@@ -238,7 +243,7 @@ Oskari.clazz.define(
                 tool.attr('title', grouptool.options.tooltip);
                 tool.addClass(grouptool.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -267,7 +272,7 @@ Oskari.clazz.define(
                 tool.attr('title', subgrouptool.options.tooltip);
                 tool.addClass(subgrouptool.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -297,7 +302,7 @@ Oskari.clazz.define(
                 tool.attr('title', subgrouptool.options.tooltip);
                 tool.addClass(subgrouptool.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -327,7 +332,7 @@ Oskari.clazz.define(
                 tool.attr('title', layertool.options.tooltip);
                 tool.addClass(layertool.options.cls);
 
-                tool.bind('click', function(evt) {
+                tool.on('click', function(evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -385,7 +390,7 @@ Oskari.clazz.define(
             // append this indicator
             indicatorCont.append(infoIcon);
             // show metadata
-            infoIcon.click(function(e) {
+            infoIcon.on('click', function(e) {
                 var desc = me.templates.description.clone(),
                     dialog = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
@@ -726,7 +731,6 @@ Oskari.clazz.define(
          * @return {Oskari.userinterface.component.FormInput} field
          */
         getFilterField: function() {
-            //"use strict";
             var me = this,
                 field,
                 timer = 0;
@@ -776,6 +780,10 @@ Oskari.clazz.define(
                     layersChecked.push(node.a_attr['data-layer-id']);
                 }
             });
+
+            if(node.type.indexOf('group') > -1 && !jQuery(event.target).hasClass('jstree-checkbox')) {
+                return;
+            }
 
             var layerId = null;
 
@@ -918,73 +926,75 @@ Oskari.clazz.define(
             }
             var layerTree = me.templates.layerTree.clone();
 
-            var addLayers = function(groupElId, layers, groupId, orders, tools) {
-                layers.forEach(function(l) {
-                    var layer = l;
-                    if (l.id) {
-                        layer = me.sb.findMapLayerFromAllAvailable(l.id);
-                    }
-                    if(layer) {
-                        var opts = {
-                            a_attr: {
-                                'data-group-id': groupId,
-                                'data-layer-id': layer.getId(),
-                                'data-tools-visible': tools
-                            }
-                        };
-
-                        orders.push({
-                            index: layer.getOrderNumber() || 0,
-                            conf: me._getJsTreeObject(jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
-                                'layer',
-                                opts)
-                        });
-                    }
-                });
-            };
-
-            var addSubgroups = function(type, groupId, subGroups, orders) {
-                subGroups.forEach(function(subgroup) {
-                    var subgroupChildren = [];
-                    var subgroupOrders = [];
+            var getLayerConf = function(layer,group) {
+                if(layer) {
                     var opts = {
                         a_attr: {
-                            class: (!subgroup.selectable) ? 'no-checkbox' : '',
-                            'data-group-id': subgroup.id,
-                            'data-parent-group-id': groupId
+                            'data-group-id': group.getId(),
+                            'data-layer-id': layer.getId(),
+                            'data-tools-visible': (typeof group.isToolsVisible == 'function') ? group.isToolsVisible() : true
                         }
                     };
 
-                    addLayers(type + '-' + subgroup.id, subgroup.layers, subgroup.id, subgroupOrders);
-                    addSubgroups('subgroup-subgroup', subgroup.id, subgroup.groups, subgroupOrders);
+                    return me._getJsTreeObject(jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
+                            'layer',
+                            opts);
+                }
+                return null;
+            };
 
-                    // sort
-                    subgroupOrders.sort(function compare(a, b) {
-                        if (a.index < b.index)
-                            return -1;
-                        if (a.index > b.index)
-                            return 1;
-                        return 0;
-                    });
+            var getSubgroupConf = function(maplayerGroup, parentGroup, groupPrefix) {
+                if(maplayerGroup) {
+                    var subgroupChildren = [];
 
-                    subgroupOrders.forEach(function(order) {
-                        subgroupChildren.push(order.conf);
-                    });
-                    orders.push({
-                        index: subgroup.orderNumber,
-                        conf: me._getJsTreeObject(me.sb.getLocalizedProperty(subgroup.name) + ' <span class="layer-count"></span>',
-                            type,
-                            opts, subgroupChildren)
-                    });
+                    var opts = {
+                        a_attr: {
+                            class: (!maplayerGroup.hasSelectable()) ? 'no-checkbox' : '',
+                            'data-group-id': maplayerGroup.getId(),
+                            'data-parent-group-id': parentGroup.getId()
+                        }
+                    };
 
-                });
+                    addChildren(maplayerGroup,subgroupChildren, groupPrefix+'subgroup-');
+
+                    return me._getJsTreeObject(me.sb.getLocalizedProperty(maplayerGroup.getName()) + ' <span class="layer-count"></span>',
+                            groupPrefix + 'subgroup',
+                            opts, subgroupChildren);
+                }
+                return null;
+
             };
 
             me.tabPanel.getContainer().append(layerTree);
+
+            if(me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults').length === 0) {
+                var noSearchResults = me.templates.noSearchResults.clone();
+                noSearchResults.html(me.instance.getLocalization('errors.noResults')).hide();
+                me.tabPanel.getContainer().append(noSearchResults);
+                me.setNoResultMessageVisible(false);
+            }
+
             me.layerGroups = groups;
 
+            var addChildren = function(group, groupChildren, groupPrefix) {
+                var childrens = group.getChildren();
+                childrens.forEach(function(children){
+                    if(children.type==='layer') {
+                        var layerConf = getLayerConf(me.sb.findMapLayerFromAllAvailable(children.id), group);
+                        if (layerConf) {
+                            groupChildren.push(layerConf);
+                        }
+                    }
+                    else {
+                        var groupConf = getSubgroupConf(me._mapLayerService.getAllLayerGroups(children.id), group, groupPrefix);
+                        if (groupConf) {
+                            groupChildren.push(groupConf);
+                        }
+                    }
+                });
+            };
+
             groups.forEach(function(group) {
-                var layers = group.getLayers();
                 var groupOrders = [];
                 var groupChildren = [];
 
@@ -998,26 +1008,7 @@ Oskari.clazz.define(
                     extraOpts.a_attr.class = 'no-checkbox';
                 }
 
-                //Loop through group layers
-                addLayers('group-' + group.getId(), layers, group.getId(), groupOrders, group.isToolsVisible());
-
-
-                if (group.getGroups().length > 0) {
-                    addSubgroups('subgroup', group.getId(), group.getGroups(), groupOrders);
-                }
-
-                // sort
-                groupOrders.sort(function compare(a, b) {
-                    if (a.index < b.index)
-                        return -1;
-                    if (a.index > b.index)
-                        return 1;
-                    return 0;
-                });
-
-                groupOrders.forEach(function(order) {
-                    groupChildren.push(order.conf);
-                });
+                addChildren(group, groupChildren, '');
 
                 var groupObject = me._getJsTreeObject(group.getTitle() + ' <span class="layer-count"></span>',
                     'group', extraOpts, groupChildren, group.isToolsVisible());
@@ -1060,6 +1051,34 @@ Oskari.clazz.define(
                     me._toggleLayerCheckboxes(layer.getId(), true);
                 });
             });
+
+
+            me.getJsTreeElement().on('redraw.jstree',function(nodes){
+                me._updateAllTools();
+                me._updateLayerCountsAndGroupsVisibility(true);
+            });
+
+            // Add click handler for toggle groups open/close state
+            me.getJsTreeElement().on('click', function(evt) {
+                if(!jQuery(evt.target).hasClass('jstree-checkbox') && !jQuery(evt.target).hasClass('jstree-ocl')) {
+                    me.getJsTreeElement().jstree(true).toggle_node(evt.target);
+                }
+            });
+        },
+
+        /**
+         * Set no result message visible
+         * @method setNoResultMessageVisible
+         * @param  {Boolean}                  visible has message visible
+         */
+        setNoResultMessageVisible: function(visible) {
+            var me = this;
+            var noResultsElement = me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults');
+            if(!visible) {
+                noResultsElement.hide();
+                return;
+            }
+            noResultsElement.show();
         },
 
         /**

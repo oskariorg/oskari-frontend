@@ -56,8 +56,8 @@ div.mapplugins {
         background-color: rgba(255, 0, 0, 0.3); }
     div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin {
       /* Note that this must also have a position for IE11:
-       * https://coderwall.com/p/s8pjpg
-       */
+                 * https://coderwall.com/p/s8pjpg
+                 */
       pointer-events: auto;
       position: relative;
       margin: 0 auto;
@@ -73,6 +73,10 @@ div.mapplugins {
       div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.scalebar {
         margin-bottom: 0; }
       div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.zoombar {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
         margin-top: 10px;
         margin-bottom: 10px; }
   div.mapplugins.top {
@@ -98,6 +102,14 @@ div.mapplugins {
             float: right; }
     div.mapplugins.top.right .mapplugin.layerselection {
       margin-left: 0; }
+    div.mapplugins.top.right .mapplugin.statsgrid-series-control-plugin {
+      position: absolute;
+      left: -815px;
+    }
+    div.mapplugins.top.right .mapplugin.statsgrid-legend-plugin, div.mapplugins.top.right .mapplugin.statsgrid-legend-plugin-transparent {
+      position: absolute;
+      left: -305px;
+    }
     div.mapplugins.top.right .mapplugin.search {
       text-align: right; }
     div.mapplugins.top.right .mapplugin.featuredataplugin, div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search, div.mapplugins.top.right .mapplugin.tools {
@@ -142,7 +154,7 @@ div.mapplugins {
     div.mapplugins.left.center {
       height: 100%;
       /* Side centers aren't used ATM
-      display: table;*/
+            display: table;*/
       display: none !important; }
       div.mapplugins.left.center .mappluginsContainer {
         display: table-cell;
@@ -157,7 +169,7 @@ div.mapplugins {
     div.mapplugins.right.center {
       height: 100%;
       /* Side centers aren't used ATM
-      display: table;*/
+            display: table;*/
       display: none !important; }
       div.mapplugins.right.center .mappluginsContainer {
         display: table-cell;
@@ -175,5 +187,3 @@ div.mapplugins {
 
 .oskari-publisher-font-georgia {
   font-family: Georgia, serif !important; }
-
-/*# sourceMappingURL=mapmodule_ol3.css.map */

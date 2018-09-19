@@ -105,10 +105,10 @@ function () {
             data: params,
             dataType : "json",
             type : "POST",
-            url : this.sandbox.getAjaxUrl('Feedback'),
+            url : Oskari.urls.getRoute('Feedback'),
             error : function (response) {
                 var success = false;
-                var evt = me.sandbox.getEventBuilder('FeedbackResultEvent')(success, params, response);
+                var evt = Oskari.eventBuilder('FeedbackResultEvent')(success, params, response);
                 me.sandbox.notifyAll(evt);
             },
             success : function (response) {
@@ -116,7 +116,7 @@ function () {
                     requestParameters = response.requestParameters,
                     data = response.data;
 
-                var evt = me.sandbox.getEventBuilder('FeedbackResultEvent')(success, requestParameters, data);
+                var evt = Oskari.eventBuilder('FeedbackResultEvent')(success, requestParameters, data);
                 me.sandbox.notifyAll(evt);
             }
         });

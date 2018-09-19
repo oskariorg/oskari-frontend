@@ -462,10 +462,10 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.ButtonHandler",
 
                 if (firstElem.text() === oid.toString()) {
                     firstElem.empty();
-                    firstElem.unbind('hover');
+                    firstElem.off('hover');
                 } else if (lastElem.text() === oid.toString()) {
                     lastElem.empty();
-                    lastElem.unbind('hover');
+                    lastElem.off('hover');
                 }
 
                 delete this.features[oid];

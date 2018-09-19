@@ -1,5 +1,104 @@
 # Release Notes
 
+## 1.48.0
+
+### Webpack build
+
+It is now possible to build the front-end application code with Webpack. In the next release (1.49.0) this will be the only supported build method. 
+
+#### Preparations
+
+Make sure you have at least Node 8.x / NPM 5.x. Run `npm install` in the front-end repo root.
+
+#### Run in development
+
+Webpack dev server is used to serve the JS bundle and assets when running in local development. XHR calls will be proxied to the Java backend assumed to be running on localhost:8080.
+
+So that the server knows to look for the JS bundle and assets from the right place, we need to change the Oskari-server `oskari-ext.properties` and add 
+
+```
+# set development to false or comment it out to load using minified javascript
+development=false
+oskari.client.version=dist/devapp
+```
+
+To start Webpack dev server, we point it to the miniferAppSetup.json file for the application we want to start, here Sample app as example:
+`npm start -- --env.appdef=applications/sample/servlet/minifierAppSetup.json`
+
+When you see "Compiled successfully." in the terminal, you can open the app in the browser at localhost:8081.
+
+The dev server has automatic reloading enabled when you save changes to JS code and hot reloading for S/CSS without need for full browser reload.
+
+#### Build for production
+
+To build minifed JS and assets, run:
+`npm run build -- --env.appdef=1.48.0:applications/sample/servlet/minifierAppSetup.json`
+
+The number before the colon sets the directory name, here producing files under dist/1.48.0/servlet/
+
+Note: The 1.48.0 release of Oskari server still has a reference to bundles/bundle.js in the JSP. This file is no longer needed because it's part of the webpack bundle. Replace this file with an empty text file on the production server if you intend to use the webpack produced bundle. 
+
+
+## 1.47.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/13?closed=1
+
+- Fix for user generated statistical indicator removal.
+- Fix for loading progressbar for layers using single tile loading.
+- Fix for coordinatetool localization handling.
+
+## 1.47.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/9?closed=1
+
+- Statistical maps now allow for filtering listings based on regionsets and adding more than one indicator at a time
+- Users can now use and save custom indicators for statistical maps
+- Fixes for statistical maps UI in geoportal
+- Layer filters in layer selector are now hidden when selecting the filter would result in empty layer listing
+- Geoportal map style is now properly reset after exiting publisher functionality (previously always reset to default style)
+- More plugins now support styling in publisher functionality
+- Timeseries functionality can now be included in embedded maps (when there's a layer providing timeseries data)
+- Publisher can now be opened automatically on startup (Usability improvement when having embedded maps in multiple projections)
+- Checking "Don't show this again" in guided tour now works again
+- Bugfixes on publisher, hierarchical layerselector and feature data table
+
+## 1.46.3
+
+- Fixed JS errors when saving myplaces features.
+- Fixed an issue where featuredata button was shown on the UI when is should have stayed hidden after browser window resize.
+
+## 1.46.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/11?closed=1
+
+- publisher now remembers the original tool style and no longer resets to default style on exit
+- fixed layer/group sorting issues on the hierarchichal layerselector
+- fixed a JS error on layer removal
+- fixed an issue where adding imported datasets/userlayers to the map zoomed to the extent of the layer always. Now it just zooms on initial import and when clicking the layer on personaldata listing. This fixes an issue where embedded maps could start from the dataset extent instead of the original saved center point.
+
+## 1.46.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/10?closed=1
+
+- Layer loading API has been changed from having the layers inside group structure (and possibly multiple times/layer) to a flat array beside the group structure. The groups will still have layers array in the internal runtime data structure, but instead of the JSON presentation the array items are instances of Oskari.mapframework.domain.AbstractLayer like any other layer references returned by the service.
+- Iframe snippet in publisher now includes 'allow="geolocation"' because: https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes
+- Line width style setting for userlayer/dataset import works properly now on import
+- Statistical map now resets when the regionset layer is removed from selected layers
+- Statistical map now resets properly when the reset button is hit
+- UI fixes for statistical map legend and classification form
+- Reverse colors control in statistical map classification form now works instead of doing nothing
+- Sandbox.removeMapLayer() was deprecated as unused and Sandbox.getMap().removeLayer() is the drop-in replacement for it.
+- Some variable leaking (to global scope) issues fixed.
+- Timeseries UI is no longer shown if the layer with timeseries isn't shown to the user (due to being hidden or incompatible CRS)
+- Group and organization is now properly removed from the admin UI when deleted from the database.
+- Oskari.urls.getRoute() default value changed from 'N/A' to '/action?' as it's the default for Oskari-server
+- Oskari.urls.getLocation() default value changed from 'N/A' to undefined so  developers don't need to know the default value for checking if it's configured
+- Personaldata, analyse and publisher2 bundles now support Oskari.urls.getLocation('login') and Oskari.urls.getLocation('register') for url configuration. Bundle-specific config is still available and used as priority.
+
 ## 1.46.0
 
 For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/7?closed=1

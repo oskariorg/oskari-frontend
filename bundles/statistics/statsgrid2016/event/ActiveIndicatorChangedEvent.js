@@ -18,21 +18,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.ActiveIndicatorChangedEve
          * Returns event name
          * @return {String} The event name.
          */
-        getName : function () {
-            return "StatsGrid.ActiveIndicatorChangedEvent";
+        getName: function () {
+            return 'StatsGrid.ActiveIndicatorChangedEvent';
         },
         /**
          * Current active indicator
          * @return {Object}
          */
-        getCurrent : function() {
+        getCurrent: function () {
             return this.current;
         },
         /**
          * Previously active indicator
          * @return {Object}
          */
-        getPrevious : function() {
+        getPrevious: function () {
             return this.previous;
         }
     }, {

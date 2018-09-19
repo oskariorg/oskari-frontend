@@ -563,7 +563,7 @@ Oskari.clazz.define(
             // Link to advanced search
             var moreLessLink = this.templates.moreLessLink.clone();
             moreLessLink.html(me.getLocalization('showMore'));
-            moreLessLink.click(function () {
+            moreLessLink.on('click', function () {
                 var advancedContainer = metadataCatalogueContainer.find('div.advanced');
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
                     // open advanced/toggle link text
@@ -651,7 +651,7 @@ Oskari.clazz.define(
                         newCheckboxDef.attr('name', dataField.field);
                         newCheckboxDef.attr('value', value.val);
                         newCheckbox.find('label.metadataTypeText').append(text);
-                        newCheckbox.change(checkboxChange);
+                        newCheckbox.on('change', checkboxChange);
                         newRow.find('.checkboxes').append(newCheckbox);
                     }
                     // Dropdown list
@@ -673,7 +673,7 @@ Oskari.clazz.define(
                         newOption.text(text);
                         dropdownDef.append(newOption);
                     }
-                    newDropdown.find('.metadataDef').change(checkboxChange);
+                    newDropdown.find('.metadataDef').on('change', checkboxChange);
                     newRow.append(newDropdown);
                 }
                 // Conditional visibility
@@ -751,7 +751,7 @@ Oskari.clazz.define(
 
         _getCoverage: function () {
             var me = this;
-            
+
             me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.getName(), 'Box', {
                 style: me.__drawStyle
             }]);
@@ -825,14 +825,14 @@ Oskari.clazz.define(
             var showLink = resultHeader.find('.showLink');
             showLink.hide();
             showLink.html(me.getLocalization('showSearch'));
-            showLink.click(function () {
+            showLink.on('click', function () {
                 jQuery('table.metadataSearchResult tr').show();
                 showLink.hide();
                 resultHeader.find('.filter-link').show();
             });
             var modifyLink = resultHeader.find('.modifyLink');
             modifyLink.html(me.getLocalization('modifySearch'));
-            modifyLink.click(function () {
+            modifyLink.on('click', function () {
                 resultPanel.empty();
                 optionPanel.show();
                 me._removeFeaturesFromMap();
@@ -916,7 +916,7 @@ Oskari.clazz.define(
                 link.append(me.resultHeaders[i].title);
                 // Todo: Temporarily only the first column is sortable
                 if (i === 0) {
-                    link.bind('click', headerClosureMagic(me.resultHeaders[i]));
+                    link.on('click', headerClosureMagic(me.resultHeaders[i]));
                 }
                 tableHeaderRow.append(header);
             }
@@ -1094,7 +1094,7 @@ Oskari.clazz.define(
                                         else {
                                             callbackElement =  actionElement.first();
                                         }
-                                        callbackElement.css({'cursor':'pointer'}).bind('click', {metadata: row}, function(event){
+                                        callbackElement.css({'cursor':'pointer'}).on('click', {metadata: row}, function(event){
                                            action.callback(event.data.metadata);
                                         });
                                     }
@@ -1136,7 +1136,7 @@ Oskari.clazz.define(
                         if(row.geom && row.geom != null) {
                             jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
                             jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
-                            jQuery(cells[3]).find('div.showBbox').click(function () {
+                            jQuery(cells[3]).find('div.showBbox').on('click', function () {
                                 // If show info area is active, remove geom from map
                                 if(jQuery(this).hasClass('icon-info-area-active')){
                                     me._removeFeaturesFromMap();
@@ -1164,7 +1164,7 @@ Oskari.clazz.define(
                         // Show layer info icon
                         jQuery(cells[4]).addClass(me.resultHeaders[3].prop);
                         jQuery(cells[4]).attr('title', me.resultHeaders[3].tooltip);
-                        jQuery(cells[4]).find('div.layerInfo').click(function () {
+                        jQuery(cells[4]).find('div.layerInfo').on('click', function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [{
                                 uuid: row.id
@@ -1174,7 +1174,7 @@ Oskari.clazz.define(
                         // Show remove icon
                         jQuery(cells[5]).addClass(me.resultHeaders[4].prop);
                         jQuery(cells[5]).attr('title', me.resultHeaders[4].tooltip);
-                        jQuery(cells[5]).find('div.resultRemove').click(function () {
+                        jQuery(cells[5]).find('div.resultRemove').on('click', function () {
                             jQuery('table.metadataSearchResult tr.res' + i).hide();
                             jQuery('div.metadataResultHeader a.showLink').show();
                             me._removeFeaturesFromMap('id', row.id);
@@ -1229,7 +1229,7 @@ Oskari.clazz.define(
             }
 
             // Click binding
-            layerLink.click(function () {
+            layerLink.on('click', function () {
                 visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
                 // Hide layer
                 if (jQuery(this).html() === hideText) {

@@ -6,36 +6,33 @@
 	position: absolute;
 	z-index: -1;
 }
-.oskari-fileinput .box__file + label {
-    margin-top:2%;
-    margin-left:3%;
+.oskari-fileinput .box__input {
+    /*margin-top:2%;
+    margin-left:3%;*/
     font-size: 1em;
     font-weight: 700;
     display: inline-block;
 }
-.oskari-fileinput .box__input {
-    height:4em;
-}
-
-.oskari-fileinput.box__file:focus + label,
-.box__dragndrop,
 .box__uploading,
 .box__success,
 .box__error {
   display: none;
 }
-
-.box.has-advanced-upload {
+.oskari-fileinput.advanced-upload {
   background-color: white;
-   outline: 1px dashed lavender; 
-   outline-offset: -10px; 
+  outline: 2px dashed lavender;
+  outline-offset: -5px;
+  padding: 15px 15px 10px;
+  min-height: 3em;
+  width: 100%;
+  line-height: 1em;
 }
-.box.has-advanced-upload .box__dragndrop {
-  display: inline;
+.oskari-fileinput.is-dragover {
+  background-color: #fdf8d9;
 }
-.box.is-uploading .box__input {
+.oskari-fileinput.is-uploading .box__input {
   visibility: none;
 }
-.box.is-uploading .box__uploading {
+.oskari-fileinput.is-uploading .box__uploading {
   display: block;
 }

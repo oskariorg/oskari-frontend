@@ -205,15 +205,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             for (i = 0; i < me.toolLayouts.length; i += 1) {
                 layoutContainer = me.templateLayout.clone();
                 input = layoutContainer.find('input');
-                input.val(me.toolLayouts[i]).change(changeListener);
+                input.val(me.toolLayouts[i]).on('change', changeListener);
                 // FIXME default to 0 index if activeToolLayout is not found
                 // First choice is active unless we have an active layout
                 if (me.activeToolLayout) {
                     if (me.toolLayouts[i] === me.activeToolLayout) {
-                        input.attr('checked', 'checked');
+                        input.prop('checked', true);
                     }
                 } else if (i === 0) {
-                    input.attr('checked', 'checked');
+                    input.prop('checked', true);
                 }
                 layoutContainer.find('span').html(
                     me.loc.toollayout[me.toolLayouts[i]] || me.toolLayouts[i]

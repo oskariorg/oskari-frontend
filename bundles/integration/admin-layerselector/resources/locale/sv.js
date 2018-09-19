@@ -45,6 +45,8 @@ Oskari.registerLocalization(
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "capabilitiesRemarks": "(*)  Kart CRS är inte understödja i service capabilities",
+            "capabilitiesUpdateRateLabel": "Capabilities uppdateringsfrekvens",
+            "capabilitiesUpdateRateInfo": "Uppdateringsfrekvens i sekunder",
             "confirmResourceKeyChange": "Du har ändrat gränssnittjänstens unik namn- eller URL-address. För säkerhets skull, nuvarande rättigheter till kartlager ska raderas. Fortsätt?",
             "confirmDeleteLayerGroup": "Kartlagergrupp blir raderad. Fortsätt?",
             "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
@@ -53,7 +55,8 @@ Oskari.registerLocalization(
                 "wfs": "WFS Lager",
                 "wmts": "WMTS Lager",
                 "arcgis": "ArcGISCache Lager",
-                "arcgis93": "ArcGISRest Lager"
+                "arcgis93": "ArcGISRest Lager",
+                "tiles3d" : "3D Tiles Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
@@ -75,6 +78,8 @@ Oskari.registerLocalization(
             "interfaceVersionDesc": "Gränss&shy;nittets version",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
+            "tiles3d0_0": "3D Tiles 0.0",
+            "tiles3d1_0": "3D Tiles 1.0",
             "getInfo": "Sök data",
             "editWfs": "Editera WFS",
             "selectClass": "Välj tema",
@@ -212,7 +217,7 @@ Oskari.registerLocalization(
         "ok": "OK",
         "close": "Stäng",
         "query": "Hämta",
-        "recheckTitle": "Hämta getCapabilities",
+        "recheckTitle": "Hämta nu",
         "recheckAllButton": "Hämta alla getCapabilities",
         "recheckAll": "Vill du hämta getCapabilites för alla kartlager? Operationen kan ta många minuter.",
         "recheckAllSucceeded": "Uppdatering lyckades för {success, number} lager, misslyckades för {fail, number} lager. Uppdatera sidan för att se uppdaterade data.",

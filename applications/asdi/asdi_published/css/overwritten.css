@@ -78,7 +78,7 @@ table {
     }
     
     .oskari-flyoutheading {
-		background-color: white !important;
+		background-color: rgb(12, 60, 98) !important;
 		border-top: 0px !important;
 		border-bottom: 0px !important;
 		height: 14px !important;
@@ -147,6 +147,42 @@ table {
 	.search .resultList div h3 {
 		font-size: 14px;	
 	}
+}
+
+div.mapplugin.timeseries .oskari-timeslider {
+    background-color: #93bbda !important;
+}
+
+.mapplugin-timeseries-popup .content {
+    background-color: #93bbda !important;
+}
+
+.mapplugin-timeseries-popup .arrow {
+    border-bottom: 15px solid #93bbda !important;
+}
+
+div.mapplugin.timeseries div.playback-button button {
+    background-color: #93bbda !important;
+}
+
+div.mapplugin.timeseries .oskari-timeslider .interval-line-highlight {
+    color: #3c3c3c !important;
+}
+
+div.mapplugin.timeseries div.playback-button button.play:after {
+    border-color: transparent transparent transparent #3c3c3c !important;
+}
+
+.mapplugin-timeseries-popup .content {
+    color: #3c3c3c !important;
+}
+
+div.mapplugin.timeseries div.playback-button button.pause:after {
+    background: #3c3c3c !important;
+}
+
+div.mapplugin.timeseries div.playback-button button.pause:before {
+    background: #3c3c3c !important;
 }
 
 /**

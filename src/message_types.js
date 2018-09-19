@@ -24,14 +24,12 @@
         }
         log.debug('Updating metadata for ' + type);
         var allKnownClassesOfType = Oskari.clazz.protocol(type);
-        for (var clazzName in allKnownClassesOfType) {
-            if (!allKnownClassesOfType.hasOwnProperty(clazzName)) {
-                continue;
-            }
-            var clazzDefinition = allKnownClassesOfType[clazzName];
-            var requestName = clazzDefinition._class.prototype.getName();
-            typeNames[requestName] = clazzName;
-        }
+        allKnownClassesOfType.forEach(function (className) {
+            var classInfo = Oskari.clazz._getClassInfo(className);
+            var dummy = Object.create(classInfo.classPrototype);
+            var requestName = dummy.getName();
+            typeNames[requestName] = className;
+        });
         log.debug('Finished updating metadata for ' + type);
         return typeNames[name];
     }

@@ -3,14 +3,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
     function( instance ) {
         var me = this;
         me.instance = instance;
-        me.loc = this.instance.getLocalization();
+        me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         me.container = null;
     }, {
         getName: function() {
             return 'Oskari.coordinatetransformation.Flyout';
         },
         getTitle: function() {
-            return this.loc.title;
+            return this.loc('flyout.title');
         },
         getViews: function () {
             return this.views;

@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Alert',
             me.ui = txtdiv;
 
             if (includeCloseButton) {
-                txtdiv.children('.oskari-alert-icon-close').click(function () {
+                txtdiv.children('.oskari-alert-icon-close').on('click', function () {
                     me.hide();
                 });
             } else {

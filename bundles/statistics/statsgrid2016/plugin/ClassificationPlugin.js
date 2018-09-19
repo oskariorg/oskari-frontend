@@ -12,14 +12,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
 
-        if ( instance.isEmbedded() )
-        {
+        if (instance.isEmbedded()) {
             this._defaultLocation = config.legendLocation;
-        }
-        else {
+        } else {
             this._defaultLocation = 'right bottom';
         }
-        
+
         me._name = 'ClassificationPlugin';
         me.element = null;
         me._templates = {
@@ -34,7 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         // me.setLocation(config.legendLocation || me._defaultLocation);
 
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-classification': {
                     iconCls: 'mobile-statslegend',
                     tooltip: locale('legend.title'),
@@ -51,15 +49,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
 
         this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, this._locale);
-        this.__legend.on('rendered', function(){
+        this.__legend.on('rendered', function () {
             me._calculatePluginSize();
         });
     }, {
         _setLayerToolsEditModeImpl: function () {
-            if ( !this.getElement() ) {
+            if (!this.getElement()) {
                 return;
             }
-            if ( !this.inLayerToolsEditMode() ) {
+            if (!this.inLayerToolsEditMode()) {
                 this.setLocation(
                     this.getElement().parents('.mapplugins').attr(
                         'data-location'
@@ -68,23 +66,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
         },
         _createControlElement: function () {
-            var sb = this._sandbox;
-
-            if ( this.element !== null ) {
+            if (this.element !== null) {
                 return this.element;
             }
             this.element = this._templates.main.clone();
+            this.element.css('z-index', 15001);
             this.__legend.render(this.element);
             return this.element;
         },
-        redrawUI: function(mapInMobileMode, forced) {
-            var sandbox = this.getSandbox();
+        redrawUI: function (mapInMobileMode, forced) {
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(!forced && toolbarNotReady) {
+            if (!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
@@ -94,14 +90,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
                 return false;
             }
-            this.addToPluginContainer( this._createControlElement() );
+            this.addToPluginContainer(this._createControlElement());
             this._makeDraggable();
             return false;
         },
-        teardownUI: function(stopping) {
+        teardownUI: function (stopping) {
             var element = this.getElement();
-            //detach old element from screen
-            if (element ) {
+            // detach old element from screen
+            if (element) {
                 element.detach();
                 this.removeFromPluginContainer(element, !stopping);
                 this.element = null;
@@ -112,24 +108,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         _makeDraggable: function () {
             this.getElement().draggable();
         },
-        makeTransparent: function ( transparent ) {
+        makeTransparent: function (transparent) {
             var element = this.getElement();
-            if ( !element ) {
+            if (!element) {
                 return;
             }
-            if ( transparent ) {
+            if (transparent) {
+                element.removeClass('statsgrid-legend-plugin');
+                element.addClass('statsgrid-legend-plugin-transparent');
                 element.find('.statsgrid-legend-container').addClass('legend-transparent');
             } else {
+                element.removeClass('statsgrid-legend-plugin-transparent');
+                element.addClass('statsgrid-legend-plugin');
                 element.find('.statsgrid-legend-container').removeClass('legend-transparent');
             }
         },
-        getElement: function() {
+        getElement: function () {
             return this.element;
         },
-        enableClassification: function(enabled) {
+        enableClassification: function (enabled) {
             this.__legend.allowClassification(enabled);
         },
-        stopPlugin: function() {
+        stopPlugin: function () {
             this.teardownUI(true);
         },
         _createEventHandlers: function () {
@@ -141,20 +141,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 }
             };
         },
-        _calculatePluginSize: function() {
+        _calculatePluginSize: function () {
             var element = this.getElement();
 
-            if ( !element ) {
+            if (!element) {
                 return;
             }
             var height = this.getSandbox().getMap().getHeight();
             var headerHeight = element.find('.active-header').first().height();
-            if ( Oskari.util.isMobile() ) {
+            if (Oskari.util.isMobile()) {
                 this._popup.getJqueryContent().find('.accordion').css({
                     'overflow': 'auto',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
-            } else if ( !Oskari.util.isMobile() ) {
+            } else if (!Oskari.util.isMobile()) {
                 element.find('.accordion').css({
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
@@ -166,7 +166,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
          * @static @property {string[]} protocol array of superclasses
          */
         'protocol': [
-            "Oskari.mapframework.module.Module",
-            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
     });

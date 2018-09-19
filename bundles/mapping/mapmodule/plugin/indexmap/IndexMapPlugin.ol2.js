@@ -123,8 +123,8 @@ Oskari.clazz.define(
 
         _bindIcon: function (icon) {
             var me = this;
-            icon.unbind('click');
-            icon.bind('click', function (event) {
+            icon.off('click');
+            icon.on('click', function (event) {
                 event.preventDefault();
                 var miniMap = me.getElement().find(
                     '.olControlOverviewMapElement'
@@ -165,7 +165,7 @@ Oskari.clazz.define(
                 );
                 miniMap.hide();
                 // disable icon
-                icon.unbind('click');
+                icon.off('click');
             } else {
                 // enable icon
                 this._bindIcon(icon);

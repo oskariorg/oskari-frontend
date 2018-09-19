@@ -193,7 +193,8 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             me.service.addLayerlistOption('plugins', ['checkbox', 'changed', 'wholerow', 'types', 'search', 'state', 'conditionalselect', 'dnd'], false);
             me.service.addLayerlistOption('dnd', {
                 use_html5: true,
-                inside_pos: 'last'
+                inside_pos: 'last',
+                drag_selection: false
             });
         },
 
@@ -369,7 +370,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     }
                 });
 
-                jQuery(primaryButton.getElement()).attr('disabled', true);
+                jQuery(primaryButton.getElement()).prop('disabled', true);
             });
 
             popup.show(loc('recheckTitle'), content, [closeButton, primaryButton]);

@@ -15,8 +15,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         this.linkToTermsOfUse = jQuery('<div class="registerInfo2"></div>');
         this.loginbarTemplate = jQuery('<div class="registerLoginBar"></div>');
         this.loginTemplate = jQuery('<div class="registerLinks"><a id="loginLink">' + this.loc.login + '</a>' +
-                                    " - " + '<a id="registerLink">' + this.loc.register + '</a></div>');
-        this.loggedInTemplate = jQuery('<div class="loggedIn">' +  Oskari.user().getName() + '</br><a href="/logout">' + this.loc.logout + '</a></div>');
+                                    ' - ' + '<a id="registerLink">' + this.loc.register + '</a></div>');
+        this.loggedInTemplate = jQuery('<div class="loggedIn">' + Oskari.user().getName() + '</br>' +
+            '<form action="/logout" method="POST"><input type="hidden" name="_csrf" value=""/></form>' +
+            '<a href="/logout">' + this.loc.logout + '</a></div>');
     },
     {
         /**
@@ -34,17 +36,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             var me = this;
 
             var conf = me.getConfiguration() || {};
-            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/?lang=' + Oskari.getLang();
+            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/user/new/paikkatietoikkuna?lang=' + Oskari.getLang();
             me.loginUrl = conf.loginUrl || '/auth';
 
             me.loginbar = me.loginbarTemplate.clone();
             me.loginContainer = jQuery(me.loginContainerId);
             if (Oskari.user().isLoggedIn()) {
+                var logoutForm = me.loggedInTemplate.find('form');
+                logoutForm.find('input').val(Oskari.app.getXSRFToken());
+                me.loggedInTemplate.find('a').on('click', function (e) {
+                    e.stopPropagation();
+                    logoutForm.submit();
+                    return false;
+                });
                 me.loginbar.append(me.loggedInTemplate);
             } else {
                 me.loginbar.append(me.loginTemplate);
                 me.loginbar.find('#loginLink').attr('href', me.loginUrl);
-                me.loginbar.find('#registerLink').click(function () {
+                me.loginbar.find('#registerLink').on('click', function () {
                     me.showRegisterPopup();
                 });
             }

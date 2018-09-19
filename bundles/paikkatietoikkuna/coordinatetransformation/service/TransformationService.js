@@ -28,39 +28,163 @@ function(instance) {
      */
     init: function() {},
 
-    requestUrlBuilder: function ( payload ) {
-        var urlBase = "action?action_route=CoordinateTransformation";
-        var urlParameterString = "";
+    requestUrlBuilder: function ( crs, transformType, exportSettings ) {
+        var urlBase = Oskari.urls.getRoute('CoordinateTransformation');
+        var urlParameterString =
+            "&sourceCrs=" + crs.sourceCrs +
+            "&targetCrs=" + crs.targetCrs +
+            "&targetDimension=" + crs.targetDimension +
+            "&sourceDimension=" + crs.sourceDimension +
+            "&transformType=" + transformType;
 
-        if( payload.sourceCrs ) {
-            urlParameterString = urlParameterString.concat("&sourceCrs="+payload.sourceCrs);
+        if( crs.sourceElevationCrs ) {
+            urlParameterString += "&sourceHeightCrs=" + crs.sourceElevationCrs;
         }
-        if( payload.sourceElevationCrs ) {
-            urlParameterString = urlParameterString.concat("&sourceHeightCrs="+payload.sourceElevationCrs);
+        if( crs.targetElevationCrs ) {
+            urlParameterString += "&targetHeightCrs=" + crs.targetElevationCrs;
         }
-        if( payload.targetCrs ) {
-            urlParameterString = urlParameterString.concat("&targetCrs="+payload.targetCrs);
+        if (exportSettings){
+            urlParameterString += "&exportSettings=" + JSON.stringify(exportSettings.selects);
         }
-        if( payload.targetElevationCrs ) {
-            urlParameterString = urlParameterString.concat("&targetHeightCrs="+payload.targetElevationCrs);
-        }
-        var url = urlBase.concat(urlParameterString);
-        return url;
+        return urlBase + urlParameterString;
     },
-    getConvertedCoordinates: function( payload, successCb, errorCb ) {
-        var url = this.requestUrlBuilder( payload );
+    formDataBuilder: function (importSettings, exportSettings){
+        var file = file;
+        var settings = settings;
+        var formData = new FormData();
+        if (exportSettings && exportSettings.selects){
+            formData.append('exportSettings', JSON.stringify(exportSettings.selects));
+        }
+        if (importSettings && importSettings.selects){
+            formData.append('importSettings', JSON.stringify(importSettings.selects));
+        }
+        if(importSettings.file){
+            formData.append('coordFile', importSettings.file);
+        }
+        return formData;
+
+    },
+    handleError: function(callback, jqXHR){
+        if (typeof callback !== "function"){
+            return;
+        }
+        var resp,
+            text,
+            errorInfo;
+        try {
+            resp = JSON.parse(jqXHR.responseText);
+            text = resp.error;
+            if(resp.info) {
+                errorInfo = resp.info;
+            }
+        } catch(err) {
+            Oskari.log(this.getName()).warn('Error whilst parsing json, error');
+        }
+        callback(errorInfo, text);
+    },
+    transformArrayToArray: function(coords, crs, successCb, errorCb ) {
+        var me = this;
+        var url = this.requestUrlBuilder( crs, "A2A" );
         jQuery.ajax({
-           contentType: "application/json",
-           type: "POST",
-           url: url,
-           data: JSON.stringify(payload.coords),
-           success: function(response) {
-               successCb(response);
-           }
-       });
+            contentType: "application/json",
+            type: "POST",
+            url: url,
+            data: JSON.stringify(coords),
+            success: function(response) {
+                successCb(response);
+            },
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
+            }
+        });
     },
-    _handleResponse: function(response, cb) {
-        cb(response);
+    transformFileToArray: function (crs, fileSettings, successCb, errorCb){
+        var me = this;
+        var url = this.requestUrlBuilder( crs, "F2A");
+        var formData = this.formDataBuilder(fileSettings);
+         jQuery.ajax({
+            contentType: false, //multipart/form-data
+            type: "POST",
+            cache : false,
+            processData: false,
+            url: url,
+            data: formData,
+            success: function(response) {
+                successCb(response);
+            },
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
+            }
+        });
+    },
+    readFileToArray: function (crs, fileSettings, successCb, errorCb){
+        var me = this;
+        var url = this.requestUrlBuilder(crs, "F2R");
+        var formData = this.formDataBuilder(fileSettings);
+         jQuery.ajax({
+            contentType: false, //multipart/form-data
+            type: "POST",
+            cache : false,
+            processData: false,
+            url: url,
+            data: formData,
+            success: function(response) {
+                successCb(response);
+            },
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
+            }
+        });
+    },
+    transformArrayToFile: function(coords, crs, fileSettings, successCb, errorCb ) {
+        var me = this;
+        var url = this.requestUrlBuilder( crs, "A2F", fileSettings);
+        jQuery.ajax({
+            contentType: "application/json",
+            type: "POST",
+            url: url,
+            data: JSON.stringify(coords),
+            success: function(response, textStatus, jqXHR) {
+                var type = jqXHR.getResponseHeader('Content-Type');
+                var filename = me.getFileNameFromResponse(jqXHR);
+                successCb(response, filename, type);
+            },
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
+            }
+        });
+    },
+    transformFileToFile: function(crs, importSettings, exportSettings, successCb, errorCb ) {
+        var me = this;
+        var url = this.requestUrlBuilder( crs , "F2F");
+        var formData = this.formDataBuilder(importSettings, exportSettings);
+        jQuery.ajax({
+            contentType: false, //multipart/form-data
+            type: "POST",
+            cache : false,
+            processData: false,
+            url: url,
+            data: formData,
+            success: function(response, textStatus, jqXHR) {
+                var type = jqXHR.getResponseHeader('Content-Type');
+                var filename = me.getFileNameFromResponse(jqXHR);
+                successCb(response, filename, type);
+            },
+            error: function(jqXHR){
+                me.handleError(errorCb, jqXHR);
+            }
+        });
+    },
+    getFileNameFromResponse: function (xhr){
+        var disposition = xhr.getResponseHeader('Content-Disposition');
+        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        if (disposition){
+            var matches = filenameRegex.exec(disposition);
+            if (matches[1]){
+                return matches[1];
+            }
+        }
+        return "results.txt";
     }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']

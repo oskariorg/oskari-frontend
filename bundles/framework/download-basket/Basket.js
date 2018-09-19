@@ -74,7 +74,7 @@ Oskari.clazz.define(
 
             me.emptyBtn.addClass('primary empty');
             me.emptyBtn.setTitle(me._getLocalization('basket-empty'));
-            jQuery(me.emptyBtn.getElement()).click(function () {
+            jQuery(me.emptyBtn.getElement()).on('click', function () {
                 var el = me.container;
                 el.find('.download-basket__component').remove();
                 el.find('.empty-basket').show();
@@ -87,7 +87,7 @@ Oskari.clazz.define(
 
             me.prevBtn.addClass('primary prev');
             me.prevBtn.setTitle(me._getLocalization('basket-prev'));
-            jQuery(me.prevBtn.getElement()).click(function () {
+            jQuery(me.prevBtn.getElement()).on('click', function () {
                 var el = me.container;
                 jQuery(el.find('input.empty')).show();
                 jQuery(el.find('input.next')).show();
@@ -100,7 +100,7 @@ Oskari.clazz.define(
 
             me.nextBtn.addClass('primary next');
             me.nextBtn.setTitle(me._getLocalization('basket-next'));
-            jQuery(me.nextBtn.getElement()).click(function() {
+            jQuery(me.nextBtn.getElement()).on('click', function() {
                 var el = me.container;
                 jQuery(el.find('input.empty')).hide();
                 jQuery(el.find('input.next')).hide();
@@ -113,7 +113,7 @@ Oskari.clazz.define(
 
             me.sendBtn.addClass('approve send');
             me.sendBtn.setTitle(me._getLocalization('basket-send'));
-            jQuery(me.sendBtn.getElement()).click(function () {
+            jQuery(me.sendBtn.getElement()).on('click', function () {
                 if(!me.validateUserInputs(jQuery('.oskari__download-basket-user-info').find('form'))){
                     me.loadBasketItem();
                 }
@@ -390,7 +390,7 @@ Oskari.clazz.define(
                         licenseLink.remove();
                     }
 
-                    basketEl.find('.icon-close-dark').click(function(event){
+                    basketEl.find('.icon-close-dark').on('click', function(event){
                         var basketEl = jQuery(this).parents('.download-basket__component');
                         basketEl.remove();
 

@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     show: true,
                     callback: function (el) {
                         if (!me.inLayerToolsEditMode()) {
-                            var requestBuilder = me.getSandbox().getRequestBuilder(
+                            var requestBuilder = Oskari.requestBuilder(
                                 'StateHandler.SetStateRequest'
                             );
                             if (requestBuilder) {
@@ -80,13 +80,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             // update path from config
             panbuttonDivImg.attr('src', pbimg + 'empty.png');
 
-            center.bind('mouseover', function (event) {
+            center.on('mouseover', function (event) {
                 panbuttonDivImg.addClass('root');
             });
-            center.bind('mouseout', function (event) {
+            center.on('mouseout', function (event) {
                 panbuttonDivImg.removeClass('root');
             });
-            center.bind('click', function (event) {
+            center.on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     var requestBuilder = me.getSandbox().getRequestBuilder(
                         'StateHandler.SetStateRequest'
@@ -99,54 +99,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 }
             });
 
-            left.bind('mouseover', function (event) {
+            left.on('mouseover', function (event) {
                 panbuttonDivImg.addClass('left');
             });
-            left.bind('mouseout', function (event) {
+            left.on('mouseout', function (event) {
                 panbuttonDivImg.removeClass('left');
             });
-            left.bind('click', function (event) {
+            left.on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     me.getMapModule().panMapByPixels(-100, 0, true);
                 }
             });
 
-            right.bind('mouseover', function (event) {
+            right.on('mouseover', function (event) {
                 panbuttonDivImg.addClass('right');
             });
-            right.bind('mouseout', function (event) {
+            right.on('mouseout', function (event) {
                 panbuttonDivImg.removeClass('right');
             });
-            right.bind('click', function (event) {
+            right.on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     me.getMapModule().panMapByPixels(100, 0, true);
                 }
             });
 
-            top.bind('mouseover', function (event) {
+            top.on('mouseover', function (event) {
                 panbuttonDivImg.addClass('up');
             });
-            top.bind('mouseout', function (event) {
+            top.on('mouseout', function (event) {
                 panbuttonDivImg.removeClass('up');
             });
-            top.bind('click', function (event) {
+            top.on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     me.getMapModule().panMapByPixels(0, -100, true);
                 }
             });
 
-            bottom.bind('mouseover', function (event) {
+            bottom.on('mouseover', function (event) {
                 panbuttonDivImg.addClass('down');
             });
-            bottom.bind('mouseout', function (event) {
+            bottom.on('mouseout', function (event) {
                 panbuttonDivImg.removeClass('down');
             });
-            bottom.bind('click', function (event) {
+            bottom.on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     me.getMapModule().panMapByPixels(0, 100, true);
                 }
             });
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     var radius = Math.round(0.5 * panbuttonDivImg[0].width),
                         pbOffset = panbuttonDivImg.offset(),
@@ -239,6 +239,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 me.refresh();
                 this.addToPluginContainer(me._element);
             }
+        },
+        teardownUI: function () {
+            this.removeFromPluginContainer(this.getElement());
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+        },
+        /**
+         * @method _stopPluginImpl BasicMapModulePlugin method override
+         * @param {Oskari.Sandbox} sandbox
+         */
+        _stopPluginImpl: function (sandbox) {
+            this.teardownUI();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
