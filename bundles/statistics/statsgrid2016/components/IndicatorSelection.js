@@ -267,6 +267,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             if (regionFilterSelect.getValue() === null || regionFilterSelect.getValue().length === 0) {
                 var keepSelectedValue = true;
                 dsSelect.reset(keepSelectedValue);
+                indicSelect.disableOptions([]);
                 return;
             }
             var unsupportedSelections = me.service.getUnsupportedDatasetsList(regionFilterSelect.getValue());
