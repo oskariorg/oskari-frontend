@@ -159,6 +159,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
             }
+        },
+        hasUI: function () {
+            return false;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
