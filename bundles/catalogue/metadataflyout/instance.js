@@ -179,7 +179,7 @@ Oskari.clazz.define(
             };
 
             for (var key in this._requestHandlers) {
-                sandbox.addRequestHandler(key, this._requestHandlers[key]);
+                sandbox.requestHandler(key, this._requestHandlers[key]);
             }
 
             /* stateful */

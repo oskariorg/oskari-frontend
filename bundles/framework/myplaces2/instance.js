@@ -134,27 +134,27 @@ Oskari.clazz.define(
                 sandbox,
                 me
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.EditPlaceRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.DeletePlaceRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.EditCategoryRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.DeleteCategoryRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.PublishCategoryRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.OpenAddLayerDialogRequest',
                 openAddLayerDialogHandler
             );

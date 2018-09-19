@@ -203,9 +203,9 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
         this._sandbox = sandbox;
 
         sandbox.register(this);
-        sandbox.addRequestHandler('LupaPisteMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
-        sandbox.addRequestHandler('LupaPisteMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.addRequestHandler('LupaPisteMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
+        sandbox.requestHandler('LupaPisteMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
+        sandbox.requestHandler('LupaPisteMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.requestHandler('LupaPisteMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
 
     },
     stopPlugin: function (sandbox) {

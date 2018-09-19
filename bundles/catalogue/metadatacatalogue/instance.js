@@ -280,7 +280,7 @@ Oskari.clazz.define(
                 sandbox,
                 me
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'AddSearchResultActionRequest',
                 this.addSearchResultActionRequestHandler
             );

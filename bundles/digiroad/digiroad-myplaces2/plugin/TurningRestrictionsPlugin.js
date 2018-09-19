@@ -140,8 +140,8 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
         this._mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         sandbox.register(this);
-        sandbox.addRequestHandler('DigiroadMyPlaces.StartRestrictionRequest', this.requestHandlers.startRestrictionHandler);
-        sandbox.addRequestHandler('DigiroadMyPlaces.FinishRestrictionRequest', this.requestHandlers.finishRestrictionHandler);
+        sandbox.requestHandler('DigiroadMyPlaces.StartRestrictionRequest', this.requestHandlers.startRestrictionHandler);
+        sandbox.requestHandler('DigiroadMyPlaces.FinishRestrictionRequest', this.requestHandlers.finishRestrictionHandler);
     },
 
     stopPlugin: function(sandbox) {

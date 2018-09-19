@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
 
             // request
             this._requestHandlers['userguide.ShowUserGuideRequest'] = Oskari.clazz.create('Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('userguide.ShowUserGuideRequest', this._requestHandlers['userguide.ShowUserGuideRequest']);
+            sandbox.requestHandler('userguide.ShowUserGuideRequest', this._requestHandlers['userguide.ShowUserGuideRequest']);
 
             // draw ui
             this.plugins['Oskari.userinterface.Flyout'].createUi();

@@ -76,11 +76,11 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 
 		/* request handler */
 		this._requestHandlers['TransportChangedRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.TransportChangedRequestHandler', sandbox, this);
-		sandbox.addRequestHandler('TransportChangedRequest', this._requestHandlers['TransportChangedRequest']);
+		sandbox.requestHandler('TransportChangedRequest', this._requestHandlers['TransportChangedRequest']);
 		this._requestHandlers['ShowHelpRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpRequestHandler', sandbox, this);
-		sandbox.addRequestHandler('ShowHelpRequest', this._requestHandlers['ShowHelpRequest']);
+		sandbox.requestHandler('ShowHelpRequest', this._requestHandlers['ShowHelpRequest']);
 		this._requestHandlers['ChangeLanguageRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLanguageRequestHandler', sandbox, this);
-		sandbox.addRequestHandler('ChangeLanguageRequest', this._requestHandlers['ChangeLanguageRequest']);
+		sandbox.requestHandler('ChangeLanguageRequest', this._requestHandlers['ChangeLanguageRequest']);
 
 		var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 

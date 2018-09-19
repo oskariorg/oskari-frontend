@@ -50,8 +50,8 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.MarkersPlugin', f
         for (p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
-        sandbox.addRequestHandler('lupakartta.ClearMapRequest', me.requestHandlers.clearMapHandler);
-        sandbox.addRequestHandler('lupakartta.AddMarkerRequest', me.requestHandlers.addMarkerHandler);
+        sandbox.requestHandler('lupakartta.ClearMapRequest', me.requestHandlers.clearMapHandler);
+        sandbox.requestHandler('lupakartta.AddMarkerRequest', me.requestHandlers.addMarkerHandler);
     },
     stopPlugin: function (sandbox) {
         var p;

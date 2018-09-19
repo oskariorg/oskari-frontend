@@ -106,7 +106,7 @@ function () {
             };
 
             for (var key in this._requestHandlers) {
-                sandbox.addRequestHandler(key, this._requestHandlers[key])
+                sandbox.requestHandler(key, this._requestHandlers[key])
             }
 
             var request = sandbox.getRequestBuilder(
