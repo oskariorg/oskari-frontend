@@ -288,6 +288,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
     getSelectedValues: function () {
         var me = this;
         var range = me._rangeSlider.element.slider('values');
+        var transparencyEl = me._element.find('select.transparency-value');
+        var transparencyVal = transparencyEl.val() !== null ? transparencyEl.val() : transparencyEl.find('option#hiddenvalue').val();
         var values = {
             method: me._element.find('select.method').val(),
             count: parseFloat(me._element.find('select.amount-class').val()),
@@ -299,7 +301,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             // only used for points vector
             min: range[0],
             max: range[1],
-            transparency: me._element.find('select.transparency-value').val(),
+            transparency: transparencyVal,
             showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
             fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
