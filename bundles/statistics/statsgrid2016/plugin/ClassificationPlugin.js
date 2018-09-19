@@ -161,6 +161,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
         },
         hasUI: function () {
+            // Plugin has ui element but returns false, because
+            // otherwise publisher would stop this plugin and start it again when leaving the publisher,
+            // resulting a misfuctioning duplicate classification element on screen.
             return false;
         }
     }, {
