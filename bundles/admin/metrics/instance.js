@@ -35,8 +35,8 @@ Oskari.clazz.define("Oskari.admin.bundle.metrics.MetricsAdminBundleInstance",
                     content.tree({ 'data' : me.formatData(response)});
                 }
             });
-            var reqBuilder = sandbox.getRequestBuilder('Admin.AddTabRequest');
-            if(reqBuilder) {
+            if (sandbox.hasHandler('Admin.AddTabRequest')) {
+                var reqBuilder = Oskari.requestBuilder('Admin.AddTabRequest');
                 var request = reqBuilder(title, content, 2, 'metrics');
                 sandbox.request(this, request);
             }
