@@ -112,7 +112,7 @@ Oskari.clazz.define(
                 'Oskari.analysis.bundle.analyse.request.AnalyseRequestHandler',
                 me
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'analyse.AnalyseRequest',
                 me.analyseHandler
             );
@@ -129,7 +129,6 @@ Oskari.clazz.define(
             //Let's extend UI
             var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
-
 
             // draw ui
             me._createUi();
@@ -185,17 +184,17 @@ Oskari.clazz.define(
         /**
          * Adds a tab for analysis layers in PersonalData
          */
-        __addTab : function() {
-            if(this.personalDataTab) {
+        __addTab: function () {
+            if (this.personalDataTab) {
                 // already added
                 return;
             }
-            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
 
-            if (!reqBuilder) {
+            if (!this.sandbox.hasHandler('PersonalData.AddTabRequest')) {
                 // request not ready
                 return;
             }
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
             // Request tab to be added to personal data
             var tab = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
