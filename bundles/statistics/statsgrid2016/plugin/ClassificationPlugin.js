@@ -80,7 +80,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             return this.element;
         },
         redrawUI: function (mapInMobileMode, forced) {
-            var sandbox = this.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
@@ -94,8 +93,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             if (toolbarReady && mapInMobileMode) {
                 // create mobile
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')('mobile-classification', 'mobileToolbar-mobile-toolbar');
-                sandbox.request(this, toolbarRequest);
+                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')('mobile-classification', 'mobileToolbar-mobile-toolbar');
+                this.getSandbox().request(this, toolbarRequest);
             }
             if (!mapInMobileMode) {
                 this._buildUI();
