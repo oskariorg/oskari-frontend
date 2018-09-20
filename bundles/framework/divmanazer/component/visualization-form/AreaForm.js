@@ -21,8 +21,8 @@ Oskari.clazz.define(
             lineWidth: this.defaultValues.line.width,
             lineCorner: this.defaultValues.line.corner,
             lineStyle: this.defaultValues.line.style,
-            lineColor: this.defaultValues.line.color,
-            fillColor: this.defaultValues.fill.color,
+            lineColor: '#'+this.defaultValues.line.color,
+            fillColor: '#'+this.defaultValues.fill.color,
             fillStyle: this.defaultValues.fill.style
         };
 
@@ -88,31 +88,13 @@ Oskari.clazz.define(
             '<div class="column2">' +
             '<div class="column21">' +
             '<label>' + this.loc.linecolor.label + '</label>' +
-            '<div class="color-grid">' +
-            '<div class="color-rectangle line"></div>' +
-            '</div>' +
-            '<div class="color-label">' +
-            '<label>' + this.loc.linecolor.labelOr + '</label>' +
-            '</div>' +
-            '<div class="color-source-selector-line">' +
-            '<label for="color-checkbox-0">' + this.loc.linecolor.labelCustom + '</label>' +
-            '</div>' +
-            '<div class="custom-colors-line"></div>' +
+            '<div id="color-picker-line-wrapper"></div>' +
             '<div class="remove-color-line"></div>' +
             '</div>' +
             '<div class="column22">' +
             '<div class="column221">' +
             '<label>' + this.loc.color.label + '</label>' +
-            '<div class="color-grid">' +
-            '<div class="color-rectangle fill"></div>' +
-            '</div>' +
-            '<div class="color-label">' +
-            '<label>' + this.loc.color.labelOr + '</label>' +
-            '</div>' +
-            '<div class="color-source-selector-fill">' +
-            '<label for="color-checkbox-1">' + this.loc.color.labelCustom + '</label>' +
-            '</div>' +
-            '<div class="custom-colors-fill"></div>' +
+            '<div id="color-picker-fill-wrapper"></div>' +
             '<label>' + this.loc.fill.label + '</label>' +
             '<div class="fill icon-buttons"></div>' +
             '<div class="remove-color-fill"></div>' +
@@ -291,172 +273,26 @@ Oskari.clazz.define(
                 greenValue,
                 blueValue,
                 rgb;
-            // Color chooser
-            for (c = 0; c < 2; c += 1) {
-                statedChosenColor = false;
-                cType = (c === 0) ? 'lineColor' : 'fillColor';
-                content = dialogContent.find('.color-rectangle.' + me.colorTypes[c]);
-                for (i = 0; i < me.basicColors.length; i += 1) {
-                    colorCell = me.templateColorCell.clone();
-                    colorCell.css('background-color', me.basicColors[i]);
-                    idExt = 'ColorCell';
-                    id = i.toString() + c.toString() + idExt;
-                    if (id.length === idExt.length + 2) {
-                        id = '0' + id;
-                    }
-                    colorCell.attr('id', id);
-                    colorCell.on('click', function () {
-                        var cellIndex = parseInt(this.id.substring(0, 2), 10);
-                        var colorType = parseInt(this.id.substring(2, 3), 10);
-                        if (jQuery('#color-checkbox-' + colorType).prop('checked')) {
-                            jQuery('#color-checkbox-' + colorType).prop('checked', false);
-                            jQuery('input.custom-color.' + me.colorTypes[colorType]).prop('disabled', true);
-                        }
-                        if (cellIndex === me.activeColorCell[colorType]) {
-                            return;
-                        }
-                        if (me.activeColorCell[colorType] > -1) {
-                            var activeCell = me.activeColorCell[colorType].toString();
-                            if (me.activeColorCell[colorType] < 10) {
-                                activeCell = '0' + activeCell;
-                            }
-                            jQuery('#' + activeCell + colorType + 'ColorCell').css('border', '1px solid #000000');
-                        }
-                        me.values[colorType === 0 ? 'lineColor' : 'fillColor'] = Oskari.util.rgbToHex(this.style.backgroundColor);
-                        me.activeColorCell[colorType] = cellIndex;
-                        if (cellIndex < 10) {
-                            cellIndex = '0' + cellIndex.toString();
-                        }
-                        jQuery('#' + cellIndex + colorType + 'ColorCell').css('border', '3px solid #ffffff');
-                        me._updatePreview(dialogContent);
-                    });
-                    //instead of selecting always black,
-                    // we should use the color that comes from the state
-                    if ('#' + me.values[cType] === me.basicColors[i]) {
-                        colorCell.css('border', '3px solid #ffffff');
-                        me.activeColorCell[c] = i;
-                        statedChosenColor = true;
-                    }
-                    content.append(colorCell);
-                }
+            
+            // Create color pickers
+            me._createColorPickers();
+            var colorPickerLineWrapper = dialogContent.find('#color-picker-line-wrapper');
+            var colorPickerFillWrapper = dialogContent.find('#color-picker-fill-wrapper');
 
-                // Custom color
-                content = dialogContent.find('.color-source-selector-' + me.colorTypes[c]);
-                colorCheckbox = me.templateColorSource.clone();
-                colorCheckbox.attr('id', 'color-checkbox-' + c);
+            colorPickerLineWrapper.append(me._colorPickers[0].getElement());
+            colorPickerFillWrapper.append(me._colorPickers[1].getElement());
+            me._colorPickers[0].setValue(me.values['lineColor']);
+            me._colorPickers[1].setValue(me.values['fillColor']);
 
-                var customColorChangeHandler = function (colorType) {
-                    var values = [],
-                        i,
-                        intValue;
-                    values[0] = jQuery('input#' + colorType + 'red-value').val();
-                    values[1] = jQuery('input#' + colorType + 'green-value').val();
-                    values[2] = jQuery('input#' + colorType + 'blue-value').val();
-                    // From integer to hex values
-                    for (i = 0; i < 3; i += 1) {
-                        intValue = parseInt(values[i],10);
-                        if ((intValue < 0) || (intValue > 255)) {
-                            return;
-                        }
-                        values[i] = intValue.toString(16);
-                        if (values[i].length === 1) {
-                            values[i] = '0' + values[i];
-                        }
-                    }
-                    me.values[(colorType === '0') ? 'lineColor' : 'fillColor'] = values.join('');
-                    me._updatePreview();
-                };
+            colorPickerLineWrapper.on('change', function() {
+                me.values['lineColor'] = me._colorPickers[0].getValue();
+                me._updatePreview(dialogContent);
+            });
 
-                // If the default value is not included in the color cells
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    colorCheckbox.prop('checked', true);
-                }
-                colorCheckbox.on('change', function () {
-                    var colorTypeId = this.id.substring(this.id.length-1, this.id.length);
-                    var colorType = (colorTypeId === '0') ? 'lineColor' : 'fillColor';
-                    jQuery('input.custom-color.' + me.colorTypes[colorTypeId]).prop('disabled', !this.checked);
-
-                    if (this.checked) {
-                        if(me.activeColorCell[colorTypeId] > -1){
-                            var cell = me.activeColorCell[colorTypeId].toString();
-                            if (me.activeColorCell[colorTypeId] < 10) {
-                                cell = '0' + cell;
-                            }
-                            var activeCell = jQuery('#' + cell + colorTypeId + 'ColorCell');
-                            activeCell.css('border', '1px solid #000000');
-                            jQuery('.custom-red-value.' + me.colorTypes[colorTypeId]).val(parseInt(me.values[colorType].substring(0, 2), 16));
-                            jQuery('.custom-green-value.' + me.colorTypes[colorTypeId]).val(parseInt(me.values[colorType].substring(2, 4), 16));
-                            jQuery('.custom-blue-value.' + me.colorTypes[colorTypeId]).val(parseInt(me.values[colorType].substring(4), 16));
-                            me.activeColorCell[colorTypeId] = -1;
-                        }
-                        customColorChangeHandler(colorTypeId);
-                    } else {
-                        me.values[colorType] = null;
-                        me.activeColorCell[colorTypeId] = -1;
-
-                    }
-                    me._updatePreview(dialogContent);
-                });
-                content.prepend(colorCheckbox);
-
-                // if the color is not picked from selection and not transparent (null), it must be users own color
-                // select user colors checkbox
-                if (!statedChosenColor && me.values[cType] !== null) {
-                    colorCheckbox.checked = true;
-                    content.find('input.color-source').prop('disabled', false).prop('checked', true);
-                }
-
-                content = dialogContent.find('.custom-colors-' + me.colorTypes[c]);
-                customColorEditor = this.templateCustomColor.clone();
-                customColorEditor.addClass(me.colorTypes[c]);
-                content.append(customColorEditor);
-
-                redValue = me.templateColorValue.clone();
-                redValue.addClass('custom-red-value');
-                redValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    redValue.val(parseInt(me.values[cType].substring(0, 2), 16));
-                    redValue.prop('disabled', false);
-                }
-                content.find('.colorcolumn1').append(redValue);
-                content.find('label.custom-red-value').text('R');
-                content.find('input.custom-red-value').attr('id', c + 'red-value');
-
-                greenValue = me.templateColorValue.clone();
-                greenValue.addClass('custom-green-value');
-                greenValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    greenValue.val(parseInt(me.values[cType].substring(2, 4), 16));
-                    greenValue.prop('disabled', false);
-                }
-                content.find('.colorcolumn21').append(greenValue);
-                content.find('label.custom-green-value').text('G');
-                content.find('input.custom-green-value').attr('id', c + 'green-value');
-
-                blueValue = me.templateColorValue.clone();
-                blueValue.addClass('custom-blue-value');
-                blueValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    blueValue.val(parseInt(me.values[cType].substring(4), 16));
-                    blueValue.prop('disabled', false);
-                }
-                content.find('.colorcolumn22').append(blueValue);
-                content.find('label.custom-blue-value').text('B');
-                content.find('input.custom-blue-value').attr('id', c + 'blue-value');
-
-                // if the color is not picked from selection and not transparent (null), it must be users own color
-                // add color values to the input fields
-                if (!statedChosenColor && me.values[cType] !== null) {
-                    rgb = Oskari.util.hexToRgb(me.values[cType]);
-                    content.find('input.custom-color.custom-red-value').val(rgb.r);
-                    content.find('input.custom-color.custom-green-value').val(rgb.g);
-                    content.find('input.custom-color.custom-blue-value').val(rgb.b);
-                    dialogContent.find('input#' + c.toString() + 'red-value.custom-color').prop('disabled', false);
-                    dialogContent.find('input#' + c.toString() + 'green-value.custom-color').prop('disabled', false);
-                    dialogContent.find('input#' + c.toString() + 'blue-value.custom-color').prop('disabled', false);
-                }
-                content.find('.custom-color').on('change', customColorChangeHandler.bind(null, c.toString()));
-            }
+            colorPickerFillWrapper.on('change', function() {
+                me.values['fillColor'] = me._colorPickers[1].getValue();
+                me._updatePreview(dialogContent);
+            });
 
             // remove color links
             ['line', 'fill'].forEach(function(type, index){
@@ -479,10 +315,13 @@ Oskari.clazz.define(
                     jQuery('input.custom-color.' + me.colorTypes[index]).prop('disabled', true);
 
                     if(type === 'fill'){
+                        me._colorPickers[1].setValue(null);
                         if (me.values.fillStyle !== -1) {
                             me._styleUnselectedButton(jQuery('div#' + me.values.fillStyle + 'fillstyle.icon-button'));
                         }
                         me.values.fillStyle = -1;
+                    } else {
+                        me._colorPickers[0].setValue(null);
                     }
                     me._updatePreview(dialogContent);
                 });
@@ -568,12 +407,12 @@ Oskari.clazz.define(
             }
 
             var previewTemplate = me._previewTemplates[me.values.lineStyle].clone();
-            var fill = (parseInt(me.values.fillStyle,10) < 0) ? '#' + me.values.fillColor : 'none';
+            var fill = (parseInt(me.values.fillStyle,10) < 0) ? me.values.fillColor : 'none';
             if (me.values.fillStyle >= 0 || me.values.fillColor === null) {
                 fill = 'none';
             }
 
-            var line = me.values.lineColor !== null ? '#' + me.values.lineColor : 'none';
+            var line = me.values.lineColor !== null ? me.values.lineColor : 'none';
 
             previewTemplate.find('path').attr({
                 'fill': fill,
@@ -616,7 +455,7 @@ Oskari.clazz.define(
                         pathSvg.attr({
                             'd': 'M' + p01a + 'L' + p01b + 'M' + p02a + 'L' + p02b + 'M' + p03a + 'L' + p03b + 'M' + p04a + 'L' + p04b + 'M' + p05a + 'L' + p05b + 'M' + p06a + 'L' + p06b + 'M' + p07a + 'L' + p07b + 'M' + p08a + 'L' + p08b + 'M' + p09a + 'L' + p09b + 'M' + p010a + 'L' + p010b + 'M' + p011a + 'L' + p011b,
                             'stroke-width': 1,
-                            'stroke': '#' + me.values.fillColor,
+                            'stroke': me.values.fillColor,
                             'fill': 'none'
                         });
                         break;
@@ -638,7 +477,7 @@ Oskari.clazz.define(
                         pathSvg.attr({
                             'd': 'M' + p11a + 'L' + p11b + 'M' + p12a + 'L' + p12b + 'M' + p13a + 'L' + p13b + 'M' + p14a + 'L' + p14b + 'M' + p15a + 'L' + p15b + 'M' + p16a + 'L' + p16b,
                             'stroke-width': 2,
-                            'stroke': '#' + me.values.fillColor,
+                            'stroke': me.values.fillColor,
                             'fill': 'none'
                         });
                         break;
@@ -662,7 +501,7 @@ Oskari.clazz.define(
                         pathSvg.attr({
                             'd': 'M' + p21a + 'L' + p21b + 'M' + p22a + 'L' + p22b + 'M' + p23a + 'L' + p23b + 'M' + p24a + 'L' + p24b + 'M' + p25a + 'L' + p25b + 'M' + p26a + 'L' + p26b + 'M' + p27a + 'L' + p27b,
                             'stroke-width': 1,
-                            'stroke': '#' + me.values.fillColor,
+                            'stroke': me.values.fillColor,
                             'fill': 'none'
                         });
                         break;
@@ -682,7 +521,7 @@ Oskari.clazz.define(
                         pathSvg.attr({
                             'd': 'M' + p31a + 'L' + p31b + 'M' + p32a + 'L' + p32b + 'M' + p33a + 'L' + p33b + 'M' + p34a + 'L' + p34b + 'M' + p35a + 'L' + p35b,
                             'stroke-width': 2,
-                            'stroke': '#' + me.values.fillColor,
+                            'stroke': me.values.fillColor,
                             'fill': 'none'
                         });
 
@@ -720,6 +559,19 @@ Oskari.clazz.define(
 
             // Refresh svg to show correctly
             preview.html(preview.html());
+        },
+
+        /**
+         * @method createColorPickers
+         * Creates an array of color picker components
+         * @private
+         */
+        _createColorPickers: function() {
+            var options = {allowEmpty: true};
+            this._colorPickers = [
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options),
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options)
+            ];
         },
 
         /**

@@ -13,7 +13,12 @@ function() {
         customClrs: jQuery('<div id="publisher-custom-colours">' + '<div id="publisher-custom-colours-bg"></div>' + '<div id="publisher-custom-colours-title"></div>' + '<div id="publisher-custom-colours-header"></div>' + '<div id="publisher-custom-colours-iconcls"></div>' + '</div>'),
         rgbInput: jQuery('<div class="rgbInput">' + '<label for="red">R</label><input type="text" name="red" maxlength="3" />' + '<label for="green">G</label><input type="text" name="green" maxlength="3" />' + '<label for="blue">B</label><input type="text" name="blue" maxlength="3" />' + '</div>'),
         iconClsInput: jQuery('<div class="iconClsInput">' + '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' + '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' + '</div>'),
-        inputRadio: jQuery('<div><input type="radio" /><label></label></div>')
+        inputRadio: jQuery('<div><input type="radio" /><label></label></div>'),
+        colorPickers: {
+            background: jQuery('<div id="color-picker-background"></div>'),
+            title: jQuery('<div id="color-picker-title"></div>'),
+            header: jQuery('<div id="color-picker-header"></div>')
+        }
     },
 
     values: {
@@ -202,7 +207,7 @@ function() {
         var me = this,
             template = me.templates.colours.clone(),
             selectedColour = me.values.colourScheme || {},
-            colourName = me.__instance._localization.BasicView.layout.fields.colours[selectedColour.val],
+            colourName = selectedColour.val ? me.__instance._localization.BasicView.layout.fields.colours[selectedColour.val] : me.__instance._localization.BasicView.layout.fields.colours['dark_grey'],
             colourLabel = me.__instance._localization.BasicView.layout.fields.colours.label,
             colourPlaceholder = me.__instance._localization.BasicView.layout.fields.colours.placeholder,
             buttonLabel = me.__instance._localization.BasicView.layout.fields.colours.buttonLabel;
@@ -462,12 +467,9 @@ function() {
     _createCustomColoursInputs: function () {
         var me = this,
             template = me.templates.customClrs.clone(),
-            bgInputs = me.templates.rgbInput.clone(),
             layoutLoc = me.__instance._localization.BasicView.layout,
             bgLoc = layoutLoc.fields.colours.customLabels.bgLabel,
-            titleInputs = me.templates.rgbInput.clone(),
             titleLoc = layoutLoc.fields.colours.customLabels.titleLabel,
-            headerInputs = me.templates.rgbInput.clone(),
             headerLoc = layoutLoc.fields.colours.customLabels.headerLabel,
             iconClsInputs = me.templates.iconClsInput.clone(),
             iconClsLoc = layoutLoc.fields.colours.customLabels.iconLabel,
@@ -478,9 +480,19 @@ function() {
         iconClsInputs.find('label[for=icon-close]').html(iconCloseLoc);
         iconClsInputs.find('label[for=icon-close-white]').html(iconCloseWhiteLoc);
 
-        template.find('div#publisher-custom-colours-bg').append(bgLoc).append(bgInputs);
-        template.find('div#publisher-custom-colours-title').append(titleLoc).append(titleInputs);
-        template.find('div#publisher-custom-colours-header').append(headerLoc).append(headerInputs);
+        me._createColorPickers();
+
+        var colorPickerBackground = me.templates.colorPickers.background.clone(),
+        colorPickerTitle = me.templates.colorPickers.title.clone(),
+        colorPickerHeader = me.templates.colorPickers.header.clone();
+        
+        colorPickerBackground.append(me._colorPickers[0].getElement());
+        colorPickerTitle.append(me._colorPickers[1].getElement());
+        colorPickerHeader.append(me._colorPickers[2].getElement());
+
+        template.find('div#publisher-custom-colours-bg').append(bgLoc).append(colorPickerBackground);
+        template.find('div#publisher-custom-colours-title').append(titleLoc).append(colorPickerTitle);
+        template.find('div#publisher-custom-colours-header').append(headerLoc).append(colorPickerHeader);
         template.find('div#publisher-custom-colours-iconcls').append(iconClsLoc).append(iconClsInputs);
 
         this._prepopulateCustomColoursTemplate(template);
@@ -507,15 +519,19 @@ function() {
      */
     _prepopulateCustomColoursTemplate: function (template) {
         var me = this,
-            bgInputs = template.find('div#publisher-custom-colours-bg'),
-            titleInputs = template.find('div#publisher-custom-colours-title'),
-            headerInputs = template.find('div#publisher-custom-colours-header'),
+            //bgInputs = template.find('div#publisher-custom-colours-bg'),
+            //titleInputs = template.find('div#publisher-custom-colours-title'),
+            //headerInputs = template.find('div#publisher-custom-colours-header'),
             iconClsInputs = template.find('div#publisher-custom-colours-iconcls'),
             customColours = me.customColourValues;
 
-        this._prepopulateRgbDiv(bgInputs, customColours.bg);
-        this._prepopulateRgbDiv(titleInputs, customColours.title);
-        this._prepopulateRgbDiv(headerInputs, customColours.header);
+        me._colorPickers[0].setValue(customColours.bg);
+        me._colorPickers[1].setValue(customColours.title);
+        me._colorPickers[2].setValue(customColours.header);
+
+        //this._prepopulateRgbDiv(bgInputs, customColours.bg);
+        //this._prepopulateRgbDiv(titleInputs, customColours.title);
+        //this._prepopulateRgbDiv(headerInputs, customColours.header);
         iconClsInputs.find('input[type=radio]').prop('checked', false);
         var iconCls = customColours.iconCls || 'icon-close-white';
         iconClsInputs.find('input[value=' + iconCls + ']').prop('checked', true);
@@ -553,22 +569,17 @@ function() {
      */
     _collectCustomColourValues: function (content) {
         var me = this,
-            bgColours = me._getColourFromRgbDiv(content.find('div#publisher-custom-colours-bg')),
-            titleColours = me._getColourFromRgbDiv(content.find('div#publisher-custom-colours-title')),
-            headerColours = me._getColourFromRgbDiv(content.find('div#publisher-custom-colours-header')),
-            iconCls = content.find('div#publisher-custom-colours-iconcls input[name=custom-icon-class]:checked').val(),
-            customColours = this._getItemByCode('custom', me.initialValues.colours);
+        iconCls = content.find('div#publisher-custom-colours-iconcls input[name=custom-icon-class]:checked').val(),
+        customColours = this._getItemByCode('custom', me.initialValues.colours);
 
-        // Save the values.
-        this.customColourValues.bg = bgColours;
-        this.customColourValues.title = titleColours;
-        this.customColourValues.header = headerColours;
+        this.customColourValues.bg = me._colorPickers[0].getValue();
+        this.customColourValues.title = me._colorPickers[1].getValue();
+        this.customColourValues.header = me._colorPickers[2].getValue();
         this.customColourValues.iconCls = iconCls;
 
-        // Set the values to initial values
-        customColours.bgColour = this._getCssRgb(bgColours);
-        customColours.titleColour = this._getCssRgb(titleColours);
-        customColours.headerColour = this._getCssRgb(headerColours);
+        customColours.bgColour = me._colorPickers[0].getValue();
+        customColours.titleColour = me._colorPickers[1].getValue();
+        customColours.headerColour = me._colorPickers[2].getValue();
         customColours.iconCls = iconCls || 'icon-close-white';
     },
 
@@ -619,6 +630,19 @@ function() {
             }
         }
         return null;
+    },
+
+    /**
+     * @method createColorPickers
+     * Creates an array of color picker components
+     * @private
+     */
+    _createColorPickers: function() {
+        this._colorPickers = [
+            Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput'),
+            Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput'),
+            Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput')
+        ];
     },
 
     /**
