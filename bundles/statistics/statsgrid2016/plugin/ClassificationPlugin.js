@@ -31,17 +31,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         //  for this reason we need to call setLocation() manually as location is not in the default path "config.location.classes"
         // me.setLocation(config.legendLocation || me._defaultLocation);
 
+        me._isMobileVisible = true;
+
         me._mobileDefs = {
             buttons: {
                 'mobile-classification': {
                     iconCls: 'mobile-statslegend',
                     tooltip: locale('legend.title'),
+                    sticky: false,
                     show: true,
                     callback: function () {
-
-                    },
-                    sticky: true,
-                    toggleChangeIcon: true
+                        if (me._isMobileVisible) {
+                            me.teardownUI();
+                        } else {
+                            me._buildUI();
+                        }
+                    }
                 }
             },
             buttonGroup: 'mobile-toolbar'
@@ -75,35 +80,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             return this.element;
         },
         redrawUI: function (mapInMobileMode, forced) {
+            var sandbox = this.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
+            var toolbarReady = !this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if (!forced && !toolbarReady) {
                 return true;
             }
             this.teardownUI();
 
-            if (!toolbarNotReady && mapInMobileMode) {
+            if (toolbarReady && mapInMobileMode) {
                 // create mobile
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                return false;
+                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')('mobile-classification', 'mobileToolbar-mobile-toolbar');
+                sandbox.request(this, toolbarRequest);
             }
-            this.addToPluginContainer(this._createControlElement());
-            this._makeDraggable();
+            if (!mapInMobileMode) {
+                this._buildUI();
+            }
             return false;
         },
-        teardownUI: function (stopping) {
+        teardownUI: function () {
+            this._isMobileVisible = false;
             var element = this.getElement();
             // detach old element from screen
             if (element) {
-                element.detach();
-                this.removeFromPluginContainer(element, !stopping);
+                this.removeFromPluginContainer(element);
                 this.element = null;
             }
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+        },
+        _buildUI: function () {
+            this._isMobileVisible = true;
+            this.addToPluginContainer(this._createControlElement());
+            this._makeDraggable();
         },
         _makeDraggable: function () {
             this.getElement().draggable();
@@ -130,7 +141,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.__legend.allowClassification(enabled);
         },
         stopPlugin: function () {
-            this.teardownUI(true);
+            this.teardownUI();
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         _createEventHandlers: function () {
             return {
@@ -150,7 +163,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var height = this.getSandbox().getMap().getHeight();
             var headerHeight = element.find('.active-header').first().height();
             if (Oskari.util.isMobile()) {
-                this._popup.getJqueryContent().find('.accordion').css({
+                element.find('.accordion').css({
                     'overflow': 'auto',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
