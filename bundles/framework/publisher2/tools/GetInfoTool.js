@@ -519,19 +519,13 @@ function() {
      */
     _prepopulateCustomColoursTemplate: function (template) {
         var me = this,
-            //bgInputs = template.find('div#publisher-custom-colours-bg'),
-            //titleInputs = template.find('div#publisher-custom-colours-title'),
-            //headerInputs = template.find('div#publisher-custom-colours-header'),
             iconClsInputs = template.find('div#publisher-custom-colours-iconcls'),
             customColours = me.customColourValues;
 
         me._colorPickers[0].setValue(customColours.bg);
         me._colorPickers[1].setValue(customColours.title);
         me._colorPickers[2].setValue(customColours.header);
-
-        //this._prepopulateRgbDiv(bgInputs, customColours.bg);
-        //this._prepopulateRgbDiv(titleInputs, customColours.title);
-        //this._prepopulateRgbDiv(headerInputs, customColours.header);
+        
         iconClsInputs.find('input[type=radio]').prop('checked', false);
         var iconCls = customColours.iconCls || 'icon-close-white';
         iconClsInputs.find('input[value=' + iconCls + ']').prop('checked', true);
