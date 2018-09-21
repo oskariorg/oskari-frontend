@@ -494,7 +494,9 @@ Oskari.clazz.define(
                 }]);
                 layer.setOrganizationName(options.layerOrganizationName || 'VECTOR');
                 layer.setDescription(options.layerDescription);
-                layer.setOpacity(options.opacity || 100);
+                if (typeof options.opacity !== 'undefined') {
+                    layer.setOpacity(options.opacity);
+                }
                 layer.setVisible(true);
                 layer.setHoverOptions(options.hover);
 
@@ -573,7 +575,7 @@ Oskari.clazz.define(
         _containsLayerOptions: function (options) {
             return options && !!(options.layerName ||
             options.layerOrganizationName ||
-            options.opacity ||
+            typeof options.opacity !== 'undefined' ||
             options.hover ||
             options.layerDescription ||
             typeof options.showLayer !== 'undefined');

@@ -226,10 +226,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      * @param
      * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
      *            layer layer to check against
+     * @param {Boolean} isRequest if MapLayerVisibilityRequest, then trigger always change because layer's visibility has changed
      */
-    handleMapLayerVisibility : function(layer) {
+    handleMapLayerVisibility : function(layer, isRequest) {
         var scaleOk = layer.isVisible();
         var geometryMatch = layer.isVisible();
+        var triggerChange = (isRequest === true);
         // if layer is visible check actual values
         if(layer.isVisible()) {
             scaleOk = this._isInScale(layer);
@@ -242,25 +244,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         var mapModule = this.getMapModule(),
             mapLayers = mapModule.getOLMapLayers(layer.getId());
         if (!mapLayers || !mapLayers.length){
+            if (triggerChange){
+                this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
+            }
             return;
         }
         if(scaleOk && geometryMatch && layer.isVisible()) {
             // show non-baselayer if in scale, in geometry and layer visible
-            if (!mapLayers[0].getVisible()) {
-                mapLayers.forEach(function (ol) {
+            mapLayers.forEach(function (ol) {
+                if (!ol.getVisible()) {
                     ol.setVisible(true);
-                });
-                this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
-            }
+                    triggerChange = true;
+                }
+            });
         } else {
             // otherwise hide non-baselayer
-            if (mapLayers[0].getVisible()) {
-                mapLayers.forEach(function (ol) {
+            mapLayers.forEach(function (ol) {
+                if (ol.getVisible()) {
                     ol.setVisible(false);
-                });
-                this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
-            }
+                    triggerChange = true;
+                }
+            });
         }
+        if (triggerChange){
+            this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
+        }
     },
     notifyLayerVisibilityChanged: function (layer, inScale, geometryMatch){
         var event = Oskari.eventBuilder('MapLayerVisibilityChangedEvent')(layer, inScale, geometryMatch);

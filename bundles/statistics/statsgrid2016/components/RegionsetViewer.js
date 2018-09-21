@@ -25,6 +25,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         if (!ind) {
             return;
         }
+        me._updateLayerProperties();
         var errorService = service.getErrorService();
 
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
@@ -121,7 +122,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                         optionalStyles: optionalStyles,
                         layerId: me.LAYER_ID,
                         prio: index,
-                        opacity: classification.opacity || 100
+                        opacity: typeof classification.transparency !== 'undefined' ? classification.transparency : 100
                     }];
 
                     sandbox.postRequestByName(
@@ -229,7 +230,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                     layerName: locale.layer.name,
                     layerInspireName: locale.layer.inspireName,
                     layerOrganizationName: locale.layer.organizationName,
-                    showLayer: true,
                     layerPermissions: {
                         'publish': 'publication_permission_ok'
                     }
@@ -287,6 +287,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 {
                     layerId: this.LAYER_ID,
                     hover: hoverOptions,
+                    showLayer: true,
                     layerDescription: (regionset && regionset.name) ? regionset.name : null
                 }
             ]
@@ -300,13 +301,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         var state = me.service.getStateService();
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             // Always show the active indicator
-            me._updateLayerProperties();
             me.render(state.getRegion());
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             // Need to update the map
-            me._updateLayerProperties();
             me.render(state.getRegion());
         });
 
@@ -319,7 +318,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
             // Classification changed, need update map
-            me._updateLayerProperties();
             me.render(state.getRegion());
         });
 

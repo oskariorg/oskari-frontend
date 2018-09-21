@@ -49,8 +49,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             });
             select.adjustChosen();
 
-            if (me.service.getStateService().activeIndicator) {
-                me.service.getStateService().activeIndicator.hash ? select.setValue(me.service.getStateService().activeIndicator.hash) : select.selectFirstValue();
+            var activeIndicator = me.service.getStateService().getActiveIndicator();
+            if (activeIndicator) {
+                activeIndicator.hash ? select.setValue(activeIndicator.hash) : select.selectFirstValue();
                 me._select = select;
             }
 

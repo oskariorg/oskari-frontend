@@ -259,9 +259,14 @@ Oskari.clazz.define(
                 }
                 if (wasClosed) {
                     me.getTile().hideExtensions();
-                    me.createClassficationView(false);
+                    if (!this.isEmbedded()) {
+                        me.createClassficationView(false);
+                    }
                 } else {
                     me.getTile().showExtensions();
+                    if (!this.isEmbedded() && this.statsService.getStateService().getIndicators().length !== 0) {
+                        this.createClassficationView(true);
+                    }
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
@@ -300,6 +305,12 @@ Oskari.clazz.define(
             },
             AfterChangeMapLayerOpacityEvent: function (evt) {
                 this.statsService.notifyOskariEvent(evt);
+                // record opacity for published map etc
+                var ind = this.statsService.getStateService().getActiveIndicator();
+                if (!ind || !ind.classification) {
+                    return;
+                }
+                ind.classification.transparency = evt.getMapLayer().getOpacity();
             }
         },
 
@@ -411,7 +422,7 @@ Oskari.clazz.define(
             return state;
         },
         createClassficationView: function (enabled) {
-            var config = this.getConfiguration();
+            var config = jQuery.extend(true, {}, this.getConfiguration());
             var sandbox = this.getSandbox();
             var locale = Oskari.getMsg.bind(null, 'StatsGrid');
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -424,11 +435,17 @@ Oskari.clazz.define(
                 }
                 return;
             }
-            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
-            mapModule.registerPlugin(this.classificationPlugin);
-            mapModule.startPlugin(this.classificationPlugin);
+            if (!this.classificationPlugin) {
+                this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
+            }
+            if (mapModule.getPluginInstances()[this.classificationPlugin.getName()]) {
+                this.classificationPlugin.redrawUI();
+            } else {
+                mapModule.registerPlugin(this.classificationPlugin);
+                mapModule.startPlugin(this.classificationPlugin);
+            }
             // get the plugin order straight in mobile toolbar even for the tools coming in late
-            if (Oskari.util.isMobile() && this.classificationPlugin.hasUI()) {
+            if (Oskari.util.isMobile()) {
                 mapModule.redrawPluginUIs(true);
             }
         },

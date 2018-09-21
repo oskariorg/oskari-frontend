@@ -74,7 +74,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             }
             if (result.complete) {
                 me.spinner.stop();
-                var isUserDatasource = '' + me.service.getUserDatasource().id === '' + datasrc;
+                var userDatasource = me.service.getUserDatasource();
+                var isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + datasrc;
                 if (!isUserDatasource && result.indicators.length === 0) {
                     // show notification about empty indicator list for non-myindicators datasource
                     errorService.show(locale('errors.title'), locale('errors.indicatorListIsEmpty'));
@@ -210,6 +211,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
 
         me.selectClassRef.push(regionFilterSelect);
+        me.selectClassRef.push(dsSelect);
 
         dsSelector.on('change', function () {
             me._params.clean();
@@ -263,7 +265,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         regionsetFilterElement.on('change', function (evt) {
             if (regionFilterSelect.getValue() === null || regionFilterSelect.getValue().length === 0) {
-                dsSelect.reset();
+                var keepSelectedValue = true;
+                dsSelect.reset(keepSelectedValue);
+                indicSelect.disableOptions([]);
                 return;
             }
             var unsupportedSelections = me.service.getUnsupportedDatasetsList(regionFilterSelect.getValue());

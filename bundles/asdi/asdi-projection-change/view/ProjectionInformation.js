@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', funct
 
         var info = jQuery( this.infoView ({
             desc: this.loc.projectionCode[this.projection.srsName].desc,
-            img: this.createClassSelector( this.projection.srsName ) + '.png',
+            img: this.createClassSelector( this.projection.srsName ) + '.png'
         }));
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var btn = dialog.createCloseButton(this.loc.infoPopup.ok);
@@ -37,7 +37,6 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', funct
             dialog.close(true);
             me.dialog = null;
         });
-        dialog.dialog.zIndex(parentElement.zIndex() + 1);
 
         dialog.show(this.constructTitle(), info, [btn]);
         dialog.moveTo(parentElement);

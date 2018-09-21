@@ -40,6 +40,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _initImpl: function (sandbox, options, map) {
             // css references use olMap as selectors so we need to add it
             this.getMapEl().addClass('olMap');
+            // disables text-selection on map (fixes an issue in Chrome 69 where dblclick on map selects text and prevents dragging the map)
+            this.getMapEl().addClass('disable-select');
             return map;
         },
         /**
@@ -85,6 +87,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }));
 
             me._setupMapEvents(map);
+
+            // user for measurements
+            this.wgs84Sphere = new ol.Sphere(6378137);
 
             return map;
         },
@@ -218,16 +223,73 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var olGeom = this.getOLGeometryFromGeoJSON(geometry);
             var sum = 0;
             if (olGeom.getType() === 'LineString') {
-                return olGeom.getLength();
+                return this.getGeomLength(olGeom);
             } else if (olGeom.getType() === 'MultiLineString') {
                 var lineStrings = olGeom.getLineStrings();
                 for (var i = 0; i < lineStrings.length; i++) {
-                    sum += lineStrings[i].getLength();
+                    sum += this.getGeomLength(lineStrings[i]);
                 }
                 return sum;
             } else if (olGeom.getType() === 'Polygon' || olGeom.getType() === 'MultiPolygon') {
-                return olGeom.getArea();
+                return this.getGeomArea(olGeom);
             }
+        },
+        /**
+         * @method getGeomArea
+         * -  calculates area of given geometry
+         *
+         * @param {ol.geom.Geometry} geometry
+         * @return {Number} area in square meters
+         *
+         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
+         */
+        getGeomArea: function(geometry) {
+            if (!geometry || (geometry.getType() !== 'Polygon' && geometry.getType() !== 'MultiPolygon')) {
+                return 0;
+            }
+            var sourceProj = this.getMap().getView().getProjection();
+            if (sourceProj.getUnits() !== "degrees") {
+                return geometry.getArea();
+            }
+            var me = this;
+            var area = 0;
+            var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
+            var polygons = geometry.getType() === 'MultiPolygon' ? geom.getPolygons() : [geom];
+            polygons.forEach(function (poly) {
+                var coordinates = poly.getLinearRing(0).getCoordinates();
+                if (coordinates.length > 0) {
+                    area += Math.abs(me.wgs84Sphere.geodesicArea(coordinates));
+                }
+            });
+            return area;
+        },
+        /**
+         * @method getGeomLength
+         * -  calculates length of given geometry
+         *
+         * @param {ol.geom.Geometry} geometry
+         * @return {Number} length in meters
+         *
+         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
+         */
+        getGeomLength: function(geometry) {
+            var length = 0;
+            if(!geometry || geometry.getType() !== 'LineString') {
+                return 0;
+            }
+            var sourceProj = this.getMap().getView().getProjection();
+            if (sourceProj.getUnits() !== "degrees") {
+                return geometry.getLength();
+            }
+            var coordinates = geometry.getCoordinates();
+            for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+                var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+                var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+                length += this.wgs84Sphere.haversineDistance(c1, c2);
+            }
+            return length;
         },
 
         /**
@@ -404,8 +466,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         centerMap: function (lonlat, zoom, suppressEnd) {
-            // TODO: we have isValidLonLat(); maybe use it here
             lonlat = this.normalizeLonLat(lonlat);
+            if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
+                return;
+            }
             this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
             if (zoom === null || zoom === undefined) {
                 zoom = this.getMapZoom();
