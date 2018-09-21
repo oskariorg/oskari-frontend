@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
 
             panel.setTitle(me.loc[me.group].label);
             tooltipCont.attr('title', me.loc[me.group].tooltip);
-            contentPanel.append(tooltipCont);
+            panel.getHeader().append(tooltipCont);
 
             // Sort tools
             me._sortTools();

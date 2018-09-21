@@ -199,7 +199,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
 
             tooltipCont.attr('title', me.loc.toollayout.tooltip);
-            contentPanel.append(tooltipCont);
+            panel.getHeader().append(tooltipCont);
 
             // content
             for (i = 0; i < me.toolLayouts.length; i += 1) {
