@@ -346,7 +346,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         },
         handleSourceClick: function(value) {
             if (value === 'file') {
-                this.importFileHandler.showFileDialogue();
+                this.importFileHandler.showFileDialogue(this.readFileToArray.bind(this));
             } else if (value === 'map') {
                 this.selectFromMap();
             }
@@ -495,7 +495,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var crsSettings = this.getCrsOptions();
             var fileSettings = settings;
             if (this.helper.validateFileSelections(fileSettings)){
-                this.instance.getService().readFileToArray(crsSettings, fileSettings, this.handleArrayResponse.bind( this ), this.handleErrorResponse.bind(this) );
+                this.dataHandler.clearCoords(); //reset tables
+                this.instance.getService().readFileToArray(crsSettings, fileSettings, this.handleReadFileResponse.bind( this ), this.handleErrorResponse.bind(this) );
             }
         },
         transformToMapCoords: function (callback) {
@@ -571,6 +572,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 this.instance.getService().transformArrayToFile( coords, crsSettings, exportSettings, this.handleFileResponse.bind( this ), this.handleErrorResponse.bind(this) );
             }*/
         },
+        handleReadFileResponse: function (response) {
+            var inputCoords = response.inputCoordinates;
+            var error = response.error;
+            var hasMoreCoordinates = response.hasMoreCoordinates;
+            if (inputCoords){
+                this.dataHandler.setInputCoords(inputCoords);
+            }
+            if (error) {
+                this.handleErrorResponse(error, true);
+            } else if (hasMoreCoordinates === true){
+                this.showMessage(this.loc('flyout.transform.responseFile.title'), this.loc('flyout.transform.responseFile.hasMoreCoordinates', {maxCoordsToArray: 100}));
+            }
+        },
         handleArrayResponse: function (response) {
             var resultCoords = response.resultCoordinates;
             var inputCoords = response.inputCoordinates;
@@ -591,21 +605,24 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             //TODO exportToFile should be moved from fileInput to helper
             this.helper.exportToFile(data, filename, type);
         },
-        handleErrorResponse: function (errorInfo, errorText){
+        handleErrorResponse: function (errorInfo, isReadFile){
+            var title = isReadFile ? this.loc('flyout.transform.responseErrors.titleRead') : this.loc('flyout.transform.responseErrors.titleTransform');
             var errors = this.loc('flyout.transform.responseErrors');
             var errorMsg = errors.generic;
             var code;
             if (errorInfo && errorInfo.errorKey){
                 code = errorInfo.errorKey;
                 if (code === "invalid_coord_in_line") {
-                    errorMsg = Oskari.getMsg('coordinatetransformation', 'flyout.transform.responseErrors.invalid_coord_in_line', {line: errorInfo.line, index: errorInfo.lineIndex});
+                    errorMsg = errors.transformFileError +"<br>" + Oskari.getMsg('coordinatetransformation', 'flyout.transform.responseErrors.invalidLine', {line: errorInfo.line, index: errorInfo.lineIndex});
+                } else if (code === "invalid_read_line") {
+                    errorMsg = errors.readFileError + "<br>" + Oskari.getMsg('coordinatetransformation', 'flyout.transform.responseErrors.invalidLine', {line: errorInfo.line, index: errorInfo.lineIndex});
+                } else if (code === "transformation_error") { //error message from transformation service
+                    errorMsg = errors[code] + "<br>" + errorInfo.exception;
                 } else if (errors[code]) {
                     errorMsg = errors[code];
                 }
-            } else if (errorText){
-                errorMsg += "<br> Error: " + errorText; //TODO adds backend msg. use only generic message, when localized messages are ready
             }
-            this.showMessage(this.loc('flyout.transform.responseErrors.title'), errorMsg);
+            this.showMessage(title, errorMsg);
         }
     }
 );

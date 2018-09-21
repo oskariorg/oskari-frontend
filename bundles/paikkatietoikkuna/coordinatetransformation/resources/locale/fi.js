@@ -91,20 +91,25 @@ Oskari.registerLocalization(
                     "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
                 },
                 "responseErrors": {
-                    "title": "Virhe muunnoksessa!",
+                    "titleTransform": "Virhe muunnoksessa!",
+                    "titleRead": "Virhe tiedoston lukemisessa!",
+                    "readFileError" : "Tiedostosta ei onnistuttu lukemaan kaikkia rivejä.",
+                    "transformFileError": "Tiedoston koordinaatteja ei onnistuttu muuntamaan.",
+                    "invalidLine": "Tiedostossa on rivillä: {index, number} virheellinen koordinaattirivi: {line} <br> Tarkasta, että kyseinen rivi on kelvollinen ja vastaa valintoja.",
+                    //error codes
                     "generic": "Koordinaattimuunnos epäonnistui...",
                     "invalid_coord": "Koordinaatti virheellinen. Tarkasta, että muunnettavat koordinaatit on oikeassa muodossa sekä geodeettinen koordinaatti- ja kokeusjärjestelmä ovat oikein.",
                     "invalid_number": "Koordinaatti virheellinen. Tarkasta..", //can we get row number from file
                     "invalid_coord_in_array": "Koordinaatti virheellinen. Tarkasta..", //can user input invalid coords in array??
-                    "no_coordinates": "Ei koordinaatteja (pitäisi tulla käytännössä vain tiedostojen kanssa).",
+                    "no_coordinates": "Tiedostosta ei löytynyt koordinaatteja. Tarkasta tiedosto sekä asetettu otsakerivien määrä.",
                     "invalid_file_settings": "Tiedoston asetukset virheelliset.", //can't be user's fault
                     "no_file": "Lähetetystä pyynnöstä ei löytynyt tiedostoa.", //can't be user's fault
                     "invalid_first_coord": "Tiedostosta ei saatu muodostettua koordinaattia annetuilla asetuksilla. Tarkasta, että koordinaatti erotin, otsakerivien määrä, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä (dimensio) valinnat vastaavat tiedoston sisältöä.",
-                    "invalid_coord_in_line": "Tiedostossa on rivillä: {index, number} virheellinen koordinaattirivi: {line} <br> Tarkasta, että kyseinen rivi on kelvollinen ja vastaa valintoja. Tarkasta myös, että desimaali- ja koordinaattierotin sekä otsakerivien määrä valinnat vastaavat tiedoston sisältöä."
+                    "transformation_error": "Koordinaattimuunnos epäonnistui. Koordinaattimuunnospalvelusta palautui virhe:"
                 },
                 "responseFile": {
                     "title": "Huomio!",
-                    "hasMoreCoordinates": "Lähtöaineistosta ei voida muuntaa taulukkoon yli {maxCoordsToArray, number} koordinaattia. Jos haluat muuntaa kaikki koordinaatit, käytä Vie tulokset tiedostoon -toimintoa."
+                    "hasMoreCoordinates": "Lähtöaineistosta ei voida muuntaa käyttöliittymän taulukkoon yli {maxCoordsToArray, number} koordinaattia. Jos haluat muuntaa kaikki koordinaatit, käytä Muunna tiedostoon -toimintoa."
                 }
             }
         },
