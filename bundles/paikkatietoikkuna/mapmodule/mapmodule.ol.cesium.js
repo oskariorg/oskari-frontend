@@ -396,6 +396,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _setZoomLevelImpl : function(newZoomLevel) {
             this.getMap().getView().setZoom(newZoomLevel);
         },
+        _setResolutionImpl: function (newResolution) {
+            this.getMap().getView().setResolution(newResolution);
+        },
+        _getExactResolutionImpl: function (scale) {
+            var units = this.getMap().getView().getProjection().getUnits();
+            var dpiTest = jQuery('<div></div>');
+            dpiTest.css({
+                height: '1in',
+                width: '1in',
+                position: 'absolute',
+                left: '-100%',
+                top: '-100%'
+            });
+            jQuery('body').append(dpiTest);
+             var dpi = dpiTest.height();
+            dpiTest.remove();
+            var mpu = ol.proj.METERS_PER_UNIT[units];
+            var resolution = scale / (mpu * 39.37 * dpi);
+            return resolution;
+        },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 /* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!

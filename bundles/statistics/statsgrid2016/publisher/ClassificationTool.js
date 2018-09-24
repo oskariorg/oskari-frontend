@@ -2,9 +2,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
 }, {
     index: 1,
     group: 'data',
-    allowedLocations: ['top left', 'top right'],
-    lefthanded: 'top right',
-    righthanded: 'top left',
+    allowedLocations: ['top left', 'top right', 'bottom-right'],
+    lefthanded: 'bottom right',
+    righthanded: 'bottom right',
 
     allowedSiblings: [
         'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
                     statsgrid: {
                         conf: {
                             allowClassification: me.state.enabled,
-                            legendLocation: 'right top'
+                            legendLocation: 'bottom right'
                         }
                     }
                 }

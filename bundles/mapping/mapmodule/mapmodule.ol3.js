@@ -60,6 +60,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _initImpl: function (sandbox, options, map) {
             // css references use olMap as selectors so we need to add it
             this.getMapEl().addClass('olMap');
+            // disables text-selection on map (fixes an issue in Chrome 69 where dblclick on map selects text and prevents dragging the map)
+            this.getMapEl().addClass('disable-select');
             return map;
         },
         /**
@@ -261,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
         getGeomArea: function(geometry) {
-            if (!geometry || geometry.getType() !== 'Polygon' || geometry.getType() === 'MultiPolygon') {
+            if (!geometry || (geometry.getType() !== 'Polygon' && geometry.getType() !== 'MultiPolygon')) {
                 return 0;
             }
             var sourceProj = this.getMap().getView().getProjection();
@@ -473,8 +475,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         centerMap: function (lonlat, zoom, suppressEnd) {
-            // TODO: we have isValidLonLat(); maybe use it here
             lonlat = this.normalizeLonLat(lonlat);
+            if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
+                return;
+            }
             this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
             if (zoom === null || zoom === undefined) {
                 zoom = this.getMapZoom();

@@ -32,7 +32,7 @@ Oskari.registerLocalization({
                 'seriesTitle': 'Time series',
                 'datasourceTitle': 'Data source',
                 'indicatorTitle': 'Indicator',
-                'regionsetTitle': 'Regionset',
+                'regionsetTitle': 'Regional division filter (optional)',
                 'seriesLabel': 'Get data as time series',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
@@ -59,12 +59,6 @@ Oskari.registerLocalization({
                     }
                 },
                 'noRegionset': 'No area selected'
-            },
-            'extraFeatures': {
-                'title': 'Additional features',
-                'hideMapLayers': 'Hide other map layers',
-                'openTableCheckbox': 'Open table',
-                'openDiagramCheckbox': 'Open bar chart'
             }
         },
         'statsgrid': {

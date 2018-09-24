@@ -31,8 +31,8 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /(?<!min)\.js$/,
-          exclude: /node_modules(?!\/oskari-frontend)|libraries/,
+          test: /\.js$/,
+          exclude: [/node_modules(?!\/oskari-frontend)/, /libraries/, /\.min\.js$/],
           use: {
             loader: 'babel-loader',
             options: {
@@ -125,7 +125,7 @@ module.exports = (env, argv) => {
         changeOrigin: true,
         ws: true
       }, {
-        context: ['**', `!/Oskari/dist/${version}/${appName}/**`],
+        context: ['**', `!/Oskari/dist/${version}/${appName}/**`, '!/Oskari/bundles/bundle.js'],
         target: 'http://localhost:8080',
         secure: false,
         changeOrigin: true

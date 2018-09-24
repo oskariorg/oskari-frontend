@@ -206,11 +206,6 @@ div.oskari-flyout {
         background-color: #000000; }
         div.oskari-flyout.statsgrid-search-flyout .statsgrid-grouping-header.sources span {
           font-weight: normal; }
-    div.oskari-flyout.statsgrid-search-flyout div.extrafeatures div.title {
-      font-weight: bold;
-      margin-top: 12px; }
-    div.oskari-flyout.statsgrid-search-flyout div.extrafeatures div.content label.oskari-formcomponent {
-      margin-bottom: 0; }
   div.oskari-flyout.statsgrid-data-flyout {
     /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
     max-width: 700px;

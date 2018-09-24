@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me.setValues(event.getCurrent());
     });
     me.service.on('AfterChangeMapLayerOpacityEvent', function (event) {
-        me.setLayerOpacityValue(event.getMapLayer());
+        me.setLayerOpacityValue(event.getMapLayer().getId(), event.getMapLayer().getOpacity());
     });
     this.__templates = {
         classification: jQuery('<div class="classifications">' +
@@ -148,17 +148,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._element.find('.visible-map-style-choropleth').hide();
         me._element.find('.visible-map-style-' + style).show();
     },
-    setLayerOpacityValue: function (layer) {
+    setLayerOpacityValue: function (layerId, opacity) {
         var me = this;
         if (me.hasSelectChange) {
             me.hasSelectChange = false;
             return;
         }
-        if (layer.getId() === me.LAYER_ID) {
+        if (layerId === me.LAYER_ID) {
             var transparencyEl = me._element.find('select.transparency-value');
             transparencyEl.find('option#hiddenvalue').remove();
-            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + layer.getOpacity() + ' %' + '</option>');
-            hiddenOption.attr('value', layer.getOpacity());
+            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + opacity + ' %' + '</option>');
+            hiddenOption.attr('value', opacity);
             hiddenOption.hide();
             hiddenOption.attr('selected', 'selected');
             transparencyEl.append(hiddenOption);
@@ -257,17 +257,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 }
             });
         });
-        var min = classification.min || me._rangeSlider.defaultValues[0];
-        var max = classification.max || me._rangeSlider.defaultValues[1];
-        var updateClassification = false;
+        if (mapStyle !== 'choropleth') {
+            var min = classification.min || me._rangeSlider.defaultValues[0];
+            var max = classification.max || me._rangeSlider.defaultValues[1];
+            var updateClassification = false;
 
-        if (max - min < classification.count * (me._rangeSlider.step || 1)) {
-            min = me._rangeSlider.defaultValues[0];
-            max = me._rangeSlider.defaultValues[1];
-            updateClassification = true;
+            if (max - min < classification.count * (me._rangeSlider.step || 1)) {
+                min = me._rangeSlider.defaultValues[0];
+                max = me._rangeSlider.defaultValues[1];
+                updateClassification = true;
+            }
+            me._rangeSlider.element.slider('values', [min, max]);
+            me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         }
-        me._rangeSlider.element.slider('values', [min, max]);
-        me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
 
         if (updateClassification) {
@@ -275,6 +277,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
 
         if (classification.transparency) {
+            this.setLayerOpacityValue(me.LAYER_ID, classification.transparency)
             me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
         }
     },
@@ -285,6 +288,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
     getSelectedValues: function () {
         var me = this;
         var range = me._rangeSlider.element.slider('values');
+        var transparencyEl = me._element.find('select.transparency-value');
+        var transparencyVal = transparencyEl.val() !== null ? transparencyEl.val() : transparencyEl.find('option#hiddenvalue').val();
         var values = {
             method: me._element.find('select.method').val(),
             count: parseFloat(me._element.find('select.amount-class').val()),
@@ -296,7 +301,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             // only used for points vector
             min: range[0],
             max: range[1],
-            transparency: me._element.find('select.transparency-value').val(),
+            transparency: transparencyVal,
             showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
             fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
@@ -304,7 +309,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         if (values.mapStyle !== 'points') {
             delete values.min;
             delete values.max;
-            delete values.transparency;
         } else {
             delete values.type;
         }
@@ -383,7 +387,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         me._colorSelect.setHandler(updateClassification);
         me._element.find('select').on('change', updateClassification);
-        me._element.find('select.decimal-place').on('change', function() {
+        me._element.find('select.decimal-place').on('change', function () {
             var stateService = me.service.getStateService();
             var indicator = stateService.getActiveIndicator();
             stateService.setActiveIndicator(indicator.hash);

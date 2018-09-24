@@ -32,7 +32,7 @@ Oskari.registerLocalization({
                 'seriesTitle': 'Aikasarja',
                 'datasourceTitle': 'Tietolähde',
                 'indicatorTitle': 'Indikaattori',
-                'regionsetTitle': 'Aluejako',
+                'regionsetTitle': 'Aluejakorajaus (valinnainen)',
                 'seriesLabel': 'Hae aikasarjana',
                 'selectDatasourcePlaceholder': 'Valitse tietolähde',
                 'selectIndicatorPlaceholder': 'Valitse aineisto',
@@ -59,12 +59,6 @@ Oskari.registerLocalization({
                     }
                 },
                 'noRegionset': 'Ei aluevalintaa'
-            },
-            'extraFeatures': {
-                'title': 'Lisäominaisuudet',
-                'hideMapLayers': 'Piilota muut karttatasot',
-                'openTableCheckbox': 'Avaa taulukko',
-                'openDiagramCheckbox': 'Avaa pylväsdiagrammiesitys'
             }
         },
         'statsgrid': {
