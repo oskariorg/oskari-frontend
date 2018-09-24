@@ -113,7 +113,7 @@ $flyoutPadding: 16px;
     .icon-warning-light {
         top: 88%;
         position: absolute;
-        cursor: pointer;   
+        cursor: pointer;
     }
     .icon {
         position: absolute;
@@ -317,19 +317,6 @@ div.oskari-flyout {
 
                 span {
                     font-weight: normal;
-                }
-            }
-        }
-
-        div.extrafeatures {
-            div.title {
-                font-weight:bold;
-                margin-top:12px;
-            }
-
-            div.content {
-                label.oskari-formcomponent {
-                    margin-bottom: 0;
                 }
             }
         }
@@ -558,7 +545,7 @@ div.oskari-flyout {
             justify-content: center;
             align-items: center;
             padding-bottom: 2%;
-           
+
            .dropdown {
                 display: flex;
                 max-width: 100%;
@@ -753,7 +740,8 @@ div.oskari-flyout {
     }
     .statsgrid-svg-legend {
         margin: 0 auto;
-        width:50%;
+        width: 90%;
+        overflow: hidden;
     }
     .statsgrid-range {
         float: left;
@@ -828,7 +816,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         background-image: url("../images/tile-diagram-dark.png");
         cursor: pointer;
         background-repeat: no-repeat;
-        background-position: center;    
+        background-position: center;
         &.active {
             background-color: $lightColor;
             background-image: url("../images/tile-diagram-light.png");
@@ -893,7 +881,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         &.diagram .icon {
             background-image: url("../images/tile-diagram-light.png");
         }
-        
+
     }
     .hidden {
         display: none;
@@ -1023,7 +1011,7 @@ div.tab-material-controls div.title {
     color:#F6F6F6;
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     overflow: hidden;
-    z-index: 3; 
+    z-index: 3;
     max-height: 100%;
 }
 
@@ -1087,7 +1075,7 @@ width: 17%;
 .user-indicator-specification {
 padding: 0.3125em;
 color:white;
-background-color: #888888; 
+background-color: #888888;
 }
 .new-indicator-dataset-params {
     display: flex;
@@ -1109,7 +1097,7 @@ background-color: #888888;
   }
 .user-dataset {
     text-align: center;
-    padding: 1px; 
+    padding: 1px;
 }
 .user-dataset-edit, .user-dataset-delete {
     text-align: center;
