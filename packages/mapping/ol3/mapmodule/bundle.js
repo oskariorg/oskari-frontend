@@ -338,6 +338,16 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/vectorlayer.css"
                 },
                 /**
+                * Vector tile Layer plugin
+                */
+               {
+                   "type": "text/javascript",
+                   "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin.js"
+               }, {
+                   "type": "text/javascript",
+                   "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/vectortilelayer.js"
+               },
+                /**
                  * GeoLocation plugin
                  */
                 {

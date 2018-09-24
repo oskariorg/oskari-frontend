@@ -56,7 +56,8 @@ Oskari.registerLocalization(
                 "wmts": "WMTS-taso",
                 "arcgis": "ArcGISCache-taso",
                 "arcgis93": "ArcGISRest-taso",
-                "tiles3d" : "3D Tiles -taso"
+                "tiles3d" : "3D Tiles -taso",
+                "vectortile" : "Vektoritiilitaso"
             },
             "selectLayer": "Valitse ylätaso",
             "selectSubLayer": "Valitse alataso",

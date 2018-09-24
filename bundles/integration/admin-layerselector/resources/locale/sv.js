@@ -56,7 +56,8 @@ Oskari.registerLocalization(
                 "wmts": "WMTS Lager",
                 "arcgis": "ArcGISCache Lager",
                 "arcgis93": "ArcGISRest Lager",
-                "tiles3d" : "3D Tiles Lager"
+                "tiles3d" : "3D Tiles Lager",
+                "vectortile" : "Vektorkakel Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
