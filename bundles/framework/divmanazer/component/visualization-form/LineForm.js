@@ -57,7 +57,7 @@ Oskari.clazz.define(
             '<div class="column2">' +
             '<div class="column21">' +
             '<label>' + this.loc.color.label + '</label>' +
-            '<div id="color-picker-wrapper"></div>' +
+            '<div class="color-picker-wrapper"></div>' +
             '</div>' +
             '<div class="column22">' +
             '<label>' + this.loc.preview.label + '</label>' +
@@ -255,7 +255,7 @@ Oskari.clazz.define(
 
             // Create color picker element
             me._createColorPicker();
-            var colorPickerWrapper = dialogContent.find('#color-picker-wrapper');
+            var colorPickerWrapper = dialogContent.find('.color-picker-wrapper');
             colorPickerWrapper.append(me._colorPicker.getElement());
             me._colorPicker.setValue(me.values.color);
 

@@ -15,9 +15,9 @@ function() {
         iconClsInput: jQuery('<div class="iconClsInput">' + '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' + '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' + '</div>'),
         inputRadio: jQuery('<div><input type="radio" /><label></label></div>'),
         colorPickers: {
-            background: jQuery('<div id="color-picker-background"></div>'),
-            title: jQuery('<div id="color-picker-title"></div>'),
-            header: jQuery('<div id="color-picker-header"></div>')
+            background: jQuery('<div class="color-picker-background"></div>'),
+            title: jQuery('<div class="color-picker-title"></div>'),
+            header: jQuery('<div class="color-picker-header"></div>')
         }
     },
 
