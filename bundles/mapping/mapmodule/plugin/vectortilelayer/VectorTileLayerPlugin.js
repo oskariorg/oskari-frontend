@@ -1,3 +1,8 @@
+import olSourceVectorTile from 'ol/source/VectorTile';
+import olLayerVectorTile from 'ol/layer/VectorTile';
+import olFormatMVT from 'ol/format/MVT';
+import TileGrid from 'ol/tilegrid/TileGrid';
+
 /**
  * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
  * Provides functionality to draw vector tile layers on the map
@@ -8,6 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
      * @static @method create called automatically on construction
      */
     function () {
+        console.log('plugin start!');
     },
     {
         __name: 'VectorTileLayerPlugin',
@@ -23,11 +29,22 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
                 mapLayerService.registerLayerModel(
-                    'vectortilelayer',
+                    'vectortile',
                     'Oskari.mapframework.domain.VectorTileLayer'
                 );
-                this._extendCesium3DTileset();
             }
+        },
+        /**
+         * Checks if the layer can be handled by this plugin
+         * @method  isLayerSupported
+         * @param  {Oskari.mapframework.domain.AbstractLayer}  layer
+         * @return {Boolean}       true if this plugin handles the type of layers
+         */
+        isLayerSupported: function (layer) {
+            if (!layer) {
+                return false;
+            }
+            return layer.isLayerOfType(this.layertype);
         },
         /**
          * @method addMapLayerToMap
@@ -38,7 +55,22 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+            var options = layer.getOptions();
+            var sourceOpts = {
+                format: new olFormatMVT(),
+                url: layer.getLayerUrl()
+            };
+            if(options.tileGrid) {
+                sourceOpts.tileGrid = new TileGrid(options.tileGrid);
+            }
+            var vectorTileLayer = new olLayerVectorTile({
+                opacity: layer.getOpacity() / 100,
+                renderMode: 'hybrid',
+                source: new olSourceVectorTile(sourceOpts)
+            });
 
+            this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
+            this.setOLMapLayers(layer.getId(), vectorTileLayer);
         }
     }, {
         /**
