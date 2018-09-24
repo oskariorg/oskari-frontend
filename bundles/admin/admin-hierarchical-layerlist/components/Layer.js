@@ -26,6 +26,9 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
         id: "wmtslayer",
         localeKey: "wmts"
     }, {
+        id: "vectortilelayer",
+        localeKey: "vectortile"
+    }, {
         id: "arcgislayer",
         localeKey: "arcgis",
         footer: false
