@@ -26,7 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
                     'vectortilelayer',
                     'Oskari.mapframework.domain.VectorTileLayer'
                 );
-                this._extendCesium3DTileset();
             }
         },
         /**
