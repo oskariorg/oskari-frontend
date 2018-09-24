@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapLayerPlugin
- * Provides functionality to draw WMS layers on the map
+ * Base class for map layer implementations (wms, wmts, vector tile etc.)
  */
 Oskari.clazz.define(
     'Oskari.mapping.mapmodule.AbstractMapLayerPlugin',
