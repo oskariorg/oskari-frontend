@@ -1,3 +1,6 @@
+import olView from 'ol/View';
+import olControlOverviewMap from 'ol/control/OverviewMap';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
  *
@@ -79,7 +82,7 @@ Oskari.clazz.define(
                         var controlOptions = {
                             target: me._indElement[0],
                             layers: [ layer ],
-                            view: new ol.View({
+                            view: new olView({
                                 center: me.getMap().getView().getCenter(),
                                 projection: me.getMap().getView().getProjection(),
                                 zoom: me.getMap().getView().getZoom()
@@ -89,7 +92,7 @@ Oskari.clazz.define(
                         if(me._indexMap) {
                             me.getMap().removeControl(me._indexMap);
                         }
-                        me._indexMap = new ol.control.OverviewMap(controlOptions);
+                        me._indexMap = new olControlOverviewMap(controlOptions);
                         me._indexMap.setCollapsible(true);
                         me.getMap().addControl(me._indexMap);
 

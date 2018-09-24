@@ -1,3 +1,12 @@
+import olSourceVector from 'ol/source/Vector';
+import olLayerVector from 'ol/layer/Vector';
+import olStyleStyle from 'ol/style/Style';
+import olStyleFill from 'ol/style/Fill';
+import olStyleStroke from 'ol/style/Stroke';
+import olStyleCircle from 'ol/style/Circle';
+import olInteractionSelect from 'ol/interaction/Select';
+import * as olEventsCondition from 'ol/events/condition';
+
 Oskari.clazz.define(
     'Oskari.analysis.bundle.analyse.service.AnalyseHelper',
     function () {
@@ -8,27 +17,27 @@ Oskari.clazz.define(
 	     * Creates the feature layer where the drawn features are added to
 	     *
 	     * @method createFeatureLayer
-	     * @return {ol.layer.Vector}
+	     * @return {ol/layer/Vector}
 	     */
 	    createFeatureLayer: function () {
 	        var me = this;
 
-	        me.featureSource = new ol.source.Vector();
+	        me.featureSource = new olSourceVector();
 
-	        var layer = new ol.layer.Vector({
+	        var layer = new olLayerVector({
 	            title: 'AnalyseFeatureLayer',
 	            source: me.featureSource,
-	            style: new ol.style.Style({
-	              fill: new ol.style.Fill({
+	            style: new olStyleStyle({
+	              fill: new olStyleFill({
 	                color: 'rgba(92, 176, 219, 0.5)'
 	              }),
-	              stroke: new ol.style.Stroke({
+	              stroke: new olStyleStroke({
 	                color: '#3399CC',
 	                width: 3
 	              }),
-	              image: new ol.style.Circle({
+	              image: new olStyleCircle({
 	                radius: 4,
-	                fill: new ol.style.Fill({
+	                fill: new olStyleFill({
 	                  color: '#3399CC'
 	                })
 	              })
@@ -40,23 +49,23 @@ Oskari.clazz.define(
 
 	    /**
 	      * Create hover interaction for the given layer
-	      * @param {ol.layer.Vector} layer
-	      * @return {ol.interaction.Select} hoverInteraction
+	      * @param {ol/layer/Vector} layer
+	      * @return {ol/interaction/Select} hoverInteraction
 	    */
 	    createHoverInteraction: function (layer) {
-	    	var hoverInteraction = new ol.interaction.Select({
-	            condition: ol.events.condition.pointerMove,
-	            style: new ol.style.Style({
-	              stroke: new ol.style.Stroke({
+	    	var hoverInteraction = new olInteractionSelect({
+	            condition: olEventsCondition.pointerMove,
+	            style: new olStyleStyle({
+	              stroke: new olStyleStroke({
 	                color: '#257ba8',
 	                width: 3
 	              }),
-	              fill: new ol.style.Fill({
+	              fill: new olStyleFill({
 	                color: 'rgba(92, 176, 219, 0.8)'
 	              }),
-	              image: new ol.style.Circle({
+	              image: new olStyleCircle({
 	                radius: 4,
-	                fill: new ol.style.Fill({
+	                fill: new olStyleFill({
 	                  color: '#257ba8'
 	                })
 	              })
@@ -68,22 +77,22 @@ Oskari.clazz.define(
 
 	    /**
 	      * Create select interaction for the given layer
-	      * @param {ol.layer.Vector} layer
-	      * @return {ol.interaction.Select} selectInteraction
+	      * @param {ol/layer/Vector} layer
+	      * @return {ol/interaction/Select} selectInteraction
 	    */
 	    createSelectInteraction: function (layer) {
-	    	var selectInteraction = new ol.interaction.Select({
-	            style: new ol.style.Style({
-	              stroke: new ol.style.Stroke({
+	    	var selectInteraction = new olInteractionSelect({
+	            style: new olStyleStyle({
+	              stroke: new olStyleStroke({
 	                color: 'rgba(21, 6, 232, 1)',
 	                width: 3
 	              }),
-	              fill: new ol.style.Fill({
+	              fill: new olStyleFill({
 	                color: 'rgba(21, 6, 232, 0.4)'
 	              }),
-	              image: new ol.style.Circle({
+	              image: new olStyleCircle({
 	                radius: 4,
-	                fill: new ol.style.Fill({
+	                fill: new olStyleFill({
 	                  color: 'rgba(21, 6, 232, 1)'
 	                })
 	              })

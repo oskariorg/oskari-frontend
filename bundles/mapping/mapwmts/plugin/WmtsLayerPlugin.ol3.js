@@ -1,3 +1,6 @@
+import olSourceVector from 'ol/source/Vector';
+import olLayerVector from 'ol/layer/Vector';
+
 /**
  * A Plugin to manage WMTS OpenLayers map layers
  *
@@ -80,8 +83,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          */
         _getPlaceHolderWmtsLayer: function (layer) {
 
-            var layerHolder = new ol.layer.Vector({
-                    source: new ol.source.Vector({}),
+            var layerHolder = new olLayerVector({
+                    source: new olSourceVector({}),
                     title: 'layer_' + layer.getId(),
                     visible: false
                 }

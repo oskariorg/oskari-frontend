@@ -440,7 +440,7 @@ Oskari.clazz.define(
         /**
          * @method getMap
          * Returns a reference to the map implementation
-         * @return {OpenLayers.Map|ol.Map}
+         * @return {OpenLayers.Map|ol/Map}
          */
         getMap: function () {
             return this._map;
@@ -1766,7 +1766,7 @@ Oskari.clazz.define(
 
             marker.append(svgObject.data);
 
-            // IE needs this because ol.style.Icon opacity property not work on IE
+            // IE needs this because ol/style/Icon opacity property not work on IE
             marker.css('opacity', style.opacity || 1);
 
             if (isWellknownMarker && style.shape.color) {

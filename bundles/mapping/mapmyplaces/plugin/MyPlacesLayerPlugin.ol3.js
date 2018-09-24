@@ -1,3 +1,6 @@
+import olLayerImage from 'ol/layer/Image';
+import olSourceImageWMS from 'ol/source/ImageWMS';
+
 /**
  * Provides functionality to draw MyPlaces layers on the map
  *
@@ -60,8 +63,8 @@ Oskari.clazz.define(
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             var openLayerId = 'layer_' + layer.getId(),
                 map = this.getMapModule();
-            var openlayer = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
+            var openlayer = new olLayerImage({
+                source: new olSourceImageWMS({
                     url: layer.getWmsUrl(),
                     params: {
                         'LAYERS': layer.getWmsName(),
