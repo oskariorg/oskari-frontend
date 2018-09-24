@@ -97,6 +97,11 @@ module.exports = (env, argv) => {
       alias: {
         'oskaribundle-loader': path.resolve(__dirname, './webpack/oskariBundleLoader.js')
       }
+    },
+    resolve: {
+      alias: {
+        'goog': path.join(__dirname, "node_modules/ol-cesium/src/goog") // needed for ol-cesium. Can be removed when v 2.3 will be released
+      }
     }
   };
 
