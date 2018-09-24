@@ -411,7 +411,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             jQuery('body').append(dpiTest);
              var dpi = dpiTest.height();
             dpiTest.remove();
-            var mpu = ol.proj.METERS_PER_UNIT[units];
+            var mpu = olProjUnitsMETERS_PER_UNIT[units];
             var resolution = scale / (mpu * 39.37 * dpi);
             return resolution;
         },
