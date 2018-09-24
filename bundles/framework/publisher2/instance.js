@@ -310,10 +310,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     // show flyout?
                     // TODO: move to default flyout/extension as "mode functionality"?
                     jQuery(me.getFlyout().container).parent().parent().css('display', '');
-                    // make sure edit mode is disabled
-                    if (me.publisher.toolLayoutEditMode) {
-                        me.publisher._editToolLayoutOff();
-                    }
                     me.publisher.setEnabled(false);
                     me.publisher.destroy();
                 }

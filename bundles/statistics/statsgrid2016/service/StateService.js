@@ -193,6 +193,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         /**
          * Sets the active indicator and sends an event about the change
+         * Note! Timeseries relies on this so the event need to be sent even if the indicator doesn't change.
          * @param {String} indicatorHash the unique hash from selected indicators details. See getHash()
          */
         setActiveIndicator: function (indicatorHash) {
@@ -336,7 +337,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getHash: function (datasrc, indicator, selections, series) {
             var hash = datasrc + '_' + indicator;
             var seriesKey = '';
-            if (typeof series === 'object') {
+            if (typeof series === 'object' && series !== null) {
                 seriesKey = series.id;
                 hash += '_' + series.id + '=' + series.values[0] + '-' + series.values[series.values.length - 1];
             }

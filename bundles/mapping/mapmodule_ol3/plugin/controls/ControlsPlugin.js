@@ -29,17 +29,6 @@ Oskari.clazz.define(
         this.removedInteractions = [];
         this.addedInteractions = [];
     }, {
-        /**
-         * @public @method hasUI
-         * This plugin doesn't have a UI, BUT it is controllable in publisher so it is added to map
-         * when publisher starts -> always return true to NOT get second navControl on map when publisher starts
-         * FIXME this is clearly a hack
-         *
-         * @return {Boolean} true
-         */
-        hasUI: function () {
-            return true;
-        },
         _startPluginImpl: function () {
             this._createMapInteractions();
         },
@@ -71,11 +60,11 @@ Oskari.clazz.define(
                     }
 
                     if (data.shape === 'LineString') {
-                        measureValue = data.lenght;
+                        measureValue = data.length;
                     } else if (data.shape === 'Polygon') {
                         measureValue = data.area;
                     }
-                    var reqBuilder = me.getSandbox().getRequestBuilder('ShowMapMeasurementRequest');
+                    var reqBuilder = Oskari.requestBuilder('ShowMapMeasurementRequest');
                     if (reqBuilder) {
                         me.getSandbox().request(me, reqBuilder(measureValue, finished, geoJson, geomMimeType));
                     }
@@ -83,15 +72,6 @@ Oskari.clazz.define(
                 'Toolbar.ToolSelectedEvent': function (event) {
                     if (event._toolId !== 'zoombox') {
                         this._clearLifetimeInteractions();
-                    }
-                },
-                'Publisher2.ToolEnabledChangedEvent': function (event) {
-                    if (event.getTool().getTool().id === this._clazz) {
-                        if (!event._tool.isEnabled()) {
-                            this.disableDragPan();
-                        } else {
-                            this._clearLifetimeInteractions();
-                        }
                     }
                 }
             };

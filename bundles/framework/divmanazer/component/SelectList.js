@@ -78,6 +78,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             disable_search_threshold: options.disable_search_threshold ? options.disable_search_threshold : 10,
             allow_single_deselect: options.allow_single_deselect ? options.allow_single_deselect : false
         });
+        // Fixes an issue where placeholder is cut off with the input field width set as pixel value even if options.width is %
+        // https://github.com/harvesthq/chosen/issues/1162
+        el.find('li.search-field input').css('width', '100%');
         return el;
     },
     /** @method selectFirstValue
@@ -93,7 +96,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
      */
     selectLastValue: function () {
         var chosen = this.element.find('select');
-        chosen.find('option:last-child').attr('selected', 'selected');
+        chosen.find('option:last-child').prop('selected', 'selected');
         this.update();
     },
     resetToPlaceholder: function () {
@@ -164,7 +167,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     disableOptions: function (ids) {
         var chosen = this.element.find('select');
 
-        this.reset();
+        this.reset(true);
 
         var isDisabledOption = function (optionId) {
             return ids.some(function (id) {
@@ -174,6 +177,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         chosen.find('option').each(function (index, opt) {
             if (isDisabledOption(opt.value)) {
                 jQuery(opt).prop('disabled', true);
+                jQuery(opt).prop('selected', false);
             }
         });
         this.update();
@@ -181,7 +185,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     reset: function (supressEvent) {
         var state = this.getOptions();
         for (var i = 0; i < state.disabled.length; i++) {
-            jQuery(state.disabled[i]).attr('disabled', false);
+            jQuery(state.disabled[i]).prop('disabled', false);
         }
         if (!supressEvent) {
             this.resetToPlaceholder();

@@ -10,11 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
         me._sandbox = sandbox;
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.SeriesControlPlugin';
-        if (instance.isEmbedded()) {
-            this._defaultLocation = 'right top';
-        } else {
-            this._defaultLocation = 'center top';
-        }
+        me._defaultLocation = 'center top';
         me._index = 5;
 
         me._name = 'SeriesControlPlugin';
@@ -30,20 +26,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
                 'mobile-stats-series': {
                     iconCls: 'mobile-timeseries',
                     tooltip: '',
-                    sticky: true,
-                    toggleChangeIcon: true,
+                    sticky: false,
                     show: true,
-                    selected: true,
                     callback: function () {
                         if (me._isMobileVisible) {
                             me.teardownUI();
-
-                            var el = jQuery(me.getMapModule().getMobileDiv())
-                                .find('.mobile-timeseries');
-
-                            me._resetMobileIcon(el, 'mobile-timeseries');
                         } else {
-                            me._isMobileVisible = true;
                             me._buildUI();
                         }
                     }
@@ -56,7 +44,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
         me._seriesControl = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesControl', sandbox, this._locale);
     }, {
         redrawUI: function (mapInMobileMode, forced) {
-            var sandbox = this.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
@@ -69,8 +56,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
 
             if (toolbarReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')('mobile-stats-series', 'mobileToolbar-mobile-toolbar');
-                sandbox.request(this, toolbarRequest);
+                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')('mobile-stats-series', 'mobileToolbar-mobile-toolbar');
+                this.getSandbox().request(this, toolbarRequest);
             }
             if (!mapInMobileMode) {
                 this._buildUI();
@@ -79,10 +66,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
         },
         teardownUI: function () {
             this._isMobileVisible = false;
-            this.removeFromPluginContainer(this.getElement());
-            this.element = null;
+            if (this.element) {
+                this.removeFromPluginContainer(this.getElement());
+                this.element = null;
+            }
         },
         _buildUI: function () {
+            this._isMobileVisible = true;
             this.addToPluginContainer(this._createControlElement());
             this._makeDraggable();
             this._enableResize();

@@ -1,6 +1,7 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
     function (title, options, markerHandler) {
         this.loc = Oskari.getMsg.bind(null, 'TerrainProfile');
+        this.numberFormatter = Oskari.getNumberFormatter(1);
         this.makeDraggable({
             handle: '.oskari-flyouttoolbar',
             scroll: false
@@ -196,7 +197,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 focus.attr('transform', 'translate(0 ' + y(d.height) + ')');
                 var text;
                 if(d.height !== null) {
-                    text = me.loc('legendValue', { value: d.height });
+                    text = me.numberFormatter.format(d.height);
                 } else {
                     text = me.loc('noValue');
                 }

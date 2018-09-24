@@ -31,8 +31,8 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /(?<!min)\.js$/,
-          exclude: /node_modules(?!\/oskari-frontend)|libraries/,
+          test: /\.js$/,
+          exclude: [/node_modules(?!\/oskari-frontend)/, /libraries/, /\.min\.js$/],
           use: {
             loader: 'babel-loader',
             options: {
@@ -114,11 +114,16 @@ module.exports = (env, argv) => {
     config.devServer = {
       port: 8081,
       proxy: [{
-        context: ['**', `!Oskari/dist/${version}/${appName}/**`],
-        target: 'http://localhost:8080',
+        context: ['/transport/cometd'],
+        target: 'ws://localhost:8080',
         secure: false,
         changeOrigin: true,
         ws: true
+      }, {
+        context: ['**', `!/Oskari/dist/${version}/${appName}/**`, '!/Oskari/bundles/bundle.js'],
+        target: 'http://localhost:8080',
+        secure: false,
+        changeOrigin: true
       }]
     };
   }

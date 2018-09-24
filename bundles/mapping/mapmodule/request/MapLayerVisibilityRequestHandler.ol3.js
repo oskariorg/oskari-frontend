@@ -39,8 +39,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             layer.setVisible(request.getVisible());
 
             // layersplugin handles ol maplayers' visibility changes
-            // and notifies other components if layer's visibility has changed
-            this.layersPlugin.handleMapLayerVisibility(layer);
+            // and notifies other components
+            this.layersPlugin.handleMapLayerVisibility(layer, true);
         },
         tryVectorLayers : function(id, blnVisible) {
             var module = this.layersPlugin.getMapModule();
