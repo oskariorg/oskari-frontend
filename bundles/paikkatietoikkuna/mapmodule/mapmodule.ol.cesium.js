@@ -88,8 +88,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             this._map3d = new OLCesium({
                 map: map,
-                time: function () {
-                    return Cesium.JulianDate.now();
+                sceneOptions: {
+                    showCredit: false
                 }
             });
 
