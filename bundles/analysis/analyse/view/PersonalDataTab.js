@@ -1,3 +1,5 @@
+import {getCenter as olExtentGetCenter, getArea as olExtentGetArea} from 'ol/extent'
+
 /**
  * @class Oskari.mapframework.bundle.analyse.view.PersonalDataTab
  * Renders the analysis tab content to be shown in "personal data" bundle.
@@ -128,8 +130,8 @@ Oskari.clazz.define(
 
             var olPolygon = geom[0];
             var extent = olPolygon.getExtent();
-            var center = ol.extent.getCenter(extent);
-            var area = ol.extent.getArea(extent);
+            var center = olExtentGetCenter(extent);
+            var area = olExtentGetArea(extent);
             var epsilon = 1.0;
             var rb = sandbox.getRequestBuilder('MapMoveRequest');
             var req;
