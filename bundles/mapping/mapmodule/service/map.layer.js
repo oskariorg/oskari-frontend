@@ -916,11 +916,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *
          * @param {String} type
          *            Mapping from map-layer json "type" parameter to a class as in #typeMapping
-         * @param {String} modelName
-         *            layer model name (like 'Oskari.mapframework.domain.WmsLayer')
+         * @param {String|Function} modelRef
+         *            layer model clazz name (like 'Oskari.mapframework.domain.WmsLayer') or constructor function
          */
-        registerLayerModel: function (type, modelName) {
-            this.typeMapping[type] = modelName;
+        registerLayerModel: function (type, modelRef) {
+            this.typeMapping[type] = modelRef;
         },
         /**
          * @method unregisterLayerModel
@@ -931,7 +931,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            Mapping from map-layer json "type" parameter to a class as in #typeMapping
          */
         unregisterLayerModel: function (type) {
-            this.typeMapping[type] = undefined;
             delete this.typeMapping[type];
         },
 
@@ -1120,11 +1119,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.AbstractLayer} empty layer model for the layer type
          */
         createLayerTypeInstance: function (type, params, options) {
-            var clazz = this.typeMapping[type];
-            if (!clazz) {
+            var modelRef = this.typeMapping[type];
+            if (!modelRef) {
                 return null;
             }
-            return Oskari.clazz.create(clazz, params, options);
+            if (typeof modelRef === 'function') {
+                return new modelRef(params, options);
+            }
+            return Oskari.clazz.create(modelRef, params, options);
         },
         /**
          * @method _createActualMapLayer
