@@ -177,7 +177,8 @@ div.basic_analyse select.settings_buffer_units, div.basic_analyse select.setting
   width: 80%; }
 
 .analyse_title_columns {
-  display: inline-block; }
+  display: inline-block;
+  width: 100%; }
 
 .analyse_settings_cont {
   margin: 10px 5px; }

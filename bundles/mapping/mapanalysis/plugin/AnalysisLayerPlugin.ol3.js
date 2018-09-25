@@ -1,3 +1,6 @@
+import olLayerImage from 'ol/layer/Image';
+import olSourceImageWMS from 'ol/source/ImageWMS';
+
 /**
  * @class Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin
  * Provides functionality to draw Analysis layers on the map
@@ -83,8 +86,8 @@ Oskari.clazz.define(
                 },
                 visible = layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                 opacity = layer.getOpacity() / 100,
-                openlayer = new ol.layer.Image({
-                    source: new ol.source.ImageWMS({
+                openlayer = new olLayerImage({
+                    source: new olSourceImageWMS({
                         url: wms.URL,
                         params: {
                             'LAYERS': wms.LAYERS,

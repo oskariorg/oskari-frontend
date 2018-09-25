@@ -1,3 +1,18 @@
+import olSourceVector from 'ol/source/Vector';
+import olLayerVector from 'ol/layer/Vector';
+import olOverlay from 'ol/Overlay';
+import {fromExtent} from 'ol/geom/Polygon';
+import olFormatWKT from 'ol/format/WKT';
+import olFormatGeoJSON from 'ol/format/GeoJSON';
+import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
+import {BufferOp} from 'jsts/org/locationtech/jts/operation/buffer';
+import * as olGeom from 'ol/geom';
+import LinearRing from 'ol/geom/LinearRing';
+import GeometryCollection from 'ol/geom/GeometryCollection';
+
+const olParser = new jstsOL3Parser();
+olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
+
 /**
  * @class Oskari.mapframework.mapmodule.VectorLayerPlugin
  * Provides functionality to draw vector layers on the map
@@ -85,8 +100,8 @@ Oskari.clazz.define(
                     }
 
                     var opacity = 100;
-                    var vectorSource = new ol.source.Vector();
-                    var olLayer = new ol.layer.Vector({
+                    var vectorSource = new olSourceVector();
+                    var olLayer = new olLayerVector({
                         name: me._olLayerPrefix + layerId,
                         id: layerId,
                         source: vectorSource
@@ -105,7 +120,7 @@ Oskari.clazz.define(
         _createHoverOverlay: function () {
             var overlayDiv = document.createElement('div');
             overlayDiv.className = 'feature-hover-overlay';
-            this._hoverOverlay = new ol.Overlay({
+            this._hoverOverlay = new olOverlay({
                 element: overlayDiv
             });
             this._map.addOverlay(this._hoverOverlay);
@@ -301,7 +316,7 @@ Oskari.clazz.define(
         registerVectorFormats: function() {
             var me = this;
             this.registerVectorFormat('application/json',
-                new ol.format.GeoJSON({}));
+                new olFormatGeoJSON({}));
             this.registerVectorFormat('application/nlsfi-x-openlayers-feature',
                 function() {
                     this.read = function(data) {
@@ -309,8 +324,8 @@ Oskari.clazz.define(
                     };
                 }
             );
-            me.registerVectorFormat('GeoJSON', new ol.format.GeoJSON());
-            me.registerVectorFormat('WKT', new ol.format.WKT({}));
+            me.registerVectorFormat('GeoJSON', new olFormatGeoJSON());
+            me.registerVectorFormat('WKT', new olFormatWKT({}));
         },
         /**
          * @method removeFeaturesFromMap
@@ -319,14 +334,14 @@ Oskari.clazz.define(
          *
          * @param {String} identifier the feature attribute identifier
          * @param {String} value the feature identifier value
-         * @param {ol.layer.Vector} layer object OR {String} layerId
+         * @param {ol/layer/Vector} layer object OR {String} layerId
          */
         removeFeaturesFromMap: function(identifier, value, layer) {
             var me = this,
                 olLayer,
                 layerId;
             if (layer && layer !== null) {
-                if (layer instanceof ol.layer.Vector) {
+                if (layer instanceof olLayerVector) {
                     layerId = layer.get('id');
                 } else if (_.isString(layer) || _.isNumber(layer)) {
                     layerId = layer;
@@ -422,10 +437,10 @@ Oskari.clazz.define(
 
             var olLayer = me._olLayers[layer.getId()];
             if(!olLayer) {
-                olLayer = new ol.layer.Vector({
+                olLayer = new olLayerVector({
                     name: me._olLayerPrefix + layer.getId(),
                     id: layer.getId(),
-                    source: new ol.source.Vector()
+                    source: new olSourceVector()
                 });
                 me._olLayers[layer.getId()] = olLayer;
                 me._map.addLayer(olLayer);
@@ -1024,7 +1039,7 @@ Oskari.clazz.define(
                 layers = me.getLayerIds(layer);
             features = me.getFeaturesMatchingQuery(layers, options);
             if (!_.isEmpty(features)) {
-                var vector = new ol.source.Vector({
+                var vector = new olSourceVector({
                     features: features
                 });
                 var extent = vector.getExtent();
@@ -1036,13 +1051,13 @@ Oskari.clazz.define(
         /**
          * @method getBufferedExtent
          * -  gets buffered extent
-         * @param {ol.Extent} extent
+         * @param {ol/Extent} extent
          * @param {Number} percentage
-         * @return {ol.Extent} extent
+         * @return {ol/Extent} extent
          */
         getBufferedExtent: function(extent, percentage) {
             var me = this,
-                line = new ol.geom.LineString([
+                line = new olGeom.LineString([
                     [extent[0], extent[1]],
                     [extent[2], extent[3]]
                 ]),
@@ -1050,13 +1065,9 @@ Oskari.clazz.define(
             if (buffer === 0) {
                 return extent;
             }
-            var geometry = ol.geom.Polygon.fromExtent(extent),
-                reader = new jsts.io.WKTReader(),
-                wktFormat = new ol.format.WKT(),
-                wktFormatString = wktFormat.writeGeometry(geometry),
-                input = reader.read(wktFormatString),
-                bufferGeometry = input.buffer(buffer),
-                parser = new jsts.io.olParser();
+            var geometry = fromExtent(extent);
+            var input = olParser.read(geometry);
+            var bufferGeometry = BufferOp.bufferOp(input, buffer);
             bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
             bufferGeometry = parser.write(bufferGeometry);
             return bufferGeometry.getExtent();

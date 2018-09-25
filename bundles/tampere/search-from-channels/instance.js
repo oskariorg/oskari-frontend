@@ -1,3 +1,8 @@
+import olSourceVector from 'ol/source/Vector';
+import olLayerVector from 'ol/layer/Vector';
+import * as olExtent from 'ol/extent';
+import olFormatWKT from 'ol/format/WKT';
+
 /**
  * @Oskari.tampere.bundle.searchfromchannels.SearchFromChannelsBundleInstance
  *
@@ -841,11 +846,11 @@ Oskari.clazz.define(
             me._clearMapFromResults();
             me._closeMapPopup();
 
-            var source = new ol.source.Vector({useSpatialIndex:true});
+            var source = new olSourceVector({useSpatialIndex:true});
 
             //Fake layer for zoomin event
-            var olLayer = new ol.layer.Vector('templayer'),
-                format = new ol.format.WKT({}),
+            var olLayer = new olLayerVector('templayer'),
+                format = new olFormatWKT({}),
                 feature,
                 geometry,
                 mapMoveRequest,
@@ -877,10 +882,10 @@ Oskari.clazz.define(
             if(isSelected){
 
             bounds = source.getExtent();
-            center = ol.extent.getCenter(bounds);
+            center = olExtent.getCenter(bounds);
 
-            var topLeft =  ol.extent.getTopLeft(bounds);
-            var bottomRight =  ol.extent.getBottomRight(bounds);
+            var topLeft =  olExtent.getTopLeft(bounds);
+            var bottomRight =  olExtent.getBottomRight(bounds);
 
             var zoom = {
                 top: topLeft[1],

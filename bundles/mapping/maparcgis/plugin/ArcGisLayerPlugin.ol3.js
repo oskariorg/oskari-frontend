@@ -1,3 +1,7 @@
+import olLayerTile from 'ol/layer/Tile';
+import olSourceTileArcGISRest from 'ol/source/TileArcGISRest';
+import olSourceXYZ from 'ol/source/XYZ';
+
 /**
  * @class Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin
  * Provides functionality to draw Stats layers on the map
@@ -86,9 +90,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
             if (layer.isLayerOfType(me._layerType2)) {
                 //ArcGIS REST layer
-                openlayer = new ol.layer.Tile({
+                openlayer = new olLayerTile({
                     extent: me.getMap().getView().getProjection().getExtent(),
-                    source: new ol.source.TileArcGISRest({
+                    source: new olSourceTileArcGISRest({
                         urls: this.__tuneURLsForOL3(layer.getLayerUrls()),
                         params : {
                             'layers' : 'show:' + layer.getLayerName()
@@ -104,8 +108,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             } else {
                 // ArcGIS cached layer.
                 // Layer URL is like: http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x} format
-                openlayer = new ol.layer.Tile({
-                    source: new ol.source.XYZ({
+                openlayer = new olLayerTile({
+                    source: new olSourceXYZ({
                         url: layer.getLayerUrl(),
                         crossOrigin : layer.getAttributes('crossOrigin')
                     }),

@@ -85,6 +85,7 @@ Oskari.registerLocalization(
                     "decimalCount": "Desimaalien tarkkuus pitää olla 0 tai positiivnen kokonaisluku.",
                     "headerCount": "Otsakerivien määrä pitää olla 0 tai positiivinen kokonaisluku.",
                     "doubleComma": "Desimaali- ja koordinaattierotin eivät voi molemmat olla pilkkuja.",
+                    "doubleSpace": "Kulman muoto/yksikkö ei voi sisältää välilyöntejä, jos koordinaattierotin on Välilyönti.",
                     "noFileSettings": "Tiedosto asetuksia ei ole annettu.",
                     "noCoordinateSeparator": "Koordinaattierotin pitää olla valittuna.",
                     "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
@@ -94,11 +95,12 @@ Oskari.registerLocalization(
                     "generic": "Koordinaattimuunnos epäonnistui...",
                     "invalid_coord": "Koordinaatti virheellinen. Tarkasta, että muunnettavat koordinaatit on oikeassa muodossa sekä geodeettinen koordinaatti- ja kokeusjärjestelmä ovat oikein.",
                     "invalid_number": "Koordinaatti virheellinen. Tarkasta..",
+                    "invalid_coord_in_array": "Koordinaatti virheellinen. Tarkasta..",
                     "no_coordinates": "Ei koordinaatteja",
                     "invalid_file_settings": "Invalid file settings",
                     "no_file": "No file entry",
-                    "invalid_coord_length": "Tiedostossa virheellinen koordinaatti. Tarkasta, että otsakerivit, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä ovat määritetty oikein.",
-                    "invalid_coord_in_row": "Tiedostossa virheellinen koordinaatti {coordinate} rivillä {rowIndex, number}."
+                    "invalid_first_coord": "Tiedostossa virheellinen koordinaatti. Tarkasta, että otsakerivit, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä ovat määritetty oikein.",
+                    "invalid_coord_in_line": "Tiedostossa virheellinen koordinaatti {line} rivillä {index, number}."
                 },
                 "responseFile": {
                     "title": "Attention!",
@@ -129,7 +131,8 @@ Oskari.registerLocalization(
                 "title": "Näytä sijainnit kartalla",
                 "info" : "Tarkastele muunnettuja koordinaatteja kartalla.",
                 "errorTitle": "Virhe sijaintien näyttämisessä",
-                "transformError": "Muunna koordinaatit ennen sijaintien näyttämistä kartalla.",
+                "noCoordinates": "Ei koordinaatteja näytettäväksi kartalla",
+                "noSrs": "Geodeettinen koordinaattijärjestelmä pitää olla valittuna lähtötiedoissa, jotta pisteet voidaan näyttää kartalla.",
                 "lon": "Lon",
                 "lat": "Lat",
                 "north": "N",
@@ -137,7 +140,9 @@ Oskari.registerLocalization(
             },
             "select":{
                 "title": "Näytä sijainnit kartalla",
-                "info": "Valitse yksi tai useampia pisteitä kartalta klikkaamalla."
+                "info": "Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
+                "add": "Add markers",
+                "remove": "Remove markers"
             }
         },
         "actions": {

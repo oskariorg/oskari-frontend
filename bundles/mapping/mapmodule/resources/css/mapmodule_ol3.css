@@ -102,10 +102,6 @@ div.mapplugins {
             float: right; }
     div.mapplugins.top.right .mapplugin.layerselection {
       margin-left: 0; }
-    div.mapplugins.top.right .mapplugin.statsgrid-series-control-plugin {
-      position: absolute;
-      left: -815px;
-    }
     div.mapplugins.top.right .mapplugin.statsgrid-legend-plugin, div.mapplugins.top.right .mapplugin.statsgrid-legend-plugin-transparent {
       position: absolute;
       left: -305px;
@@ -144,6 +140,11 @@ div.mapplugins {
             float: right; }
     div.mapplugins.bottom.right .mapplugin.logoplugin {
       clear: both; }
+    div.mapplugins.bottom.right .mapplugin.statsgrid-legend-plugin, div.mapplugins.bottom.right .mapplugin.statsgrid-legend-plugin-transparent {
+      position: absolute;
+      top: -155px;
+      left: calc(-310px + 100%);
+    }
     div.mapplugins.bottom.left .mapplugin.logoplugin {
       clear: both; }
   div.mapplugins.left {

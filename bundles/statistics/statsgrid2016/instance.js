@@ -445,7 +445,7 @@ Oskari.clazz.define(
                 mapModule.startPlugin(this.classificationPlugin);
             }
             // get the plugin order straight in mobile toolbar even for the tools coming in late
-            if (Oskari.util.isMobile() && this.classificationPlugin.hasUI()) {
+            if (Oskari.util.isMobile()) {
                 mapModule.redrawPluginUIs(true);
             }
         },

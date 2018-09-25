@@ -1,3 +1,8 @@
+import olFeature from 'ol/Feature';
+import * as olGeom from 'ol/geom';
+import olFormatWKT from 'ol/format/WKT';
+import olFormatGeoJSON from 'ol/format/GeoJSON';
+
 Oskari.clazz.define(
     'Oskari.analysis.bundle.analyse.view.ContentPanel',
     function (view) {
@@ -122,12 +127,12 @@ Oskari.clazz.define(
          */
         parseFeatureFromClickedFeature: function(clickedGeometry) {
             var data = clickedGeometry[1],
-                wkt = new ol.format.WKT(),
+                wkt = new olFormatWKT(),
                 feature = wkt.readFeature(data),
                 geom = feature.getGeometry();
 
-            if (geom instanceof ol.geom.LineString || geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon) {
-                return new ol.Feature({
+            if (geom instanceof olGeom.LineString || geom instanceof olGeom.Polygon || geom instanceof olGeom.MultiPolygon) {
+                return new olFeature({
                     geometry: geom
                 });
             }
@@ -195,7 +200,7 @@ Oskari.clazz.define(
 
                 var mode = event.getData().shape;
 
-                var features = new ol.format.GeoJSON().readFeatures(event.getGeoJson());
+                var features = new olFormatGeoJSON().readFeatures(event.getGeoJson());
 
                 for (i=0; i < features.length; i++) {
                     this.addFeature(features[i], mode);
@@ -494,7 +499,7 @@ Oskari.clazz.define(
          * Adds the given geometry to the feature layer
          * and to the internal list of features.
          *
-         * @param {ol.Feature} feature to add
+         * @param {ol/Feature} feature to add
          * @param {String} mode geometry type
          * @param {String} name optional name for the temp feature
          *
@@ -625,7 +630,7 @@ Oskari.clazz.define(
                 layerType = this.getLayerType(),
                 featureLayer = this.featureLayer,
                 featureSource = this.featureSource,
-                formatter = new ol.format.GeoJSON(),
+                formatter = new olFormatGeoJSON(),
                 geometryMode = this.analyseHelper.getInternalType(mode);
 
             var nonNullName = name || (loc[geometryMode] + ' ' + (this.featCounts[geometryMode] += 1));
@@ -690,7 +695,7 @@ Oskari.clazz.define(
 
             me.selectInteraction.on('select', function (evt) {
               if (evt.selected.length > 0) {
-                  var wkt = new ol.format.WKT();
+                  var wkt = new olFormatWKT();
                       featureWKT = wkt.writeFeature(evt.selected[0]);
 
                   //set geometry for drawFilter
@@ -797,12 +802,12 @@ Oskari.clazz.define(
 
             return function (result) {
                 return function () {
-                    var geometry = new ol.geom.Point(
+                    var geometry = new olGeom.Point(
                             result.lon, result.lat
                         ),
                         name = (result.name + ' (' + result.village + ')');
 
-                    var feature = new ol.Feature({
+                    var feature = new olFeature({
                         geometry: geometry
                     });
 

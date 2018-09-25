@@ -143,6 +143,9 @@ div.basic_publisher ul.selectedLayersList {
   div.basic_publisher ul.selectedLayersList span {
     position: absolute; }
 
+div.basic_publisher label.oskari-languageselect {
+  clear: left; }
+
 div.publisher div.startview div.content {
   margin-top: 5px; }
 

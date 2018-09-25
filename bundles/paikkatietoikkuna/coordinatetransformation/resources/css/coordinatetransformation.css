@@ -92,6 +92,23 @@
     font-size: 13px;
 }*/
 
+/* Coordinate map selection */
+.coordinatetransformation-flyout.coordinateSelectionPopup {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+
+}
+.coordinatetransformation-flyout .coordinateSelectionOptions {
+    margin-top: 24px;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* Show coordinates on the map*/
+.showMapMarkers {
+    width: 400px;
+}
+
 /* Coordinate system selections */
 .coordinatetransformation-flyout .coordinate-systems-wrapper {
     display: flex;

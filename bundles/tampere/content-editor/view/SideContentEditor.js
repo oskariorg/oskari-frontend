@@ -1,3 +1,7 @@
+import olFormatWKT from 'ol/format/WKT';
+import olFormatGeoJSON from 'ol/format/GeoJSON';
+import * as olProj from 'ol/proj';
+
 /**
  * @class Oskari.tampere.bundle.content-editor.view.SideContentEditor
  */
@@ -116,7 +120,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 }
             }
             if(geometry != null) {
-                var format = new ol.format.GeoJSON();
+                var format = new olFormatGeoJSON();
                 var geomAsGeoJSON = format.writeGeometry(geometry);
                 if (me.getDrawToolsGeometryType().indexOf("Multi") > -1) {
                     me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.instance.getName(), me.getDrawToolsGeometryType(), {
@@ -193,7 +197,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _findGeometryByFidFromLayer: function (fid) {
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(this.selectedLayerId);
             var geometries = layer.getClickedGeometries();
-            var wkt = new ol.format.WKT();
+            var wkt = new olFormatWKT();
             for(var j = 0; j < geometries.length; j++) {
                 if(geometries[j][0] === fid) {
                     return {fid: fid, geometry: wkt.readGeometry(geometries[j][1])};
@@ -203,7 +207,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         _addClickedFeature: function (clickedFeature) {
             var me = this;
-            var wkt = new ol.format.WKT();
+            var wkt = new olFormatWKT();
             var geometry = wkt.readGeometry(clickedFeature[1]);
             if (me.allClickedFeatures.length > 0) {
                 var isNewFeature = true;
@@ -361,7 +365,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         _fillLayerGeometries: function(geometries) {
             if (this.layerGeometries != null && this.layerGeometries.geometry != null) {
-                var layerGeometries = JSON.parse(new ol.format.GeoJSON().writeGeometry(this.layerGeometries.geometry));
+                var layerGeometries = JSON.parse(new olFormatGeoJSON().writeGeometry(this.layerGeometries.geometry));
                 if (layerGeometries != null) {
                     if (layerGeometries.type == "Point") {
                         geometries.type = "point";
@@ -1241,8 +1245,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         if(geometryType === "MultiPoint") {
                             var closestPoint = me.layerGeometries.geometry.getClosestPoint([me.clickCoords.x, me.clickCoords.y]);
                             //Have to transform point and multipoint closest point for turf.
-                            var closestPointCoordinatesWGS84 = ol.proj.transform(closestPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
-                            var clickedPointCoordinatesWGS84 = ol.proj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            var closestPointCoordinatesWGS84 = olProj.transform(closestPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            var clickedPointCoordinatesWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
                             var from = turf.point(closestPointCoordinatesWGS84);
                             var to = turf.point(clickedPointCoordinatesWGS84);
                             var distance = turf.distance(from, to);
@@ -1258,14 +1262,14 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         } else if(geometryType === "MultiLineString") {
                             var lineStrings = me.layerGeometries.geometry.getLineStrings();
                             //Have to transform point and linestring for turf.
-                            var clickedPointCoordinatesWGS84 = ol.proj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            var clickedPointCoordinatesWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
                             var pt = turf.point(clickedPointCoordinatesWGS84);
                             for(var j = 0; j < lineStrings.length; ++j) {
                                 var lineStringCoords = lineStrings[j].getCoordinates();
                                 var lineStringTransformed = [];
                                 for(var k = 0; k < lineStringCoords.length; ++k) {
                                     var lineStringPoint = lineStringCoords[k];
-                                    var lineStringPointWGS84 = ol.proj.transform(lineStringPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                                    var lineStringPointWGS84 = olProj.transform(lineStringPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
                                     lineStringTransformed.push(lineStringPointWGS84);
                                 }
                                 var line = turf.lineString(lineStringTransformed);

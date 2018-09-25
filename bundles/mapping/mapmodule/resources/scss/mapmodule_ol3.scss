@@ -184,11 +184,6 @@ div.mapplugins {
                     position: absolute;
                     left: -305px;
                 }
-                &.statsgrid-series-control-plugin {
-                    position: absolute;
-                    left: -815px;
-                }
-
             }
 
         }
@@ -261,6 +256,12 @@ div.mapplugins {
 
                 &.logoplugin {
                     clear: both;
+                }
+                &.statsgrid-legend-plugin,
+                &.statsgrid-legend-plugin-transparent {
+                    position: absolute;
+                    top: -155px;
+                    left: calc(-310px + 100%);
                 }
 
             }

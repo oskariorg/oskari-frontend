@@ -19,22 +19,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                             '<input type="text">' +
                                             //'<div class="infolink icon-info" data-selection="fileName"></div>' +
                                         '</div>'+
-                                        '<div class="selection-wrapper decimalCount">'+
-                                            '<b class="title">${decimalCount}</b>'+
-                                            '<input type="number" value="0" min="0" max = "20" required> '+
-                                            '<div class="infolink icon-info" data-selection="decimalCount"></div>' +
-                                        '</div>'+
-                                        '<div class="selection-wrapper lineSeparator">'+
-                                            '<b class="title">${lineSeparator}</b> '+
-                                            '<div class="settingsSelect">'+
-                                                '<select>'+
-                                                    '<option value="win">Windows / DOS</option>'+
-                                                    '<option value="unix">Unix</option>'+
-                                                    '<option value="mac">MacOS</option>'+
-                                                '</select>'+
-                                            '</div>'+
-                                            '<div class="infolink icon-info" data-selection="lineSeparator"></div>' +
-                                        '</div>'+
                                     '<% } else { %>'+
                                         '<div class="selection-wrapper fileInput without-infolink"></div>'+
                                         '<div class="selection-wrapper headerLineCount">'+
@@ -47,18 +31,25 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '<b class="title">${units.label}</b> '+
                                         '<div class="settingsSelect">'+
                                             '<select>'+
-                                                '<option value="degree">${units.degree}</option>'+
-                                                '<option value="gradian">${units.gradian}</option>'+
-                                                '<option value="radian">${units.radian}</option>'+
-                                                '<option value="DD">DD</option>'+
-                                                '<option value="DD MM SS">DD MM SS</option>'+
-                                                '<option value="DD MM">DD MM</option>'+
-                                                '<option value="DDMMSS">DDMMSS</option>'+
-                                                '<option value="DDMM">DDMM</option>'+
+                                                '<option value="degree" data-decimals="8">${units.degree}</option>'+
+                                                '<option value="gradian" data-decimals="8">${units.gradian}</option>'+
+                                                '<option value="radian" data-decimals="10">${units.radian}</option>'+
+                                                '<option value="DD" data-decimals="8">DD</option>'+
+                                                '<option value="DD MM SS" data-decimals="4">DD MM SS</option>'+
+                                                '<option value="DD MM" data-decimals="6">DD MM</option>'+
+                                                '<option value="DDMMSS" data-decimals="4">DDMMSS</option>'+
+                                                '<option value="DDMM" data-decimals="6">DDMM</option>'+
                                             '</select>'+
                                         '</div>'+
                                         '<div class="infolink icon-info" data-selection="unitFormat"></div>' +
                                     '</div>'+
+                                    '<% if (obj.export === true) { %> '+
+                                        '<div class="selection-wrapper decimalCount">'+
+                                            '<b class="title">${decimalCount}</b>'+
+                                            '<input type="number" value="0" min="0" max = "20" required> '+
+                                            '<div class="infolink icon-info" data-selection="decimalCount"></div>' +
+                                        '</div>'+
+                                    '<% } %> ' +
                                     '<div class="selection-wrapper decimalSeparator">'+
                                         '<b class="title">${decimalSeparator}</b> '+
                                         '<div class="settingsSelect">'+
@@ -83,6 +74,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '</div>' +
                                         '<div class="infolink icon-info" data-selection="coordinateSeparator"></div>' +
                                     '</div>' +
+                                    '<% if (obj.export === true) { %> '+
+                                        '<div class="selection-wrapper lineSeparator">'+
+                                            '<b class="title">${lineSeparator}</b> '+
+                                            '<div class="settingsSelect">'+
+                                                '<select>'+
+                                                    '<option value="win">Windows / DOS</option>'+
+                                                    '<option value="unix">Unix</option>'+
+                                                    '<option value="mac">MacOS</option>'+
+                                                '</select>'+
+                                            '</div>'+
+                                            '<div class="infolink icon-info" data-selection="lineSeparator"></div>' +
+                                        '</div>'+
+                                    '<% } %> ' +
                                     '<label class="lbl prefixId">' +
                                         '<input class="chkbox" type="checkbox">' +
                                         '<span>${prefixId}</span>' +
@@ -222,9 +226,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             btn.setTitle(btnText);
             btn.setHandler(function() {
                 me.settings.selects = me.getFormSelections();
-                me.settings.file = me.fileInput.getFiles();
+                if (me.type==="import"){
+                    me.settings.file = me.fileInput.getFiles();
+                }
                 me.settings.type = me.type;
-                if (me.helper.validateFileSelections(me.settings) === false){
+                if (me.helper.validateFileSelections(me.getSettings()) === false){
                     return;
                 }
                 if (typeof callback === "function"){
@@ -236,12 +242,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             dialog.makeDraggable();
             if (this.degreeSystem === false){
                 formatRow.css("display","none");
-                decimalInput.val(4);
+                decimalInput.val(3);
             } else {
                 formatRow.css("display","");
-                decimalInput.val(7);
+                decimalInput.val(8);
             }
             this.bindInfoLinks();
+            //when degree unit is changed, change also default decimal value
+            elem.find('.unitFormat select').on('change', function(){
+                var decimals = jQuery(this).find(':checked').data('decimals');
+                decimalInput.val(decimals);
+            });
             // HACK //
             //TODO handle listeners if fileinput is moved to file settings form instead of flyout
             if(this.type === "import" && jQuery._data(this.fileInput.getElement().get(0), "events") === undefined){

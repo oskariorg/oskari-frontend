@@ -182,10 +182,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
      */
     _createAccordionPanel: function (title) {
         var me = this;
+
+        function _overflowCheck () {
+            var pluginEl = me._element.parent();
+            if (pluginEl.css('position') === 'absolute') {
+                var top = pluginEl.offset().top;
+                var bottom = top + pluginEl.height();
+                var offsetToWindowBottom = jQuery(window).height() - bottom;
+                if (offsetToWindowBottom < 0) {
+                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
+                }
+            }
+        }
+
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.on('open', function () {
             me._setPanelState(panel);
             me._element.find('.edit-legend').addClass('edit-active');
+            _overflowCheck();
         });
         panel.on('close', function () {
             me._setPanelState(panel);
