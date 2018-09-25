@@ -181,10 +181,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var epsgValues;
             if (value.length === 4){
                 epsgValues = this.helper.findEpsg(value);
-                if (epsgValues.srs){
+                if (epsgValues){
                     this.selectInstances["geodetic-coordinate"].setValue(epsgValues.srs);
-                    this.trigger('CoordSystemChanged', this.type);
                     inputElem.css('color', '#444');
+                    // compound epsg contains heightSrs
+                    if (epsgValues.heigthSrs){
+                        this.selectInstances.elevation.setValue(epsgValues.heigthSrs);
+                    // "normal" epsg doesn't contain height system -> reset height system
+                    } else {
+                        this.disableElevationSelection(false);
+                        this.selectInstances.elevation.setValue("");
+                    }
+                    this.trigger('CoordSystemChanged', this.type);
                 } else {
                     inputElem.css('color', '#F00');
                 }
@@ -196,7 +204,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             return {
                 geodeticDatum: this.loc('infoPopup.geodeticDatum.info'),
                 coordinateSystem: this.loc('infoPopup.coordinateSystem.info'),
-                mapProjection: this.loc('infoPopup.mapProjection.content'),
+                mapProjection: this.loc('infoPopup.mapProjection.info'),
                 geodeticCoordinateSystem: this.loc('infoPopup.geodeticCoordinateSystem.info'),
                 heightSystem: this.loc('infoPopup.heightSystem.info'),
                 epsgSearch: this.loc('infoPopup.epsgSearch.info')
@@ -283,9 +291,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 case "elevation":
                     break;
                 case "geodetic-coordinate":
-                    if (this.helper.is3DSystem(currentValue)) {
-                        disableElevSystem = true;
-                    }
+                    //do common stuff
                     break;
                 default:
                     Oskari.log(this.getName()).warn("Invalid select");
@@ -377,7 +383,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 if (key === "datum" && resetDatum !== true){
                     return;
                 }
-                if (key === "geodetic-coordinate" && skipCoordSys === true){
+                if (skipCoordSys === true && (key === "geodetic-coordinate" || key === "elevation")){
                     return;
                 }
                 //TODO

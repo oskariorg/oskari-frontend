@@ -15,6 +15,7 @@ import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
 import * as olSphere from 'ol/sphere';
+import * as olGeom from 'ol/geom';
 
 import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
 
@@ -686,6 +687,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
         isPointInExtent: function (extent, x, y){
             return olExtent.containsXY(extent, x, y);
+        },
+        getExtentForPointsArray: function (points){
+            var multiPoint = new olGeom.MultiPoint(points);
+            return multiPoint.getExtent();
         },
         /* --------- /Impl specific --------------------------------------> */
 
