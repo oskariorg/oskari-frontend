@@ -32,7 +32,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
         };
         this.langField = {
             template: jQuery('<div class="field">' +
-                '<div class="help icon-info" title="' + localization.language.tooltip + '" helptags="portti,help,publisher,language"></div>' +
+                    '<div class="help icon-info" title="' + localization.language.tooltip + '" helptags="portti,help,publisher,language"></div>' +
+                    '<div class="language-select-wrapper"></div>' +
+                    '<div class="info-label"></div>' +
                 '</div>')
         };
         this.panel = null;
@@ -116,8 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             langField.setHandler(function (value) {
                 me._languageChanged(value);
             });
-            langElement.append(langField.getElement());
-            langElement.append('<div class="info-label"></div>');
+            langElement.find('.language-select-wrapper').append(langField.getElement());
             me.langField.field = langField;
             me.langField.element = langElement;
 
