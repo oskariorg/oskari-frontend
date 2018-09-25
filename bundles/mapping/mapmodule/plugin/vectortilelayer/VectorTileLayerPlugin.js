@@ -5,6 +5,7 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import olStyleStyle, {createDefaultStyle} from 'ol/style/Style';
 
 import VectorTileModelBuilder from './VectorTileModelBuilder';
+import VectorTileLayer from './VectorTileLayerA';
 
 const invisible = new olStyleStyle();
 
@@ -33,10 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             // register domain builder
             const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
-                mapLayerService.registerLayerModel(
-                    'vectortile',
-                    'Oskari.mapframework.domain.VectorTileLayer'
-                );
+                mapLayerService.registerLayerModel(this.layertype, VectorTileLayer);
                 mapLayerService.registerLayerModelBuilder(this.layertype, new VectorTileModelBuilder());
             }
         },

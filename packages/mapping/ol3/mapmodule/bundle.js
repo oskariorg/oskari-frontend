@@ -344,9 +344,6 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/vectortilelayer.js"
                 },
                 /**
                  * GeoLocation plugin
