@@ -2,7 +2,9 @@ import olSourceVectorTile from 'ol/source/VectorTile';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import olFormatMVT from 'ol/format/MVT';
 import TileGrid from 'ol/tilegrid/TileGrid';
-import olStyleStyle from 'ol/style/Style';
+import olStyleStyle, {createDefaultStyle} from 'ol/style/Style';
+
+import VectorTileModelBuilder from './VectorTileModelBuilder';
 
 const invisible = new olStyleStyle();
 
@@ -35,7 +37,24 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
                     'vectortile',
                     'Oskari.mapframework.domain.VectorTileLayer'
                 );
+                mapLayerService.registerLayerModelBuilder(this.layertype, new VectorTileModelBuilder());
             }
+        },
+        _createPluginEventHandlers() {
+            return {
+                AfterChangeMapLayerStyleEvent(event) {
+                    const oskariLayer = event.getMapLayer();
+                    const olLayers = this.getOLMapLayers(oskariLayer);
+
+                    if (olLayers && olLayers.length > 0) {
+                        olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
+                    }
+                }
+            };
+        },
+        _getLayerCurrentStyleFunction(layer) {
+            const styleDef = layer.getCurrentStyleDef();
+            return styleDef ? this._generateStyleFunction(styleDef) : createDefaultStyle;
         },
         /**
          * Checks if the layer can be handled by this plugin
@@ -66,15 +85,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             if(options.tileGrid) {
                 sourceOpts.tileGrid = new TileGrid(options.tileGrid);
             }
-            const layerOpts = {
+            const vectorTileLayer = new olLayerVectorTile({
                 opacity: layer.getOpacity() / 100,
                 renderMode: 'hybrid',
-                source: new olSourceVectorTile(sourceOpts)
-            };
-            if (options.style && options.style.default) {
-                layerOpts.style = this._generateStyleFunction(options.style.default);
-            }
-            const vectorTileLayer = new olLayerVectorTile(layerOpts);
+                source: new olSourceVectorTile(sourceOpts),
+                style: this._getLayerCurrentStyleFunction(layer)
+            });
 
             this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
             this.setOLMapLayers(layer.getId(), vectorTileLayer);
