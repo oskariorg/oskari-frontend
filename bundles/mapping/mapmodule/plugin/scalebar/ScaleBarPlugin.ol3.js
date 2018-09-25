@@ -1,3 +1,5 @@
+import olControlScaleLine from 'ol/control/ScaleLine';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin
  * Provides scalebar functionality for map
@@ -28,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
         _createControlElement: function () {
             var el = jQuery('<div class="mapplugin scalebar"></div>');
             // initialize control, pass container
-            this._scalebar = new ol.control.ScaleLine({
+            this._scalebar = new olControlScaleLine({
                 target: el[0]
             });
 

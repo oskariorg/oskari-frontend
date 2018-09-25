@@ -155,9 +155,9 @@ Oskari.clazz.define(
          */
         updateLayerParams : function(layer, forced, params) {
             //var openLayerId = 'layer_' + layer.getId();
-            var ol = this.getOLMapLayers(layer);
+            var oLayer = this.getOLMapLayers(layer);
 
-            if(!ol) {
+            if(!oLayer) {
                 return;
             }
             params = params || {};
@@ -165,15 +165,15 @@ Oskari.clazz.define(
                 params._ts = Date.now();
             }
 
-            if (jQuery.isArray(ol)){
-                for (i=0; i < ol.length; i+=1){
-                    if (typeof ol[i].mergeNewParams ==='function'){
-                        ol[i].mergeNewParams(params);
+            if (jQuery.isArray(oLayer)){
+                for (i=0; i < oLayer.length; i+=1){
+                    if (typeof oLayer[i].mergeNewParams ==='function'){
+                        oLayer[i].mergeNewParams(params);
                     }
                 }
             } else {
-                if (typeof ol.mergeNewParams ==='function'){
-                    ol.mergeNewParams(params);
+                if (typeof oLayer.mergeNewParams ==='function'){
+                    oLayer.mergeNewParams(params);
                 }
             }
         },

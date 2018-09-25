@@ -1,3 +1,5 @@
+import olOverlay from 'ol/Overlay';
+
 /**
  * @class Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin
  *
@@ -234,7 +236,7 @@ Oskari.clazz.define(
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
                 popupType = "desktop";
-                popup = new ol.Overlay({
+                popup = new olOverlay({
                     element: popupElement[0],
                     position: lonlatArray,
                     //start with null positioning
@@ -671,7 +673,7 @@ Oskari.clazz.define(
             }
 
             var me = this,
-                posClasses = me._positionClasses, // supported ol.OverlayPositionings
+                posClasses = me._positionClasses, // supported ol/OverlayPositioning
                 pixels = me.getMapModule().getPixelFromCoordinate(lonlatArray),
                 mapSize = me.getMapModule().getSize(),
                 panY = 0,
@@ -689,7 +691,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            //If supported ol.OverlayPositioning is used, use it instead of default values
+            //If supported ol/OverlayPositioning is used, use it instead of default values
             Object.keys(posClasses).forEach(function (pos){
                 if (positioning === posClasses[pos]){
                     var popupDirection = positioning.split("-");

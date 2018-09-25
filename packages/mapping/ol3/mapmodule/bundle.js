@@ -34,14 +34,6 @@ Oskari.clazz.define(
                     "src": "../../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js"
                 },
                 /*
-                 * Openlayers 3
-                 */
-                {
-                    "type": "text/javascript",
-                    "expose" : "ol",
-                    "src": "../../../../libraries/ol3/ol-v4.4.2-oskari.js"
-                },
-                /*
                  * Abstract base
                  */
                 {
@@ -345,6 +337,16 @@ Oskari.clazz.define(
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/vectorlayer.css"
                 },
+                /**
+                * Vector tile Layer plugin
+                */
+               {
+                   "type": "text/javascript",
+                   "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin.js"
+               }, {
+                   "type": "text/javascript",
+                   "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/vectortilelayer.js"
+               },
                 /**
                  * GeoLocation plugin
                  */

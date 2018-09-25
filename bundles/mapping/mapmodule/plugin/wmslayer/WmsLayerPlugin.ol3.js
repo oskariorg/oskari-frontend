@@ -1,3 +1,11 @@
+import olLayerTile from 'ol/layer/Tile';
+import olLayerImage from 'ol/layer/Image';
+import olProjProjection from 'ol/proj/Projection';
+import * as olProj from 'ol/proj';
+
+import OskariImageWMS from './OskariImageWMS';
+import OskariTileWMS from './OskariTileWMS';
+
 /**
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
  * Provides functionality to draw WMS layers on the map
@@ -99,18 +107,16 @@ Oskari.clazz.define(
                     projection: reverseProjection ? reverseProjection : undefined
                 };
                 if (layerOptions.singleTile === true) {
-                    sourceImpl = ol.source.OskariImageWMS
-                        ? new ol.source.OskariImageWMS(sourceOpts) : new ol.source.ImageWMS(sourceOpts);
-                    layerImpl = new ol.layer.Image({
+                    sourceImpl = new OskariImageWMS(sourceOpts);
+                    layerImpl = new olLayerImage({
                         source: sourceImpl,
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
                     this._registerLayerEvents(layerImpl, _layer, 'image');
                 } else {
-                    sourceImpl = ol.source.OskariTileWMS
-                        ? new ol.source.OskariTileWMS(sourceOpts) : new ol.source.TileWMS(sourceOpts);
-                    layerImpl = new ol.layer.Tile({
+                    sourceImpl = new OskariTileWMS(sourceOpts);
+                    layerImpl = new olLayerTile({
                         source: sourceImpl,
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
@@ -129,7 +135,7 @@ Oskari.clazz.define(
                 // gather references to layers
                 olLayers.push(layerImpl);
 
-                this.getSandbox().printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
+                this.getSandbox().printDebug("#!#! CREATED ol/layer/TileLayer for " + _layer.getId());
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
@@ -158,13 +164,13 @@ Oskari.clazz.define(
          *
          */
         _createReverseProjection: function (projectionCode) {
-            var originalProjection = ol.proj.get(projectionCode);
+            var originalProjection = olProj.get(projectionCode);
 
             if (!originalProjection) {
                 return null;
             }
 
-            var reverseProjection = new ol.proj.Projection({
+            var reverseProjection = new olProjProjection({
                 "code": projectionCode,
                 "units": originalProjection.getUnits(),
                 "extent": originalProjection.getExtent(),
@@ -215,9 +221,9 @@ Oskari.clazz.define(
                     count = olLayerList.length;
                     for (i = 0; i < count; i++) {
                     		var layerSource = olLayerList[i].getSource();
-                    		//TileWMS -> original is ol.source.TileWMS.getTileLoadFunction
+                    		//TileWMS -> original is olSourceTileWMS.getTileLoadFunction
                     		if (layerSource.getTileLoadFunction && typeof(layerSource.getTileLoadFunction) === 'function') {
-                    			var originalTileLoadFunction = new ol.source.OskariTileWMS().getTileLoadFunction();
+                    			var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
 								layerSource.setTileLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
 										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
@@ -227,9 +233,9 @@ Oskari.clazz.define(
 									}
 								});
                     		}
-                    		//ImageWMS -> original is ol.source.ImageWMS.getImageLoadFunction
+                    		//ImageWMS -> original is olSourceImageWMS.getImageLoadFunction
                     		else if (layerSource.getImageLoadFunction && typeof(layerSource.getImageLoadFunction) === 'function') {
-                    			var originalImageLoadFunction = new ol.source.OskariImageWMS().getImageLoadFunction();
+                    			var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
 								layerSource.setImageLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
 										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";

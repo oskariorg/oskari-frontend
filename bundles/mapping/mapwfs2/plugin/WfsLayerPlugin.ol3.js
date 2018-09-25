@@ -1,3 +1,14 @@
+import olLayerTile from 'ol/layer/Tile';
+import olLayerImage from 'ol/layer/Image';
+import olSourceTileImage from 'ol/source/TileImage';
+import olSourceImageStatic from 'ol/source/ImageStatic';
+import * as olGeom from 'ol/geom';
+import olFormatGeoJSON from 'ol/format/GeoJSON';
+import olTilegridTileGrid from 'ol/tilegrid/TileGrid';
+import * as olProj from 'ol/proj';
+
+import OskariAsyncTileImage from './OskariAsyncTileImage';
+
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin
  */
@@ -748,8 +759,8 @@ Oskari.clazz.define(
             var lonlat = event.getLonLat(),
                 keepPrevious = event.getParams().ctrlKeyDown;
 
-            var point = new ol.geom.Point([lonlat.lon, lonlat.lat]);
-            var geojson = new ol.format.GeoJSON(this.getMap().getView().getProjection());
+            var point = new olGeom.Point([lonlat.lon, lonlat.lat]);
+            var geojson = new olFormatGeoJSON(this.getMap().getView().getProjection());
             var pixelTolerance = 15;
             var json = {
                 type: 'FeatureCollection',
@@ -1099,7 +1110,7 @@ Oskari.clazz.define(
          */
         createTileGrid: function() {
             var tileSize = this.getTileSize();
-            this._tileGrid = new ol.tilegrid.TileGrid({
+            this._tileGrid = new olTilegridTileGrid({
                 extent: this.ol2ExtentOl3Transform(this.getMapModule().getMaxExtent()),
                 tileSize: [tileSize.width, tileSize.height],
                 resolutions : this.getMapModule().getResolutionArray()
@@ -1126,13 +1137,7 @@ Oskari.clazz.define(
                 },
                 rowidx = 0,
                 colidx = 0;
-            var tileRangeExtentArray = tileGrid.getTileRangeForExtentAndZoomWrapper(mapExtent, z);
-            var tileRangeExtent = {
-                minX: tileRangeExtentArray[0],
-                minY: tileRangeExtentArray[1],
-                maxX: tileRangeExtentArray[2],
-                maxY: tileRangeExtentArray[3]
-            };
+            var tileRangeExtent = tileGrid.getTileRangeForExtentAndZ(mapExtent, z);
 
             for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
                 for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
@@ -1444,15 +1449,15 @@ Oskari.clazz.define(
                     defaultOptions[key] = layerOptions[key];
                 }
             }
-            var projection = ol.proj.get(me.getMapModule().getProjection());
+            var projection = olProj.get(me.getMapModule().getProjection());
 
-            //var tileSrc = new ol.source.TileImage({
-            var tileSrc = new ol.source.OskariAsyncTileImage({
+            //var tileSrc = new olSourceTileImage({
+            var tileSrc = new OskariAsyncTileImage({
                 layerId: _layer.getId(),
                 projection: projection,
                 tileGrid: this._tileGrid
             });
-            var openLayer = new ol.layer.Tile({
+            var openLayer = new olLayerTile({
                 source: tileSrc
             });
             openLayer.setVisible(_layer.isVisible());
@@ -1505,11 +1510,11 @@ Oskari.clazz.define(
                 return;
             }
             if (layerType === me.__typeHighlight) {
-                ols = [imageSize.width,imageSize.height];  //ol.Size
+                ols = [imageSize.width,imageSize.height];  // ol/size
                 layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
 
-                wfsMapImageLayer = new ol.layer.Image({
-                    source: new ol.source.ImageStatic({
+                wfsMapImageLayer = new olLayerImage({
+                    source: new olSourceImageStatic({
                         url: imageUrl,
                         imageExtent: boundsObj,
                         imageSize: ols,

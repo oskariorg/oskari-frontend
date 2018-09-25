@@ -167,10 +167,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // startup plugins
             if (me.conf.plugins) {
-                var plugins = this.conf.plugins,
-                    i;
+                let plugins = this.conf.plugins;
 
-                for (i = 0; i < plugins.length; i += 1) {
+                let vectorTilePlugin = plugins.find(cur => cur.id === 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin');
+                if (!vectorTilePlugin) {
+                    plugins.push({
+                        id: 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
+                        config: {},
+                        state: {}
+                    });
+                }
+
+                for (let i = 0; i < plugins.length; i += 1) {
                     try {
                         plugins[i].instance = Oskari.clazz.create(
                             plugins[i].id,

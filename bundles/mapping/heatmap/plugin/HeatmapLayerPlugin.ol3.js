@@ -1,3 +1,6 @@
+import olLayerImage from 'ol/layer/Image';
+import olSourceImageWMS from 'ol/source/ImageWMS';
+
 /**
  * @class Oskari.mapframework.heatmap.HeatmapLayerPlugin
  * Provides functionality to draw Heatmap layers on the map
@@ -53,13 +56,13 @@ Oskari.clazz.define(
                     }
             }
 
-            var wmsSource = new ol.source.ImageWMS({
+            var wmsSource = new olSourceImageWMS({
                 id:layerIdPrefix + layer.getId(),
                 url: layer.getLayerUrls()[0],
                 params: defaultParams
             });
-            // ol.layer.Tile or ol.layer.Image for wms
-            var openlayer = new ol.layer.Image({
+            // olLayerTile or olLayerImage for wms
+            var openlayer = new olLayerImage({
                 title: layerIdPrefix + layer.getId(),
                 source: wmsSource,
                 projection: reverseProjection ? reverseProjection : undefined,

@@ -1,3 +1,6 @@
+import olLayerImage from 'ol/layer/Image';
+import olSourceImageWMS from 'ol/source/ImageWMS';
+
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.plugin.MyLayersLayerPlugin
  * Provides functionality to draw user layers on the map
@@ -59,7 +62,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox();
             var map = this.getMapModule();
             var model = {
-                source: new ol.source.ImageWMS({
+                source: new olSourceImageWMS({
                     url: imgUrl,
                     params: {
                         'LAYERS': layer.getRenderingElement(),
@@ -84,7 +87,7 @@ Oskari.clazz.define(
                 }
             }
 
-            var openlayer = new ol.layer.Image(model);
+            var openlayer = new olLayerImage(model);
             me._registerLayerEvents(openlayer, layer);
             map.addLayer(openlayer, !keepLayerOnTop);
 
