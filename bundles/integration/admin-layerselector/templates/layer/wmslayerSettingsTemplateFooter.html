@@ -29,3 +29,22 @@
             </div>
         </div>
     </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-capabilities-update-rate" class="add-layer-label"
+                    title="<%= instance.getLocalization('admin').capabilitiesUpdateRateLabel %>"><%=instance.getLocalization('admin').capabilitiesUpdateRateLabel %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-capabilities-update-rate"
+                    class="add-layer-capabilities-update-rate add-layer-input"
+                    placeholder="<%= instance.getLocalization('admin').capabilitiesUpdateRateInfo %>"
+                    value="<%= model.getCapabilitiesUpdateRate() %>" />
+                <% if (model.getId()) { %>
+                <button class="add-layer-recheck"
+                    title="<%= instance.getLocalization('recheckTitle') %>"><%= instance.getLocalization('recheckTitle') %></button>
+                <% } %>
+            </div>
+        </div>
+    </div>
