@@ -957,6 +957,8 @@ define([
                                 });
                             }
 
+                            resp.groups = me.options.maplayerGroups;
+
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: 'adminAction',
@@ -1084,6 +1086,13 @@ define([
                     data.attributes = JSON.stringify(attrJson);
                 } catch (error) {
                     // don't include "attributes" in data if malformed JSON
+                }
+
+                try {
+                    var optsJson = JSON.parse(form.find('.add-layer-input.layer-options').val().trim() || '{}');
+                    data.options = JSON.stringify(optsJson);
+                } catch (error) {
+                    // don't include "options" in data if malformed JSON
                 }
 
                 // layer type specific
