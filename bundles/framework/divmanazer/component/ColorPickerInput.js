@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
         },
 
         getValue: function () {
-            return jQuery(this._input).spectrum('get').toHexString();
+            return jQuery(this._input).spectrum('get') != null ? jQuery(this._input).spectrum('get').toHexString() : null;
         },
 
         /**
