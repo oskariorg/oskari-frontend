@@ -5,7 +5,7 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import olStyleStyle, {createDefaultStyle} from 'ol/style/Style';
 
 import VectorTileModelBuilder from './VectorTileModelBuilder';
-import VectorTileLayer from './VectorTileLayerA';
+import VectorTileLayer from './VectorTileLayer';
 
 const invisible = new olStyleStyle();
 

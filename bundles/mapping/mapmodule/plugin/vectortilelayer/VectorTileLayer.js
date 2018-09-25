@@ -25,8 +25,8 @@ export default class VectorTileLayer extends AbstractLayer {
      * @return {Object}
      */
     getStyleDef(styleName) {
-        if (this._options.style) {
-            return this._options.style[styleName];
+        if (this._options.styles) {
+            return this._options.styles[styleName];
         }
     }
     /**
