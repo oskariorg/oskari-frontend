@@ -34,6 +34,10 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             mapLayerService.registerLayerModelBuilder(layertype + 'layer', new VectorTileModelBuilder());
         }
     }
+    /**
+     * @private @method _createPluginEventHandlers
+     * Called by superclass to create event handlers
+     */
     _createPluginEventHandlers() {
         return {
             AfterChangeMapLayerStyleEvent(event) {
@@ -46,6 +50,12 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             }
         };
     }
+    /**
+     * @private @method _getLayerCurrentStyleFunction
+     * Returns OL style corresponding to layer currently selected style
+     * @param {Oskari.mapframework.domain.AbstractLayer} layer
+     * @return {ol/style/Style}
+     */
     _getLayerCurrentStyleFunction(layer) {
         const styleDef = layer.getCurrentStyleDef();
         return styleDef ? styleGenerator(this.mapModule.getStyle.bind(this.mapModule), styleDef) : createDefaultStyle;
@@ -53,7 +63,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     /**
      * Checks if the layer can be handled by this plugin
      * @method  isLayerSupported
-     * @param  {Oskari.mapframework.domain.AbstractLayer}  layer
+     * @param  {Oskari.mapframework.domain.AbstractLayer} layer
      * @return {Boolean}       true if this plugin handles the type of layers
      */
     isLayerSupported(layer) {
