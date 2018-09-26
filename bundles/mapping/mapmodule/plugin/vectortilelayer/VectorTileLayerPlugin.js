@@ -2,12 +2,12 @@ import olSourceVectorTile from 'ol/source/VectorTile';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import olFormatMVT from 'ol/format/MVT';
 import TileGrid from 'ol/tilegrid/TileGrid';
-import olStyleStyle, {createDefaultStyle} from 'ol/style/Style';
+import {createDefaultStyle} from 'ol/style/Style';
 
 import VectorTileModelBuilder from './VectorTileModelBuilder';
 import VectorTileLayer from './VectorTileLayer';
+import styleGenerator from './styleGenerator';
 
-const invisible = new olStyleStyle();
 const layertype = 'vectortile';
 
 /**
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
         },
         _getLayerCurrentStyleFunction(layer) {
             const styleDef = layer.getCurrentStyleDef();
-            return styleDef ? this._generateStyleFunction(styleDef) : createDefaultStyle;
+            return styleDef ? styleGenerator(this.mapModule.getStyle.bind(this.mapModule), styleDef) : createDefaultStyle;
         },
         /**
          * Checks if the layer can be handled by this plugin
@@ -91,46 +91,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
             this.setOLMapLayers(layer.getId(), vectorTileLayer);
         },
-        _generateStyleFunction(styleDef) {
-            const styleCache = {};
-            Object.keys(styleDef).forEach((layerName) => {
-                const styles = {};
-                const layerStyleDef = styleDef[layerName];
-                const featureStyle = layerStyleDef.featureStyle;
-                if (featureStyle) {
-                    styles.base = this.mapModule.getStyle(featureStyle);
-                }
-                const optionalStyles = layerStyleDef.optionalStyles;
-                if (optionalStyles) {
-                    styles.optional = optionalStyles.map((optionalDef) => {
-                        return {
-                            key: optionalDef.property.key,
-                            value: optionalDef.property.value,
-                            style: this.mapModule.getStyle(Object.assign({}, featureStyle, optionalDef))
-                        }
-                    });
-                }
-                styleCache[layerName] = styles;
-            })
-            return (feature, resolution) => {
-                var styles = styleCache[feature.get('layer')];
-                if (!styles) {
-                    return invisible;
-                }
-                if (styles.optional) {
-                    var found = styles.optional.find((op) => {
-                        return feature.get(op.key) === op.value;
-                    });
-                    if (found) {
-                        return found.style;
-                    }
-                }
-                if (styles.base) {
-                    return styles.base;
-                }
-                return invisible;
-            }
-        }
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
