@@ -8,6 +8,7 @@ import VectorTileModelBuilder from './VectorTileModelBuilder';
 import VectorTileLayer from './VectorTileLayer';
 
 const invisible = new olStyleStyle();
+const layertype = 'vectortile';
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
@@ -18,13 +19,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
     /**
      * @static @method create called automatically on construction
      */
-    function () {
-        console.log('plugin start!');
-    },
+    function () {},
     {
         __name: 'VectorTileLayerPlugin',
         _clazz: 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
-        layertype: 'vectortile',
 
         /**
          * @private @method _initImpl
@@ -34,8 +32,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             // register domain builder
             const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
-                mapLayerService.registerLayerModel(this.layertype, VectorTileLayer);
-                mapLayerService.registerLayerModelBuilder(this.layertype, new VectorTileModelBuilder());
+                mapLayerService.registerLayerModel(layertype + 'layer', VectorTileLayer);
+                mapLayerService.registerLayerModelBuilder(layertype + 'layer', new VectorTileModelBuilder());
             }
         },
         _createPluginEventHandlers() {
@@ -64,7 +62,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             if (!layer) {
                 return false;
             }
-            return layer.isLayerOfType(this.layertype);
+            return layer.isLayerOfType(layertype);
         },
         /**
          * @method addMapLayerToMap
