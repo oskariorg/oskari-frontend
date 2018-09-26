@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             // Common settings for the dynamicScreenSpaceError optimization
             // copied from Cesium.Cesium3DTileset api doc.
             var tileset = new Cesium.Cesium3DTileset({
-                url: layer.getLayerUrls(),
+                url: layer.getLayerUrls()[0],
                 dynamicScreenSpaceError: true,
                 dynamicScreenSpaceErrorDensity: 0.00278,
                 dynamicScreenSpaceErrorFactor: 4.0,
