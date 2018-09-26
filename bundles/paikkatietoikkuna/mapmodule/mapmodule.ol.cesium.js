@@ -94,8 +94,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             var scene = this._map3d.getCesiumScene();
-            scene.terrainProvider = new Cesium.CesiumTerrainProvider({
+            var terrainProvider = new Cesium.CesiumTerrainProvider({
                 url: this.__TERRAIN_SERVICE_URL
+            });
+            terrainProvider.readyPromise.then(() => {
+                scene.terrainProvider = terrainProvider;
             });
 
             var updateReadyStatus = function () {
