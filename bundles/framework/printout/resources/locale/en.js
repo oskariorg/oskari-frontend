@@ -55,8 +55,7 @@ Oskari.registerLocalization(
                 "tooltip": "Click the preview image to open a larger image in another window.",
                 "pending": "The preview image will be updated shortly.",
                 "notes": {
-                    "extent": "Check the map extent area in the preview image.",
-                    "restriction": "Only a background map is shown in the preview image."
+                    "extent": "Check the map extent area in the preview image."
                 }
             },
             "buttons": {
