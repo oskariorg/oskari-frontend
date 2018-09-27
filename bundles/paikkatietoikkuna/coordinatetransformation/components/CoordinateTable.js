@@ -278,7 +278,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
         },*/
         updateHeader: function (epsgValues, elevSystem) {
             this.getElements().header.remove();
-            if (!epsgValues.coord){
+            if (!epsgValues || !epsgValues.coord){
                 return;
             }
             var x = "",

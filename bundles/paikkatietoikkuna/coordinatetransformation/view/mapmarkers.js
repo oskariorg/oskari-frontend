@@ -21,8 +21,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapmarkers',
         show: function() {
             var me = this;
             var helper = me.instance.getHelper();
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(this.loc('actions.done'));
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var btn = dialog.createCloseButton(this.loc('actions.done'));
+            dialog.addClass('showMapMarkers');
+            dialog.makeDraggable();
             me.dialog = dialog;
 
             btn.addClass('primary');

@@ -272,7 +272,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             // layer tooltip
             var tooltipCont = this.templateHelp.clone();
             tooltipCont.attr('title', this.loc.layerselection.tooltip);
-            contentPanel.append(tooltipCont);
+            this.panel.getHeader().append(tooltipCont);
 
             var layers = this._getLayersList(),
                 i,

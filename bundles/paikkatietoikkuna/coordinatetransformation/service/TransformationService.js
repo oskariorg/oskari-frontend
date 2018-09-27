@@ -69,18 +69,16 @@ function(instance) {
             return;
         }
         var resp,
-            text,
             errorInfo;
         try {
             resp = JSON.parse(jqXHR.responseText);
-            text = resp.error;
             if(resp.info) {
                 errorInfo = resp.info;
             }
         } catch(err) {
             Oskari.log(this.getName()).warn('Error whilst parsing json, error');
         }
-        callback(errorInfo, text);
+        callback(errorInfo);
     },
     transformArrayToArray: function(coords, crs, successCb, errorCb ) {
         var me = this;

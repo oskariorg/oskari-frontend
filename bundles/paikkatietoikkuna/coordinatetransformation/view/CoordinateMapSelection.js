@@ -3,8 +3,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
         var me = this;
         me.instance = instance;
         me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
-        me.mapSelectionContainer = null;
+        //me.mapSelectionContainer = null;
         me.dialog = null;
+        this._template = jQuery(
+                '<div class="coordinateSelectionPopup coordinatetransformation-flyout">' +
+                '   <div class="coordinateSelectionContent"></div>' +
+                '   <div class="coordinateSelectionOptions">' +
+                '       <input id="add-coordinate-to-map" type="radio" name="coordinate-map-select" value="add" checked/>' +
+                '       <label for="add-coordinate-to-map" class="source-select">' +
+                '           <span/>' +
+                '       </label>' +
+                '       <input id="remove-coordinate-from-map" type="radio" name="coordinate-map-select" value="remove"/>' +
+                '       <label for="remove-coordinate-from-map" class="source-select">' +
+                '            <span/>' +
+                '       </label>' +
+                '    </div>' +
+                '</div>'
+            );
     }, {
         getName: function() {
             return 'Oskari.coordinatetransformation.view.CoordinateMapSelection';
@@ -44,8 +59,24 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
                 me.instance.addMapCoordsToInput(true);
                 dialog.close();
             });
+            var content = this._template.clone();
+            content.find('.coordinateSelectionContent').append(this.loc('mapMarkers.select.info'));
+            content.find('label[for=add-coordinate-to-map]').append(this.loc('mapMarkers.select.add'));
+            content.find('label[for=remove-coordinate-from-map]').append(this.loc('mapMarkers.select.remove'));
 
-            dialog.show(this.loc('mapMarkers.select.title'), this.loc('mapMarkers.select.info'), [cancelBtn, btn]);
+            me.instance.setRemoveMarkers(false); //add markers radio button is pre-checked
+
+            content.find('input[type=radio]').on("change", function(evt) {
+                var value = this.value;
+                if (value === "remove"){
+                    me.instance.setRemoveMarkers(true);
+                } else {
+                    me.instance.setRemoveMarkers(false);
+                }
+            });
+
+            dialog.makeDraggable();
+            dialog.show(this.loc('mapMarkers.select.title'), content, [cancelBtn, btn]);
             dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
         },
         /*getCoords: function ( coords ) {

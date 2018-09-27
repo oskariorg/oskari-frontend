@@ -204,7 +204,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             panel.setTitle(me.loc.size.label);
             tooltipCont.attr('title', me.loc.size.tooltip);
-            contentPanel.append(tooltipCont);
+            panel.getHeader().append(tooltipCont);
             // content
             me.sizeOptions.forEach(function (option) {
                 var toolContainer = me.template.sizeOptionTool.clone();
@@ -257,7 +257,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             // tooltip
             var tooltipCont = me.template.help.clone();
             tooltipCont.attr('title', me.loc.settings.tooltip);
-            contentPanel.append(tooltipCont);
+            panel.getHeader().append(tooltipCont);
 
             /* format options from localisations files */
             var format = me.template.format.clone();
@@ -335,7 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             panel.setTitle(me.loc.scale.label);
             tooltipCont.attr('title', me.loc.scale.tooltip);
-            contentPanel.append(tooltipCont);
+            panel.getHeader().append(tooltipCont);
 
             var unsupportedLayersDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okButton = unsupportedLayersDialog.createCloseButton('OK');
@@ -472,7 +472,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var tooltipCont = me.template.help.clone();
 
             tooltipCont.attr('title', me.loc.preview.tooltip);
-            contentPanel.append(tooltipCont);
+            panel.getHeader().append(tooltipCont);
 
             var previewContent = me.template.preview.clone();
 
