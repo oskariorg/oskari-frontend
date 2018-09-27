@@ -2,7 +2,7 @@
 
 ## Description
 
-The plugin offers functionality to add Vector tile layers ([MVT](https://www.mapbox.com/vector-tiles/specification/)) to the map. Added layers support styling with Oskari style definitions, see (FeatureStyle/optionalStyles)[./request/addfeaturestomaprequest.md]. Maps with projection EPSG:3857 (Web Mercator) work out of the box, other projections need tile grid configuration in the layer options.
+The plugin offers functionality to add Vector tile layers ([MVT](https://www.mapbox.com/vector-tiles/specification/)) to the map. Added layers support styling with Oskari style definitions, see featureStyle/optionalStyles in AddFeaturesToMapRequest. Maps with projection EPSG:3857 (Web Mercator) work out of the box, other projections need tile grid configuration in the layer options.
 
 
 ## Layer data model
@@ -51,7 +51,7 @@ Each style definition has keys for the MVT layer names that should be rendered:
 }
 ```
 
-And each key has object value with one or both keys `featureStyle`, `optionalStyles`. Content of these is defined at (AddFeaturesToMapRequest)[./request/addfeaturestomaprequest.md] documentation. Full style example:
+And each key has object value with one or both keys `featureStyle`, `optionalStyles`. Content of these is defined at AddFeaturesToMapRequest documentation. Full style example:
 
 ```javascript
 "styles": {
