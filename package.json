@@ -11,9 +11,8 @@
     "lintfix": "eslint -c .eslintrc.js src/**/*.js --fix",
     "build": "webpack --mode production",
     "start": "webpack-dev-server --hot",
-    "paikkis:dev": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json",
-    "paikkis:experimental": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi/full-map_experimental/minifierAppSetup.json",
-    "asdi:dev": "webpack-dev-server --hot --env.appdef=applications/asdi/asdi_guest/minifierAppSetup.json"
+    "paikkis": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi",
+    "asdi": "webpack-dev-server --hot --env.appdef=applications/asdi"
   },
   "dependencies": {
     "babel-core": "^6.26.3",
