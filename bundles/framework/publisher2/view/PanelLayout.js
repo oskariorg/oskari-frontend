@@ -208,17 +208,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
-            // Find current tool style for mapmodule
-            const mapToolStyleVal = me.mapModule.getToolStyle() || 'default';
-            const matches = me.initialValues.toolStyles.filter(styleDef => styleDef.val === mapToolStyleVal);
-            const mapToolStyleDef = matches.length === 1 ? matches[0] : me.initialValues.toolStyles[0];
+            // Use current tool style as default
+            const mapToolStyle = me.mapModule.getToolStyle() || 'default';
 
             // Set the initial values
             me.values = {
                 metadata: {
                     style: {
                         font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0],
-                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : mapToolStyleDef
+                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : mapToolStyle
                     }
                 }
             };
