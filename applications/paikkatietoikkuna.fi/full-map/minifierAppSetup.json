@@ -28,9 +28,6 @@
                     "mapwfs2": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapstats": {
-                        "bundlePath": "../../../packages/mapping/ol3/"
-                    },
                     "mapuserlayers": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },

@@ -1,3 +1,5 @@
+import olFormatWKT from 'ol/format/WKT';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin
  *
@@ -25,10 +27,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         // stopped moving
         // after map move stopped -> activate a timer that will
         // do the check after _visibilityPollingInterval milliseconds
-        this._visibilityPollingInterval = 1500;
+        this._visibilityPollingInterval = 750;
         this._visibilityCheckOrder = 0;
         this._previousTimer = null;
-        this._lastVisibilityCheckResult = {};
     }, {
     _createEventHandlers: function () {
         var me = this;
@@ -95,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 return;
             }
 
-            var wkt = new ol.format.WKT();
+            var wkt = new olFormatWKT();
             var geometry = wkt.readGeometry(layerWKTGeom);
 
             if (geometry) {
@@ -134,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
     /**
      * @method getGeometryCenter
      *
-     * @param {ol.geom.Geometry} geometry
+     * @param {ol/geom/Geometry} geometry
      * @return {Object} centroid
      */
     getGeometryCenter: function (geometry) {
@@ -154,7 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
     /**
      * @method getGeometryBounds
      *
-     * @param {ol.geom.Geometry} geometry
+     * @param {ol/geom/Geometry} geometry
      * @return {Object} like OpenLayers bounds
      */
     getGeometryBounds: function (geometry) {
@@ -201,13 +202,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             layer;
         for (i = 0; i < layers.length; ++i) {
             layer = layers[i];
-
-            var visible = layer.isVisible();
-            var previousVisibility = this._lastVisibilityCheckResult[layer.getId()];
-            if (typeof previousVisibility !== 'undefined' && visible !== previousVisibility) {
-                this.notifyLayerVisibilityChanged(layer);
+            if (layer.isVisible()) {
+                this.handleMapLayerVisibility(layer);
             }
-            this._lastVisibilityCheckResult[layer.getId()] = visible;
         }
         this._visibilityCheckScheduled = false;
     },
@@ -225,15 +222,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         return layer.isInScale(scale);
     },
     /**
-     * @method notifyLayerVisibilityChanged
-     * Notifies bundles about layer visibility changes by sending MapLayerVisibilityChangedEvent.
+     * @method handleMapLayerVisibility
+     * Checks layer's visibility (visible, inScale, inGeometry) and sets ol layers' visibilities.
+     * notifies bundles about visibility changes by sending MapLayerVisibilityChangedEvent.
      * @param
      * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
      *            layer layer to check against
+     * @param {Boolean} isRequest if MapLayerVisibilityRequest, then trigger always change because layer's visibility has changed
      */
-    notifyLayerVisibilityChanged : function(layer) {
+    handleMapLayerVisibility : function(layer, isRequest) {
         var scaleOk = layer.isVisible();
         var geometryMatch = layer.isVisible();
+        var triggerChange = (isRequest === true);
         // if layer is visible check actual values
         if(layer.isVisible()) {
             scaleOk = this._isInScale(layer);
@@ -244,21 +244,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         // change in UI also)
         // this is for optimization purposes
         var mapModule = this.getMapModule(),
-            mapLayers = mapModule.getOLMapLayers(layer.getId()),
-            mapLayer = mapLayers.length ? mapLayers[0] : null;
-
+            mapLayers = mapModule.getOLMapLayers(layer.getId());
+        if (!mapLayers || !mapLayers.length){
+            if (triggerChange){
+                this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
+            }
+            return;
+        }
         if(scaleOk && geometryMatch && layer.isVisible()) {
             // show non-baselayer if in scale, in geometry and layer visible
-            if (mapLayer && !mapLayer.getVisible()) {
-                mapLayer.setVisible(true);
-            }
+            mapLayers.forEach(function (mapLayer) {
+                if (!mapLayer.getVisible()) {
+                    mapLayer.setVisible(true);
+                    triggerChange = true;
+                }
+            });
         } else {
             // otherwise hide non-baselayer
-            if (mapLayer && mapLayer.getVisible()) {
-                mapLayer.setVisible(false);
-            }
+            mapLayers.forEach(function (mapLayer) {
+                if (mapLayer.getVisible()) {
+                    mapLayer.setVisible(false);
+                    triggerChange = true;
+                }
+            });
         }
-        var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
+        if (triggerChange){
+            this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
+        }
+    },
+    notifyLayerVisibilityChanged: function (layer, inScale, geometryMatch){
+        var event = Oskari.eventBuilder('MapLayerVisibilityChangedEvent')(layer, inScale, geometryMatch);
         this._sandbox.notifyAll(event);
     }
     }, {

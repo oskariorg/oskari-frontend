@@ -161,7 +161,7 @@ function(instance) {
 	emptyUserDetails: function(){
 	    jQuery('#lakapa-basket-name').val('');
 	    jQuery('#lakapa-basket-organization').val('');
-	    jQuery('#lakapa-basket-organization').removeAttr('disabled');
+	    jQuery('#lakapa-basket-organization').prop('disabled', false);
 	    jQuery('#lakapa-basket-email').val('');
 	    jQuery('#lakapa-basket-email2').val('');
 	    jQuery('#lakapa-basket-private-user').prop('checked', false);
@@ -309,9 +309,9 @@ function(instance) {
     	jQuery('#lakapa-basket-private-user').unbind('change');
         jQuery('#lakapa-basket-private-user').bind('change',function() {
             if(jQuery(this).is(':checked')) {
-                jQuery('#lakapa-basket-organization').attr('disabled','disabled');
+                jQuery('#lakapa-basket-organization').prop('disabled',true);
             } else {
-                jQuery('#lakapa-basket-organization').removeAttr('disabled');
+                jQuery('#lakapa-basket-organization').prop('disabled', false);
             }
         });
 

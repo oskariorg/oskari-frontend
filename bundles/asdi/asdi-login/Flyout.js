@@ -26,6 +26,7 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
                 '   </div>'+
                 '   <div class="asdiLoginInputField">'+
                 '       <input size="46" id="password" name="j_password" type="password" placeholder="" autofocus="" required="">'+
+                '       <input type="hidden" id="asdicsrf" name="_csrf" value=""/>'+
                 '   </div>'+
                 '   <div class="floatright">'+
                 '       <input type="reset" id="cancel" value="" class="oskari-formcomponent oskari-button">'+
@@ -53,6 +54,8 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
 
             username.attr("placeholder",this.locale.username);
             password.attr("placeholder",this.locale.password);
+
+            template.find('#asdicsrf').val(Oskari.app.getXSRFToken());
             submit.val(this.locale.login);
 
             cancel.val(this.locale.cancel);

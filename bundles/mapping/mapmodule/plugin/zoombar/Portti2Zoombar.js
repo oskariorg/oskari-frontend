@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             sliderEl.attr('id', 'pzb-slider-' + me.getName());
 
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     event.stopPropagation();
                 }
@@ -190,7 +190,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 }
             });
 
-            el.find('.pzbDiv-plus').bind('click', function (event) {
+            el.find('.pzbDiv-plus').on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     if (me._slider && me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
                         me.getMapModule().setZoomLevel(
@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 }
             });
 
-            el.find('.pzbDiv-minus').bind('click', function (event) {
+            el.find('.pzbDiv-minus').on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     if (me._slider && me._slider.slider('value') > 0) {
                         me.getMapModule().setZoomLevel(

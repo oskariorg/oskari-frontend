@@ -1,3 +1,17 @@
+import olStyleStyle from 'ol/style/Style';
+import olStyleFill from 'ol/style/Fill';
+import olStyleStroke from 'ol/style/Stroke';
+import olStyleCircle from 'ol/style/Circle';
+import olStyleIcon from 'ol/style/Icon';
+import olStyleText from 'ol/style/Text';
+import {defaults as olInteractionDefaults} from 'ol/interaction';
+import olView from 'ol/View';
+import {METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT} from 'ol/proj/Units';
+import * as olProj from 'ol/proj';
+import olMap from 'ol/Map';
+import {defaults as olControlDefaults} from 'ol/control';
+import OLCesium from 'ol-cesium';
+
 /**
  * @class Oskari.mapframework.ui.module.common.MapModule
  *
@@ -21,6 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         this._mapReadySubscribers = [];
         this._lastKnownZoomLevel = null;
     }, {
+        __TERRAIN_SERVICE_URL: 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/',
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
@@ -35,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @method createMap
          * Creates OlCesium map implementation
-         * @return {ol.Map}
+         * @return {ol/Map}
          */
         createMap: function () {
             var me = this;
@@ -43,13 +58,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
             
-            var controls = ol.control.defaults({
+            var controls = olControlDefaults({
                 zoom: false,
                 attribution: false,
                 rotate: false
             });
 
-            var map = new ol.Map({
+            var map = new olMap({
                 keyboardEventTarget: document,
                 target: this.getMapElementId(),
                 controls: controls,
@@ -59,8 +74,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 moveTolerance: 2
             });
 
-            var projection = ol.proj.get(me.getProjection());
-            map.setView(new ol.View({
+            var projection = olProj.get(me.getProjection());
+            map.setView(new olView({
                 projection: projection,
                 // actual startup location is set with MapMoveRequest later on
                 // still these need to be set to prevent errors
@@ -71,14 +86,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             me._setupMapEvents(map);
 
-            this._map3d = new olcs.OLCesium({
+            this._map3d = new OLCesium({
                 map: map,
-                time: function () {
-                    return Cesium.JulianDate.now();
+                sceneOptions: {
+                    showCredit: false
                 }
             });
 
             var scene = this._map3d.getCesiumScene();
+            var terrainProvider = new Cesium.CesiumTerrainProvider({
+                url: this.__TERRAIN_SERVICE_URL
+            });
+            terrainProvider.readyPromise.then(() => {
+                scene.terrainProvider = terrainProvider;
+            });
+
             var updateReadyStatus = function () {
                 scene.postRender.removeEventListener(updateReadyStatus);
                 me._mapReady = true;
@@ -86,20 +108,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             scene.postRender.addEventListener(updateReadyStatus);
 
-            // Load sample 3D tiles
-            this._addSampleTileset();
-
             return map;
-        },
-        _addSampleTileset: function () {
-            var sampleTiles = new Cesium.Cesium3DTileset({
-                url: '/3dtiles/helsinki/',
-                dynamicScreenSpaceError: true,
-                dynamicScreenSpaceErrorDensity: 0.00278,
-                dynamicScreenSpaceErrorFactor: 4.0,
-                dynamicScreenSpaceErrorHeightFalloff: 0.25
-            });
-            this._map3d.getCesiumScene().primitives.add(sampleTiles);
         },
         /**
          * Fire operations that have been waiting for the map to initialize.
@@ -287,7 +296,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             srs = srs || me.getProjection();
 
             try {
-                var proj = ol.proj.get(srs);
+                var proj = olProj.get(srs);
                 units = proj.getUnits(); // return 'degrees' or 'm'
             } catch (err) {
                 var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
@@ -345,11 +354,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 return pLonlat;
             }
 
-            var isSRSDefined = ol.proj.get(srs);
-            var isTargetSRSDefined = ol.proj.get(targetSRS);
+            var isSRSDefined = olProj.get(srs);
+            var isTargetSRSDefined = olProj.get(targetSRS);
 
             if (isSRSDefined && isTargetSRSDefined) {
-              var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, targetSRS);
+              var transformed = olProj.transform([pLonlat.lon, pLonlat.lat], srs, targetSRS);
                   return {
                       lon : transformed[0],
                       lat : transformed[1]
@@ -375,7 +384,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 ------------------------------------------------------------------> */
         _calculateScalesImpl: function(resolutions) {
             var units = this.getMap().getView().getProjection().getUnits(),
-                mpu = ol.proj.METERS_PER_UNIT[units];
+                mpu = olProjUnitsMETERS_PER_UNIT[units];
 
             for (var i = 0; i < resolutions.length; ++i) {
                 var scale = resolutions[i] * mpu * 39.37 * this._dpi;
@@ -390,42 +399,70 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _setZoomLevelImpl : function(newZoomLevel) {
             this.getMap().getView().setZoom(newZoomLevel);
         },
+        _setResolutionImpl: function (newResolution) {
+            this.getMap().getView().setResolution(newResolution);
+        },
+        _getExactResolutionImpl: function (scale) {
+            var units = this.getMap().getView().getProjection().getUnits();
+            var dpiTest = jQuery('<div></div>');
+            dpiTest.css({
+                height: '1in',
+                width: '1in',
+                position: 'absolute',
+                left: '-100%',
+                top: '-100%'
+            });
+            jQuery('body').append(dpiTest);
+             var dpi = dpiTest.height();
+            dpiTest.remove();
+            var mpu = olProjUnitsMETERS_PER_UNIT[units];
+            var resolution = scale / (mpu * 39.37 * dpi);
+            return resolution;
+        },
 /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 /* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
 ------------------------------------------------------------------> */
 
         /**
-         * @param {ol.layer.Layer} layer ol3 specific!
+         * @param {Object} layerImpl ol/layer/Layer or Cesium.Cesium3DTileset, olcs specific!
          * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
          */
-        addLayer: function(layerImpl, toBottom) {
-            if(!layerImpl) {
+        addLayer: function (layerImpl, toBottom) {
+            if (!layerImpl) {
                 return;
             }
-            this.getMap().addLayer(layerImpl);
-            // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
-            if(toBottom === true) {
-                this.setLayerIndex(layerImpl, 0);
+            if (layerImpl instanceof Cesium.Cesium3DTileset) {
+                this._map3d.getCesiumScene().primitives.add(layerImpl);
+            } else {
+                this.getMap().addLayer(layerImpl);
+                // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
+                if (toBottom === true) {
+                    this.setLayerIndex(layerImpl, 0);
+                }
             }
         },
         /**
-         * @param {ol.layer.Layer} layer ol3 specific!
+         * @param {Object} layerImpl ol/layer/Layer or Cesium.Cesium3DTileset, olcs specific!
          */
-        removeLayer : function(layerImpl) {
-            if(!layerImpl) {
+        removeLayer: function (layerImpl) {
+            if (!layerImpl) {
                 return;
             }
-            this.getMap().removeLayer(layerImpl);
-            if(typeof layerImpl.destroy === 'function') {
+            if (layerImpl instanceof Cesium.Cesium3DTileset) {
                 layerImpl.destroy();
+            } else {
+                this.getMap().removeLayer(layerImpl);
+                if (typeof layerImpl.destroy === 'function') {
+                    layerImpl.destroy();
+                }
             }
         },
         /**
          * Brings map layer to top
          * @method bringToTop
          *
-         * @param {ol.layer.Layer} layer The new topmost layer
+         * @param {ol/layer/Layer} layer The new topmost layer
          */
         bringToTop: function(layer) {
             var map = this.getMap();
@@ -442,7 +479,34 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this.set3dEnabled(!this.isDrawing);
         },
         /**
-         * @param {ol.layer.Layer} layer ol3 specific!
+         * @method afterRearrangeSelectedMapLayerEvent
+         * @private
+         * Handles AfterRearrangeSelectedMapLayerEvent.
+         * Changes the layer order in Openlayers to match the selected layers list in
+         * Oskari. Ignores Cesium 3D Tilesets.
+         */
+        afterRearrangeSelectedMapLayerEvent: function () {
+            var me = this;
+            var layers = this.getSandbox().findAllSelectedMapLayers();
+            var layerIndex = 0;
+
+            // setup new order based on the order we get from sandbox
+            layers.forEach(function (layer) {
+                if (!layer) {
+                    return;
+                }
+                var olLayers = me.getOLMapLayers(layer.getId());
+                olLayers.forEach(function (layerImpl) {
+                    if (!(layerImpl instanceof Cesium.Cesium3DTileset)) {
+                        me.setLayerIndex(layerImpl, layerIndex++);
+                    }
+                });
+            });
+
+            this.orderLayersByZIndex();
+        },
+        /**
+         * @param {ol/layer/Layer} layer ol3 specific!
          */
         setLayerIndex: function(layerImpl, index) {
             var layerColl = this.getMap().getLayers();
@@ -471,7 +535,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
-         * @param {ol.layer.Layer} layer ol3 specific!
+         * @param {ol/layer/Layer} layer ol3 specific!
          */
         getLayerIndex: function(layerImpl) {
             var layerColl = this.getMap().getLayers();
@@ -485,13 +549,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return -1;
         },
         /**
-         * @param {ol.control.Control} layer ol3 specific!
+         * @param {ol/control/Control} layer ol3 specific!
          */
         _addMapControlImpl: function(ctl) {
             this.getMap().addControl(ctl);
         },
         /**
-         * @param {ol.control.Control} layer ol3 specific!
+         * @param {ol/control/Control} layer ol3 specific!
          */
         _removeMapControlImpl: function(ctl) {
             this.getMap().removeControl(ctl);
@@ -499,7 +563,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * Creates style based on JSON
-         * @return {ol.style.Style} style ol3 specific!
+         * @return {ol/style/Style} style ol3 specific!
          */
         getStyle: function(styleDef) {
             var me = this;
@@ -521,7 +585,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                         color = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+style.image.opacity+')';
                     }
                 }
-                olStyle.fill = new ol.style.Fill({
+                olStyle.fill = new olStyleFill({
                   color: color
                 });
             }
@@ -537,13 +601,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     olStyle.text = textStyle;
                 }
             }
-            return new ol.style.Style(olStyle);
+            return new olStyleStyle(olStyle);
         },
         /**
          * Parses stroke style from json
          * @method __getStrokeStyle
          * @param {Object} style json
-         * @return {ol.style.Stroke}
+         * @return {ol/style/Stroke}
          */
         __getStrokeStyle: function(styleDef) {
             var stroke = {};
@@ -567,13 +631,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(styleDef.stroke.lineCap) {
                 stroke.lineCap = styleDef.stroke.lineCap;
             }
-            return new ol.style.Stroke(stroke);
+            return new olStyleStroke(stroke);
         },
         /**
          * Parses image style from json
          * @method __getImageStyle
          * @param {Object} style json
-         * @return {ol.style.Circle}
+         * @return {ol/style/Circle}
          */
         __getImageStyle: function(styleDef) {
             var me = this,
@@ -596,7 +660,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             if(me.isSvg(styleDef.image)) {
                 var svg = me.getSvg(styleDef.image);
-                image = new ol.style.Icon({
+                image = new olStyleIcon({
                     src: svg,
                     size: [size, size],
                     imgSize: [size, size],
@@ -607,7 +671,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             else if(styleDef.image && styleDef.image.shape) {
                 var offsetX = (!isNaN(style.image.offsetX)) ? style.image.offsetX : 16;
                 var offsetY = (!isNaN(style.image.offsetY)) ? style.image.offsetY : 16;
-                image = new ol.style.Icon({
+                image = new olStyleIcon({
                     src: style.image.shape,
                     anchorYUnits: 'pixels',
                     anchorXUnits: 'pixels',
@@ -627,19 +691,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 image.snapToPixel = styleDef.snapToPixel;
             }
             if(Oskari.util.keyExists(styleDef.image, 'fill.color')) {
-                image.fill = new ol.style.Fill({
+                image.fill = new olStyleFill({
                     color: styleDef.image.fill.color
                 });
             }
             if(styleDef.stroke) {
                 image.stroke = this.__getStrokeStyle(styleDef);
             }
-            return new ol.style.Circle(image);
+            return new olStyleCircle(image);
         },
         /**
-         * Parses JSON and returns matching ol.style.Text
+         * Parses JSON and returns matching ol/style/Text
          * @param  {Object} textStyleJSON text style definition
-         * @return {ol.style.Text} parsed style or undefined if no param is given
+         * @return {ol/style/Text} parsed style or undefined if no param is given
          */
         __getTextStyle : function(textStyleJSON) {
             if(!textStyleJSON) {
@@ -668,7 +732,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 text.font = textStyleJSON.font;
             }
             if(Oskari.util.keyExists(textStyleJSON, 'fill.color')) {
-                text.fill = new ol.style.Fill({
+                text.fill = new olStyleFill({
                     color: textStyleJSON.fill.color
                 });
             }
@@ -682,7 +746,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     text.text = textStyleJSON.labelText;
                 }
             }
-            return new ol.style.Text(text);
+            return new olStyleText(text);
         },
         /**
          * Enable 3d view.
@@ -708,7 +772,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             } else {
                 // Add default interactions to 2d view.
-                interactions = ol.interaction.defaults({
+                interactions = olInteractionDefaults({
                     altShiftDragRotate: false,
                     pinchRotate: false
                 });
@@ -765,7 +829,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     var view = {};
                     if (options.location) {
                         var pos = options.location;
-                        var lonlat = ol.proj.transform([pos.x, pos.y], this.getProjection(), 'EPSG:4326');
+                        var lonlat = olProj.transform([pos.x, pos.y], this.getProjection(), 'EPSG:4326');
                         view.destination = new Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], pos.altitude);
                     }
                     if (options.orientation) {
@@ -823,12 +887,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (this._map3d.getEnabled()) {
                 var cam = this.getCamera();
                 params +=
-                    '&cam=' + cam.location.x +
-                    '_' + cam.location.y +
-                    '_' + cam.location.altitude +
-                    '_' + cam.orientation.heading +
-                    '_' + cam.orientation.pitch +
-                    '_' + cam.orientation.roll;
+                    '&cam=' + cam.location.x.toFixed(0) +
+                    '_' + cam.location.y.toFixed(0) +
+                    '_' + cam.location.altitude.toFixed(0) +
+                    '_' + cam.orientation.heading.toFixed(2) +
+                    '_' + cam.orientation.pitch.toFixed(2) +
+                    '_' + cam.orientation.roll.toFixed(2);
             }
 
             for (pluginName in this._pluginInstances) {

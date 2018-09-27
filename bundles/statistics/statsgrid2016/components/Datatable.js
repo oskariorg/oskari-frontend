@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">' +
-                '<div class="header"><span class="title"></span> </div>' +
+                '<div class="header"><span class="title"></span> </br> </div>' +
                 '<div class="icon icon-close-dark"></div>' +
                 '<div style="clear:both;"></div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             sortBy.find('.orderTitle').html(gridLoc.orderBy);
             var order = sortBy.find('.order');
 
-            sortBy.bind('click', function (evt) {
+            sortBy.on('click', function (evt) {
                 evt.stopPropagation();
 
                 me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
@@ -261,6 +261,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             return;
         }
         indicators.forEach(function (ind, id) {
+            var numberFormatter = Oskari.getNumberFormatter(ind.classification.fractionDigits);
+            me.grid.setColumnValueRenderer(ind.hash, function (value) {
+                if (typeof value !== 'number') {
+                    return '';
+                }
+                return numberFormatter.format(value);
+            });
             me.grid.setColumnUIName(ind.hash, function (content) {
                 var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
                 tableHeader.find('.title').html(gridLoc.source + ' ' + (id + 1) + ':');
@@ -268,13 +275,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 me.service.getUILabels(ind, function (labels) {
                     tableHeader.find('.header').append(labels.full).attr('title', labels.full);
                 });
+                me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, me.getCurrentRegionset(), function (err, data) {
+                    if (err || !data) {
+                        tableHeader.append('<div class="icon-warning-light"></div>');
+                        tableHeader.find('.icon-warning-light').attr('title', gridLoc.noValues);
+                        return;
+                    }
+                    var isUndefined = function (element) {
+                        return data[element] === undefined;
+                    };
+                    if (Object.keys(data).every(isUndefined)) {
+                        tableHeader.append('<div class="icon-warning-light"></div>');
+                        tableHeader.find('.icon-warning-light').attr('title', gridLoc.noValues);
+                    }
+                });
 
                 tableHeader.find('.icon').attr('title', gridLoc.removeSource);
 
                 // If not published then show close icon
                 if (me.indicatorRemovalEnabled) {
                     tableHeader.find('.icon').attr('data-ind-hash', ind.hash);
-                    tableHeader.find('.icon').bind('click', function () {
+                    tableHeader.find('.icon').on('click', function () {
                         log.debug('Removing indicator ', ind.hash);
 
                         // Set default sort order
@@ -292,7 +313,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 sortBy.find('.orderTitle').html(gridLoc.orderBy);
                 var order = sortBy.find('.order');
 
-                sortBy.bind('click', function (evt) {
+                sortBy.on('click', function (evt) {
                     evt.stopPropagation();
 
                     me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
@@ -339,7 +360,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                     order.addClass('desc');
                 }
 
-                tableHeader.bind('click', function () {
+                tableHeader.on('click', function () {
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
@@ -427,7 +448,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             var current = event.getCurrent();
+            var previous = event.getPrevious();
             log.debug('Active indicator changed! ', current);
+            if (current === previous) { // No change, but event was sent to refresh components
+                me._handleRegionsetChanged();
+            }
             if (current && me.grid) {
                 me.grid.selectColumn(current.hash);
             }

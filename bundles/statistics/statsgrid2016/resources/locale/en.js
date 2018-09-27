@@ -32,7 +32,7 @@ Oskari.registerLocalization({
                 'seriesTitle': 'Time series',
                 'datasourceTitle': 'Data source',
                 'indicatorTitle': 'Indicator',
-                'regionsetTitle': 'Regionset',
+                'regionsetTitle': 'Regional division filter (optional)',
                 'seriesLabel': 'Get data as time series',
                 'selectDatasourcePlaceholder': 'Select data source',
                 'selectIndicatorPlaceholder': 'Select data',
@@ -42,6 +42,7 @@ Oskari.registerLocalization({
                 'refineSearchTooltip1': 'You will get more options after choosing data provider and data.',
                 'refineSearchTooltip2': '',
                 'addButtonTitle': 'Get contents of data',
+                'clearButtonTitle': 'Clear',
                 'defaultPlaceholder': 'Select value',
                 'selectionValues': {
                     'sex': {
@@ -58,17 +59,12 @@ Oskari.registerLocalization({
                     }
                 },
                 'noRegionset': 'No area selected'
-            },
-            'extraFeatures': {
-                'title': 'Additional features',
-                'hideMapLayers': 'Hide other map layers',
-                'openTableCheckbox': 'Open table',
-                'openDiagramCheckbox': 'Open bar chart'
             }
         },
         'statsgrid': {
             'title': 'SEARCHED DATA',
             'noResults': 'No data selected',
+            'noValues': 'No values for the selected data',
             'areaSelection': {
                 'title': 'AREAL DIVISION',
                 'info': 'Redefine areal division for data from dropdown list'
@@ -83,7 +79,16 @@ Oskari.registerLocalization({
             'title': 'Classification',
             'noActive': 'Data was not selected, select data to see map classification.',
             'noEnough': 'The data is too small to be classified, try different data or change limitings.',
+            'noData': 'Data is not available for the selected point in time.',
             'cannotCreateLegend': 'Legend cannot be created by chosen values, try different values.'
+        },
+        'series': {
+            'speed': {
+                'label': 'Animation speed',
+                'fast': 'Fast',
+                'normal': 'Normal',
+                'slow': 'Slow'
+            }
         },
         'diagram': {
             'title': 'Diagram'
@@ -131,7 +136,8 @@ Oskari.registerLocalization({
                 'max': 'Maximum',
                 'color': 'Color',
                 'transparency': 'Transparency',
-                'showValues': 'Show values'
+                'showValues': 'Show values',
+                'fractionDigits': 'Decimal places'
             }
         },
         'colorset': {
@@ -158,7 +164,9 @@ Oskari.registerLocalization({
             'datasetDelete': 'Error deleting dataset.',
             'indicatorSave': 'Error saving indicator',
             'myIndicatorYearInput': 'Year field cannot be empty.',
-            'myIndicatorRegionselect': 'Regionselect cannot be empty.'
+            'myIndicatorRegionselect': 'Regionselect cannot be empty.',
+            'myIndicatorDatasource': 'Datasource is empty.',
+            'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.'
         },
         'datacharts': {
             'flyout': 'Searched data',
@@ -245,8 +253,10 @@ Oskari.registerLocalization({
                 'successMsg': 'The data has been saved. Add the indicator to the map using the statistics search functionality.'
             },
             'import': {
-                'title': '',
-                'placeholder': ''
+                'title': 'Import from the clipboard',
+                'placeholder': 'Enter the indicators data here. Each row should contain a region and it\'s value. Enter the region\'s name or id. Use semicolon as a separator. Data can be imported in following formats: \n' +
+                'Sample 1: Helsinki;1234 \n' +
+                'Sample 2: 011;5678'
             },
             'notLoggedInTitle': 'Warning',
             'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',

@@ -52,7 +52,7 @@ Oskari.clazz.define(
          */
         __eventHandlers: {
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
-                if (event.getMapLayer().hasTimeseries()) {
+                if (event.getMovedMapLayer().hasTimeseries()) {
                     this.updateTimeseriesLayers();
                 }
             },

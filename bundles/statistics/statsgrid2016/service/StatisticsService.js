@@ -18,11 +18,15 @@
 
         // pushed from instance
         this.datasources = [];
+        this.regionsets = [];
         // attach on, off, trigger functions
         Oskari.makeObservable(this);
 
         // possible values: wms, vector
         this._mapModes = ['vector'];
+
+        // Make series service listen for changes
+        this.series.bindToEvents(this);
     }, {
         __name: 'StatsGrid.StatisticsService',
         __qname: 'Oskari.statistics.statsgrid.StatisticsService',
@@ -61,6 +65,9 @@
          */
         notifyOskariEvent: function (event) {
             this.trigger(event.getName(), event);
+        },
+        getSeriesService: function () {
+            return this.series;
         },
         getStateService: function () {
             return this.state;
@@ -145,7 +152,14 @@
                 }
 
                 var name = Oskari.getLocalized(ind.name);
-                var selectorsFormatted = '(' + preferredFormatting.join(' / ') + ')';
+                var selectorsFormatted;
+                if(indicator.series) {
+                    var range = String(indicator.series.values[0]) + ' - ' + String(indicator.series.values[indicator.series.values.length -1]);
+                    selectorsFormatted = range +' (' + preferredFormatting.join(' / ') + ')';
+                } else {
+                    selectorsFormatted = '(' + preferredFormatting.join(' / ') + ')';
+                }
+
                 callback({
                     indicator: name,
                     source: Oskari.getLocalized(ind.source),
@@ -174,23 +188,34 @@
             });
             return found;
         },
+        addRegionset: function (regionset) {
+            if (!regionset) {
+                // log error message
+                return;
+            }
+            var me = this;
+            if (Array.isArray(regionset)) {
+                // if(typeof regionset === 'array') -> loop and add all
+                regionset.forEach(function (item) {
+                    me.addRegionset(item);
+                });
+                return;
+            }
+            if (regionset.id && regionset.name) {
+                this.regionsets.push(regionset);
+            } else {
+                _log.info('Ignoring regionset without id or name:', regionset);
+            }
+        },
         /**
          * Returns regionsets that are available to user.
          * Based on maplayers of type STATS.
          */
         getRegionsets: function (includeOnlyIds) {
-            var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            var layers = service.getLayersOfType('STATS');
-            if (!layers || layers.length === 0) {
+            var list = this.regionsets || [];
+            if (!list || list.length === 0) {
                 return [];
             }
-            var list = [];
-            layers.forEach(function (regionset) {
-                list.push({
-                    id: regionset.getId(),
-                    name: regionset.getName()
-                });
-            });
             var singleValue = typeof includeOnlyIds === 'number' || typeof includeOnlyIds === 'string';
             if (singleValue) {
                 // wrap to an array
@@ -401,11 +426,19 @@
 
             var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
             _log.debug('Getting data with key', cacheKey);
-            if (this.cache.tryCachedVersion(cacheKey, callback)) {
+
+            function fractionInit(err, data) {
+                var hash = me.state.getHash(ds, indicator, params, series);
+                if (!err) {
+                    me._setInitialFractions(hash, data);
+                }
+                callback(err, data);
+            }
+            if (this.cache.tryCachedVersion(cacheKey, fractionInit)) {
                 // found a cached response
                 return;
             }
-            if (this.cache.addToQueue(cacheKey, callback)) {
+            if (this.cache.addToQueue(cacheKey, fractionInit)) {
                 // request already in progress
                 return;
             }
@@ -439,6 +472,28 @@
                     me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
                 }
             });
+        },
+        /**
+         * @method @private _setInitialFractions
+         * Sets initial fractionDigits for presentation of indicator
+         * Zero if indicator has only integers values, otherwise 1
+         * @param {String} indicatorHash
+         * @param {Object} data indicator data
+         */
+        _setInitialFractions: function(indicatorHash, data) {
+            var ind = this.state.getIndicator(indicatorHash);
+            if (!ind) {
+                return;
+            }
+            if (!ind.classification) {
+                ind.classification = this.state.getClassificationOpts(indicatorHash);
+            }
+            if (typeof ind.classification.fractionDigits !== 'number') {
+                var allInts = Object.keys(data).every(function(key){
+                    return data[key] % 1 === 0;
+                });
+                ind.classification.fractionDigits = allInts ? 0 : 1;
+            }
         },
         getSelectedIndicatorsRegions: function () {
             var me = this;
@@ -613,6 +668,7 @@
             });
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
+            var me = this;
             if (typeof callback !== 'function') {
                 return;
             }
@@ -643,6 +699,8 @@
             if (!Oskari.user().isLoggedIn()) {
                 // successfully saved for guest user
                 _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                // send out event about updated indicators
+                me.sandbox.notifyAll(Oskari.eventBuilder('StatsGrid.DatasourceEvent')(datasrc));
                 return;
             }
             // send data to server for logged in users
@@ -660,6 +718,8 @@
                 success: function (pResp) {
                     _log.debug('AddIndicatorData', pResp);
                     _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data, callback);
+                    // send out event about updated indicators
+                    me.sandbox.notifyAll(Oskari.eventBuilder('StatsGrid.DatasourceEvent')(datasrc));
                 },
                 error: function (jqXHR, textStatus) {
                     callback('Error saving data to server');
@@ -705,6 +765,48 @@
                     callback('Error on server');
                 }
             });
+        },
+        /**
+         * @method  @public  getUnsupportedRegionsets
+         * @description returns a list of unsupported regionsets for the currently selected datasource
+         * @param datasource datasource
+         */
+        getUnsupportedRegionsets: function (ds) {
+            var all = this.regionsets.slice(0);
+            var supported = this.datasources.find(function (e) {
+                return e.id === Number(ds);
+            });
+            if (supported) {
+                supported.regionsets.forEach(function (index) {
+                    for (var i = 0; i < all.length; i++) {
+                        if (all[i].id === index) {
+                            all.splice(i, 1);
+                        }
+                    }
+                });
+                return all;
+            }
+        },
+        /**
+         * @method  @public  getUnsupportedDatasets
+         * @description returns a list of unsupported datasources for the currently selected regionset(s)
+         * @param regionsets regionsets
+         */
+        getUnsupportedDatasetsList: function (regionsets) {
+            if (regionsets === null) {
+                return;
+            }
+    
+            var unsupportedDatasources = [];
+            this.datasources.forEach(function (ds) {
+                var supported = regionsets.some(function (iter) {
+                    return ds.regionsets.indexOf(Number(iter)) !== -1;
+                });
+                if (!supported) {
+                    unsupportedDatasources.push(ds);
+                }
+            });
+            return unsupportedDatasources;
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

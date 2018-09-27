@@ -603,8 +603,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 filterButton.find('.filter-icon').addClass('filter-' + filterName);
                 filterButton.find('.filter-icon').addClass(iconClassDeactive);
 
-                filterButton.unbind('click');
-                filterButton.bind('click', function() {
+                filterButton.off('click');
+                filterButton.on('click', function() {
                     var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
                     me.deactivateAllFilters(filterName);
                     if (filterIcon.hasClass(iconClassDeactive)) {

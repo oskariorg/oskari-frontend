@@ -119,27 +119,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'attach']);
             });
             sandbox.addRequestHandler('printout.PrintMapRequest', this.printoutHandler);
-            // request toolbar to add buttons
-            var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
-                tool,
-                btns = {
-                    'print': {
-                        iconCls: 'tool-print',
-                        tooltip: this.localization.btnTooltip,
-                        sticky: true,
-                        callback: function () {
-                            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
-                        }
-                    }
-                };
 
-            for (tool in btns) {
-                // Button not in UI - activated in an other route
-                if (conf.buttons && conf.buttons[tool] === false) continue;
-                if (btns.hasOwnProperty(tool)) {
-                    sandbox.request(this, addBtnRequestBuilder(tool, this.buttonGroup, btns[tool]));
+            // request toolbar to add buttons
+            var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
+            var buttonConf = {
+                iconCls: 'tool-print',
+                tooltip: this.localization.btnTooltip,
+                sticky: true,
+                callback: function () {
+                    me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
                 }
-            }
+            };
+            sandbox.request(this, addToolButtonBuilder('print', this.buttonGroup, buttonConf));
 
             // create the PrintService for handling ajax calls
             // and common functionality.
@@ -151,7 +142,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
             this.printService = printService;
 
             //Let's extend UI
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
             //sandbox.registerAsStateful(this.mediator.bundleId, this);
@@ -204,7 +195,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
             'AfterMapMoveEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.printout && this.printout.isEnabled) {
-                    this.printout.refresh(false);
+                    this.printout.refresh(true);
                 }
                 this.isMapStateChanged = true;
             },
@@ -322,7 +313,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
 
             sandbox.removeRequestHandler('printout.PrintMapRequest', this.printoutHandler);
             this.printoutHandler = null;
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
             this.sandbox.unregisterStateful(this.mediator.bundleId);
@@ -395,7 +386,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 i;
 
             // trigger an event letting other bundles know we require the whole UI
-            var eventBuilder = this.sandbox.getEventBuilder('UIChangeEvent');
+            var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
             if (blnEnabled) {
@@ -426,11 +417,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 }
                 if (this.printout) {
                     jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', '');
-                    request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+                    request = Oskari.requestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                     me.sandbox.request(me.getName(), request);
                     this.printout.setEnabled(false);
                     this.printout.hide();
                 }
+                var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+                this.sandbox.request(this, builder());
+            }
+            // resize map to fit screen with expanded/normal sidebar
+            var reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
+            if (reqBuilder) {
+                me.sandbox.request(me, reqBuilder(true));
             }
         },
         /**
@@ -438,7 +436,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
          */
         sendCanceledEvent: function (state) {
             var me = this;
-            var eventBuilder = me.sandbox.getEventBuilder('Printout.PrintCanceledEvent');
+            var eventBuilder = Oskari.eventBuilder('Printout.PrintCanceledEvent');
 
             if (eventBuilder) {
                 var event = eventBuilder(state);

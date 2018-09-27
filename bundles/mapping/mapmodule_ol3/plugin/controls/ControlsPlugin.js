@@ -1,3 +1,11 @@
+import olInteractionDragZoom from 'ol/interaction/DragZoom';
+import olInteractionDragPan from 'ol/interaction/DragPan';
+import olInteractionKeyboardPan from 'ol/interaction/KeyboardPan';
+import olInteractionKeyboardZoom from 'ol/interaction/KeyboardZoom';
+import olInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
+import olInteractionDoubleClickZoom from 'ol/interaction/DoubleClickZoom';
+import * as olEventsCondition from 'ol/events/condition';
+
 /**
  * @class Oskari.mapframework.mapmodule.ControlsPlugin
  *
@@ -21,17 +29,6 @@ Oskari.clazz.define(
         this.removedInteractions = [];
         this.addedInteractions = [];
     }, {
-        /**
-         * @public @method hasUI
-         * This plugin doesn't have a UI, BUT it is controllable in publisher so it is added to map
-         * when publisher starts -> always return true to NOT get second navControl on map when publisher starts
-         * FIXME this is clearly a hack
-         *
-         * @return {Boolean} true
-         */
-        hasUI: function () {
-            return true;
-        },
         _startPluginImpl: function () {
             this._createMapInteractions();
         },
@@ -63,11 +60,11 @@ Oskari.clazz.define(
                     }
 
                     if (data.shape === 'LineString') {
-                        measureValue = data.lenght;
+                        measureValue = data.length;
                     } else if (data.shape === 'Polygon') {
                         measureValue = data.area;
                     }
-                    var reqBuilder = me.getSandbox().getRequestBuilder('ShowMapMeasurementRequest');
+                    var reqBuilder = Oskari.requestBuilder('ShowMapMeasurementRequest');
                     if (reqBuilder) {
                         me.getSandbox().request(me, reqBuilder(measureValue, finished, geoJson, geomMimeType));
                     }
@@ -75,15 +72,6 @@ Oskari.clazz.define(
                 'Toolbar.ToolSelectedEvent': function (event) {
                     if (event._toolId !== 'zoombox') {
                         this._clearLifetimeInteractions();
-                    }
-                },
-                'Publisher2.ToolEnabledChangedEvent': function (event) {
-                    if (event.getTool().getTool().id === this._clazz) {
-                        if (!event._tool.isEnabled()) {
-                            this.disableDragPan();
-                        } else {
-                            this._clearLifetimeInteractions();
-                        }
                     }
                 }
             };
@@ -118,10 +106,10 @@ Oskari.clazz.define(
         disableDragPan: function () {
             var me = this;
             var disable = me.getMap().getInteractions().getArray().filter(function (interaction) {
-                if (interaction instanceof ol.interaction.DragZoom) {
+                if (interaction instanceof olInteractionDragZoom) {
                     return interaction;
                 }
-                if (interaction instanceof ol.interaction.DragPan) {
+                if (interaction instanceof olInteractionDragPan) {
                     return interaction;
                 }
             });
@@ -132,14 +120,14 @@ Oskari.clazz.define(
         },
         mouseDragZoomInteraction: function () {
             var boxzoom = this.getMap().getInteractions().forEach(function (interaction) {
-                if (interaction instanceof ol.interaction.DragZoom) {
+                if (interaction instanceof olInteractionDragZoom) {
                     return interaction;
                 }
             });
             if (!boxzoom) {
-                boxzoom = new ol.interaction.DragZoom({
+                boxzoom = new olInteractionDragZoom({
                     condition: function (mapBrowserEvent) {
-                        return ol.events.condition.mouseOnly(mapBrowserEvent);
+                        return olEventsCondition.mouseOnly(mapBrowserEvent);
                     }
                 });
             }
@@ -161,7 +149,7 @@ Oskari.clazz.define(
             // Map movement/keyboard control
             if (conf.keyboardControls === false) {
                 interactions.forEach(function (interaction) {
-                    if (interaction instanceof ol.interaction.KeyboardPan || interaction instanceof ol.interaction.KeyboardZoom) {
+                    if (interaction instanceof olInteractionKeyboardPan || interaction instanceof olInteractionKeyboardZoom) {
                         kbInteractionRemove.push(interaction);
                     }
                 });
@@ -173,7 +161,7 @@ Oskari.clazz.define(
             // mouse control
             if (conf.mouseControls === false) {
                 interactions.forEach(function (interaction) {
-                    if (interaction instanceof ol.interaction.DragPan || interaction instanceof ol.interaction.MouseWheelZoom || interaction instanceof ol.interaction.DoubleClickZoom || interaction instanceof ol.interaction.DragZoom) {
+                    if (interaction instanceof olInteractionDragPan || interaction instanceof olInteractionMouseWheelZoom || interaction instanceof olInteractionDoubleClickZoom || interaction instanceof olInteractionDragZoom) {
                         mouseInteractionRemove.push(interaction);
                     }
                 });

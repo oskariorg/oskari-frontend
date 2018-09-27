@@ -32,7 +32,7 @@ Oskari.registerLocalization({
                 'seriesTitle': 'Aikasarja',
                 'datasourceTitle': 'Tietolähde',
                 'indicatorTitle': 'Indikaattori',
-                'regionsetTitle': 'Aluejako',
+                'regionsetTitle': 'Aluejakorajaus (valinnainen)',
                 'seriesLabel': 'Hae aikasarjana',
                 'selectDatasourcePlaceholder': 'Valitse tietolähde',
                 'selectIndicatorPlaceholder': 'Valitse aineisto',
@@ -42,6 +42,7 @@ Oskari.registerLocalization({
                 'refineSearchTooltip1': 'Saat näkyviin vaihtoehtoja kun olet ensin valinnut aineiston tarjoajan ja aineiston.',
                 'refineSearchTooltip2': '',
                 'addButtonTitle': 'Hae aineiston tiedot',
+                'clearButtonTitle': 'Tyhjennä',
                 'defaultPlaceholder': 'Valitse arvo',
                 'selectionValues': {
                     'sex': {
@@ -58,17 +59,12 @@ Oskari.registerLocalization({
                     }
                 },
                 'noRegionset': 'Ei aluevalintaa'
-            },
-            'extraFeatures': {
-                'title': 'Lisäominaisuudet',
-                'hideMapLayers': 'Piilota muut karttatasot',
-                'openTableCheckbox': 'Avaa taulukko',
-                'openDiagramCheckbox': 'Avaa pylväsdiagrammiesitys'
             }
         },
         'statsgrid': {
             'title': 'HAETUT AINEISTOT',
             'noResults': 'Ei valittuja aineistoja',
+            'noValues': 'Ei arvoja valitulla aineistolla',
             'areaSelection': {
                 'title': 'ALUEJAKO',
                 'info': 'Määritä uudelleen millä alueilla haluat tarkastella aineistoja valitsemalla alasvetovalikosta'
@@ -83,7 +79,16 @@ Oskari.registerLocalization({
             'title': 'Luokittelu',
             'noActive': 'Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.',
             'noEnough': 'Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.',
+            'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',
             'cannotCreateLegend': 'Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla.'
+        },
+        'series': {
+            'speed': {
+                'label': 'Animaationopeus',
+                'fast': 'Nopea',
+                'normal': 'Normaali',
+                'slow': 'Hidas'
+            }
         },
         'diagram': {
             'title': 'Diagram'
@@ -131,7 +136,8 @@ Oskari.registerLocalization({
                 'max': 'Maksimi',
                 'color': 'Väri',
                 'transparency': 'Läpinäkyvyys',
-                'showValues': 'Näytä arvot'
+                'showValues': 'Näytä arvot',
+                'fractionDigits': 'Desimaalien lukumäärä'
             }
         },
         'colorset': {
@@ -159,7 +165,9 @@ Oskari.registerLocalization({
             'indicatorSave': 'Virhe tallennettaessa muuttujaa.',
             'indicatorDelete': 'Virhe poistaessa muuttujaa.',
             'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
-            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.'
+            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
+            'myIndicatorDatasource': 'Tietolähde on tyhjä.',
+            'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',

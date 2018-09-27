@@ -86,12 +86,6 @@ Oskari.clazz.category(
                 var nameA = me._getAttributeValue(a, pAttribute);
                 var nameB = me._getAttributeValue(b, pAttribute);
 
-                var renderer = me.valueRenderer[pAttribute];
-                if (renderer) {
-                    nameA = renderer(nameA);
-                    nameB = renderer(nameB);
-                }
-
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
         }

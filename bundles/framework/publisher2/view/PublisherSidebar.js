@@ -83,7 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 sidebarTitle.append(me.loc.title);
             }
             // bind close from header (X)
-            container.find('div.header div.icon-close').bind(
+            container.find('div.header div.icon-close').on(
                 'click',
                 function () {
                     me.cancel();
@@ -115,7 +115,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 me.panels.push(panel);
                 accordion.addPanel(panel.getPanel());
             });
-
             var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
             me.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
@@ -130,12 +129,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             // disable keyboard map moving whenever a text-input is focused element
             var inputs = me.mainPanel.find('input[type=text]');
-            inputs.focus(function () {
+            inputs.on('focus', function () {
                 me.instance.sandbox.postRequestByName(
                     'DisableMapKeyboardMovementRequest'
                 );
             });
-            inputs.blur(function () {
+            inputs.on('blur', function () {
                 me.instance.sandbox.postRequestByName(
                     'EnableMapKeyboardMovementRequest'
                 );
@@ -292,7 +291,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var grouping = {};
             var allTools = [];
             // group tools per tool-group
-            _.each(definedTools, function(ignored, toolname) {
+            _.each(definedTools, function(toolname) {
                 var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
                 if(tool.isDisplayed(me.data) === true && tool.isShownInToolsPanel()) {
                     var group = tool.getGroup();
@@ -385,7 +384,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * Closes publisher without saving
          */
         cancel: function () {
-            this._editToolLayoutOff();
             this.instance.setPublishMode(false);
         },
         /**
@@ -522,6 +520,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 this._editToolLayoutOff();
                 this._disablePreview();
             }
+            var sb = this.instance.sandbox;
+            var publisherTools = this._createToolGroupings();
+            publisherTools.tools.forEach( function (tool) {
+                var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(tool);
+                sb.notifyAll(event);
+            });
         },
 
         /**

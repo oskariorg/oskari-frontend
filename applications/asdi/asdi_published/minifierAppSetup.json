@@ -85,6 +85,15 @@
             }
         }
     }, {
+        "bundlename": "coordinatetool",
+        "metadata": {
+            "Import-Bundle": {
+                "coordinatetool": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }, {
         "bundlename" : "timeseries",
         "metadata" : {
             "Import-Bundle" : {

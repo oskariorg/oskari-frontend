@@ -55,7 +55,9 @@ Oskari.registerLocalization(
                 "wfs": "WFS layer",
                 "wmts": "WMTS layer",
                 "arcgis": "ArcGISCache layer",
-                "arcgis93": "ArcGISRest layer"
+                "arcgis93": "ArcGISRest layer",
+                "tiles3d" : "3D Tiles layer",
+                "vectortile" : "MBTiles layer"
             },
             "selectLayer": "Select map layer",
             "selectSubLayer": "Select sub layer",
@@ -77,8 +79,12 @@ Oskari.registerLocalization(
             "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
+            "tiles3d0_0": "3D Tiles 0.0",
+            "tiles3d1_0": "3D Tiles 1.0",
             "getInfo": "Get info",
             "editWfs": "Edit WFS",
+            "options": "Options JSON",
+            "mbtilesOptionsDesc": "{\n  styles: {\n    default: { ... },\n    myStyle: { ... }\n  },\n  tileGrid: { ... }\n}",
             "selectClass": "Select theme",
             "selectClassDesc": "Select a theme describing the map layer from the list.",
             "baseName": "Background Map Layer Name",

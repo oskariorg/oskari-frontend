@@ -71,6 +71,15 @@
                 }
             }
         }, {
+            "bundlename": "maprotator",
+            "metadata": {
+                "Import-Bundle": {
+                    "maprotator": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
             "bundlename": "statehandler",
             "metadata": {
                 "Import-Bundle": {

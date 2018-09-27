@@ -1,3 +1,8 @@
+import olLayerTile from 'ol/layer/Tile';
+import olSourceWMTS from 'ol/source/WMTS';
+import {optionsFromCapabilities} from 'ol/source/WMTS';
+import olFormatWMTSCapabilities from 'ol/format/WMTSCapabilities'
+
 /**
  *
  * A service to act as a WMTS Layer Source
@@ -40,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     getCapabilitiesForLayer: function (layer, success, failure) {
         var me = this;
         var url = layer.getLayerUrl();
-        var format = new ol.format.WMTSCapabilities();
+        var format = new olFormatWMTSCapabilities();
         var getCapsUrl = this.sandbox.getAjaxUrl() + 'action_route=GetLayerCapabilities';
 
         var caps = this.getCapabilities(url);
@@ -126,15 +131,15 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     },
     __createWMTSLayer: function (caps, layer) {
         var config = this.__getLayerConfig(caps, layer);
-        var options = ol.source.WMTS.optionsFromCapabilities(caps, config);
+        var options = optionsFromCapabilities(caps, config);
         //this doesn't get merged automatically by ol3
         options.crossOrigin = config.crossOrigin;
         if(config.url) {
             // override capabilities url with the configured one
             options.urls = [config.url];
         }
-        var wmtsLayer = new ol.layer.Tile({
-            source : new ol.source.WMTS(options),
+        var wmtsLayer = new olLayerTile({
+            source : new olSourceWMTS(options),
             opacity: layer.getOpacity() / 100.0,
             transparent: true,
             visible: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible()

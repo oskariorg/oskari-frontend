@@ -1,10 +1,15 @@
+import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
+import GeoJSONWriter from 'jsts/org/locationtech/jts/io/GeoJSONWriter';
+import GeometryFactory from 'jsts/org/locationtech/jts/geom/GeometryFactory';
+import Polygonizer from 'jsts/org/locationtech/jts/operation/polygonize/Polygonizer';
+
 /**
  * @class Oskari.mapframework.ui.module.common.geometrycutter.GeometryProcessor
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor', function () {
-    this._reader = new jsts.io.GeoJSONReader();
-    this._writer = new jsts.io.GeoJSONWriter();
-    this._geomFactory = new jsts.geom.GeometryFactory();
+    this._reader = new GeoJSONReader();
+    this._writer = new GeoJSONWriter();
+    this._geomFactory = new GeometryFactory();
 }, {
     splitByLine: function (sourceFeature, drawnFeature) {
         var source = this._reader.read(sourceFeature.geometry);
@@ -24,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
     },
     _polygonSplit: function (sourceGeometry, drawnGeometry) {
         var linework = sourceGeometry.getBoundary().union(drawnGeometry);
-        var polygonizer = new jsts.operation.polygonize.Polygonizer();
+        var polygonizer = new Polygonizer();
         polygonizer.add(linework);
 
         var polygons = polygonizer.getPolygons();

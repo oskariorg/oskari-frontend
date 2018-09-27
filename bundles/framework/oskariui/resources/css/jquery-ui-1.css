@@ -264,14 +264,12 @@ body .oskariui .ui-tooltip {
 
 /* Overlays */
 .oskariui .ui-widget-overlay {
-  background: #5c5c5c url(images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x;
   opacity: .8;
   filter: alpha(opacity=80);; }
 
 .oskariui .ui-widget-shadow {
   margin: -7px 0 0 -7px;
   padding: 7px;
-  background: #cccccc url(images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x;
   opacity: .6;
   filter: alpha(opacity=60);;
   -moz-border-radius: 8px;

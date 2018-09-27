@@ -193,6 +193,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         /**
          * Sets the active indicator and sends an event about the change
+         * Note! Timeseries relies on this so the event need to be sent even if the indicator doesn't change.
          * @param {String} indicatorHash the unique hash from selected indicators details. See getHash()
          */
         setActiveIndicator: function (indicatorHash) {
@@ -249,10 +250,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @return {Object} false if indicator is already selected or an object describing the added indicator (includes parameters as an object)
          */
         addIndicator: function (datasrc, indicator, selections, series, classification) {
-            if (series) {
-                this.seriesService.addSeries(series);
-                selections[series.id] = this.seriesService.getValue();
-            }
             var ind = {
                 datasource: Number(datasrc),
                 indicator: indicator,
@@ -269,6 +266,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             });
             if (found) {
                 return false;
+            }
+            if (series) {
+                this.seriesService.setValues(series.values);
+                ind.selections[series.id] = this.seriesService.getValue();
+                // Discontinuos mode is problematic for series data,
+                // because each class has to get at least one hit -> set distinct mode.
+                ind.classification = jQuery.extend({}, indicator.classification || {}, {mode: 'distinct'});
             }
             this.indicators.push(ind);
 
@@ -333,7 +337,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getHash: function (datasrc, indicator, selections, series) {
             var hash = datasrc + '_' + indicator;
             var seriesKey = '';
-            if (typeof series === 'object') {
+            if (typeof series === 'object' && series !== null) {
                 seriesKey = series.id;
                 hash += '_' + series.id + '=' + series.values[0] + '-' + series.values[series.values.length - 1];
             }

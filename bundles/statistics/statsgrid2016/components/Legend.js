@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         error: _.template('<div class="legend-noactive">${ msg }</div>'),
         header: _.template('<div class="header"><div class="link">${ link }</div><div class="title">${ source }</div><div class="sourcename">${ label }</div></div>'),
         activeHeader: _.template('<div class="title">${label}</div>'),
-        edit: jQuery('<div class="edit-legend"></div>')
+        edit: _.template('<div class="edit-legend" title="${ tooltip }"></div>')
     };
     this._element = jQuery('<div class="statsgrid-legend-container"> ' +
         '<div class="active-header"></div>' +
@@ -93,33 +93,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             var legendContainer = container.find('.active-legend');
             headerContainer.empty();
             legendContainer.empty();
+            container.find('.legend-noactive').empty();
 
             // create inidicator dropdown if we have more than one indicator
             if (me.service.getStateService().getIndicators().length > 1) {
-                var edit = me.__templates.edit.clone();
                 var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
                 indicatorMenu.render(headerContainer);
                 indicatorMenu.setWidth('94%');
-                headerContainer.append(edit);
-                me._createEditClassificationListener();
             } else {
                 me._getLabels(activeIndicator, function (labels) {
                     var header = me.__templates.activeHeader({
                         label: labels.label
                     });
-                    var edit = me.__templates.edit.clone();
                     headerContainer.empty();
                     headerContainer.append(header);
-                    headerContainer.append(edit);
-                    me._createEditClassificationListener();
                 }); // _getLabels
             }
             if (!classificationOpts) {
                 // didn't get classification options so not enough data to classify or other error
+                container.find('.edit-legend').hide();
+                container.find('.legend-noactive').empty();
+                legendContainer.empty();
                 container.append(legendUI);
                 me._renderDone();
                 return;
             }
+            var edit = me.__templates.edit({ tooltip: me.locale('classify.editClassifyTitle') });
+            headerContainer.append(edit);
+            me._createEditClassificationListener();
             // legend
             legendContainer.html(legendUI);
         }); // _createLegend
@@ -181,10 +182,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
      */
     _createAccordionPanel: function (title) {
         var me = this;
+
+        function _overflowCheck () {
+            var pluginEl = me._element.parent();
+            if (pluginEl.css('position') === 'absolute') {
+                var top = pluginEl.offset().top;
+                var bottom = top + pluginEl.height();
+                var offsetToWindowBottom = jQuery(window).height() - bottom;
+                if (offsetToWindowBottom < 0) {
+                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
+                }
+            }
+        }
+
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.on('open', function () {
             me._setPanelState(panel);
             me._element.find('.edit-legend').addClass('edit-active');
+            _overflowCheck();
         });
         panel.on('close', function () {
             me._setPanelState(panel);
@@ -237,12 +252,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             activeIndicator.selections, activeIndicator.series, currentRegionset, function (err, data) {
                 if (err) {
                     me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
-                    callback(me.__templates.error({ msg: locale('legend.noEnough') }));
+                    callback(me.__templates.error({ msg: locale('legend.noData') }));
+                    return;
+                }
+                if (!data) {
+                    me.log.warn('Error getting indicator classification', data);
+                    callback(me.__templates.error({ msg: locale('legend.noData') }));
                     return;
                 }
                 var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
-                var classification = service.getClassificationService().getClassification(data, classificationOpts);
-
+                var groupStats = service.getSeriesService().getSeriesStats(activeIndicator.hash);
+                var classification = service.getClassificationService().getClassification(data, classificationOpts, groupStats);
                 if (!classification) {
                     me.log.warn('Error getting indicator classification', data);
                     callback(me.__templates.error({ msg: locale('legend.noEnough') }));
@@ -270,7 +290,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         var legendElement = this._element.find('.active-legend');
         legendElement.empty();
 
-        this._createLegend(ind.hash, function (legend) {
+        this._createLegend(ind, function (legend) {
             legendElement.append(legend);
         });
     },
@@ -297,6 +317,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             // Always show the active indicator - also handles "no indicator selected"
+            // if the selected indicator has no data & edit panel is open -> close it
+            var current = event.current;
+            if (current) {
+                me.service.getIndicatorData(current.datasource, current.indicator,
+                    current.selections, current.series, me.service.getStateService().getRegionset(), function (err, data) {
+                        if (err) {}
+                        if (!data) {
+                            me._accordion.getPanels().forEach(function (panel) {
+                                if (panel.isOpen()) {
+                                    panel.close();
+                                }
+                            });
+                        };
+                    });
+            }
             me.render();
         });
 

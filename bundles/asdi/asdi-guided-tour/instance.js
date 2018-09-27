@@ -144,7 +144,7 @@ Oskari.clazz.define(
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
-                openLink.bind('click',
+                openLink.on('click',
                     function () {
                         me._openExtension('Search');
                         openLink.hide();
@@ -152,7 +152,7 @@ Oskari.clazz.define(
                     });
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
-                closeLink.bind('click',
+                closeLink.on('click',
                     function () {
                         me._closeExtension('Search');
                         openLink.show();
@@ -184,7 +184,7 @@ Oskari.clazz.define(
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
-                openLink.bind('click',
+                openLink.on('click',
                     function () {
                         me._openExtension('LayerSelector');
                         openLink.hide();
@@ -192,7 +192,7 @@ Oskari.clazz.define(
                     });
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
-                closeLink.bind('click',
+                closeLink.on('click',
                     function () {
                         me._closeExtension('LayerSelector');
                         openLink.show();
@@ -224,7 +224,7 @@ Oskari.clazz.define(
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
-                openLink.bind('click',
+                openLink.on('click',
                     function () {
                         me._openExtension('LayerSelection');
                         openLink.hide();
@@ -232,7 +232,7 @@ Oskari.clazz.define(
                     });
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
-                closeLink.bind('click',
+                closeLink.on('click',
                     function () {
                         me._closeExtension('LayerSelection');
                         openLink.show();
@@ -264,7 +264,7 @@ Oskari.clazz.define(
               var linkTemplate = jQuery('<a href="#"></a>');
               var openLink = linkTemplate.clone();
               openLink.append(loc.openLink);
-              openLink.bind('click',
+              openLink.on('click',
                   function () {
                       me._openExtension('PersonalData');
                       openLink.hide();
@@ -272,7 +272,7 @@ Oskari.clazz.define(
                   });
               var closeLink = linkTemplate.clone();
               closeLink.append(loc.closeLink);
-              closeLink.bind('click',
+              closeLink.on('click',
                   function () {
                       me._closeExtension('PersonalData');
                       openLink.show();
@@ -304,7 +304,7 @@ Oskari.clazz.define(
               var linkTemplate = jQuery('<a href="#"></a>');
               var openLink = linkTemplate.clone();
               openLink.append(loc.openLink);
-              openLink.bind('click',
+              openLink.on('click',
                   function () {
                       me._openExtension('Publisher2');
                       openLink.hide();
@@ -312,7 +312,7 @@ Oskari.clazz.define(
                   });
               var closeLink = linkTemplate.clone();
               closeLink.append(loc.closeLink);
-              closeLink.bind('click',
+              closeLink.on('click',
                   function () {
                       me._closeExtension('Publisher2');
                       openLink.show();
@@ -344,7 +344,7 @@ Oskari.clazz.define(
               var linkTemplate = jQuery('<a href="#"></a>');
               var openLink = linkTemplate.clone();
               openLink.append(loc.openLink);
-              openLink.bind('click',
+              openLink.on('click',
                   function () {
                       me._openExtension('maplegend');
                       openLink.hide();
@@ -352,7 +352,7 @@ Oskari.clazz.define(
                   });
               var closeLink = linkTemplate.clone();
               closeLink.append(loc.closeLink);
-              closeLink.bind('click',
+              closeLink.on('click',
                   function () {
                       me._closeExtension('maplegend');
                       openLink.show();
@@ -384,7 +384,7 @@ Oskari.clazz.define(
               var linkTemplate = jQuery('<a href="#"></a>');
               var openLink = linkTemplate.clone();
               openLink.append(loc.openLink);
-              openLink.bind('click',
+              openLink.on('click',
                   function () {
                       me._openExtension('userinterface.UserGuide');
                       openLink.hide();
@@ -392,7 +392,7 @@ Oskari.clazz.define(
                   });
               var closeLink = linkTemplate.clone();
               closeLink.append(loc.closeLink);
-              closeLink.bind('click',
+              closeLink.on('click',
                   function () {
                       me._closeExtension('userinterface.UserGuide');
                       openLink.show();
@@ -536,7 +536,7 @@ Oskari.clazz.define(
                     jQuery('<label for="pti_tour_seen"></label>');
                 var label = labelTemplate.clone();
                 label.append(this._localization.tourseen.label);
-                checkbox.bind(
+                checkbox.on(
                     'change',
                     function () {
                         if (jQuery(this).is(':checked')) {

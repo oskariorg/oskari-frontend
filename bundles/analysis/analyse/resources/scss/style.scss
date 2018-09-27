@@ -1,0 +1,534 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+/* SASS removes whitespace that calc requires, so unquote() whatever calculation you pass to this */
+@mixin calcProperty($property, $calculation) {
+    #{$property}: -moz-calc(#{$calculation});
+    #{$property}: -webkit-calc(#{$calculation});
+    #{$property}: -o-calc(#{$calculation});
+    #{$property}: calc(#{$calculation});
+}
+
+div.notLoggedIn {
+    padding: 10px;
+}
+
+#contentMap {
+
+    &.mapAnalyseMode {
+        margin-left: 384px;
+    }
+
+    div.basic_analyse {
+        background: white;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1500;
+        width: 384px;
+    }
+
+    div.basic_publisher div.content {
+        padding: 10px;
+    }
+
+}
+
+div.analyse {
+
+    div.startview {
+
+        div.error ul li {
+            color: red;
+        }
+
+        div.icon-info {
+            float: right;
+        }
+
+    }
+
+}
+
+div.analyse-featurelist {
+    ul {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    li {
+        list-style-type: none;
+    }
+}
+
+div.analyse-startview-label {
+    margin-top: 20px;
+}
+
+div.basic_analyse {
+
+    > div.content {
+        overflow: auto;
+        height: 89%;
+        @include calcProperty(height, unquote("100% - 88px"));
+    }
+
+    > div.header {
+        background-color: #FDF8D9;
+        padding: 5px 10px;
+        height: 37px;
+
+        div.icon-close {
+            float: right;
+        }
+
+    }
+
+    div.analyse-select-featurelist {
+        display: inline;
+        margin-left: 6px;
+
+        a {
+            text-decoration: none;
+        }
+
+        ul {
+            padding: 0;
+            padding-top: 10px;
+
+            li {
+                list-style-type: none;
+            }
+
+        }
+
+    }
+
+    div.analyse_difference_cont {
+
+        ul {
+            margin: 0;
+            padding: 0;
+            padding-bottom: 10px;
+
+            li {
+                list-style-type: none;
+                margin: 5px;
+            }
+
+        }
+
+    }
+
+    div.icon-info {
+        float: right;
+        cursor: help;
+    }
+
+    div.icon-funnel, div.icon-funnel-active {
+        cursor: pointer;
+    }
+
+    div.icon-menu {
+        margin: -5px 100px;
+    }
+
+    div.location {
+        height: 30px;
+    }
+
+    div.previewNotes {
+        margin-left: 8px;
+        margin-right: 8px;
+        margin-bottom: 2px;
+    }
+
+    div.tool {
+        margin: 5px;
+    }
+
+    div.drawFilter {
+        margin: 5px;
+    }
+
+    div.icon-close.analyse-temp-feature {
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    div.toolContainer {
+        margin: 5px 15px 5px 5px;
+        display: inline-block;
+
+        h4 {
+            padding: 0;
+        }
+
+        div.tool {
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        div.buttons {
+            display: inline-block;
+            float: right;
+        }
+
+    }
+
+    div.drawFilterContainer {
+        margin: 5px;
+        display: inline-block;
+
+        h4 {
+            padding: 0;
+        }
+
+        div.drawFilter {
+            display: inline-block;
+            cursor: pointer;
+
+            &.disabled {
+                opacity: 0.4;
+                cursor: default !important;
+            }
+
+            &.selected {
+                opacity: 1.0;
+                background-color: #333438;
+                cursor: default !important;
+            }
+
+        }
+
+        div.buttons {
+            display: inline-block;
+            float: right;
+        }
+
+    }
+
+    div.form {
+
+        div.field {
+
+            input, select {
+                width: 80%;
+                background-color: white;
+                filter:unquote("Alpha(opacity=100)") !important; /* unquote for libsass bug */
+            }
+
+        }
+
+    }
+
+    div.header-icon-info {
+        margin: 10px;
+    }
+
+    div.tool, div.drawFilter, div.analyse_settings_cont, div.analyse_areas_and_sectors_cont {
+
+        input {
+            margin-right: 10px;
+        }
+
+    }
+
+    div.analyse_settings_cont {
+
+        label {
+            margin: 5px 0;
+
+            input[type=text] {
+                clear: left;
+            }
+
+            select {
+                margin-top: 7px;
+                margin-bottom: 10px;
+            }
+
+        }
+    }
+
+    select {
+
+        &.settings_buffer_units, &.settings_area_size_units {
+            width: 110px;
+        }
+
+    }
+
+}
+
+.analyse_radiolabel, .analyse_checklabel {
+    padding: 3px 6px;
+    @include border-radius(2px);
+
+    &:hover {
+        background-color: #eee;
+    }
+
+}
+
+/* FIXME change these to actual labels? */
+.analyse_params_label, .analyse_title_label, .output_color_label, .columns_title_label, .settings_buffer_label, .extra_title_label, .settings_name_label {
+    /* FIXME change these to fieldset + legend? */
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.extra_title_label {
+    display: inline;    
+}
+
+.analyse_output_cont {
+
+    .columns_title_label {
+        display: inline-block;
+        width: 80%;
+    }
+}
+
+.analyse_title_columns {
+    width: 100%;
+    display: inline-block;
+}
+
+.analyse_settings_cont {
+    margin: 10px 5px;
+}
+
+.analyse_title_colcont {
+    margin: 10px 5px;
+}
+
+.params-icon-info {
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.columns-icon-info {
+    margin-right: 5px;
+    margin-top: 10px;
+}
+
+/* Buttons */
+div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
+    margin: 5px;
+
+    input {
+        margin-right: 1px;
+    }
+
+}
+
+/*additional info div*/
+div.basic_analyse div.analysis_additional_info {
+    padding: 5px;
+    font-style: italic;
+}
+
+label.params_checklabel {
+    text-overflow: ellipsis;
+    display: inline-block;
+    width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+// for local use .icon-funnel {
+//    background-image: url("../icons/icon-funnel.png") !important;
+//    background-repeat: no-repeat !important;
+//    height: 18px !important;
+//    width: 18px !important;
+//} 
+table.layer-icons {
+    margin: 0;
+    // FIXME percentages is no bueno
+    width: 30%;
+    display: inline-block;
+
+    td {
+        padding-left: 6px;
+    }
+
+    div.icon-info {
+        float: none;
+    }
+
+    div.icon-close {
+        cursor: pointer;
+    }
+
+}
+
+/* Analyse filter CSS */
+
+div.filter-popup-content {
+    overflow: auto;
+    max-height: 500px;
+    width: 700px;
+    margin: 0px !important;
+    padding: 10px;
+}
+
+div.analyse-filter-popup-content {
+    padding: 8px;
+
+    div.analyse-filter {
+        padding: 12px 8px;
+        border-bottom: 1px solid #888;
+        border-top: 1px solid #E8E8E8;
+
+        &:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+      
+    }
+
+    div.filter-selections-title, div.filter-selection-radios {
+        display: inline-block;
+    }
+
+    div.filter-selections-title {
+        float: left;
+    }
+
+    div.filter-selection-radios {
+        margin-left: 25px;
+
+        div.bbox-on, div.bbox-off {
+            margin-top: 5px;
+        }
+
+        input:disabled + label {
+            opacity: 0.5;
+        }
+    }
+    div.filter-by-geometry-methods {
+        display: inline-block;
+        margin-left: 25px!important;     
+    }
+
+}
+
+div.analyse-filter-popup-content div.filter-option {
+    padding-bottom: 10px;
+    margin-top: 5px;
+
+    div.manage-filter-option {
+        display: inline-block;
+        vertical-align: middle;
+
+        div.add-filter-option, div.remove-filter-option {
+            cursor: pointer;
+            display: inline-block;
+            /* These are icons, so it's OK to have a custom font here. */
+            font-size: 48px;
+            font-weight: bold;
+            margin-left: 5px;
+            min-width: 16px;
+            text-align: center;
+        }
+        
+    }
+
+    &.filter-option-aggregate {
+        padding-bottom: 25px;
+
+        div.attribute-value-block {
+            position: relative;
+            display: inline-block;
+
+            div.add-link {
+                position: absolute;
+                top: 40px;
+            }
+        }
+    }
+
+    .filter-input-value {
+        width: 160px;
+        margin: 1px;
+    }
+
+    input[name="case-sensitive"] {
+        margin-right: 5px;
+    }
+
+    select {
+
+        &.attribute {
+            width: 150px;
+        }
+
+        &.boolean {
+            margin-top: 10px;
+            width: 65px;
+        }
+
+        &.operator {
+            width: 210px;
+        }
+
+    }
+}
+
+div.analyse-filter-popup-content div.analyse-filter {
+    border-bottom: none;
+
+    .input-blink {
+        border: 2px solid #217ad4;
+        margin: 0px;
+    }
+}
+
+div.filter-popup-multiselect {
+    border: 1px solid;
+
+    div.header div.icon-close {
+        float: right;
+        margin: 10px;
+    }
+
+    .oskari-formcomponent {
+        margin: 10px;
+    }
+
+    .oskari-filter-with-aggregateAnalysis {
+        margin: 10px;
+    }
+}
+
+div.divmanazerpopup {
+
+    &.drawfilterdialog {
+        max-width: 400px;
+    }
+
+    &.analyse-draw-dialog {
+        max-width: 280px;
+    }
+
+}
+
+div.analyse-result-popup-content {
+    overflow: auto;
+}

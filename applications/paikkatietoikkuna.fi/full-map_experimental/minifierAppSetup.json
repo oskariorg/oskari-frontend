@@ -27,6 +27,9 @@
 					},
 					"oskariui": {
 						"bundlePath": "../../../packages/framework/bundle/"
+					},
+					"map3dtiles": {
+						"bundlePath": "../../../packages/paikkatietoikkuna/bundle/"
 					}
                 }
             }
@@ -68,6 +71,15 @@
 				}
 			}
 		}, {
+			"bundlename": "search",
+			"metadata": {
+				"Import-Bundle": {
+					"search": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
 			"bundlename": "layerselector2",
 			"metadata": {
 				"Import-Bundle": {
@@ -82,6 +94,15 @@
 				"Import-Bundle": {
 					"layerselection2": {
 						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		},	{
+			"bundlename": "demo-link",
+			"metadata": {
+				"Import-Bundle": {
+					"demo-link": {
+						"bundlePath": "../../../packages/paikkatietoikkuna/bundle/"
 					}
 				}
 			}

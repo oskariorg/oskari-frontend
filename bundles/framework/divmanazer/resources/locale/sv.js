@@ -326,6 +326,7 @@ Oskari.registerLocalization(
             "success":"Lyckades",
             "error":"Fel!",
             "invalidType": "Filformatet är inte tillåtet.",
+            "allowedExtensions": "Tillåtna filändelser: {allowedExtensions}.",
             "multipleNotAllowed": "Endast en fil kan laddas upp.",
             "fileSize": "Den valda filen är för stor. Den högsta tillåtna storleken är {size, number} Mb.",
             "noFiles": "Ingen fil vald."

@@ -33,7 +33,7 @@ Oskari.clazz.define(
                 '<img class="fullscreenDivImg" src="' + me._getImagePath('hide-navigation.png') + '"></img>' +
                 '</div>'
             );
-            el.find('.fullscreenDivImg').bind('click', function (event) {
+            el.find('.fullscreenDivImg').on('click', function (event) {
                 event.preventDefault();
                 if (me.state.fullscreen) {
                     me._showNavigation();

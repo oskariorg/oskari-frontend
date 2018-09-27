@@ -13,7 +13,12 @@ function() {
         customClrs: jQuery('<div id="publisher-custom-colours">' + '<div id="publisher-custom-colours-bg"></div>' + '<div id="publisher-custom-colours-title"></div>' + '<div id="publisher-custom-colours-header"></div>' + '<div id="publisher-custom-colours-iconcls"></div>' + '</div>'),
         rgbInput: jQuery('<div class="rgbInput">' + '<label for="red">R</label><input type="text" name="red" maxlength="3" />' + '<label for="green">G</label><input type="text" name="green" maxlength="3" />' + '<label for="blue">B</label><input type="text" name="blue" maxlength="3" />' + '</div>'),
         iconClsInput: jQuery('<div class="iconClsInput">' + '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' + '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' + '</div>'),
-        inputRadio: jQuery('<div><input type="radio" /><label></label></div>')
+        inputRadio: jQuery('<div><input type="radio" /><label></label></div>'),
+        colorPickers: {
+            background: jQuery('<div class="color-picker-background"></div>'),
+            title: jQuery('<div class="color-picker-title"></div>'),
+            header: jQuery('<div class="color-picker-header"></div>')
+        }
     },
 
     values: {
@@ -186,8 +191,6 @@ function() {
         if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
             me.__plugin.setMode(me.state.mode);
         }
-        var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
-        sandbox.notifyAll(event);
     },
 
     isEnabled: function () {
@@ -204,7 +207,7 @@ function() {
         var me = this,
             template = me.templates.colours.clone(),
             selectedColour = me.values.colourScheme || {},
-            colourName = me.__instance._localization.BasicView.layout.fields.colours[selectedColour.val],
+            colourName = selectedColour.val ? me.__instance._localization.BasicView.layout.fields.colours[selectedColour.val] : me.__instance._localization.BasicView.layout.fields.colours['dark_grey'],
             colourLabel = me.__instance._localization.BasicView.layout.fields.colours.label,
             colourPlaceholder = me.__instance._localization.BasicView.layout.fields.colours.placeholder,
             buttonLabel = me.__instance._localization.BasicView.layout.fields.colours.buttonLabel;
@@ -302,7 +305,7 @@ function() {
 
             // Set the selected colour or default to 'dark_grey' if non-existant.
             if (prevColour && prevColour.val === colours[i].val || (!prevColour && colours[i].val === 'dark_grey')) {
-                colourInput.find('input[type=radio]').attr('checked', 'checked');
+                colourInput.find('input[type=radio]').prop('checked', true);
                 me._changeGfiColours(colours[i], content);
             }
 
@@ -312,8 +315,8 @@ function() {
             if ('custom' === colours[i].val) {
                 customColourButton = jQuery('<button>' + me.__instance._localization.BasicView.layout.fields.colours.buttonLabel + '</button>');
 
-                customColourButton.click(function () {
-                    colourInput.find('input[type=radio]').attr('checked', 'checked');
+                customColourButton.on('click', function () {
+                    colourInput.find('input[type=radio]').prop('checked', true);
                     me._createCustomColoursPopup();
                 });
                 content.find('div#publisher-colour-inputs').append(customColourButton);
@@ -321,7 +324,7 @@ function() {
         }
 
         // Things to do when the user changes the colour scheme:
-        content.find('input[name=colour]').change(function () {
+        content.find('input[name=colour]').on('change', function () {
             selectedColour = me._getItemByCode(jQuery(this).val(), me.initialValues.colours);
             // change the preview gfi
             me._changeGfiColours(selectedColour, content);
@@ -440,7 +443,7 @@ function() {
         closeButton.setHandler(function () {
             me._collectCustomColourValues(content);
             // Change the preview gfi and send event only if currently checked
-            if (jQuery('div#publisher-colour-inputs input#custom').attr('checked')) {
+            if (jQuery('div#publisher-colour-inputs input#custom').prop('checked')) {
                 customColours = me._getItemByCode('custom', me.initialValues.colours);
                 // Change the colours of the preview popup
                 me._changeGfiColours(customColours);
@@ -464,12 +467,9 @@ function() {
     _createCustomColoursInputs: function () {
         var me = this,
             template = me.templates.customClrs.clone(),
-            bgInputs = me.templates.rgbInput.clone(),
             layoutLoc = me.__instance._localization.BasicView.layout,
             bgLoc = layoutLoc.fields.colours.customLabels.bgLabel,
-            titleInputs = me.templates.rgbInput.clone(),
             titleLoc = layoutLoc.fields.colours.customLabels.titleLabel,
-            headerInputs = me.templates.rgbInput.clone(),
             headerLoc = layoutLoc.fields.colours.customLabels.headerLabel,
             iconClsInputs = me.templates.iconClsInput.clone(),
             iconClsLoc = layoutLoc.fields.colours.customLabels.iconLabel,
@@ -480,14 +480,24 @@ function() {
         iconClsInputs.find('label[for=icon-close]').html(iconCloseLoc);
         iconClsInputs.find('label[for=icon-close-white]').html(iconCloseWhiteLoc);
 
-        template.find('div#publisher-custom-colours-bg').append(bgLoc).append(bgInputs);
-        template.find('div#publisher-custom-colours-title').append(titleLoc).append(titleInputs);
-        template.find('div#publisher-custom-colours-header').append(headerLoc).append(headerInputs);
+        me._createColorPickers();
+
+        var colorPickerBackground = me.templates.colorPickers.background.clone(),
+        colorPickerTitle = me.templates.colorPickers.title.clone(),
+        colorPickerHeader = me.templates.colorPickers.header.clone();
+        
+        colorPickerBackground.append(me._colorPickers[0].getElement());
+        colorPickerTitle.append(me._colorPickers[1].getElement());
+        colorPickerHeader.append(me._colorPickers[2].getElement());
+
+        template.find('div#publisher-custom-colours-bg').append(bgLoc).append(colorPickerBackground);
+        template.find('div#publisher-custom-colours-title').append(titleLoc).append(colorPickerTitle);
+        template.find('div#publisher-custom-colours-header').append(headerLoc).append(colorPickerHeader);
         template.find('div#publisher-custom-colours-iconcls').append(iconClsLoc).append(iconClsInputs);
 
         this._prepopulateCustomColoursTemplate(template);
 
-        template.find('input[type=text]').change(function () {
+        template.find('input[type=text]').on('change', function () {
             // If the value is not a number or is out of range (0-255), set the value to proper value.
             rgbValue = jQuery(this).val();
             if (isNaN(rgbValue) || (rgbValue < me.minColourValue)) {
@@ -509,18 +519,16 @@ function() {
      */
     _prepopulateCustomColoursTemplate: function (template) {
         var me = this,
-            bgInputs = template.find('div#publisher-custom-colours-bg'),
-            titleInputs = template.find('div#publisher-custom-colours-title'),
-            headerInputs = template.find('div#publisher-custom-colours-header'),
             iconClsInputs = template.find('div#publisher-custom-colours-iconcls'),
             customColours = me.customColourValues;
 
-        this._prepopulateRgbDiv(bgInputs, customColours.bg);
-        this._prepopulateRgbDiv(titleInputs, customColours.title);
-        this._prepopulateRgbDiv(headerInputs, customColours.header);
-        iconClsInputs.find('input[type=radio]').removeAttr('checked');
+        me._colorPickers[0].setValue(customColours.bg);
+        me._colorPickers[1].setValue(customColours.title);
+        me._colorPickers[2].setValue(customColours.header);
+        
+        iconClsInputs.find('input[type=radio]').prop('checked', false);
         var iconCls = customColours.iconCls || 'icon-close-white';
-        iconClsInputs.find('input[value=' + iconCls + ']').attr('checked', 'checked');
+        iconClsInputs.find('input[value=' + iconCls + ']').prop('checked', true);
     },
 
     /**
@@ -555,22 +563,17 @@ function() {
      */
     _collectCustomColourValues: function (content) {
         var me = this,
-            bgColours = me._getColourFromRgbDiv(content.find('div#publisher-custom-colours-bg')),
-            titleColours = me._getColourFromRgbDiv(content.find('div#publisher-custom-colours-title')),
-            headerColours = me._getColourFromRgbDiv(content.find('div#publisher-custom-colours-header')),
-            iconCls = content.find('div#publisher-custom-colours-iconcls input[name=custom-icon-class]:checked').val(),
-            customColours = this._getItemByCode('custom', me.initialValues.colours);
+        iconCls = content.find('div#publisher-custom-colours-iconcls input[name=custom-icon-class]:checked').val(),
+        customColours = this._getItemByCode('custom', me.initialValues.colours);
 
-        // Save the values.
-        this.customColourValues.bg = bgColours;
-        this.customColourValues.title = titleColours;
-        this.customColourValues.header = headerColours;
+        this.customColourValues.bg = me._colorPickers[0].getValue();
+        this.customColourValues.title = me._colorPickers[1].getValue();
+        this.customColourValues.header = me._colorPickers[2].getValue();
         this.customColourValues.iconCls = iconCls;
 
-        // Set the values to initial values
-        customColours.bgColour = this._getCssRgb(bgColours);
-        customColours.titleColour = this._getCssRgb(titleColours);
-        customColours.headerColour = this._getCssRgb(headerColours);
+        customColours.bgColour = me._colorPickers[0].getValue();
+        customColours.titleColour = me._colorPickers[1].getValue();
+        customColours.headerColour = me._colorPickers[2].getValue();
         customColours.iconCls = iconCls || 'icon-close-white';
     },
 
@@ -621,6 +624,19 @@ function() {
             }
         }
         return null;
+    },
+
+    /**
+     * @method createColorPickers
+     * Creates an array of color picker components
+     * @private
+     */
+    _createColorPickers: function() {
+        this._colorPickers = [
+            Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput'),
+            Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput'),
+            Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput')
+        ];
     },
 
     /**

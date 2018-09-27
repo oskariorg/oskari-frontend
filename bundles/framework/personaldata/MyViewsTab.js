@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
               view.name = Oskari.util.sanitize(view.name);
               view.description = Oskari.util.sanitize(view.description);
             });
-            
+
             this.viewData = views;
 
             var model = this._getGridModel(views);
@@ -317,7 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var defaultViewRenderer = function (name, data) {
                 var input = me.templateDefaultGridView.clone();
                 input.prop('checked',data.isDefault);
-                input.bind('click', function () {
+                input.on('click', function () {
                     var view = me._getViewById(data.id);
                     var service = me.instance.getViewService();
 
@@ -351,7 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var nameRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     if(view.srsName !== sandbox.getMap().getSrsName()) {
                         window.location.href = view.url;
@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var editRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
                         me._editView(view);
@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var deleteRenderer = function (name, data) {
                 var link = me.templateLink.clone();
                 link.append(name);
-                link.bind('click', function () {
+                link.on('click', function () {
                     var view = me._getViewById(data.id);
                     if (view && !me.popupOpen) {
                         me._confirmDelete(view);

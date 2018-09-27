@@ -55,8 +55,7 @@ Oskari.registerLocalization(
                 "tooltip": "Velikost predogleda lahko povečaš s klikom nanj.",
                 "pending": "Predogled bo kmalu osvežen",
                 "notes": {
-                    "extent": "Velikost izrisa za tiskanje lahko preveriš v oknu za predogled.",
-                    "restriction": "V predogledu niso vidni vsi sloji karte."
+                    "extent": "Velikost izrisa za tiskanje lahko preveriš v oknu za predogled."
                 }
             },
             "buttons": {

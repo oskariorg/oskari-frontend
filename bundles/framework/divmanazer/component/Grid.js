@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (!data.size && me.additionalDataHandler) {
                 link = me.templatePopupLink.clone();
                 link.append(me.additionalDataHandler.title);
-                link.bind('click', function () {
+                link.on('click', function () {
                     // show userguide popup with data
                     me.additionalDataHandler.handler(link, content);
                     return false;
@@ -607,7 +607,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         }
                     }
                     if (me._fullFieldNames[i].type === 'default') {
-                        link.bind('click', headerClosureMagic(me._fullFieldNames[i].key));
+                        link.on('click', headerClosureMagic(me._fullFieldNames[i].key));
                         me.__attachHeaderTools(header, tools, me._fullFieldNames[i].key);
                     } else if (me._fullFieldNames[i].type === 'object') {
                         if (dataArray.length > 2) {
@@ -618,7 +618,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             header.addClass('base');
                         }
                         // Expand or close subtable
-                        link.bind('click', headerLinkClosureMagic);
+                        link.on('click', headerLinkClosureMagic);
                     }
 
                     if (me._fullFieldNames[i].visibility === 'hidden') {
@@ -702,11 +702,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 row.attr('data-id', data[me.model.getIdField()]);
                 columnIndex = 0;
                 fieldNames.forEach(function(key) {
-                    if ( typeof data[key] === 'number' ) {
-                        value = me._loc('Grid.cellValue', {value: data[key]});
-                    } else {
-                        value = data[key];
-                    }
+                    value = data[key];
+
                     // Handle subtables
                     if (typeof value === 'object') {
                         columnIndex = me._createSubTable(
@@ -720,6 +717,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         renderer = me.valueRenderer[key];
                         if (renderer) {
                             value = renderer(value, data);
+                        } else if (typeof value === 'number') {
+                            value = me._loc('Grid.cellValue', {value: value});
                         }
                         cell.append(value);
                         row.append(cell);
@@ -734,9 +733,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             };
             rows.on('click', rowClicked);
             // enable links to work normally (unbind row click on hover and rebind when mouse exits)
-            rows.find('a').hover(function () {
+            rows.find('a').on('mouseenter', function () {
                 jQuery(this).parents('tr').off('click');
-            }, function () {
+            });
+            rows.find('a').on('mouseleave', function () {
                 jQuery(this).parents('tr').on('click', rowClicked);
             });
 
@@ -773,14 +773,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector.append(columnSelector);
 
             // Open or close the checkbox dropdown list
-            me.visibleColumnSelector.click(function () {
+            me.visibleColumnSelector.on('click', function () {
                 if (columnSelector.css('visibility') !== 'hidden') {
                     columnSelector.css('visibility', 'hidden');
                 } else {
                     columnSelector.css('visibility', 'visible');
                 }
             });
-            columnSelectorClose.click(function (e) {
+            columnSelectorClose.on('click', function (e) {
                 e.stopPropagation();
                 columnSelector.css('visibility', 'hidden');
             });
@@ -816,7 +816,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     newColumn = me.templateColumnSelectorListItem.clone();
                     newColumn.addClass('column-selector-list-item');
                     checkboxInput = newColumn.find('input');
-                    checkboxInput.attr('checked', (me.visibleColumns.indexOf(field) !== -1));
+                    checkboxInput.prop('checked', (me.visibleColumns.indexOf(field) !== -1));
 
                     checkboxInput.addClass('column-selector-list-item');
                     checkboxInput.attr('data-id', field);
@@ -832,13 +832,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     });
 
                     // Update visible fields after checkbox change
-                    checkboxInput.change(checkbocInputChange);
+                    checkboxInput.on('change', checkbocInputChange);
                     columnSelectorList.append(newColumn);
                 }
             });
             columnSelectorList.attr('class', 'column-selector-list');
             columnSelector.append(columnSelectorList, columnSelectorClose);
-            columnSelectorClose.click(function (e) {
+            columnSelectorClose.on('click', function (e) {
                 e.stopPropagation();
                 columnSelector.css('visibility', 'hidden');
             });
@@ -857,7 +857,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             featureTable.css('cursor', 'e-resize');
 
             // Start resizing
-            featureTable.mousedown(function (e) {
+            featureTable.on('mousedown', function (e) {
                 start = jQuery(this);
                 pressed = true;
                 startX = e.pageX;
@@ -870,14 +870,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
 
             // Resize when mouse moves
-            jQuery(document).mousemove(function (e) {
+            jQuery(document).on('.mousemove', function (e) {
                 if (pressed) {
                     jQuery(start).width(startWidth + (e.pageX - startX));
                 }
             });
 
             // Stop resizing
-            jQuery(document).mouseup(function () {
+            jQuery(document).on('mouseup', function () {
                 if (pressed) {
                     jQuery(start).removeClass('resizing');
                     pressed = false;

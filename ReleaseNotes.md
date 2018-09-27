@@ -1,5 +1,72 @@
 # Release Notes
 
+## 1.48.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/12?closed=1
+
+- Timeseries support for statistical maps.
+- Lots of improvements for statistical maps in general.
+- Cross-site request forgery protection added for the server and frontend now sends the token in XHR calls.
+- Action routes changed from using HTTP POST instead of GET for write operations to prevent CSRF issues.
+- Some (internal) changes to the class system to make it more compliant with Webpack based build and ES6+ modules.
+- A new request 'VectorLayerRequest' has been added that enables vector features to have hover functionality in conjunction with 'AddFeaturesToMapRequest'.
+- Some of the features in 'AddFeaturesToMapRequest' are now part of 'VectorLayerRequest' and have been deprecated/will be removed in a future version. See api/CHANGELOG.md for details.
+- jQuery version compatibility changes. Frontend code now works with 3.3.1 jQuery and server has been updated to use it.
+- jQuery 1.10.2 works as well, but from now on it's assumed that the newer version is used.
+- jQuery UI has been updated from 1.9.2 to 1.12.1
+- Publisher tools handling and resuming normal operations after publisher has been improved.
+- Improved placement for UI-elements/plugins that are shown on top of the map.
+- API doc improvements
+- 3D map engine improvements (under paikkatietoikkuna as it's still app specific)
+- Popup now tries harder to stay on screen on small displays.
+- Fixed an issue with map layer admin and adding/editing grouplayers.
+- A new function Oskari.getNumberFormatter([optional fraction digits count like 2]) has been added to the core for formatting numbers with given decimal accuracy.
+- Improved projection/axis order handling for userlayers and my places.
+- Improvements to drawtools.
+- Measurements for myplaces listing and measurement/draw tools are now calculated with the same method in mapmodule instead of myplaces having another function for it.
+- Mapmodules measurement function now works properly for MultiPolygons and degree based projections.
+- Fixed an issue where map drag/pan was broken with the Chrome 69 after zooming with double click
+
+New build script has been introduced for 1.48.0. The old one still works, but will be dropped in the next version:
+
+### Webpack build
+
+It is now possible to build the front-end application code with Webpack. In the next release (1.49.0) this will be the only supported build method.
+
+#### Preparations
+
+Make sure you have at least Node 8.x / NPM 5.x. Run `npm install` in the front-end repo root.
+
+#### Run in development
+
+Webpack dev server is used to serve the JS bundle and assets when running in local development. XHR calls will be proxied to the Java backend assumed to be running on localhost:8080.
+
+So that the server knows to look for the JS bundle and assets from the right place, we need to change the Oskari-server `oskari-ext.properties` and add
+
+```
+# set development to false or comment it out to load using minified javascript
+development=false
+oskari.client.version=dist/devapp
+```
+
+To start Webpack dev server, we point it to the miniferAppSetup.json file for the application we want to start, here Sample app as example:
+`npm start -- --env.appdef=applications/sample/servlet/minifierAppSetup.json`
+
+When you see "Compiled successfully." in the terminal, you can open the app in the browser at localhost:8081.
+
+The dev server has automatic reloading enabled when you save changes to JS code and hot reloading for S/CSS without need for full browser reload.
+
+#### Build for production
+
+To build minifed JS and assets, run:
+`npm run build -- --env.appdef=1.48.0:applications/sample/servlet/minifierAppSetup.json`
+
+The number before the colon sets the directory name, here producing files under dist/1.48.0/servlet/
+
+Note: The 1.48.0 release of Oskari server still has a reference to bundles/bundle.js in the JSP. This file is no longer needed because it's part of the webpack bundle. Replace this file with an empty text file on the production server if you intend to use the webpack produced bundle.
+
+
 ## 1.47.1
 
 For a full list of changes see:

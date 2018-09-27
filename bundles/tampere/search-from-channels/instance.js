@@ -1,3 +1,8 @@
+import olSourceVector from 'ol/source/Vector';
+import olLayerVector from 'ol/layer/Vector';
+import * as olExtent from 'ol/extent';
+import olFormatWKT from 'ol/format/WKT';
+
 /**
  * @Oskari.tampere.bundle.searchfromchannels.SearchFromChannelsBundleInstance
  *
@@ -437,7 +442,7 @@ Oskari.clazz.define(
             me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,true);
             advancedContainer.hide();
 
-            moreLessLink.click(function () {
+            moreLessLink.on('click', function () {
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
                     // open advanced/toggle link text
                     moreLessLink.html(me.getLocalization('showLess'));
@@ -555,7 +560,7 @@ Oskari.clazz.define(
 
             searchResultWindow.find('div.header h3').text(me.getLocalization('searchResults_header'));
 
-            searchResultWindow.find('div.header div.icon-close').bind(
+            searchResultWindow.find('div.header div.icon-close').on(
                 'click',
                 function () {
                     searchResultWindow.remove();
@@ -671,7 +676,7 @@ Oskari.clazz.define(
                         header = me.templates.templateResultTableHeader.clone();
                         link = header.find('a');
                         link.append(me.resultHeaders[i].title);
-                        link.bind('click', headerClosureMagic(me.resultHeaders[i], results));
+                        link.on('click', headerClosureMagic(me.resultHeaders[i], results));
                         tableHeaderRow.append(header);
                     }
 
@@ -699,7 +704,7 @@ Oskari.clazz.define(
             );
             btn.setTitle(me.getLocalization("show-all-on-map"));
             btn.addClass('show-on-map');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     jQuery(this).addClass('active');
                     me._zoomMapToResults(result, true, resultList.find('table.search_result'));
@@ -713,7 +718,7 @@ Oskari.clazz.define(
             );
             btn.setTitle(me.getLocalization("show-selected-on-map"));
             btn.addClass('show-on-map');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     jQuery(this).addClass('active');
                     me._zoomMapToResults(result, false, resultList.find('table.search_result'));
@@ -725,7 +730,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Button'
             );
             btn.setTitle(me.getLocalization("back-to-search"));
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                    me.toggleParentFlyout(me.optionPanel, searchResultWindow, mapDiv);
                 }
@@ -841,11 +846,11 @@ Oskari.clazz.define(
             me._clearMapFromResults();
             me._closeMapPopup();
 
-            var source = new ol.source.Vector({useSpatialIndex:true});
+            var source = new olSourceVector({useSpatialIndex:true});
 
             //Fake layer for zoomin event
-            var olLayer = new ol.layer.Vector('templayer'),
-                format = new ol.format.WKT({}),
+            var olLayer = new olLayerVector('templayer'),
+                format = new olFormatWKT({}),
                 feature,
                 geometry,
                 mapMoveRequest,
@@ -858,7 +863,7 @@ Oskari.clazz.define(
                     me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                     feature = format.readFeature(value.GEOMETRY);
                     source.addFeatures([feature]);
-                    olLayer.setSource(source);                   
+                    olLayer.setSource(source);
                     isSelected = true;
                 }else{
                     var row = tableBody.find("tr[name="+value.id+"]");
@@ -867,7 +872,7 @@ Oskari.clazz.define(
                         me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                         feature = format.readFeature(value.GEOMETRY);
                         source.addFeatures([feature]);
-                        olLayer.setSource(source);   
+                        olLayer.setSource(source);
                         isSelected = true;
                     }
                 }
@@ -875,12 +880,12 @@ Oskari.clazz.define(
             });
 
             if(isSelected){
-                      
-            bounds = source.getExtent();
-            center = ol.extent.getCenter(bounds);
 
-            var topLeft =  ol.extent.getTopLeft(bounds);
-            var bottomRight =  ol.extent.getBottomRight(bounds); 
+            bounds = source.getExtent();
+            center = olExtent.getCenter(bounds);
+
+            var topLeft =  olExtent.getTopLeft(bounds);
+            var bottomRight =  olExtent.getBottomRight(bounds);
 
             var zoom = {
                 top: topLeft[1],
@@ -889,7 +894,7 @@ Oskari.clazz.define(
                 bottom: bottomRight[1]
             }
 
-            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center[0], center[1], zoom);            
+            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center[0], center[1], zoom);
             me.sandbox.request(me, mapmoveRequest);
 
             }else{
@@ -936,7 +941,7 @@ Oskari.clazz.define(
                 titleCell = jQuery(cells[1]);
                 title = titleCell.find('a');
                 title.append(row.name);
-                title.bind('click', closureMagic(row));
+                title.on('click', closureMagic(row));
                 jQuery(cells[2]).append(row.village);
                 jQuery(cells[3]).append(row.type);
                 resultsTableBody.append(resultContainer);
@@ -990,7 +995,7 @@ Oskari.clazz.define(
             var options = {
                 hidePrevious: true
             };
-            
+
             var rN = 'InfoBox.ShowInfoBoxRequest',
                 rB = sandbox.getRequestBuilder(rN),
                 request = rB(
@@ -1099,7 +1104,7 @@ Oskari.clazz.define(
                 newCheckboxDef = newCheckbox.find(':checkbox');
                 newCheckboxDef.attr('name', "channelChkBox");
                 newCheckboxDef.attr('value', dataField.id);
-                newCheckboxDef.attr('checked', !!dataField.isDefault);
+                newCheckboxDef.prop('checked', !!dataField.isDefault);
                 newCheckbox.find('label.searchFromChannelsTypeText').append(text);
                 newRow.find('.checkboxes').append(newCheckbox);
 

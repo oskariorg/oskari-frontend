@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             // react to window resize with timer so app stays responsive
-            jQuery(window).resize(function () {
+            jQuery(window).on('resize', function () {
                 clearTimeout(me.resizeTimer);
                 me.resizeTimer = setTimeout(
                     function () {
@@ -167,10 +167,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // startup plugins
             if (me.conf.plugins) {
-                var plugins = this.conf.plugins,
-                    i;
+                let plugins = this.conf.plugins;
 
-                for (i = 0; i < plugins.length; i += 1) {
+                let vectorTilePlugin = plugins.find(cur => cur.id === 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin');
+                if (!vectorTilePlugin) {
+                    plugins.push({
+                        id: 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
+                        config: {},
+                        state: {}
+                    });
+                }
+
+                for (let i = 0; i < plugins.length; i += 1) {
                     try {
                         plugins[i].instance = Oskari.clazz.create(
                             plugins[i].id,
@@ -302,7 +310,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
-            epsgConfs = _.keys(defs);
+            window.epsgConfs = _.keys(defs);
             _.forEach(epsgConfs, function (conf) {
                 if (!_.has(defaultDefs, conf)) {
                     defaultDefs[conf] = defs[conf];

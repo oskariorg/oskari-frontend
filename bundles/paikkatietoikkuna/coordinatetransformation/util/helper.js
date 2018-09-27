@@ -9,12 +9,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
     this.epsgValues = this.getGeodeticCoordinateOptions();
     this.elevationSystems = this.getElevationOptions();
     this.mapEpsgValues = this.getEpsgValues(this.mapSrs);
+    this._templates = {
+        content: jQuery('<div class="coordinatetransformation-helper-popup">' +
+                            '<div class="error-message"></div>' +
+                            '<ul class="error-list"></ul>' +
+                        '</div>'),
+        listItem: jQuery('<li></li>')
+    }
 }, {
     getName: function() {
         return 'Oskari.coordinatetransformation.helper';
     },
     init: function () {},
-    addMarkerForCoords: function (lonlat, label, color) {
+    addMarkerForCoords: function (id, lonlat, label, color) {
         var color = color || "ff0000";
         if ( this.addMarkerReq ) {
                 var data = {
@@ -26,42 +33,60 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 if (label) {
                     data.msg = label;
                 }
-            var request = this.addMarkerReq(data);
+            var request = this.addMarkerReq(data, id);
             this.sb.request('MainMapModule', request);
         }
     },
-    showMarkersOnMap: function (coords, addExisting, srs){
-        var me = this,
-            color,
-            epsgValues,
-            lonlat,
-            label,
-            transform;
 
-        if (addExisting === true){
-            color = "#ffe5e5";
-        }
+    showMarkersOnMap: function (mapCoords, inputCoords, srs){
+        var coords = mapCoords;
+        var coordsForLabel = inputCoords;
+        var epsgValuesForLabel;
+        var label;
+        var addLabelFromInput = false;
+        var mapEpsgValues = this.getMapEpsgValues();
 
-        if (srs !== this.mapSrs){
-            transform = true;
-            epsgValues = this.getEpsgValues(srs);
-        } else {
-            transform = false;
-            epsgValues = this.mapEpsgValues;
+        if (srs) {
+            epsgValuesForLabel = this.getEpsgValues(srs);
         }
-        coords.some( function ( coord ) {
-            lonlat = me.getLonLatObj(coord, epsgValues.lonFirst);
-            label = me.getLabelForMarker(lonlat, epsgValues);
-            if (transform){
-                try{
-                    lonlat = me.mapmodule.transformCoordinates(lonlat, srs, me.mapSrs);
-                } catch (error){
-                    me.showPopup(me.loc('mapMarkers.show.errorTitle'), me.loc('mapMarkers.show.transformError'));
-                    return true;
-                }
+        if (coordsForLabel && epsgValuesForLabel && coords.length === coordsForLabel.length){
+            addLabelFromInput = true;
+        }
+        for (var i = 0; i < coords.length; i++){
+            lonlat = this.getLonLatObj(coords[i], mapEpsgValues.lonFirst);
+            if (addLabelFromInput){
+                labelLonLat = this.getLonLatObj(coordsForLabel[i], epsgValuesForLabel.lonFirst);
+                label = this.getLabelForMarker(labelLonLat, epsgValuesForLabel);
+            } else {
+                label = this.getLabelForMarker(lonlat, mapEpsgValues);
             }
-            me.addMarkerForCoords(lonlat, label, color);
-        });
+            this.addMarkerForCoords(null, lonlat, label); //null id -> generate
+        }
+        this.moveMapToMarkers(coords);
+    },
+    moveMapToMarkers: function(points){
+        var closestZoom = 6;
+        if (!Array.isArray(points) || points.length === 0 ){
+            return
+        } else if (points.length === 1 ){
+            var x;
+            var y;
+            var point = points[0];
+            if (this.mapEpsgValues.lonFirst){
+                x = point[0];
+                y = point[1];
+            }else{
+                x = point[1];
+                y = point[0];
+            }
+            this.sb.postRequestByName('MapMoveRequest', [x, y, closestZoom]);
+        } else {
+            var extent = this.mapmodule.getExtentForPointsArray(points);
+            this.mapmodule.zoomToExtent(extent);
+            if (this.mapmodule.getMapZoom() > closestZoom){
+                this.mapmodule.setZoomLevel(closestZoom);
+            }
+        }
     },
     getLonLatObj: function (coord, lonFirst){
         var lonlat = {};
@@ -100,42 +125,74 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
     },
     validateCrsSelections: function (crs){
-        var error = "";
         //source crs and target crs should be always selected
         if (!crs.sourceCrs || !crs.targetCrs){
-            error += this.loc('flyout.transform.validateErrors.crs') + " ";
-        }
-        if (error.length !== 0){
-            this.showPopup(this.loc('flyout.transform.validateErrors.title'), error);
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.crs'));
             return false;
         }
         return true;
     },
-    validateFileSelections: function (settings, requireFileName){
-        var error = "";
-        if (settings.decimalSeparator === "," && settings.coordinateSeparator === "comma"){
-            error += this.loc('flyout.transform.validateErrors.doubleComma');
+    validateFileSelections: function (settings){
+        if (Object.keys(settings).length === 0) {
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'),this.loc('flyout.transform.validateErrors.noFileSettings'));
+            return false;
         }
-        if (requireFileName === true && !settings.fileName && settings.fileName === ""){
-            error += this.loc('flyout.transform.validateErrors.noFileName');
+
+        var selects = settings.selects;
+        //var type = settings.type;
+        //var file = settings.file;
+        var errors = [];
+        if (selects.decimalSeparator === "," && selects.coordinateSeparator === "comma"){
+            errors.push(this.loc('flyout.transform.validateErrors.doubleComma'));
         }
-        if (error.length !== 0){
-            this.showPopup(this.loc('flyout.transform.validateErrors.title'), error);
+        if (selects.coordinateSeparator === "space" && (selects.unit === "DD MM SS" || selects.unit === "DD MM")){
+            errors.push(this.loc('flyout.transform.validateErrors.doubleSpace'));
+        }
+        if (selects.coordinateSeparator === ""){
+            errors.push(this.loc('flyout.transform.validateErrors.noCoordinateSeparator'));
+        }
+        if (selects.decimalSeparator === ""){
+            errors.push(this.loc('flyout.transform.validateErrors.noDecimalSeparator'));
+        }
+        if (settings.type === "import"){
+            if (!settings.file ){ // && settings.file.constructor !== File
+                errors.push(this.loc('flyout.transform.validateErrors.noInputFile'));
+            }
+            if (!(parseInt(selects.headerLineCount)>=0)){
+                errors.push(this.loc('flyout.transform.validateErrors.headerCount'));
+            }
+        } else if (settings.type === "export") {
+            if (!selects.fileName && selects.fileName === ""){
+                errors.push(this.loc('flyout.transform.validateErrors.noFileName'));
+            }
+            if (!(parseInt(selects.decimalCount)>=0)){
+                errors.push(this.loc('flyout.transform.validateErrors.decimalCount'));
+            }
+        }
+
+        if (errors.length !== 0){
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'),this.loc('flyout.transform.validateErrors.message'), errors);
             return false;
         }
         return true;
+    },
+    exportToFile: function ( data, filename, type ) {
+        var me = this;
+        var blob = new Blob([data], {type: type});
+        if( window.navigator.msSaveOrOpenBlob ) {
+            window.navigator.msSaveBlob(blob, filename);
+        }
+        else {
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = filename;
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
     },
     checkDimensions: function (crs, callback){
-        var ok = true,
-            message;
-        if (crs.sourceDimension === 2 && crs.targetDimension === 3){
-            message = this.loc('flyout.transform.warnings.2DTo3D');
-        } else if (crs.sourceDimension === 3 && crs.targetDimension === 2){
-            message = this.loc('flyout.transform.warnings.3DTo2D');
-        } else {
-            callback();
-            return;
-        }
+        var message;
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             cancelBtn = dialog.createCloseButton(this.loc('actions.cancel')),
             okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -146,18 +203,72 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             callback();
             dialog.close();
         });
-        dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
+
+        if (crs.sourceDimension === 2 && crs.targetCrs === "EPSG:4936"){
+            message = this.loc('flyout.transform.warnings.xyz');
+            cancelBtn.setTitle(this.loc('actions.ok'));
+            dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn]);
+        } else if (crs.sourceDimension === 2 && crs.targetDimension === 3){
+            message = this.loc('flyout.transform.warnings.2DTo3D');
+            dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
+        } else if (crs.sourceDimension === 3 && crs.targetDimension === 2){
+            message = this.loc('flyout.transform.warnings.3DTo2D');
+            dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
+        } else {
+            callback();
+        }
     },
-    showPopup: function (title, message){
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+    showPopup: function (title, message, errorList){
+        var me = this,
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             btn = dialog.createCloseButton(this.loc('actions.close'));
-        dialog.show(title, message, [btn]);
+        if (errorList && errorList.length !== 0){
+            var content = this._templates.content.clone();
+            content.find('.error-message').html(message);
+            var list = content.find('.error-list');
+            errorList.forEach(function (error){
+                var listItem = me._templates.listItem.clone();
+                listItem.text(error);
+                list.append(listItem);
+            });
+            dialog.show(title, content, [btn]);
+        } else {
+            dialog.show(title, message, [btn]);
+        }
+    },
+    /**
+     * Tries to find epsg values by number.
+     *
+     * @method findEpsg
+     * @param {String} epsgNumber
+     * @return {Object} epsgValues, return null if not found
+     */
+    findEpsg: function(epsgNumber) {
+        var epsgValues = null;
+        var srs;
+        var compound;
+        if (epsgNumber.length === 4 || epsgNumber.length === 5 ){
+            srs = "EPSG:" + epsgNumber;
+            //check first if is's compound system
+            compound = this.getCompoundSystem(srs);
+            if (compound !== null){
+                epsgValues = this.getEpsgValues(compound.geodetic);
+                epsgValues.heigthSrs = compound.height;
+                epsgValues.srs = compound.geodetic;
+            } else {
+                epsgValues = this.getEpsgValues(srs);
+                if(epsgValues){
+                    epsgValues.srs = srs;
+                }
+            }
+        }
+        return epsgValues;
     },
     getEpsgValues: function (srs) {
         if (srs && this.epsgValues.hasOwnProperty(srs)){
             return this.epsgValues[srs];
         }
-        return {};
+        return null;
     },
     getMapEpsgValues: function () {
         var epsg = this.mapEpsgValues;
@@ -447,13 +558,48 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 "lonFirst": false
             },
             "EPSG:3067":{
-                "title": "ETRS-TM35FIN",
+                "title": "ETRS-TM35FIN", //(E,N)
                 "datum": "DATUM_EUREF-FIN",
                 "proj": "PROJECTION_TM",
                 "coord": "COORD_PROJ_2D",
                 "bounds": [-3669433.90, 4601644.86, 642319.78, 9362767.00],
                 "lonFirst": true
             },
+            //TODO: add when transformation service supports these
+            // and add possibility to search with 5 digits
+            /*"EPSG:5048":{
+                "title": "ETRS-TM35FIN (N,E)",
+                "datum": "DATUM_EUREF-FIN",
+                "proj": "PROJECTION_TM",
+                "coord": "COORD_PROJ_2D",
+                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
+                "lonFirst": false
+            },
+            "EPSG:25834":{
+                "title": "ETRS-TM34 (E,N)",
+                "datum": "DATUM_EUREF-FIN",
+                "proj": "PROJECTION_TM",
+                "coord": "COORD_PROJ_2D",
+                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
+                "lonFirst": true
+            },
+            "EPSG:25835":{
+                "title": "ETRS-TM35(E,N)",
+                "datum": "DATUM_EUREF-FIN",
+                "proj": "PROJECTION_TM",
+                "coord": "COORD_PROJ_2D",
+                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
+                "lonFirst": true
+            },
+            "EPSG:5048":{
+                "title": "ETRS-TM35FIN (E,N)",
+                "datum": "DATUM_EUREF-FIN",
+                "proj": "PROJECTION_TM",
+                "coord": "COORD_PROJ_2D",
+                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
+                "lonFirst": true
+            },
+            */
             "EPSG:4258":{
                 "title": "EUREF-FIN-GRS80",
                 "datum": "DATUM_EUREF-FIN",
@@ -555,6 +701,36 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"
             }
         }
+    },
+    getCompoundSystem: function (epsg){
+        switch(epsg) {
+            case "EPSG:3091": //YKJ + N60
+                return {
+                    geodetic: "EPSG:2393",
+                    height: "EPSG:5717"
+                };
+            case "EPSG:3092": //ETRS-TM35FIN (N,E) + N60
+                return {
+                    geodetic: "EPSG:3047", //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
+                    height: "EPSG:5717"
+                };
+            case "EPSG:3093": //ETRS-TM35FIN (N,E) + N2000
+                return {
+                    geodetic: "EPSG:3047", //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
+                    height: "EPSG:3900"
+                };
+            case "EPSG:7409": //ETRS89 + EVRF2000 (EUREF-FIN-GRS80 + N60)
+                return {
+                    geodetic: "EPSG:4258",
+                    height: "EPSG:5717"
+                };
+            case "EPSG:7423": //ETRS89 + EVRF2007 (EUREF-FIN-GRS80 + N2000)
+                return {
+                    geodetic: "EPSG:4258",
+                    height: "EPSG:3900"
+                };
+        }
+        return null;
     },
     createCls: function(json){
         Object.keys( json ).forEach( function ( key ) {

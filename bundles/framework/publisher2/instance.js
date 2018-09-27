@@ -300,6 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     me.getLocalization('BasicView'),
                     data
                 );
+
                 // call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
                 me.publisher.render(map);
@@ -309,10 +310,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     // show flyout?
                     // TODO: move to default flyout/extension as "mode functionality"?
                     jQuery(me.getFlyout().container).parent().parent().css('display', '');
-                    // make sure edit mode is disabled
-                    if (me.publisher.toolLayoutEditMode) {
-                        me.publisher._editToolLayoutOff();
-                    }
                     me.publisher.setEnabled(false);
                     me.publisher.destroy();
                 }
@@ -444,7 +441,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
-                openLink.bind('click',
+                openLink.on('click',
                     function () {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
                         openLink.hide();
@@ -452,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     });
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
-                closeLink.bind('click',
+                closeLink.on('click',
                     function () {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']);
                         openLink.show();

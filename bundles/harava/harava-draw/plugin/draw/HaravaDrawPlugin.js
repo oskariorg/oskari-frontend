@@ -448,8 +448,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
 
                 jQuery('.olPopupCloseBox').hide();
 
-                jQuery('#kana').unbind('click');
-                jQuery('#kana').bind('click', function () {
+                jQuery('#kana').off('click');
+                jQuery('#kana').on('click', function () {
                     return false;
                 });
 
@@ -469,8 +469,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
                     jQuery('#harava-draw-popup-additional-data').val(feature.attributes.additionalData);
                 }
 
-                jQuery('#harava-draw-popup-save').unbind('click');
-                jQuery('#harava-draw-popup-save').bind('click', function () {
+                jQuery('#harava-draw-popup-save').off('click');
+                jQuery('#harava-draw-popup-save').on('click', function () {
                     if (me._conf.popupCheckFunc !== null && me._conf.popupCheckFunc !== undefined) {
                         var func = me._conf.popupCheckFunc,
                             ret = eval(func)();
@@ -491,8 +491,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
                 });
 
 
-                jQuery('#harava-draw-popup-cancel').unbind('click');
-                jQuery('#harava-draw-popup-cancel').bind('click', function () {
+                jQuery('#harava-draw-popup-cancel').off('click');
+                jQuery('#harava-draw-popup-cancel').on('click', function () {
                     var currentFeature = null;
                     jQuery('.harava-add-geometry-tool').removeClass('disabled');
                     if (me._drawLayer && me._drawLayer.features.length > 0) {

@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me.setValues(event.getCurrent());
     });
     me.service.on('AfterChangeMapLayerOpacityEvent', function (event) {
-        me.setLayerOpacityValue(event.getMapLayer());
+        me.setLayerOpacityValue(event.getMapLayer().getId(), event.getMapLayer().getOpacity());
     });
     this.__templates = {
         classification: jQuery('<div class="classifications">' +
@@ -102,6 +102,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                         '</select>' +
                     '</div>' +
                 '</div>' +
+
+                // decimal places
+                '<div class="decimal-place visible-map-style-choropleth visible-map-style-points">' +
+                    '<div class="label">' + this.locale('classify.map.fractionDigits') + '</div>' +
+                    '<div class="decimal-place value">' +
+                        '<select class="decimal-place">' +
+                        '<option value="0">0</option>' +
+                        '<option value="1" selected="selected">1</option>' +
+                        '<option value="2">2</option>' +
+                        '<option value="3">3</option>' +
+                        '<option value="4">4</option>' +
+                        '<option value="5">5</option>' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
             '</div>' +
             '</div>')
 
@@ -133,17 +148,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._element.find('.visible-map-style-choropleth').hide();
         me._element.find('.visible-map-style-' + style).show();
     },
-    setLayerOpacityValue: function (layer) {
+    setLayerOpacityValue: function (layerId, opacity) {
         var me = this;
         if (me.hasSelectChange) {
             me.hasSelectChange = false;
             return;
         }
-        if (layer.getId() === me.LAYER_ID) {
+        if (layerId === me.LAYER_ID) {
             var transparencyEl = me._element.find('select.transparency-value');
             transparencyEl.find('option#hiddenvalue').remove();
-            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + layer.getOpacity() + ' %' + '</option>');
-            hiddenOption.attr('value', layer.getOpacity());
+            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + opacity + ' %' + '</option>');
+            hiddenOption.attr('value', opacity);
             hiddenOption.hide();
             hiddenOption.attr('selected', 'selected');
             transparencyEl.append(hiddenOption);
@@ -161,6 +176,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             // not rendered yet
             return;
         }
+        me._rangeSlider.element.slider();
+
         var service = me.service;
         var state = service.getStateService();
         var ind = state.getActiveIndicator();
@@ -196,9 +213,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
         me._element.find('select.amount-class').val(classification.count);
 
-        me._element.find('select.classify-mode').val(classification.mode);
+        var mode = me._element.find('select.classify-mode');
+        mode.val(classification.mode);
         me._element.find('select.color-set').val(classification.type);
-        me._element.find('#legend-flip-colors').attr('checked', classification.reverseColors);
+        me._element.find('#legend-flip-colors').prop('checked', !!classification.reverseColors);
         // update color selection values
         var colors = service.getColorService().getDefaultSimpleColors();
         if (mapStyle === 'choropleth') {
@@ -208,6 +226,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._colorSelect.setColorValues(colors);
         me._colorSelect.setValue(classification.name, true, true);
         me._colorSelect.refresh();
+
+        var decimalSelect = me._element.find('select.decimal-place');
+        decimalSelect.val(typeof classification.fractionDigits === 'number' ? classification.fractionDigits : 1);
 
         // disable invalid choices
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
@@ -221,22 +242,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 options.each(function (index, opt) {
                     opt = jQuery(opt);
                     if (opt.val() > validOptions.maxCount) {
-                        opt.attr('disabled', true);
+                        opt.prop('disabled', true);
                     }
                 });
             }
-        });
-        var min = classification.min || me._rangeSlider.defaultValues[0];
-        var max = classification.max || me._rangeSlider.defaultValues[1];
-        var updateClassification = false;
 
-        if (max - min < classification.count * (me._rangeSlider.step || 1)) {
-            min = me._rangeSlider.defaultValues[0];
-            max = me._rangeSlider.defaultValues[1];
-            updateClassification = true;
+            // Discontinuous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
+            // Disabling it for data series.
+            var modeOpts = mode.find('option');
+            modeOpts.each(function (index, opt) {
+                opt = jQuery(opt);
+                if (opt.val() === 'discontinuous') {
+                    opt.prop('disabled', ind.series !== undefined);
+                }
+            });
+        });
+        if (mapStyle !== 'choropleth') {
+            var min = classification.min || me._rangeSlider.defaultValues[0];
+            var max = classification.max || me._rangeSlider.defaultValues[1];
+            var updateClassification = false;
+
+            if (max - min < classification.count * (me._rangeSlider.step || 1)) {
+                min = me._rangeSlider.defaultValues[0];
+                max = me._rangeSlider.defaultValues[1];
+                updateClassification = true;
+            }
+            me._rangeSlider.element.slider('values', [min, max]);
+            me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         }
-        me._rangeSlider.element.slider('values', [min, max]);
-        me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
 
         if (updateClassification) {
@@ -244,10 +277,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
 
         if (classification.transparency) {
+            this.setLayerOpacityValue(me.LAYER_ID, classification.transparency)
             me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
         }
     },
-
     /**
      * @method  @public getSelectedValues gets selected values
      * @return {Object} selected values object
@@ -255,6 +288,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
     getSelectedValues: function () {
         var me = this;
         var range = me._rangeSlider.element.slider('values');
+        var transparencyEl = me._element.find('select.transparency-value');
+        var transparencyVal = transparencyEl.val() !== null ? transparencyEl.val() : transparencyEl.find('option#hiddenvalue').val();
         var values = {
             method: me._element.find('select.method').val(),
             count: parseFloat(me._element.find('select.amount-class').val()),
@@ -266,14 +301,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             // only used for points vector
             min: range[0],
             max: range[1],
-            transparency: me._element.find('select.transparency-value').val(),
-            showValues: (me._showNumericValueCheckButton.getValue() === 'on')
+            transparency: transparencyVal,
+            showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
+            fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
 
         if (values.mapStyle !== 'points') {
             delete values.min;
             delete values.max;
-            delete values.transparency;
         } else {
             delete values.type;
         }
@@ -352,6 +387,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         me._colorSelect.setHandler(updateClassification);
         me._element.find('select').on('change', updateClassification);
+        me._element.find('select.decimal-place').on('change', function () {
+            var stateService = me.service.getStateService();
+            var indicator = stateService.getActiveIndicator();
+            stateService.setActiveIndicator(indicator.hash);
+        });
 
         me._element.find('#legend-flip-colors').on('change', function () {
             updateClassification();

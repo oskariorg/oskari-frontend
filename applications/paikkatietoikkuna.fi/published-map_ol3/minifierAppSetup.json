@@ -25,9 +25,6 @@
                 "maparcgis": {
                     "bundlePath": "../../../packages/mapping/ol3/"
                 },
-                "mapstats": {
-                    "bundlePath": "../../../packages/mapping/ol3/deprecated/"
-                },
                 "mapanalysis" : {
                     "bundlePath" : "../../../packages/mapping/ol3/"
                 },

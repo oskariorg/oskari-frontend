@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         var select = this._selectTemplate.clone();
         this.element = select;
         if (options.multi) {
-            select.find('select').attr('multiple', true);
+            select.find('select').prop('multiple', true);
         }
         if (data === undefined) {
             return this.makeChosen(select, options);
@@ -58,6 +58,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             if (dataKey.cls) {
                 option.addClass(dataKey.cls);
             }
+            if (dataKey.tooltip){
+                option.prop('title', dataKey.tooltip);
+            }
             option.val(dataKey.id).text(dataKey.title || dataKey.name);
             select.find('select').append(option);
         }
@@ -75,6 +78,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             disable_search_threshold: options.disable_search_threshold ? options.disable_search_threshold : 10,
             allow_single_deselect: options.allow_single_deselect ? options.allow_single_deselect : false
         });
+        // Fixes an issue where placeholder is cut off with the input field width set as pixel value even if options.width is %
+        // https://github.com/harvesthq/chosen/issues/1162
+        el.find('li.search-field input').css('width', '100%');
         return el;
     },
     /** @method selectFirstValue
@@ -82,7 +88,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
      */
     selectFirstValue: function () {
         var chosen = this.element.find('select');
-        chosen.find('option:nth-child(2)').attr('selected', 'selected');
+        chosen.find('option:nth-child(2)').prop('selected', 'selected');
         this.update();
     },
     /** @method selectLastValue
@@ -90,15 +96,15 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
      */
     selectLastValue: function () {
         var chosen = this.element.find('select');
-        chosen.find('option:last-child').attr('selected', 'selected');
+        chosen.find('option:last-child').prop('selected', 'selected');
         this.update();
     },
     resetToPlaceholder: function () {
         var chosen = this.element.find('select');
-        if (chosen.attr('multiple')) {
+        if (chosen.prop('multiple')) {
             chosen.val('');
         } else {
-            chosen.find('option:first-child').attr('selected', 'selected');
+            chosen.find('option:first-child').prop('selected', 'selected');
         }
         this.update();
     },
@@ -170,21 +176,21 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         }
         chosen.find('option').each(function (index, opt) {
             if (isDisabledOption(opt.value)) {
-                jQuery(opt).attr('disabled', true);
+                jQuery(opt).prop('disabled', true);
+                jQuery(opt).prop('selected', false);
             }
         });
-        chosen.trigger('chosen:updated');
+        this.update();
     },
     reset: function (supressEvent) {
-        var chosen = this.element.find('select');
-
         var state = this.getOptions();
         for (var i = 0; i < state.disabled.length; i++) {
-            jQuery(state.disabled[i]).attr('disabled', false);
+            jQuery(state.disabled[i]).prop('disabled', false);
         }
         if (!supressEvent) {
             this.resetToPlaceholder();
-            chosen.trigger('chosen:updated');
+        } else {
+            this.element.find('select').trigger('chosen:updated');
         }
     },
     /** @method updateOptions
@@ -211,7 +217,6 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     getId: function () {
         return this.id;
     },
-
     setValue: function (value) {
         if (!this.element.find('select')) {
             Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");

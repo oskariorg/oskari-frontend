@@ -1,7 +1,9 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', function ( ) {
+Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', function (helper) {
     this.inputCoords = []; //[[1324, 12424]]
     this.resultCoords = []; //[[1324, 12424]]
-    this.mapCoords = []; //[{lon:123, lat:134}]
+    this.mapCoords = []; //[{id: "coord_marker_1", lon:123, lat:134}]
+    this.mapCoordId = 0;
+    this.helper = helper;
     Oskari.makeObservable(this);
 }, {
     getName: function() {
@@ -28,21 +30,51 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
     getResultCoords: function() {
         return this.resultCoords;
     },
+    hasResultCoords: function () {
+        return this.resultCoords.length !== 0;
+    },
     setResultCoords: function (coords) {
         this.resultCoords = coords;
         this.trigger('ResultCoordsChanged', coords);
     },
-    //lonlat
     getMapCoords: function () {
         return this.mapCoords;
     },
-    //lonlat
-    setMapCoords: function (coords) {
-        this.mapCoords = coords;
+    setMapCoords: function (mapCoords) {
+        this.mapCoords = mapCoords;
     },
-    //lonlat
-    addMapCoord: function (coord) {
+    //Select from map
+    addMapCoord: function (lonlat) {
+        var id = "coord_marker_" + this.mapCoordId;
+        var coord = {
+            lon: lonlat.lon,
+            lat: lonlat.lat,
+            id: id
+        }
+        this.mapCoordId++;
         this.mapCoords.push(coord);
+        return id;
+    },
+    removeMapCoord: function (id){
+        var checkId = function (coord){
+            return coord.id !== id;
+        }
+        this.mapCoords = this.mapCoords.filter(checkId);
+    },
+    //add input coords as previously selected coordinates
+    populateMapCoordsAndMarkers: function () {
+        var me = this;
+        var lonFirst = this.helper.getMapEpsgValues().lonFirst;
+        var color = "#00ff00"; // add existing coords with different color
+        var mapCoord;
+        var markerId;
+        var label;
+        this.inputCoords.forEach(function(coord){
+            mapCoord = me.helper.getLonLatObj(coord, lonFirst);
+            markerId = me.addMapCoord(mapCoord);
+            label = me.helper.getLabelForMarker(mapCoord);
+            me.helper.addMarkerForCoords (markerId, mapCoord, label, color);
+        });
     },
     /** 
      * @method validateData
@@ -139,14 +171,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         return obj;
     },
     addMapCoordsToInput: function (addBln){
-        var me = this;
-        var coords = me.getMapCoords();
+        var mapCoords = this.getMapCoords();
+        var coords = [];
+        var lonFirst = this.helper.getMapEpsgValues().lonFirst;
         if (addBln === true){
-            for (var i = 0 ; i < coords.length ; i++ ) {
-                me.addInputCoord(me.lonLatCoordToArray(coords[i], true)); //TODO check mapsrs lonFirst
+            for (var i = 0 ; i < mapCoords.length ; i++ ) {
+                coords.push(this.lonLatCoordToArray(mapCoords[i], lonFirst));
             }
+            this.setInputCoords(coords);
         }
-        coords.length = 0;
+        //mapcoords is used only with select on map
+        //reset always
+        mapCoords.length = 0;
     },
     clearCoords: function () {
         this.inputCoords.length = 0;

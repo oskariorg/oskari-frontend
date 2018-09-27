@@ -394,7 +394,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             }
             panel.setTitle(me.loc.size.label);
             tooltipCont.attr('title', me.loc.size.tooltip);
-            contentPanel.append(tooltipCont);
+            panel.getHeader().append(tooltipCont);
 
             for (fkey in this.fields) {
                 if (this.fields.hasOwnProperty(fkey)) {

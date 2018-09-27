@@ -1,3 +1,5 @@
+import olInteractionDragRotate from 'ol/interaction/DragRotate';
+
 Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
     function (config) {
         var me = this;
@@ -33,7 +35,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         },
         handleEvents: function () {
             var me = this;
-            var DragRotate = new ol.interaction.DragRotate();
+            var DragRotate = new olInteractionDragRotate();
             this._map.addInteraction(DragRotate);
             var degrees;
             var eventBuilder = Oskari.eventBuilder('map.rotated');

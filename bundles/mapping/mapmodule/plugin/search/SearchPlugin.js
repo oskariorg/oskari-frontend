@@ -147,7 +147,7 @@ Oskari.clazz.define(
                         'position': 'relative'
                     })
                     .append(overlay);
-                overlay.mousedown(function(e) {
+                overlay.on('mousedown', function(e) {
                     e.preventDefault();
                 });
 
@@ -197,7 +197,7 @@ Oskari.clazz.define(
                 content = el || me.getElement();
 
             // Toggle map keyboard controls so the user can use arrowkeys in the search...
-            me._inputField.focus(function() {
+            me._inputField.on('focus', function() {
                 reqBuilder = sandbox.getRequestBuilder(
                     'DisableMapKeyboardMovementRequest'
                 );
@@ -206,7 +206,7 @@ Oskari.clazz.define(
                 }
                 //me._checkForKeywordClear();
             });
-            me._inputField.blur(function() {
+            me._inputField.on('blur', function() {
                 reqBuilder = sandbox.getRequestBuilder(
                     'EnableMapKeyboardMovementRequest'
                 );
@@ -216,7 +216,7 @@ Oskari.clazz.define(
                 //me._checkForKeywordInsert();
             });
 
-            me._inputField.keypress(function(event) {
+            me._inputField.on('keypress', function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._checkForEnter(event);
                 }
@@ -224,12 +224,12 @@ Oskari.clazz.define(
 
             // FIXME these are the same thing now...
             // to search button
-            me._searchButton.click(function(event) {
+            me._searchButton.on('click', function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._doSearch();
                 }
             });
-            content.find('div.search-right').click(function(event) {
+            content.find('div.search-right').on('click', function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._doSearch();
                 }
@@ -237,14 +237,14 @@ Oskari.clazz.define(
 
 
             // to close button
-            content.find('div.close').click(function(event) {
+            content.find('div.close').on('click', function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
                     me._inputField.val('');
                     // TODO: this should also unbind the TR tag click listeners?
                 }
             });
-            content.find('div.close-results').click(function(event) {
+            content.find('div.close-results').on('click', function(event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
                     me._inputField.val('');
@@ -450,7 +450,7 @@ Oskari.clazz.define(
                         xref.attr('data-location', i);
                         xref.attr('title', name);
                         xref.append(name);
-                        xref.click(clickFunction);
+                        xref.on('click', clickFunction);
 
                         jQuery(cells[1]).attr('title', region).append(region);
                         jQuery(cells[2]).attr('title', type).append(type);

@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             me._loc = Oskari.getLocalization('FeatureData2', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
             link.html(me._loc.title);
             me._bindLinkClick(el);
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 event.stopPropagation();
             });
 
@@ -153,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 return;
             }
 
-            linkElement.bind('click', function () {
+            linkElement.on('click', function () {
                 if(!me._flyoutOpen) {
                     if(me._mapStatusChanged) {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
@@ -256,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             if (!this.inLayerToolsEditMode()) {
                 this._bindLinkClick();
             } else {
-                this.getElement().find('a').unbind('click');
+                this.getElement().find('a').off('click');
             }
         },
 

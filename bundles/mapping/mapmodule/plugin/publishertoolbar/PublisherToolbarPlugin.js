@@ -227,7 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 // close toolbar
                 this.getElement().find('.' + this.toolbarContainer).hide();
                 // disable icon
-                this.getElement().find('div.icon').unbind('click');
+                this.getElement().find('div.icon').off('click');
             } else {
                 // enable icon
                 this._bindIcon();
@@ -478,8 +478,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 el = me.getElement(),
                 icon = el.find('div.icon');
 
-            icon.unbind('click');
-            icon.bind('click', function () {
+            icon.off('click');
+            icon.on('click', function () {
                 if (me.popup && me.popup.isVisible()) {
                     me.popup.getJqueryContent().detach();
                     me.popup.close(true);
@@ -647,7 +647,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 }
             } else if (appendContentDiv) {
                 // if no actions, the user can click on tool content to close it
-                contentDiv.bind('click', function () {
+                contentDiv.on('click', function () {
                     me.resetToolContent();
                 });
             }

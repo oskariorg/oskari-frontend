@@ -3,31 +3,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ControlsTool',
     }, {
         index: 5,
         pluginName: 'ControlsPlugin',
-        setEnabled: function (enabled) {
+        init: function (pdata) {
             var me = this;
-            var tool = me.getTool();
-            var sandbox = me.__sandbox;
-
-            if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
-                return;
+            var data = pdata;
+            if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
+                data.configuration.mapfull.conf.plugins.forEach(function (plugin) {
+                    if (me.getTool().id === plugin.id) {
+                        var hasConfig = typeof plugin.config === 'object';
+                        // enabled if either no config OR has config with false flag
+                        me.setEnabled(!hasConfig || (hasConfig && plugin.config.keyboardControls !== false));
+                    }
+                });
             }
-            me.state.enabled = enabled;
-
-            if (!me.__plugin && enabled) {
-                me.__plugin = Oskari.clazz.create(tool.id, tool.config);
-                me.__mapmodule.registerPlugin(me.__plugin);
-            }
-
-            if (enabled === true && !me.__started) {
-                me.__plugin.startPlugin(me.__sandbox);
-                me.__started = true;
-            }
-
-            var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
-            sandbox.notifyAll(event);
         },
-        getInstance: function () {
-            return Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getPluginInstances(this.pluginName);
+        setEnabled: function (enabled) {
+            this.state.enabled = !!enabled;
+            this.allowPanning(this.state.enabled);
         },
         getTool: function () {
             return {
@@ -46,6 +37,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ControlsTool',
             }
             return config;
         },
+        allowPanning: function (enabled) {
+            if (!enabled) {
+                this.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest', []);
+                this.getSandbox().postRequestByName('DisableMapMouseMovementRequest', []);
+            } else {
+                this.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest', []);
+                this.getSandbox().postRequestByName('EnableMapMouseMovementRequest', []);
+            }
+        },
         getValues: function () {
             return {
                 configuration: {
@@ -56,6 +56,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ControlsTool',
                     }
                 }
             };
+        },
+        stop: function () {
+            this.allowPanning(true);
         }
 }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

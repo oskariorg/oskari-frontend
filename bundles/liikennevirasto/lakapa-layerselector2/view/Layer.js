@@ -40,7 +40,7 @@ function(layer, sandbox, localization) {
     },
     setSelected : function(isSelected) {
         // checking since we dont assume param is boolean
-        this.ui.find('input').attr('checked', (isSelected == true));
+        this.ui.find('input').prop('checked', (isSelected == true));
     },
 
     /**
@@ -135,7 +135,7 @@ function(layer, sandbox, localization) {
 
         if(layer.getMetadataIdentifier()) {
             tools.find('div.layer-info').addClass('icon-info');
-            tools.find('div.layer-info').click(function() {
+            tools.find('div.layer-info').on('click', function() {
                   var rn = 'catalogue.ShowMetadataRequest';
                   var uuid = layer.getMetadataIdentifier();
                   sandbox.postRequestByName(rn, [
@@ -147,7 +147,7 @@ function(layer, sandbox, localization) {
         // setup id
         jQuery(layerDiv).attr('layer_id', layer.getId());
         jQuery(layerDiv).find('.layer-title').append(layer.getName());
-        jQuery(layerDiv).find('input').change(function() {
+        jQuery(layerDiv).find('input').on('change', function() {
             var checkbox = jQuery(this);
             var request = null;
             if(checkbox.is(':checked')) {
@@ -162,7 +162,7 @@ function(layer, sandbox, localization) {
          * backend status
          */
         var elBackendStatus = tools.find('.layer-backendstatus-icon');
-        elBackendStatus.click(function() {
+        elBackendStatus.on('click', function() {
             var mapLayerId = layer.getId();
             sandbox.postRequestByName('ShowMapLayerInfoRequest', [
                       mapLayerId

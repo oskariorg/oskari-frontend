@@ -171,31 +171,12 @@ ol.source.OskariAsyncTileImage.prototype.createOskariAsyncTile = function(z, x, 
  }
 
 /**
- * Workaround for being able to access renderer's private tile range property...
- * Not sure if we need this for anything anymore? We needed this in ol 3.11.2 for the canvas to update
- * border tiles correctly, but it seems the canvas' behaviour has been fixed in 3.14.2. Still, keeping this as a memory of what once was.
- */
- ol.renderer.canvas.TileLayer.prototype.resetRenderedCanvasTileRange = function() {
-  //this.renderedCanvasTileRange_ = new ol.TileRange(NaN, NaN, NaN, NaN);
- }
-
-/**
  * Workaround for being able to set the imageTile's state manually.
  */
 ol.ImageTile.prototype.setState = function(state) {
   this.state = state;
 };
 
-/**
- * Workaround for obtaining a tilerange for a resolution and extent in wfslayerplugin
- * @api
- */
- ol.tilegrid.TileGrid.prototype.getTileRangeForExtentAndZoomWrapper = function(mapExtent, zoom) {
-    var tileRange = this.getTileRangeForExtentAndZ(mapExtent, zoom);
-    //return as array to avoid the closure compiler's dirty renaming deeds without having to expose the tilerange as well...
-    return [tileRange.minX, tileRange.minY, tileRange.maxX, tileRange.maxY];
-
- }
 /**
  * @param  {Array.<number>} boundsObj     tile bounds
  * @param  {string}         imageData     dataurl or actual url for image
