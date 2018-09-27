@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if(geometry != null) {
                 var format = new ol.format.GeoJSON();
                 var geomAsGeoJSON = format.writeGeometry(geometry);
-                if (me.getDrawToolsGeometryType().indexOf("Multi") > -1) {
+                if (me.layerGeometryType.indexOf("Multi") > -1) {
                     me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.instance.getName(), me.getDrawToolsGeometryType(), {
                         allowMultipleDrawing: 'multiGeom'
                         ,geojson: geomAsGeoJSON
@@ -522,7 +522,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             requestData.geometries = {};
             requestData.geometries.data = [];
             if (me.operationMode == "edit" || deleteFeature == true) {
-                me._fillLayerGeometries(requestData.geometries, geometries);
+                me._fillLayerGeometries(requestData.geometries);
             }
             if (geometries != null) {
                 me._cloneGeometries(requestData, geometries);

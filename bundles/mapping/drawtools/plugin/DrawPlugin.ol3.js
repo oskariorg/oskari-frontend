@@ -105,10 +105,10 @@ Oskari.clazz.define(
          * @param {Object} options include:
          *                  {Number} buffer: buffer for drawing buffered line and dot. If not given or 0, will disable dragging.
          *                  {Object} style: styles for draw, modify and intersect mode. If options don't include custom style, sets default styles
-         *                  {Boolean/String} allowMultipleDrawing: true - multiple selection is allowed, 
-         *                                                         false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map. 
+         *                  {Boolean/String} allowMultipleDrawing: true - multiple selection is allowed,
+         *                                                         false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map.
          *                                                        'single' - selection will be removed before drawing a new selection.
-         *                                                        'multiGeom' - form multigeometry from drawn features. 
+         *                                                        'multiGeom' - form multigeometry from drawn features.
          *                                                         Default is false.
          *                  {Boolean} showMeasureOnMap: true - if measure result should be displayed on map near drawing feature. Default is false.
          *                  {Boolean} drawControl: true - will activate draw control, false - will not activate. Default is true.
@@ -618,7 +618,7 @@ Oskari.clazz.define(
 
                     if(!me._featuresValidity[feature.getId()]) {
                         measures.area = me._loc.intersectionNotAllowed;
-                    } 
+                    }
                     jsonObject = me.formJsonObject(feature, measures, buffer);
                     geoJsonObject.features.push(jsonObject);
                 });
@@ -1242,8 +1242,8 @@ Oskari.clazz.define(
          * @return {Array} coordinates array
          */
         _getFeatureCenter: function(feature) {
-            // Circle has polygon or point ol type and it center need calculated different way
-            if(feature.getGeometry().getType() === 'Polygon' || feature.getGeometry().getType() === 'Point') {
+            // Circle has (multi)polygon or (multi)point ol type and it center need calculated different way
+            if(feature.getGeometry().getType().indexOf('Polygon') > -1 || feature.getGeometry().getType().indexOf('Point') > -1) {
                 return ol.extent.getCenter(feature.getGeometry().getExtent());
             }
             return feature.getGeometry().getCenter();
