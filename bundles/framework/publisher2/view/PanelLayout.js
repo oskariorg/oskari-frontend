@@ -208,13 +208,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
-            // Set the initial values
+            // Use current tool style as default
+            var mapToolStyle = me.mapModule.getToolStyle() || 'default';
 
+            // Set the initial values
             me.values = {
                 metadata: {
                     style: {
                         font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0],
-                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : me.initialValues.toolStyles[0]
+                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : mapToolStyle
                     }
                 }
             };
