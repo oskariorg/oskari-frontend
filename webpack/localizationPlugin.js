@@ -12,9 +12,10 @@ function isLocaleFile(filePath) {
 }
 
 class LocalizationPlugin {
-    constructor() {
+    constructor(appName) {
         this.startTime = Date.now();
         this.prevTimestamps = new Map();
+        this.appPath = appName ? appName + '/' : '';
     }
     apply(compiler) {
         compiler.hooks.emit.tapAsync('LocalizationPlugin', (compilation, callback) => {
@@ -87,7 +88,7 @@ class LocalizationPlugin {
                     });
 
                 let fileContent = keyContents.map(content => `Oskari.registerLocalization(${JSON.stringify(content)});`).join('\n');
-                compilation.assets[`oskari_lang_${lang}.js`] = {
+                compilation.assets[`${this.appPath}oskari_lang_${lang}.js`] = {
                     source() {
                         return fileContent;
                     },
