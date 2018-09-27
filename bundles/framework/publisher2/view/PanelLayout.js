@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             }
 
             // Use current tool style as default
-            const mapToolStyle = me.mapModule.getToolStyle() || 'default';
+            var mapToolStyle = me.mapModule.getToolStyle() || 'default';
 
             // Set the initial values
             me.values = {
