@@ -1174,7 +1174,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         /**
          * Returns the zoom based click tolerance threshold.
-         * @return {Number} the tolerance in kilometers.
+         * @return {Number} the tolerance
          */
         _getZoomBasedClickToleranceThreshold: function() {
             var me = this,
@@ -1237,6 +1237,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          */
         _getClickedGeometryNumber: function(geometryType) {
             var me = this;
+            var clickedPointCoordinatesWGS84 = null;
+            var distance = null;
             if (geometryType.indexOf("Multi") > -1) {
                 if (me.layerGeometries.geometry.getCoordinates() != undefined) {
                     for (var i = 0; i < me.layerGeometries.geometry.getCoordinates().length; i++) {
@@ -1244,10 +1246,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             var closestPoint = me.layerGeometries.geometry.getClosestPoint([me.clickCoords.x, me.clickCoords.y]);
                             //Have to transform point and multipoint closest point for turf.
                             var closestPointCoordinatesWGS84 = olProj.transform(closestPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
-                            var clickedPointCoordinatesWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            clickedPointCoordinatesWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
                             var from = turf.point(closestPointCoordinatesWGS84);
                             var to = turf.point(clickedPointCoordinatesWGS84);
-                            var distance = turf.distance(from, to);
+                            distance = turf.distance(from, to);
                             if(distance <= me._getZoomBasedClickToleranceThreshold()) {
                                 me.clickedGeometryNumber = i;
                                 break;
@@ -1260,7 +1262,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         } else if(geometryType === "MultiLineString") {
                             var lineStrings = me.layerGeometries.geometry.getLineStrings();
                             //Have to transform point and linestring for turf.
-                            var clickedPointCoordinatesWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            clickedPointCoordinatesWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
                             var pt = turf.point(clickedPointCoordinatesWGS84);
                             for(var j = 0; j < lineStrings.length; ++j) {
                                 var lineStringCoords = lineStrings[j].getCoordinates();
@@ -1271,8 +1273,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                                     lineStringTransformed.push(lineStringPointWGS84);
                                 }
                                 var line = turf.lineString(lineStringTransformed);
-                                //Get default distance in kilometers
-                                var distance = turf.pointToLineDistance(pt, line);
+                                //Get default distance
+                                distance = turf.pointToLineDistance(pt, line);
                                 if(distance <= me._getZoomBasedClickToleranceThreshold()) {
                                     me.clickedGeometryNumber = i;
                                     break;
@@ -1335,7 +1337,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     var layer = me._getLayerById(me.selectedLayerId);
                     me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                     wfsLayerPlugin.deleteTileCache(me.selectedLayerId, layer.getCurrentStyle().getName());
-                    //wfsLayerPlugin.refreshLayer(me.selectedLayerId);
+
                     var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
                     okButton.setHandler(function () {
@@ -1363,6 +1365,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var type = me.layerGeometries.geometry.getType();
             var newGeometry = null;
 
+            var clickedCoordsWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
 
             switch(type) {
                 case 'MultiPolygon':
@@ -1376,7 +1379,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me.layerGeometries.geometry.getPoints().forEach(function(point, index){
                         var coords = point.getCoordinates();
                         var coordWGS84 = olProj.transform(coords, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
-                        var clickedCoordsWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
                         var from = turf.point(coordWGS84);
                         var to = turf.point(clickedCoordsWGS84);
                         var distance = turf.distance(from, to);
@@ -1384,12 +1386,26 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             featureGeometryIndex = index;
                         }
                     });
-
-
+                    break;
+                case 'MultiLineString':
+                    var pt = turf.point(clickedCoordsWGS84);
+                    me.layerGeometries.geometry.getLineStrings().forEach(function(lineString, index){
+                        var lineStringCoords = lineString.getCoordinates();
+                        var lineStringTransformed = [];
+                        for(var k = 0; k < lineStringCoords.length; ++k) {
+                            var lineStringPoint = lineStringCoords[k];
+                            var lineStringPointWGS84 = olProj.transform(lineStringPoint, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                            lineStringTransformed.push(lineStringPointWGS84);
+                        }
+                        var line = turf.lineString(lineStringTransformed);
+                        //Get default distance
+                        var distance = turf.pointToLineDistance(pt, line);
+                        if(distance <= me._getZoomBasedClickToleranceThreshold()) {
+                            featureGeometryIndex = index;
+                        }
+                    });
                     break;
             }
-
-            // FIXME MultiPoint and MultiLineString types
 
 
             if (featureGeometryIndex !== null) {
