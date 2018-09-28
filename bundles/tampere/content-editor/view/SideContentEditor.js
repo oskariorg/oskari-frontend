@@ -489,7 +489,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 geometries.features.forEach(function(feature){
                     if(feature.geometry.type.indexOf('Point') > -1) {
                         requestData.geometries.type = "multipoint";
-                        requestData.geometries.data.push(me._getLineString(feature.geometry.coordinates));
+                        requestData.geometries.data.push({x:feature.geometry.coordinates[0], y:feature.geometry.coordinates[1]});
                     } else if(feature.geometry.type.indexOf('LineString') > -1) {
                         requestData.geometries.type = "multilinestring";
                         requestData.geometries.data.push(me._getLineString(feature.geometry.coordinates));
@@ -507,9 +507,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         setCurrentGeoJson: function(geojson) {
             var me = this;
-            console.log('Set geojson', geojson);
             me._geojson = geojson;
-
         },
         prepareRequest: function (geometries, deleteFeature) {
             var me = this;
@@ -1374,8 +1372,24 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         }
                     });
                     break;
+                case 'MultiPoint':
+                    me.layerGeometries.geometry.getPoints().forEach(function(point, index){
+                        var coords = point.getCoordinates();
+                        var coordWGS84 = olProj.transform(coords, me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                        var clickedCoordsWGS84 = olProj.transform([me.clickCoords.x,  me.clickCoords.y], me.sandbox.getMap()._projectionCode, 'EPSG:4326');
+                        var from = turf.point(coordWGS84);
+                        var to = turf.point(clickedCoordsWGS84);
+                        var distance = turf.distance(from, to);
+                        if(distance <= me._getZoomBasedClickToleranceThreshold()) {
+                            featureGeometryIndex = index;
+                        }
+                    });
+
+
+                    break;
             }
 
+            // FIXME MultiPoint and MultiLineString types
 
 
             if (featureGeometryIndex !== null) {
