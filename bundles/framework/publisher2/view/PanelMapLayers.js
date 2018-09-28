@@ -184,7 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 );
                 me.panel.setTitle(me.loc.layerselection.label);
 
-                me._populateMapLayerPanel();
+                me._populateMapLayerPanel(true /* isInit */);
             }
         },
         /**
@@ -262,17 +262,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * @method _populateMapLayerPanel
          * @private
          */
-        _populateMapLayerPanel: function () {
+        _populateMapLayerPanel: function (isInit) {
             var me = this,
                 sandbox = this.instance.getSandbox(),
                 contentPanel = this.panel.getContainer();
             contentPanel.empty();
             me.container = contentPanel;
 
-            // layer tooltip
-            var tooltipCont = this.templateHelp.clone();
-            tooltipCont.attr('title', this.loc.layerselection.tooltip);
-            this.panel.getHeader().append(tooltipCont);
+            if (isInit) {
+                // layer tooltip
+                var tooltipCont = this.templateHelp.clone();
+                tooltipCont.attr('title', this.loc.layerselection.tooltip);
+                this.panel.getHeader().append(tooltipCont);
+            }
 
             var layers = this._getLayersList(),
                 i,
