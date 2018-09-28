@@ -515,13 +515,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var me = this;
             var requestData = {};
             requestData.featureFields = [];
-            if (deleteFeature != true) {
+            //if (deleteFeature != true) {
                 var featureData = me._getFeatureData();
                 featureData.splice(0, 1);
                 requestData.featureFields = featureData;
-            }
+            //}
 
-            requestData.featureId = (me.operationMode == "edit" && me._getFeatureData().length > 0 ? me._getFeatureData()[0].value : null);
+            requestData.featureId = (me._getFeatureData().length > 0 ? me._getFeatureData()[0].value : null);
             requestData.layerId = me.selectedLayerId;
             requestData.srsName = this.sandbox.getMap().getSrsName();
             requestData.geometries = {};
@@ -1360,24 +1360,32 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         _handleDeleteGeometry: function () {
             var me = this;
-            var featureGeometryId = null;
-            var coords = new OpenLayers.LonLat(me.clickCoords.x, me.clickCoords.y);
-            for (var i = 0; i < me.layerGeometries.geometry.components.length; i++) {
-                if (me.layerGeometries.geometry.components[i].atPoint(coords, 2, 2)) {
-                    featureGeometryId = i;
+            var featureGeometryIndex = null;
+
+            var type = me.layerGeometries.geometry.getType();
+            var newGeometry = null;
+
+
+            switch(type) {
+                case 'MultiPolygon':
+                    me.layerGeometries.geometry.getPolygons().forEach(function(polygon, index){
+                        if(polygon.containsXY(me.clickCoords.x, me.clickCoords.y)) {
+                            featureGeometryIndex = index;
+                        }
+                    });
                     break;
-                }
             }
 
-            if (featureGeometryId != null) {
-                var featureGeometry = me.layerGeometries.geometry.components[i],
-                    contentActions = [];
+
+
+            if (featureGeometryIndex !== null) {
+                var contentActions = [];
 
                 var cancelAction = {};
-                cancelAction['name'] = me.loc.buttons.cancel;
-                cancelAction['type'] = 'button';
-                cancelAction['group'] = 1;
-                cancelAction['action'] = function () {
+                cancelAction.name = me.loc.buttons.cancel;
+                cancelAction.type = 'button';
+                cancelAction.group = 1;
+                cancelAction.action = function () {
                     var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')("contentEditor");
                     me.sandbox.request(me, request);
                     me._highlighGeometries(me.highlightFeaturesIds, me._getLayerById(me.selectedLayerId), true);
@@ -1385,11 +1393,18 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 contentActions.push(cancelAction);
 
                 var deleteAction = {};
-                deleteAction['name'] = me.loc.buttons.delete;
-                deleteAction['type'] = 'button';
-                deleteAction['group'] = 1;
-                deleteAction['action'] = function () {
-                    me.layerGeometries.geometry.components.splice(featureGeometryId, 1);
+                deleteAction.name = me.loc.buttons.delete;
+                deleteAction.type = 'button';
+                deleteAction.group = 1;
+                deleteAction.action = function () {
+                    var newCoords =  [];
+                    me.layerGeometries.geometry.getCoordinates().forEach(function(coords, index) {
+                        if(index!==featureGeometryIndex) {
+                            newCoords.push(coords);
+                        }
+                    });
+
+                    me.layerGeometries.geometry.setCoordinates(newCoords);
                     me.prepareRequest(null, true);
                     var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')("contentEditor");
                     me.sandbox.request(me, request);
@@ -1405,9 +1420,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 var options = {
                     hidePrevious: true
                 };
-                var request = me.sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')("contentEditor", me.loc.deleteGeometryDialog.title, content, new OpenLayers.LonLat(featureGeometry.getCentroid().x, featureGeometry.getCentroid().y), options);
+                var request = me.sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')("contentEditor", me.loc.deleteGeometryDialog.title, content, {lon:me.clickCoords.x, lat:me.clickCoords.y}, options);
                 me.sandbox.request(me.getName(), request);
-                jQuery("#delete-dialog").parent().parent().css('height', 'auto').css('padding-bottom', '30px');
             }
             me.operationMode = "edit";
         },
