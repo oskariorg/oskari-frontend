@@ -22,6 +22,9 @@
 
 div {
   &.content-editor {
+    table.getinforesult_table {
+      tr:nth-child(even) {background: #eee}
+    }
     input[type=text] {
       width: 260px;
     }

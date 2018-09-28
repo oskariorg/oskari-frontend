@@ -513,11 +513,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var me = this;
             var requestData = {};
             requestData.featureFields = [];
-            //if (deleteFeature != true) {
-                var featureData = me._getFeatureData();
-                featureData.splice(0, 1);
-                requestData.featureFields = featureData;
-            //}
+            var featureData = me._getFeatureData();
+            featureData.splice(0, 1);
+            requestData.featureFields = featureData;
 
             requestData.featureId = (me._getFeatureData().length > 0 ? me._getFeatureData()[0].value : null);
             requestData.layerId = me.selectedLayerId;
@@ -775,8 +773,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if (node === null || node === undefined) {
                 return '';
             }
-            var even = true,
-                html = jQuery(this.templates.getinfoResultTable),
+            var html = jQuery(this.templates.getinfoResultTable),
                 row = null,
                 keyColumn = null,
                 valColumn = null,
@@ -836,13 +833,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     default:
                         valpres = '';
                     }
-                    even = !even;
 
                     row = jQuery(this.templates.tableRow);
-                    // FIXME this is unnecessary, we can do this with a css selector.
-                    if (!even) {
-                        row.addClass('odd');
-                    }
 
                     keyColumn = jQuery(this.templates.tableCell);
                     keyColumn.append(key);
@@ -1485,25 +1477,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             } else {
                 lang = storedLanguage;
             }
-
-            jQuery.datepicker.regional['fi'] = {
-                closeText: 'Sulje',
-                prevText: '&laquo;Edellinen',
-                nextText: 'Seuraava&raquo;',
-                currentText: 'T&auml;n&auml;&auml;n',
-                monthNames: ['Tammikuu','Helmikuu','Maaliskuu','Huhtikuu','Toukokuu','Kes&auml;kuu',
-                'Hein&auml;kuu','Elokuu','Syyskuu','Lokakuu','Marraskuu','Joulukuu'],
-                monthNamesShort: ['Tammi','Helmi','Maalis','Huhti','Touko','Kes&auml;',
-                'Hein&auml;','Elo','Syys','Loka','Marras','Joulu'],
-                dayNamesShort: ['Su','Ma','Ti','Ke','To','Pe','Su'],
-                dayNames: ['Sunnuntai','Maanantai','Tiistai','Keskiviikko','Torstai','Perjantai','Lauantai'],
-                dayNamesMin: ['Su','Ma','Ti','Ke','To','Pe','La'],
-                weekHeader: 'Vk',
-                dateFormat: 'dd.mm.yy',
-                firstDay: 1,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: ''};
 
             jQuery.datepicker.setDefaults(
                   jQuery.extend(
