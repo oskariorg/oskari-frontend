@@ -915,9 +915,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 if (me.drawingActive == true) {
                     me.drawingActive = false;
                     me.sendStopDrawRequest();
-                } else {
-                    me.prepareRequest(me._geojson);
                 }
+
+                me.prepareRequest(me._geojson);
                 me.featureDuringEdit = false;
                 me._storeFormData();
             } else {
