@@ -65,23 +65,15 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                     lat: result.lat
                 },
                 popupId = "elf-geolocator-search-result",
-                moveReqBuilder = sandbox
-                    .getRequestBuilder('MapMoveRequest'),
-                infoBoxReqBuilder = sandbox
-                    .getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
-                moveReq,
-                infoBoxReq,
+                moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
+                infoBoxReqBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest'),
                 infoBoxContent;
 
-            if(result.zoomScale) {
-                zoom = {scale : result.zoomScale};
+            if (result.zoomScale) {
+                zoom = { scale: result.zoomScale };
             }
 
-            if (moveReqBuilder) {
-                moveReq = moveReqBuilder(
-                    lonlat.lon, lonlat.lat, zoom, false, srsName);
-                sandbox.request(this, moveReq);
-            }
+            sandbox.request(this, moveReqBuilder(lonlat.lon, lonlat.lat, zoom, false, srsName));
 
             var options = {
                 hidePrevious: true
@@ -92,10 +84,9 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                     html: this.__getInfoBoxHtml(result),
                     actions: {}
                 };
-                infoBoxReq = infoBoxReqBuilder(
+                sandbox.request(this, infoBoxReqBuilder(
                     popupId, this.getLocalization('tab').resultsTitle,
-                    [infoBoxContent], lonlat, options);
-                sandbox.request(this, infoBoxReq);
+                    [infoBoxContent], lonlat, options));
             }
         },
         /**

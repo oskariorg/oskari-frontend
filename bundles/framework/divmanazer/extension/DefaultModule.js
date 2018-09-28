@@ -60,7 +60,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
 
             for (p in me.requestHandlers) {
                 if (me.requestHandlers.hasOwnProperty(p)) {
-                    sandbox.addRequestHandler(p, this);
+                    sandbox.requestHandler(p, this);
                 }
             }
             for (p in me.eventHandlers) {

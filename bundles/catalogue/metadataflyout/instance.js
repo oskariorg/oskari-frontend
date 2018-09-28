@@ -1,9 +1,8 @@
 /**
  * @class Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundleInstance
  */
-Oskari.clazz.define(
-    'Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundleInstance',
-    function() {
+Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundleInstance',
+    function () {
         this.map = null;
         this.core = null;
         this.sandbox = null;
@@ -123,7 +122,7 @@ Oskari.clazz.define(
          * @method implements BundleInstance start methdod
          *
          */
-        start: function() {
+        start: function () {
             var me = this;
             if (this.started) {
                 return;
@@ -159,10 +158,7 @@ Oskari.clazz.define(
                 }
             }
 
-            var request = sandbox.getRequestBuilder(
-                'userinterface.AddExtensionRequest'
-            )(this);
-
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
             this._requestHandlers = {
@@ -179,7 +175,7 @@ Oskari.clazz.define(
             };
 
             for (var key in this._requestHandlers) {
-                sandbox.addRequestHandler(key, this._requestHandlers[key]);
+                sandbox.requestHandler(key, this._requestHandlers[key]);
             }
 
             /* stateful */
@@ -339,17 +335,11 @@ Oskari.clazz.define(
          *
          * implements bundle instance stop method
          */
-        stop: function() {
-            var sandbox = this.sandbox,
-                p;
+        stop: function () {
+            var sandbox = this.sandbox;
+            var p;
 
             /* request handler cleanup */
-            /*
-            sandbox.removeRequestHandler(
-                'catalogue.ShowMetadataRequest',
-                this._requestHandlers['catalogue.ShowMetadataRequest']
-            );
-            */
             for (var key in this._requestHandlers) {
                 sandbox.removeRequestHandler(key, this._requestHandlers[key]);
             }
@@ -361,10 +351,7 @@ Oskari.clazz.define(
                 }
             }
 
-            var request = sandbox.getRequestBuilder(
-                'userinterface.RemoveExtensionRequest'
-            )(this);
-
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
             sandbox.unregisterStateful(this.mediator.bundleId);
@@ -372,11 +359,11 @@ Oskari.clazz.define(
             this.started = false;
         },
 
-        setSandbox: function(sandbox) {
+        setSandbox: function (sandbox) {
             this.sandbox = null;
         },
 
-        startExtension: function() {
+        startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] =
                 Oskari.clazz.create(
                     'Oskari.catalogue.bundle.metadataflyout.Flyout',
@@ -386,19 +373,19 @@ Oskari.clazz.define(
                 );
         },
 
-        stopExtension: function() {
+        stopExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = null;
         },
 
-        getTitle: function() {
+        getTitle: function () {
             return this.getLocale().title;
         },
 
-        getDescription: function() {
+        getDescription: function () {
             return 'Sample';
         },
 
-        getPlugins: function() {
+        getPlugins: function () {
             return this.plugins;
         },
 
@@ -408,9 +395,7 @@ Oskari.clazz.define(
          */
         scheduleShowMetadata: function(allMetadata) {
             /** update flyout content */
-            this.plugins[
-                'Oskari.userinterface.Flyout'
-            ].scheduleShowMetadata(allMetadata);
+            this.plugins['Oskari.userinterface.Flyout'].scheduleShowMetadata(allMetadata);
 
             this.getSandbox().requestByName(
                 this,
@@ -421,7 +406,7 @@ Oskari.clazz.define(
          * @method setState
          * @param {Object} state bundle state as JSON
          */
-        setState: function(state) {
+        setState: function (state) {
             this.state = state;
             if (state && state.current) {
                 this.scheduleShowMetadata(state.current);
@@ -432,7 +417,7 @@ Oskari.clazz.define(
          * @method getState
          * @return {Object} bundle state as JSON
          */
-        getState: function() {
+        getState: function () {
             return this.state;
         }
     }, {

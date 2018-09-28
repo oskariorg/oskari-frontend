@@ -129,7 +129,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 }
             }
             // handle ShowMapLayerInfoRequest
-            sandbox.addRequestHandler('ShowMapLayerInfoRequest', this);
+            sandbox.requestHandler('ShowMapLayerInfoRequest', this);
 
             /* we may have missed the maplayerevent */
             if (me._mapLayerService.isAllLayersLoaded() && !me.gotStartupProcessCall) {

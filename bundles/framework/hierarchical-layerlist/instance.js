@@ -221,10 +221,10 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
 
             // create and register request handlers
             var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('ShowFilteredLayerListRequest', reqHandler);
+            sandbox.requestHandler('ShowFilteredLayerListRequest', reqHandler);
 
             var reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
+            sandbox.requestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
             // draw ui
             me.createUi();

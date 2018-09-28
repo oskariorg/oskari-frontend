@@ -273,9 +273,9 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
         this._sandbox = sandbox;
 
         sandbox.register(this);
-        sandbox.addRequestHandler('DigiroadMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
-        sandbox.addRequestHandler('DigiroadMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.addRequestHandler('DigiroadMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
+        sandbox.requestHandler('DigiroadMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
+        sandbox.requestHandler('DigiroadMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.requestHandler('DigiroadMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
 
     },
     stopPlugin: function (sandbox) {

@@ -46,31 +46,24 @@ Oskari.clazz.define(
                 return this.container;
             }
             // construct it
-            var me = this,
-                sandbox = me.instance.sandbox,
-                addMLrequestBuilder = sandbox.getRequestBuilder(
-                    'AddMapLayerRequest'
-                ),
-                grid = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Grid'
-                ),
-                visibleFields = ['name', 'delete'];
+            var me = this;
+            var sandbox = me.instance.sandbox;
+            var addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest');
+            var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+            var visibleFields = ['name', 'delete'];
 
             me.grid = grid;
             grid.setVisibleFields(visibleFields);
             // set up the link from name field
             var nameRenderer = function (name, data) {
-                var link = me.template.link.clone(),
-                    layer = data.layer;
+                var link = me.template.link.clone();
+                var layer = data.layer;
 
                 link.append(name);
                 link.on('click', function () {
                     // add analysis layer to map on name click
                     if (!me.popupOpen) {
-                        var request = addMLrequestBuilder(
-                            layer.getId()
-                        );
-                        sandbox.request(me.instance, request);
+                        sandbox.request(me.instance, addMLrequestBuilder(layer.getId()));
                         me.handleBounds(layer);
                         return false;
                     }
@@ -80,8 +73,7 @@ Oskari.clazz.define(
             grid.setColumnValueRenderer('name', nameRenderer);
             // set up the link from edit field
             var deleteRenderer = function (name, data) {
-                var link = me.template.link.clone(),
-                    layer = data.layer;
+                var link = me.template.link.clone();
                 link.append(name);
                 link.on('click', function () {
                     if (!me.popupOpen) {
@@ -118,10 +110,9 @@ Oskari.clazz.define(
          */
         handleBounds: function (layer) {
             var sandbox = this.instance.sandbox;
-
             var geom = layer.getGeometry();
 
-            if ((geom === null) || (typeof geom === 'undefined') ) {
+            if ((geom === null) || (typeof geom === 'undefined')) {
                 return;
             }
             if (geom.length === 0) {
@@ -133,19 +124,16 @@ Oskari.clazz.define(
             var center = olExtentGetCenter(extent);
             var area = olExtentGetArea(extent);
             var epsilon = 1.0;
-            var rb = sandbox.getRequestBuilder('MapMoveRequest');
+            var rb = Oskari.requestBuilder('MapMoveRequest');
             var req;
-
-            if (rb) {
-                if (area < epsilon) {
-                    // zoom to level 9 if a single point
-                    req = rb(center.x, center.y, 9);
-                    sandbox.request(this.instance, req);
-                } else {
-                    var bounds = {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
-                    req = rb(center.x, center.y, bounds);
-                    sandbox.request(this.instance, req);
-                }
+            if (area < epsilon) {
+                // zoom to level 9 if a single point
+                req = rb(center.x, center.y, 9);
+                sandbox.request(this.instance, req);
+            } else {
+                var bounds = {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
+                req = rb(center.x, center.y, bounds);
+                sandbox.request(this.instance, req);
             }
         },
 
@@ -259,18 +247,12 @@ Oskari.clazz.define(
          * @private
          */
         _deleteSuccess: function (layer, showDialog) {
-            var sandbox = this.instance.sandbox,
-                service = sandbox.getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+            var sandbox = this.instance.sandbox;
+            var service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
             // also we need to do it before service.remove() to avoid problems on other components
-            var removeMLrequestBuilder = sandbox.getRequestBuilder(
-                    'RemoveMapLayerRequest'
-                ),
-                request = removeMLrequestBuilder(layer.getId());
-
-            sandbox.request(this.instance, request);
+            var removeMLrequestBuilder = Oskari.requestBuilder('RemoveMapLayerRequest');
+            sandbox.request(this.instance, removeMLrequestBuilder(layer.getId()));
             service.removeLayer(layer.getId());
             // show msg to user about successful removal
             if (showDialog) {
@@ -290,11 +272,8 @@ Oskari.clazz.define(
          * @private
          */
         _deleteFailure: function () {
-            var dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                okBtn = dialog.createCloseButton(this.loc('personalDataTab.buttons.ok'));
-
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = dialog.createCloseButton(this.loc('personalDataTab.buttons.ok'));
             dialog.show(this.loc('personalDataTab.error.title'), this.loc('personalDataTab.error.generic'), [okBtn]);
         }
     });

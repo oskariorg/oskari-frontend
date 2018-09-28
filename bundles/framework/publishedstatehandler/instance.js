@@ -82,11 +82,11 @@ Oskari.clazz.define(
                 }
             }
 
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'StateHandler.SetStateRequest',
                 this.requestHandlers.setStateHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'StateHandler.SaveStateRequest',
                 this.requestHandlers.saveStateHandler
             );

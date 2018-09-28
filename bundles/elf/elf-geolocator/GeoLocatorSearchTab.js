@@ -247,14 +247,11 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          * @method requestToAddTab
          */
         requestToAddTab: function () {
-            var reqBuilder = this.sandbox
-                    .getRequestBuilder('Search.AddTabRequest'),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(this.getTitle(), this.getContent());
-                this.sandbox.request(this.instance, request);
+            if (!this.sandbox.hasHandler('Search.AddTabRequest')) {
+                return;
             }
+            var reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
+            this.sandbox.request(this.instance, reqBuilder(this.getTitle(), this.getContent()));
         },
         /**
          * Initializes the tab content by creating the search fields

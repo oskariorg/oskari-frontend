@@ -149,13 +149,13 @@ Oskari.clazz.define(
                     'Oskari.mapframework.bundle.search.request.SearchResultActionRequestHandler',
                     sandbox, this.plugins['Oskari.userinterface.Flyout'])
             };
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'Search.AddTabRequest',
                 this.requestHandlers.addTabRequestHandler);
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'Search.AddSearchResultActionRequest',
                 this.requestHandlers.addSearchResultActionRequestHandler);
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'Search.RemoveSearchResultActionRequest',
                 this.requestHandlers.addSearchResultActionRequestHandler);
 

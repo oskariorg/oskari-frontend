@@ -2819,15 +2819,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me = this,
                 mlays,
                 requestBuilder,
-                showFeatureDataReqBuilder,
-                request;
+                showFeatureDataReqBuilder;
 
             if (me._showFeatureDataWithoutSaving) {
-                var aggregateValues = analyseJson.aggregate,
-                    geojson = analyseJson.geojson.features[0];
+                var aggregateValues = analyseJson.aggregate;
+                var geojson = analyseJson.geojson.features[0];
 
-                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-                me.instance.sandbox.postRequestByName(rn, [geojson, {
+                me.instance.sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [geojson, {
                     layerId: 'ANALYSIS_VECTOR',
                     clearPrevious: true,
                     layerOptions: null,
@@ -2844,23 +2842,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 mapLayerService.addLayer(mapLayer);
                 // Request the layer to be added to the map.
                 // instance.js handles things from here on.
-                requestBuilder = me.instance.sandbox.getRequestBuilder(
-                    'AddMapLayerRequest'
-                );
-                if (requestBuilder) {
-                    request = requestBuilder(mapLayer.getId());
-                    me.instance.sandbox.request(this.instance, request);
-                }
+                requestBuilder = Oskari.requestBuilder('AddMapLayerRequest');
+                me.instance.sandbox.request(this.instance, requestBuilder(mapLayer.getId()));
 
                 // show featureData if wanted
                 if (me._showFeatureDataAfterAnalysis) {
-                    showFeatureDataReqBuilder = me.instance.sandbox.getRequestBuilder(
-                        'ShowFeatureDataRequest'
-                    );
+                    showFeatureDataReqBuilder = Oskari.requestBuilder('ShowFeatureDataRequest');
 
                     if (showFeatureDataReqBuilder) {
-                        request = showFeatureDataReqBuilder(mapLayer.getId());
-                        me.instance.sandbox.request(this.instance, request);
+                        me.instance.sandbox.request(this.instance, showFeatureDataReqBuilder(mapLayer.getId()));
                     }
                 }
 
@@ -2870,15 +2860,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     if (mlays.length > 0) {
                         // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
                         // also we need to do it before service.remove() to avoid problems on other components
-                        var removeMLrequestBuilder =
-                            me.instance.sandbox.getRequestBuilder(
-                                'RemoveMapLayerRequest'
-                            );
+                        var removeMLrequestBuilder = Oskari.requestBuilder('RemoveMapLayerRequest');
 
                         for (i in mlays) {
                             if (mlays.hasOwnProperty(i)) {
-                                request = removeMLrequestBuilder(mlays[i]);
-                                me.instance.sandbox.request(me.instance, request);
+                                me.instance.sandbox.request(me.instance, removeMLrequestBuilder(mlays[i]));
                                 mapLayerService.removeLayer(mlays[i]);
                             }
                         }
@@ -3116,14 +3102,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _removeLayerRequest: function (analyseLayerId) {
-            var sandbox = this.instance.getSandbox(),
-                layer = this._getLayerByPrefixedId(analyseLayerId),
-                reqBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest'),
-                request;
+            var sandbox = this.instance.getSandbox();
+            var layer = this._getLayerByPrefixedId(analyseLayerId);
+            var reqBuilder = Oskari.requestBuilder('RemoveMapLayerRequest');
 
             if (layer && reqBuilder) {
-                request = reqBuilder(layer.getId());
-                sandbox.request(this.instance, request);
+                sandbox.request(this.instance, reqBuilder(layer.getId()));
             }
         },
 
@@ -3135,9 +3119,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @return {Object/null} an Oskari layer or null if no layer selected
          */
         _getSelectedMapLayer: function () {
-            var selectedLayer = this._selectedLayers(),
-                layerId;
-
+            var selectedLayer = this._selectedLayers();
+            var layerId;
+            // FIXME: what's going on here?
             selectedLayer = selectedLayer && selectedLayer[0];
 
             if (!selectedLayer) {
@@ -3163,9 +3147,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!layer || !filterJson) {
                 return;
             }
-//            filterJson.featureIds = (layer.getClickedFeatureListIds() ? layer.getClickedFeatureListIds().slice() : []);
             var featureIds = this.WFSLayerService.getSelectedFeatureIds(layer.getId());
-            filterJson.featureIds = (featureIds ? featureIds : []);
+            filterJson.featureIds = featureIds || [];
         },
 
         /**
@@ -3176,8 +3159,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _addPropertyTypes: function (layers) {
-            var me = this,
-                analyseService = me.instance.analyseService;
+            var me = this;
+            var analyseService = me.instance.analyseService;
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData()) {
