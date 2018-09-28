@@ -213,7 +213,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 if(!evt.getIsFinished()) {
                     return;
                 }
-                me.sideContentEditor.prepareRequest(evt.getGeoJson());
+                me.sideContentEditor.setCurrentGeoJson(evt.getGeoJson());
             });
         },
 

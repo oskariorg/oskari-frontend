@@ -78,6 +78,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.GFIFirstRequestProcessed = false;
         me.highlightFeaturesIds = [];
         me.defaultClickDistanceThreshold = 0.05;
+        me._geojson = null;
     }, {
         __name: 'ContentEditor',
         /**
@@ -322,6 +323,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me.featureDuringEdit = false;
                     me._showAddUnsavedInfoModal();
                 } else {
+                    me.allClickedFeatures = [];
                     me._addNewFeature();
                 }
             });
@@ -363,48 +365,54 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 }
             });
         },
+
+        /**
+         * Get linestring
+         * @method  _getLineString
+         * @param   {Array}       coordinates coordinates array
+         * @return  {Array}       linestring object array, example [{x:1,y:1},{x:2,y:2}]
+         * @private
+         */
+        _getLineString: function(coordinates){
+            var line = [];
+            coordinates.forEach(function(coord){
+                line.push({x: coord[0], y: coord[1]});
+            });
+            return line;
+        },
+
         _fillLayerGeometries: function(geometries) {
-            if (this.layerGeometries != null && this.layerGeometries.geometry != null) {
-                var layerGeometries = JSON.parse(new olFormatGeoJSON().writeGeometry(this.layerGeometries.geometry));
+            var me = this;
+            if (me.layerGeometries != null && me.layerGeometries.geometry != null) {
+                var layerGeometries = JSON.parse(new olFormatGeoJSON().writeGeometry(me.layerGeometries.geometry));
+                if(me._geojson && me._geojson.features[0] && me._geojson.features[0].geometry) {
+                    layerGeometries = me._geojson.features[0].geometry;
+                }
+
                 if (layerGeometries != null) {
-                    if (layerGeometries.type == "Point") {
-                        geometries.type = "point";
-                        if (this.drawToolType != "edit" || i != this.clickedGeometryNumber) {
-                            geometries.data.push({x: layerGeometries.coordinates[0], y: layerGeometries.coordinates[1]});
-                        }
-                    } else if (layerGeometries.type == "MultiPoint") {
+                    if (layerGeometries.type == "MultiPoint") {
                         geometries.type = "multipoint";
-                        for (var i = 0; i < layerGeometries.coordinates.length; i++) {
-                            if (this.drawToolType != "edit" || i != this.clickedGeometryNumber) {
-                                geometries.data.push({x: layerGeometries.coordinates[i][0], y: layerGeometries.coordinates[i][1]});
-                            }
-                        }
+                        layerGeometries.coordinates.forEach(function(coordinates){
+                            geometries.data.push({x: coordinates[0], y: coordinates[1]});
+                        });
                     } else if (layerGeometries.type == "MultiLineString") {
                         geometries.type = "multilinestring";
-                        for (var i = 0; i < layerGeometries.coordinates.length; i++) {
-                            if (this.drawToolType != "edit" || i != this.clickedGeometryNumber) {
-                                var tmpLineString = [];
-                                for (var j = 0; j < layerGeometries.coordinates[i].length; j++) {
-                                    tmpLineString.push({x: layerGeometries.coordinates[i][j][0], y: layerGeometries.coordinates[i][j][1]});
-                                }
-                                geometries.data.push(tmpLineString);
-                            }
-                        }
+
+                        layerGeometries.coordinates.forEach(function(coordinates){
+                            geometries.data.push(me._getLineString(coordinates));
+                        });
                     } else if (layerGeometries.type == "MultiPolygon") {
                         geometries.type = "multipolygon";
-                        for (var i = 0; i < layerGeometries.coordinates.length; i++) {
-                            if (this.drawToolType != "edit" || i != this.clickedGeometryNumber) {
-                                var tmpPolygon = [];
-                                for (var j = 0; j < layerGeometries.coordinates[i].length; j++) {
-                                    var tmpLineString = [];
-                                    for (var k = 0; k < layerGeometries.coordinates[i][j].length; k++) {
-                                        tmpLineString.push({x: layerGeometries.coordinates[i][j][k][0], y: layerGeometries.coordinates[i][j][k][1]});
-                                    }
-                                    tmpPolygon.push(tmpLineString);
-                                }
-                                geometries.data.push(tmpPolygon);
-                            }
-                        }
+
+                        layerGeometries.coordinates.forEach(function(coordinates){
+                            var tmpPolygon = [];
+
+                            coordinates.forEach(function(lineCoordinates){
+                                tmpPolygon.push(me._getLineString(lineCoordinates));
+                            });
+
+                            geometries.data.push(tmpPolygon);
+                        });
                     }
                 }
             }
@@ -431,6 +439,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 dialog.success = me.loc.featureUpdate.success;
                 dialog.error = me.loc.featureUpdate.error;
             }
+            me._geojson = null;
             jQuery.ajax({
                 type : 'POST',
                 data : {'featureData':JSON.stringify(requestData)},
@@ -444,7 +453,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     var layer = me._getLayerById(me.layerId);
                     me._highlighGeometries([], layer, true);
                     wfsLayerPlugin.deleteTileCache(me.layerId, layer.getCurrentStyle().getName());
-                    // wfsLayerPlugin.refreshLayer(me.layerId);
                     var evt = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
                     me.sendStopDrawRequest(true);
@@ -476,39 +484,32 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          */
         _cloneGeometries: function(requestData, geometries) {
             var me = this;
+
             if(geometries.type === 'FeatureCollection') {
-                geometries.features.forEach(function(value){
-                    if(value.geometry.type === 'MultiPoint') {
+                geometries.features.forEach(function(feature){
+                    if(feature.geometry.type.indexOf('Point') > -1) {
                         requestData.geometries.type = "multipoint";
-                        for(var j = 0; j < value.geometry.coordinates.length; ++j) {
-                            //Check that the edited feature does not get saved again.
-                            if(j!=me.clickedGeometryNumber) {
-                                requestData.geometries.data.push({x: value.geometry.coordinates[j][0], y: value.geometry.coordinates[j][1]});
-                            }
-                        }
-                    } else if(value.geometry.type === 'LineString') {
+                        requestData.geometries.data.push(me._getLineString(feature.geometry.coordinates));
+                    } else if(feature.geometry.type.indexOf('LineString') > -1) {
                         requestData.geometries.type = "multilinestring";
-                        var tmpLineString = [];
-                        for (var j = 0; j < value.geometry.coordinates.length; ++j) {
-                            tmpLineString.push({x: value.geometry.coordinates[j][0], y: value.geometry.coordinates[j][1]});
-                        }
-                        requestData.geometries.data.push(tmpLineString);
-                    } else if(value.geometry.type === 'Polygon') {
+                        requestData.geometries.data.push(me._getLineString(feature.geometry.coordinates));
+                    } else if(feature.geometry.type.indexOf('Polygon') > -1) {
                         requestData.geometries.type = "multipolygon";
-                        var coordinatesMultiPolygon = value.geometry.coordinates;
+                        var coordinatesMultiPolygon = feature.geometry.coordinates;
                         var tmpPolygon = [];
-                        for (var j = 0; j < coordinatesMultiPolygon.length; ++j) {
-                            var coordinatesPolygon = coordinatesMultiPolygon[j];
-                            var tmpLinearString = [];
-                            for(var k = 0; k < coordinatesPolygon.length; ++k) {
-                                tmpLinearString.push({x: coordinatesPolygon[k][0], y: coordinatesPolygon[k][1]});
-                            }
-                            tmpPolygon.push(tmpLinearString);
-                        }
+                        coordinatesMultiPolygon.forEach(function(coordinates){
+                            tmpPolygon.push(me._getLineString(coordinates));
+                        });
                         requestData.geometries.data.push(tmpPolygon);
                     }
                 });
             }
+        },
+        setCurrentGeoJson: function(geojson) {
+            var me = this;
+            console.log('Set geojson', geojson);
+            me._geojson = geojson;
+
         },
         prepareRequest: function (geometries, deleteFeature) {
             var me = this;
@@ -527,8 +528,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             requestData.geometries.data = [];
             if (me.operationMode == "edit" || deleteFeature == true) {
                 me._fillLayerGeometries(requestData.geometries);
-            }
-            if (geometries != null) {
+            } else if (geometries != null) {
                 me._cloneGeometries(requestData, geometries);
             }
             me.sendRequest(requestData, deleteFeature);
@@ -926,7 +926,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me.drawingActive = false;
                     me.sendStopDrawRequest();
                 } else {
-                    me.prepareRequest(null);
+                    me.prepareRequest(me._geojson);
                 }
                 me.featureDuringEdit = false;
                 me._storeFormData();
@@ -1324,7 +1324,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             jQuery.ajax({
                 type : 'POST',
-                dataType : 'json',
                 beforeSend : function(x) {
                     if(x && x.overrideMimeType) {
                         x.overrideMimeType("application/j-son;charset=UTF-8");
