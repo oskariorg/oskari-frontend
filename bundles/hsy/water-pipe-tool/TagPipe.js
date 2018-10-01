@@ -1109,7 +1109,6 @@ Oskari.clazz.define(
             var me = this,
             layers = me._getTagPipeLayers(),
             mapVO = me.sandbox.getMap(),
-            ajaxUrl = Oskari.urls.getRoute(),
             layerName = "",
             layerUrl = "",
             inactiveLayers = [];
@@ -1133,7 +1132,7 @@ Oskari.clazz.define(
             jQuery.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: ajaxUrl + 'action_route=GetPipesWithParams',
+                url: Oskari.urls.getRoute('GetPipesWithParams'),
                 data : {
                     layers: layerName,
                     url: layerUrl,
