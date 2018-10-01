@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var touContentLink = content.find('div.tou a');
             touContentLink.append(me.loc.touLink);
             var conf = me.instance.conf || {};
-            var url = me.instance.sandbox.getLocalizedProperty(conf.termsOfUseUrl) || '';
+            var url = Oskari.getLocalized(conf.termsOfUseUrl) || '';
             if (url.indexOf('http') === 0) {
                 // starts with http - use as a link
                 touContentLink.attr('target', '_blank');
