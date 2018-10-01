@@ -372,7 +372,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             me._cancelAjaxRequest();
             me._startAjaxRequest(dteMs);
 
-            var ajaxUrl = Oskari.urls.getRoute(null, allKnown);
+            var ajaxUrl = me.getAjaxUrl(null, allKnown);
             jQuery.ajax({
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;
