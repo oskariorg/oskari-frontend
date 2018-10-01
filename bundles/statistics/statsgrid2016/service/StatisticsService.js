@@ -267,7 +267,7 @@
                     regionset: regionset,
                     srs: this.sandbox.getMap().getSrsName()
                 },
-                url: this.sandbox.getAjaxUrl('GetRegions'),
+                url: Oskari.urls.getRoute('GetRegions'),
                 success: function (pResp) {
                     var onlyWithNames = pResp.regions.filter(function (region) {
                         return !!region.name;
@@ -336,7 +336,7 @@
                 data: {
                     datasource: ds
                 },
-                url: me.sandbox.getAjaxUrl('GetIndicatorList'),
+                url: Oskari.urls.getRoute('GetIndicatorList'),
                 success: function (pResp) {
                     me.cache.respondToQueue(cacheKey, null, pResp);
                     if (!pResp.complete) {
@@ -384,7 +384,7 @@
                     datasource: ds,
                     indicator: indicator
                 },
-                url: me.sandbox.getAjaxUrl('GetIndicatorMetadata'),
+                url: Oskari.urls.getRoute('GetIndicatorMetadata'),
                 success: function (pResp) {
                     me.cache.respondToQueue(cacheKey, null, pResp);
                 },
@@ -452,7 +452,7 @@
                 type: 'GET',
                 dataType: 'json',
                 data: data,
-                url: this.sandbox.getAjaxUrl('GetIndicatorData'),
+                url: Oskari.urls.getRoute('GetIndicatorData'),
                 success: function (pResp) {
                     me.getRegions(regionset, function (err, regions) {
                         if (err) {

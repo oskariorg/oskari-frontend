@@ -287,7 +287,7 @@ Oskari.clazz.define(
 
             var me = this,
             mapVO = me._sandbox.getMap(),
-            ajaxUrl = me._sandbox.getAjaxUrl(),
+            ajaxUrl = Oskari.urls.getRoute(),
             map = me.mapModule.getMap(),
             layerUniqueKey = jQuery('.cropping-btn.selected').data('uniqueKey'),
             layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),

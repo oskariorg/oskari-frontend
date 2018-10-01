@@ -88,13 +88,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             return this._sandbox;
         },
         getAjaxUrl: function (key, allKnown) {
-            var ajaxUrl = this.getSandbox().getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute('GetBackendStatus');
             var url = null;
 
             if (allKnown) {
-                url = ajaxUrl + 'action_route=GetBackendStatus&Subset=AllKnown';
+                url = ajaxUrl + '&Subset=AllKnown';
             } else {
-                url = ajaxUrl + 'action_route=GetBackendStatus&Subset=Alert';
+                url = ajaxUrl + '&Subset=Alert';
             }
 
             return url;
@@ -372,7 +372,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             me._cancelAjaxRequest();
             me._startAjaxRequest(dteMs);
 
-            var ajaxUrl = me.getAjaxUrl(null, allKnown);
+            var ajaxUrl = Oskari.urls.getRoute(null, allKnown);
             jQuery.ajax({
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;

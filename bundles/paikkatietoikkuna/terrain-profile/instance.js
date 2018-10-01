@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                 return;
             }
             this.feature.properties = { numPoints: 100 };
-            var url = this.sandbox.getAjaxUrl() + 'action_route=TerrainProfile&route=' + encodeURIComponent(JSON.stringify(this.feature));
+            var url = Oskari.urls.getRoute('TerrainProfile') + '&route=' + encodeURIComponent(JSON.stringify(this.feature));
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',

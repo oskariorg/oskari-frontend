@@ -13,10 +13,7 @@ function(instance, config) {
     this._reverseGeocodingIds = config.reverseGeocodingIds;
     this.urls = {};
 
-    var ajaxUrl = this._sandbox.getAjaxUrl() + '&action_route=';
-    this.urls.reverseGeocode = (ajaxUrl + 'GetReverseGeocodingResult');
-
-
+    this.urls.reverseGeocode = Oskari.urls.getRoute('GetReverseGeocodingResult');
 }, {
     __name: "CoordinateTool.CoordinateToolService",
     __qname : "Oskari.mapframework.bundle.coordinatetool.CoordinateToolService",

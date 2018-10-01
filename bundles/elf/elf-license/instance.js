@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         if (conf && conf.licenseInformationUrl) {
             me._licenseInformationUrl = conf.licenseInformationUrl;
         } else {
-            me._licenseInformationUrl = sandbox.getAjaxUrl() +
+            me._licenseInformationUrl = Oskari.urls.getRoute() +
                 'action_route=ELFLicense';
         }
 

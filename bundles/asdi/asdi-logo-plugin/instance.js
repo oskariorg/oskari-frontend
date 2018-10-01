@@ -24,7 +24,7 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
         getAboutLinkContent: function(errorCb) {
           var me = this;
           jQuery.ajax({
-            url:Oskari.getSandbox().getAjaxUrl('GetArticlesByTag'),
+            url: Oskari.urls.getRoute('GetArticlesByTag'),
             data: {
               tags: 'asdi-about'
             },

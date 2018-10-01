@@ -24,7 +24,7 @@ Oskari.clazz.define("Oskari.admin.bundle.metrics.MetricsAdminBundleInstance",
             jQuery.ajax({
                 dataType : "json",
                 type : "GET",
-                url : sandbox.getAjaxUrl(),
+                url : Oskari.urls.getRoute(),
                 data : {
                     action_route : 'Metrics'
                 },

@@ -896,7 +896,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          */
         _loadWFSLayerPropertiesAndTypes:function (layer_id, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
             var me = this,
-                url = me.sandbox.getAjaxUrl()
+                url = Oskari.urls.getRoute()
 
             // Request analyis layers via the backend
             me._getWFSLayerPropertiesAndTypes(layer_id,
@@ -923,7 +923,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {Function} failure the failure callback
          */
         _getWFSLayerPropertiesAndTypes: function (layer_id, success, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&simple=true&layer_id=' + layer_id;
+            var url = Oskari.urls.getRoute('GetWFSDescribeFeature') + '&simple=true&layer_id=' + layer_id;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',

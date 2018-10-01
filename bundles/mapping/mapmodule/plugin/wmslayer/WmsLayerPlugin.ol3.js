@@ -226,7 +226,7 @@ Oskari.clazz.define(
                     			var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
 								layerSource.setTileLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
-										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
+                                        proxyUrl = Oskari.urls.getRoute('GetLayerTile') + "&id=" + layer.getId();
 										me._imagePostFunction(image, src, proxyUrl);
 									} else {
 										originalTileLoadFunction.apply(this, arguments);
@@ -238,7 +238,7 @@ Oskari.clazz.define(
                     			var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
 								layerSource.setImageLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
-										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
+                                        proxyUrl = Oskari.urls.getRoute('GetLayerTile') + "&id=" + layer.getId();
 										me._imagePostFunction(image, src, proxyUrl);
 									} else {
 										originalImageLoadFunction.apply(this, arguments);

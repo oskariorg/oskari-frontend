@@ -294,7 +294,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json; charset=UTF-8',
-                url: me.sandbox.getAjaxUrl('LayerAndGroupOrder'),
+                url: Oskari.urls.getRoute('LayerAndGroupOrder'),
                 data: JSON.stringify(data),
                 error: function(response) {
                     var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -351,7 +351,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     data: {
                         srs: me.sandbox.getMap().getSrsName()
                     },
-                    url: me.sandbox.getAjaxUrl('UpdateCapabilities'),
+                    url: Oskari.urls.getRoute('UpdateCapabilities'),
                     success: function (resp) {
                         xhr = null;
                         var successCount = resp.success.length;

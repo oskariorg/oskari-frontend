@@ -53,8 +53,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
      * @param  {Function} callback [description]
      */
     getDefaultViews: function(callback) {
-        var me = this,
-            sb = me.instance.getSandbox();
+        var me = this;
 
         jQuery.ajax({
             type: 'GET',
@@ -62,7 +61,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
             data: {
                 action_route: 'SystemViews'
             },
-            url: sb.getAjaxUrl(),
+            url: Oskari.urls.getRoute(),
             success: function(data) {
                 callback(data);
             },
@@ -108,7 +107,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
             type: 'POST',
             dataType: 'json',
             data: data,
-            url: sb.getAjaxUrl(),
+            url: Oskari.urls.getRoute(),
             success: function(response) {
                 me.__viewSaved(id, response);
             },

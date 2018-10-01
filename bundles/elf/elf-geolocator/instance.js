@@ -22,7 +22,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             if (conf && conf.searchUrl) {
                 this.searchUrl = conf.searchUrl;
             } else {
-                this.searchUrl = sandbox.getAjaxUrl() +
+                this.searchUrl = Oskari.urls.getRoute() +
                     'action_route=GetGeoLocatorSearchResult';
             }
 

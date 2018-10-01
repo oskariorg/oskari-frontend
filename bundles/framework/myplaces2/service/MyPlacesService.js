@@ -632,7 +632,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 callback(false);
                 return;
             }
-            var ajaxUrl = me._sandbox.getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute();
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',

@@ -189,7 +189,7 @@ function () {
      */
     getRoute: function (params) {
         var me = this;
-            getRouteUrl = this.sandbox.getAjaxUrl('Routing');
+            getRouteUrl = Oskari.urls.getRoute('Routing');
 
         jQuery.ajax({
             data: params,

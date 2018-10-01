@@ -10,7 +10,7 @@ Oskari.clazz.define(
         this.instance = parent;
         this._localization = localization;
         this.sandbox = parent.getSandbox();
-        this.ajaxUrl = this.sandbox.getAjaxUrl();
+        this.ajaxUrl = Oskari.urls.getRoute();
         this.setTitle(localization.title);
         this.setContent(this.createUi());
     }, {

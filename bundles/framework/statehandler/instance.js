@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 }
             }
 
-            var ajaxUrl = sandbox.getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute();
             //"/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&";
             var sessionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlugin', ajaxUrl);
             this.registerPlugin(sessionPlugin);

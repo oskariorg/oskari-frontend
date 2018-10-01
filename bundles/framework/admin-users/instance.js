@@ -259,7 +259,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
 
             jQuery.ajax({
                 type: 'GET',
-                url: me.sandbox.getAjaxUrl() + 'action_route=ManageRoles',
+                url: Oskari.urls.getRoute('ManageRoles'),
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 error: function () {

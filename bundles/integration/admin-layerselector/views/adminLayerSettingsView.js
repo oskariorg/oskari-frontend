@@ -266,7 +266,7 @@ define([
                         id: this.model.getId(),
                         srs: sandbox.getMap().getSrsName()
                     },
-                    url: sandbox.getAjaxUrl('UpdateCapabilities'),
+                    url: Oskari.urls.getRoute('UpdateCapabilities'),
                     success: function (resp) {
                         xhr = null;
                         if(resp.success.length === 1) {
@@ -1294,7 +1294,7 @@ define([
                 var me = this,
                     element = jQuery(e.currentTarget),
                     form = element.parents('.add-layer-wrapper'),
-                    baseUrl = Oskari.getSandbox().getAjaxUrl();
+                    baseUrl = Oskari.urls.getRoute();
 
                 e.stopPropagation();
 
@@ -1427,7 +1427,7 @@ define([
             _setupSldStyles: function() {
                 var me = this,
                     elem = me.$el,
-                    baseUrl = me.options.instance.getSandbox().getAjaxUrl();
+                    baseUrl = Oskari.urls.getRoute();
 
                 if (me.sldStyles) {
                     me._SldStylesUI(elem);
@@ -1456,7 +1456,7 @@ define([
              */
             _saveSldStyle: function(sldName, sldXml) {
                 var me = this,
-                    baseUrl = me.options.instance.getSandbox().getAjaxUrl();
+                    baseUrl = Oskari.urls.getRoute();
 
 
                 jQuery.ajax({

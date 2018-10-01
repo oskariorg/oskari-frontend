@@ -59,7 +59,7 @@ Oskari.clazz.define(
         _startPluginImpl: function () {
             if (!this.ajaxUrl) {
                 this.ajaxUrl =
-                    this.getSandbox().getAjaxUrl() + 'action_route=GetAnalysis?';
+                    Oskari.urls.getRoute('GetAnalysis') + '?';
             }
         },
 

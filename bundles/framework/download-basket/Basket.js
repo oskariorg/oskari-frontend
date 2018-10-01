@@ -164,7 +164,7 @@ Oskari.clazz.define(
             };
             var strUserDetails = JSON.stringify(userDetails);
 
-            var ajaxUrl = me._sandbox.getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute();
 
             jQuery.ajax({
                 beforeSend : function(x) {
