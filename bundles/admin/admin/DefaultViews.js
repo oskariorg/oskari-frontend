@@ -58,10 +58,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
-            data: {
-                action_route: 'SystemViews'
-            },
-            url: Oskari.urls.getRoute(),
+            url: Oskari.urls.getRoute('SystemViews'),
             success: function(data) {
                 callback(data);
             },
@@ -84,7 +81,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
         // setup route and location
         var selectedLayers = [];
         var data = {
-            action_route: 'SystemViews',
             id: id,
             north: sb.getMap().getY(),
             east: sb.getMap().getX(),
@@ -107,7 +103,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, p
             type: 'POST',
             dataType: 'json',
             data: data,
-            url: Oskari.urls.getRoute(),
+            url: Oskari.urls.getRoute('SystemViews'),
             success: function(response) {
                 me.__viewSaved(id, response);
             },
