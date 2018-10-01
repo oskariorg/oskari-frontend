@@ -192,13 +192,18 @@ div.publisher div.startview div.buttons {
 div#publisher-colour-inputs {
   margin-bottom: 15px; }
 
+  div.publisher-color-picker-group-wrapper {
+    display: flex;
+  }
+
 div#publisher-custom-colours {
   padding: 10px 20px; }
   div#publisher-custom-colours div#publisher-custom-colours-bg,
   div#publisher-custom-colours div#publisher-custom-colours-title,
   div#publisher-custom-colours div#publisher-custom-colours-header,
   div#publisher-custom-colours div#publisher-custom-colours-iconcls {
-    margin-bottom: 12px; }
+    margin-bottom: 12px;
+    padding: 1%; }
   div#publisher-custom-colours div.rgbInput {
     padding: 5px;
     border: 1px solid black; }
@@ -208,20 +213,15 @@ div#publisher-custom-colours {
 
 /* I don't think this is needed anymore?
 .maincontainer {
-
     ul.selectedLayersList {
         margin-left: 0px;
-
         li {
             list-style: none;
         }
-
     }
-
     .block {
         display: block;
     }
-
 }
 */
 #editModeBtn {
