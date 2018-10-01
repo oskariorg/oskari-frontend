@@ -209,11 +209,11 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
                 toggleQuestionToolsRequestHandler: Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequestHandler', sandbox, me),
                 visibilityQuestionToolsRequestHandler: Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.VisibilityQuestionRequestHandler', sandbox, me)
             };
-            me.sandbox.addRequestHandler('ShowQuestionStepRequest', this.requestHandlers.showQuestionStepRequest);
-            me.sandbox.addRequestHandler('ShowQuestionToolsRequest', this.requestHandlers.showQuestionToolsRequestHandler);
-            me.sandbox.addRequestHandler('HideQuestionToolsRequest', this.requestHandlers.hideQuestionToolsRequestHandler);
-            me.sandbox.addRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers.toggleQuestionToolsRequestHandler);
-            me.sandbox.addRequestHandler('VisibilityQuestionRequest', this.requestHandlers.visibilityQuestionToolsRequestHandler);
+            me.sandbox.requestHandler('ShowQuestionStepRequest', this.requestHandlers.showQuestionStepRequest);
+            me.sandbox.requestHandler('ShowQuestionToolsRequest', this.requestHandlers.showQuestionToolsRequestHandler);
+            me.sandbox.requestHandler('HideQuestionToolsRequest', this.requestHandlers.hideQuestionToolsRequestHandler);
+            me.sandbox.requestHandler('ToggleQuestionToolsRequest', this.requestHandlers.toggleQuestionToolsRequestHandler);
+            me.sandbox.requestHandler('VisibilityQuestionRequest', this.requestHandlers.visibilityQuestionToolsRequestHandler);
         },
         /**
          * @method getCurrentModuleFeatures

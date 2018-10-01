@@ -108,8 +108,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
             for (p in this.eventHandlers) {
                 this._sandbox.registerForEventByName(this, p);
             }
-            this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoRequest', this.getGFIHandler);
-            this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', this.getGFIHandler);
+            this._sandbox.requestHandler('MapModulePlugin.GetFeatureInfoRequest', this.getGFIHandler);
+            this._sandbox.requestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', this.getGFIHandler);
         },
         /**
          * @method stopPlugin

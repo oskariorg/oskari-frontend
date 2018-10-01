@@ -342,11 +342,9 @@ Oskari.clazz.define(
          *
          */
         start: function () {
-            var me = this,
-                sandbox = me.sandbox,
-                rn = 'Search.AddSearchResultActionRequest',
-                reqBuilder,
-                request;
+            var me = this;
+            var sandbox = me.sandbox;
+            var requestName = 'Search.AddSearchResultActionRequest';
 
             // Already started so nothing to do here
             if (me.isStarted) {
@@ -363,10 +361,9 @@ Oskari.clazz.define(
             me.mapModule.registerPlugin(me.drawFilterPlugin);
             me.mapModule.startPlugin(me.drawFilterPlugin);
 
-            reqBuilder = sandbox.getRequestBuilder(rn);
-            if (reqBuilder) {
-                request = reqBuilder(
-                    me.linkAction, me._getSearchResultAction(), me);
+            if (sandbox.hasHandler(requestName)) {
+                var reqBuilder = Oskari.requestBuilder(requestName);
+                var request = reqBuilder(me.linkAction, me._getSearchResultAction(), me);
                 sandbox.request(me.instance, request);
             }
 
@@ -418,11 +415,9 @@ Oskari.clazz.define(
          *
          */
         stop: function () {
-            var me = this,
-                sandbox = me.sandbox,
-                rn = 'Search.RemoveSearchResultActionRequest',
-                reqBuilder,
-                request;
+            var me = this;
+            var sandbox = me.sandbox;
+            var requestName = 'Search.RemoveSearchResultActionRequest';
 
             // Already stopped so nothing to do here
             if (!me.isStarted) {
@@ -445,9 +440,9 @@ Oskari.clazz.define(
             me._toggleDrawPlugins(true);
             me._toggleDrawFilterPlugins(true);
 
-            reqBuilder = sandbox.getRequestBuilder(rn);
-            if (reqBuilder) {
-                request = reqBuilder(me.linkAction);
+            if (sandbox.hasHandler(requestName)) {
+                var reqBuilder = Oskari.requestBuilder(requestName);
+                var request = reqBuilder(me.linkAction);
                 sandbox.request(me.instance, request);
             }
 
@@ -798,7 +793,7 @@ Oskari.clazz.define(
                 .find('div.toolContainer div.buttons')
                 .remove();
 
-            if(this.drawPlugin) {
+            if (this.drawPlugin) {
                 if (isCancel) {
                     // we wish to clear the drawing without sending further events
                     this.drawPlugin.stopDrawing();
@@ -817,16 +812,12 @@ Oskari.clazz.define(
          * @param {Object} config params for StartDrawFilteringRequest
          */
         _sendDrawFilterRequest: function (config) {
-            var sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'DrawFilterPlugin.StartDrawFilteringRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(config);
-                sandbox.request(this.instance, request);
+            if (!this.sandbox.hasHandler('DrawFilterPlugin.StartDrawFilteringRequest')) {
+                return;
             }
+            var reqBuilder = Oskari.requestBuilder('DrawFilterPlugin.StartDrawFilteringRequest');
+            var request = reqBuilder(config);
+            this.sandbox.request(this.instance, request);
         },
 
         /**
@@ -837,16 +828,12 @@ Oskari.clazz.define(
          * @param {Object} config params for StopDrawFilteringRequest
          */
         _sendStopDrawFilterRequest: function (config) {
-            var sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'DrawFilterPlugin.StopDrawFilteringRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(config);
-                sandbox.request(this.instance, request);
+            if (!this.sandbox.hasHandler('DrawFilterPlugin.StopDrawFilteringRequest')) {
+                return;
             }
+            var reqBuilder = Oskari.requestBuilder('DrawFilterPlugin.StopDrawFilteringRequest');
+            var request = reqBuilder(config);
+            this.sandbox.request(this.instance, request);
         },
 
         /**

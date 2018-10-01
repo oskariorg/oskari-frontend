@@ -77,8 +77,8 @@ function() {
 		var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 		mapModule.registerPlugin(this.popupPlugin);
 		mapModule.startPlugin(this.popupPlugin);
-		sandbox.addRequestHandler('HaravaInfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
-		sandbox.addRequestHandler('HaravaInfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
+		sandbox.requestHandler('HaravaInfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
+		sandbox.requestHandler('HaravaInfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
 
         sandbox.registerAsStateful(this.mediator.bundleId, this);
 	},

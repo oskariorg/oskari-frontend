@@ -118,7 +118,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
             this.printoutHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, function () {
                 me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'attach']);
             });
-            sandbox.addRequestHandler('printout.PrintMapRequest', this.printoutHandler);
+            sandbox.requestHandler('printout.PrintMapRequest', this.printoutHandler);
 
             // request toolbar to add buttons
             var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');

@@ -2357,8 +2357,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             p;
         this._sandbox = sandbox;
         sandbox.register(this);
-        sandbox.addRequestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
-        sandbox.addRequestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
+        sandbox.requestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
+        sandbox.requestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
         for (p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
                 me._sandbox.registerForEventByName(me, p);

@@ -256,7 +256,7 @@ Oskari.clazz.define(
                 sandbox,
                 me
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'AddSearchResultActionRequest',
                 this.addSearchResultActionRequestHandler
             );
@@ -365,30 +365,25 @@ Oskari.clazz.define(
          * @param {String} value the identifier value
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
-        _removeFeaturesFromMap: function(identifier, value, layer){
-            var me = this,
-                rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
-            me._unactiveShowInfoAreaIcons();
-            me.sandbox.postRequestByName(rn, [identifier, value, layer]);
+        _removeFeaturesFromMap: function (identifier, value, layer) {
+            this._unactiveShowInfoAreaIcons();
+            this.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [identifier, value, layer]);
         },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var sandbox = this.sandbox,
-                p;
+            var sandbox = this.sandbox;
+            var p;
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
                     sandbox.unregisterFromEventByName(this, p);
                 }
             }
 
-            var reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
-                request = reqBuilder(this);
-
-            sandbox.request(this, request);
+            var reqBuilder = Oskari.requestBuilder('userinterface.RemoveExtensionRequest');
+            sandbox.request(this, reqBuilder(this));
 
             this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
@@ -414,8 +409,8 @@ Oskari.clazz.define(
          * (re)creates the UI for "metadata catalogue" functionality
          */
         createUi: function () {
-            var me = this,
-                metadataCatalogueContainer = me.templates.metadataTab.clone();
+            var me = this;
+            var metadataCatalogueContainer = me.templates.metadataTab.clone();
             me.optionPanel = me.templates.optionPanel.clone();
             me.searchPanel = me.templates.searchPanel.clone();
             me.resultPanel = me.templates.resultPanel.clone();
@@ -524,15 +519,12 @@ Oskari.clazz.define(
 
             // Metadata catalogue tab
 
-            var title = me.getLocalization('tabTitle'),
-                content = metadataCatalogueContainer,
-                priority = this.tabPriority,
-                id = 'oskari_metadatacatalogue_tabpanel_header',
-                reqName = 'Search.AddTabRequest',
-                reqBuilder = me.sandbox.getRequestBuilder(reqName),
-                req = reqBuilder(title, content, priority, id);
-
-            me.sandbox.request(me, req);
+            var title = me.getLocalization('tabTitle');
+            var content = metadataCatalogueContainer;
+            var priority = this.tabPriority;
+            var id = 'oskari_metadatacatalogue_tabpanel_header';
+            var reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
+            me.sandbox.request(me, reqBuilder(title, content, priority, id));
 
             // Link to advanced search
             var moreLessLink = this.templates.moreLessLink.clone();
@@ -568,8 +560,8 @@ Oskari.clazz.define(
             var me = this;
             me.searchPanel.hide();
             me.optionPanel.show();
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okButton = dialog.createCloseButton('OK');
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okButton = dialog.createCloseButton('OK');
 
             dialog.setId('oskari_search_error_popup');
             dialog.makeModal();
@@ -1178,9 +1170,6 @@ Oskari.clazz.define(
                 layerSelected,
                 showText,
                 hideText,
-                visibilityRequestBuilder,
-                builder,
-                request,
                 layerListItem,
                 layerLink;
 
@@ -1206,15 +1195,12 @@ Oskari.clazz.define(
 
             // Click binding
             layerLink.on('click', function () {
-                visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
                 // Hide layer
                 if (jQuery(this).html() === hideText) {
                     // Set previously selected layer only invisible
-                    builder = me.sandbox.getRequestBuilder('RemoveMapLayerRequest');
+                    var builder = Oskari.requestBuilder('RemoveMapLayerRequest');
                     layerSelected = false;
-
-                    request = builder(layer.getId());
-                    me.sandbox.request(me.getName(), request);
+                    me.sandbox.request(me.getName(), builder(layer.getId()));
                     jQuery(this).html(showText);
                 } else {
                     // Select previously unselected layer
@@ -1222,8 +1208,8 @@ Oskari.clazz.define(
                         me.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
                     }
                     // Set layer visible
-                    request = visibilityRequestBuilder(layer.getId(), true);
-                    me.sandbox.request(me.getName(), request);
+                    var visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+                    me.sandbox.request(me.getName(), visibilityRequestBuilder(layer.getId(), true));
                     jQuery(this).html(hideText);
                 }
             });

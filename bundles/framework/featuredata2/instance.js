@@ -147,7 +147,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
             }
 
-            sandbox.addRequestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
+            sandbox.requestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
             this.__setupLayerTools();
         },
 

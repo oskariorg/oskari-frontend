@@ -26,7 +26,7 @@ function () {
         this.createPlugin();
         this.createUi();
 
-        this.sandbox.addRequestHandler('ShowProjectionChangerRequest', this);
+        this.sandbox.requestHandler('ShowProjectionChangerRequest', this);
     },
     getViews: function () {
         return this.getAppViews();

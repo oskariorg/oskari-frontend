@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             );
 
             // register request handlers
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'ContentEditor.ShowContentEditorRequest',
                 me.showContentEditorRequestHandler
             );

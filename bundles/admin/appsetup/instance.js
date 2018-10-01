@@ -66,8 +66,8 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
             });
             me._importBtn.insertTo(content.find('.appsetup__button'));
 
-            var reqBuilder = sandbox.getRequestBuilder('Admin.AddTabRequest');
-            if(reqBuilder) {
+            if (sandbox.hasHandler('Admin.AddTabRequest')) {
+                var reqBuilder = Oskari.requestBuilder('Admin.AddTabRequest');
                 var request = reqBuilder(me._localization.title, content, 3, 'appsetup');
                 sandbox.request(this, request);
             }

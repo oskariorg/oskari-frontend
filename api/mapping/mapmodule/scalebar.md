@@ -1,4 +1,4 @@
-# Scale Bar
+# Scale Bar Plugin
 
 ## Description
 

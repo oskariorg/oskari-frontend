@@ -95,9 +95,9 @@ function() {
     			ToggleVisibilityGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequestHandler', sandbox, searchPlugin)
     	};
 
-        sandbox.addRequestHandler('StartGeometrySearchRequest', this.requestHandlers.StartGeometrySearchRequest);
-    	sandbox.addRequestHandler('StopGeometrySearchRequest', this.requestHandlers.StopGeometrySearchRequest);
-    	sandbox.addRequestHandler('ToggleVisibilityGeometrySearchRequest', this.requestHandlers.ToggleVisibilityGeometrySearchRequest);
+        sandbox.requestHandler('StartGeometrySearchRequest', this.requestHandlers.StartGeometrySearchRequest);
+    	sandbox.requestHandler('StopGeometrySearchRequest', this.requestHandlers.StopGeometrySearchRequest);
+    	sandbox.requestHandler('ToggleVisibilityGeometrySearchRequest', this.requestHandlers.ToggleVisibilityGeometrySearchRequest);
     },
 
     /**

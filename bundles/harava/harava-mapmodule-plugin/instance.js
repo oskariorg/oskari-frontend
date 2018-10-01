@@ -76,9 +76,9 @@ function() {
     			addControlToMapRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.AddControlToMapRequestHandler', sandbox, mapModule),
     			zoomToExtentRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequestHandler', sandbox, mapModule)
     	};
-        sandbox.addRequestHandler('UpdateMapRequest', this.requestHandlers.updateMapRequest);
-        sandbox.addRequestHandler('AddControlToMapRequest', this.requestHandlers.addControlToMapRequest);
-        sandbox.addRequestHandler('ZoomToExtentRequest', this.requestHandlers.zoomToExtentRequest);
+        sandbox.requestHandler('UpdateMapRequest', this.requestHandlers.updateMapRequest);
+        sandbox.requestHandler('AddControlToMapRequest', this.requestHandlers.addControlToMapRequest);
+        sandbox.requestHandler('ZoomToExtentRequest', this.requestHandlers.zoomToExtentRequest);
 
     },
 
