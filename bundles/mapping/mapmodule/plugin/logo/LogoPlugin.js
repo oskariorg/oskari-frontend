@@ -146,7 +146,7 @@ Oskari.clazz.define(
             this.changeFont(conf.font || this.getToolFontFromMapModule(), container);
             this._createServiceLink(container);
 
-            var termsUrl = this.getSandbox().getLocalizedProperty(conf.termsUrl);
+            var termsUrl = Oskari.getLocalized(conf.termsUrl);
             this._createTermsLink(termsUrl, container);
             this._createDataSourcesLink(container);
             return container;
@@ -189,7 +189,7 @@ Oskari.clazz.define(
          */
         __getMapUrl : function() {
             var sandbox = this.getSandbox();
-            var url = sandbox.getLocalizedProperty(this.getConfig().mapUrlPrefix);
+            var url = Oskari.getLocalized(this.getConfig().mapUrlPrefix);
 
             // setup current url as base if none configured
             return sandbox.createURL(url || window.location.pathname, true);
