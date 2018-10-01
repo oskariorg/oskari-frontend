@@ -847,12 +847,12 @@ Oskari.clazz.define(
             if (!layer.isLayerOfType('VECTOR')) {
                 return null;
             }
-            var ol = this.getLayerById(layer.getId());
-            if (!ol) {
+            var olLayer = this.getLayerById(layer.getId());
+            if (!olLayer) {
                 return null;
             }
             // only single layer/id, wrap it in an array
-            return [ol];
+            return [olLayer];
         },
         getLayerById: function(id) {
             if (!id) {
