@@ -314,13 +314,11 @@ function() {
             // Create the inputs for custom colour
             if ('custom' === colours[i].val) {
                 content.find('div#publisher-colour-inputs').append(me._createCustomColoursInputs());
+                // Color picker value or icon changed
                 content.find('div#publisher-custom-colours').on('change',function() {
+                    jQuery('#publisher-colour-inputs input[id=custom]').prop('checked', true);
+                    jQuery('div.basic_publisher').find('input[name=publisher-colour]').val(me.__instance._localization.BasicView.layout.fields.colours['custom']).attr('data-colour-code', 'custom');
                     me._updatePreviewFromCustomValues(content);
-                });
-                content.find('div#publisher-colour-inputs input[name=colour]').on('change', function() {
-                    if (jQuery(this).attr('id') === 'custom') {
-                        me._updatePreviewFromCustomValues(content);
-                    }
                 });
             }
         }
@@ -649,15 +647,16 @@ function() {
      */
 
     _updatePreviewFromCustomValues: function(content) {
-        if (jQuery('#publisher-colour-inputs input[name=colour]:checked').attr('id') === 'custom') {
             var selectedColour = {};
             selectedColour.bgColour = this._colorPickers[0].getValue();
             selectedColour.titleColour = this._colorPickers[1].getValue();
             selectedColour.headerColour = this._colorPickers[2].getValue();
             selectedColour.iconCls = content.find('div#publisher-custom-colours-iconcls input[name=custom-icon-class]:checked').val();
+            selectedColour.val = 'custom';
+            this.values.colourScheme = selectedColour;
+            this._sendColourSchemeChangedEvent(selectedColour);
             this._changeGfiColours(selectedColour, content);
             this._collectCustomColourValues(content);
-        }
     },
 
     /**
