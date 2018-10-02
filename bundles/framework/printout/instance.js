@@ -38,7 +38,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 "image/png": ""
             }
         };
-
+        this._log = Oskari.log(this.getName());
     }, {
         /**
          * @static
@@ -188,7 +188,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 /* we might get 9 of these if 9 layers would have been selected */
                 if (this.printout && this.printout.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
-                    this.getSandbox().printDebug("PRINTOUT REFRESH");
+                    this._log.debug("PRINTOUT REFRESH");
                     this.printout.refresh(true);
                 }
             },

@@ -30,6 +30,7 @@ Oskari.clazz.define(
         this.state = undefined;
         this.conf = {};
         this.personalDataTab = undefined;
+        this._log = Oskari.log(this.getName());
     }, {
         /**
          * @static @property __name
@@ -221,7 +222,7 @@ Oskari.clazz.define(
             MapLayerVisibilityChangedEvent: function (event) {
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
-                    this.getSandbox().printDebug('ANALYSE REFRESH');
+                    this._log.debug('ANALYSE REFRESH');
                     //this.analyse.refreshAnalyseData();
                 }
             },

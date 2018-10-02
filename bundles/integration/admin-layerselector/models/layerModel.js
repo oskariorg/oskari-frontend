@@ -70,7 +70,7 @@
              */
             _setupFromCapabilitiesValues: function (capabilitiesNode) {
                 var sb = Oskari.getSandbox();
-                sb.printDebug("Found:", capabilitiesNode);
+                Oskari.log('admin-layerselector~layerModel').debug("Found:", capabilitiesNode);
                 var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService'),
                     mapLayer = mapLayerService.createMapLayer(capabilitiesNode),
                     dataToKeep = null;

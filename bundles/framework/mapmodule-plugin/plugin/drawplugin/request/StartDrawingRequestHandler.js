@@ -2,10 +2,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.r
 
     this.sandbox = sandbox;
     this.drawPlugin = drawPlugin;
+    this._log = Oskari.log('StartDrawingRequestPluginHandler');
 }, {
     handleRequest : function(core, request) {
         var drawMode = request.getDrawMode();
-        this.sandbox.printDebug("[Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.request.StartDrawingRequestPluginHandler] Start Drawing: " + drawMode);
+        this._log.debug('Start Drawing: ' + drawMode);
         this.drawPlugin.startDrawing({
             drawMode : request.getDrawMode(),
             geometry : request.getGeometry(),

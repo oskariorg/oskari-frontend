@@ -12,7 +12,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveFeatures
      */
 	function (sandbox, vectorLayerPlugin) {
 	    this.sandbox = sandbox;
-	    this.vectorLayerPlugin = vectorLayerPlugin;
+        this.vectorLayerPlugin = vectorLayerPlugin;
+        this._log = Oskari.log('RemoveFeaturesFromMapRequestHandler');
 	}, {
 		/**
          * @method handleRequest
@@ -21,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveFeatures
          * @param {Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequest} request request to handle
          */
 	    handleRequest: function (core, request) {
-	        this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequestHandler] Remove Features');
+	        this._log.debug('Remove Features');
 	        this.vectorLayerPlugin.removeFeaturesFromMap(request.getIdentifier(), request.getValue(), request.getLayer());
 	    }
 	}, {

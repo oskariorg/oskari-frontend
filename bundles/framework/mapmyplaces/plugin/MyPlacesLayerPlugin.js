@@ -24,6 +24,7 @@ Oskari.clazz.define(
         if (me._config && me._config.ajaxUrl) {
             me.ajaxUrl = me._config.ajaxUrl;
         }
+        this._log = Oskari.log('MyPlacesLayerPlugin');
     }, {
 
         /** @static @property _layerType type of layers this plugin handles */
@@ -126,7 +127,7 @@ Oskari.clazz.define(
                     continue;
                 }
 
-                sandbox.printDebug('preselecting ' + layerId);
+                this._log.debug('preselecting ' + layerId);
                 this.addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
         },
@@ -710,7 +711,7 @@ Oskari.clazz.define(
 
             this.layers[openLayerId] = myLayersGroup;
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for MyPlacesLayer ' +
                 layer.getId()
             );

@@ -5,9 +5,10 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', function (sandbox, mapmodule) {
     this.sandbox = sandbox;
     this.mapmodule = mapmodule;
+    this._log = Oskari.log('GetUserLocationRequestHandler');
 }, {
     handleRequest: function (core, request) {
-        this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler] Get user location');
+        this._log.debug('Get user location');
         var mapmodule = this.mapmodule;
         var cb = undefined;
         // if request.getCenterMap() is truthy: also move map
