@@ -895,8 +895,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          *
          */
         _loadWFSLayerPropertiesAndTypes:function (layer_id, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
-            var me = this,
-                url = Oskari.urls.getRoute()
+            var me = this;
 
             // Request analyis layers via the backend
             me._getWFSLayerPropertiesAndTypes(layer_id,

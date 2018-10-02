@@ -10,7 +10,7 @@ Oskari.clazz.define(
         this.instance = parent;
         this._localization = localization;
         this.sandbox = parent.getSandbox();
-        this.ajaxUrl = Oskari.urls.getRoute();
+        this.ajaxUrl = Oskari.urls.getRoute('ManageRoles');
         this.setTitle(localization.title);
         this.setContent(this.createUi());
     }, {
@@ -130,7 +130,7 @@ Oskari.clazz.define(
 
             jQuery.ajax({
                 type: 'PUT',
-                url: me.ajaxUrl + 'action_route=ManageRoles',
+                url: me.ajaxUrl,
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
 
@@ -184,7 +184,7 @@ Oskari.clazz.define(
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.ajaxUrl + 'action_route=ManageRoles' + '&id=' + role.id,
+                url: me.ajaxUrl + '&id=' + role.id,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(

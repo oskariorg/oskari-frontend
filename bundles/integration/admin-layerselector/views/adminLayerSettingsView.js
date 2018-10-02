@@ -1293,8 +1293,7 @@ define([
             fetchCapabilities: function(e) {
                 var me = this,
                     element = jQuery(e.currentTarget),
-                    form = element.parents('.add-layer-wrapper'),
-                    baseUrl = Oskari.urls.getRoute();
+                    form = element.parents('.add-layer-wrapper');
 
                 e.stopPropagation();
 
@@ -1334,7 +1333,7 @@ define([
                         version: version,
                         crs: crs
                     },
-                    url: baseUrl + 'action_route=GetWSCapabilities',
+                    url: Oskari.urls.getRoute('GetWSCapabilities'),
                     success: function(resp) {
                         me.progressSpinner.stop();
                         me.__capabilitiesResponseHandler(layerType, resp);
@@ -1426,8 +1425,7 @@ define([
              */
             _setupSldStyles: function() {
                 var me = this,
-                    elem = me.$el,
-                    baseUrl = Oskari.urls.getRoute();
+                    elem = me.$el;
 
                 if (me.sldStyles) {
                     me._SldStylesUI(elem);
@@ -1437,7 +1435,7 @@ define([
                     type: 'POST',
                     dataType: 'json',
                     data: {},
-                    url: baseUrl + 'action_route=SldStyles',
+                    url: Oskari.urls.getRoute('SldStyles'),
                     success: function(resp) {
                         me.sldStyles = resp.sldStyles;
                         me._SldStylesUI(elem);
@@ -1455,9 +1453,7 @@ define([
              * @method _saveSldStyle
              */
             _saveSldStyle: function(sldName, sldXml) {
-                var me = this,
-                    baseUrl = Oskari.urls.getRoute();
-
+                var me = this;
 
                 jQuery.ajax({
                     type: 'POST',
@@ -1466,7 +1462,7 @@ define([
                         name: sldName,
                         xml: encodeURIComponent(sldXml)
                     },
-                    url: baseUrl + 'action_route=SldStyles',
+                    url: Oskari.urls.getRoute('SldStyles'),
                     success: function(resp) {
                         me._showDialog("title", "New sld saved success / " + sldName);
                         //Update UI

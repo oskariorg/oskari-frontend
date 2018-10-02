@@ -459,7 +459,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _publishMap: function (selections) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
-                url = Oskari.urls.getRoute(),
                 totalWidth = '100%',
                 totalHeight = '100%',
                 errorHandler = function () {
@@ -473,7 +472,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             }
             // make the ajax call
             jQuery.ajax({
-                url: url + '&action_route=AppSetup',
+                url: Oskari.urls.getRoute(AppSetup),
                 type: 'POST',
                 dataType: 'json',
                 data: {

@@ -1,6 +1,5 @@
 /**
- * @clas
-s Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+ * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
  *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
@@ -632,7 +631,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 callback(false);
                 return;
             }
-            var ajaxUrl = Oskari.urls.getRoute();
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -645,7 +643,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                     id: category.getId(),
                     makePublic: makePublic
                 },
-                url: ajaxUrl + 'action_route=PublishMyPlaceLayer',
+                url: Oskari.urls.getRoute('PublishMyPlaceLayer'),
                 success: function (pResp) {
                     if (pResp) {
                         category.setPublic(makePublic);
