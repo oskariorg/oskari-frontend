@@ -229,7 +229,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             },
             WFSFeatureGeometriesEvent: function(evt) {
                 if (this.sideContentEditor != null) {
-                    this.sideContentEditor.ParseWFSFeatureGeometries(evt);
+                    this.sideContentEditor.parseWFSFeatureGeometries(evt);
                 }
             },
             'MapClickedEvent': function(event) {

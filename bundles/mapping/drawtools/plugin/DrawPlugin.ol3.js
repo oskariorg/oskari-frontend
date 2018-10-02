@@ -1181,7 +1181,7 @@ Oskari.clazz.define(
         _getFeatureCenter: function(feature) {
             // Circle has (multi)polygon or (multi)point ol type and it center need calculated different way
             if(feature.getGeometry().getType().indexOf('Polygon') > -1 || feature.getGeometry().getType().indexOf('Point') > -1) {
-                return ol.extent.getCenter(feature.getGeometry().getExtent());
+                return olExtent.getCenter(feature.getGeometry().getExtent());
             }
             return feature.getGeometry().getCenter();
         },
