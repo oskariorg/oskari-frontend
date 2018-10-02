@@ -957,7 +957,7 @@ Oskari.clazz.define(
 
                     addChildren(maplayerGroup,subgroupChildren, groupPrefix+'subgroup-');
 
-                    return me._getJsTreeObject(me.sb.getLocalizedProperty(maplayerGroup.getName()) + ' <span class="layer-count"></span>',
+                    return me._getJsTreeObject(Oskari.getLocalized(maplayerGroup.getName()) + ' <span class="layer-count"></span>',
                             groupPrefix + 'subgroup',
                             opts, subgroupChildren);
                 }
