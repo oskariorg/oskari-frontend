@@ -324,7 +324,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             this._propertyTimer = null;
         }
         this._propertyTimer = setTimeout(function () {
-            var event = self.plugin.getSandbox().getEventBuilder('WFSPropertiesEvent')(layer);
+            var event = Oskari.eventBuilder('WFSPropertiesEvent')(layer);
             self.plugin.getSandbox().notifyAll(event);
         }, this._featureUpdateFrequence);
     },
@@ -355,7 +355,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             this._featureTimer = null;
         }
         this._featureTimer = setTimeout(function () {
-            var event = self.plugin.getSandbox().getEventBuilder('WFSFeatureEvent')(
+            var event = Oskari.eventBuilder('WFSFeatureEvent')(
                 layer,
                 data.data.feature
             );
@@ -394,7 +394,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 });
             }
             me.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds);
-            var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, true);
+            var event = Oskari.eventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, true);
             sandbox.notifyAll(event);
         } else {
             // FIXME: pass coordinates from server in response, but not like this
@@ -409,7 +409,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                     features [i] = this.sortArrayByFeaturePropertyIndexes (layer, features[i]);
                 }
             }
-            var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
+            var infoEvent = Oskari.eventBuilder('GetInfoResultEvent')(data.data);
             sandbox.notifyAll(infoEvent);
         }
     },
@@ -444,7 +444,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             }
         }
 
-        var event = sandbox.getEventBuilder('WFSFeatureGeometriesEvent')(layer, keepPrevious);
+        var event = Oskari.eventBuilder('WFSFeatureGeometriesEvent')(layer, keepPrevious);
         sandbox.notifyAll(event);
 
     },
@@ -500,7 +500,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
         }
 
-        var event = this.plugin.getSandbox().getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, selectFeatures);
+        var event = Oskari.eventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, selectFeatures);
         this.plugin.getSandbox().notifyAll(event);
     },
 
@@ -534,7 +534,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             };
 
         // send as an event forward to WFSPlugin (draws)
-        var event = this.plugin.getSandbox().getEventBuilder('WFSImageEvent')(
+        var event = Oskari.eventBuilder('WFSImageEvent')(
             layer,
             imageUrl,
             data.data.bbox,
@@ -556,7 +556,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 this.session.session
             );
 
-            var printoutEvent = this.plugin.getSandbox().getEventBuilder(
+            var printoutEvent = Oskari.eventBuilder(
                     'Printout.PrintableContentEvent'
                 ),
                 evt;

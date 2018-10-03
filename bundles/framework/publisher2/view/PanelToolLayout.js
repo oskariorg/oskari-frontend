@@ -373,7 +373,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     hoverClass: 'ui-state-highlight',
                     tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
                 });
-            var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(true);
+            var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
         },
 
@@ -395,7 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             draggables.draggable('destroy');
             jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
 
-            var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
+            var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
         },
 

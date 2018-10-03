@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);
         },
 

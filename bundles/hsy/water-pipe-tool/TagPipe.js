@@ -1338,7 +1338,7 @@ Oskari.clazz.define(
          */
         _printGeoJSON: function(mustachePrintJSONarray){
             var me = this,
-            printoutEvent = me.sandbox.getEventBuilder('Printout.PrintableContentEvent'),
+            printoutEvent = Oskari.eventBuilder('Printout.PrintableContentEvent'),
             printOutArray = [],
             evt;
 

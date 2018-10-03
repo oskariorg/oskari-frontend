@@ -140,7 +140,7 @@ Oskari.clazz.define(
             } catch (error) {
                 // happens when the sketch isn't even started -> reset state
                 this.stopDrawing();
-                var evtBuilder = this.getSandbox().getEventBuilder(
+                var evtBuilder = Oskari.eventBuilder(
                     'DrawPlugin.SelectedDrawingEvent'
                 );
                 var event = evtBuilder(null, null, this.creatorId);
@@ -204,7 +204,7 @@ Oskari.clazz.define(
             }
 
             if (!me.multipart || isForced) {
-                evtBuilder = sandbox.getEventBuilder(
+                evtBuilder = Oskari.eventBuilder(
                     'DrawPlugin.FinishedDrawingEvent'
                 );
                 event = evtBuilder(
@@ -213,7 +213,7 @@ Oskari.clazz.define(
                     me.creatorId
                 );
             } else {
-                evtBuilder = sandbox.getEventBuilder(
+                evtBuilder = Oskari.eventBuilder(
                     'DrawPlugin.AddedFeatureEvent'
                 );
                 event = evtBuilder(
@@ -505,7 +505,7 @@ Oskari.clazz.define(
         },
 
         _sendActiveGeometry: function (geometry, drawMode) {
-            var eventBuilder = this.getSandbox().getEventBuilder(
+            var eventBuilder = Oskari.eventBuilder(
                     'DrawPlugin.ActiveDrawingEvent'
                 ),
                 event,

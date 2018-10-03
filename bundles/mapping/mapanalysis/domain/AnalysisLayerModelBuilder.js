@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
                 var filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', fixedOptions);
                 filterDialog.setUpdateButtonHandler(function(filters) {
                     // throw event to new wfs
-                    var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
+                    var evt = Oskari.eventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
                     me.sandbox.notifyAll(evt);
                 });
 

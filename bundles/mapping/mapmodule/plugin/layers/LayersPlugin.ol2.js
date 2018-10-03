@@ -273,7 +273,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                     mapLayer.display(false);
                 }
             }
-            var event = this.getSandbox().getEventBuilder(
+            var event = Oskari.eventBuilder(
                 'MapLayerVisibilityChangedEvent'
             )(layer, scaleOk, geometryMatch);
             this.getSandbox().notifyAll(event);

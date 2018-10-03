@@ -515,7 +515,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          */
         highlightWFSFeature: function(layerId, featureId){
                 var me = this,
-                builder = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
+                builder = Oskari.eventBuilder('WFSFeaturesSelectedEvent');
 
                 var featureIdList = [];
                 // check if the param is already an array
@@ -585,7 +585,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             if(me.wfsMapIdList.length > 0){
                 var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layer = mapLayerService.findMapLayer(me.wfsMapIdList[0]);
-                var event = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
+                var event = Oskari.eventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
                 me.sandbox.notifyAll(event);
             }
         },

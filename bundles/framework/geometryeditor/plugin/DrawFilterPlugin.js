@@ -1048,7 +1048,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * Finishes operation of geometry filtering by drawing
      */
     finishDrawFiltering: function () {
-        var evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
+        var evtBuilder = Oskari.eventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
         var event = evtBuilder(this.getFiltered(), this.editMode, this.creatorId);
         this._sandbox.notifyAll(event);
     },

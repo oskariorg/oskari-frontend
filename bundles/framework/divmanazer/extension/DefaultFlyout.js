@@ -243,7 +243,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         notify: function () {
             var eventName = arguments[0],
                 args = this.slicer.apply(arguments, [1]),
-                builder = this.getSandbox().getEventBuilder(eventName),
+                builder = Oskari.eventBuilder(eventName),
                 evt = builder.apply(builder, args);
             return this.getSandbox().notifyAll(evt);
         },

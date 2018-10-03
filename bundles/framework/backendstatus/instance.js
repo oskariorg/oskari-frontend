@@ -415,7 +415,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 return;
             }
 
-            var evtBuilder = sandbox.getEventBuilder('BackendStatus.BackendStatusChangedEvent'),
+            var evtBuilder = Oskari.eventBuilder('BackendStatus.BackendStatusChangedEvent'),
                 changeNotifications = {};
 
             /* let's update AllKnown */

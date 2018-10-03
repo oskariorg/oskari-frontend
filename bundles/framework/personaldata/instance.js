@@ -129,7 +129,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             sandbox.requestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
 
             // Personaldata available
-            var eventBuilder = sandbox.getEventBuilder('Personaldata.PersonaldataLoadedEvent');
+            var eventBuilder = Oskari.eventBuilder('Personaldata.PersonaldataLoadedEvent');
             var event = eventBuilder();
             sandbox.notifyAll(event);
             this._registerForGuidedTour();

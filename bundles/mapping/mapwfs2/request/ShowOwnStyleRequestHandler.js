@@ -77,7 +77,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
 
                 // change style to custom
                 layer.selectStyle(styleName);
-                var event = self.plugin.getSandbox().getEventBuilder('MapLayerEvent')(layerId, 'update');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
                 self.plugin.getSandbox().notifyAll(event);
 
                 dialog.close();

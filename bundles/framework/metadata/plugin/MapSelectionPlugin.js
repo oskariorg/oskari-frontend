@@ -78,7 +78,7 @@ Oskari.clazz.define(
                 this.listeners[i](geometry);
             }
             // create event
-            event = this.getSandbox().getEventBuilder(
+            event = Oskari.eventBuilder(
                 'Metadata.MapSelectionEvent'
             )(geometry);
             this.getSandbox().notifyAll(event);

@@ -238,7 +238,7 @@ Oskari.clazz.define(
 
             me.filterDialog.setUpdateButtonHandler(function (filters) {
                 // throw event to new wfs
-                var event = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
+                var event = Oskari.eventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
                 me.instance.sandbox.notifyAll(event);
             });
 
@@ -948,7 +948,7 @@ Oskari.clazz.define(
         _handleGridSelect: function (layer, dataId, keepCollection) {
             var sandbox = this.instance.sandbox,
                 featureIds = [dataId],
-                builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent'),
+                builder = Oskari.eventBuilder('WFSFeaturesSelectedEvent'),
                 panel = this.layers['' + layer.getId()],
                 isOk = this.tabsContainer.isSelected(panel);
 

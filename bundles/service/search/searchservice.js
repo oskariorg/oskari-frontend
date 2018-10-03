@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
         doSearch: function(searchString, onSuccess, onError) {
             var lang = Oskari.getLang();
             var sb = this.sandbox || Oskari.getSandbox();
-            var evtBuilder = sb.getEventBuilder('SearchResultEvent');
+            var evtBuilder = Oskari.eventBuilder('SearchResultEvent');
             jQuery.ajax({
                 dataType: "json",
                 type: "POST",
