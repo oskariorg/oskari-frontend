@@ -407,6 +407,9 @@ Oskari.clazz.define(
                 }, {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapmodule/service/map.state.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapmodule/service/VectorFeatureService.ol.js"
                 },
 
                 /**

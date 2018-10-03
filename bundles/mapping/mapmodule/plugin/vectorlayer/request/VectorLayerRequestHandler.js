@@ -8,11 +8,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.VectorLayerReq
      * @static
      *
      * @param {Oskari.Sandbox} sandbox reference to sandbox
-     * @param {Oskari.mapframework.mapmodule.VectorLayerPlugin} vectorLayerPlugin reference to vectorlayer plugin
+     * @param {Oskari.mapframework.mapmodule.VectorFeatureService} service reference to vector feature service
      */
-    function (sandbox, vectorLayerPlugin) {
+    function (sandbox, service) {
         this.sandbox = sandbox;
-        this.vectorLayerPlugin = vectorLayerPlugin;
+        this.service = service;
     }, {
         /**
          * @method handleRequest
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.VectorLayerReq
          * @param {Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest} request request to handle
          */
         handleRequest: function (core, request) {
-            this.vectorLayerPlugin.prepareVectorLayer(request.getOptions());
+            this.service.handleVectorLayerRequest(request);
         }
     }, {
         /**

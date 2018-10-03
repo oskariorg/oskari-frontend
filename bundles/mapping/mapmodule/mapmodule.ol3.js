@@ -168,6 +168,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
         },
         _startImpl: function () {
+            const sandbox = this._sandbox;
+            this._vectorFeatureService = this._sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
+            if (!this._vectorFeatureService) {
+                // create vector feature service to sandbox if it doesn't exist yet
+                this._vectorFeatureService = Oskari.clazz.create('Oskari.mapframework.service.VectorFeatureService', sandbox, this._map);
+                sandbox.registerService(this._vectorFeatureService);
+            }
+            this.requestHandlers.vectorLayerRequestHandler = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequestHandler',
+                sandbox,
+                this._vectorFeatureService
+            );
+            sandbox.requestHandler('VectorLayerRequest', this.requestHandlers.vectorLayerRequestHandler);
             this.getMap().render();
             return true;
         },
