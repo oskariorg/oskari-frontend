@@ -2,10 +2,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.request.AnalyseRequestHandle
 
     this.sandbox = sandbox;
     this.cb = handlerFunc;
+    this._log = Oskari.log('AnalyseRequestHandler');
 }, {
     handleRequest: function (core, request) {
         var selections = request.getSelections();
-        this.sandbox.printDebug("[Oskari.analysis.bundle.analyse.request.AnalyseRequestHandler] analyse requested");
+        this._log.debug("Analyse requested");
         this.cb(selections);
     }
 }, {

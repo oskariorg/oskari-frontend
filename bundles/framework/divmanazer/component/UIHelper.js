@@ -62,9 +62,8 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
          *   boolean that indicates success, second parameter is the loaded content if it was successfully loaded
          */
         getHelpArticle: function (taglist, callback) {
-            var me = this;
             jQuery.ajax({
-                url: me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',
+                url: Oskari.urls.getRoute('GetArticlesByTag'),
                 data: {
                     tags: taglist
                 },

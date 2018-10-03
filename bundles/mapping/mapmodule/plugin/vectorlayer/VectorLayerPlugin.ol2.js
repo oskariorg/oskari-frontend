@@ -16,6 +16,7 @@ Oskari.clazz.define(
             multipleSymbolizers: false,
             namedLayersAsArray: true
         });
+        this._log = Oskari.log(this.getName());
 
         this._olLayers = {};
         this._features = {};
@@ -160,7 +161,7 @@ Oskari.clazz.define(
                     continue;
                 }
 
-                sandbox.printDebug('preselecting ' + layerId);
+                this._log.debug('preselecting ' + layerId);
                 this.addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
         },
@@ -654,7 +655,7 @@ Oskari.clazz.define(
                 me = this;
 
             if (sldSpec) {
-                this.getSandbox().printDebug(sldSpec);
+                this._log.debug(sldSpec);
                 var styleInfo = this._sldFormat.read(sldSpec),
                     styles = styleInfo.namedLayers[0].userStyles,
                     style = styles[0];
@@ -667,7 +668,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 '#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for ' +
                 layer.getId()
             );
@@ -707,7 +708,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' +
                 layer.getOpacity()
             );

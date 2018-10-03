@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         me._name = 'ArcGisLayerPlugin';
 
         me._layer = {};
+        this._log = Oskari.log(this.getName());
     }, {
 
         /** @static @property _layerType type of layers this plugin handles */
@@ -100,7 +101,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 layerId = layer.getId();
 
                 if (layer.isLayerOfType(this._layerType) || layer.isLayerOfType(this._layerType2) ) {
-                    sandbox.printDebug('preselecting ' + layerId);
+                    this._log.debug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
@@ -170,7 +171,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
             });
 
-            me.getSandbox().printDebug(
+            me._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.ArcGis for ArcGisLayer ' +
                 layer.getId()
             );
@@ -212,7 +213,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             // Set queryable
             layer.setQueryable(true);
 
-            me.getSandbox().printDebug(
+            me._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.ArcGis93Rest for ArcGisLayer ' +
                 layer.getId()
             );
@@ -301,7 +302,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 return;
             }
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' +
                 layer.getOpacity()
             );

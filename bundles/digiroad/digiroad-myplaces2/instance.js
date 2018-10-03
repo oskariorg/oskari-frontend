@@ -17,6 +17,7 @@ function() {
     this.myPlacesService = undefined;
     this.idPrefix = 'myplaces';
     this.queryUrl = undefined;
+    this._log = Oskari.log(this.getName());
 }, {
     __name : 'DigiroadMyPlaces2',
     /**
@@ -134,7 +135,7 @@ function() {
         this.sandbox = sandbox;
 
         var me = this;
-        sandbox.printDebug("Initializing my places module...");
+        this._log.debug("Initializing my places module...");
 
         // handles toolbar buttons related to my places
         this.buttons = Oskari.clazz.create("Oskari.digiroad.bundle.myplaces2.ButtonHandler", this);

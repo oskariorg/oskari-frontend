@@ -236,7 +236,7 @@ Oskari.clazz.define(
         getWFSLayerColumns: function (layer_id, el) {
             var me = this;
             if(layer_id != "" && layer_id != null){
-                var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&layer_id=' + layer_id;
+                var url = Oskari.urls.getRoute('GetWFSDescribeFeature') + '&layer_id=' + layer_id;
                 jQuery.ajax({
                     type: 'GET',
                     dataType: 'json',
@@ -290,7 +290,7 @@ Oskari.clazz.define(
                 data: {
                     srs: me.sandbox.getMap().getSrsName()
                 },
-                url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
+                url: Oskari.urls.getRoute('SearchWFSChannel'),
                 success: function (data) {
                     me._createList(me, data.channels, me.state.filter);
                  },
@@ -385,7 +385,7 @@ Oskari.clazz.define(
 
             item.hide();
             this.__tryRestMethods('DELETE', {
-                url: me.sandbox.getAjaxUrl('SearchWFSChannel') + '&id=' + uid,
+                url: Oskari.urls.getRoute('SearchWFSChannel') + '&id=' + uid,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -545,7 +545,7 @@ Oskari.clazz.define(
             dataObject.paramsForSearch = JSON.stringify(dataObject.paramsForSearch);
             dataObject.config = JSON.stringify(dataObject.config);
             this.__tryRestMethods(frm.attr('method'), {
-                url: me.sandbox.getAjaxUrl('SearchWFSChannel'),
+                url: Oskari.urls.getRoute('SearchWFSChannel'),
                 data: dataObject,
                 success: function (data) {
                     me._closeForm(frm);

@@ -8,11 +8,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.request.ShowUserGuideR
 
 	/** @property instance */
 	this.instance = instance;
+	this._log = Oskari.log('ShowUserGuideRequestHandler');
 }, {
 
 	/** @method handleRequest dispatches processing to instance */
 	handleRequest : function(core, request) {
-		this.sandbox.printDebug("[Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequestHandler] Show UserGuide: " + request.getUuid());
+		this._log.debug('Show UserGuide: ' + request.getUuid());
 		this.instance.scheduleShowUserGuide(request);
 	}
 }, {

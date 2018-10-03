@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             /* loader */
             this.loader = Oskari.clazz.create(
                 'Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader', {
-                    baseUrl: sandbox.getAjaxUrl(),
+                    baseUrl: Oskari.urls.getRoute(),
                     srs: me.mapmodule.getProjection()
 
                 }

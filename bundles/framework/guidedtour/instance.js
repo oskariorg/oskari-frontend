@@ -363,7 +363,7 @@ Oskari.clazz.define(
         _getGuideContent: function(tags, callback){
             var me = this;
             jQuery.ajax({
-                url: me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',
+                url: Oskari.urls.getRoute('GetArticlesByTag'),
                 data: {
                     tags: tags
                 },

@@ -33,7 +33,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 
         /* maplayerservice */
         this._mapLayerService = null;
-
+        this._log = Oskari.log(this.getName());
     }, {
         ajaxSettings: {
             defaultTimeThreshold: 15000
@@ -88,13 +88,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             return this._sandbox;
         },
         getAjaxUrl: function (key, allKnown) {
-            var ajaxUrl = this.getSandbox().getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute('GetBackendStatus');
             var url = null;
 
             if (allKnown) {
-                url = ajaxUrl + 'action_route=GetBackendStatus&Subset=AllKnown';
+                url = ajaxUrl + '&Subset=AllKnown';
             } else {
-                url = ajaxUrl + 'action_route=GetBackendStatus&Subset=Alert';
+                url = ajaxUrl + '&Subset=Alert';
             }
 
             return url;
@@ -320,7 +320,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             if (!jqhr) {
                 return;
             }
-            this._sandbox.printDebug("[BackendStatus] Abort jqhr ajax request");
+            this._log.debug("Abort jqhr ajax request");
             jqhr.abort();
             jqhr = null;
             me._pendingAjaxQuery.busy = false;
@@ -335,11 +335,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             var me = this;
             me._pendingAjaxQuery.busy = false;
             me._pendingAjaxQuery.jqhr = null;
-            this._sandbox.printDebug("[BackendStatus] finished jqhr ajax request");
+            this._log.debug("finished jqhr ajax request");
         },
         _notifyAjaxFailure: function () {
             var me = this;
-            me._sandbox.printDebug("[BackendStatus] BackendStatus AJAX failed");
+            this._log.debug("BackendStatus AJAX failed");
             me._processResponse({
                 backendstatus: []
             });
@@ -351,16 +351,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
         updateBackendStatus: function (allKnown) {
             var me = this;
             me.gotStartupProcessCall = me.gotStartupProcessCall || allKnown;
-            var sandbox = me._sandbox;
             if (!allKnown && me._pendingAjaxQuery.busy) {
-                sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT previous query is busy");
+                this._log.debug("updateBackendStatus NOT SENT previous query is busy");
                 return;
             }
             var dte = new Date();
             var dteMs = dte.getTime();
 
             if (!allKnown && me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < me.timeInterval) {
-                sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT (time difference < " + me.timeInterval + "ms)");
+                this._log.debug("updateBackendStatus NOT SENT (time difference < " + me.timeInterval + "ms)");
                 return;
             }
 
@@ -405,14 +404,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             var me = this;
             var sandbox = this._sandbox;
             if (!resp) {
-                sandbox.printDebug("[BackendStatus] empty data from server");
+                this._log.debug("empty data from server");
                 return;
             }
 
             var backendStatusArr = resp.backendstatus;
             // FIXME use ===
             if (!backendStatusArr || backendStatusArr.length === undefined) {
-                sandbox.printDebug("[BackendStatus] backendStatus NO data");
+                this._log.debug("backendStatus NO data");
                 return;
             }
 
@@ -435,7 +434,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                         changed: true
                     };
                     extendedStatuses[layerId] = data;
-                    /*sandbox.printDebug("[BackendStatus] "+layerId+" new alert");*/
+                    /*this._log.debug(layerId+" new alert");*/
                     // FIXME use !==
                 } else if (this.backendStatus[layerId].status !== data.status) {
                     changeNotifications[layerId] = {
@@ -443,7 +442,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                         changed: true
                     };
                     extendedStatuses[layerId] = data;
-                    /*sandbox.printDebug("[BackendStatus] "+layerId+" changed alert");*/
+                    /*this._log.debug(layerId+" changed alert");*/
                 } else {
                     changeNotifications[layerId] = {
                         status: data.status,
@@ -461,7 +460,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                             status: null,
                             changed: true
                         };
-                        /*sandbox.printDebug("[BackendStatus] "+p+" alert closed");*/
+                        /*this._log.debug(p+" alert closed");*/
                     }
                 }
             }

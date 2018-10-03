@@ -55,6 +55,7 @@ Oskari.clazz.define(
         this._nextFeatureId = 0;
         this._hoverOverlay = undefined;
         this._hoverFeature = undefined;
+        this._log = Oskari.log('VectorLayerPlugin');
     }, {
         /**
          * @method register
@@ -164,7 +165,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' +
                 layer.getOpacity()
             );

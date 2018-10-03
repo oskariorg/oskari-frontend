@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
      */
 
     function () {
+        this._log = Oskari.log(this.getName());
     }, {
         __name : 'ArcGisLayerPlugin',
         _clazz : 'Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
@@ -128,7 +129,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
 
-            me.getSandbox().printDebug(
+            me._log.debug(
                 '#!#! CREATED ' + layerType + ' for ArcGisLayer ' +
                 layer.getId()
             );

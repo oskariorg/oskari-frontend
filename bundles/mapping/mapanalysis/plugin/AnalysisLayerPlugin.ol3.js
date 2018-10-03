@@ -18,6 +18,7 @@ Oskari.clazz.define(
         if (me._config && me._config.ajaxUrl) {
             me.ajaxUrl = me._config.ajaxUrl;
         }
+        this._log = Oskari.log(this.getName());
     }, {
         __name : 'AnalysisLayerPlugin',
         _clazz : 'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin',
@@ -59,7 +60,7 @@ Oskari.clazz.define(
         _startPluginImpl: function () {
             if (!this.ajaxUrl) {
                 this.ajaxUrl =
-                    this.getSandbox().getAjaxUrl() + 'action_route=GetAnalysis?';
+                    Oskari.urls.getRoute('GetAnalysis') + '?';
             }
         },
 
@@ -107,7 +108,7 @@ Oskari.clazz.define(
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
 
-            me.getSandbox().printDebug(
+            me._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for AnalysisLayer ' +
                 layer.getId()
             );

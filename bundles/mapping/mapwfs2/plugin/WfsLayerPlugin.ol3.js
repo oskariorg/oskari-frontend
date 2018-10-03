@@ -62,6 +62,7 @@ Oskari.clazz.define(
 
         me.__layersByName = {};
 
+        me._log = Oskari.log(me.getName());
     }, {
         __layerPrefix: 'wfs_layer_',
         __typeHighlight: 'highlight',
@@ -354,7 +355,7 @@ Oskari.clazz.define(
                  */
                 AfterMapMoveEvent: function () {
                     if (me.getConfig() && me.getConfig().deferSetLocation) {
-                        me.getSandbox().printDebug(
+                        me._log.debug(
                             'setLocation deferred (to aftermapmove)'
                         );
                         return;
@@ -817,7 +818,7 @@ Oskari.clazz.define(
                 );
 
                 if (event.getMapLayer().isVisible() && this.getConfig() && this.getConfig().deferSetLocation) {
-                    this.getSandbox().printDebug(
+                    this._log.debug(
                         'sending deferred setLocation'
                     );
                     this.mapMoveHandler(event.getMapLayer().getId());
@@ -1019,8 +1020,8 @@ Oskari.clazz.define(
                 layers,
                 function (layer) {
                     if (layer.hasFeatureData()) {
-                        this.getSandbox().printDebug(
-                            '[WfsLayerPlugin] preselecting ' + layer.getId()
+                        this._log.debug(
+                            'preselecting ' + layer.getId()
                         );
                     }
                 }

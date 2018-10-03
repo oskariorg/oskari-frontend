@@ -254,7 +254,7 @@ function(locale, mapModule) {
         me._cancelAjaxRequest();
         me._startAjaxRequest(dteMs);
 
-        var ajaxUrl = me._sandbox.getAjaxUrl();
+        var ajaxUrl = Oskari.urls.getRoute();
 
         jQuery.ajax({
             beforeSend : function(x) {

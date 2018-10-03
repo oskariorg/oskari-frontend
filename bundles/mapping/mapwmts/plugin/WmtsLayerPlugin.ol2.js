@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         me._clazz = 'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin';
         me._name = 'WmtsLayerPlugin';
         me._supportedFormats = {};
+        me._log = Oskari.log(me.getName());
     }, {
 
         register: function () {
@@ -125,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 layer = layers[i];
 
                 if (layer.isLayerOfType('WMTS')) {
-                    sandbox.printDebug('preselecting ' + layer.getId());
+                    this._log.debug('preselecting ' + layer.getId());
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
@@ -142,7 +143,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             map.addLayer(wmtsHolderLayer);
             index = map.layers.length;
                 this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
-                    me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
+                    me._log.debug('created WMTS layer ' + wmtsLayer);
                     // Get the reserved current index for wmts layer
                     var holderLayerIndex = map.getLayerIndex(wmtsHolderLayer);
                     map.removeLayer(wmtsHolderLayer);

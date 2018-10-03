@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
 
             me._startAjaxRequest(dteMs);
 
-            var ajaxUrl = this._sandbox.getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute();
 
             var lon = lonlat.lon;
             var lat = lonlat.lat;

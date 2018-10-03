@@ -38,7 +38,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 "image/png": ""
             }
         };
-
+        this._log = Oskari.log(this.getName());
     }, {
         /**
          * @static
@@ -109,10 +109,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
             me.backendConfiguration.formatProducers["image/png"] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers["image/png"] : null) || '';
 
             if (!me.backendConfiguration.formatProducers["application/pdf"]){
-                me.backendConfiguration.formatProducers["application/pdf"] = sandbox.getAjaxUrl() + 'action_route=GetPrint&format=application/pdf&';
+                me.backendConfiguration.formatProducers["application/pdf"] = Oskari.urls.getRoute('GetPrint') + '&format=application/pdf&';
             }
             if (!me.backendConfiguration.formatProducers["image/png"]){
-                me.backendConfiguration.formatProducers["image/png"] = sandbox.getAjaxUrl() + 'action_route=GetPrint&format=image/png&';
+                me.backendConfiguration.formatProducers["image/png"] = Oskari.urls.getRoute('GetPrint') + '&format=image/png&';
             }
             // requesthandler
             this.printoutHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, function () {
@@ -188,7 +188,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 /* we might get 9 of these if 9 layers would have been selected */
                 if (this.printout && this.printout.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
-                    this.getSandbox().printDebug("PRINTOUT REFRESH");
+                    this._log.debug("PRINTOUT REFRESH");
                     this.printout.refresh(true);
                 }
             },
