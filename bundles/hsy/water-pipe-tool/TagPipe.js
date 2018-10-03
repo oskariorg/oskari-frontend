@@ -336,7 +336,7 @@ Oskari.clazz.define(
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe&tag_id='+ uid,
+                url: Oskari.urls.getRoute('SearchTagPipe') + '&tag_id='+ uid,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -929,7 +929,7 @@ Oskari.clazz.define(
 
                 jQuery.ajax({
                     type: form.attr('method'),
-                    url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe',
+                    url: Oskari.urls.getRoute('SearchTagPipe'),
                     data: data,
                     success: function (data) {
                         me._closeForm(form, true);
@@ -1006,7 +1006,7 @@ Oskari.clazz.define(
 
             jQuery.ajax({
                 type: 'GET',
-                url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe',
+                url: Oskari.urls.getRoute('SearchTagPipe'),
                 success: function (data) {
                     me._createList(me, data.tagpipes, me.state.filter, addLastOnMap);
                  },
@@ -1109,7 +1109,6 @@ Oskari.clazz.define(
             var me = this,
             layers = me._getTagPipeLayers(),
             mapVO = me.sandbox.getMap(),
-            ajaxUrl = me.sandbox.getAjaxUrl(),
             layerName = "",
             layerUrl = "",
             inactiveLayers = [];
@@ -1133,7 +1132,7 @@ Oskari.clazz.define(
             jQuery.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: ajaxUrl + 'action_route=GetPipesWithParams',
+                url: Oskari.urls.getRoute('GetPipesWithParams'),
                 data : {
                     layers: layerName,
                     url: layerUrl,

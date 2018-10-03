@@ -82,8 +82,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             if (conf && conf.searchUrl) {
                 this.searchUrl = conf.searchUrl;
             } else {
-                this.searchUrl = sandbox.getAjaxUrl() +
-                    'action_route=GetReverseGeocodingResult';
+                this.searchUrl = Oskari.urls.getRoute('GetReverseGeocodingResult');
             }
 
             // Create the search service

@@ -106,7 +106,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
             if (conf && conf.url) {
                 ajaxUrl = this.conf.url;
             } else {
-                ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetAllRoles';
+                ajaxUrl = Oskari.urls.getRoute('GetAllRoles');
             }
 
 

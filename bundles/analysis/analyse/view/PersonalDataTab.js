@@ -220,9 +220,8 @@ Oskari.clazz.define(
                 idParam = layer.getId().substring(tokenIndex);
 
             jQuery.ajax({
-                url: sandbox.getAjaxUrl(),
+                url: Oskari.urls.getRoute('DeleteAnalysisData'),
                 data: {
-                    action_route: 'DeleteAnalysisData',
                     id: idParam
                 },
                 type: 'POST',

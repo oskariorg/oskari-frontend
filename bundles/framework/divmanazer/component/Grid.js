@@ -1082,7 +1082,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             form.addClass('oskari-grid-export');
             form.addClass('clearfix');
             form.setAction(
-                Oskari.getSandbox().getAjaxUrl('ExportTableFile')
+                Oskari.urls.getRoute('ExportTableFile')
             );
             form.setMethod('POST');
 

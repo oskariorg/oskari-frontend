@@ -4,10 +4,11 @@ Oskari.clazz.define(
         function(sandbox, drawFilterPlugin) {
             this.sandbox = sandbox;
             this.drawFilterPlugin = drawFilterPlugin;
+            this._log = Oskari.log('StopDrawFilteringRequestPluginHandler');
         },
         {
             handleRequest: function(core,request) {
-                this.sandbox.printDebug("[Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StopDrawFilteringRequestPluginHandler] Stop draw filtering");
+                this._log.debug('Stop draw filtering');
                 if(request.isCancel()) {
                     // we wish to clear the drawing without sending further events
                     this.drawFilterPlugin.stopDrawFiltering();

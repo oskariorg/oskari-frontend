@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
             multipleSymbolizers : false,
             namedLayersAsArray : true
         });
+        this._log = Oskari.log(this.__name);
     }, {
         __name : 'DigiroadVectorLayerPlugin',
 
@@ -137,7 +138,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
             if (!layer.isLayerOfType(this._layerType))
                 continue;
 
-            sandbox.printDebug("preselecting " + layerId);
+            this._log.debug("preselecting " + layerId);
             this.addMapLayerToMap(layer,true,layer.isBaseLayer());
         }
 
@@ -232,7 +233,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
 /*                      var sldSpec = layer.getStyledLayerDescriptor();
 
         if (sldSpec) {
-            this._sandbox.printDebug(sldSpec);
+            this._log.debug(sldSpec);
             var styleInfo = this._sldFormat.read(sldSpec);
 
             window.styleInfo = styleInfo;
@@ -258,8 +259,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
         this._controls[layerId]['getFeature'] = this.activateGetFeature(layer, openLayer, protocol, filter);
         this._controls[layerId]['selectFeature'] = this.activateSelectFeature(openLayer);
 
-        this._sandbox
-                .printDebug("#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for "
+        this._log.debug("#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for "
                         + layer.getId());
 
         if (keepLayerOnTop) {

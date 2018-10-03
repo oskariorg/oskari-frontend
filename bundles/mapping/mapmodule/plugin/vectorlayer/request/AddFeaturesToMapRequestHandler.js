@@ -12,7 +12,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
      */
 	function (sandbox, vectorLayerPlugin) {
 	    this.sandbox = sandbox;
-	    this.vectorLayerPlugin = vectorLayerPlugin;
+        this.vectorLayerPlugin = vectorLayerPlugin;
+        this._log = Oskari.log('AddFeaturesToMapRequestHandler');
 	}, {
 		/**
          * @method handleRequest
@@ -21,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
          * @param {Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequest} request request to handle
          */
 	    handleRequest: function (core, request) {
-	        this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToMapRequestHandler] Add Features');
+	        this._log.debug('Add Features');
 			this.vectorLayerPlugin.addFeaturesToMap(request.getGeometry(), request.getOptions());
 	    }
 	}, {

@@ -128,7 +128,7 @@ define([
                 this.inspireTabModel = new LayersTabModel({
                     layers: collection,
                     type: 'inspire',
-                    baseUrl: this.instance.getSandbox().getAjaxUrl() + '&action_route=',
+                    baseUrl: Oskari.urls.getRoute() + '&action_route=',
                     actions: {
                         load: "MapLayerGroups",
                         save: "MapLayerGroups",
@@ -143,7 +143,7 @@ define([
                 this.organizationTabModel = new LayersTabModel({
                     layers: collection,
                     type: 'organization',
-                    baseUrl: this.instance.getSandbox().getAjaxUrl() + '&action_route=',
+                    baseUrl: Oskari.urls.getRoute() + '&action_route=',
                     actions: {
                         load: "GetMapLayerGroups",
                         save: "SaveOrganization",

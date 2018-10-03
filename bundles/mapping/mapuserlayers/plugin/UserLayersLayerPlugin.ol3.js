@@ -13,6 +13,7 @@ Oskari.clazz.define(
      *
      */
     function () {
+        this._log = Oskari.log(this.getName());
     }, {
         __name : 'UserLayersLayerPlugin',
         _clazz : 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
@@ -94,7 +95,7 @@ Oskari.clazz.define(
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
 
-            me.getSandbox().printDebug(
+            me._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for UserLayer ' +
                 layer.getId()
             );

@@ -346,7 +346,7 @@ define([
                         type: 'GET',
                         dataType: 'json',
                         contentType: 'application/json; charset=UTF-8',
-                        url: Oskari.getSandbox().getAjaxUrl('GetMapLayerGroups'),
+                        url: Oskari.urls.getRoute('GetMapLayerGroups'),
                         error: function() {
                             var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));

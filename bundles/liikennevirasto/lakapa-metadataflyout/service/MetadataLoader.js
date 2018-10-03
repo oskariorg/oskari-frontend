@@ -47,7 +47,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
         var me = this;
         var uri = this.getURLForView(subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace);
 
-        var ajaxUrl = me.sandbox.getAjaxUrl() +'action_route=GetMetadata';
+        var ajaxUrl = Oskari.urls.getRoute('GetMetadata');
 
         me.sandbox.printDebug("loadMetadata " + uri);
 
@@ -92,7 +92,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
 
         var uri = this.getURLForView(viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace);
 
-        var ajaxUrl = me.sandbox.getAjaxUrl() +'action_route=GetMetadata';
+        var ajaxUrl = Oskari.urls.getRoute('GetMetadata');
 
         if (uri === null || uri === undefined) {
             return;

@@ -7,6 +7,7 @@ import olLayerVector from 'ol/layer/Vector';
  */
 Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     function () {
+        this._log = Oskari.log(this.getName());
     }, {
         __name : 'WmtsLayerPlugin',
         _clazz : 'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
@@ -54,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             map.addLayer(wmtsHolderLayer);
             this.setOLMapLayers(layer.getId(), wmtsHolderLayer);
             this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
-                me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
+                me._log.debug("created WMTS layer " + wmtsLayer);
                 me._registerLayerEvents(wmtsLayer, layer);
 
                 // Get the reserved current index for wmts layer

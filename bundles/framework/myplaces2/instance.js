@@ -18,6 +18,7 @@ Oskari.clazz.define(
         this.myPlacesService = undefined;
         this.featureNS = undefined;
         this.idPrefix = 'myplaces';
+        this._log = Oskari.log(this.getName());
     }, {
         __name: 'MyPlaces2',
         /**
@@ -176,7 +177,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            sandbox.printDebug("Initializing my places module...");
+            this._log.debug("Initializing my places module...");
 
             // handles toolbar buttons related to my places
             this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.ButtonHandler", this);

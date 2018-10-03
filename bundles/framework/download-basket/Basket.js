@@ -164,8 +164,6 @@ Oskari.clazz.define(
             };
             var strUserDetails = JSON.stringify(userDetails);
 
-            var ajaxUrl = me._sandbox.getAjaxUrl();
-
             jQuery.ajax({
                 beforeSend : function(x) {
                     if (x && x.overrideMimeType) {
@@ -211,7 +209,7 @@ Oskari.clazz.define(
                 },
                 type : 'POST',
                 dataType : 'json',
-                url : ajaxUrl + 'action_route=DownloadInfo'
+                url : Oskari.urls.getRoute('DownloadInfo')
             });
 
         },

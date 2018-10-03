@@ -220,14 +220,14 @@ Oskari.clazz.define(
             if (me.conf && me.conf.optionUrl) {
                 optionAjaxUrl = me.conf.optionUrl;
             } else {
-                optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearchOptions';
+                optionAjaxUrl = Oskari.urls.getRoute('GetMetadataSearchOptions');
             }
 
             var searchAjaxUrl = null;
             if (me.conf && me.conf.searchUrl) {
                 searchAjaxUrl = me.conf.searchUrl;
             } else {
-                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearch';
+                searchAjaxUrl = Oskari.urls.getRoute('GetMetadataSearch');
             }
 
             // Default tab priority

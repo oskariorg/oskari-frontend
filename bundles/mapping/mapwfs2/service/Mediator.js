@@ -39,7 +39,7 @@ Oskari.clazz.define(
         'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler', plugin.getSandbox());
 
         this.WFSLayerService = plugin.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-
+        this._log = Oskari.log('Oskari.mapframework.bundle.mapwfs2.service.Mediator');
     }, {
 
         /**
@@ -523,7 +523,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 imageUrl = this.rootURL + data.data.url + '&session=' + this.session.session;
             }
         } catch (error) {
-            this.plugin.getSandbox().printDebug(error);
+            this._log.debug(error);
         }
         var layerType = data.data.type.toLowerCase(), // "highlight" | "normal"
             boundaryTile = data.data.boundaryTile,

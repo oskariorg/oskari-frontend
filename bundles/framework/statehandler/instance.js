@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         this._historyPrevious = [];
         this._historyNext = [];
         this._historyEnabled = true;
+        this._log = Oskari.log(this.getName());
 
         // TODO: default view from conf?
         this._defaultViewId = 1;
@@ -82,7 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 }
             }
 
-            var ajaxUrl = sandbox.getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute();
             //"/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&";
             var sessionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlugin', ajaxUrl);
             this.registerPlugin(sessionPlugin);
@@ -226,7 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         registerPlugin: function (plugin) {
             plugin.setHandler(this);
             var pluginName = plugin.getName();
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' Registering ' + pluginName);
+            this._log.debug('Registering ' + pluginName);
             this._pluginInstances[pluginName] = plugin;
         },
         /**
@@ -239,7 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
          */
         unregisterPlugin: function (plugin) {
             var pluginName = plugin.getName();
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' Unregistering ' + pluginName);
+            this._log.debug('Unregistering ' + pluginName);
             this._pluginInstances[pluginName] = undefined;
             plugin.setHandler(null);
         },
@@ -253,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         startPlugin: function (plugin) {
             var pluginName = plugin.getName();
 
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+            this._log.debug('Starting ' + pluginName);
             plugin.startPlugin(this.sandbox);
         },
         /**
@@ -266,7 +267,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         stopPlugin: function (plugin) {
             var pluginName = plugin.getName();
 
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+            this._log.debug('Starting ' + pluginName);
             plugin.stopPlugin(this.sandbox);
         },
 
@@ -336,7 +337,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                         prevLayer = prevLayers[ln];
                         nextLayer = nextLayers[ln];
 
-                        me.sandbox.printDebug('[StateHandler] comparing layer state ' + prevLayer.id + ' vs ' + nextLayer.id);
+                        me._log.debug('comparing layer state ' + prevLayer.id + ' vs ' + nextLayer.id);
 
 
                         if (prevLayer.id !== nextLayer.id) {
@@ -389,9 +390,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 cmp;
             for (sc = 0; sc < me._stateComparators.length; sc += 1) {
                 cmp = me._stateComparators[sc];
-                me.sandbox.printDebug('[StateHandler] comparing state ' + cmp.rule);
+                me._log.debug('comparing state ' + cmp.rule);
                 if (cmp.cmp.apply(this, [prevState, nextState])) {
-                    me.sandbox.printDebug('[StateHandler] comparing state MATCH ' + cmp.rule);
+                    me._log.debug('comparing state MATCH ' + cmp.rule);
                     cmpResult.result = true;
                     cmpResult.rule = cmp.rule;
                     cmpResult.rulesMatched[cmp.rule] = cmp.rule;
@@ -426,7 +427,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                     prevState = history.length === 0 ? null : history[history.length - 1],
                     cmpResult = me._compareState(prevState, state, true);
                 if (cmpResult.result) {
-                    me.sandbox.printDebug('[StateHandler] PUSHING state');
+                    me._log.debug('PUSHING state');
                     state.rule = cmpResult.rule;
                     me._historyPrevious.push(state);
                     me._historyNext = [];

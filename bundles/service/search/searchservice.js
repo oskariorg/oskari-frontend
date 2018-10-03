@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             }
             // else setup this instance
             if(!searchUrl) {
-                this._searchUrl = sandbox.getAjaxUrl('GetSearchResult');
+                this._searchUrl = Oskari.urls.getRoute('GetSearchResult');
             }
             sandbox.requestHandler('SearchRequest', this);
             sandbox.registerService(this);

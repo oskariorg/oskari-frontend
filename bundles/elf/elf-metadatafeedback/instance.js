@@ -84,8 +84,8 @@ function () {
             this.sandbox = sandbox;
 
             sandbox.register(this);
-            var addFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=UserFeedback';
-            var fetchFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=UserFeedback';
+            var addFeedbackAjaxUrl = Oskari.urls.getRoute('UserFeedback');
+            var fetchFeedbackAjaxUrl = Oskari.urls.getRoute('UserFeedback');
             var feedbackServiceName =
                 'Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService';
             this.feedbackService = Oskari.clazz.create(feedbackServiceName, addFeedbackAjaxUrl, fetchFeedbackAjaxUrl);

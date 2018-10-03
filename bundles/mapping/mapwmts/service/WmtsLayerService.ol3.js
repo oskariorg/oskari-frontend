@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         var me = this;
         var url = layer.getLayerUrl();
         var format = new olFormatWMTSCapabilities();
-        var getCapsUrl = this.sandbox.getAjaxUrl() + 'action_route=GetLayerCapabilities';
+        var getCapsUrl = Oskari.urls.getRoute('GetLayerCapabilities');
 
         var caps = this.getCapabilities(url);
         if(caps) {

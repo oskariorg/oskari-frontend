@@ -137,9 +137,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 idParam = layerId.substring(tokenIndex);
 
             jQuery.ajax({
-                url: sandbox.getAjaxUrl(),
+                url: Oskari.urls.getRoute('DeleteUserLayer'),
                 data: {
-                    action_route: 'DeleteUserLayer',
                     id: idParam
                 },
                 type: 'POST',

@@ -1,26 +1,3 @@
-// polyfill for bind - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind -> polyfill
-if (!Function.prototype.bind) {
-    Function.prototype.bind = function(oThis) {
-        if (typeof this !== "function") {
-            // closest thing possible to the ECMAScript 5 internal IsCallable function
-            throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-        }
-
-        var aArgs = Array.prototype.slice.call(arguments, 1),
-            fToBind = this,
-            fNOP = function() {},
-            fBound = function() {
-                return fToBind.apply(this instanceof fNOP && oThis ? this : oThis,
-                    aArgs.concat(Array.prototype.slice.call(arguments)));
-            };
-
-        fNOP.prototype = this.prototype;
-        fBound.prototype = new fNOP();
-
-        return fBound;
-    };
-}
-// actual model - uses bind to make Oskari layer object functions call BackBone model.attributes
 (function() {
     define(function() {
         return Backbone.Model.extend({
@@ -92,7 +69,7 @@ if (!Function.prototype.bind) {
              */
             _setupFromCapabilitiesValues: function(capabilitiesNode) {
                 var sb = Oskari.getSandbox();
-                sb.printDebug("Found:", capabilitiesNode);
+                Oskari.log('admin-hierarchical-layerlist~layerModel').debug("Found:", capabilitiesNode);
                 var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService'),
                     mapLayer = mapLayerService.createMapLayer(capabilitiesNode),
                     dataToKeep = null;
