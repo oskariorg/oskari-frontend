@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
 
             if (this.initialLoad) {
                 // notify components of added layer if not suppressed
-                var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+                var event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
                 sandbox.notifyAll(event); // add the myplaces layers programmatically since normal link processing
                 // cant do this (run before the bundle adds the layers)
                 this._processStartupLinkLayers(sandbox);
@@ -688,7 +688,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 mapLayer.addPermission('publish', 'no_publication_permission');
             }
             // send an event to notify other bundles of updated permissions
-            var evt = sandbox.getEventBuilder('MapLayerEvent')(layerId, 'update');
+            var evt = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
             sandbox.notifyAll(evt);
         }
     }, {

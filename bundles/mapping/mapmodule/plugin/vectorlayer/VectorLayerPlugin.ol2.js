@@ -132,7 +132,7 @@ Oskari.clazz.define(
         },
         __featureClicked: function(features, olLayer) {
             var sandbox = this.getSandbox();
-            var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
+            var clickEvent = Oskari.eventBuilder('FeatureEvent')().setOpClick();
             var formatter = this._supportedFormats.GeoJSON;
             var me = this;
             _.forEach(features, function(feature) {
@@ -273,7 +273,7 @@ Oskari.clazz.define(
             // notify other components of removal
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
-            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
+            var removeEvent = Oskari.eventBuilder('FeatureEvent')().setOpRemove();
 
             olLayer.removeFeatures(featuresToRemove);
 
@@ -486,7 +486,7 @@ Oskari.clazz.define(
             // notify other components that features have been added
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
-            var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
+            var addEvent = Oskari.eventBuilder('FeatureEvent')().setOpAdd();
             _.forEach(features, function(feature) {
                 var geojson = JSON.parse(formatter.write([feature]));
                 addEvent.addFeature(feature.id, geojson, options.layerId);

@@ -137,7 +137,7 @@ Oskari.clazz.define(
                 data: saveData,
                 success: function (role) {
                     me.addRoleToList(role);
-                    var evt = me.sandbox.getEventBuilder('RoleChangedEvent')(role, 'add');
+                    var evt = Oskari.eventBuilder('RoleChangedEvent')(role, 'add');
                     me.sandbox.notifyAll(evt);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -195,7 +195,7 @@ Oskari.clazz.define(
                 },
                 success: function (data) {
                     item.remove();
-                    var evt = me.sandbox.getEventBuilder('RoleChangedEvent')(role, 'remove');
+                    var evt = Oskari.eventBuilder('RoleChangedEvent')(role, 'remove');
                     me.sandbox.notifyAll(evt);
                 }
             });

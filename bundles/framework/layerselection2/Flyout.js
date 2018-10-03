@@ -511,7 +511,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     'click',
                     function() {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
-                        var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')(layerId);
+                        var event = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent')(layerId);
                         sandbox.notifyAll(event);
                         return false;
                     }

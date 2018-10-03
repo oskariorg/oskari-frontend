@@ -112,7 +112,7 @@ function(instance) {
             layer = mapLayerService.findMapLayer(id),
             request = this.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(id, true),
             layerIsSelected = this.sandbox.isLayerAlreadySelected(id),
-            evt = this.sandbox.getEventBuilder('MapLayerEvent')(id, 'update');
+            evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
         layer.setName(updatedLayer.name);
         layer.setSource(updatedLayer.source);
         layer.setDescription(updatedLayer.description);
@@ -137,7 +137,7 @@ function(instance) {
         });
         if (_.isFunction(cb)) cb();
         if (layers && layers.length > 0) {
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
             me.sandbox.notifyAll(event); // add user layers programmatically since normal link processing
         }
 

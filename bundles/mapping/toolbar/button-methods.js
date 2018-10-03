@@ -204,7 +204,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 pId = this.defaultButton.id;
                 pGroup = this.defaultButton.group;
             } else {
-                e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+                e = Oskari.eventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
                 this.sandbox.notifyAll(e);
 
                 if (pGroup) {
@@ -282,7 +282,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             me._addHoverIcon(btn, toolbarConfig, button);
         }
         // notify components that tool has changed
-        e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+        e = Oskari.eventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
         this.sandbox.notifyAll(e);
     },
     _addHoverIcon: function (btnConfig, toolbarConfig, buttonEl) {

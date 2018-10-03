@@ -155,7 +155,7 @@ Oskari.clazz.define(
 
             if (layerarr && layerarr.length > 0) {
                 // notify components of added layer if not suppressed
-                var evt = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
+                var evt = Oskari.eventBuilder('MapLayerEvent')(null, 'add');
                 sandbox.notifyAll(evt); // add the analysis layers programmatically since normal link processing
             }
         },

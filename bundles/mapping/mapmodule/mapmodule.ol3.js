@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     lon: evt.coordinate[0],
                     lat: evt.coordinate[1]
                 };
-                var mapClickedEvent = sandbox.getEventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
+                var mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
                 sandbox.notifyAll(mapClickedEvent);
             });
             map.on('dblclick', function () {
@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 clearTimeout(this.mouseMoveTimer);
                 this.mouseMoveTimer = setTimeout(function () {
                     // No mouse move in 1000 ms - mouse move paused
-                    var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(
+                    var hoverEvent = Oskari.eventBuilder('MouseHoverEvent')(
                         evt.coordinate[0],
                         evt.coordinate[1],
                         true,
@@ -158,7 +158,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     );
                     sandbox.notifyAll(hoverEvent);
                 }, 1000);
-                var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(
+                var hoverEvent = Oskari.eventBuilder('MouseHoverEvent')(
                     evt.coordinate[0],
                     evt.coordinate[1],
                     false,

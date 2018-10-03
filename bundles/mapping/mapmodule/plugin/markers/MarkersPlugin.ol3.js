@@ -250,7 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         __markerClicked: function(markerId) {
             var sandbox = this.getSandbox();
-            var clickEvent = sandbox.getEventBuilder('MarkerClickEvent')(markerId);
+            var clickEvent = Oskari.eventBuilder('MarkerClickEvent')(markerId);
             sandbox.notifyAll(clickEvent);
         },
 
@@ -320,7 +320,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
 
             if (!suppressEvent) {
-                var removeEvent = sandbox.getEventBuilder(
+                var removeEvent = Oskari.eventBuilder(
                     'AfterRemoveMarkersEvent'
                 )(optionalMarkerId);
                 sandbox.notifyAll(removeEvent);
@@ -562,7 +562,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             me.updateState();
 
             if (!suppressEvent) {
-                var addEvent = me.getSandbox().getEventBuilder(
+                var addEvent = Oskari.eventBuilder(
                     'AfterAddMarkerEvent'
                 )(data, data.id);
                 me.getSandbox().notifyAll(addEvent);
@@ -697,7 +697,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         enableGfi: function(blnEnable) {
             var sandbox = this.getSandbox(),
-                evtB = sandbox.getEventBuilder(
+                evtB = Oskari.eventBuilder(
                     'DrawFilterPlugin.SelectedDrawingEvent'
                 ),
                 gfiReqBuilder = sandbox.getRequestBuilder(

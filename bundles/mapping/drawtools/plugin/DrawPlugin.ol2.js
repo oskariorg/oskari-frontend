@@ -51,7 +51,7 @@ Oskari.clazz.define(
             if(clearCurrent) {
                 // TODO: clear the drawing matching the id from map
             }
-            var event = sb.getEventBuilder('DrawingEvent')(id, geojson, data);
+            var event = Oskari.eventBuilder('DrawingEvent')(id, geojson, data);
             sb.notifyAll(event);
             // TODO: deactivate draw control
         }

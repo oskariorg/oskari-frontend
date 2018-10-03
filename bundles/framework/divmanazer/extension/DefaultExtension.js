@@ -388,7 +388,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
          */
         notify: function (eventName) {
             var args = this.slicer.apply(arguments, [1]),
-                builder = this.getSandbox().getEventBuilder(eventName),
+                builder = Oskari.eventBuilder(eventName),
                 evt = builder.apply(builder, args);
 
             return this.getSandbox().notifyAll(evt);

@@ -144,7 +144,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          */
         startNewDrawing: function (config) {
             // notify components to reset any saved "selected place" data
-            var event = this.instance.sandbox.getEventBuilder('DrawPlugin.SelectedDrawingEvent')();
+            var event = Oskari.eventBuilder('DrawPlugin.SelectedDrawingEvent')();
             this.instance.sandbox.notifyAll(event);
 
             // notify plugin to start drawing new geometry

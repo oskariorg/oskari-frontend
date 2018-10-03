@@ -242,7 +242,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);
         },
 
@@ -401,7 +401,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                 me.selectionPlugin.clearDrawing();
 
-                var evt = me.sandbox.getEventBuilder("WFSSetFilter")(features);
+                var evt = Oskari.eventBuilder("WFSSetFilter")(features);
                 me.sandbox.notifyAll(evt);
 
             },
@@ -432,7 +432,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 me.selectionPlugin.setFeatures(geojson.features);
                 me.selectionPlugin.stopDrawing();
 
-                var event = me.sandbox.getEventBuilder("WFSSetFilter")(geojson);
+                var event = Oskari.eventBuilder("WFSSetFilter")(geojson);
                 me.sandbox.notifyAll(event);
 
                 me.popupHandler.removeButtonSelection();

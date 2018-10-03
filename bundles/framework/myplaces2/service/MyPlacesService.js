@@ -450,7 +450,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * Notifies components that places/categories have changed with 'MyPlaces.MyPlacesChangedEvent'
          */
         _notifyDataChanged: function () {
-            var event = this._sandbox.getEventBuilder('MyPlaces.MyPlacesChangedEvent')();
+            var event = Oskari.eventBuilder('MyPlaces.MyPlacesChangedEvent')();
             this._sandbox.notifyAll(event);
         },
 

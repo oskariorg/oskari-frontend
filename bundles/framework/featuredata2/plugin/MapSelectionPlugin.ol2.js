@@ -122,13 +122,13 @@ Oskari.clazz.define(
 
             var event;
             if (!this.multipart || isForced) {
-                event = this.getSandbox().getEventBuilder(
+                event = Oskari.eventBuilder(
                     this.prefix + 'FinishedDrawingEvent'
                 )(this.getDrawing(), this.editMode);
 
                 this.getSandbox().notifyAll(event);
             } else {
-                event = this.getSandbox().getEventBuilder(
+                event = Oskari.eventBuilder(
                     this.prefix + 'AddedFeatureEvent'
                 )(this.getDrawing(), this.currentDrawMode);
 

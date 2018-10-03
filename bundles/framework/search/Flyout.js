@@ -133,7 +133,7 @@ Oskari.clazz.define(
                             searchInput.focus();
                         }
                     }
-                    var eventBuilder = sandbox.getEventBuilder('Search.TabChangedEvent'),
+                    var eventBuilder = Oskari.eventBuilder('Search.TabChangedEvent'),
                         previousTabId = previousTab ? previousTab.getId() : null,
                         newTabId = newTab ? newTab.getId() : null,
                         event = eventBuilder(previousTabId, newTabId);

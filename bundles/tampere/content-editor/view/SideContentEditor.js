@@ -1303,7 +1303,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 }
 
                 if (isCorrect) {
-                    var eventBuilder = this.sandbox.getEventBuilder("WFSFeaturesSelectedEvent");
+                    var eventBuilder = Oskari.eventBuilder("WFSFeaturesSelectedEvent");
                     if(eventBuilder) {
                         var event = eventBuilder(featuresIds, layer, true);
                         this.sandbox.notifyAll(event);
@@ -1339,7 +1339,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                     wfsLayerPlugin.deleteTileCache(me.selectedLayerId, layer.getCurrentStyle().getName());
                     //wfsLayerPlugin.refreshLayer(me.selectedLayerId);
-                    var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
+                    var evt = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
                     okButton.setHandler(function () {
                         setTimeout(function() {

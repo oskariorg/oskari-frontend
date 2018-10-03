@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChangedEv
  *
  * Setup status and type of the request with setters:
  * var sb = Oskari.getSandbox();
- * var event = sb.getEventBuilder('WFSStatusChangedEvent')('mylayer_1');
+ * var event = Oskari.eventBuilder('WFSStatusChangedEvent')('mylayer_1');
  * event.setStatus(event.status.loading);
  * event.setRequestType(event.type.image);
  * sb.notifyAll(event);
