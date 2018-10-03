@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
                 layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
 
             if (layer) {
-                var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                var updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                     updateRequest = updateRequestBuilder(layerId, true);
                 sandbox.request(this.instance, updateRequest);
                 // Update myplaces extra layers

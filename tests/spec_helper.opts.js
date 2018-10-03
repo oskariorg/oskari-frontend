@@ -295,7 +295,7 @@ function getConfigForMapfull() {
 function removeLayers(module, idList) {
     var sandbox = module.getSandbox();
     // remove selected layer
-    var rbRemove = sandbox.getRequestBuilder('RemoveMapLayerRequest');
+    var rbRemove = Oskari.requestBuilder('RemoveMapLayerRequest');
     if (idList) {
         for (var i = 0; i < idList.length; ++i) {
             sandbox.request(module, rbRemove(idList[i]));
@@ -314,7 +314,7 @@ function removeLayers(module, idList) {
 function addLayers(module, idList) {
     // add selected layers
     var sandbox = module.getSandbox();
-    var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
+    var rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
     if (idList) {
         for (var i = 0; i < idList.length; ++i) {
             sandbox.request(module, rbAdd(idList[i], true));

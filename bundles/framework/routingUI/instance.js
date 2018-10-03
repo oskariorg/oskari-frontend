@@ -101,7 +101,7 @@ function () {
     registerTool: function() {
         var me = this,
             sandbox = this.getSandbox(),
-            reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
+            reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
             request;
 
         me.popup = Oskari.clazz.create("Oskari.mapframework.bundle.routingUI.PopupRouting", me);

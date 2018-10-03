@@ -216,7 +216,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             sandbox.registerService(layerlistService);
 
             //Let's extend UI
-            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+            request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
 
             // create and register request handlers
@@ -267,7 +267,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(me, request);
 

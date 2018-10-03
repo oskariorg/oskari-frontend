@@ -439,7 +439,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           }
         },
         _markersSupported : function() {
-            var builder = this._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            var builder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
             return !!builder;
         },
         /**
@@ -449,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _addMarker: function (data, messageData) {
             var me = this,
                 loc = me._locale,
-                reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
+                reqBuilder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest'),
                 inputData = me._getInputsData(),
                 lat = parseFloat(inputData.lonlat.lat),
                 lon = parseFloat(inputData.lonlat.lon),
@@ -600,7 +600,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var me = this;
 
             if(this.getMapModule().isValidLonLat(data.lonlat.lon, data.lonlat.lat)) {
-                var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
+                var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(data.lonlat.lon, data.lonlat.lat);
                 me._sandbox.request(this, moveReq);
             } else {

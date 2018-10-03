@@ -160,7 +160,7 @@ Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleIn
                 }
             }
             //Let's extend UI with Flyout and Tile
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
             // TODO: stateful to myfourthbundle?
@@ -217,7 +217,7 @@ Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleIn
                 }
             }
             var request =
-                sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(me);
+                Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(me);
             sandbox.request(me, request);
             // unregister module from sandbox
             me.sandbox.unregister(me);

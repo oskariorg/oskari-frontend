@@ -2325,7 +2325,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @param {Boolean} blnEnable true to enable, false to disable
      */
     _enableGfi: function (blnEnable) {
-        var gfiReqBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
         if (gfiReqBuilder) {
             this._sandbox.request(this.getName(), gfiReqBuilder(blnEnable));
         }

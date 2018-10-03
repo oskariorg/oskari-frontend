@@ -102,7 +102,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             }
 
             //Let's extend UI
-            var requestBuilder = sandbox.getRequestBuilder('userinterface.AddExtensionRequest');
+            var requestBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
             if (requestBuilder) {
                 var request = requestBuilder(this);
                 sandbox.request(this, request);
@@ -116,7 +116,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             //sends request via config to add tool selection button
             if (this.conf && this.conf.selectionTools === true) {
                 this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', this);
-                var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
+                var addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
                     btn = {
                         iconCls: 'tool-feature-selection',
                         tooltip: localization.tools.select.tooltip,
@@ -459,7 +459,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
             }
 
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(this, request);
 

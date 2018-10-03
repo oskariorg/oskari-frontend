@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
         setupToolbar: function () {
             var me = this,
                 sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
+                reqBuilder = Oskari.requestBuilder(
                     'Toolbar.AddToolButtonRequest'
                 );
 
@@ -182,7 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
              */
             'Metadata.MapSelectionEvent': function (event) {
                 // ask toolbar to select default tool
-                var toolbarRequest = this.sandbox.getRequestBuilder(
+                var toolbarRequest = Oskari.requestBuilder(
                     'Toolbar.SelectToolButtonRequest'
                 )();
                 this.sandbox.request(this, toolbarRequest);

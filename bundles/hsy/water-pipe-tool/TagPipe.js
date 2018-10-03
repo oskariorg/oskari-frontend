@@ -1299,7 +1299,7 @@ Oskari.clazz.define(
          */
         _addLayerToMapById: function(layerId){
             var me = this,
-            request = me.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+            request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
             me.sandbox.request(me.instance, request);
         },
 
@@ -1310,7 +1310,7 @@ Oskari.clazz.define(
          */
         _activateNormalGFI: function(state){
             var me = this,
-            reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            reqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
 
             if (reqBuilder) {
                 var request = reqBuilder(state);
@@ -1325,7 +1325,7 @@ Oskari.clazz.define(
          */
         _activateNormalWFSReq: function(state){
             var me = this,
-            reqBuilder = me.sandbox.getRequestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
+            reqBuilder = Oskari.requestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
 
             if (reqBuilder) {
                 var request = reqBuilder(state);

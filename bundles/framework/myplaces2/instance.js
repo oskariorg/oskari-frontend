@@ -66,7 +66,7 @@ Oskari.clazz.define(
          * @param {Boolean} blnEnable true to enable, false to disable
          */
         enableGfi: function (blnEnable) {
-            var gfiReqBuilder = this.sandbox.getRequestBuilder(
+            var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
             );
             if (gfiReqBuilder) {
@@ -230,7 +230,7 @@ Oskari.clazz.define(
                 first = true,
                 id = me.idPrefix,
                 reqName = 'PersonalData.AddTabRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 req = reqBuilder(title, content, first, id);
             sandbox.request(this, req);
         },

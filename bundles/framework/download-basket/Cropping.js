@@ -158,7 +158,7 @@ Oskari.clazz.define(
          */
         activateNormalGFI: function(state){
             var me = this,
-            reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            reqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
 
             if (reqBuilder) {
                 var request = reqBuilder(state);
@@ -172,7 +172,7 @@ Oskari.clazz.define(
          */
         activateNormalWFSReq: function(state){
             var me = this,
-            reqBuilder = me._sandbox.getRequestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
+            reqBuilder = Oskari.requestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
 
             if (reqBuilder) {
                 var request = reqBuilder(state);

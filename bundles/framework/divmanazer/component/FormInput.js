@@ -513,8 +513,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             }
 
 
-            enabler = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest');
-            disabler = sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest');
+            enabler = Oskari.requestBuilder('EnableMapKeyboardMovementRequest');
+            disabler = Oskari.requestBuilder('DisableMapKeyboardMovementRequest');
             if (!enabler || !disabler) {
                 return;
             }

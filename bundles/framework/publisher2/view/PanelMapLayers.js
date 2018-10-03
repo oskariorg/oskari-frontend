@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     // FIXME create function outside loop. Just have to figure out a way to access the layer...
                     layerContainer.find('div.layer-tool-remove').on('click', function (e) {
                         var reqName = 'RemoveMapLayerRequest',
-                            builder = sandbox.getRequestBuilder(reqName),
+                            builder = Oskari.requestBuilder(reqName),
                             request = builder(jQuery(e.currentTarget).parents('.layer').attr('data-id')),
                             checkbox = jQuery(e.currentTarget).parents('.layer').find('.baselayer'),
                             isChecked = checkbox.is(':checked');
@@ -357,10 +357,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         _populateLayerPromotion: function (contentPanel) {
             var me = this,
                 sandbox = this.instance.getSandbox(),
-                addRequestBuilder = sandbox.getRequestBuilder(
+                addRequestBuilder = Oskari.requestBuilder(
                     'AddMapLayerRequest'
                 ),
-                removeRequestBuilder = sandbox.getRequestBuilder(
+                removeRequestBuilder = Oskari.requestBuilder(
                     'RemoveMapLayerRequest'
                 ),
                 closureMagic = function (layer) {
@@ -471,7 +471,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 newIndex = (allNodes.length - 1) - newIndex;
                 var sandbox = this.instance.getSandbox(),
                     reqName = 'RearrangeSelectedMapLayerRequest',
-                    builder = sandbox.getRequestBuilder(reqName),
+                    builder = Oskari.requestBuilder(reqName),
                     request = builder(movedId, newIndex);
                 sandbox.request(this.instance.getName(), request);
             }
@@ -489,7 +489,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         _layerOpacityChanged: function (layer, newOpacity) {
             var sandbox = this.instance.getSandbox(),
                 reqName = 'ChangeMapLayerOpacityRequest',
-                requestBuilder = sandbox.getRequestBuilder(reqName),
+                requestBuilder = Oskari.requestBuilder(reqName),
                 request = requestBuilder(layer.getId(), newOpacity);
 
             sandbox.request(this.instance.getName(), request);
@@ -593,7 +593,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 tools = this.templateLayerFooterTools.clone(), // layer footer
-                visibilityRequestBuilder = sandbox.getRequestBuilder(
+                visibilityRequestBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.MapLayerVisibilityRequest'
                 );
 
@@ -641,7 +641,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterHidden.clone(),
-                visibilityRequestBuilder = sandbox.getRequestBuilder(
+                visibilityRequestBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.MapLayerVisibilityRequest'
                 );
 

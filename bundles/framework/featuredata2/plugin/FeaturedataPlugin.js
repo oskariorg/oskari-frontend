@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                             var sandbox = me.getSandbox();
                             sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
                             var el = jQuery(me.getMapModule().getMobileDiv()).find('.mobile-info-marker');
-                            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
                             sandbox.request(me, toolbarRequest);
                             me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-featuredata'].iconCls);
                             me._flyoutOpen = undefined;

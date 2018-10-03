@@ -162,7 +162,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
             var bounds = olPoints.getBounds();
             var centroid = olPoints.getCentroid();
 
-            var rb = this.sandbox.getRequestBuilder('MapMoveRequest'),
+            var rb = Oskari.requestBuilder('MapMoveRequest'),
                 req;
             if (rb && count > 0) {
                 if (count === 1) {

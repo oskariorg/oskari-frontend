@@ -92,7 +92,7 @@ function() {
      * @param {Boolean} blnEnable true to enable, false to disable
      */
     enableGfi : function(blnEnable) {
-        var gfiReqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
         if(gfiReqBuilder) {
             this.sandbox.request(this.buttons, gfiReqBuilder(blnEnable));
         }

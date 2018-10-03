@@ -543,7 +543,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         	var me = this;
         	me._showLayers();
 
-        	var gfiActivationRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        	var gfiActivationRequestBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             var request = gfiActivationRequestBuilder(true);
             me.sandbox.request(me.instance.getName(), request);
 
@@ -587,7 +587,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         _disableGFI: function () {
         	var me = this;
-        	var gfiActivationRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        	var gfiActivationRequestBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             var request = gfiActivationRequestBuilder(false);
             me.sandbox.request(me.instance.getName(), request);
         },
@@ -602,7 +602,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _setLayerVisibility: function (layerId, setVisible) {
         	var me = this;
 
-        	var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+        	var visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
         	var request = visibilityRequestBuilder(layerId, setVisible);
             me.sandbox.request(me.instance.getName(), request);
         },
@@ -1343,7 +1343,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me.sandbox.notifyAll(evt);
                     okButton.setHandler(function () {
                         setTimeout(function() {
-                            var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+                            var visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
                             var request = visibilityRequestBuilder(me.selectedLayerId, true);
                             me.sandbox.request(me.instance.getName(), request);
                         }, 500);
@@ -1379,7 +1379,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 cancelAction['type'] = 'button';
                 cancelAction['group'] = 1;
                 cancelAction['action'] = function () {
-                    var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')("contentEditor");
+                    var request = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')("contentEditor");
                     me.sandbox.request(me, request);
                     me._highlighGeometries(me.highlightFeaturesIds, me._getLayerById(me.selectedLayerId), true);
                 };
@@ -1392,7 +1392,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 deleteAction['action'] = function () {
                     me.layerGeometries.geometry.components.splice(featureGeometryId, 1);
                     me.prepareRequest(null, true);
-                    var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')("contentEditor");
+                    var request = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')("contentEditor");
                     me.sandbox.request(me, request);
                     me._enableGFIRequestProcess();
                 };
@@ -1406,7 +1406,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 var options = {
                     hidePrevious: true
                 };
-                var request = me.sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')("contentEditor", me.loc.deleteGeometryDialog.title, content, new OpenLayers.LonLat(featureGeometry.getCentroid().x, featureGeometry.getCentroid().y), options);
+                var request = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest')("contentEditor", me.loc.deleteGeometryDialog.title, content, new OpenLayers.LonLat(featureGeometry.getCentroid().x, featureGeometry.getCentroid().y), options);
                 me.sandbox.request(me.getName(), request);
                 jQuery("#delete-dialog").parent().parent().css('height', 'auto').css('padding-bottom', '30px');
             }

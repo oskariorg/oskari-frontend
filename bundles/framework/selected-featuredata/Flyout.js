@@ -462,7 +462,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          */
         addLayerToMapById: function(layerId){
             var me = this,
-            request = me.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+            request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
             me.sandbox.request(me.instance, request);
         },
         /**
@@ -543,7 +543,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          */
         moveMapRequest: function(x, y){
             var me = this;
-            var mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(x, y);
+            var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(x, y);
             me.sandbox.request(me.instance, mapmoveRequest);
         },
         /**
@@ -553,7 +553,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          */
         showWmsMarker: function(x,y){
             var sb = Oskari.getSandbox();
-            var reqBuilder = sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            var reqBuilder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
             if (reqBuilder) {
                 var data = {
                     x: x,
@@ -576,7 +576,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             sb = Oskari.getSandbox();
 
             //WMS marker
-            var reqBuilder = sb.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            var reqBuilder = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
             if (reqBuilder) {
                 sb.request('MainMapModule', reqBuilder());
             }

@@ -272,7 +272,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')('mobile-timeseries', 'mobileToolbar-mobile-toolbar');
+                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')('mobile-timeseries', 'mobileToolbar-mobile-toolbar');
                 sandbox.request(me, toolbarRequest);
             }
             if (!mapInMobileMode) {

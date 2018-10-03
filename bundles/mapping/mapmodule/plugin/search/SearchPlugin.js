@@ -198,7 +198,7 @@ Oskari.clazz.define(
 
             // Toggle map keyboard controls so the user can use arrowkeys in the search...
             me._inputField.on('focus', function() {
-                reqBuilder = sandbox.getRequestBuilder(
+                reqBuilder = Oskari.requestBuilder(
                     'DisableMapKeyboardMovementRequest'
                 );
                 if (reqBuilder) {
@@ -207,7 +207,7 @@ Oskari.clazz.define(
                 //me._checkForKeywordClear();
             });
             me._inputField.on('blur', function() {
-                reqBuilder = sandbox.getRequestBuilder(
+                reqBuilder = Oskari.requestBuilder(
                     'EnableMapKeyboardMovementRequest'
                 );
                 if (reqBuilder) {
@@ -343,7 +343,7 @@ Oskari.clazz.define(
                 lon = typeof result.lon !== 'number' ? parseFloat(result.lon) : result.lon;
 
             // Add new marker
-            reqBuilder = sandbox.getRequestBuilder(
+            reqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.AddMarkerRequest'
             );
             if (reqBuilder) {
@@ -401,7 +401,7 @@ Oskari.clazz.define(
 
                     me.getSandbox().request(
                         me.getName(),
-                        me.getSandbox().getRequestBuilder(
+                        Oskari.requestBuilder(
                             'MapMoveRequest'
                         )(lon, lat, zoom)
                     );
@@ -522,7 +522,7 @@ Oskari.clazz.define(
             }
             this.getSandbox().request(
                 this.getName(),
-                this.getSandbox().getRequestBuilder(
+                Oskari.requestBuilder(
                     'MapMoveRequest'
                 )(result.lon, result.lat, zoom)
             );
@@ -548,7 +548,7 @@ Oskari.clazz.define(
             me.getElement().find('div.results').hide();
             // Send hide marker request
             // This is done just so the user can get rid of the marker somehow...
-            var requestBuilder = me.getSandbox().getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            var requestBuilder = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
             if (!requestBuilder) {
                 return;
             }

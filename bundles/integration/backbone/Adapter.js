@@ -108,7 +108,7 @@ function(name,viewClazz) {
         /* stateful */
         sandbox.registerAsStateful(this.mediator.bundleId, this);
 
-        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+        var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
 
         sandbox.request(this, request);
 
@@ -125,7 +125,7 @@ function(name,viewClazz) {
 
 
 
-        var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+        var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
         sandbox.request(this, request);
 
         sandbox.unregisterStateful(this.mediator.bundleId);

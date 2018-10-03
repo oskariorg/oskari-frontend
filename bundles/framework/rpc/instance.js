@@ -113,7 +113,7 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    var builder = me.sandbox.getRequestBuilder(params[0]);
+                    var builder = Oskari.requestBuilder(params[0]);
                     if (!me._allowedRequests[params[0]] || !builder) {
                         throw {
                             error: 'request_not_available',
@@ -214,7 +214,7 @@ Oskari.clazz.define(
             var available = [];
             var sb = this.getSandbox();
             for(var i=0; i < allowedRequests.length; ++i) {
-                if(typeof sb.getRequestBuilder(allowedRequests[i]) === 'function') {
+                if(typeof Oskari.requestBuilder(allowedRequests[i]) === 'function') {
                     available.push(allowedRequests[i]);
                 }
             }

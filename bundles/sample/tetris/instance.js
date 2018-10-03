@@ -94,7 +94,7 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
             }
 
             //Let's extend UI
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
             // draw ui
@@ -154,7 +154,7 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
         "stop": function () {
             var sandbox = this.sandbox,
                 p,
-                request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+                request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
                     sandbox.unregisterFromEventByName(this, p);
