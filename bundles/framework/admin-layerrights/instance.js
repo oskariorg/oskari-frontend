@@ -117,7 +117,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
 
             //Let's extend UI
             var reqName = 'userinterface.AddExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
             sandbox.request(this, request);
 
@@ -179,7 +179,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
             var me = this,
                 sandbox = me.sandbox(),
                 reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName);
+                reqBuilder = Oskari.requestBuilder(reqName);
 
             for (var p in me.eventHandlers) {
                 sandbox.unregisterFromEventByName(me, p);

@@ -117,7 +117,7 @@ Oskari.clazz.define(
                 this.requestHandlers.saveStateHandler
             );
             // sends a request that removes button described in config
-            var rb = sandbox.getRequestBuilder('MapControls.ToolButtonRequest');
+            var rb = Oskari.requestBuilder('MapControls.ToolButtonRequest');
             if (rb) {
                 sandbox.request(this, rb(this.toolbar.config, 'remove'));
             }
@@ -513,10 +513,10 @@ Oskari.clazz.define(
                 this._log.debug('restoring LAYER state');
                 this._teardownState(mapmodule);
 
-                var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest'),
-                    rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
-                    visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest'),
-                    styleReqBuilder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),
+                var rbAdd = Oskari.requestBuilder('AddMapLayerRequest'),
+                    rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest'),
+                    visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest'),
+                    styleReqBuilder = Oskari.requestBuilder('ChangeMapLayerStyleRequest'),
                     len = state.selectedLayers.length,
                     i,
                     layer;
@@ -559,7 +559,7 @@ Oskari.clazz.define(
         _teardownState: function (module) {
             var sandbox = this.getSandbox(),
                 selectedLayers = sandbox.findAllSelectedMapLayers(),
-                rbRemove = sandbox.getRequestBuilder('RemoveMapLayerRequest'), // remove all current layers
+                rbRemove = Oskari.requestBuilder('RemoveMapLayerRequest'), // remove all current layers
                 i;
             for (i = 0; i < selectedLayers.length; i += 1) {
                 sandbox.request(module.getName(), rbRemove(selectedLayers[i].getId()));

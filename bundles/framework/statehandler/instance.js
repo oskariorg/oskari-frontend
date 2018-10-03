@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             sandbox.removeRequestHandler('StateHandler.SetStateRequest', this.requestHandlers.setStateHandler);
             sandbox.removeRequestHandler('StateHandler.SaveStateRequest', this.requestHandlers.saveStateHandler);
             // sends a request that removes button described in config
-            var rb = sandbox.getRequestBuilder('MapControls.ToolButtonRequest');
+            var rb = Oskari.requestBuilder('MapControls.ToolButtonRequest');
             if (rb) {
                 sandbox.request(this, rb(this.toolbar.config, 'remove'));
             }
@@ -513,7 +513,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         _teardownState: function (module) {
             var sandbox = this.getSandbox(),
                 selectedLayers = sandbox.findAllSelectedMapLayers(),
-                rbRemove = sandbox.getRequestBuilder('RemoveMapLayerRequest'), // remove all current layers
+                rbRemove = Oskari.requestBuilder('RemoveMapLayerRequest'), // remove all current layers
                 i;
             for (i = 0; i < selectedLayers.length; i += 1) {
                 sandbox.request(module.getName(), rbRemove(selectedLayers[i].getId()));

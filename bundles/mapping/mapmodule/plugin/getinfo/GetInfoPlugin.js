@@ -437,7 +437,7 @@ Oskari.clazz.define(
                 req;
 
             if (this.clickLocation) {
-                reqB = this.getSandbox().getRequestBuilder(
+                reqB = Oskari.requestBuilder(
                     'InfoBox.RefreshInfoBoxRequest'
                 );
 

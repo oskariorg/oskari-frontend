@@ -112,7 +112,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 loc = this.getLocalization(),
                 sandbox = this.getSandbox(),
                 request,
-                reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+                reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
 
             this.tool.callback = function() {
                 me.startTool();
@@ -147,7 +147,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         stopTool: function () {
             var me = this,
                 sandbox = this.getSandbox(),
-                spinnerRequestBuilder = sandbox.getRequestBuilder('ShowProgressSpinnerRequest');
+                spinnerRequestBuilder = Oskari.requestBuilder('ShowProgressSpinnerRequest');
             if(spinnerRequestBuilder) {
                 sandbox.request(this, spinnerRequestBuilder(false));
             }
@@ -161,10 +161,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @param {Boolean} blnEnable true to enable, false to disable
          */
         enableGFI: function (blnEnable) {
-            var gfiReqBuilder = this.sandbox.getRequestBuilder(
+            var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
                 ),
-                hiReqBuilder = this.sandbox.getRequestBuilder(
+                hiReqBuilder = Oskari.requestBuilder(
                 'WfsLayerPlugin.ActivateHighlightRequest'
                 );
             // enable or disable gfi requests
@@ -199,7 +199,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         _hidePopups: function(){
             var me = this,
                 sandbox = this.getSandbox(),
-                infoBoxHideReqBuilder = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest');
+                infoBoxHideReqBuilder = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest');
 
             if(me._popup){
                 me._popup.close();
@@ -219,7 +219,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         __handleMapClick: function (lonlat) {
             var me = this,
                 sandbox = this.getSandbox(),
-                spinnerRequestBuilder = sandbox.getRequestBuilder('ShowProgressSpinnerRequest');
+                spinnerRequestBuilder = Oskari.requestBuilder('ShowProgressSpinnerRequest');
 
             if(spinnerRequestBuilder) {
                 sandbox.request(this, spinnerRequestBuilder(true));
@@ -266,8 +266,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         lon: result.lon,
                         lat: result.lat
                     },
-                    moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
-                    infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
+                    moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
+                    infoBoxReqBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest'),
                     options = {
                         hidePrevious: true
                     };
@@ -300,8 +300,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                     colorsLength = me.__colors.length,
                     shapeIndex = 0,
                     colorIndex = 0,
-                    addMarkerRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
-                    removeMarkerRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest'),
+                    addMarkerRequestBuilder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest'),
+                    removeMarkerRequestBuilder = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest'),
                     MARKER_ID_PREFIX = 'findbycoordinates_';
 
                 // Close button

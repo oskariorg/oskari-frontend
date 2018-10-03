@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             });
             center.on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    var requestBuilder = me.getSandbox().getRequestBuilder(
+                    var requestBuilder = Oskari.requestBuilder(
                         'StateHandler.SetStateRequest'
                     );
                     if (requestBuilder) {

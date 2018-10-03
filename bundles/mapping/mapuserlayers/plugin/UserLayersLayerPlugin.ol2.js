@@ -134,7 +134,7 @@ Oskari.clazz.define(
                 bounds = olPolygon.getBounds(),
                 centroid = olPolygon.getCentroid(),
                 epsilon = 1.0,
-                rb = sandbox.getRequestBuilder('MapMoveRequest'),
+                rb = Oskari.requestBuilder('MapMoveRequest'),
                 req;
 
             if (rb) {

@@ -109,7 +109,7 @@ function () {
                 sandbox.requestHandler(key, this._requestHandlers[key])
             }
 
-            var request = sandbox.getRequestBuilder(
+            var request = Oskari.requestBuilder(
                 'userinterface.AddExtensionRequest'
             )(this);
             sandbox.request(this, request);
@@ -126,7 +126,7 @@ function () {
          */
         _activateMetadataSearchResultsShowRating: function(){
             var me = this,
-                reqBuilder = me.sandbox.getRequestBuilder('AddSearchResultActionRequest');
+                reqBuilder = Oskari.requestBuilder('AddSearchResultActionRequest');
 
             if (reqBuilder) {
                 var data = {
@@ -157,7 +157,7 @@ function () {
         },
         _addMetadataFeedbackTabToMetadataFlyout: function() {
             var me = this,
-                reqBuilder = me.sandbox.getRequestBuilder('catalogue.AddTabRequest');
+                reqBuilder = Oskari.requestBuilder('catalogue.AddTabRequest');
             var data = {
                 'feedback': {
                     template: null,

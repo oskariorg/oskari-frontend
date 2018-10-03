@@ -205,7 +205,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             var exitModeSpy = sinon.spy(statsView, 'prepareMode');
 
             // Remove the layer
-            var builder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
+            var builder = Oskari.requestBuilder('RemoveMapLayerRequest');
             var request = builder(testLayerId);
             sandbox.request(statsModule, request);
 

@@ -268,7 +268,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 footer = me.templateChangeUnsupported.clone();
                 footer.find('a').on('click', function () {
                     // send request to show projection changer
-                    var request = sandbox.getRequestBuilder('ShowProjectionChangerRequest')();
+                    var request = Oskari.requestBuilder('ShowProjectionChangerRequest')();
                     sandbox.request(me.instance.getName(), request);
                     return false;
                 });
@@ -365,7 +365,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 newIndex = (allNodes.length - 1) - newIndex;
                 var sandbox = this.instance.getSandbox(),
                     reqName = 'RearrangeSelectedMapLayerRequest',
-                    builder = sandbox.getRequestBuilder(reqName),
+                    builder = Oskari.requestBuilder(reqName),
                     request = builder(movedId, newIndex);
 
                 sandbox.request(this.instance.getName(), request);
@@ -407,7 +407,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     sel.on('change', function(e) {
                         var val = sel.find('option:selected').val();
                         layer.selectStyle(val);
-                        var builder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),
+                        var builder = Oskari.requestBuilder('ChangeMapLayerStyleRequest'),
                             req = builder(layer.getId(), val);
                         sandbox.request(me.instance.getName(), req);
                     });
@@ -437,7 +437,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 reqName = 'ChangeMapLayerOpacityRequest',
-                opacityRequestBuilder = sandbox.getRequestBuilder(reqName),
+                opacityRequestBuilder = Oskari.requestBuilder(reqName),
                 layerId = layer.getId(),
                 value = layer.getOpacity(),
                 layerDiv = this.templateLayer.clone(),
@@ -492,7 +492,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     'click',
                     function() {
                         var reqName = 'RemoveMapLayerRequest',
-                            builder = sandbox.getRequestBuilder(reqName),
+                            builder = Oskari.requestBuilder(reqName),
                             request = builder(layer.getId());
 
                         sandbox.request(me.instance.getName(), request);
@@ -616,7 +616,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         _layerOpacityChanged: function(layer, newOpacity) {
             var sandbox = this.instance.getSandbox(),
                 reqName = 'ChangeMapLayerOpacityRequest',
-                requestBuilder = sandbox.getRequestBuilder(reqName),
+                requestBuilder = Oskari.requestBuilder(reqName),
                 request = requestBuilder(layer.getId(), newOpacity);
 
             sandbox.request(this.instance.getName(), request);
@@ -690,7 +690,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterOutOfScale.clone(),
                 reqName = 'MapModulePlugin.MapMoveByLayerContentRequest',
-                requestBuilder = sandbox.getRequestBuilder(reqName);
+                requestBuilder = Oskari.requestBuilder(reqName);
 
             msg.addClass('layer-msg-for-outofscale');
             msg.find('a').on('click', function() {
@@ -717,7 +717,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterHidden.clone(),
                 reqName = 'MapModulePlugin.MapLayerVisibilityRequest',
-                visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
+                visibilityRequestBuilder = Oskari.requestBuilder(reqName);
 
             msg.addClass('layer-msg-for-hidden');
             msg.find('a').on('click', function() {
@@ -744,7 +744,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterOutOfContentArea.clone(),
                 reqName = 'MapModulePlugin.MapMoveByLayerContentRequest',
-                requestBuilder = sandbox.getRequestBuilder(reqName);
+                requestBuilder = Oskari.requestBuilder(reqName);
 
             msg.addClass('layer-msg-for-outofcontentarea');
             msg.find('a').on('click', function() {
@@ -772,7 +772,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 tools = this.templateLayerFooterTools.clone(), // layer footer
                 loc = this.instance.getLocalization('layer'),
                 visReqName = 'MapModulePlugin.MapLayerVisibilityRequest',
-                visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName),
+                visibilityRequestBuilder = Oskari.requestBuilder(visReqName),
                 s,
                 subLayers,
                 subLmeta = false,

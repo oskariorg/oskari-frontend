@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                     me._markTouAccepted();
                 }
 
-                var publishMapEditorRequestBuilder = me.instance.sandbox.getRequestBuilder(
+                var publishMapEditorRequestBuilder = Oskari.requestBuilder(
                     'Publisher.PublishMapEditorRequest'
                 );
                 if (publishMapEditorRequestBuilder) {

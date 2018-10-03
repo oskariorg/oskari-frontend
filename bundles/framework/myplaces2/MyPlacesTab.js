@@ -77,14 +77,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
 
                 var editLinkClosure = function (id) {
                     return function () {
-                        var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
+                        var request = Oskari.requestBuilder('MyPlaces.EditCategoryRequest')(id);
                         me.instance.sandbox.request(me.instance, request);
                         return false;
                     };
                 };
                 var deletelinkClosure = function (id) {
                     return function () {
-                        var request = me.instance.sandbox.getRequestBuilder('MyPlaces.DeleteCategoryRequest')(id);
+                        var request = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest')(id);
                         me.instance.sandbox.request(me.instance, request);
                         return false;
                     };
@@ -150,13 +150,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             var me = this,
                 center = geometry.getCentroid(),
                 bounds = me._fitBounds(geometry.getBounds()),
-                mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds);
+                mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
             var layerId = 'myplaces_' + categoryId,
                 layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
-                var request = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+                var request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
                 this.instance.sandbox.request(this.instance, request);
             }
         },
@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             // focus on map
             this._showPlace(data.geometry, data.categoryId);
             // request form
-            var request = this.instance.sandbox.getRequestBuilder('MyPlaces.EditPlaceRequest')(data.id);
+            var request = Oskari.requestBuilder('MyPlaces.EditPlaceRequest')(data.id);
             this.instance.sandbox.request(this.instance, request);
         },
         /**

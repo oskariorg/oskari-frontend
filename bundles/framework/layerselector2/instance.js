@@ -109,7 +109,7 @@ Oskari.clazz.define(
             sandbox.registerService(layerlistService);
 
             //Let's extend UI
-            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+            request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
 
             // create and register request handlers
@@ -300,7 +300,7 @@ Oskari.clazz.define(
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(me, request);
 

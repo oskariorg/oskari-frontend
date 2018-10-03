@@ -235,7 +235,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         issue: function () {
             var requestName = arguments[0],
                 args = this.slicer.apply(arguments, [1]),
-                builder = this.getSandbox().getRequestBuilder(requestName),
+                builder = Oskari.requestBuilder(requestName),
                 request = builder.apply(builder, args);
             return this.getSandbox().request(this.getExtension(), request);
         },

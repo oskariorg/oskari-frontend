@@ -69,7 +69,7 @@ function() {
         // register to sandbox as a module
         sandbox.register(me);
 
-        var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+        var reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
         if(reqBuilder) {
             // got builder -> toolbar is loaded
             sandbox.request(me, reqBuilder('mytool', 'sampletools', {

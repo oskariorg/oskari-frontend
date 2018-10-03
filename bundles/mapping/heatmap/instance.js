@@ -129,13 +129,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
                 // adding layer to service so it can be referenced with id
                 service.addLayer(layer);
                 // add layer to map with request
-                var rbAdd = this.sandbox.getRequestBuilder('AddMapLayerRequest');
+                var rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
                 this.sandbox.request(this, rbAdd(layer.getId(), true));
             }
             else {
                 this._log.debug('Update heatmap with values', values, layer);
                 // request update for the layer
-                var rbUpdate = this.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+                var rbUpdate = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
                 this.sandbox.request(this, rbUpdate(layer.getId(), true));
             }
         },

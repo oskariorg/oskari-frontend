@@ -172,7 +172,7 @@ Oskari.clazz.define(
                 searchContainer.find('div.resultList').empty();
 
                 // try to remove markers if request is available when field is emptied
-                var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+                var reqBuilder = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
                 if (reqBuilder) {
                     sandbox.request(me.instance.getName(), reqBuilder());
                 }
@@ -198,7 +198,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            var reqBuilder = me.getSandbox().getRequestBuilder('SearchRequest');
+            var reqBuilder = Oskari.requestBuilder('SearchRequest');
             if(reqBuilder) {
                 var request = reqBuilder(searchKey);
                 me.getSandbox().request(this.instance, request);
@@ -398,7 +398,7 @@ Oskari.clazz.define(
                 sandbox = inst.sandbox;
             // good to go
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
-            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
+            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if(result.zoomScale) {
                 zoom = {scale : result.zoomScale};
@@ -430,7 +430,7 @@ Oskari.clazz.define(
             closeAction.group = 1;
             closeAction.action = function () {
                 var rN = 'InfoBox.HideInfoBoxRequest',
-                    rB = sandbox.getRequestBuilder(rN),
+                    rB = Oskari.requestBuilder(rN),
                     request = rB(popupId);
                 sandbox.request(me.instance.getName(), request);
             };
@@ -447,7 +447,7 @@ Oskari.clazz.define(
             };
 
             var rN = 'InfoBox.ShowInfoBoxRequest',
-                rB = sandbox.getRequestBuilder(rN),
+                rB = Oskari.requestBuilder(rN),
                 request = rB(
                     popupId,
                     loc.title,

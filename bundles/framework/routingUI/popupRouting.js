@@ -118,7 +118,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
          * @param {Boolean} blnEnable true to enable, false to disable
          */
         enableGFI: function (blnEnable) {
-            var gfiReqBuilder = this.sandbox.getRequestBuilder(
+            var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
                 );
             // enable or disable gfi requests
@@ -149,7 +149,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
         removeMarkersFromMap: function(){
             var me=this,
                 rn='MapModulePlugin.RemoveMarkersRequest',
-                reqBuilder = me.sandbox.getRequestBuilder(
+                reqBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.RemoveMarkersRequest'
                 );
 
@@ -228,7 +228,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
                 me.removeMarkersFromMap();
             }
             // Add new marker
-            reqBuilder = sandbox.getRequestBuilder(
+            reqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.AddMarkerRequest'
             );
             if (reqBuilder) {

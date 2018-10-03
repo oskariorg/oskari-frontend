@@ -366,7 +366,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
             me.dotForm.setSaveHandler(function() {
                 var values = me.dotForm.getValues(),
-                    reqBuilder = me.getSandbox().getRequestBuilder(
+                    reqBuilder = Oskari.requestBuilder(
                         'MapModulePlugin.AddMarkerRequest'
                     );
 
@@ -407,7 +407,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
 
             // ask toolbar to select default tool if available
-            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest');
+            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
             if(toolbarRequest) {
                 sandbox.request(me, toolbarRequest());
             }
@@ -676,7 +676,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 // Couldn't get the request, toolbar not loaded
                 return;
             }
-            var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            var reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
 
             for (tool in me.buttons) {
                 if (me.buttons.hasOwnProperty(tool)) {
@@ -701,10 +701,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 evtB = sandbox.getEventBuilder(
                     'DrawFilterPlugin.SelectedDrawingEvent'
                 ),
-                gfiReqBuilder = sandbox.getRequestBuilder(
+                gfiReqBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.GetFeatureInfoActivationRequest'
                 ),
-                hiReqBuilder = sandbox.getRequestBuilder(
+                hiReqBuilder = Oskari.requestBuilder(
                     'WfsLayerPlugin.ActivateHighlightRequest'
                 );
 

@@ -131,7 +131,7 @@ Oskari.clazz.define(
 
             //Let's extend UI
             var reqName = 'userinterface.AddExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
             sandbox.request(this, request);
 
@@ -240,7 +240,7 @@ Oskari.clazz.define(
             }
 
             var reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
 
             sandbox.request(this, request);

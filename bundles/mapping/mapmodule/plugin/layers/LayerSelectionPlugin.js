@@ -337,7 +337,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _setLayerVisible: function (layer, blnVisible) {
             var sandbox = this.getSandbox(),
-                visibilityRequestBuilder = sandbox.getRequestBuilder(
+                visibilityRequestBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.MapLayerVisibilityRequest'
                 ),
                 request = visibilityRequestBuilder(layer.getId(), blnVisible);
@@ -478,7 +478,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // FIXME values.defaultBaseLayer is sometimes empty...
             // send Request to rearrange layers
             var reqName = 'RearrangeSelectedMapLayerRequest',
-                builder = sandbox.getRequestBuilder(reqName),
+                builder = Oskari.requestBuilder(reqName),
                 request = builder(values.defaultBaseLayer, 0);
 
             sandbox.request(me, request);

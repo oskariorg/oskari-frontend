@@ -191,7 +191,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
         issue: function () {
             var requestName = arguments[0];
             var args = this.slicer.apply(arguments, [1]);
-            var builder = this.getSandbox().getRequestBuilder(requestName);
+            var builder = Oskari.requestBuilder(requestName);
             var request = builder.apply(builder, args);
             return this.getSandbox().request(this.getName(), request);
         },
