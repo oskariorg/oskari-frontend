@@ -9,7 +9,6 @@ import VectorTileLayer from './VectorTileLayer';
 import styleGenerator from './styleGenerator';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
-const layertype = 'vectortile';
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
@@ -21,6 +20,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         super(config);
         this.__name = 'VectorTileLayerPlugin';
         this._clazz = 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin';
+        this.layertype = 'vectortile';
     }
     /**
      * @private @method _initImpl
@@ -30,8 +30,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         // register domain builder
         const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         if (mapLayerService) {
-            mapLayerService.registerLayerModel(layertype + 'layer', VectorTileLayer);
-            mapLayerService.registerLayerModelBuilder(layertype + 'layer', new VectorTileModelBuilder());
+            mapLayerService.registerLayerModel(this.layertype + 'layer', VectorTileLayer);
+            mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new VectorTileModelBuilder());
         }
     }
     /**
@@ -70,7 +70,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         if (!layer) {
             return false;
         }
-        return layer.isLayerOfType(layertype);
+        return layer.isLayerOfType(this.layertype);
     }
     /**
      * @method addMapLayerToMap
