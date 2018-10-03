@@ -149,7 +149,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          */
         getAggregateAnalysisJSON: function(analyse_id) {
             var me = this;
-            var url = Oskari.getSandbox().getAjaxUrl() + 'action_route=GetAnalysisData&analyse_id=' + analyse_id;
+            var url = Oskari.urls.getRoute('GetAnalysisData') + '&analyse_id=' + analyse_id;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',

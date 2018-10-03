@@ -88,13 +88,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             return this._sandbox;
         },
         getAjaxUrl: function (key, allKnown) {
-            var ajaxUrl = this.getSandbox().getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute('GetBackendStatus');
             var url = null;
 
             if (allKnown) {
-                url = ajaxUrl + 'action_route=GetBackendStatus&Subset=AllKnown';
+                url = ajaxUrl + '&Subset=AllKnown';
             } else {
-                url = ajaxUrl + 'action_route=GetBackendStatus&Subset=Alert';
+                url = ajaxUrl + '&Subset=Alert';
             }
 
             return url;

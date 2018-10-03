@@ -96,7 +96,7 @@ function(instance, title) {
         if(this.layerGroups.length == 0) {
             this.accordion.showMessage(this.instance.getLocalization('loading'));
             var me = this;
-            var ajaxUrl = this.instance.sandbox.getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute();
             jQuery.ajax({
                 type : "GET",
                 dataType: 'json',

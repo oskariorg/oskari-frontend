@@ -14,8 +14,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
     function (instance) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
-        this.locationTypeUrl = this.sandbox.getAjaxUrl() + '&action_route=GetLocationType';
-        this.countryUrl = this.sandbox.getAjaxUrl() + '&action_route=GetELFCountriesData&lang=' + Oskari.getLang();
+        this.locationTypeUrl = Oskari.urls.getRoute('GetLocationType');
+        this.countryUrl = Oskari.urls.getRoute('GetELFCountriesData') + '&lang=' + Oskari.getLang();
         this.loc = instance.getLocalization('tab');
         this.templates = {};
         //Selections for advanced search

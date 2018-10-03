@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._ajaxXhr[srs + targetSRS].abort();
                 }
                 me._ajaxXhr[srs + targetSRS] = jQuery.ajax({
-                    url: me._sandbox.getAjaxUrl('Coordinates'),
+                    url: Oskari.urls.getRoute('Coordinates'),
                     data: {
                         lat: data.lonlat.lat,
                         lon: data.lonlat.lon,

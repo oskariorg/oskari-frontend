@@ -264,7 +264,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
             $('#searchbygeom-searchindicator').addClass('show');
             me._startAjaxRequest(dteMs);
 
-            var ajaxUrl = this._sandbox.getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute();
 
             var mapVO = me._sandbox.getMap();
             var centerLonLat = me._map.getCenter();
