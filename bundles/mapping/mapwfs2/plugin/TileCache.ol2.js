@@ -1,4 +1,4 @@
-Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache",
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.TileCache',
     function () {
         this.data = {};
         this.ts = {};

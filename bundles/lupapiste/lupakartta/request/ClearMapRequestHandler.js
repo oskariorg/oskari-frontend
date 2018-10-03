@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.request.ClearMapRequestH
 	this.markersPlugin = markersPlugin;
 }, {
 	handleRequest : function(core, request) {
-		this.sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.request.ClearMapRequestHandler] Clear map");
+		this.sandbox.printDebug('[Oskari.lupapiste.bundle.lupakartta.request.ClearMapRequestHandler] Clear map');
 		this.markersPlugin.clearMapMarkers();
 	}
 }, {

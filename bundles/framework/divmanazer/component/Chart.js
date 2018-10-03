@@ -74,11 +74,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         this.y.domain( yScaleDomain );
     },
     getSVGTemplate: function () {
-        var svg = d3.select( this.plot.get(0) ).append("svg")
-            .attr( "width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
-            .attr( "height", this.dimensions.height() + this.dimensions.margin.top + this.dimensions.margin.bottom )
-            .append( "g" )
-            .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" );
+        var svg = d3.select( this.plot.get(0) ).append('svg')
+            .attr( 'width', this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
+            .attr( 'height', this.dimensions.height() + this.dimensions.margin.top + this.dimensions.margin.bottom )
+            .append( 'g' )
+            .attr( 'transform', 'translate(' + this.dimensions.margin.left + ',' + this.dimensions.margin.top + ')' );
 
         return svg;
     },
@@ -106,25 +106,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var me = this;
         // empty string ("") is the placeholder value from selectlist
         if ( !this.sortingType ) {
-            if ( typeof type === "undefined" || type === "" ) {
+            if ( typeof type === 'undefined' || type === '' ) {
                 type = 'value-descending';
             } 
-        } else if( type === undefined || type === "" ) {
+        } else if( type === undefined || type === '' ) {
             type = this.sortingType;
         }
 
         switch( type ) {
-            case "name-ascending":
+            case 'name-ascending':
                 me.data.sort(function (a, b) {
                     return d3.descending(a.name , b.name);
                 });
             break;
-            case "name-descending":
+            case 'name-descending':
                 me.data.sort(function (a, b) {
                     return d3.ascending(a.name , b.name);
                 });
             break;
-            case "value-ascending":
+            case 'value-ascending':
                 me.data.sort(function (a, b) {
                     var result = me.nullsLast(a.value, b.value);
                     if (!result) {
@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                     return result;
                 });
             break;
-            case "value-descending":
+            case 'value-descending':
                 me.data.sort(function (a, b) {
                     var result = me.nullsLast(a.value, b.value);
                     if (!result) {
@@ -213,13 +213,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var me = this;
 
         // append x-tick lines to chart
-        var xtickAxis = this.svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate( 0, 0)")
+        var xtickAxis = this.svg.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate( 0, 0)')
             .attr('shape-rendering', 'crispEdges')
             .call(this.xAxis);
 
-            xtickAxis.selectAll("x axis, tick, text").remove();
+            xtickAxis.selectAll('x axis, tick, text').remove();
             xtickAxis.select('.domain').remove();
 
         xtickAxis.selectAll('line')
@@ -227,12 +227,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
 
             //append the x-axis to different element so we can show the values when scrollign
             var gx = d3.select( this.axisLabelValues.get(0) )
-            .append("svg")
-            .attr( "width", this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
-            .attr( "height", 12 )
-            .append("g")
-            .attr("class", "x axis header")
-            .attr( "transform", "translate(" + this.dimensions.margin.left + "," + this.dimensions.margin.top + ")" )
+            .append('svg')
+            .attr( 'width', this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
+            .attr( 'height', 12 )
+            .append('g')
+            .attr('class', 'x axis header')
+            .attr( 'transform', 'translate(' + this.dimensions.margin.left + ',' + this.dimensions.margin.top + ')' )
             .call(this.xAxis);
 
             gx.select('.domain').remove();
@@ -272,17 +272,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
 
         // labels
         var labels = this.svg.append('g')
-            .selectAll(".labels")
+            .selectAll('.labels')
             .data(this.data)
             .enter()
-            .append("g")
-            .attr("class", function ( d ) { return d.value < 0 ? "labels negative" : "labels positive" } )
-            .attr("transform", function ( d ) {
+            .append('g')
+            .attr('class', function ( d ) { return d.value < 0 ? 'labels negative' : 'labels positive' } )
+            .attr('transform', function ( d ) {
                 var marginized = me.y(d.name) + 11;
-                return  "translate("+ me.x(0) +","+ marginized +")";
+                return  'translate('+ me.x(0) +','+ marginized +')';
             })
         //append lines
-        labels.append("line")
+        labels.append('line')
             .attr('x2', function ( d ) {
                 if ( d.value < 0 ) {
                     return 5;
@@ -296,12 +296,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr('stroke', '#aaa')
             .attr('shape-rendering', 'crispEdges');
         //append text
-        labels.append("text")
-            .attr("text-anchor", function (d) {
+        labels.append('text')
+            .attr('text-anchor', function (d) {
                 if ( d.value < 0 ) {
-                    return "start";
+                    return 'start';
                 }
-                return "end";
+                return 'end';
             })
             .attr('x', function ( d ) {
                 if ( d.value < 0 ) {
@@ -318,24 +318,24 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             });
 
         // bars
-        var bars = this.svg.insert('g','g.y').selectAll(".bar")
+        var bars = this.svg.insert('g','g.y').selectAll('.bar')
             .data(this.data)
             .enter()
-            .append("g")
-            .attr("class", function ( d ) { return d.value < 0 ? "negative" : "positive" } )
+            .append('g')
+            .attr('class', function ( d ) { return d.value < 0 ? 'negative' : 'positive' } )
             .attr('transform', function ( d ) {
                 return 'translate(0,' + ( me.y( d.name ) + me.y.bandwidth() / 2 ) + ')';
             });
 
         //append rects
-        bars.append("rect")
-            .attr("class", "bar")
-            .attr("text-anchor", "middle")
+        bars.append('rect')
+            .attr('class', 'bar')
+            .attr('text-anchor', 'middle')
             .style('fill', function( d,i ){ return me.colorScale(i); }) 
-            .attr("y", -8) // 7 is half of 15 height (pixel aligned)
-            .attr("x", function ( d ) { return d.value ? me.x( Math.min( 0, d.value ) ) : 0 })
-            .attr("height", 17)
-            .attr("width", function( d ) {
+            .attr('y', -8) // 7 is half of 15 height (pixel aligned)
+            .attr('x', function ( d ) { return d.value ? me.x( Math.min( 0, d.value ) ) : 0 })
+            .attr('height', 17)
+            .attr('width', function( d ) {
                  return d.value ? Math.abs( me.x( d.value ) - me.x( 0 ) ) : 0; 
             });
         //append text

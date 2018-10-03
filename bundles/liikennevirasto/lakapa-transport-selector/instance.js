@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.liikennevirasto.bundle.lakapa.TransportSelectorBundleInstance plugin for main map.
  */
-Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.TransportSelectorBundleInstance",
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.TransportSelectorBundleInstance',
 
 /**
  * @method create called automatically on construction

@@ -124,7 +124,7 @@ Oskari.clazz.define(
         }
 
     }, {
-        'extend': ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

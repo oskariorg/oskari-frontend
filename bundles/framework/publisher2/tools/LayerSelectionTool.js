@@ -288,7 +288,7 @@ function() {
         }
     },
     getName: function() {
-        return "Oskari.mapframework.publisher.tool.LayerSelectionTool";
+        return 'Oskari.mapframework.publisher.tool.LayerSelectionTool';
     },
     /**
      * @method onEvent

@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.request.StartDrawingRequest',
         this._options = options || {};
     }, {
         /** @static @property __name request name */
-        __name: "DrawTools.StartDrawingRequest",
+        __name: 'DrawTools.StartDrawingRequest',
         /**
          * @method getName
          * @return {String} request name

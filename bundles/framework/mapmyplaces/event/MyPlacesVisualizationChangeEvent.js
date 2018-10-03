@@ -20,7 +20,7 @@ function(layerId, forced) {
      * @return {String} The event name.
      */
     getName : function() {
-        return "MapMyPlaces.MyPlacesVisualizationChangeEvent";
+        return 'MapMyPlaces.MyPlacesVisualizationChangeEvent';
     },
     /**
     * @method getLayer

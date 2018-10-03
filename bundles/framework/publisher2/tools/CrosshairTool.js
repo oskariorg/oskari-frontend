@@ -2,7 +2,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CrosshairTool',
 function() {
 }, {
     getName: function() {
-        return "Oskari.mapframework.publisher.tool.CrosshairTool";
+        return 'Oskari.mapframework.publisher.tool.CrosshairTool';
     },
     /**
     * Get tool object.

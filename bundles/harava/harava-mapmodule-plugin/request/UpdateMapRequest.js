@@ -14,7 +14,7 @@ function() {
 	this._creator = null;
 }, {
     /** @static @property __name request name */
-	__name : "UpdateMapRequest",
+	__name : 'UpdateMapRequest',
     /**
      * @method getName
      * @return {String} request name

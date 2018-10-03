@@ -176,8 +176,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
                         layerList.find('ul').append(layerListRadioElement);
 
-                        if (layerList.find("input")[0].checked !== true) {
-                            layerList.find("input").prop('checked', true);
+                        if (layerList.find('input')[0].checked !== true) {
+                            layerList.find('input').prop('checked', true);
                             layersWithFeatures = _.map(WFSSelections, 'layerId');
                             me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerId);
                         }

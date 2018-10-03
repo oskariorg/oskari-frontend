@@ -6,7 +6,7 @@ Oskari.clazz.define(
     'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder',
     function(sandbox) {
         this.sandbox = sandbox;
-        this.localization = Oskari.getLocalization("MyPlacesImport");
+        this.localization = Oskari.getLocalization('MyPlacesImport');
         this.wfsBuilder = Oskari.clazz.create(
             'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
             sandbox
@@ -42,7 +42,7 @@ Oskari.clazz.define(
 
         addHiddenFields: function(fields){
             if (fields.indexOf('__fid') === -1){
-                fields.splice(0,0,"__fid");
+                fields.splice(0,0,'__fid');
             }
             if (fields.indexOf('__centerX') === -1){
                 fields.push('__centerX');

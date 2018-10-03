@@ -122,20 +122,20 @@ Oskari.clazz.define(
          _registerLayerEvents: function(layer, oskariLayer){
            var me = this;
 
-           layer.events.register("tileloadstart", layer, function(){
+           layer.events.register('tileloadstart', layer, function(){
              me.getMapModule().loadingState( oskariLayer.getId(), true);
            });
 
-           layer.events.register("tileloaded", layer, function(){
+           layer.events.register('tileloaded', layer, function(){
              me.getMapModule().loadingState( oskariLayer.getId(), false);
            });
 
-          layer.events.register("tileerror", layer, function(){
+          layer.events.register('tileerror', layer, function(){
             me.getMapModule().loadingState( oskariLayer.getId(), null, true );
          });
          }
     }, {
-        "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
+        'extend' : ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

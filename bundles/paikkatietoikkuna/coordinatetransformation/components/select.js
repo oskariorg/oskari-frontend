@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                     };
                     selections.push( valObject );
                     // First element, set placeholder
-                    if ( key === "0" ) {
+                    if ( key === '0' ) {
                         options = {
                             placeholder_text: obj.title,
                             allow_single_deselect : true,
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                         };
                     }
                      if ( key == size -1 ) {
-                        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', "id");
+                        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', 'id');
                         var dropdown = select.create(selections, options);
                         selections = [];
                         options = {};

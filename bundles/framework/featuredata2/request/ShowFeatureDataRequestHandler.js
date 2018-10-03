@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
          */
         handleRequest : function(core, request) {
             var id = request.getId(),
-                flyout = this.featureData.plugins["Oskari.userinterface.Flyout"],
+                flyout = this.featureData.plugins['Oskari.userinterface.Flyout'],
                 panels = flyout.tabsContainer.panels,
                 i;
             for (i=0; i<panels.length; i++) {

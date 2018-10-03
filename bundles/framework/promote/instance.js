@@ -7,7 +7,7 @@
  * See Oskari.mapframework.bundle.promote.PromoteBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.promote.PromoteBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -30,7 +30,7 @@ function() {
      * @method getName
      * @return {String} the name for the component
      */
-    "getName": function() {
+    'getName': function() {
         return this.conf.__name;
     },
     /**
@@ -80,7 +80,7 @@ function() {
      * @method start
      * implements BundleInstance protocol start methdod
      */
-    "start": function() {
+    'start': function() {
         var me = this;
 
         if(me.started) {
@@ -129,7 +129,7 @@ function() {
      * @method init
      * implements Module protocol init method - does nothing atm
      */
-    "init": function() {
+    'init': function() {
         return null;
     },
     /**
@@ -137,7 +137,7 @@ function() {
      * implements BundleInstance protocol update method - does
      * nothing atm
      */
-    "update": function() {
+    'update': function() {
 
     },
     /**
@@ -165,7 +165,7 @@ function() {
      * @method stop
      * implements BundleInstance protocol stop method
      */
-    "stop": function() {
+    'stop': function() {
         var sandbox = this.sandbox;
 
         var reqName = 'userinterface.RemoveExtensionRequest';
@@ -237,5 +237,5 @@ function() {
      * @property {String[]} protocol
      * @static
      */
-    "protocol": ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+    'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

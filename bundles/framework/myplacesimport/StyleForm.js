@@ -60,8 +60,8 @@ Oskari.clazz.define(
         setStyleValues: function (style){
             style.dot.color = this._formatColorFromServer(style.dot.color);
             style.line.color = this._formatColorFromServer(style.line.color);
-            style.area.lineColor = (typeof style.area.lineColor === "string" ? this._formatColorFromServer(style.area.lineColor) : null);
-            style.area.fillColor = (typeof style.area.fillColor === "string" ? this._formatColorFromServer(style.area.fillColor) : null);
+            style.area.lineColor = (typeof style.area.lineColor === 'string' ? this._formatColorFromServer(style.area.lineColor) : null);
+            style.area.fillColor = (typeof style.area.fillColor === 'string' ? this._formatColorFromServer(style.area.fillColor) : null);
             this.visualizationForm.setValues(style);
         },
 

@@ -9,7 +9,7 @@
         }
         appSetup.startupSequence.push(obj);
  */
-Oskari.clazz.define("Oskari.projection.change.instance",
+Oskari.clazz.define('Oskari.projection.change.instance',
 function () {
     this.sandbox = null;
     this.loc = null;

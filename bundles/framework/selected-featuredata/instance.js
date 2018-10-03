@@ -3,7 +3,7 @@
 *
 * Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance.
 */
-Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -214,7 +214,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             },
             'MapClickedEvent': function (){
                 //if show many or one accordions is clicked
-                if(jQuery('.selected_featuredata_howmany_show').attr("data-many") === "one"){
+                if(jQuery('.selected_featuredata_howmany_show').attr('data-many') === 'one'){
                     this.plugins['Oskari.userinterface.Flyout'].clearTabsLayout();
                 }
             },

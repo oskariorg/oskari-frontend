@@ -13,7 +13,7 @@ function(id, actionName, params) {
     this._params = params;
 }, {
     /** @static @property __name event name */
-    __name : "InfoboxActionEvent",
+    __name : 'InfoboxActionEvent',
     /**
      * @method getName
      * @return {String} the name for the event

@@ -21,7 +21,7 @@ Oskari.clazz.define(
         Oskari.makeObservable(this);
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.mapframework.bundle.timeseries.TimeseriesService",
+        __qname: 'Oskari.mapframework.bundle.timeseries.TimeseriesService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -30,7 +30,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "TimeseriesService",
+        __name: 'TimeseriesService',
         /**
          * @method getName
          * @return {String} service name

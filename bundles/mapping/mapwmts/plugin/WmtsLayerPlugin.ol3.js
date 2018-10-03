@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             map.addLayer(wmtsHolderLayer);
             this.setOLMapLayers(layer.getId(), wmtsHolderLayer);
             this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
-                me._log.debug("created WMTS layer " + wmtsLayer);
+                me._log.debug('created WMTS layer ' + wmtsLayer);
                 me._registerLayerEvents(wmtsLayer, layer);
 
                 // Get the reserved current index for wmts layer

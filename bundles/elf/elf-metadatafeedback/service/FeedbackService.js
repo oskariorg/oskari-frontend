@@ -20,7 +20,7 @@ function(addFeedbackAjaxUrl, fetchFeedbackAjaxUrl) {
     this._fetchFeedbackAjaxUrl = fetchFeedbackAjaxUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService",
+    __qname : 'Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService',
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -29,7 +29,7 @@ function(addFeedbackAjaxUrl, fetchFeedbackAjaxUrl) {
         return this.__qname;
     },
     /** @static @property __name service name */
-    __name : "FeedbackService",
+    __name : 'FeedbackService',
     /**
      * @method getName
      * @return {String} service name
@@ -39,11 +39,11 @@ function(addFeedbackAjaxUrl, fetchFeedbackAjaxUrl) {
     },
     addFeedback: function(params, onSuccess, onError) {
         jQuery.ajax({
-            dataType : "json",
-            type : "POST",
+            dataType : 'json',
+            type : 'POST',
             beforeSend: function(x) {
               if(x && x.overrideMimeType) {
-               x.overrideMimeType("application/json");
+               x.overrideMimeType('application/json');
               }
              },
             url : this._addFeedbackAjaxUrl,
@@ -56,11 +56,11 @@ function(addFeedbackAjaxUrl, fetchFeedbackAjaxUrl) {
     },
     fetchFeedback: function(params, onSuccess, onError) {
         jQuery.ajax({
-            dataType : "json",
-            type : "GET",
+            dataType : 'json',
+            type : 'GET',
             beforeSend: function(x) {
               if(x && x.overrideMimeType) {
-               x.overrideMimeType("application/json");
+               x.overrideMimeType('application/json');
               }
              },
             url : this._fetchFeedbackAjaxUrl,

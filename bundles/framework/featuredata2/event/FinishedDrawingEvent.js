@@ -16,7 +16,7 @@ function(geometry, blnEdit, blnSelectAllLayers) {
     this._selectAllLayers = blnSelectAllLayers;
 }, {
     /** @static @property __name event name */
-    __name : "FeatureData.FinishedDrawingEvent",
+    __name : 'FeatureData.FinishedDrawingEvent',
     /**
      * @method getName
      * Returns event name

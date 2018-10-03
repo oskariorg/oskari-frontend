@@ -41,10 +41,10 @@ Oskari.clazz.define(
         parseLayerData: function(layer, mapLayerJson, maplayerService) {
             var me = this;
 
-            if (layer.isLayerOfType("WFS")) {
+            if (layer.isLayerOfType('WFS')) {
                 var locOwnStyle = me.localization['own-style'];
                 var toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-                toolOwnStyle.setName("ownStyle");
+                toolOwnStyle.setName('ownStyle');
                 toolOwnStyle.setTitle(locOwnStyle);
                 toolOwnStyle.setIconCls('show-own-style-tool');
                 toolOwnStyle.setTooltip(locOwnStyle);
@@ -58,14 +58,14 @@ Oskari.clazz.define(
             var locDefaultStyle = this.localization['default-style'],
                 defaultStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style'),
                 i;
-            defaultStyle.setName("default");
+            defaultStyle.setName('default');
             defaultStyle.setTitle(locDefaultStyle);
-            defaultStyle.setLegend("");
+            defaultStyle.setLegend('');
 
             // check if default style comes and give localization for it if found
             if (mapLayerJson.styles && mapLayerJson.styles.length > 0) {
                 for (i = 0; i < mapLayerJson.styles.length; i++) {
-                    if (mapLayerJson.styles[i].name === "default") {
+                    if (mapLayerJson.styles[i].name === 'default') {
                         mapLayerJson.styles[i].title = locDefaultStyle;
                         break;
                     }

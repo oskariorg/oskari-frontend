@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
         init: function (sandbox) {
             this.template = jQuery("<div class='oskari-datasource'>" +
                 "<div class='link'><a href='JavaScript:void(0);'></a></div>" +
-                "</div>");
+                '</div>');
             this.templateinfoIcon = jQuery('<div class="icon-info"></div>');
             this.templategroupTemplate = jQuery('<ul style="padding: 0 12px;"></ul>');
             this.templatecontent = jQuery('<div></div>');
@@ -331,7 +331,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
             if (subLayers && subLayers.length > 0) {
                 for (s = 0; s < subLayers.length; s++) {
                     subUuid = subLayers[s].getMetadataIdentifier();
-                    if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
+                    if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
                         additionalUuidsCheck[subUuid] = true;
                         additionalUuids.push({
                             uuid: subUuid
@@ -350,5 +350,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

@@ -22,7 +22,7 @@ function(mapLayerId, visible) {
 
 }, {
     /** @static @property __name request name */
-    __name : "MapModulePlugin.MapLayerVisibilityRequest",
+    __name : 'MapModulePlugin.MapLayerVisibilityRequest',
     /**
      * @method getName
      * @return {String} request name

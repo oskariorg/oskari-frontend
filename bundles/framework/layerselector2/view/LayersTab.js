@@ -275,7 +275,7 @@ Oskari.clazz.define(
 
                 var badge = Oskari.clazz.create('Oskari.userinterface.component.Badge');
                 badge.insertTo( groupPanel.getHeader() );
-                badge.setContent( layersLength, "inverse" );
+                badge.setContent( layersLength, 'inverse' );
                 group.badge = badge;
 
                 groupContainer = groupPanel.getContainer();

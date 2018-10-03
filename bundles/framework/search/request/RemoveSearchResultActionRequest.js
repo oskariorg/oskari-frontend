@@ -12,7 +12,7 @@ function(linkName) {
     this._linkName = linkName;
 },{
     /** @static @property __name request name */
-    __name : "Search.RemoveSearchResultActionRequest",
+    __name : 'Search.RemoveSearchResultActionRequest',
     /**
      * @method getName
      * @return {String} request name

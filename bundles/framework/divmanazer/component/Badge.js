@@ -15,18 +15,18 @@ Oskari.clazz
             this.ui = null;
             this.container = null;
             this.supportedTypes = [
-                "default",
-                "success",
-                "warning",
-                "important",
-                "info",
-                "inverse",
-                "oskari",
-                "oskari-inverse"
+                'default',
+                'success',
+                'warning',
+                'important',
+                'info',
+                'inverse',
+                'oskari',
+                'oskari-inverse'
             ];
         }, {
             templates: {
-                "wrapper": jQuery('<div class="badge-wrapper"></div>')
+                'wrapper': jQuery('<div class="badge-wrapper"></div>')
             },
             getTemplate: function(type) {
                 if(this.supportedTypes.indexOf(type) === -1) {

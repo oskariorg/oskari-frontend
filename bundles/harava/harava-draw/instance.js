@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.harava.bundle.haravaDraw.DrawBundleInstance plugin for main map.
  */
-Oskari.clazz.define("Oskari.harava.bundle.haravaDraw.DrawBundleInstance",
+Oskari.clazz.define('Oskari.harava.bundle.haravaDraw.DrawBundleInstance',
 
     /**
      * @method create called automatically on construction

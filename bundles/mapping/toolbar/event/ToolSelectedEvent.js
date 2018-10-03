@@ -16,7 +16,7 @@ function(toolId, groupId) {
     this._groupId = groupId;
 }, {
     /** @static @property __name event name */
-    __name : "Toolbar.ToolSelectedEvent",
+    __name : 'Toolbar.ToolSelectedEvent',
     /**
      * @method getName
      * Returns event name

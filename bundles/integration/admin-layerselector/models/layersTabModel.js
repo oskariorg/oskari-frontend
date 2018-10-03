@@ -109,16 +109,16 @@
              */
             save: function(item, callback) {
                 var me = this;
-                var method = "POST";
+                var method = 'POST';
                 if (!item.id) {
                     // insert if no id
-                    method = "PUT";
+                    method = 'PUT';
                 }
                 this.__tryRestMethods(method, {
                     dataType: 'json',
                     data: JSON.stringify(item),
                     contentType: 'application/json; charset=UTF-8',
-                    url: me.baseURL + me.actions.save + "&iefix=" + (new Date()).getTime(),
+                    url: me.baseURL + me.actions.save + '&iefix=' + (new Date()).getTime(),
                     success: function(pResp) {
                         me._saved(pResp);
                         if (callback) {
@@ -127,7 +127,7 @@
                     },
                     error: function(jqXHR, textStatus) {
                         if (callback) {
-                            callback("Error while saving group:" + textStatus);
+                            callback('Error while saving group:' + textStatus);
                         }
                     }
                 });
@@ -194,9 +194,9 @@
             getClasses: function(groupingMethod) {
                 var me = this;
                 jQuery.ajax({
-                    type: "GET",
+                    type: 'GET',
                     dataType: 'json',
-                    url: me.baseURL + me.actions.load + "&iefix=" + (new Date()).getTime(),
+                    url: me.baseURL + me.actions.load + '&iefix=' + (new Date()).getTime(),
                     success: function(pResp) {
                         // cleanup old layer Groups since we always refresh from server for now
                         me.layerGroups = [];
@@ -306,13 +306,13 @@
                 var names = [];
                 for (var i = 0; i < supportedLanguages.length; i++) {
                     names.push({
-                        "lang": supportedLanguages[i],
-                        "name": ""
+                        'lang': supportedLanguages[i],
+                        'name': ''
                     });
                 }
 
                 return {
-                    "getNamesAsList": function() {
+                    'getNamesAsList': function() {
                         return names;
                     }
                 };
@@ -354,9 +354,9 @@
                     }
                     return;
                 }
-                this.__tryRestMethods("DELETE", {
+                this.__tryRestMethods('DELETE', {
                     dataType: 'json',
-                    url: me.baseURL + me.actions.remove + "&id=" + id + "&iefix=" + (new Date()).getTime(),
+                    url: me.baseURL + me.actions.remove + '&id=' + id + '&iefix=' + (new Date()).getTime(),
                     success: function() {
                         me._removeClass(id);
                         if (callback) {
@@ -365,7 +365,7 @@
                     },
                     error: function(jqXHR, textStatus) {
                         if (callback) {
-                            callback("Error while removing group: " + textStatus, jqXHR);
+                            callback('Error while removing group: ' + textStatus, jqXHR);
                         }
                     }
                 });

@@ -24,7 +24,7 @@ Oskari.clazz.define(
         this._olLayers = {};
         this._oskariLayers = {};
         this._supportedFormats = {};
-        this._olLayerPrefix = "vectorlayer_";
+        this._olLayerPrefix = 'vectorlayer_';
         this._featureStyles = {};
         this._layerStyles = {};
         this._defaultStyle = {
@@ -1069,7 +1069,7 @@ Oskari.clazz.define(
             var geometry = fromExtent(extent);
             var input = olParser.read(geometry);
             var bufferGeometry = BufferOp.bufferOp(input, buffer);
-            bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
+            bufferGeometry.CLASS_NAME = 'jsts.geom.Polygon';
             bufferGeometry = parser.write(bufferGeometry);
             return bufferGeometry.getExtent();
         },

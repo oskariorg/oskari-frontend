@@ -17,7 +17,7 @@ function(title, content, priority, id) {
     this._id = id;
 },{
     /** @static @property __name request name */
-    __name : "Admin.AddTabRequest",
+    __name : 'Admin.AddTabRequest',
     /**
      * @method getName
      * @return {String} request name

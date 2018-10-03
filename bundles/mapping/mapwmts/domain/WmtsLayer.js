@@ -15,7 +15,7 @@ function() {
     this._tileURL = null;
     this._availableQueryFormats = [];
     /* Layer Type */
-    this._layerType = "WMTS";
+    this._layerType = 'WMTS';
 }, {
     /**
      * @method setTileUrl
@@ -66,5 +66,5 @@ function() {
         return this._availableQueryFormats || [];
     }
 }, {
-    "extend": ["Oskari.mapframework.domain.AbstractLayer"]
+    'extend': ['Oskari.mapframework.domain.AbstractLayer']
 });

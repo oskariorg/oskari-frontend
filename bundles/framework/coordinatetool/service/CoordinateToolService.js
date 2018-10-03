@@ -15,8 +15,8 @@ function(instance, config) {
 
     this.urls.reverseGeocode = Oskari.urls.getRoute('GetReverseGeocodingResult');
 }, {
-    __name: "CoordinateTool.CoordinateToolService",
-    __qname : "Oskari.mapframework.bundle.coordinatetool.CoordinateToolService",
+    __name: 'CoordinateTool.CoordinateToolService',
+    __qname : 'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
     getQName : function() {
         return this.__qname;
     },
@@ -68,7 +68,7 @@ function(instance, config) {
             dataType : 'json',
             beforeSend: function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             success: function(response) {

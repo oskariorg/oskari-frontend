@@ -26,7 +26,7 @@ function(contentId, layer, tileData, geojsonData) {
      * @return {String} The event name.
      */
     getName : function() {
-        return "Printout.PrintableContentEvent";
+        return 'Printout.PrintableContentEvent';
     },
 
     getContentId: function() {

@@ -10,7 +10,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.mapmodule.VectorLayerPlugin';
         me._name = 'VectorLayerPlugin';
-        this._olLayerPrefix = "vectorlayer_";
+        this._olLayerPrefix = 'vectorlayer_';
         this._supportedFormats = {};
         this._sldFormat = new OpenLayers.Format.SLD({
             multipleSymbolizers: false,
@@ -445,8 +445,8 @@ Oskari.clazz.define(
             //set feature styles. For attribute dependent styles (=label text from property) we gotta use styleMap
             for (i = 0; i < features.length; i++) {
                 featureInstance = features[i];
-                styleMap.styles["default"] = new OpenLayers.Style(me.getStyle(options, features[i]));
-                featureInstance.style = styleMap.createSymbolizer(featureInstance, "default");
+                styleMap.styles['default'] = new OpenLayers.Style(me.getStyle(options, features[i]));
+                featureInstance.style = styleMap.createSymbolizer(featureInstance, 'default');
             }
 
             if (options.cursor) {

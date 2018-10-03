@@ -19,7 +19,7 @@ Oskari.clazz
 
     }, {
         /** @static @property __name request name */
-        __name : "WfsLayerPlugin.ActivateHighlightRequest",
+        __name : 'WfsLayerPlugin.ActivateHighlightRequest',
         /**
          * @method getName
          * @return {String} request name

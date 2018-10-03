@@ -37,8 +37,8 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
         // attach on, off, trigger functions
         Oskari.makeObservable(this);
     }, {
-        __name: "map.DataProviderInfoService",
-        __qname: "Oskari.map.DataProviderInfoService",
+        __name: 'map.DataProviderInfoService',
+        __qname: 'Oskari.map.DataProviderInfoService',
 
         getQName: function () {
             return this.__qname;

@@ -114,7 +114,7 @@ function() {
         }
     },
     getName: function() {
-        return "Oskari.mapframework.publisher.tool.GetInfoTool";
+        return 'Oskari.mapframework.publisher.tool.GetInfoTool';
     },
     /**
      * @method onEvent
@@ -632,7 +632,7 @@ function() {
      * @private
      */
     _createColorPickers: function() {
-        var options = {className: "oskari-colorpickerinput"};
+        var options = {className: 'oskari-colorpickerinput'};
         this._colorPickers = [
             Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options),
             Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options),

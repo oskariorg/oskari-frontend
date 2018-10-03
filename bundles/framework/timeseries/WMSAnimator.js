@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                         me._resolveWait();
                     });
                 }
-                var request = requestBuilder(this._layer.getId(), true, { "TIME": newTime });
+                var request = requestBuilder(this._layer.getId(), true, { 'TIME': newTime });
                 this._sandbox.request(this, request);
             }
         },

@@ -220,7 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var defaultViewTemplate = me.templateDefaultView.clone();
             defaultViewTemplate.find('label').html(me.loc('tabs.myviews.popup.default'));
             isDefault = isDefault ? isDefault : false;
-            defaultViewTemplate.find("#defaultview").prop('checked', isDefault);
+            defaultViewTemplate.find('#defaultview').prop('checked', isDefault);
             template.append(defaultViewTemplate);
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -232,7 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             okBtn.setHandler(function () {
                 var errors = form.validate();
                 if (errors.length === 0) {
-                    successCallback(nameInput.getValue(), template.find('textarea').val(), template.find("#defaultview").prop('checked'));
+                    successCallback(nameInput.getValue(), template.find('textarea').val(), template.find('#defaultview').prop('checked'));
                     dialog.close();
                     me.dialog = null;
                 } else {

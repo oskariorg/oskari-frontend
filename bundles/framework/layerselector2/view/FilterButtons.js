@@ -1,4 +1,4 @@
-Oskari.clazz.define("Oskari.layerselector2.view.FilterButtons",
+Oskari.clazz.define('Oskari.layerselector2.view.FilterButtons',
     function ( element, layerListService ) {
         var me = this;
         this.layerlistService = layerListService;

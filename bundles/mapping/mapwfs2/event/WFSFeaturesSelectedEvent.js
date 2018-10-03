@@ -21,7 +21,7 @@ function(wfsFeatureIds, mapLayer, keepCollection) {
     this._mapLayer = mapLayer;
 }, {
     /** @static @property __name event name */
-    __name : "WFSFeaturesSelectedEvent",
+    __name : 'WFSFeaturesSelectedEvent',
     /**
      * @method getName
      * @return {String} event name

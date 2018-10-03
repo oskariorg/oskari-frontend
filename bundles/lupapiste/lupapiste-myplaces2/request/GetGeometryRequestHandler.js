@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.GetGeometryReques
 }, {
     handleRequest : function(core, request) {
         var callBack = request.getCallBack();
-        this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.GetGeometryRequestPluginHandler] geometry requested");
+        this.sandbox.printDebug('[Oskari.lupapiste.bundle.myplaces2.request.GetGeometryRequestPluginHandler] geometry requested');
         var drawing = this.drawPlugin.getDrawing();
         callBack(drawing.geometry);
     }

@@ -16,7 +16,7 @@ function(control) {
 	this._control = control;
 }, {
     /** @static @property __name request name */
-	__name : "AddControlToMapRequest",
+	__name : 'AddControlToMapRequest',
     /**
      * @method getName
      * @return {String} request name

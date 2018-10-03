@@ -3,7 +3,7 @@
  *
  * Adds to the filterDialog the possibility to filter with aggregate analyse values
  */
-Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
+Oskari.clazz.define('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
 
     /**
      * @method create called automatically on construction
@@ -31,8 +31,8 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
                     if (aggregateAnalysis.length === 0) {
                         me.aggregateAnalyseFilter.showAdvertisingText();
                     } else {
-                        me.content.find('.input-blink').removeClass("input-blink");
-                        jQuery(event.target).parent().parent().find('input[name=attribute-value]').addClass("input-blink");
+                        me.content.find('.input-blink').removeClass('input-blink');
+                        jQuery(event.target).parent().parent().find('input[name=attribute-value]').addClass('input-blink');
                         var aggregateSelect = me.content.find('.filter-popup-multiselect');
                         if (aggregateSelect) {
                             aggregateSelect.remove();
@@ -115,7 +115,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
             me.content.find('.icon-close').on('click', function() {
                 me.content.find('.filter-popup-multiselect').remove();
                 me._turnOnClickOff();
-                me.content.find('.input-blink').removeClass("input-blink");
+                me.content.find('.input-blink').removeClass('input-blink');
             });
 
             me._cachedAggregateValue = [-1];
@@ -130,12 +130,12 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
                         me.getAggregateAnalysisJSON(value[0]);
                     }
                     if (indexofChangedValue === 1) {
-                        if (value[1] !== "undefined") {
+                        if (value[1] !== 'undefined') {
                             me.parseLastSelect(value[1]);
                         }
                     }
                     if (indexofChangedValue === 2) {
-                        if (value[2] !== "undefined") {
+                        if (value[2] !== 'undefined') {
                             me.useAggregateValue(value[2], callback);
                         }
                     }
@@ -245,7 +245,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
             me.content.on('click', '.oskari-filter-with-aggregateAnalysis', function() {
                 me.content.find('.filter-popup-multiselect').remove();
                 me._turnOnClickOff();
-                me.content.find('.input-blink').removeClass("input-blink");
+                me.content.find('.input-blink').removeClass('input-blink');
             });
         },
 

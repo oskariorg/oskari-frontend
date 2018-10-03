@@ -5,7 +5,7 @@ Oskari.clazz
                     this._creator = null;
                     this._callbackMethod = callbackMethod;
                 }, {
-                    __name : "DigiroadMyPlaces.GetGeometryRequest",
+                    __name : 'DigiroadMyPlaces.GetGeometryRequest',
                     getName : function() {
                         return this.__name;
                     },

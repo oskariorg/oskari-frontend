@@ -336,7 +336,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
          */
         _fonectaURLBuilder: function (fromLoc, toLoc) {
             var url = 'https://www.fonecta.fi/kartat?';
-            url += "from="+encodeURIComponent(fromLoc.name);
+            url += 'from='+encodeURIComponent(fromLoc.name);
             if (fromLoc.village) {
                 url += ',' + encodeURIComponent(fromLoc.village);
             }
@@ -344,7 +344,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             if (toLoc.village) {
                 url += ',' + encodeURIComponent(toLoc.village);
             }
-            url += "&rt=fastest";
+            url += '&rt=fastest';
             return url;
         },
 
@@ -424,7 +424,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
 
             for (i = 0; i < me.services.length; i++) {
                 routingService = me.services[i];
-                if(routingService.name==="Matka.fi"){
+                if(routingService.name==='Matka.fi'){
                   routingService.fromLonLat = me.fromLonLat;
                   routingService.toLonLat = me.toLonLat;
                 }

@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 			radiusInput.setValue(layer.getRadius());
 			radiusInput.setMin(1);
 			radiusInput.setMax(300);
-            jQuery(radiusInput.getElement()).find("input").attr("name", "heatmap-input");
+            jQuery(radiusInput.getElement()).find('input').attr('name', 'heatmap-input');
 			content.append(radiusInput.getElement());
 
 			var ppcInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 			ppcInput.setValue(layer.getPixelsPerCell());
 			ppcInput.setMin(1);
 			ppcInput.setMax(300);
-            jQuery(ppcInput.getElement()).find("input").attr("name", "heatmap-input");
+            jQuery(ppcInput.getElement()).find('input').attr('name', 'heatmap-input');
 			content.append(ppcInput.getElement());
 
     		var propertyElement = null;
@@ -122,9 +122,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             // set latest selected color theme checked
             var selectedColorTheme = layer.getSelectedTheme();
             if (selectedColorTheme) {
-                jQuery(content).find("input[id="+ selectedColorTheme.id + "]").prop("checked", true);
+                jQuery(content).find('input[id='+ selectedColorTheme.id + ']').prop('checked', true);
             } else {
-                jQuery(content).find("input[id=theme1]").prop("checked", true);
+                jQuery(content).find('input[id=theme1]').prop('checked', true);
             }
 
             //set colors for colorboxes
@@ -165,31 +165,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             });
 
             var colorPickerHandler = function() {
-                jQuery("input[id=customTheme]").prop("checked", true);
+                jQuery('input[id=customTheme]').prop('checked', true);
             }
             this._colorPickers[0].setHandler(colorPickerHandler);
             this._colorPickers[1].setHandler(colorPickerHandler);
             this._colorPickers[2].setHandler(colorPickerHandler);
 
     		dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
-            jQuery(dialog.dialog[0]).find(".actions").addClass("heatmap-actions");
+            jQuery(dialog.dialog[0]).find('.actions').addClass('heatmap-actions');
     		dialog.makeDraggable();
 			this.dialog = dialog;
     	},
 
         getSelectedColors: function (content) {
             this.colors = [];
-            this.colors.push("#FFFFFF");
+            this.colors.push('#FFFFFF');
             var me = this,
-                element = jQuery(content).find("input:checked");
+                element = jQuery(content).find('input:checked');
 
-            if (element.attr('id') === "customTheme") {
+            if (element.attr('id') === 'customTheme') {
                 this.colors = this.colors.concat(this.getColorSetup());
             }
             else {
                 var colorBoxes = jQuery(element[0].parentElement).find('.color-box');
                 colorBoxes.each(function (index, colorBox) {
-                    me.colors.push(jQuery(colorBox).attr("color"));
+                    me.colors.push(jQuery(colorBox).attr('color'));
                 });
             }
             return me.colors;
@@ -205,7 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
         },
 
         getSelectedTheme: function (content) {
-            var element = jQuery(content).find("input:checked");
+            var element = jQuery(content).find('input:checked');
             return element[0];
         }
     });

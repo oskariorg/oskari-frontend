@@ -166,12 +166,12 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 if (errors.length) {
                     var errorLayers = me._collectResponseMessages( errors );
                     // TODO: append layers that couldn't be updated to dialog message
-                    dialog.show(rightsLoc.error.title, rightsLoc.error.message + " " + errorLayers);
+                    dialog.show(rightsLoc.error.title, rightsLoc.error.message + ' ' + errorLayers);
                 }
 
                 dialog.show(rightsLoc.success.title, rightsLoc.success.message + '</br>' + changedLayers);
                 dialog.fadeout(3000);
-                me.updatePermissionsTable(me.activeRole, "ROLE");
+                me.updatePermissionsTable(me.activeRole, 'ROLE');
             }, []);
         },
         _collectResponseMessages: function( responseItems ) {
@@ -210,7 +210,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             var me = this;
             var currentChunk = chunks.shift();
             var saveData = {
-                "resource": JSON.stringify(currentChunk)
+                'resource': JSON.stringify(currentChunk)
             };
             jQuery.ajax({
                 type: 'POST',
@@ -262,12 +262,12 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
             roleSelect.on('change', function(event) {
                 me.activeRole = jQuery(event.currentTarget).val();
-                me.updatePermissionsTable(me.activeRole, "ROLE");
+                me.updatePermissionsTable(me.activeRole, 'ROLE');
             });
 
             flyout.append(container);
             // We're only supporting ROLE ATM, USER support might be added later
-            me.getExternalIdsAjaxRequest("ROLE", 0);
+            me.getExternalIdsAjaxRequest('ROLE', 0);
 
             /* progress */
             this.progressSpinner.insertTo(container);
@@ -285,7 +285,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 option.text(role.name);
             }
             if (operation == 'add') {
-                select.append("<option value=" + role.id + ">" + role.name + "</option>");
+                select.append('<option value=' + role.id + '>' + role.name + '</option>');
             }
         },
 
@@ -308,7 +308,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 checkboxes,
                 columnsLoc = this.instance.getLocalization('rights');
 
-                controlRow.addClass("control");
+                controlRow.addClass('control');
 
 
             // Create headers
@@ -477,7 +477,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             me.progressSpinner.start();
 
             jQuery.getJSON(ajaxUrl, {
-                action_route: "GetPermissionsLayerHandlers",
+                action_route: 'GetPermissionsLayerHandlers',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 externalId: activeRole,
@@ -521,7 +521,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     if (permission.name) {
                         return;
                     }
-                    permission["name"] = nameMapper[permission.id] || permission.id;
+                    permission['name'] = nameMapper[permission.id] || permission.id;
                 });
                 mapped.push(resource);
             });
@@ -541,7 +541,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             //ajaxRequestGoing = true;
             // TODO add error handling
             jQuery.getJSON(ajaxUrl, {
-                action_route: "GetAllRoles",
+                action_route: 'GetAllRoles',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 getExternalIds: externalType
@@ -557,17 +557,17 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          */
         makeExternalIdsSelect: function(result, externalType, selectedId) {
 
-            var externalIdSelect = jQuery(this.container).find("select.admin-layerrights-role"),
+            var externalIdSelect = jQuery(this.container).find('select.admin-layerrights-role'),
                 optionEl,
                 d,
                 rightsLoc = this.instance._localization.rights;
 
-            externalIdSelect.html("");
-            if (externalType !== "0") {
+            externalIdSelect.html('');
+            if (externalType !== '0') {
                 optionEl = document.createElement('option');
-                optionEl.value = "0";
+                optionEl.value = '0';
                 optionEl.textContent = '-- ' + rightsLoc.selectValue + ' --';
-                if (selectedId == "0") {
+                if (selectedId == '0') {
                     optionEl.setAttribute('selected', 'selected');
                 }
                 externalIdSelect.append(optionEl);

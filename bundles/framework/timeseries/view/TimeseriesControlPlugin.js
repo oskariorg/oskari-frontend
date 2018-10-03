@@ -450,13 +450,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 formatterFunction = d3.timeFormat.bind(d3);
             }
-            var formatMillisecond = formatterFunction(".%L"),
-                formatSecond = formatterFunction(":%S"),
-                formatMinute = formatterFunction(locale ? "%H:%M" : "%I:%M"),
-                formatHour = formatterFunction(locale ? "%H:%M" : "%I %p"),
-                formatDay = formatterFunction(locale ? "%d.%m." : "%d %b"),
-                formatMonth = formatterFunction("%b"),
-                formatYear = formatterFunction("%Y");
+            var formatMillisecond = formatterFunction('.%L'),
+                formatSecond = formatterFunction(':%S'),
+                formatMinute = formatterFunction(locale ? '%H:%M' : '%I:%M'),
+                formatHour = formatterFunction(locale ? '%H:%M' : '%I %p'),
+                formatDay = formatterFunction(locale ? '%d.%m.' : '%d %b'),
+                formatMonth = formatterFunction('%b'),
+                formatYear = formatterFunction('%Y');
 
             return function multiFormat(date) {
                 var textEl = d3.select(this);
@@ -512,7 +512,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             var handle = svg.select('g.drag-handle')
                 .attr('transform', 'translate(' + scaleSubset(new Date(this._uiState.currentTime)) + ',80)')
-                .on(".drag", null); // remove old event handlers
+                .on('.drag', null); // remove old event handlers
 
 
             function renderHandle() {
@@ -569,7 +569,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 var brush = d3.brushX()
                     .extent([[margin.left, 0], [this._timelineWidth - margin.right, 50]])
                     .handleSize(40)
-                    .on(".brush", null) // remove old event handlers
+                    .on('.brush', null) // remove old event handlers
                     .on('brush', brushed);
 
                 svg.select('.full-axis-brush')
@@ -652,5 +652,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

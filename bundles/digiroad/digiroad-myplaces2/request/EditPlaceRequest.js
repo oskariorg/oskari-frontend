@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.request.EditPlaceRequest',
     function (placeId) {
         this._placeId = placeId;
     }, {
-        __name: "DigiroadMyPlaces.EditPlaceRequest",
+        __name: 'DigiroadMyPlaces.EditPlaceRequest',
         /**
          * @method getName
          * @return {String} request name

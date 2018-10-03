@@ -740,10 +740,10 @@ Oskari.clazz.define(
                                         }, 1000);
                                     }
                                 }
-                                me.instance.sandbox.unregisterFromEventByName(me.instance, "WFSFeatureGeometriesEvent");
+                                me.instance.sandbox.unregisterFromEventByName(me.instance, 'WFSFeatureGeometriesEvent');
                                 me.instance.eventHandlers.WFSFeatureGeometriesEvent = null;
                             };
-                            me.instance.sandbox.registerForEventByName(me.instance, "WFSFeatureGeometriesEvent");
+                            me.instance.sandbox.registerForEventByName(me.instance, 'WFSFeatureGeometriesEvent');
 
                         });
                         return div;
@@ -1103,7 +1103,7 @@ Oskari.clazz.define(
                 return;
             }
             // Extract analysis input layer id
-            inputid = layer.getId().split("_")[1];
+            inputid = layer.getId().split('_')[1];
             inputlayer = sandbox.findMapLayerFromAllAvailable(inputid);
             if (inputlayer &&  inputlayer.getLayerType().toUpperCase() === 'WFS') {
                 if (inputlayer.getWpsLayerParams()) {

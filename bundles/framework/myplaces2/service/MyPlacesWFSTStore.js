@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             var uuid = this.uuid;
             var uuidFilter = new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                property: "uuid",
+                property: 'uuid',
                 value: uuid
             });
             var p = this.protocols.categories;
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
                 category.setId(id);
                 category.setName(Oskari.util.sanitize(featAtts.category_name));
-                category.setDefault("true" === featAtts['default']);
+                category.setDefault('true' === featAtts['default']);
                 category.setLineWidth(featAtts.stroke_width);
                 category.setLineStyle(featAtts.stroke_dasharray);
                 category.setLineCap(featAtts.stroke_linecap);
@@ -360,7 +360,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
 
             var uuidFilter = new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                property: "uuid",
+                property: 'uuid',
                 value: uuid
             });
 
@@ -440,7 +440,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 type: OpenLayers.Filter.Logical.AND,
                 filters: [new OpenLayers.Filter.Comparison({
                     type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                    property: "uuid",
+                    property: 'uuid',
                     value: uuid
                 }), new OpenLayers.Filter.FeatureId({
                     fids: idList

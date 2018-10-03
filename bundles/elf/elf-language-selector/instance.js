@@ -1,13 +1,13 @@
 /**
  * @class  Oskari.elf.LanguageSelector
  */
-Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
+Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function() {
 
 }, {
     templates : {
-        "link": '<a></a>',
-        "option": '<option></option>',
-        "flyout": '<div class="langSelection">' +
+        'link': '<a></a>',
+        'option': '<option></option>',
+        'flyout': '<div class="langSelection">' +
                 '<select></select>' +
                 '<a class="btn"></a>' +
             '</div>'
@@ -17,7 +17,7 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
         var sandbox = this.getSandbox();
         var elem = jQuery('#langSelector');
 
-        jQuery("#langSelector").appendTo("#maptools");
+        jQuery('#langSelector').appendTo('#maptools');
 
         // get localization file "Languages" for language "all" - imported by this bundle
         // don't try this at home
@@ -95,5 +95,5 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
 
     eventHandlers : {}
 }, {
-    "extend" : ["Oskari.elf.extension.EnhancedExtension"]
+    'extend' : ['Oskari.elf.extension.EnhancedExtension']
 });

@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
             if(layerModel.isLayerOfType('HEATMAP')) {
                 label = loc.tool_label_settings;
             }
-            tool.setName("heatmap");
+            tool.setName('heatmap');
             tool.setTitle(label);
             tool.setTooltip(label);
             var dialog = Oskari.clazz.create('Oskari.mapframework.bundle.heatmap.HeatmapDialog', loc.dialog);

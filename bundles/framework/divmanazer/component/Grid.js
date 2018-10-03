@@ -646,12 +646,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 return value;
             }
             // replace " with empty string so html doesn't break
-            var result = value.split("\"").join("");
-            result = result.split(":").join("");
-            result = result.split(",").join("_");
-            result = result.split(".").join("_");
-            result = result.split("{").join("_");
-            result = result.split("}").join("_");
+            var result = value.split('"').join('');
+            result = result.split(':').join('');
+            result = result.split(',').join('_');
+            result = result.split('.').join('_');
+            result = result.split('{').join('_');
+            result = result.split('}').join('_');
             return result;
         },
         /**
@@ -1226,7 +1226,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     var parsedString = String(value),
                         parsed = parseFloat(value);
                     if(parsedString){
-                        if(parsedString.indexOf("0") === 0 && parsedString.indexOf(".") === -1 ){
+                        if(parsedString.indexOf('0') === 0 && parsedString.indexOf('.') === -1 ){
                             return value;
                         }
                     }

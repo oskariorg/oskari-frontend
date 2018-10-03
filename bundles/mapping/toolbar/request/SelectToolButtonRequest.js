@@ -21,7 +21,7 @@ function(id, group) {
     this._group = group;
 }, {
     /** @static @property __name request name */
-    __name : "Toolbar.SelectToolButtonRequest",
+    __name : 'Toolbar.SelectToolButtonRequest',
     /**
      * @method getName
      * @return {String} request name

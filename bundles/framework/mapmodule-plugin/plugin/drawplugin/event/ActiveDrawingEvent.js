@@ -15,7 +15,7 @@ function(geometry, mode, creatorId) {
     this._creatorId = creatorId;
 }, {
     /** @static @property __name event name */
-    __name : "DrawPlugin.ActiveDrawingEvent",
+    __name : 'DrawPlugin.ActiveDrawingEvent',
     /**
      * @method getName
      * Returns event name

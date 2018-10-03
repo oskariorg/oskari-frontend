@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.mapframework.bundle.coordinatetool.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBundleInstance',
 
     /**
      * @method create called automatically on construction

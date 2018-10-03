@@ -34,7 +34,7 @@ Oskari.clazz.define(
 
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService",
+        __qname: 'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -43,7 +43,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "WFSLayerService",
+        __name: 'WFSLayerService',
         /**
          * @method getName
          * @return {String} service name

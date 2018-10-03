@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
             actionTextElement = request.getActionTextElement(),
             actionText = request.getActionText(),
             showAction = request.getShowAction();
-        this._log.debug("Handling reguest");
+        this._log.debug('Handling reguest');
         this.instance.addSearchResultAction(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction);
     }
 }, {

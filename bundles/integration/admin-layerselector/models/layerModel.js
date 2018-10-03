@@ -39,7 +39,7 @@
                     this._sortCapabilities(resp);
                 }
                 this.set({
-                    "capabilities": resp
+                    'capabilities': resp
                 });
             },
             _sortCapabilities: function (capabilities) {
@@ -70,13 +70,13 @@
              */
             _setupFromCapabilitiesValues: function (capabilitiesNode) {
                 var sb = Oskari.getSandbox();
-                Oskari.log('admin-layerselector~layerModel').debug("Found:", capabilitiesNode);
+                Oskari.log('admin-layerselector~layerModel').debug('Found:', capabilitiesNode);
                 var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService'),
                     mapLayer = mapLayerService.createMapLayer(capabilitiesNode),
                     dataToKeep = null;
                 // clear existing values
-                var capabilities = this.get("capabilities");
-                var adminBlock = this.get("_admin");
+                var capabilities = this.get('capabilities');
+                var adminBlock = this.get('_admin');
 
                 var typeFunction = this._typeHandlers[mapLayer.getLayerType()];
                 if(typeFunction) {
@@ -108,7 +108,7 @@
              * @param  {Object} GetWfsLayerconfiguration response from server
              */
             setWfsConfigurationResponse: function (resp) {
-                var adminBlock = this.get("_admin");
+                var adminBlock = this.get('_admin');
                 if(adminBlock) {
                     adminBlock.passtrough = resp;
                 }

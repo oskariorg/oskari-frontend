@@ -5,7 +5,7 @@
  * See Oskari.sample.bundle.tetris.Bundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
+Oskari.clazz.define('Oskari.sample.bundle.tetris.BundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -27,7 +27,7 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             return this.__name;
         },
         /**
@@ -68,7 +68,7 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        "start": function () {
+        'start': function () {
             var me = this;
 
             if (me.started) {
@@ -104,14 +104,14 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        'update': function () {
 
         },
         /**
@@ -151,7 +151,7 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        'stop': function () {
             var sandbox = this.sandbox,
                 p,
                 request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
@@ -219,5 +219,5 @@ Oskari.clazz.define("Oskari.sample.bundle.tetris.BundleInstance",
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

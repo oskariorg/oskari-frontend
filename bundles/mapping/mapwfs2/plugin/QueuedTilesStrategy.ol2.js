@@ -13,7 +13,7 @@
  * Inherits from: - <OpenLayers.Strategy>
  */
 
-Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrategy",
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrategy',
     function (options) {
 
         this.debugGridFeatures = true;
@@ -93,7 +93,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
             this.active = true;
 
             this.grid = Oskari.clazz.create(
-                "Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid", {
+                'Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid', {
                     map: this.layer.map,
                     layer: this.layer,
                     maxExtent: this.layer.map.getMaxExtent(),
@@ -101,7 +101,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
 
                 });
             this.layer.events.on({
-                "refresh": this.updateRefresh,
+                'refresh': this.updateRefresh,
                 scope: this
             });
 
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
             }
 
             this.layer.events.un({
-                "refresh": this.update,
+                'refresh': this.update,
                 scope: this
             });
             this.grid.destroy();
@@ -226,14 +226,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                         boundsFeature = new
                         OpenLayers.Feature.Vector(boundGeomArea, {
                             featureClassName: this.CLASS_NAME,
-                            description: ""
+                            description: ''
                         });
                         boundsFeature.renderIntent =
-                            "tile";
+                            'tile';
                         gridFeatures.push(boundsFeature);
                     }
                     var qObj = Oskari.clazz.create(
-                        "Oskari.mapframework.bundle.mapwfs2.domain.QueuedTile", {
+                        'Oskari.mapframework.bundle.mapwfs2.domain.QueuedTile', {
                             bounds: tileBounds,
                             tileFeature: boundsFeature
                         });
@@ -265,5 +265,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
             }
         },
 
-        CLASS_NAME: "NLSFI.OpenLayers.Strategy.QueuedTilesStrategy"
+        CLASS_NAME: 'NLSFI.OpenLayers.Strategy.QueuedTilesStrategy'
     });

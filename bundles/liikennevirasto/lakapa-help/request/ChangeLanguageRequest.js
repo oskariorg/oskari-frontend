@@ -14,7 +14,7 @@ function(language) {
 	this._language = language;
 }, {
 	/** @static @property __name request name */
-    __name : "ChangeLanguageRequest",
+    __name : 'ChangeLanguageRequest',
     /**
      * @method getName
      * @return {String} request name

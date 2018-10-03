@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
                 prev_val = target.val();
 
             setTimeout(function(){
-                var chars = target.val().split(""),
+                var chars = target.val().split(''),
                     decimal_exist = !me._allowDecimal,
                     negative_exist = !me._allowNegative,
                     remove_char = false;

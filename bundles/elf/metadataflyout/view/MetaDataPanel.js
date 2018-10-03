@@ -241,7 +241,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           </td>'+
                     '       </tr>'+
                     '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.technicalInformation.metadataChangeDate+" / "+this.locale.tableHeaders.technicalInformation.uniqueIdentifier+'</td>'+
+                    '           <td>'+this.locale.tableHeaders.technicalInformation.metadataChangeDate+' / '+this.locale.tableHeaders.technicalInformation.uniqueIdentifier+'</td>'+
                     '           <td>'+
                     '               <%- metadataDateStamp %> / <%- fileIdentifier %></p>' +
                     '           </td>'+
@@ -410,7 +410,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             },
             MapLayerEvent: function(event) {
                 /*add + no layerid -> mass load -> all map layers probably loaded*/
-                if (event.getOperation() === "add" && event.getLayerId() === null) {
+                if (event.getOperation() === 'add' && event.getLayerId() === null) {
                     this.renderMapLayerList();
                 }
             },
@@ -472,7 +472,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     }
 
                     //license tab but no license url -> skip rendering the tab.
-                    if (tabId === 'license' && (!model.license || model.license === "")) {
+                    if (tabId === 'license' && (!model.license || model.license === '')) {
                         continue;
                     }
 
@@ -489,7 +489,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         );
                     } else if (me.asyncTabs && me.asyncTabs[tabId] && me.asyncTabs[tabId].tabActivatedCallback) {
                         asyncTabsFound = true;
-                        var newTabTitle = me.asyncTabs[tabId].title ? me.asyncTabs[tabId].title : "";
+                        var newTabTitle = me.asyncTabs[tabId].title ? me.asyncTabs[tabId].title : '';
                         entry.setTitle(newTabTitle);
                     }
 
@@ -571,7 +571,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     }
 
                     //license tab but no license url -> skip rendering the tab.
-                    if (tabId === 'license' && (!model.license || model.license === "")) {
+                    if (tabId === 'license' && (!model.license || model.license === '')) {
                         continue;
                     }
 
@@ -586,7 +586,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     entry.setId(tabId);
 
                     if (tabsJSON[tabId].tabActivatedCallback) {
-                        var newTabTitle = tabsJSON[tabId].title ? tabsJSON[tabId].title : "";
+                        var newTabTitle = tabsJSON[tabId].title ? tabsJSON[tabId].title : '';
                         entry.setTitle(newTabTitle);
                     }
                     me._tabContainer.addPanel(entry);
@@ -665,9 +665,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         getMetadataTabRatingStars: function() {
             var me = this;
             //obtain a reference to metadatafeedback bundle, which contains the rating functionality... Update rating stars if exists...
-            var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance("catalogue.bundle.metadatafeedback");
+            var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance('catalogue.bundle.metadatafeedback');
             if (metadataFeedbackBundle) {
-                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getAdminMetadataRating(me._model.latestAdminRating)+"&nbsp;");
+                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getAdminMetadataRating(me._model.latestAdminRating)+'&nbsp;');
                 jQuery('div.metadatatab-rating-container').show();
             } else {
                 jQuery('div.metadatatab-rating-container').hide();
@@ -730,7 +730,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             container.find('table.metadataSearchResult').remove();
             container.append(me._templates['layerList']());
 
-            layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : "";
+            layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : '';
             container.find('h2').html(layerListHeader);
 
             layerListElement = container.find('ul.layerList');

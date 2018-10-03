@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepR
     handleRequest : function(core, request) {
     	var module = request.getModuleId();
 
-        this.sandbox.printDebug("[Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest] Activate question module: " + module);
+        this.sandbox.printDebug('[Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest] Activate question module: ' + module);
         this.bundle.showStep(module);
     }
 }, {

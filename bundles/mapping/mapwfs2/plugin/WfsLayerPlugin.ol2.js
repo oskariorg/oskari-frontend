@@ -201,8 +201,8 @@ Oskari.clazz.define(
                 countManu = 0,
                 countInvisi = 0,
                 countInscale = 0,
-                refresh_status1 = "all_invisible",
-                refresh_status2 = "all_not_in_scale",
+                refresh_status1 = 'all_invisible',
+                refresh_status2 = 'all_not_in_scale',
                 scale = sandbox.getMap().getScale(),
                 conf = me._config;
             if(this.getElement()) {
@@ -295,7 +295,7 @@ Oskari.clazz.define(
                 loc = me.getLocalization();
 
             if(me.getElement()) {
-                refresh_status = me.getElement().attr("refresh_status");
+                refresh_status = me.getElement().attr('refresh_status');
             }
             if(refresh_status && loc.refresh_alert){
                 //  refresh_status values = "all_invisible", "all_not_in_scale",

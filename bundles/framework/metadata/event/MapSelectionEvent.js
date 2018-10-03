@@ -13,7 +13,7 @@ function(geometry) {
     this._drawing = geometry;
 }, {
     /** @static @property __name event name */
-    __name : "Metadata.MapSelectionEvent",
+    __name : 'Metadata.MapSelectionEvent',
     /**
      * @method getName
      * Returns event name

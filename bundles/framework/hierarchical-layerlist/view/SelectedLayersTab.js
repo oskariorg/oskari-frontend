@@ -131,9 +131,9 @@ Oskari.clazz.define(
         _calculateContainerHeightDuringSort: function(height) {
             var me = this;
             var container = me.tabPanel.getContainer();
-            if (typeof height === "undefined") {
+            if (typeof height === 'undefined') {
                 container.css({
-                    height: ""
+                    height: ''
                 });
             }
             var totalHeight = container.height() + height;

@@ -3,7 +3,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
+Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
 
     /**
      * @method create called automatically on construction
@@ -167,7 +167,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     subLmeta = true;
                     for (s = 0; s < subLayers.length; s += 1) {
                         subUuid = subLayers[s].getMetadataIdentifier();
-                        if (!subUuid || subUuid === "") {
+                        if (!subUuid || subUuid === '') {
                             subLmeta = false;
                             break;
                         }
@@ -187,7 +187,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     if (subLayers && subLayers.length > 0) {
                         for (s = 0; s < subLayers.length; s += 1) {
                             subUuid = subLayers[s].getMetadataIdentifier();
-                            if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
+                            if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
                                 additionalUuidsCheck[subUuid] = true;
                                 additionalUuids.push({
                                     uuid: subUuid

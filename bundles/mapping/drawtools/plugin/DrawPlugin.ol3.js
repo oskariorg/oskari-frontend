@@ -39,7 +39,7 @@ Oskari.clazz.define(
         this._overlays = {};
         this._drawFeatureIdSequence = 0;
         this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
-        this._mode = "";
+        this._mode = '';
         this._featuresValidity = {};
         // TODO: figure out why we have some variables that are "globally reset" and some that are functionality id specific.
         // As some are "global"/shared between functionalities resuming a previous id will probably NOT work the way expected
@@ -161,7 +161,7 @@ Oskari.clazz.define(
             me.removeInteractions(me._modify, me._id);
 
             if(me._sketch) {
-                jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId()).remove();
+                jQuery('div.' + me._tooltipClassForMeasure + '.' + me._sketch.getId()).remove();
             }
             me._shape = shape;
 
@@ -225,13 +225,13 @@ Oskari.clazz.define(
                 feat = features[i];
                 geom = feat.getGeometry();
 
-                if (geom.getType() === "MultiPoint"){
+                if (geom.getType() === 'MultiPoint'){
                     geoms = geom.getPoints();
                     feats = feats.concat(this.createFeatures(geoms, false));
-                } else if (geom.getType() === "MultiLineString"){
+                } else if (geom.getType() === 'MultiLineString'){
                     geoms = geom.getLineStrings();
                     feats = feats.concat(this.createFeatures(geoms, false));
-                }else if (geom.getType() === "MultiPolygon"){
+                }else if (geom.getType() === 'MultiPolygon'){
                     geoms = geom.getPolygons();
                     feats = feats.concat(this.createFeatures(geoms, true));
                 } else {
@@ -416,7 +416,7 @@ Oskari.clazz.define(
                 coords,
                 parsedCoords;
 
-            if (geom.getType() === "LineString"){
+            if (geom.getType() === 'LineString'){
                 coords = geom.getCoordinates();
                 if(coords.length > 2){
                     parsedCoords = coords.slice(0, coords.length-1); // remove last point
@@ -430,7 +430,7 @@ Oskari.clazz.define(
                     //cannot finish geometry, remove measurement result from map
                     this._cleanupInternalState();
                 }
-            } else if (geom.getType() === "Polygon"){
+            } else if (geom.getType() === 'Polygon'){
                 //only for exterior linear ring, drawtools doesn't support linear rings (holes)
                 coords = geom.getCoordinates()[0];
                 if (coords.length > 4){
@@ -452,7 +452,7 @@ Oskari.clazz.define(
         _cleanupInternalState: function() {
             // Remove measure result from map
             if(this._sketch) {
-               jQuery('div.' + this._tooltipClassForMeasure + "." + this._sketch.getId()).remove();
+               jQuery('div.' + this._tooltipClassForMeasure + '.' + this._sketch.getId()).remove();
             }
             this._sketch = null;
         },
@@ -960,20 +960,20 @@ Oskari.clazz.define(
                 if (geom instanceof olGeom.Polygon) {
                     area = mapmodule.getGeomArea(geom);
                     if(area < 10000) {
-                        area = area.toFixed(0) + " m<sup>2</sup>";
+                        area = area.toFixed(0) + ' m<sup>2</sup>';
                     } else if(area > 1000000) {
-                        area = (area/1000000).toFixed(2) + " km<sup>2</sup>";
+                        area = (area/1000000).toFixed(2) + ' km<sup>2</sup>';
                     } else {
-                        area = (area/10000).toFixed(2) + " ha";
+                        area = (area/10000).toFixed(2) + ' ha';
                     }
                     if (area) {
-                        area = area.replace(".", ",");
+                        area = area.replace('.', ',');
                     }
                     output = area;
                     tooltipCoord = geom.getInteriorPoint().getCoordinates();
                     // for Polygon-drawing checking itself-intersection
                     if(me._featuresValidity[me._sketch.getId()]===false) {
-                        output = "";
+                        output = '';
                         if(me._showIntersectionWarning) {
                             output = me._loc.intersectionNotAllowed;
                         }
@@ -981,12 +981,12 @@ Oskari.clazz.define(
                 } else if (geom instanceof olGeom.LineString) {
                     length = mapmodule.getGeomLength(geom);
                     if(length < 1000) {
-                        length = length.toFixed(0) + " m";
+                        length = length.toFixed(0) + ' m';
                     } else {
-                        length = (length/1000).toFixed(3) + " km";
+                        length = (length/1000).toFixed(3) + ' km';
                     }
                     if (length) {
-                        length = length.replace(".", ",");
+                        length = length.replace('.', ',');
                     }
                     output = length;
                     tooltipCoord = geom.getLastCoordinate();
@@ -994,9 +994,9 @@ Oskari.clazz.define(
                 if(me.getOpts('showMeasureOnMap') && tooltipCoord) {
                     overlay = me._overlays[me._sketch.getId()];
                     if(overlay) {
-                        var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
+                        var ii = jQuery('div.' + me._tooltipClassForMeasure + '.' + me._sketch.getId());
                         ii.html(output);
-                        if(output==="") {
+                        if(output==='') {
                             ii.addClass('withoutText');
                         } else {
                             ii.removeClass('withoutText');
@@ -1063,13 +1063,13 @@ Oskari.clazz.define(
                     //turn off changehandler in case something we touch here triggers a change event -> avoid eternal loop
                     me.toggleDrawLayerChangeFeatureEventHandler(false);
                     me._sketch = evt.feature;
-                    if (shape === "LineString") {
+                    if (shape === 'LineString') {
                         if(options.buffer > 0) {
                             me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
                         }
-                    }else if (shape === "Point" && options.buffer > 0) {
+                    }else if (shape === 'Point' && options.buffer > 0) {
                         me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
-                    } else if (shape === "Polygon" && options.selfIntersection !== false) {
+                    } else if (shape === 'Polygon' && options.selfIntersection !== false) {
                         me.checkIntersection(me._sketch.getGeometry());
                     }
                     me.sendDrawingEvent(me._id, options);
@@ -1118,7 +1118,7 @@ Oskari.clazz.define(
         getBufferedFeature: function(geometry, buffer, style, sides) {
             var input = olParser.read(geometry);
             var bufferGeometry = BufferOp.bufferOp(input, buffer, new BufferParameters(sides));
-            bufferGeometry.CLASS_NAME = "jsts.geom.Polygon";
+            bufferGeometry.CLASS_NAME = 'jsts.geom.Polygon';
             bufferGeometry = olParser.write(bufferGeometry);
             var feature = new olFeature({
                 geometry: bufferGeometry

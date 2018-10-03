@@ -26,7 +26,7 @@
  instanceProps : {}
  }
  */
-Oskari.clazz.define("Oskari.integration.bundle.backbone.AdapterBundleInstance",
+Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -183,7 +183,7 @@ function(name,viewClazz) {
         return this.plugins;
     },
 
-    "init" : function() {
+    'init' : function() {
         return null;
     },
     /**

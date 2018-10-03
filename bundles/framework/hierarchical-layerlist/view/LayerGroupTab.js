@@ -4,7 +4,7 @@
  *
  */
 Oskari.clazz.define(
-    "Oskari.framework.bundle.hierarchical-layerlist.view.LayerGroupTab",
+    'Oskari.framework.bundle.hierarchical-layerlist.view.LayerGroupTab',
     /**
      * @method create called automatically on construction
      * @static
@@ -478,7 +478,7 @@ Oskari.clazz.define(
             if (subLayers && subLayers.length > 0) {
                 for (s = 0; s < subLayers.length; s += 1) {
                     subUuid = subLayers[s].getMetadataIdentifier();
-                    if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
+                    if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
                         additionalUuidsCheck[subUuid] = true;
                         additionalUuids.push({
                             uuid: subUuid
@@ -567,7 +567,7 @@ Oskari.clazz.define(
                     subLmeta = true;
                     for (s = 0; s < subLayers.length; s += 1) {
                         subUuid = subLayers[s].getMetadataIdentifier();
-                        if (!subUuid || subUuid === "") {
+                        if (!subUuid || subUuid === '') {
                             subLmeta = false;
                             break;
                         }
@@ -936,7 +936,7 @@ Oskari.clazz.define(
                         }
                     };
 
-                    return me._getJsTreeObject(jQuery("<span/>").append(me._createLayerContainer(layer).clone()).html(),
+                    return me._getJsTreeObject(jQuery('<span/>').append(me._createLayerContainer(layer).clone()).html(),
                             'layer',
                             opts);
                 }

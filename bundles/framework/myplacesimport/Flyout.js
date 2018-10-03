@@ -246,7 +246,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             error = null,
                             warning = null;
                         me.progressSpinner.stop();
-                        if (textStatus === "error"){
+                        if (textStatus === 'error'){
                             try {
                                 err = JSON.parse(jqXHR.responseText);
                                 if (err.error !== null && err.error !== undefined) {
@@ -259,11 +259,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                                 Oskari.log(me.getName())
                                 .warn('Error whilst parsing json',e);
                             }
-                        }else if (textStatus === "timeout"){
+                        }else if (textStatus === 'timeout'){
                             error = textStatus;
-                        }else if (textStatus === "abort"){
+                        }else if (textStatus === 'abort'){
                              error = textStatus;
-                        }else if (textStatus === "parsererror"){
+                        }else if (textStatus === 'parsererror'){
                             error = textStatus;
                         }
 
@@ -272,13 +272,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             Oskari.log(me.getName()).warn('Error whilst importing userlayer: ' + errorThrown);
                         }
 
-                        if (typeof error === "string" && locale.error[error.toLowerCase()]) {
+                        if (typeof error === 'string' && locale.error[error.toLowerCase()]) {
                             msg = locale.error[error.toLowerCase()];
                         } else {
                             msg = locale.error.generic;
                         }
                         if (warning){
-                            msg = msg + " " + warning;
+                            msg = msg + ' ' + warning;
                         }
                         me.__showMessage(title, msg, false);
                     }
@@ -366,7 +366,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 fadeout = true;
 
             if (json.warning !== undefined && json.warning.featuresSkipped){
-                msg = msg + " " + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
+                msg = msg + ' ' + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
                 fadeout = false;
             }
             this.instance.addUserLayer(json);
@@ -398,5 +398,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             }
         }
     }, {
-        "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
+        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     });

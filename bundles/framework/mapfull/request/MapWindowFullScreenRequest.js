@@ -15,7 +15,7 @@ function() {
 
 }, {
     /** @static @property __name request name */
-    __name : "MapFull.MapWindowFullScreenRequest",
+    __name : 'MapFull.MapWindowFullScreenRequest',
     /**
      * @method getName
      * @return {String} request name

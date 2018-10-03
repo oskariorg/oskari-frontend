@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolbarRequest',
         this._data = data;
     }, {
         /** @static @property __name request name */
-        __name: "Toolbar.ToolbarRequest",
+        __name: 'Toolbar.ToolbarRequest',
         /**
          * @method getName
          * @return {String} request name

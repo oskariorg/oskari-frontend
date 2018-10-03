@@ -26,7 +26,7 @@ function(toolId) {
         draw_area : 'map_control_draw_area_tool'
     },
     /** @static @property __name request name */
-    __name : "ToolSelectionRequest",
+    __name : 'ToolSelectionRequest',
     /**
      * @method getName
      * @return {String} request name

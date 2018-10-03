@@ -13,7 +13,7 @@ function(_popupId, _popupOpen, _contentId) {
     this._contentId = _contentId;
 }, {
     /** @static @property __name event name */
-    __name : "InfoBox.InfoBoxEvent",
+    __name : 'InfoBox.InfoBoxEvent',
     /**
      * @method getName
      * @return {String} the name for the event

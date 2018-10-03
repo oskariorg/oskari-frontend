@@ -18,7 +18,7 @@ function(id, geojson, data, isFinished) {
     this._isFinished = isFinished;
 }, {
     /** @static @property __name event name */
-    __name : "DrawingEvent",
+    __name : 'DrawingEvent',
     /**
      * @method getName
      * @return {String} the name for the event

@@ -129,20 +129,20 @@ Oskari.clazz.define(
       }
       if( error.type === 'normal' && !error.success) {
         if(requestBuilder){
-          var request = requestBuilder(plugin._loc.error.layer_load_fail+": "+layer._name, 'error');
+          var request = requestBuilder(plugin._loc.error.layer_load_fail+': '+layer._name, 'error');
           Oskari.getSandbox().request('system-message', request);
         } else {
-          Oskari.log(this.getName()).info("no system-message started");
+          Oskari.log(this.getName()).info('no system-message started');
         }
         this._errorLayer = error;
         this._errorLayers.push({errorlayer:this._errorLayer});
       }
       if( error.level === 'warning' ) {
         if(requestBuilder){
-          var request = requestBuilder(layer._name+" "+error.message, 'warning');
+          var request = requestBuilder(layer._name+' '+error.message, 'warning');
           Oskari.getSandbox().request('system-message', request);
         } else {
-          Oskari.log(this.getName()).info("no system-message started");
+          Oskari.log(this.getName()).info('no system-message started');
         }
         this._errorLayer = error;
         this._errorLayers.push({errorlayer:this._errorLayer});

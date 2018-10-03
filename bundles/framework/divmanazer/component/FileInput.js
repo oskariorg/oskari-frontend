@@ -179,8 +179,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 valid = false;
                 message = this.loc('fileInput.invalidType');
                 if (Array.isArray(allowedExtensions) && allowedExtensions.length > 0) {
-                    allowedExtensions = "." + allowedExtensions.join(", .");
-                    message += "<br>" + this.loc('fileInput.allowedExtensions', {allowedExtensions: allowedExtensions});
+                    allowedExtensions = '.' + allowedExtensions.join(', .');
+                    message += '<br>' + this.loc('fileInput.allowedExtensions', {allowedExtensions: allowedExtensions});
                 }
                 this._showPopup(this.loc('fileInput.error'), message);
             }
@@ -238,10 +238,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             var allowMultiple;
 
             if (opts.allowMultipleFiles === true ){
-                allowMultiple = "multiple";
+                allowMultiple = 'multiple';
                 fileUpload = this.loc('fileInput.fileUpload', {files: 2});
             } else {
-                allowMultiple = "";
+                allowMultiple = '';
                 fileUpload = this.loc('fileInput.fileUpload', {files: 1});
             }
 
@@ -249,7 +249,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 fileInput = jQuery(this._template.fileBox({
                     link: this.loc('fileInput.link'),
                     allowedFiles: allowedFiles,
-                    classes: "oskari-fileinput advanced-upload",
+                    classes: 'oskari-fileinput advanced-upload',
                     fileupload: fileUpload,
                     allowMultiple: allowMultiple,
                     uploading: this.loc('fileInput.uploading'),
@@ -261,7 +261,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 this._addTooltip();
             } else {
                 fileInput = jQuery(this._template.basicInput({
-                    classes: "oskari-fileinput basic-upload",
+                    classes: 'oskari-fileinput basic-upload',
                     allowMultiple: allowMultiple,
                     allowedFiles: allowedFiles
                 }));
@@ -275,17 +275,17 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             var acceptedFiles = [];
             if (allowedTypes.length === 0 && allowedExtensions.length === 0){
                 //if not defined in option, accept all
-                return "";
+                return '';
             } else {
                 allowedTypes.forEach(function (type) {
                     acceptedFiles.push(type);
                 });
                 allowedExtensions.forEach(function (extension) {
-                    acceptedFiles.push("." + extension);
+                    acceptedFiles.push('.' + extension);
                 });
                 return acceptedFiles.map(function (file) {
                     return file;
-                }).join(",");
+                }).join(',');
             }
         },
         /**
@@ -316,7 +316,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             var allowedExtensions = this.options.allowedFileExtensions;
             var tooltip;
             if (Array.isArray(allowedExtensions) && allowedExtensions.length !== 0) {
-                allowedExtensions = "." + allowedExtensions.join(", .");
+                allowedExtensions = '.' + allowedExtensions.join(', .');
                 tooltip = this.loc('fileInput.allowedExtensions', {allowedExtensions: allowedExtensions});
                 elem.prop('title', tooltip);
             }
@@ -324,9 +324,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         setVisible: function (visible) {
             var elem = this.getElement();
             if (visible === false){
-                elem.css("display", "none");
+                elem.css('display', 'none');
             } else {
-                elem.css("display", "");
+                elem.css('display', '');
             }
         },
         //TODO should these be in different place
@@ -341,7 +341,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 elem.href = window.URL.createObjectURL(blob);
                 elem.download = filename;
                 document.body.appendChild(elem);
-                elem.trigger( "click" );
+                elem.trigger( 'click' );
                 document.body.removeChild(elem);
             }
         },

@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
 
             cancelBtn.setHandler(function() {
                 helper.removeMarkers();
-                me.instance.toggleViews("transformation");
+                me.instance.toggleViews('transformation');
                 me.instance.setMapSelectionMode(false);
                 me.instance.addMapCoordsToInput(false);
                 dialog.close();
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             btn.setHandler(function() {
                 me.instance.setMapSelectionMode(false);
                 helper.removeMarkers();
-                me.instance.toggleViews("transformation");
+                me.instance.toggleViews('transformation');
                 me.instance.addMapCoordsToInput(true);
                 dialog.close();
             });
@@ -66,9 +66,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
 
             me.instance.setRemoveMarkers(false); //add markers radio button is pre-checked
 
-            content.find('input[type=radio]').on("change", function(evt) {
+            content.find('input[type=radio]').on('change', function(evt) {
                 var value = this.value;
-                if (value === "remove"){
+                if (value === 'remove'){
                     me.instance.setRemoveMarkers(true);
                 } else {
                     me.instance.setRemoveMarkers(false);

@@ -30,8 +30,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
         }
     }, {
         __templates: {
-            "main": '<div class="oskari-user-layers-tab"></div>',
-            "link": '<a href="JavaScript:void(0);"></a>'
+            'main': '<div class="oskari-user-layers-tab"></div>',
+            'link': '<a href="JavaScript:void(0);"></a>'
         },
         /**
          * Returns reference to a container that should be shown in personal data
@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 sandbox = me.instance.sandbox;
 
             // parse actual id from layer id
-            var tokenIndex = layerId.lastIndexOf("_") + 1,
+            var tokenIndex = layerId.lastIndexOf('_') + 1,
                 idParam = layerId.substring(tokenIndex);
 
             jQuery.ajax({
@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 saveBtn,
                 cancelBtn,
                 action = this.instance.getService().getEditLayerUrl(),
-                tokenIndex = data.id.lastIndexOf("_") + 1,
+                tokenIndex = data.id.lastIndexOf('_') + 1,
                 idParam = data.id.substring(tokenIndex);
             me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             styleForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.StyleForm', me.instance);

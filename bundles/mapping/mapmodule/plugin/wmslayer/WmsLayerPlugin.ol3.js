@@ -136,7 +136,7 @@ Oskari.clazz.define(
                 // gather references to layers
                 olLayers.push(layerImpl);
 
-                this._log.debug("#!#! CREATED ol/layer/TileLayer for " + _layer.getId());
+                this._log.debug('#!#! CREATED ol/layer/TileLayer for ' + _layer.getId());
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
@@ -172,14 +172,14 @@ Oskari.clazz.define(
             }
 
             var reverseProjection = new olProjProjection({
-                "code": projectionCode,
-                "units": originalProjection.getUnits(),
-                "extent": originalProjection.getExtent(),
-                "axisOrientation": "neu",
-                "global": originalProjection.isGlobal(),
-                "metersPerUnit": originalProjection.getMetersPerUnit(),
-                "worldExtent": originalProjection.getWorldExtent(),
-                "getPointResolution": originalProjection.getPointResolution
+                'code': projectionCode,
+                'units': originalProjection.getUnits(),
+                'extent': originalProjection.getExtent(),
+                'axisOrientation': 'neu',
+                'global': originalProjection.isGlobal(),
+                'metersPerUnit': originalProjection.getMetersPerUnit(),
+                'worldExtent': originalProjection.getWorldExtent(),
+                'getPointResolution': originalProjection.getPointResolution
             });
             return reverseProjection;
         },
@@ -215,7 +215,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (params && layer.isLayerOfType("WMS")) {
+            if (params && layer.isLayerOfType('WMS')) {
                 olLayerList = this.mapModule.getOLMapLayers(layer.getId());
 
                 if (olLayerList) {
@@ -227,7 +227,7 @@ Oskari.clazz.define(
                     			var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
 								layerSource.setTileLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
-                                        proxyUrl = Oskari.urls.getRoute('GetLayerTile') + "&id=" + layer.getId();
+                                        proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
 										me._imagePostFunction(image, src, proxyUrl);
 									} else {
 										originalTileLoadFunction.apply(this, arguments);
@@ -239,7 +239,7 @@ Oskari.clazz.define(
                     			var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
 								layerSource.setImageLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
-                                        proxyUrl = Oskari.urls.getRoute('GetLayerTile') + "&id=" + layer.getId();
+                                        proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
 										me._imagePostFunction(image, src, proxyUrl);
 									} else {
 										originalImageLoadFunction.apply(this, arguments);
@@ -262,11 +262,11 @@ Oskari.clazz.define(
 			if (typeof window.btoa === 'function') {
 				var xhr = new XMLHttpRequest();
 			  	//GET ALL THE PARAMETERS OUT OF THE SOURCE URL**
-			  	var dataEntries = src.split("&");
-			  	var params = "";
+			  	var dataEntries = src.split('&');
+			  	var params = '';
 			  	//i === 0 -> the actual url, skip. Everything after that is params.
 			  	for (var i = 1 ; i< dataEntries.length ; i++){
-			    	params = params + "&"+dataEntries[i];
+			    	params = params + '&'+dataEntries[i];
 			  	}
 			 	xhr.open('POST', proxyUrl, true);
 
@@ -286,7 +286,7 @@ Oskari.clazz.define(
 						}
 					}
 				};
-				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 				xhr.send(params);
 			} else {
 			  img.src = src;
@@ -297,7 +297,7 @@ Oskari.clazz.define(
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"],
-        "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"]
+        'protocol' : ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin'],
+        'extend' : ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
     }
 );

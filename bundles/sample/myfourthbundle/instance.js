@@ -23,7 +23,7 @@
             instanceProps : {}
         }
  */
-Oskari.clazz.define("Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleInstance",
+Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleInstance',
 
 /**
  * @method create called automatically on construction

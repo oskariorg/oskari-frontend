@@ -4,7 +4,7 @@
  * This is a class to manage a set of
  * Oskari.mapframework.gridcalc.QueuedTile objects
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.domain.TileQueue",
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.TileQueue',
 
 /**
  * @method create called automatically on construction

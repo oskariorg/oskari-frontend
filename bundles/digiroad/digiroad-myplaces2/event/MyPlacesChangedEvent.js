@@ -8,7 +8,7 @@ Oskari.clazz.define(
         function(config) {
             this._creator = null;
         }, {
-            __name : "DigiroadMyPlaces.MyPlacesChangedEvent",
+            __name : 'DigiroadMyPlaces.MyPlacesChangedEvent',
             getName : function() {
                 return this.__name;
             }

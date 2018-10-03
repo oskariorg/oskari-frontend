@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
             'strokeOpacity': 0.0
         });
 
-        layer = new OpenLayers.Layer.Vector("snappingGridLayer", {
+        layer = new OpenLayers.Layer.Vector('snappingGridLayer', {
             protocol: protocol,
             strategies: [this.snappingLayerStrategy],
             styleMap: styleMap,
@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
 
         this.snappingGridLayer = this.createSnappingGridLayer(this.queryUrl, this.snappingLayerConf);
 
-        this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {
+        this.drawLayer = new OpenLayers.Layer.Vector('MyPlaces Draw Layer', {
             /*style: {
              strokeColor: "#ff00ff",
              strokeWidth: 3,
@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
              cursor: "pointer"
              },*/
             eventListeners: {
-                "featuresadded": function (layer) {
+                'featuresadded': function (layer) {
                     // send an event that the drawing has been completed
                     me.finishedDrawing();
                 }
@@ -299,5 +299,5 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
      */
     stop: function (sandbox) {}
 }, {
-    'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

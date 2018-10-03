@@ -3,7 +3,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
+Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance',
 
     /**
      * @method create called automatically on construction
@@ -13,7 +13,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
     function () {
         this.sandbox = null;
     }, {
-        __name: "lupakartta",
+        __name: 'lupakartta',
         // jemma - a hash for storing state of what ever needed
         jemma: {},
 
@@ -63,11 +63,11 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
 
             var requestBuilder = sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest');
             var request = requestBuilder();
-            sandbox.request("lupakartta", request);
+            sandbox.request('lupakartta', request);
 
-            hub.subscribe("documents-map", function (e) {
+            hub.subscribe('documents-map', function (e) {
                 var sandbox = Oskari.getSandbox();
-                sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-show-markers-request");
+                sandbox.printDebug('[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-show-markers-request');
                 var bounds;
                 var requestBuilder;
                 var request;
@@ -75,13 +75,13 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                 if (e.clear !== undefined && e.clear) {
                     requestBuilder = sandbox.getRequestBuilder('lupakartta.ClearMapRequest');
                     request = requestBuilder();
-                    sandbox.request("lupakartta", request);
+                    sandbox.request('lupakartta', request);
                 }
                 for (var i in e.data) {
                     if (e.data[i].location != undefined) {
                         requestBuilder = sandbox.getRequestBuilder('lupakartta.AddMarkerRequest');
                         request = requestBuilder(e.data[i].location.x, e.data[i].location.y, e.data[i].id, e.data[i].events, e.data[i].iconUrl);
-                        sandbox.request("lupakartta", request);
+                        sandbox.request('lupakartta', request);
                     }
                 }
                 var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -98,12 +98,12 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
 
                 requestBuilder = sandbox.getRequestBuilder('MapMoveRequest');
                 request = requestBuilder(bounds.getCenterLonLat().lon, bounds.getCenterLonLat().lat, bounds);
-                sandbox.request("lupakartta", request);
+                sandbox.request('lupakartta', request);
             });
 
-            hub.subscribe("inforequest-map-start", function (e) {
+            hub.subscribe('inforequest-map-start', function (e) {
                 var sandbox = Oskari.getSandbox();
-                sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] draw-request " + e.drawMode);
+                sandbox.printDebug('[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] draw-request ' + e.drawMode);
                 var config = {
                     drawMode: e.drawMode
                 };
@@ -116,38 +116,38 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                     //tyhjennetään
                     requestBuilder = sandbox.getRequestBuilder('lupakartta.ClearMapRequest');
                     request = requestBuilder();
-                    sandbox.request("lupakartta", request);
+                    sandbox.request('lupakartta', request);
                 }
                 //aloitetaan piirto
                 requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest');
                 request = requestBuilder(config);
-                sandbox.request("lupakartta", request);
+                sandbox.request('lupakartta', request);
             });
 
 
-            hub.subscribe("map-get-geometry-request", function (e) {
+            hub.subscribe('map-get-geometry-request', function (e) {
 
                 var sandbox = Oskari.getSandbox();
-                sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-stop-editing-request");
+                sandbox.printDebug('[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-stop-editing-request');
                 var requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.GetGeometryRequest');
                 var request = requestBuilder(
                     function (ee) {
-                        hub.send("map-draw-done", {
+                        hub.send('map-draw-done', {
                             data: {
                                 drawing: ee
                             }
 
                         });
                     });
-                sandbox.request("lupakartta", request);
+                sandbox.request('lupakartta', request);
 
 
             });
-            hub.subscribe("map-stop-editing-request", function (e) {
+            hub.subscribe('map-stop-editing-request', function (e) {
 
                 var requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
                 var request = requestBuilder();
-                sandbox.request("lupakartta", request);
+                sandbox.request('lupakartta', request);
             });
 
             //var requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
@@ -155,9 +155,9 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
             //this.sandbox.request("lupakartta", request);
 
 
-            hub.subscribe("map-draw-start", function (e) {
+            hub.subscribe('map-draw-start', function (e) {
                 var sandbox = Oskari.getSandbox();
-                sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] draw-request " + e.drawMode);
+                sandbox.printDebug('[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] draw-request ' + e.drawMode);
                 var config = {
                     drawMode: e.drawMode
                 };
@@ -168,7 +168,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                     //tyhjennetään
                     requestBuilder = sandbox.getRequestBuilder('lupakartta.ClearMapRequest');
                     request = requestBuilder();
-                    sandbox.request("lupakartta", request);
+                    sandbox.request('lupakartta', request);
                 }
                 //aloitetaan piirto
 
@@ -185,17 +185,17 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                     };
                     requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest');
                     request = requestBuilder(config);
-                    sandbox.request("lupakartta", request);
+                    sandbox.request('lupakartta', request);
 
                     var requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
                     var request = requestBuilder();
-                    sandbox.request("lupakartta", request);
+                    sandbox.request('lupakartta', request);
 
 
                 } else {
                     requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest');
                     request = requestBuilder(config);
-                    sandbox.request("lupakartta", request);
+                    sandbox.request('lupakartta', request);
 
                 }
 
@@ -205,17 +205,17 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
             });
 
 
-            hub.subscribe("map-clear-request", function (e) {
+            hub.subscribe('map-clear-request', function (e) {
                 var sandbox = Oskari.getSandbox();
-                sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-clear-request");
+                sandbox.printDebug('[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-clear-request');
                 var requestBuilder = sandbox.getRequestBuilder('lupakartta.ClearMapRequest');
                 var request = requestBuilder();
-                sandbox.request("lupakartta", request);
+                sandbox.request('lupakartta', request);
             });
 
-            hub.subscribe("map-update-size", function (e) {
+            hub.subscribe('map-update-size', function (e) {
                 var sandbox = Oskari.getSandbox();
-                sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-update-size");
+                sandbox.printDebug('[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-update-size');
                 //set new center to old center
                 var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
                 var center = mapmodule.getMap().getCenter();
@@ -223,7 +223,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                 mapmodule.getMap().setCenter(center);
             });
 
-            hub.send("map-initialized");
+            hub.send('map-initialized');
             //  **************************************
             //    Your code ends
             //  **************************************
@@ -267,15 +267,15 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                 if (this.getJemma('currentdrawmode').indexOf('inforequest_') == 0) {
 
                     jQuery.ajax({
-                        type: "POST",
-                        url: this.conf.ajaxurl + "/Kunta",
-                        data: "{'x':" + event._drawing.x + ",'y':" + event._drawing.y + "}",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
+                        type: 'POST',
+                        url: this.conf.ajaxurl + '/Kunta',
+                        data: "{'x':" + event._drawing.x + ",'y':" + event._drawing.y + '}',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
                         success: function (response) {
                             var kuntatiedot = response.d;
 
-                            hub.send("inforequest-map-click", {
+                            hub.send('inforequest-map-click', {
                                 data: {
                                     kunta: {
                                         kuntanumero: kuntatiedot.kuntanumero,
@@ -298,10 +298,10 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                     var requestBuilder = this.sandbox.getRequestBuilder('lupakartta.AddMarkerRequest');
                     //var request = requestBuilder(event._drawing,  null, null, null, 'http://www.openlayers.org/dev/img/marker-green.png');
                     var request = requestBuilder(event._drawing.x, event._drawing.y, null, null, 'http://www.openlayers.org/dev/img/marker-green.png');
-                    this.sandbox.request("lupakartta", request);
+                    this.sandbox.request('lupakartta', request);
                     var requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
                     var request = requestBuilder();
-                    this.sandbox.request("lupakartta", request);
+                    this.sandbox.request('lupakartta', request);
                 }
 
                 if (this.getJemma('currentdrawmode').indexOf('inforequest_') < 0) {
@@ -312,7 +312,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                         this.setJemma('alapuhdista', '');
                     } else {
 
-                        hub.send("map-draw-done", {
+                        hub.send('map-draw-done', {
                             data: {
                                 drawing: event._drawing
                             }
@@ -321,7 +321,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
 
                         var requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
                         var request = requestBuilder();
-                        this.sandbox.request("lupakartta", request);
+                        this.sandbox.request('lupakartta', request);
 
 
                         var config = {
@@ -332,7 +332,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                         this.setJemma('alapuhdista', 1);
                         requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest');
                         request = requestBuilder(config);
-                        this.sandbox.request("lupakartta", request);
+                        this.sandbox.request('lupakartta', request);
                     }
                 }
 

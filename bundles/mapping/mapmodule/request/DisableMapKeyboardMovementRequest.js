@@ -20,7 +20,7 @@ function(options) {
     this._options = options;
 }, {
     /** @static @property __name request name */
-    __name : "DisableMapKeyboardMovementRequest",
+    __name : 'DisableMapKeyboardMovementRequest',
     /**
      * @method getName
      * @return {String} request name

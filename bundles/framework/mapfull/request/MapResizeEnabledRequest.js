@@ -19,7 +19,7 @@ function(resizeEnabled) {
 
 }, {
     /** @static @property __name request name */
-    __name : "MapFull.MapResizeEnabledRequest",
+    __name : 'MapFull.MapResizeEnabledRequest',
     /**
      * @method getName
      * @return {String} request name

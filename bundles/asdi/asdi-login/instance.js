@@ -1,10 +1,10 @@
 /**
  * @class Oskari.asdi.login.BundleInstance
  */
-Oskari.clazz.define("Oskari.asdi.login.BundleInstance",
+Oskari.clazz.define('Oskari.asdi.login.BundleInstance',
     function() {
         this.templates = {
-            "loginButton": jQuery('<input id="loginbutton" type="submit" value="">')
+            'loginButton': jQuery('<input id="loginbutton" type="submit" value="">')
         };
     }, {
         __name : 'asdi-login',
@@ -40,6 +40,6 @@ Oskari.clazz.define("Oskari.asdi.login.BundleInstance",
             );
         }
     }, {
-        "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
+        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
     }
 );

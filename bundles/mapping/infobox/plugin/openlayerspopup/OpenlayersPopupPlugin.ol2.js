@@ -124,7 +124,7 @@ Oskari.clazz.define(
                     currPopup.lonlat.lat === lat);
 
             if (currPopup && !refresh) {
-                if (me._popups[id].type === "mobile") {
+                if (me._popups[id].type === 'mobile') {
                     me._popups[id].popup.dialog.remove();
                     me._popups[id].popup.__notifyListeners('close');
                 } else {
@@ -167,11 +167,11 @@ Oskari.clazz.define(
                 popup = me._popups[id].popup;
 
                 if (isInMobileMode) {
-                    popupType = "mobile";
+                    popupType = 'mobile';
                     popup.setContent(contentDiv);
                 } else {
                     popupDOM = jQuery('#' + id);
-                    popupType = "desktop";
+                    popupType = 'desktop';
                     popup.setContentHTML(popupContent);
                     if (colourScheme) {
                         me._changeColourScheme(colourScheme, popupDOM, id);
@@ -179,7 +179,7 @@ Oskari.clazz.define(
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                popupType = "mobile";
+                popupType = 'mobile';
 
                 popup.createCloseIcon();
                 me._showInMobileMode(popup);
@@ -197,7 +197,7 @@ Oskari.clazz.define(
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
-                popupType = "desktop";
+                popupType = 'desktop';
 
                 popup = new OpenLayers.Popup(
                     id,
@@ -379,9 +379,9 @@ Oskari.clazz.define(
                     group = -1,
                     sanitizedHtml;
 
-                if (typeof datum.html === "string") {
+                if (typeof datum.html === 'string') {
                     sanitizedHtml = Oskari.util.sanitize(datum.html);
-                } else if (typeof datum.html === "object") {
+                } else if (typeof datum.html === 'object') {
                     sanitizedHtml = Oskari.util.sanitize(datum.html.outerHTML());
                 }
 
@@ -392,7 +392,7 @@ Oskari.clazz.define(
                 if (actions && _.isArray(actions)) {
                     _.forEach(actions, function (action) {
                         var sanitizedActionName = Oskari.util.sanitize(action.name);
-                        if (action.type === "link") {
+                        if (action.type === 'link') {
                             actionTemplate = me._actionLink.clone();
                             link = actionTemplate.find('a');
                             link.attr('contentdata', index);

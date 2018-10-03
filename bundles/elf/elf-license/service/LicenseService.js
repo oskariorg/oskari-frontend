@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             if (!jqhr) {
                 return;
             }
-            me._log.debug("Abort jqhr ajax request");
+            me._log.debug('Abort jqhr ajax request');
             jqhr.abort();
             jqhr = null;
             me._pendingAjaxQuery[requestName].busy = false;
@@ -121,7 +121,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._pendingAjaxQuery[requestName].busy = false;
             me._pendingAjaxQuery[requestName].jqhr = null;
 
-            me._log.debug("finished jqhr ajax request");
+            me._log.debug('finished jqhr ajax request');
         },
         /**
          * Do license search
@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             if (me._pendingAjaxQuery['licenseInformation'].busy && me._pendingAjaxQuery['licenseInformation'].timestamp &&
                 dteMs - me._pendingAjaxQuery['licenseInformation'].timestamp < 500) {
-                me._log.debug("License information request NOT SENT (time difference < 500ms)");
+                me._log.debug('License information request NOT SENT (time difference < 500ms)');
                 return;
             }
 
@@ -148,13 +148,13 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._startAjaxRequest(dteMs, 'licenseInformation');
 
             jQuery.ajax({
-                dataType : "json",
-                type : "GET",
+                dataType : 'json',
+                type : 'GET',
                 data: data,
                 beforeSend: function(x) {
                     me._pendingAjaxQuery['licenseInformation'].jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url : me._licenseServiceUrl,
@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             if (me._pendingAjaxQuery['getPrice'].busy && me._pendingAjaxQuery['getPrice'].timestamp &&
                 dteMs - me._pendingAjaxQuery['getPrice'].timestamp < 500) {
-                me._log.debug("License information request NOT SENT (time difference < 500ms)");
+                me._log.debug('License information request NOT SENT (time difference < 500ms)');
                 return;
             }
 
@@ -200,13 +200,13 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._startAjaxRequest(dteMs, 'getPrice');
 
             jQuery.ajax({
-                dataType : "json",
-                type : "POST",
+                dataType : 'json',
+                type : 'POST',
                 data: data,
                 beforeSend: function(x) {
                     me._pendingAjaxQuery['getPrice'].jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url : me._licenseServiceUrl,
@@ -244,7 +244,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             if (me._pendingAjaxQuery['concludeLicense'].busy && me._pendingAjaxQuery['concludeLicense'].timestamp &&
                 dteMs - me._pendingAjaxQuery['concludeLicense'].timestamp < 500) {
-                me._log.debug("License information request NOT SENT (time difference < 500ms)");
+                me._log.debug('License information request NOT SENT (time difference < 500ms)');
                 return;
             }
 
@@ -252,13 +252,13 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._startAjaxRequest(dteMs, 'concludeLicense');
 
             jQuery.ajax({
-                dataType : "json",
-                type : "PUT",
+                dataType : 'json',
+                type : 'PUT',
                 data: data,
                 beforeSend: function(x) {
                     me._pendingAjaxQuery['concludeLicense'].jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url : me._licenseServiceUrl,
@@ -296,7 +296,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             if (me._pendingAjaxQuery['deactivateLicense'].busy && me._pendingAjaxQuery['deactivateLicense'].timestamp &&
                 dteMs - me._pendingAjaxQuery['deactivateLicense'].timestamp < 500) {
-                me._log.debug("License information request NOT SENT (time difference < 500ms)");
+                me._log.debug('License information request NOT SENT (time difference < 500ms)');
                 return;
             }
 
@@ -304,12 +304,12 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._startAjaxRequest(dteMs, 'deactivateLicense');
 
             jQuery.ajax({
-                dataType : "json",
-                type : "DELETE",
+                dataType : 'json',
+                type : 'DELETE',
                 beforeSend: function(x) {
                     me._pendingAjaxQuery['deactivateLicense'].jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url : me._licenseServiceUrl + '&' + jQuery.param(data),

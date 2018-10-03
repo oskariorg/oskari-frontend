@@ -4,7 +4,7 @@
  * license.  See http://svn.openlayers.org/trunk/openlayers/license.txt for the
  * full text of the license. */
 
-Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
     function (options) {
         this.grid = [];
         this.map = null;
@@ -272,7 +272,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          */
 
         addTile: function (bounds, position) {
-            return new OpenLayers.Tile(this.layer, bounds, position, "", this.tileSize);
+            return new OpenLayers.Tile(this.layer, bounds, position, '', this.tileSize);
         },
 
 
@@ -417,5 +417,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
 
 
 
-        CLASS_NAME: "NLSFI.OpenLayers.Strategy.QueuedTilesGrid"
+        CLASS_NAME: 'NLSFI.OpenLayers.Strategy.QueuedTilesGrid'
     });

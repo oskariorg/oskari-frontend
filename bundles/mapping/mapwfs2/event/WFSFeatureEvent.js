@@ -17,7 +17,7 @@ function(layer, feature) {
     this._feature = feature;
 }, {
     /** @static @property __name event name */
-    __name : "WFSFeatureEvent",
+    __name : 'WFSFeatureEvent',
 
     /**
      * @method getName

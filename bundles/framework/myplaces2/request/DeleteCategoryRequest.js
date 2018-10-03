@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.DeleteCategory
 function(categoryId) {
     this._categoryId = categoryId;
 }, {
-    __name : "MyPlaces.DeleteCategoryRequest",
+    __name : 'MyPlaces.DeleteCategoryRequest',
     /**
      * @method getName
      * @return {String} request name

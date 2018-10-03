@@ -18,7 +18,7 @@ function(title, content, first, id) {
     this._id = id;
 },{
     /** @static @property __name request name */
-    __name : "PersonalData.AddTabRequest",
+    __name : 'PersonalData.AddTabRequest',
     /**
      * @method getName
      * @return {String} request name

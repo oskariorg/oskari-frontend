@@ -167,7 +167,7 @@ function () {
                             function(response) {
                                 _.each(response[1], function(feedbackItem) {
                                     feedbackItem.score = me._getMetadataRating(feedbackItem);
-                                    feedbackItem.comment = feedbackItem.comment.split("\n").join("<br />");
+                                    feedbackItem.comment = feedbackItem.comment.split('\n').join('<br />');
                                 });
                                 var json = {
                                     'locale': me._locale,
@@ -278,7 +278,7 @@ function () {
         _getMetadataRating: function(metadata) {
             var me = this;
             var ratingContainer = me.templates.ratingContainer.clone();
-            if (typeof metadata.score !== "undefined") {
+            if (typeof metadata.score !== 'undefined') {
                 var ratingSymbols = me._generateRatingSymbols(metadata.score);
                 for (j = 0; j < 5; j++) {
                     starContainer = me.templates.starItem.clone();
@@ -289,7 +289,7 @@ function () {
 
                 if (metadata.amount !== undefined) {
                     var numRatingsContainer = me.templates.numRatings.clone();
-                    var numRatingsText = metadata.amount !== undefined ? "("+metadata.amount +")" : "&nbsp;";
+                    var numRatingsText = metadata.amount !== undefined ? '('+metadata.amount +')' : '&nbsp;';
                     numRatingsContainer.append(numRatingsText);
                     ratingContainer.append(numRatingsContainer);
                 }
@@ -303,7 +303,7 @@ function () {
          *
          */
         _generateRatingSymbols: function(input) {
-            if ((typeof input === "undefined")||(input === null)) {
+            if ((typeof input === 'undefined')||(input === null)) {
                 return null;
             }
             var ratingSymbols = [];
@@ -311,11 +311,11 @@ function () {
             var i;
             for (i=0; i<5; i++) {
                 if (score < i+0.25) {
-                    ratingSymbols.push("icon-star-off");
+                    ratingSymbols.push('icon-star-off');
                 } else if ((i+0.25 <= score)&&(score < i+0.75)) {
-                    ratingSymbols.push("icon-star-half");
+                    ratingSymbols.push('icon-star-half');
                 } else {
-                    ratingSymbols.push("icon-star-on");
+                    ratingSymbols.push('icon-star-on');
                 }
             }
             return ratingSymbols;

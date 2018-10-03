@@ -135,7 +135,7 @@ Oskari.clazz.define(
             var me = this;
             var downloadDetails = [];
             var el = me.getContainer();
-            el.find('.oskari__download-basket-buttons').find('input.send').attr("disabled",true);
+            el.find('.oskari__download-basket-buttons').find('input.send').attr('disabled',true);
 
             el.find('.download-basket__component').each(function(){
                 var parent = jQuery(this);
@@ -167,7 +167,7 @@ Oskari.clazz.define(
             jQuery.ajax({
                 beforeSend : function(x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/json;charset=UTF-8");
+                        x.overrideMimeType('application/json;charset=UTF-8');
                     }
                 },
                 success : function(resp) {
@@ -176,7 +176,7 @@ Oskari.clazz.define(
                         btn = dialog.createCloseButton('OK');
                         btn.setHandler(function() {
                             var buttons = el.find('.oskari__download-basket-buttons');
-                            buttons.find('input.send').attr("disabled",false);
+                            buttons.find('input.send').attr('disabled',false);
                             el.find('.oskari__download-basket-user-info').find('input').val('');
                             buttons.find('input.prev').trigger('click');
                             buttons.find('input.empty').trigger('click');
@@ -253,7 +253,7 @@ Oskari.clazz.define(
         validateUserInputs: function(form){
             var me = this,
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            errorText = me._getLocalization('check-form-error')+" ",
+            errorText = me._getLocalization('check-form-error')+' ',
             error = false;
 
             form.find('input,select').each(function (index) {
@@ -356,7 +356,7 @@ Oskari.clazz.define(
                     };
                     identifiers.push(identifier);
 
-                    basketEl.attr("data-identifiers", JSON.stringify(identifiers));
+                    basketEl.attr('data-identifiers', JSON.stringify(identifiers));
 
                     basketEl.find('.download-basket__component-layer-name').text(basketItem.layerNameLang);
                     basketEl.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));

@@ -37,5 +37,5 @@ Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
             jQuery( elParent ).addClass('coordinatetransformation-flyout');
         }
     }, {
-        "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
+        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     });

@@ -17,7 +17,7 @@ function(success, requestParameters, result) {
     this._result = result;
 }, {
     /** @static @property __name event name */
-    __name : "SearchResultEvent",
+    __name : 'SearchResultEvent',
 
     /**
      * @method getName

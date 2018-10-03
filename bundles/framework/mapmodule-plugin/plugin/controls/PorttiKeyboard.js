@@ -21,8 +21,8 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
     },
     draw: function () {
         this.handler = new OpenLayers.Handler.Keyboard(this, {
-            "keydown": this.defaultKeyDown,
-            "keyup": this.defaultKeyUp
+            'keydown': this.defaultKeyDown,
+            'keyup': this.defaultKeyUp
         });
     },
     defaultKeyDown: function (evt) {
@@ -125,5 +125,5 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
             break;
         }
     },
-    CLASS_NAME: "OpenLayers.Control.PorttiKeyboard"
+    CLASS_NAME: 'OpenLayers.Control.PorttiKeyboard'
 });

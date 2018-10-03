@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.request.GetRouteR
         this._routeparams = params;
     }, {
         /** @static @property __name request name */
-        __name : "GetRouteRequest",
+        __name : 'GetRouteRequest',
         /**
          * @method getName
          * @return {String} request name

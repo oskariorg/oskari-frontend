@@ -69,7 +69,7 @@ Oskari.clazz
             this._additionalTools = [];
         }, {
             /** @static @property __name request name */
-            __name: "InfoBox.ShowInfoBoxRequest",
+            __name: 'InfoBox.ShowInfoBoxRequest',
             /**
              * @method getName
              * @return {String} request name
