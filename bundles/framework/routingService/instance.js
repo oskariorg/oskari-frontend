@@ -189,7 +189,6 @@ function () {
      */
     getRoute: function (params) {
         var me = this;
-            getRouteUrl = Oskari.urls.getRoute('Routing');
 
         jQuery.ajax({
             data: params,
@@ -200,7 +199,7 @@ function () {
                x.overrideMimeType("application/json");
               }
              },
-            url : getRouteUrl,
+            url : Oskari.urls.getRoute('Routing'),
             error : function() {
                 // send an event about failure (for RPC etc)
                 var evt = Oskari.eventBuilder('RouteResultEvent')(false, undefined, undefined, params);
