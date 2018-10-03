@@ -17,6 +17,7 @@ Oskari.clazz.define(
      * @static @method create called automatically on construction
      */
     function () {
+        this._log = Oskari.log(this.getName());
     },
     {
         __name : 'WmsLayerPlugin',
@@ -135,7 +136,7 @@ Oskari.clazz.define(
                 // gather references to layers
                 olLayers.push(layerImpl);
 
-                this.getSandbox().printDebug("#!#! CREATED ol/layer/TileLayer for " + _layer.getId());
+                this._log.debug("#!#! CREATED ol/layer/TileLayer for " + _layer.getId());
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);

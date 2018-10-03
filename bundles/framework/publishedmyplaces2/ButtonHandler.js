@@ -17,6 +17,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
         me.ignoreEvents = false;
         me.dialog = null;
         me.conf = instance.conf || {};
+        this._log = Oskari.log(this.getName());
 
         me.buttons = {
             'point': {
@@ -117,7 +118,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                     sandbox.request(me, reqBuilder(tool, me.buttonGroup, me.buttons[tool]));
                 }
             } else {
-                sandbox.printDebug("Missing toolbar.");
+                this._log.debug("Missing toolbar.");
             }
 
             if (!Oskari.user().isLoggedIn() && me.conf.allowGuest !== true) {

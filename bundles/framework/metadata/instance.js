@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
 
     function () {
         this.buttons = {};
+        this._log = Oskari.log(this.getName());
     }, {
         __name: 'MetadataSearch',
 
@@ -52,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
             }
             me.sandbox = sandbox;
 
-            sandbox.printDebug('Initializing metadata module...');
+            this._log.debug('Initializing metadata module...');
             me.setupToolbar();
 
             // register plugin for map (drawing for selection box)

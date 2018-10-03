@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 timestamp: null
             }
         };
+        this._log = Oskari.log(this.getName());
     }, {
         __name: 'elf-license.LicenseService',
         __qname: 'Oskari.elf.license.service.LicenseService',
@@ -94,7 +95,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             if (!jqhr) {
                 return;
             }
-            me.sandbox.printDebug("[elf-license.LicenseService] Abort jqhr ajax request");
+            me._log.debug("Abort jqhr ajax request");
             jqhr.abort();
             jqhr = null;
             me._pendingAjaxQuery[requestName].busy = false;
@@ -120,7 +121,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._pendingAjaxQuery[requestName].busy = false;
             me._pendingAjaxQuery[requestName].jqhr = null;
 
-            me.sandbox.printDebug("[elf-license.LicenseService] finished jqhr ajax request");
+            me._log.debug("finished jqhr ajax request");
         },
         /**
          * Do license search
@@ -139,7 +140,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             if (me._pendingAjaxQuery['licenseInformation'].busy && me._pendingAjaxQuery['licenseInformation'].timestamp &&
                 dteMs - me._pendingAjaxQuery['licenseInformation'].timestamp < 500) {
-                me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
+                me._log.debug("License information request NOT SENT (time difference < 500ms)");
                 return;
             }
 
@@ -191,7 +192,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             if (me._pendingAjaxQuery['getPrice'].busy && me._pendingAjaxQuery['getPrice'].timestamp &&
                 dteMs - me._pendingAjaxQuery['getPrice'].timestamp < 500) {
-                me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
+                me._log.debug("License information request NOT SENT (time difference < 500ms)");
                 return;
             }
 
@@ -243,7 +244,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             if (me._pendingAjaxQuery['concludeLicense'].busy && me._pendingAjaxQuery['concludeLicense'].timestamp &&
                 dteMs - me._pendingAjaxQuery['concludeLicense'].timestamp < 500) {
-                me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
+                me._log.debug("License information request NOT SENT (time difference < 500ms)");
                 return;
             }
 
@@ -295,7 +296,7 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
 
             if (me._pendingAjaxQuery['deactivateLicense'].busy && me._pendingAjaxQuery['deactivateLicense'].timestamp &&
                 dteMs - me._pendingAjaxQuery['deactivateLicense'].timestamp < 500) {
-                me.sandbox.printDebug("[elf-license.LicenseService] License information request NOT SENT (time difference < 500ms)");
+                me._log.debug("License information request NOT SENT (time difference < 500ms)");
                 return;
             }
 

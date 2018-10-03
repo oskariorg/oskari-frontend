@@ -9,6 +9,7 @@ Oskari.clazz.define(
      * @static @method create called automatically on construction
      */
     function () {
+        this._log = Oskari.log(this.getName());
     },
     {
         __name : 'WmsLayerPlugin',
@@ -121,7 +122,7 @@ Oskari.clazz.define(
                 // gather references to layers
                 olLayers.push(openLayer);
 
-                sandbox.printDebug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
+                me._log.debug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
 
 
             });
@@ -224,7 +225,7 @@ Oskari.clazz.define(
                         olLayerList[i].mergeNewParams(params);
                     }
                 }
-                sandbox.printDebug("[MapLayerUpdateRequestHandler] WMS layer / merge new params: " + layer.getId() + ", found " + count);
+                this._log.debug("WMS layer / merge new params: " + layer.getId() + ", found " + count);
             }
         }
     },

@@ -8,6 +8,7 @@ import olSourceImageWMS from 'ol/source/ImageWMS';
 Oskari.clazz.define(
     'Oskari.mapframework.heatmap.HeatmapLayerPlugin',
     function () {
+        this._log = Oskari.log('HeatmapLayerPlugin');
     }, {
         /**
          * Adds a single WMS layer to this map
@@ -74,7 +75,7 @@ Oskari.clazz.define(
 
             this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
             this.setOLMapLayers(layer.getId(), openlayer);
-            this.getSandbox().printDebug(
+            this._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for ' + layer.getId()
             );
         },
