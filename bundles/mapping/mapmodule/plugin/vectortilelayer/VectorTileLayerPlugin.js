@@ -44,7 +44,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             mapLayerService.registerLayerModel(this.layertype + 'layer', VectorTileLayer);
             mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new VectorTileModelBuilder());
         }
-        this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(layertype, this);
+        this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(this.layertype, this);
     }
     /**
      * @private @method _createPluginEventHandlers
