@@ -54,9 +54,9 @@ function(instance) {
 
         var tabsLocalization = this.instance.getLocalization('tabs');
 		this.tabsData = {
-			"myPlaces" : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyPlacesTab', this.instance, tabsLocalization.myplaces),
-			"myEditedFeatures" : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyEditedFeaturesTab', this.instance, tabsLocalization.editedfeatures),
-			"myFeedback" : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyFeedbackTab', this.instance, tabsLocalization.feedback)
+			'myPlaces' : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyPlacesTab', this.instance, tabsLocalization.myplaces),
+			'myEditedFeatures' : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyEditedFeaturesTab', this.instance, tabsLocalization.editedfeatures),
+			'myFeedback' : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyFeedbackTab', this.instance, tabsLocalization.feedback)
 		};
     },
 	/**

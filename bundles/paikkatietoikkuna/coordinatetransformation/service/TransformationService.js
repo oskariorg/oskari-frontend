@@ -13,8 +13,8 @@ function(instance) {
 
     this.urls.result = Oskari.urls.getRoute('GetConversionResult');
 }, {
-    __name: "coordinatetransformation.TransformationService",
-    __qname : "Oskari.coordinatetransformation.TransformationService",
+    __name: 'coordinatetransformation.TransformationService',
+    __qname : 'Oskari.coordinatetransformation.TransformationService',
     getQName : function() {
         return this.__qname;
     },
@@ -31,20 +31,20 @@ function(instance) {
     requestUrlBuilder: function ( crs, transformType, exportSettings ) {
         var urlBase = Oskari.urls.getRoute('CoordinateTransformation');
         var urlParameterString =
-            "&sourceCrs=" + crs.sourceCrs +
-            "&targetCrs=" + crs.targetCrs +
-            "&targetDimension=" + crs.targetDimension +
-            "&sourceDimension=" + crs.sourceDimension +
-            "&transformType=" + transformType;
+            '&sourceCrs=' + crs.sourceCrs +
+            '&targetCrs=' + crs.targetCrs +
+            '&targetDimension=' + crs.targetDimension +
+            '&sourceDimension=' + crs.sourceDimension +
+            '&transformType=' + transformType;
 
         if( crs.sourceElevationCrs ) {
-            urlParameterString += "&sourceHeightCrs=" + crs.sourceElevationCrs;
+            urlParameterString += '&sourceHeightCrs=' + crs.sourceElevationCrs;
         }
         if( crs.targetElevationCrs ) {
-            urlParameterString += "&targetHeightCrs=" + crs.targetElevationCrs;
+            urlParameterString += '&targetHeightCrs=' + crs.targetElevationCrs;
         }
         if (exportSettings){
-            urlParameterString += "&exportSettings=" + JSON.stringify(exportSettings.selects);
+            urlParameterString += '&exportSettings=' + JSON.stringify(exportSettings.selects);
         }
         return urlBase + urlParameterString;
     },
@@ -65,7 +65,7 @@ function(instance) {
 
     },
     handleError: function(callback, jqXHR){
-        if (typeof callback !== "function"){
+        if (typeof callback !== 'function'){
             return;
         }
         var resp,
@@ -82,10 +82,10 @@ function(instance) {
     },
     transformArrayToArray: function(coords, crs, successCb, errorCb ) {
         var me = this;
-        var url = this.requestUrlBuilder( crs, "A2A" );
+        var url = this.requestUrlBuilder( crs, 'A2A' );
         jQuery.ajax({
-            contentType: "application/json",
-            type: "POST",
+            contentType: 'application/json',
+            type: 'POST',
             url: url,
             data: JSON.stringify(coords),
             success: function(response) {
@@ -98,11 +98,11 @@ function(instance) {
     },
     transformFileToArray: function (crs, fileSettings, successCb, errorCb){
         var me = this;
-        var url = this.requestUrlBuilder( crs, "F2A");
+        var url = this.requestUrlBuilder( crs, 'F2A');
         var formData = this.formDataBuilder(fileSettings);
          jQuery.ajax({
             contentType: false, //multipart/form-data
-            type: "POST",
+            type: 'POST',
             cache : false,
             processData: false,
             url: url,
@@ -117,11 +117,11 @@ function(instance) {
     },
     readFileToArray: function (crs, fileSettings, successCb, errorCb){
         var me = this;
-        var url = this.requestUrlBuilder(crs, "F2R");
+        var url = this.requestUrlBuilder(crs, 'F2R');
         var formData = this.formDataBuilder(fileSettings);
          jQuery.ajax({
             contentType: false, //multipart/form-data
-            type: "POST",
+            type: 'POST',
             cache : false,
             processData: false,
             url: url,
@@ -136,10 +136,10 @@ function(instance) {
     },
     transformArrayToFile: function(coords, crs, fileSettings, successCb, errorCb ) {
         var me = this;
-        var url = this.requestUrlBuilder( crs, "A2F", fileSettings);
+        var url = this.requestUrlBuilder( crs, 'A2F', fileSettings);
         jQuery.ajax({
-            contentType: "application/json",
-            type: "POST",
+            contentType: 'application/json',
+            type: 'POST',
             url: url,
             data: JSON.stringify(coords),
             success: function(response, textStatus, jqXHR) {
@@ -154,11 +154,11 @@ function(instance) {
     },
     transformFileToFile: function(crs, importSettings, exportSettings, successCb, errorCb ) {
         var me = this;
-        var url = this.requestUrlBuilder( crs , "F2F");
+        var url = this.requestUrlBuilder( crs , 'F2F');
         var formData = this.formDataBuilder(importSettings, exportSettings);
         jQuery.ajax({
             contentType: false, //multipart/form-data
-            type: "POST",
+            type: 'POST',
             cache : false,
             processData: false,
             url: url,
@@ -182,7 +182,7 @@ function(instance) {
                 return matches[1];
             }
         }
-        return "results.txt";
+        return 'results.txt';
     }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']

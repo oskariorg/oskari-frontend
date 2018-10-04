@@ -7,7 +7,7 @@
  *
  * See Oskari.mapframework.bundle.maplegend.MapLegendBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -336,5 +336,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

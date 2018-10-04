@@ -3,7 +3,7 @@
 *
 * Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance.
 */
-Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance",
+Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance',
 
     /**
      * @method create called automatically on construction

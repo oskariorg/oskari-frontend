@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance',
 
     /**
      * @static @method create called automatically on construction
@@ -18,7 +18,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         this.searchUrl = undefined;
         this._popup = null;
         this._logger = Oskari.log('findbycoordinates');
-        this.POPUP_ID = "findbycoordinates-search-result";
+        this.POPUP_ID = 'findbycoordinates-search-result';
     }, {
         __name : 'findbycoordinates',
         __templates : {
@@ -435,5 +435,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             };
         }
     }, {
-        "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
+        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
 });

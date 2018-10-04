@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadata
             }
         }
     }, {
-        __name: "catalogue.ShowMetadataRequest",
+        __name: 'catalogue.ShowMetadataRequest',
         getName: function () {
             return this.__name;
         },

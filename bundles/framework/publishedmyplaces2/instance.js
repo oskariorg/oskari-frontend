@@ -3,7 +3,7 @@
  *
  * My places functionality
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPlacesBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPlacesBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -158,10 +158,10 @@ function() {
             return;
         }
 
-        this._log.debug("Initializing my places module...");
+        this._log.debug('Initializing my places module...');
 
         // handles toolbar buttons related to my places
-        this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler", this);
+        this.buttons = Oskari.clazz.create('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler', this);
         this.buttons.start();
 
 
@@ -193,7 +193,7 @@ function() {
         // handles my places insert form etc
         var categoryId = (conf ? (conf.layer ? conf.layer.split('myplaces_')[1] : null) : null);
         this.view = Oskari.clazz.create(
-            "Oskari.mapframework.bundle.myplaces2.view.MainView", this, {
+            'Oskari.mapframework.bundle.myplaces2.view.MainView', this, {
                 category: categoryId,
                 published: true
             });
@@ -212,22 +212,22 @@ function() {
              name: this.getLocalization('category').defaultName,
              point: {
                  shape: 1,
-                 color: "000000",
+                 color: '000000',
                  size: 3
              },
              line: {
-                 style: "",
+                 style: '',
                  cap: 0,
                  corner: 0,
                  width: 1,
-                 color: "3233ff"
+                 color: '3233ff'
              },
              area: {
-                 linestyle: "",
+                 linestyle: '',
                  linecorner: 0,
                  linewidth: 1,
-                 linecolor: "000000",
-                 color: "ffde00",
+                 linecolor: '000000',
+                 color: 'ffde00',
                  fill: -1
 
              }

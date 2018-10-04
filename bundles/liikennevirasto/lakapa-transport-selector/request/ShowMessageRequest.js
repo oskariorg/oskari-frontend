@@ -16,7 +16,7 @@ function(title, message, handler) {
 	this._handler = handler;
 }, {
 	/** @static @property __name request name */
-    __name : "ShowMessageRequest",
+    __name : 'ShowMessageRequest',
     /**
      * @method getName
      * @return {String} request name

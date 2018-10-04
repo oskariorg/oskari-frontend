@@ -49,7 +49,7 @@ Oskari.clazz
 	    this._centerMap = (centerMap == true);
 	  }, {
 	    /** @static @property __name request name */
-	    __name : "HaravaInfoBox.ShowInfoBoxRequest",
+	    __name : 'HaravaInfoBox.ShowInfoBoxRequest',
 	    /**
 	     * @method getName
 	     * @return {String} request name

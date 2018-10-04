@@ -21,7 +21,7 @@ function(id, group, toolbarId) {
     this._toolbarId = toolbarId;
 }, {
     /** @static @property __name request name */
-    __name : "Toolbar.RemoveToolButtonRequest",
+    __name : 'Toolbar.RemoveToolButtonRequest',
     /**
      * @method getName
      * @return {String} request name

@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
             var popupLocation = this.getPopupPosition();
 
-            legend.on("click", function() {
+            legend.on('click', function() {
                 if( me._toggleToolState() === false){
                     return;
                 }
@@ -229,10 +229,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         getPopupPosition: function() {
           var popupLocation;
 
-          if (this._config.location && this._config.location.classes === "top left") {
-                popupLocation = "right";
+          if (this._config.location && this._config.location.classes === 'top left') {
+                popupLocation = 'right';
             } else {
-                popupLocation = "left";
+                popupLocation = 'left';
             }
         return popupLocation;
         },
@@ -302,7 +302,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
             } else {
 
-                dropdown.on("change", function(e, params) {
+                dropdown.on('change', function(e, params) {
 
                     var id = e.target.value ? e.target.value : jQuery(e.target).find(':selected').val();
                     layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(id);
@@ -421,7 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
          * @static @property {string[]} protocol array of superclasses
          */
         'protocol': [
-            "Oskari.mapframework.module.Module",
-            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
     });

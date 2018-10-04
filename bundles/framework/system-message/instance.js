@@ -129,8 +129,8 @@ Oskari.clazz.define(
                 Oskari.log(me.getName()).warn('Could not find element with id #oskari-system-messages');
                 return false;
             }
-            var icon = this.messageElement.find("div.messageIcon");
-            icon.on("click", this, function(e) {
+            var icon = this.messageElement.find('div.messageIcon');
+            icon.on('click', this, function(e) {
                 e.data.showMessagesPopup(e.data.localization.title, e.data.messages);
             });
             return true;
@@ -172,10 +172,10 @@ Oskari.clazz.define(
         toggleIcon: function(){
           var container = this.messageElement.find('div.message-container');
           if(this.messages.length > 0 && !container.hasClass('.flip')){
-              container.addClass("flip");
+              container.addClass('flip');
           }
           if(this.messages.length === 0 && container.hasClass('flip')){
-            container.toggleClass("flip");
+            container.toggleClass('flip');
           }
         },
         /**
@@ -202,7 +202,7 @@ Oskari.clazz.define(
                 me._dialog.close();
                 me.popupIsOpen = false;
             });
-            message = message.join("<br/>");
+            message = message.join('<br/>');
             this._dialog.show(title, message, [btn]);
             this._dialog.moveTo(jQuery('.messageIcon'), 'top', true);
         }

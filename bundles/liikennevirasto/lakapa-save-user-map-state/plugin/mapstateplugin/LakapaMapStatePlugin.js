@@ -72,7 +72,7 @@ function(locale, mapModule) {
     init : function(sandbox) {
         var me = this;
         this._sandbox = sandbox;
-        this._sandbox.printDebug("[LakapaMapStatePlugin] init");
+        this._sandbox.printDebug('[LakapaMapStatePlugin] init');
     },
     /**
      * @method register
@@ -174,7 +174,7 @@ function(locale, mapModule) {
      */
     _notifyAjaxFailure: function() {
     	 var me = this;
-    	 me._sandbox.printDebug("[LakapaMapStatePlugin] Map state chenge AJAX failed");
+    	 me._sandbox.printDebug('[LakapaMapStatePlugin] Map state chenge AJAX failed');
     },
     /**
      * @method _isAjaxRequestBusy
@@ -201,7 +201,7 @@ function(locale, mapModule) {
     	if( !jqhr) {
     		return;
     	}
-    	this._sandbox.printDebug("[LakapaMapStatePlugin] Abort jqhr ajax request");
+    	this._sandbox.printDebug('[LakapaMapStatePlugin] Abort jqhr ajax request');
     	jqhr.abort();
     	jqhr = null;
     	me._pendingAjaxQuery.busy = false;
@@ -226,7 +226,7 @@ function(locale, mapModule) {
     	var me = this;
     	me._pendingAjaxQuery.busy = false;
         me._pendingAjaxQuery.jqhr = null;
-        this._sandbox.printDebug("[LakapaMapStatePlugin] finished jqhr ajax request");
+        this._sandbox.printDebug('[LakapaMapStatePlugin] finished jqhr ajax request');
     },
     /**
      * @method _saveMapState
@@ -247,7 +247,7 @@ function(locale, mapModule) {
 
         if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&
             	dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
-            	me._sandbox.printDebug("[LakapaMapStatePlugin] Map state change NOT SENT (time difference < 500ms)");
+            	me._sandbox.printDebug('[LakapaMapStatePlugin] Map state change NOT SENT (time difference < 500ms)');
             	return;
         }
 
@@ -261,7 +261,7 @@ function(locale, mapModule) {
 
             	me._pendingAjaxQuery.jqhr = x;
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             success : function(resp) {
@@ -317,5 +317,5 @@ function(locale, mapModule) {
      * @property {Object} protocol
      * @static
      */
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol' : ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

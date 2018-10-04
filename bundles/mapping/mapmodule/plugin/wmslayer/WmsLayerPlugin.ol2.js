@@ -132,18 +132,18 @@ Oskari.clazz.define(
         _registerLayerEvents: function(layer, oskariLayer){
           var me = this;
           
-          layer.events.register("tileloadstart", layer, function(){
+          layer.events.register('tileloadstart', layer, function(){
             me.getMapModule().loadingState( oskariLayer._id, true);
           });
 
-          layer.events.register("tileloaded", layer, function(){
+          layer.events.register('tileloaded', layer, function(){
             me.getMapModule().loadingState( oskariLayer._id, false);
           });
 
-          layer.events.register("loadend", layer, function(){
+          layer.events.register('loadend', layer, function(){
          });
 
-         layer.events.register("tileerror", layer, function(){
+         layer.events.register('tileerror', layer, function(){
             me.getMapModule().loadingState( oskariLayer.getId(), null, true );
 
         });
@@ -216,7 +216,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (params && layer.isLayerOfType("WMS")) {
+            if (params && layer.isLayerOfType('WMS')) {
                 olLayerList = this.mapModule.getOLMapLayers(layer.getId());
                 count = 0;
                 if (olLayerList) {
@@ -225,7 +225,7 @@ Oskari.clazz.define(
                         olLayerList[i].mergeNewParams(params);
                     }
                 }
-                this._log.debug("WMS layer / merge new params: " + layer.getId() + ", found " + count);
+                this._log.debug('WMS layer / merge new params: ' + layer.getId() + ', found ' + count);
             }
         }
     },

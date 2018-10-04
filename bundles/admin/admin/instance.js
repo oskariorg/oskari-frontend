@@ -3,7 +3,7 @@
  *
  * Generic bundle for admins
  */
-Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
+Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -52,7 +52,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
-                    doOpen = event.getViewState() !== "close";
+                    doOpen = event.getViewState() !== 'close';
                 if (event.getExtension().getName() !== me.getName()) {
                     // not me -> do nothing
                     return;
@@ -63,5 +63,5 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
             }
         }
     }, {
-        "extend": ["Oskari.userinterface.extension.DefaultExtension"]
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     });

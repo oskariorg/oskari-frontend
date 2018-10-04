@@ -21,7 +21,7 @@ function(mapLayerId, zoomToExtent) {
     this._zoomToExtent = (zoomToExtent === true);
 }, {
     /** @static @property __name request name */
-    __name : "MapModulePlugin.MapMoveByLayerContentRequest",
+    __name : 'MapModulePlugin.MapMoveByLayerContentRequest',
     /**
      * @method getName
      * @return {String} request name

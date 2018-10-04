@@ -34,5 +34,5 @@ function() {
     stopPlugin : function() {
     }
 }, {
-    "extend" : ["Oskari.userinterface.extension.DefaultFlyout"]
+    'extend' : ['Oskari.userinterface.extension.DefaultFlyout']
 });

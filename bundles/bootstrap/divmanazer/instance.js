@@ -8,7 +8,7 @@
  * This overrides HTML templates with bootstrap 3 compatible ones.
  *
  */
-Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleInstance",
+Oskari.clazz.define('Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleInstance',
 
     /**
      * @method init called on constructing this instance
@@ -21,16 +21,16 @@ Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleIn
         /**
          * HTML templates
          */
-        "templates": {
+        'templates': {
 
             /* menu tile */
-            "Oskari.userinterface.Tile": '<li class="oskari-tile-closed">' + '<a href="#" class="oskari-tile-title"></a>' + '<div class="badge oskari-tile-status"></div>' + '</li>',
+            'Oskari.userinterface.Tile': '<li class="oskari-tile-closed">' + '<a href="#" class="oskari-tile-title"></a>' + '<div class="badge oskari-tile-status"></div>' + '</li>',
 
             /* flyout */
-            "Oskari.userinterface.Flyout": '<div class="panel oskari-flyout oskari-closed">' + '<div class="oskari-flyouttoolbar">' + '<div class="panel-heading oskari-flyoutheading"></div>' + '<div class="panel-title oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + '<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + '<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + '<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close icon-close icon-close:hover">' + '</div>' + '</div>' + '</div>' + '<div class="panel-body oskari-flyoutcontentcontainer">' + '<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>',
+            'Oskari.userinterface.Flyout': '<div class="panel oskari-flyout oskari-closed">' + '<div class="oskari-flyouttoolbar">' + '<div class="panel-heading oskari-flyoutheading"></div>' + '<div class="panel-title oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + '<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + '<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + '<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close icon-close icon-close:hover">' + '</div>' + '</div>' + '</div>' + '<div class="panel-body oskari-flyoutcontentcontainer">' + '<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>',
 
             /* view */
-            "Oskari.userinterface.View": '<div class="oskari-view"></div>'
+            'Oskari.userinterface.View': '<div class="oskari-view"></div>'
 
         },
 
@@ -38,18 +38,18 @@ Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleIn
         /**
          * @static @property flyout default positioning
          */
-        "defaults": {
-            "detach": {
-                "left": "212px",
-                "top": "200px"
+        'defaults': {
+            'detach': {
+                'left': '212px',
+                'top': '200px'
             },
-            "attach": {
-                "left": "192px",
-                "top": "200px"
+            'attach': {
+                'left': '192px',
+                'top': '200px'
             }
         }
     }, {
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Stateful'],
-        "extend": ["Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"]
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Stateful'],
+        'extend': ['Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance']
 
     });

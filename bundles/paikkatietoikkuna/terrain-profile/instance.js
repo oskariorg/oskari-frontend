@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             if (this.flyout) {
                 this.flyout.update(data);
             } else {
-                var p = jQuery("#mapdiv");
+                var p = jQuery('#mapdiv');
                 var position = p.position().left;
                 var offset = 40;
                 this.flyout = Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout', this.loc('terrainHeightProfile'), {

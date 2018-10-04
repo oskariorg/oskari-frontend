@@ -5,7 +5,7 @@
  *
  * See Oskari.digiroad.bundle.personaldata.PersonalDataBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundleInstance",
+Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.PersonalDataBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -28,7 +28,7 @@ function() {
 	 * @method getName
 	 * @return {String} the name for the component
 	 */
-	"getName" : function() {
+	'getName' : function() {
 		return this.__name;
 	},
 	/**
@@ -76,7 +76,7 @@ function() {
 	 * @method start
 	 * implements BundleInstance protocol start methdod
 	 */
-	"start" : function() {
+	'start' : function() {
 		var me = this;
 
 		if(me.started)
@@ -105,14 +105,14 @@ function() {
 	 * @method init
 	 * implements Module protocol init methdod - does nothing atm
 	 */
-	"init" : function() {
+	'init' : function() {
 		return null;
 	},
 	/**
 	 * @method update
 	 * implements BundleInstance protocol update method - does nothing atm
 	 */
-	"update" : function() {
+	'update' : function() {
 
 	},
 	/**
@@ -140,7 +140,7 @@ function() {
 	 * @method stop
 	 * implements BundleInstance protocol stop method
 	 */
-	"stop" : function() {
+	'stop' : function() {
 		var sandbox = this.sandbox();
 		for(p in this.eventHandlers) {
 			sandbox.unregisterFromEventByName(this, p);
@@ -210,5 +210,5 @@ function() {
 	 * @property {String[]} protocol
 	 * @static
 	 */
-	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+	'protocol' : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

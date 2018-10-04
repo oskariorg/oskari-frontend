@@ -167,14 +167,14 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 // detect layerId and replace with the corresponding layerModel
                 layerModel = service.findMapLayer(layerModel);
             }
-            if (!layerModel || !layerModel.getPermission("EDIT_LAYER_CONTENT") || !layerModel.isLayerOfType("WFS")) {
+            if (!layerModel || !layerModel.getPermission('EDIT_LAYER_CONTENT') || !layerModel.isLayerOfType('WFS')) {
                 return;
             }
 
             // add feature data tool for layer
             var label = this.getLocalization('title') || {},
                 tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-            tool.setName("content-editor");
+            tool.setName('content-editor');
             tool.setTitle(label);
             tool.setIconCls('show-content-editor-tool');
             tool.setTooltip(label);
@@ -381,7 +381,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             this.sandbox.postRequestByName(rn, [extension, 'close']);
         },
         showContentEditor: function(layerId) {
-            this._closeExtension("LayerSelection");
+            this._closeExtension('LayerSelection');
             this.setEditorMode(true, layerId);
         }
     }, {

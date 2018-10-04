@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             if (this._element) {
                 this._element.id = pId;
             } else {
-                Oskari.getSandbox().printWarn("Oskari.userinterface.component.Button.setId: No UI");
+                Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button.setId: No UI');
             }
         },
         /**

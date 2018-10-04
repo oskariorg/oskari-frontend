@@ -20,7 +20,7 @@ Oskari.clazz.define(
         this._ctrlKeyDown = ctrlKeyDown;
     }, {
         /** @static @property __name event name */
-        __name: "MapClickedEvent",
+        __name: 'MapClickedEvent',
         /**
          * @method getName
          * @return {String} the name for the event

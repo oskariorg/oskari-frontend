@@ -177,10 +177,10 @@ Oskari.clazz.define(
                 return;
             }
 
-            this._log.debug("Initializing my places module...");
+            this._log.debug('Initializing my places module...');
 
             // handles toolbar buttons related to my places
-            this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.ButtonHandler", this);
+            this.buttons = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.ButtonHandler', this);
             this.buttons.start();
 
             var user = Oskari.user();
@@ -210,7 +210,7 @@ Oskari.clazz.define(
             this.myPlacesService.init();
 
             // handles my places insert form etc
-            this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.MainView", this);
+            this.view = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.MainView', this);
             this.view.start();
 
             me._addRequestHandlers();
@@ -255,7 +255,7 @@ Oskari.clazz.define(
                     me
                 ),
                 categoryHandler = Oskari.clazz.create(
-                    "Oskari.mapframework.bundle.myplaces2.CategoryHandler",
+                    'Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                     me
                 ),
                 buttons = [],
@@ -303,22 +303,22 @@ Oskari.clazz.define(
                 name: this.loc('category.defaultName'),
                 point: {
                     shape: 1,
-                    color: "000000",
+                    color: '000000',
                     size: 3
                 },
                 line: {
-                    style: "",
+                    style: '',
                     cap: 0,
                     corner: 0,
                     width: 1,
-                    color: "3233ff"
+                    color: '3233ff'
                 },
                 area: {
-                    linestyle: "",
+                    linestyle: '',
                     linecorner: 0,
                     linewidth: 1,
-                    linecolor: "000000",
-                    color: "ffde00",
+                    linecolor: '000000',
+                    color: 'ffde00',
                     fill: -1
                 }
             };

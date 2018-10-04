@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             return this._plugin;
         },
         getName: function() {
-            return "Oskari.mapframework.bundle.publisher2.view.PanelMapLayers";
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelMapLayers';
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.

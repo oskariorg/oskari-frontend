@@ -21,7 +21,7 @@ function(config) {
     }
 
 }, {
-    __name : "DrawFilterPlugin.StartDrawFilteringRequest",
+    __name : 'DrawFilterPlugin.StartDrawFilteringRequest',
     getName : function() {
         return this.__name;
     },

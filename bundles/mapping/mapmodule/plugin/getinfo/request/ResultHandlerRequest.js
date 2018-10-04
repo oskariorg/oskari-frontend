@@ -17,7 +17,7 @@ Oskari.clazz
             this._callback = callback;
     }, {
         /** @static @property __name request name */
-        __name : "GetInfoPlugin.ResultHandlerRequest",
+        __name : 'GetInfoPlugin.ResultHandlerRequest',
         /**
          * @method getName
          * @return {String} request name

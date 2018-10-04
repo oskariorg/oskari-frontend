@@ -19,7 +19,7 @@ function(searchUrl) {
     this._searchUrl = searchUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService",
+    __qname : 'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService',
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -28,7 +28,7 @@ function(searchUrl) {
         return this.__qname;
     },
     /** @static @property __name service name */
-    __name : "SearchService",
+    __name : 'SearchService',
     /**
      * @method getName
      * @return {String} service name
@@ -51,11 +51,11 @@ function(searchUrl) {
         var lang = Oskari.getLang();
         var epsg = Oskari.getSandbox().getMap().getSrsName();
         jQuery.ajax({
-            dataType : "json",
-            type : "POST",
+            dataType : 'json',
+            type : 'POST',
             beforeSend: function(x) {
               if(x && x.overrideMimeType) {
-               x.overrideMimeType("application/json");
+               x.overrideMimeType('application/json');
               }
              },
             url : this._searchUrl,

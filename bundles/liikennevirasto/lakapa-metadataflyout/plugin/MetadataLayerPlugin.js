@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
                 layerId = layer.getId() + '';
 
                 if (layer.isLayerOfType('VECTOR') && ownedLayer.getId() + '' === layerId) {
-                    sandbox.printDebug("preselecting " + layerId);
+                    sandbox.printDebug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
@@ -121,8 +121,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
          * registers default vector formats
          */
         registerVectorFormats: function () {
-            this.registerVectorFormat("application/json", new OpenLayers.Format.GeoJSON({}));
-            this.registerVectorFormat("application/nlsfi-x-openlayers-feature", {
+            this.registerVectorFormat('application/json', new OpenLayers.Format.GeoJSON({}));
+            this.registerVectorFormat('application/nlsfi-x-openlayers-feature', {
                 read: function (data) {
                     return data;
                 }
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             }
 
 
-            this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
+            this._sandbox.printDebug('Setting Layer Opacity for ' + layer.getId() + ' to ' + layer.getOpacity());
             var mapLayer = this._map.getLayersByName('layer_' + layer.getId());
             if (mapLayer[0] !== null || mapLayer[0] !== undefined) {
                 mapLayer[0].setOpacity(layer.getOpacity() / 100);
@@ -182,10 +182,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
 
                 var style = styles[0];
                 // if( style.isDefault) {
-                styleMap.styles["default"] = style;
+                styleMap.styles['default'] = style;
                 // }
             } else {
-                this._sandbox.printDebug("NO SLD FOUND");
+                this._sandbox.printDebug('NO SLD FOUND');
             }
 
             var openLayer = new OpenLayers.Layer.Vector('layer_' + layer.getId(), layerOpts);
@@ -199,7 +199,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             }
 
 
-            this._sandbox.printDebug("#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for " + layer.getId());
+            this._sandbox.printDebug('#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for ' + layer.getId());
 
             if (keepLayerOnTop) {
                 this._map.setLayerIndex(openLayer, this._map.layers.length);
@@ -238,5 +238,5 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             return this._map.getLayersByName('layer_' + layer.getId());
         }
     }, {
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

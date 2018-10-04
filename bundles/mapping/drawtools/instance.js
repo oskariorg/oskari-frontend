@@ -22,7 +22,7 @@
  *
  * See Oskari.mapframework.bundle.infobox.InfoBoxBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundleInstance",
+Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -40,7 +40,7 @@ function() {
      * @static
      * @property __validShapeTypes
      */
-    __validShapeTypes : ["Point","Circle","Polygon","Box","Square","LineString"],
+    __validShapeTypes : ['Point','Circle','Polygon','Box','Square','LineString'],
 
     /**
      * @method getName

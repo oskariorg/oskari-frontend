@@ -14,7 +14,7 @@ function(bbox) {
 	this._bbox = bbox;
 }, {
 	/** @static @property __name request name */
-    __name : "ShowBoundingBoxRequest",
+    __name : 'ShowBoundingBoxRequest',
     /**
      * @method getName
      * @return {String} request name

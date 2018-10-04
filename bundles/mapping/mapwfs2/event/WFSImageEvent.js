@@ -24,7 +24,7 @@ function(layer, imageUrl, bbox, size, layerType, boundaryTile, keepPrevious) {
     this._keepPrevious = !!keepPrevious;
 }, {
     /** @static @property __name event name */
-    __name : "WFSImageEvent",
+    __name : 'WFSImageEvent',
 
     /**
      * @method getName

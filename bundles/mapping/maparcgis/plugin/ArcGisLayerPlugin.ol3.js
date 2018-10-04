@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         },
 
         __tuneURLsForOL3 : function(urls) {
-            var strToFind = "/export",
+            var strToFind = '/export',
                 length = strToFind.length;
             return _.map(urls, function(url) {
                 // Note! endsWith requires a polyfill. One is available in bundles/bundle.js
@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
       }
     }, {
-        "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
+        'extend' : ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

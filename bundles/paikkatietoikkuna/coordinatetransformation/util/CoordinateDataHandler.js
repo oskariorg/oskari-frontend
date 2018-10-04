@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
     },
     //Select from map
     addMapCoord: function (lonlat) {
-        var id = "coord_marker_" + this.mapCoordId;
+        var id = 'coord_marker_' + this.mapCoordId;
         var coord = {
             lon: lonlat.lon,
             lat: lonlat.lat,
@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
     populateMapCoordsAndMarkers: function () {
         var me = this;
         var lonFirst = this.helper.getMapEpsgValues().lonFirst;
-        var color = "#00ff00"; // add existing coords with different color
+        var color = '#00ff00'; // add existing coords with different color
         var mapCoord;
         var markerId;
         var label;

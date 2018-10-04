@@ -18,7 +18,7 @@ Oskari.clazz
             this._id = id;
     }, {
         /** @static @property __name request name */
-        __name : "ShowOwnStyleRequest",
+        __name : 'ShowOwnStyleRequest',
         /**
          * @method getName
          * @return {String} request name

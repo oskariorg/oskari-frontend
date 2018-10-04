@@ -185,10 +185,10 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
         },
         getMapdivOffset: function () {
-            var mapdiv = jQuery("#mapdiv");
+            var mapdiv = jQuery('#mapdiv');
             return {
-                "top": mapdiv.offset().top,
-                "left": mapdiv.offset().left
+                'top': mapdiv.offset().top,
+                'left': mapdiv.offset().left
             }
         },
         /**

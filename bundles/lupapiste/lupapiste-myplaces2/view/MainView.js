@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.lupapiste.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.MainView",
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.view.MainView',
 
 /**
  * @method create called automatically on construction

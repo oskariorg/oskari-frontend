@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             }
         },
         getName: function() {
-            return "Oskari.mapframework.bundle.publisher2.view.PanelMapTools";
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelMapTools';
         },
         /**
         * Sort tools

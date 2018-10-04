@@ -262,7 +262,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
                 if(legendUrl){
                     noLegendContainer.html(invalidLegendUrl);
-                    Oskari.log(me.instance.getName()).debug(invalidLegendUrl + ": " + legendUrl);
+                    Oskari.log(me.instance.getName()).debug(invalidLegendUrl + ': ' + legendUrl);
                 }
                 legendDiv.append(noLegendContainer);
             }

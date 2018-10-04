@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.EscPressedEvent'
 function() {
 }, {
     /** @static @property __name event name */
-    __name : "EscPressedEvent",
+    __name : 'EscPressedEvent',
     /**
      * @method getName
      * @return {String} the name for the event

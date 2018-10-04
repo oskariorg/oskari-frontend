@@ -17,28 +17,28 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
     this._extraFlyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout');
 
     this.supportedTypes = [{
-        id: "wfslayer",
-        localeKey: "wfs"
+        id: 'wfslayer',
+        localeKey: 'wfs'
     }, {
-        id: "wmslayer",
-        localeKey: "wms"
+        id: 'wmslayer',
+        localeKey: 'wms'
     }, {
-        id: "wmtslayer",
-        localeKey: "wmts"
+        id: 'wmtslayer',
+        localeKey: 'wmts'
     }, {
-        id: "vectortilelayer",
-        localeKey: "vectortile"
+        id: 'vectortilelayer',
+        localeKey: 'vectortile'
     }, {
-        id: "arcgislayer",
-        localeKey: "arcgis",
+        id: 'arcgislayer',
+        localeKey: 'arcgis',
         footer: false
     }, {
-        id: "arcgis93layer",
-        localeKey: "arcgis93",
+        id: 'arcgis93layer',
+        localeKey: 'arcgis93',
         footer: false
     }, {
-        id: "tiles3dlayer",
-        localeKey: "tiles3d",
+        id: 'tiles3dlayer',
+        localeKey: 'tiles3d',
         footer: false
     }];
     this._init();
@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             window.require([file], function(header) {
                 type.headerTemplate = _.template(header);
             }, function() {
-                me.log.warn('No admin header template for layertype: ' + type.id + " file was: " + file);
+                me.log.warn('No admin header template for layertype: ' + type.id + ' file was: ' + file);
             });
         });
         _.each(this.supportedTypes, function(type) {
@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             window.require([file], function(footer) {
                 type.footerTemplate = _.template(footer);
             }, function() {
-                me.log.warn('No admin footer template for layertype: ' + type.id + " file was: " + file);
+                me.log.warn('No admin footer template for layertype: ' + type.id + ' file was: ' + file);
             });
         });
     },
@@ -239,7 +239,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                     max: 100,
                     value: 100,
                     slide: function(event, ui) {
-                        jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
+                        jQuery(ui.handle).parents('.left-tools').find('#opacity-slider').val(ui.value);
                     }
                 });
 

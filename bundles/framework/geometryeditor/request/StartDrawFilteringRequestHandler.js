@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFil
 }, {
     handleRequest : function(core, request) {
         var drawMode = request.getMode();
-        this._log.debug("Start Drawing: " + drawMode);
+        this._log.debug('Start Drawing: ' + drawMode);
         this.drawFilterPlugin.startDrawFiltering({
             drawMode : request.getMode(),
             geometry : request.getGeometry(),

@@ -47,8 +47,8 @@
                     if (this.names.hasOwnProperty(lang)) {
                         usedLanguages[lang] = true;
                         names.push({
-                            "lang" : lang,
-                            "name" : this.names[lang]
+                            'lang' : lang,
+                            'name' : this.names[lang]
                         });
                     }
                 }
@@ -59,8 +59,8 @@
                 for (var j = 0; j < supportedLanguages.length; j++) {
                     if (!usedLanguages[supportedLanguages[j]]) {
                         names.push({
-                            "lang" : supportedLanguages[j],
-                            "name": ""
+                            'lang' : supportedLanguages[j],
+                            'name': ''
                         });
                     }
                 }

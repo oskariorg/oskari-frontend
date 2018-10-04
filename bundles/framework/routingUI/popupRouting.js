@@ -3,7 +3,7 @@
  *
  * Handles routing popup functionality.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
+Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
 
     /**
      * @method create called automatically on construction
@@ -33,9 +33,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
     }, {
 
         __templates: {
-            "wrapper": '<div></div>',
-            "instructions": '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
-            "routeInstructions": '<div class="route-instructions"><div class="title"></div><div class="instructions"></div></div>'
+            'wrapper': '<div></div>',
+            'instructions': '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
+            'routeInstructions': '<div class="route-instructions"><div class="title"></div><div class="instructions"></div></div>'
         },
         /**
          * @method showSelectionTools
@@ -168,16 +168,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             var me = this;
 
             var startingPointField = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
-            startingPointField.setIds("startingPoint", "startingPointInput");
+            startingPointField.setIds('startingPoint', 'startingPointInput');
             startingPointField.setPlaceholder(me.loc.startingPointTooltip);
-            startingPointField.getField().addClass("routing-field");
+            startingPointField.getField().addClass('routing-field');
             startingPointField.setEnabled(false);
             me.popupContent.append(startingPointField.getField());
 
             var finishingPointField = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
-            finishingPointField.setIds("finishingPoint", "finishingPointInput");
+            finishingPointField.setIds('finishingPoint', 'finishingPointInput');
             finishingPointField.setPlaceholder(me.loc.finishingPointTooltip);
-            finishingPointField.getField().addClass("routing-field");
+            finishingPointField.getField().addClass('routing-field');
             finishingPointField.setEnabled(false);
             me.popupContent.append(finishingPointField.getField());
 
@@ -193,7 +193,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             var me = this;
             me.params.fromlon = lonlat.lon;
             me.params.fromlat = lonlat.lat;
-            me.popupContent.find('#startingPointInput').val(lonlat.lon + " , " + lonlat.lat);
+            me.popupContent.find('#startingPointInput').val(lonlat.lon + ' , ' + lonlat.lat);
             me._setMarker(lonlat.lon, lonlat.lat, true, '3DCE00', me.loc.startingPoint, me.markerIds.start);
         },
 
@@ -206,7 +206,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.PopupRouting",
             var me = this;
             me.params.tolon = lonlat.lon;
             me.params.tolat = lonlat.lat;
-            me.popupContent.find('#finishingPointInput').val(lonlat.lon + " , " + lonlat.lat);
+            me.popupContent.find('#finishingPointInput').val(lonlat.lon + ' , ' + lonlat.lat);
             me._setMarker(lonlat.lon, lonlat.lat, false, 'CE0000', me.loc.finishingPoint, me.markerIds.end);
         },
 

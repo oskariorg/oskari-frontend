@@ -39,7 +39,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "TimeseriesLayerService",
+        __name: 'TimeseriesLayerService',
         /**
          * @method getName
          * @return {String} service name

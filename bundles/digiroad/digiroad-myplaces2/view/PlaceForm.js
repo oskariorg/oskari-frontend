@@ -3,7 +3,7 @@
  *
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.view.PlaceForm",
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.view.PlaceForm',
 
 /**
  * @method create called automatically on construction
@@ -53,8 +53,8 @@ function(instance) {
         }
 
         if(this.initialValues) {
-            ui.find('select[name=placedyntype]').attr("value", this.initialValues.place.dyntype);
-            ui.find('input[name=placedynvalue]').attr("value", this.initialValues.place.dynvalue);
+            ui.find('select[name=placedyntype]').attr('value', this.initialValues.place.dyntype);
+            ui.find('input[name=placedynvalue]').attr('value', this.initialValues.place.dynvalue);
         }
         return ui;
     },

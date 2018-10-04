@@ -20,7 +20,7 @@ function(moduleId, questionId, enabled) {
 	this.enabled = enabled;
 }, {
 	/** @static @property __name request name */
-    __name : "VisibilityQuestionRequest",
+    __name : 'VisibilityQuestionRequest',
     /**
      * @method getName
      * @return {String} request name

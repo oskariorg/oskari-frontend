@@ -24,7 +24,7 @@ function(contentId, printParams, geojsonData) {
      * @return {String} The event name.
      */
     getName : function() {
-        return "Printout.PrintWithoutUIEvent";
+        return 'Printout.PrintWithoutUIEvent';
     },
 
     getContentId: function() {

@@ -11,7 +11,7 @@ Oskari.app.playBundle(
   }
 });
 */
-Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
+Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
   function() {
     this._started = false;
     this.plugin = null;

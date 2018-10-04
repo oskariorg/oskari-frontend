@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpR
 	 */
     handleRequest : function(core, request) {
     	var me = this;
-        me.sandbox.printDebug("[Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpRequest] show help called");
+        me.sandbox.printDebug('[Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpRequest] show help called');
         me.sandbox.printDebug(request);
         me.instance.showHelp();
         //me.instance.plugins['Oskari.userinterface.Flyout'].createUI(request.getTransport());

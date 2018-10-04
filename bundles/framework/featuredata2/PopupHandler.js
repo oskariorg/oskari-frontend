@@ -3,7 +3,7 @@
  *
  * Handles map selection popup functionality.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
+Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
 
     /**
      * @method create called automatically on construction
@@ -20,11 +20,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
             p;
 
-        me.selectionPlugin = sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
+        me.selectionPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
 
         if (!me.selectionPlugin) {
             var config = {
-                id: "FeatureData",
+                id: 'FeatureData',
                 instance: this
             };
             me.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, sandbox);
@@ -33,7 +33,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
         }
 
         this.WFSLayerService = this.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-        this.localization = Oskari.getLocalization("FeatureData2");
+        this.localization = Oskari.getLocalization('FeatureData2');
         this.loc = this.localization.selectionTools;
         this.buttons = {
             'point': {
@@ -118,10 +118,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
     }, {
 
         __templates: {
-            "wrapper": '<div class="FeatureDataPopupWrapper"></div>',
-            "toolsButton": '<div style= "display: inline-block;"></div>',
-            "instructions": '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
-            "selectOptions": '<div>' +
+            'wrapper': '<div class="FeatureDataPopupWrapper"></div>',
+            'toolsButton': '<div style= "display: inline-block;"></div>',
+            'instructions': '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
+            'selectOptions': '<div>' +
                 '  <label id="select-from-top-layer" class="selectFeaturesOptions">' +
                 '    <input type="radio" name="selectOption" />' +
                 '    <span></span>' +
@@ -131,13 +131,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 '    <span></span>' +
                 '  </label>' +
                 '</div>',
-            "link": '<div class="link"><a href="javascript:void(0);"></a></div></div>'
+            'link': '<div class="link"><a href="javascript:void(0);"></a></div></div>'
         },
         /**
          * @method showSelectionTools
          * Handles tool button click -> opens selection tool dialog
          */
-        "showSelectionTools": function () {
+        'showSelectionTools': function () {
             var me = this,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 popupLoc = this.loc.title,
@@ -220,14 +220,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 activeTool = null,
                 startDrawing;
 
-            content.addClass("selectionToolsDiv");
+            content.addClass('selectionToolsDiv');
 
             _.forEach(me.buttons, function (button) {
                 var btnContainer = me.template.toolsButton.clone();
 
-                btnContainer.attr("title", button.tooltip);
+                btnContainer.attr('title', button.tooltip);
                 btnContainer.addClass(button.iconCls);
-                btnContainer.addClass("tool");
+                btnContainer.addClass('tool');
                 btnContainer.on('click', function (evt, deselect) {
                     me.removeButtonSelection(content);
                     if( deselect ) {
@@ -242,7 +242,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                         button.callback(startDrawing);
                     } else {
                         activeTool = button;
-                        btnContainer.addClass("active");
+                        btnContainer.addClass('active');
                         startDrawing = true;
                         button.callback(startDrawing);
                     }
@@ -259,13 +259,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
          */
         removeButtonSelection: function (content) {
             if(!content) {
-                content = jQuery(".selectionToolsDiv");
+                content = jQuery('.selectionToolsDiv');
             }
             var me = this,
-                isActive = jQuery(content).find(".tool").hasClass("active");
+                isActive = jQuery(content).find('.tool').hasClass('active');
 
             if (isActive) {
-                jQuery(content).find(".active").removeClass("active");
+                jQuery(content).find('.active').removeClass('active');
                 me.WFSLayerService.setSelectionToolsActive(false);
             }
         }

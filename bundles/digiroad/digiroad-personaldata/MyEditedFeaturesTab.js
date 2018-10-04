@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyEditedFeaturesTab',
 function(instance, localization) {
     this.instance = instance;
     this.loc = localization;
-    this.dataTypeLoc = Oskari.getLocalization("FeatureSelector")['gridheaders'];
+    this.dataTypeLoc = Oskari.getLocalization('FeatureSelector')['gridheaders'];
     this.tabsContainer = undefined;
     this.tabPanels = {};
 
@@ -105,7 +105,7 @@ function(instance, localization) {
         this.instance.sandbox.request(this.instance, mapmoveRequest);
 
         // add the myplaces layer to map
-        var layerId = "muokatut_kohteet";
+        var layerId = 'muokatut_kohteet';
         var layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
         if(!layer) {
             var request = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
@@ -134,7 +134,7 @@ function(instance, localization) {
             var service = sandbox.getService('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService');
             var callback = function(isSuccess) {
                 /* let's refresh map also if there */
-                var layerId = "muokatut_kohteet";
+                var layerId = 'muokatut_kohteet';
                 var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
                 if(layer) {
                     var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
@@ -151,10 +151,10 @@ function(instance, localization) {
                 dialog.fadeout();
             };
             var protocolType;
-            if(data.layerType === "SEGMENTTI_MUUTOS") {
-                protocolType = "edited_segments";
-            } else if(data.layerType === "LIIKENNE_ELEMENTTI_MUUTOS") {
-                protocolType = "edited_elements";
+            if(data.layerType === 'SEGMENTTI_MUUTOS') {
+                protocolType = 'edited_segments';
+            } else if(data.layerType === 'LIIKENNE_ELEMENTTI_MUUTOS') {
+                protocolType = 'edited_elements';
             }
             service.deleteEditedFeature(protocolType, data.id, callback);
         });
@@ -340,12 +340,12 @@ function(instance, localization) {
      * @param {Number} value an integer value of the data type.
      */
     _getNameFromValue: function(id, value) {
-        var mappings = Oskari.getLocalization("FeatureSelector")['mappings'];
+        var mappings = Oskari.getLocalization('FeatureSelector')['mappings'];
             return_value = null;
 
         if(mappings[id]) {
             return_value = mappings[id]['int'][value];
         }
-        return return_value || value || "";
+        return return_value || value || '';
     }
 });

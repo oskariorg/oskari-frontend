@@ -17,7 +17,7 @@ function(state) {
      * @return {String} The event name.
      */
     getName : function() {
-        return "Printout.PrintCanceledEvent";
+        return 'Printout.PrintCanceledEvent';
     },
 
     getState: function() {

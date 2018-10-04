@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             }
         },
         getName: function() {
-            return "Oskari.mapframework.bundle.publisher2.view.PanelToolLayout";
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout';
         },
 
         /**

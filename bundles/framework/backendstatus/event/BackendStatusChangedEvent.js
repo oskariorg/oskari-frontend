@@ -13,7 +13,7 @@ function(layerId, status) {
     this._status = status;
 }, {
     /** @static @property __name event name */
-    __name : "BackendStatus.BackendStatusChangedEvent",
+    __name : 'BackendStatus.BackendStatusChangedEvent',
     /**
      * @method getName
      * @return {String} the name for the event

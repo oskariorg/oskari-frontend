@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.request.UpdateExtensionRequest', funct
     this._location.top = extensionTop;
     this._location.left = extensionLeft;
 }, {
-    __name: "userinterface.UpdateExtensionRequest",
+    __name: 'userinterface.UpdateExtensionRequest',
     getName: function () {
         return this.__name;
     },

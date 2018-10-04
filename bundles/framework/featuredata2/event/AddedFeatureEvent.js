@@ -14,7 +14,7 @@ function(geometry, drawingMode) {
     this._drawingMode = drawingMode;
 }, {
     /** @static @property __name event name */
-    __name : "FeatureData.AddedFeatureEvent",
+    __name : 'FeatureData.AddedFeatureEvent',
     /**
      * @method getName
      * Returns event name

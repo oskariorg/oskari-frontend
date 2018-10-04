@@ -15,7 +15,7 @@ function(previousTabId, newTabId) {
     this._newTabId = newTabId;
 }, {
     /** @static @property __name event name */
-    __name : "Search.TabChangedEvent",
+    __name : 'Search.TabChangedEvent',
     /**
      * @method getName
      * Returns event name

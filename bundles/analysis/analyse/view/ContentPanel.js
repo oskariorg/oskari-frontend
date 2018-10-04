@@ -923,7 +923,7 @@ Oskari.clazz.define(
                     {
                         hover: true,
                         highlightOnly: true,
-                        renderIntent: "temporary"
+                        renderIntent: 'temporary'
                     });
 
             me.selectControl = new OpenLayers.Control.SelectFeature(

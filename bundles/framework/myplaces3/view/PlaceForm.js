@@ -3,7 +3,7 @@
  *
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
     /**
      * @method create called automatically on construction
@@ -132,12 +132,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
                     if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
                         placeLink = 'http://' + placeLink;
                     }
-                    placeLink = placeLink.replace("<", '');
-                    placeLink = placeLink.replace(">", '');
+                    placeLink = placeLink.replace('<', '');
+                    placeLink = placeLink.replace('>', '');
                 }
                 var imageLink = onScreenForm.find('input[data-name=imagelink]').val(),
                     categorySelection = onScreenForm.find('select[data-name=category]').val();
-                if(typeof categorySelection === "string"){
+                if(typeof categorySelection === 'string'){
                     categorySelection = parseInt(categorySelection);
                 }
                 values.place = {
@@ -185,7 +185,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
             this.initialValues = data;
         },
         setMeasurementResult: function (measurement, drawMode) {
-            if (drawMode === "point" || typeof measurement !== 'number') {
+            if (drawMode === 'point' || typeof measurement !== 'number') {
                return;
             }
             var measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);

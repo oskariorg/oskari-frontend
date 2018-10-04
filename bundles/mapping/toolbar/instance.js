@@ -7,7 +7,7 @@
  *
  * See Oskari.mapframework.bundle.toolbar.ToolbarBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -156,16 +156,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             var tbcontainer = this.templateMenutoolbar.clone();
             this.menutoolbarcontainer.append(tbcontainer);
             this.toolbars[tbid] = tbcontainer;
-            var c = tbcontainer.find(".oskariui-menutoolbarbuttongroup");
+            var c = tbcontainer.find('.oskariui-menutoolbarbuttongroup');
             this.containers[tbid] = c;
             if (data.title) {
-                tbcontainer.find(".oskariui-menutoolbar-title p").append(data.title);
+                tbcontainer.find('.oskariui-menutoolbar-title p').append(data.title);
             }
             if (data.show) {
                 tbcontainer.removeClass('oskari-closed');
             }
             if (data.closeBoxCallback) {
-                tbcontainer.find(".oskariui-menutoolbar-closebox div").on('click', data.closeBoxCallback);
+                tbcontainer.find('.oskariui-menutoolbar-closebox div').on('click', data.closeBoxCallback);
             }
 
             return c;
@@ -190,7 +190,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         },
         changeMenuToolbarTitle: function (title) {
             if (title) {
-                this.menutoolbarcontainer.find(".oskariui-menutoolbar-title p").html(title);
+                this.menutoolbarcontainer.find('.oskariui-menutoolbar-title p').html(title);
             }
         },
 
@@ -291,9 +291,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             return handler.apply(this, [event]);
         },
         measureTools: {
-            "default-basictools": {
-                "measureline": true,
-                "measurearea": true
+            'default-basictools': {
+                'measureline': true,
+                'measurearea': true
             }
         },
 
@@ -305,7 +305,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             /*
              * @method ToolSelectedEvent
              * */
-            "Toolbar.ToolSelectedEvent": function (event) {
+            'Toolbar.ToolSelectedEvent': function (event) {
                 var me = this;
                 var sandbox = this.getSandbox();
 
@@ -322,7 +322,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
 
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];
 
-                sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || "", false, null, null));
+                sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || '', false, null, null));
 
             }
         },

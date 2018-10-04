@@ -22,7 +22,7 @@ function(sandbox, flyout) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-        this.flyout.addTab({"title": request.getTitle(), "content": request.getContent(), "priority": request.getPriority(), "id": request.getId()});
+        this.flyout.addTab({'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId()});
    }
 }, {
     /**

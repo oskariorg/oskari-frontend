@@ -5,7 +5,7 @@
  * Updates information only when LayerSelector2 is being opened.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -69,7 +69,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             return this.__name;
         },
         /**
@@ -104,7 +104,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * @method start
          * implements BundleInstance protocol start method
          */
-        "start": function () {
+        'start': function () {
             var me = this;
 
             if (me._started) {
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 
             me._sandbox = sandbox;
 
-            me._mapLayerService = sandbox.getService("Oskari.mapframework.service.MapLayerService");
+            me._mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -165,14 +165,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        'update': function () {
 
         },
         /**
@@ -269,15 +269,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 
         },
         openURLinWindow: function (infoUrl) {
-            var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200",
+            var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200',
                 link = infoUrl;
-            window.open(link, "BackendStatus", wopParm);
+            window.open(link, 'BackendStatus', wopParm);
         },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        'stop': function () {
 
             var me = this,
                 sandbox = me._sandbox,
@@ -320,7 +320,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             if (!jqhr) {
                 return;
             }
-            this._log.debug("Abort jqhr ajax request");
+            this._log.debug('Abort jqhr ajax request');
             jqhr.abort();
             jqhr = null;
             me._pendingAjaxQuery.busy = false;
@@ -335,11 +335,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             var me = this;
             me._pendingAjaxQuery.busy = false;
             me._pendingAjaxQuery.jqhr = null;
-            this._log.debug("finished jqhr ajax request");
+            this._log.debug('finished jqhr ajax request');
         },
         _notifyAjaxFailure: function () {
             var me = this;
-            this._log.debug("BackendStatus AJAX failed");
+            this._log.debug('BackendStatus AJAX failed');
             me._processResponse({
                 backendstatus: []
             });
@@ -352,14 +352,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             var me = this;
             me.gotStartupProcessCall = me.gotStartupProcessCall || allKnown;
             if (!allKnown && me._pendingAjaxQuery.busy) {
-                this._log.debug("updateBackendStatus NOT SENT previous query is busy");
+                this._log.debug('updateBackendStatus NOT SENT previous query is busy');
                 return;
             }
             var dte = new Date();
             var dteMs = dte.getTime();
 
             if (!allKnown && me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < me.timeInterval) {
-                this._log.debug("updateBackendStatus NOT SENT (time difference < " + me.timeInterval + "ms)");
+                this._log.debug('updateBackendStatus NOT SENT (time difference < ' + me.timeInterval + 'ms)');
                 return;
             }
 
@@ -376,7 +376,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (resp) {
@@ -404,14 +404,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             var me = this;
             var sandbox = this._sandbox;
             if (!resp) {
-                this._log.debug("empty data from server");
+                this._log.debug('empty data from server');
                 return;
             }
 
             var backendStatusArr = resp.backendstatus;
             // FIXME use ===
             if (!backendStatusArr || backendStatusArr.length === undefined) {
-                this._log.debug("backendStatus NO data");
+                this._log.debug('backendStatus NO data');
                 return;
             }
 
@@ -478,7 +478,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                     if (maplayer) {
                         maplayer.setBackendStatus(this.backendStatus[p].status);
                         /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
-                        if (changeNotifications[p].changed || "DOWN" === maplayer.getBackendStatus()) {
+                        if (changeNotifications[p].changed || 'DOWN' === maplayer.getBackendStatus()) {
                             if (sandbox.isLayerAlreadySelected(maplayer.getId())) {
                                 // If the layer's been selected, notify immediately
                                 evt = evtBuilder(maplayer.getId(), maplayer.getBackendStatus());
@@ -527,5 +527,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

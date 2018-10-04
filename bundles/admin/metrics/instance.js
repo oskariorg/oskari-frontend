@@ -3,7 +3,7 @@
  *
  * Metrics bundle for admins. Displayes metrics gathered by serverside functions.
  */
-Oskari.clazz.define("Oskari.admin.bundle.metrics.MetricsAdminBundleInstance",
+Oskari.clazz.define('Oskari.admin.bundle.metrics.MetricsAdminBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -13,7 +13,7 @@ Oskari.clazz.define("Oskari.admin.bundle.metrics.MetricsAdminBundleInstance",
     function () {
     }, {
         getName : function() {
-            return "AdminMetrics";
+            return 'AdminMetrics';
         },
         start : function() {
             var me = this;
@@ -22,8 +22,8 @@ Oskari.clazz.define("Oskari.admin.bundle.metrics.MetricsAdminBundleInstance",
             var title = 'Metrics';
             var content = jQuery('<div></div>');
             jQuery.ajax({
-                dataType : "json",
-                type : "GET",
+                dataType : 'json',
+                type : 'GET',
                 url : Oskari.urls.getRoute('Metrics'),
                 error : function() {
                     content.append('Error loading metrics');

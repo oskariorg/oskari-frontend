@@ -268,7 +268,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 return 0;
             }
             var sourceProj = this.getMap().getView().getProjection();
-            if (sourceProj.getUnits() !== "degrees") {
+            if (sourceProj.getUnits() !== 'degrees') {
                 return geometry.getArea();
             }
             var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
@@ -290,7 +290,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 return 0;
             }
             var sourceProj = this.getMap().getView().getProjection();
-            if (sourceProj.getUnits() !== "degrees") {
+            if (sourceProj.getUnits() !== 'degrees') {
                 return geometry.getLength();
             }
             var coordinates = geometry.getCoordinates();

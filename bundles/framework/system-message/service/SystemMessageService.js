@@ -11,8 +11,8 @@ function(instance) {
     this._sandbox = instance.sandbox;
     this.urls = {};
 },{
-  __name: "system.message.SystemMessageService",
-  __qname : "Oskari.framework.bundle.system.message.service.SystemMessageService",
+  __name: 'system.message.SystemMessageService',
+  __qname : 'Oskari.framework.bundle.system.message.service.SystemMessageService',
   getQName : function() {
       return this.__qname;
   },

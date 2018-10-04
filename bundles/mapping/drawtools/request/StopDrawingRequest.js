@@ -26,7 +26,7 @@ Oskari.clazz
             this._supressEvent = supressEvent;
         }, {
             /** @static @property __name request name */
-            __name: "DrawTools.StopDrawingRequest",
+            __name: 'DrawTools.StopDrawingRequest',
             /**
              * @method getName
              * @return {String} request name

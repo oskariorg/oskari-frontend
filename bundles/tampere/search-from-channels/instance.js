@@ -273,7 +273,7 @@ Oskari.clazz.define(
                     return;
                 }
                 if (event.getViewState() !== 'close') {
-                    var searchFromChannelsContainer = jQuery(".searchFromChannelsContainer"),
+                    var searchFromChannelsContainer = jQuery('.searchFromChannelsContainer'),
                     advancedContainer = searchFromChannelsContainer.find('div.advanced'),
                     moreLessLink = searchFromChannelsContainer.find('a.moreLessLink');
 
@@ -385,7 +385,7 @@ Oskari.clazz.define(
                 var channelIds = [];
 
                 me.optionPanel.find("input[name='channelChkBox']").each( function () {
-                    if(jQuery(this).is(":checked")){
+                    if(jQuery(this).is(':checked')){
                         channelIds.push(jQuery(this).val());
                     }
                 });
@@ -397,7 +397,7 @@ Oskari.clazz.define(
                 }
 
                 me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-                me._progressSpinner.insertTo(jQuery(".searchFromChannelsOptions"));
+                me._progressSpinner.insertTo(jQuery('.searchFromChannelsOptions'));
                 me._progressSpinner.start();
 
                 me.searchService.doSearch(
@@ -468,7 +468,7 @@ Oskari.clazz.define(
         _getChannelsForAdvancedUi: function(searchFromChannelsContainer,advancedContainer,moreLessLink, createTab) {
             var me = this;
             me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-            me._progressSpinner.insertTo(jQuery(".searchFromChannelsOptions"));
+            me._progressSpinner.insertTo(jQuery('.searchFromChannelsOptions'));
             me._progressSpinner.start();
 
             me.optionService.getOptions(function (data) {
@@ -543,7 +543,7 @@ Oskari.clazz.define(
             var me = this,
                 searchResultWindow = me.templates.templateSearchResultsWindow.clone(),
                 resultList = null,
-                mapDiv = jQuery("#contentMap"),
+                mapDiv = jQuery('#contentMap'),
                 types = [];
 
             jQuery.each(result.locations, function(index, val) {
@@ -702,7 +702,7 @@ Oskari.clazz.define(
             var btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
-            btn.setTitle(me.getLocalization("show-all-on-map"));
+            btn.setTitle(me.getLocalization('show-all-on-map'));
             btn.addClass('show-on-map');
             jQuery(btn.getElement()).on('click',
                 function (event) {
@@ -716,7 +716,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
-            btn.setTitle(me.getLocalization("show-selected-on-map"));
+            btn.setTitle(me.getLocalization('show-selected-on-map'));
             btn.addClass('show-on-map');
             jQuery(btn.getElement()).on('click',
                 function (event) {
@@ -729,7 +729,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
-            btn.setTitle(me.getLocalization("back-to-search"));
+            btn.setTitle(me.getLocalization('back-to-search'));
             jQuery(btn.getElement()).on('click',
                 function (event) {
                    me.toggleParentFlyout(me.optionPanel, searchResultWindow, mapDiv);
@@ -772,14 +772,14 @@ Oskari.clazz.define(
          _updateMapModuleSize: function (mapDiv, searchResultWindow) {
             var me = this;
 
-            if(searchResultWindow.find('div.resultList').is(":visible")){
-                mapDiv.css("margin-left",searchResultWindow.width());
-                jQuery(".oskariui-center").width(jQuery(".oskariui-center").width()-searchResultWindow.width());
-                jQuery(".fullscreenDiv").hide();
+            if(searchResultWindow.find('div.resultList').is(':visible')){
+                mapDiv.css('margin-left',searchResultWindow.width());
+                jQuery('.oskariui-center').width(jQuery('.oskariui-center').width()-searchResultWindow.width());
+                jQuery('.fullscreenDiv').hide();
             }else{
-                mapDiv.css("margin-left",jQuery("#maptools").width());
-                jQuery(".oskariui-center").width(jQuery(".oskariui-center").width()+searchResultWindow.width());
-                jQuery(".fullscreenDiv").show();
+                mapDiv.css('margin-left',jQuery('#maptools').width());
+                jQuery('.oskariui-center').width(jQuery('.oskariui-center').width()+searchResultWindow.width());
+                jQuery('.fullscreenDiv').show();
             }
 
             var reqBuilder = Oskari.requestBuilder(
@@ -866,9 +866,9 @@ Oskari.clazz.define(
                     olLayer.setSource(source);
                     isSelected = true;
                 }else{
-                    var row = tableBody.find("tr[name="+value.id+"]");
-                    var firstCell = row.find("td:first-child");
-                    if(firstCell.find("input").is(":checked")){
+                    var row = tableBody.find('tr[name='+value.id+']');
+                    var firstCell = row.find('td:first-child');
+                    if(firstCell.find('input').is(':checked')){
                         me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                         feature = format.readFeature(value.GEOMETRY);
                         source.addFeatures([feature]);
@@ -936,7 +936,7 @@ Oskari.clazz.define(
             for (i = 0; i < data.length; i += 1) {
                 row = data[i];
                 resultContainer = me.templates.templateResultTableRow.clone();
-                resultContainer.attr("name",row.id);
+                resultContainer.attr('name',row.id);
                 cells = resultContainer.find('td');
                 titleCell = jQuery(cells[1]);
                 title = titleCell.find('a');
@@ -1102,7 +1102,7 @@ Oskari.clazz.define(
                 text = dataField.locale.name;
                 newCheckbox = me.templates.checkbox.clone();
                 newCheckboxDef = newCheckbox.find(':checkbox');
-                newCheckboxDef.attr('name', "channelChkBox");
+                newCheckboxDef.attr('name', 'channelChkBox');
                 newCheckboxDef.attr('value', dataField.id);
                 newCheckboxDef.prop('checked', !!dataField.isDefault);
                 newCheckbox.find('label.searchFromChannelsTypeText').append(text);

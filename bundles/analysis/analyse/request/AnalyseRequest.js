@@ -6,7 +6,7 @@ Oskari.clazz
             this._selections = selections;
         },
         {
-            __name: "analyse.AnalyseRequest",
+            __name: 'analyse.AnalyseRequest',
             getName: function () {
                 return this.__name;
             },

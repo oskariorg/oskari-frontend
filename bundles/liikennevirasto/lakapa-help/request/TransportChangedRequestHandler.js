@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.Transport
 	 */
     handleRequest : function(core, request) {
     	var me = this;
-        me.sandbox.printDebug("[Oskari.liikennevirasto.bundle.lakapa.help.request.TransportChangedRequest] transport changed");
+        me.sandbox.printDebug('[Oskari.liikennevirasto.bundle.lakapa.help.request.TransportChangedRequest] transport changed');
         me.instance.plugins['Oskari.userinterface.Flyout'].createUI(request.getTransport());
 
     }

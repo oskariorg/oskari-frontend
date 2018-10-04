@@ -6,7 +6,7 @@
  * See Oskari.mapframework.bundle.featuredata2.FeatureDataBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -32,7 +32,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function() {
+        'getName': function() {
             return this.__name;
         },
 
@@ -76,7 +76,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        "start": function() {
+        'start': function() {
             if (this.started) {
                 return;
             }
@@ -127,11 +127,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     };
                 sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
 
-                this.selectionPlugin = this.sandbox.findRegisteredModuleInstance("MainMapModuleMapSelectionPlugin");
+                this.selectionPlugin = this.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
 
                 if (!this.selectionPlugin) {
                     var config = {
-                        id: "FeatureData"
+                        id: 'FeatureData'
                     };
                     this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
                     mapModule.registerPlugin(this.selectionPlugin);
@@ -155,7 +155,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function() {
+        'init': function() {
             var me = this;
             this.requestHandlers = {
                 showFeatureHandler: Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.request.ShowFeatureDataRequestHandler', me)
@@ -175,7 +175,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function() {
+        'update': function() {
 
         },
 
@@ -377,7 +377,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (event.getExtension().getName() !== this.getName()) {
                     // wasn't me or disabled -> do nothing
                     return;
-                } else if (event.getViewState() === "close") {
+                } else if (event.getViewState() === 'close') {
                     plugin.setEnabled(false);
                     if (this.plugin) {
                         this.plugin.handleCloseFlyout();
@@ -401,7 +401,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                 me.selectionPlugin.clearDrawing();
 
-                var evt = Oskari.eventBuilder("WFSSetFilter")(features);
+                var evt = Oskari.eventBuilder('WFSSetFilter')(features);
                 me.sandbox.notifyAll(evt);
 
             },
@@ -432,7 +432,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 me.selectionPlugin.setFeatures(geojson.features);
                 me.selectionPlugin.stopDrawing();
 
-                var event = Oskari.eventBuilder("WFSSetFilter")(geojson);
+                var event = Oskari.eventBuilder('WFSSetFilter')(geojson);
                 me.sandbox.notifyAll(event);
 
                 me.popupHandler.removeButtonSelection();
@@ -450,7 +450,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function() {
+        'stop': function() {
             var sandbox = this.sandbox(),
                 p;
             for (p in this.eventHandlers) {
@@ -538,5 +538,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

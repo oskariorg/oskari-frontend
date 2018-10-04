@@ -74,9 +74,9 @@ function () {
         if(name === 'GetFeedbackServiceRequest') {
             // recognized, but nothing to add
         } else if(name === 'GetFeedbackRequest') {
-            params.method = "getFeedback";
+            params.method = 'getFeedback';
         } else if(name === 'PostFeedbackRequest') {
-            params.method = "postFeedback";
+            params.method = 'postFeedback';
         } else {
             return;
         }
@@ -103,8 +103,8 @@ function () {
         }
         jQuery.ajax({
             data: params,
-            dataType : "json",
-            type : "POST",
+            dataType : 'json',
+            type : 'POST',
             url : Oskari.urls.getRoute('Feedback'),
             error : function (response) {
                 var success = false;

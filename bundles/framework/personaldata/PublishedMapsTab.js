@@ -351,8 +351,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
         createProjectionChangeDialog: function (cb) {
             var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var btn = dialog.createCloseButton(this.loc("projectionError").ok);
-            var cancel = dialog.createCloseButton( this.loc("projectionError").cancel );
+            var btn = dialog.createCloseButton(this.loc('projectionError').ok);
+            var cancel = dialog.createCloseButton( this.loc('projectionError').cancel );
             cancel.setHandler( function () {
                 dialog.close(true);
             });
@@ -361,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 cb();
                 dialog.close(true);
             });
-            dialog.show(this.loc("projectionError").title, this.loc("projectionError").msg, [cancel, btn]);
+            dialog.show(this.loc('projectionError').title, this.loc('projectionError').msg, [cancel, btn]);
             dialog.makeDraggable();
         },
         /**

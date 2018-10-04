@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.harava.bundle.haravagetinfo.plugin.HaravaGetInfoPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.harava.bundle.MapModulePluginBundleInstance",
+Oskari.clazz.define('Oskari.harava.bundle.MapModulePluginBundleInstance',
 
 /**
  * @method create called automatically on construction

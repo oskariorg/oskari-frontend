@@ -14,7 +14,7 @@ function(transport) {
 	this._transport = transport;
 }, {
 	/** @static @property __name request name */
-    __name : "TransportChangedRequest",
+    __name : 'TransportChangedRequest',
     /**
      * @method getName
      * @return {String} request name

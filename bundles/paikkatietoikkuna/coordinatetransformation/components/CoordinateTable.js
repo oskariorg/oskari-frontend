@@ -51,10 +51,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
         },
         getElements: function () { //TODO: store references
             var elements = {
-                "table": this.getContainer().find( '.oskari-coordinate-table' ),
-                "rows": this.getContainer().find( ".oskari-coordinate-table tr" ),
-                "header": this.getContainer().find( ".oskari-tbl-header" ),
-                "tableContent": this.getContainer().find('.oskari-table-content')
+                'table': this.getContainer().find( '.oskari-coordinate-table' ),
+                'rows': this.getContainer().find( '.oskari-coordinate-table tr' ),
+                'header': this.getContainer().find( '.oskari-tbl-header' ),
+                'tableContent': this.getContainer().find('.oskari-table-content')
             }
         return elements;
         },
@@ -121,10 +121,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
         bindTableScroll: function () {
             var me = this;
             var content = this.getElements().tableContent;
-            content.on("scroll", function(evt){
+            content.on('scroll', function(evt){
                 clearTimeout(me.scrollTimer);
                 me.scrollTimer = setTimeout(function(){
-                    me.trigger("TableScroll", content.scrollTop());
+                    me.trigger('TableScroll', content.scrollTop());
                 }, 50);
             });
 
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
         create: function () {
             var me = this;
             var title;
-            if (this.type === "input"){
+            if (this.type === 'input'){
                 title = this.loc('flyout.coordinateTable.input');
             } else {
                 title = this.loc('flyout.coordinateTable.output');
@@ -207,13 +207,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             //table.trigger('RowCountChanged');
         },
         displayNumberOfDataRows: function ( number ) {
-            this.getContainer().find(".row-counter").text( number ); //TODO store ref
+            this.getContainer().find('.row-counter').text( number ); //TODO store ref
         },
         setIsEditable: function ( editable ) {
             this.isEditable = editable;
             var rows = this.getElements().rows;
             rows.each( function () {
-                jQuery(this).find('.cellContent').attr("contenteditable", editable);
+                jQuery(this).find('.cellContent').attr('contenteditable', editable);
             });
         },
         emptyTableCells: function() {
@@ -221,11 +221,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             var cell;
             var rows = this.getElements().rows;
             for (var i = 0; i < rows.length; i++ ) {
-                jQuery(rows[i]).find(".cellContent").each(function(){
+                jQuery(rows[i]).find('.cellContent').each(function(){
                     cell = jQuery(this);
-                    cell.text("");//empty();
-                    cell.removeClass("invalid-coord");
-                    cell.attr("contenteditable", isEditable);
+                    cell.text('');//empty();
+                    cell.removeClass('invalid-coord');
+                    cell.attr('contenteditable', isEditable);
                 });
             }
         },
@@ -281,25 +281,25 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             if (!epsgValues || !epsgValues.coord){
                 return;
             }
-            var x = "",
-                y = "",
-                z = "",
+            var x = '',
+                y = '',
+                z = '',
                 lonFirst = epsgValues.lonFirst,
                 coordSystem = epsgValues.coord;
 
             switch ( coordSystem ) {
-                case "COORD_PROJ_3D":
+                case 'COORD_PROJ_3D':
                     x = this.loc('flyout.coordinateTable.geoX');
                     y = this.loc('flyout.coordinateTable.geoY');
                     z = this.loc('flyout.coordinateTable.geoZ');
                     break;
-                case "COORD_PROJ_2D":
+                case 'COORD_PROJ_2D':
                     x = this.loc('flyout.coordinateTable.east');
                     y = this.loc('flyout.coordinateTable.north');
                     break;
-                case "COORD_GEOG_3D":
+                case 'COORD_GEOG_3D':
                     z = this.loc('flyout.coordinateTable.ellipseElevation');
-                case "COORD_GEOG_2D":
+                case 'COORD_GEOG_2D':
                     x = this.loc('flyout.coordinateTable.lon');
                     y = this.loc('flyout.coordinateTable.lat');
                     break;
@@ -326,11 +326,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                 } else {
                     header.find('th').addClass('three');
                 }
-            this.getContainer().find(".oskari-table-header").append(header);
+            this.getContainer().find('.oskari-table-header').append(header);
         },
         handleClipboardPasteEvent: function () {
             var me = this;
-            var cells = document.getElementsByClassName("cell");
+            var cells = document.getElementsByClassName('cell');
 
             for ( var i = 0; i < cells.length; i++ ) {
                 cells[i].addEventListener('paste', function( e ) {
@@ -343,7 +343,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                     pastedData = clipboardData.getData('Text');
 
                     var dataJson = me.transformView.dataHandler.validateData( pastedData );
-                    me.transformView.updateCoordinateData( "input", dataJson );
+                    me.transformView.updateCoordinateData( 'input', dataJson );
                 });
             }
         }

@@ -14,7 +14,7 @@ function(show) {
 	this._show = show;
 }, {
 	/** @static @property __name request name */
-    __name : "ToggleTransportSelectorRequest",
+    __name : 'ToggleTransportSelectorRequest',
     /**
      * @method getName
      * @return {String} request name

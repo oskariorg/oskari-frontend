@@ -399,12 +399,12 @@ Oskari.clazz.define(
                extend.addClass(link.options.id.toLowerCase());
              }
              if(link.options.id !== 'icon') {
-               extend.css("margin","5px");
+               extend.css('margin','5px');
              }
              extend.find('a').text(link.title);
              template.append(extend);
              if(typeof link.options.callback === 'function') {
-               extend.on("click", function(e) {
+               extend.on('click', function(e) {
                  link.options.callback(e);
                });
              }

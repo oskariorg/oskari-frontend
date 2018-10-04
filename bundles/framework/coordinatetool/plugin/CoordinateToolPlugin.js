@@ -316,7 +316,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var topOffsetElement = jQuery('div.mobileToolbarDiv');
                 me._popup.addClass('coordinatetool__popup');
                 me._popup.addClass('mobile-popup');
-                me._popup.setColourScheme({"bgColour": "#e6e6e6"});
+                me._popup.setColourScheme({'bgColour': '#e6e6e6'});
 
                 //hide mouse coordinates
                 popupContent.find('.mousecoordinates-div').hide();
@@ -345,10 +345,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.makeDraggable();
                 me._popup.addClass('coordinatetool__popup');
                 //check location of the tool and open popup according to it
-                if (me._config.location && me._config.location.classes === "top left") {
-                    popupLocation = "right";
+                if (me._config.location && me._config.location.classes === 'top left') {
+                    popupLocation = 'right';
                 } else {
-                    popupLocation = "left";
+                    popupLocation = 'left';
                 }
 
                 //show mouse coordinates
@@ -480,7 +480,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var msgLat = (messageData && messageData.lat) ? messageData.lat : lat;
                 var msg = msgLat + ', ' + msgLon;
                 if(me._config.supportedProjections) {
-                    msg += ' (' + jQuery("#projection option:selected" ).text() + ')';
+                    msg += ' (' + jQuery('#projection option:selected' ).text() + ')';
                 }
 
                 var marker = {
@@ -515,7 +515,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._previousProjection = null;
                 me._showPopup();
 
-                me._labelMetricOrDegrees(jQuery("#projection option:selected").val());
+                me._labelMetricOrDegrees(jQuery('#projection option:selected').val());
             }
         },
 
@@ -624,7 +624,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             // XY icon click
             el.off('click');
             el.on('click', function(event) {
-                if (me._sandbox.mapMode !== "mapPublishMode") {
+                if (me._sandbox.mapMode !== 'mapPublishMode') {
                     me._toggleToolState();
                     event.stopPropagation();
                 }
@@ -813,7 +813,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             if (data) {
-                var degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min");
+                var degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, 'min');
 
                 var coordinateDisplayDeg = coordinateFormatDisplayX.find('div.coordinatedisplay-degx');
                 var coordinateDisplayDegmin = coordinateFormatDisplayX.find('div.coordinatedisplay-degminx');
@@ -871,7 +871,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
         _updateEmergencyCallMessage: function(data) {
             var me = this,
-                degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min"),
+                degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, 'min'),
                 coordinateDisplayEmergencyCall = me._popupContent.find('div.coordinatedisplay-emergencycall');
 
             var minutesX = ''  + parseFloat(degmin.minutesX.replace(me._decimalSeparator,'.')).toFixed(3);
@@ -923,7 +923,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                             if (!title) {
                                 title = r.type;
                             }
-                            me._reverseGeocodeLabel.append("<div>" + title + "<u>" + r.name + "</u></div>");
+                            me._reverseGeocodeLabel.append('<div>' + title + '<u>' + r.name + '</u></div>');
                         }
                     }
                 },
@@ -941,7 +941,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         message = me._instance.getName() + ': ' + messageJSON.error;
                     }
 
-                    Oskari.log("coordinatetool").warn(message);
+                    Oskari.log('coordinatetool').warn(message);
                 },data.lonlat.lon, data.lonlat.lat);
 
         },
@@ -960,7 +960,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             if(me._getPreciseTransform) {
                 try {
-                    var changeToProjection = jQuery("#projection option:selected").val();
+                    var changeToProjection = jQuery('#projection option:selected').val();
                     var fromProjection =  me.getMapModule().getProjection();
                     if(me._projectionChanged) {
                         fromProjection = me._previousProjection;
@@ -1307,7 +1307,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @static @property {string[]} protocol array of superclasses
          */
         'protocol': [
-            "Oskari.mapframework.module.Module",
-            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
     });

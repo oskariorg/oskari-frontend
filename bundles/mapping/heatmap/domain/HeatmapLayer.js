@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
         this.init();
     }, {
     	init : function() {
-	        this._layerType = "HEATMAP";
+	        this._layerType = 'HEATMAP';
             this._selectedProperty = null;
             this._radius = 30;
             this._pixelsPerCell = 10;
@@ -103,5 +103,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
         }
 
     }, {
-        "extend": ["Oskari.mapframework.domain.WmsLayer"]
+        'extend': ['Oskari.mapframework.domain.WmsLayer']
     });

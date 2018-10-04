@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
     this._mapLayerService = null;
 
     this.features = [];
-    this.layerId = "liikenne_elementti";
+    this.layerId = 'liikenne_elementti';
 }, {
     __name: 'DigiroadMyPlaces.TurningRestrictionsPlugin',
 
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
             this._sandbox.request(this, request);
         }
 
-        this._addVectorLayer(this.url, "LIIKENNE_ELEMENTTI", this.layerId);
+        this._addVectorLayer(this.url, 'LIIKENNE_ELEMENTTI', this.layerId);
     },
 
     finishRestriction: function(data, callback) {
@@ -107,24 +107,24 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
 
     _baseJson: function(url, type, name) {
         return {
-            "id": name+'_vector',
-            "type": "dr-vectorlayer",
-            "opacity": 100,
-            "name": name+'_vector',
-            "minScale": 25001,
-            "maxScale": 1,
-            "inspire": "Vektoritasot",
-            "orgName": "Liikenne-elementit",
-            "protocolType": "WFS",
-            "protocolOpts": {
-                "url": url,
-                "srsName": "EPSG:3067",
-                "version": "1.1.0",
-                "featureType": type,
-                "featureNS": "http://localhost/LiVi",
-                "featurePrefix": "LiVi",
-                "geometryName": "GEOMETRY",
-                "outputFormat": "json"
+            'id': name+'_vector',
+            'type': 'dr-vectorlayer',
+            'opacity': 100,
+            'name': name+'_vector',
+            'minScale': 25001,
+            'maxScale': 1,
+            'inspire': 'Vektoritasot',
+            'orgName': 'Liikenne-elementit',
+            'protocolType': 'WFS',
+            'protocolOpts': {
+                'url': url,
+                'srsName': 'EPSG:3067',
+                'version': '1.1.0',
+                'featureType': type,
+                'featureNS': 'http://localhost/LiVi',
+                'featurePrefix': 'LiVi',
+                'geometryName': 'GEOMETRY',
+                'outputFormat': 'json'
             }
         }
     },
@@ -135,8 +135,8 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
 
     startPlugin: function(sandbox) {
         this._sandbox = sandbox;
-        this._myPlacesService = sandbox.getService("Oskari.digiroad.bundle.myplaces2.service.MyPlacesService");
-        this._vectorLayerPlugin = sandbox.findRegisteredModuleInstance("MainMapModuleDigiroadVectorLayerPlugin");
+        this._myPlacesService = sandbox.getService('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService');
+        this._vectorLayerPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleDigiroadVectorLayerPlugin');
         this._mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         sandbox.register(this);
@@ -166,7 +166,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
     stop: function(sandbox) {}
 }, {
     'protocol' : [
-        "Oskari.mapframework.module.Module",
-        "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+        'Oskari.mapframework.module.Module',
+        'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
     ]
 });

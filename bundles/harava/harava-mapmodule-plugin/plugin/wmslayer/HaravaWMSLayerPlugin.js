@@ -166,7 +166,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             if(!layer.isLayerOfType('WMS'))
                 continue;
 
-            sandbox.printDebug("preselecting " + layerId);
+            sandbox.printDebug('preselecting ' + layerId);
             this.addMapLayerToMap(layer, true, layer.isBaseLayer());
         }
 
@@ -193,14 +193,14 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         if(!layer.isLayerOfType('WMS')) {
             return;
         }
-        this._sandbox.printDebug(" [SnappyWMSLayer]  Creating " +
+        this._sandbox.printDebug(' [SnappyWMSLayer]  Creating ' +
                                  layer.getId() +
-                                 " KEEP ON TOP ? " +
+                                 ' KEEP ON TOP ? ' +
                                  keepLayerOnTop +
-                                 " BASE? " +
+                                 ' BASE? ' +
                                  isBaseMap);
 
-        var markerLayer = this._map.getLayersByName("Markers");
+        var markerLayer = this._map.getLayersByName('Markers');
         if (markerLayer) {
             for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
                 if (markerLayer[mlIdx]) {
@@ -216,7 +216,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
                  */
                 for(var i = 0; i < layer.getSubLayers().length; i++) {
 
-                    var layerUrls = "";
+                    var layerUrls = '';
                     for(var j = 0; j < layer.getSubLayers()[i].getWmsUrls().length; j++) {
                         layerUrls += layer.getSubLayers()[i]
                         .getWmsUrls()[j];
@@ -226,14 +226,14 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
                     .getSubLayers()[i].getMaxScale(), layer
                     .getSubLayers()[i].getMinScale());
 
-                    var WMS = Oskari.$("SnappyWMSLayer");
+                    var WMS = Oskari.$('SnappyWMSLayer');
                     var openLayer = new WMS('basemap_' + layer.getSubLayers()[i].getId(),
                                             layer.getSubLayers()[i].getWmsUrls(), {
                         layers : layer.getSubLayers()[i].getWmsName(),
                         transparent : true,
                         id : layer.getSubLayers()[i].getId(),
                         styles : layer.getSubLayers()[i].getCurrentStyle().getName(),
-                        format : "image/png",
+                        format : 'image/png',
                         MAP: 'wms.map'
                     }, {
                         layerId : layer.getSubLayers()[i].getWmsName(),
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
 
                     this._map.addLayer(openLayer);
 
-                    this._sandbox.printDebug(" [SnappyWMSLayer]  Created SnappyGrid for WMS WITH SUBLAYERS for " + layer.getId());
+                    this._sandbox.printDebug(' [SnappyWMSLayer]  Created SnappyGrid for WMS WITH SUBLAYERS for ' + layer.getId());
 
                     if(!keepLayerOnTop) {
                         this._map.setLayerIndex(openLayer, 0);
@@ -259,13 +259,13 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             } else {
                 var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
 
-                var WMS = Oskari.$("SnappyWMSLayer");
+                var WMS = Oskari.$('SnappyWMSLayer');
                 var openLayer = new WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
                     layers : layer.getWmsName(),
                     transparent : true,
                     id : layer.getId(),
                     styles : layer.getCurrentStyle().getName(),
-                    format : "image/png",
+                    format : 'image/png',
                     MAP: 'wms.map'
                 }, {
                     layerId : layer.getWmsName(),
@@ -280,7 +280,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
 
                 this._map.addLayer(openLayer);
 
-                this._sandbox.printDebug(" [SnappyWMSLayer]  Created SnappyGrid for WMS WITH SUBLAYERS for " + layer.getId());
+                this._sandbox.printDebug(' [SnappyWMSLayer]  Created SnappyGrid for WMS WITH SUBLAYERS for ' + layer.getId());
 
                 if(keepLayerOnTop) {
                     this._map.setLayerIndex(openLayer, this._map.layers.length);
@@ -292,13 +292,13 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         } else {
 
             var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
-            var WMS = Oskari.$("SnappyWMSLayer");
+            var WMS = Oskari.$('SnappyWMSLayer');
             var openLayer = new WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
                 layers : layer.getWmsName(),
                 transparent : true,
                 id : layer.getId(),
                 styles : layer.getCurrentStyle().getName(),
-                format : "image/png",
+                format : 'image/png',
                 MAP: 'wms.map'
             }, {
                 layerId : layer.getWmsName(),
@@ -313,7 +313,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
 
             this._map.addLayer(openLayer);
 
-            this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for " + layer.getId());
+            this._sandbox.printDebug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + layer.getId());
 
             if(keepLayerOnTop) {
                 this._map.setLayerIndex(openLayer, this._map.layers.length);
@@ -354,7 +354,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             return;
 
         if(layer.isBaseLayer()||layer.isGroupLayer()) {
-            var baseLayerId = "";
+            var baseLayerId = '';
             if(layer.getSubLayers().length > 0) {
                 for(var i = 0; i < layer.getSubLayers().length; i++) {
 		    var subtmp = layer.getSubLayers()[i];
@@ -387,7 +387,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         }
 
         if(layer.isBaseLayer()||layer.isGroupLayer()) {
-            var baseLayerId = "";
+            var baseLayerId = '';
             if(layer.getSubLayers().length > 0) {
                 var olLayers = [];
                 for(var i = 0; i < layer.getSubLayers().length; i++) {
@@ -430,7 +430,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
                 }
             }
         } else {
-            this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
+            this._sandbox.printDebug('Setting Layer Opacity for ' + layer.getId() + ' to ' + layer.getOpacity());
             var mapLayer = this._map.getLayersByName('layer_' + layer.getId());
             if(mapLayer[0] != null) {
                 mapLayer[0].setOpacity(layer.getOpacity() / 100);
@@ -461,5 +461,5 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol' : ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

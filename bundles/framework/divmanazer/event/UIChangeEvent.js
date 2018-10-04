@@ -8,7 +8,7 @@
 Oskari.clazz.define('Oskari.userinterface.event.UIChangeEvent', function (functionality) {
     this.functionality = functionality;
 }, {
-    __name: "UIChangeEvent",
+    __name: 'UIChangeEvent',
     getName: function () {
         return this.__name;
     },

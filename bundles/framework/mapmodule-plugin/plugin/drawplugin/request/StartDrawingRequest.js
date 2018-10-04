@@ -17,7 +17,7 @@ function(config) {
     }
 
 }, {
-    __name : "DrawPlugin.StartDrawingRequest",
+    __name : 'DrawPlugin.StartDrawingRequest',
     getName : function() {
         return this.__name;
     },

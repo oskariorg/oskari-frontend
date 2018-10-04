@@ -6,9 +6,9 @@
         },
         {
         /** @static @property __name service name */
-        __name: "LayerlistService",
+        __name: 'LayerlistService',
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.mapframework.service.LayerlistService",
+        __qname: 'Oskari.mapframework.service.LayerlistService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service

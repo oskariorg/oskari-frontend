@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
                 p;
 
             this.sandbox = sandbox;
-            this.mapmodule = this.sandbox.findRegisteredModuleInstance("MainMapModule");
+            this.mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
             /* loader */
             this.loader = Oskari.clazz.create(
                 'Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader', {

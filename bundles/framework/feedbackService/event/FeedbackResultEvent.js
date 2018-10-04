@@ -17,7 +17,7 @@ function(success, requestParameters, data) {
     this._data = data;
 }, {
     /** @static @property __name event name */
-    __name : "FeedbackResultEvent",
+    __name : 'FeedbackResultEvent',
 
     /**
      * @method getName

@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
         // Show the marker button
         me._showMarkerButton = true;
-        if ((conf) && (typeof conf.markerButton === "boolean")) {
+        if ((conf) && (typeof conf.markerButton === 'boolean')) {
             me._showMarkerButton = conf.markerButton;
         }
         this.__layer = undefined;

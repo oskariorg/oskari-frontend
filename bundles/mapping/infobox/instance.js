@@ -7,7 +7,7 @@
  *
  * See Oskari.mapframework.bundle.infobox.InfoBoxBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
 
 /**
  * @method create called automatically on construction

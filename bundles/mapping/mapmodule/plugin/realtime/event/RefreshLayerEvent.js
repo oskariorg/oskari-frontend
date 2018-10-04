@@ -10,7 +10,7 @@ function(_layer) {
     this._layer = _layer;
 }, {
     /** @static @property __name event name */
-    __name : "Realtime.RefreshLayerEvent",
+    __name : 'Realtime.RefreshLayerEvent',
     /**
      * @method getName
      * @return {String} the name for the event

@@ -3,7 +3,7 @@
  *
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.view.FeedbackForm",
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.view.FeedbackForm',
 
 /**
  * @method create called automatically on construction

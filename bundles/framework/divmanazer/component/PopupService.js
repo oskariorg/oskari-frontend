@@ -29,7 +29,7 @@ Oskari.clazz.define(
 
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.userinterface.component.PopupService",
+        __qname: 'Oskari.userinterface.component.PopupService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -38,7 +38,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "PopupService",
+        __name: 'PopupService',
         /**
          * @method getName
          * @return {String} service name

@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.StartGeometrySearchR
 	 */
     handleRequest : function(core, request) {
         var searchMode = request.getSearchMode();
-        this.sandbox.printDebug("[Oskari.harava.bundle.mapmodule.request.StartGeometrySearchRequest] Start Searching: " + searchMode);
+        this.sandbox.printDebug('[Oskari.harava.bundle.mapmodule.request.StartGeometrySearchRequest] Start Searching: ' + searchMode);
         this.searchPlugin.startSearch(request.getSearchMode());
     }
 }, {

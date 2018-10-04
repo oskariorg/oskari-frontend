@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
             'apiExtensions': jQuery('<div id="publisher-feedback-extensionskey" class="tool-options">' + '<label for="publisher-feedback-extensions"></label>' +  '<input type="text" name="publisher-feedback-extensions" />'  + '</div>')
         },
         getName: function() {
-            return "Oskari.mapframework.publisher.tool.FeedbackServiceTool";
+            return 'Oskari.mapframework.publisher.tool.FeedbackServiceTool';
         },
         /**
          * Get tool object.

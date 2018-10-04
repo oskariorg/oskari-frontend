@@ -4,7 +4,7 @@
 * Registers and starts the
 * Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowserBundleInstance plugin for main map.
 */
-Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowserBundleInstance",
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowserBundleInstance',
 
 	/**
 	* @method create called automatically on construction
@@ -121,9 +121,9 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 			 * Test if the Liferay dockbar is visible and give some more margin to spesific elements.
 			 * TODO: Make a bundle out of it?
 			 */
-			var isDockbar = jQuery(".dockbar").length;
+			var isDockbar = jQuery('.dockbar').length;
 			if(isDockbar) {
-				jQuery(".logoplugin").css("bottom", "30px");
+				jQuery('.logoplugin').css('bottom', '30px');
 			}
 		},
 		/**
@@ -167,39 +167,39 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 			// Parse userAgent for more spesific IE testing. Actual version is defined by trident.
 			var testIE = nAgt.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
 			// In Opera 15+, the true version is after "OPR/"
-			if ((verOffset=nAgt.indexOf("OPR/"))!=-1) {
-				browserName = "Opera";
+			if ((verOffset=nAgt.indexOf('OPR/'))!=-1) {
+				browserName = 'Opera';
 				fullVersion = nAgt.substring(verOffset+4);
 			}
 			// In older Opera, the true version is after "Opera" or after "Version"
-			else if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
-				browserName = "Opera";
+			else if ((verOffset=nAgt.indexOf('Opera'))!=-1) {
+				browserName = 'Opera';
 				fullVersion = nAgt.substring(verOffset+6);
-				if ((verOffset=nAgt.indexOf("Version"))!=-1) {
+				if ((verOffset=nAgt.indexOf('Version'))!=-1) {
 					fullVersion = nAgt.substring(verOffset+8);
 				}
 			}
 			// In MSIE, the true version is after "MSIE" in userAgent
-			else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
-				browserName = "IE";
+			else if ((verOffset=nAgt.indexOf('MSIE'))!=-1) {
+				browserName = 'IE';
 				fullVersion = nAgt.substring(verOffset+5);
 			}
 			// In Chrome, the true version is after "Chrome"
-			else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
-				browserName = "Chrome";
+			else if ((verOffset=nAgt.indexOf('Chrome'))!=-1) {
+				browserName = 'Chrome';
 				fullVersion = nAgt.substring(verOffset+7);
 			}
 			// In Safari, the true version is after "Safari" or after "Version"
-			else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
-				browserName = "Safari";
+			else if ((verOffset=nAgt.indexOf('Safari'))!=-1) {
+				browserName = 'Safari';
 				fullVersion = nAgt.substring(verOffset+7);
-				if ((verOffset=nAgt.indexOf("Version"))!=-1) {
+				if ((verOffset=nAgt.indexOf('Version'))!=-1) {
 					fullVersion = nAgt.substring(verOffset+8);
 				}
 			}
 			// In Firefox, the true version is after "Firefox"
-			else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
-				browserName = "Firefox";
+			else if ((verOffset=nAgt.indexOf('Firefox'))!=-1) {
+				browserName = 'Firefox';
 				fullVersion = nAgt.substring(verOffset+8);
 			}
 			// In most other browsers, "name/version" is at the end of userAgent
@@ -217,10 +217,10 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.LaKaPaSupportedBrowser
 		        fullVersion = tmp[1] || '';
 			}
 			// trim the fullVersion string at semicolon/space if present
-			if ((ix=fullVersion.indexOf(";"))!=-1) {
+			if ((ix=fullVersion.indexOf(';'))!=-1) {
 			   fullVersion=fullVersion.substring(0,ix);
 			}
-			if ((ix=fullVersion.indexOf(" "))!=-1) {
+			if ((ix=fullVersion.indexOf(' '))!=-1) {
 				fullVersion=fullVersion.substring(0,ix);
 			}
 			majorVersion = parseInt(''+fullVersion,10);

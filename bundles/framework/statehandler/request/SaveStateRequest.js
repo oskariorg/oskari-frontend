@@ -17,7 +17,7 @@ function(viewname, viewdescription, isDefault) {
     this._isDefault = isDefault;
 }, {
     /** @static @property __name request name */
-    __name : "StateHandler.SaveStateRequest",
+    __name : 'StateHandler.SaveStateRequest',
     /**
      * @method getName
      * @return {String} request name

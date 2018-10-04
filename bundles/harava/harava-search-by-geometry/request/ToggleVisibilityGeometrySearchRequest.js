@@ -16,7 +16,7 @@ function(visible) {
     this._visible = visible;
 }, {
 	/** @static @property __name request name */
-    __name : "ToggleVisibilityGeometrySearchRequest",
+    __name : 'ToggleVisibilityGeometrySearchRequest',
     /**
      * @method getName
      * @return {String} request name

@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.request.StartRestrictionRe
 function(config) {
 
 }, {
-    __name : "DigiroadMyPlaces.StartRestrictionRequest",
+    __name : 'DigiroadMyPlaces.StartRestrictionRequest',
     getName : function() {
         return this.__name;
     }

@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.request.GetFeedb
         this._feedbackparams = params;
     }, {
         /** @static @property __name request name */
-        __name : "GetFeedbackRequest",
+        __name : 'GetFeedbackRequest',
         /**
          * @method getName
          * @return {String} request name

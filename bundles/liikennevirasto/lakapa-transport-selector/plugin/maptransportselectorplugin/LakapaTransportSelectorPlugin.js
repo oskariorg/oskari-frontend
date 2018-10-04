@@ -66,7 +66,7 @@ function(locale, conf) {
         };
 
     this.featureStyle = new OpenLayers.StyleMap({
-        "default": new OpenLayers.Style(
+        'default': new OpenLayers.Style(
             {
                 pointRadius: 8,
                 strokeColor: this._conf.selector.selectedFillColor,
@@ -141,24 +141,24 @@ function(locale, conf) {
     init : function(sandbox) {
         var me = this;
         me._sandbox = sandbox;
-        me._sandbox.printDebug("[LakapaTransportSelectorPlugin] init");
+        me._sandbox.printDebug('[LakapaTransportSelectorPlugin] init');
 
-        me._croppingLayer = new OpenLayers.Layer.Vector("Lakapa cropping layer", {
+        me._croppingLayer = new OpenLayers.Layer.Vector('Lakapa cropping layer', {
     		eventListeners : {
-                "featuresadded" : function(layer) {
+                'featuresadded' : function(layer) {
                     me.finishedDrawing();
                 }
             }
     	});
 
-        me._oldCroppingLayer = new OpenLayers.Layer.Vector("Lakapa old cropping layer",{
+        me._oldCroppingLayer = new OpenLayers.Layer.Vector('Lakapa old cropping layer',{
                 styleMap: me.featureStyle});
 
         me._reqularControl = new OpenLayers.Control.DrawFeature(me._croppingLayer,
                 OpenLayers.Handler.RegularPolygon,{handlerOptions: {irregular:true}});
         me._map.addControl(me._reqularControl);
-        me.selectionLayer = new OpenLayers.Layer.Vector("LAKAPA selection", {styleMap:
-            new OpenLayers.Style(OpenLayers.Feature.Vector.style["select"])
+        me.selectionLayer = new OpenLayers.Layer.Vector('LAKAPA selection', {styleMap:
+            new OpenLayers.Style(OpenLayers.Feature.Vector.style['select'])
         });
 
         me._map.addLayers([me._croppingLayer,me._oldCroppingLayer,me.selectionLayer]);
@@ -497,7 +497,7 @@ function(locale, conf) {
             this._sandbox = sandbox;
         }
 
-        me._sandbox.printDebug("[LakapaTransportSelectorPlugin] startPlugin");
+        me._sandbox.printDebug('[LakapaTransportSelectorPlugin] startPlugin');
 
         this._map = this.getMapModule().getMap();
 
@@ -529,12 +529,12 @@ function(locale, conf) {
         jQuery('body').append(transportMessageConfirm);
 
         transportRoadSelectorDiv.attr('title', me._locale.transport_all);
-        transportRoadSelectorDiv.append("<span>"+me._locale.transport_all+"</span");
+        transportRoadSelectorDiv.append('<span>'+me._locale.transport_all+'</span');
         //transportRoadSelectorDiv.html("<div>"+me._locale.transport_all+"</div");
         transportSeaSelectorDiv.attr('title', me._locale.transport_sea);
         transportRailwaySelectorDiv.attr('title', me._locale.transport_railway_line);
         transportDigiroadSelectorDiv.attr('title', me._locale.transport_digiroad);
-        transportDigiroadSelectorDiv.append("<span>"+me._locale.transport_digiroad+"</span");
+        transportDigiroadSelectorDiv.append('<span>'+me._locale.transport_digiroad+'</span');
         //transportDigiroadSelectorDiv.html(me._locale.transport_digiroad);
         transportSelectorDivTitle.html(me._locale.transport_title);
 
@@ -560,7 +560,7 @@ function(locale, conf) {
         }
 
         transportSelectorDiv.append(transportRoadSelectorDiv);
-        transportSelectorDiv.append("<br/>");
+        transportSelectorDiv.append('<br/>');
 //        transportSelectorDiv.append(transportSeaSelectorDiv);
         //transportSelectorDiv.append(transportRailwaySelectorDiv);
         transportSelectorDiv.append(transportDigiroadSelectorDiv);
@@ -569,7 +569,7 @@ function(locale, conf) {
         transportContainer.append(transportCroppingSelect);
         //Handle language change functionality
         var language = jQuery.cookie('language');
-        jQuery("#language-"+language+"").addClass("language-selected");
+        jQuery('#language-'+language+'').addClass('language-selected');
         jQuery('.transport-selector-div-language a').unbind('click');
         jQuery('.transport-selector-div-language a').bind('click', function(evt){
         	evt.preventDefault();
@@ -1095,7 +1095,7 @@ function(locale, conf) {
      */
     _notifyAjaxFailure: function() {
     	 var me = this;
-    	 me._sandbox.printDebug("[LakapaTransportSelectorPlugin] AJAX failed");
+    	 me._sandbox.printDebug('[LakapaTransportSelectorPlugin] AJAX failed');
     },
     /**
      * @method _isAjaxRequestBusy
@@ -1122,7 +1122,7 @@ function(locale, conf) {
     	if( !jqhr) {
     		return;
     	}
-    	this._sandbox.printDebug("[LakapaTransportSelectorPlugin] Abort jqhr ajax request");
+    	this._sandbox.printDebug('[LakapaTransportSelectorPlugin] Abort jqhr ajax request');
     	jqhr.abort();
     	jqhr = null;
     	me._pendingAjaxQuery.busy = false;
@@ -1147,7 +1147,7 @@ function(locale, conf) {
     	var me = this;
     	me._pendingAjaxQuery.busy = false;
         me._pendingAjaxQuery.jqhr = null;
-        this._sandbox.printDebug("[LakapaTransportSelectorPlugin] finished jqhr ajax request");
+        this._sandbox.printDebug('[LakapaTransportSelectorPlugin] finished jqhr ajax request');
     },/**
      * @method _notifyAjaxFailure2
      * @private
@@ -1155,7 +1155,7 @@ function(locale, conf) {
      */
     _notifyAjaxFailure2: function() {
     	 var me = this;
-    	 me._sandbox.printDebug("[LakapaTransportSelectorPlugin] AJAX failed");
+    	 me._sandbox.printDebug('[LakapaTransportSelectorPlugin] AJAX failed');
     },
     /**
      * @method _isAjaxRequestBusy2
@@ -1182,7 +1182,7 @@ function(locale, conf) {
     	if( !jqhr) {
     		return;
     	}
-    	this._sandbox.printDebug("[LakapaTransportSelectorPlugin] Abort jqhr ajax request");
+    	this._sandbox.printDebug('[LakapaTransportSelectorPlugin] Abort jqhr ajax request');
     	jqhr.abort();
     	jqhr = null;
     	me._pendingAjaxQuery2.busy = false;
@@ -1207,7 +1207,7 @@ function(locale, conf) {
     	var me = this;
     	me._pendingAjaxQuery2.busy = false;
         me._pendingAjaxQuery2.jqhr = null;
-        this._sandbox.printDebug("[LakapaTransportSelectorPlugin] finished jqhr ajax request");
+        this._sandbox.printDebug('[LakapaTransportSelectorPlugin] finished jqhr ajax request');
     },
     /**
      * @method _saveLastSelectedRegion
@@ -1225,7 +1225,7 @@ function(locale, conf) {
 
         if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&
             	dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
-            	me._sandbox.printDebug("[LakapaTransportSelectorPlugin] Save last selected region NOT SENT (time difference < 500ms)");
+            	me._sandbox.printDebug('[LakapaTransportSelectorPlugin] Save last selected region NOT SENT (time difference < 500ms)');
             	return;
         }
 
@@ -1242,7 +1242,7 @@ function(locale, conf) {
             beforeSend : function(x) {
             	me._pendingAjaxQuery.jqhr = x;
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/json;charset=UTF-8");
+                    x.overrideMimeType('application/json;charset=UTF-8');
                 }
             },
             success : function(resp) {
@@ -1516,7 +1516,7 @@ function(locale, conf) {
 
         if( me._pendingMapAjaxQuery.busy && me._pendingMapAjaxQuery.timestamp &&
         	dteMs - me._pendingMapAjaxQuery.timestamp < 500 ) {
-        	me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)");
+        	me._sandbox.printDebug('[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)');
         	return;
         }
 
@@ -1541,7 +1541,7 @@ function(locale, conf) {
 	            beforeSend : function(x) {
 	            	me._pendingMapAjaxQuery.jqhr = x;
 	                if (x && x.overrideMimeType) {
-	                    x.overrideMimeType("application/json;charset=UTF-8");
+	                    x.overrideMimeType('application/json;charset=UTF-8');
 	                }
 	            },
 	            success : function(resp) {
@@ -1557,7 +1557,7 @@ function(locale, conf) {
 	            			identifier += '__';
 	            		});
 
-	            		var founded = me.selectionLayer.getFeaturesByAttribute("livi_yksiloiva_tunnus",identifier);
+	            		var founded = me.selectionLayer.getFeaturesByAttribute('livi_yksiloiva_tunnus',identifier);
 
 		            	if(founded!= null && founded.length>0){
 		            		me.selectionLayer.removeFeatures(founded);
@@ -1639,7 +1639,7 @@ function(locale, conf) {
 
         if( me._pendingDigiroadAjaxQuery.busy && me._pendingDigiroadAjaxQuery.timestamp &&
         	dteMs - me._pendingDigiroadAjaxQuery.timestamp < 500 ) {
-        	me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)");
+        	me._sandbox.printDebug('[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)');
         	return;
         }
 
@@ -1672,11 +1672,11 @@ function(locale, conf) {
 	            beforeSend : function(x) {
 	            	me._pendingDigiroadAjaxQuery.jqhr = x;
 	                if (x && x.overrideMimeType) {
-	                    x.overrideMimeType("application/json;charset=UTF-8");
+	                    x.overrideMimeType('application/json;charset=UTF-8');
 	                }
 	            },
 	            success : function(resp) {
-	            	var founded = me.selectionLayer.getFeaturesByAttribute("livimaakunta",resp.maakunta);
+	            	var founded = me.selectionLayer.getFeaturesByAttribute('livimaakunta',resp.maakunta);
 	            	var isZipFile = resp.isZipFile;
 	            	if(isZipFile==true){
 		            	if(founded!=null && founded.length>0){
@@ -1786,5 +1786,5 @@ function(locale, conf) {
      * @property {Object} protocol
      * @static
      */
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol' : ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

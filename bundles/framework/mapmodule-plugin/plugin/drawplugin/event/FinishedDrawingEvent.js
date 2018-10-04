@@ -16,7 +16,7 @@ function(geometry, blnEdit, creatorId) {
     this._creatorId = creatorId;
 }, {
     /** @static @property __name event name */
-    __name : "DrawPlugin.FinishedDrawingEvent",
+    __name : 'DrawPlugin.FinishedDrawingEvent',
     /**
      * @method getName
      * Returns event name

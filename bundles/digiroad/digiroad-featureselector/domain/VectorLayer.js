@@ -68,5 +68,5 @@ function() {
     }
 
 }, {
-    "extend": ["Oskari.mapframework.domain.AbstractLayer"]
+    'extend': ['Oskari.mapframework.domain.AbstractLayer']
 });

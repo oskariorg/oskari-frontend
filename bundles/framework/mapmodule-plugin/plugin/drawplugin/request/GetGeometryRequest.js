@@ -5,7 +5,7 @@ Oskari.clazz
                     this._creator = null;
                     this._callbackMethod = callbackMethod;
                 }, {
-                    __name : "DrawPlugin.GetGeometryRequest",
+                    __name : 'DrawPlugin.GetGeometryRequest',
                     getName : function() {
                         return this.__name;
                     },

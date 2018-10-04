@@ -575,9 +575,9 @@ Oskari.clazz.define(
             }
 
             if (!style) {
-                style = this.toolStyles["default"];
-            } if (!style.hasOwnProperty("widthLeft")) {
-                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
+                style = this.toolStyles['default'];
+            } if (!style.hasOwnProperty('widthLeft')) {
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles['default'];
             }
 
             // Set the correct template for the style... ugly.
@@ -767,7 +767,7 @@ Oskari.clazz.define(
                 me._element.addClass('mobilesearch');
                 // FIXME is index is not first then this fails
                 mobileDivElement.prepend(me._element[0]);
-                me._uiMode = "mobile";
+                me._uiMode = 'mobile';
                 me.changeToolStyle('rounded-light', me._element);
                 me._element.find('div.close-results').remove();
                 me._element.find('input.search-input').css({

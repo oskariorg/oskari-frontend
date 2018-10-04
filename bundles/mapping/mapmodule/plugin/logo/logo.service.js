@@ -19,8 +19,8 @@ function(sandbox) {
   sandbox.registerService(this);
   Oskari.makeObservable(this);
 }, {
-  __name: "map.logo.service",
-  __qname : "Oskari.map.LogoPluginService",
+  __name: 'map.logo.service',
+  __qname : 'Oskari.map.LogoPluginService',
   getQName : function() {
       return this.__qname;
   },
@@ -42,7 +42,7 @@ function(sandbox) {
         return;
     }
     this.labels.push({ title: title, options: options || {} });
-    this.trigger("change");
+    this.trigger('change');
   }
 },{
     'protocol' : ['Oskari.framework.service.Service']

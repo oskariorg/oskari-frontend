@@ -5,7 +5,7 @@ Oskari.clazz.define(
             this._myPlace = pMyPlace;
             this._dblClick = dblClick;
         }, {
-            __name : "LupaPisteMyPlaces.MyPlaceSelectedEvent",
+            __name : 'LupaPisteMyPlaces.MyPlaceSelectedEvent',
             getName : function() {
                 return this.__name;
             },

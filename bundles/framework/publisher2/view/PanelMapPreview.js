@@ -83,7 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             }
         },
         getName: function() {
-            return "Oskari.mapframework.bundle.publisher2.view.PanelMapPreview";
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelMapPreview';
         },
         /**
          * @public @method updateMapSize

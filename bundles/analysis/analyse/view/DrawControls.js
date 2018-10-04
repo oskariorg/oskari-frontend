@@ -12,7 +12,7 @@ Oskari.clazz.define(
 
         if (!this.selectionPlugin) {
             var config = {
-                id: "FeatureData"
+                id: 'FeatureData'
             };
             this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
             this.mapModule.registerPlugin(me.selectionPlugin);
@@ -285,7 +285,7 @@ Oskari.clazz.define(
                 WFSSelections = (me.WFSLayerService.getWFSSelections() && me.WFSLayerService.getWFSSelections().length > 0);
 
             //use the existing component to render selection buttons
-            me.selectionButtonsRenderer = Oskari.clazz.create("Oskari.mapframework.bundle.featuredata2.PopupHandler", me.instance);
+            me.selectionButtonsRenderer = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', me.instance);
             me.selectionButtonsRenderer.renderSelectionToolButtons(selectionToolDiv);
 
             var emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
@@ -331,9 +331,9 @@ Oskari.clazz.define(
         toggleEmptySelectionBtn: function(enable) {
             var selectionToolsContainer = jQuery('div.toolContainer');
             if (enable) {
-                selectionToolsContainer.find(".toolContainerButtons").find("input[type=button]").prop({'disabled': false});
+                selectionToolsContainer.find('.toolContainerButtons').find('input[type=button]').prop({'disabled': false});
             } else {
-                selectionToolsContainer.find(".toolContainerButtons").find("input[type=button]").prop({'disabled': true});
+                selectionToolsContainer.find('.toolContainerButtons').find('input[type=button]').prop({'disabled': true});
             }
         },
 

@@ -18,7 +18,7 @@ Oskari.clazz.define(
     },
     {
         /** @static @property __name event name */
-        __name: "StateSavedEvent",
+        __name: 'StateSavedEvent',
         getName: function () {
             return this.__name;
         },

@@ -470,7 +470,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 style = jQuery.extend(true, {}, styleDef),
                 size;
             //create a blank style with default values
-            var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
+            var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
             // use sizePx if given
             if (style.image && style.image.sizePx){
                 size = style.image.sizePx;
@@ -525,11 +525,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 if(style.image.radius) {
                     olStyle.pointRadius = style.image.radius;
                     //currently only supporting circle
-                    olStyle.graphicName = "circle";
+                    olStyle.graphicName = 'circle';
                 }
             }
           if(style.text.font) {
-            var split = style.text.font.split(" ");
+            var split = style.text.font.split(' ');
             if(split[1]) {
                olStyle.fontSize = split[1];
             }
@@ -578,7 +578,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                   olStyle.label = style.text.labelText;
               }
           } else if (style.text.labelProperty) {
-             olStyle.label = "${"+style.text.labelProperty+"}";
+             olStyle.label = '${'+style.text.labelProperty+'}';
           }
             return olStyle;
         },

@@ -22,7 +22,7 @@ function(data) {
     this._showAction = data.showAction;
 }, {
     /** @static @property __name request name */
-    __name : "AddSearchResultActionRequest",
+    __name : 'AddSearchResultActionRequest',
     /**
      * @method getName
      * @return {String} request name

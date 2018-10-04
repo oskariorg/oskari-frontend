@@ -15,7 +15,7 @@ function(layerId) {
     this._layerId = layerId;
 }, {
     /** @static @property __name event name */
-    __name : "WFSRefreshManualLoadLayersEvent",
+    __name : 'WFSRefreshManualLoadLayersEvent',
     /**
      * @method getName
      * @return {String} event name

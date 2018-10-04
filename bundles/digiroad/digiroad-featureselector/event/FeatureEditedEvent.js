@@ -9,7 +9,7 @@ Oskari.clazz.define(
         this._callback = callback;
     },
     {
-        __name : "FeatureSelector.FeatureEditedEvent",
+        __name : 'FeatureSelector.FeatureEditedEvent',
         getName : function() {
             return this.__name;
         },

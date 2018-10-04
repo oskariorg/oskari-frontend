@@ -12,7 +12,7 @@ function(data, content) {
     this._data = data;
 }, {
     /** @static @property __name event name */
-    __name : "GetInfoResultEvent",
+    __name : 'GetInfoResultEvent',
     /**
      * @method getName
      * @return {String} the name for the event

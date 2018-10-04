@@ -19,10 +19,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Alert',
         this.container = null;
     }, {
         templates: {
-            "default": '<div class="oskari-alert"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
-            "success": '<div class="oskari-alert oskari-alert-success"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
-            "error": '<div class="oskari-alert oskari-alert-error"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
-            "info": '<div class="oskari-alert oskari-alert-info"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>'
+            'default': '<div class="oskari-alert"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
+            'success': '<div class="oskari-alert oskari-alert-success"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
+            'error': '<div class="oskari-alert oskari-alert-error"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
+            'info': '<div class="oskari-alert oskari-alert-info"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>'
         },
         compileTemplates: function () {
             var p;

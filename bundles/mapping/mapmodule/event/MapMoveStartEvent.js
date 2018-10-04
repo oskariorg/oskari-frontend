@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapMoveStartEvent',
     }, {
 
         /** @static @property __name event name */
-        __name: "MapMoveStartEvent",
+        __name: 'MapMoveStartEvent',
         /**
          * @method getName
          * @return {String} event name

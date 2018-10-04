@@ -19,7 +19,7 @@ function(mapLayer, keepSelection) {
     this._mapLayer = mapLayer;
 }, {
     /** @static @property __name event name */
-    __name : "WFSFeatureGeometriesEvent",
+    __name : 'WFSFeatureGeometriesEvent',
     /**
      * @method getName
      * @return {String} event name

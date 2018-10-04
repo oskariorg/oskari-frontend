@@ -1,7 +1,7 @@
 /**
  * @class Oskari.elf.geolocator.BundleInstance
  */
-Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
+Oskari.clazz.define('Oskari.elf.geolocator.BundleInstance',
     function() {
         this.searchUrl = undefined;
     }, {
@@ -63,7 +63,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                     lon: result.lon,
                     lat: result.lat
                 },
-                popupId = "elf-geolocator-search-result",
+                popupId = 'elf-geolocator-search-result',
                 moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 infoBoxReqBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest'),
                 infoBoxContent;
@@ -104,5 +104,5 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             return _.template(template, result);
         }
     }, {
-        "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
+        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
 });

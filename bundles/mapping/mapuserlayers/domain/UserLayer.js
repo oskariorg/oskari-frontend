@@ -10,8 +10,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.domain.UserLayer'
  * @static
  */
 function() {
-    this._layerType = "USERLAYER";
-    this._metaType = "USERLAYER";
+    this._layerType = 'USERLAYER';
+    this._metaType = 'USERLAYER';
     this.description = undefined;
     this.source = undefined;
     this.renderingElement = undefined;
@@ -59,5 +59,5 @@ function() {
     }
 
 }, {
-    "extend": ["Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer"]
+    'extend': ['Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer']
 });

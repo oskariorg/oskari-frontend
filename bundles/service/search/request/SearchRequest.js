@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchRequest',
         this._searchparams = params;
     }, {
         /** @static @property __name request name */
-        __name : "SearchRequest",
+        __name : 'SearchRequest',
         /**
          * @method getName
          * @return {String} request name

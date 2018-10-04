@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
     function (instance, locale) {
 
         //move to be a part of the bundle's configuration perhaps...?
-        this.availableOskariRoles = ["sM_Administrator", "sM_GroupAdministrator", "User", "BetaTester", "AlphaTester", "GeoLocatorUser", "NewUser", "Guest"];
+        this.availableOskariRoles = ['sM_Administrator', 'sM_GroupAdministrator', 'User', 'BetaTester', 'AlphaTester', 'GeoLocatorUser', 'NewUser', 'Guest'];
         this.instance = instance;
         this.locale = locale;
         this.container = null;
@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
               }
             }
           }
-          return "";
+          return '';
         },
         userHasRole: function(roleToCheck) {
           var user = Oskari.user();
@@ -87,13 +87,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         startPlugin: function () {
             var me = this,
                 contents = jQuery(me.template),
-                imgDir = "/Oskari/bundles/elf/elf-metadatafeedback/resources/images/",
-                starOnImg = imgDir+"star-on.png",
-                starOffImg = imgDir+"star-off.png",
-                starHalfImg = imgDir+"star-half.png",
-                saveBtn = contents.find("button.save"),
-                cancelBtn = contents.find("button.cancel"),
-                ratings = contents.find("div#raty-star"),
+                imgDir = '/Oskari/bundles/elf/elf-metadatafeedback/resources/images/',
+                starOnImg = imgDir+'star-on.png',
+                starOffImg = imgDir+'star-off.png',
+                starHalfImg = imgDir+'star-half.png',
+                saveBtn = contents.find('button.save'),
+                cancelBtn = contents.find('button.cancel'),
+                ratings = contents.find('div#raty-star'),
                 el = me.getEl();
             ratings.raty({
                 starOn: starOnImg,
@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                         me._showMessage(me.locale.successPopup.title, me.locale.successPopup.savingTheFeedbackSuccesful);
                         me._resetForm();
                         //update the "admin latest" rating, in case the user has that role.
-                        if (me.userHasRole("sM_Administrator")) {
+                        if (me.userHasRole('sM_Administrator')) {
                           e.latestAdminRating = params.score;
                           me.instance.updateMetadataRating(e);
                         }

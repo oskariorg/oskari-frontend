@@ -33,21 +33,21 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.PrintPlugin', fun
         this._printer = new OpenLayers.Control.TileStitchPrinter({
             printUrl: me.printUrl,
             beforePrint: function () {
-                alert("One moment, please...");
+                alert('One moment, please...');
             },
             handleResponse: function (url) {
                 alert('The print is ready, and will open in a new window.');
                 window.open(url);
             },
             handleError: function (error) {
-                alert("Printing failed:\n\n" + error);
+                alert('Printing failed:\n\n' + error);
             }
         });
         me._map.addControl(this._printer);
 
-        hub.subscribe("map-print", function (e) {
+        hub.subscribe('map-print', function (e) {
             var sandbox = Oskari.getSandbox();
-            sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.plugin.PrintPlugin] map-print");
+            sandbox.printDebug('[Oskari.lupapiste.bundle.lupakartta.plugin.PrintPlugin] map-print');
             var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
             var printPlugin = mapmodule.getPluginInstances('lupakartta.PrintPlugin');
             printPlugin._printer.print();
@@ -100,5 +100,5 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.PrintPlugin', fun
         return this.eventHandlers[event.getName()].apply(this, [event]);
     }
 }, {
-    'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

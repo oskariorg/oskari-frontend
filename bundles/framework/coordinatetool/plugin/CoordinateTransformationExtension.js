@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._projectionSelect =  me._popupContent.find('.projection-select');
                 me._populateCoordinatesTransformSelect(me._projectionSelect);
                 me._projectionSelect.on('change', function(event) {
-                    var nowSelected = jQuery("#projection option:selected").val();
+                    var nowSelected = jQuery('#projection option:selected').val();
                     var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
                     var data = coordinateToolPlugin._getInputsData();
                     var usersInputs = _.clone(data);
@@ -225,18 +225,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 secondsY;
 
             switch (type) {
-                case "min":
+                case 'min':
                     degreesX = parseInt(lon);
                     degreesY = parseInt(lat);
                     minutesX = Number((lon - degreesX) * 60).toFixed(5);
                     minutesY = Number((lat - degreesY) * 60).toFixed(5);
                     return {
-                        "degreesX": degreesX,
-                        "degreesY": degreesY,
-                        "minutesX": minutesX.replace('.', Oskari.getDecimalSeparator()),
-                        "minutesY": minutesY.replace('.', Oskari.getDecimalSeparator())
+                        'degreesX': degreesX,
+                        'degreesY': degreesY,
+                        'minutesX': minutesX.replace('.', Oskari.getDecimalSeparator()),
+                        'minutesY': minutesY.replace('.', Oskari.getDecimalSeparator())
                     };
-                case "sec":
+                case 'sec':
                     degreesX = parseInt(lon);
                     degreesY = parseInt(lat);
                     minutesX = parseFloat((lon - degreesX) * 60);
@@ -244,12 +244,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     secondsX = parseFloat((minutesX - parseInt(minutesX))*60).toFixed(3);
                     secondsY = parseFloat((minutesY - parseInt(minutesY))*60).toFixed(3);
                     return {
-                        "degreesX": degreesX,
-                        "degreesY": degreesY,
-                        "minutesX": parseInt(minutesX),
-                        "minutesY": parseInt(minutesY),
-                        "secondsX": secondsX.replace('.', Oskari.getDecimalSeparator()),
-                        "secondsY": secondsY.replace('.', Oskari.getDecimalSeparator())
+                        'degreesX': degreesX,
+                        'degreesY': degreesY,
+                        'minutesX': parseInt(minutesX),
+                        'minutesY': parseInt(minutesY),
+                        'secondsX': secondsX.replace('.', Oskari.getDecimalSeparator()),
+                        'secondsY': secondsY.replace('.', Oskari.getDecimalSeparator())
                     };
             }
 
@@ -286,7 +286,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @static @property {string[]} protocol array of superclasses
          */
         'protocol': [
-            "Oskari.mapframework.module.Module",
-            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
     });

@@ -17,8 +17,8 @@ function(instance) {
     this.urls.edit = Oskari.urls.getRoute('EditUserLayer');
     this.urls.getStyle = Oskari.urls.getRoute('GetUserLayerStyle');
 }, {
-    __name: "MyPlacesImport.MyPlacesImportService",
-    __qname : "Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService",
+    __name: 'MyPlacesImport.MyPlacesImportService',
+    __qname : 'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
     getQName : function() {
         return this.__qname;
     },
@@ -82,7 +82,7 @@ function(instance) {
             dataType : 'json',
             beforeSend: function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             success: function(response) {

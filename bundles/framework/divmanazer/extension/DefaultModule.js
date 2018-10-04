@@ -3,7 +3,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
+Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
 
     /**
      * @method create called automatically on construction
@@ -105,7 +105,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
             this.sandbox = null;
         },
 
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
@@ -129,10 +129,10 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
          * @property eventHandlers
          * may be overridden in derived classes to get some events
          */
-        "eventHandlers": {
+        'eventHandlers': {
 
         },
-        "requestHandlers": {
+        'requestHandlers': {
 
         },
 
@@ -172,7 +172,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
          * helper to get current language from Oskari
          *
          */
-        "getLang": function () {
+        'getLang': function () {
             return Oskari.getLang();
         },
 

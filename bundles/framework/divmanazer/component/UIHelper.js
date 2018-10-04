@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
             getCallback = function (btn) {
                 return function (isSuccess, pContent) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                        okBtn = dialog.createCloseButton("OK");
+                        okBtn = dialog.createCloseButton('OK');
                     okBtn.addClass('primary');
                     if (isSuccess) {
                         // help articles have only 'static' content
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
             // Help popups
             content.find('[helptags]').each(function (i, e) {
                 var btn = jQuery(e),
-                    taglist = btn.attr("helptags");
+                    taglist = btn.attr('helptags');
                 btn.on('click', function () {
                     me.getHelpArticle(taglist, getCallback(btn));
                 });
@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (resp) {

@@ -7,7 +7,7 @@
  *
  * See Oskari.harava.bundle.haravaInfobox.InfoBoxBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.harava.bundle.haravaInfobox.InfoBoxBundleInstance",
+Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.InfoBoxBundleInstance',
 
 /**
  * @method create called automatically on construction

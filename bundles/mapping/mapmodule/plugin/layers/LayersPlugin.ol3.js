@@ -139,10 +139,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      * @return {Object} centroid
      */
     getGeometryCenter: function (geometry) {
-        if (geometry.getType()==="Point") {
+        if (geometry.getType()==='Point') {
             var point = geometry.getCoordinates();
             return {lon: point[0], lat: point[1]};
-        } else if (geometry.getType()==="Polygon"){
+        } else if (geometry.getType()==='Polygon'){
             var extent = geometry.getExtent();
             return {
                 lon: extent[0] + (extent[2]-extent[0])/2,

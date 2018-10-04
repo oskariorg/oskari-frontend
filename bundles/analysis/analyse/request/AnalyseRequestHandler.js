@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.request.AnalyseRequestHandle
 }, {
     handleRequest: function (core, request) {
         var selections = request.getSelections();
-        this._log.debug("Analyse requested");
+        this._log.debug('Analyse requested');
         this.cb(selections);
     }
 }, {

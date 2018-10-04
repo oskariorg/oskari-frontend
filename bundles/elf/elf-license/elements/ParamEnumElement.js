@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                         data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + me.getElementLabel(param, value) + '<br>');
                     });
 
-                    data.find('input').first().prop("checked", true);
+                    data.find('input').first().prop('checked', true);
                     title += ' <span class="elf_license_required">*</span>';
                 }
                 // Checkbox list

@@ -104,7 +104,7 @@ function () {
             reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
             request;
 
-        me.popup = Oskari.clazz.create("Oskari.mapframework.bundle.routingUI.PopupRouting", me);
+        me.popup = Oskari.clazz.create('Oskari.mapframework.bundle.routingUI.PopupRouting', me);
 
         me.buttonGroup = 'viewtools';
         me.toolName = 'routing';
@@ -335,10 +335,10 @@ function () {
         var newLength = '';
         if (length > 1000) {
             var kilometers = this._decimalAdjust('round', length/1000, -1);
-            newLength = kilometers + " km";
+            newLength = kilometers + ' km';
         } else {
             var meters = this._decimalAdjust('round', length, 1);
-            newLength = meters + " m";
+            newLength = meters + ' m';
         }
         return newLength;
     },
@@ -388,15 +388,15 @@ function () {
 
         if (hours === 0) {
             if (minutes === 0) {
-                duration = seconds + " s";
+                duration = seconds + ' s';
             } else {
-                duration = minutes + " min";
+                duration = minutes + ' min';
             }
         } else {
-            duration = hours + " h " + minutes + " min";
+            duration = hours + ' h ' + minutes + ' min';
         }
         return duration;
     }
 }, {
-    "extend": ["Oskari.userinterface.extension.DefaultExtension"]
+    'extend': ['Oskari.userinterface.extension.DefaultExtension']
 });

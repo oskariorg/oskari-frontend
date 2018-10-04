@@ -65,8 +65,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 data: {
                     id : layer.getId()
                 },
-                dataType : "xml",
-                type : "GET",
+                dataType : 'xml',
+                type : 'GET',
                 url : getCapsUrl,
                 success : function(response) {
                     var caps = format.read(response);
