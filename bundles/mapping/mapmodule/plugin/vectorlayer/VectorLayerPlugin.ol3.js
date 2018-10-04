@@ -10,6 +10,8 @@ import * as olGeom from 'ol/geom';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 
+const LAYER_ID = 'id';
+const LAYER_NAME = 'name';
 const LAYER_TYPE = 'oskariLayerType';
 const LAYER_HOVER = 'oskariHoverOptions';
 
@@ -312,7 +314,7 @@ Oskari.clazz.define(
                 layerId;
             if (layer && layer !== null) {
                 if (layer instanceof olLayerVector) {
-                    layerId = layer.get('id');
+                    layerId = layer.get(LAYER_ID);
                 } else if (_.isString(layer) || _.isNumber(layer)) {
                     layerId = layer;
                 }
@@ -371,9 +373,9 @@ Oskari.clazz.define(
             featuresToRemove.forEach(function(feature) {
                 source.removeFeature(feature);
                 // remove from "cache"
-                me._removeFromCache(olLayer.get('id'), feature);
+                me._removeFromCache(olLayer.get(LAYER_ID), feature);
                 var geojson = formatter.writeFeaturesObject([feature]);
-                removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
+                removeEvent.addFeature(feature.getId(), geojson, olLayer.get(LAYER_ID));
             });
             sandbox.notifyAll(removeEvent);
         },
@@ -408,12 +410,16 @@ Oskari.clazz.define(
             var olLayer = me._olLayers[layer.getId()];
             if(!olLayer) {
                 olLayer = new olLayerVector({
-                    name: me._olLayerPrefix + layer.getId(),
-                    id: layer.getId(),
-                    source: new olSourceVector(),
-                    [LAYER_HOVER]: layer.getHoverOptions(),
-                    [LAYER_TYPE]: 'vector'
+                    source: new olSourceVector()
                 });
+                // Set oskari properties
+                const silent = true;
+                olLayer.set(LAYER_ID, layer.getId(), silent);
+                olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
+                olLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
+                // TODO the getter for the name property is only used in old Oskari ol builds.
+                // Check if we are missing some implementation in ol5.
+                olLayer.set(LAYER_NAME, me._olLayerPrefix + layer.getId(), silent);
                 me._olLayers[layer.getId()] = olLayer;
                 me._map.addLayer(olLayer);
                 me.raiseVectorLayer(olLayer);
@@ -679,7 +685,7 @@ Oskari.clazz.define(
                 if (!feature.getGeometry()) {
                     event = errorEvent;
                 }
-                event.addFeature(feature.getId(), geojson, olLayer.get('id'));
+                event.addFeature(feature.getId(), geojson, olLayer.get(LAYER_ID));
             });
             if (errorEvent.hasFeatures()) {
                 sandbox.notifyAll(errorEvent);

@@ -5,6 +5,7 @@ import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 
 const LAYER_ID = 'id';
+const PROPERTY_ID = 'id';
 const LAYER_TYPE = 'oskariLayerType';
 const LAYER_HOVER = 'oskariHoverOptions';
 const HOVER = 'hover';
@@ -345,7 +346,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          * Returns geojson for feature.
          * If the feature is read-only (olRenderFeature), creates a geojson of the feature's extent.
          * 
-         * @param {olFeature | olRenderFeature} feature 
+         * @param {olFeature | olRenderFeature} feature
          * @return geojson
          */
         _getGeojson (feature) {
@@ -368,26 +369,26 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          */
         _onMapClicked (event) {
             const me = this;
-            let features = [];
+            let clickHits = [];
             me._map.forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
                 const layerType = layer.get(LAYER_TYPE);
                 const isRegisteredLayerType = layerType && me.layerTypeHandlers[layerType];
                 if (isRegisteredLayerType) {
-                    const layerId = layer.get(LAYER_ID);
                     const handler = me._getRegisteredHandler(layerType, CLICK);
                     if (handler) {
                         handler(event, feature, layer);
                     }
-                    features.push({ feature, layerId });
+                    clickHits.push({ feature, layer });
                 }
             });
-            if (features.length > 0) {
+            if (clickHits.length > 0) {
                 const clickEvent = me.getSandbox().getEventBuilder('FeatureEvent')().setOpClick();
-                features.forEach(obj => {
-                    const { feature, layerId } = obj;
-                    const geojson = me._getGeojson(feature);
-                    const ftrId = feature.get('id');
-                    clickEvent.addFeature(ftrId, geojson, layerId);
+                clickHits.forEach(obj => {
+                    const { feature, layer } = obj;
+                    const geojson = me._getGeojson(feature, layer);
+                    const propertyId = feature.get(PROPERTY_ID);
+                    const layerId = layer.get(LAYER_ID);
+                    clickEvent.addFeature(propertyId, geojson, layerId);
                 });
                 me.getSandbox().notifyAll(clickEvent);
             }

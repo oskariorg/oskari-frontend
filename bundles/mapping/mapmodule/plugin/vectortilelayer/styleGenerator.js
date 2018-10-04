@@ -2,6 +2,17 @@ import olStyleStyle from 'ol/style/Style';
 
 const invisible = new olStyleStyle();
 
+const isHovered = (feature, hoverState) => {
+    if (hoverState && hoverState.feature) {
+        if (hoverState.propertyId) {
+            return hoverState.propertyId === feature.get('id');
+        } else {
+            return hoverState.feature === feature;
+        }
+    }
+    return false;
+}
+
 export default function styleGenerator(styleFactory, styleDef, hoverOptions, hoverState) {
     const styleCache = {};
     Object.keys(styleDef).forEach((layerName) => {
@@ -34,7 +45,7 @@ export default function styleGenerator(styleFactory, styleDef, hoverOptions, hov
         styleCache[layerName] = styles;
     })
     return (feature, resolution) => {
-        var hovered = hoverState && hoverState.ftrId === feature.get('id');
+        var hovered = isHovered(feature, hoverState);
         var styles = styleCache[feature.get('layer')];
         if (!styles) {
             return invisible;

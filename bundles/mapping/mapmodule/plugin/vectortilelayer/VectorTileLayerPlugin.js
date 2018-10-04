@@ -1,7 +1,6 @@
 import olSourceVectorTile from 'ol/source/VectorTile';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import olFormatMVT from 'ol/format/MVT';
-import olOverlay from 'ol/Overlay';
 import TileGrid from 'ol/tilegrid/TileGrid';
 import { createDefaultStyle } from 'ol/style/Style';
 
@@ -12,6 +11,8 @@ import styleGenerator from './styleGenerator';
 const LAYER_ID = 'id';
 const LAYER_TYPE = 'oskariLayerType';
 const LAYER_HOVER = 'oskariHoverOptions';
+
+const PROPERTY_ID = 'id';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 const layertype = 'vectortile';
@@ -26,8 +27,11 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         super(config);
         this.__name = 'VectorTileLayerPlugin';
         this._clazz = 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin';
-        this.hoverState = {};
-        this._hoverCache = {};
+        this.hoverState = {
+            layer: null,
+            propertyId: null,
+            feature: null
+        };
     }
     /**
      * @private @method _initImpl
@@ -104,11 +108,13 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             opacity: layer.getOpacity() / 100,
             renderMode: 'hybrid',
             source: new olSourceVectorTile(sourceOpts),
-            style: this._getLayerCurrentStyleFunction(layer),
-            [LAYER_ID]: layer.getId(),
-            [LAYER_TYPE]: layertype,
-            [LAYER_HOVER]: layer.getHoverOptions()
+            style: this._getLayerCurrentStyleFunction(layer)
         });
+        // Set oskari properties for vector feature service functionalities.
+        const silent = true;
+        vectorTileLayer.set(LAYER_ID, layer.getId(), silent);
+        vectorTileLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
+        vectorTileLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
 
         this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
         this.setOLMapLayers(layer.getId(), vectorTileLayer);
@@ -126,21 +132,25 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         if (feature && layer) {
             var hoverOptions = layer.get(LAYER_HOVER);
             if (hoverOptions) {
+                const propertyId = feature.get(PROPERTY_ID);
                 if (this.hoverState.layer && this.hoverState.layer !== layer) {
                     // clear highlight from previously highlighted layer.
-                    this.hoverState.ftrId = null;
+                    this.hoverState.propertyId = null;
+                    this.hoverState.feature = null;
                     this.hoverState.layer.changed();
                     this.hoverState.layer = null;
                 }
-                if (this.hoverState.ftrId !== feature.get('id') && hoverOptions.featureStyle) {
-                    this.hoverState.ftrId = feature.get('id');
+                if (this.hoverState.feature !== feature && hoverOptions.featureStyle) {
+                    this.hoverState.propertyId = propertyId;
+                    this.hoverState.feature = feature;
                     this.hoverState.layer = layer;
                     this.hoverState.layer.changed();
                 }
             }
         } else if (this.hoverState.layer) {
             // Remove feature highlighting
-            this.hoverState.ftrId = null;
+            this.hoverState.propertyId = null;
+            this.hoverState.feature = null;
             this.hoverState.layer.changed();
             this.hoverState.layer = null;
         }
