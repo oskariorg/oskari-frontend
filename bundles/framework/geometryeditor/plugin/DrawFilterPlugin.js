@@ -1048,7 +1048,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * Finishes operation of geometry filtering by drawing
      */
     finishDrawFiltering: function () {
-        var evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
+        var evtBuilder = Oskari.eventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
         var event = evtBuilder(this.getFiltered(), this.editMode, this.creatorId);
         this._sandbox.notifyAll(event);
     },
@@ -2325,7 +2325,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @param {Boolean} blnEnable true to enable, false to disable
      */
     _enableGfi: function (blnEnable) {
-        var gfiReqBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
         if (gfiReqBuilder) {
             this._sandbox.request(this.getName(), gfiReqBuilder(blnEnable));
         }
@@ -2357,8 +2357,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             p;
         this._sandbox = sandbox;
         sandbox.register(this);
-        sandbox.addRequestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
-        sandbox.addRequestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
+        sandbox.requestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
+        sandbox.requestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
         for (p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
                 me._sandbox.registerForEventByName(me, p);

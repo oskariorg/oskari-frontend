@@ -18,6 +18,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             return [];
         }
         this.sandbox.useState(state);
+        this._log = Oskari.log('StateHandlerBundleInstance');
     },
 
     /**
@@ -41,7 +42,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
 
         for (pluginName in me._pluginInstances) {
             if (me._pluginInstances.hasOwnProperty(pluginName)) {
-                me.sandbox.printDebug('[' + me.getName() + ']' + ' resetting state on ' + pluginName);
+                me._log.debug('resetting state on ' + pluginName);
                 me._pluginInstances[pluginName].resetState();
             }
         }
@@ -134,7 +135,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             }
             return;
         }
-        this.sandbox.printDebug('[' + this.getName() + ']' + ' saving state with ' + pluginName);
+        this._log.debug('saving state with ' + pluginName);
         this._pluginInstances[pluginName].saveState(view);
     },
     /**

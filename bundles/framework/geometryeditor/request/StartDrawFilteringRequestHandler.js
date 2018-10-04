@@ -2,10 +2,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFil
 
     this.sandbox = sandbox;
     this.drawFilterPlugin = drawFilterPlugin;
+    this._log = Oskari.log('StartDrawFilteringRequestPluginHandler');
 }, {
     handleRequest : function(core, request) {
         var drawMode = request.getMode();
-        this.sandbox.printDebug("[Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StartDrawFilteringRequestPluginHandler] Start Drawing: " + drawMode);
+        this._log.debug("Start Drawing: " + drawMode);
         this.drawFilterPlugin.startDrawFiltering({
             drawMode : request.getMode(),
             geometry : request.getGeometry(),

@@ -130,7 +130,7 @@ Oskari.clazz.define(
                 lat = position.lat;
             } else {
                 // Send a status report of the popup (it is not open)
-                var evtB = me.getSandbox().getEventBuilder('InfoBox.InfoBoxEvent');
+                var evtB = Oskari.eventBuilder('InfoBox.InfoBoxEvent');
                 var evt = evtB(id, false);
                 me.getSandbox().notifyAll(evt);
                 return;
@@ -499,7 +499,7 @@ Oskari.clazz.define(
                         if (typeof actionObject.action === 'function') {
                             actionObject.action();
                         } else {
-                            var event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
+                            var event = Oskari.eventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
                             sandbox.notifyAll(event);
                         }
                     }
@@ -938,7 +938,7 @@ Oskari.clazz.define(
                 } else if (popup.popup && popup.type === "mobile") {
                     popup.popup.close();
                 }
-                event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
+                event = Oskari.eventBuilder('InfoBox.InfoBoxEvent')(id, false);
             	sandbox.notifyAll(event);
             }
             // else notify popup not found?

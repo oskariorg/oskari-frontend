@@ -131,7 +131,7 @@ Oskari.clazz.define(
 
             //Let's extend UI
             var reqName = 'userinterface.AddExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
             sandbox.request(this, request);
 
@@ -149,13 +149,13 @@ Oskari.clazz.define(
                     'Oskari.mapframework.bundle.search.request.SearchResultActionRequestHandler',
                     sandbox, this.plugins['Oskari.userinterface.Flyout'])
             };
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'Search.AddTabRequest',
                 this.requestHandlers.addTabRequestHandler);
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'Search.AddSearchResultActionRequest',
                 this.requestHandlers.addSearchResultActionRequestHandler);
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'Search.RemoveSearchResultActionRequest',
                 this.requestHandlers.addSearchResultActionRequestHandler);
 
@@ -240,7 +240,7 @@ Oskari.clazz.define(
             }
 
             var reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
 
             sandbox.request(this, request);
@@ -387,7 +387,7 @@ Oskari.clazz.define(
             var me = this;
             function sendRegister() {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if(requestBuilder){
+                if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };

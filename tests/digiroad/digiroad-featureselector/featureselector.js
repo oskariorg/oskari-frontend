@@ -185,7 +185,7 @@ describe('Test Suite for digiroad/featureselector bundle', function() {
             gridElement = jQuery('body').find('#' + testLayerId + '_grid');
 
             var featureSpy = sinon.spy(flyout, 'appendFeatures');
-            var eventBuilder = sandbox.getEventBuilder('FeatureSelector.FeaturesAddedEvent');
+            var eventBuilder = Oskari.eventBuilder('FeatureSelector.FeaturesAddedEvent');
             var event = eventBuilder(testLayerId, [testFeature]);
 
             expect(gridElement.length).to.be(1);
@@ -247,7 +247,7 @@ describe('Test Suite for digiroad/featureselector bundle', function() {
             gridElement = jQuery('body').find('#' + testLayerId + '_grid');
             gridRow = jQuery(gridElement).find('.slick-row');
             var removeSpy = sinon.spy(flyout, 'removeFeatures');
-            var eventBuilder = sandbox.getEventBuilder('FeatureSelector.FeaturesRemovedEvent');
+            var eventBuilder = Oskari.eventBuilder('FeatureSelector.FeaturesRemovedEvent');
             var event = eventBuilder(testLayerId, [testFeature]);
 
             expect(gridRow.length).to.be(1);

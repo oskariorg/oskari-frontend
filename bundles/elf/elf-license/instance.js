@@ -3,12 +3,7 @@
  *
  * @class Oskari.elf.licencse.BundleInstance
  */
-Oskari.clazz.define('Oskari.elf.license.BundleInstance',
-/**
- * @method create called automatically on construction
- * @static
- */
-function () {
+Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
     this._sandbox = null;
     this._locale = null;
     this._licenseInformationUrl = null;
@@ -123,8 +118,7 @@ function () {
         if (conf && conf.licenseInformationUrl) {
             me._licenseInformationUrl = conf.licenseInformationUrl;
         } else {
-            me._licenseInformationUrl = sandbox.getAjaxUrl() +
-                'action_route=ELFLicense';
+            me._licenseInformationUrl = Oskari.urls.getRoute('ELFLicense');
         }
 
         // Create the license service
@@ -150,44 +144,42 @@ function () {
      * @method _activateMetadataSearchResultsShowLicenseLink
      * @private
      */
-    _activateMetadataSearchResultsShowLicenseLink: function(){
-        var me = this,
-            reqBuilder = me._sandbox.getRequestBuilder('AddSearchResultActionRequest');
-
-        if (reqBuilder) {
-            var data = {
-                actionElement: jQuery('<a href="javascript:void(0)"></a>'),
-                callback: function(metadata) {
-                    me._getLicenseInfo(metadata);
-                },
-                bindCallbackTo: null,
-                actionTextElement: null,
-                actionText: me._locale.getLicenseText,
-                showAction: function(metadata) {
-                    return metadata.license && metadata.license !== null;
-                }
-            };
-            var request = reqBuilder(data);
-            me._sandbox.request(me, request);
+    _activateMetadataSearchResultsShowLicenseLink: function () {
+        var me = this;
+        if (!this.sandbox.hasHandler('AddSearchResultActionRequest')) {
+            return;
         }
+        var data = {
+            actionElement: jQuery('<a href="javascript:void(0)"></a>'),
+            callback: function (metadata) {
+                me._getLicenseInfo(metadata);
+            },
+            bindCallbackTo: null,
+            actionTextElement: null,
+            actionText: me._locale.getLicenseText,
+            showAction: function (metadata) {
+                return metadata.license && metadata.license !== null;
+            }
+        };
+        var reqBuilder = Oskari.requestBuilder('AddSearchResultActionRequest');
+        me._sandbox.request(me, reqBuilder(data));
     },
-    _addLicenseTabToMetadataFlyout: function() {
-        var me = this,
-            reqBuilder = me.sandbox.getRequestBuilder('catalogue.AddTabRequest');
+    _addLicenseTabToMetadataFlyout: function () {
+        if (!this.sandbox.hasHandler('catalogue.AddTabRequest')) {
+            return;
+        }
+        var me = this;
         var data = {
             'license': {
                 template: null,
                 title: me._locale.getLicenseText,
-                tabActivatedCallback: function(uuid, panel, metadataModel) {
+                tabActivatedCallback: function (uuid, panel, metadataModel) {
                     me._getLicenseInfoForMetadataFlyout(metadataModel, panel);
                 }
             }
         };
-
-        if (reqBuilder) {
-            var request = reqBuilder(data);
-            me.sandbox.request(me, request);
-        }
+        var reqBuilder = Oskari.requestBuilder('catalogue.AddTabRequest');
+        me.sandbox.request(me, reqBuilder(data));
     },
     /**
      * Get license information
@@ -196,7 +188,7 @@ function () {
      *
      * @param {Object} metadata metadata information
      */
-    _getLicenseInfo: function(metadata) {
+    _getLicenseInfo: function (metadata) {
         var me = this;
         me._progressSpinner.insertTo(jQuery('.actionPlaceholder').parents('.oskari-flyoutcontent'));
         me._progressSpinner.start();
@@ -205,7 +197,7 @@ function () {
         }, function (response) {
             me._progressSpinner.stop();
             if (response) {
-                if(response.userLicense){
+                if (response.userLicense) {
                     me._showLicenseDeactivateDialog(response, metadata);
                 } else {
                     me._showLicenseSubscriptionInformationDialog(response, metadata);

@@ -576,7 +576,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
             return;
         }
         var me = this;
-        var ajaxUrl = this._sandbox.getAjaxUrl();
+        var ajaxUrl = Oskari.urls.getRoute();
         jQuery.ajax({
             type : 'POST',
             dataType : 'json',

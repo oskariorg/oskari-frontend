@@ -1,6 +1,5 @@
 /**
- * @clas
-s Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+ * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
  *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
@@ -450,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * Notifies components that places/categories have changed with 'MyPlaces.MyPlacesChangedEvent'
          */
         _notifyDataChanged: function () {
-            var event = this._sandbox.getEventBuilder('MyPlaces.MyPlacesChangedEvent')();
+            var event = Oskari.eventBuilder('MyPlaces.MyPlacesChangedEvent')();
             this._sandbox.notifyAll(event);
         },
 
@@ -632,7 +631,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 callback(false);
                 return;
             }
-            var ajaxUrl = me._sandbox.getAjaxUrl();
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -645,7 +643,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                     id: category.getId(),
                     makePublic: makePublic
                 },
-                url: ajaxUrl + 'action_route=PublishMyPlaceLayer',
+                url: Oskari.urls.getRoute('PublishMyPlaceLayer'),
                 success: function (pResp) {
                     if (pResp) {
                         category.setPublic(makePublic);

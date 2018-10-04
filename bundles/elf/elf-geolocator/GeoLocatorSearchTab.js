@@ -14,8 +14,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
     function (instance) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
-        this.locationTypeUrl = this.sandbox.getAjaxUrl() + '&action_route=GetLocationType';
-        this.countryUrl = this.sandbox.getAjaxUrl() + '&action_route=GetELFCountriesData&lang=' + Oskari.getLang();
+        this.locationTypeUrl = Oskari.urls.getRoute('GetLocationType');
+        this.countryUrl = Oskari.urls.getRoute('GetELFCountriesData') + '&lang=' + Oskari.getLang();
         this.loc = instance.getLocalization('tab');
         this.templates = {};
         //Selections for advanced search
@@ -247,14 +247,11 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          * @method requestToAddTab
          */
         requestToAddTab: function () {
-            var reqBuilder = this.sandbox
-                    .getRequestBuilder('Search.AddTabRequest'),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(this.getTitle(), this.getContent());
-                this.sandbox.request(this.instance, request);
+            if (!this.sandbox.hasHandler('Search.AddTabRequest')) {
+                return;
             }
+            var reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
+            this.sandbox.request(this.instance, reqBuilder(this.getTitle(), this.getContent()));
         },
         /**
          * Initializes the tab content by creating the search fields

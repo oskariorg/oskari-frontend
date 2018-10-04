@@ -10,7 +10,7 @@ Oskari.clazz.define(
         this.instance = parent;
         this._localization = localization;
         this.sandbox = parent.getSandbox();
-        this.ajaxUrl = this.sandbox.getAjaxUrl();
+        this.ajaxUrl = Oskari.urls.getRoute('ManageRoles');
         this.setTitle(localization.title);
         this.setContent(this.createUi());
     }, {
@@ -130,14 +130,14 @@ Oskari.clazz.define(
 
             jQuery.ajax({
                 type: 'PUT',
-                url: me.ajaxUrl + 'action_route=ManageRoles',
+                url: me.ajaxUrl,
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
 
                 data: saveData,
                 success: function (role) {
                     me.addRoleToList(role);
-                    var evt = me.sandbox.getEventBuilder('RoleChangedEvent')(role, 'add');
+                    var evt = Oskari.eventBuilder('RoleChangedEvent')(role, 'add');
                     me.sandbox.notifyAll(evt);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -184,7 +184,7 @@ Oskari.clazz.define(
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.ajaxUrl + 'action_route=ManageRoles' + '&id=' + role.id,
+                url: me.ajaxUrl + '&id=' + role.id,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -195,7 +195,7 @@ Oskari.clazz.define(
                 },
                 success: function (data) {
                     item.remove();
-                    var evt = me.sandbox.getEventBuilder('RoleChangedEvent')(role, 'remove');
+                    var evt = Oskari.eventBuilder('RoleChangedEvent')(role, 'remove');
                     me.sandbox.notifyAll(evt);
                 }
             });

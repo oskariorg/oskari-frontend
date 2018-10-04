@@ -26,10 +26,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
         var sandbox = instance.sandbox,
             me = this;
         // add save view button to toolbar if we get the statehandler request
-        var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest'),
+        var rbState = Oskari.requestBuilder('StateHandler.SaveStateRequest'),
             reqBuilder;
         if (rbState) {
-            reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
             sandbox.request(instance, reqBuilder('save_view', 'viewtools', {
                 iconCls: 'tool-save-view',
                 tooltip: this.loc('tabs.myviews.button.toolbarsave') || '',
@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 prepend: true,
                 callback: function () {
                     me._promptForView(function (name, description, isDefault) {
-                        var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+                        var rbState = Oskari.requestBuilder('StateHandler.SaveStateRequest');
                         sandbox.request(instance, rbState(name, description, isDefault));
                     });
                 }
@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var sandbox = this.instance.sandbox;
             okBtn.setHandler(function () {
                 me._promptForView(function (name, description, isDefault) {
-                    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+                    var rbState = Oskari.requestBuilder('StateHandler.SaveStateRequest');
                     sandbox.request(me.instance, rbState(name, description, isDefault));
                 });
             });
@@ -357,7 +357,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                         window.location.href = view.url;
                         return;
                     }
-                    var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
+                    var rb = Oskari.requestBuilder('StateHandler.SetStateRequest');
                     if (rb && !me.popupOpen) {
                         var req = rb(data.state);
                         req.setCurrentViewId(data.id);

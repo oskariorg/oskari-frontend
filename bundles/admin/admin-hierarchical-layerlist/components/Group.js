@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             type: method,
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
-            url: me.sandbox.getAjaxUrl('MapLayerGroups') + params,
+            url: Oskari.urls.getRoute('MapLayerGroups') + params,
             data: JSON.stringify(data),
             error: function() {
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -236,7 +236,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function(sandbo
             type: method,
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
-            url: me.sandbox.getAjaxUrl('MapLayerGroups') + params,
+            url: Oskari.urls.getRoute('MapLayerGroups') + params,
             data: JSON.stringify(data),
             error: function() {
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');

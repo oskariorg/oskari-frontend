@@ -77,9 +77,9 @@ function() {
 		var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 		mapModule.registerPlugin(this.popupPlugin);
 		mapModule.startPlugin(this.popupPlugin);
-		sandbox.addRequestHandler('InfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
-		sandbox.addRequestHandler('InfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
-        sandbox.addRequestHandler('InfoBox.RefreshInfoBoxRequest', this.requestHandlers.refreshInfoHandler);
+		sandbox.requestHandler('InfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
+		sandbox.requestHandler('InfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
+        sandbox.requestHandler('InfoBox.RefreshInfoBoxRequest', this.requestHandlers.refreshInfoHandler);
 	},
 	/**
 	 * @method init

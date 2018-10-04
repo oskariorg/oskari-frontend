@@ -55,10 +55,6 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
       }
       var conf = this.conf || {};
       var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.MapRotatorPlugin', conf);
-      if ( !plugin.isSupported() ) {
-        // don't create plugin if ol4 is not supported
-        return;
-      }
       this._mapmodule.registerPlugin(plugin);
       this._mapmodule.startPlugin(plugin);
       this.plugin = plugin;

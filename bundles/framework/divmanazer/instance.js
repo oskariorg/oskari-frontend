@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 extensionUpdatedEvent: null
             };
 
-            extensionInfo.extensionUpdatedEvent = me.sandbox.getEventBuilder('userinterface.ExtensionUpdatedEvent')(extension, extensionInfo.state);
+            extensionInfo.extensionUpdatedEvent = Oskari.eventBuilder('userinterface.ExtensionUpdatedEvent')(extension, extensionInfo.state);
 
             count = extensions.length;
             name = extension.getName();

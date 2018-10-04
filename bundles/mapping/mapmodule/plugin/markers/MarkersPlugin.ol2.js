@@ -249,7 +249,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         __markerClicked: function(markerId) {
             var sandbox = this.getSandbox();
-            var clickEvent = sandbox.getEventBuilder('MarkerClickEvent')(markerId);
+            var clickEvent = Oskari.eventBuilder('MarkerClickEvent')(markerId);
             sandbox.notifyAll(clickEvent);
         },
 
@@ -318,7 +318,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
 
             if (!suppressEvent) {
-                var removeEvent = sandbox.getEventBuilder(
+                var removeEvent = Oskari.eventBuilder(
                     'AfterRemoveMarkersEvent'
                 )(optionalMarkerId);
                 sandbox.notifyAll(removeEvent);
@@ -366,7 +366,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
             me.dotForm.setSaveHandler(function() {
                 var values = me.dotForm.getValues(),
-                    reqBuilder = me.getSandbox().getRequestBuilder(
+                    reqBuilder = Oskari.requestBuilder(
                         'MapModulePlugin.AddMarkerRequest'
                     );
 
@@ -407,7 +407,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
 
             // ask toolbar to select default tool if available
-            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest');
+            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
             if(toolbarRequest) {
                 sandbox.request(me, toolbarRequest());
             }
@@ -564,7 +564,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             me.updateState();
 
             if (!suppressEvent) {
-                var addEvent = me.getSandbox().getEventBuilder(
+                var addEvent = Oskari.eventBuilder(
                     'AfterAddMarkerEvent'
                 )(data, data.id);
                 me.getSandbox().notifyAll(addEvent);
@@ -676,7 +676,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 // Couldn't get the request, toolbar not loaded
                 return;
             }
-            var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            var reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
 
             for (tool in me.buttons) {
                 if (me.buttons.hasOwnProperty(tool)) {
@@ -698,13 +698,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         enableGfi: function(blnEnable) {
             var sandbox = this.getSandbox(),
-                evtB = sandbox.getEventBuilder(
+                evtB = Oskari.eventBuilder(
                     'DrawFilterPlugin.SelectedDrawingEvent'
                 ),
-                gfiReqBuilder = sandbox.getRequestBuilder(
+                gfiReqBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.GetFeatureInfoActivationRequest'
                 ),
-                hiReqBuilder = sandbox.getRequestBuilder(
+                hiReqBuilder = Oskari.requestBuilder(
                     'WfsLayerPlugin.ActivateHighlightRequest'
                 );
 

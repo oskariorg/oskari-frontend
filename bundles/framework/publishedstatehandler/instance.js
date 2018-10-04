@@ -21,6 +21,7 @@ Oskari.clazz.define(
         this._historyPrevious = [];
         this._historyNext = [];
         this._historyEnabled = true;
+        this._log = Oskari.log(this.getName());
 
         // TODO: default view from conf?
         this._defaultViewId = 1;
@@ -82,11 +83,11 @@ Oskari.clazz.define(
                 }
             }
 
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'StateHandler.SetStateRequest',
                 this.requestHandlers.setStateHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'StateHandler.SaveStateRequest',
                 this.requestHandlers.saveStateHandler
             );
@@ -116,7 +117,7 @@ Oskari.clazz.define(
                 this.requestHandlers.saveStateHandler
             );
             // sends a request that removes button described in config
-            var rb = sandbox.getRequestBuilder('MapControls.ToolButtonRequest');
+            var rb = Oskari.requestBuilder('MapControls.ToolButtonRequest');
             if (rb) {
                 sandbox.request(this, rb(this.toolbar.config, 'remove'));
             }
@@ -228,7 +229,7 @@ Oskari.clazz.define(
         registerPlugin: function (plugin) {
             plugin.setHandler(this);
             var pluginName = plugin.getName();
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' Registering ' + pluginName);
+            this._log.debug('Registering ' + pluginName);
             this._pluginInstances[pluginName] = plugin;
         },
         /**
@@ -241,7 +242,7 @@ Oskari.clazz.define(
          */
         unregisterPlugin: function (plugin) {
             var pluginName = plugin.getName();
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' Unregistering ' + pluginName);
+            this._log.debug('Unregistering ' + pluginName);
             this._pluginInstances[pluginName] = undefined;
             plugin.setHandler(null);
         },
@@ -255,7 +256,7 @@ Oskari.clazz.define(
         startPlugin: function (plugin) {
             var pluginName = plugin.getName();
 
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+            this._log.debug('Starting ' + pluginName);
             plugin.startPlugin(this.sandbox);
         },
         /**
@@ -268,7 +269,7 @@ Oskari.clazz.define(
         stopPlugin: function (plugin) {
             var pluginName = plugin.getName();
 
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+            this._log.debug('Starting ' + pluginName);
             plugin.stopPlugin(this.sandbox);
         },
 
@@ -338,10 +339,7 @@ Oskari.clazz.define(
                     prevLayer = prevLayers[ln];
                     nextLayer = nextLayers[ln];
 
-                    me.sandbox.printDebug(
-                        '[StateHandler] comparing layer state ' +
-                        prevLayer.id + ' vs ' + nextLayer.id
-                    );
+                    me._log.debug('comparing layer state ' + prevLayer.id + ' vs ' + nextLayer.id);
 
 
                     if (prevLayer.id !== nextLayer.id) {
@@ -374,13 +372,9 @@ Oskari.clazz.define(
                 cmp;
             for (sc = 0; sc < me._stateComparators.length; sc += 1) {
                 cmp = me._stateComparators[sc];
-                me.sandbox.printDebug(
-                    '[StateHandler] comparing state ' + cmp.rule
-                );
+                me._log.debug('comparing state ' + cmp.rule);
                 if (cmp.cmp.apply(this, [prevState, nextState])) {
-                    me.sandbox.printDebug(
-                        '[StateHandler] comparing state MATCH ' + cmp.rule
-                    );
+                    me._log.debug('comparing state MATCH ' + cmp.rule);
                     cmpResult.result = true;
                     cmpResult.rule = cmp.rule;
                     cmpResult.rulesMatched[cmp.rule] = cmp.rule;
@@ -415,7 +409,7 @@ Oskari.clazz.define(
                     prevState = history.length === 0 ? null : history[history.length - 1],
                     cmpResult = me._compareState(prevState, state, true);
                 if (cmpResult.result) {
-                    me.sandbox.printDebug('[StateHandler] PUSHING state');
+                    me._log.debug('PUSHING state');
                     state.rule = cmpResult.rule;
                     me._historyPrevious.push(state);
                     me._historyNext = [];
@@ -516,13 +510,13 @@ Oskari.clazz.define(
 
             // setting state
             if (state.selectedLayers && cmpResult.rulesMatched.layers) {
-                sandbox.printDebug('[StateHandler] restoring LAYER state');
+                this._log.debug('restoring LAYER state');
                 this._teardownState(mapmodule);
 
-                var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest'),
-                    rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
-                    visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest'),
-                    styleReqBuilder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),
+                var rbAdd = Oskari.requestBuilder('AddMapLayerRequest'),
+                    rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest'),
+                    visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest'),
+                    styleReqBuilder = Oskari.requestBuilder('ChangeMapLayerStyleRequest'),
                     len = state.selectedLayers.length,
                     i,
                     layer;
@@ -544,7 +538,7 @@ Oskari.clazz.define(
             }
 
             if (state.east) {
-                sandbox.printDebug('[StateHandler] restoring LOCATION state');
+                this._log.debug('restoring LOCATION state');
                 this.getSandbox().getMap().moveTo(
                     state.east,
                     state.north,
@@ -565,7 +559,7 @@ Oskari.clazz.define(
         _teardownState: function (module) {
             var sandbox = this.getSandbox(),
                 selectedLayers = sandbox.findAllSelectedMapLayers(),
-                rbRemove = sandbox.getRequestBuilder('RemoveMapLayerRequest'), // remove all current layers
+                rbRemove = Oskari.requestBuilder('RemoveMapLayerRequest'), // remove all current layers
                 i;
             for (i = 0; i < selectedLayers.length; i += 1) {
                 sandbox.request(module.getName(), rbRemove(selectedLayers[i].getId()));

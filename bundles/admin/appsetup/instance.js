@@ -47,7 +47,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
 
             var content = me._templates.tabContent.clone();
             var description = content.find('.appsetup__description');
-            var currentViewUrl = me.sandbox.getAjaxUrl('Views') + '&uuid=' + Oskari.app.getUuid();
+            var currentViewUrl = Oskari.urls.getRoute('Views') + '&uuid=' + Oskari.app.getUuid();
             description.html('<div>' + me._localization.description.fillJSON + ' ' +
                 '(<a href="' + currentViewUrl + '" target="_blank">' + me._localization.description.current + '</a>).</div>' +
                 '<div>' + this._localization.description.differentUuid + '</div>'
@@ -66,8 +66,8 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
             });
             me._importBtn.insertTo(content.find('.appsetup__button'));
 
-            var reqBuilder = sandbox.getRequestBuilder('Admin.AddTabRequest');
-            if(reqBuilder) {
+            if (sandbox.hasHandler('Admin.AddTabRequest')) {
+                var reqBuilder = Oskari.requestBuilder('Admin.AddTabRequest');
                 var request = reqBuilder(me._localization.title, content, 3, 'appsetup');
                 sandbox.request(this, request);
             }
@@ -100,7 +100,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
                 type : 'POST',
                 dataType   : 'json',
                 contentType: 'application/json; charset=UTF-8',
-                url : me.sandbox.getAjaxUrl('Views'),
+                url : Oskari.urls.getRoute('Views'),
                 data : JSON.stringify(parsed),
                 error : function() {
                     me._popup.show(me._localization.error.title, me._localization.error.importError);

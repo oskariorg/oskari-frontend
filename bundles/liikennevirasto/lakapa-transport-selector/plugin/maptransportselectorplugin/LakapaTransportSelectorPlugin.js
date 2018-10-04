@@ -1236,7 +1236,7 @@ function(locale, conf) {
         me._cancelAjaxRequest();
         me._startAjaxRequest(dteMs);
 
-        var ajaxUrl = me._sandbox.getAjaxUrl();
+        var ajaxUrl = Oskari.urls.getRoute();
 
         jQuery.ajax({
             beforeSend : function(x) {
@@ -1524,7 +1524,7 @@ function(locale, conf) {
 
         me._startMapAjaxRequest(dteMs);
 
-        var ajaxUrl = this._sandbox.getAjaxUrl();
+        var ajaxUrl = Oskari.urls.getRoute();
 
         var lon = lonlat.lon;
         var lat = lonlat.lat;
@@ -1647,7 +1647,7 @@ function(locale, conf) {
 
         me._startDigiroadAjaxRequest(dteMs);
 
-        var ajaxUrl = this._sandbox.getAjaxUrl();
+        var ajaxUrl = Oskari.urls.getRoute();
 
         var lon = lonlat.lon;
         var lat = lonlat.lat;

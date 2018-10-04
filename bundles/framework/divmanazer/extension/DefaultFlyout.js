@@ -25,8 +25,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         this.container = null;
 
         this._sidetool = null;
-
-
+        this._log = Oskari.log(this.getName());
     }, {
         __temp:{
             sideTool:_.template(
@@ -236,7 +235,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         issue: function () {
             var requestName = arguments[0],
                 args = this.slicer.apply(arguments, [1]),
-                builder = this.getSandbox().getRequestBuilder(requestName),
+                builder = Oskari.requestBuilder(requestName),
                 request = builder.apply(builder, args);
             return this.getSandbox().request(this.getExtension(), request);
         },
@@ -244,7 +243,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         notify: function () {
             var eventName = arguments[0],
                 args = this.slicer.apply(arguments, [1]),
-                builder = this.getSandbox().getEventBuilder(eventName),
+                builder = Oskari.eventBuilder(eventName),
                 evt = builder.apply(builder, args);
             return this.getSandbox().notifyAll(evt);
         },
@@ -252,14 +251,14 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
          * Hook function for bundle specific op. Called when flyout is opened.
          */
         onOpen : function() {
-            this.getSandbox().printDebug('Opened flyout ' + this.getName());
+            this._log.debug('Opened flyout ' + this.getName());
         },
 
         /**
          * Hook function for bundle specific op. Called when flyout is closed.
          */
         onClose : function() {
-            this.getSandbox().printDebug('Closed flyout' + this.getName());
+            this._log.debug('Closed flyout' + this.getName());
         }
 
     }, {

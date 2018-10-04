@@ -93,12 +93,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
 
             me.getRoles(function () {
                 //Let's extend UI after we have the role data
-                var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+                var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
             }, function(){
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     btn = dialog.createCloseButton('Ok'),
-                    request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+                    request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
 
                 btn.addClass('primary');
@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(this, request);
 
@@ -259,7 +259,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
 
             jQuery.ajax({
                 type: 'GET',
-                url: me.sandbox.getAjaxUrl() + 'action_route=ManageRoles',
+                url: Oskari.urls.getRoute('ManageRoles'),
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 error: function () {

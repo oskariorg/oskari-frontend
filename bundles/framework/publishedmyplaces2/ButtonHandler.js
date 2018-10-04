@@ -17,6 +17,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
         me.ignoreEvents = false;
         me.dialog = null;
         me.conf = instance.conf || {};
+        this._log = Oskari.log(this.getName());
 
         me.buttons = {
             'point': {
@@ -111,13 +112,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
             }
 
             // request toolbar to add buttons
-            var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            var reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
             if (reqBuilder) {
                 for (var tool in me.buttons) {
                     sandbox.request(me, reqBuilder(tool, me.buttonGroup, me.buttons[tool]));
                 }
             } else {
-                sandbox.printDebug("Missing toolbar.");
+                this._log.debug("Missing toolbar.");
             }
 
             if (!Oskari.user().isLoggedIn() && me.conf.allowGuest !== true) {
@@ -132,7 +133,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          */
         disableButtons: function () {
             var sandbox = this.instance.sandbox,
-                stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+                stateReqBuilder = Oskari.requestBuilder('Toolbar.ToolButtonStateRequest');
             if(stateReqBuilder) {
                 sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
             }
@@ -144,7 +145,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          */
         startNewDrawing: function (config) {
             // notify components to reset any saved "selected place" data
-            var event = this.instance.sandbox.getEventBuilder('DrawPlugin.SelectedDrawingEvent')();
+            var event = Oskari.eventBuilder('DrawPlugin.SelectedDrawingEvent')();
             this.instance.sandbox.notifyAll(event);
 
             // notify plugin to start drawing new geometry
@@ -158,7 +159,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          */
         sendDrawRequest: function (config) {
             var me = this,
-                startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(config);
+                startRequest = Oskari.requestBuilder('DrawPlugin.StartDrawingRequest')(config);
             this.instance.sandbox.request(this, startRequest);
 
             if (!config.geometry) {
@@ -185,7 +186,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
             cancelBtn.setTitle(locBtns.cancel);
             cancelBtn.setHandler(function () {
                 // ask toolbar to select default tool
-                var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                 me.instance.sandbox.request(me, toolbarRequest);
                 me.sendStopDrawRequest(true);
             });
@@ -208,7 +209,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                 "buttons": buttons
             };
 
-            toolContainerRequest = me.instance.sandbox.getRequestBuilder('Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
+            toolContainerRequest = Oskari.requestBuilder('Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
             me.instance.sandbox.request(me, toolContainerRequest);
         },
         /**
@@ -219,10 +220,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          */
         sendStopDrawRequest: function (isCancel) {
             var me = this,
-                request = me.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
+                request = Oskari.requestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
             me.instance.sandbox.request(me, request);
 
-            var toolContainerRequest = me.instance.sandbox.getRequestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
+            var toolContainerRequest = Oskari.requestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
             me.instance.sandbox.request(me, toolContainerRequest);
         },
         /**
@@ -274,7 +275,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                 if (!event.getPlace()) {
                     // cleanup
                     // ask toolbar to select default tool
-                    var toolbarRequest = this.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                    var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                     this.instance.sandbox.request(this, toolbarRequest);
                 }
             },
@@ -288,14 +289,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                 // set ignore so we don't cancel our drawing unintentionally
                 me.ignoreEvents = true;
                 // ask toolbar to select default tool
-                var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                 me.instance.sandbox.request(me, toolbarRequest);
                 // disable ignore to act normally after ^request
                 me.ignoreEvents = false;
                 // select tool selection will enable gfi -> disable it again
                 me.instance.enableGfi(false);
 
-                var toolContainerRequest = me.instance.sandbox.getRequestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
+                var toolContainerRequest = Oskari.requestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
                 me.instance.sandbox.request(me, toolContainerRequest);
             },
 
@@ -314,7 +315,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                         if (me.toolContentDivData.content !== areaDialogContent) {
                             me.toolContentDivData.content = areaDialogContent;
 
-                            toolContainerRequest = me.instance.sandbox.getRequestBuilder('Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
+                            toolContainerRequest = Oskari.requestBuilder('Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
                             me.instance.sandbox.request(me, toolContainerRequest);
                         }
                     }

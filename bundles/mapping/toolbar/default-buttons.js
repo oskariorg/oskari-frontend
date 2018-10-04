@@ -237,7 +237,7 @@ Oskari.clazz.category(
             var sandbox = this.getSandbox();
             var url = null;
             if(this.conf) {
-                url = sandbox.getLocalizedProperty(this.conf.mapUrlPrefix);
+                url = Oskari.getLocalized(this.conf.mapUrlPrefix);
             }
 
             // setup current url as base if none configured

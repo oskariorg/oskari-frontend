@@ -105,7 +105,7 @@ function(name,viewClazz) {
         me.sandbox = sandbox;
         sandbox.register(this);
 
-        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+        var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
 
         sandbox.request(this, request);
 
@@ -117,7 +117,7 @@ function(name,viewClazz) {
      */
     stop : function() {
         var sandbox = this.sandbox,
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
         sandbox.request(this, request);
         sandbox.unregister(this);
         this.sandbox = null;

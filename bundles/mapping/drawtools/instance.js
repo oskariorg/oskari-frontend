@@ -93,8 +93,8 @@ function() {
         }
 
         // handleRequest is being called for these
-        sandbox.addRequestHandler('DrawTools.StartDrawingRequest', this);
-        sandbox.addRequestHandler('DrawTools.StopDrawingRequest', this);
+        sandbox.requestHandler('DrawTools.StartDrawingRequest', this);
+        sandbox.requestHandler('DrawTools.StopDrawingRequest', this);
     },
     /**
      * @method init

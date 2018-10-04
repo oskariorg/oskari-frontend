@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         var sandbox = psandbox || Oskari.getSandbox(),
             label,
             input;
-        Oskari.log('Oskari.userinterface.component.FormInput').warn('Deprecated - please use Oskari.userinterface.component.TextInput instead.');
+        Oskari.log('FormInput').deprecated('Oskari.userinterface.component.FormInput', 'Please use Oskari.userinterface.component.TextInput instead.');
         this.sandbox = sandbox;
         this.template = jQuery('<div class="oskarifield"><label></label><input type="text"/></div>');
         this.templateErrors = jQuery('<div class="error"></div>');
@@ -513,8 +513,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             }
 
 
-            enabler = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest');
-            disabler = sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest');
+            enabler = Oskari.requestBuilder('EnableMapKeyboardMovementRequest');
+            disabler = Oskari.requestBuilder('DisableMapKeyboardMovementRequest');
             if (!enabler || !disabler) {
                 return;
             }

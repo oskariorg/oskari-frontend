@@ -104,7 +104,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 p;
 
             me.sandbox = sandbox;
-            this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', sandbox.getAjaxUrl());
+            this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -115,7 +115,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
 
 
             //Let's extend UI
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
 
             sandbox.request(this, request);
 
@@ -126,10 +126,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             this.requestHandlers = {
                 addTabRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler', sandbox, this.plugins['Oskari.userinterface.Flyout'])
             };
-            sandbox.addRequestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
+            sandbox.requestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
 
             // Personaldata available
-            var eventBuilder = sandbox.getEventBuilder('Personaldata.PersonaldataLoadedEvent');
+            var eventBuilder = Oskari.eventBuilder('Personaldata.PersonaldataLoadedEvent');
             var event = eventBuilder();
             sandbox.notifyAll(event);
             this._registerForGuidedTour();
@@ -183,7 +183,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             }
             sandbox.removeRequestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
 
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(this, request);
 
@@ -298,7 +298,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             var me = this;
             function sendRegister() {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if(requestBuilder){
+                if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };

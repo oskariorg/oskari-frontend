@@ -110,7 +110,7 @@ Oskari.clazz.define(
                 '<fieldset></fieldset>' +
                 '</form>'
             );
-            //me.templates.form.attr('action', me.sandbox.getAjaxUrl() + me.instance.conf.restUrl);
+            //me.templates.form.attr('action', Oskari.urls.getRoute() + me.instance.conf.restUrl);
             me.templates.form.find('input').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
@@ -222,7 +222,7 @@ Oskari.clazz.define(
             var me = this;
             jQuery.ajax({
                 type: 'GET',
-                url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
+                url: Oskari.urls.getRoute() + me.instance.conf.restUrl,
                 success: function (data) {
                     me._createList(me, data.users, me.state.filter);
                 },
@@ -311,7 +311,7 @@ Oskari.clazz.define(
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl + '&id=' + uid,
+                url: Oskari.urls.getRoute() + me.instance.conf.restUrl + '&id=' + uid,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -447,7 +447,7 @@ Oskari.clazz.define(
 
                 jQuery.ajax({
                     type: frm.attr('method'),
-                    url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
+                    url: Oskari.urls.getRoute() + me.instance.conf.restUrl,
                     data: frm.serialize(),
                     success: function (data) {
                         me._closeForm(frm);

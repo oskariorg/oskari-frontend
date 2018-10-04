@@ -434,7 +434,7 @@ Oskari.clazz.define(
 
             me.sentKeyword = keyword;
 
-            ajaxUrl = this.instance.sandbox.getAjaxUrl();
+            ajaxUrl = Oskari.urls.getRoute('SearchKeywords') + '&keyword=';
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -444,8 +444,7 @@ Oskari.clazz.define(
                             'application/j-son;charset=UTF-8');
                     }
                 },
-                url: ajaxUrl + 'action_route=SearchKeywords&keyword=' +
-                    encodeURIComponent(keyword) + '&lang=' + Oskari.getLang(),
+                url: ajaxUrl + encodeURIComponent(keyword) + '&lang=' + Oskari.getLang(),
                 success: function (pResp) {
                     me.relatedKeywords = pResp;
                     me._showRelatedKeywords(keyword, pResp, oskarifield);

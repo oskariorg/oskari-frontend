@@ -11,12 +11,11 @@ function(instance) {
     this.sandbox = instance.sandbox;
     this.urls = {};
 
-    var ajaxUrl = this.sandbox.getAjaxUrl() + 'action_route=';
     var srsName = this.sandbox.getMap().getSrsName();
-    this.urls.create = ajaxUrl + 'CreateUserLayer&srs=' + srsName + '&sourceEpsg=' + srsName;
-    this.urls.get = ajaxUrl + 'GetUserLayers&srs=' + srsName;
-    this.urls.edit = (ajaxUrl + 'EditUserLayer');
-    this.urls.getStyle = (ajaxUrl + 'GetUserLayerStyle');
+    this.urls.create = Oskari.urls.getRoute('CreateUserLayer') + '&srs=' + srsName + '&sourceEpsg=' + srsName;
+    this.urls.get = Oskari.urls.getRoute('GetUserLayers') + '&srs=' + srsName;
+    this.urls.edit = Oskari.urls.getRoute('EditUserLayer');
+    this.urls.getStyle = Oskari.urls.getRoute('GetUserLayerStyle');
 }, {
     __name: "MyPlacesImport.MyPlacesImportService",
     __qname : "Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService",
@@ -110,9 +109,9 @@ function(instance) {
         var mapLayerService = this.sandbox
                 .getService('Oskari.mapframework.service.MapLayerService'),
             layer = mapLayerService.findMapLayer(id),
-            request = this.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(id, true),
+            request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(id, true),
             layerIsSelected = this.sandbox.isLayerAlreadySelected(id),
-            evt = this.sandbox.getEventBuilder('MapLayerEvent')(id, 'update');
+            evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
         layer.setName(updatedLayer.name);
         layer.setSource(updatedLayer.source);
         layer.setDescription(updatedLayer.description);
@@ -137,7 +136,7 @@ function(instance) {
         });
         if (_.isFunction(cb)) cb();
         if (layers && layers.length > 0) {
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
             me.sandbox.notifyAll(event); // add user layers programmatically since normal link processing
         }
 

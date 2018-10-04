@@ -110,7 +110,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
         this._requestHandlers['catalogue.ShowMetadataRequest'] =
             Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadataRequestHandler', sandbox, this);
 
-        sandbox.addRequestHandler('catalogue.ShowMetadataRequest', this._requestHandlers['catalogue.ShowMetadataRequest']);
+        sandbox.requestHandler('catalogue.ShowMetadataRequest', this._requestHandlers['catalogue.ShowMetadataRequest']);
 
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 

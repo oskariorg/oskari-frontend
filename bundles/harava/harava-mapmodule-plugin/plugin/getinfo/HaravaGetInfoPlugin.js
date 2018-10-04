@@ -108,8 +108,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
             for (p in this.eventHandlers) {
                 this._sandbox.registerForEventByName(this, p);
             }
-            this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoRequest', this.getGFIHandler);
-            this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', this.getGFIHandler);
+            this._sandbox.requestHandler('MapModulePlugin.GetFeatureInfoRequest', this.getGFIHandler);
+            this._sandbox.requestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', this.getGFIHandler);
         },
         /**
          * @method stopPlugin
@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
 
             me._startAjaxRequest(dteMs);
 
-            var ajaxUrl = this._sandbox.getAjaxUrl();
+            var ajaxUrl = Oskari.urls.getRoute();
 
             var lon = lonlat.lon;
             var lat = lonlat.lat;

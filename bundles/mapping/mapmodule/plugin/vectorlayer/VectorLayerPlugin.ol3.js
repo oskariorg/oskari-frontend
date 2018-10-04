@@ -59,6 +59,7 @@ Oskari.clazz.define(
         };
         this._nextFeatureId = 0;
         this._hoverFeature = undefined;
+        this._log = Oskari.log('VectorLayerPlugin');
     }, {
         /**
          * @method register
@@ -161,7 +162,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' +
                 layer.getOpacity()
             );
@@ -368,7 +369,7 @@ Oskari.clazz.define(
             // notify other components of removal
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
-            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
+            var removeEvent = Oskari.eventBuilder('FeatureEvent')().setOpRemove();
 
             featuresToRemove.forEach(function(feature) {
                 source.removeFeature(feature);
@@ -727,8 +728,8 @@ Oskari.clazz.define(
                    this.setupFeatureStyle(options, feature, true);
                 }
                 var formatter = this._supportedFormats.GeoJSON;
-                var addEvent = this.getSandbox().getEventBuilder('FeatureEvent')().setOpAdd();
-                var errorEvent = this.getSandbox().getEventBuilder('FeatureEvent')().setOpError('feature has no geometry');
+                var addEvent = Oskari.eventBuilder('FeatureEvent')().setOpAdd();
+                var errorEvent = Oskari.eventBuilder('FeatureEvent')().setOpError('feature has no geometry');
                 var highlighted = feature.get('highlighted');
                 if(highlighted){
                     feature.set('highlighted', false);
@@ -821,12 +822,12 @@ Oskari.clazz.define(
             if (!layer.isLayerOfType('VECTOR')) {
                 return null;
             }
-            var ol = this.getLayerById(layer.getId());
-            if (!ol) {
+            var olLayer = this.getLayerById(layer.getId());
+            if (!olLayer) {
                 return null;
             }
             // only single layer/id, wrap it in an array
-            return [ol];
+            return [olLayer];
         },
         getLayerById: function(id) {
             if (!id) {
@@ -1030,7 +1031,7 @@ Oskari.clazz.define(
          */
         sendZoomFeatureEvent: function(features) {
             var me = this,
-                featureEvent = me._sandbox.getEventBuilder('FeatureEvent')().setOpZoom();
+                featureEvent = Oskari.eventBuilder('FeatureEvent')().setOpZoom();
             if (!_.isEmpty(features)) {
                 var formatter = me._supportedFormats.GeoJSON;
                 _.each(features, function(feature) {
@@ -1047,7 +1048,7 @@ Oskari.clazz.define(
          */
         sendErrorFeatureEvent: function(msg) {
             var me = this,
-                featureEvent = me._sandbox.getEventBuilder('FeatureEvent')().setOpError(msg);
+                featureEvent = Oskari.eventBuilder('FeatureEvent')().setOpError(msg);
             me._sandbox.notifyAll(featureEvent);
         },
         /**

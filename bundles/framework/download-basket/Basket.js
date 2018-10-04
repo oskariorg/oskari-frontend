@@ -164,8 +164,6 @@ Oskari.clazz.define(
             };
             var strUserDetails = JSON.stringify(userDetails);
 
-            var ajaxUrl = me._sandbox.getAjaxUrl();
-
             jQuery.ajax({
                 beforeSend : function(x) {
                     if (x && x.overrideMimeType) {
@@ -211,7 +209,7 @@ Oskari.clazz.define(
                 },
                 type : 'POST',
                 dataType : 'json',
-                url : ajaxUrl + 'action_route=DownloadInfo'
+                url : Oskari.urls.getRoute('DownloadInfo')
             });
 
         },
@@ -369,10 +367,10 @@ Oskari.clazz.define(
                     var licenseLink = basketEl.find('.basket__content-license>a');
                     if(me.instance.conf.licenseUrl) {
                         licenseTitle.text(me._getLocalization('basket-license-title'));
-                        licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseName) ||
+                        licenseLink.text(Oskari.getLocalized(me.instance.conf.licenseName) ||
                             me.instance.conf.licenseName ||
                             me._getLocalization('basket-license-name'));
-                        licenseLink.attr('href',me._sandbox.getLocalizedProperty(me.instance.conf.licenseUrl) ||
+                        licenseLink.attr('href',Oskari.getLocalized(me.instance.conf.licenseUrl) ||
                             me.instance.conf.licenseUrl);
                     } else {
                         licenseTitle.remove();

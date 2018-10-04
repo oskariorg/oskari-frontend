@@ -8,7 +8,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
      * @method create called automatically on construction
      * @static
      */
-    function() {}, {
+    function() {
+        this._log = Oskari.log(this.getName());
+    }, {
         __idCounter : 1,
         /**
          * @static
@@ -122,18 +124,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
             layer.setColorSetup(values.colorSetup);
             layer.setSelectedTheme(values.selectedTheme);
             if(isNew) {
-                this.sandbox.printDebug('Register and setup heatmap with values', values, layer);
+                this._log.debug('Register and setup heatmap with values', values, layer);
                 var service = this.getLayerService();
                 // adding layer to service so it can be referenced with id
                 service.addLayer(layer);
                 // add layer to map with request
-                var rbAdd = this.sandbox.getRequestBuilder('AddMapLayerRequest');
+                var rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
                 this.sandbox.request(this, rbAdd(layer.getId(), true));
             }
             else {
-                this.sandbox.printDebug('Update heatmap with values', values, layer);
+                this._log.debug('Update heatmap with values', values, layer);
                 // request update for the layer
-                var rbUpdate = this.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+                var rbUpdate = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
                 this.sandbox.request(this, rbUpdate(layer.getId(), true));
             }
         },
@@ -149,7 +151,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);
         },
         /**

@@ -46,7 +46,7 @@ Oskari.clazz.define(
          *
          */
         sendAnalyseData: function (data, success, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=CreateAnalysisLayer';
+            var url = Oskari.urls.getRoute('CreateAnalysisLayer');
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -71,7 +71,7 @@ Oskari.clazz.define(
          *
          */
         _getAnalysisLayers: function (mysuccess, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetAnalysisLayers';
+            var url = Oskari.urls.getRoute('GetAnalysisLayers');
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -95,7 +95,7 @@ Oskari.clazz.define(
         loadAnalyseLayers: function () {
             var me = this,
                 sandbox = me.instance.getSandbox(),
-                url = sandbox.getAjaxUrl(),
+                url = Oskari.urls.getRoute(),
                 loc = Oskari.getLocalization(me.instance.getName());
 
             // Request analyis layers via the backend
@@ -155,7 +155,7 @@ Oskari.clazz.define(
 
             if (layerarr && layerarr.length > 0) {
                 // notify components of added layer if not suppressed
-                var evt = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
+                var evt = Oskari.eventBuilder('MapLayerEvent')(null, 'add');
                 sandbox.notifyAll(evt); // add the analysis layers programmatically since normal link processing
             }
         },
@@ -188,7 +188,7 @@ Oskari.clazz.define(
          *
          */
         _getWFSLayerPropertiesAndTypes: function (layer_id, success2, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&simple=true&layer_id=' + layer_id;
+            var url = Oskari.urls.getRoute('GetWFSDescribeFeature') + '&simple=true&layer_id=' + layer_id;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -212,7 +212,7 @@ Oskari.clazz.define(
         loadWFSLayerPropertiesAndTypes: function (layer_id) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
-                url = sandbox.getAjaxUrl(),
+                url = Oskari.urls.getRoute(),
                 loc = Oskari.getLocalization(me.instance.getName());
 
             // Request analyis layers via the backend

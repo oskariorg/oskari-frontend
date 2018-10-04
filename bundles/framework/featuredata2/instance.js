@@ -102,7 +102,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             }
 
             //Let's extend UI
-            var requestBuilder = sandbox.getRequestBuilder('userinterface.AddExtensionRequest');
+            var requestBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
             if (requestBuilder) {
                 var request = requestBuilder(this);
                 sandbox.request(this, request);
@@ -116,7 +116,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             //sends request via config to add tool selection button
             if (this.conf && this.conf.selectionTools === true) {
                 this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', this);
-                var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
+                var addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
                     btn = {
                         iconCls: 'tool-feature-selection',
                         tooltip: localization.tools.select.tooltip,
@@ -147,7 +147,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
             }
 
-            sandbox.addRequestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
+            sandbox.requestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
             this.__setupLayerTools();
         },
 
@@ -242,7 +242,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);
         },
 
@@ -401,7 +401,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                 me.selectionPlugin.clearDrawing();
 
-                var evt = me.sandbox.getEventBuilder("WFSSetFilter")(features);
+                var evt = Oskari.eventBuilder("WFSSetFilter")(features);
                 me.sandbox.notifyAll(evt);
 
             },
@@ -432,7 +432,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 me.selectionPlugin.setFeatures(geojson.features);
                 me.selectionPlugin.stopDrawing();
 
-                var event = me.sandbox.getEventBuilder("WFSSetFilter")(geojson);
+                var event = Oskari.eventBuilder("WFSSetFilter")(geojson);
                 me.sandbox.notifyAll(event);
 
                 me.popupHandler.removeButtonSelection();
@@ -459,7 +459,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
             }
 
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(this, request);
 

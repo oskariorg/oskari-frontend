@@ -210,7 +210,7 @@ Oskari.clazz.define(
 
             if (me.getSelectedFeatureIds(layer._id)) {
                 _.remove(me.WFSFeatureSelections, {'layerId': layer._id});
-                var event = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
+                var event = Oskari.eventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
                 me.sandbox.notifyAll(event);
             }
         },

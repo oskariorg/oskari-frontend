@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             }
 
             //Let's extend UI
-            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
             // draw ui
@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             );
 
             // register request handlers
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'ContentEditor.ShowContentEditorRequest',
                 me.showContentEditorRequestHandler
             );
@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);
         },
 
@@ -213,7 +213,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 if(!evt.getIsFinished()) {
                     return;
                 }
-                me.sideContentEditor.prepareRequest(evt.getGeoJson());
+                me.sideContentEditor.setCurrentGeoJson(evt.getGeoJson());
             });
         },
 
@@ -229,7 +229,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             },
             WFSFeatureGeometriesEvent: function(evt) {
                 if (this.sideContentEditor != null) {
-                    this.sideContentEditor.ParseWFSFeatureGeometries(evt);
+                    this.sideContentEditor.parseWFSFeatureGeometries(evt);
                 }
             },
             'MapClickedEvent': function(event) {
@@ -267,7 +267,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
             this.sandbox.unregister(this);
@@ -361,7 +361,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     delete me.sandbox._mapMode;
                 }
 
-                request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+                request = Oskari.requestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                 me.sandbox.request(me.getName(), request);
 
             }

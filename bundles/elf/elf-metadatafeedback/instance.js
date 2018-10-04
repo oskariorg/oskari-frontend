@@ -84,8 +84,8 @@ function () {
             this.sandbox = sandbox;
 
             sandbox.register(this);
-            var addFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=UserFeedback';
-            var fetchFeedbackAjaxUrl = this.sandbox.getAjaxUrl()+'action_route=UserFeedback';
+            var addFeedbackAjaxUrl = Oskari.urls.getRoute('UserFeedback');
+            var fetchFeedbackAjaxUrl = Oskari.urls.getRoute('UserFeedback');
             var feedbackServiceName =
                 'Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService';
             this.feedbackService = Oskari.clazz.create(feedbackServiceName, addFeedbackAjaxUrl, fetchFeedbackAjaxUrl);
@@ -106,10 +106,10 @@ function () {
             };
 
             for (var key in this._requestHandlers) {
-                sandbox.addRequestHandler(key, this._requestHandlers[key])
+                sandbox.requestHandler(key, this._requestHandlers[key])
             }
 
-            var request = sandbox.getRequestBuilder(
+            var request = Oskari.requestBuilder(
                 'userinterface.AddExtensionRequest'
             )(this);
             sandbox.request(this, request);
@@ -126,7 +126,7 @@ function () {
          */
         _activateMetadataSearchResultsShowRating: function(){
             var me = this,
-                reqBuilder = me.sandbox.getRequestBuilder('AddSearchResultActionRequest');
+                reqBuilder = Oskari.requestBuilder('AddSearchResultActionRequest');
 
             if (reqBuilder) {
                 var data = {
@@ -157,7 +157,7 @@ function () {
         },
         _addMetadataFeedbackTabToMetadataFlyout: function() {
             var me = this,
-                reqBuilder = me.sandbox.getRequestBuilder('catalogue.AddTabRequest');
+                reqBuilder = Oskari.requestBuilder('catalogue.AddTabRequest');
             var data = {
                 'feedback': {
                     template: null,

@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             }
             // else setup this instance
             if(!searchUrl) {
-                this._searchUrl = sandbox.getAjaxUrl('GetSearchResult');
+                this._searchUrl = Oskari.urls.getRoute('GetSearchResult');
             }
             sandbox.requestHandler('SearchRequest', this);
             sandbox.registerService(this);
@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
         doSearch: function(searchString, onSuccess, onError) {
             var lang = Oskari.getLang();
             var sb = this.sandbox || Oskari.getSandbox();
-            var evtBuilder = sb.getEventBuilder('SearchResultEvent');
+            var evtBuilder = Oskari.eventBuilder('SearchResultEvent');
             jQuery.ajax({
                 dataType: "json",
                 type: "POST",

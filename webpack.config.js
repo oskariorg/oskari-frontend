@@ -6,6 +6,8 @@ const LocalizationPlugin = require('./webpack/localizationPlugin');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
 
+const proxyPort = 8081;
+
 module.exports = (env, argv) => {
   const isProd = argv.mode === 'production';
 
@@ -130,7 +132,7 @@ module.exports = (env, argv) => {
     };
   } else {
     config.devServer = {
-      port: 8081,
+      port: proxyPort,
       proxy: [{
         context: ['/transport/cometd'],
         target: 'ws://localhost:8080',
@@ -141,7 +143,11 @@ module.exports = (env, argv) => {
         context: ['**', `!/Oskari/dist/${version}/**`, '!/Oskari/bundles/bundle.js'],
         target: 'http://localhost:8080',
         secure: false,
-        changeOrigin: true
+        changeOrigin: true,
+        headers: {
+          'X-Forwarded-Host': 'localhost:' + proxyPort,
+          'X-Forwarded-Proto': 'http'
+        }
       }]
     };
   }

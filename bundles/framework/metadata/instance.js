@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
 
     function () {
         this.buttons = {};
+        this._log = Oskari.log(this.getName());
     }, {
         __name: 'MetadataSearch',
 
@@ -52,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
             }
             me.sandbox = sandbox;
 
-            sandbox.printDebug('Initializing metadata module...');
+            this._log.debug('Initializing metadata module...');
             me.setupToolbar();
 
             // register plugin for map (drawing for selection box)
@@ -78,7 +79,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
         setupToolbar: function () {
             var me = this,
                 sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
+                reqBuilder = Oskari.requestBuilder(
                     'Toolbar.AddToolButtonRequest'
                 );
 
@@ -182,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
              */
             'Metadata.MapSelectionEvent': function (event) {
                 // ask toolbar to select default tool
-                var toolbarRequest = this.sandbox.getRequestBuilder(
+                var toolbarRequest = Oskari.requestBuilder(
                     'Toolbar.SelectToolButtonRequest'
                 )();
                 this.sandbox.request(this, toolbarRequest);

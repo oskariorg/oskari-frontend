@@ -10,6 +10,7 @@ Oskari.clazz.define(
      *
      */
     function () {
+        this._log = Oskari.log(this.getName());
     }, {
         __name : 'UserLayersLayerPlugin',
         _clazz : 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
@@ -82,7 +83,7 @@ Oskari.clazz.define(
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openLayer);
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for UserLayer ' +
                 layer.getId()
             );
@@ -133,7 +134,7 @@ Oskari.clazz.define(
                 bounds = olPolygon.getBounds(),
                 centroid = olPolygon.getCentroid(),
                 epsilon = 1.0,
-                rb = sandbox.getRequestBuilder('MapMoveRequest'),
+                rb = Oskari.requestBuilder('MapMoveRequest'),
                 req;
 
             if (rb) {

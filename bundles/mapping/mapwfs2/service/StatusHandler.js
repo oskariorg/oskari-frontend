@@ -37,7 +37,7 @@ Oskari.clazz.define(
       delete this.status['' + layerId];
 
       var sb = this.sandbox;
-      var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(layerId);
+      var loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
       loadEvent.setRequestType(loadEvent.type.image);
       loadEvent.setStatus(loadEvent.status.complete);
       sb.notifyAll(loadEvent);
@@ -50,7 +50,7 @@ Oskari.clazz.define(
         reqId : reqId
       });
       var sb = this.sandbox;
-      var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(layerId);
+      var loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
       loadEvent.setStatus(loadEvent.status.loading);
       loadEvent.setRequestType(loadEvent.type.image);
       sb.notifyAll(loadEvent);
@@ -69,7 +69,7 @@ Oskari.clazz.define(
         return progress.reqId !== data.reqId;
       });
       var sb = this.sandbox;
-      var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(data.layerId);
+      var loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(data.layerId);
       loadEvent.setRequestType(loadEvent.type.image);
 
       if(data.success) {
@@ -152,7 +152,7 @@ Oskari.clazz.define(
       }
 
       var sb = this.sandbox;
-      var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(error.layerId);
+      var loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(error.layerId);
       loadEvent.setStatus(loadEvent.status.error);
       loadEvent.setRequestType(loadEvent.type.image);
       sb.notifyAll(loadEvent);

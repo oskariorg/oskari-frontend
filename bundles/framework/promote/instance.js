@@ -101,7 +101,7 @@ function() {
 
         //Let's extend UI
         var reqName = 'userinterface.AddExtensionRequest';
-        var reqBuilder = sandbox.getRequestBuilder(reqName)
+        var reqBuilder = Oskari.requestBuilder(reqName)
         var request = reqBuilder(this);
         sandbox.request(this, request);
 
@@ -110,7 +110,7 @@ function() {
 
         if (this.conf && this.conf.toolbarButtons) {
             // request toolbar to add buttons
-            reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
             for(var group in this.conf.toolbarButtons) {
                 for(var tool in this.conf.toolbarButtons[group]) {
                     var toolConfig = this.conf.toolbarButtons[group][tool];
@@ -169,7 +169,7 @@ function() {
         var sandbox = this.sandbox;
 
         var reqName = 'userinterface.RemoveExtensionRequest';
-        var reqBuilder = sandbox.getRequestBuilder(reqName);
+        var reqBuilder = Oskari.requestBuilder(reqName);
         var request = reqBuilder(this);
 
         sandbox.request(this, request);

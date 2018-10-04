@@ -89,10 +89,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 }
             }
 
-		 	var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+		 	var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
 
-            var reqGetInfoResultHandler = sandbox.getRequestBuilder('GetInfoPlugin.ResultHandlerRequest')(function(content, data, formatters, params) {
+            var reqGetInfoResultHandler = Oskari.requestBuilder('GetInfoPlugin.ResultHandlerRequest')(function(content, data, formatters, params) {
                 me.resultHandler(content, data, formatters, params);
             });
             sandbox.request(me, reqGetInfoResultHandler);
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             if(flyout.isFlyoutVisible() && content.length > 0){
                 flyout.createUI(content, data);
             } else {
-                var reqBuilder = this.getSandbox().getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
+                var reqBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest'),
                     request;
 
                 if (reqBuilder) {
@@ -246,7 +246,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
 

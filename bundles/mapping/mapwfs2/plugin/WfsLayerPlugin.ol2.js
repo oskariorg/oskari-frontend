@@ -51,6 +51,7 @@ Oskari.clazz.define(
                 count: 0
             }
         };
+        this._log = Oskari.log(this.getName());
 
         me.activeHighlightLayers = [];
     }, {
@@ -180,7 +181,7 @@ Oskari.clazz.define(
                 linkElement = link || me.getElement().find('a'),
                 sandbox = me.getSandbox();
             linkElement.on('click', function () {
-                var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                var event = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent')();
                 sandbox.notifyAll(event);
                 return false;
             });
@@ -363,7 +364,7 @@ Oskari.clazz.define(
                  */
                 AfterMapMoveEvent: function (event) {
                     if (me.getConfig() && me.getConfig().deferSetLocation) {
-                        me.getSandbox().printDebug(
+                        me._log.debug(
                             'setLocation deferred (to aftermapmove)'
                         );
                         return;
@@ -850,7 +851,7 @@ Oskari.clazz.define(
             );
 
             if (layer.isVisible() && this.getConfig() && this.getConfig().deferSetLocation) {
-                this.getSandbox().printDebug(
+                this._log.debug(
                     'sending deferred setLocation'
                 );
                 this.mapMoveHandler(layer.getId());
@@ -1091,8 +1092,8 @@ Oskari.clazz.define(
                 layers,
                 function (layer) {
                     if (layer.hasFeatureData()) {
-                        this.getSandbox().printDebug(
-                            '[WfsLayerPlugin] preselecting ' + layer.getId()
+                        this._log.debug(
+                            'preselecting ' + layer.getId()
                         );
                     }
                 }
@@ -1811,7 +1812,7 @@ Oskari.clazz.define(
                 okBtn.addClass('primary');
                 okBtn.setHandler(function () {
                     if (render) {
-                        var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                        var event = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent')();
                         sandbox.notifyAll(event);
                     }
                     dialog.close(true);
@@ -1890,7 +1891,7 @@ Oskari.clazz.define(
                 imageUrl = me.getIO().getRootURL() + '/image' + params;
 
             // send as an event forward to WFSPlugin (draws)
-            var event = sandbox.getEventBuilder('WFSImageEvent')(
+            var event = Oskari.eventBuilder('WFSImageEvent')(
                 layer,
                 imageUrl,
                 bbox,

@@ -1,9 +1,10 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequestHandler', function (sandbox, markersPlugin) {
     this.sandbox = sandbox;
     this.markersPlugin = markersPlugin;
+    this._log = Oskari.log('AddMarkerRequestHandler');
 }, {
     handleRequest: function (core, request) {
-        this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequestHandler] Add Marker');
+        this._log.debug('Add Marker');
 
         // Check debricated data
         var data = request.getData();

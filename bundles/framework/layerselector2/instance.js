@@ -109,16 +109,16 @@ Oskari.clazz.define(
             sandbox.registerService(layerlistService);
 
             //Let's extend UI
-            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+            request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
 
             // create and register request handlers
             var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('ShowFilteredLayerListRequest', reqHandler);
+            sandbox.requestHandler('ShowFilteredLayerListRequest', reqHandler);
 
 
             var reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
+            sandbox.requestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
             // draw ui
             me.createUi();
@@ -300,7 +300,7 @@ Oskari.clazz.define(
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(me, request);
 
@@ -446,7 +446,7 @@ Oskari.clazz.define(
             var me = this;
             function sendRegister() {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if(requestBuilder){
+                if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };

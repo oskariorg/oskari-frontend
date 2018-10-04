@@ -18,6 +18,7 @@ Oskari.clazz.define(
         this.myPlacesService = undefined;
         this.featureNS = undefined;
         this.idPrefix = 'myplaces';
+        this._log = Oskari.log(this.getName());
     }, {
         __name: 'MyPlaces2',
         /**
@@ -66,7 +67,7 @@ Oskari.clazz.define(
          * @param {Boolean} blnEnable true to enable, false to disable
          */
         enableGfi: function (blnEnable) {
-            var gfiReqBuilder = this.sandbox.getRequestBuilder(
+            var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
             );
             if (gfiReqBuilder) {
@@ -134,27 +135,27 @@ Oskari.clazz.define(
                 sandbox,
                 me
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.EditPlaceRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.DeletePlaceRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.EditCategoryRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.DeleteCategoryRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.PublishCategoryRequest',
                 editRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MyPlaces.OpenAddLayerDialogRequest',
                 openAddLayerDialogHandler
             );
@@ -176,7 +177,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            sandbox.printDebug("Initializing my places module...");
+            this._log.debug("Initializing my places module...");
 
             // handles toolbar buttons related to my places
             this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.ButtonHandler", this);
@@ -230,7 +231,7 @@ Oskari.clazz.define(
                 first = true,
                 id = me.idPrefix,
                 reqName = 'PersonalData.AddTabRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 req = reqBuilder(title, content, first, id);
             sandbox.request(this, req);
         },

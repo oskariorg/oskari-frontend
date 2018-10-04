@@ -62,7 +62,7 @@ function(instance, localization) {
 /*
             var publishLinkClosure = function(id, isPublic) {
                 return function() {
-                    var request = me.instance.sandbox.getRequestBuilder('MyPlaces.PublishCategoryRequest')(id, isPublic);
+                    var request = Oskari.requestBuilder('MyPlaces.PublishCategoryRequest')(id, isPublic);
                     me.instance.sandbox.request(me.instance, request);
                     return false;
                 };
@@ -70,14 +70,14 @@ function(instance, localization) {
 */
             var editLinkClosure = function(id) {
                 return function() {
-                    var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
+                    var request = Oskari.requestBuilder('MyPlaces.EditCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
                     return false;
                 };
             }
             var deletelinkClosure = function(id) {
                 return function() {
-                    var request = me.instance.sandbox.getRequestBuilder('MyPlaces.DeleteCategoryRequest')(id);
+                    var request = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
                     return false;
                 };
@@ -145,13 +145,13 @@ function(instance, localization) {
     _showPlace : function(geometry, categoryId) {
         // center map on selected place
         var center = geometry.getCentroid();
-        var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds());
+        var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds());
         this.instance.sandbox.request(this.instance, mapmoveRequest);
         // add the myplaces layer to map
         var layerId = 'myplaces_' + categoryId;
         var layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
         if(!layer) {
-            var request = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+            var request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
             this.instance.sandbox.request(this.instance, request);
         }
     },
@@ -165,7 +165,7 @@ function(instance, localization) {
         // focus on map
         this._showPlace(data.geometry, data.categoryId);
         // request form
-        var request = this.instance.sandbox.getRequestBuilder('MyPlaces.EditPlaceRequest')(data.id);
+        var request = Oskari.requestBuilder('MyPlaces.EditPlaceRequest')(data.id);
         this.instance.sandbox.request(this.instance, request);
     },
     /**
@@ -194,7 +194,7 @@ function(instance, localization) {
             	var layerId = 'myplaces_' + categoryId;
         		var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
         		if(layer) {
-        			var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+        			var updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')
         			var updateRequest = updateRequestBuilder(layerId, true);
                     sandbox.request(me.instance, updateRequest);
         		}

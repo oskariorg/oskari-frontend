@@ -103,11 +103,11 @@ function() {
     			HideSelectionRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.transport.selector.HideSelectionRequestHandler', sandbox, me.plugin)
     	};
 
-    	sandbox.addRequestHandler('ShowBoundingBoxRequest', this.requestHandlers.ShowBoundingBoxRequest);
-    	sandbox.addRequestHandler('ShowMessageRequest', this.requestHandlers.ShowMessageRequest);
-    	sandbox.addRequestHandler('ToggleTransportSelectorRequest', this.requestHandlers.ToggleTransportSelectorRequest);
-    	sandbox.addRequestHandler('ShowFeatureRequest', this.requestHandlers.ShowFeatureRequest);
-    	sandbox.addRequestHandler('HideSelectionRequest', this.requestHandlers.HideSelectionRequest);
+    	sandbox.requestHandler('ShowBoundingBoxRequest', this.requestHandlers.ShowBoundingBoxRequest);
+    	sandbox.requestHandler('ShowMessageRequest', this.requestHandlers.ShowMessageRequest);
+    	sandbox.requestHandler('ToggleTransportSelectorRequest', this.requestHandlers.ToggleTransportSelectorRequest);
+    	sandbox.requestHandler('ShowFeatureRequest', this.requestHandlers.ShowFeatureRequest);
+    	sandbox.requestHandler('HideSelectionRequest', this.requestHandlers.HideSelectionRequest);
 
     	sandbox.registerAsStateful(me.mediator.bundleId, me);
     },

@@ -60,7 +60,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
 
             for (p in me.requestHandlers) {
                 if (me.requestHandlers.hasOwnProperty(p)) {
-                    sandbox.addRequestHandler(p, this);
+                    sandbox.requestHandler(p, this);
                 }
             }
             for (p in me.eventHandlers) {
@@ -191,7 +191,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
         issue: function () {
             var requestName = arguments[0];
             var args = this.slicer.apply(arguments, [1]);
-            var builder = this.getSandbox().getRequestBuilder(requestName);
+            var builder = Oskari.requestBuilder(requestName);
             var request = builder.apply(builder, args);
             return this.getSandbox().request(this.getName(), request);
         },
@@ -202,7 +202,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
         notify: function () {
             var eventName = arguments[0];
             var args = this.slicer.apply(arguments, [1]);
-            var builder = this.getSandbox().getEventBuilder(eventName);
+            var builder = Oskari.eventBuilder(eventName);
             var evt = builder.apply(builder, args);
             return this.getSandbox().notifyAll(evt);
         }

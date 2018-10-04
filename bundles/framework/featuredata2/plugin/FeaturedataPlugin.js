@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                             var sandbox = me.getSandbox();
                             sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
                             var el = jQuery(me.getMapModule().getMobileDiv()).find('.mobile-info-marker');
-                            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
                             sandbox.request(me, toolbarRequest);
                             me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-featuredata'].iconCls);
                             me._flyoutOpen = undefined;
@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 if(!me._flyoutOpen) {
                     if(me._mapStatusChanged) {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
-                        var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                        var event = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent')();
                         sandbox.notifyAll(event);
                         me._mapStatusChanged = false;
                     } else {

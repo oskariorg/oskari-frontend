@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
         me._element.appendChild(me._input);
         me._element.appendChild(me._titleEl);
 
-        me._element.className = 'oskari-formcomponent oskari-colorpickerinput';
+        me._element.className = options.className ? options.className : 'oskari-formcomponent oskari-colorpickerinput';
         me._input.type = 'text';
 
         me._input.onchange = function () {

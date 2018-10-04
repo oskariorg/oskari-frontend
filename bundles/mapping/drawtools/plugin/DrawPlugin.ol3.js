@@ -789,7 +789,7 @@ Oskari.clazz.define(
                    } else {
                      geometry.setCoordinates(coords);
                    }
-                   
+
                    me.pointerMoveHandler();
                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                    return geometry;
@@ -1179,8 +1179,8 @@ Oskari.clazz.define(
          * @return {Array} coordinates array
          */
         _getFeatureCenter: function(feature) {
-            // Circle has polygon or point ol type and it center need calculated different way
-            if(feature.getGeometry().getType() === 'Polygon' || feature.getGeometry().getType() === 'Point') {
+            // Circle has (multi)polygon or (multi)point ol type and it center need calculated different way
+            if(feature.getGeometry().getType().indexOf('Polygon') > -1 || feature.getGeometry().getType().indexOf('Point') > -1) {
                 return olExtent.getCenter(feature.getGeometry().getExtent());
             }
             return feature.getGeometry().getCenter();

@@ -66,6 +66,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
 
+            if (isNaN(this.regionset)) {
+                this.regionset = null;
+            }
+
             // notify if regionset changed
             if (previousSet !== this.regionset) {
                 var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');

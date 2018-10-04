@@ -352,7 +352,7 @@ describe('Test Suite for mapwfs2', function() {
                     selectedLayers = addLayers(module, [216]);
                 } else if(event.getName() === "AfterMapLayerAddEvent") { // wait that the layer has been added
                     var layer = sandbox.findMapLayerFromSelectedMapLayers(216);
-                    var event = sandbox.getEventBuilder("WFSFeaturesSelectedEvent")(["toimipaikat.4535"], layer, false);
+                    var event = Oskari.eventBuilder("WFSFeaturesSelectedEvent")(["toimipaikat.4535"], layer, false);
                     sandbox.notifyAll(event);
                 } else if(event.getName() === "WFSImageEvent") {
                     image = true;
@@ -487,7 +487,7 @@ describe('Test Suite for mapwfs2', function() {
             }
             self.onEvent = function(event) {
                 if(event.getName() === "AfterMapLayerAddEvent") { // wait that the layer has been added
-                    var event = sandbox.getEventBuilder("MapSizeChangedEvent")(800, 600);
+                    var event = Oskari.eventBuilder("MapSizeChangedEvent")(800, 600);
                     sandbox.notifyAll(event);
                 } else if(event.getName() === "WFSPropertiesEvent") {
                     properties = true;
@@ -554,7 +554,7 @@ describe('Test Suite for mapwfs2', function() {
                 if(event.getName() === "AfterMapLayerAddEvent") { // wait that the layer has been added
                     var layer = sandbox.findMapLayerFromSelectedMapLayers(216);
                     layer.selectStyle("testi");
-                    var event = sandbox.getEventBuilder("AfterChangeMapLayerStyleEvent")(layer);
+                    var event = Oskari.eventBuilder("AfterChangeMapLayerStyleEvent")(layer);
                     sandbox.notifyAll(event);
                 } else if(event.getName() === "AfterChangeMapLayerStyleEvent") {
                 } else if(event.getName() === "WFSImageEvent") {
@@ -611,7 +611,7 @@ describe('Test Suite for mapwfs2', function() {
                 var data = {
                     fragments: [{layerName: "testLayer", markup: "test markup", layerId: "testLayerId"}]
                 };
-                var event = sandbox.getEventBuilder("GetInfoResultEvent")(data);
+                var event = Oskari.eventBuilder("GetInfoResultEvent")(data);
                 sandbox.notifyAll(event);
             });
 
@@ -630,7 +630,7 @@ describe('Test Suite for mapwfs2', function() {
                 } else if(event.getName() === "AfterMapLayerAddEvent") { // wait that the layer has been added
                     var map = sandbox.findRegisteredModuleInstance("MainMapModule").getMap();
                     var point = map.getViewPortPxFromLonLat(new OpenLayers.LonLat(385373, 6671561));
-                    var evt = sandbox.getEventBuilder('MapClickedEvent')(point, point.x, point.y);
+                    var evt = Oskari.eventBuilder('MapClickedEvent')(point, point.x, point.y);
                     sandbox.notifyAll(evt);
                 } else if(event.getName() === "WFSFeaturesSelectedEvent") {
                     selected = true;

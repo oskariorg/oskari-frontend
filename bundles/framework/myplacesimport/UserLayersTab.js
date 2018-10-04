@@ -137,9 +137,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 idParam = layerId.substring(tokenIndex);
 
             jQuery.ajax({
-                url: sandbox.getAjaxUrl(),
+                url: Oskari.urls.getRoute('DeleteUserLayer'),
                 data: {
-                    action_route: 'DeleteUserLayer',
                     id: idParam
                 },
                 type: 'POST',
@@ -181,7 +180,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
 
             // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
             // also we need to do it before service.remove() to avoid problems on other components
-            var removeMLrequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest'),
+            var removeMLrequestBuilder = Oskari.requestBuilder('RemoveMapLayerRequest'),
                 request = removeMLrequestBuilder(layerId);
             sandbox.request(me.instance, request);
             service.removeLayer(layerId);

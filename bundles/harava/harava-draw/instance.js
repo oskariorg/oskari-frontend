@@ -97,8 +97,8 @@ Oskari.clazz.define("Oskari.harava.bundle.haravaDraw.DrawBundleInstance",
                 ToggleVisibilityHaravaDrawRequest: Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequestHandler', sandbox, plugin),
                 AddWKTGeometryRequest: Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.AddWKTGeometryRequestHandler', sandbox, plugin)
             };
-            sandbox.addRequestHandler('ToggleVisibilityHaravaDrawRequest', this.requestHandlers.ToggleVisibilityHaravaDrawRequest);
-            sandbox.addRequestHandler('AddWKTGeometryRequest', this.requestHandlers.AddWKTGeometryRequest);
+            sandbox.requestHandler('ToggleVisibilityHaravaDrawRequest', this.requestHandlers.ToggleVisibilityHaravaDrawRequest);
+            sandbox.requestHandler('AddWKTGeometryRequest', this.requestHandlers.AddWKTGeometryRequest);
         },
 
         /**

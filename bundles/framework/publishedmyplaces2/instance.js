@@ -17,6 +17,7 @@ function() {
     this.myPlacesService = undefined;
     this.featureNS = undefined;
     this.idPrefix = 'myplaces';
+    this._log = Oskari.log(this.getName());
 }, {
     __name : 'PublishedMyPlaces',
     /**
@@ -92,7 +93,7 @@ function() {
      * @param {Boolean} blnEnable true to enable, false to disable
      */
     enableGfi : function(blnEnable) {
-        var gfiReqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
         if(gfiReqBuilder) {
             this.sandbox.request(this.buttons, gfiReqBuilder(blnEnable));
         }
@@ -157,7 +158,7 @@ function() {
             return;
         }
 
-        sandbox.printDebug("Initializing my places module...");
+        this._log.debug("Initializing my places module...");
 
         // handles toolbar buttons related to my places
         this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler", this);

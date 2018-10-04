@@ -16,6 +16,7 @@ Oskari.clazz.define(
             multipleSymbolizers: false,
             namedLayersAsArray: true
         });
+        this._log = Oskari.log(this.getName());
 
         this._olLayers = {};
         this._features = {};
@@ -132,7 +133,7 @@ Oskari.clazz.define(
         },
         __featureClicked: function(features, olLayer) {
             var sandbox = this.getSandbox();
-            var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
+            var clickEvent = Oskari.eventBuilder('FeatureEvent')().setOpClick();
             var formatter = this._supportedFormats.GeoJSON;
             var me = this;
             _.forEach(features, function(feature) {
@@ -160,7 +161,7 @@ Oskari.clazz.define(
                     continue;
                 }
 
-                sandbox.printDebug('preselecting ' + layerId);
+                this._log.debug('preselecting ' + layerId);
                 this.addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
         },
@@ -273,7 +274,7 @@ Oskari.clazz.define(
             // notify other components of removal
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
-            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
+            var removeEvent = Oskari.eventBuilder('FeatureEvent')().setOpRemove();
 
             olLayer.removeFeatures(featuresToRemove);
 
@@ -486,7 +487,7 @@ Oskari.clazz.define(
             // notify other components that features have been added
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
-            var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
+            var addEvent = Oskari.eventBuilder('FeatureEvent')().setOpAdd();
             _.forEach(features, function(feature) {
                 var geojson = JSON.parse(formatter.write([feature]));
                 addEvent.addFeature(feature.id, geojson, options.layerId);
@@ -654,7 +655,7 @@ Oskari.clazz.define(
                 me = this;
 
             if (sldSpec) {
-                this.getSandbox().printDebug(sldSpec);
+                this._log.debug(sldSpec);
                 var styleInfo = this._sldFormat.read(sldSpec),
                     styles = styleInfo.namedLayers[0].userStyles,
                     style = styles[0];
@@ -667,7 +668,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 '#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for ' +
                 layer.getId()
             );
@@ -707,7 +708,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' +
                 layer.getOpacity()
             );

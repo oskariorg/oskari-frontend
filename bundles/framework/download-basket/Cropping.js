@@ -158,7 +158,7 @@ Oskari.clazz.define(
          */
         activateNormalGFI: function(state){
             var me = this,
-            reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            reqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
 
             if (reqBuilder) {
                 var request = reqBuilder(state);
@@ -172,7 +172,7 @@ Oskari.clazz.define(
          */
         activateNormalWFSReq: function(state){
             var me = this,
-            reqBuilder = me._sandbox.getRequestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
+            reqBuilder = Oskari.requestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
 
             if (reqBuilder) {
                 var request = reqBuilder(state);
@@ -287,7 +287,7 @@ Oskari.clazz.define(
 
             var me = this,
             mapVO = me._sandbox.getMap(),
-            ajaxUrl = me._sandbox.getAjaxUrl(),
+            ajaxUrl = Oskari.urls.getRoute(),
             map = me.mapModule.getMap(),
             layerUniqueKey = jQuery('.cropping-btn.selected').data('uniqueKey'),
             layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),

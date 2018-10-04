@@ -186,14 +186,14 @@ Oskari.clazz.define(
             if (me.conf && me.conf.optionUrl) {
                 optionAjaxUrl = me.conf.optionUrl;
             } else {
-                optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=SearchOptions';
+                optionAjaxUrl = Oskari.urls.getRoute('SearchOptions');
             }
 
             var searchAjaxUrl = null;
             if (me.conf && me.conf.searchUrl) {
                 searchAjaxUrl = me.conf.searchUrl;
             } else {
-                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
+                searchAjaxUrl = Oskari.urls.getRoute('GetSearchResult');
             }
 
             // Default tab priority
@@ -296,7 +296,7 @@ Oskari.clazz.define(
             }
 
             var reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
 
             sandbox.request(this, request);
@@ -481,7 +481,7 @@ Oskari.clazz.define(
                         priority = me.tabPriority,
                         id = 'oskari_searchfromchannels_tabpanel_header',
                         reqName = 'Search.AddTabRequest',
-                        reqBuilder = me.sandbox.getRequestBuilder(reqName),
+                        reqBuilder = Oskari.requestBuilder(reqName),
                         req = reqBuilder(title, content, priority, id);
 
                     me.sandbox.request(me, req);
@@ -782,7 +782,7 @@ Oskari.clazz.define(
                 jQuery(".fullscreenDiv").show();
             }
 
-            var reqBuilder = me.sandbox.getRequestBuilder(
+            var reqBuilder = Oskari.requestBuilder(
                  'MapFull.MapSizeUpdateRequest'
             );
 
@@ -894,7 +894,7 @@ Oskari.clazz.define(
                 bottom: bottomRight[1]
             }
 
-            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center[0], center[1], zoom);
+            mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center[0], center[1], zoom);
             me.sandbox.request(me, mapmoveRequest);
 
             }else{
@@ -958,7 +958,7 @@ Oskari.clazz.define(
                 sandbox = me.sandbox;
             // good to go
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
-            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
+            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if(result.zoomScale) {
                  zoom = {scale : result.zoomScale};
@@ -984,7 +984,7 @@ Oskari.clazz.define(
                         type: 'link',
                         action: function(){
                             var rN = 'InfoBox.HideInfoBoxRequest',
-                                rB = sandbox.getRequestBuilder(rN),
+                                rB = Oskari.requestBuilder(rN),
                                 request = rB(popupId);
                             sandbox.request(me.getName(), request);
                         }
@@ -997,7 +997,7 @@ Oskari.clazz.define(
             };
 
             var rN = 'InfoBox.ShowInfoBoxRequest',
-                rB = sandbox.getRequestBuilder(rN),
+                rB = Oskari.requestBuilder(rN),
                 request = rB(
                     popupId,
                     loc.title,
@@ -1014,7 +1014,7 @@ Oskari.clazz.define(
          */
         _closeMapPopup: function (){
             var me = this;
-            var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')(me.popupId);
+            var request = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(me.popupId);
             me.sandbox.request(this, request);
         },
 

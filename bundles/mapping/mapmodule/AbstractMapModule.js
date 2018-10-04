@@ -2416,7 +2416,7 @@ Oskari.clazz.define(
             var me = this;
             function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if (requestBuilder) {
+                if (requestBuilder && me._sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     me.__guidedTourDelegateTemplates.forEach(function (template, i) {
                         var delegate = {
                             bundleName: me.getName() + '_' + (i + 1)

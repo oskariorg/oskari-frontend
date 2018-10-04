@@ -30,7 +30,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
         afterStart : function() {
 
             // register request handler
-            this.getSandbox().addRequestHandler('Admin.AddTabRequest', this.getFlyout());
+            this.getSandbox().requestHandler('Admin.AddTabRequest', this.getFlyout());
         },
         /**
          * Closes the message dialog if one is open

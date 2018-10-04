@@ -5,6 +5,7 @@
 Oskari.clazz.define(
     'Oskari.mapframework.heatmap.HeatmapLayerPlugin',
     function () {
+        this._log = Oskari.log('HeatmapLayerPlugin');
     }, {
         /**
          * Adds a single WMS layer to this map
@@ -77,7 +78,7 @@ Oskari.clazz.define(
 
             this.getMap().addLayer(openLayer, !keepLayerOnTop);
             this.setOLMapLayers(layer.getId(), openLayer);
-            this.getSandbox().printDebug(
+            this._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for ' + layer.getId()
             );
         }

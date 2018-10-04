@@ -286,7 +286,7 @@ Oskari.clazz.define(
                 }
                 sandbox.request(
                     me,
-                    sandbox.getRequestBuilder(
+                    Oskari.requestBuilder(
                         'ShowMapMeasurementRequest'
                     )(out, finished, geomAsText, geomMimeType)
                 );

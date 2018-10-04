@@ -360,33 +360,24 @@ Oskari.clazz.define(
          *
          */
         start: function () {
-            var me = this,
-                sandbox = me.sandbox,
-                rn = 'Search.AddSearchResultActionRequest',
-                reqBuilder,
-                request;
+            var me = this;
+            var sandbox = me.sandbox;
+            var rn = 'Search.AddSearchResultActionRequest';
 
             // Already started so nothing to do here
             if (me.isStarted) {
                 return;
             }
-
-            //me._toggleDrawFilterPlugins(false);
             me.mapModule.getMap().addLayer(me.featureLayer);
 
-            //me.mapModule.registerPlugin(me.drawFilterPlugin);
-            //me.mapModule.startPlugin(me.drawFilterPlugin);
-
-            reqBuilder = Oskari.requestBuilder(rn);
-            if (reqBuilder) {
-                request = reqBuilder(
-                    me.linkAction, me._getSearchResultAction(), me);
+            if (sandbox.hasHandler(rn)) {
+                var reqBuilder = Oskari.requestBuilder(rn);
+                var request = reqBuilder(me.linkAction, me._getSearchResultAction(), me);
                 sandbox.request(me.instance, request);
             }
 
             me.isStarted = true;
         },
-
 
         getDrawToolsPanel: function () {
             return this.drawToolsPanel;
@@ -463,29 +454,23 @@ Oskari.clazz.define(
          *
          */
         stop: function () {
-            var me = this,
-                sandbox = me.sandbox,
-                rn = 'Search.RemoveSearchResultActionRequest',
-                reqBuilder,
-                request;
+            var me = this;
+            var sandbox = me.sandbox;
+            var requestName = 'Search.RemoveSearchResultActionRequest';
 
             // Already stopped so nothing to do here
             if (!me.isStarted) {
                 return;
             }
 
-            //me.mapModule.stopPlugin(me.drawFilterPlugin);
-            //me.mapModule.unregisterPlugin(me.drawFilterPlugin);
-
             me.mapModule.getMap().removeLayer(me.featureLayer);
             me._deactivateSelectControls();
             me.drawControls.deactivateSelectTools();
             me.drawControls.closeHelpDialog();
-            //me._toggleDrawFilterPlugins(true);
 
-            reqBuilder = Oskari.requestBuilder(rn);
-            if (reqBuilder) {
-                request = reqBuilder(me.linkAction);
+            if (sandbox.hasHandler(requestName)) {
+                var reqBuilder = Oskari.requestBuilder(requestName);
+                var request = reqBuilder(me.linkAction);
                 sandbox.request(me.instance, request);
             }
 
@@ -899,14 +884,13 @@ Oskari.clazz.define(
          * @param  {Boolean} enabled
          */
         _toggleDrawFilterPlugins: function (enabled) {
-            var me = this,
-                sandbox = this.sandbox,
-                mapModule = this.mapModule;
+            var me = this;
+            var mapModule = this.mapModule;
 
             var drawFilterPlugins = _.filter(
                 mapModule.getPluginInstances(),
                 function (plugin) {
-                    return  me._isPluginNamed(plugin, /DrawFilterPlugin$/);
+                    return me._isPluginNamed(plugin, /DrawFilterPlugin$/);
                 }
             );
 
@@ -921,10 +905,9 @@ Oskari.clazz.define(
 
         _startNewDrawFiltering: function (config) {
             if (this.drawControls.helpDialog) {
-                me._cancelDrawFilter();
+                this._cancelDrawFilter();
                 return;
             }
-
 
             var me = this,
                 diaLoc = this.loc.content.drawFilter.dialog,
@@ -951,8 +934,7 @@ Oskari.clazz.define(
                 controlButtons = this._createDrawFilterControls();
                 this.drawControls.helpDialog.addClass('drawfilterdialog');
                 this.drawControls.helpDialog.show(dialogTitle, dialogText, controlButtons);
-                this.drawControls.helpDialog.
-                moveTo('div.drawFilter.analysis-selection-' + config.mode, 'bottom');
+                this.drawControls.helpDialog.moveTo('div.drawFilter.analysis-selection-' + config.mode, 'bottom');
             }
 
             // Disable WFS highlight and GFI dialog
@@ -985,16 +967,11 @@ Oskari.clazz.define(
          * @param {Object} config params for StartDrawFilteringRequest
          */
         _sendDrawFilterRequest: function (config) {
-            var sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'DrawFilterPlugin.StartDrawFilteringRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(config);
-                sandbox.request(this.instance, request);
+            if (!this.sandbox.hasHandler('DrawFilterPlugin.StartDrawFilteringRequest')) {
+                return;
             }
+            var reqBuilder = Oskari.requestBuilder('DrawFilterPlugin.StartDrawFilteringRequest');
+            this.sandbox.request(this.instance, reqBuilder(config));
         },
 
         /**
@@ -1005,20 +982,15 @@ Oskari.clazz.define(
          * @param {Object} config params for StopDrawFilteringRequest
          */
         _sendStopDrawFilterRequest: function (config) {
-            var sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'DrawFilterPlugin.StopDrawFilteringRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(config);
-                sandbox.request(this.instance, request);
+            if (!this.sandbox.hasHandler('DrawFilterPlugin.StopDrawFilteringRequest')) {
+                return;
             }
+            var reqBuilder = Oskari.requestBuilder('DrawFilterPlugin.StopDrawFilteringRequest');
+            this.sandbox.request(this.instance, reqBuilder(config));
         },
 
         _operateDrawFilters: function () {
-            //TODO: enable when geometryeditor is integrated
+            // TODO: enable when geometryeditor is integrated
             return;
 
             var preSelector = 'div.drawFilter.analysis-selection-',

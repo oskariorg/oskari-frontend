@@ -39,9 +39,9 @@ function () {
         this.sandbox = sandbox;
         sandbox.register(this);
 
-        sandbox.addRequestHandler('GetFeedbackServiceRequest', this);
-        sandbox.addRequestHandler('GetFeedbackRequest', this);
-        sandbox.addRequestHandler('PostFeedbackRequest', this);
+        sandbox.requestHandler('GetFeedbackServiceRequest', this);
+        sandbox.requestHandler('GetFeedbackRequest', this);
+        sandbox.requestHandler('PostFeedbackRequest', this);
     },
 
     /**
