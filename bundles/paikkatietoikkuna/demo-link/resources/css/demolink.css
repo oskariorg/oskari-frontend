@@ -1,4 +1,4 @@
-.tool.demo-3D-view-tool {
+.tool.demo-3D-view-tool,.tool.demo-3D-view-tool-back {
     color: #FFDE00;
     font-size: 15px;
     font-weight: 900;
@@ -13,4 +13,7 @@
 }
 .tool.demo-3D-view-tool::before {
     content: '3D';
+}
+.tool.demo-3D-view-tool-back::before {
+    content: '2D';
 }
