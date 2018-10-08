@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                         me.toLonLat = toLonLat;
                     }
                 }
-            })
+            });
         },
 
         /**

@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                 '</div>' +
                             '</div>'
             )
-        } 
+        }; 
     }, {
         getElement: function() {
             return this.element;
@@ -205,7 +205,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 writeHeader: element.find('.writeHeader input').is(':checked'),
                 writeLineEndings: element.find('.lineEnds').is(':checked'),
                 writeCardinals: element.find('.useCardinals input').is(':checked')
-            }
+            };
             return settings;
         },
         showFileDialogue: function(callback) {

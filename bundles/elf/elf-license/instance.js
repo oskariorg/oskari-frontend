@@ -784,7 +784,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         calculatedMaxHeight = calculatedMaxHeight - c3.height() - parseInt(c3.css('margin-top'), 10);
         calculatedMaxHeight = calculatedMaxHeight - c4.height() - parseInt(c4.css('margin-top'), 10);
 
-        models.css('max-height', calculatedMaxHeight + 'px')
+        models.css('max-height', calculatedMaxHeight + 'px');
     },
     /**
      * Go back

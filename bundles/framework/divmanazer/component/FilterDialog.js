@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
             if (check) {
                 container.find('input[name="filter-by-geometry"]').prop({'disabled': !enable});
                 //check the first option.
-                container.find('#analyse-filter-by-geometry-intersect').prop({'checked': check, 'disabled': !enable})
+                container.find('#analyse-filter-by-geometry-intersect').prop({'checked': check, 'disabled': !enable});
             } else {
                 container.find('input[name="filter-by-geometry"]').prop({'checked': check, 'disabled': true});
             }
@@ -336,10 +336,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 valuesSelection.find('div.filter-by-values-container').css({'display': 'block'});
             } else if (filterByGeometryChecked) {
                 valuesSelection.find('div.values-additional-info').html(this.loc.values.info.filterByGeometrySelected);
-                valuesSelection.find('div.filter-by-values-container').css({'display': 'none'})
+                valuesSelection.find('div.filter-by-values-container').css({'display': 'none'});
             } else {
                 valuesSelection.find('div.values-additional-info').html('');
-                valuesSelection.find('div.filter-by-values-container').css({'display': 'block'})
+                valuesSelection.find('div.filter-by-values-container').css({'display': 'block'});
             }
         },
         /**

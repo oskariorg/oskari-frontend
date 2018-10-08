@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
             var selections = [];
             var dropdowns = {};
             var selects = {};
-            var options = {}
+            var options = {};
             Object.keys( json ).forEach( function ( key ) {
                 var instanceKey = key;
                 var value = json[key];

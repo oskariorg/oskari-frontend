@@ -18,11 +18,11 @@ export default function styleGenerator(styleFactory, styleDef) {
                     key: optionalDef.property.key,
                     value: optionalDef.property.value,
                     style: styleFactory(Object.assign({}, featureStyle, optionalDef))
-                }
+                };
             });
         }
         styleCache[layerName] = styles;
-    })
+    });
     return (feature, resolution) => {
         var styles = styleCache[feature.get('layer')];
         if (!styles) {
@@ -40,5 +40,5 @@ export default function styleGenerator(styleFactory, styleDef) {
             return styles.base;
         }
         return invisible;
-    }
+    };
 }

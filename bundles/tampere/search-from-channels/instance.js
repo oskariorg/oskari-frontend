@@ -889,7 +889,7 @@ Oskari.clazz.define(
                     left: topLeft[0],
                     right: bottomRight[0],
                     bottom: bottomRight[1]
-                }
+                };
 
                 mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center[0], center[1], zoom);
                 me.sandbox.request(me, mapmoveRequest);

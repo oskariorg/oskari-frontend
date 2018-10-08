@@ -1,7 +1,7 @@
 import olLayerTile from 'ol/layer/Tile';
 import olSourceWMTS from 'ol/source/WMTS';
 import {optionsFromCapabilities} from 'ol/source/WMTS';
-import olFormatWMTSCapabilities from 'ol/format/WMTSCapabilities'
+import olFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 
 /**
  *

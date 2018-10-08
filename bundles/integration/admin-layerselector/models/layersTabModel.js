@@ -381,7 +381,7 @@
                 var groups = this.layerGroups;
                 var foundIndex = groups.findIndex(function (group) {
                     // group.id is number and id can be a string...
-                    return '' + group.id === '' + id
+                    return '' + group.id === '' + id;
                 });
 
                 if (foundIndex !== -1) {

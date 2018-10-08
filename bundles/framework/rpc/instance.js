@@ -159,7 +159,7 @@ Oskari.clazz.define(
                         mapModule.getScreenshot(function(image){
                             transaction.complete(image);
                         });
-                    }
+                    };
                 }
 
                 for(var name in funcs) {
@@ -422,7 +422,7 @@ Oskari.clazz.define(
                     }
                     return value;
                 });
-            }
+            };
 
             for(var name in funcs) {
                 if(!funcs.hasOwnProperty(name) || !this._availableFunctions[name]) {
@@ -449,7 +449,7 @@ Oskari.clazz.define(
                 return false;
             }
             // Allow subdomains and different ports
-            var domain = this.conf.domain
+            var domain = this.conf.domain;
 
             var url = document.createElement('a');
             url.href = origin;

@@ -1402,7 +1402,7 @@ Oskari.clazz.define(
             var me = this;
             layer.setMinScale(minscale);
             layer.setMaxScale(maxscale);
-            var olLayer = this.getOLMapLayers(layer)
+            var olLayer = this.getOLMapLayers(layer);
             var layerResolutions = this.getMapModule().calculateLayerResolutions(maxscale, minscale);
             olLayer[0].setMinResolution(layerResolutions[0]);
             olLayer[0].setMaxResolution(layerResolutions[layerResolutions.length -1]);

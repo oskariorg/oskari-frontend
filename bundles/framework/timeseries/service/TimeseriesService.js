@@ -90,7 +90,7 @@ Oskari.clazz.define(
                 priority: priority,
                 delegate: delegate,
                 conf: conf
-            }
+            };
             this._scheduleUpdate();
         },
         /**
@@ -145,7 +145,7 @@ Oskari.clazz.define(
          */
         getActiveTimeseries: function () {
             var me = this;
-            var things = Object.keys(this._timeseriesThings).map(function (key) { return me._timeseriesThings[key] });
+            var things = Object.keys(this._timeseriesThings).map(function (key) { return me._timeseriesThings[key]; });
             var targets = things.filter(function (thing) {
                 return thing.type !== 'layer';
             });

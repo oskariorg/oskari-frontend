@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             return ids.some(function (id) {
                 return '' + id === optionId;
             });
-        }
+        };
         chosen.find('option').each(function (index, opt) {
             if (isDisabledOption(opt.value)) {
                 jQuery(opt).prop('disabled', true);
@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             // cleanup empty placeholder value to an empty array
             return value.filter(function (item) {
                 return item !== '';
-            })
+            });
         }
         return value;
     },

@@ -38,7 +38,7 @@ Oskari.clazz.define(
 
         me._templates = {
             plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
-        }
+        };
     }, {
         /**
          * @private @method _createControlElement

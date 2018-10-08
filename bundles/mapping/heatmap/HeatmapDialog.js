@@ -166,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 
             var colorPickerHandler = function() {
                 jQuery('input[id=customTheme]').prop('checked', true);
-            }
+            };
             this._colorPickers[0].setHandler(colorPickerHandler);
             this._colorPickers[1].setHandler(colorPickerHandler);
             this._colorPickers[2].setHandler(colorPickerHandler);

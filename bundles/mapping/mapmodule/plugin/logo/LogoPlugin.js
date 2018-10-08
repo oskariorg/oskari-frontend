@@ -66,7 +66,7 @@ Oskari.clazz.define(
             }
             this._labelCallBack = function () {
                 me.updateLabels(element);
-            }
+            };
         },
         /**
          * @method _createEventHandlers

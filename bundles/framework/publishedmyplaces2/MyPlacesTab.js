@@ -72,14 +72,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
                         me.instance.sandbox.request(me.instance, request);
                         return false;
                     };
-                }
+                };
                 var deletelinkClosure = function(id) {
                     return function() {
                         var request = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest')(id);
                         me.instance.sandbox.request(me.instance, request);
                         return false;
                     };
-                }
+                };
                 for(var i = 0; i < categories.length; ++i) {
                     var id = categories[i].getId();
                     var panel = this.tabPanels[id];
@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
             	var layerId = 'myplaces_' + categoryId;
         		var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
         		if(layer) {
-        			var updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+        			var updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
         			var updateRequest = updateRequestBuilder(layerId, true);
                         sandbox.request(me.instance, updateRequest);
         		}

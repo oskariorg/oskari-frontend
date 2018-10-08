@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var xScaleDomain;
 
         if ( !this.dataHasNegativeValues() ) {
-            xScaleDomain = [ 0, dataset.max]
+            xScaleDomain = [ 0, dataset.max];
         } else {
             xScaleDomain = d3.extent(this.data, function ( d ) {return d.value; } );
         }
@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         return {
             min: min,
             max: max
-        }
+        };
     },
     nullsLast: function (a, b) {
         if(a == null && b == null) return 0;
@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      */
     initAxis: function () {
         var me = this;
-        var maxValue = d3.max(this.data, function (d) {return d.value});
+        var maxValue = d3.max(this.data, function (d) {return d.value;});
         var numDigits = Math.floor((Math.log(maxValue) * Math.LOG10E) + 1);
         var range = this.x.range();
         var width = range[1] - range[0];
@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .ticks(Math.min(10, tickTarget))
             .tickSizeInner(-this.dimensions.height()+this.dimensions.xAxisOffset)
             .tickSizeOuter(0)
-            .tickFormat(function (d) {return me.loc('graph.tick', {value: d})});
+            .tickFormat(function (d) {return me.loc('graph.tick', {value: d});});
     },
     /**
      * initializes the chart skeleton without any specific line or bar options
@@ -187,7 +187,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     handleData: function ( data ) {
         this.data = data;
         this.sortDataByType();
-        var maxNameLength = d3.max(data, function (d) {return d.name.length});
+        var maxNameLength = d3.max(data, function (d) {return d.name.length;});
         this.dimensions = this.chartDimensions(maxNameLength * 5.5);
     },
     /**
@@ -222,7 +222,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         xtickAxis.select('.domain').remove();
 
         xtickAxis.selectAll('line')
-            .attr('stroke', '#aaa')
+            .attr('stroke', '#aaa');
 
             //append the x-axis to different element so we can show the values when scrollign
         var gx = d3.select( this.axisLabelValues.get(0) )
@@ -275,11 +275,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .data(this.data)
             .enter()
             .append('g')
-            .attr('class', function ( d ) { return d.value < 0 ? 'labels negative' : 'labels positive' } )
+            .attr('class', function ( d ) { return d.value < 0 ? 'labels negative' : 'labels positive'; } )
             .attr('transform', function ( d ) {
                 var marginized = me.y(d.name) + 11;
                 return  'translate('+ me.x(0) +','+ marginized +')';
-            })
+            });
         //append lines
         labels.append('line')
             .attr('x2', function ( d ) {
@@ -321,7 +321,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .data(this.data)
             .enter()
             .append('g')
-            .attr('class', function ( d ) { return d.value < 0 ? 'negative' : 'positive' } )
+            .attr('class', function ( d ) { return d.value < 0 ? 'negative' : 'positive'; } )
             .attr('transform', function ( d ) {
                 return 'translate(0,' + ( me.y( d.name ) + me.y.bandwidth() / 2 ) + ')';
             });
@@ -332,7 +332,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr('text-anchor', 'middle')
             .style('fill', function( d,i ){ return me.colorScale(i); }) 
             .attr('y', -8) // 7 is half of 15 height (pixel aligned)
-            .attr('x', function ( d ) { return d.value ? me.x( Math.min( 0, d.value ) ) : 0 })
+            .attr('x', function ( d ) { return d.value ? me.x( Math.min( 0, d.value ) ) : 0; })
             .attr('height', 17)
             .attr('width', function( d ) {
                 return d.value ? Math.abs( me.x( d.value ) - me.x( 0 ) ) : 0; 

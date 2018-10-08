@@ -784,7 +784,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 } else {
                     layersWithoutCreatedDate.push(layer);
                 }
-            })
+            });
 
             layersWithCreatedDate.sort(function (a, b) {
                 if (a.getCreated() > b.getCreated()) {

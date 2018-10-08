@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             style.property = {
                 value: region,
                 key: 'id'
-            }
+            };
         }
         return style;
     },

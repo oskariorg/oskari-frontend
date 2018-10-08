@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
                 { color : colorConfig[0], quantity : 0.02, opacity : 0 },
                 { color : colorConfig[1], quantity : 0.1, opacity : 1 },
                 { color : colorConfig[2], quantity : 0.5, opacity : 1 },
-                { color : colorConfig[3], quantity : 1, opacity : 1 }]
+                { color : colorConfig[3], quantity : 1, opacity : 1 }];
         },
 
         getColorConfig : function() {

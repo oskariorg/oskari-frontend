@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
     function () {
         var conf = this.getConfiguration();
         conf.name = 'coordinatetransformation';
-        conf.flyoutClazz = 'Oskari.coordinatetransformation.Flyout'
+        conf.flyoutClazz = 'Oskari.coordinatetransformation.Flyout';
         this.plugins = {};
         //this._mapmodule = null;
         this.transformationService = null;
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
                 transformation: Oskari.clazz.create('Oskari.coordinatetransformation.view.transformation', this, this.helper, this.dataHandler),
                 MapSelection: Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateMapSelection', this),
                 mapmarkers: Oskari.clazz.create('Oskari.coordinatetransformation.view.mapmarkers', this)
-            }
+            };
         },
         toggleViews: function (view) {
             var views = this.getViews();
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
                 var roundedLonLat = {
                     lon: parseInt(lonlat.lon),
                     lat: parseInt(lonlat.lat)
-                }
+                };
                 //add coords to map coords
                 markerId = this.dataHandler.addMapCoord(roundedLonLat);
                 label = this.helper.getLabelForMarker(roundedLonLat);

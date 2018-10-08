@@ -1485,7 +1485,7 @@ Oskari.clazz.define(
                     openLayer.removeBackBuffer();
                 }
                 return value;
-            }
+            };
 
             this.getMap().addLayer(openLayer);
         },
@@ -1941,7 +1941,7 @@ Oskari.clazz.define(
             var me = this;
             layer.setMinScale(minscale);
             layer.setMaxScale(maxscale);
-            var olLayer = this.getOLMapLayers(layer)
+            var olLayer = this.getOLMapLayers(layer);
             olLayer[0].minScale = minscale;
             olLayer[0].maxScale = maxscale;
 

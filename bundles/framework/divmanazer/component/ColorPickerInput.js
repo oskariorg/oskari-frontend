@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
         var me = this;
         
         if (!options) {
-            options = {}
+            options = {};
         }
 
         me._clazz = 'Oskari.userinterface.component.ColorPickerInput';

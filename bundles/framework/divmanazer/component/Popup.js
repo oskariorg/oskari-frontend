@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             return {
                 content: height - headerHeight - actionsHeight - contentsMargin - margin - popupMargins,
                 popup: height - margin
-            }
+            };
         },
 
         /**

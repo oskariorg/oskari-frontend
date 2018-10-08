@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                     '</div>'+
                 '</div>'
             )
-        }
+        };
         this.createUi();
         Oskari.makeObservable(this);
     }, {
@@ -208,7 +208,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 geodeticCoordinateSystem: this.loc('infoPopup.geodeticCoordinateSystem.info'),
                 heightSystem: this.loc('infoPopup.heightSystem.info'),
                 epsgSearch: this.loc('infoPopup.epsgSearch.info')
-            }
+            };
         },
         toggleFilter: function (filter, preventReset) {
             if (filter === 'epsg'){
