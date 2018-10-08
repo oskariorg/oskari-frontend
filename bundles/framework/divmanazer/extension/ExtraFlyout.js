@@ -231,6 +231,12 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 start: function() {
                     // bring this flyout to top when user starts dragging it
                     me.bringToTop();
+                },
+                stop: function () {
+                    //prevent to drag flyout's toolbar out of the viewport's top
+                    if (me._popup.position().top < 0){
+                        me._popup.css('top', '0px');
+                    }
                 }
             });
         },
