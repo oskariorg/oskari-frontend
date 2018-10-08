@@ -13,21 +13,27 @@
             "bundlename": "mapfull",
             "metadata": {
                 "Import-Bundle": {
+                    "mapmyplaces": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "maparcgis": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "mapmodule": {
+                        "bundlePath": "../../../packages/paikkatietoikkuna/bundle/"
+                    },
+                    "oskariui": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "ui-components": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapfull": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
                     "mapwmts": {
-						"bundlePath": "../../../packages/mapping/ol3/"
-					},
-					"mapmodule": {
-						"bundlePath": "../../../packages/paikkatietoikkuna/bundle/"
-					},
-					"mapfull": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"ui-components": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"oskariui": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
 					"map3dtiles": {
 						"bundlePath": "../../../packages/paikkatietoikkuna/bundle/"
 					}
@@ -71,6 +77,15 @@
 				}
 			}
 		}, {
+            "bundlename": "infobox",
+            "metadata": {
+                "Import-Bundle": {
+                    "infobox": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
 			"bundlename": "search",
 			"metadata": {
 				"Import-Bundle": {
@@ -80,6 +95,15 @@
 				}
 			}
 		}, {
+            "bundlename": "metadatacatalogue",
+            "metadata": {
+                "Import-Bundle": {
+                    "metadatacatalogue": {
+                        "bundlePath": "../../../packages/catalogue/"
+                    }
+                }
+            }
+        }, {
 			"bundlename": "layerselector2",
 			"metadata": {
 				"Import-Bundle": {
@@ -97,7 +121,244 @@
 					}
 				}
 			}
-		},	{
+		}, {
+            "bundlename": "publisher2",
+            "metadata": {
+                "Import-Bundle": {
+                    "publisher2": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "maplegend",
+            "metadata": {
+                "Import-Bundle": {
+                    "maplegend": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "userguide",
+            "metadata": {
+                "Import-Bundle": {
+                    "userguide": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "metadataflyout",
+            "metadata": {
+                "Import-Bundle": {
+                    "metadataflyout": {
+                        "bundlePath": "../../../packages/catalogue/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "guidedtour",
+            "metadata": {
+                "Import-Bundle": {
+                    "guidedtour": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "backendstatus",
+            "metadata": {
+                "Import-Bundle": {
+                    "backendstatus": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "printout",
+            "metadata": {
+                "Import-Bundle": {
+                    "printout": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "postprocessor",
+            "metadata": {
+                "Import-Bundle": {
+                    "postprocessor": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "statsgrid",
+            "metadata": {
+                "Import-Bundle": {
+                    "statsgrid": {
+                        "bundlePath": "../../../packages/statistics/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "routesearch",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "routesearch" : {
+                        "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "register",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "register" : {
+                        "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "findbycoordinates",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "findbycoordinates" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "terrain-profile",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "terrain-profile" : {
+                        "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "heatmap",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "heatmap" : {
+                        "bundlePath" : "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "coordinatetool",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "coordinatetool" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "routingUI",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "routingUI" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "routingService",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "routingService" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "feedbackService",
+            "metadata" : {
+              "Import-Bundle" : {
+                "feedbackService" : {
+                  "bundlePath" : "../../../packages/framework/bundle/"
+                }
+              }
+            }
+          }, {
+            "bundlename": "timeseries",
+            "metadata": {
+                "Import-Bundle": {
+                    "timeseries": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "maprotator",
+            "metadata": {
+                "Import-Bundle": {
+                    "maprotator": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "telemetry",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "telemetry" : {
+                        "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "admin-layerselector",
+            "metadata": {
+                "Import-Bundle": {
+                    "admin-layerselector": {
+                        "bundlePath": "../../../packages/integration/bundle/"
+                    },
+                    "bb": {
+                        "bundlePath": "../../../packages/integration/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "admin-layerrights",
+            "metadata": {
+                "Import-Bundle": {
+                    "admin-layerrights": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "admin",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin" : {
+                        "bundlePath" : "../../../packages/admin/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "metrics",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "metrics" : {
+                        "bundlePath" : "../../../packages/admin/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "appsetup",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "appsetup" : {
+                        "bundlePath" : "../../../packages/admin/bundle/"
+                    }
+                }
+            }
+        }, {
 			"bundlename": "demo-link",
 			"metadata": {
 				"Import-Bundle": {

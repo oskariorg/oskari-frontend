@@ -337,7 +337,6 @@ Oskari.clazz.define(
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/vectorlayer.css"
                 },
-
                 /**
                  * Vector tiles
                  */ 
