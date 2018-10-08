@@ -28,7 +28,7 @@ module.exports = {
     "no-template-curly-in-string": 0,
     // allow debugger during development
     "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0,
-    // enforce
+    // enforce single quote
     "quotes": ["error", "single", {"allowTemplateLiterals": true, "avoidEscape": true}]
   }
 }
