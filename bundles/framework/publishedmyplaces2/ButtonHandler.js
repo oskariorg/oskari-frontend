@@ -158,8 +158,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler'
          * @param config params for StartDrawRequest
          */
         sendDrawRequest: function (config) {
-            var me = this,
-                startRequest = Oskari.requestBuilder('DrawPlugin.StartDrawingRequest')(config);
+            var startRequest = Oskari.requestBuilder('DrawPlugin.StartDrawingRequest')(config);
             this.instance.sandbox.request(this, startRequest);
 
             if (!config.geometry) {

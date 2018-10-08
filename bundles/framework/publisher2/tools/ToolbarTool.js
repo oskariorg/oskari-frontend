@@ -262,8 +262,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          * @param {Boolean} localeChange, true to not reset config when disabling plugin, false to reset config
          */
         activatePreviewPlugin: function (tool, enabled, localeChange) {
-            var me = this,
-                sandbox = me.__sandbox;
+            var me = this;
 
             if (!tool || !tool.__plugin) {
                 // no tool or plugin not created -> nothing to do
@@ -372,7 +371,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
         },
         _checkAdminDrawControls: function(){
-            var me = this;
             // show drawing controls for admin users
             //TODO: PublishedMyPlaces is not supported with ol3!
         },
@@ -616,8 +614,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         },
 
         stop: function() {
-            var me = this,
-                sandbox = me.__sandbox;
+            var me = this;
 
             if(me.__plugin) {
                 //send remove request per active button

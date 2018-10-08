@@ -131,8 +131,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
-                    doOpen = event.getViewState() !== 'close',
-                    p;
+                    doOpen = event.getViewState() !== 'close';
                 if (event.getExtension().getName() !== me.getName() || !this.plugins['Oskari.userinterface.Flyout']) {
                     // not me -> do nothing
                     return;

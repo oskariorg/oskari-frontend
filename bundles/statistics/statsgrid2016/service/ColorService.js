@@ -189,9 +189,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @return {Object[]} Returns an array of objects like { name : "nameOfSet", value : [.. array of hex colors...]}
          */
         getOptionsForType: function (type, count, reverse) {
-            var me = this,
-                i,
-                set;
+            var me = this;
             var colors = [];
             type = type || this.limits.defaultType;
             var range = this.getRange(type);

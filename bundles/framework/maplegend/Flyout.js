@@ -118,7 +118,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             var layers = sandbox.findAllSelectedMapLayers().slice(0),
                 n,
                 layer,
-                groupAttr,
                 layerContainer,
                 accordionPanel;
 

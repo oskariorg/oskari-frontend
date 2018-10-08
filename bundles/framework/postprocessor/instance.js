@@ -34,7 +34,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * implements BundleInstance protocol start methdod
          */
         'start': function () {
-            var me = this;
             var conf = this.conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
@@ -153,8 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                 }
             },
                 count,
-                point,
-                olPoint;
+                point;
             for (count = 0; count < points.length; ++count) {
                 point = points[count];
                 olPoints.addPoint(point.lon, point.lat);

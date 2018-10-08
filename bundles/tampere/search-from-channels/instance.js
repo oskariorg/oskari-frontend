@@ -623,7 +623,6 @@ Oskari.clazz.define(
 
             //Accordion
             var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                container = jQuery('div.myAccordion'),
                 panel = null;
 
             jQuery.each(types, function(index, type) {
@@ -852,8 +851,6 @@ Oskari.clazz.define(
             var olLayer = new olLayerVector('templayer'),
                 format = new olFormatWKT({}),
                 feature,
-                geometry,
-                mapMoveRequest,
                 bounds,
                 center,
                 isSelected = false;
@@ -1078,8 +1075,6 @@ Oskari.clazz.define(
                 i,
                 dataField,
                 newRow,
-                newLabel,
-                value,
                 text,
                 newCheckbox,
                 newCheckboxDef;

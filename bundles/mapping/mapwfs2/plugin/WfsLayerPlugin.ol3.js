@@ -1,6 +1,5 @@
 import olLayerTile from 'ol/layer/Tile';
 import olLayerImage from 'ol/layer/Image';
-import olSourceTileImage from 'ol/source/TileImage';
 import olSourceImageStatic from 'ol/source/ImageStatic';
 import * as olGeom from 'ol/geom';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
@@ -192,7 +191,6 @@ Oskari.clazz.define(
                 i,
                 loc = me.getLocalization(),
                 isVisible = false,
-                isInvisible = false,
                 countManu = 0,
                 countInvisi = 0,
                 countInscale = 0,
@@ -1127,7 +1125,6 @@ Oskari.clazz.define(
         getGrid: function () {
             var me = this,
                 sandbox = me.getSandbox(),
-                resolution = me.getMap().getView().getResolution(),
                 mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getBbox()),
                 z = me.getMapModule().getMapZoom(),
                 tileGrid = this._tileGrid,
@@ -1498,7 +1495,6 @@ Oskari.clazz.define(
                 layerId = layer.getId(),
                 layerIndex = null,
                 layerName = me.__layerPrefix + layerId + '_' + layerType,
-                layerScales,
                 normalLayerIndex,
                 highlightLayer,
                 boundsObj = imageBbox,
@@ -1512,7 +1508,6 @@ Oskari.clazz.define(
             }
             if (layerType === me.__typeHighlight) {
                 ols = [imageSize.width,imageSize.height];  // ol/size
-                layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
 
                 wfsMapImageLayer = new olLayerImage({
                     source: new olSourceImageStatic({

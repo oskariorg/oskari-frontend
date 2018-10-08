@@ -27,7 +27,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
          * implements BundleInstance protocol start methdod
          */
         afterStart: function (sandbox) {
-            var title = this.getLocalization('title');
 
             var conf = this.getConfiguration(),
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',

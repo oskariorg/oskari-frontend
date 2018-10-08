@@ -48,8 +48,7 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this,
-                btn,
-                i;
+                btn;
 
             //main wrapper
             me.templates.main = jQuery('<div class="tag-pipe-wrapper"></div>');
@@ -731,8 +730,7 @@ Oskari.clazz.define(
          * @return {[float]}      [calculated value]
          */
         _calculateTagHeight: function(form, tagType){
-            var me = this,
-            type = tagType[1],
+            var type = tagType[1],
             pipeSizemm = parseInt(form.find('[name=tag-pipe-size]').val()),
             pipeSize = pipeSizemm/1000,
             bottomHeight = parseFloat(form.find('[name=tag-bottom-height]').val()),
@@ -775,8 +773,7 @@ Oskari.clazz.define(
          * @return {[float]}      [calculated value]
          */
         _calculateBarrageHeight: function(form, tagType){
-            var me = this,
-            type = tagType[0],
+            var type = tagType[0],
             pipeSizemm = parseInt(form.find('[name=tag-pipe-size]').val()),
             pipeSize = pipeSizemm/1000,
             bottomHeight = parseFloat(form.find('[name=tag-bottom-height]').val()),
@@ -870,8 +867,7 @@ Oskari.clazz.define(
          * that password field values match.
          */
         _formIsValid: function (form, me) {
-            var errors = [],
-                pass;
+            var errors = [];
             // check that required fields have values
             form.find('input[required], textarea[required]').each(function (index) {
                 if (!this.value.length) {
@@ -1070,7 +1066,6 @@ Oskari.clazz.define(
          * @param  {[jquery object]} list [li]
          */
         _showLastTagPipeOnMap: function(list){
-            var me = this;
             var last_li = list.find('li').last();
             last_li.find('.show-tag-on-map').trigger('click');
         },
@@ -1280,7 +1275,6 @@ Oskari.clazz.define(
          * @return {[object]}            [op features]
          */
         _getActiveTagPipeLayers: function(features, attributes){
-            var me = this;
 
             var activeLayers = jQuery.grep(features, function(n) {
                 var finalId = n.id.split('.');

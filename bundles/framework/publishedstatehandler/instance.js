@@ -469,7 +469,6 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 map = sandbox.getMap(),
                 selectedLayers = sandbox.findAllSelectedMapLayers(),
-                zoom = map.getZoom(),
                 lat = map.getX(),
                 lon = map.getY(),
                 state = {

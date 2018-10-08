@@ -175,8 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 ),
                 okBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button'
-                ),
-                sandbox = me.instance.sandbox;
+                );
 
             okBtn.setTitle(me.loc('tabs.publishedmaps.delete'));
             okBtn.addClass('primary');
@@ -349,7 +348,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @param function cb - callback to call when clicking ok button
           */
         createProjectionChangeDialog: function (cb) {
-            var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var btn = dialog.createCloseButton(this.loc('projectionError').ok);
             var cancel = dialog.createCloseButton( this.loc('projectionError').cancel );

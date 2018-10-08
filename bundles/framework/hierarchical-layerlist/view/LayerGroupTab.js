@@ -124,7 +124,7 @@ Oskari.clazz.define(
                 }
             });
 
-            me.service.on('search.clear', function(obj) {
+            me.service.on('search.clear', function() {
                 me.setNoResultMessageVisible(false);
             });
         },
@@ -182,7 +182,6 @@ Oskari.clazz.define(
             var updateLayerCounts = function(type){
                 var groups = getNodesByType(type);
                 groups.forEach(function(groupNode){
-                    var countText = '';
                     var count = calculateLayerCounts(groupNode);
                     var node = jstree.get_node(groupNode);
                     if((count.all === 0 && !me.service.hasEmptyGroupsVisible()) || node.state.hidden) {
@@ -390,7 +389,7 @@ Oskari.clazz.define(
             // append this indicator
             indicatorCont.append(infoIcon);
             // show metadata
-            infoIcon.on('click', function(e) {
+            infoIcon.on('click', function() {
                 var desc = me.templates.description.clone(),
                     dialog = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
@@ -523,22 +522,16 @@ Oskari.clazz.define(
          */
         _createLayerContainer: function(layer) {
             var me = this,
-                sandbox = me.sb,
                 // create from layer template
                 // (was clone-from-template but template was only used once so there was some overhead)
                 layerDiv = this.templates.layerContainer.clone(),
                 tooltips = me.instance.getLocalization('tooltip'),
                 tools = jQuery(layerDiv).find('span.layer-tools'),
                 icon = tools.find('span.layer-icon'),
-                rn,
-                uuid,
-                additionalUuids,
-                additionalUuidsCheck,
                 subLayers,
                 s,
                 subUuid,
                 elBackendStatus,
-                mapLayerId,
                 layerInfo;
 
             icon.addClass(layer.getIconClassname());
@@ -744,7 +737,6 @@ Oskari.clazz.define(
 
             field.bindChange(function(event) {
                 event.stopPropagation(); // JUST BECAUSE TEST ENVIRONMENT FAILS
-                var evt = event;
                 if (timer) {
                     clearTimeout(timer);
                 }
@@ -769,7 +761,6 @@ Oskari.clazz.define(
             var me = this;
             var tree = jQuery(event.delegateTarget);
             var isChecked = tree.jstree().is_checked(node);
-            var isOpen = tree.jstree().is_open(node);
             var target = jQuery(event.target);
             var nodeChildren = node.children_d;
 
@@ -793,7 +784,6 @@ Oskari.clazz.define(
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-            var nodes = [];
 
             switch (node.type) {
                 case 'layer':
@@ -995,7 +985,6 @@ Oskari.clazz.define(
             };
 
             groups.forEach(function(group) {
-                var groupOrders = [];
                 var groupChildren = [];
 
                 var extraOpts = {
@@ -1041,7 +1030,7 @@ Oskari.clazz.define(
             });
 
             // When open node then updata tools also
-            me.getJsTreeElement().on('open_node.jstree', function(node) {
+            me.getJsTreeElement().on('open_node.jstree', function() {
                 me._addSubgroupTools();
                 me._addSubgroupSubgroupTools();
                 me._addLayerTools();
@@ -1053,7 +1042,7 @@ Oskari.clazz.define(
             });
 
 
-            me.getJsTreeElement().on('redraw.jstree',function(nodes){
+            me.getJsTreeElement().on('redraw.jstree',function(){
                 me._updateAllTools();
                 me._updateLayerCountsAndGroupsVisibility(true);
             });

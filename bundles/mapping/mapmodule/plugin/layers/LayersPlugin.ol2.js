@@ -256,8 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             // NOTE: DO NOT CHANGE visibility in internal layer object (it will
             // change in UI also)
             // this is for optimization purposes
-            var map = this.getMap(),
-                mapLayers = this.getMapModule().getOLMapLayers(layer.getId()),
+            var mapLayers = this.getMapModule().getOLMapLayers(layer.getId()),
                 mapLayer = mapLayers.length ? mapLayers[0] : null;
 
             if (scaleOk && geometryMatch && layer.isVisible()) {

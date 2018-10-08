@@ -234,9 +234,7 @@ Oskari.clazz.define(
          */
         toggleControl: function (drawMode) {
             var key,
-                control,
-                activeDrawing,
-                event;
+                control;
 
             this.currentDrawMode = drawMode;
 

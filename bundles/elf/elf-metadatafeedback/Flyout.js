@@ -65,8 +65,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         getUserRole: function() {
           var me = this;
           if (me.availableOskariRoles) {
-            var user = Oskari.user();
-            var userRoles = _.pluck(user.getRoles(), 'name');
             for (var i = 0; i < me.availableOskariRoles.length; i++) {
               if (me.userHasRole(me.availableOskariRoles[i])) {
                 return me.availableOskariRoles[i];

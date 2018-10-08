@@ -414,7 +414,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 link,
                 dataArray,
                 data,
-                fullFieldNames,
                 fieldName,
                 baseKey,
                 uiName,
@@ -687,8 +686,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 body = table.find('tbody').last(),
                 dataArray = me.model.getData(),
                 row,
-                data,
-                key,
                 value,
                 cell,
                 columnIndex,
@@ -898,7 +895,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         renderTo: function (container, state, toolRowElement) {
             var me = this,
-                toolRow,
                 fieldNames,
                 table;
 
@@ -1048,7 +1044,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // autosize header
             if(typeof me.autoHeightHeader === 'number' && me.table) {
                 var maxHeight = 0;
-                var thead = me.table.find('thead');
                 var theadRow = me.table.find('thead tr:not(.grouping)');
                 theadRow.height(me.autoHeightHeader || 30);
 
@@ -1306,7 +1301,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _getAttributeValue: function (a, pAttribute) {
             // to string so number will work also
             var nameA = a[pAttribute],
-                numericValue,
                 split = pAttribute.split('.');
 
             // if not found, try subtable

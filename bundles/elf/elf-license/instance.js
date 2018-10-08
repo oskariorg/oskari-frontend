@@ -472,8 +472,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
 
     },
     _showLoginInfo: function(element){
-        var me = this,
-            html = jQuery('<div>')
+        var me = this;
         element.html('<div>' +
             me._locale.dialog.loginShort +
             '</div>' +

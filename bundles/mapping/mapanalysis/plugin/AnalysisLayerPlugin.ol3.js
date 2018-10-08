@@ -74,8 +74,6 @@ Oskari.clazz.define(
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             var me = this,
-                sandbox = this.getSandbox(),
-                openLayerId = 'layer_' + layer.getId(),
                 imgUrl = layer.getWpsUrl() + layer.getWpsLayerId(),
                 //minresolution === maxscale and vice versa...
                 minResolution = this.getMapModule().getResolutionForScale(layer.getMaxScale()),

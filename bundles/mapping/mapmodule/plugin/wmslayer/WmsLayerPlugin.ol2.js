@@ -207,8 +207,7 @@ Oskari.clazz.define(
             }
         },
         updateLayerParams: function(layer, forced, params) {
-            var sandbox = this.getSandbox(),
-                i,
+            var i,
                 olLayerList,
                 count;
 

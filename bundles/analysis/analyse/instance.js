@@ -393,9 +393,7 @@ Oskari.clazz.define(
          */
         setAnalyseMode: function (blnEnabled) {
             var me = this,
-                map = jQuery('#contentMap'),
-                mapmodule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                tools = jQuery('#maptools');
+                map = jQuery('#contentMap');
 
 
             if (blnEnabled) {

@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                             '</table>'
                             )
     }
-    var me =this;
 },  {
         getContainer: function () {
             return jQuery(this.container);
@@ -67,8 +66,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
          * @desc handle hiding and showing the elevation row in the table
          */
         handleDisplayingElevationRows: function ( dimension ) {
-            var me = this;
-            var isEmpty = true;
             var elevationCells = this.getElements().rows.find('.elevation');
             var table = this.getElements().table;
             if ( dimension === 2 ) {
@@ -144,7 +141,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             }
         },
         create: function () {
-            var me = this;
             var title;
             if (this.type === 'input'){
                 title = this.loc('flyout.coordinateTable.input');

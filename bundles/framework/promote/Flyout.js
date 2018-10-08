@@ -96,7 +96,6 @@ function(instance) {
      */
     createUi : function() {
         var me = this;
-        var sandbox = me.instance.getSandbox();
 
         var flyout = jQuery(this.container);
         flyout.empty();

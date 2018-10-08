@@ -246,13 +246,6 @@ Oskari.clazz.define(
             widthSpinner.val(me.values.width !== null && me.values.width !== undefined ? me.values.width : 1);
             content.append(widthSpinner);
 
-            var statedChosenColor = false,
-                colorCell,
-                idExt,
-                id,
-                cellIndex,
-                activeCell;
-
             // Create color picker element
             me._createColorPicker();
             var colorPickerWrapper = dialogContent.find('.color-picker-wrapper');

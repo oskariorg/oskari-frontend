@@ -1905,7 +1905,6 @@ Oskari.clazz.define(
          */
         __changePathAttribute: function (svg, attr, value) {
             var htmlObject = jQuery(svg);
-            var sandbox = this.getSandbox();
             htmlObject.find('path').attr(attr, value);
 
             if (htmlObject.find('path').length > 1) {
@@ -2272,8 +2271,7 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         afterMapLayerAddEvent: function (event) {
-            var map = this.getMap(),
-                layer = event.getMapLayer(),
+            var layer = event.getMapLayer(),
                 keepLayersOrder = true,
                 isBaseMap = false,
                 layerPlugins = this.getLayerPlugins(),

@@ -53,8 +53,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
         if (!uuid) {
             return;
         }
-        var me = this,
-            url = window.location.origin;
+        var url = window.location.origin;
         if (window.location.pathname && window.location.pathname.length) {
             url += window.location.pathname;
         }

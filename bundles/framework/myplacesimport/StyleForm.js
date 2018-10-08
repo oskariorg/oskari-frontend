@@ -124,7 +124,6 @@ Oskari.clazz.define(
          */
         getValues: function (){
             var values = {},
-                styleFormValues,
                 me = this;
             // infobox will make us lose our reference so search
             // from document using the form-class

@@ -53,7 +53,6 @@ Oskari.clazz.category(
             this.dialog = null;
             var me = this,
                 loc = this.getLocalization('buttons'),
-                sandbox = this.getSandbox(),
                 reqBuilder = Oskari.requestBuilder('ToolSelectionRequest'),
                 gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
                 gfiReqBuilder = Oskari.requestBuilder(gfiRn),

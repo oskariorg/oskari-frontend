@@ -30,8 +30,7 @@ Oskari.clazz.define(
          *
          */
         _initImpl: function() {
-            var me = this,
-                ajaxUrl = null;
+            var me = this;
 
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.SearchPlugin;
 
@@ -296,11 +295,8 @@ Oskari.clazz.define(
          * Detects if <enter> key was pressed and calls #_doSearch if it was
          */
         _checkForEnter: function(event) {
-            var keycode;
             if (window.event) {
-                keycode = window.event.keyCode;
             } else if (event) {
-                keycode = event.which;
             }
 
             if (event.keyCode === 13) {
@@ -565,10 +561,7 @@ Oskari.clazz.define(
          * @param {jQuery} div
          */
         changeToolStyle: function(style, div) {
-            var me = this,
-                removedClass,
-                addedClass,
-                template;
+            var me = this;
             div = div || me.getElement();
             if (!div) {
                 return;
@@ -628,8 +621,7 @@ Oskari.clazz.define(
                 middle = div.find('div.search-middle'),
                 right = div.find('div.search-right'),
                 closeResults = middle.find('div.close-results'),
-                inputField = div.find('input.search-input'),
-                searchContainer;
+                inputField = div.find('input.search-input');
 
             left.css({
                 'background-image': 'url("' + bgLeft + '")',

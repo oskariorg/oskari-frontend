@@ -93,10 +93,7 @@ Oskari.clazz.define(
          *
          */
         loadAnalyseLayers: function () {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                url = Oskari.urls.getRoute(),
-                loc = Oskari.getLocalization(me.instance.getName());
+            var me = this;
 
             // Request analyis layers via the backend
             me._getAnalysisLayers(
@@ -127,8 +124,6 @@ Oskari.clazz.define(
                 sandbox = me.instance.getSandbox(),
                 mapLayerService,
                 mapLayer,
-                requestBuilder,
-                request,
                 layerarr = analysislayersJson.analysislayers,
                 i,
                 analyseJson;
@@ -210,10 +205,7 @@ Oskari.clazz.define(
          *
          */
         loadWFSLayerPropertiesAndTypes: function (layer_id) {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                url = Oskari.urls.getRoute(),
-                loc = Oskari.getLocalization(me.instance.getName());
+            var me = this;
 
             // Request analyis layers via the backend
             me._getWFSLayerPropertiesAndTypes(layer_id,

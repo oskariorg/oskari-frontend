@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.model.LayerG
         this._children = group.getChildren();
         this._orderNumber = group.getOrderNumber();
         this._toolsVisible = group.hasToolsVisible();
-        var me = this;
     }, {
         /**
          * @method setId

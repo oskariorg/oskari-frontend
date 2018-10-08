@@ -216,13 +216,6 @@ Oskari.clazz.define(
                 }
             });
 
-            var statedChosenColor = false,
-                colorCell,
-                idExt,
-                id,
-                cellIndex,
-                activeCell;
-
             // Create color picker element
             me._createColorPicker();
             var colorPickerWrapper = dialogContent.find('.color-picker-wrapper');

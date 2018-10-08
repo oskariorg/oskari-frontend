@@ -27,7 +27,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, null, {
                     type: 'group'
                 });
-                var popup = popupConf.popup;
                 var message = popupConf.message;
                 popupConf.popup.show(me.locale('groupTitles.addMainGroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
@@ -72,7 +71,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 options.type = 'group';
 
                 var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, null, options);
-                var popup = popupConf.popup;
                 var message = popupConf.message;
                 popupConf.popup.show(me.locale('groupTitles.editMainGroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
@@ -87,7 +85,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     type: 'subgroup'
                 });
 
-                var popup = popupConf.popup;
                 var message = popupConf.message;
                 popupConf.popup.show(me.locale('groupTitles.addSubgroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
@@ -122,7 +119,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 options.type = 'subgroup';
 
                 var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, parentId, options);
-                var popup = popupConf.popup;
                 var message = popupConf.message;
                 popupConf.popup.show(me.locale('groupTitles.editSubgroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
@@ -137,7 +133,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     type: 'subgroup-subgroup'
                 });
 
-                var popup = popupConf.popup;
                 var message = popupConf.message;
                 popupConf.popup.show(me.locale('groupTitles.addSubgroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
@@ -172,7 +167,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 options.type = 'subgroup-subgroup';
 
                 var popupConf = me.group.getGroupAddingPopupConf(tool, groupId, parentId, options);
-                var popup = popupConf.popup;
                 var message = popupConf.message;
                 popupConf.popup.show(me.locale('groupTitles.editSubgroup'), message, popupConf.buttons);
                 popupConf.popup.makeModal();
@@ -235,8 +229,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 }
                 var originalParentNode = draggedNode.original;
 
-                // Get ajax data
-                var type = me._findJSTreeNodeActualType(draggedNode.type);
                 var draggedId = (draggedNode.type === 'layer') ? draggedNode.a_attr['data-layer-id'] : draggedNode.a_attr['data-group-id'];
                 var parentNode = data.data.origin.get_node(draggedNode.parent);
 

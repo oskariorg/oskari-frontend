@@ -458,7 +458,6 @@ Oskari.clazz.define(
          */
         handleLayerOpacity: function(layer, opacity) {
             var me = this;
-            var features = null;
             var olLayer = me._olLayers[layer.getId()];
             if(olLayer) {
                 olLayer.setOpacity(opacity);
@@ -1057,8 +1056,7 @@ Oskari.clazz.define(
          * @return {ol/Extent} extent
          */
         getBufferedExtent: function(extent, percentage) {
-            var me = this,
-                line = new olGeom.LineString([
+            var line = new olGeom.LineString([
                     [extent[0], extent[1]],
                     [extent[2], extent[3]]
                 ]),

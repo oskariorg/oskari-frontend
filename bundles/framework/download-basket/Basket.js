@@ -321,7 +321,6 @@ Oskari.clazz.define(
                 '</div>');
             if(me._selected.length > 0) {
                 var el = me.container;
-                var buttons = el.find('.oskari__download-basket-buttons');
                 // Change basket to visible
                 el.find('.oskari__download-basket-wrapper').find('.empty-basket').hide();
                 jQuery(el.find('input.empty')).show();

@@ -87,9 +87,6 @@ Oskari.clazz.define(
       Oskari.log('mapwfs2').debug('WFS complete', data);
     },
     handleChannelStatus : function(data) {
-      var me = this;
-      // {"layerId":"5","message":"started","reqId":9}
-      // {"layerId":"15","success":true,"message":"completed","reqId":3}
       if(data.message === 'started') {
         Oskari.log('mapwfs2').debug('Processing started for layer ' + data.layerId + ' (req: ' + data.reqId + ')');
         if(typeof this.timer === 'undefined'){

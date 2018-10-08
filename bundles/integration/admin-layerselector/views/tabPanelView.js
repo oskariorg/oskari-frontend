@@ -159,8 +159,7 @@ define([
 
                     // Loop through layer groupings
                     for (var i = 0; i < this.layerGroupingModel.layerGroups.length; ++i) {
-                        var group = this.layerGroupingModel.layerGroups[i],
-                            visibleLayerCount = 0;
+                        var group = this.layerGroupingModel.layerGroups[i];
                         //create groupPanel / accordion
                         var groupPanel = jQuery(this.accordionTemplate({
                             title: this.layerGroupingModel.getGroupingTitle(i, Oskari.getLang()),

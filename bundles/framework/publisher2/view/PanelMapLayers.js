@@ -565,8 +565,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * viewport
          */
         handleLayerVisibilityChanged: function (layer, isInScale, isGeometryMatch) {
-            var me = this,
-                lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']',
+            var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']',
                 layerDiv = jQuery(this.container).find(lyrSel),
                 footer = layerDiv.find('div.layer-tools'), // teardown previous footer & layer state classes
                 isChecked = footer.find('.baselayer').is(':checked');
@@ -686,10 +685,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
             toolsDiv.append(footer);
 
-            var slider = this._addSlider(layer, layerDiv),
-                opa = layerDiv.find('div.layer-opacity input.opacity');
+            this._addSlider(layer, layerDiv);
+            var opa = layerDiv.find('div.layer-opacity input.opacity');
             opa.attr('value', layer.getOpacity());
-
         },
 
         /**

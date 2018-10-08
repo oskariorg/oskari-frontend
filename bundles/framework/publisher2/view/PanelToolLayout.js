@@ -348,31 +348,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             jQuery('.mapplugins').show();
             jQuery('.mapplugin').addClass('toollayoutedit');
             // TODO create droppables on _showDroppable, destroy them on _hideDroppable
-            var draggables = me._makeDraggable(jQuery('.mapplugin')),
-                droppables = jQuery('.mappluginsContent').droppable({
-                    // TODO see if this can be done in hover? Would it even be wanted behaviour?
-                    drop: function (event, ui) {
-                        var pluginClazz = ui.draggable.attr('data-clazz'),
-                            plugin = me.getToolById(pluginClazz).getPlugin(),
-                            source = ui.draggable.parents('.mapplugins'),
-                            target = jQuery(this);
+            me._makeDraggable(jQuery('.mapplugin'));
+            jQuery('.mappluginsContent').droppable({
+                // TODO see if this can be done in hover? Would it even be wanted behaviour?
+                drop: function (event, ui) {
+                    var pluginClazz = ui.draggable.attr('data-clazz'),
+                        plugin = me.getToolById(pluginClazz).getPlugin(),
+                        source = ui.draggable.parents('.mapplugins'),
+                        target = jQuery(this);
 
-                        me._moveSiblings(pluginClazz, source, target);
-                        if (plugin && plugin.setLocation) {
-                            plugin.setLocation(jQuery(this).parents('.mapplugins').attr('data-location'));
-                            // Reset draggable's inline css... couldn't find a cleaner way to do this.
-                            // Can't be removed as that breaks draggable, has to be zeroed because we're changing containers
-                            plugin.getElement().css({
-                                'top': '0px',
-                                'left': '0px'
-                            });
-                        }
-                        // draggable.stop doesn't fire if dropped to a droppable so we have to do this here as well...
-                        me._hideDroppable();
-                    },
-                    hoverClass: 'ui-state-highlight',
-                    tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
-                });
+                    me._moveSiblings(pluginClazz, source, target);
+                    if (plugin && plugin.setLocation) {
+                        plugin.setLocation(jQuery(this).parents('.mapplugins').attr('data-location'));
+                        // Reset draggable's inline css... couldn't find a cleaner way to do this.
+                        // Can't be removed as that breaks draggable, has to be zeroed because we're changing containers
+                        plugin.getElement().css({
+                            'top': '0px',
+                            'left': '0px'
+                        });
+                    }
+                    // draggable.stop doesn't fire if dropped to a droppable so we have to do this here as well...
+                    me._hideDroppable();
+                },
+                hoverClass: 'ui-state-highlight',
+                tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
+            });
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
         },
@@ -640,8 +640,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          *
          */
         _restartActivePlugins: function () {
-            var me = this,
-                tools = me.tools;
+            var me = this;
 
             _.each(me.tools, function(tool) {
                 if (tool.isDisplayed(me.data) && tool.isStarted()) {

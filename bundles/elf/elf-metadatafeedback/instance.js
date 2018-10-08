@@ -177,7 +177,7 @@ function () {
                                 panel.setContent(_.template(me.templates.feedbackSuccessTemplate(json)));
                             },
                             function(error) {
-                                var content = me.templates.feedbackTabErrorTemplate(error);
+                                panel.setContent(_.template(me.templates.feedbackTabErrorTemplate(error)));
                             }
                         );
                     }

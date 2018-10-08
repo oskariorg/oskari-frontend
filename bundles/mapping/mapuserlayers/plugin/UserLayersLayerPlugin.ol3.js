@@ -60,7 +60,6 @@ Oskari.clazz.define(
             var layerId = _.last(layer.getId().split('_'));
             var imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&');
 
-            var sandbox = this.getSandbox();
             var map = this.getMapModule();
             var model = {
                 source: new olSourceImageWMS({

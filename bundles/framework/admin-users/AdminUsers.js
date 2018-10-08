@@ -24,8 +24,7 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this,
-                btn,
-                i;
+                btn;
 
             me.templates.main = jQuery('<div class="admin-users"></div>');
             me.templates.search = jQuery(
@@ -192,7 +191,6 @@ Oskari.clazz.define(
                 roleData,
                 value,
                 name,
-                opt,
                 roles = me.instance.storedRoles;
 
             for (i = 0, ilen = roles.length; i < ilen; i += 1) {
@@ -332,7 +330,6 @@ Oskari.clazz.define(
          * Populates an item fragment
          */
         _populateItem: function (item, user) {
-            var me = this;
 
             item.attr('data-id', user.id);
             item.find('h3').text(
@@ -454,11 +451,6 @@ Oskari.clazz.define(
                         me.fetchUsers(me.container);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        var error = me._getErrorText(
-                            jqXHR,
-                            textStatus,
-                            errorThrown
-                        );
                         me._openPopup(
                             me._getLocalization('save_failed'),
                             me._getLocalization('save_failed_message')

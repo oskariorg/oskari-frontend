@@ -227,7 +227,6 @@ function () {
             loc = me.localization,
             accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
             panel = null,
-            titlePanel = jQuery('<div>'),
             routeDiv = me.popup.popupContent.find('.route-instructions'),
             titleDiv = routeDiv.find('.title'),
             instructionsDiv = routeDiv.find('.instructions');
@@ -296,8 +295,7 @@ function () {
      * @param  {String} color route color
      */
     _renderRoute: function (geom, color) {
-        var me = this,
-            rn = 'MapModulePlugin.AddFeaturesToMapRequest',
+        var rn = 'MapModulePlugin.AddFeaturesToMapRequest',
             colorRGB = Oskari.util.hexToRgb(color),
             style = {
                 stroke: {

@@ -146,8 +146,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             me: me
         }, me.handleAction);
 
-        var locale = me.getLocalization(),
-            confRequirementsConfig =
+        var confRequirementsConfig =
                 (this.getConfiguration() || {}).requirementsConfig,
             requirementsConfig =
                 confRequirementsConfig || this.requirementsConfig;
@@ -178,8 +177,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         e.stopPropagation();
         var me = e.data.me,
             sandbox = me.getSandbox(),
-            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-            parentLayerId;
+            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         /*
          *****************
          * NORMAL LAYERS *

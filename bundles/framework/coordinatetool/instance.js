@@ -50,7 +50,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * implements BundleInstance protocol update method - does nothing atm
          */
         update: function () {
-            var me = this;
         },
         /**
          * @method getLocalization

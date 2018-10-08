@@ -165,10 +165,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 crossOrigin : layer.getAttributes('crossOrigin')
             };
 
-            var capsLayer = _.find(caps.Contents.Layer, function(capsLayer) {
-              return capsLayer.Identifier === config.layer;
-            });
-
             // override default params and options from layer
             _.each(layer.getOptions(), function(value, key) {
                 config[key] = value;

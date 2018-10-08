@@ -1,5 +1,4 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
-    var me = this;
     this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
     this.sb = Oskari.getSandbox();
     this.removeMarkersReq = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
@@ -177,7 +176,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         return true;
     },
     exportToFile: function ( data, filename, type ) {
-        var me = this;
         var blob = new Blob([data], {type: type});
         if( window.navigator.msSaveOrOpenBlob ) {
             window.navigator.msSaveBlob(blob, filename);

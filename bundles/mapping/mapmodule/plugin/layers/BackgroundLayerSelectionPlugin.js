@@ -381,9 +381,7 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var me = this,
                 conf = me.getConfig(),
-                el,
-                containerClasses = 'bottom center',
-                position = 0;
+                el;
 
             if (me.error) {
                 // No baseLayers in config, show error.

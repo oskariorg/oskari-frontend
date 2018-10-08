@@ -184,8 +184,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                     }
                 );
                 jQuery(layerList).find('input').on('click', function (el) {
-                    var layerid = parseInt(el.currentTarget.value),
-                        layerIdsToEmpty;
+                    var layerid = parseInt(el.currentTarget.value);
                     layersWithFeatures = _.map(WFSSelections, 'layerId');
                     me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerid);
                 });

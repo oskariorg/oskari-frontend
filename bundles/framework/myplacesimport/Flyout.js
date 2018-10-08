@@ -362,7 +362,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         __finish: function(json, locale){
             var title = locale.finish.success.title,
                 msg = locale.finish.success.message,
-                me=this,
                 fadeout = true;
 
             if (json.warning !== undefined && json.warning.featuresSkipped){
@@ -386,9 +385,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          */
         __showMessage: function (title, message, fadeout) {
             fadeout =  fadeout !== false;
-            var me = this,
-                loc = this._locale,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 btn = dialog.createCloseButton(this.locale.actions.close);
 
             dialog.makeModal();

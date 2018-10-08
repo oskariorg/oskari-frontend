@@ -269,7 +269,6 @@ Oskari.clazz.define(
          * @return {[String]}           [right parameter value]
          */
         getUrlParams: function(uri, paramName){
-            var me = this;
             var queryString = {};
             uri.replace(
                 new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
@@ -371,8 +370,7 @@ Oskari.clazz.define(
          * @return {[none]}
          */
         removeAllFeaturesFromCroppingLayer: function(map){
-            var me = this,
-            layer = map.getLayersByName('cropping-areas')[0];
+            var layer = map.getLayersByName('cropping-areas')[0];
             if(layer !== null){
                 layer.destroyFeatures();
             }
@@ -384,7 +382,6 @@ Oskari.clazz.define(
          * @return none
          */
         disableAllCroppingLayers: function(map){
-            var me = this;
 
              var layer = map.getLayersByName('download-basket-cropping-layer');
              if(layer.length > 0){
@@ -420,8 +417,7 @@ Oskari.clazz.define(
          * @param {[type]} croppingLength [How many areas user has selected]
          */
         addToTempBasket: function(croppingLength) {
-            var me = this,
-            el =  jQuery('.oskari__download-basket-temp-basket');
+            var el =  jQuery('.oskari__download-basket-temp-basket');
             p = el.find('p');
 
             if(croppingLength > 0){

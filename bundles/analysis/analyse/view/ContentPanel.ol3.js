@@ -505,7 +505,6 @@ Oskari.clazz.define(
          *
          */
         addFeature: function (feature, mode, name) {
-            var me = this;
 
             feature.setId(this.drawLayerId);
 
@@ -909,8 +908,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            var me = this,
-                diaLoc = this.loc.content.drawFilter.dialog,
+            var diaLoc = this.loc.content.drawFilter.dialog,
                 controlButtons = [],
                 dialogTitle,
                 dialogText;

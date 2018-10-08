@@ -143,8 +143,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             }
 
             var maplayerId = request.getMapLayerId();
-            var layer = this._mapLayerService.findMapLayer(maplayerId);
-            var mapLayerBackendStatus = layer.getBackendStatus();
             var backendExtendedStatusForLayer = this.backendExtendedStatus[maplayerId];
 
             if (!backendExtendedStatusForLayer) {

@@ -25,9 +25,6 @@ Oskari.clazz.category(
                 var groupCols = Number(groupHeader.attr('data-group-cols'));
                 var groupStartCol = Number(groupHeader.attr('data-start-col'));
                 var table = groupHeader.parents('table');
-                var next = groupHeader.find('.paging.next');
-                var previous = groupHeader.find('.paging.previous');
-                var c;
 
                 // hide grouping cols
                 for(var i=groupStartCol;i<groupCols+groupStartCol;i++){

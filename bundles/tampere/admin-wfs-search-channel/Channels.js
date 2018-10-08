@@ -24,8 +24,7 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this,
-                btn,
-                i;
+                btn;
 
             me.templates.main = jQuery('<div class="admin-channels"></div>');
             me.templates.search = jQuery(
@@ -406,7 +405,6 @@ Oskari.clazz.define(
          * Populates an item fragment
          */
         _populateItem: function (item, channel) {
-            var me = this;
 
             item.attr('data-id', channel.id);
             item.find('h3').html(
@@ -474,8 +472,7 @@ Oskari.clazz.define(
          * that password field values match.
          */
         _formIsValid: function (form, me) {
-            var errors = [],
-                pass;
+            var errors = [];
             // check that required fields have values
             form.find('input[required]').each(function (index) {
                 if (!this.value.length) {
@@ -620,7 +617,6 @@ Oskari.clazz.define(
                     fragment.find('[name=details-topic-'+lang+']').val(text.name);
                     fragment.find('[name=details-desc-'+lang+']').val(text.desc);
                 });
-                var paramsSelect =  fragment.find('[name=choose-param-for-search]');
                 $.each(channel.params_for_search, function(index, text) {
                     if(index > 0){
                         fragment.find('.new-params-btn').trigger('click');

@@ -237,7 +237,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * (re)creates the UI for "personal data" functionality
          */
         createUi: function () {
-            var me = this;
 
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();

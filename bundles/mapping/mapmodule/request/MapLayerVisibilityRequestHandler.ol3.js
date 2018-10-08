@@ -24,7 +24,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var me = this;
             var layerId = request.getMapLayerId();
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {

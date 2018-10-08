@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                         var dropdown = select.create(selections, options);
                         selections = [];
                         options = {};
-                        var id = obj.id;
                         dropdown.css( { width:'180px' } );
                         select.adjustChosen();
                         select.selectFirstValue();

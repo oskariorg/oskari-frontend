@@ -359,7 +359,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             me.getLayerGeometryType();
             me.getFieldsTypes();
             me.mainPanel = content;
-            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
 
             container.append(content);
             container.find('.icon-close').on('click', function(){
@@ -644,7 +643,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          */
         _hideLayers: function () {
             var me = this,
-                sandbox = me.sandbox,
                 i,
                 layer;
 
@@ -804,9 +802,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             var content = [],
                 contentData = {},
-                fragments = [],
-                colourScheme,
-                font;
+                fragments = [];
 
             me.mainPanel.find('.content-draw-tools').removeClass('hide');
             fragments = this._formatWFSFeaturesForInfoBox(data, editableFeatureFid);
@@ -1260,7 +1256,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 geomEditButton.on('click', function() {
                     me.drawingActive = true;
                     me.drawToolType = 'edit';
-                    var geometryType = me.layerGeometries.geometry.getType();
                     me.startNewDrawing();
                 });
             } else {
@@ -1455,7 +1450,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 return -1;
             }
 
-            var index = null;
             var clickedTurfPoint = turf.point(clickedCoordsWGS84);
 
             // Get MultiPolygon geometry index

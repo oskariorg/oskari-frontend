@@ -90,16 +90,6 @@ Oskari.clazz
 	     * Creates the UI for a fresh start
 	     */
 	    refresh : function() {
-	      var me = this;
-	      var instance = me.instance;
-	      var cel = this.container;
-	      var tpl = this.template;
-	      var sandbox = instance.getSandbox();
-
-	      var status = cel.children('.oskari-tile-status');
-
-//	      status.empty();
-//	      status.append('(' + layers.length + ')');
 
 	    }
 	  }, {

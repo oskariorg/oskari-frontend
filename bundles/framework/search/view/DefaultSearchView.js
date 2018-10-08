@@ -73,7 +73,6 @@ Oskari.clazz.define(
          */
         createUi: function (container) {
             var me = this;
-            var sandbox = me.getSandbox();
             var ui = jQuery(container);
             ui.empty();
             // create ui
@@ -473,7 +472,6 @@ Oskari.clazz.define(
          *
          */
         _sortResults: function (pAttribute, pDescending, locations) {
-            var me = this;
             if (!this.lastResult) {
                 return;
             }

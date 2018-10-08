@@ -187,8 +187,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 conf = me.conf,
                 sandboxName = conf ? conf.sandbox : 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
-                request,
-                p;
+                request;
 
             if (me.started) {
                 return;

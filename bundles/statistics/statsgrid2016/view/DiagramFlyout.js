@@ -28,7 +28,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         return this.element;
     },
     scroll: function () {
-        var me = this;
         var axisLabel = jQuery('.axisLabel');
         jQuery(jQuery('.statsgrid-diagram-flyout > .oskari-flyoutcontentcontainer')).scroll(function () {
             var scrollAmount = jQuery(this).scrollTop();
@@ -37,7 +36,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
             if (scrollAmount > 50) {
                 axisLabel.addClass('sticky');
                 axisLabel.css('margin-top', function () {
-                    var el = jQuery('.statsgrid-diagram-flyout > .oskari-flyouttoolbar');
                     return scrollAmount - chartControlHeight;
                 });
             } else {

@@ -202,7 +202,6 @@ Oskari.clazz.define(
         },
         __setupAvailableEvents : function(allowedEvents) {
             var available = [];
-            var sb = this.getSandbox();
             for(var i=0; i < allowedEvents.length; ++i) {
                 if(typeof Oskari.eventBuilder(allowedEvents[i]) === 'function') {
                     available.push(allowedEvents[i]);
@@ -212,7 +211,6 @@ Oskari.clazz.define(
         },
         __setupAvailableRequests : function(allowedRequests) {
             var available = [];
-            var sb = this.getSandbox();
             for(var i=0; i < allowedRequests.length; ++i) {
                 if(typeof Oskari.requestBuilder(allowedRequests[i]) === 'function') {
                     available.push(allowedRequests[i]);
@@ -445,7 +443,6 @@ Oskari.clazz.define(
          */
         _domainMatch: function (origin) {
             
-            var sb = this.sandbox;
             if(!origin) {
                 this.log.warn('No origin in RPC message');
                 // no origin, always deny

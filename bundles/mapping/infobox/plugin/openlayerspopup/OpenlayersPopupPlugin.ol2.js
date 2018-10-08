@@ -371,7 +371,6 @@ Oskari.clazz.define(
             return _.foldl(contentData, function (contentDiv, datum, index) {
                 var contentWrapper = me._contentWrapper.clone(),
                     actions = datum.actions,
-                    key,
                     actionTemplate,
                     btn,
                     link,
@@ -428,9 +427,7 @@ Oskari.clazz.define(
         },
 
         _setClickEvent: function (id, popup, contentData, additionalTools, isMobilePopup) {
-            var me = this,
-                sandbox = this.getMapModule().getSandbox(),
-                popupElement;
+            var me = this;
 
             if (isMobilePopup) {
                 popup.dialog[0].onclick = function (evt) {

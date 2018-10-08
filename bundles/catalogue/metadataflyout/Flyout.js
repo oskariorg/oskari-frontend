@@ -44,8 +44,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
         },
 
         startPlugin: function () {
-            var me = this,
-                locale = me.locale;
         },
 
         stopPlugin: function () {

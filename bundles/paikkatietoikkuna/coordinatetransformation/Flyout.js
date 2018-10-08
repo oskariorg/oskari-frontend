@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
             }
         },
         createUi: function() {
-            var view = this.instance.getViews().transformation.createUI(this.container);
+            this.instance.getViews().transformation.createUI(this.container);
         },
         toggleFlyout: function ( visible ) {
             if( !visible ) {

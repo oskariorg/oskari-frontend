@@ -249,7 +249,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             var textSize = textWidth(sidelabel.find('label'));
 
             var flyout = me._popup;
-            var parent = flyout.parent();
 
             sidelabel.css('margin-left', '-16px');
             flyout.append(sidelabel);

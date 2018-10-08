@@ -449,8 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param {Boolean} suppressEvent true to not send out an event about adding marker
          */
         addMapMarker: function(markerData, id, suppressEvent) {
-            var me = this,
-                size;
+            var me = this;
 
             // Combine default values with given values
             var data = this.__getSanitizedMarker(markerData, id);
@@ -478,18 +477,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 if ((typeof data.shape !== 'undefined') && (data.shape !== null)) {
                     iconSrc = data.shape;
                     if (jQuery.isNumeric(markerData.size)) {
-                        size = data.size;
                     } else {
-                        size = me._defaultIconUrlSize;
                     }
 
                 } else {
-                    // Construct image
-                    size = data.size;
                 }
             } else {
                 iconSrc = me.getDefaultIconUrl();
-                size = data.size;
             }
 
             if (typeof data.color === 'string') {

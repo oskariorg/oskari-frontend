@@ -75,7 +75,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             var elem = this.getElement();
             var link = elem.find('a');
             var input = elem.find('input[type="file"]');
-            var fileNameElem = elem.find('.box__uploaded');
 
             elem.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
                 e.preventDefault();
@@ -331,7 +330,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         },
         //TODO should these be in different place
         exportToFile: function ( data, filename, type ) {
-            var me = this;
             var blob = new Blob([data], {type: type});
             if( window.navigator.msSaveOrOpenBlob ) {
                 window.navigator.msSaveBlob(blob, filename);
