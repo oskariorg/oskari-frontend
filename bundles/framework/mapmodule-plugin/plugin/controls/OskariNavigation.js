@@ -15,7 +15,7 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         // Call the super constructor
         OpenLayers.Control.Navigation.prototype.initialize.apply(this, [bounds, options]);
     },
-      /* @method setup */
+    /* @method setup */
     setup : function(mapmodule) {
         this.mapmodule = mapmodule;
         this.sandbox = this.mapmodule.getSandbox();
@@ -85,7 +85,7 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         // </custom hooking>
 
         this.zoomBox = new OpenLayers.Control.ZoomBox(
-                    {map: this.map, keyMask: this.zoomBoxKeyMask});
+            {map: this.map, keyMask: this.zoomBoxKeyMask});
 
         // <custom hooking>
         var originalzoomBox = this.zoomBox.zoomBox;
@@ -107,7 +107,7 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         if (OpenLayers.Control.PinchZoom) {
             // <custom hooking>
             this.pinchZoom = new OskariPinchZoom(OpenLayers.Util.extend(
-                    {map: this.map}, this.pinchZoomOptions));
+                {map: this.map}, this.pinchZoomOptions));
             this.pinchZoom.setup(this.mapmodule);
             // </custom hooking>
         }

@@ -825,15 +825,15 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
         },
         getFlyoutDefaultPositions: function () {
             return {
-                    detach: {
-                        left: '212px',
-                        top: '50px'
-                    },
-                    attach: {
-                        left: this.getMapdivOffset().left,
-                        top: '30px'
-                    }
+                detach: {
+                    left: '212px',
+                    top: '50px'
+                },
+                attach: {
+                    left: this.getMapdivOffset().left,
+                    top: '30px'
                 }
+            }
         },
         /*
          * @static @property validStates

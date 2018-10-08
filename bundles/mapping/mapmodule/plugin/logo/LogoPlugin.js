@@ -170,13 +170,13 @@ Oskari.clazz.define(
             }
 
             var options = {
-              id:'icon',
-              callback: function (event) {
-                  if (!me.inLayerToolsEditMode()) {
-                      linkParams = me.getSandbox().generateMapLinkParameters({});
-                      window.open(mapUrl + linkParams, '_blank');
-                  }
-              }
+                id:'icon',
+                callback: function (event) {
+                    if (!me.inLayerToolsEditMode()) {
+                        linkParams = me.getSandbox().generateMapLinkParameters({});
+                        window.open(mapUrl + linkParams, '_blank');
+                    }
+                }
             };
 
             me._extendService.addLabel('', options);
@@ -200,7 +200,7 @@ Oskari.clazz.define(
             if(!element || !termsUrl) {
                 return;
             }
-              var options = {
+            var options = {
                 id:'terms',
                 callback: function (evt) {
                     evt.preventDefault();
@@ -208,9 +208,9 @@ Oskari.clazz.define(
                         window.open(termsUrl, '_blank');
                     }
                 }
-              };
+            };
 
-              me._extendService.addLabel(me._loc.terms, options);
+            me._extendService.addLabel(me._loc.terms, options);
         },
 
         _createDataSourcesLink: function (el) {
@@ -219,18 +219,18 @@ Oskari.clazz.define(
                 element = el || me.getElement();
 
             if(!element || conf.hideDataSourceLink) {
-              return;
+                return;
             }
             var options = {
-              id:'data-sources',
-              callback: function(e) {
-                if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
-                  me._openDataSourcesDialog(e.target);
-                } else if (me.dataSourcesDialog) {
-                  me.dataSourcesDialog.close(true);
-                  me.dataSourcesDialog = null;
+                id:'data-sources',
+                callback: function(e) {
+                    if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
+                        me._openDataSourcesDialog(e.target);
+                    } else if (me.dataSourcesDialog) {
+                        me.dataSourcesDialog.close(true);
+                        me.dataSourcesDialog = null;
+                    }
                 }
-              }
             };
 
             me._extendService.addLabel(me._loc.dataSources, options);
@@ -385,31 +385,31 @@ Oskari.clazz.define(
          * @param {jQuery} el
          *
          */
-         updateLabels: function (el) {
-           var me = this;
-           var template = el || this.getElement();
-           if(!template) {
-             return;
-           }
-           var labels = this._extendService.getLabels();
+        updateLabels: function (el) {
+            var me = this;
+            var template = el || this.getElement();
+            if(!template) {
+                return;
+            }
+            var labels = this._extendService.getLabels();
 
-           labels.forEach( function( link ) {
-             var extend = me.templates.extend.clone();
-             if(link.options.id) {
-               extend.addClass(link.options.id.toLowerCase());
-             }
-             if(link.options.id !== 'icon') {
-               extend.css('margin','5px');
-             }
-             extend.find('a').text(link.title);
-             template.append(extend);
-             if(typeof link.options.callback === 'function') {
-               extend.on('click', function(e) {
-                 link.options.callback(e);
-               });
-             }
-           });
-         }
+            labels.forEach( function( link ) {
+                var extend = me.templates.extend.clone();
+                if(link.options.id) {
+                    extend.addClass(link.options.id.toLowerCase());
+                }
+                if(link.options.id !== 'icon') {
+                    extend.css('margin','5px');
+                }
+                extend.find('a').text(link.title);
+                template.append(extend);
+                if(typeof link.options.callback === 'function') {
+                    extend.on('click', function(e) {
+                        link.options.callback(e);
+                    });
+                }
+            });
+        }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

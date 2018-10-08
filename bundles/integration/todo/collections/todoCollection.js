@@ -5,7 +5,7 @@
 
 
 
-          // Todo Collection
+        // Todo Collection
         // ---------------
 
         // The collection of todos is backed by *localStorage* instead of a remote

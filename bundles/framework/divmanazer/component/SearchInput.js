@@ -17,4 +17,4 @@ Oskari.clazz.define('Oskari.userinterface.component.SearchInput',
     {
         extend: ['Oskari.userinterface.component.TextInput']
     }
-    );
+);

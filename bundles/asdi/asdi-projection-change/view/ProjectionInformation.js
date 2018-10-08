@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', funct
         return this.dialog;
     },
     createClassSelector: function ( srs ) {
-       return srs.replace(':', '');
+        return srs.replace(':', '');
     },
     constructTitle: function () {
         var title = this.loc.projectionCode[this.projection.srsName].name + ' [' + this.projection.srsName + ']';

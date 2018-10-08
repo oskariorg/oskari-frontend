@@ -173,17 +173,17 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
             return;
         }
         switch (tile.getState()) {
-            case olTileState.IDLE: // IDLE: 0,
-            case olTileState.LOADING: //LOADING: 1,
-                me.__fixTile(tile, imageData, layer, map);
-                break;
-            case olTileState.LOADED: // LOADED: 2
-            case olTileState.ERROR: // ERROR: 3
-            case olTileState.EMPTY: // EMPTY: 4
-                me.__fixTile(tile, imageData, layer, map);
-                break;
-            default:
-                tile.handleImageError_();
+        case olTileState.IDLE: // IDLE: 0,
+        case olTileState.LOADING: //LOADING: 1,
+            me.__fixTile(tile, imageData, layer, map);
+            break;
+        case olTileState.LOADED: // LOADED: 2
+        case olTileState.ERROR: // ERROR: 3
+        case olTileState.EMPTY: // EMPTY: 4
+            me.__fixTile(tile, imageData, layer, map);
+            break;
+        default:
+            tile.handleImageError_();
         }
 
         tile.isBoundaryTile = boundaryTile;

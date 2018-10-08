@@ -427,7 +427,7 @@ Oskari.clazz.define(
             if (me.showSearchSuggestions) {
                 oskarifield.append(
                     me.templates.spinner.clone()
-                    .text(me.instance.getLocalization('loading'))
+                        .text(me.instance.getLocalization('loading'))
                 );
 
                 oskarifield.append(
@@ -486,9 +486,9 @@ Oskari.clazz.define(
                 }
             }
             me.sb.postRequestByName(rn, [{
-                    uuid: uuid
-                },
-                additionalUuids
+                uuid: uuid
+            },
+            additionalUuids
             ]);
         },
         /**
@@ -786,99 +786,85 @@ Oskari.clazz.define(
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
 
             switch (node.type) {
-                case 'layer':
-                    // Need open backend status
-                    if (target.hasClass('layer-backendstatus-icon')) {
-                        me._showMapLayerBackendStatus(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
-                    }
-                    // Need open metadata
-                    else if (target.hasClass('layer-info')) {
-                        me._showLayerMetaData(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
-                    }
-                    // uncheck nodes
-                    else if (isChecked) {
+            case 'layer':
+                // Need open backend status
+                if (target.hasClass('layer-backendstatus-icon')) {
+                    me._showMapLayerBackendStatus(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
+                }
+                // Need open metadata
+                else if (target.hasClass('layer-info')) {
+                    me._showLayerMetaData(me.sb.findMapLayerFromAllAvailable(me._getNodeRealId(node)));
+                }
+                // uncheck nodes
+                else if (isChecked) {
 
-                        tree.jstree().uncheck_node(node);
+                    tree.jstree().uncheck_node(node);
 
-                        layerId = me._getNodeRealId(node);
-                        if (me.sb.isLayerAlreadySelected(layerId)) {
-                            me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
-                        }
-
-                        if (me.instance._selectedLayerGroupId[layerId]) {
-                            delete me.instance._selectedLayerGroupId[layerId];
-                        }
+                    layerId = me._getNodeRealId(node);
+                    if (me.sb.isLayerAlreadySelected(layerId)) {
+                        me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
                     }
-                    // check nodes
-                    else {
-                        if (allSelectedLayersLength > 10) {
-                            desc.find('p').text(me.instance.getLocalization('manyLayersWarning').text);
-                            okBtn.addClass('primary');
-                            okBtn.setHandler(function() {
-                                dialog.close(true);
-                                tree.jstree().check_node(node);
-                                var layerId = me._getNodeRealId(node);
-                                if (!me.sb.isLayerAlreadySelected(layerId)) {
-                                    me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
-                                }
-                            });
-                            cancelBtn.addClass('secondary');
-                            cancelBtn.setHandler(function() {
-                                dialog.close(true);
-                            });
-                            dialog.show(me.instance.getLocalization('manyLayersWarning').title, desc, [okBtn, cancelBtn]);
-                        } else {
+
+                    if (me.instance._selectedLayerGroupId[layerId]) {
+                        delete me.instance._selectedLayerGroupId[layerId];
+                    }
+                }
+                // check nodes
+                else {
+                    if (allSelectedLayersLength > 10) {
+                        desc.find('p').text(me.instance.getLocalization('manyLayersWarning').text);
+                        okBtn.addClass('primary');
+                        okBtn.setHandler(function() {
+                            dialog.close(true);
                             tree.jstree().check_node(node);
-                            layerId = me._getNodeRealId(node);
+                            var layerId = me._getNodeRealId(node);
                             if (!me.sb.isLayerAlreadySelected(layerId)) {
                                 me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                             }
-                        }
-
-                        if (!me.instance._selectedLayerGroupId[layerId]) {
-                            me.instance._selectedLayerGroupId[layerId] = node.a_attr['data-group-id'];
+                        });
+                        cancelBtn.addClass('secondary');
+                        cancelBtn.setHandler(function() {
+                            dialog.close(true);
+                        });
+                        dialog.show(me.instance.getLocalization('manyLayersWarning').title, desc, [okBtn, cancelBtn]);
+                    } else {
+                        tree.jstree().check_node(node);
+                        layerId = me._getNodeRealId(node);
+                        if (!me.sb.isLayerAlreadySelected(layerId)) {
+                            me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                         }
                     }
-                    break;
-                case 'subgroup-subgroup':
-                case 'subgroup':
-                case 'group':
-                    if (isChecked) {
-                        tree.jstree().uncheck_node(node);
-                        layersChecked.forEach(function(layerId) {
-                            if (me.sb.isLayerAlreadySelected(layerId)) {
-                                me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
-                            }
-                        });
-                    } else {
-                        //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
-                        // selected layers
 
-                        if ((layersChecked.length > 10 || allSelectedLayersLength >= 10)) {
+                    if (!me.instance._selectedLayerGroupId[layerId]) {
+                        me.instance._selectedLayerGroupId[layerId] = node.a_attr['data-group-id'];
+                    }
+                }
+                break;
+            case 'subgroup-subgroup':
+            case 'subgroup':
+            case 'group':
+                if (isChecked) {
+                    tree.jstree().uncheck_node(node);
+                    layersChecked.forEach(function(layerId) {
+                        if (me.sb.isLayerAlreadySelected(layerId)) {
+                            me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
+                        }
+                    });
+                } else {
+                    //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
+                    // selected layers
 
-                            var text = me.instance.getLocalization('manyLayersWarning').text;
-                            if (allSelectedLayersLength >= 10) {
-                                text = me.instance.getLocalization('manyLayersWarningAlready').text;
-                            }
+                    if ((layersChecked.length > 10 || allSelectedLayersLength >= 10)) {
 
-                            desc.find('p').text(text);
-                            okBtn.addClass('primary');
-                            okBtn.setHandler(function() {
-                                dialog.close(true);
-                                tree.jstree().open_node(node);
-                                tree.jstree().check_node(node);
-                                layersChecked.forEach(function(layerId) {
-                                    if (!me.sb.isLayerAlreadySelected(layerId)) {
-                                        me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
-                                    }
-                                });
-                            });
-                            cancelBtn.addClass('secondary');
-                            cancelBtn.setHandler(function() {
-                                dialog.close(true);
-                            });
-                            dialog.show(me.instance.getLocalization('manyLayersWarning').title, desc, [okBtn, cancelBtn]);
-                        } else {
+                        var text = me.instance.getLocalization('manyLayersWarning').text;
+                        if (allSelectedLayersLength >= 10) {
+                            text = me.instance.getLocalization('manyLayersWarningAlready').text;
+                        }
+
+                        desc.find('p').text(text);
+                        okBtn.addClass('primary');
+                        okBtn.setHandler(function() {
+                            dialog.close(true);
                             tree.jstree().open_node(node);
                             tree.jstree().check_node(node);
                             layersChecked.forEach(function(layerId) {
@@ -886,9 +872,23 @@ Oskari.clazz.define(
                                     me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                                 }
                             });
-                        }
+                        });
+                        cancelBtn.addClass('secondary');
+                        cancelBtn.setHandler(function() {
+                            dialog.close(true);
+                        });
+                        dialog.show(me.instance.getLocalization('manyLayersWarning').title, desc, [okBtn, cancelBtn]);
+                    } else {
+                        tree.jstree().open_node(node);
+                        tree.jstree().check_node(node);
+                        layersChecked.forEach(function(layerId) {
+                            if (!me.sb.isLayerAlreadySelected(layerId)) {
+                                me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
+                            }
+                        });
                     }
-                    break;
+                }
+                break;
             }
         },
         /**
@@ -927,8 +927,8 @@ Oskari.clazz.define(
                     };
 
                     return me._getJsTreeObject(jQuery('<span/>').append(me._createLayerContainer(layer).clone()).html(),
-                            'layer',
-                            opts);
+                        'layer',
+                        opts);
                 }
                 return null;
             };
@@ -948,8 +948,8 @@ Oskari.clazz.define(
                     addChildren(maplayerGroup,subgroupChildren, groupPrefix+'subgroup-');
 
                     return me._getJsTreeObject(Oskari.getLocalized(maplayerGroup.getName()) + ' <span class="layer-count"></span>',
-                            groupPrefix + 'subgroup',
-                            opts, subgroupChildren);
+                        groupPrefix + 'subgroup',
+                        opts, subgroupChildren);
                 }
                 return null;
 

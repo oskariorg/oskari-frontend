@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
          */
         register: function () {
-           this.getMapModule().setLayerPlugin('arcgislayer', this);
+            this.getMapModule().setLayerPlugin('arcgislayer', this);
 
         },
         /**
@@ -223,22 +223,22 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
-           var me = this;
+        _registerLayerEvents: function(layer, oskariLayer){
+            var me = this;
 
-           layer.events.register('tileloadstart', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), true);
-           });
+            layer.events.register('tileloadstart', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-           layer.events.register('tileloaded', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), false);
-           });
+            layer.events.register('tileloaded', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-          layer.events.register('tileerror', layer, function(){
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            layer.events.register('tileerror', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
 
-         });
-         },
+            });
+        },
 
         /**
          * @method _afterMapLayerRemoveEvent

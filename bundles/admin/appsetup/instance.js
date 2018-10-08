@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance',
             description.html('<div>' + me._localization.description.fillJSON + ' ' +
                 '(<a href="' + currentViewUrl + '" target="_blank">' + me._localization.description.current + '</a>).</div>' +
                 '<div>' + this._localization.description.differentUuid + '</div>'
-                );
+            );
             me._jsonInput = Oskari.clazz.create('Oskari.userinterface.component.TextAreaInput');
             me._jsonInput.setName('json');
             me._jsonInput.setPlaceholder(me._localization.textAreaPlaceholder);

@@ -23,8 +23,8 @@ Oskari.clazz.category(
                 return;
             }
             var columnIndex = me._fullFieldNames.map( function( name ) {
-               return name.key;
-           }).indexOf( value );
+                return name.key;
+            }).indexOf( value );
 
             if(!this.table || columnIndex === -1) {
                 return;

@@ -188,8 +188,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.PlaceForm',
             this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
 
             this._getOnScreenForm().
-            find('div.measurementResult').
-            html(this.measurementResult);
+                find('div.measurementResult').
+                html(this.measurementResult);
         },
         bindEvents: function(){
             var me = this;

@@ -15,64 +15,64 @@ const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.Abstra
  * Provides functionality to draw vector tile layers on the map
  */
 Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
-class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
-    constructor(config) {
-        super(config);
-        this.__name = 'VectorTileLayerPlugin';
-        this._clazz = 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin';
-        this.layertype = 'vectortile';
-    }
-    /**
+    class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
+        constructor(config) {
+            super(config);
+            this.__name = 'VectorTileLayerPlugin';
+            this._clazz = 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin';
+            this.layertype = 'vectortile';
+        }
+        /**
      * @private @method _initImpl
      * Interface method for the module protocol.
      */
-    _initImpl() {
+        _initImpl() {
         // register domain builder
-        const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-        if (mapLayerService) {
-            mapLayerService.registerLayerModel(this.layertype + 'layer', VectorTileLayer);
-            mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new VectorTileModelBuilder());
+            const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+            if (mapLayerService) {
+                mapLayerService.registerLayerModel(this.layertype + 'layer', VectorTileLayer);
+                mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new VectorTileModelBuilder());
+            }
         }
-    }
-    /**
+        /**
      * @private @method _createPluginEventHandlers
      * Called by superclass to create event handlers
      */
-    _createPluginEventHandlers() {
-        return {
-            AfterChangeMapLayerStyleEvent(event) {
-                const oskariLayer = event.getMapLayer();
-                const olLayers = this.getOLMapLayers(oskariLayer);
+        _createPluginEventHandlers() {
+            return {
+                AfterChangeMapLayerStyleEvent(event) {
+                    const oskariLayer = event.getMapLayer();
+                    const olLayers = this.getOLMapLayers(oskariLayer);
 
-                if (olLayers && olLayers.length > 0) {
-                    olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
+                    if (olLayers && olLayers.length > 0) {
+                        olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
+                    }
                 }
-            }
-        };
-    }
-    /**
+            };
+        }
+        /**
      * @private @method _getLayerCurrentStyleFunction
      * Returns OL style corresponding to layer currently selected style
      * @param {Oskari.mapframework.domain.AbstractLayer} layer
      * @return {ol/style/Style}
      */
-    _getLayerCurrentStyleFunction(layer) {
-        const styleDef = layer.getCurrentStyleDef();
-        return styleDef ? styleGenerator(this.mapModule.getStyle.bind(this.mapModule), styleDef) : createDefaultStyle;
-    }
-    /**
+        _getLayerCurrentStyleFunction(layer) {
+            const styleDef = layer.getCurrentStyleDef();
+            return styleDef ? styleGenerator(this.mapModule.getStyle.bind(this.mapModule), styleDef) : createDefaultStyle;
+        }
+        /**
      * Checks if the layer can be handled by this plugin
      * @method  isLayerSupported
      * @param  {Oskari.mapframework.domain.AbstractLayer} layer
      * @return {Boolean}       true if this plugin handles the type of layers
      */
-    isLayerSupported(layer) {
-        if (!layer) {
-            return false;
+        isLayerSupported(layer) {
+            if (!layer) {
+                return false;
+            }
+            return layer.isLayerOfType(this.layertype);
         }
-        return layer.isLayerOfType(this.layertype);
-    }
-    /**
+        /**
      * @method addMapLayerToMap
      * @private
      * Adds a single vector tile layer to this map
@@ -80,26 +80,26 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Boolean} keepLayerOnTop
      * @param {Boolean} isBaseMap
      */
-    addMapLayerToMap(layer, keepLayerOnTop, isBaseMap) {
-        const options = layer.getOptions();
-        const sourceOpts = {
-            format: new olFormatMVT(),
-            url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection())
-        };
-        if (options.tileGrid) {
-            sourceOpts.tileGrid = new TileGrid(options.tileGrid);
-        }
-        const vectorTileLayer = new olLayerVectorTile({
-            opacity: layer.getOpacity() / 100,
-            renderMode: 'hybrid',
-            source: new olSourceVectorTile(sourceOpts),
-            style: this._getLayerCurrentStyleFunction(layer)
-        });
+        addMapLayerToMap(layer, keepLayerOnTop, isBaseMap) {
+            const options = layer.getOptions();
+            const sourceOpts = {
+                format: new olFormatMVT(),
+                url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection())
+            };
+            if (options.tileGrid) {
+                sourceOpts.tileGrid = new TileGrid(options.tileGrid);
+            }
+            const vectorTileLayer = new olLayerVectorTile({
+                opacity: layer.getOpacity() / 100,
+                renderMode: 'hybrid',
+                source: new olSourceVectorTile(sourceOpts),
+                style: this._getLayerCurrentStyleFunction(layer)
+            });
 
-        this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
-        this.setOLMapLayers(layer.getId(), vectorTileLayer);
-    }
-}, {
+            this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
+            this.setOLMapLayers(layer.getId(), vectorTileLayer);
+        }
+    }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

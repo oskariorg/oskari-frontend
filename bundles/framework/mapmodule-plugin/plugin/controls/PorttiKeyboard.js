@@ -35,73 +35,73 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
 
         var size = this.mapmodule.getSize();
         switch (evt.keyCode) {
-            case OpenLayers.Event.KEY_LEFT:
-                this.mapmodule.panMapByPixels(-this.slideFactor, 0, false, true);
-                break;
-            case OpenLayers.Event.KEY_RIGHT:
-                this.mapmodule.panMapByPixels(this.slideFactor, 0, false, true);
-                break;
-            case OpenLayers.Event.KEY_UP:
-                this.mapmodule.panMapByPixels(0, -this.slideFactor, false, true);
-                break;
-            case OpenLayers.Event.KEY_DOWN:
-                this.mapmodule.panMapByPixels(0, this.slideFactor, false, true);
-                break;
-            case 17:
-                // CTRL
-                Oskari.ctrlKeyDown(true);
-                break;
-            case 27:
-                // ESC
-                this.sandbox.postRequestByName('EscPressedEvent');
-                break;
-            case 33:
-                // Page Up. Same in all browsers.
-                this.mapmodule.panMapByPixels(0, -0.75 * size.height);
-                break;
-            case 34:
-                // Page Down. Same in all browsers.
-                this.mapmodule.panMapByPixels(0, 0.75 * size.height);
-                break;
-            case 35:
-                // End. Same in all browsers.
-                this.mapmodule.panMapByPixels(0.75 * size.width, 0);
-                break;
-            case 36:
-                // Home. Same in all browsers.
-                this.mapmodule.panMapByPixels(-0.75 * size.width, 0);
-                break;
-            case 43:
-                // +/= (ASCII), keypad + (ASCII, Opera)
-            case 61:
-                // +/= (Mozilla, Opera, some ASCII)
-            case 187:
-                // +/= (IE)
-            case 107:
-                // keypad + (IE, Mozilla)
-                this.mapmodule.adjustZoomLevel(1);
-                break;
-            case 45:
-                // -/_ (ASCII, Opera), keypad - (ASCII, Opera)
-            case 109:
-                // -/_ (Mozilla), keypad - (Mozilla, IE)
-            case 189:
-                // -/_ (IE)
-            case 95:
-                // -/_ (some ASCII)
-                this.mapmodule.adjustZoomLevel(-1);
-                break;
-                // F key.
-            case 70:
-                if(!this.sandbox.isCtrlKeyDown()) {
-                    this.sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
-                }
-                break;
+        case OpenLayers.Event.KEY_LEFT:
+            this.mapmodule.panMapByPixels(-this.slideFactor, 0, false, true);
+            break;
+        case OpenLayers.Event.KEY_RIGHT:
+            this.mapmodule.panMapByPixels(this.slideFactor, 0, false, true);
+            break;
+        case OpenLayers.Event.KEY_UP:
+            this.mapmodule.panMapByPixels(0, -this.slideFactor, false, true);
+            break;
+        case OpenLayers.Event.KEY_DOWN:
+            this.mapmodule.panMapByPixels(0, this.slideFactor, false, true);
+            break;
+        case 17:
+            // CTRL
+            Oskari.ctrlKeyDown(true);
+            break;
+        case 27:
+            // ESC
+            this.sandbox.postRequestByName('EscPressedEvent');
+            break;
+        case 33:
+            // Page Up. Same in all browsers.
+            this.mapmodule.panMapByPixels(0, -0.75 * size.height);
+            break;
+        case 34:
+            // Page Down. Same in all browsers.
+            this.mapmodule.panMapByPixels(0, 0.75 * size.height);
+            break;
+        case 35:
+            // End. Same in all browsers.
+            this.mapmodule.panMapByPixels(0.75 * size.width, 0);
+            break;
+        case 36:
+            // Home. Same in all browsers.
+            this.mapmodule.panMapByPixels(-0.75 * size.width, 0);
+            break;
+        case 43:
+            // +/= (ASCII), keypad + (ASCII, Opera)
+        case 61:
+            // +/= (Mozilla, Opera, some ASCII)
+        case 187:
+            // +/= (IE)
+        case 107:
+            // keypad + (IE, Mozilla)
+            this.mapmodule.adjustZoomLevel(1);
+            break;
+        case 45:
+            // -/_ (ASCII, Opera), keypad - (ASCII, Opera)
+        case 109:
+            // -/_ (Mozilla), keypad - (Mozilla, IE)
+        case 189:
+            // -/_ (IE)
+        case 95:
+            // -/_ (some ASCII)
+            this.mapmodule.adjustZoomLevel(-1);
+            break;
+            // F key.
+        case 70:
+            if(!this.sandbox.isCtrlKeyDown()) {
+                this.sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+            }
+            break;
         }
     },
     defaultKeyUp: function (evt) {
         switch (evt.keyCode) {
-            // CTRL
+        // CTRL
         case 17:
             Oskari.ctrlKeyDown(false);
             break;

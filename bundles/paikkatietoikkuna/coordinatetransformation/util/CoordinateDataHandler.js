@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         var matched = data.match( lonlatKeyMatch );
         var numMatch = data.match( numericWhitespaceMatch );
 
-            if( matched !== null ) {
+        if( matched !== null ) {
             return this.constructObjectFromRegExpMatch( matched, true );
         } else {
             if( numMatch !== null ) {

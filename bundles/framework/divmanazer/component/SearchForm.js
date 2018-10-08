@@ -24,9 +24,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SearchForm',
         _initFields: function () {
             // TODO check that submit on return works...
             this._input = Oskari.clazz.create(
-                    'Oskari.userinterface.component.SearchInput',
-                    'q'
-                );
+                'Oskari.userinterface.component.SearchInput',
+                'q'
+            );
             this.addComponent(this._input);
             this._button = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.SearchButton'

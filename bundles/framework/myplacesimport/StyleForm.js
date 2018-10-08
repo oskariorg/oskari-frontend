@@ -16,7 +16,7 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
             
         this.visualizationForm = Oskari.clazz.create(
-        'Oskari.userinterface.component.VisualizationForm'
+            'Oskari.userinterface.component.VisualizationForm'
         );
         this.template = jQuery(
         	'<div class="myplacesimportstyleform">' +

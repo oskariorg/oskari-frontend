@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
             me.cropping.setBasket(me.basket);
 
             var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
+            sandbox.request(me, request);
 
             this.mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
@@ -172,8 +172,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
             },
             'MapClickedEvent' : function(evt) {
                 var me = this,
-                x = evt.getMouseX(),
-                y = evt.getMouseY();
+                    x = evt.getMouseX(),
+                    y = evt.getMouseY();
                 if(me.cropping.isCroppingToolActive()){
                     me.cropping.croppingLayersHighlight(x, y);
                 }

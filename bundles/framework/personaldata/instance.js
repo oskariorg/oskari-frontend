@@ -34,13 +34,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
         },
 
         openProfileTab: function() {
-          Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
-          var flyout = this.plugins['Oskari.userinterface.Flyout'];
-          flyout.tabsContainer.panels.forEach(function(panel){
-            if(panel.id === 'account') {
-              flyout.tabsContainer.select(panel);
-            }
-          });
+            Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+            var flyout = this.plugins['Oskari.userinterface.Flyout'];
+            flyout.tabsContainer.panels.forEach(function(panel){
+                if(panel.id === 'account') {
+                    flyout.tabsContainer.select(panel);
+                }
+            });
         },
         /**
          * @method setSandbox

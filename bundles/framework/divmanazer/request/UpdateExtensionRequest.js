@@ -27,5 +27,5 @@ Oskari.clazz.define('Oskari.userinterface.request.UpdateExtensionRequest', funct
     }
 
 }, {
-	'protocol' : ['Oskari.mapframework.request.Request']
+    'protocol' : ['Oskari.mapframework.request.Request']
 });

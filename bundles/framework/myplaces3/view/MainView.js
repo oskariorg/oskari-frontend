@@ -258,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @return {String} matching draw mode string-key for the geometry
          * @private
          */
-         //TODO move to more common place
+        //TODO move to more common place
         _getDrawModeFromGeometry: function (geometry) {
             if (geometry === null) {
                 return null;

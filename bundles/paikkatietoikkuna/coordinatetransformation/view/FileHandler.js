@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '<div class="selection-wrapper fileName without-infolink">' +
                                             '<b class="title">${fileName}</b>' +
                                             '<input type="text">' +
-                                            //'<div class="infolink icon-info" data-selection="fileName"></div>' +
+                //'<div class="infolink icon-info" data-selection="fileName"></div>' +
                                         '</div>'+
                                     '<% } else { %>'+
                                         '<div class="selection-wrapper fileInput without-infolink"></div>'+
@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                     '<% } %>' +
                                 '</div>' +
                             '</div>'
-                                )
+            )
         } 
     }, {
         getElement: function() {

@@ -3,7 +3,7 @@ define([
     '_bundle/views/itemView',
     'text!_bundle/templates/stats.html',
     'text!_bundle/templates/view.html'],
-    function(TodoCollection, ItemView, StatsTemplate, ViewTemplate) {
+function(TodoCollection, ItemView, StatsTemplate, ViewTemplate) {
     // Create our global collection of **Todos**.
     var Todos = new TodoCollection;
 

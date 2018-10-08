@@ -207,4 +207,4 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

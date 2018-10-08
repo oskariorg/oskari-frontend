@@ -34,13 +34,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             me.data = pData;
 
             if (me.data) {
-              _.each(me.tools, function (tool) {
-                try {
-                  tool.init(me.data, me.instance);
-                } catch(e) {
-                    Oskari.log('publisher2.view.PanelMapTools').error('Error initializing publisher tool ' + tool.getTool().id);
-                }
-              });
+                _.each(me.tools, function (tool) {
+                    try {
+                        tool.init(me.data, me.instance);
+                    } catch(e) {
+                        Oskari.log('publisher2.view.PanelMapTools').error('Error initializing publisher tool ' + tool.getTool().id);
+                    }
+                });
             }
 
 
@@ -177,9 +177,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             if (me.data) {
                 enabledTools = {};
                 _.each(me.tools, function(tool) {
-                  if (tool.isEnabled()) {
-                    enabledTools[tool.getTool().id] = true;
-                  }
+                    if (tool.isEnabled()) {
+                        enabledTools[tool.getTool().id] = true;
+                    }
                 });
                 return enabledTools;
             }
@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 bartool = null;
             _.each(me.tools, function (tool) {
                 if( tool.getTool().name === name){
-                  bartool = tool;
+                    bartool = tool;
                 }
 
             });

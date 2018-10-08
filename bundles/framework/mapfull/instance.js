@@ -345,7 +345,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 // remove all current layers
                 rbRemove = Oskari.requestBuilder(
-                        'RemoveMapLayerRequest'
+                    'RemoveMapLayerRequest'
                 ),
                 i;
 

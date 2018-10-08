@@ -4,7 +4,7 @@
  * Renders the "promote" tile.
  */
 Oskari.clazz
-  .define('Oskari.mapframework.bundle.promote.Tile',
+    .define('Oskari.mapframework.bundle.promote.Tile',
 
 	  /**
 	   * @method create called automatically on construction
@@ -44,16 +44,16 @@ Oskari.clazz
 	     */
 	    startPlugin : function() {
 	    	var isContainer = (this.container && this.instance.mediator) ? true : false;
-            var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
-            var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
+                var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
+                var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
 
-            if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
-                this.container.addClass(this.instance.mediator.instanceId);
-            }
+                if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
+                    this.container.addClass(this.instance.mediator.instanceId);
+                }
 
-            if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
-                this.container.addClass(this.instance.mediator.bundleId);
-            }
+                if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
+                    this.container.addClass(this.instance.mediator.bundleId);
+                }
 
 	      	this.refresh();
 	    },

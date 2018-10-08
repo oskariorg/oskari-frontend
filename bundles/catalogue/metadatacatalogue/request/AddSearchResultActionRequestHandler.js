@@ -2,7 +2,7 @@
  * @class Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler
  * Handles Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest.
  */
- /**
+/**
  * @method create called automatically on construction
  * @static
  * @param {Oskari.Sandbox} sandbox

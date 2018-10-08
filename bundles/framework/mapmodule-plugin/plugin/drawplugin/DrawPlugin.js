@@ -57,7 +57,7 @@ Oskari.clazz.define(
             } else {
                 // Solve OL problem in select modify feature
                 if(this.modifyControls.modify.feature){
-                     this.modifyControls.modify.feature = null;
+                    this.modifyControls.modify.feature = null;
                 }
                 // remove possible old drawing
                 this.drawLayer.destroyFeatures();
@@ -109,28 +109,28 @@ Oskari.clazz.define(
             for (i = 0; i < activeControls.length; i += 1) {
                 activeControl = activeControls[i];
                 switch (activeControl) {
-                    case 'point':
-                        if(drawLayer.features.length === 0){
-                            return;
-                        }
-                        break;
-                    case 'line':
-                        if (!drawControls.line.handler.line){
-                            return;
-                        }
-                        if (drawControls.line.handler.line.geometry.components.length < 3 && drawLayer.features.length === 0) {
-                            return;
-                        }
-                        break;
-                    case 'area':
-                        if (!drawControls.area.handler.polygon){
-                            return;
-                        }
-                        components = drawControls.area.handler.polygon.geometry.components;
-                        if (components[components.length - 1].components.length < 5 && drawLayer.features.length === 0) {
-                            return;
-                        }
-                        break;
+                case 'point':
+                    if(drawLayer.features.length === 0){
+                        return;
+                    }
+                    break;
+                case 'line':
+                    if (!drawControls.line.handler.line){
+                        return;
+                    }
+                    if (drawControls.line.handler.line.geometry.components.length < 3 && drawLayer.features.length === 0) {
+                        return;
+                    }
+                    break;
+                case 'area':
+                    if (!drawControls.area.handler.polygon){
+                        return;
+                    }
+                    components = drawControls.area.handler.polygon.geometry.components;
+                    if (components[components.length - 1].components.length < 5 && drawLayer.features.length === 0) {
+                        return;
+                    }
+                    break;
                 }
             };
             try {
@@ -176,17 +176,17 @@ Oskari.clazz.define(
                     if (typeof drawControls[activeControl].handler.finishGeometry === 'function') {
                         // No need to finish geometry if already finished
                         switch (activeControl) {
-                            case 'line':
-                                if (drawControls.line.handler.line.geometry.components.length < 3) {
-                                    continue;
-                                }
-                                break;
-                            case 'area':
-                                components = drawControls.area.handler.polygon.geometry.components;
-                                if (components[components.length - 1].components.length < 5) {
-                                    continue;
-                                }
-                                break;
+                        case 'line':
+                            if (drawControls.line.handler.line.geometry.components.length < 3) {
+                                continue;
+                            }
+                            break;
+                        case 'area':
+                            components = drawControls.area.handler.polygon.geometry.components;
+                            if (components[components.length - 1].components.length < 5) {
+                                continue;
+                            }
+                            break;
                         }
                         drawControls[activeControl].handler.finishGeometry();
                     }
@@ -442,17 +442,17 @@ Oskari.clazz.define(
                 }
             }
             switch (featClass) {
-                case 'OpenLayers.Geometry.Point':
-                    drawing = new OpenLayers.Geometry.MultiPoint(components);
-                    break;
-                case 'OpenLayers.Geometry.LineString':
-                    drawing = new OpenLayers.Geometry.MultiLineString(
-                        components
-                    );
-                    break;
-                case 'OpenLayers.Geometry.Polygon':
-                    drawing = new OpenLayers.Geometry.MultiPolygon(components);
-                    break;
+            case 'OpenLayers.Geometry.Point':
+                drawing = new OpenLayers.Geometry.MultiPoint(components);
+                break;
+            case 'OpenLayers.Geometry.LineString':
+                drawing = new OpenLayers.Geometry.MultiLineString(
+                    components
+                );
+                break;
+            case 'OpenLayers.Geometry.Polygon':
+                drawing = new OpenLayers.Geometry.MultiPolygon(components);
+                break;
             }
             this.currentDrawing = drawing;
             return drawing;
@@ -512,16 +512,16 @@ Oskari.clazz.define(
             if (drawMode === null || drawMode === undefined) {
                 featClass = geometry.CLASS_NAME;
                 switch (featClass) {
-                    case 'OpenLayers.Geometry.LineString':
-                    case 'OpenLayers.Geometry.MultiLineString':
-                        drawMode = 'line';
-                        break;
-                    case 'OpenLayers.Geometry.Polygon':
-                    case 'OpenLayers.Geometry.MultiPolygon':
-                        drawMode = 'area';
-                        break;
-                    default:
-                        return;
+                case 'OpenLayers.Geometry.LineString':
+                case 'OpenLayers.Geometry.MultiLineString':
+                    drawMode = 'line';
+                    break;
+                case 'OpenLayers.Geometry.Polygon':
+                case 'OpenLayers.Geometry.MultiPolygon':
+                    drawMode = 'area';
+                    break;
+                default:
+                    return;
                 }
             }
 

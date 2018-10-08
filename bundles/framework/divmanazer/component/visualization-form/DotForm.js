@@ -54,7 +54,7 @@ Oskari.clazz.define(
             '#3233ff',
             '#26bf4b',
             '#00ff01'
-            ];
+        ];
         this.paper = null;
         this.activeColorCell = 6;
 

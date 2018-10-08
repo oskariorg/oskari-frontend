@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             '<label></label>' +
             '</div>' +
             '</li>'
-            );
+        );
         this.templateColumnSelectorClose = jQuery(
             '<div class="icon-close close-selector-button"></div>'
         );
@@ -784,21 +784,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             fields = me.model.getFields();
 
             var checkbocInputChange = function () {
-                    var fieldSelectors = me.visibleColumnSelector.find('input.column-selector-list-item:checked');
-                    me.visibleColumns = [];
+                var fieldSelectors = me.visibleColumnSelector.find('input.column-selector-list-item:checked');
+                me.visibleColumns = [];
 
-                    fieldSelectors.each(function(){
-                        me.visibleColumns.push(jQuery(this).attr('data-id'));
-                    });
+                fieldSelectors.each(function(){
+                    me.visibleColumns.push(jQuery(this).attr('data-id'));
+                });
 
-                    if(me.visibleColumns.length>0) {
-                       me.setVisibleFields(me.visibleColumns);
-                    }
+                if(me.visibleColumns.length>0) {
+                    me.setVisibleFields(me.visibleColumns);
+                }
 
-                    me.renderTo(table.parent(), {
-                        columnSelector: 'open'
-                    });
-                };
+                me.renderTo(table.parent(), {
+                    columnSelector: 'open'
+                });
+            };
 
             // Set current checkbox value for the field
             fieldNames.forEach(function(field){

@@ -132,7 +132,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
             jQuery('#metadataBbox').val(geometry.transform(
                 currentProj,
                 new OpenLayers.Projection('EPSG:4326')
-                )
+            )
             );
         },
 

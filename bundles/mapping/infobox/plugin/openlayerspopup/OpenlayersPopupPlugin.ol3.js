@@ -160,7 +160,7 @@ Oskari.clazz.define(
         /**
          * @method _renderPopup
          */
-         _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools, marker) {
+        _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools, marker) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
                 sanitizedTitle = Oskari.util.sanitize(title),

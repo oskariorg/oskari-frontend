@@ -25,9 +25,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerL
          */
         handleRequest : function(core, request) {
             this.layerlistService.registerLayerlistFilterButton(request.getToolText(), request.getTooltip(), {
-                    active: request.getIconClassActive(),
-                    deactive: request.getIconClassDeactive()
-                }, request.getFilterName());
+                active: request.getIconClassActive(),
+                deactive: request.getIconClassDeactive()
+            }, request.getFilterName());
         }
     }, {
         /**

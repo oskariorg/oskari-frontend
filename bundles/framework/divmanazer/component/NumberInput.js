@@ -108,4 +108,4 @@ Oskari.clazz.define('Oskari.userinterface.component.NumberInput',
     {
         extend: ['Oskari.userinterface.component.TextInput']
     }
-    );
+);

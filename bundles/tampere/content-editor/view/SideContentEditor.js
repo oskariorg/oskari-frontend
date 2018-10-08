@@ -25,27 +25,27 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.instance = instance;
         me.loc = localization;
         me.templates = {
-                wrapper: '<div></div>',
-                getinfoResultTable: '<table class="getinforesult_table"></table>',
-                tableRow: '<tr></tr>',
-                tableCell: '<td></td>',
-                tableInput: '<input />',
-                header: '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
-                headerTitle: '<div class="getinforesult_header_title"></div>',
-                linkOutside: '<a target="_blank"></a>',
-                templateGuide: jQuery('<div><div class="guide"></div>' +
+            wrapper: '<div></div>',
+            getinfoResultTable: '<table class="getinforesult_table"></table>',
+            tableRow: '<tr></tr>',
+            tableCell: '<td></td>',
+            tableInput: '<input />',
+            header: '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
+            headerTitle: '<div class="getinforesult_header_title"></div>',
+            linkOutside: '<a target="_blank"></a>',
+            templateGuide: jQuery('<div><div class="guide"></div>' +
                     '<div class="buttons">' +
                     '<div class="cancel button"></div>' +
                     '<div class="finish button"></div>' +
                     '</div>' +
                     '</div>'),
-                templateHelper: jQuery(
-                    '<div class="drawHelper">' +
+            templateHelper: jQuery(
+                '<div class="drawHelper">' +
                     '<div class="infoText"></div>' +
                     '<div class="measurementResult"></div>' +
                     '</div>'
-                ),
-                deleteDialog: jQuery('<div id="delete-dialog">' +
+            ),
+            deleteDialog: jQuery('<div id="delete-dialog">' +
                     '<div>' + me.loc.deleteGeometryDialog.text + '</div>' +
                 '</div>')
         };
@@ -266,7 +266,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _addNewFeature: function () {
             var me = this;
             if (me.selectedLayerId) {
-               me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
+                me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
             }
             me.getLayerGeometryType();
             me.sendStopDrawRequest(true);
@@ -778,7 +778,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if(data.features) {
                 for (var i = 0; i < data.features.length; i++) {
                     if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != ''))
-                    me.highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
+                        me.highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
                 }
             }
 
@@ -844,9 +844,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if(fields.length === 0) { //layer view is empty, get fields from DescribeFeatureType
                 fields = ['__fid'];
                 jQuery.each(me.fieldsTypes, function(key, value) {
-                   if(value.indexOf('gml:') !== 0) { //skip geometry
-                       fields.push(key);
-                   }
+                    if(value.indexOf('gml:') !== 0) { //skip geometry
+                        fields.push(key);
+                    }
                 });
                 fields = fields.concat(['__centerX', '__centerY']);
             }
@@ -929,69 +929,69 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     row.append(keyColumn);
 
                     valColumn = jQuery(this.templates.tableCell);
-					if (key == '__fid' || readonly) {
-						valColumn.append(value);
-					} else {
+                    if (key == '__fid' || readonly) {
+                        valColumn.append(value);
+                    } else {
                         valInput = jQuery(this.templates.tableInput);
                         switch (this.fieldsTypes[key])
                         {
-                            case 'xsd:numeric':
-                                valInput.prop('type', 'number');
-                                valInput.on('blur', function (event) {
-                                    if (jQuery.isNumeric(jQuery(this).val()) == false) {
-                                        jQuery(this).addClass('field-invalid');
+                        case 'xsd:numeric':
+                            valInput.prop('type', 'number');
+                            valInput.on('blur', function (event) {
+                                if (jQuery.isNumeric(jQuery(this).val()) == false) {
+                                    jQuery(this).addClass('field-invalid');
 
-                                        var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                                        okButton.setTitle(me.loc.buttons.ok);
-                                        okButton.setHandler(function () {
-                                            me.closeDialog();
-                                        });
-                                        me.showMessage(me.loc.formValidationNumberError.title, me.loc.formValidationNumberError.text, [okButton]);
-                                    }
-                                });
-                                valInput.on('keyup', function (event) {
-                                    if (jQuery.isNumeric(jQuery(this).val())) {
-                                        jQuery(this).removeClass('field-invalid');
-                                    }
-                                });
-                                break;
-                            case 'xsd:double':
-                            case 'xsd:decimal':
-                                valInput.prop('type', 'number').prop('step', 0.01);
-                                valInput.on('blur', function (event) {
-                                    if (jQuery.isNumeric(jQuery(this).val()) == false) {
-                                        jQuery(this).addClass('field-invalid');
+                                    var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                                    okButton.setTitle(me.loc.buttons.ok);
+                                    okButton.setHandler(function () {
+                                        me.closeDialog();
+                                    });
+                                    me.showMessage(me.loc.formValidationNumberError.title, me.loc.formValidationNumberError.text, [okButton]);
+                                }
+                            });
+                            valInput.on('keyup', function (event) {
+                                if (jQuery.isNumeric(jQuery(this).val())) {
+                                    jQuery(this).removeClass('field-invalid');
+                                }
+                            });
+                            break;
+                        case 'xsd:double':
+                        case 'xsd:decimal':
+                            valInput.prop('type', 'number').prop('step', 0.01);
+                            valInput.on('blur', function (event) {
+                                if (jQuery.isNumeric(jQuery(this).val()) == false) {
+                                    jQuery(this).addClass('field-invalid');
 
-                                        var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                                        okButton.setTitle(me.loc.buttons.ok);
-                                        okButton.setHandler(function () {
-                                            me.closeDialog();
-                                        });
-                                        me.showMessage(me.loc.formValidationNumberError.title, me.loc.formValidationNumberError.text, [okButton]);
-                                    }
-                                });
-                                valInput.on('keyup', function (event) {
-                                    if (jQuery.isNumeric(jQuery(this).val())) {
-                                        jQuery(this).removeClass('field-invalid');
-                                    }
-                                });
-                                break;
-                            case 'xsd:date':
-                                valInput.prop('type', 'text');
-                                valInput.addClass('datepicker');
-                                break;
-                            case 'xsd:string':
-                            default:
-                                valInput.prop('type', 'text');
-                                break;
+                                    var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                                    okButton.setTitle(me.loc.buttons.ok);
+                                    okButton.setHandler(function () {
+                                        me.closeDialog();
+                                    });
+                                    me.showMessage(me.loc.formValidationNumberError.title, me.loc.formValidationNumberError.text, [okButton]);
+                                }
+                            });
+                            valInput.on('keyup', function (event) {
+                                if (jQuery.isNumeric(jQuery(this).val())) {
+                                    jQuery(this).removeClass('field-invalid');
+                                }
+                            });
+                            break;
+                        case 'xsd:date':
+                            valInput.prop('type', 'text');
+                            valInput.addClass('datepicker');
+                            break;
+                        case 'xsd:string':
+                        default:
+                            valInput.prop('type', 'text');
+                            break;
                         }
                         valInput.val(value);
                         valInput.on('change', function () {
                             me.featureDuringEdit = true;
                         });
                         valColumn.append(valInput);
-					}
-					row.append(valColumn);
+                    }
+                    row.append(valColumn);
                     html.append(row);
                 }
             }
@@ -1223,8 +1223,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var pointButton = jQuery('<div />').addClass('add-point tool').attr('title', me.loc.tools.point);
             if (me.layerGeometryType == 'MultiPoint' || me.layerGeometryType == 'Point' || me.layerGeometryType == 'GeometryPropertyType') {
                 pointButton.on('click', function() {
-                        me.drawingActive = true;
-                        me.startNewDrawing();
+                    me.drawingActive = true;
+                    me.startNewDrawing();
                 });
             } else {
                 pointButton.addClass('disabled');
@@ -1233,8 +1233,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var lineButton = jQuery('<div />').addClass('add-line tool').attr('title', me.loc.tools.line);
             if (me.layerGeometryType == 'MultiLineString' || me.layerGeometryType == 'GeometryPropertyType') {
                 lineButton.on('click', function() {
-                        me.drawingActive = true;
-                        me.startNewDrawing();
+                    me.drawingActive = true;
+                    me.startNewDrawing();
                 });
             } else {
                 lineButton.addClass('disabled');
@@ -1243,8 +1243,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var areaButton = jQuery('<div />').addClass('add-area tool').attr('title', me.loc.tools.area);
             if (me.layerGeometryType == 'MultiPolygon' || me.layerGeometryType == 'Polygon' || me.layerGeometryType == 'GeometryPropertyType') {
                 areaButton.on('click', function() {
-                        me.drawingActive = true;
-                        me.startNewDrawing();
+                    me.drawingActive = true;
+                    me.startNewDrawing();
                 });
             } else {
                 areaButton.addClass('disabled');
@@ -1292,53 +1292,53 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 zoom = me.sandbox.getMap().getZoom(),
                 zoomBasedClickToleranceThreshold;
             switch(zoom) {
-                case 1:
-                    zoomBasedClickToleranceThreshold = 6.9;
-                    break;
-                case 2:
-                    zoomBasedClickToleranceThreshold = 3.34;
-                    break;
-                case 3:
-                    zoomBasedClickToleranceThreshold = 1.79;
-                    break;
-                case 4:
-                    zoomBasedClickToleranceThreshold = 0.808;
-                    break;
-                case 5:
-                    zoomBasedClickToleranceThreshold = 0.405;
-                    break;
-                case 6:
-                    zoomBasedClickToleranceThreshold = 0.202;
-                    break;
-                case 7:
-                    zoomBasedClickToleranceThreshold = 0.111;
-                    break;
-                case 8:
-                    zoomBasedClickToleranceThreshold = 0.05;
-                    break;
-                case 9:
-                    zoomBasedClickToleranceThreshold = 0.0247;
-                    break;
-                case 10:
-                    zoomBasedClickToleranceThreshold = 0.01338;
-                    break;
-                case 11:
-                    zoomBasedClickToleranceThreshold = 0.0061;
-                    break;
-                case 12:
-                    zoomBasedClickToleranceThreshold = 0.00335;
-                    break;
-                case 13:
-                    zoomBasedClickToleranceThreshold = 0.00152;
-                    break;
-                case 14:
-                    zoomBasedClickToleranceThreshold = 0.000881;
-                    break;
-                case 15:
-                    zoomBasedClickToleranceThreshold = 0.00038;
-                    break;
-                default:
-                    zoomBasedClickToleranceThreshold = me.defaultClickDistanceThreshold;
+            case 1:
+                zoomBasedClickToleranceThreshold = 6.9;
+                break;
+            case 2:
+                zoomBasedClickToleranceThreshold = 3.34;
+                break;
+            case 3:
+                zoomBasedClickToleranceThreshold = 1.79;
+                break;
+            case 4:
+                zoomBasedClickToleranceThreshold = 0.808;
+                break;
+            case 5:
+                zoomBasedClickToleranceThreshold = 0.405;
+                break;
+            case 6:
+                zoomBasedClickToleranceThreshold = 0.202;
+                break;
+            case 7:
+                zoomBasedClickToleranceThreshold = 0.111;
+                break;
+            case 8:
+                zoomBasedClickToleranceThreshold = 0.05;
+                break;
+            case 9:
+                zoomBasedClickToleranceThreshold = 0.0247;
+                break;
+            case 10:
+                zoomBasedClickToleranceThreshold = 0.01338;
+                break;
+            case 11:
+                zoomBasedClickToleranceThreshold = 0.0061;
+                break;
+            case 12:
+                zoomBasedClickToleranceThreshold = 0.00335;
+                break;
+            case 13:
+                zoomBasedClickToleranceThreshold = 0.00152;
+                break;
+            case 14:
+                zoomBasedClickToleranceThreshold = 0.000881;
+                break;
+            case 15:
+                zoomBasedClickToleranceThreshold = 0.00038;
+                break;
+            default:
+                zoomBasedClickToleranceThreshold = me.defaultClickDistanceThreshold;
             }
             return zoomBasedClickToleranceThreshold;
         },
@@ -1601,11 +1601,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             jQuery.datepicker.setDefaults(
-                  jQuery.extend(
+                jQuery.extend(
                     jQuery.datepicker.regional[lang],
                     {'dateFormat':'yy-mm-dd'}
-                  )
-                );
+                )
+            );
         },
 
         /**

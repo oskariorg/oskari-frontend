@@ -44,7 +44,7 @@ Oskari.clazz.define(
             this.instance.getLocalization('searchResultsDescription') + ' ${search}</h3></div>');
     }, {
     	__templates : {
-			main : _.template(
+            main : _.template(
 			    '<div class="searchContainer">' +
                 '  <div class="searchDescription">${desc}</div>' +
                 '  <div class="controls">' +
@@ -180,7 +180,7 @@ Oskari.clazz.define(
 
         __doSearch : function() {
         	var me = this;
-			var field = this.getField();
+            var field = this.getField();
             var button = this.getButton();
             var searchContainer = this.getContainer();
 
@@ -280,8 +280,8 @@ Oskari.clazz.define(
             dialog.makeModal();
 
             dialog.show(
-                    this.instance.getLocalization('searchservice_search_alert_title'),
-                    error, [okButton]
+                this.instance.getLocalization('searchservice_search_alert_title'),
+                error, [okButton]
             );
         },
         __getSearchResultHeader : function(count, hasMore) {

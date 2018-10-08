@@ -62,8 +62,8 @@ Oskari.clazz.define(
                 onPause: function (evt) {
                     var lonlat = me._map.getLonLatFromPixel(evt.xy),
                         event = Oskari.eventBuilder(
-                                'MyPlaces.MyPlaceHoverEvent'
-                            )(lonlat, evt, me._map.getZoom());
+                            'MyPlaces.MyPlaceHoverEvent'
+                        )(lonlat, evt, me._map.getZoom());
                     me.getSandbox().notifyAll(event);
                 }
             });

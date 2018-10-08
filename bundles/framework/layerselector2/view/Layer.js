@@ -199,9 +199,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
                     }
 
                     sandbox.postRequestByName(rn, [{
-                            uuid: uuid
-                        },
-                        additionalUuids
+                        uuid: uuid
+                    },
+                    additionalUuids
                     ]);
                 });
             }

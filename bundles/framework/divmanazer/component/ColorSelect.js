@@ -333,7 +333,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             }
             return visible;
         }
-}, {
-    extend: ['Oskari.userinterface.component.FormComponent']
+    }, {
+        extend: ['Oskari.userinterface.component.FormComponent']
     }
 );

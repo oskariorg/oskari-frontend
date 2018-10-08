@@ -1,22 +1,22 @@
 Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
-  this.svg = null;
-  this.dimensions = this.chartDimensions();
-  this.x = null;
-  this.y = null;
-  this.colorScale = null;
-  this.data = null;
-  this.chartType = null;
-  this.containerWidth = null;
-  this.plot = jQuery('<div style="width:100%"></div>');
-  this.axisLabelValues = jQuery('<div style="width:100%"></div>');
-  this.sortingType = null;
-  this.defaultWidth = 630;
-  this._g = null;
-  this._options = {
-    colors:  ['#555','#555']
-  };
-  this.loc = Oskari.getMsg.bind(null, 'DivManazer');
-  this.noValStr = this.loc('graph.noValue');
+    this.svg = null;
+    this.dimensions = this.chartDimensions();
+    this.x = null;
+    this.y = null;
+    this.colorScale = null;
+    this.data = null;
+    this.chartType = null;
+    this.containerWidth = null;
+    this.plot = jQuery('<div style="width:100%"></div>');
+    this.axisLabelValues = jQuery('<div style="width:100%"></div>');
+    this.sortingType = null;
+    this.defaultWidth = 630;
+    this._g = null;
+    this._options = {
+        colors:  ['#555','#555']
+    };
+    this.loc = Oskari.getMsg.bind(null, 'DivManazer');
+    this.noValStr = this.loc('graph.noValue');
 }, {
     _checkColors: function ( opts ) {
         var options = opts || {};
@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
     chartDimensions: function (sideMargin) {
         var me = this;
         var margin = sideMargin ? Math.min(sideMargin, 140) : 80;
-            //set up svg using margin conventions - we'll need plenty of room on the left for labels
+        //set up svg using margin conventions - we'll need plenty of room on the left for labels
         var dimensions = {
             margin: {
                 top: 10,
@@ -114,33 +114,33 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         }
 
         switch( type ) {
-            case 'name-ascending':
-                me.data.sort(function (a, b) {
-                    return d3.descending(a.name , b.name);
-                });
+        case 'name-ascending':
+            me.data.sort(function (a, b) {
+                return d3.descending(a.name , b.name);
+            });
             break;
-            case 'name-descending':
-                me.data.sort(function (a, b) {
-                    return d3.ascending(a.name , b.name);
-                });
+        case 'name-descending':
+            me.data.sort(function (a, b) {
+                return d3.ascending(a.name , b.name);
+            });
             break;
-            case 'value-ascending':
-                me.data.sort(function (a, b) {
-                    var result = me.nullsLast(a.value, b.value);
-                    if (!result) {
-                        return d3.descending(a.value, b.value);
-                    }
-                    return result;
-                });
+        case 'value-ascending':
+            me.data.sort(function (a, b) {
+                var result = me.nullsLast(a.value, b.value);
+                if (!result) {
+                    return d3.descending(a.value, b.value);
+                }
+                return result;
+            });
             break;
-            case 'value-descending':
-                me.data.sort(function (a, b) {
-                    var result = me.nullsLast(a.value, b.value);
-                    if (!result) {
-                        return d3.ascending(a.value, b.value);
-                    }
-                    return result;
-                });
+        case 'value-descending':
+            me.data.sort(function (a, b) {
+                var result = me.nullsLast(a.value, b.value);
+                if (!result) {
+                    return d3.ascending(a.value, b.value);
+                }
+                return result;
+            });
             break;
         }
 
@@ -161,10 +161,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
         var tickTarget = (width / numDigits) / 10;
 
         this.xAxis = d3.axisTop( this.x )
-        .ticks(Math.min(10, tickTarget))
-        .tickSizeInner(-this.dimensions.height()+this.dimensions.xAxisOffset)
-        .tickSizeOuter(0)
-        .tickFormat(function (d) {return me.loc('graph.tick', {value: d})});
+            .ticks(Math.min(10, tickTarget))
+            .tickSizeInner(-this.dimensions.height()+this.dimensions.xAxisOffset)
+            .tickSizeOuter(0)
+            .tickFormat(function (d) {return me.loc('graph.tick', {value: d})});
     },
     /**
      * initializes the chart skeleton without any specific line or bar options
@@ -218,14 +218,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr('shape-rendering', 'crispEdges')
             .call(this.xAxis);
 
-            xtickAxis.selectAll('x axis, tick, text').remove();
-            xtickAxis.select('.domain').remove();
+        xtickAxis.selectAll('x axis, tick, text').remove();
+        xtickAxis.select('.domain').remove();
 
         xtickAxis.selectAll('line')
             .attr('stroke', '#aaa')
 
             //append the x-axis to different element so we can show the values when scrollign
-            var gx = d3.select( this.axisLabelValues.get(0) )
+        var gx = d3.select( this.axisLabelValues.get(0) )
             .append('svg')
             .attr( 'width', this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right )
             .attr( 'height', 12 )
@@ -234,11 +234,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr( 'transform', 'translate(' + this.dimensions.margin.left + ',' + this.dimensions.margin.top + ')' )
             .call(this.xAxis);
 
-            gx.select('.domain').remove();
-            gx.selectAll('line').remove();
+        gx.select('.domain').remove();
+        gx.selectAll('line').remove();
 
-            // / X
-        },
+        // / X
+    },
     /**
      * @method setColorScale
      */
@@ -335,7 +335,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
             .attr('x', function ( d ) { return d.value ? me.x( Math.min( 0, d.value ) ) : 0 })
             .attr('height', 17)
             .attr('width', function( d ) {
-                 return d.value ? Math.abs( me.x( d.value ) - me.x( 0 ) ) : 0; 
+                return d.value ? Math.abs( me.x( d.value ) - me.x( 0 ) ) : 0; 
             });
         //append text
         bars.each(function (d) {
@@ -343,13 +343,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
                 return;
             }
             d3.select(this)
-            .append('text')
-            .attr('x',  me.x( 0 ) + 10 )
-            .attr('y', 0)
-            .attr('dy', '0.32em')
-            .style('font-size', '11px')
-            .attr('fill', '#999')
-            .text(me.noValStr);
+                .append('text')
+                .attr('x',  me.x( 0 ) + 10 )
+                .attr('y', 0)
+                .attr('dy', '0.32em')
+                .style('font-size', '11px')
+                .attr('fill', '#999')
+                .text(me.noValStr);
         });
 
         this.chartType = 'barchart';

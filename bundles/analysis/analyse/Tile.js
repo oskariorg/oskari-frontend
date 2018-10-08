@@ -109,18 +109,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Tile',
             if (extensionState === 'close') {
                 // Close statsgrid... trying to close all breaks things.
                 s.postRequestByName(
-                                'userinterface.UpdateExtensionRequest',
-                                [{
-                                    getName: function () {
-                                        return 'StatsGrid';
-                                    }
-                                }, 'close']
-                            );
+                    'userinterface.UpdateExtensionRequest',
+                    [{
+                        getName: function () {
+                            return 'StatsGrid';
+                        }
+                    }, 'close']
+                );
             }
             s.postRequestByName(
-                            'userinterface.UpdateExtensionRequest',
-                            [i, 'toggle']
-                        );
+                'userinterface.UpdateExtensionRequest',
+                [i, 'toggle']
+            );
         }
     }, {
         /**

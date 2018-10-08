@@ -210,24 +210,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                     var boundsFeature = null;
                     if (debugGridFeatures) {
                         var ptFromA = new
-                        OpenLayers.Geometry.Point(bs.left, bs.bottom);
+                            OpenLayers.Geometry.Point(bs.left, bs.bottom);
                         var
-                        ptToA = new OpenLayers.Geometry.Point(bs.right,
-                            bs.top);
+                            ptToA = new OpenLayers.Geometry.Point(bs.right,
+                                bs.top);
 
                         var ptFromB = new
-                        OpenLayers.Geometry.Point(bs.left, bs.top);
+                            OpenLayers.Geometry.Point(bs.left, bs.top);
                         var ptToB =
                             new OpenLayers.Geometry.Point(bs.right, bs.bottom);
                         var boundGeomArea = new
-                        OpenLayers.Geometry.LineString([ptFromA, ptToB,
-                            ptToA, ptFromB, ptFromA
-                        ]);
+                            OpenLayers.Geometry.LineString([ptFromA, ptToB,
+                                ptToA, ptFromB, ptFromA
+                            ]);
                         boundsFeature = new
-                        OpenLayers.Feature.Vector(boundGeomArea, {
-                            featureClassName: this.CLASS_NAME,
-                            description: ''
-                        });
+                            OpenLayers.Feature.Vector(boundGeomArea, {
+                                featureClassName: this.CLASS_NAME,
+                                description: ''
+                            });
                         boundsFeature.renderIntent =
                             'tile';
                         gridFeatures.push(boundsFeature);

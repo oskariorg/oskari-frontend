@@ -100,8 +100,8 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 success = this.view.addToCollection(this._scheduledLayers);
             }
             if(success) {
-               // clear schedule layer updates
-               this._scheduledLayers = [];
+                // clear schedule layer updates
+                this._scheduledLayers = [];
             }
         }
         return success;

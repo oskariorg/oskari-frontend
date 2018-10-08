@@ -126,7 +126,7 @@ Oskari.clazz.define(
             }
         },
         //PAGE1
-         {
+        {
             setScope: function (inst) {
                 this.ref = inst;
             },
@@ -167,7 +167,7 @@ Oskari.clazz.define(
             }
         },
         //PAGE2
-          {
+        {
             setScope: function (inst) {
                 this.ref = inst;
             },
@@ -207,7 +207,7 @@ Oskari.clazz.define(
             }
         },
         //PAGE3
-          {
+        {
             setScope: function (inst) {
                 this.ref = inst;
             },
@@ -248,164 +248,164 @@ Oskari.clazz.define(
         },
         //PAGE4
         {
-          setScope: function (inst) {
-              this.ref = inst;
-          },
-          getTitle: function () {
-              var p5 = this.ref._localization.page5.title;
-              return p5 + '<span> 4/12</span>';
-          },
-          getContent: function () {
-              var me = this.ref;
-              me._openExtension('PersonalData');
-              var loc = me._localization.page5;
-              var content = jQuery('<div></div>');
-              content.append(loc.message);
-              var linkTemplate = jQuery('<a href="#"></a>');
-              var openLink = linkTemplate.clone();
-              openLink.append(loc.openLink);
-              openLink.on('click',
-                  function () {
-                      me._openExtension('PersonalData');
-                      openLink.hide();
-                      closeLink.show();
-                  });
-              var closeLink = linkTemplate.clone();
-              closeLink.append(loc.closeLink);
-              closeLink.on('click',
-                  function () {
-                      me._closeExtension('PersonalData');
-                      openLink.show();
-                      closeLink.hide();
-                  });
-              content.append('<br><br>');
-              content.append(openLink);
-              content.append(closeLink);
-              closeLink.show();
-              openLink.hide();
-              return content;
-          }
-      },
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p5 = this.ref._localization.page5.title;
+                return p5 + '<span> 4/12</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                me._openExtension('PersonalData');
+                var loc = me._localization.page5;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.on('click',
+                    function () {
+                        me._openExtension('PersonalData');
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.on('click',
+                    function () {
+                        me._closeExtension('PersonalData');
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                content.append('<br><br>');
+                content.append(openLink);
+                content.append(closeLink);
+                closeLink.show();
+                openLink.hide();
+                return content;
+            }
+        },
         //PAGE5
         {
-          setScope: function (inst) {
-              this.ref = inst;
-          },
-          getTitle: function () {
-              var p6 = this.ref._localization.page6.title;
-              return p6 + '<span> 5/12</span>';
-          },
-          getContent: function () {
-              var me = this.ref;
-              me._openExtension('Publisher2');
-              var loc = me._localization.page6;
-              var content = jQuery('<div></div>');
-              content.append(loc.message);
-              var linkTemplate = jQuery('<a href="#"></a>');
-              var openLink = linkTemplate.clone();
-              openLink.append(loc.openLink);
-              openLink.on('click',
-                  function () {
-                      me._openExtension('Publisher2');
-                      openLink.hide();
-                      closeLink.show();
-                  });
-              var closeLink = linkTemplate.clone();
-              closeLink.append(loc.closeLink);
-              closeLink.on('click',
-                  function () {
-                      me._closeExtension('Publisher2');
-                      openLink.show();
-                      closeLink.hide();
-                  });
-              content.append('<br><br>');
-              content.append(openLink);
-              content.append(closeLink);
-              closeLink.show();
-              openLink.hide();
-              return content;
-          }
-      },
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p6 = this.ref._localization.page6.title;
+                return p6 + '<span> 5/12</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                me._openExtension('Publisher2');
+                var loc = me._localization.page6;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.on('click',
+                    function () {
+                        me._openExtension('Publisher2');
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.on('click',
+                    function () {
+                        me._closeExtension('Publisher2');
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                content.append('<br><br>');
+                content.append(openLink);
+                content.append(closeLink);
+                closeLink.show();
+                openLink.hide();
+                return content;
+            }
+        },
         //PAGE6
         {
-          setScope: function (inst) {
-              this.ref = inst;
-          },
-          getTitle: function () {
-              var p7 = this.ref._localization.page7.title;
-              return p7 + '<span> 6/12</span>';
-          },
-          getContent: function () {
-              var me = this.ref;
-              me._openExtension('maplegend');
-              var loc = me._localization.page7;
-              var content = jQuery('<div></div>');
-              content.append(loc.message);
-              var linkTemplate = jQuery('<a href="#"></a>');
-              var openLink = linkTemplate.clone();
-              openLink.append(loc.openLink);
-              openLink.on('click',
-                  function () {
-                      me._openExtension('maplegend');
-                      openLink.hide();
-                      closeLink.show();
-                  });
-              var closeLink = linkTemplate.clone();
-              closeLink.append(loc.closeLink);
-              closeLink.on('click',
-                  function () {
-                      me._closeExtension('maplegend');
-                      openLink.show();
-                      closeLink.hide();
-                  });
-              content.append('<br><br>');
-              content.append(openLink);
-              content.append(closeLink);
-              closeLink.show();
-              openLink.hide();
-              return content;
-          }
-      },
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p7 = this.ref._localization.page7.title;
+                return p7 + '<span> 6/12</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                me._openExtension('maplegend');
+                var loc = me._localization.page7;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.on('click',
+                    function () {
+                        me._openExtension('maplegend');
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.on('click',
+                    function () {
+                        me._closeExtension('maplegend');
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                content.append('<br><br>');
+                content.append(openLink);
+                content.append(closeLink);
+                closeLink.show();
+                openLink.hide();
+                return content;
+            }
+        },
         //PAGE7
         {
-          setScope: function (inst) {
-              this.ref = inst;
-          },
-          getTitle: function () {
-              var p8 = this.ref._localization.page8.title;
-              return p8 + '<span> 7/12</span>';
-          },
-          getContent: function () {
-              var me = this.ref;
-              me._openExtension('userinterface.UserGuide');
-              var loc = me._localization.page8;
-              var content = jQuery('<div></div>');
-              content.append(loc.message);
-              var linkTemplate = jQuery('<a href="#"></a>');
-              var openLink = linkTemplate.clone();
-              openLink.append(loc.openLink);
-              openLink.on('click',
-                  function () {
-                      me._openExtension('userinterface.UserGuide');
-                      openLink.hide();
-                      closeLink.show();
-                  });
-              var closeLink = linkTemplate.clone();
-              closeLink.append(loc.closeLink);
-              closeLink.on('click',
-                  function () {
-                      me._closeExtension('userinterface.UserGuide');
-                      openLink.show();
-                      closeLink.hide();
-                  });
-              content.append('<br><br>');
-              content.append(openLink);
-              content.append(closeLink);
-              closeLink.show();
-              openLink.hide();
-              return content;
-          }
-      },
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p8 = this.ref._localization.page8.title;
+                return p8 + '<span> 7/12</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                me._openExtension('userinterface.UserGuide');
+                var loc = me._localization.page8;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.on('click',
+                    function () {
+                        me._openExtension('userinterface.UserGuide');
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.on('click',
+                    function () {
+                        me._closeExtension('userinterface.UserGuide');
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                content.append('<br><br>');
+                content.append(openLink);
+                content.append(closeLink);
+                closeLink.show();
+                openLink.hide();
+                return content;
+            }
+        },
         //PAGE8
         {
             setScope: function (inst) {
@@ -430,89 +430,89 @@ Oskari.clazz.define(
         },
         //PAGE9
         {
-          setScope: function (inst) {
-              this.ref = inst;
-          },
-          getTitle: function () {
-              var p10 = this.ref._localization.page10.title;
-              return p10 + '<span> 9/12</span>';
-          },
-          getContent: function () {
-              var me = this.ref;
-              var loc = me._localization.page10;
-              var content = jQuery('<div></div>');
-              content.append(loc.message);
-              return content;
-          },
-          getPositionRef: function () {
-              return jQuery('#login');
-          },
-          positionAlign: 'right'
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p10 = this.ref._localization.page10.title;
+                return p10 + '<span> 9/12</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                var loc = me._localization.page10;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('#login');
+            },
+            positionAlign: 'right'
         },
         //PAGE10
         {
-          setScope: function (inst) {
-              this.ref = inst;
-          },
-          getTitle: function () {
-              var p11 = this.ref._localization.page11.title;
-              return p11 + '<span> 10/12</span>';
-          },
-          getContent: function () {
-              var me = this.ref;
-              var loc = me._localization.page11;
-              var content = jQuery('<div></div>');
-              content.append(loc.message);
-              return content;
-          },
-          getPositionRef: function () {
-              return jQuery('.tool-pan');
-          },
-          positionAlign: 'right'
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p11 = this.ref._localization.page11.title;
+                return p11 + '<span> 10/12</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                var loc = me._localization.page11;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.tool-pan');
+            },
+            positionAlign: 'right'
         },
         //PAGE11
         {
-          setScope: function (inst) {
-              this.ref = inst;
-          },
-          getTitle: function () {
-              var p12 = this.ref._localization.page12.title;
-              return p12 + '<span> 11/12</span>';
-          },
-          getContent: function () {
-              var me = this.ref;
-              var loc = me._localization.page12;
-              var content = jQuery('<div></div>');
-              content.append(loc.message);
-              return content;
-          },
-          getPositionRef: function () {
-              return jQuery('.pzbDiv');
-          },
-          positionAlign: 'left'
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p12 = this.ref._localization.page12.title;
+                return p12 + '<span> 11/12</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                var loc = me._localization.page12;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.pzbDiv');
+            },
+            positionAlign: 'left'
         },
         //PAGE12
         {
-          appendTourSeenCheckbox: true,
+            appendTourSeenCheckbox: true,
 
-          setScope: function (inst) {
-              this.ref = inst;
-          },
-          getTitle: function () {
-              var p13 = this.ref._localization.page13.title;
-              return p13 + '<span> 12/12</span>';
-          },
-          getContent: function () {
-              var me = this.ref;
-              var loc = me._localization.page13;
-              var content = jQuery('<div></div>');
-              content.append(loc.message);
-              return content;
-          },
-          getPositionRef: function () {
-              return jQuery('.coordinatetool');
-          },
-          positionAlign: 'left'
+            setScope: function (inst) {
+                this.ref = inst;
+            },
+            getTitle: function () {
+                var p13 = this.ref._localization.page13.title;
+                return p13 + '<span> 12/12</span>';
+            },
+            getContent: function () {
+                var me = this.ref;
+                var loc = me._localization.page13;
+                var content = jQuery('<div></div>');
+                content.append(loc.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.coordinatetool');
+            },
+            positionAlign: 'left'
         }],
 
         _showGuideContentForStep: function (stepIndex, dialog) {
@@ -523,9 +523,9 @@ Oskari.clazz.define(
             var content = step.getContent();
 
             if(dialog.dialog.hasClass('right')){
-              dialog.dialog.removeClass('right');
+                dialog.dialog.removeClass('right');
             }else{
-              dialog.dialog.removeClass('left');
+                dialog.dialog.removeClass('left');
             }
             if (step.appendTourSeenCheckbox) {
                 content.append('<br><br>');

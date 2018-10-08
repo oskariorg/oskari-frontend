@@ -200,9 +200,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             baseJson.name = categoryModel.getName();
             baseJson.id = this._getMapLayerId(categoryModel.getId());
             //  Permission is always ok for user's own data
-                baseJson.permissions = {
-                    'publish': 'publication_permission_ok'
-                };
+            baseJson.permissions = {
+                'publish': 'publication_permission_ok'
+            };
             return baseJson;
         },
         /**
@@ -213,14 +213,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
          */
         _getMapLayerJsonBase: function () {
             var json = {
-                    wmsName: 'oskari:my_places_categories',
-                    type: 'myplaceslayer',
-                    isQueryable: true,
-                    opacity: 50,
-                    metaType: this.instance.idPrefix,
-                    orgName: this.loc('category.organization'),
-                    inspire: this.loc('category.inspire')
-                };
+                wmsName: 'oskari:my_places_categories',
+                type: 'myplaceslayer',
+                isQueryable: true,
+                opacity: 50,
+                metaType: this.instance.idPrefix,
+                orgName: this.loc('category.organization'),
+                inspire: this.loc('category.inspire')
+            };
             if (this.instance.conf &&
                 this.instance.conf.layerDefaults &&
                 typeof this.instance.conf.layerDefaults === 'object') {

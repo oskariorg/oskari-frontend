@@ -728,7 +728,7 @@ Oskari.clazz.define(
                 }
             }
         },
-         /**
+        /**
          * @method _updateFeature
          * @public
          * Updates feature's style
@@ -745,7 +745,7 @@ Oskari.clazz.define(
             var feature = featuresMatchingQuery[0];
             if(feature) {
                 if(options.featureStyle) {
-                   this.setupFeatureStyle(options, feature, true);
+                    this.setupFeatureStyle(options, feature, true);
                 }
                 var formatter = this._supportedFormats.GeoJSON;
                 var addEvent = Oskari.eventBuilder('FeatureEvent')().setOpAdd();

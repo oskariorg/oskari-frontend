@@ -257,12 +257,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                                 }
                             } catch (e) {
                                 Oskari.log(me.getName())
-                                .warn('Error whilst parsing json',e);
+                                    .warn('Error whilst parsing json',e);
                             }
                         }else if (textStatus === 'timeout'){
                             error = textStatus;
                         }else if (textStatus === 'abort'){
-                             error = textStatus;
+                            error = textStatus;
                         }else if (textStatus === 'parsererror'){
                             error = textStatus;
                         }

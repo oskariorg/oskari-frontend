@@ -9,39 +9,39 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
  * @static
  * @param {OpenLayers.Geometry} geometry the drawing that is being drawn
  */
-function(geometry, mode, creatorId) {
-    this._drawing = geometry;
-    this._drawMode = mode;
-    this._creatorId = creatorId;
-}, {
+    function(geometry, mode, creatorId) {
+        this._drawing = geometry;
+        this._drawMode = mode;
+        this._creatorId = creatorId;
+    }, {
     /** @static @property __name event name */
-    __name : 'DrawPlugin.ActiveDrawingEvent',
-    /**
+        __name : 'DrawPlugin.ActiveDrawingEvent',
+        /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName : function() {
+            return this.__name;
+        },
+        /**
      * @method getDrawing
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-    getDrawing : function() {
-        return this._drawing;
-    },
-    getDrawMode : function() {
-        return this._drawMode;
-    },
-    getCreatorId: function() {
-        return this._creatorId;
-    }
-}, {
+        getDrawing : function() {
+            return this._drawing;
+        },
+        getDrawMode : function() {
+            return this._drawMode;
+        },
+        getCreatorId: function() {
+            return this._creatorId;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+        'protocol' : ['Oskari.mapframework.event.Event']
+    });

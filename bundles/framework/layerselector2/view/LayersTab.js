@@ -138,7 +138,7 @@ Oskari.clazz.define(
             if (me.showSearchSuggestions) {
                 oskarifield.append(
                     jQuery(me.templates.spinner)
-                    .text(me._locale.loading)
+                        .text(me._locale.loading)
                 );
 
                 oskarifield.append(
@@ -148,7 +148,7 @@ Oskari.clazz.define(
 
             oskarifield.append(
                 jQuery(me.templates.shortDescription)
-                .text(me._locale.filter.shortDescription)
+                    .text(me._locale.filter.shortDescription)
             );
 
             me._createInfoIcon(oskarifield);
@@ -568,7 +568,7 @@ Oskari.clazz.define(
                     if (keyword.layers.length > 0) {
                         // check if we want to show matching layers instead of a suggestion
                         if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
-                                keyword.type) && me._containsIgnoreCase(
+                            keyword.type) && me._containsIgnoreCase(
                                 keyword.keyword, userInput))) {
                             // copy keyword layerids to ontologyLayers, avoid duplicates just because
                             if (ontologyLayers.size === 0) {

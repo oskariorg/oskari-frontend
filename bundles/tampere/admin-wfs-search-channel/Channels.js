@@ -91,7 +91,7 @@ Oskari.clazz.define(
 
             jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
                 me.templates.form.detailinputs = jQuery(
-                '    <label>' +
+                    '    <label>' +
                 '        <span></span>' +
                 '        <input type="text" name="details-topic-'+item+'" class="details-topic" language="details-name-'+item+'" required="required" />' +
                 '    </label>' +
@@ -113,16 +113,16 @@ Oskari.clazz.define(
                 event.preventDefault;
             });
 
-             me.templates.form.find('select[name=choose-wfs-layer]').on('change', function(event) {
-                 me.getWFSLayerColumns(jQuery(this).val(), jQuery(this).parents('fieldset'));
-                 event.preventDefault;
-             });
+            me.templates.form.find('select[name=choose-wfs-layer]').on('change', function(event) {
+                me.getWFSLayerColumns(jQuery(this).val(), jQuery(this).parents('fieldset'));
+                event.preventDefault;
+            });
 
             me.templates.form.find('input,select').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
                 if(el.attr('language') != null){
-                   el.attr('placeholder', me._getLocalization(el.attr('language')));
+                    el.attr('placeholder', me._getLocalization(el.attr('language')));
                 }
             });
 
@@ -277,7 +277,7 @@ Oskari.clazz.define(
          * @param  {[type]}
          * @return {[type]}
          */
-         fetchChannels: function (container) {
+        fetchChannels: function (container) {
             // Remove old list from container
             container.find('ul').remove();
             // get channels with ajax
@@ -292,15 +292,15 @@ Oskari.clazz.define(
                 url: Oskari.urls.getRoute('SearchWFSChannel'),
                 success: function (data) {
                     me._createList(me, data.channels, me.state.filter);
-                 },
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
 
-                     me._openPopup(
-                         me._getLocalization('fetch_failed'),
-                         error
-                     );
-                 }
+                    me._openPopup(
+                        me._getLocalization('fetch_failed'),
+                        error
+                    );
+                }
             });
         },
 
@@ -333,10 +333,10 @@ Oskari.clazz.define(
             if(list.children().length > 0){
                 me.container.append(list);
             }else{
-                 me._openPopup(
-                     me._getLocalization('search-channels'),
-                     me._getLocalization('noMatch')
-                 );
+                me._openPopup(
+                    me._getLocalization('search-channels'),
+                    me._getLocalization('noMatch')
+                );
             }
         },
 

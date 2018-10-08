@@ -137,9 +137,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              */
             MapLayerVisibilityChangedEvent: function (event) {
                 this.handleLayerVisibilityChanged(
-                        event.getMapLayer(),
-                        event.isInScale(),
-                        event.isGeometryMatch()
+                    event.getMapLayer(),
+                    event.isInScale(),
+                    event.isGeometryMatch()
                 );
             },
             'Publisher2.ToolEnabledChangedEvent': function (event) {

@@ -62,14 +62,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 var holderLayerIndex = mapModule.getLayerIndex(wmtsHolderLayer);
                 map.removeLayer(wmtsHolderLayer);
                 wmtsLayer.setVisible(layer.isVisible());
-                    if (keepLayerOnTop) {
-                        // use the index as it was when addMapLayer was called
-                        // bringing layer on top causes timing errors, because of async capabilities load
-                        map.getLayers().insertAt(holderLayerIndex, wmtsLayer);
-                    } else {
-                        map.getLayers().insertAt(0, wmtsLayer);
-                    }
-                    me.setOLMapLayers(layer.getId(), wmtsLayer);
+                if (keepLayerOnTop) {
+                    // use the index as it was when addMapLayer was called
+                    // bringing layer on top causes timing errors, because of async capabilities load
+                    map.getLayers().insertAt(holderLayerIndex, wmtsLayer);
+                } else {
+                    map.getLayers().insertAt(0, wmtsLayer);
+                }
+                me.setOLMapLayers(layer.getId(), wmtsLayer);
             }, function() {
             });
 
@@ -85,10 +85,10 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         _getPlaceHolderWmtsLayer: function (layer) {
 
             var layerHolder = new olLayerVector({
-                    source: new olSourceVector({}),
-                    title: 'layer_' + layer.getId(),
-                    visible: false
-                }
+                source: new olSourceVector({}),
+                title: 'layer_' + layer.getId(),
+                visible: false
+            }
             );
 
             return layerHolder;
@@ -100,20 +100,20 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          *
          */
         _registerLayerEvents: function(layer, oskariLayer){
-        var me = this;
-        var source = layer.getSource();
+            var me = this;
+            var source = layer.getSource();
 
-        source.on('tileloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), true);
-        });
+            source.on('tileloadstart', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-        source.on('tileloadend', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), false);
-        });
+            source.on('tileloadend', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-        source.on('tileloaderror', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-        });
+            source.on('tileloaderror', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            });
 
         }
     }, {

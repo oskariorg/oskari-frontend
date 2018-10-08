@@ -103,7 +103,7 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function(layer, oskariLayer){
             var me = this,
                 source = layer.getSource();
 
@@ -119,7 +119,7 @@ Oskari.clazz.define(
                 me.getMapModule().loadingState(oskariLayer.getId(), null, true );
             });
         
-       }
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**

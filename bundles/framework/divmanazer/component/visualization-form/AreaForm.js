@@ -411,105 +411,105 @@ Oskari.clazz.define(
             if (me.values.fillStyle >= 0) {
                 var pathSvg = jQuery('<path></path>');
                 switch (parseInt(me.values.fillStyle)) {
-                    case 0:
-                        var p01a = [10.5,17.5];
-                        var p02a = [12.3,19.7];
-                        var p03a = [14.1,21.9];
-                        var p04a = [15.9,24.1];
-                        var p05a = [17.7,26.3];
-                        var p06a = [19.5,28.5];
-                        var p07a = [21.4,30.6];
-                        var p08a = [23.2,32.8];
-                        var p09a = [25.0,35.0];
-                        var p010a = [26.8,37.2];
-                        var p011a = [28.6,39.4];
+                case 0:
+                    var p01a = [10.5,17.5];
+                    var p02a = [12.3,19.7];
+                    var p03a = [14.1,21.9];
+                    var p04a = [15.9,24.1];
+                    var p05a = [17.7,26.3];
+                    var p06a = [19.5,28.5];
+                    var p07a = [21.4,30.6];
+                    var p08a = [23.2,32.8];
+                    var p09a = [25.0,35.0];
+                    var p010a = [26.8,37.2];
+                    var p011a = [28.6,39.4];
 
-                        var p01b = [11.2,16.8];
-                        var p02b = [16,16];
-                        var p03b = [20.8,15.2];
-                        var p04b = [25.6,14.4];
-                        var p05b = [30.4,13.6];
-                        var p06b = [35.2,12.8];
-                        var p07b = [40.0,12.0];
-                        var p08b = [37.4,18.6];
-                        var p09b = [34.8,25.2];
-                        var p010b = [32.2,31.8];
-                        var p011b = [29.6,38.4];
+                    var p01b = [11.2,16.8];
+                    var p02b = [16,16];
+                    var p03b = [20.8,15.2];
+                    var p04b = [25.6,14.4];
+                    var p05b = [30.4,13.6];
+                    var p06b = [35.2,12.8];
+                    var p07b = [40.0,12.0];
+                    var p08b = [37.4,18.6];
+                    var p09b = [34.8,25.2];
+                    var p010b = [32.2,31.8];
+                    var p011b = [29.6,38.4];
 
-                        pathSvg.attr({
-                            'd': 'M' + p01a + 'L' + p01b + 'M' + p02a + 'L' + p02b + 'M' + p03a + 'L' + p03b + 'M' + p04a + 'L' + p04b + 'M' + p05a + 'L' + p05b + 'M' + p06a + 'L' + p06b + 'M' + p07a + 'L' + p07b + 'M' + p08a + 'L' + p08b + 'M' + p09a + 'L' + p09b + 'M' + p010a + 'L' + p010b + 'M' + p011a + 'L' + p011b,
-                            'stroke-width': 1,
-                            'stroke': me.values.fillColor,
-                            'fill': 'none'
-                        });
-                        break;
-                    case 1:
-                        var p11a = [14.8,16.2];
-                        var p12a = [23.2,14.8];
-                        var p13a = [31.6,13.4];
-                        var p14a = [39.8,12.2];
-                        var p15a = [35.4,23.6];
-                        var p16a = [30.9,35.1];
+                    pathSvg.attr({
+                        'd': 'M' + p01a + 'L' + p01b + 'M' + p02a + 'L' + p02b + 'M' + p03a + 'L' + p03b + 'M' + p04a + 'L' + p04b + 'M' + p05a + 'L' + p05b + 'M' + p06a + 'L' + p06b + 'M' + p07a + 'L' + p07b + 'M' + p08a + 'L' + p08b + 'M' + p09a + 'L' + p09b + 'M' + p010a + 'L' + p010b + 'M' + p011a + 'L' + p011b,
+                        'stroke-width': 1,
+                        'stroke': me.values.fillColor,
+                        'fill': 'none'
+                    });
+                    break;
+                case 1:
+                    var p11a = [14.8,16.2];
+                    var p12a = [23.2,14.8];
+                    var p13a = [31.6,13.4];
+                    var p14a = [39.8,12.2];
+                    var p15a = [35.4,23.6];
+                    var p16a = [30.9,35.1];
 
-                        var p11b = [11.9,19.1];
-                        var p12b = [15.0,23.0];
-                        var p13b = [18.2,26.8];
-                        var p14b = [21.4,30.6];
-                        var p15b = [24.5,34.5];
-                        var p16b = [27.7,38.3];
+                    var p11b = [11.9,19.1];
+                    var p12b = [15.0,23.0];
+                    var p13b = [18.2,26.8];
+                    var p14b = [21.4,30.6];
+                    var p15b = [24.5,34.5];
+                    var p16b = [27.7,38.3];
 
-                        pathSvg.attr({
-                            'd': 'M' + p11a + 'L' + p11b + 'M' + p12a + 'L' + p12b + 'M' + p13a + 'L' + p13b + 'M' + p14a + 'L' + p14b + 'M' + p15a + 'L' + p15b + 'M' + p16a + 'L' + p16b,
-                            'stroke-width': 2,
-                            'stroke': me.values.fillColor,
-                            'fill': 'none'
-                        });
-                        break;
-                    case 2:
-                        var p21a = [19,15.5];
-                        var p22a = [12.1,19.5];
-                        var p23a = [15.4,23.5];
-                        var p24a = [18.7,27.5];
-                        var p25a = [22.0,31.5];
-                        var p26a = [25.3,35.5];
-                        var p27a = [28.6,39.5];
+                    pathSvg.attr({
+                        'd': 'M' + p11a + 'L' + p11b + 'M' + p12a + 'L' + p12b + 'M' + p13a + 'L' + p13b + 'M' + p14a + 'L' + p14b + 'M' + p15a + 'L' + p15b + 'M' + p16a + 'L' + p16b,
+                        'stroke-width': 2,
+                        'stroke': me.values.fillColor,
+                        'fill': 'none'
+                    });
+                    break;
+                case 2:
+                    var p21a = [19,15.5];
+                    var p22a = [12.1,19.5];
+                    var p23a = [15.4,23.5];
+                    var p24a = [18.7,27.5];
+                    var p25a = [22.0,31.5];
+                    var p26a = [25.3,35.5];
+                    var p27a = [28.6,39.5];
 
-                        var p21b = [38.6,15.5];
-                        var p22b = [37.0,19.5];
-                        var p23b = [35.4,23.5];
-                        var p24b = [33.9,27.5];
-                        var p25b = [32.3,31.5];
-                        var p26b = [30.7,35.5];
-                        var p27b = [29.1,39.5];
+                    var p21b = [38.6,15.5];
+                    var p22b = [37.0,19.5];
+                    var p23b = [35.4,23.5];
+                    var p24b = [33.9,27.5];
+                    var p25b = [32.3,31.5];
+                    var p26b = [30.7,35.5];
+                    var p27b = [29.1,39.5];
 
-                        pathSvg.attr({
-                            'd': 'M' + p21a + 'L' + p21b + 'M' + p22a + 'L' + p22b + 'M' + p23a + 'L' + p23b + 'M' + p24a + 'L' + p24b + 'M' + p25a + 'L' + p25b + 'M' + p26a + 'L' + p26b + 'M' + p27a + 'L' + p27b,
-                            'stroke-width': 1,
-                            'stroke': me.values.fillColor,
-                            'fill': 'none'
-                        });
-                        break;
-                    case 3:
-                        var p31a = [16.1,16.0];
-                        var p32a = [13.4,21.0];
-                        var p33a = [17.5,26.0];
-                        var p34a = [21.6,31.0];
-                        var p35a = [25.7,36.0];
+                    pathSvg.attr({
+                        'd': 'M' + p21a + 'L' + p21b + 'M' + p22a + 'L' + p22b + 'M' + p23a + 'L' + p23b + 'M' + p24a + 'L' + p24b + 'M' + p25a + 'L' + p25b + 'M' + p26a + 'L' + p26b + 'M' + p27a + 'L' + p27b,
+                        'stroke-width': 1,
+                        'stroke': me.values.fillColor,
+                        'fill': 'none'
+                    });
+                    break;
+                case 3:
+                    var p31a = [16.1,16.0];
+                    var p32a = [13.4,21.0];
+                    var p33a = [17.5,26.0];
+                    var p34a = [21.6,31.0];
+                    var p35a = [25.7,36.0];
 
-                        var p31b = [38.4,16.0];
-                        var p32b = [36.4,21.0];
-                        var p33b = [35.5,26.0];
-                        var p34b = [32.5,31.0];
-                        var p35b = [30.5,36.0];
+                    var p31b = [38.4,16.0];
+                    var p32b = [36.4,21.0];
+                    var p33b = [35.5,26.0];
+                    var p34b = [32.5,31.0];
+                    var p35b = [30.5,36.0];
 
-                        pathSvg.attr({
-                            'd': 'M' + p31a + 'L' + p31b + 'M' + p32a + 'L' + p32b + 'M' + p33a + 'L' + p33b + 'M' + p34a + 'L' + p34b + 'M' + p35a + 'L' + p35b,
-                            'stroke-width': 2,
-                            'stroke': me.values.fillColor,
-                            'fill': 'none'
-                        });
+                    pathSvg.attr({
+                        'd': 'M' + p31a + 'L' + p31b + 'M' + p32a + 'L' + p32b + 'M' + p33a + 'L' + p33b + 'M' + p34a + 'L' + p34b + 'M' + p35a + 'L' + p35b,
+                        'stroke-width': 2,
+                        'stroke': me.values.fillColor,
+                        'fill': 'none'
+                    });
 
-                        break;
+                    break;
                 }
                 previewTemplate.prepend(pathSvg);
             }

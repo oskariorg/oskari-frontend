@@ -23,15 +23,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
     addMarkerForCoords: function (id, lonlat, label, color) {
         var color = color || 'ff0000';
         if ( this.addMarkerReq ) {
-                var data = {
-                    x: lonlat.lon,
-                    y: lonlat.lat,
-                    color: color,
-                    shape: 3
-                };
-                if (label) {
-                    data.msg = label;
-                }
+            var data = {
+                x: lonlat.lon,
+                y: lonlat.lat,
+                color: color,
+                shape: 3
+            };
+            if (label) {
+                data.msg = label;
+            }
             var request = this.addMarkerReq(data, id);
             this.sb.request('MainMapModule', request);
         }
@@ -349,7 +349,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         return {
             'DEFAULT': {
                 'title': this.loc('flyout.coordinateSystem.noFilter'),
-                 'cls': 'DATUM_KKJ DATUM_EUREF-FIN'
+                'cls': 'DATUM_KKJ DATUM_EUREF-FIN'
             },
             'COORD_PROJ_2D': {
                 'title': this.loc('flyout.coordinateSystem.coordinateSystem.proj2D'),
@@ -702,31 +702,31 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
     },
     getCompoundSystem: function (epsg){
         switch(epsg) {
-            case 'EPSG:3091': //YKJ + N60
-                return {
-                    geodetic: 'EPSG:2393',
-                    height: 'EPSG:5717'
-                };
-            case 'EPSG:3092': //ETRS-TM35FIN (N,E) + N60
-                return {
-                    geodetic: 'EPSG:3047', //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
-                    height: 'EPSG:5717'
-                };
-            case 'EPSG:3093': //ETRS-TM35FIN (N,E) + N2000
-                return {
-                    geodetic: 'EPSG:3047', //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
-                    height: 'EPSG:3900'
-                };
-            case 'EPSG:7409': //ETRS89 + EVRF2000 (EUREF-FIN-GRS80 + N60)
-                return {
-                    geodetic: 'EPSG:4258',
-                    height: 'EPSG:5717'
-                };
-            case 'EPSG:7423': //ETRS89 + EVRF2007 (EUREF-FIN-GRS80 + N2000)
-                return {
-                    geodetic: 'EPSG:4258',
-                    height: 'EPSG:3900'
-                };
+        case 'EPSG:3091': //YKJ + N60
+            return {
+                geodetic: 'EPSG:2393',
+                height: 'EPSG:5717'
+            };
+        case 'EPSG:3092': //ETRS-TM35FIN (N,E) + N60
+            return {
+                geodetic: 'EPSG:3047', //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
+                height: 'EPSG:5717'
+            };
+        case 'EPSG:3093': //ETRS-TM35FIN (N,E) + N2000
+            return {
+                geodetic: 'EPSG:3047', //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
+                height: 'EPSG:3900'
+            };
+        case 'EPSG:7409': //ETRS89 + EVRF2000 (EUREF-FIN-GRS80 + N60)
+            return {
+                geodetic: 'EPSG:4258',
+                height: 'EPSG:5717'
+            };
+        case 'EPSG:7423': //ETRS89 + EVRF2007 (EUREF-FIN-GRS80 + N2000)
+            return {
+                geodetic: 'EPSG:4258',
+                height: 'EPSG:3900'
+            };
         }
         return null;
     },

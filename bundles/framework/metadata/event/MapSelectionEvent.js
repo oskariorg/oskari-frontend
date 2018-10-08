@@ -9,31 +9,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.event.MapSelectionEvent
  * @static
  * @param {OpenLayers.Geometry} geometry the drawing that was finished
  */
-function(geometry) {
-    this._drawing = geometry;
-}, {
+    function(geometry) {
+        this._drawing = geometry;
+    }, {
     /** @static @property __name event name */
-    __name : 'Metadata.MapSelectionEvent',
-    /**
+        __name : 'Metadata.MapSelectionEvent',
+        /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName : function() {
+            return this.__name;
+        },
+        /**
      * @method getDrawing
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-    getDrawing : function() {
-        return this._drawing;
-    }
-}, {
+        getDrawing : function() {
+            return this._drawing;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+        'protocol' : ['Oskari.mapframework.event.Event']
+    });

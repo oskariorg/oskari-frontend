@@ -245,4 +245,4 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
     }, {
         extend: ['Oskari.userinterface.component.Component']
     }
-    );
+);

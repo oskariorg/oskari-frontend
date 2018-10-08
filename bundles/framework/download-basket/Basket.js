@@ -160,7 +160,7 @@ Oskari.clazz.define(
             var strDownloadDetails = JSON.stringify(downloadDetails);
 
             var userDetails = {
-                    email: el.find('.oskari__download-basket-user-info').find('input.email').val()
+                email: el.find('.oskari__download-basket-user-info').find('input.email').val()
             };
             var strUserDetails = JSON.stringify(userDetails);
 
@@ -173,7 +173,7 @@ Oskari.clazz.define(
                 success : function(resp) {
                     if(resp.success){
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                        btn = dialog.createCloseButton('OK');
+                            btn = dialog.createCloseButton('OK');
                         btn.setHandler(function() {
                             var buttons = el.find('.oskari__download-basket-buttons');
                             buttons.find('input.send').attr('disabled',false);
@@ -187,7 +187,7 @@ Oskari.clazz.define(
                         btn.addClass('primary');
                         dialog.show(me._getLocalization('basket-thank-you'), me._getLocalization('basket-email-will-be'), [btn]);
                     } else {
-                         me._openPopup(
+                        me._openPopup(
                             me._getLocalization('title'),
                             me._getLocalization('error-in-downloading')
                         );
@@ -252,9 +252,9 @@ Oskari.clazz.define(
          */
         validateUserInputs: function(form){
             var me = this,
-            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            errorText = me._getLocalization('check-form-error')+' ',
-            error = false;
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                errorText = me._getLocalization('check-form-error')+' ',
+                error = false;
 
             form.find('input,select').each(function (index) {
                 var el = jQuery(this);

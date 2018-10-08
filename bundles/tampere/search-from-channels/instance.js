@@ -30,20 +30,20 @@ Oskari.clazz.define(
         this.conditions = [];
         this.safeChars = false;
         this.resultHeaders = [
-                {
-                    title: '',
-                    prop: 'check'
-                },
-                {
-                    title: this.getLocalization('grid').name,
-                    prop: 'name'
-                }, {
-                    title: this.getLocalization('grid').village,
-                    prop: 'village'
-                }, {
-                    title: this.getLocalization('grid').type,
-                    prop: 'type'
-                }
+            {
+                title: '',
+                prop: 'check'
+            },
+            {
+                title: this.getLocalization('grid').name,
+                prop: 'name'
+            }, {
+                title: this.getLocalization('grid').village,
+                prop: 'village'
+            }, {
+                title: this.getLocalization('grid').type,
+                prop: 'type'
+            }
         ];
     }, {
         /**
@@ -82,7 +82,7 @@ Oskari.clazz.define(
                 '</div>'
             ),
             templateSearchResultsWindow: jQuery(
-            '<div class="searchFromChannels_window_search_results">' +
+                '<div class="searchFromChannels_window_search_results">' +
             '  <div class="header">' +
             '    <div class="icon-close">' +
             '    </div>' +
@@ -201,7 +201,7 @@ Oskari.clazz.define(
                 me.tabPriority = me.conf.priority;
             }
 
-              // Filter special characters?
+            // Filter special characters?
             if (this.conf && this.conf.safeChars === true) {
                 this.safeChars = true;
             }
@@ -274,8 +274,8 @@ Oskari.clazz.define(
                 }
                 if (event.getViewState() !== 'close') {
                     var searchFromChannelsContainer = jQuery('.searchFromChannelsContainer'),
-                    advancedContainer = searchFromChannelsContainer.find('div.advanced'),
-                    moreLessLink = searchFromChannelsContainer.find('a.moreLessLink');
+                        advancedContainer = searchFromChannelsContainer.find('div.advanced'),
+                        moreLessLink = searchFromChannelsContainer.find('a.moreLessLink');
 
                     advancedContainer.empty();
                     me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,false);
@@ -447,7 +447,7 @@ Oskari.clazz.define(
                     // open advanced/toggle link text
                     moreLessLink.html(me.getLocalization('showLess'));
                     if (!advancedContainer.is(':empty')) {
-                         advancedContainer.show();
+                        advancedContainer.show();
                     }
                 } else {
                     // close advanced/toggle link text
@@ -473,23 +473,23 @@ Oskari.clazz.define(
 
             me.optionService.getOptions(function (data) {
 
-            if(data.channels.length > 0){
-                if(createTab){
+                if(data.channels.length > 0){
+                    if(createTab){
                     // Wfs search from channels tab OBS. this will be in UI if user has rights into channels
-                    var title = me.getLocalization('tabTitle'),
-                        content = searchFromChannelsContainer,
-                        priority = me.tabPriority,
-                        id = 'oskari_searchfromchannels_tabpanel_header',
-                        reqName = 'Search.AddTabRequest',
-                        reqBuilder = Oskari.requestBuilder(reqName),
-                        req = reqBuilder(title, content, priority, id);
+                        var title = me.getLocalization('tabTitle'),
+                            content = searchFromChannelsContainer,
+                            priority = me.tabPriority,
+                            id = 'oskari_searchfromchannels_tabpanel_header',
+                            reqName = 'Search.AddTabRequest',
+                            reqBuilder = Oskari.requestBuilder(reqName),
+                            req = reqBuilder(title, content, priority, id);
 
-                    me.sandbox.request(me, req);
+                        me.sandbox.request(me, req);
+                    }
+
+                    me._createAdvancedPanel(data, advancedContainer, moreLessLink);
+                    me._progressSpinner.stop();
                 }
-
-                me._createAdvancedPanel(data, advancedContainer, moreLessLink);
-                me._progressSpinner.stop();
-            }
 
             }, function (data) {
                 me._progressSpinner.stop();
@@ -569,8 +569,8 @@ Oskari.clazz.define(
                     me._closeMapPopup();
 
                     me.sandbox.postRequestByName(
-                    'userinterface.UpdateExtensionRequest',
-                    [me.instance, 'close']
+                        'userinterface.UpdateExtensionRequest',
+                        [me.instance, 'close']
                     );
                 }
             );
@@ -615,7 +615,7 @@ Oskari.clazz.define(
                 resultList.empty();
                 me.lastResult = result;
 
-             if (result.totalCount === 1) {
+                if (result.totalCount === 1) {
                     // move map etc
                     me._resultClicked(result.locations[0], true);
                 }
@@ -731,7 +731,7 @@ Oskari.clazz.define(
             btn.setTitle(me.getLocalization('back-to-search'));
             jQuery(btn.getElement()).on('click',
                 function (event) {
-                   me.toggleParentFlyout(me.optionPanel, searchResultWindow, mapDiv);
+                    me.toggleParentFlyout(me.optionPanel, searchResultWindow, mapDiv);
                 }
             );
             var returnTosearch = searchResultWindow.find('div.returnTosearch');
@@ -768,7 +768,7 @@ Oskari.clazz.define(
          * @param  {[type]} searchResultWindow [description]
          * @return {[type]}                    [description]
          */
-         _updateMapModuleSize: function (mapDiv, searchResultWindow) {
+        _updateMapModuleSize: function (mapDiv, searchResultWindow) {
             var me = this;
 
             if(searchResultWindow.find('div.resultList').is(':visible')){
@@ -782,11 +782,11 @@ Oskari.clazz.define(
             }
 
             var reqBuilder = Oskari.requestBuilder(
-                 'MapFull.MapSizeUpdateRequest'
+                'MapFull.MapSizeUpdateRequest'
             );
 
             if (reqBuilder) {
-                 me.sandbox.request(me, reqBuilder(true));
+                me.sandbox.request(me, reqBuilder(true));
             }
         },
 
@@ -799,7 +799,7 @@ Oskari.clazz.define(
          */
         _clearMapFromResults: function(identifier, value, layer){
             var me = this,
-             rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
 
             me.sandbox.postRequestByName(rn, [identifier, value, layer]);
         },
@@ -812,24 +812,24 @@ Oskari.clazz.define(
 
             var featureStyle = {
                 fill: {
-                  color: 'rgb(153,204,0,0.3)',
+                    color: 'rgb(153,204,0,0.3)',
                 },
                 stroke: {
-                  color: '#FF0000',
-                  width: 1
+                    color: '#FF0000',
+                    width: 1
                 },
                 text : {
-                  scale : 1.3,
-                  fill : {
-                    color : 'rgba(0,0,0,1)'
-                  },
-                  stroke : {
-                    color : 'rgba(255,255,255,0.8)',
-                    width : 2
-                  }
+                    scale : 1.3,
+                    fill : {
+                        color : 'rgba(0,0,0,1)'
+                    },
+                    stroke : {
+                        color : 'rgba(255,255,255,0.8)',
+                        width : 2
+                    }
                 }
-              };
-              return featureStyle;
+            };
+            return featureStyle;
         },
         /**
          * [_zoomMapToResults description] Zooms map into results
@@ -878,21 +878,21 @@ Oskari.clazz.define(
 
             if(isSelected){
 
-            bounds = source.getExtent();
-            center = olExtent.getCenter(bounds);
+                bounds = source.getExtent();
+                center = olExtent.getCenter(bounds);
 
-            var topLeft =  olExtent.getTopLeft(bounds);
-            var bottomRight =  olExtent.getBottomRight(bounds);
+                var topLeft =  olExtent.getTopLeft(bounds);
+                var bottomRight =  olExtent.getBottomRight(bounds);
 
-            var zoom = {
-                top: topLeft[1],
-                left: topLeft[0],
-                right: bottomRight[0],
-                bottom: bottomRight[1]
-            }
+                var zoom = {
+                    top: topLeft[1],
+                    left: topLeft[0],
+                    right: bottomRight[0],
+                    bottom: bottomRight[1]
+                }
 
-            mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center[0], center[1], zoom);
-            me.sandbox.request(me, mapmoveRequest);
+                mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center[0], center[1], zoom);
+                me.sandbox.request(me, mapmoveRequest);
 
             }else{
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -958,10 +958,10 @@ Oskari.clazz.define(
             var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if(result.zoomScale) {
-                 zoom = {scale : result.zoomScale};
+                zoom = {scale : result.zoomScale};
             }
 
-           sandbox.request(
+            sandbox.request(
                 me.getName(),
                 moveReqBuilder(result.lon, result.lat, zoom)
             );
@@ -1022,7 +1022,7 @@ Oskari.clazz.define(
          */
         _showError: function (error) {
             var me = this;
-           /* me.searchPanel.hide();*/
+            /* me.searchPanel.hide();*/
             me.optionPanel.show();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okButton = dialog.createCloseButton('OK');
@@ -1134,7 +1134,7 @@ Oskari.clazz.define(
 
         },
 
-         /**
+        /**
          * @private @method _searchResultComparator
          * Compares the given attribute on given objects for sorting
          * search result objects.

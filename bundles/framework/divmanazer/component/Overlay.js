@@ -30,8 +30,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             targets = jQuery(targetSelector);
             me._overlays = _.map(targets, function (target) {
                 return {
-                  overlay: me.template.clone(),
-                  target: jQuery(target)
+                    overlay: me.template.clone(),
+                    target: jQuery(target)
                 };
             });
             _.forEach(me._overlays, function (overlay) {
@@ -84,10 +84,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         close: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {
-               overlay.overlay.remove();
-               if(overlay.spinner) {
+                overlay.overlay.remove();
+                if(overlay.spinner) {
                     overlay.spinner.stop();
-               }
+                }
             });
             if (this._resizingWorkaround) {
                 clearTimeout(this._resizingWorkaround);

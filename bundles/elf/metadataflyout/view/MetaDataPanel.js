@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           <% _.forEach(identification.temporalExtents, function (temporalExtent) { %>' +
                     '               <p><%= temporalExtent.begin %> - <%= temporalExtent.end %></p>' +
                     '           <% }); %>' +
-                                        //TODO: "updated:" + maintenanceAndUpdateFrequency
+                    //TODO: "updated:" + maintenanceAndUpdateFrequency
                     '           </td>'+
                     '       </tr>'+
                     '       <tr>'+

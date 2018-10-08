@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
             }
 
 		 	var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
+            sandbox.request(me, request);
 
         },
         /**

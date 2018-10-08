@@ -256,11 +256,11 @@ Oskari.clazz.define(
                 featuresToRemove = olLayer.getFeaturesByAttribute(identifier, value);
                 // if not found then check also feature data values (ol2 getFeaturesByAttribute not functionality right when features are added from GeoJSON?)
                 if(featuresToRemove === null || featuresToRemove.length === 0) {
-                  featuresToRemove = jQuery.grep(olLayer.features, function(f){
-                      var hasData = (f.data && f.data[identifier]) ? true : false;
-                      var hasWantedAttributes = (hasData && f.data[identifier] === value) ? true : false;
-                      return hasWantedAttributes;
-                  });
+                    featuresToRemove = jQuery.grep(olLayer.features, function(f){
+                        var hasData = (f.data && f.data[identifier]) ? true : false;
+                        var hasWantedAttributes = (hasData && f.data[identifier] === value) ? true : false;
+                        return hasWantedAttributes;
+                    });
                 }
             }
 
