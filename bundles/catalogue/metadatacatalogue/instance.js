@@ -493,11 +493,9 @@ Oskari.clazz.define(
                         checkboxDefs,
                         values,
                         j,
-                        coverageButton,
                         checkboxDef,
                         dropdownDef,
-                        dropdownRows,
-                        dropdownRow;
+                        dropdownRows;
                     for (i = 0; i < checkboxRows.length; i += 1) {
                         checkboxDefs = jQuery(checkboxRows[i]).find('.metadataMultiDef');
                         if (checkboxDefs.length === 0) {
@@ -613,8 +611,6 @@ Oskari.clazz.define(
                 newCheckbox,
                 newCheckboxDef,
                 newDropdown,
-                button,
-                icon,
                 dropdownDef,
                 emptyOption,
                 newOption,
@@ -705,7 +701,6 @@ Oskari.clazz.define(
                         me._stopCoverage();
                         me.coverageButton.val(me.getLocalization('delimitArea'));
                         document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
-                        var emptyData = {};
                         me.coverageButton[0].data = '';
                         me._removeFeaturesFromMap();
                     }
@@ -950,15 +945,7 @@ Oskari.clazz.define(
         _populateResultTable: function (resultsTableBody) {
             var me = this,
                 results = me.lastResult;
-            // row reference needs some closure magic to work here
-            var closureMagic = function (scopedValue) {
-                return function () {
-                    me._resultClicked(scopedValue);
-                    return false;
-                };
-            };
-            var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
-                i,
+            var i,
                 style = {
                     stroke: {
                         color: 'rgba(211, 187, 27, 0.8)',

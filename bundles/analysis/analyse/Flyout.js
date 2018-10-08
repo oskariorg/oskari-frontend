@@ -120,7 +120,6 @@ Oskari.clazz.define(
          *
          */
         createUi: function () {
-            var me = this;
 
             this.view = Oskari.clazz.create(
                 'Oskari.analysis.bundle.analyse.view.StartView',

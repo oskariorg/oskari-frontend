@@ -195,7 +195,6 @@ Oskari.clazz.define(
             var me = this,
                 conf = me.getConfig(),
                 geodesic = conf.geodesic === undefined ? true : conf.geodesic,
-                sandbox = me.getSandbox(),
                 key;
 
             // check if already created
@@ -262,9 +261,7 @@ Oskari.clazz.define(
             function measurementsHandler(event, finished) {
                 var sandbox = me.getSandbox(),
                     geometry = event.geometry,
-                    units = event.units,
                     order = event.order,
-                    measure = event.measure,
                     mapModule = me.getMapModule(),
                     out = null,
                     geomAsText = null,

@@ -243,8 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
              * @param {Object} event
              */
             'Printout.PrintableContentEvent': function (event) {
-                var contentId = event.getContentId(),
-                    layer = event.getLayer(),
+                var layer = event.getLayer(),
                     layerId = ((layer && layer.getId) ? layer.getId() : null),
                     tileData = event.getTileData(),
                     geoJson = event.getGeoJsonData();
@@ -269,7 +268,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
              */
             'Printout.PrintWithoutUIEvent': function (event) {
                 var me = this,
-                    contentId = event.getContentId(),
                     printParams = event.getPrintParams(),
                     geoJson = event.getGeoJsonData();
                 if (geoJson) {
@@ -367,7 +365,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * (re)creates the UI for "printout" functionality
          */
         _createUi: function () {
-            var me = this;
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             /*this.plugins['Oskari.userinterface.Tile'].refresh();*/
         },
@@ -381,9 +378,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          */
         setPublishMode: function (blnEnabled) {
             var me = this,
-                map = jQuery('#contentMap'),
-                tools = jQuery('#maptools'),
-                i;
+                map = jQuery('#contentMap');
 
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');

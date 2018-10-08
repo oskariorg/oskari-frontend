@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          */
         _createControlElement: function () {
             var me = this,
-                sandbox = me.getSandbox(),
                 el = jQuery('<div class="mapplugin featuredataplugin">' +
                     '<a href="JavaScript: void(0);"></a>' +
                     '</div>');
@@ -100,7 +99,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         redrawUI: function(mapInMobileMode, forced) {
             var isMobile = mapInMobileMode || Oskari.util.isMobile();
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
@@ -174,7 +172,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
 
         handleCloseFlyout: function () {
             var me = this,
-                sandbox = me.getSandbox(),
                 el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-featuredata');
 
             if (!me._flyoutOpen) {

@@ -502,10 +502,7 @@ Oskari.clazz.define(
                 this.featureLayer.events.on({
                     'featureselected': function (event) {
                         var wkt = new OpenLayers.Format.WKT(),
-                            featureWKT = wkt.write(event.feature),
-                            map = me.mapModule.getMap(),
-                            sandbox = me.mapModule.getSandbox(),
-                            layers = sandbox.findAllSelectedMapLayers();
+                            featureWKT = wkt.write(event.feature);
 
                         //set geometry for drawFilter
                         me.selectedGeometry = featureWKT;
@@ -1000,7 +997,6 @@ Oskari.clazz.define(
          */
         _toggleDrawPlugins: function (enabled) {
             var me = this,
-                sandbox = me.sandbox,
                 mapModule = me.mapModule;
 
             var drawPlugins = _.filter(
@@ -1028,7 +1024,6 @@ Oskari.clazz.define(
          */
         _toggleDrawFilterPlugins: function (enabled) {
             var me = this,
-                sandbox = this.sandbox,
                 mapModule = this.mapModule;
 
             var drawFilterPlugins = _.filter(

@@ -339,7 +339,6 @@ Oskari.clazz.define(
          * Updates data for layer
          */
         updateData: function (layer) {
-            var me = this;
             var panel = this.layers['' + layer.getId()];
             var isOk = this.tabsContainer.isSelected(panel);
             if (!layer || !isOk) {
@@ -347,8 +346,7 @@ Oskari.clazz.define(
             }
 
             var map = this.instance.sandbox.getMap(),
-                container = panel.getContainer(),
-                i;
+                container = panel.getContainer();
 
             container.empty();
             if (!layer.isInScale(map.getScale())) {
@@ -463,7 +461,6 @@ Oskari.clazz.define(
                 }
 
                 var flyOutMinHeight = 100,
-                    bottomPadding = 60,
                     flyoutPosition = flyout.offset(),
                     containerPosition = container.offset();
 
@@ -481,9 +478,7 @@ Oskari.clazz.define(
                     container.css('max-height', (newContainerHeight - resizerHeight).toString() + 'px');
                     container.css('height', (newContainerHeight - resizerHeight).toString() + 'px');
 
-                    var tabsContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tabsContent'),
-                        newMaxHeight = e.pageY - tabsContent[0].offsetTop - resizerHeight - bottomPadding,
-                        tabTools = jQuery('div.oskari-flyoutcontent.featuredata').find('div.grid-tools');
+                    var tabTools = jQuery('div.oskari-flyoutcontent.featuredata').find('div.grid-tools');
                     if (tabTools.length > 0) {
                         newMaxHeight = newMaxHeight - tabTools.height();
                     }
@@ -526,7 +521,6 @@ Oskari.clazz.define(
          * @return {Array}  visible fields
          */
         getVisibleFields: function(layer){
-            var me = this;
             var fields = layer.getFields();
             var hiddenFields = [];
             var visibleFields = [];
@@ -714,7 +708,6 @@ Oskari.clazz.define(
                             jQuery('.featuredata-go-to-location').html(normalIconObj.outerHTML());
                             jQuery(this).html(activeIconObj.outerHTML());
 
-                            var feature = null;
                             //create the eventhandler for this particular fid
                             me.instance.eventHandlers.WFSFeatureGeometriesEvent = function(event) {
                                 var wkts = event.getGeometries(),
@@ -820,8 +813,7 @@ Oskari.clazz.define(
             if (!this.active || !layer || isNaN(opacity)) {
                 return;
             }
-            var me = this,
-                panel = this.layers['' + layer.getId()],
+            var panel = this.layers['' + layer.getId()],
                 tabContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-content');
                 isOk = this.tabsContainer.isSelected(panel);
 

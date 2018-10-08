@@ -251,8 +251,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             toolsDiv.append(footer);
 
-            var opa = layerDiv.find('div.layer-opacity div.opacity-slider input'),
-                slider = this._addSlider(layer, layerDiv, opa);
+            var opa = layerDiv.find('div.layer-opacity div.opacity-slider input');
+            this._addSlider(layer, layerDiv, opa);
         },
         /**
          * @private
@@ -436,10 +436,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         _createLayerContainer: function(layer) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
-                reqName = 'ChangeMapLayerOpacityRequest',
-                opacityRequestBuilder = Oskari.requestBuilder(reqName),
                 layerId = layer.getId(),
-                value = layer.getOpacity(),
                 layerDiv = this.templateLayer.clone(),
                 tooltips = this.instance.getLocalization('layer').tooltip,
                 icon = layerDiv.find('div.layer-icon'),
@@ -583,11 +580,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          */
         handleLayerVisibilityChanged: function(layer, isInScale, isGeometryMatch) {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                lyrSel = 'li.layerselection2.layer.selected[layer_id=' + layer.getId() + ']',
+            var lyrSel = 'li.layerselection2.layer.selected[layer_id=' + layer.getId() + ']',
                 layerDiv = jQuery(this.container).find(lyrSel),
-                loc = this.instance.getLocalization('layer'),
                 footer = layerDiv.find('div.layer-tools'); // teardown previous footer & layer state classes
 
             footer.empty();
@@ -766,17 +760,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {jQuery} reference to the created footer
          */
-        _createLayerFooter: function(layer, layerDiv) {
+        _createLayerFooter: function(layer) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 tools = this.templateLayerFooterTools.clone(), // layer footer
-                loc = this.instance.getLocalization('layer'),
                 visReqName = 'MapModulePlugin.MapLayerVisibilityRequest',
                 visibilityRequestBuilder = Oskari.requestBuilder(visReqName),
-                s,
-                subLayers,
-                subLmeta = false,
-                subUuid;
+                s;
 
             // Sticky layers can't be hidden
             if (layer.isSticky()) {
@@ -836,8 +826,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          */
         _updatePublishPermissionText: function(layer, footer) {
-            var sandbox = this.instance.getSandbox(),
-                loc = this.instance.getLocalization('layer'),
+            var loc = this.instance.getLocalization('layer'),
                 publishPermission = layer.getPermission('publish');
 
             if (publishPermission === 'publication_permission_ok' && Oskari.user().isLoggedIn()) {
@@ -872,7 +861,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     scale = sandbox.getMap().getScale(),
                     listContainer = jQuery('ul.selectedLayersList'),
                     layerContainer = this._createLayerContainer(layer),
-                    footer = layerContainer.find('div.layer-tools'), // footer tools
                     previousLayers = [];
 
                 // insert to top

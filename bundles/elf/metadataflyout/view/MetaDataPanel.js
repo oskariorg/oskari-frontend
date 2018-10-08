@@ -451,7 +451,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 me = this,
                 locale = me.locale,
                 model = me._model,
-                tabContainerHeader,
                 tabId;
 
             /* Tab container */

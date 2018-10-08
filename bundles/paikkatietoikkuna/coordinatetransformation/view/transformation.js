@@ -371,7 +371,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var cells;
             var coord;
             var inputCoords = [];
-            var srs = me.inputSystem.getSrs();
 
             rows.each(function(){
                 coord = [];
@@ -520,9 +519,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var crsSettings = this.getCrsOptions();
             var source = this.sourceSelect.getSourceSelection();
             var coords;
-            var validTransform;
             var fileSettings;
-            var file;
             if (source === 'file'){
                 fileSettings = this.importFileHandler.getSettings();
                 //file = this.fileInput.getFiles();
@@ -548,7 +545,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         transformToFile: function (settings){
             var crsSettings = this.getCrsOptions();
             var exportSettings = settings;
-            var file;
             var coords;
             var source = this.sourceSelect.getSourceSelection();
             if (source === 'file'){
@@ -588,8 +584,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         handleArrayResponse: function (response) {
             var resultCoords = response.resultCoordinates;
             var inputCoords = response.inputCoordinates;
-            //TODO check that response dimension matches
-            var dimension = response.dimension;
             var hasMoreCoordinates = response.hasMoreCoordinates;
             if (resultCoords){
                 this.dataHandler.setResultCoords(resultCoords);

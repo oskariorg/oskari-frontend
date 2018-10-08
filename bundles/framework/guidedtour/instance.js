@@ -361,7 +361,6 @@ Oskari.clazz.define(
             this.sandbox.unregister(this);
         },
         _getGuideContent: function(tags, callback){
-            var me = this;
             jQuery.ajax({
                 url: Oskari.urls.getRoute('GetArticlesByTag'),
                 data: {

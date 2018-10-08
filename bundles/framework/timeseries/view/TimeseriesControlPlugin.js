@@ -124,7 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _requestNewTime: function () {
             var me = this;
-            var index = d3.bisectLeft(this._uiState.times, this._uiState.currentTime) + 1;
             var nextTime = null;
             if (me._uiState.isAnimating) {
                 nextTime = this._getNextTime(this._uiState.currentTime);
@@ -200,7 +199,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _createControlElement: function () {
             var me = this,
-                sandbox = me.getSandbox(),
                 el = jQuery(
                     '<div class="mapplugin timeseriescontrolplugin">' +
                     '<div class="timeseries-timelines"><svg class="timeline-svg">' +

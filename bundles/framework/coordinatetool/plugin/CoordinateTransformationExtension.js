@@ -216,8 +216,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * format different degree presentations of lon/lat coordinates
          */
         _formatDegrees: function(lon, lat, type) {
-            var me = this,
-                degreesX,
+            var degreesX,
                 degreesY,
                 minutesX,
                 minutesY,

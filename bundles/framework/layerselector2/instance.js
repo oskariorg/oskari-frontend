@@ -241,9 +241,7 @@ Oskari.clazz.define(
             },
 
             'BackendStatus.BackendStatusChangedEvent': function (event) {
-                var me = this,
-                    layerId = event.getLayerId(),
-                    status = event.getStatus(),
+                var layerId = event.getLayerId(),
                     flyout = this.plugins['Oskari.userinterface.Flyout'],
                     mapLayerService = this.sandbox.getService(
                         'Oskari.mapframework.service.MapLayerService'

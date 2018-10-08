@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             me._latLabel = popupContent.find('.lat-label');
             me._lonLabel = popupContent.find('.lon-label');
-            var showLatLon = me._labelMetricOrDegrees();
+            me._labelMetricOrDegrees();
 
             popupContent.find('.coordinatetool__popup__content').html(loc('display.popup.info'));
             popupContent.find('.mousecoordinates-label').html(loc('display.popup.showMouseCoordinates'));
@@ -665,7 +665,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
@@ -897,8 +896,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _updateReverseGeocode: function(data) {
             var me = this,
                 locale = me._locale('display.reversegeocode'),
-                service = me._instance.getService(),
-                popup = me._getPopup();
+                service = me._instance.getService();
 
             if (me._toolOpen !== true || me._reverseGeocodeNotImplementedError === true) {
                 return;

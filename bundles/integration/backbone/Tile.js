@@ -40,8 +40,6 @@ function(instance, locale) {
 		this.state = state;
 	},
 	refresh : function() {
-		var me = this;
-		var instance = me.instance;
 	}
 }, {
 	'protocol' : ['Oskari.userinterface.Tile']

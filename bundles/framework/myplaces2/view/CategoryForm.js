@@ -89,8 +89,7 @@ Oskari.clazz.define(
          * @return {jQuery} jquery reference for the form
          */
         getForm: function () {
-            var ui = this.template.clone(),
-                table = ui.find('div.drawing table');
+            var ui = this.template.clone();
             // populate the rendering fields
             var content = ui.find('div.rendering');
             content.append(this.visualizationForm.getForm());

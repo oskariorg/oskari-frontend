@@ -73,8 +73,7 @@ function() {
   */
   setEnabled : function(enabled) {
       var me = this,
-          tool = me.getTool(),
-          request;
+          tool = me.getTool();
 
       me.state.enabled = enabled;
       if(tool.config.instance.plugin === null && enabled) {

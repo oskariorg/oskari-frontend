@@ -362,9 +362,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             if (this.getElement()) {
                 this.teardownUI(true);
             }
-            var me = this;
             var mobileDefs = this.getMobileDefs();
-            var sandbox = me.getSandbox();
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             if (!forced && toolbarNotReady) {
                 return true;

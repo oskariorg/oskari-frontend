@@ -30,8 +30,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var toolId = request.getToolId();
-            var namespace = request.getNamespace();
             var toolName = request.getToolName();
             var stateHandler;
             if (toolName === 'map_control_tool_prev') {

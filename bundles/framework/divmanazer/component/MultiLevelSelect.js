@@ -92,7 +92,6 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
             // TODO add a startIndex to this so we can only update selects
             // 'below' the changed value
             var me = this,
-                handler = me.getHandler(),
                 i,
                 j,
                 select,
@@ -220,8 +219,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          */
         setName: function (name) {
             
-            var me = this,
-                i;
+            var me = this;
 
             me._name = name;
             me._selects.forEach(function (select) {

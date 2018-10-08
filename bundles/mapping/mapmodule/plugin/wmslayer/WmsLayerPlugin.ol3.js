@@ -49,13 +49,11 @@ Oskari.clazz.define(
             }
 
             var layers = [],
-                olLayers = [],
-                layerIdPrefix = 'layer_';
+                olLayers = [];
             // insert layer or sublayers into array to handle them identically
             if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap === true) && (layer.getSubLayers().length > 0)) {
                 // replace layers with sublayers
                 layers = layer.getSubLayers();
-                layerIdPrefix = 'basemap_';
             } else {
                 // add layer into layers
                 layers.push(layer);
@@ -204,11 +202,9 @@ Oskari.clazz.define(
         },
         updateLayerParams: function(layer, forced, params) {
             var me = this,
-            	sandbox = this.getSandbox(),
             	i,
             	olLayerList,
                 count,
-                usePostMethod = false,
                 count = 0,
                 proxyUrl = null;
             if (!layer) {

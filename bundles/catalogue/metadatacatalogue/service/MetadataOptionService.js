@@ -48,7 +48,6 @@ function(searchUrl) {
 	 *            onComplete callback method for search completion
      */
     getOptions : function(onSuccess, onError) {
-        var lang = Oskari.getLang();
         var epsg = Oskari.getSandbox().getMap().getSrsName();
         jQuery.ajax({
             dataType : 'json',

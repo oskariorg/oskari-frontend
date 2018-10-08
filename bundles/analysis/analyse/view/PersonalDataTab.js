@@ -215,7 +215,6 @@ Oskari.clazz.define(
          */
         _deleteAnalysis: function (layer, showDialog) {
             var me = this,
-                sandbox = this.instance.sandbox,
                 tokenIndex = layer.getId().lastIndexOf('_') + 1, // parse actual id from layer id
                 idParam = layer.getId().substring(tokenIndex);
 

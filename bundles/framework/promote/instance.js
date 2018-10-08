@@ -228,7 +228,6 @@ function() {
      * (re)creates the UI for "selected layers" functionality
      */
     createUi: function() {
-        var me = this;
         this.plugins['Oskari.userinterface.Flyout'].createUi();
         this.plugins['Oskari.userinterface.Tile'].refresh();
     }

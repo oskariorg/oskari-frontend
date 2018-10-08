@@ -1,6 +1,5 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
-import olStyleStyle from 'ol/style/Style';
 import * as olExtent from 'ol/extent';
 import olInteractionDraw from 'ol/interaction/Draw';
 import olInteractionModify from 'ol/interaction/Modify';

@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
     __idPrefix: 'geometryCutter-',
     eventHandlers: {
         'DrawingEvent': function (event) {
-            var me = this;
             var drawId = event.getId();
             if (drawId.substr(0, this.__idPrefix.length) !== this.__idPrefix || !event.getIsFinished()) {
                 return;

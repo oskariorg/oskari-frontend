@@ -113,8 +113,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.WfsLayer[]} layers
          */
         preselectLayers: function (layers) {
-            var sandbox = this.getSandbox(),
-                i,
+            var i,
                 layer,
                 layerId;
 
@@ -205,8 +204,7 @@ Oskari.clazz.define(
          * @param {Boolean} isNew  is WMS openLayer already on Map
          */
         _addMapLayersToMap: function (layer, openLayer, keepLayerOnTop, isNew) {
-            var me = this,
-                openLayerId = 'layer_' + layer.getId(),
+            var openLayerId = 'layer_' + layer.getId(),
                 renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 
             renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
@@ -682,9 +680,6 @@ Oskari.clazz.define(
                         'default': style
                     })
                 }
-            ),
-            myPlacesService = this.getSandbox().getService(
-                'Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'
             );
 
             /*  GeoServer is used instead.

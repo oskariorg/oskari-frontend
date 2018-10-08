@@ -148,7 +148,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
          */
         removeMarkersFromMap: function(){
             var me=this,
-                rn='MapModulePlugin.RemoveMarkersRequest',
                 reqBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.RemoveMarkersRequest'
                 );

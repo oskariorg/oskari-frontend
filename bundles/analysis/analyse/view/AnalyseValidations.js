@@ -209,10 +209,7 @@ Oskari.clazz.category(
          * @return {Boolean} returns true if no validation errors, false otherwise
          */
         _validate_method_areas_and_sectors: function (selections, errorTitle) {
-            var areaCount = selections.methodParams.areaCount,
-                areaSize = selections.methodParams.areaSize,
-                sectorCount = selections.methodParams.sectorCount,
-                noErrors = true;
+            var noErrors = true;
 
             // FIXME add validation once we know:
             // - which fields are mandatory

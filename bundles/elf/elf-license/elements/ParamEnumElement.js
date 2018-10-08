@@ -116,8 +116,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 var me = this,
                     duration = value.substring(1, value.length - 1),
                     unit = value[value.length - 1],
-                    durationLocalisation = null,
-                    durationSplit;
+                    durationLocalisation = null;
 
                 if (!duration || isNaN(duration)) {
                     return value;

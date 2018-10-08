@@ -2,7 +2,6 @@
  * @class Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierServic
  */
 (function(Oskari) {
-    var _log = Oskari.log('HierarchicalLayerlist.OskariEventNotifierService');
 
     Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService',
 

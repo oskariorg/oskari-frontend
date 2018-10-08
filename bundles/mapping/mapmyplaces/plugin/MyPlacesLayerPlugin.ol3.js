@@ -61,8 +61,7 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var openLayerId = 'layer_' + layer.getId(),
-                map = this.getMapModule();
+            var map = this.getMapModule();
             var openlayer = new olLayerImage({
                 source: new olSourceImageWMS({
                     url: layer.getWmsUrl(),

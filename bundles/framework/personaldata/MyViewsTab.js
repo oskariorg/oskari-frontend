@@ -153,7 +153,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          */
         _editView: function (view) {
             var me = this;
-            var sandbox = this.instance.getSandbox();
             var service = me.instance.getViewService();
 
             var successCallback = function (newName, newDescription, newDefault) {
@@ -228,7 +227,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             okBtn.setTitle(this.loc('tabs.myviews.button.save'));
             okBtn.addClass('primary');
 
-            var sandbox = this.instance.sandbox;
             okBtn.setHandler(function () {
                 var errors = form.validate();
                 if (errors.length === 0) {

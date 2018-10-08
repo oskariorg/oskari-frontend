@@ -51,7 +51,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
             var me = this,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
-                request,
                 p;
 
 

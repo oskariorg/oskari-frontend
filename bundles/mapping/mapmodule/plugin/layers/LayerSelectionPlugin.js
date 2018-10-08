@@ -630,7 +630,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
             } else {
                 var icon = div.find('div.header div.header-icon'),
-                    header = div.find('div.header'),
                     mapmodule = me.getMapModule(),
                     size = mapmodule.getSize();
 
@@ -642,7 +641,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me._handleMapSizeChanged(size, false);
 
                 var layersTitle = div.find('.content-header');
-                var layersTitleHeight = 0;
 
                 if(layersTitle.length==0){
                     layersTitle = div.find('.header');
@@ -650,7 +648,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
                 // Get layers title height
                 if(layersTitle.length>0){
-                    layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
                 }
             }
 
@@ -747,7 +744,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             var icon = element.find('div.header div.header-icon');
-            var header = element.find('div.header');
 
             icon.removeClass('icon-arrow-white-down');
             icon.addClass('icon-arrow-white-right');
@@ -769,7 +765,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
@@ -793,8 +788,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
-                element = me.getElement(),
-                mapModule = me.getMapModule();
+                element = me.getElement();
 
             if (conf) {
                 if (conf.toolStyle) {
@@ -832,8 +826,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            var self = this,
-                header = div.find('div.header'),
+            var header = div.find('div.header'),
                 contentHeader = this.templates.contentHeader.clone(),
                 resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/mapping/mapmodule/resources/images/',

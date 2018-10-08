@@ -29,6 +29,7 @@ module.exports = {
     // allow debugger during development
     "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0,
     // enforce single quote
-    "quotes": ["error", "single", {"allowTemplateLiterals": true, "avoidEscape": true}]
+    "quotes": ["error", "single", {"allowTemplateLiterals": true, "avoidEscape": true}],
+    "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }]
   }
 }

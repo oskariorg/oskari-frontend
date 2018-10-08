@@ -89,8 +89,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
-                ajaxUrl = null;
+                sandbox = Oskari.getSandbox(sandboxName);
 
             if (me.started) {
                 return;

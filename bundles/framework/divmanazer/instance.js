@@ -707,8 +707,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
             /* opening  flyouts 'attached' closes previously attachily opened  flyout(s) */
             if (state === 'attach' && flyoutInfo) {
-                var extTop = null,
-                    extLeft = null;
 
                 if (request.getExtensionLocation().top || request.getExtensionLocation().left) {
                     me.origExtensionLocation = {};

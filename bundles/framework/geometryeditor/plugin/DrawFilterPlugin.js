@@ -844,7 +844,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             k,
             l,
             m,
-            n,
             marker = this.activeMarker,
             markers = this.markers;
 
@@ -861,14 +860,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         if (pInd < 0) { // This should not happen
             return;
         }
-        var remPolygon = null;
 
         // Remove the point from old polygon
         var features = this.targetLayer.features,
             fInd;
         for (i = 0; i < features.length; i += 1) {
             if (features[i].geometry.id === p[pInd].references[0]) {
-                remPolygon = features[i].geometry;
                 fInd = i;
                 break;
             }
@@ -1906,8 +1903,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @private
      */
     _splitGeometryByLine: function (polygons, splitGeom) {
-        var me = this,
-            // Transform and scale coordinates
+        var // Transform and scale coordinates
             origin = new OpenLayers.Geometry.Point(0.0, 0.0),
             reference = [polygons.geometry.components[0].components[0].components[0].x,
                 polygons.geometry.components[0].components[0].components[0].y
@@ -1941,8 +1937,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             olLinearRingPoints = [],
             olLinearRings,
             olLineStringPoints = [],
-            olPolygon,
-
             // JSTS variables
             jstsParser = new jsts.io.OpenLayersParser(),
             jstsPoints,
@@ -1982,8 +1976,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             epsilon = 1.0e6, // about 10 cm x 10 cm
 
             // Scaling factor for integer operations
-            scale = 1,
-            marker;
+            scale = 1;
 
         // IE8 compatibility
         this._enableIE8();
@@ -2023,7 +2016,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         lastIndex = postLineStrings.lastIndex;
 
         // Create boundary markers
-        var createdMarkers = this.createBoundaryMarkers(olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found);
+        this.createBoundaryMarkers(olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found);
 
         // Update boundary info
         this.updateBoundaryInfo(olNewFeatures);

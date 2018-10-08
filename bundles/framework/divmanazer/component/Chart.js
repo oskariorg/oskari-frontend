@@ -174,7 +174,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      */
     initChart: function () {
         this.svg = this.getSVGTemplate();
-        var scales = this.initScales();
+        this.initScales();
         var chart = this.chart( this.svg );
         return chart;
     },
@@ -210,7 +210,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function() {
      * @method svgAppendElements
      */
     svgAppendElements: function () {
-        var me = this;
 
         // append x-tick lines to chart
         var xtickAxis = this.svg.append('g')

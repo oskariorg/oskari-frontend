@@ -19,8 +19,7 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var me = this,
-            	layerIdPrefix = 'layer_',
+            var layerIdPrefix = 'layer_',
             	key;
 
             // default params and options
@@ -32,8 +31,7 @@ Oskari.clazz.define(
                     FORMAT: 'image/png',
                     SLD_BODY : this.__getSLD(layer),
                 },
-                layerParams = layer.getParams(),
-                layerOptions = layer.getOptions();
+                layerParams = layer.getParams();
                 layerAttributes = layer.getAttributes() || undefined;
 
             if (layer.getMaxScale() || layer.getMinScale()) {
@@ -70,8 +68,6 @@ Oskari.clazz.define(
                 opacity: layer.getOpacity() / 100,
                 visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
             });
-
-            var params = openlayer.getSource().getParams();
 
             this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
             this.setOLMapLayers(layer.getId(), openlayer);

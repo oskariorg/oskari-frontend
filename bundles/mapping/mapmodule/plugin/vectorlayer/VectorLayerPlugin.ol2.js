@@ -147,8 +147,7 @@ Oskari.clazz.define(
          * @public preselect layers
          */
         preselectLayers: function(layers) {
-            var sandbox = this.getSandbox(),
-                i,
+            var i,
                 ilen,
                 layer,
                 layerId;
@@ -205,7 +204,6 @@ Oskari.clazz.define(
          */
         removeFeaturesFromMap: function(identifier, value, layer) {
             var me = this,
-                foundFeatures,
                 olLayer,
                 layerId;
 

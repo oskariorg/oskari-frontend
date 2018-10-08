@@ -248,7 +248,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 var features = response.reqFeatures;
                 // deal with inserts, updates, and deletes
                 var state, feature;
-                var destroys = [];
                 var insertIds = response.insertIds || [],
                     i,
                     id,
@@ -516,7 +515,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 var features = response.reqFeatures;
                 // deal with inserts, updates, and deletes
                 var state, feature;
-                var destroys = [];
                 var insertIds = response.insertIds || [];
                 var formattedIdList = [],
                     i,

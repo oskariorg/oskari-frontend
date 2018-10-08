@@ -205,8 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * Creates logo and terms of use links on top of map
          */
         _createUI: function () {
-            var me = this,
-                sandbox = me._sandbox;
+            var me = this;
             // get div where the map is rendered from openlayers
             var parentContainer = jQuery(this._map.div);
             if (!this.element) {
@@ -233,11 +232,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * renders pop-up
          */
         _openDialog: function () {
-            var me = this,
-                sandbox = me._sandbox,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = dialog.createCloseButton(this.localization.button.close),
-                infoIcon = this.templateinfoIcon.clone(),
                 groupTemplate = this.templategroupTemplate.clone(),
                 selectedLayers = this._getLayers(),
                 group = null,

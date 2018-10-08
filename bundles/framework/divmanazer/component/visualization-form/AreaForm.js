@@ -258,22 +258,6 @@ Oskari.clazz.define(
                 }
             });
             content.append(widthSpinner);
-            var c,
-                statedChosenColor,
-                cType,
-                colorCell,
-                idExt,
-                id,
-                colorCheckbox,
-                colorTypeId,
-                cell,
-                activeCell,
-                customColorEditor,
-                redValue,
-                greenValue,
-                blueValue,
-                rgb;
-            
             // Create color pickers
             me._createColorPickers();
             var colorPickerLineWrapper = dialogContent.find('.color-picker-area-line-wrapper');

@@ -487,9 +487,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 panel = Oskari.clazz.create(
                     'Oskari.userinterface.component.AccordionPanel'
                 ),
-                headerPanel = panel.getHeader(),
-                contentPanel = panel.getContainer(),
-                tooltipCont = this.template.help.clone();
+                contentPanel = panel.getContainer();
 
             panel.setTitle(this.loc.settings.label);
 
@@ -540,8 +538,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 columnsTitle = me.template.title_columns.clone(),
                 tooltipCont = me.template.help.clone(),
-                i,
-                option,
                 toolContainer;
 
             columnsTitle.find('.columns_title_label').html(title);
@@ -985,7 +981,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _addAnalyseData: function (contentPanel, inserted_layer_id) {
             var me = this,
-                i,
                 layersContainer = contentPanel.getLayersContainer(),
                 sandbox = me.instance.getSandbox(),
                 layers = sandbox.findAllSelectedMapLayers(),
@@ -1190,7 +1185,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
                 analysisWFSLayer,
-                selectedFids,
                 selectedGeometry = null,
                 feature = null;
 
@@ -1314,7 +1308,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     bufferUnitSelect = bufferOptions.find(
                         'select.settings_buffer_units'
                     ),
-                    tooltipCont = this.template.help.clone(),
                     unit;
 
                 this._addTitle(contentPanel, me.loc.buffer_size.label, this.loc.buffer_size.labelTooltip);
@@ -1345,9 +1338,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
              * @param {jQuery} contentPanel  div to append extra params
              */
             aggregate: function (me, contentPanel) {
-                var i,
-                    option,
-                    toolContainer;
+                var toolContainer;
                 // Title
                 me._addTitle(contentPanel, me.loc.aggregate.label, me.loc.aggregate.labelTooltip);
 
@@ -1485,14 +1476,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             intersect: function (me, contentPanel, full) {
                 // Set radiobuttons for selecting intersecting layer
                 var options = me._getLayerOptions(false, true, false),
-                    option,
                     optionChecked,
                     targetLayer = _.find(options, {
                         'data': true
                     }),
                     targetLayerElem = jQuery('<span></span>'),
                     toolContainer,
-                    i,
                     input,
                     label,
                     showSpatial = full !== undefined ? full : true; // Show also spatial operator choice
@@ -1828,7 +1817,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var loc = me.loc.spatial_join,
                     extraParams = me.template.difference.clone(),
                     featureList,
-                    firstField,
                     options = me._getLayerOptions(false, true, false),
                     option,
                     targetLayerOption = _.find(options, {
@@ -2676,7 +2664,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 sandbox = me.instance.getSandbox(),
                 selections = me._gatherSelections(),
                 functions = selections.methodParams.functions,
-                i,
                 showError = function (error) {
                     me.instance.showMessage(
                         me.loc.error.title,
@@ -2985,7 +2972,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 additionalUuidsCheck[uuid] = true;
 
                 var subLayers = layer.getSubLayers() || [],
-                    s,
                     subUuid;
 
                 subLayers.forEach(function (subLayer) {
@@ -3024,11 +3010,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _filterRequest: function (tools, analyse_layer_id) {
             var me = this,
                 filterIcon = tools.find('div.filter'),
-                popupContent,
                 prevJson,
                 selectedLayer,
-                isLayerSelected,
-
                 // From 'oskari_analyse_layer_{id}' to '{id}'
                 layerId = analyse_layer_id.replace((this.id_prefix + 'layer_'), ''),
                 layer = this.instance.mapLayerService.findMapLayer(layerId);

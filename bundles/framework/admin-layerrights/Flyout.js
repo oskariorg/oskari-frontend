@@ -274,8 +274,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         },
 
         handleRoleChange: function(role, operation) {
-            var me = this,
-                select = jQuery(this.container).find('select.admin-layerrights-role'),
+            var select = jQuery(this.container).find('select.admin-layerrights-role'),
                 option = select.find('option[value=' + role.id + ']');
 
             if (operation == 'remove') {
@@ -304,8 +303,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService'),
                 headerRow = me._templates.row.clone(),
                 controlRow = me._templates.row.clone(),
-                controlCell,
-                checkboxes,
                 columnsLoc = this.instance.getLocalization('rights');
 
                 controlRow.addClass('control');
@@ -339,7 +336,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 var layer = service.findMapLayer(layerRight.id),
                     dataRow = me._templates.row.clone(),
                     cell = null,
-                    tooltip = null,
                     dataCell = me._templates.cellTd.clone();
 
                 if (layer) {

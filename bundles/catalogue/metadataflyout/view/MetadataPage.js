@@ -40,7 +40,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          */
         _createContent: function (data) {
             var me = this,
-                browseGraphics,
                 i,
                 me = this,
                 model,
@@ -96,15 +95,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          *
          */
         _processJSON: function (uuid, metadataJson) {
-            var abstractText,
-                me = this,
+            var me = this,
                 data,
                 dataTemplate,
                 i,
-                identification,
-                imgObj,
-                identificationTemplate,
-                url;
+                identificationTemplate;
             // underscore templates don't like missing values, so let's extend empty strings and arrays...
             dataTemplate = {
                 lineageStatements: [],

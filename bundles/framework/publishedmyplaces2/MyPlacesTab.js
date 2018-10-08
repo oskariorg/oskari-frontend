@@ -41,7 +41,6 @@ function(instance, localization) {
         this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc['nocategories']);
     },
     addTabContent : function(container) {
-        var me = this;
         this.initTabContent();
         container.append(this.tabsContainer.ui);
     },
@@ -57,7 +56,6 @@ function(instance, localization) {
         'MyPlaces.MyPlacesChangedEvent' : function(event) {
             var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
             var categories = service.getAllCategories();
-            var places = service.getAllMyPlaces();
             var me = this;
 /*
             var publishLinkClosure = function(id, isPublic) {

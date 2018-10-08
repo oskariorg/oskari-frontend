@@ -451,9 +451,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param {Boolean} suppressEvent true to not send out an event about adding marker
          */
         addMapMarker: function(markerData, id, suppressEvent) {
-            var me = this,
-                size;
-
+            var me = this;
             // Combine default values with given values
             var data = this.__getSanitizedMarker(markerData, id);
             if (!data) {

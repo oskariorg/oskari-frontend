@@ -79,9 +79,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         _initImpl: function () {
             var me = this,
                 sandbox = me.getSandbox(),
-                reqBuilder = Oskari.requestBuilder(
-                    'ToolSelectionRequest'
-                ),
                 gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
                 gfiReqBuilder = Oskari.requestBuilder(gfiRn),
                 mapmodule = me.getMapModule(),
@@ -274,8 +271,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          */
         _createControlElement: function (mapInMobileMode) {
             var me = this,
-                el,
-                sandbox = me.getSandbox();
+                el;
 
             el = me.template.clone();
             if (!me._toolbarContent) {
@@ -314,7 +310,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
 
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
@@ -339,12 +334,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     toolStyle = 'rounded-dark';
                 }
 
-                var imgPath = me.getImagePath(),
-                    styledImg = imgPath + 'menu-' + toolStyle + '.png',
-                    icon = div.find('.icon'),
-                    blackOrWhite = toolStyle ? toolStyle.split('-')[1] : 'dark';
+                var icon = div.find('.icon');
 
-                var styledImgClass = 'menu-' + toolStyle;
 
                 if (toolStyle === null) {
                     icon.removeAttr('style');
@@ -492,14 +483,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         _openToolsPopup: function () {
             var me = this,
-                conf = me.conf,
                 mapmodule = me.getMapModule(),
                 isMobile = Oskari.util.isMobile(),
                 sandbox = me.getSandbox(),
                 popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
 
-            var popupTitle = 'Toolbar',
-                el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-publishedtoolbar'),
+            var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-publishedtoolbar'),
                 topOffsetElement = jQuery('div.mobileToolbarDiv'),
                 theme = mapmodule.getTheme(),
                 wantedTheme = (theme === 'dark') ? 'light' : 'dark',
@@ -621,9 +610,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 contentDiv = me.getElement().find('.' + className),
                 appendContentDiv = false,
                 actionDiv,
-                i,
-                contentHeight,
-                reasonableHeight;
+                i;
             if (contentDiv.length === 0) {
                 // no container found, clone a new one
                 contentDiv = me.templates.publishedToolbarPopupContent.clone();

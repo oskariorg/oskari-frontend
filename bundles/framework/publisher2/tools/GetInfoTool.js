@@ -166,8 +166,7 @@ function() {
     */
     setEnabled : function(enabled) {
         var me = this,
-            tool = me.getTool(),
-            sandbox = me.__sandbox;
+            tool = me.getTool();
 
         //state actually hasn't changed -> do nothing
         if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {

@@ -24,8 +24,7 @@ Oskari.clazz.define(
          */
         handleRequest: function (core, request) {
             var options = request.getOptions() || {},
-                hidePrevious = options.hidePrevious || false,
-                mobileBreakpoints = options.mobileBreakpoints;
+                hidePrevious = options.hidePrevious || false;
             if (hidePrevious) {
                 this.popupPlugin.close(undefined);
             }

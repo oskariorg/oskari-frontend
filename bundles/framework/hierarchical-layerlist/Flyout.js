@@ -165,10 +165,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          */
         _getLayerGroups: function(groupingMethod) {
             var me = this,
-                groupList = [],
-                n,
-                layer,
-                groupAttr;
+                groupList = [];
 
             var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();
 
@@ -549,9 +546,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method  @public populateLayers
          */
         populateLayers: function() {
-            var me = this;
-            var sandbox = this.instance.getSandbox(),
-                i,
+            var i,
                 tab,
                 groups;
 
@@ -584,13 +579,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 return;
             }
 
-            var filter = {
-                toolText: toolText,
-                tooltip: tooltip,
-                iconClassActive: iconClassActive,
-                iconClassDeactive: iconClassDeactive,
-                filterName: filterName
-            };
             var loc = me.instance.getLocalization('layerFilter');
 
             me.layerTabs.forEach(function(tab) {

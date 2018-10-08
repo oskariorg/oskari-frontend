@@ -154,7 +154,6 @@ Oskari.clazz.define(
                 return;
             }
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.

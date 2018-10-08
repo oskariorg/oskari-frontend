@@ -107,7 +107,6 @@ function(instance) {
         me.refresh();
     },
     notifyUser : function() {
-        var me = this;
         var status = this.container.children('.oskari-tile-status');
 
         // stop current animation

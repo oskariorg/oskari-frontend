@@ -406,8 +406,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          */
         bindUpKey: function (callback) {
 
-            var me = this,
-                input = this._field.find('input');
+            var input = this._field.find('input');
 
             input.on('keyup', function (event) {
                 callback(event);

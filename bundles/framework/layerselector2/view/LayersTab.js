@@ -416,7 +416,6 @@ Oskari.clazz.define(
             var oskarifield = jQuery(event.currentTarget).parents(
                     '.oskarifield'
                 ),
-                loc,
                 relatedKeywordsCont,
                 ajaxUrl;
 

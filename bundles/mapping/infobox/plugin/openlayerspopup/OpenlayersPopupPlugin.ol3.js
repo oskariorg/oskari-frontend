@@ -409,7 +409,6 @@ Oskari.clazz.define(
             return _.foldl(contentData, function (contentDiv, datum, index) {
                 var contentWrapper = me._contentWrapper.clone(),
                     actions = datum.actions,
-                    key,
                     actionTemplate,
                     btn,
                     link,
@@ -637,7 +636,7 @@ Oskari.clazz.define(
                 maxHeight = size.height * 0.7;
             popup.find('.popupHeader').css('width', '100%');
 
-            var content = popup.find('.popupContent').css({
+            popup.find('.popupContent').css({
                 'margin-left': '0',
                 'padding': '5px 20px 5px 20px',
                 'max-height': maxHeight - 40 + 'px'
@@ -648,7 +647,6 @@ Oskari.clazz.define(
                 'height': '100%'
             });
 
-            var wrapper = content.find('.contentWrapper');
             popup.css({
                 'height': 'auto',
                 //just have some initial width, other than auto, so that we don't get ridiculous widths with wide content

@@ -278,7 +278,6 @@ Oskari.clazz.define(
                 if (this.drawFilterMode || !this.instance.analyse.isEnabled) {
                     return;
                 }
-                var olMap = this.mapModule.getMap();
                 this.mapModule.bringToTop(this.featureLayer);
             },
             'AfterMapLayerAddEvent': function(event) {
@@ -505,7 +504,6 @@ Oskari.clazz.define(
          *
          */
         addFeature: function (feature, mode, name) {
-            var me = this;
 
             feature.setId(this.drawLayerId);
 
@@ -909,8 +907,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            var me = this,
-                diaLoc = this.loc.content.drawFilter.dialog,
+            var diaLoc = this.loc.content.drawFilter.dialog,
                 controlButtons = [],
                 dialogTitle,
                 dialogText;

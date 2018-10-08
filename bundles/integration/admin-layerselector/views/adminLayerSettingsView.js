@@ -167,7 +167,6 @@ define([
             selectMaplayerGroups: function() {
                 var me = this;
                 var buttons = [];
-                var selectedGroups = {};
 
                 var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -380,7 +379,6 @@ define([
              */
             render: function() {
                 var me = this;
-                var spinnerContainer;
 
                 // set id for this layer
                 if (me.model && me.model.getId()) {
@@ -423,8 +421,7 @@ define([
              * Updates user roles.
              */
             _rolesUpdateHandler: function() {
-                var sandbox = Oskari.getSandbox(),
-                    roles = Oskari.user().getRoles();
+                var roles = Oskari.user().getRoles();
 
                 this.roles = new userRoleCollection(roles).getRoles();
             },
@@ -435,8 +432,7 @@ define([
              * @method createLayerSelect
              */
             createLayerSelect: function(e) {
-                var me = this,
-                    element = jQuery(e.currentTarget),
+                var element = jQuery(e.currentTarget),
                     addLayerWrappers = element.parents('.add-layer-wrapper'),
                     addGroups = element.parents('.admin-add-group'),
                     layerTypeWrappers = element.parents('.layer-type-wrapper');
@@ -657,8 +653,7 @@ define([
              */
             importSldStyle: function(e) {
                 e.stopPropagation();
-                var me = this,
-                    element = jQuery(e.currentTarget),
+                var element = jQuery(e.currentTarget),
                     form = element.parents('.add-style-send'),
                     sldImport = form.find('.add-layer-style-import-block');
 
@@ -676,8 +671,7 @@ define([
              */
             cancelSldStyle: function(e) {
                 e.stopPropagation();
-                var me = this,
-                    element = jQuery(e.currentTarget),
+                var element = jQuery(e.currentTarget),
                     form = element.parents('.add-style-send'),
                     sldImport = form.find('.add-layer-style-import-block'),
                     sldImportBtn = form.find('.import-wfs-style-button');
@@ -701,8 +695,7 @@ define([
                     sldImport = form.find('.add-layer-style-import-block'),
                     sldImportBtn = form.find('.import-wfs-style-button'),
                     sldName = form.find('.add-layer-sld-style-sldname').val(),
-                    sldXml = form.find('.add-sld-file').val(),
-                    newId = 0;
+                    sldXml = form.find('.add-sld-file').val();
 
                 //Check if sld is valid
                 if (me._checkXml(sldXml)) {
@@ -765,8 +758,7 @@ define([
              */
             selectedSldStyles: function(form) {
 
-                var me = this,
-                    selectedStyles = {},
+                var selectedStyles = {},
                     styles = [];
 
                 form.find('#add-layer-sld-style option:selected').each(function() {
@@ -782,8 +774,7 @@ define([
                 return selectedStyles;
             },
             _DefaultStylesUI: function(element, selection) {
-                var me = this,
-                    form = element.parents('.admin-add-layer'),
+                var form = element.parents('.admin-add-layer'),
                     defaelem = form.find('#add-layer-style');
 
                 defaelem.find('option').remove();
@@ -820,8 +811,7 @@ define([
                     confirmMsg = me.instance.getLocalization('admin').confirmDeleteLayer,
                     dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton'),
-                    cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
-                    sandbox = Oskari.getSandbox();
+                    cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
 
                 if (callback) {
                     addLayerDiv = jQuery('.admin-layerselector .admin-add-layer.show-edit-layer[data-id=' + me.options.baseLayerId + ']');
@@ -1025,7 +1015,6 @@ define([
 
                 var me = this,
                     element = jQuery(e.currentTarget),
-                    accordion = element.parents('.accordion'),
                     form = element.parents('.admin-add-layer'),
                     data = {},
                     interfaceVersion = form.find('#add-layer-interface-version').val(),
@@ -1264,7 +1253,6 @@ define([
                     element = jQuery(e.currentTarget),
                     //                    editForm = element.parents('.admin-add-layer').attr('data-id'),
                     accordion = element.parents('.accordion');
-                var sandbox = me.options.instance.getSandbox();
                 // make AJAX call
                 jQuery.ajax({
                     type: 'POST',

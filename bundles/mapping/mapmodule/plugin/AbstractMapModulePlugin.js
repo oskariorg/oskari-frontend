@@ -219,8 +219,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          *
          */
         startPlugin: function (sandbox) {
-            var me = this,
-                handler;
+            var me = this;
 
             me._sandbox = sandbox;
             sandbox.register(me);
@@ -259,8 +258,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @param {Oskari.Sandbox} sandbox
          */
         stopPlugin: function (sandbox) {
-            var me = this,
-                handler;
+            var me = this;
 
             try {
                 me._stopPluginImpl(sandbox);

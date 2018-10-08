@@ -101,7 +101,6 @@ function() {
      * implements Module protocol init method - initializes request handlers
      */
     init : function() {
-        var me = this;
 
         // initialize drawPlugin
         this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
@@ -149,7 +148,6 @@ function() {
      */
     stop : function() {
         var me = this;
-        var sandbox = this.sandbox;
         // TODO: maybe stop/unregister drawplugin?
         me.sandbox.unregister(me);
         me.started = false;

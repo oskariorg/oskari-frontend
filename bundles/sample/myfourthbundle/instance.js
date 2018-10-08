@@ -108,7 +108,6 @@ function() {
      */
     stop : function() {
         var me = this;
-        var sandbox = me.sandbox();
         // unregister module from sandbox
         me.sandbox.unregister(me);
     },

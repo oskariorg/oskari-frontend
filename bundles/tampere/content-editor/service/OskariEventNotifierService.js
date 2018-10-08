@@ -2,7 +2,6 @@
  * @class Oskari.tampere.bundle.content-editor.OskariEventNotifierService
  */
 (function(Oskari) {
-    var _log = Oskari.log('ContentEditor.OskariEventNotifierService');
 
     Oskari.clazz.define('Oskari.tampere.bundle.content-editor.OskariEventNotifierService',
 

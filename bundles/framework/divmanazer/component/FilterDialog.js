@@ -461,8 +461,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 filterOption = jQuery(this.__filterTemplates.filterContentOption),
                 attrSelect = filterOption.find('select.attribute'),
                 attrPlaceHolder = this.loc.values.placeholders.attribute,
-                opSelect = filterOption.find('select.operator'),
-                opPlaceHolder = this.loc.values.placeholders.operator;
+                opSelect = filterOption.find('select.operator');
 
             filterOption.find('label').html(this.loc.values.placeholders['case-sensitive']);
 
@@ -528,7 +527,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          */
         _addManageFilterOption: function (layer) {
             var manageFilterOption = jQuery(this.__filterTemplates.manageFilterOption),
-                filterContentOption = jQuery(this.__filterTemplates.filterContentOption),
                 addTitle = this.loc.addFilter,
                 removeTitle = this.loc.removeFilter;
 
@@ -580,8 +578,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
         _changeAttributeFilter: function (element, layer) {
-            var me = this,
-                parent = element.parents('div.filter-option'),
+            var parent = element.parents('div.filter-option'),
                 filterList = element.parents('div.analyse-filter-popup-values'),
                 // Create another filter selection
                 newFilter = this._addAttributeFilter(layer),
@@ -625,8 +622,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @return {jQuery object}
          */
         _createBooleanSelect: function () {
-            var boolOption = jQuery(this.__filterTemplates.filterBooleanOption),
-                boolPlaceHolder = this.loc.values.placeholders.boolean;
+            var boolOption = jQuery(this.__filterTemplates.filterBooleanOption);
 
             // Put the default boolean values to the select.
             this._appendOptionValues(boolOption, null, [
@@ -945,8 +941,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
          */
         _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
-            var me = this,
-                prevJson,
+            var prevJson,
                 fields = propertyJson.propertyTypes;
             var layerAttributes = [];
             for (var key in fields) {

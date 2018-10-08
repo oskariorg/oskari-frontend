@@ -197,7 +197,6 @@ Oskari.clazz.define(
                 i,
                 loc = me.getLocalization(),
                 isVisible = false,
-                isInvisible = false,
                 countManu = 0,
                 countInvisi = 0,
                 countInscale = 0,
@@ -922,7 +921,6 @@ Oskari.clazz.define(
         refreshLayer: function (layerID, noBufferClean) {
             var bbox,
                 grid,
-                layers = [],
                 layerId,
                 layer,
                 me = this,

@@ -64,7 +64,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 return;
             }
             var me = this;
-            var sandbox = me.getSandbox();
             if(this.getElement()) {
                 // ui already in place no need to do anything, override in plugins to do responsive
                 return;
@@ -370,7 +369,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
         },
         addToolbarButtons : function(buttons, group) {
-            var me  =this;
             var sandbox = this.getSandbox();
             var toolbar = this.getMapModule().getMobileToolbar();
             var themeColors = this.getMapModule().getThemeColours();

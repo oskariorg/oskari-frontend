@@ -34,8 +34,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.WmsLayer[]} layers
          */
         preselectLayers: function (layers) {
-            var sandbox = this.getSandbox(),
-                i,
+            var i,
                 layer,
                 layerId;
 

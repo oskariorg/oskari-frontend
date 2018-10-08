@@ -281,7 +281,6 @@ Oskari.clazz.define(
                 selectionToolsContainer = jQuery(me._templates.selectionToolsContainer).clone(),
                 selectionToolDiv = jQuery(me._templates.tool).clone(),
                 selectionToolButtonsContainer = selectionToolsContainer.find('div.toolContainerButtons'),
-                hasWFSLayers = (me.WFSLayerService.getTopWFSLayer() !== undefined && me.WFSLayerService.getTopWFSLayer() !== null),
                 WFSSelections = (me.WFSLayerService.getWFSSelections() && me.WFSLayerService.getWFSSelections().length > 0);
 
             //use the existing component to render selection buttons
@@ -317,8 +316,7 @@ Oskari.clazz.define(
          * @method deactivateSelectTools
          */
         deactivateSelectTools: function () {
-            var me = this,
-                toolsPanel = me.drawToolsPanel;
+            var me = this;
 
             me.selectionButtonsRenderer.removeButtonSelection();
             me.selectionPlugin.stopDrawing();

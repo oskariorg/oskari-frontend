@@ -78,11 +78,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             var me = this,
                 openlayer,
                 sandbox = me.getSandbox(),
-                map = sandbox.getMap(),
-                layerScales = me.getMapModule().calculateLayerScales(
-                    layer.getMaxScale(),
-                    layer.getMinScale()
-                ),
                 layerType;
 
             if (!layer.isLayerOfType(me._layerType) && !layer.isLayerOfType(me._layerType2)) {

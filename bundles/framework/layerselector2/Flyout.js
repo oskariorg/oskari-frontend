@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
      */
 
     function (instance) {
-        var me = this;
         this.instance = instance;
         this.container = null;
         this.template = null;
@@ -273,7 +272,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         populateLayers: function () {
             var me = this;
-            var sandbox = this.instance.getSandbox();
             // populate layer list
             var layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers();
             this.layerTabs.forEach(function (tab) {

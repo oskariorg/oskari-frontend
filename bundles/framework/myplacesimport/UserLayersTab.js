@@ -129,8 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @private
          */
         _deleteUserLayer: function (layerId) {
-            var me = this,
-                sandbox = me.instance.sandbox;
+            var me = this;
 
             // parse actual id from layer id
             var tokenIndex = layerId.lastIndexOf('_') + 1,
@@ -257,7 +256,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             var me = this,
                 styleForm,
                 form,
-                style,
                 dialog,
                 buttons = [],
                 saveBtn,
@@ -282,9 +280,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             saveBtn.addClass('primary');
             saveBtn.setHandler(function () {
                 var values = styleForm.getValues(),
-                    errors,
                     msg,
-                    layerJson,
                     title,
                     fadeout;
                 values.id = idParam;
@@ -342,8 +338,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @param {Object} form
          */
         _setStyleValuesToStyleForm: function (id, form){
-            var style,
-                me = this,
+            var me = this,
                 action = this.instance.getService().getGetUserLayerStyleUrl();
 
             jQuery.ajax({

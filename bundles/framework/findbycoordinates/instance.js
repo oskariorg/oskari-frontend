@@ -413,8 +413,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @return {String}
          */
         __getInfoBoxHtml: function (result) {
-            var me = this,
-                loc = this.getLocalization(),
+            var loc = this.getLocalization(),
                 lang = (result.lang && typeof result.lang ==='string') ? ' (' + result.lang.toUpperCase() + ')' : '';
 
             var item = this.__templates.item.clone();
