@@ -27,7 +27,6 @@
             var me = this;
 
             if (me.layerlistFilterButtons[filterId]) {
-                Oskari.log(this.getName()).warn(filterId + '-layerlist filter button has allready defined. Not register layerlist filter button.');
                 return;
             }
 
