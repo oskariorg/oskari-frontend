@@ -278,7 +278,6 @@ Oskari.clazz.define(
                 if (this.drawFilterMode || !this.instance.analyse.isEnabled) {
                     return;
                 }
-                var olMap = this.mapModule.getMap();
                 this.mapModule.bringToTop(this.featureLayer);
             },
             'AfterMapLayerAddEvent': function(event) {
