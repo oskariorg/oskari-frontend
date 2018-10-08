@@ -1,23 +1,4 @@
-import olStyleStyle from 'ol/style/Style';
-import olStyleFill from 'ol/style/Fill';
-import olStyleStroke from 'ol/style/Stroke';
-import olStyleCircle from 'ol/style/Circle';
-import olStyleIcon from 'ol/style/Icon';
-import olStyleText from 'ol/style/Text';
-import * as olExtent from 'ol/extent';
-import {defaults as olInteractionDefaults} from 'ol/interaction';
-import olFormatWKT from 'ol/format/WKT';
-import olFormatGeoJSON from 'ol/format/GeoJSON';
-import olView from 'ol/View';
-import {METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT} from 'ol/proj/Units';
-import * as olProjProj4 from 'ol/proj/proj4';
-import * as olProj from 'ol/proj';
-import olMap from 'ol/Map';
-import {defaults as olControlDefaults} from 'ol/control';
-import * as olSphere from 'ol/sphere';
-import * as olGeom from 'ol/geom';
-
-import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
+import MapModuleOl from './MapModule.ol';
 
 /**
  * @class Oskari.mapframework.ui.module.common.MapModule
@@ -28,6 +9,7 @@ import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
  *
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapmodule
  */
+<<<<<<< HEAD
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
     /**
      * @method create called automatically on construction
@@ -1133,10 +1115,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         }
         /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
+=======
+Oskari.clazz.defineES(
+    'Oskari.mapframework.ui.module.common.MapModule',
+    MapModuleOl,
+    {
+>>>>>>> 4f793ef8d6dbb5ae460498e7aa81ee6026177865
         /**
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.mapframework.module.Module'],
-        'extend': ['Oskari.mapping.mapmodule.AbstractMapModule']
-    });
+        'protocol': ['Oskari.mapframework.module.Module']
+    }
+);
