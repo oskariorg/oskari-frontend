@@ -1,10 +1,10 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
 
     function( instance ) {
-        var me = this;
-        me.instance = instance;
-        me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
-        me.container = null;
+        this.instance = instance;
+        this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
+        this.container = null;
+        this.flyout = null;
     }, {
         getName: function() {
             return 'Oskari.coordinatetransformation.Flyout';
@@ -15,10 +15,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
         getViews: function () {
             return this.views;
         },
-        setEl: function(el, width, height) {
-            this.container = el[0];
-            if ( !jQuery( this.container ).hasClass('coordinatetransformation-flyout') ) {
-                jQuery( this.container ).addClass('coordinatetransformation-flyout');
+        setEl: function(el, flyout, width, height) {
+            this.container = jQuery(el[0]);
+            this.flyout = flyout;
+            if ( !this.container.hasClass('coordinatetransformation') ) {
+                this.container.addClass('coordinatetransformation');
+            }
+            if (!this.flyout.hasClass('coordinatetransformation')) {
+                this.flyout.addClass('coordinatetransformation');
             }
         },
         createUi: function() {
@@ -33,8 +37,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
         },
         startPlugin: function() {
             this.template = jQuery();
-            var elParent = this.container.parentElement.parentElement;
-            jQuery( elParent ).addClass('coordinatetransformation-flyout');
         }
     }, {
         "extend": ["Oskari.userinterface.extension.DefaultFlyout"]

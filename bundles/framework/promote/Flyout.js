@@ -35,10 +35,13 @@ function(instance) {
      *
      * Interface method implementation
      */
-    setEl : function(el, width, height) {
+    setEl : function(el, flyout, width, height) {
         this.container = el[0];
         if (!jQuery(this.container).hasClass('promote')) {
             jQuery(this.container).addClass('promote');
+        }
+        if (!flyout.hasClass('promote')) {
+            flyout.addClass('promote');
         }
     },
 

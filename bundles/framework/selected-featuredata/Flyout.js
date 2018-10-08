@@ -50,11 +50,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          * Reference to the container in browser
          *
          */
-        setEl: function (el) {
+        setEl: function (el, flyout) {
             this.container = el[0];
 
             if (!jQuery(this.container).hasClass('selected-featuredata')) {
                 jQuery(this.container).addClass('selected-featuredata');
+            }
+            if (!flyout.hasClass('selected-featuredata')) {
+                flyout.addClass('selected-featuredata');
             }
         },
         /**

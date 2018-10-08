@@ -301,6 +301,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method setEl
          * @param {Object} el
          *     reference to the container in browser
+         * @param {Object} flyout jQuery
          * @param {Number} width
          *     container size(?) - not used
          * @param {Number} height
@@ -308,12 +309,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function(el, width, height) {
+        setEl: function(el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('hierarchical-layerlist')) {
                 jQuery(this.container).addClass('hierarchical-layerlist');
             }
-            jQuery(this.container).parents('.oskari-flyout').addClass('hierarchical-layerlist-flyout');
+            if (!flyout.hasClass('hierarchical-layerlist-flyout')) {
+                flyout.addClass('hierarchical-layerlist-flyout');
+            }
         },
 
         /**

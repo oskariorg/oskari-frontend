@@ -64,6 +64,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         getTemplate: function() {
             return this.template;
         },
+        setEl: function (el, flyout) {
+            this.container = jQuery(el[0]);
+            this.container.addClass('myplacesimport');
+            flyout.addClass('myplacesimport');
+        },
+
         /**
          * Interface method implementation, assigns the HTML templates
          * that will be used to create the UI
@@ -71,17 +77,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @method startPlugin
          */
         startPlugin: function () {
-            var container = this.getEl(),
-                tooltipCont = jQuery(this.__templates.help).clone();
-            container.addClass('myplacesimport');
+            var tooltipCont = jQuery(this.__templates.help).clone();
             tooltipCont.attr('title', this.locale.help);
-            container.append(tooltipCont);
+            this.container.append(tooltipCont);
 
             this.setTemplate(this.createUi());
-            container.append(this.getTemplate());
+            this.container.append(this.getTemplate());
             /* progress */
-            this.progressSpinner.insertTo(container);
-            this.progressBarFile.create(container);
+            this.progressSpinner.insertTo(this.container);
+            this.progressBarFile.create(this.container);
         },
         /**
          * Interface method implementation

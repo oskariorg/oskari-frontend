@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
     function (instance) {
         this.instance = instance;
         this.template = jQuery('<div></div>');
+        this.container = null;
     }, {
         /**
          * @method getName
@@ -25,6 +26,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.Flyout';
         },
+        setEl: function (el, flyout) {
+            this.container = jQuery(el[0]);
+            jQuery(this.container).addClass('publisher');
+            flyout.addClass('publisher');
+        },
         /**
          * @method startPlugin
          *
@@ -32,7 +38,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          * that will be used to create the UI
          */
         startPlugin: function () {
-            this.getEl().addClass('publisher');
         },
         /**
          * @method lazyRender
@@ -41,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          * Selects the view to show based on user (guest/loggedin)
          */
         lazyRender: function () {
-            var flyout = jQuery(this.container);
+            var flyout = this.container;
             flyout.empty();
 
             // check if the user is logged in

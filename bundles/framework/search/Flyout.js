@@ -42,10 +42,13 @@ Oskari.clazz.define(
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('search')) {
                 jQuery(this.container).addClass('search');
+            }
+            if (!flyout.hasClass('search')) {
+                flyout.addClass('search');
             }
         },
 

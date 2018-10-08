@@ -40,10 +40,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('printout')) {
                 jQuery(this.container).addClass('printout');
+            }
+            if (!flyout.hasClass('printout')) {
+                flyout.addClass('printout');
             }
         },
         /**

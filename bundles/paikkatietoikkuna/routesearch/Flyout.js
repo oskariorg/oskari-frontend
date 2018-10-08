@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         this.toLonLat = {};
         this.locations = [];
         this.services = [];
+        this.container = null;
         this._templates = {};
         this._mapmodule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         this._templates.main =
@@ -151,7 +152,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 me.mapEl.addClass('cursor-crosshair');
             }
         },
-
+        setEl: function (el, flyout) {
+            this.container = jQuery(el[0]);
+            this.container.addClass('routesearch');
+            flyout.addClass('routesearch');
+        },
         /**
          * @method startPlugin
          * called by host to start flyout operations
@@ -159,7 +164,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         startPlugin: function () {
             var me = this,
                 ajaxUrl = null,
-                el = me.getEl().addClass('routesearch'),
                 contents = jQuery(me._templates.main),
                 i,
                 field,
@@ -206,7 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 });
             }
 
-            el.append(contents);
+            this.container.append(contents);
             me._initRoutingServices();
             me._updateRoutingLinks(true);
         },
@@ -433,7 +437,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     locations
                 );
                 if (createButtons) {
-                    me.getEl().find('ul').append(
+                    this.container.find('ul').append(
                         jQuery('<li>').append(button)
                     );
                 }

@@ -79,10 +79,13 @@ Oskari.clazz.define(
          *
          * Interface method implementation
          */
-        setEl: function (el) {
+        setEl: function (el, flyout) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('featuredata')) {
                 jQuery(this.container).addClass('featuredata');
+            }
+            if (!flyout.hasClass('featuredata')) {
+                flyout.addClass('featuredata');
             }
         },
 

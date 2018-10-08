@@ -38,9 +38,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
             return 'Oskari.catalogue.bundle.metadataflyout.Flyout';
         },
 
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = jQuery(el);
             this.container.addClass('metadataflyout');
+            flyout.addClass('metadataflyout');
         },
 
         startPlugin: function () {

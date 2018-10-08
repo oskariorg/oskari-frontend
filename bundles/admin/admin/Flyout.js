@@ -7,12 +7,17 @@
 Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
     function() {
         this.tabsContainer = null;
+        this.container = null;
     }, {
         tabs : [{
             'id' : 'defaultviews',
             'clazz' : 'Oskari.admin.bundle.admin.DefaultViews'
         }],
-
+        setEl: function (el, flyout) {
+            this.container = jQuery(el[0]);
+            this.container.addClass('admin');
+            flyout.addClass('admin');
+        },
         /* App specific methods */
         createUI : function () {
             if(this.tabsContainer) {

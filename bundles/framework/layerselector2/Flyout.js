@@ -48,10 +48,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('layerselector2')) {
                 jQuery(this.container).addClass('layerselector2');
+            }
+            if (!flyout.hasClass('layerselector2')) {
+                flyout.addClass('layerselector2');
             }
         },
 
