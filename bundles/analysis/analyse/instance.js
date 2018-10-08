@@ -398,6 +398,10 @@ Oskari.clazz.define(
 
 
             if (blnEnabled) {
+                // trigger an event letting other bundles know we require the whole UI
+                var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
+                this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
+
                 map.addClass('mapAnalyseMode');
                 me.sandbox.mapMode = 'mapAnalyseMode';
                 // Hide flyout, it's not needed...
