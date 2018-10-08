@@ -2,10 +2,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
     function (title, options, markerHandler) {
         this.loc = Oskari.getMsg.bind(null, 'TerrainProfile');
         this.numberFormatter = Oskari.getNumberFormatter(1);
-        this.makeDraggable({
-            handle: '.oskari-flyouttoolbar',
-            scroll: false
-        });
         this._spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this._updateGraph = null;
         this.markerHandler = markerHandler;
@@ -42,6 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
             var graphHeight = 300;
             var graphWidth = 600;
             var wrapper = document.createElement('div');
+            wrapper.className = "terrainprofile-graphwrapper";
             var svg = d3.select(wrapper)
                 .append('svg')
                 .attr('height', graphHeight)
