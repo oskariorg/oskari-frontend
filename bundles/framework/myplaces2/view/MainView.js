@@ -39,11 +39,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.MainView',
          * @method getPopupId
          * @return {String} popupid
          */
-        getPopupId: function (){
+        getPopupId: function () {
             return this.popupId;
         },
 
-        getForm: function(){
+        getForm: function () {
             return this.form;
         },
         /**

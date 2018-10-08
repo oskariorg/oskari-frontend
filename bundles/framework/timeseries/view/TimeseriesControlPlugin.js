@@ -99,9 +99,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var shortestInterval = Number.MAX_VALUE;
             for (var i = 0; i < times.length - 1; i++) {
                 var current = times[i];
-                var next = times[i+1];
+                var next = times[i + 1];
                 var difference = next.diff(current);
-                if(difference < shortestInterval) {
+                if (difference < shortestInterval) {
                     shortestInterval = difference;
                 }
             }
@@ -456,7 +456,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 formatMonth = formatterFunction('%b'),
                 formatYear = formatterFunction('%Y');
 
-            return function multiFormat(date) {
+            return function multiFormat (date) {
                 var textEl = d3.select(this);
                 return (d3.timeSecond(date) < date ? formatMillisecond
                     : d3.timeMinute(date) < date ? formatSecond
@@ -513,13 +513,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .on('.drag', null); // remove old event handlers
 
 
-            function renderHandle() {
+            function renderHandle () {
                 var newX = scaleSubset(new Date(me._uiState.currentTime));
                 handle.attr('transform', 'translate(' + newX + ',80)');
             }
             me._renderHandle = renderHandle;
 
-            function timeFromMouse(newX) {
+            function timeFromMouse (newX) {
                 var scaleRange = scaleSubset.range();
                 if (newX > scaleRange[1]) {
                     newX = scaleRange[1];
@@ -530,7 +530,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._updateCurrentTime(scaleSubset.invert(newX).toISOString());
             }
 
-            function updateFullAxisControls() {
+            function updateFullAxisControls () {
                 var range = scaleSubset.domain().map(scaleFull);
                 svg.selectAll('.full-axis-controls circle').each(function (d, i) {
                     d3.select(this).attr('cx', range[i]);
@@ -580,7 +580,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 updateFullAxisControls();
             }
 
-            function brushed() {
+            function brushed () {
                 var selection = d3.event.selection;
                 var inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString(); });
                 scaleSubset.domain(inverted.map(function (t) { return new Date(me._getClosestTime(t)); }));

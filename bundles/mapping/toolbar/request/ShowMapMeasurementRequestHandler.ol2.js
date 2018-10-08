@@ -96,7 +96,7 @@ Oskari.clazz.define(
                 var cancelBtn = me._buttons[0];
                 cancelBtn.setHandler(function () {
                     // ask toolbar to select default tool
-                    var toolbarRequest =Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
+                    var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                     me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                     me._hideResultsInPlugin(true);
                     //enable gfi

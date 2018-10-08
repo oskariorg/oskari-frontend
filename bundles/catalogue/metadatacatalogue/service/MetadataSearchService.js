@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
  * @param {String}
  *            searchUrl ajax URL to actual metadata catalogue search implementation
  */
-    function(searchUrl) {
+    function (searchUrl) {
 
     /* searchUrl url that will give us results */
         this._searchUrl = searchUrl;
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
      * @method getQName
      * @return {String} fully qualified name for service
      */
-        getQName : function() {
+        getQName : function () {
             return this.__qname;
         },
         /** @static @property __name service name */
@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
      * @method getName
      * @return {String} service name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -47,14 +47,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
 	 * @param {Function}
 	 *            onComplete callback method for search completion
      */
-        doSearch : function(search, onSuccess, onError) {
+        doSearch : function (search, onSuccess, onError) {
             var epsg = Oskari.getSandbox().getMap().getSrsName();
-            if(!search.srs) search.srs = epsg;
+            if (!search.srs) search.srs = epsg;
             jQuery.ajax({
                 dataType : 'json',
                 type : 'POST',
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },

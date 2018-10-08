@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabled
  * @param {Oskari.Sandbox} sandbox
  *          reference to application sandbox
  */
-    function(mapfull) {
+    function (mapfull) {
         this.mapfull = mapfull;
     }, {
     /**
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabled
      * @param {Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest} request
      *      request to handle
      */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             this.mapfull.resizeEnabled = request.getResizeEnabled();
 
         }

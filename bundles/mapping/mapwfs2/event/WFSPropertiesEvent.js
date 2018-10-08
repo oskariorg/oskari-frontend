@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
  * @param {String[]} locales
  * @param {String[]} fields
  */
-    function(layer, locales, fields) {
+    function (layer, locales, fields) {
         this._layer = layer;
         this._locales = locales;
         this._fields = fields;
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
      * @method getName
      * @return {String} event name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
 
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
      * @method getLayer
      * @return {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
-        getLayer : function() {
+        getLayer : function () {
             return this._layer;
         },
 
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
      * @method getLocales
      * @return {String[]} locales
      */
-        getLocales : function() {
+        getLocales : function () {
             return this._locales;
         },
 
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
      * @method getFields
      * @return {String[]} fields
      */
-        getFields : function() {
+        getFields : function () {
             return this._fields;
         }
     }, {

@@ -35,11 +35,11 @@ Oskari.clazz.define(
                 '  <h4 class="title"></h4>' +
                 '</div>',
             drawFilter: '<div class="drawFilter"></div>',
-            selectionToolsContainer: '<div class="toolContainer">'+
-                '   <h4 class="title"></h4>'+
-                '   <div class="toolContainerToolDiv"></div>'+
-                '   <div class="toolContainerFooter"></div>'+
-                '   <div class="toolContainerButtons"></div>'+
+            selectionToolsContainer: '<div class="toolContainer">' +
+                '   <h4 class="title"></h4>' +
+                '   <div class="toolContainerToolDiv"></div>' +
+                '   <div class="toolContainerFooter"></div>' +
+                '   <div class="toolContainerButtons"></div>' +
                 '</div>',
             search: '<div class="analyse-search"></div>'
         },
@@ -157,14 +157,14 @@ Oskari.clazz.define(
                 },
                 rn = 'userinterface.UpdateExtensionRequest';
 
-            if(name === 'LayerSelector') {
+            if (name === 'LayerSelector') {
                 var requestName = 'ShowFilteredLayerListRequest';
                 me.sandbox.postRequestByName(
                     requestName,
                     [null, 'featuredata']
                 );
                 clearTimeout(this._flyoutTimeOut);
-                this._flyoutTimeOut = setTimeout(function(){
+                this._flyoutTimeOut = setTimeout(function () {
                     me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
                 },100);
             } else {
@@ -326,7 +326,7 @@ Oskari.clazz.define(
          * @method toggleEmptySelectionBtn
          * Enables / disables the empty selections - button in selection tools
          */
-        toggleEmptySelectionBtn: function(enable) {
+        toggleEmptySelectionBtn: function (enable) {
             var selectionToolsContainer = jQuery('div.toolContainer');
             if (enable) {
                 selectionToolsContainer.find('.toolContainerButtons').find('input[type=button]').prop({'disabled': false});

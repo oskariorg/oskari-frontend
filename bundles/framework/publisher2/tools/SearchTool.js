@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
-    function() {
+    function () {
     }, {
         index : 4,
         allowedLocations : ['top left', 'top center', 'top right'],
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
     *
     * @returns {Object} tool description
     */
-        getTool: function(){
+        getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 title: 'SearchPlugin',
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
         getValues: function () {
             var me = this;
 
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 return {
                     configuration: {
                         mapfull: {

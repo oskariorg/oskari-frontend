@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.catalogue.request.AddTabRequestH
  * @param {Oskari.mapframework.bundle.search.StateHandlerBundleInstance} search
  *          reference to search
  */
-    function(sandbox, flyout) {
+    function (sandbox, flyout) {
         this.sandbox = sandbox;
         this.flyout = flyout;
     }, {
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.catalogue.request.AddTabRequestH
      * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
      *      request to handle
      */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             this.flyout.addTabs(request.getData());
         }
     }, {

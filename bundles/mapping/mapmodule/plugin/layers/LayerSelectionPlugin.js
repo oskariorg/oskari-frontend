@@ -166,15 +166,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             };
         },
-        _handleMapSizeChanged: function(size, isMobile){
+        _handleMapSizeChanged: function (size, isMobile) {
             var me = this,
                 mobile = isMobile || Oskari.util.isMobile();
-            if(!mobile &&  me.layerContent) {
+            if (!mobile && me.layerContent) {
                 me.layerContent.find('div.layers-content').css('max-height', (0.75 * size.height) + 'px');
             }
         },
         _setLayerToolsEditModeImpl: function () {
-            if(!this.getElement()) {
+            if (!this.getElement()) {
                 return;
             }
             var header = this.getElement().find('div.header');
@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {String} layerId id for layer to select
          */
         selectBaseLayer: function (layerId) {
-            if(!this.layerContent) {
+            if (!this.layerContent) {
                 return;
             }
             var baseLayersDiv = this.layerContent.find(
@@ -283,26 +283,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
         },
-        _rebindCheckboxes: function(){
+        _rebindCheckboxes: function () {
             var me = this,
                 sandbox = this.getSandbox();
 
-            var reBind = function(el){
+            var reBind = function (el) {
                 var layerId = el.attr('value');
                 var layer = sandbox.findMapLayerFromAllAvailable(layerId);
-                if(layer) {
+                if (layer) {
                     el.off('change');
                     me._bindCheckbox(el,layer);
                 }
             };
-            me.layerContent.find('input[type=radio]').each(function(){
+            me.layerContent.find('input[type=radio]').each(function () {
                 var input = jQuery(this);
                 input.off('change');
                 input.on('change', function (evt) {
                     me._changedBaseLayer();
                 });
             });
-            me.layerContent.find('input[type=checkbox]').each(function(){
+            me.layerContent.find('input[type=checkbox]').each(function () {
                 reBind(jQuery(this));
             });
         },
@@ -490,16 +490,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * changed every time the active one is changed.
          */
         sortLayers: function (forced) {
-            if(!this.layerContent) {
+            if (!this.layerContent) {
                 // not on screen yet
                 return;
             }
             var me = this;
-            if(!forced) {
+            if (!forced) {
                 // this is called multiple times in sequence.
                 // just do it once after calls have stopped for a while
                 clearTimeout(this._sortTimer);
-                this._sortTimer = setTimeout(function() {
+                this._sortTimer = setTimeout(function () {
                     me.sortLayers(true);
                 }, 500);
                 return;
@@ -607,7 +607,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.popup.addClass('mapplugin layerselectionpopup');
                 if (isMobile && el.length) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
-                    me.popup.onClose(function() {
+                    me.popup.onClose(function () {
                         me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-layerselection'].iconCls);
                     });
                     var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
@@ -642,12 +642,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
                 var layersTitle = div.find('.content-header');
 
-                if(layersTitle.length==0){
+                if (layersTitle.length == 0) {
                     layersTitle = div.find('.header');
                 }
 
                 // Get layers title height
-                if(layersTitle.length>0){
+                if (layersTitle.length > 0) {
                 }
             }
 
@@ -709,7 +709,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _createControlElement: function () {
             var me = this,
-                el  = me.templates.main.clone(),
+                el = me.templates.main.clone(),
                 header = el.find('div.header');
 
             header.append(this._loc.title);
@@ -724,7 +724,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             return el;
         },
 
-        teardownUI : function() {
+        teardownUI : function () {
             //remove old element
             this.removeFromPluginContainer(this.getElement());
             if (this.popup) {
@@ -740,7 +740,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         closeSelection: function (el) {
             var element = el || this.getElement();
-            if(!element) {
+            if (!element) {
                 return;
             }
             var icon = element.find('div.header div.header-icon');
@@ -758,9 +758,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, forced) {
+        redrawUI: function (mapInMobileMode, forced) {
             var isMobile = mapInMobileMode || Oskari.util.isMobile();
-            if(!this.isVisible()) {
+            if (!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
             }
@@ -770,7 +770,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(!forced && toolbarNotReady) {
+            if (!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();

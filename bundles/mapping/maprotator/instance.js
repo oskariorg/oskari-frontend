@@ -12,7 +12,7 @@ Oskari.app.playBundle(
 });
 */
 Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
-    function() {
+    function () {
         this._started = false;
         this.plugin = null;
         this._mapmodule = null;
@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
         getName: function () {
             return this.__name;
         },
-        init : function() {},
+        init : function () {},
         setSandbox: function (sbx) {
             this.sandbox = sbx;
         },
@@ -36,9 +36,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
         handleRequest: function (core, request) {
             this.plugin.setRotation(request.getDegrees());
         },
-        start: function(sandbox) {
+        start: function (sandbox) {
             var me = this;
-            if(me._started){
+            if (me._started) {
                 return;
             }
             me._started = true;
@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
             sandbox.register(me);
             sandbox.requestHandler('rotate.map', this);
         },
-        createPlugin: function( ) {
+        createPlugin: function () {
             if (this.plugin) {
                 return;
             }
@@ -59,12 +59,12 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;
         },
-        stopPlugin: function() {
+        stopPlugin: function () {
             this._mapmodule.unregisterPlugin(this.plugin);
             this._mapmodule.stopPlugin(this.plugin);
             this.plugin = null;
         },
-        stop: function() {
+        stop: function () {
             this.stopPlugin();
             this.getSandbox().requestHandler('rotate.map', null);
             this.sandbox = null;

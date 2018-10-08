@@ -1,5 +1,5 @@
-Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
-    function ( options, localization ) {
+Oskari.clazz.define('Oskari.projection.change.ProjectionChangerPlugin',
+    function (options, localization) {
         this.options = options || {};
         this._clazz = 'Oskari.projection.change.ProjectionChangerPlugin';
         this._defaultLocation = 'top right';
@@ -13,7 +13,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
             projectionchanger: jQuery('<div class="mapplugin oskari-projection-changer"></div>')
         };
         this._loc = localization;
-    
+
         this._flyout = Oskari.clazz.create('Oskari.projection.change.flyout', options, {
             width: 'auto',
             cls: 'projection-change-flyout'
@@ -29,7 +29,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
                     show: false,
                     callback: function () {
                         me._flyout.toggle();
-                        if ( !me._flyout.isVisible() ) {
+                        if (!me._flyout.isVisible()) {
                             me.mobilePluginOnClose();
                         }
                     },
@@ -47,14 +47,14 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
    */
         _createEventHandlers: function () {
             return {
-                'MapSizeChangedEvent' : function(evt) {
+                'MapSizeChangedEvent' : function (evt) {
                     var width = evt._width;
                     //if the rightoffset + element width is greater than screensize use a different right offset
-                    if ( width * 0.45 + this._flyout.getElement().width() > width ) {
+                    if (width * 0.45 + this._flyout.getElement().width() > width) {
                         this._flyout.move(this.offsetRightSmallScreen, this.offsetTop, true);
                         return;
                     }
-                    if ( !Oskari.util.isMobile() ) {
+                    if (!Oskari.util.isMobile()) {
                         this._flyout.move(this.offsetRight, this.offsetTop, true);
                     }
                 }
@@ -68,8 +68,8 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
             launcher.attr('title', this._loc.tooltip.tool);
             return launcher;
         },
-        createUi: function() {
-            if ( this.getElement() ) {
+        createUi: function () {
+            if (this.getElement()) {
                 return;
             }
             this._flyout.off('hide');
@@ -90,7 +90,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         handleEvents: function () {
             var me = this;
             this._flyout.move(this.offsetRight, this.offsetTop, true);
-            this.getElement().on( 'click', function() {
+            this.getElement().on('click', function () {
                 me._flyout.toggle();
             });
         },
@@ -100,31 +100,31 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
      * @param  {Boolean} mapInMobileMode is map in mobile mode
      * @param {Boolean} forced application has started and ui should be rendered with assets that are available
      */
-        redrawUI: function() {
+        redrawUI: function () {
             var isMobile = Oskari.util.isMobile();
-            if ( this.getElement() ) {
+            if (this.getElement()) {
                 this.teardownUI(true);
             }
-            if ( isMobile ) {
+            if (isMobile) {
                 this.createMobileUi();
             } else {
                 this.createUi();
             }
         },
-        teardownUI : function(stopping) {
+        teardownUI : function (stopping) {
             //detach old element from screen
             var mobileDefs = this.getMobileDefs();
             this.getElement().detach();
             this.removeFromPluginContainer(this.getElement());
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
-        getElement: function() {
+        getElement: function () {
             return this._element;
         },
-        getFlyout: function() {
+        getFlyout: function () {
             return this._flyout;
         },
-        stopPlugin: function() {
+        stopPlugin: function () {
             this.teardownUI(true);
         }
     }, {

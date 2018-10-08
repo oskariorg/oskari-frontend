@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 this.virtualVertices = [];
                 var control = this;
 
-                function collectComponentVertices(geometry) {
+                function collectComponentVertices (geometry) {
                     var i,
                         vertex,
                         component,
@@ -631,7 +631,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      */
     getDistance: function (p1, p2) {
         var x1;
-        var isNumber = function isNumber(n) {
+        var isNumber = function isNumber (n) {
             return (!isNaN(parseFloat(n))) && (isFinite(n));
         };
 
@@ -1126,7 +1126,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 }
             }
             // Update also the split line
-            if(me.sourceLayer.features[0].geometry) {
+            if (me.sourceLayer.features[0].geometry) {
                 var lines = me.sourceLayer.features[0].geometry.components;
                 for (i = 0; i < lines.length; i += 1) {
                     points = lines[i].components;
@@ -2032,7 +2032,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     _enableIE8: function () {
         // IE8 compatibility
         if (!Array.prototype.indexOf) {
-            Array.prototype.indexOf = function (elt /*, from*/ ) {
+            Array.prototype.indexOf = function (elt /*, from*/) {
                 var len = this.length >>> 0;
 
                 var from = Number(arguments[1]) || 0;
@@ -2053,8 +2053,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         // Reference: http://es5.github.com/#x15.4.4.18
         if (!Array.prototype.forEach) {
 
-            Array.prototype.forEach = function forEach(callback, thisArg) {
-                
+            Array.prototype.forEach = function forEach (callback, thisArg) {
+
                 var T, k;
 
                 if (this === null) {

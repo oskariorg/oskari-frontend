@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
  * @method create called automatically on construction
  * @static
  */
-    function() {
+    function () {
         this.sandbox = null;
         this.started = false;
         this.mediator = null;
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
 	 * @method getName
 	 * @return {String} the name for the component
 	 */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -36,29 +36,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
 	 * @param {Oskari.Sandbox} sandbox
 	 * Sets the sandbox reference to this component
 	 */
-        setSandbox : function(sbx) {
+        setSandbox : function (sbx) {
             this.sandbox = sbx;
         },
         /**
 	 * @method getSandbox
 	 * @return {Oskari.Sandbox}
 	 */
-        getSandbox : function() {
+        getSandbox : function () {
             return this.sandbox;
         },
         /**
 	 * @method update
 	 * implements BundleInstance protocol update method - does nothing atm
 	 */
-        update : function() {
+        update : function () {
         },
         /**
 	 * @method start
 	 * implements BundleInstance protocol start methdod
 	 */
-        start : function() {
+        start : function () {
             var me = this;
-            if(me.started) {
+            if (me.started) {
                 return;
             }
             me.started = true;
@@ -67,8 +67,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             sandbox.register(me);
             me.setSandbox(sandbox);
 
-            for(var p in me.eventHandlers) {
-                if(p) {
+            for (var p in me.eventHandlers) {
+                if (p) {
                     sandbox.registerForEventByName(me, p);
                 }
             }
@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
 	 * @method init
 	 * implements Module protocol init method - initializes request handlers
 	 */
-        init : function() {
+        init : function () {
             var adaptable = this.conf && this.conf.adaptable === true;
             // register plugin for map (actual popup implementation handling)
             this.popupPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin');
@@ -104,10 +104,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
 	 * @param {Oskari.mapframework.event.Event} event a Oskari event object
 	 * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
 	 */
-        onEvent : function(event) {
+        onEvent : function (event) {
             var me = this;
             var handler = me.eventHandlers[event.getName()];
-            if(!handler) {
+            if (!handler) {
                 return;
             }
 
@@ -121,28 +121,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             /**
 		 * @method MapClickedEvent
 		 */
-            MapClickedEvent : function(e) {
+            MapClickedEvent : function (e) {
             },
-            'Publisher2.ColourSchemeChangedEvent': function(evt){
+            'Publisher2.ColourSchemeChangedEvent': function (evt) {
                 this._handleColourSchemeChangedEvent(evt);
             },
-            'Publisher.ColourSchemeChangedEvent': function(evt){
+            'Publisher.ColourSchemeChangedEvent': function (evt) {
                 this._handleColourSchemeChangedEvent(evt);
             },
-            'AfterAddMarkerEvent': function(evt) {
-        	if(evt.getID()) {
+            'AfterAddMarkerEvent': function (evt) {
+        	if (evt.getID()) {
         		this.popupPlugin.markers[evt.getID()] = {
         			data: evt.getData(),
         			params: evt.getParams()
         		};
         	}
             },
-            'AfterRemoveMarkersEvent': function(evt) {
-        	if(evt.getId() && this.popupPlugin.markers[evt.getId()]) {
+            'AfterRemoveMarkersEvent': function (evt) {
+        	if (evt.getId() && this.popupPlugin.markers[evt.getId()]) {
         		delete this.popupPlugin.markers[evt.getId()];
         		this.popupPlugin.close(this.popupPlugin.markerPopups[evt.getId()]);
         		delete this.popupPlugin.markerPopups[evt.getId()];
-        	} else if (!evt.getId()){
+        	} else if (!evt.getId()) {
         		this.popupPlugin.markers = {};
         	}
             },
@@ -151,18 +151,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             }
         },
 
-        _handleColourSchemeChangedEvent: function(evt){
+        _handleColourSchemeChangedEvent: function (evt) {
             this.popupPlugin._changeColourScheme(evt.getColourScheme());
         },
         /**
 	 * @method stop
 	 * implements BundleInstance protocol stop method
 	 */
-        stop : function() {
+        stop : function () {
             var me = this;
             var sandbox = this.sandbox;
-            for(var p in me.eventHandlers) {
-                if(p) {
+            for (var p in me.eventHandlers) {
+                if (p) {
                     sandbox.unregisterFromEventByName(me, p);
                 }
             }
@@ -173,13 +173,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
      * @method setState
      * @param {Object} state bundle state as JSON
      */
-        setState : function(state) {
-            if(!state || !state.popups) {
+        setState : function (state) {
+            if (!state || !state.popups) {
                 return;
             }
             // good to go -> close existing and open ones saved in state
             this.popupPlugin.close();
-            for(var i = 0 ; i < state.popups.length; ++i) {
+            for (var i = 0 ; i < state.popups.length; ++i) {
                 var data = state.popups[i];
                 this.popupPlugin.popup(data.id, data.title, data.data, data.lonlat);
             }
@@ -188,14 +188,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
      * @method getState
      * @return {Object} bundle state as JSON
      */
-        getState : function() {
+        getState : function () {
         // get applications current state
             var state = {
                 popups : []
             };
             var popups = this.popupPlugin.getPopups();
 
-            for(var id in popups) {
+            for (var id in popups) {
         	if (popups.hasOwnProperty(id)) {
 	            var popup = popups[id];
 	            var data = {

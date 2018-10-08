@@ -16,7 +16,7 @@ Oskari.clazz.define(
         _clazz : 'Oskari.mapframework.mapmodule.WmsLayerPlugin',
         layertype : 'wmslayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector : function () {
             return 'WMS';
         },
 
@@ -76,8 +76,8 @@ Oskari.clazz.define(
                     layerParams = oskariLayer.getParams(),
                     layerOptions = oskariLayer.getOptions(),
                     layerAttributes = oskariLayer.getAttributes();
-                
-                if(layerAttributes.times) {
+
+                if (layerAttributes.times) {
                     defaultOptions.singleTile = true;
                 }
 
@@ -129,22 +129,22 @@ Oskari.clazz.define(
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
         },
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this;
-          
-            layer.events.register('tileloadstart', layer, function(){
-                me.getMapModule().loadingState( oskariLayer._id, true);
+
+            layer.events.register('tileloadstart', layer, function () {
+                me.getMapModule().loadingState(oskariLayer._id, true);
             });
 
-            layer.events.register('tileloaded', layer, function(){
-                me.getMapModule().loadingState( oskariLayer._id, false);
+            layer.events.register('tileloaded', layer, function () {
+                me.getMapModule().loadingState(oskariLayer._id, false);
             });
 
-            layer.events.register('loadend', layer, function(){
+            layer.events.register('loadend', layer, function () {
             });
 
-            layer.events.register('tileerror', layer, function(){
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            layer.events.register('tileerror', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
 
             });
         },
@@ -157,10 +157,10 @@ Oskari.clazz.define(
         _afterChangeMapLayerStyleEvent: function (event) {
             var layer = event.getMapLayer();
             var layerList = this.getOLMapLayers(layer);
-            if(!layerList) {
+            if (!layerList) {
                 return;
             }
-            layerList.forEach(function(openlayer) {
+            layerList.forEach(function (openlayer) {
                 openlayer.mergeNewParams({
                     styles: layer.getCurrentStyle().getName()
                 });
@@ -174,7 +174,7 @@ Oskari.clazz.define(
          * @param  {Oskari.mapframework.domain.WmsLayer} layer
          * @return {undefined}
          */
-        _updateLayer: function(layer) {
+        _updateLayer: function (layer) {
             var oLayers = this.getOLMapLayers(layer),
                 subs = layer.getSubLayers(),
                 layerList = subs.length ? subs : [layer],
@@ -206,7 +206,7 @@ Oskari.clazz.define(
                 oLayers[i].redraw(true);
             }
         },
-        updateLayerParams: function(layer, forced, params) {
+        updateLayerParams: function (layer, forced, params) {
             var i,
                 olLayerList,
                 count;

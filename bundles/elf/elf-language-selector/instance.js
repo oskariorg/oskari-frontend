@@ -1,7 +1,7 @@
 /**
  * @class  Oskari.elf.LanguageSelector
  */
-Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function() {
+Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function () {
 
 }, {
     templates : {
@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function() {
             '</div>'
     },
 
-    startPlugin : function() {
+    startPlugin : function () {
         var sandbox = this.getSandbox();
         var elem = jQuery('#langSelector');
 
@@ -26,8 +26,8 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function() {
         var _supported = Oskari.getSupportedLanguages();
 
         // reduce list to supported languages
-        this.languageList = _.reduce(languages, function(result, value, key) {
-            if(_.contains(_supported, key)) {
+        this.languageList = _.reduce(languages, function (result, value, key) {
+            if (_.contains(_supported, key)) {
                 result.push({
                     lang : key,
                     label : value.toLowerCase()
@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function() {
             }
             return result;
         }, []);
-        this.languageList.sort(function(a,b) {
+        this.languageList.sort(function (a,b) {
             return a.label > b.label;
         });
 
@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function() {
         elem.append(changeLink);
     },
 
-    stopPlugin : function() {
+    stopPlugin : function () {
 
     },
 
@@ -70,11 +70,11 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function() {
             link = container.find('a'),
             firstLang;
 
-        _.each(this.languageList, function(item) {
+        _.each(this.languageList, function (item) {
             var opt = langOption.clone();
             opt.val(item.lang);
             opt.text(item.label);
-            if(item.lang === Oskari.getLang()) {
+            if (item.lang === Oskari.getLang()) {
                 opt.attr('selected', 'selected');
             }
             langList.append(opt);

@@ -9,12 +9,12 @@ Oskari.clazz.define('Oskari.sample.bundle.helloworld.HelloWorldBundleInstance',
 /**
  * @static constructor function
  */
-    function() {
+    function () {
 
     }, {
 
         'eventHandlers' : {
-            'AfterMapMoveEvent' : function() {
+            'AfterMapMoveEvent' : function () {
             }
         }
 

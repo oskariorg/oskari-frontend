@@ -178,19 +178,19 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this;
 
-            layer.events.register('tileloadstart', layer, function(){
-                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            layer.events.register('tileloadstart', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
             });
 
-            layer.events.register('tileloaded', layer, function(){
-                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            layer.events.register('tileloaded', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
             });
 
-            layer.events.register('tileerror', layer, function(){
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            layer.events.register('tileerror', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
         },
 
@@ -734,26 +734,26 @@ Oskari.clazz.define(
          * @param  {Boolean} forced
          * @param  {Object} params
          */
-        updateLayerParams : function(layer, forced, params) {
+        updateLayerParams : function (layer, forced, params) {
             var openLayerId = 'layer_' + layer.getId(),
                 oLayer = this.layers[openLayerId],
                 i;
-            if(!oLayer) {
+            if (!oLayer) {
                 return;
             }
             params = params || {};
-            if(forced) {
+            if (forced) {
                 params._ts = Date.now();
             }
             // myLayersGroup[openLayer, attentionLayer, clusterLayer]
-            if (jQuery.isArray(oLayer)){
-                for (i=0; i < oLayer.length; i+=1){
-                    if (typeof oLayer[i].mergeNewParams ==='function'){
+            if (jQuery.isArray(oLayer)) {
+                for (i = 0; i < oLayer.length; i += 1) {
+                    if (typeof oLayer[i].mergeNewParams === 'function') {
                         oLayer[i].mergeNewParams(params);
                     }
                 }
             } else {
-                if (typeof oLayer.mergeNewParams ==='function'){
+                if (typeof oLayer.mergeNewParams === 'function') {
                     oLayer.mergeNewParams(params);
                 }
             }

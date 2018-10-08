@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.event.DrawingEvent',
  * @param {Object} geojson drawn shape (includes buffer as property?)
  * @param {Object} additional info like length of line or area of a polygon?
  */
-    function(id, geojson, data, isFinished) {
+    function (id, geojson, data, isFinished) {
         this._id = id;
         this._geojson = geojson;
         this._data = data;
@@ -23,22 +23,22 @@ Oskari.clazz.define('Oskari.mapping.drawtools.event.DrawingEvent',
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
-        getId : function() {
+        getId : function () {
             return this._id;
         },
-        getGeoJson : function() {
+        getGeoJson : function () {
             return this._geojson;
         },
-        getData : function() {
+        getData : function () {
             return this._data;
         },
-        getCrs : function() {
+        getCrs : function () {
             return this._geoJson.crs;
         },
-        getIsFinished : function() {
+        getIsFinished : function () {
             return this._isFinished;
         },
         /**

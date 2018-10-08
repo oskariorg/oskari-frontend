@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSRefreshManualLo
  * @param {Oskari.mapframework.domain.WfsLayer}
  *            mapLayer  maplayer to refresh (option)
  */
-    function(layerId) {
+    function (layerId) {
         this._layerId = layerId;
     }, {
     /** @static @property __name event name */
@@ -20,14 +20,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSRefreshManualLo
      * @method getName
      * @return {String} event name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getLayerId
      * @return int mapLayer id for  maplayer to be refreshed (option)
      */
-        getLayerId : function() {
+        getLayerId : function () {
             return this._layerId;
         }
     }, {

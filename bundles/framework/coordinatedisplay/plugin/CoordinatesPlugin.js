@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                 conf = me._config,
                 roundToDecimals = 0;
 
-            if(conf && conf.roundToDecimals) {
+            if (conf && conf.roundToDecimals) {
                 roundToDecimals = conf.roundToDecimals;
             }
 

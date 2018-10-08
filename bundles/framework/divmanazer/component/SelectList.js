@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             if (dataKey.cls) {
                 option.addClass(dataKey.cls);
             }
-            if (dataKey.tooltip){
+            if (dataKey.tooltip) {
                 option.prop('title', dataKey.tooltip);
             }
             option.val(dataKey.id).text(dataKey.title || dataKey.name);

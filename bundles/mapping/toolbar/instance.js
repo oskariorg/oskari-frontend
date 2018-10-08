@@ -194,7 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
             }
         },
 
-        getToolBarConfigs: function(ptbid){
+        getToolBarConfigs: function (ptbid) {
             var tbid = ptbid || 'default';
             return this._toolbarConfigs[tbid];
         },
@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
             var showHover = (data && typeof data.disableHover === 'boolean') ? !data.disableHover : true;
 
             var createHoverStyle = false;
-            if(c) {
+            if (c) {
                 createHoverStyle = true;
             }
 
@@ -222,21 +222,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 createHoverStyle = true;
             }
 
-            if(!data) {
+            if (!data) {
                 data = {};
             }
 
-            if(!data.colours) {
+            if (!data.colours) {
                 data.colours = {
                     hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
                     background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
                 };
 
             } else {
-                if(!data.colours.hover) {
+                if (!data.colours.hover) {
                     data.colours.hover = '#3c3c3c';
                 }
-                if(!data.colours.background) {
+                if (!data.colours.background) {
                     data.colours.background = '#333438';
                 }
             }
@@ -247,8 +247,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
             var addHoverStyle = (createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]) ? true : false;
 
             c.addClass('toolbar_' + tbid);
-            if(addHoverStyle) {
-                jQuery('<style type="text/css" id="toolbar_'+tbid+'_style">'+
+            if (addHoverStyle) {
+                jQuery('<style type="text/css" id="toolbar_' + tbid + '_style">' +
                             'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
                             '   background-color: ' + data.colours.hover + ';' +
                             '}' +
@@ -266,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
             }
             */
 
-            if(!this._toolbarConfigs[tbid]) {
+            if (!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
                     createdHover: (addHoverStyle && showHover) ? true : false,
                     colours: data.colours
@@ -472,26 +472,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
         _addToolbar: function (tbid, data) {
             this.getToolbarContainer(tbid, data);
         },
-        _updateToolbar: function(ptbid, data){
+        _updateToolbar: function (ptbid, data) {
             var me = this;
             var tbid = ptbid || 'default';
 
 
-            if(!data) {
+            if (!data) {
                 data = {};
             }
 
-            if(!data.colours) {
+            if (!data.colours) {
                 data.colours = {
                     hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
                     background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
                 };
 
             } else {
-                if(!data.colours.hover) {
+                if (!data.colours.hover) {
                     data.colours.hover = '#3c3c3c';
                 }
-                if(!data.colours.background) {
+                if (!data.colours.background) {
                     data.colours.background = '#333438';
                 }
             }
@@ -499,9 +499,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
             };
 
-            if(this._toolbarConfigs[tbid].createdHover === true) {
-                jQuery('style#toolbar_'+tbid+'_style').remove();
-                jQuery('<style type="text/css" id="toolbar_'+tbid+'_style">'+
+            if (this._toolbarConfigs[tbid].createdHover === true) {
+                jQuery('style#toolbar_' + tbid + '_style').remove();
+                jQuery('<style type="text/css" id="toolbar_' + tbid + '_style">' +
                             'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
                             '   background-color: ' + data.colours.hover + ';' +
                             '}' +
@@ -514,19 +514,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
 
             // change toolbar toolicons
             var c = me.containers[tbid];
-            if(c) {
-                c.find('.tool').each(function(){
+            if (c) {
+                c.find('.tool').each(function () {
                     var button = jQuery(this);
                     var iconCls = button.attr('data-icon');
                     button.removeClass(iconCls + '-light');
                     button.removeClass(iconCls + '-dark');
 
                     var color = data.colours.background;
-                    if(button.hasClass('selected') && button.attr('data-toggle-change-icon') === 'true' && button.attr('data-active-color')) {
+                    if (button.hasClass('selected') && button.attr('data-toggle-change-icon') === 'true' && button.attr('data-active-color')) {
                         color = button.attr('data-active-color');
                     }
 
-                    if(Oskari.util.getColorBrightness(color) === 'light') {
+                    if (Oskari.util.getColorBrightness(color) === 'light') {
                         button.addClass(iconCls + '-light');
                     } else {
                         button.addClass(iconCls + '-dark');
@@ -561,16 +561,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
-        _registerForGuidedTour: function() {
+        _registerForGuidedTour: function () {
             var me = this;
-            function sendRegister() {
+            function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for(prop in me.__guidedTourDelegateTemplate){
-                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                    for (prop in me.__guidedTourDelegateTemplate) {
+                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
@@ -580,14 +580,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 }
             }
 
-            function handler(msg){
-                if(msg.id === 'guidedtour') {
+            function handler (msg) {
+                if (msg.id === 'guidedtour') {
                     sendRegister();
                 }
             }
 
             var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
-            if(tourInstance) {
+            if (tourInstance) {
                 sendRegister();
             } else {
                 Oskari.on('bundle.start', handler);

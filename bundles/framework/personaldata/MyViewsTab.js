@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var listContainer = me.container.find('.viewsList');
             listContainer.empty();
 
-            views.forEach(function(view) {
+            views.forEach(function (view) {
                 view.name = Oskari.util.sanitize(view.name);
                 view.description = Oskari.util.sanitize(view.description);
             });
@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @method _editViewSuccessNotify
          * @private
          */
-        _editViewSuccessNotify: function(isSuccess) {
+        _editViewSuccessNotify: function (isSuccess) {
             if (isSuccess) {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 dialog.show(this.loc('tabs.myviews.popup.title'), this.loc('tabs.myviews.save.success'));
@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 }
             });
             var cancelBtn = dialog.createCloseButton(this.loc('tabs.myviews.button.cancel'));
-            cancelBtn.setHandler(function() {
+            cancelBtn.setHandler(function () {
                 dialog.close(true);
                 me.dialog = null;
             });
@@ -325,7 +325,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
 
                     var wasChecked = this.checked;
                     var checkboxes = jQuery(grid.table).find('input[name=isDefault]');
-                    _.each(checkboxes, function(checkbox) {
+                    _.each(checkboxes, function (checkbox) {
                         //uncheck other checkboxes,
                         //disable all isDefault checkboxes
                         checkbox.checked = false;
@@ -351,7 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 link.append(name);
                 link.on('click', function () {
                     var view = me._getViewById(data.id);
-                    if(view.srsName !== sandbox.getMap().getSrsName()) {
+                    if (view.srsName !== sandbox.getMap().getSrsName()) {
                         window.location.href = view.url;
                         return;
                     }

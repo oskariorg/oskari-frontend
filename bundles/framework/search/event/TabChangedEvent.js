@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
  * @param {String} previousTabId id of closed tab
  * @param {String} newTabId id of opened tab
  */
-    function(previousTabId, newTabId) {
+    function (previousTabId, newTabId) {
         this._previousTabId = previousTabId;
         this._newTabId = newTabId;
     }, {
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
      * Returns the id of closed tab
      * @return {String}
      */
-        getPreviousTabId : function() {
+        getPreviousTabId : function () {
             return this._previousTabId;
         },
         /**
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
      * Returns the id of opened tab
      * @return {String}
      */
-        getNewTabId : function() {
+        getNewTabId : function () {
             return this._newTabId;
         }
     }, {

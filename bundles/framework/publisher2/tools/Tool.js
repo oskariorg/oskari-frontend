@@ -6,7 +6,7 @@
 */
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
-    function(sandbox, mapmodule, localization) {
+    function (sandbox, mapmodule, localization) {
     // sandbox
         this.__sandbox = sandbox;
         // mapmodule
@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         // plugin
         this.__plugin = null;
         // tool state
-        this.state= {
+        this.state = {
             enabled: false,
             mode:null
         };
@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Object} tool
     */
-        getTool: function(){
+        getTool: function () {
             return {
                 id: '<plugin id>',
                 title: '<plugin name>',
@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-        setEnabled : function(enabled) {
+        setEnabled : function (enabled) {
 
         },
         /**
@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Object} jQuery element
     */
-        getExtraOptions: function() {
+        getExtraOptions: function () {
             return null;
         },
         /**
@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {String} tool name
     */
-        getName: function() {
+        getName: function () {
 
         },
         /**
@@ -88,11 +88,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Boolean} is displayed in wanted mode
     */
-        isDisplayedInMode: function(mode) {
+        isDisplayedInMode: function (mode) {
             var me = this,
                 supportedModes = [];
 
-            supportedModes = jQuery.grep(me.__supportedModes, function(modename) {
+            supportedModes = jQuery.grep(me.__supportedModes, function (modename) {
                 return modename === mode;
             });
 
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Boolean} is tool displayed
     */
-        isDisplayed: function() {
+        isDisplayed: function () {
             return true;
         },
         /**
@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Integer} group id
     */
-        getGroup : function() {
+        getGroup : function () {
             var me = this;
             return me.__group;
         },
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Integer} index
     */
-        getIndex : function() {
+        getIndex : function () {
             var me = this;
             return me.__index;
         },
@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Object} allowed locations array
     */
-        getAllowedLocations: function(){
+        getAllowedLocations: function () {
             var me = this;
             return me.__allowedLocations;
         },
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Object} errors object
     */
-        validate: function() {
+        validate: function () {
         // always valid
             return true;
         // or tool create validation

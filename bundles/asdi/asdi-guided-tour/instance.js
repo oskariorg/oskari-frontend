@@ -522,9 +522,9 @@ Oskari.clazz.define(
             var title = step.getTitle();
             var content = step.getContent();
 
-            if(dialog.dialog.hasClass('right')){
+            if (dialog.dialog.hasClass('right')) {
                 dialog.dialog.removeClass('right');
-            }else{
+            } else {
                 dialog.dialog.removeClass('left');
             }
             if (step.appendTourSeenCheckbox) {

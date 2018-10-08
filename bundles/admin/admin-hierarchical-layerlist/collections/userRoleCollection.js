@@ -1,13 +1,13 @@
 
-(function() {
+(function () {
     define(['_bundle/models/roleModel', '_bundle/collections/userRoleCollection'],
-        function(roleModel) {
+        function (roleModel) {
             return Backbone.Collection.extend({
 
             // Reference to this collection's model.
                 model : roleModel,
 
-                getRoles : function() {
+                getRoles : function () {
                     return this.models;
                 }
             });

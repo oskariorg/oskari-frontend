@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.RoutingServiceBun
 
             sandbox.requestHandler('GetRouteRequest', this.requestHandlers.getRouteHandler);
 
-            if(!sandbox.hasHandler('MapModulePlugin.RegisterStyleRequest')) {
+            if (!sandbox.hasHandler('MapModulePlugin.RegisterStyleRequest')) {
                 return;
             }
             var request = Oskari.requestBuilder(
@@ -194,13 +194,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.RoutingServiceBun
                 data: params,
                 dataType : 'json',
                 type : 'GET',
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
                 url : Oskari.urls.getRoute('Routing'),
-                error : function() {
+                error : function () {
                 // send an event about failure (for RPC etc)
                     var evt = Oskari.eventBuilder('RouteResultEvent')(false, undefined, undefined, params);
                     me.sandbox.notifyAll(evt);

@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
  * @param {JSON} plan parameters of route
  * @param {JSON} rawParameters parameters passed by the caller
  */
-    function(success, requestParameters, plan, rawParams) {
+    function (success, requestParameters, plan, rawParams) {
         this._success = success;
         this._requestParameters = requestParameters;
         this._plan = plan;
@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
      * Returns the successfully routing info
      * @return {Boolean}
      */
-        getSuccess : function() {
+        getSuccess : function () {
             return this._success;
         },
         /**
@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
      * Returns the plan JSON
      * @return {JSON}
      */
-        getPlan : function() {
+        getPlan : function () {
             return this._plan;
         },
         /**
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
      * Returns request paremeters
      * @return {JSON}
      */
-        getRequestParameters : function() {
+        getRequestParameters : function () {
             return this._requestParameters;
         },
 

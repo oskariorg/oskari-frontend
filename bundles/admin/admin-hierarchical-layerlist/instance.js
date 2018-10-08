@@ -4,7 +4,7 @@
  * Hierarchical layerlist bundle for admins. This extends hierarchical-layerlist bundle.
  */
 Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstance',
-    function() {
+    function () {
         this.locale = this.getLocalization();
         this.sandbox = Oskari.getSandbox();
         this.service = this.sandbox.getService('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService');
@@ -20,10 +20,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @method  _addMainTools
          * @private
          */
-        _addMainTools: function() {
+        _addMainTools: function () {
             var me = this;
             // Add new tool to adding groups
-            me.service.addMainTool('add-group', function(tool) {
+            me.service.addMainTool('add-group', function (tool) {
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, null, {
                     type: 'group'
                 });
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             });
 
             // Add update all capabilities tool
-            me.service.addMainTool('update-capabilities', function(tool) {
+            me.service.addMainTool('update-capabilities', function (tool) {
                 me._recheckAllCapabilities(tool);
             }, {
                 cls: 'update-capabilities',
@@ -49,11 +49,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @method  _addGroupTools
          * @private
          */
-        _addGroupTools: function() {
+        _addGroupTools: function () {
             var me = this;
 
             // Add layer add tools
-            me.service.addGroupTool('add-layer', function(tool, groupId) {
+            me.service.addGroupTool('add-layer', function (tool, groupId) {
                 var options = {};
                 me.layer.showLayerAddPopup(tool, null, groupId, options);
             }, {
@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             });
 
             // Add edit tool to adding groups
-            me.service.addGroupTool('edit-group', function(tool, groupId) {
+            me.service.addGroupTool('edit-group', function (tool, groupId) {
                 var group = me.layerService.getAllLayerGroups(groupId);
                 var options = {
                     locale: group.name,
@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             });
 
             // Add new tool to adding sub-groups
-            me.service.addGroupTool('add-subgroup', function(tool, parentId) {
+            me.service.addGroupTool('add-subgroup', function (tool, parentId) {
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, parentId, {
                     type: 'subgroup'
                 });
@@ -98,10 +98,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @method  _addSubgroupTools
          * @private
          */
-        _addSubgroupTools: function() {
+        _addSubgroupTools: function () {
             var me = this;
             // Add layer add tools
-            me.service.addSubgroupTool('add-layer', function(tool, groupId, parentId) {
+            me.service.addSubgroupTool('add-layer', function (tool, groupId, parentId) {
                 var options = {};
                 me.layer.showLayerAddPopup(tool, null, groupId, options);
             }, {
@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             });
 
             // Add edit tool to adding groups
-            me.service.addSubgroupTool('edit-subgroup', function(tool, groupId, parentId) {
+            me.service.addSubgroupTool('edit-subgroup', function (tool, groupId, parentId) {
                 var group = me.layerService.getAllLayerGroups(groupId);
                 var options = {
                     locale: group.name,
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             });
 
             // Add new tool to adding sub-groups
-            me.service.addSubgroupTool('add-subgroup-subgroup', function(tool, parentId) {
+            me.service.addSubgroupTool('add-subgroup-subgroup', function (tool, parentId) {
                 var popupConf = me.group.getGroupAddingPopupConf(tool, null, parentId, {
                     type: 'subgroup-subgroup'
                 });
@@ -147,10 +147,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @method  _addSubgroupSubgroupTools
          * @private
          */
-        _addSubgroupSubgroupTools: function() {
+        _addSubgroupSubgroupTools: function () {
             var me = this;
             // Add layer add tools
-            me.service.addSubgroupSubgroupTool('add-layer', function(tool, groupId, parentId) {
+            me.service.addSubgroupSubgroupTool('add-layer', function (tool, groupId, parentId) {
                 me.layer.showLayerAddPopup(tool, null, groupId);
             }, {
                 cls: 'add-layer',
@@ -158,7 +158,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             });
 
             // Add edit tool to adding groups
-            me.service.addSubgroupSubgroupTool('edit-subgroup-subgroup', function(tool, groupId, parentId) {
+            me.service.addSubgroupSubgroupTool('edit-subgroup-subgroup', function (tool, groupId, parentId) {
                 var group = me.layerService.getAllLayerGroups(groupId);
                 var options = {
                     locale: group.name,
@@ -180,7 +180,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @method  _addOptions
          * @private
          */
-        _addOptions: function() {
+        _addOptions: function () {
             var me = this;
 
             // Add Drag & drop plugin
@@ -197,10 +197,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @method  _addLayerTools
          * @private
          */
-        _addLayerTools: function() {
+        _addLayerTools: function () {
             var me = this;
             // Add edit tool for layers
-            me.service.addLayerTool('edit-layer', function(tool, groupId, layerId) {
+            me.service.addLayerTool('edit-layer', function (tool, groupId, layerId) {
                 me.layer.showLayerAddPopup(tool, layerId, groupId);
             }, {
                 cls: 'edit-layer',
@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         /**
          * Assigns event handlers to the admin hierarchical layer list.
          */
-        _addEventHandlers: function() {
+        _addEventHandlers: function () {
             var me = this;
             // JStree event handler, see: https://www.jstree.com/api/#/?f=dnd_stop.vakata
             //  event is Jquery event and data object contains:
@@ -219,7 +219,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             //  - element: the DOM element being dragged
             //  - helper: the helper shown next to the mouse
             //  - event: the event that caused the stop
-            jQuery(document).on('dnd_stop.vakata', function(event, data) {
+            jQuery(document).on('dnd_stop.vakata', function (event, data) {
                 //If the drag target group is not open, we have to open it.
                 //Otherwise we can't get the necessary information of the drag operation.
                 var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop('id').split('_anchor')[0]);
@@ -239,7 +239,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     parent: (parentNode.a_attr && parentNode.a_attr['data-group-id']) ? parentNode.a_attr['data-group-id'] : -1
                 };
 
-                parentNode.children.forEach(function(nodeId) {
+                parentNode.children.forEach(function (nodeId) {
                     var node = data.data.origin.get_node(nodeId);
                     var order = {
                         type: node.type, // groups, subgroup, subgroups
@@ -249,7 +249,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                         order.oldParent = draggedNodeOldParentId;
                     }
                     // check at id is number
-                    if(!isNaN(order.id)) {
+                    if (!isNaN(order.id)) {
                         ajaxData.orders.push(order);
                     }
                 });
@@ -265,7 +265,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @param  {String} type The node type in the tree
          * @return {String}      The node actual type - layer or group.
          */
-        _findJSTreeNodeActualType: function(type) {
+        _findJSTreeNodeActualType: function (type) {
             var actualType;
             if (type.indexOf('group') >= 0) {
                 actualType = 'group';
@@ -281,14 +281,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @param   {Object}   data  data for saving
          * @private
          */
-        _saveOrder: function(data) {
+        _saveOrder: function (data) {
             var me = this;
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json; charset=UTF-8',
                 url: Oskari.urls.getRoute('LayerAndGroupOrder'),
                 data: JSON.stringify(data),
-                error: function(response) {
+                error: function (response) {
                     var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     errorDialog.show(me.locale('errors.nodeDropSave.title'), me.locale('errors.nodeDropSave.message'));
                     errorDialog.fadeout();
@@ -297,7 +297,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                         success: false
                     });
                 },
-                success: function(response) {
+                success: function (response) {
                     var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     successDialog.show(me.locale('successMessages.nodeDropSave.title'), me.locale('successMessages.nodeDropSave.message'));
                     successDialog.fadeout();
@@ -316,7 +316,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
          * @param   {Object}                tool jQuery tool element
          * @private
          */
-        _recheckAllCapabilities: function(tool){
+        _recheckAllCapabilities: function (tool) {
             var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
 
             var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -326,8 +326,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             var me = this;
             var xhr;
 
-            closeButton.setHandler(function() {
-                if(xhr) {
+            closeButton.setHandler(function () {
+                if (xhr) {
                     xhr.abort();
                 }
                 popup.close();
@@ -353,7 +353,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                     },
                     error: function (xhr, status, error) {
                         xhr = null;
-                        if(status === 'timeout') {
+                        if (status === 'timeout') {
                             content.append('<br><br><span>' + loc('recheckFailTimeout') + '<span>');
                             return;
                         }
@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
         *******************************************************************************************************************************/
-        getLocalization: function(key) {
+        getLocalization: function (key) {
             if (!this.locale) {
                 this.locale = Oskari.getMsg.bind(null, 'admin-layerselector');
             }
@@ -381,10 +381,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             }
             return this.locale;
         },
-        getName: function() {
+        getName: function () {
             return 'AdminHierarchicalLayerList';
         },
-        start: function() {
+        start: function () {
             var me = this;
             // Only works with hierarchical layer selector,
             // if the service it provides is not available we cannot proceed
@@ -404,16 +404,16 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
         },
 
         // module boilerplate methods
-        init: function() {
+        init: function () {
 
         },
-        stop: function() {
+        stop: function () {
 
         },
-        update: function() {
+        update: function () {
 
         },
-        getSandbox: function(){
+        getSandbox: function () {
             return this.sandbox;
         }
     }, {

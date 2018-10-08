@@ -14,7 +14,7 @@ Oskari.clazz
      * @param {Boolean}
      *            enabled Truth value of WFS highlight activation
      */
-        function(enabled) {
+        function (enabled) {
             this._enabled = !!enabled;
 
         }, {
@@ -24,10 +24,10 @@ Oskari.clazz
          * @method getName
          * @return {String} request name
          */
-            getName : function() {
+            getName : function () {
                 return this.__name;
             },
-            isEnabled : function() {
+            isEnabled : function () {
                 return this._enabled;
             }
         }, {

@@ -14,7 +14,7 @@ Oskari.clazz
      * @param {String} selectedFilter select wanted filter
      * @param {Boolean} opeLayerList Open layer list when calling request
      */
-        function(selectedFilter, openLayerList) {
+        function (selectedFilter, openLayerList) {
             this._selectedFilter = selectedFilter;
             this._openLayerList = openLayerList;
         }, {
@@ -24,21 +24,21 @@ Oskari.clazz
          * @method getName
          * @return {String} request name
          */
-            getName : function() {
+            getName : function () {
                 return this.__name;
             },
             /**
          * @method  getSelectedFilter
          * @return {String} default selected filter
          */
-            getSelectedFilter: function(){
+            getSelectedFilter: function () {
                 return this._selectedFilter;
             },
             /**
          * @method  getOpenLayerList
          * @return {Boolean} open layer list
          */
-            getOpenLayerList: function(){
+            getOpenLayerList: function () {
                 return this._openLayerList;
             }
         }, {

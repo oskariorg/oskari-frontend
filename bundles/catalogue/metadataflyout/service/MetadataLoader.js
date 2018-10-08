@@ -33,7 +33,7 @@ Oskari.clazz.define(
             }
             uri = this.baseUrl + 'action_route=GetCSWData&uuid=' + uuid +
                 '&lang=' + lang +
-                '&srs='+this.srs;
+                '&srs=' + this.srs;
 
             jQuery.ajax({
                 url: uri,

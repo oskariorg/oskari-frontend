@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.ProgressEvent',
  * @method create called automatically on construction
  * @static
  */
-    function(status, id) {
+    function (status, id) {
         this._status = status;
         this._id = id;
     }, {
@@ -18,13 +18,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.ProgressEvent',
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
-        getId: function(){
+        getId: function () {
             return this._id;
         },
-        getStatus: function(){
+        getStatus: function () {
             return this._status;
         }
     }, {

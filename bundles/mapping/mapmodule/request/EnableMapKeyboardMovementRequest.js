@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapKeybo
  * @method create called automatically on construction
  * @static
  */
-    function(options) {
+    function (options) {
         this._creator = null;
         this._options = options;
     }, {
@@ -26,15 +26,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapKeybo
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
-        getOptions: function(option) {
-            if(option && this._options) {
-                return this._options.findIndex(function(o){
+        getOptions: function (option) {
+            if (option && this._options) {
+                return this._options.findIndex(function (o) {
                     return o === option;
                 }) > -1;
-            } else if(option){
+            } else if (option) {
                 return true;
             }
             return this._options;

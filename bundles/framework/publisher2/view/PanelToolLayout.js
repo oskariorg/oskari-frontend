@@ -68,13 +68,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
             me._toggleAdditionalTools();
             //init the tools' plugins location infos
-            if (me.data && me.activeToolLayout === 'userlayout' ) {
+            if (me.data && me.activeToolLayout === 'userlayout') {
                 me._initUserLayout();
             } else {
                 me._changeToolLayout(me.activeToolLayout, null);
             }
         },
-        getName: function() {
+        getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout';
         },
 
@@ -88,23 +88,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         *
         * @return {Object} extended object
         */
-        _extendRecursive: function(defaults, extend){
+        _extendRecursive: function (defaults, extend) {
             var me = this;
             if (extend === null || extend === undefined || jQuery.isEmptyObject(extend)) {
                 return defaults;
             } else if (jQuery.isEmptyObject(defaults)) {
                 return jQuery.extend(true, defaults, extend);
             } else if (jQuery.isArray(defaults)) {
-                if(jQuery.isArray(extend)){
-                    jQuery.each(extend, function(key, value) {
+                if (jQuery.isArray(extend)) {
+                    jQuery.each(extend, function (key, value) {
                         defaults.push(value);
                     });
                 }
                 return defaults;
             } else if (extend.constructor && extend.constructor === Object) {
-                jQuery.each(extend, function(key, value){
+                jQuery.each(extend, function (key, value) {
                     //not an array or an object -> just use the plain value
-                    if( defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
+                    if (defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
                         defaults[key] = value;
                     } else {
                         defaults[key] = me._extendRecursive(defaults[key], value);
@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             var me = this,
                 values = {};
 
-            _.each(me.tools, function(tool){
+            _.each(me.tools, function (tool) {
 
                 if (tool.isDisplayed(me.data)) {
                     var value = tool.getValues();
@@ -157,9 +157,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @method _toggleAdditionalTools
          *   sets on the tools that are displayed but aren't showing in the tools panel (LogoPlugin etc.)
          */
-        _toggleAdditionalTools: function() {
+        _toggleAdditionalTools: function () {
             var me = this;
-            _.each(me.tools, function(tool) {
+            _.each(me.tools, function (tool) {
                 //don't call for tools that already have been set enabled (=plugin has already been created.)
                 if (tool.isDisplayed(me.data) && !tool.isShownInToolsPanel() && !tool.state.enabled) {
                     tool.setEnabled(true);
@@ -306,19 +306,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * Initialises the plugins' location info when restoring a published map that has a user defined layout
          * @method _initToolLayout
          */
-        _initUserLayout: function() {
+        _initUserLayout: function () {
             var me = this,
                 tools = this.tools,
                 pluginConfigs;
             //gotta figure out some nicer way to check the existence of (deep) nested properties in an object...
             try {
                 pluginConfigs = me.data.configuration.mapfull.conf.plugins;
-            } catch(e) {
+            } catch (e) {
                 pluginConfigs = null;
             }
             if (pluginConfigs && pluginConfigs.length) {
                 var pluginConfig = null;
-                _.each(tools, function(tool) {
+                _.each(tools, function (tool) {
                     for (var i = 0; i < pluginConfigs.length; i++) {
                         pluginConfig = pluginConfigs[i];
                         if (tool.getTool().id === pluginConfig.id) {
@@ -500,7 +500,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             return null;
         },
 
-        getToolById: function(id) {
+        getToolById: function (id) {
             for (var i = 0; i < this.tools.length; i++) {
                 if (this.tools[i].getTool().id === id) {
                     return this.tools[i];
@@ -512,9 +512,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         * @method stop
         * @public
         **/
-        stop: function(){
+        stop: function () {
             var me = this;
-            _.each(me.tools, function(tool){
+            _.each(me.tools, function (tool) {
                 //just call stop for the tools that haven't already been shut down by the tool panel
                 if (tool.isStarted() && tool.getPlugin() && tool.getPlugin().getSandbox()) {
                     tool.stop();
@@ -642,7 +642,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _restartActivePlugins: function () {
             var me = this;
 
-            _.each(me.tools, function(tool) {
+            _.each(me.tools, function (tool) {
                 if (tool.isDisplayed(me.data) && tool.isStarted()) {
                     //reset
                     tool.setEnabled(false);

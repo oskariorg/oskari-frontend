@@ -87,11 +87,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *            layer layer for which to parse geometry
      *
      */
-        _parseGeometryForLayer : function(layer) {
+        _parseGeometryForLayer : function (layer) {
         // parse geometry if available
-            if(layer.getGeometry && layer.getGeometry().length === 0) {
+            if (layer.getGeometry && layer.getGeometry().length === 0) {
                 var layerWKTGeom = layer.getGeometryWKT();
-                if(!layerWKTGeom) {
+                if (!layerWKTGeom) {
                 // no wkt, dont parse
                     return;
                 }
@@ -115,9 +115,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *            layer layer to check against
      * @return {Boolean} true if geometry is visible or cant determine if it isnt
      */
-        isInGeometry : function(layer) {
+        isInGeometry : function (layer) {
             var geometries = layer.getGeometry();
-            if(!geometries) {
+            if (!geometries) {
                 return true;
             }
 
@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
 
             var viewBounds = this.getMapModule().getCurrentExtent();
             var ol3Extent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
-            if(geometries[0].intersectsExtent(ol3Extent)) {
+            if (geometries[0].intersectsExtent(ol3Extent)) {
                 return true;
             }
             return false;
@@ -139,14 +139,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      * @return {Object} centroid
      */
         getGeometryCenter: function (geometry) {
-            if (geometry.getType()==='Point') {
+            if (geometry.getType() === 'Point') {
                 var point = geometry.getCoordinates();
                 return {lon: point[0], lat: point[1]};
-            } else if (geometry.getType()==='Polygon'){
+            } else if (geometry.getType() === 'Polygon') {
                 var extent = geometry.getExtent();
                 return {
-                    lon: extent[0] + (extent[2]-extent[0])/2,
-                    lat: extent[1] + (extent[3]-extent[1])/2
+                    lon: extent[0] + (extent[2] - extent[0]) / 2,
+                    lat: extent[1] + (extent[3] - extent[1]) / 2
                 };
             } else {
             //
@@ -230,12 +230,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *            layer layer to check against
      * @param {Boolean} isRequest if MapLayerVisibilityRequest, then trigger always change because layer's visibility has changed
      */
-        handleMapLayerVisibility : function(layer, isRequest) {
+        handleMapLayerVisibility : function (layer, isRequest) {
             var scaleOk = layer.isVisible();
             var geometryMatch = layer.isVisible();
             var triggerChange = (isRequest === true);
             // if layer is visible check actual values
-            if(layer.isVisible()) {
+            if (layer.isVisible()) {
                 scaleOk = this._isInScale(layer);
                 geometryMatch = this.isInGeometry(layer);
             }
@@ -245,13 +245,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             // this is for optimization purposes
             var mapModule = this.getMapModule(),
                 mapLayers = mapModule.getOLMapLayers(layer.getId());
-            if (!mapLayers || !mapLayers.length){
-                if (triggerChange){
+            if (!mapLayers || !mapLayers.length) {
+                if (triggerChange) {
                     this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
                 }
                 return;
             }
-            if(scaleOk && geometryMatch && layer.isVisible()) {
+            if (scaleOk && geometryMatch && layer.isVisible()) {
             // show non-baselayer if in scale, in geometry and layer visible
                 mapLayers.forEach(function (mapLayer) {
                     if (!mapLayer.getVisible()) {
@@ -268,11 +268,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                     }
                 });
             }
-            if (triggerChange){
+            if (triggerChange) {
                 this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
             }
         },
-        notifyLayerVisibilityChanged: function (layer, inScale, geometryMatch){
+        notifyLayerVisibilityChanged: function (layer, inScale, geometryMatch) {
             var event = Oskari.eventBuilder('MapLayerVisibilityChangedEvent')(layer, inScale, geometryMatch);
             this._sandbox.notifyAll(event);
         }

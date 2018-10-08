@@ -47,37 +47,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             // get openlayers layer objects from map
             var module = this.layersPlugin.getMapModule();
             var layerList = module.getOLMapLayers(layer.getId());
-            if(!layerList.length) {
+            if (!layerList.length) {
                 // couldn't find the matching ol layer, maybe a timing issue
                 this.handleWMTStimingIssue(layer, core, request);
                 return;
             }
 
-            layerList.forEach(function(ol) {
+            layerList.forEach(function (ol) {
                 me.setVisible(ol, layer.isVisible());
             });
 
             // notify other components
             this.layersPlugin.notifyLayerVisibilityChanged(layer);
         },
-        tryVectorLayers : function(id, blnVisible) {
+        tryVectorLayers : function (id, blnVisible) {
             var module = this.layersPlugin.getMapModule();
             var plugin = module.getLayerPlugins('vectorlayer');
-            if(!plugin || typeof plugin.getLayerById !== 'function') {
+            if (!plugin || typeof plugin.getLayerById !== 'function') {
                 return;
             }
             var layer = plugin.getLayerById(id);
-            if(!layer) {
+            if (!layer) {
                 return;
             }
             this.setVisible(layer, blnVisible);
         },
-        setVisible : function(layer, bln) {
+        setVisible : function (layer, bln) {
             // ol2 specific
             layer.setVisibility(bln);
             layer.display(bln);
         },
-        handleWMTStimingIssue : function(layer, core, request) {
+        handleWMTStimingIssue : function (layer, core, request) {
             var me = this;
             if (!layer.isLayerOfType('WMTS')) {
                 return;
@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             }
 
             if (me.wmtsRetryCounter[layer.getId()]++ < 10) {
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                     me.handleRequest(core, request);
                 }, 500);
             }

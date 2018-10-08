@@ -2,7 +2,7 @@
  * @class Oskari.asdi.login.BundleInstance
  */
 Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
-    function() {
+    function () {
         this.dialog = null;
         this.data = null;
         this._loc;
@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
             return this.__name;
         },
 
-        start: function() {
+        start: function () {
             var errorCb = function (xhr, errorText) {
                 Oskari.log(this.getName(), errorText);
             };
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
             this.createLogoPlugin();
         },
 
-        getAboutLinkContent: function(errorCb) {
+        getAboutLinkContent: function (errorCb) {
             var me = this;
             jQuery.ajax({
                 url: Oskari.urls.getRoute('GetArticlesByTag'),
@@ -29,40 +29,40 @@ Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
                     tags: 'asdi-about'
                 },
                 success: function (response) {
-                    if( response.articles instanceof Array ) {
+                    if (response.articles instanceof Array) {
                         me.data = response.articles[0].content.body;
                     }
                 },
                 error: function (jqXHR, textStatus) {
-                    if(typeof errorCb === 'function' && jqXHR.status !== 0) {
+                    if (typeof errorCb === 'function' && jqXHR.status !== 0) {
                         errorCb(jqXHR, textStatus);
                     }
                 }
             });
         },
 
-        createLogoPlugin(response) {
+        createLogoPlugin (response) {
             var me = this;
             var logoService = Oskari.getSandbox().getService('Oskari.map.LogoPluginService');
             var options = {
                 id:'About',
-                callback: function(event) {
+                callback: function (event) {
                     me.createAboutDialog(event);
                 }
             };
             logoService.addLabel(this._loc.title, options);
         },
 
-        createAboutDialog(event) {
+        createAboutDialog (event) {
             var me = this;
-            if(this.dialog) {
+            if (this.dialog) {
                 this.dialog.close(true);
                 this.dialog = null;
                 return;
             }
             var content = jQuery('<div></div>');
-            if( this.data ){
-                content.append( this.data );
+            if (this.data) {
+                content.append(this.data);
             }
             var me = this;
             var popupTitle = this._loc.title;

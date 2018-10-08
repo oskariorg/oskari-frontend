@@ -11,18 +11,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         var newData = {};
 
         // Request data is allready to new format
-        if(data && !data.iconUrl && (data.shape || typeof data.shape === 'number') && typeof data.shape !== 'object') {
+        if (data && !data.iconUrl && (data.shape || typeof data.shape === 'number') && typeof data.shape !== 'object') {
         	newData = data;
         }
         // Else format old data to new form and inform user about this
         else {
         	this.sandbox.printWarn('AddMarkerRequest data is debricated format, formatted this to the new format before processing request. Please check your request!');
-            var shape  = null;
-            if(data.iconUrl) {
+            var shape = null;
+            if (data.iconUrl) {
                 shape = data.iconUrl;
-            } else if(data.shape && data.shape.data){
+            } else if (data.shape && data.shape.data) {
                 shape = data.shape.data;
-            } else if(data.shape) {
+            } else if (data.shape) {
                 shape = data.shape;
             }
         	newData = {
@@ -41,31 +41,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
     	}
 
         // validations
-        if(newData.x) {
+        if (newData.x) {
             newData.x = parseFloat(Oskari.util.sanitize(newData.x));
         }
-        if(newData.y) {
+        if (newData.y) {
             newData.y = parseFloat(Oskari.util.sanitize(newData.y));
         }
-        if(newData.color) {
+        if (newData.color) {
             newData.color = Oskari.util.sanitize(newData.color);
         }
-        if(newData.msg) {
+        if (newData.msg) {
             newData.msg = Oskari.util.sanitize(newData.msg);
         }
-        if(newData.size) {
+        if (newData.size) {
             newData.size = parseFloat(Oskari.util.sanitize(newData.size));
         }
-        if(newData.stroke) {
+        if (newData.stroke) {
             newData.stroke = Oskari.util.sanitize(newData.stroke);
         }
-        if(newData.shape) {
+        if (newData.shape) {
             newData.shape = Oskari.util.sanitize(newData.shape);
         }
-        if(newData.offsetX) {
+        if (newData.offsetX) {
             newData.offsetX = parseFloat(Oskari.util.sanitize(newData.offsetX));
         }
-        if(newData.offsetY) {
+        if (newData.offsetY) {
             newData.offsetY = parseFloat(Oskari.util.sanitize(newData.offsetY));
         }
         this.markersPlugin.addMapMarker(newData, request.getID());

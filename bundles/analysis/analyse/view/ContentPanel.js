@@ -41,11 +41,11 @@ Oskari.clazz.define(
                 '  <h4 class="title"></h4>' +
                 '</div>',
             drawFilter: '<div class="drawFilter"></div>',
-            selectionToolsContainer: '<div class="toolContainer">'+
-                '   <h4 class="title"></h4>'+
-                '   <div class="toolContainerToolDiv"></div>'+
-                '   <div class="toolContainerFooter"></div>'+
-                '   <div class="toolContainerButtons"></div>'+
+            selectionToolsContainer: '<div class="toolContainer">' +
+                '   <h4 class="title"></h4>' +
+                '   <div class="toolContainerToolDiv"></div>' +
+                '   <div class="toolContainerFooter"></div>' +
+                '   <div class="toolContainerButtons"></div>' +
                 '</div>',
             search: '<div class="analyse-search"></div>'
         },
@@ -118,7 +118,7 @@ Oskari.clazz.define(
          *
          * @return {OpenLayers.Feature.Vector}
          */
-        parseFeatureFromClickedFeature: function(clickedGeometry) {
+        parseFeatureFromClickedFeature: function (clickedGeometry) {
             var data = clickedGeometry[1],
                 wkt = new OpenLayers.Format.WKT(),
                 feature = wkt.read(data),
@@ -272,11 +272,11 @@ Oskari.clazz.define(
                     layer = olMap.getLayersByName('AnalyseFeatureLayer')[0];
                 this.mapModule.bringToTop(layer, 20);
             },
-            'AfterMapLayerAddEvent': function(event) {
+            'AfterMapLayerAddEvent': function (event) {
                 this.toggleSelectionTools();
                 this.drawControls.toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
             },
-            'AfterMapLayerRemoveEvent': function(event) {
+            'AfterMapLayerRemoveEvent': function (event) {
                 this.toggleSelectionTools();
                 this.drawControls.toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
             }
@@ -512,7 +512,7 @@ Oskari.clazz.define(
                         me.view.setFilterGeometry(geometries);
                         me.WFSLayerService.emptyAllWFSFeatureSelections();
                     },
-                    'featureunselected': function(feature) {
+                    'featureunselected': function (feature) {
                         me.selectedGeometry = undefined;
                     }
                 });
@@ -554,7 +554,7 @@ Oskari.clazz.define(
          * Sets the selection tools' status after a map layer has been added or removed. Disables controls if no wfs layers selected, enables tools otherwise
          *
          */
-        toggleSelectionTools: function() {
+        toggleSelectionTools: function () {
             var me = this,
                 selectionToolsToolContainer = jQuery('div.toolContainerToolDiv'),
                 analysisWFSLayerSelected = (me.WFSLayerService.getAnalysisWFSLayerId() !== undefined && me.WFSLayerService.getAnalysisWFSLayerId() !== null);
@@ -670,14 +670,14 @@ Oskari.clazz.define(
                 },
                 rn = 'userinterface.UpdateExtensionRequest';
 
-            if(name === 'LayerSelector') {
+            if (name === 'LayerSelector') {
                 var requestName = 'ShowFilteredLayerListRequest';
                 me.sandbox.postRequestByName(
                     requestName,
                     [null, 'featuredata']
                 );
                 clearTimeout(this._flyoutTimeOut);
-                this._flyoutTimeOut = setTimeout(function(){
+                this._flyoutTimeOut = setTimeout(function () {
                     me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
                 },100);
             } else {
@@ -774,7 +774,7 @@ Oskari.clazz.define(
          * @param {Object} config params for StartDrawRequest
          */
         _sendDrawRequest: function (config) {
-            if(this.drawPlugin) {
+            if (this.drawPlugin) {
                 this.drawPlugin.startDrawing(config);
             }
         },
@@ -978,9 +978,9 @@ Oskari.clazz.define(
          * @param  {String}  regex  regex
          * @return {Boolean}        is plugin not named
          */
-        _isPluginNamed: function(plugin, regex) {
+        _isPluginNamed: function (plugin, regex) {
             // Check at puligin has name
-            if(!plugin || !plugin.getName()) {
+            if (!plugin || !plugin.getName()) {
                 return false;
             }
 
@@ -1029,7 +1029,7 @@ Oskari.clazz.define(
             var drawFilterPlugins = _.filter(
                 mapModule.getPluginInstances(),
                 function (plugin) {
-                    return  me._isPluginNamed(plugin, /DrawFilterPlugin$/);
+                    return me._isPluginNamed(plugin, /DrawFilterPlugin$/);
                 }
             );
 

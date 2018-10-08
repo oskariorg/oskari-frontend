@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.SearchResultEvent',
  * @param {JSON} requestParameters request parameters
  * @param {JSON} search result
  */
-    function(success, requestParameters, result) {
+    function (success, requestParameters, result) {
         this._success = success;
         this._requestParameters = requestParameters;
         this._result = result;
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.SearchResultEvent',
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.SearchResultEvent',
      * Returns the successfully routing info
      * @return {Boolean}
      */
-        getSuccess : function() {
+        getSuccess : function () {
             return this._success;
         },
         /**
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.SearchResultEvent',
      * Returns the search result JSON
      * @return {JSON}
      */
-        getResult : function() {
+        getResult : function () {
             return this._result;
         },
         /**
@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.SearchResultEvent',
      * Returns request paremeters
      * @return {JSON}
      */
-        getRequestParameters : function() {
+        getRequestParameters : function () {
             return this._requestParameters;
         },
 

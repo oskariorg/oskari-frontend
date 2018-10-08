@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.MapSizeChangedEv
  * @param {Number} width map div's width
  * @param {Number} height map div's height
  */
-    function(width, height) {
+    function (width, height) {
         this._width = width;
         this._height = height;
     }, {
@@ -20,21 +20,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.MapSizeChangedEv
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getWidth
      * @return {Number}
      */
-        getWidth : function() {
+        getWidth : function () {
             return this._width;
         },
         /**
      * @method getHeight
      * @return {Number}
      */
-        getHeight : function() {
+        getHeight : function () {
             return this._height;
         }
     }, {

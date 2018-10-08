@@ -13,10 +13,10 @@ Oskari.clazz.category(
          * @method  @private _changePage  Change page
          * @param  {Object} groupHeader group header
          */
-        _changePage: function(groupHeader){
+        _changePage: function (groupHeader) {
             var me = this;
 
-            if(me._groupingHeaders && groupHeader.attr('data-group-cols')) {
+            if (me._groupingHeaders && groupHeader.attr('data-group-cols')) {
                 var page = Number(groupHeader.attr('data-page'));
                 var groupIndex = groupHeader.attr('data-header-index');
                 me._currentPage[groupIndex] = page;
@@ -27,34 +27,34 @@ Oskari.clazz.category(
                 var table = groupHeader.parents('table');
 
                 // hide grouping cols
-                for(var i=groupStartCol;i<groupCols+groupStartCol;i++){
-                    var content = table.find('tr th:not(.grouping):nth-child('+i+') ,td:not(.grouping):nth-child('+i+')');
+                for (var i = groupStartCol;i < groupCols + groupStartCol;i++) {
+                    var content = table.find('tr th:not(.grouping):nth-child(' + i + ') ,td:not(.grouping):nth-child(' + i + ')');
                     content.hide();
                 }
 
-                var pagingHandler = function(groupHeader, data) {
+                var pagingHandler = function (groupHeader, data) {
                     var headerIndex = Number(groupHeader.attr('data-header-index'));
                     var header = me._groupingHeaders[headerIndex];
                     // If header has paging handler then do it
-                    if(typeof header.pagingHandler === 'function') {
+                    if (typeof header.pagingHandler === 'function') {
                         header.pagingHandler(groupHeader.find('.title'), data);
                     }
                     // otherwise show default text, for example: "2-4/5"
-                    else if(!header.text) {
+                    else if (!header.text) {
                         groupHeader.find('.title').html(data.visible.start + '-' + data.visible.end + '/' + data.count);
                     }
                 };
 
                 // Check buttons visibility
-                var checkPagingButtonsVisiblity = function(){
+                var checkPagingButtonsVisiblity = function () {
                     var page = Number(groupHeader.attr('data-page'));
                     var next = groupHeader.find('.paging.next');
                     var previous = groupHeader.find('.paging.previous');
                     next.removeClass('hidden');
                     previous.removeClass('hidden');
-                    if(page===1) {
+                    if (page === 1) {
                         previous.addClass('hidden');
-                    } else if(page === Number(groupHeader.attr('data-max-page'))){
+                    } else if (page === Number(groupHeader.attr('data-max-page'))) {
                         next.addClass('hidden');
                     }
                 };
@@ -63,7 +63,7 @@ Oskari.clazz.category(
 
                 // Get visible cols and shows them
                 // If page is first then show only first cols
-                if(page === 1) {
+                if (page === 1) {
                     visibleCols = visibleCols.slice(0, maxCols);
                 }
                 // else page is latest
@@ -72,22 +72,22 @@ Oskari.clazz.category(
                 }
                 // else page is between first and latest
                 else {
-                    visibleCols = visibleCols.slice((page-1) * maxCols, page * maxCols);
+                    visibleCols = visibleCols.slice((page - 1) * maxCols, page * maxCols);
                 }
 
                 // Show page cols
-                visibleCols.forEach(function(element){
+                visibleCols.forEach(function (element) {
                     var colIndex = element + groupStartCol;
                     var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
                     currentColEl.show();
                 });
 
 
-                if(visibleCols.length < groupCols) {
+                if (visibleCols.length < groupCols) {
                     pagingHandler(groupHeader, {
                         visible: {
                             start: visibleCols[0] + 1,
-                            end: visibleCols[visibleCols.length-1] + 1
+                            end: visibleCols[visibleCols.length - 1] + 1
                         },
                         count: groupCols,
                         page: page,
@@ -104,46 +104,46 @@ Oskari.clazz.category(
          * @method  @private_checkPaging Check table paging
          * @param  {Object} table jQuery table dom
          */
-        _checkPaging: function(table){
+        _checkPaging: function (table) {
             var me = this;
-            if(me._groupingHeaders) {
+            if (me._groupingHeaders) {
                 // Paging handlers
-                var prevHandler = function(evt) {
+                var prevHandler = function (evt) {
                     evt.stopPropagation();
                     var groupHeader = jQuery(this).parents('th.grouping');
                     var page = Number(groupHeader.attr('data-page')) - 1;
-                    if(page < 1) {
+                    if (page < 1) {
                         page = 1;
                     }
                     groupHeader.attr('data-page', page);
                     me._changePage(groupHeader);
                 };
 
-                var nextHandler = function(evt) {
+                var nextHandler = function (evt) {
                     evt.stopPropagation();
                     var groupHeader = jQuery(this).parents('th.grouping');
                     var page = Number(groupHeader.attr('data-page')) + 1;
-                    if(page > groupHeader.attr('data-max-page')) {
+                    if (page > groupHeader.attr('data-max-page')) {
                         page = groupHeader.attr('data-max-page');
                     }
                     groupHeader.attr('data-page', page);
                     me._changePage(groupHeader);
                 };
-                table.find('th.grouping').each(function(i,el){
+                table.find('th.grouping').each(function (i,el) {
                     var groupHeader = jQuery(this);
-                    var groupCols = groupHeader.attr('colspan') ?  Number(groupHeader.attr('colspan')) :  1;
+                    var groupCols = groupHeader.attr('colspan') ? Number(groupHeader.attr('colspan')) : 1;
                     var maxCols = groupHeader.attr('data-max-cols');
                     var next = groupHeader.find('.paging.next');
                     var previous = groupHeader.find('.paging.previous');
-                    if(!!maxCols && groupCols > maxCols){
-                        if(me._groupingHeaders.length > 1 && i === 0) {
+                    if (!!maxCols && groupCols > maxCols) {
+                        if (me._groupingHeaders.length > 1 && i === 0) {
                             next.addClass('hidden');
-                        } else if(me._groupingHeaders.length > 1 && i > 0) {
+                        } else if (me._groupingHeaders.length > 1 && i > 0) {
                             previous.addClass('hidden');
                         }
 
                         var maxPage = (groupCols - (groupCols % maxCols)) / maxCols;
-                        if(groupCols % maxCols > 0) {
+                        if (groupCols % maxCols > 0) {
                             maxPage += 1;
                         }
                         groupHeader.attr('data-group-cols', groupCols);
@@ -158,7 +158,7 @@ Oskari.clazz.category(
                         previous.off('click');
                         previous.on('click', prevHandler);
 
-                        if(me._currentPage[groupIndex]) {
+                        if (me._currentPage[groupIndex]) {
                             groupHeader.attr('data-page', me._currentPage[groupIndex]);
                             // release current page information
                             delete me._currentPage[groupIndex];
@@ -175,21 +175,21 @@ Oskari.clazz.category(
         /**
          * @method  @private _selectActivePage Select active to visible page
          */
-        _selectActivePage: function(){
+        _selectActivePage: function () {
             var me = this;
             // Safety checks
-            if(!this.table || !me._groupingHeaders) {
+            if (!this.table || !me._groupingHeaders) {
                 return;
             }
             var selected = this.table.find('th.selected');
-            if(!selected.is(':visible')) {
+            if (!selected.is(':visible')) {
                 var colIndex = this.table.find('tr th:not(.grouping)').index(selected);
                 var cols = 0;
 
                 // Resolve wanted page to visible
-                selected.parent().parent().find('tr.grouping th').each(function(){
+                selected.parent().parent().find('tr.grouping th').each(function () {
                     var groupHeader = jQuery(this);
-                    if(!groupHeader.attr('colspan')){
+                    if (!groupHeader.attr('colspan')) {
                         cols++;
                     } else {
                         cols += Number(groupHeader.attr('colspan'));
@@ -198,10 +198,10 @@ Oskari.clazz.category(
                     var groupStartCol = Number(groupHeader.attr('data-start-col'));
 
                     // Founded matching group header
-                    if(colIndex < cols && colIndex + 1 >= groupStartCol && !!maxCols) {
+                    if (colIndex < cols && colIndex + 1 >= groupStartCol && !!maxCols) {
                         // resolve wanted page
                         var wantedPage = (colIndex - (colIndex % maxCols)) / maxCols;
-                        if(colIndex % maxCols > 0) {
+                        if (colIndex % maxCols > 0) {
                             wantedPage += 1;
                         }
                         groupHeader.attr('data-page',wantedPage);

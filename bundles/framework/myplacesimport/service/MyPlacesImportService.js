@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
  * @method create called automatically on construction
  * @static
  */
-    function(instance) {
+    function (instance) {
         this.instance = instance;
         this.sandbox = instance.sandbox;
         this.urls = {};
@@ -19,10 +19,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     }, {
         __name: 'MyPlacesImport.MyPlacesImportService',
         __qname : 'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
-        getQName : function() {
+        getQName : function () {
             return this.__qname;
         },
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      *
      * @method init
      */
-        init: function() {
+        init: function () {
         },
         /**
      * Returns the url used to send the file data to.
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @method getFileImportUrl
      * @return {String}
      */
-        getFileImportUrl: function() {
+        getFileImportUrl: function () {
             return this.urls.create;
         },
         /**
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @method getEditLayerUrl
      * @return {String}
      */
-        getEditLayerUrl: function() {
+        getEditLayerUrl: function () {
             return this.urls.edit;
         },
 
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @method getUserLayerStyleUrl
      * @return {String}
      */
-        getGetUserLayerStyleUrl: function() {
+        getGetUserLayerStyleUrl: function () {
             return this.urls.getStyle;
         },
 
@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param  {Function} errorCb (optional)
      * @param  {String} id (optional)
      */
-        getUserLayers: function(successCb, errorCb, id) {
+        getUserLayers: function (successCb, errorCb, id) {
             var me = this,
                 url = this.urls.get;
 
@@ -80,17 +80,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
                 url : url,
                 type : 'GET',
                 dataType : 'json',
-                beforeSend: function(x) {
+                beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response) {
                         me._addLayersToService(response.userlayers, successCb);
                     }
                 },
-                error: function(jqXHR, textStatus) {
+                error: function (jqXHR, textStatus) {
                     if (_.isFunction(errorCb) && jqXHR.status !== 0) {
                         errorCb(jqXHR, textStatus);
                     }
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {String} id
      * @param {Object} updatedLayer
      */
-        updateLayer: function (id, updatedLayer){
+        updateLayer: function (id, updatedLayer) {
             var mapLayerService = this.sandbox
                     .getService('Oskari.mapframework.service.MapLayerService'),
                 layer = mapLayerService.findMapLayer(id),
@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             layer.setDescription(updatedLayer.description);
 
             this.sandbox.notifyAll(evt);
-            if (layerIsSelected){
+            if (layerIsSelected) {
                 this.instance.sandbox.request(this.instance, request);
             }
         },
@@ -129,9 +129,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {JSON[]} layers
      * @param {Function} cb
      */
-        _addLayersToService: function(layers, cb) {
+        _addLayersToService: function (layers, cb) {
             var me = this;
-            _.each(layers, function(layerJson) {
+            _.each(layers, function (layerJson) {
                 me.addLayerToService(layerJson, true);
             });
             if (_.isFunction(cb)) cb();
@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {Boolean} skip add maplayer even in map-layer-service
      * @param {Function} cb (optional)
      */
-        addLayerToService: function(layerJson, skipEvent, cb) {
+        addLayerToService: function (layerJson, skipEvent, cb) {
             var mapLayerService = this.sandbox
                     .getService('Oskari.mapframework.service.MapLayerService'),
                 // Create the layer model

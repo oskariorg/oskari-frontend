@@ -68,14 +68,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.FeedbackServiceB
      * @param {Oskari.mapframework.bundle.feedbackService.request.GetFeedbackRequest} request
      *      request to handle
      */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             var params = request.getFeedbackParams() || {};
             var name = request.getName();
-            if(name === 'GetFeedbackServiceRequest') {
+            if (name === 'GetFeedbackServiceRequest') {
             // recognized, but nothing to add
-            } else if(name === 'GetFeedbackRequest') {
+            } else if (name === 'GetFeedbackRequest') {
                 params.method = 'getFeedback';
-            } else if(name === 'PostFeedbackRequest') {
+            } else if (name === 'PostFeedbackRequest') {
                 params.method = 'postFeedback';
             } else {
                 return;
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.FeedbackServiceB
             params = params || {};
             // Add view uuid for the request for to access view metadata
             params['uuid'] = Oskari.app.getUuid();
-            if(typeof params.payload === 'object') {
+            if (typeof params.payload === 'object') {
                 params.payload = JSON.stringify(params.payload);
             }
             jQuery.ajax({

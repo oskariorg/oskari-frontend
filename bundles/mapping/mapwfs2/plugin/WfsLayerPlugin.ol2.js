@@ -204,7 +204,7 @@ Oskari.clazz.define(
                 refresh_status2 = 'all_not_in_scale',
                 scale = sandbox.getMap().getScale(),
                 conf = me._config;
-            if(this.getElement()) {
+            if (this.getElement()) {
                 this.getElement().hide();
             }
             // Check, if there's any manual refresh wfs layers, show element if so
@@ -227,12 +227,12 @@ Oskari.clazz.define(
                     }
                 }
 
-                if (countInscale === countManu && loc.refresh_alert ) {
+                if (countInscale === countManu && loc.refresh_alert) {
                     this.getElement().attr('refresh_status', refresh_status2);
                     this.getElement().css({'background-color': '#FF007F'});
                     this.getElement().attr('title', loc.refresh_alert[refresh_status2]);
                 } else {
-                    if (countInvisi === countManu && loc.refresh_alert ) {
+                    if (countInvisi === countManu && loc.refresh_alert) {
                         this.getElement().attr('refresh_status', refresh_status1);
                         this.getElement().css({'background-color': '#FF007F'});
                         this.getElement().attr('title', loc.refresh_alert[refresh_status1]);
@@ -244,7 +244,7 @@ Oskari.clazz.define(
                 }
 
             }
-            if(isVisible && this.getElement()) {
+            if (isVisible && this.getElement()) {
                 this.getElement().show();
             }
             me.setVisible(isVisible);
@@ -276,9 +276,9 @@ Oskari.clazz.define(
             var styleClass = 'toolstyle-' + (style ? style : 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for(var c=0;c<classList.length;c++){
+            for (var c = 0;c < classList.length;c++) {
                 var className = classList[c];
-                if(className.indexOf('toolstyle-') > -1){
+                if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);
                 }
             }
@@ -293,10 +293,10 @@ Oskari.clazz.define(
                 refresh_status,
                 loc = me.getLocalization();
 
-            if(me.getElement()) {
+            if (me.getElement()) {
                 refresh_status = me.getElement().attr('refresh_status');
             }
-            if(refresh_status && loc.refresh_alert){
+            if (refresh_status && loc.refresh_alert) {
                 //  refresh_status values = "all_invisible", "all_not_in_scale",
                 me.showMessage(loc.refresh_alert.title, loc.refresh_alert[refresh_status]);
                 return true;
@@ -318,17 +318,17 @@ Oskari.clazz.define(
                 count = 0,
                 render = false;
 
-            if(config){
+            if (config) {
                 render = config.isPublished;
             }
 
             // see if there's any wfs layers, show  if so
             for (i = 0; i < layers.length; i++) {
-                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                if (layers[i].hasFeatureData() && layers[i].isManualRefresh()) {
                     count++;
                 }
             }
-            if(count === 1 && layer.isManualRefresh()){
+            if (count === 1 && layer.isManualRefresh()) {
                 me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
             }
 
@@ -550,9 +550,9 @@ Oskari.clazz.define(
 
             // update cache
             this.refreshCaches();
-            if(reqLayerId) {
+            if (reqLayerId) {
                 var layer = sandbox.findMapLayerFromSelectedMapLayers(reqLayerId);
-                if(layer) {
+                if (layer) {
                     layers.push(layer);
                 }
             }
@@ -562,7 +562,7 @@ Oskari.clazz.define(
 
             for (i = 0; i < layers.length; i += 1) {
                 // Clean layer data cache if not in scale
-                if ( layers[i].hasFeatureData()  && !me.OLlayerVisibility(layers[i]) ) {
+                if (layers[i].hasFeatureData() && !me.OLlayerVisibility(layers[i])) {
                     me.getOLMapLayer(layers[i], me.__typeNormal).removeBackBuffer();
                     continue;
                 }
@@ -859,7 +859,7 @@ Oskari.clazz.define(
             this.refresh();
 
             // linked WMS layer
-            if(layer.getWMSLayerId()){
+            if (layer.getWMSLayerId()) {
                 me.getSandbox().postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getWMSLayerId(), layer.isVisible()]);
             }
         },
@@ -883,7 +883,7 @@ Oskari.clazz.define(
                 layer.setOpacity(opacity);
             });
             // linked WMS layer
-            if(layer.getWMSLayerId() ){
+            if (layer.getWMSLayerId()) {
                 me.getSandbox().postRequestByName('ChangeMapLayerOpacityRequest', [layer.getWMSLayerId(), layer.getOpacity()]);
             }
         },
@@ -896,11 +896,11 @@ Oskari.clazz.define(
                 layers = [];
 
             // inform user, if no manual refresh wfs layer visible or  not in scale
-            if (me.checkManualRefreshState()){
+            if (me.checkManualRefreshState()) {
                 return;
             }
 
-            if(event.getLayerId()) {
+            if (event.getLayerId()) {
                 layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
             }
             else {
@@ -1479,9 +1479,9 @@ Oskari.clazz.define(
             // override redraw with tile cache flush
 
             var originalRedraw = openLayer.redraw;
-            openLayer.redraw = function(forced) {
+            openLayer.redraw = function (forced) {
                 var value = originalRedraw.apply(openLayer, arguments);
-                if(forced) {
+                if (forced) {
                     openLayer.removeBackBuffer();
                 }
                 return value;
@@ -1609,7 +1609,7 @@ Oskari.clazz.define(
          *
          * @return {Boolean} is tile ok
          */
-        _isTile: function(tile) {
+        _isTile: function (tile) {
             var b = tile.bounds;
             // true if none of these is undefined
             return !(
@@ -1805,7 +1805,7 @@ Oskari.clazz.define(
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 me = this,
                 sandbox = me.getSandbox();
-            if(ok) {
+            if (ok) {
                 okBtn.setTitle(ok);
                 okBtn.addClass('primary');
                 okBtn.setHandler(function () {
@@ -1817,7 +1817,7 @@ Oskari.clazz.define(
                 });
                 dialog.show(title, message, [okBtn]);
             }
-            else{
+            else {
                 dialog.show(title, message);
                 dialog.fadeout(5000);
             }
@@ -1851,7 +1851,7 @@ Oskari.clazz.define(
          * sends message to /highlight*
          */
         getHighlightImage: function (layer, srs, bbox, zoom, featureIds) {
-            if(!featureIds || !featureIds.length) {
+            if (!featureIds || !featureIds.length) {
                 return;
             }
             // helper function for visibleFields
@@ -1926,18 +1926,18 @@ Oskari.clazz.define(
             return stripbox.join(',');
         },
         OLlayerVisibility: function (layer) {
-            var    me = this,
+            var me = this,
                 mapLayers = me.getMapModule().getOLMapLayers(layer.getId()),
                 mapLayer = mapLayers.length ? mapLayers[0] : null;
-            if(mapLayer){
+            if (mapLayer) {
                 return mapLayer.getVisibility();
             }
             return layer.isVisible();
         },
-        hasUI: function() {
+        hasUI: function () {
             return false;
         },
-        updateScale: function(layer, minscale, maxscale) {
+        updateScale: function (layer, minscale, maxscale) {
             var me = this;
             layer.setMinScale(minscale);
             layer.setMaxScale(maxscale);
@@ -1950,7 +1950,7 @@ Oskari.clazz.define(
             );
             var btn = this._dialog.createCloseButton('OK');
 
-            btn.setHandler(function() {
+            btn.setHandler(function () {
                 me._dialog.close();
             });
             this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
@@ -1958,21 +1958,21 @@ Oskari.clazz.define(
         /*
         * add WMS layer as linked layer, if configured for wfs rendering
          */
-        _addLinkedLayer: function(layer) {
+        _addLinkedLayer: function (layer) {
             var me = this,
                 linkedLayer = null,
                 mapLayerService;
 
             // Remove linked wms layer, if it is not opened internally and reopen it internally
-            if(layer.getWMSLayerId() && me.getSandbox().findMapLayerFromSelectedMapLayers(layer.getWMSLayerId())){
+            if (layer.getWMSLayerId() && me.getSandbox().findMapLayerFromSelectedMapLayers(layer.getWMSLayerId())) {
                 me.getSandbox().postRequestByName('RemoveMapLayerRequest', [layer.getWMSLayerId()]);
             }
-            if(layer.getWMSLayerId()) {
+            if (layer.getWMSLayerId()) {
                 mapLayerService = me.getSandbox().getService(
                     'Oskari.mapframework.service.MapLayerService'
                 );
                 linkedLayer = mapLayerService.findMapLayer(layer.getWMSLayerId());
-                if(linkedLayer){
+                if (linkedLayer) {
                     linkedLayer.setLinkedLayer(true);
                 }
                 me.getSandbox().postRequestByName('AddMapLayerRequest', [layer.getWMSLayerId(), true]);
@@ -1982,18 +1982,18 @@ Oskari.clazz.define(
         /*
          * remove WMS layer, if it was linked to wfs layer and configured for wfs rendering
          */
-        _removeLinkedLayer: function(layer) {
+        _removeLinkedLayer: function (layer) {
             var me = this,
                 linkedLayer = null,
                 mapLayerService;
 
             // Remove linked wms layer, if it is opened internally
-            if(layer.getWMSLayerId()){
+            if (layer.getWMSLayerId()) {
                 mapLayerService = me.getSandbox().getService(
                     'Oskari.mapframework.service.MapLayerService'
                 );
                 linkedLayer = mapLayerService.findMapLayer(layer.getWMSLayerId());
-                if(linkedLayer){
+                if (linkedLayer) {
                     linkedLayer.setLinkedLayer(false);
                 }
                 me.getSandbox().postRequestByName('RemoveMapLayerRequest', [layer.getWMSLayerId()]);

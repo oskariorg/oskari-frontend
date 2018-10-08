@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .range([graphHeight - graphMargin.bottom, graphMargin.top]);
 
             var area = d3.area()
-                .defined(function(d) {return d.height !== null;})
+                .defined(function (d) {return d.height !== null;})
                 .x(function (d) {
                     return x(d.distance);
                 })
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .classed('axis-brush', true)
                 .call(brush);
 
-            function brushed() {
+            function brushed () {
                 var selection = d3.event.selection;
                 if (!selection) {
                     return;
@@ -181,7 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
 
             var bisectX = d3.bisector(function (d) { return d.distance; }).left;
 
-            function mousemove() {
+            function mousemove () {
                 var x0 = x.invert(d3.mouse(this)[0]),
                     i = bisectX(processed[0], x0, 1),
                     d0 = processed[0][i - 1],
@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 cursor.select('line').attr('y1', y(d.height));
                 focus.attr('transform', 'translate(0 ' + y(d.height) + ')');
                 var text;
-                if(d.height !== null) {
+                if (d.height !== null) {
                     text = me.numberFormatter.format(d.height);
                 } else {
                     text = me.loc('noValue');
@@ -208,7 +208,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
 
             var processed;
 
-            function recalculateYDomain() {
+            function recalculateYDomain () {
                 var extent = d3.extent(processed[0], function (d) { return d.height; });
                 if (extent[0] > 0) {
                     extent[0] = 0;

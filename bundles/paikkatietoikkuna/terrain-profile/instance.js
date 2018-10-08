@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         this.flyout = null;
         this.loc = Oskari.getMsg.bind(null, 'TerrainProfile');
 
-        function requestFunction(requestName, args) {
+        function requestFunction (requestName, args) {
             var builder = Oskari.requestBuilder(requestName);
             if (!builder) {
                 return false;

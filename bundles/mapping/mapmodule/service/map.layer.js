@@ -104,9 +104,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getActiveFilters: function () {
             var me = this;
             var registeredFilters = [];
-            Object.keys(this.layerFilters).forEach( function( key ) {
-                if ( me.filterHasLayers(key) ) {
-                    registeredFilters.push( key );
+            Object.keys(this.layerFilters).forEach(function (key) {
+                if (me.filterHasLayers(key)) {
+                    registeredFilters.push(key);
                 }
             });
             return registeredFilters;
@@ -348,7 +348,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (newLayerConf.groups) {
                 var groups = [];
-                newLayerConf.groups.forEach(function(groupId){
+                newLayerConf.groups.forEach(function (groupId) {
                     var group = me.getAllLayerGroups(groupId);
                     groups.push({
                         id: group.getId(),
@@ -870,8 +870,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var allLayerGroups = me.getAllLayerGroups();
             var filteredLayers = me.getFilteredLayers(filterId);
 
-            var hasFilteredLayer = function(groupLayer) {
-                var layers = filteredLayers.filter(function(l) {
+            var hasFilteredLayer = function (groupLayer) {
+                var layers = filteredLayers.filter(function (l) {
                     return groupLayer.getId() === l.getId();
                 });
                 return layers.length > 0;

@@ -14,7 +14,7 @@ Oskari.clazz.define(
         this._clazz = 'Oskari.mapping.drawtools.plugin.DrawPlugin';
         this._name = 'GenericDrawPlugin';
     }, {
-        setDefaultStyle : function(style) {
+        setDefaultStyle : function (style) {
             // TODO: save this, style is an object like this:
             /*
              {
@@ -31,7 +31,7 @@ Oskari.clazz.define(
              */
 
         },
-        draw : function(id, shape, options) {
+        draw : function (id, shape, options) {
             // TODO: implementations
             // if shape == geojson -> setup editing it
             // if shape == undefined -> update buffer for existing drawing (any other reason for this? text etc?)
@@ -40,7 +40,7 @@ Oskari.clazz.define(
             // TODO : start draw control
             // use default style if options don't include custom style
         },
-        stopDrawing : function(id, clearCurrent) {
+        stopDrawing : function (id, clearCurrent) {
             var sb = this.getSandbox();
             // TODO: get geojson for matching id
             var geojson = undefined;
@@ -48,7 +48,7 @@ Oskari.clazz.define(
                 lenght : 'optional line length',
                 area : 'optional area size'
             };
-            if(clearCurrent) {
+            if (clearCurrent) {
                 // TODO: clear the drawing matching the id from map
             }
             var event = Oskari.eventBuilder('DrawingEvent')(id, geojson, data);

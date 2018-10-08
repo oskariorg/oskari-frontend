@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method  @private __sendMapClickEvent
          * @param  {Object} evt event object
          */
-        __sendMapClickEvent : function(evt) {
+        __sendMapClickEvent : function (evt) {
             var sandbox = this.getSandbox();
             /* may be this should dispatch to mapmodule */
             var lonlat = this.getMap().getLonLatFromViewPortPx(evt.xy);
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {String}
          *
          */
-        formatMeasurementResult: function(geometry, drawMode) {
+        formatMeasurementResult: function (geometry, drawMode) {
             var measurement,
                 unit;
 
@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
 
-        getPixelFromCoordinate : function(lonlat) {
+        getPixelFromCoordinate : function (lonlat) {
             lonlat = this.normalizeLonLat(lonlat);
             var px = this.getMap().getViewPortPxFromLonLat(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
             return {
@@ -184,7 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return Math.round(this.getMap().getZoom());
         },
 
-        getSize: function() {
+        getSize: function () {
             var size = this.getMap().getCurrentSize();
             return {
                 width: size.w,
@@ -227,7 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         centerMap: function (lonlat, zoom, suppressEnd) {
             // TODO: we have isValidLonLat(); maybe use it here
             lonlat = this.normalizeLonLat(lonlat);
-            if(zoom === null ||zoom === undefined) {
+            if (zoom === null || zoom === undefined) {
                 zoom = this.getMapZoom();
             }
             this.getMap().setCenter(new OpenLayers.LonLat(lonlat.lon, lonlat.lat), zoom, false);
@@ -241,7 +241,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method  @public getMapUnits Get map units
          * @return {String} map units. 'degrees' or 'm'
          */
-        getMapUnits: function(){
+        getMapUnits: function () {
             var me = this;
             var map = me.getMap();
             return map.getUnits(); // return 'degrees' or 'm'
@@ -252,7 +252,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {String} srs projection srs, if not defined used map srs
          * @return {String} projection units. 'degrees' or 'm'
          */
-        getProjectionUnits: function(srs){
+        getProjectionUnits: function (srs) {
             var me = this;
             var units = null;
             srs = srs || me.getProjection();
@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             try {
                 var proj = new Proj4js.Proj(srs);
                 units = proj.units || 'degrees'; // return 'degrees' or 'm'
-            } catch(err){
+            } catch (err) {
                 var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
                 log.warn('Cannot get map units for "' + srs + '"-projection!');
             }
@@ -272,7 +272,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method getCurrentExtent
          * @return {Object} current extent
          */
-        getCurrentExtent: function(){
+        getCurrentExtent: function () {
             var bbox = this.getMap().getExtent();
             return {
                 left: bbox.left,
@@ -320,10 +320,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs, targetSRS) {
-            if(!targetSRS) {
+            if (!targetSRS) {
                 targetSRS = this.getProjection();
             }
-            if(!srs || targetSRS === srs) {
+            if (!srs || targetSRS === srs) {
                 return pLonlat;
             }
 
@@ -349,12 +349,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method orderLayersByZIndex
          * Orders layers by Z-indexes.
          */
-        orderLayersByZIndex: function() {
-            this.getMap().layers.sort(function(a, b){
-                return a.getZIndex()-b.getZIndex();
+        orderLayersByZIndex: function () {
+            this.getMap().layers.sort(function (a, b) {
+                return a.getZIndex() - b.getZIndex();
             });
         },
-        isPointInExtent: function (extent, x, y){
+        isPointInExtent: function (extent, x, y) {
             var extent = new OpenLayers.Bounds(extent);
             return extent.contains(x,y);
         },
@@ -377,10 +377,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this._mapScales.push(calculatedScale);
             }
         },
-        _updateSizeImpl : function() {
+        _updateSizeImpl : function () {
             this.getMap().updateSize();
         },
-        _setZoomLevelImpl : function(newZoomLevel) {
+        _setZoomLevelImpl : function (newZoomLevel) {
             this.getMap().zoomTo(newZoomLevel);
         },
         /* --------- /Impl specific - PRIVATE ----------------------------> */
@@ -393,25 +393,25 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {OpenLayers.Layer} layer ol2 specific!
          * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
          */
-        addLayer: function(layerImpl, toBottom) {
-            if(!layerImpl) {
+        addLayer: function (layerImpl, toBottom) {
+            if (!layerImpl) {
                 return;
             }
             this.getMap().addLayer(layerImpl);
             // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
-            if(toBottom === true) {
+            if (toBottom === true) {
                 this.setLayerIndex(layerImpl, 0);
             }
         },
         /**
          * @param {OpenLayers.Layer} layer ol2 specific!
          */
-        removeLayer : function(layerImpl) {
-            if(!layerImpl) {
+        removeLayer : function (layerImpl) {
+            if (!layerImpl) {
                 return;
             }
             this.getMap().removeLayer(layerImpl);
-            if(typeof layerImpl.destroy === 'function') {
+            if (typeof layerImpl.destroy === 'function') {
                 layerImpl.destroy();
             }
         },
@@ -422,7 +422,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {OpenLayers.Layer} layer The new topmost layer
          * @param {Integer} buffer Add this buffer to z index. If it's undefined, using 1.
          */
-        bringToTop: function(layer, buffer) {
+        bringToTop: function (layer, buffer) {
             if (!layer || !layer.getZIndex) {
                 return;
             }
@@ -436,7 +436,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @return {OpenLayers.Layer} layer ol2 specific!
          */
-        getLayerIndex: function(layerImpl) {
+        getLayerIndex: function (layerImpl) {
             return this.getMap().getLayerIndex(layerImpl);
         },
         /**
@@ -463,22 +463,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Creates style based on JSON
          * @return {Object} ol2 specific style hash
          */
-        getStyle : function(styleDef) {
+        getStyle : function (styleDef) {
             var me = this,
                 style = jQuery.extend(true, {}, styleDef),
                 size;
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style['default']);
             // use sizePx if given
-            if (style.image && style.image.sizePx){
+            if (style.image && style.image.sizePx) {
                 size = style.image.sizePx;
-            } else if (style.image && style.image.size){
+            } else if (style.image && style.image.size) {
                 size = this.getPixelForSize(style.image.size);
             } else {
                 size = this._defaultMarker.size;
             }
 
-            if(typeof size !== 'number'){
+            if (typeof size !== 'number') {
                 size = this._defaultMarker.size;
             }
 
@@ -486,97 +486,97 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             olStyle.graphicHeight = size;
 
             // If svg marker
-            if(me.isSvg(style.image)) {
+            if (me.isSvg(style.image)) {
                 var svg = this.getSvg(style.image);
                 olStyle.externalGraphic = svg;
             }
             // else if external graphic
-            else if(style.image && style.image.shape) {
+            else if (style.image && style.image.shape) {
                 olStyle.externalGraphic = style.image.shape;
                 olStyle.graphicWidth = style.image.size || 32;
                 olStyle.graphicHeight = style.image.size || 32;
-                var offsetX = (!isNaN(style.image.offsetX))  ? style.image.offsetX : 16;
-                var offsetY = (!isNaN(style.image.offsetY))  ? style.image.offsetY : 16;
+                var offsetX = (!isNaN(style.image.offsetX)) ? style.image.offsetX : 16;
+                var offsetY = (!isNaN(style.image.offsetY)) ? style.image.offsetY : 16;
                 olStyle.graphicXOffset = -offsetX;
                 olStyle.graphicYOffset = -(32 - offsetY);
             }
 
-            if(style.image.opacity) {
+            if (style.image.opacity) {
                 olStyle.fillOpacity = style.image.opacity;
             }
 
-            if(style.stroke) {
-                if(style.stroke.color) {
+            if (style.stroke) {
+                if (style.stroke.color) {
                     olStyle.strokeColor = style.stroke.color;
                 }
-                if(style.stroke.width) {
+                if (style.stroke.width) {
                     olStyle.strokeWidth = style.stroke.width;
                 }
-                if(style.stroke.lineDash) {
+                if (style.stroke.lineDash) {
                     olStyle.strokeDashstyle = style.stroke.lineDash;
                 }
-                if(style.stroke.lineCap) {
+                if (style.stroke.lineCap) {
                     olStyle.strokeLinecap = style.stroke.lineCap;
                 }
             }
             if (style.image.radius) {
-                if(style.image.radius) {
+                if (style.image.radius) {
                     olStyle.pointRadius = style.image.radius;
                     //currently only supporting circle
                     olStyle.graphicName = 'circle';
                 }
             }
-            if(style.text.font) {
+            if (style.text.font) {
                 var split = style.text.font.split(' ');
-                if(split[1]) {
+                if (split[1]) {
                     olStyle.fontSize = split[1];
                 }
-                if(split[0]) {
+                if (split[0]) {
                     olStyle.fontWeight = split[0];
                 }
-                if(split[2]) {
+                if (split[2]) {
                     olStyle.fontFamily = split[2];
                 }
             }
 
-            if(style.text.stroke && typeof style.text.stroke.width === 'number') {
+            if (style.text.stroke && typeof style.text.stroke.width === 'number') {
                 olStyle.labelOutlineWidth = style.text.stroke.width;
             }
 
-            if(Oskari.util.keyExists(style, 'fill.color')) {
+            if (Oskari.util.keyExists(style, 'fill.color')) {
                 olStyle.fillColor = style.fill.color;
             }
-            if(Oskari.util.keyExists(style.text, 'fill.color')) {
+            if (Oskari.util.keyExists(style.text, 'fill.color')) {
                 olStyle.fontColor = style.text.fill.color;
             }
-            if(style.text.stroke) {
-                if(style.text.stroke.color) {
+            if (style.text.stroke) {
+                if (style.text.stroke.color) {
                     olStyle.labelOutlineColor = style.text.stroke.color;
                 }
-                if(style.text.stroke.width) {
+                if (style.text.stroke.width) {
                     olStyle.labelOutlineWidth = style.text.stroke.width;
                 }
             }
             // TODO: remove support for labelAlign as ol3 uses textAlign and we only want to support one
-            if(style.text.labelAlign || style.text.textAlign) {
+            if (style.text.labelAlign || style.text.textAlign) {
                 olStyle.labelAlign = style.text.labelAlign || style.text.textAlign;
             }
-            if(style.text.offsetX) {
+            if (style.text.offsetX) {
                 olStyle.labelXOffset = style.text.offsetX;
             }
-            if(style.text.offsetY) {
+            if (style.text.offsetY) {
                 olStyle.labelYOffset = style.text.offsetY;
             }
 
             //label
             if (style.text.labelText) {
-                if(typeof style.text.labelText === 'number'){
+                if (typeof style.text.labelText === 'number') {
                     olStyle.label = style.text.labelText.toString();
                 } else {
                     olStyle.label = style.text.labelText;
                 }
             } else if (style.text.labelProperty) {
-                olStyle.label = '${'+style.text.labelProperty+'}';
+                olStyle.label = '${' + style.text.labelProperty + '}';
             }
             return olStyle;
         },
@@ -584,7 +584,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
          * @param {String} wkt Well known text representation of the geometry
          */
-        getViewPortForGeometry: function(wkt) {
+        getViewPortForGeometry: function (wkt) {
 
             if (!wkt) {
                 return null;
@@ -622,7 +622,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @method getFeatureFromWKT
          */
-        getFeatureFromWKT: function(wkt) {
+        getFeatureFromWKT: function (wkt) {
             var wktFormat = new OpenLayers.Format.WKT(),
                 feature = wktFormat.read(wkt);
 
@@ -634,7 +634,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {String[]}
          * Get urls of tile layer tiles.
          */
-        getLayerTileUrls: function(layerId) {
+        getLayerTileUrls: function (layerId) {
             var OLlayers = this.getOLMapLayers(layerId);
             var urls = [];
             OLlayers[0].grid.forEach(function (a) {

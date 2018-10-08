@@ -274,7 +274,7 @@ Oskari.clazz.define(
                     plugin.focus();
                 }
                 // Remove the filtering, if opened by ShowFilteredLayerListRequest.
-                else if(me.filteredLayerListOpenedByRequest) {
+                else if (me.filteredLayerListOpenedByRequest) {
                     plugin.deactivateAllFilters();
                     me.filteredLayerListOpenedByRequest = false;
                 }
@@ -396,10 +396,10 @@ Oskari.clazz.define(
          */
         __guidedTourDelegateTemplate: {
             priority: 20,
-            show: function(){
+            show: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'LayerSelector']);
             },
-            hide: function(){
+            hide: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'LayerSelector']);
             },
             getTitle: function () {
@@ -410,7 +410,7 @@ Oskari.clazz.define(
                 content.append(this.getLocalization('guidedTour').message);
                 return content;
             },
-            getLinks: function() {
+            getLinks: function () {
                 var me = this;
                 var loc = this.getLocalization('guidedTour');
                 var linkTemplate = jQuery('<a href="#"></a>');
@@ -440,16 +440,16 @@ Oskari.clazz.define(
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
-        _registerForGuidedTour: function() {
+        _registerForGuidedTour: function () {
             var me = this;
-            function sendRegister() {
+            function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for(var prop in me.__guidedTourDelegateTemplate){
-                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                    for (var prop in me.__guidedTourDelegateTemplate) {
+                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
@@ -459,14 +459,14 @@ Oskari.clazz.define(
                 }
             }
 
-            function handler(msg){
-                if(msg.id === 'guidedtour') {
+            function handler (msg) {
+                if (msg.id === 'guidedtour') {
                     sendRegister();
                 }
             }
 
             var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
-            if(tourInstance) {
+            if (tourInstance) {
                 sendRegister();
             } else {
                 Oskari.on('bundle.start', handler);

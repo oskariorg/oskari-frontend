@@ -31,7 +31,7 @@ Oskari.clazz.define(
          * @method  @public getCenterMap center map to user location
          * @return {Boolean} center map
          */
-        getCenterMap: function(){
+        getCenterMap: function () {
             return this._centerMap;
         }
     }, {

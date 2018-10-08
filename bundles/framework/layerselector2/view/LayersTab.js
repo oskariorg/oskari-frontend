@@ -32,7 +32,7 @@ Oskari.clazz.define(
                 '  <span class="keyword"></span>' +
                 '</a>',
             keywordType: '<div class="type"></div>',
-            layerFilter: '<div class="layer-filter layerselector2-layer-filter">'+
+            layerFilter: '<div class="layer-filter layerselector2-layer-filter">' +
                 '</div><div style="clear:both;"></div>'
         };
         this._createUI(id);
@@ -153,7 +153,7 @@ Oskari.clazz.define(
 
             me._createInfoIcon(oskarifield);
 
-            if(!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
+            if (!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
                 layerFilter = jQuery(me.templates.layerFilter);
                 me.tabPanel.getContainer().append(layerFilter);
             }
@@ -274,8 +274,8 @@ Oskari.clazz.define(
                 group.layerListPanel = groupPanel;
 
                 var badge = Oskari.clazz.create('Oskari.userinterface.component.Badge');
-                badge.insertTo( groupPanel.getHeader() );
-                badge.setContent( layersLength, 'inverse' );
+                badge.insertTo(groupPanel.getHeader());
+                badge.setContent(layersLength, 'inverse');
                 group.badge = badge;
 
                 groupContainer = groupPanel.getContainer();
@@ -360,8 +360,8 @@ Oskari.clazz.define(
                 if (group.layerListPanel.isVisible()) {
                     visibleGroupCount += 1;
                 }
-                if( group.badge ) {
-                    group.badge.updateContent( visibleLayerCount + '/' + layers.length );
+                if (group.badge) {
+                    group.badge.updateContent(visibleLayerCount + '/' + layers.length);
                 }
 
             }

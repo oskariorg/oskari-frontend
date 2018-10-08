@@ -120,10 +120,10 @@ Oskari.clazz
             getOptions: function () {
                 return this._options;
             },
-            addAdditionalTool: function(toolDefs) {
+            addAdditionalTool: function (toolDefs) {
                 this._additionalTools.push(toolDefs);
             },
-            getAdditionalTools: function(){
+            getAdditionalTools: function () {
                 return this._additionalTools;
             }
         }, {

@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.userinterface.request.UpdateExtensionRequest', funct
     getExtensionName: function () {
         return this._extensionName;
     },
-    getExtensionLocation: function() {
+    getExtensionLocation: function () {
         return this._location;
     }
 

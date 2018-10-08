@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchResultActio
  * @param {Oskari.mapframework.bundle.search.StateHandlerBundleInstance} search
  *          reference to search
  */
-    function(sandbox, search) {
+    function (sandbox, search) {
         this.sandbox = sandbox;
         this.search = search;
     }, {
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchResultActio
      * @param {Oskari.mapframework.bundle.personaldata.request.SearchResultActionRequestHandler} request
      *      request to handle
      */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             if (request.getName() === 'Search.AddSearchResultActionRequest') {
                 this.search.addSearchResultAction({
                     'name': request.getLinkName(),

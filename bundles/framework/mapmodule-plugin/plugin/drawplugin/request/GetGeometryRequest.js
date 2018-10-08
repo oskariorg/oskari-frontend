@@ -1,15 +1,15 @@
 Oskari.clazz
     .define(
         'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.request.GetGeometryRequest',
-        function(callbackMethod) {
+        function (callbackMethod) {
             this._creator = null;
             this._callbackMethod = callbackMethod;
         }, {
             __name : 'DrawPlugin.GetGeometryRequest',
-            getName : function() {
+            getName : function () {
                 return this.__name;
             },
-            getCallBack : function() {
+            getCallBack : function () {
                 return this._callbackMethod;
             }
         },

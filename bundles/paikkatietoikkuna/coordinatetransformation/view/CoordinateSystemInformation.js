@@ -12,14 +12,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInform
         listItem: jQuery('<li></li>'),
         paragraph: jQuery('<p></p>')
     },
-    setElement: function(el) {
+    setElement: function (el) {
         this.element = el;
     },
-    getElement: function() {
+    getElement: function () {
         return this.element;
     },
-    show: function( parentElement, key , skipInfo) {
-        if (this.dialog){
+    show: function (parentElement, key , skipInfo) {
+        if (this.dialog) {
             this.dialog.close(true);
             this.dialog = null;
         }
@@ -40,26 +40,26 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInform
         var content = this._template.content.clone();
         var infoLoc = this.loc('infoPopup')[key];
         content.find('.info-description').html(this.loc('infoPopup.description'));
-        if (skipInfo !== true){
+        if (skipInfo !== true) {
             content.find('.info-content').html(infoLoc.info);
         }
-        if (Array.isArray(infoLoc.paragraphs) && infoLoc.paragraphs.length !== 0){
-            infoLoc.paragraphs.forEach(function(item){
+        if (Array.isArray(infoLoc.paragraphs) && infoLoc.paragraphs.length !== 0) {
+            infoLoc.paragraphs.forEach(function (item) {
                 var paragraph = me._template.paragraph.clone();
                 paragraph.text(item);
                 content.append(paragraph);
             });
         }
-        if (Array.isArray(infoLoc.listItems) && infoLoc.listItems.length !== 0){
+        if (Array.isArray(infoLoc.listItems) && infoLoc.listItems.length !== 0) {
             content.find('.info-content').append(this._createList(infoLoc.listItems));
         }
         return content;
 
     },
-    _createList: function (list){
+    _createList: function (list) {
         var me = this;
         var listElem = this._template.list.clone();
-        list.forEach(function(item){
+        list.forEach(function (item) {
             var listItem = me._template.listItem.clone();
             listItem.html(item);
             listElem.append(listItem);

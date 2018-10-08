@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.TileQueue',
  * @method create called automatically on construction
  * @static
  */
-    function() {
+    function () {
     /** @property {Oskari.mapframework.gridcalc.QueuedTile[]} queue
      *      tile queue
      */
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.TileQueue',
      * @return {Array}
      *            array of Oskari.mapframework.gridcalc.QueuedTile objects
      */
-        getQueue : function() {
+        getQueue : function () {
             return this.queue;
         },
         /**
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.TileQueue',
      * @return {Number}
      *            queue size
      */
-        getLength : function() {
+        getLength : function () {
             return this.queue.length;
         },
         /**
@@ -44,14 +44,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.TileQueue',
      * @return {Oskari.mapframework.gridcalc.QueuedTile/Object}
      *            popped tile
      */
-        popJob : function() {
+        popJob : function () {
             var q = this.queue;
             var qLength = q.length;
-            if(qLength === 0) {
+            if (qLength === 0) {
                 return null;
             }
 
-            if(qLength < 4) {
+            if (qLength < 4) {
                 return q.shift(-1);
             }
 
@@ -70,14 +70,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.TileQueue',
      * @param {Oskari.mapframework.gridcalc.QueuedTile/Object} obj
      *            tile to push into queue
      */
-        pushJob : function(obj) {
+        pushJob : function (obj) {
             this.queue.push(obj);
         },
         /**
      * @method flushQueue
      * replace queue with an empty one
      */
-        flushQueue : function() {
+        flushQueue : function () {
             this.queue = [];
         }
     });

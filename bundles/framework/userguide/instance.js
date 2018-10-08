@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        'stop': function() {
+        'stop': function () {
             var sandbox = this.sandbox(),
                 p;
             for (p in this.eventHandlers) {

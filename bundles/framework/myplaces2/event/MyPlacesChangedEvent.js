@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.myplaces.event.MyPlacesChangedEvent',
  * @method create called automatically on construction
  * @static
  */
-    function(config) {
+    function (config) {
     }, {
     /** @static @property __name event name */
         __name : 'MyPlaces.MyPlacesChangedEvent',
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.myplaces.event.MyPlacesChangedEvent',
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         }
     }, {

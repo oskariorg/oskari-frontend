@@ -119,7 +119,7 @@ Oskari.clazz.define(
         /**
          * @method  @private _addEventHandlers Add event handlers
          */
-        _addRequestHandlers: function(){
+        _addRequestHandlers: function () {
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',

@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 layer = layers[i];
                 layerId = layer.getId();
 
-                if (layer.isLayerOfType(this._layerType) || layer.isLayerOfType(this._layerType2) ) {
+                if (layer.isLayerOfType(this._layerType) || layer.isLayerOfType(this._layerType2)) {
                     this._log.debug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
@@ -195,7 +195,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                     me.getMap().projection.indexOf(':') + 1),
                 transparent: 'true'};
 
-            var openLayer = new OpenLayers.Layer.ArcGIS93Rest( 'arcgis93layer_' + layer.getId(),
+            var openLayer = new OpenLayers.Layer.ArcGIS93Rest('arcgis93layer_' + layer.getId(),
                 layer.getLayerUrls()[0],
                 params);
 
@@ -223,19 +223,19 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this;
 
-            layer.events.register('tileloadstart', layer, function(){
-                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            layer.events.register('tileloadstart', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
             });
 
-            layer.events.register('tileloaded', layer, function(){
-                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            layer.events.register('tileloaded', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
             });
 
-            layer.events.register('tileerror', layer, function(){
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            layer.events.register('tileerror', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
 
             });
         },
@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Oskari.arcgis.domain.ArcGisLayer} layer
          */
         _removeMapLayerFromMap: function (layer) {
-            if(!this._layer[layer.getId()]) {
+            if (!this._layer[layer.getId()]) {
                 return;
             }
             this._layer[layer.getId()].destroy();
@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             if (!layer.isLayerOfType(this._layerType) && !layer.isLayerOfType(this._layerType2)) {
                 return null;
             }
-            if(!this._layer[layer.getId()]) {
+            if (!this._layer[layer.getId()]) {
                 return [];
             }
 
@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' +
                 layer.getOpacity()
             );
-            for(var i = 0; i < olLayers.length; ++i) {
+            for (var i = 0; i < olLayers.length; ++i) {
                 olLayers[i].setOpacity(layer.getOpacity() / 100);
             }
         }

@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.AddToolButtonReq
  * @param {Object} config
  *            JSON config for button
  */
-    function(id, group, config) {
+    function (id, group, config) {
         this._id = id;
         this._group = group;
         this._config = config;
@@ -28,28 +28,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.AddToolButtonReq
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {String} identifier so we can manage the button with subsequent requests
      */
-        getId : function() {
+        getId : function () {
             return this._id;
         },
         /**
      * @method getGroup
      * @return {String} identifier for organizing buttons
      */
-        getGroup : function() {
+        getGroup : function () {
             return this._group;
         },
         /**
      * @method getConfig
      * @return {Object} button config
      */
-        getConfig : function() {
+        getConfig : function () {
             return this._config;
         }
     }, {

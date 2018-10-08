@@ -153,9 +153,9 @@
 
                 var name = Oskari.getLocalized(ind.name);
                 var selectorsFormatted;
-                if(indicator.series) {
-                    var range = String(indicator.series.values[0]) + ' - ' + String(indicator.series.values[indicator.series.values.length -1]);
-                    selectorsFormatted = range +' (' + preferredFormatting.join(' / ') + ')';
+                if (indicator.series) {
+                    var range = String(indicator.series.values[0]) + ' - ' + String(indicator.series.values[indicator.series.values.length - 1]);
+                    selectorsFormatted = range + ' (' + preferredFormatting.join(' / ') + ')';
                 } else {
                     selectorsFormatted = '(' + preferredFormatting.join(' / ') + ')';
                 }
@@ -427,7 +427,7 @@
             var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
             _log.debug('Getting data with key', cacheKey);
 
-            function fractionInit(err, data) {
+            function fractionInit (err, data) {
                 var hash = me.state.getHash(ds, indicator, params, series);
                 if (!err) {
                     me._setInitialFractions(hash, data);
@@ -480,7 +480,7 @@
          * @param {String} indicatorHash
          * @param {Object} data indicator data
          */
-        _setInitialFractions: function(indicatorHash, data) {
+        _setInitialFractions: function (indicatorHash, data) {
             var ind = this.state.getIndicator(indicatorHash);
             if (!ind) {
                 return;
@@ -489,7 +489,7 @@
                 ind.classification = this.state.getClassificationOpts(indicatorHash);
             }
             if (typeof ind.classification.fractionDigits !== 'number') {
-                var allInts = Object.keys(data).every(function(key){
+                var allInts = Object.keys(data).every(function (key) {
                     return data[key] % 1 === 0;
                 });
                 ind.classification.fractionDigits = allInts ? 0 : 1;
@@ -796,7 +796,7 @@
             if (regionsets === null) {
                 return;
             }
-    
+
             var unsupportedDatasources = [];
             this.datasources.forEach(function (ds) {
                 var supported = regionsets.some(function (iter) {

@@ -2,7 +2,7 @@
  * @class Oskari.elf.license.validator.NumberValidator
  */
 Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
-    function(instance, allowDecimal, allowNegative) {
+    function (instance, allowDecimal, allowNegative) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this._allowDecimal = allowDecimal;
@@ -34,11 +34,11 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
          */
         init: function () {
             var me = this;
-            if(me._allowDecimal === null) {
+            if (me._allowDecimal === null) {
                 me._allowDecimal = true;
             }
 
-            if(me._allowNegative === null) {
+            if (me._allowNegative === null) {
                 me._allowNegative = true;
             }
         },
@@ -49,19 +49,19 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
          *
          * @param {Object} evt event object
          */
-        keyListener: function(evt){
+        keyListener: function (evt) {
             var me = this,
                 target = jQuery(evt.target),
                 prev_val = target.val();
 
-            setTimeout(function(){
+            setTimeout(function () {
                 var chars = target.val().split(''),
                     decimal_exist = !me._allowDecimal,
                     negative_exist = !me._allowNegative,
                     remove_char = false;
 
-                jQuery.each(chars, function(key, value){
-                    switch(value){
+                jQuery.each(chars, function (key, value) {
+                    switch (value) {
                     case '0':
                     case '1':
                     case '2':
@@ -75,32 +75,32 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
                     case '.':
                     case ',':
                     case '-':
-                        if (value === '.' || value === ','){
-                            if(decimal_exist === false){
+                        if (value === '.' || value === ',') {
+                            if (decimal_exist === false) {
                                 decimal_exist = true;
-                            } else{
+                            } else {
                                 remove_char = true;
-                                chars[''+key+''] = '';
+                                chars['' + key + ''] = '';
                             }
                         }
 
-                        if(value === '-'){
-                            if(negative_exist === false){
+                        if (value === '-') {
+                            if (negative_exist === false) {
                                 negative_exist = true;
-                            } else{
+                            } else {
                                 remove_char = true;
-                                chars[''+key+''] = '';
+                                chars['' + key + ''] = '';
                             }
                         }
                         break;
                     default:
                         remove_char = true;
-                        chars[''+key+''] = '';
+                        chars['' + key + ''] = '';
                         break;
                     }
                 });
 
-                if(prev_val !== target.val() && remove_char === true) {
+                if (prev_val !== target.val() && remove_char === true) {
                     target.val(chars.join(''));
                 }
             }, 0);

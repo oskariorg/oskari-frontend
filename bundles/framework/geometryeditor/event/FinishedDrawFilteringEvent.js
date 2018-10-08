@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
  * @param {OpenLayers.Geometry} geometry the drawing that was finished
  * @param {Boolean} blnEdit true if the geometry was opened in edit mode
  */
-    function(geometry, blnEdit, creatorId) {
+    function (geometry, blnEdit, creatorId) {
         this._filtered = geometry;
         this._modification = (blnEdit == true);
         this._creatorId = creatorId;
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * Returns the filtered geometry
      * @return {OpenLayers.Geometry}
      */
-        getFiltered : function() {
+        getFiltered : function () {
             return this._filtered;
         },
         /**
@@ -38,10 +38,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * Returns true if drawing was initially opened for editing (not a new one)
      * @return {Boolean}
      */
-        isModification : function() {
+        isModification : function () {
             return this._modification;
         },
-        getCreatorId: function() {
+        getCreatorId: function () {
             return this._creatorId;
         }
     }, {

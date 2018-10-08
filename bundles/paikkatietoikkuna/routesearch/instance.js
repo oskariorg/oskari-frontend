@@ -9,7 +9,7 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.RouteSearchBundleInstance',
     function () {},
     {
-        afterStart: function(sandbox){
+        afterStart: function (sandbox) {
 
         },
         /**

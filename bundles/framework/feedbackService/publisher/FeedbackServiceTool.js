@@ -1,6 +1,6 @@
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
-    function() {
+    function () {
     }, {
         index : 9,
         apiUrl: null,
@@ -10,11 +10,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
         extensionsValue: null,
         templates: {
             'toolOptions': jQuery('<div class="tool-options"></div>'),
-            'apiUrl': jQuery('<div id="publisher-feedback-apiurl" class="tool-options">' + '<label for="publisher-feedback-url"></label>' +  '<input type="text" name="publisher-feedback-url" />'  + '</div>'),
-            'apiKey': jQuery('<div id="publisher-feedback-apikey" class="tool-options">' + '<label for="publisher-feedback-key"></label>' +  '<input type="text" name="publisher-feedback-key" />'  + '</div>'),
-            'apiExtensions': jQuery('<div id="publisher-feedback-extensionskey" class="tool-options">' + '<label for="publisher-feedback-extensions"></label>' +  '<input type="text" name="publisher-feedback-extensions" />'  + '</div>')
+            'apiUrl': jQuery('<div id="publisher-feedback-apiurl" class="tool-options">' + '<label for="publisher-feedback-url"></label>' + '<input type="text" name="publisher-feedback-url" />' + '</div>'),
+            'apiKey': jQuery('<div id="publisher-feedback-apikey" class="tool-options">' + '<label for="publisher-feedback-key"></label>' + '<input type="text" name="publisher-feedback-key" />' + '</div>'),
+            'apiExtensions': jQuery('<div id="publisher-feedback-extensionskey" class="tool-options">' + '<label for="publisher-feedback-extensions"></label>' + '<input type="text" name="publisher-feedback-extensions" />' + '</div>')
         },
-        getName: function() {
+        getName: function () {
             return 'Oskari.mapframework.publisher.tool.FeedbackServiceTool';
         },
         /**
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
          *
          * @returns {Object} tool description
          */
-        getTool: function(){
+        getTool: function () {
             return {
                 //doesn't actually map to anything real, just need this in order to not break stuff in publisher
                 id: 'Oskari.mapframework.publisher.tool.FeedbackServiceTool',
@@ -39,14 +39,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
      * Initialise tool
      * @method init
      */
-        init: function(data) {
+        init: function (data) {
             var me = this;
             if (!data || !data.configuration[me.bundleName]) {
                 return;
             }
 
             var conf = data.configuration[me.bundleName].conf || {};
-            if(conf.publish){
+            if (conf.publish) {
                 me.setEnabled(true);
             }
             var meta = data.metadata[me.bundleName] || {};
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
     */
         getValues: function () {
             var me = this;
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 return {
                     configuration: {
                         feedbackService: {
@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
 
             return template;
         },
-        setEnabled: function(enabled) {
+        setEnabled: function (enabled) {
             var me = this;
             me.state.enabled = (enabled === true) ? true : false;
         }

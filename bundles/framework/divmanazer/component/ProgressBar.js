@@ -3,9 +3,9 @@
  *
  * Simple progressbar
  */
-Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
-    function(){
-        this._progressBar = jQuery( '<div class="oskari-progressbar"></div>' );
+Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
+    function () {
+        this._progressBar = jQuery('<div class="oskari-progressbar"></div>');
         this._element = null;
     },{
         defaultColor : 'rgba( 0, 40, 190, 0.4 )',
@@ -15,7 +15,7 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
     * @param {Object} goal, total number which to fill
     * @return {jQuery Element} a list with chosen applied
      */
-        create: function(target) {
+        create: function (target) {
             this._element = this._progressBar.clone();
             this._element.css({
                 position: 'absolute',
@@ -28,30 +28,30 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
                 zIndex:25000
             });
             var content = target;
-            content.append( this._element );
+            content.append(this._element);
             return this._element;
         },
-        updateProgressBar: function( goal, current ) {
-            if( goal === 0 ) {
+        updateProgressBar: function (goal, current) {
+            if (goal === 0) {
                 return;
             }
-            var width = ( current / goal * 100 ).toFixed( 1 );
-            this._element.css( { width: width+'%' } );
-            if( width >= 100.0 ) {
+            var width = (current / goal * 100).toFixed(1);
+            this._element.css({ width: width + '%' });
+            if (width >= 100.0) {
                 this.hide();
             }
         },
-        setColor: function(color){
-            this._element.css( { background: color } );
+        setColor: function (color) {
+            this._element.css({ background: color });
         },
-        show: function() {
-            this._element.css( { visibility: 'visible' } );
+        show: function () {
+            this._element.css({ visibility: 'visible' });
         },
-        hide: function() {
+        hide: function () {
             var me = this;
-            setTimeout( function() {
-                me._element.css( { visibility: 'hidden', width: 0, background: me.defaultColor } );
-            }, 400 );
+            setTimeout(function () {
+                me._element.css({ visibility: 'hidden', width: 0, background: me.defaultColor });
+            }, 400);
         }
 
     });

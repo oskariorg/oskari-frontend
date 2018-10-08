@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCuttingEv
          * @method getFinished
          * @return {Boolean} is the editing finished?
          */
-        getFinished: function() {
+        getFinished: function () {
             return this._finished;
         },
         /**

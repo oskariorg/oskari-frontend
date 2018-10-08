@@ -261,7 +261,7 @@ Oskari.clazz.define(
          * [getStateTagPipe get tools state value]
          * @return {[type]} [description]
          */
-        getStateTagPipe: function(){
+        getStateTagPipe: function () {
             var me = this;
             return me.state.tagPipeActive;
         },
@@ -269,7 +269,7 @@ Oskari.clazz.define(
          * [getStateMustache get tools state value]
          * @return {[type]} [description]
          */
-        getStateMustache: function(){
+        getStateMustache: function () {
             var me = this;
             return me.state.mustacheActive;
         },
@@ -279,14 +279,14 @@ Oskari.clazz.define(
          * @param  {[boolena]} show [show or hide]
          * @param  {[String]} text [text you want to show]
          */
-        _manageHelp: function(show, text){
+        _manageHelp: function (show, text) {
             var me = this,
-                help = jQuery('.'+me.templates.help.attr('class').split(' ')[0]);
+                help = jQuery('.' + me.templates.help.attr('class').split(' ')[0]);
 
-            if(show){
+            if (show) {
                 help.show();
                 help.find('p').text(text);
-            }else{
+            } else {
                 help.hide();
                 help.find('p').text('');
             }
@@ -328,14 +328,14 @@ Oskari.clazz.define(
                 uid = parseInt(item.attr('data-id')),
                 tagpipe = me._getTagPipe(uid);
 
-            if (!window.confirm(me._getLocalization('confirm_delete').replace('{tagpipe}', tagpipe.tag_address+ ', '+me._getLocalization('tag-type-'+tagpipe.tag_type)))) {
+            if (!window.confirm(me._getLocalization('confirm_delete').replace('{tagpipe}', tagpipe.tag_address + ', ' + me._getLocalization('tag-type-' + tagpipe.tag_type)))) {
                 return;
             }
 
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: Oskari.urls.getRoute('SearchTagPipe') + '&tag_id='+ uid,
+                url: Oskari.urls.getRoute('SearchTagPipe') + '&tag_id=' + uid,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -356,13 +356,13 @@ Oskari.clazz.define(
          * [_createTagPipeList creates list based on user click to pipes]
          * @param  {[array]} data [features]
          */
-        _createTagPipeList: function(data){
+        _createTagPipeList: function (data) {
             var me = this,
                 list = me.templates.pipeList.clone();
 
-            me.container.find('.'+me.templates.pipeList.attr('class')).remove();
+            me.container.find('.' + me.templates.pipeList.attr('class')).remove();
 
-            for(var i in data){
+            for (var i in data) {
 
                 var listEl = me.templates.pipeListElement.clone(),
                     listElspan = listEl.find('span'),
@@ -372,12 +372,12 @@ Oskari.clazz.define(
 
                 listElspan.text(data[i].id);
                 listElaOnMap.text(me._getLocalization('show_on_map'));
-                listElaOnMap.on('click', {feature: geojsonObject}, function(e){
+                listElaOnMap.on('click', {feature: geojsonObject}, function (e) {
                     e.preventDefault();
                     me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null, true);
                 });
                 listElaSelect.text(me._getLocalization('select_tag_pipe'));
-                listElaSelect.on('click', {feature: geojsonObject}, function(e){
+                listElaSelect.on('click', {feature: geojsonObject}, function (e) {
                     e.preventDefault();
                     me._openForm(e, me, e.data.feature);
                     me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null, true);
@@ -394,7 +394,7 @@ Oskari.clazz.define(
          * @param  {[object]} data [geometry]
          * @return {[object]}      [final geojson]
          */
-        _populateGeoJSON: function(data){
+        _populateGeoJSON: function (data) {
 
             var geojsonObject = {
                 'type': 'FeatureCollection',
@@ -415,8 +415,8 @@ Oskari.clazz.define(
          * @param  {[String]} labelProperty [label name found in geojson]
          * @return {[object]}               [style]
          */
-        _getFeatureStyle: function(labelProperty, labelPosition){
-            if(labelPosition == ''){
+        _getFeatureStyle: function (labelProperty, labelPosition) {
+            if (labelPosition == '') {
                 labelPosition = 'lb';
             }
 
@@ -457,7 +457,7 @@ Oskari.clazz.define(
          * @param {[String]} labelProperty [label name found in geojson]
          * @param {[boolean]} centerTo      [centers map]
          */
-        _addFeaturesToMap: function(geojsonObject, layerId, clearPrevious, labelProperty, centerTo, labelPosition){
+        _addFeaturesToMap: function (geojsonObject, layerId, clearPrevious, labelProperty, centerTo, labelPosition) {
             var me = this;
 
             var params = [geojsonObject, {
@@ -478,7 +478,7 @@ Oskari.clazz.define(
          * @param  {[String]} propKey   [propKey]
          * @param  {[String]} propValue [propValue]
          */
-        _removeFeaturesFromMap: function(layerId, propKey, propValue){
+        _removeFeaturesFromMap: function (layerId, propKey, propValue) {
             var me = this;
             me.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',[propKey, propValue, layerId]);
         },
@@ -487,13 +487,13 @@ Oskari.clazz.define(
          * [_initFormRedirectSelect create select options from arrays]
          * @return {[array]} [different tag types]
          */
-        _initFormRedirectSelect: function(){
+        _initFormRedirectSelect: function () {
             var me = this,
                 output = [];
             output.push('<option value=""></option>');
 
-            jQuery.each(me.state.allTagTypes, function(key, value) {
-                output.push('<option value="'+ value +'">'+ me._getLocalization('tag-type-'+value) +'</option>');
+            jQuery.each(me.state.allTagTypes, function (key, value) {
+                output.push('<option value="' + value + '">' + me._getLocalization('tag-type-' + value) + '</option>');
             });
 
             return output.join('');
@@ -519,7 +519,7 @@ Oskari.clazz.define(
                 target.hide();
                 item.append(me._initForm(tagpipe.tag_type, tagpipe));
 
-            }else{
+            } else {
 
                 //update help text
                 me._manageHelp(true, me._getLocalization('help_redirect'));
@@ -531,16 +531,16 @@ Oskari.clazz.define(
 
                 //add redirect select with options to container
                 direct.find('select').html(me._initFormRedirectSelect());
-                direct.on('change', function(e){
+                direct.on('change', function (e) {
                     var el = jQuery(this),
                         value = el.find(':selected').val(),
                         form = me.container.find('form');
                     me.state.mustacheActive = false;
 
-                    if(value === ''){
+                    if (value === '') {
                         me._manageHelp(true, me._getLocalization('help_redirect'));
                         form.remove();
-                    }else{
+                    } else {
                         me._manageHelp(true, me._getLocalization('help_insert'));
                         form.remove();
                         tagPipeSection.append(me._initForm(value, null));
@@ -573,7 +573,7 @@ Oskari.clazz.define(
          * @param  {[array]} data [feature]
          * @return {[jquery object]}      [html]
          */
-        _initForm: function(type, tagpipe){
+        _initForm: function (type, tagpipe) {
             var me = this,
                 form = me.templates.form.clone(true),
                 tagType = type.split('_');
@@ -584,29 +584,29 @@ Oskari.clazz.define(
             form.find('h4').text(me._getLocalization('tag-pipe-details-header'));
 
             //loop states and find right form input names
-            jQuery.each(me.state[me.state.mustacheType], function(index, item) {
+            jQuery.each(me.state[me.state.mustacheType], function (index, item) {
 
                 var elclass = '';
-                if(me.state.onlyNumberInputs.indexOf(item) > -1){ elclass = 'allownumericwithdecimal'; }
-                if(item === 'tag-other-issue'){
+                if (me.state.onlyNumberInputs.indexOf(item) > -1) { elclass = 'allownumericwithdecimal'; }
+                if (item === 'tag-other-issue') {
                     me.templates.form.detailinputs = jQuery(
                         '    <label>' +
                         '        <span></span>' +
-                        '        <textarea rows="4" cols="20" maxlength="100" tagtype="'+me.state.mustacheType+'" name="'+item+'" class="tag-pipe-details '+elclass+'" language="'+item+'" required="required" />' +
+                        '        <textarea rows="4" cols="20" maxlength="100" tagtype="' + me.state.mustacheType + '" name="' + item + '" class="tag-pipe-details ' + elclass + '" language="' + item + '" required="required" />' +
                         '    </label>'
                     );
-                }else if(item === 'tag-calculate-btn'){
+                } else if (item === 'tag-calculate-btn') {
                     me.templates.form.detailinputs = jQuery(
                         '    <label>' +
                         '        <span></span>' +
-                        '        <button tagtype="'+me.state.mustacheType+'" class="tag-pipe-details tag-pipe-calculate-btn">'+me._getLocalization('tag-pipe-calculate-btn')+'</button>' +
+                        '        <button tagtype="' + me.state.mustacheType + '" class="tag-pipe-details tag-pipe-calculate-btn">' + me._getLocalization('tag-pipe-calculate-btn') + '</button>' +
                         '    </label>'
                     );
-                }else{
+                } else {
                     me.templates.form.detailinputs = jQuery(
                         '    <label>' +
                         '        <span></span>' +
-                        '        <input type="text" tagtype="'+me.state.mustacheType+'" name="'+item+'" class="tag-pipe-details '+elclass+'" language="'+item+'" required="required" />' +
+                        '        <input type="text" tagtype="' + me.state.mustacheType + '" name="' + item + '" class="tag-pipe-details ' + elclass + '" language="' + item + '" required="required" />' +
                         '    </label>'
                     );
                 }
@@ -615,8 +615,8 @@ Oskari.clazz.define(
             });
 
             //calculate certain values into inputs
-            if(me.state.calculateTagTypes.indexOf(tagType[0]) > -1){
-                form.find('.tag-pipe-calculate-btn').on('click', function(e) {
+            if (me.state.calculateTagTypes.indexOf(tagType[0]) > -1) {
+                form.find('.tag-pipe-calculate-btn').on('click', function (e) {
                     e.preventDefault();
                     form.find('[name=tag-low-tag-height]').val(me._calculateTagHeight(form, tagType));
                     form.find('[name=tag-barrage-height]').val(me._calculateBarrageHeight(form, tagType));
@@ -627,10 +627,10 @@ Oskari.clazz.define(
             form.find('input,select,textarea').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
-                if(el.attr('language') != null){
+                if (el.attr('language') != null) {
                     el.attr('placeholder', me._getLocalization(el.attr('language')));
-                    if(el.attr('name') == 'tag-type'){
-                        el.val(me._getLocalization('tag-type-'+el.attr('tagtype')));
+                    if (el.attr('name') == 'tag-type') {
+                        el.val(me._getLocalization('tag-type-' + el.attr('tagtype')));
                     }
                 }
             });
@@ -649,17 +649,17 @@ Oskari.clazz.define(
                 var el = jQuery(this);
                 e.preventDefault();
 
-                if(el.hasClass('start-mode')){
+                if (el.hasClass('start-mode')) {
                     if (me._formIsValid(el.parents('form'), me)) {
                         el.removeClass('start-mode').addClass('draw-mustache primary');
                         el.val(me._getLocalization('add_label_to_map'));
                         me.state.mustacheActive = true;
                     }
-                }else if(el.hasClass('draw-mustache')){
+                } else if (el.hasClass('draw-mustache')) {
                     el.removeClass('draw-mustache').addClass('draw-label');
                     el.val(me._getLocalization('cancel_mustache_to_map'));
                     me.state.mustacheActive = true;
-                }else if(el.hasClass('draw-label')){
+                } else if (el.hasClass('draw-label')) {
                     el.removeClass('draw-label primary').addClass('start-mode');
                     el.val(me._getLocalization('add_mustache_to_map'));
                     me.state.mustacheActive = false;
@@ -708,16 +708,16 @@ Oskari.clazz.define(
 
             form.find('.allownumericwithdecimal').on('keypress keyup blur',function (event) {
                 jQuery(this).val(jQuery(this).val().replace(/[^0-9\.\-\+]/g,''));
-                if(event.key == 'Backspace' || event.key == 'Tab') {return;}
-                if ((event.which != 46 || jQuery(this).val().indexOf('.') != -1)  && (event.which < 48 || event.which > 57) && (event.which != 45 || jQuery(this).val().indexOf('-') != -1) && (event.which != 43 || jQuery(this).val().indexOf('+') != -1)) {
+                if (event.key == 'Backspace' || event.key == 'Tab') {return;}
+                if ((event.which != 46 || jQuery(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57) && (event.which != 45 || jQuery(this).val().indexOf('-') != -1) && (event.which != 43 || jQuery(this).val().indexOf('+') != -1)) {
                     event.preventDefault();
                 }
             });
 
-            if(tagpipe){
+            if (tagpipe) {
                 me._populateForm(form, tagpipe);
                 form.find('.delete-tagpipe').removeClass('hidden');
-            }else{
+            } else {
                 me._populateForm(form, null);
             }
 
@@ -729,38 +729,38 @@ Oskari.clazz.define(
          * @param  {[jquery object]} form [jquery object]
          * @return {[float]}      [calculated value]
          */
-        _calculateTagHeight: function(form, tagType){
+        _calculateTagHeight: function (form, tagType) {
             var type = tagType[1],
                 pipeSizemm = parseInt(form.find('[name=tag-pipe-size]').val()),
-                pipeSize = pipeSizemm/1000,
+                pipeSize = pipeSizemm / 1000,
                 bottomHeight = parseFloat(form.find('[name=tag-bottom-height]').val()),
                 output = null;
 
-            if(isNaN(pipeSizemm) || isNaN(bottomHeight)){
+            if (isNaN(pipeSizemm) || isNaN(bottomHeight)) {
                 return;
             }
 
             switch (type) {
             case 'kaivo':
-                if(pipeSizemm > 0 && pipeSizemm <= 250){
+                if (pipeSizemm > 0 && pipeSizemm <= 250) {
                     //Pohjan korkeus + 150mm
-                    output = bottomHeight + (150/1000);
-                }else if(pipeSizemm >= 251 && pipeSizemm <= 350){
+                    output = bottomHeight + (150 / 1000);
+                } else if (pipeSizemm >= 251 && pipeSizemm <= 350) {
                     //Pohjan korkeus + 200 mm
-                    output = bottomHeight + (200/1000);
-                }else if(pipeSizemm > 350){
+                    output = bottomHeight + (200 / 1000);
+                } else if (pipeSizemm > 350) {
                     //Pohjan korkeus + 0,75 * katuviemärin halkaisija
-                    output = (0.75*pipeSize) + bottomHeight;
+                    output = (0.75 * pipeSize) + bottomHeight;
                 }
                 break;
 
             case 'putki':
-                if(pipeSizemm > 0 && pipeSizemm <= 500){
+                if (pipeSizemm > 0 && pipeSizemm <= 500) {
                     //Pohjan korkeus + 0,5 * katuviemärin halkaisija
-                    output = (0.5*pipeSize) + bottomHeight;
-                }else if(pipeSizemm > 500){
+                    output = (0.5 * pipeSize) + bottomHeight;
+                } else if (pipeSizemm > 500) {
                     //Pohjan korkeus + 0,75 * katuviemärin halkaisija
-                    output = (0.75*pipeSize) + bottomHeight;
+                    output = (0.75 * pipeSize) + bottomHeight;
                 }
                 break;
             }
@@ -772,10 +772,10 @@ Oskari.clazz.define(
          * @param  {[jquery object]} form [jquery object]
          * @return {[float]}      [calculated value]
          */
-        _calculateBarrageHeight: function(form, tagType){
+        _calculateBarrageHeight: function (form, tagType) {
             var type = tagType[0],
                 pipeSizemm = parseInt(form.find('[name=tag-pipe-size]').val()),
-                pipeSize = pipeSizemm/1000,
+                pipeSize = pipeSizemm / 1000,
                 bottomHeight = parseFloat(form.find('[name=tag-bottom-height]').val()),
                 groundHeight = parseFloat(form.find('[name=tag-ground-height]').val()),
                 minBarrageHeight = parseFloat(1.8),
@@ -783,26 +783,26 @@ Oskari.clazz.define(
 
             switch (type) {
             case 'jatevesi':
-                if(isNaN(pipeSizemm) || isNaN(bottomHeight)){
+                if (isNaN(pipeSizemm) || isNaN(bottomHeight)) {
                     return;
-                }else{
-                    output = bottomHeight + pipeSize + (1000/1000);
+                } else {
+                    output = bottomHeight + pipeSize + (1000 / 1000);
                 }
                 break;
             case 'hulevesi':
             case 'sekaviemari':
-                if(isNaN(pipeSizemm) || isNaN(bottomHeight) || isNaN(groundHeight)){
+                if (isNaN(pipeSizemm) || isNaN(bottomHeight) || isNaN(groundHeight)) {
                     return;
-                }else{
-                    output = groundHeight + (100/1000);
+                } else {
+                    output = groundHeight + (100 / 1000);
                 }
                 break;
             }
 
-            if(output > minBarrageHeight){
-                return '+'+parseFloat(output).toFixed(1);
-            }else{
-                return '+'+minBarrageHeight;
+            if (output > minBarrageHeight) {
+                return '+' + parseFloat(output).toFixed(1);
+            } else {
+                return '+' + minBarrageHeight;
             }
         },
 
@@ -826,10 +826,10 @@ Oskari.clazz.define(
             tagPipeWrapper.find('.tag-search-wrapper').show();
             me._activateNormalGFI(true);
             me._activateNormalWFSReq(true);
-            if(mustachelayer){
+            if (mustachelayer) {
                 me._removeFeaturesFromMap('MUSTACHE-TAG', null, null);
                 me._removeFeaturesFromMap('MUSTACHE-TAG-LABEL', null, null);
-            }else{
+            } else {
                 me._removeFeaturesFromMap();
                 me.state.mustachePrintJSONarray = [];
             }
@@ -848,13 +848,13 @@ Oskari.clazz.define(
          * [_mustacheLayerIsValid check that mustachelayer is not empty]
          * @return {[output]} [true/false]
          */
-        _mustacheLayerIsValid: function(){
+        _mustacheLayerIsValid: function () {
             var me = this,
                 output = false;
 
-            if(me.state.mustacheIsOnMap){
+            if (me.state.mustacheIsOnMap) {
                 output = true;
-            }else{
+            } else {
                 me._openPopup(me._getLocalization('mustache_invalid'), me._getLocalization('mustache_invalid_help'));
             }
 
@@ -909,7 +909,7 @@ Oskari.clazz.define(
                 var data = {};
 
                 //get data from form
-                form.find('input[type=text],textarea').each(function(index, value) {
+                form.find('input[type=text],textarea').each(function (index, value) {
                     var input = jQuery(this);
                     data[input.attr('name').replace(/-/g , '_')] = input.val();
                 });
@@ -919,7 +919,7 @@ Oskari.clazz.define(
                 //get geojson
                 data.tag_geojson = me.state.mustacheGeoJSON;
 
-                if(parentLi){
+                if (parentLi) {
                     data.tag_id = parseInt(parentLi.attr('data-id'));
                 }
 
@@ -961,19 +961,19 @@ Oskari.clazz.define(
 
                 me.state.mustacheType = tagpipe.tag_type;
 
-                form.find('input[type=text], textarea').each(function(index, value) {
+                form.find('input[type=text], textarea').each(function (index, value) {
                     var input = jQuery(this);
                     var tagValue = tagpipe[input.attr('name').replace(/-/g , '_')];
 
-                    if(input.attr('name') === 'tag-type'){
-                        input.val(me._getLocalization('tag-type-'+tagValue));
-                    }else{
+                    if (input.attr('name') === 'tag-type') {
+                        input.val(me._getLocalization('tag-type-' + tagValue));
+                    } else {
                         input.val(tagValue);
                     }
                 });
 
                 //FIXME Dynamic option adding needs it
-                setTimeout(function(){
+                setTimeout(function () {
                     me.mustachePointOnMap(null, tagpipe.tag_geojson);
                 },300);
 
@@ -1032,10 +1032,10 @@ Oskari.clazz.define(
                 topic;
 
             me.tagpipes = tagpipes;
-            if(tagpipes) {
+            if (tagpipes) {
                 for (i = 0; i < tagpipes.length; i += 1) {
                     tagpipe = tagpipes[i];
-                    topic = tagpipe.tag_address+ ', '+me._getLocalization('tag-type-'+tagpipe.tag_type);
+                    topic = tagpipe.tag_address + ', ' + me._getLocalization('tag-type-' + tagpipe.tag_type);
                     matches = !hasFilter || topic.toLowerCase().indexOf(filter.toLowerCase()) > -1;
                     if (matches) {
                         list.append(
@@ -1048,12 +1048,12 @@ Oskari.clazz.define(
                 }
             }
             // Add list to container
-            if(list.children().length > 0){
+            if (list.children().length > 0) {
                 me.container.append(list);
-                if(addLastOnMap){
+                if (addLastOnMap) {
                     me._showLastTagPipeOnMap(list);
                 }
-            }else{
+            } else {
                 me._openPopup(
                     me._getLocalization('tag-pipes'),
                     me._getLocalization('noMatch')
@@ -1065,7 +1065,7 @@ Oskari.clazz.define(
          * [_showLastTagPipeOnMap shows lastly added tagpipe on map and on print]
          * @param  {[jquery object]} list [li]
          */
-        _showLastTagPipeOnMap: function(list){
+        _showLastTagPipeOnMap: function (list) {
             var last_li = list.find('li').last();
             last_li.find('.show-tag-on-map').trigger('click');
         },
@@ -1088,7 +1088,7 @@ Oskari.clazz.define(
             //topic = tagpipe.tag_address+ ", "+me._getLocalization("tag-type-"+tagpipe.tag_type);
 
             item.attr('data-id', tagpipe.tag_id);
-            item.find('span').text(me._getLocalization('tag-type-'+tagpipe.tag_type));
+            item.find('span').text(me._getLocalization('tag-type-' + tagpipe.tag_type));
             item.find('h4').text(tagpipe.tag_address);
             return item;
         },
@@ -1099,7 +1099,7 @@ Oskari.clazz.define(
          * @param  {[string]} y      [Clicked on map Y]
          * @return {[none]}
          */
-        findPipesRequest: function(x, y){
+        findPipesRequest: function (x, y) {
 
             var me = this,
                 layers = me._getTagPipeLayers(),
@@ -1111,12 +1111,12 @@ Oskari.clazz.define(
             //collect layernames and url
             for (var i in layers) {
                 layerName += layers[i].getLayerName();
-                if(i < layers.length-1){
+                if (i < layers.length - 1) {
                     layerName += ',';
                 }
                 layerUrl = layers[i].getLayerUrl();
                 var attributes = layers[i].getAttributes();
-                if(typeof attributes.inactive_layers !== 'undefined'){
+                if (typeof attributes.inactive_layers !== 'undefined') {
                     inactiveLayers = inactiveLayers.concat(attributes.inactive_layers);
                 }
             }
@@ -1140,7 +1140,7 @@ Oskari.clazz.define(
                 },
                 success: function (data) {
                     me._createTagPipeList(me._getActiveTagPipeLayers(data.features,inactiveLayers));
-                    if(data.features.length == 0){
+                    if (data.features.length == 0) {
                         me._manageHelp(true, me._getLocalization('no_pipes_in_click'));
                         return false;
                     }
@@ -1160,21 +1160,21 @@ Oskari.clazz.define(
          * [mustachePointOnMap users click adds point to map and then creates line between this and first clicked point]
          * @param  {[object]} lonlat [openlayers lonlat]
          */
-        mustachePointOnMap: function(lonlat, geojson){
+        mustachePointOnMap: function (lonlat, geojson) {
             var me = this,
                 mustacheInfo = me._populateMustacheInfo(),
                 geojson_format = new OpenLayers.Format.GeoJSON(),
                 mustacheBtn = jQuery('.add-mustache-to-map');
 
-            if(geojson){
+            if (geojson) {
                 var geojson2point = geojson_format.parseCoords.point(geojson.features[0].geometry.coordinates[1]);
                 me.state.tagPipeClickLonLat = new OpenLayers.LonLat(geojson2point.x, geojson2point.y);
                 var labelPosition = geojson.features[1].properties.labelposition;
                 me._addFeaturesToMap(geojson, 'MUSTACHE-TAG', true, 'label', true, labelPosition);
 
-            }else{
+            } else {
 
-                if(mustacheBtn.hasClass('draw-mustache')){
+                if (mustacheBtn.hasClass('draw-mustache')) {
 
                     var points = [
                         new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat),
@@ -1190,7 +1190,7 @@ Oskari.clazz.define(
                     mustacheBtn.attr('data-mustache-line', JSON.stringify(lineFeatures));
                     me._addFeaturesToMap(geojsonObjectLine, 'MUSTACHE-TAG', true, 'label', false, mustacheInfo.labelposition);
 
-                }else if(mustacheBtn.hasClass('draw-label')){
+                } else if (mustacheBtn.hasClass('draw-label')) {
 
                     var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
                     pointFeature.attributes = mustacheInfo;
@@ -1215,7 +1215,7 @@ Oskari.clazz.define(
          * [_populateMustacheInfo gets certain values from form]
          * @return {[object]} [output data]
          */
-        _populateMustacheInfo: function(){
+        _populateMustacheInfo: function () {
             var me = this,
                 output = {},
                 form = me.container.find('form');
@@ -1223,13 +1223,13 @@ Oskari.clazz.define(
             output.label = '';
             output.labelposition = '';
 
-            jQuery.each(me.state[me.state.mustacheType], function(index, item) {
+            jQuery.each(me.state[me.state.mustacheType], function (index, item) {
                 output.labelposition = 'lb';
-                if(me.state.doNotUseInLabel.indexOf(item) == -1){
-                    if(index !== 0){
-                        label += me._getLocalization(item)+':';
+                if (me.state.doNotUseInLabel.indexOf(item) == -1) {
+                    if (index !== 0) {
+                        label += me._getLocalization(item) + ':';
                     }
-                    label += form.find("input[name='"+item+"'],textarea[name='"+item+"']").val()+'\n';
+                    label += form.find("input[name='" + item + "'],textarea[name='" + item + "']").val() + '\n';
                 }
             });
 
@@ -1241,7 +1241,7 @@ Oskari.clazz.define(
         /**
          * [activateTagPipeLayers: Puts tagpipe layers on]
          */
-        _activateTagPipeLayers: function(){
+        _activateTagPipeLayers: function () {
             var me = this;
             var layers = me._getTagPipeLayers();
 
@@ -1254,14 +1254,14 @@ Oskari.clazz.define(
          * [getTagPipeLayers: Gets layers that has attribute tagpipe: true]
          * @return {[array]} [Layers that has attribute tagpipe: true]
          */
-        _getTagPipeLayers: function(){
+        _getTagPipeLayers: function () {
             var me = this;
 
             var mapService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var allLayers = mapService.getAllLayers();
-            var tagPipeLayers = jQuery.grep(allLayers, function(n) {
+            var tagPipeLayers = jQuery.grep(allLayers, function (n) {
                 var attributes = n.getAttributes();
-                if(attributes.tagpipe){
+                if (attributes.tagpipe) {
                     return n;
                 }
             });
@@ -1274,9 +1274,9 @@ Oskari.clazz.define(
          * @param  {[array]} attributes [attributes of inactive layer]
          * @return {[object]}            [op features]
          */
-        _getActiveTagPipeLayers: function(features, attributes){
+        _getActiveTagPipeLayers: function (features, attributes) {
 
-            var activeLayers = jQuery.grep(features, function(n) {
+            var activeLayers = jQuery.grep(features, function (n) {
                 var finalId = n.id.split('.');
                 if (attributes.indexOf(finalId[0]) === -1) {
                     return n;
@@ -1290,7 +1290,7 @@ Oskari.clazz.define(
          * [addLayerToMapById add layer back to map by layer id]
          * @param {[Integer]} layerId [layerId]
          */
-        _addLayerToMapById: function(layerId){
+        _addLayerToMapById: function (layerId) {
             var me = this,
                 request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
             me.sandbox.request(me.instance, request);
@@ -1301,7 +1301,7 @@ Oskari.clazz.define(
          * @param  {[type]} state [true/false]
          * @return {[none]}
          */
-        _activateNormalGFI: function(state){
+        _activateNormalGFI: function (state) {
             var me = this,
                 reqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
 
@@ -1316,7 +1316,7 @@ Oskari.clazz.define(
          * @param  {[type]} state [true/false]
          * @return {[none]}
          */
-        _activateNormalWFSReq: function(state){
+        _activateNormalWFSReq: function (state) {
             var me = this,
                 reqBuilder = Oskari.requestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
 
@@ -1330,15 +1330,15 @@ Oskari.clazz.define(
          * [_printGeoJSON sends print request with geojson in it]
          * @param  {[array]} mustachePrintJSONarray [all geojsons]
          */
-        _printGeoJSON: function(mustachePrintJSONarray){
+        _printGeoJSON: function (mustachePrintJSONarray) {
             var me = this,
                 printoutEvent = Oskari.eventBuilder('Printout.PrintableContentEvent'),
                 printOutArray = [],
                 evt;
 
-            if(mustachePrintJSONarray){
-                for(var i in mustachePrintJSONarray){
-                    for(var j in mustachePrintJSONarray[i].features){
+            if (mustachePrintJSONarray) {
+                for (var i in mustachePrintJSONarray) {
+                    for (var j in mustachePrintJSONarray[i].features) {
 
                         var printObj = {
                             'type': 'geojson',

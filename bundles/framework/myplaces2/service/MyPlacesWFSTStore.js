@@ -537,7 +537,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                         feature.state = null;
                     }
                 }
-                if(skipFeatureLoading === true) {
+                if (skipFeatureLoading === true) {
                     cb(true, list);
                 } else {
                     // make another roundtrip to get the updated models from server

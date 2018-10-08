@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
  * 		JSON config with params needed to run the bundle
  *
  */
-    function() {}, {
+    function () {}, {
     /**
      * @static
      * @property __name
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      * @method getName
      * @return {String} the name for the component
      */
-        'getName' : function() {
+        'getName' : function () {
             return this.__name;
         },
         /**
@@ -28,21 +28,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      * @param {Oskari.Sandbox} sandbox
      * Sets the sandbox reference to this component
      */
-        setSandbox : function(sandbox) {
+        setSandbox : function (sandbox) {
             this.sandbox = sandbox;
         },
         /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
-        getSandbox : function() {
+        getSandbox : function () {
             return this.sandbox;
         },
         /**
      * @method start
      * implements BundleInstance start methdod
      */
-        'start' : function() {
+        'start' : function () {
 
             var me = this;
             if (me.started) {
@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
             me.started = true;
 
    		var conf = this.conf ;
-            var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox' ;
             var sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
@@ -77,14 +77,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      *
      * implements bundle instance update method
      */
-        'update' : function() {
+        'update' : function () {
 
         },
         /**
      * @method stop
      * implements BundleInstance protocol stop method
      */
-        'stop' : function() {
+        'stop' : function () {
             var me = this;
             var sandbox = me.sandbox;
 
@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      * @method init
      * implements Module protocol init method - does nothing atm
      */
-        'init': function() {
+        'init': function () {
         // headless
             return null;
         },
@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      * Event is handled forwarded to correct #eventHandlers if found or discarded
      * if not.
      */
-        onEvent : function(event) {
+        onEvent : function (event) {
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -134,9 +134,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      * @private
      * Sends a GET request to the url in the conf with map parameters
      */
-        _logState: function() {
+        _logState: function () {
             var me = this,
-                logUrlWithLinkParams = me.conf.logUrl + '?'+ me.sandbox.generateMapLinkParameters();
+                logUrlWithLinkParams = me.conf.logUrl + '?' + me.sandbox.generateMapLinkParameters();
 
             jQuery.ajax({
                 type : 'GET',

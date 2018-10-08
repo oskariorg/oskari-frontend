@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.GetInfoResultEve
  * @method create called automatically on construction
  * @static
  */
-    function(data, content) {
+    function (data, content) {
         this._data = data;
     }, {
     /** @static @property __name event name */
@@ -16,14 +16,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.GetInfoResultEve
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
 
         /**
      * @method getData
      */
-        getData : function() {
+        getData : function () {
             return this._data;
         }
     }, {

@@ -40,13 +40,13 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
             me.subLayerTemplate = _.template(SubLayerTemplate);
             this.layerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             // listenTo will remove dead listeners, use it instead of on()
-            this.listenTo(this.model, 'add', function() {
+            this.listenTo(this.model, 'add', function () {
                 me.render();
             });
-            this.listenTo(this.model, 'change', function() {
+            this.listenTo(this.model, 'change', function () {
                 me.render();
             });
-            this.listenTo(this.model, 'remove', function() {
+            this.listenTo(this.model, 'remove', function () {
                 me.render();
             });
             this.supportedTypes = this.options.supportedTypes;
@@ -128,11 +128,11 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
              * @return  {Array}           groups
              * @private
              */
-        _getMaplayerGroups: function() {
+        _getMaplayerGroups: function () {
             var me = this;
             var groups = [];
 
-            me.layerService.getAllLayerGroups().forEach(function(group) {
+            me.layerService.getAllLayerGroups().forEach(function (group) {
                 groups.push({
                     id: group.id,
                     cls: 'group',
@@ -140,7 +140,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                 });
 
                 // subgroups
-                group.groups.forEach(function(subgroup) {
+                group.groups.forEach(function (subgroup) {
                     groups.push({
                         id: subgroup.id,
                         cls: 'subgroup',
@@ -148,7 +148,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                     });
 
                     // subgroup subgroups
-                    subgroup.groups.forEach(function(subgroupsubgroup) {
+                    subgroup.groups.forEach(function (subgroupsubgroup) {
                         groups.push({
                             id: subgroupsubgroup.id,
                             cls: 'subgroupsubgroup',
@@ -166,7 +166,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
              * @param  {Boolean}        emptyCache empty cache
              * @param  {Function}       callback   callback function
              */
-        getDataproviders: function(emptyCache, callback) {
+        getDataproviders: function (emptyCache, callback) {
             var me = this;
             if (!me.dataProviders || emptyCache === true) {
                 jQuery.ajax({
@@ -174,21 +174,21 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                     dataType: 'json',
                     contentType: 'application/json; charset=UTF-8',
                     url: Oskari.urls.getRoute('GetMapLayerGroups'),
-                    error: function() {
+                    error: function () {
                         var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
                         errorDialog.fadeout();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         me.dataProviders = [];
-                        response.organization.forEach(function(org) {
+                        response.organization.forEach(function (org) {
                             me.dataProviders.push({
                                 id: org.id,
                                 name: Oskari.getLocalized(org.name)
                             });
                         });
 
-                        me.dataProviders.sort(function(a, b) {
+                        me.dataProviders.sort(function (a, b) {
                             return Oskari.util.naturalSort(a.name, b.name);
                         });
                         callback();
@@ -208,11 +208,11 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
             var me = this,
                 element = jQuery(e.currentTarget);
 
-            me.getDataproviders(false,function(){
+            me.getDataproviders(false,function () {
                 //show layer settings
                 if (element.parents('.admin-add-layer').length === 0 && !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
                     e.stopPropagation();
-                    if(!me.instance.locale) {
+                    if (!me.instance.locale) {
                         me.instance.locale = Oskari.getMsg.bind(null, 'admin-layerselector');
                     }
                     var groupId = element.parents('.accordion').attr('lcid');
@@ -278,7 +278,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                     // call trigger on parent element's dom...
                     // see adminAction
                 };
-            if(subLayer && subLayer.getId && subLayer.getId()) {
+            if (subLayer && subLayer.getId && subLayer.getId()) {
                 saveButton.setTitle(this.instance.getLocalization('save'));
             }
             else {
@@ -305,7 +305,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                     var el = {
                         currentTarget: settings.$el.find('.admin-remove-sublayer')
                     };
-                    settings.removeLayer(el, function() {
+                    settings.removeLayer(el, function () {
                         // we need to trigger this manually for sublayers to work...
                         me.$el.trigger({
                             type: 'adminAction',

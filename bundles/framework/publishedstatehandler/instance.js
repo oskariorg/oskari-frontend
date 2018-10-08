@@ -330,7 +330,7 @@ Oskari.clazz.define(
                         allInvisible = false;
                     }
                 }
-                if(allInvisible){
+                if (allInvisible) {
                     //Don't save state when all are invisible
                     return false;
                 }

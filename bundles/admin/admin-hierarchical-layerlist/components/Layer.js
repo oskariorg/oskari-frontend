@@ -2,7 +2,7 @@
  * Contains new layer creation and also layer editing.
  */
 
-Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instance, sandbox, locale) {
+Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function (instance, sandbox, locale) {
     this.instance = instance;
     this.sandbox = sandbox;
     this.locale = locale;
@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
      * @method  _init
      * @private
      */
-    _init: function() {
+    _init: function () {
         var requirementsConfig = {
             waitSeconds: 15,
             paths: {
@@ -74,34 +74,34 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
      * They are used by AdminLayerSettingsView directly from this View for new layers and passed through LayerView
      * for existing layers
      */
-    _setupSupportedLayerTypes: function() {
+    _setupSupportedLayerTypes: function () {
         var me = this;
         // generic list of layertypes supported
 
 
-        me.supportedTypes = _.filter(this.supportedTypes, function(type) {
+        me.supportedTypes = _.filter(this.supportedTypes, function (type) {
             return me.layerService.hasSupportForLayerType(type.id);
         });
         // setup templates for layer types/require only ones supported
-        _.each(this.supportedTypes, function(type) {
+        _.each(this.supportedTypes, function (type) {
             if (type.header === false) {
                 return;
             }
             var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateHeader.html';
-            window.require([file], function(header) {
+            window.require([file], function (header) {
                 type.headerTemplate = _.template(header);
-            }, function() {
+            }, function () {
                 me.log.warn('No admin header template for layertype: ' + type.id + ' file was: ' + file);
             });
         });
-        _.each(this.supportedTypes, function(type) {
+        _.each(this.supportedTypes, function (type) {
             if (type.footer === false) {
                 return;
             }
             var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateFooter.html';
-            window.require([file], function(footer) {
+            window.require([file], function (footer) {
                 type.footerTemplate = _.template(footer);
-            }, function() {
+            }, function () {
                 me.log.warn('No admin footer template for layertype: ' + type.id + ' file was: ' + file);
             });
         });
@@ -113,10 +113,10 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
      * @return  {Array}           groups
      * @private
      */
-    _getMaplayerGroups: function() {
+    _getMaplayerGroups: function () {
         var me = this;
         var groups = [];
-        me.layerService.getAllLayerGroups().forEach(function(group) {
+        me.layerService.getAllLayerGroups().forEach(function (group) {
             groups.push({
                 id: group.id,
                 cls: 'group',
@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             });
 
             // subgroups
-            group.groups.forEach(function(subgroup) {
+            group.groups.forEach(function (subgroup) {
                 groups.push({
                     id: subgroup.id,
                     cls: 'subgroup',
@@ -132,7 +132,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                 });
 
                 // subgroup subgroups
-                subgroup.groups.forEach(function(subgroupsubgroup) {
+                subgroup.groups.forEach(function (subgroupsubgroup) {
                     groups.push({
                         id: subgroupsubgroup.id,
                         cls: 'subgroupsubgroup',
@@ -154,10 +154,10 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
      * @param  {Boolean}        emptyCache empty cache
      * @param  {Function}       callback   callback function
      */
-    getDataproviders: function(emptyCache, callback) {
+    getDataproviders: function (emptyCache, callback) {
         var me = this;
 
-        if(me.dataProviders !== null && !emptyCache) {
+        if (me.dataProviders !== null && !emptyCache) {
             callback(me.dataProviders);
             return;
         }
@@ -167,22 +167,22 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             url: Oskari.urls.getRoute('GetMapLayerGroups'),
-            error: function() {
+            error: function () {
                 var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
                 errorDialog.fadeout();
                 callback([]);
             },
-            success: function(response) {
+            success: function (response) {
                 me.dataProviders = [];
-                response.organization.forEach(function(org) {
+                response.organization.forEach(function (org) {
                     me.dataProviders.push({
                         id: org.id,
                         name: Oskari.getLocalized(org.name)
                     });
                 });
 
-                me.dataProviders.sort(function(a, b) {
+                me.dataProviders.sort(function (a, b) {
                     return Oskari.util.naturalSort(a.name, b.name);
                 });
                 callback(me.dataProviders);
@@ -196,15 +196,15 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
      * @param  {String}          layerId layerId
      * @param  {String}          groupId groupId
      */
-    showLayerAddPopup: function(tool, layerId, groupId) {
+    showLayerAddPopup: function (tool, layerId, groupId) {
         var me = this;
-        me.getDataproviders(false, function(dataProviders) {
+        me.getDataproviders(false, function (dataProviders) {
             me._extraFlyout.move(100, 100, true);
             me._extraFlyout.makeDraggable();
             me._extraFlyout.addClass('admin-hierarchical-layerlist-add-layer');
             me._extraFlyout.bringToTop();
             me._extraFlyout.setTitle(me.locale('admin.addLayer'));
-            me._extraFlyout.on('hide', function() {
+            me._extraFlyout.on('hide', function () {
                 tool.removeClass('active');
             });
 
@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
             }
 
             var groupDetails = me.layerService.getAllLayerGroups(groupId);
-            window.require(['_bundle/views/adminLayerSettingsView', '_bundle/views/adminLayerSettingsView'], function(adminLayerSettingsView, sublayerView) {
+            window.require(['_bundle/views/adminLayerSettingsView', '_bundle/views/adminLayerSettingsView'], function (adminLayerSettingsView, sublayerView) {
                 // create layer settings view for adding or editing layer
                 var settings = new adminLayerSettingsView({
                     model: layerModel,
@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function(instan
                     min: 0,
                     max: 100,
                     value: 100,
-                    slide: function(event, ui) {
+                    slide: function (event, ui) {
                         jQuery(ui.handle).parents('.left-tools').find('#opacity-slider').val(ui.value);
                     }
                 });

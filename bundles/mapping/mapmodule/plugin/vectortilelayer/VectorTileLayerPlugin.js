@@ -16,7 +16,7 @@ const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.Abstra
  */
 Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
     class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
-        constructor(config) {
+        constructor (config) {
             super(config);
             this.__name = 'VectorTileLayerPlugin';
             this._clazz = 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin';
@@ -26,7 +26,7 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
      * @private @method _initImpl
      * Interface method for the module protocol.
      */
-        _initImpl() {
+        _initImpl () {
         // register domain builder
             const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
@@ -38,9 +38,9 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
      * @private @method _createPluginEventHandlers
      * Called by superclass to create event handlers
      */
-        _createPluginEventHandlers() {
+        _createPluginEventHandlers () {
             return {
-                AfterChangeMapLayerStyleEvent(event) {
+                AfterChangeMapLayerStyleEvent (event) {
                     const oskariLayer = event.getMapLayer();
                     const olLayers = this.getOLMapLayers(oskariLayer);
 
@@ -56,7 +56,7 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
      * @param {Oskari.mapframework.domain.AbstractLayer} layer
      * @return {ol/style/Style}
      */
-        _getLayerCurrentStyleFunction(layer) {
+        _getLayerCurrentStyleFunction (layer) {
             const styleDef = layer.getCurrentStyleDef();
             return styleDef ? styleGenerator(this.mapModule.getStyle.bind(this.mapModule), styleDef) : createDefaultStyle;
         }
@@ -66,7 +66,7 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
      * @param  {Oskari.mapframework.domain.AbstractLayer} layer
      * @return {Boolean}       true if this plugin handles the type of layers
      */
-        isLayerSupported(layer) {
+        isLayerSupported (layer) {
             if (!layer) {
                 return false;
             }
@@ -80,7 +80,7 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
      * @param {Boolean} keepLayerOnTop
      * @param {Boolean} isBaseMap
      */
-        addMapLayerToMap(layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
             const options = layer.getOptions();
             const sourceOpts = {
                 format: new olFormatMVT(),

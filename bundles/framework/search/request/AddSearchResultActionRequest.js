@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddSearchResultAc
  * @method create called automatically on construction
  * @static
  */
-    function(linkName, callback) {
+    function (linkName, callback) {
         this._linkName = linkName;
         this._callback = callback;
     },{
@@ -18,21 +18,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddSearchResultAc
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getLinkName
      * @return {String} link name
      */
-        getLinkName : function() {
+        getLinkName : function () {
             return this._linkName;
         },
         /**
      * @method getCallback
      * @return {Function} callback function
      */
-        getCallback : function() {
+        getCallback : function () {
             return this._callback;
         }
     }, {

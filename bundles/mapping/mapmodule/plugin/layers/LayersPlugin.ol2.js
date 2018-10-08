@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          * @param {OpenLayers.Geometry} geometry
          * @return {Object} centroid
          */
-        getGeometryCenter: function (geometry){
+        getGeometryCenter: function (geometry) {
             var center = geometry.getCentroid();
             return {
                 lon: center.x,
@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          * @param {OpenLayers.Geometry} geometry
          * @return {OpenLayers.Bounds} bounds
          */
-        getGeometryBounds: function (geometry){
+        getGeometryBounds: function (geometry) {
             return geometry.getBounds();
         },
         /**

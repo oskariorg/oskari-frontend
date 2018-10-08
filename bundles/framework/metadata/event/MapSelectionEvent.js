@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.event.MapSelectionEvent
  * @static
  * @param {OpenLayers.Geometry} geometry the drawing that was finished
  */
-    function(geometry) {
+    function (geometry) {
         this._drawing = geometry;
     }, {
     /** @static @property __name event name */
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.event.MapSelectionEvent
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.event.MapSelectionEvent
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-        getDrawing : function() {
+        getDrawing : function () {
             return this._drawing;
         }
     }, {

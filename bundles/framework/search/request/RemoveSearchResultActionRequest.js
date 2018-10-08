@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.RemoveSearchResul
  * @method create called automatically on construction
  * @static
  */
-    function(linkName) {
+    function (linkName) {
         this._linkName = linkName;
     },{
     /** @static @property __name request name */
@@ -17,14 +17,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.RemoveSearchResul
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getLinkName
      * @return {String} link name
      */
-        getLinkName : function() {
+        getLinkName : function () {
             return this._linkName;
         }
     }, {

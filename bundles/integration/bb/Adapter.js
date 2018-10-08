@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
  * @method create called automatically on construction
  * @static
  */
-    function(name,viewClazz) {
+    function (name,viewClazz) {
         this.sandbox = null;
         this.plugins = {};
         this._localization = null;
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * Extension protocol method
      * @return {String} localized text for the title of the component
      */
-        getTitle : function() {
+        getTitle : function () {
             return this.getLocalization('title');
         },
         /**
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * Extension protocol method
      * @return {String} localized text for the description of the component
      */
-        getDescription : function() {
+        getDescription : function () {
             return this.getLocalization('desc');
         },
         /**
@@ -63,14 +63,14 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * Convenience method to call from Tile and Flyout
      * @return {Oskari.Sandbox}
      */
-        getSandbox : function() {
+        getSandbox : function () {
             return this.sandbox;
         },
         /**
      * @method update
      * BundleInstance protocol method
      */
-        update : function() {
+        update : function () {
         },
         /**
      * @method getLocalization
@@ -83,11 +83,11 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      *      JSON object for complete data depending on localization
      *      structure and if parameter key is given
      */
-        getLocalization : function(key) {
-            if(!this._localization) {
+        getLocalization : function (key) {
+            if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
-            if(key) {
+            if (key) {
                 return this._localization[key];
             }
             return this._localization;
@@ -96,10 +96,10 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * @method start
      * BundleInstance protocol method
      */
-        start : function() {
+        start : function () {
             var me = this;
             var conf = me.conf ;
-            var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox' ;
             var sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * @method stop
      * BundleInstance protocol method
      */
-        stop : function() {
+        stop : function () {
             var sandbox = this.sandbox,
                 request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * @method startExtension
      * Extension protocol method
      */
-        startExtension : function() {
+        startExtension : function () {
             var me = this,
                 sandbox = me.sandbox,
                 locFlyout = me.getLocalization('flyout'),
@@ -136,8 +136,8 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
                 p;
             this.view = view;
 
-            for(p in view.eventHandlers) {
-                if(view.eventHandlers.hasOwnProperty(p)) {
+            for (p in view.eventHandlers) {
+                if (view.eventHandlers.hasOwnProperty(p)) {
                     sandbox.registerForEventByName(view, p);
                 }
             }
@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
             me.plugins['Oskari.userinterface.Flyout'] =
             Oskari.clazz.create('Oskari.integration.bundle.bb.Flyout', me, locFlyout, view);
 
-            if(view.init !== null && view.init !== undefined) {
+            if (view.init !== null && view.init !== undefined) {
                 this.view.init();
             }
 
@@ -158,19 +158,19 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * @method stopExtension
      * Extension protocol method
      */
-        stopExtension : function() {
+        stopExtension : function () {
             var me = this,
                 pluginType,
                 sandbox = me.sandbox,
                 view = me.view,
                 p;
             for (p in view.eventHandlers) {
-                if(view.eventHandlers.hasOwnProperty(p)) {
+                if (view.eventHandlers.hasOwnProperty(p)) {
                     sandbox.unregisterFromEventByName(view, p);
                 }
             }
             for (pluginType in me.plugins) {
-                if(pluginType) {
+                if (pluginType) {
                     me.plugins[pluginType] = null;
                 }
             }
@@ -179,25 +179,25 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * @method getPlugins
      * Extension protocol method
      */
-        getPlugins : function() {
+        getPlugins : function () {
             return this.plugins;
         },
 
-        'init' : function() {
+        'init' : function () {
             return null;
         },
         /**
      * @method getName
      * Module protocol method
      */
-        getName : function() {
+        getName : function () {
             return this._name;
         },
 
         /**
      * @method getConfiguration
      */
-        getConfiguration : function() {
+        getConfiguration : function () {
             return this.conf;
         },
 
@@ -205,14 +205,14 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
      * @method setState
      * @param {Object} state bundle state as JSON
      */
-        setState : function() {
+        setState : function () {
         },
 
         /*
      * @method getState
      * @return {Object} bundle state as JSON
      */
-        getState : function() {
+        getState : function () {
         }
 
     }, {

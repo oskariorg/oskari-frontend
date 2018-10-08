@@ -14,7 +14,7 @@ Oskari.clazz
      * @param {String}
      *            id layer identifier so we can select correct tab
      */
-        function(id) {
+        function (id) {
             this._id = id;
         }, {
         /** @static @property __name request name */
@@ -23,14 +23,14 @@ Oskari.clazz
          * @method getName
          * @return {String} request name
          */
-            getName : function() {
+            getName : function () {
                 return this.__name;
             },
             /**
          * @method getId
          * @return {String} identifier so we can manage select correct tab
          */
-            getId : function() {
+            getId : function () {
                 return this._id;
             }
         }, {

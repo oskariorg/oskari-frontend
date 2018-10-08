@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.DeletePlaceReq
  * @param {Number}
  *            placeId id of place to be edited
  */
-    function(placeId) {
+    function (placeId) {
         this._placeId = placeId;
     }, {
         __name : 'MyPlaces.DeletePlaceRequest',
@@ -23,14 +23,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.DeletePlaceReq
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {Number} id of place to be edited
      */
-        getId : function() {
+        getId : function () {
             return this._placeId;
         }
     }, {

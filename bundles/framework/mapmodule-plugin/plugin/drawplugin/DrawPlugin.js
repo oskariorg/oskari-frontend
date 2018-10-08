@@ -56,7 +56,7 @@ Oskari.clazz.define(
 
             } else {
                 // Solve OL problem in select modify feature
-                if(this.modifyControls.modify.feature){
+                if (this.modifyControls.modify.feature) {
                     this.modifyControls.modify.feature = null;
                 }
                 // remove possible old drawing
@@ -110,12 +110,12 @@ Oskari.clazz.define(
                 activeControl = activeControls[i];
                 switch (activeControl) {
                 case 'point':
-                    if(drawLayer.features.length === 0){
+                    if (drawLayer.features.length === 0) {
                         return;
                     }
                     break;
                 case 'line':
-                    if (!drawControls.line.handler.line){
+                    if (!drawControls.line.handler.line) {
                         return;
                     }
                     if (drawControls.line.handler.line.geometry.components.length < 3 && drawLayer.features.length === 0) {
@@ -123,7 +123,7 @@ Oskari.clazz.define(
                     }
                     break;
                 case 'area':
-                    if (!drawControls.area.handler.polygon){
+                    if (!drawControls.area.handler.polygon) {
                         return;
                     }
                     components = drawControls.area.handler.polygon.geometry.components;
@@ -389,7 +389,7 @@ Oskari.clazz.define(
             var me = this,
                 sandbox = me.getSandbox();
 
-            if(!me.registerRequests) {
+            if (!me.registerRequests) {
                 return {};
             }
 

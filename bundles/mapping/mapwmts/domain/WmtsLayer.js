@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
  * @method create called automatically on construction
  * @static
  */
-    function() {
+    function () {
 
     //Internal id for this map layer
         this._WmtsMatrixSetId = null;
@@ -21,15 +21,15 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
      * @method setTileUrl
      * @param {String} url
      */
-        setTileUrl : function(url) {
+        setTileUrl : function (url) {
             this._tileURL = url;
         },
         /**
      * @method getTileUrl
      * @return {String} url
      */
-        getTileUrl : function() {
-            if(!this._tileURL) {
+        getTileUrl : function () {
+            if (!this._tileURL) {
                 return this.getLayerUrl();
             }
             return this._tileURL;
@@ -38,14 +38,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
      * @method setWmtsMatrixSetId
      * @param {String} matrixSetId
      */
-        setWmtsMatrixSetId : function(matrixSetId) {
+        setWmtsMatrixSetId : function (matrixSetId) {
             this._WmtsMatrixSetId = matrixSetId;
         },
         /**
      * @method getWmtsMatrixSetId
      * @return {String}
      */
-        getWmtsMatrixSetId : function() {
+        getWmtsMatrixSetId : function () {
             return this._WmtsMatrixSetId;
         },
         /**

@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolContainerReq
  * @param {Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance} toolbar
  *          reference to toolbarInstance that handles the buttons
  */
-    function(toolbarPlugin) {
+    function (toolbarPlugin) {
         this._toolbar = toolbarPlugin;
     }, {
     /**
@@ -22,11 +22,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolContainerReq
      * @param {Oskari.mapframework.bundle.toolbar.request.AddToolbarRequest/Oskari.mapframework.bundle.toolbar.request.RemoveToolbarRequest/Oskari.mapframework.bundle.toolbar.request.ToolButtonStateRequest} request
      *      request to handle
      */
-        handleRequest : function(core, request) {
-            if(request.getOp() == 'set') {
+        handleRequest : function (core, request) {
+            if (request.getOp() == 'set') {
                 this._toolbar.setToolContent(request.getData());
             }
-            else if(request.getOp() == 'reset') {
+            else if (request.getOp() == 'reset') {
                 this._toolbar.resetToolContent(request.getData());
             }
         }

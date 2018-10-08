@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolButtonStateR
  * @param {Boolean}
  *            state true if enabled, false to disable
  */
-    function(id, group, state) {
+    function (id, group, state) {
         this._id = id;
         this._group = group;
         this._state = (state === true);
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolButtonStateR
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
 
@@ -36,21 +36,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolButtonStateR
      * @method getId
      * @return {String} identifier so we can manage the button with subsequent requests
      */
-        getId : function() {
+        getId : function () {
             return this._id;
         },
         /**
      * @method getGroup
      * @return {String} identifier for organizing buttons
      */
-        getGroup : function() {
+        getGroup : function () {
             return this._group;
         },
         /**
      * @method getState
      * @return {Boolean} true to enable, false to disable
      */
-        getState : function() {
+        getState : function () {
             return this._state;
         }
     }, {

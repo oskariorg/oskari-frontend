@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             // preload stuff
             var me = this;
             this.wfstStore.connect();
-            if(blnSkipLoad === true) {
+            if (blnSkipLoad === true) {
                 this.skipLoading = blnSkipLoad;
                 return;
             }

@@ -5,7 +5,7 @@ define([
     '_bundle/models/layersTabModel',
     '_bundle/views/tabPanelView'
 ],
-function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPanelView) {
+function (ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPanelView) {
     return Backbone.View.extend({
 
 
@@ -29,7 +29,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
              *
              * @method initialize
              */
-        initialize: function() {
+        initialize: function () {
             this.instance = this.options.instance;
             this.el = this.options.el;
             this.appTemplate = _.template(ViewTemplate);
@@ -45,7 +45,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
              *
              * @method render
              */
-        render: function() {
+        render: function () {
             this.el.html(this.appTemplate);
         },
 
@@ -56,7 +56,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
              * @param {Object} LayerGroupingTab contains layersTabModel
              * @param {String} tabType - what kind of tab this is (inspire vs. organization)
              */
-        _renderLayerGroups: function(layerGroupingTab, tabType) {
+        _renderLayerGroups: function (layerGroupingTab, tabType) {
             if (!layerGroupingTab) {
                 return;
             }
@@ -74,7 +74,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
                     tabId: tabType
                 }));
         },
-        removeLayer: function(layerId) {
+        removeLayer: function (layerId) {
             // removing layer from the main collection
             // layer groups monitor the main collection and update
             // their state based on changes to the main collection
@@ -89,7 +89,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
                 }
             }
         },
-        addToCollection: function(layerList) {
+        addToCollection: function (layerList) {
             if (!this.instance.models || !this.instance.models.layers) {
                 return false;
             }
@@ -98,7 +98,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
             models.add(layerList, {
                 merge: true
             });
-            _.each(layerList, function(layer) {
+            _.each(layerList, function (layer) {
                 if (layer.getParentId() === -1) {
                     return;
                 }
@@ -116,7 +116,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
              * @method addToCollection
              * @param {Array} models which are created from layers.
              */
-        createUI: function(models) {
+        createUI: function (models) {
             var collection = new LayerCollection(models);
             this.instance.models = {
                 'layers': collection
@@ -174,7 +174,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
              * @method toggleTab
              * @param {Object} e - click event
              */
-        toggleTab: function(e) {
+        toggleTab: function (e) {
             // this event does not need to bubble up.
             e.stopPropagation();
             var target = jQuery(e.currentTarget),
@@ -205,11 +205,11 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
              * @method catchInputs
              * @param {Object} e - click event
              */
-        catchInputs: function(e) {
+        catchInputs: function (e) {
             e.stopPropagation();
         },
 
-        recheckCapabilities: function(e) {
+        recheckCapabilities: function (e) {
             var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
 
             var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -219,8 +219,8 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
             var me = this;
             var xhr;
 
-            closeButton.setHandler(function() {
-                if(xhr) {
+            closeButton.setHandler(function () {
+                if (xhr) {
                     xhr.abort();
                 }
                 popup.close();
@@ -244,7 +244,7 @@ function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPan
                     },
                     error: function (xhr, status, error) {
                         xhr = null;
-                        if(status === 'timeout') {
+                        if (status === 'timeout') {
                             content.append('<br><br><span>' + loc('recheckFailTimeout') + '<span>');
                             return;
                         }

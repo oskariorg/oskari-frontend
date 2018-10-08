@@ -41,13 +41,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @method bindOnFloatingLabelInput
          * binds floating label functionality.
          */
-        bindOnFloatingLabelInput: function() {
-            this._field.find('.oskarifield_floating_input').on('focus', function() {
+        bindOnFloatingLabelInput: function () {
+            this._field.find('.oskarifield_floating_input').on('focus', function () {
                 var $field = jQuery(this).closest('.oskarifield');
                 $field.addClass('oskarifield--not-empty');
             });
 
-            this._field.find('.oskarifield_floating_input').on('blur', function() {
+            this._field.find('.oskarifield_floating_input').on('blur', function () {
                 var $field = jQuery(this).closest('.oskarifield');
                 if (!this.value) {
                     $field.removeClass('oskarifield--not-empty');
@@ -106,9 +106,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 tooltip.addClass('help');
                 tooltip.attr('helptags', pDataTags);
             }
-            if (bindToInput){
+            if (bindToInput) {
                 place = this._field.find('input');
-            }else{
+            } else {
                 place = this._field.find('label');
             }
             place.before(tooltip);
@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setFloatingLabel: function (pLabel, topPosition) {
             var input = this._field.find('input'),
                 label = this._field.find('label');
-            if (topPosition){
+            if (topPosition) {
                 this._setTopPosition(label, topPosition);
             }
             label.addClass('oskarifield_floating_label');
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Integer} top value in px
          */
         _setTopPosition: function (elem, top) {
-            if (typeof top === 'number'){
+            if (typeof top === 'number') {
                 elem.css('top', top + 'px');
             }
         },
@@ -239,7 +239,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setValue: function (value) {
             var input = this._field.find('input');
             input.attr('value', value);
-            if(value && input.hasClass('oskarifield_floating_input')){
+            if (value && input.hasClass('oskarifield_floating_input')) {
                 this._field.addClass('oskarifield--not-empty');
             }
         },
@@ -473,7 +473,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             });
             input.autocomplete('search', input.val());
         },
-        addClass: function(className) {
+        addClass: function (className) {
             var input = this._field.find('input');
             input.addClass(className);
         },

@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
  * @method create called automatically on construction
  * @static
  */
-    function() {
+    function () {
     /* Layer Type */
         this._layerType = 'ANALYSIS';
         this._metaType = 'ANALYSIS';
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
      * @method setWpsUrl
      * @param {String} url
      */
-        setWpsUrl: function(url) {
+        setWpsUrl: function (url) {
             this._wpsUrl = url;
         },
 
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
      * @method getWpsUrl
      * @return {String} the url for wps service
      */
-        getWpsUrl: function() {
+        getWpsUrl: function () {
             return this._wpsUrl;
         },
 
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
      * @method setWpsName
      * @param {String} wpsName used to identify service f.ex. in GetFeatureInfo queries.
      */
-        setWpsName: function(wpsName) {
+        setWpsName: function (wpsName) {
             this._wpsName = wpsName;
         },
 
@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
      * @method getWpsName
      * @return {String} wpsName used to identify service f.ex. in GetFeatureInfo queries.
      */
-        getWpsName : function() {
+        getWpsName : function () {
             return this._wpsName;
         },
 
@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
      * @method setWpsLayerId
      * @param {String} wpsLayerId used to identify the right analysis result
      */
-        setWpsLayerId: function(wpsLayerId) {
+        setWpsLayerId: function (wpsLayerId) {
             this._wpsLayerId = wpsLayerId;
         },
 
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
      * @method getWpsLayerId
      * @return {String}
      */
-        getWpsLayerId : function() {
+        getWpsLayerId : function () {
             return this._wpsLayerId;
         },
         /**

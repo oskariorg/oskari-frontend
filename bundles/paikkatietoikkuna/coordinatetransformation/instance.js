@@ -50,27 +50,27 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         getService: function () {
             return this.transformationService;
         },
-        setDimension: function (type, srs, elevation){
+        setDimension: function (type, srs, elevation) {
             this.dimensions[type] = this.helper.getDimension(srs, elevation);
         },
-        getDimension: function (type){
+        getDimension: function (type) {
             return this.dimensions[type];
         },
-        getDimensions: function (){
+        getDimensions: function () {
             return this.dimensions;
         },
         /**
      * @method afterStart
      */
         afterStart: function () {
-            this.helper = Oskari.clazz.create( 'Oskari.coordinatetransformation.helper');
-            this.transformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
-            this.dataHandler = Oskari.clazz.create( 'Oskari.coordinatetransformation.CoordinateDataHandler', this.helper);
+            this.helper = Oskari.clazz.create('Oskari.coordinatetransformation.helper');
+            this.transformationService = Oskari.clazz.create('Oskari.coordinatetransformation.TransformationService', this);
+            this.dataHandler = Oskari.clazz.create('Oskari.coordinatetransformation.CoordinateDataHandler', this.helper);
             this.instantiateViews();
             this.createUi();
             this.bindListeners();
         },
-        bindListeners: function (){
+        bindListeners: function () {
             var me = this;
             var dimensions = this.getDimensions();
             this.dataHandler.on('InputCoordAdded', function (coords) {
@@ -83,10 +83,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
                 me.views.transformation.outputTable.render(coords, dimensions.output);
             });
         },
-        getPlugins: function() {
+        getPlugins: function () {
             return this.plugins;
         },
-        getDataHandler: function() {
+        getDataHandler: function () {
             return this.dataHandler;
         },
         getHelper: function () {
@@ -101,10 +101,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         },
         toggleViews: function (view) {
             var views = this.getViews();
-            if( !views[view] ) {
+            if (!views[view]) {
                 return;
             }
-            Object.keys( views ).forEach( function ( view ) {
+            Object.keys(views).forEach(function (view) {
                 views[view].setVisible(false);
             });
             views[view].setVisible(true);
@@ -112,9 +112,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
         },
-        setMapSelectionMode: function (isSelect){
+        setMapSelectionMode: function (isSelect) {
             this.isMapSelection = !!isSelect;
-            if (isSelect === true){
+            if (isSelect === true) {
                 this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [false]);
             } else {
                 this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [true]);
@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         setRemoveMarkers: function (isRemove) {
             this.isRemoveMarkers = isRemove;
         },
-        addMapCoordsToInput: function (addBln){ //event??
+        addMapCoordsToInput: function (addBln) { //event??
             this.getDataHandler().addMapCoordsToInput(addBln);
         },
         /**
@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         return transformationService;
     },*/
         eventHandlers: {
-            'MapClickedEvent': function ( event ) {
+            'MapClickedEvent': function (event) {
                 if (!this.isMapSelection || this.isRemoveMarkers) {
                     return;
                 }
@@ -159,19 +159,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
                     return;
                 }
                 var markerId = event.getID();
-                if (this.isRemoveMarkers === true){
+                if (this.isRemoveMarkers === true) {
                     this.dataHandler.removeMapCoord(markerId);
                     this.sandbox.postRequestByName('MapModulePlugin.RemoveMarkersRequest', [markerId]);
                 }
             },
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                if(event.getExtension().getName() !==this.getName()){
+                if (event.getExtension().getName() !== this.getName()) {
                     return;
                 }
                 var state = event.getViewState();
-                if (state === 'attach' || state === 'restore'){
+                if (state === 'attach' || state === 'restore') {
                     this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-                } else if (state === 'close' || state === 'minimize'){
+                } else if (state === 'close' || state === 'minimize') {
                     this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
                 }
             }

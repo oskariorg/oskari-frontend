@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
      * @method create called automatically on construction
      * @static
      */
-    function() {
+    function () {
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method getName
          * @return {String} the name for the component
          */
-        'getName': function() {
+        'getName': function () {
             return this.__name;
         },
 
@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
-        setSandbox: function(sandbox) {
+        setSandbox: function (sandbox) {
             this.sandbox = sandbox;
         },
 
@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method getSandbox
          * @return {Oskari.Sandbox}
          */
-        getSandbox: function() {
+        getSandbox: function () {
             return this.sandbox;
         },
         /**
@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          *      JSON object for complete data depending on localization
          *      structure and if parameter key is given
          */
-        getLocalization: function(key) {
+        getLocalization: function (key) {
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        'start': function() {
+        'start': function () {
             if (this.started) {
                 return;
             }
@@ -121,7 +121,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                         iconCls: 'tool-feature-selection',
                         tooltip: localization.tools.select.tooltip,
                         sticky: false,
-                        callback: function() {
+                        callback: function () {
                             me.popupHandler.showSelectionTools();
                         }
                     };
@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        'init': function() {
+        'init': function () {
             var me = this;
             this.requestHandlers = {
                 showFeatureHandler: Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.request.ShowFeatureDataRequestHandler', me)
@@ -167,7 +167,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method getSelectionPlugin
          * @return {Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin}
          **/
-        getSelectionPlugin: function() {
+        getSelectionPlugin: function () {
             return this.selectionPlugin;
         },
 
@@ -175,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        'update': function() {
+        'update': function () {
 
         },
 
@@ -184,7 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
-        onEvent: function(event) {
+        onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
          */
-        getLayerService: function() {
+        getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
 
@@ -205,7 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @param  {String| Number} layerId layer to process
          * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
-        __addTool: function(layerModel, suppressEvent) {
+        __addTool: function (layerModel, suppressEvent) {
             var me = this;
             var service = this.getLayerService();
             if (typeof layerModel !== 'object') {
@@ -224,7 +224,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             tool.setIconCls('show-featuredata-tool');
             tool.setTitle(label);
             tool.setTooltip(label);
-            tool.setCallback(function() {
+            tool.setCallback(function () {
                 me.sandbox.postRequestByName('ShowFeatureDataRequest', [layerModel.getId()]);
             });
 
@@ -233,12 +233,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         /**
          * Adds tools for all layers
          */
-        __setupLayerTools: function() {
+        __setupLayerTools: function () {
             var me = this;
             // add tools for feature data layers
             var service = this.getLayerService();
             var layers = service.getAllLayers();
-            _.each(layers, function(layer) {
+            _.each(layers, function (layer) {
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
@@ -251,7 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @static
          */
         eventHandlers: {
-            'WFSStatusChangedEvent': function(event) {
+            'WFSStatusChangedEvent': function (event) {
                 if (event.getLayerId() === undefined) {
                     return;
                 }
@@ -288,7 +288,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     loading: [],
                     error: []
                 };
-                _.each(this.__loadingStatus, function(value, key) {
+                _.each(this.__loadingStatus, function (value, key) {
                     status[value].push(key);
                 });
                 if (status.loading.length === 0) {
@@ -298,7 +298,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 // setup error indicator based on error statuses
                 this.plugin.showErrorIndicator(status.error.length > 0);
             },
-            'MapLayerEvent': function(event) {
+            'MapLayerEvent': function (event) {
                 if (event.getOperation() !== 'add') {
                     // only handle add layer
                     return;
@@ -317,7 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              *
              * Calls flyouts layerRemoved() method
              */
-            'AfterMapLayerRemoveEvent': function(event) {
+            'AfterMapLayerRemoveEvent': function (event) {
                 if (event.getMapLayer().hasFeatureData()) {
                     this.plugin.refresh();
                     this.plugins['Oskari.userinterface.Flyout'].layerRemoved(event.getMapLayer());
@@ -330,7 +330,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              *
              * Calls flyouts layerAdded() method
              */
-            'AfterMapLayerAddEvent': function(event) {
+            'AfterMapLayerAddEvent': function (event) {
                 if (event.getMapLayer().hasFeatureData()) {
                     this.plugin.refresh();
                     this.plugins['Oskari.userinterface.Flyout'].layerAdded(event.getMapLayer());
@@ -341,7 +341,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * @method WFSPropertiesEvent
              * Update grid headers
              */
-            'WFSPropertiesEvent': function(event) {
+            'WFSPropertiesEvent': function (event) {
                 // update grid information [don't update the grid if not active]
                 var layer = event.getLayer();
                 this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
@@ -351,7 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * @method WFSFeatureEvent
              * Update grid data
              */
-            'WFSFeatureEvent': function(event) {
+            'WFSFeatureEvent': function (event) {
                 // update grid information [don't update the grid if not active]
                 var layer = event.getLayer();
                 this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
@@ -361,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * @method WFSFeaturesSelectedEvent
              * Highlight the feature on flyout
              */
-            'WFSFeaturesSelectedEvent': function(event) {
+            'WFSFeaturesSelectedEvent': function (event) {
                 var layer = event.getMapLayer();
                 this.plugins['Oskari.userinterface.Flyout'].featureSelected(layer);
             },
@@ -370,7 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * @method userinterface.ExtensionUpdatedEvent
              * Disable grid updates on close, otherwise enable updates
              */
-            'userinterface.ExtensionUpdatedEvent': function(event) {
+            'userinterface.ExtensionUpdatedEvent': function (event) {
                 var plugin = this.plugins['Oskari.userinterface.Flyout'];
 
                 // ExtensionUpdateEvents are fired a lot, only let featuredata2 extension event to be handled when enabled
@@ -390,7 +390,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             /**
              * @method FeatureData.FinishedDrawingEvent
              */
-            'FeatureData.FinishedDrawingEvent': function() {
+            'FeatureData.FinishedDrawingEvent': function () {
                 var me = this;
 
                 if (!me.selectionPlugin) {
@@ -405,7 +405,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 me.sandbox.notifyAll(evt);
 
             },
-            'DrawingEvent': function(evt) {
+            'DrawingEvent': function (evt) {
                 var me = this;
                 if (!evt.getIsFinished()) {
                     // only interested in finished drawings
@@ -437,7 +437,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                 me.popupHandler.removeButtonSelection();
             },
-            'AfterMapMoveEvent': function() {
+            'AfterMapMoveEvent': function () {
                 var me = this;
                 me.plugin.mapStatusChanged();
                 this.plugins['Oskari.userinterface.Flyout'].locateOnMapFID = null;
@@ -450,7 +450,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        'stop': function() {
+        'stop': function () {
             var sandbox = this.sandbox(),
                 p;
             for (p in this.eventHandlers) {
@@ -474,7 +474,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * Oskari.mapframework.bundle.featuredata2.Flyout
          * Oskari.mapframework.bundle.featuredata2.Tile
          */
-        startExtension: function() {
+        startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.Flyout', this);
         },
 
@@ -483,7 +483,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * implements Oskari.userinterface.Extension protocol stopExtension method
          * Clears references to flyout and tile
          */
-        stopExtension: function() {
+        stopExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = null;
         },
 
@@ -492,7 +492,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * implements Oskari.userinterface.Extension protocol getPlugins method
          * @return {Object} references to flyout and tile
          */
-        getPlugins: function() {
+        getPlugins: function () {
             return this.plugins;
         },
 
@@ -500,7 +500,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method getTitle
          * @return {String} localized text for the title of the component
          */
-        getTitle: function() {
+        getTitle: function () {
             return this.getLocalization('title');
         },
 
@@ -508,7 +508,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
-        getDescription: function() {
+        getDescription: function () {
             return this.getLocalization('desc');
         },
 
@@ -516,7 +516,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method createUi
          * (re)creates the UI for "selected layers" functionality
          */
-        createUi: function() {
+        createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', {

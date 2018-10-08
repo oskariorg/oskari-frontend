@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
  * @static
  * @param {OpenLayers.Geometry} geometry the feature geometry that was finished
  */
-    function(geometry, drawingMode, creatorId) {
+    function (geometry, drawingMode, creatorId) {
         this._drawing = geometry;
         this._drawingMode = drawingMode;
         this._creatorId = creatorId;
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-        getDrawing : function() {
+        getDrawing : function () {
             return this._drawing;
         },
         /**
@@ -37,10 +37,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
      * Returns the current drawing mode
      * @return {String}
      */
-        getDrawingMode : function() {
+        getDrawingMode : function () {
             return this._drawingMode;
         },
-        getCreatorId: function() {
+        getCreatorId: function () {
             return this._creatorId;
         }
     }, {

@@ -26,21 +26,21 @@ Oskari.clazz.define('map.layer.handler',
         handleRequest: function (core, request) {
             var sandbox = this.layerService.getSandbox();
 
-            if('activate.map.layer' === request.getName()) {
+            if ('activate.map.layer' === request.getName()) {
                 var layerId = request.getLayerId();
-                if(request.isActivated()) {
+                if (request.isActivated()) {
                     this.mapState.activateLayer(layerId, request._creator);
                 } else {
                     this.mapState.deactivateLayer(layerId, request._creator);
                 }
-            } else if('AddMapLayerRequest' === request.getName()) {
+            } else if ('AddMapLayerRequest' === request.getName()) {
                 var layer = this.layerService.findMapLayer(request.getMapLayerId());
                 this.mapState.addLayer(layer, request._creator);
-            } else if('RemoveMapLayerRequest' === request.getName()) {
+            } else if ('RemoveMapLayerRequest' === request.getName()) {
                 this.mapState.removeLayer(request.getMapLayerId(), request._creator);
-            } else if('RearrangeSelectedMapLayerRequest' === request.getName()) {
+            } else if ('RearrangeSelectedMapLayerRequest' === request.getName()) {
                 this.mapState.moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
-            } else if('ChangeMapLayerOpacityRequest' === request.getName()) {
+            } else if ('ChangeMapLayerOpacityRequest' === request.getName()) {
                 var layer = this.mapState.getSelectedLayer(request.getMapLayerId());
                 if (!layer) {
                     return;
@@ -50,7 +50,7 @@ Oskari.clazz.define('map.layer.handler',
                 var evt = Oskari.eventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
                 evt._creator = request._creator;
                 sandbox.notifyAll(evt);
-            } else if('ChangeMapLayerStyleRequest' === request.getName()) {
+            } else if ('ChangeMapLayerStyleRequest' === request.getName()) {
                 if (request.getStyle() === '!default!') {
                     // Check for magic string - should propably be removed...
                     return;

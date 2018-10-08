@@ -191,10 +191,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.PlaceForm',
                 find('div.measurementResult').
                 html(this.measurementResult);
         },
-        bindEvents: function(){
+        bindEvents: function () {
             var me = this;
             var isPublished = (this.options ? this.options.published : false);
-            if(!isPublished) {
+            if (!isPublished) {
                 me._bindCategoryChange();
                 me._bindCreateNewLayer();
             }

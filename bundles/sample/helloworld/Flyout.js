@@ -9,18 +9,18 @@ Oskari.clazz.define('Oskari.sample.bundle.helloworld.HelloWorldFlyout',
 /**
  * @static constructor function
  */
-    function() {
+    function () {
 
     }, {
     /**
      * @method startPlugin
      * called by host to start flyout operations
      */
-        startPlugin : function() {
+        startPlugin : function () {
             var el = this.getEl();
 
             /* this gets the flyout part */
-            var loc  = this.getLocalization();
+            var loc = this.getLocalization();
             var msg = loc.message ;
 
             el.append(msg);
@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.sample.bundle.helloworld.HelloWorldFlyout',
      * @method stopPlugin
      * called by host to stop flyout operations
      */
-        stopPlugin : function() {
+        stopPlugin : function () {
         }
     }, {
         'extend' : ['Oskari.userinterface.extension.DefaultFlyout']

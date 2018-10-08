@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureGeometri
  * @param {Boolean}
  *            keepSelection true if this should append previous selection
  */
-    function(mapLayer, keepSelection) {
+    function (mapLayer, keepSelection) {
         this._addToSelection = !!keepSelection;
         this._mapLayer = mapLayer;
     }, {
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureGeometri
      * @method getName
      * @return {String} event name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
 
@@ -32,21 +32,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureGeometri
      * @method isKeepSelection
      * @return {Boolean} true if geometry is appended to previous one
      */
-        isKeepSelection : function() {
+        isKeepSelection : function () {
             return this._addToSelection;
         },
         /**
      * @method getMapLayer
      * @return {Oskari.mapframework.domain.WfsLayer} mapLayer highlighted/selected maplayer
      */
-        getMapLayer : function() {
+        getMapLayer : function () {
             return this._mapLayer;
         },
         /**
          * @method getGeometries [[layerid,geom]..]
          * @return [[layerid,geom]..] mapLayer highlighted/selected maplayer
     */
-        getGeometries : function() {
+        getGeometries : function () {
             return this._mapLayer.getClickedGeometries();
         }
     }, {

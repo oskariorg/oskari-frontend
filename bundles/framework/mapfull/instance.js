@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     // FIXME: this must be done different way in future
                     statsgrid = jQuery('.statsgrid:visible:not(.oskari-tile):not(.oskari-flyoutcontent)'),
 
-                    maxWidth = jQuery(window).width()-sidebar.width()-statsgrid.width(),
+                    maxWidth = jQuery(window).width() - sidebar.width() - statsgrid.width(),
                     mapTools = jQuery('#maptools:visible');
 
                 contentMap.height(mapHeight);
@@ -95,16 +95,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     dataContent.addClass('oskari-closed');
                 }
 
-                if(contentMap.hasClass('oskari-map-window-fullscreen')){
+                if (contentMap.hasClass('oskari-map-window-fullscreen')) {
                     maxWidth += mapTools.width();
                     maxWidth += sidebar.width();
                     var position = sidebar.position();
-                    if(position && position.left){
+                    if (position && position.left) {
                         maxWidth += position;
                     }
                 }
 
-                if(mapWidth>maxWidth){
+                if (mapWidth > maxWidth) {
                     mapWidth = maxWidth;
                 }
 
@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // create services & enhancements
             var services = me._createServices(conf);
-            services.forEach(function(service) {
+            services.forEach(function (service) {
                 sandbox.registerService(service);
             });
 
@@ -317,15 +317,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 }
             });
             // OL3 uses proj4
-            if(window.proj4) {
+            if (window.proj4) {
                 // ensure static projections are defined
-                jQuery.each(defaultDefs, function(srs, defs) {
+                jQuery.each(defaultDefs, function (srs, defs) {
                     window.proj4.defs(srs, defs);
                 });
             }
             // OL2 uses Proj4js
             else {
-                if(!Proj4js) {
+                if (!Proj4js) {
                     window.Proj4js = {};
                 }
                 // ensure static projections are defined

@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
      * @param {Oskari.framework.bundle.admin-layerrights.AdminLayerRightsBundleInstance}
      *        instance reference to component that created the tile
      */
-    function(instance) {
+    function (instance) {
 
         var me = this;
         me.instance = instance;
@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function() {
+        getName: function () {
 
             return 'Oskari.framework.bundle.admin-layerrights.Flyout';
         },
@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function(el, width, height) {
+        setEl: function (el, width, height) {
 
             this.container = el[0];
             if (!jQuery(this.container).hasClass('admin-layerrights')) {
@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Interface method implementation, assigns the HTML templates
          * that will be used to create the UI
          */
-        startPlugin: function() {
+        startPlugin: function () {
 
 
             this.template = jQuery(
@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          *
          * Interface method implementation, does nothing atm
          */
-        stopPlugin: function() {
+        stopPlugin: function () {
 
         },
 
@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @method getTitle
          * @return {String} localized text for the title of the flyout
          */
-        getTitle: function() {
+        getTitle: function () {
 
             return this.instance.getLocalization('title');
         },
@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @return {String} localized text for the description of the
          * flyout
          */
-        getDescription: function() {
+        getDescription: function () {
 
             return this.instance.getLocalization('desc');
         },
@@ -121,7 +121,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @method getOptions
          * Interface method implementation, does nothing atm
          */
-        getOptions: function() {
+        getOptions: function () {
 
         },
 
@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @method setState
          * @param {Object} state
          */
-        setState: function(state) {
+        setState: function (state) {
 
             this.state = state;
         },
@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @method getState
          * @return {Object} state
          */
-        getState: function() {
+        getState: function () {
 
             if (!this.state) {
                 return {};
@@ -149,22 +149,22 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @method doSave
          * Save layer rights
          */
-        doSave: function() {
+        doSave: function () {
 
             var me = this,
                 changedPermissions = me.extractSelections();
 
             me.progressSpinner.start();
             var chunks = this._createChunks(changedPermissions, 100);
-            this._savePermissions(chunks, function(errors) {
+            this._savePermissions(chunks, function (errors) {
                 me.progressSpinner.stop();
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var rightsLoc = me.instance._localization.rights;
 
-                var changedLayers = me._collectResponseMessages( changedPermissions );
+                var changedLayers = me._collectResponseMessages(changedPermissions);
 
                 if (errors.length) {
-                    var errorLayers = me._collectResponseMessages( errors );
+                    var errorLayers = me._collectResponseMessages(errors);
                     // TODO: append layers that couldn't be updated to dialog message
                     dialog.show(rightsLoc.error.title, rightsLoc.error.message + ' ' + errorLayers);
                 }
@@ -174,11 +174,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 me.updatePermissionsTable(me.activeRole, 'ROLE');
             }, []);
         },
-        _collectResponseMessages: function( responseItems ) {
+        _collectResponseMessages: function (responseItems) {
             var responseArray = [];
-            jQuery.each( responseItems, function( index ) {
-                if ( !_.contains( responseArray, responseItems[index].name ) ) {
-                    responseArray.push( responseItems[index].name );
+            jQuery.each(responseItems, function (index) {
+                if (!_.contains(responseArray, responseItems[index].name)) {
+                    responseArray.push(responseItems[index].name);
                 }
             });
             return responseArray;
@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param  {Number} size
          * @return {Array} array containing list as chunks
          */
-        _createChunks: function(list, size) {
+        _createChunks: function (list, size) {
             var result = [];
             var chunksCount = Math.ceil(list.length / size);
             for (var i = 0; i < chunksCount; ++i) {
@@ -202,7 +202,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             }
             return result;
         },
-        _savePermissions: function(chunks, done, errors) {
+        _savePermissions: function (chunks, done, errors) {
             if (!chunks.length) {
                 done(errors);
                 return;
@@ -218,10 +218,10 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 data: saveData,
-                success: function() {
+                success: function () {
                     me._savePermissions(chunks, done, errors);
                 },
-                error: function() {
+                error: function () {
                     errors.push(currentChunk);
                     me._savePermissions(chunks, done, errors);
                 }
@@ -233,7 +233,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Creates the UI for a fresh start
          * @param {String} content
          */
-        setContent: function(content) {
+        setContent: function (content) {
 
             // TODO add filters (provider/theme etc.)
             var me = this,
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             button.setTitle(me.instance.getLocalization('save'));
 
             button.setHandler(
-                function() {
+                function () {
                     me.doSave();
                 }
             );
@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             roleSelectLabel.html(this.instance.getLocalization('selectRole'));
             container.append(content);
 
-            roleSelect.on('change', function(event) {
+            roleSelect.on('change', function (event) {
                 me.activeRole = jQuery(event.currentTarget).val();
                 me.updatePermissionsTable(me.activeRole, 'ROLE');
             });
@@ -273,7 +273,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             this.progressSpinner.insertTo(container);
         },
 
-        handleRoleChange: function(role, operation) {
+        handleRoleChange: function (role, operation) {
             var select = jQuery(this.container).find('select.admin-layerrights-role'),
                 option = select.find('option[value=' + role.id + ']');
 
@@ -294,7 +294,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {Object} layerRightsJSON
          * @return {String} Permissions table
          */
-        createLayerRightGrid: function(layerRightsJSON) {
+        createLayerRightGrid: function (layerRightsJSON) {
 
             var me = this,
                 table = me._templates.table.clone(),
@@ -313,7 +313,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             thCell.html(columnsLoc.name);
             headerRow.append(thCell);
 
-            jQuery.each(layerRightsJSON[0].permissions, function(index, header) {
+            jQuery.each(layerRightsJSON[0].permissions, function (index, header) {
                 var thCell = me._templates.cellTh.clone();
                 var tdCell = me._templates.cellTd.clone();
                 var checkboxCtrl = me._templates.checkboxCtrl.clone();
@@ -332,7 +332,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
 
             // Create rows
-            jQuery.each(layerRightsJSON, function(index, layerRight) {
+            jQuery.each(layerRightsJSON, function (index, layerRight) {
                 var layer = service.findMapLayer(layerRight.id),
                     dataRow = me._templates.row.clone(),
                     cell = null,
@@ -350,7 +350,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 dataRow.append(dataCell);
 
                 // lets loop through permissions
-                jQuery.each(layerRight.permissions, function(index, permission) {
+                jQuery.each(layerRight.permissions, function (index, permission) {
                     var allow = permission.allow,
                         tooltip = permission.name,
                         dataCell = me._templates.cellTd.clone();
@@ -372,10 +372,10 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
             return table;
         },
-        togglePermissionsColumn: function(thead, tbody) {
+        togglePermissionsColumn: function (thead, tbody) {
             var controlCell = thead.find('#checkboxCtrl');
-            controlCell.on('change', function() {
-                var checkboxes = tbody.find('input.'+ this.className);
+            controlCell.on('change', function () {
+                var checkboxes = tbody.find('input.' + this.className);
                 checkboxes.prop('checked', !checkboxes.prop('checked'));
             });
         },
@@ -385,7 +385,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * Returns dirty table rows as JSON
          * @return {Object} Dirty table rows
          */
-        extractSelections: function() {
+        extractSelections: function () {
 
             var me = this,
                 data = [],
@@ -448,7 +448,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
             return changedData;
         },
-        getChangedValues: function(arrayClean, arrayDirty) {
+        getChangedValues: function (arrayClean, arrayDirty) {
             var changedvalues = [];
             for (var i = 0; i < arrayClean.length; i++) {
                 for (var j = 0; j < arrayClean[0].permissions.length; j++) {
@@ -467,7 +467,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} activeRole
          * @param {String} externalType
          */
-        updatePermissionsTable: function(activeRole, externalType) {
+        updatePermissionsTable: function (activeRole, externalType) {
 
             var me = this;
             me.progressSpinner.start();
@@ -479,7 +479,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 externalId: activeRole,
                 //resourceType: "WMS_LAYER",
                 externalType: externalType
-            }, function(result) {
+            }, function (result) {
                 me.progressSpinner.stop();
                 var mappedResult = me.mapResult(result);
                 // store unaltered data so we can do a dirty check on save
@@ -493,11 +493,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param  {Object} result response from GetPermissionsLayerHandlers
          * @return {Object[]}    resource array of response with populated permission names
          */
-        mapResult: function(result) {
+        mapResult: function (result) {
             //result.names = [id : VIEW_LAYER, name : 'ui name'];
             //result.resource = [{permissions : [{id : VIEW_LAYER, name : "populate"}]}]
             var nameMapper = {};
-            result.names.forEach(function(item) {
+            result.names.forEach(function (item) {
                 // for whatever reason...
                 if (item.id === 'VIEW_LAYER') {
                     item.name = 'rightToView';
@@ -512,8 +512,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             });
 
             var mapped = [];
-            result.resource.forEach(function(resource) {
-                resource.permissions.forEach(function(permission) {
+            result.resource.forEach(function (resource) {
+                resource.permissions.forEach(function (permission) {
                     if (permission.name) {
                         return;
                     }
@@ -530,7 +530,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} externalType
          * @param {String} selectedId
          */
-        getExternalIdsAjaxRequest: function(externalType, selectedId) {
+        getExternalIdsAjaxRequest: function (externalType, selectedId) {
 
             var me = this;
 
@@ -541,7 +541,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 getExternalIds: externalType
-            }, function(result) {
+            }, function (result) {
                 me.makeExternalIdsSelect(result, externalType, selectedId);
             });
         },
@@ -551,7 +551,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} externalType
          * @param {String} selectedId
          */
-        makeExternalIdsSelect: function(result, externalType, selectedId) {
+        makeExternalIdsSelect: function (result, externalType, selectedId) {
 
             var externalIdSelect = jQuery(this.container).find('select.admin-layerrights-role'),
                 optionEl,

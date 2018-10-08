@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
  * @param {String} bundle id
  * @param {Boolean/Object} payload
  */
-    function(bundleId, payload) {
+    function (bundleId, payload) {
         this._bundleId = bundleId;
         this._payload = payload;
     }, {
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
      * Returns
      * @return {String}
      */
-        getBundleId : function() {
+        getBundleId : function () {
             return this._bundleId;
         },
         /**
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
      * Returns
      * @return {}
      */
-        getPayload : function() {
+        getPayload : function () {
             return this._payload;
         },
         getParams: function () {

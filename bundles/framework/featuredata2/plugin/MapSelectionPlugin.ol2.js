@@ -78,7 +78,7 @@ Oskari.clazz.define(
             // disable all draw controls
             this._toggleControl();
         },
-        clearDrawing: function() {
+        clearDrawing: function () {
             this.removeFeatures();
         },
         removeFeatures: function () {

@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
-    function() {
+    function () {
     }, {
         index : 4,
         allowedLocations : ['top left', 'top right'],
@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
    *
    * @returns {Object} tool description
    */
-        getTool: function() {
+        getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
                 title: 'MapLegend',
@@ -22,10 +22,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
                 }
             };
         },
-        getInstance : function() {
+        getInstance : function () {
             return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
         },
-        getPlugin: function(){
+        getPlugin: function () {
             var maplegend = this.getInstance() || {};
             return maplegend.plugin;
         },
@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
    * Initialise tool
    * @method init
    */
-        init: function(data) {
+        init: function (data) {
             var me = this;
 
             if (!data || !data.configuration[me.bundleName]) {
@@ -41,12 +41,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             }
 
 
-            me.setEnabled( true );
+            me.setEnabled(true);
         },
-        isDisplayed: function() {
+        isDisplayed: function () {
             var legendLayers = [];
             var layers = this.__sandbox.findAllSelectedMapLayers().slice(0);
-            layers.forEach(function(layer) {
+            layers.forEach(function (layer) {
                 if (!layer.getLegendImage()) {
                     return;
                 }
@@ -71,17 +71,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
   *
   * @param {Boolean} enabled is tool enabled or not
   */
-        setEnabled : function(enabled) {
+        setEnabled : function (enabled) {
             var me = this,
                 tool = me.getTool();
 
             me.state.enabled = enabled;
-            if(tool.config.instance.plugin === null && enabled) {
+            if (tool.config.instance.plugin === null && enabled) {
                 me.getInstance().createPlugin();
                 me.__started = true;
             }
-            if(!enabled && me.__started){
-                if(me.getInstance().plugin){
+            if (!enabled && me.__started) {
+                if (me.getInstance().plugin) {
                     me.getInstance().stopPlugin();
                 }
                 me.__started = false;
@@ -96,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
   */
         getValues: function () {
             var me = this;
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 var pluginConfig = this.getPlugin().getConfig();
 
                 var json = {

@@ -1,7 +1,7 @@
 /**
  * @class Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierServic
  */
-(function(Oskari) {
+(function (Oskari) {
 
     Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService',
 
@@ -9,7 +9,7 @@
          * @method create called automatically on construction
          * @static
          */
-        function() {
+        function () {
             // attach on, off, trigger functions
             Oskari.makeObservable(this);
 
@@ -24,16 +24,16 @@
             /*******************************************************************************************************************************
             /* PUBLIC METHODS
             *******************************************************************************************************************************/
-            getQName: function() {
+            getQName: function () {
                 return this.__qname;
             },
-            getName: function() {
+            getName: function () {
                 return this.__name;
             },
-            getSandbox: function() {
+            getSandbox: function () {
                 return this.sandbox;
             },
-            onEvent: function(event) {
+            onEvent: function (event) {
                 this.trigger(event.getName(), event);
             }
         }, {

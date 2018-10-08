@@ -77,7 +77,7 @@ Oskari.clazz.define(
          * @method connect
          */
         connect: function () {
-            if(!this._connected && !this._handshakeInProcess) {
+            if (!this._connected && !this._handshakeInProcess) {
                 this._handshakeInProcess = true;
                 this.cometd.handshake();
             }

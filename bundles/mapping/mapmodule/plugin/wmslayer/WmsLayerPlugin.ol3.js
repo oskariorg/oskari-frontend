@@ -24,7 +24,7 @@ Oskari.clazz.define(
         _clazz : 'Oskari.mapframework.mapmodule.WmsLayerPlugin',
         layertype : 'wmslayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector : function () {
             return 'WMS';
         },
 
@@ -43,7 +43,7 @@ Oskari.clazz.define(
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap : function (layer, keepLayerOnTop, isBaseMap) {
             if (!this.isLayerSupported(layer)) {
                 return;
             }
@@ -73,8 +73,8 @@ Oskari.clazz.define(
                     layerParams = _layer.getParams() || {},
                     layerOptions = _layer.getOptions() || {},
                     layerAttributes = _layer.getAttributes() || undefined;
-                
-                if(!layerOptions.hasOwnProperty('singleTile') && layerAttributes && layerAttributes.times) {
+
+                if (!layerOptions.hasOwnProperty('singleTile') && layerAttributes && layerAttributes.times) {
                     layerOptions.singleTile = true;
                 }
 
@@ -123,11 +123,11 @@ Oskari.clazz.define(
                     this._registerLayerEvents(layerImpl, _layer, 'tile');
                 }
                 // Set min max Resolutions
-                if (_layer.getMaxScale() && _layer.getMaxScale() !== -1 ) {
+                if (_layer.getMaxScale() && _layer.getMaxScale() !== -1) {
                     layerImpl.setMinResolution(this.getMapModule().getResolutionForScale(_layer.getMaxScale()));
                 }
                 // No definition, if scale is greater than max resolution scale
-                if (_layer.getMinScale()  && _layer.getMinScale() !== -1 && (_layer.getMinScale() < this.getMapModule().getScaleArray()[0] )) {
+                if (_layer.getMinScale() && _layer.getMinScale() !== -1 && (_layer.getMinScale() < this.getMapModule().getScaleArray()[0])) {
                     layerImpl.setMaxResolution(this.getMapModule().getResolutionForScale(_layer.getMinScale()));
                 }
                 this.mapModule.addLayer(layerImpl,!keepLayerOnTop);
@@ -140,20 +140,20 @@ Oskari.clazz.define(
             this.setOLMapLayers(layer.getId(), olLayers);
 
         },
-        _registerLayerEvents: function(layer, oskariLayer, prefix){
+        _registerLayerEvents: function (layer, oskariLayer, prefix) {
             var me = this;
             var source = layer.getSource();
 
-            source.on(prefix + 'loadstart', function() {
-                me.getMapModule().loadingState( oskariLayer._id, true);
+            source.on(prefix + 'loadstart', function () {
+                me.getMapModule().loadingState(oskariLayer._id, true);
             });
 
-            source.on(prefix + 'loadend', function() {
-                me.getMapModule().loadingState( oskariLayer._id, false);
+            source.on(prefix + 'loadend', function () {
+                me.getMapModule().loadingState(oskariLayer._id, false);
             });
 
-            source.on(prefix + 'loaderror', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            source.on(prefix + 'loaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
 
         },
@@ -188,19 +188,19 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent}
          *            event
          */
-        _afterChangeMapLayerStyleEvent : function(event) {
+        _afterChangeMapLayerStyleEvent : function (event) {
             var layer = event.getMapLayer();
             var layerList = this.getOLMapLayers(layer);
-            if(!layerList) {
+            if (!layerList) {
                 return;
             }
-            layerList.forEach(function(openlayer) {
+            layerList.forEach(function (openlayer) {
                 openlayer.getSource().updateParams({
                     styles : layer.getCurrentStyle().getName()
                 });
             });
         },
-        updateLayerParams: function(layer, forced, params) {
+        updateLayerParams: function (layer, forced, params) {
             var me = this,
             	i,
             	olLayerList,
@@ -219,9 +219,9 @@ Oskari.clazz.define(
                     for (i = 0; i < count; i++) {
                     		var layerSource = olLayerList[i].getSource();
                     		//TileWMS -> original is olSourceTileWMS.getTileLoadFunction
-                    		if (layerSource.getTileLoadFunction && typeof(layerSource.getTileLoadFunction) === 'function') {
+                    		if (layerSource.getTileLoadFunction && typeof (layerSource.getTileLoadFunction) === 'function') {
                     			var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
-                            layerSource.setTileLoadFunction(function(image, src) {
+                            layerSource.setTileLoadFunction(function (image, src) {
                                 if (src.length >= 2048) {
                                     proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
                                     me._imagePostFunction(image, src, proxyUrl);
@@ -231,9 +231,9 @@ Oskari.clazz.define(
                             });
                     		}
                     		//ImageWMS -> original is olSourceImageWMS.getImageLoadFunction
-                    		else if (layerSource.getImageLoadFunction && typeof(layerSource.getImageLoadFunction) === 'function') {
+                    		else if (layerSource.getImageLoadFunction && typeof (layerSource.getImageLoadFunction) === 'function') {
                     			var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
-                            layerSource.setImageLoadFunction(function(image, src) {
+                            layerSource.setImageLoadFunction(function (image, src) {
                                 if (src.length >= 2048) {
                                     proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
                                     me._imagePostFunction(image, src, proxyUrl);
@@ -253,7 +253,7 @@ Oskari.clazz.define(
          *
          * http://gis.stackexchange.com/questions/175057/openlayers-3-wms-styling-using-sld-body-and-post-request
          */
-        _imagePostFunction: function(image, src, proxyUrl) {
+        _imagePostFunction: function (image, src, proxyUrl) {
             var img = image.getImage();
             if (typeof window.btoa === 'function') {
                 var xhr = new XMLHttpRequest();
@@ -261,13 +261,13 @@ Oskari.clazz.define(
 			  	var dataEntries = src.split('&');
 			  	var params = '';
 			  	//i === 0 -> the actual url, skip. Everything after that is params.
-			  	for (var i = 1 ; i< dataEntries.length ; i++){
-			    	params = params + '&'+dataEntries[i];
+			  	for (var i = 1 ; i < dataEntries.length ; i++) {
+			    	params = params + '&' + dataEntries[i];
 			  	}
 			 	xhr.open('POST', proxyUrl, true);
 
 			  	xhr.responseType = 'arraybuffer';
-			  	xhr.onload = function(e) {
+			  	xhr.onload = function (e) {
 		    		if (this.status === 200) {
                         var uInt8Array = new Uint8Array(this.response);
                         var i = uInt8Array.length;

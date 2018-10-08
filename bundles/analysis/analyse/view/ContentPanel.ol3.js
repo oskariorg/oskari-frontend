@@ -125,7 +125,7 @@ Oskari.clazz.define(
          *
          * @return {OpenLayers.Feature.Vector}
          */
-        parseFeatureFromClickedFeature: function(clickedGeometry) {
+        parseFeatureFromClickedFeature: function (clickedGeometry) {
             var data = clickedGeometry[1],
                 wkt = new olFormatWKT(),
                 feature = wkt.readFeature(data),
@@ -202,7 +202,7 @@ Oskari.clazz.define(
 
                 var features = new olFormatGeoJSON().readFeatures(event.getGeoJson());
 
-                for (i=0; i < features.length; i++) {
+                for (i = 0; i < features.length; i++) {
                     this.addFeature(features[i], mode);
                 }
 
@@ -280,7 +280,7 @@ Oskari.clazz.define(
                 }
                 this.mapModule.bringToTop(this.featureLayer);
             },
-            'AfterMapLayerAddEvent': function(event) {
+            'AfterMapLayerAddEvent': function (event) {
                 if (!this.instance.analyse.isEnabled) {
                     return;
                 }
@@ -288,7 +288,7 @@ Oskari.clazz.define(
                 this.drawControls.toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
                 this.mapModule.bringToTop(this.featureLayer);
             },
-            'AfterMapLayerRemoveEvent': function(event) {
+            'AfterMapLayerRemoveEvent': function (event) {
                 if (!this.instance.analyse.isEnabled) {
                     return;
                 }
@@ -751,7 +751,7 @@ Oskari.clazz.define(
          * Sets the selection tools' status after a map layer has been added or removed. Disables controls if no wfs layers selected, enables tools otherwise
          *
          */
-        toggleSelectionTools: function() {
+        toggleSelectionTools: function () {
             var me = this,
                 selectionToolsToolContainer = jQuery('div.toolContainerToolDiv'),
                 analysisWFSLayerSelected = (me.WFSLayerService.getAnalysisWFSLayerId() !== undefined && me.WFSLayerService.getAnalysisWFSLayerId() !== null);
@@ -776,9 +776,9 @@ Oskari.clazz.define(
          * @param  {String}  regex  regex
          * @return {Boolean}        is plugin not named
          */
-        _isPluginNamed: function(plugin, regex) {
+        _isPluginNamed: function (plugin, regex) {
             // Check at puligin has name
-            if(!plugin || !plugin.getName()) {
+            if (!plugin || !plugin.getName()) {
                 return false;
             }
 

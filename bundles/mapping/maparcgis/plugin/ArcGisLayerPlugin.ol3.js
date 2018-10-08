@@ -30,8 +30,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param  {Oskari.mapframework.domain.AbstractLayer}  layer
          * @return {Boolean}       true if this plugin handles the type of layers
          */
-        isLayerSupported : function(layer) {
-            if(!layer || !this.isLayerSrsSupported(layer)) {
+        isLayerSupported : function (layer) {
+            if (!layer || !this.isLayerSrsSupported(layer)) {
                 return false;
             }
             return layer.isLayerOfType(this.layerType) || layer.isLayerOfType(this._layerType2);
@@ -55,12 +55,12 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             }
         },
 
-        __tuneURLsForOL3 : function(urls) {
+        __tuneURLsForOL3 : function (urls) {
             var strToFind = '/export',
                 length = strToFind.length;
-            return _.map(urls, function(url) {
+            return _.map(urls, function (url) {
                 // Note! endsWith requires a polyfill. One is available in bundles/bundle.js
-                if(url.endsWith(strToFind)) {
+                if (url.endsWith(strToFind)) {
                     return url.substring(0, url.length - length);
                 }
                 return url;
@@ -135,20 +135,20 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this;
             var source = layer.getSource();
 
-            source.on('tileloadstart', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            source.on('tileloadstart', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
             });
 
-            source.on('tileloadend', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            source.on('tileloadend', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
             });
 
-            source.on('tileloaderror', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            source.on('tileloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
 
             });
 

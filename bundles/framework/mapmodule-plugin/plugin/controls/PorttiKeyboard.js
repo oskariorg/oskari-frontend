@@ -93,7 +93,7 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
             break;
             // F key.
         case 70:
-            if(!this.sandbox.isCtrlKeyDown()) {
+            if (!this.sandbox.isCtrlKeyDown()) {
                 this.sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
             }
             break;

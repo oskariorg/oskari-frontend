@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.WfsSearchS
      * @method getQName
      * @return {String} fully qualified name for service
      */
-        getQName : function() {
+        getQName : function () {
             return this.__qname;
         },
         /** @static @property __name service name */
@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.WfsSearchS
      * @method getName
      * @return {String} service name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.WfsSearchS
 	 * @param {Function}
 	 *            onComplete callback method for search completion
      */
-        doSearch : function(searchString, channelIds, onSuccess, onError) {
+        doSearch : function (searchString, channelIds, onSuccess, onError) {
             var lang = Oskari.getLang(),
                 epsg = Oskari.getSandbox().getMap().getSrsName();
             jQuery.ajax({

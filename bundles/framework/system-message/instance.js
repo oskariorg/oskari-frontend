@@ -17,13 +17,13 @@ Searches dom for element with id="oskari-system-messages", that is used for disp
 Oskari.clazz.define(
     'Oskari.framework.bundle.system-message.SystemBundleInstance',
 
-    function() {
+    function () {
         this._messageField = jQuery('<div class="messagetext"></div>');
-        this._messageContainer = jQuery('<div class="message-container">'+
+        this._messageContainer = jQuery('<div class="message-container">' +
                                         '<div class="iconFlip">' +
                                         '<a href="#"><div class="messageIcon front"></div></a>' +
-                                        '<div class="iconBack back"></div>'+
-                                        '</div>'+
+                                        '<div class="iconBack back"></div>' +
+                                        '</div>' +
                                         '</div>');
         this.sandbox = null;
         this.started = false;
@@ -43,23 +43,23 @@ Oskari.clazz.define(
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
-        init: function() {},
+        init: function () {},
         /**
          * @method setSandbox
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
-        setSandbox: function(sbx) {
+        setSandbox: function (sbx) {
             this.sandbox = sbx;
         },
         /**
          * @method getSandbox
          * @return {Oskari.mapframework.sandbox.Sandbox}
          */
-        getSandbox: function() {
+        getSandbox: function () {
             return this.sandbox;
         },
         /**
@@ -70,10 +70,10 @@ Oskari.clazz.define(
          * creates and registers request handlers
          *
          */
-        start: function(sandbox) {
+        start: function (sandbox) {
             var me = this;
             var canBeStarted = me.initDomElements();
-            if(!canBeStarted) {
+            if (!canBeStarted) {
                 // element not found
                 return;
             }
@@ -101,7 +101,7 @@ Oskari.clazz.define(
          * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox
          * @return {Oskari.mapframework.bundle.system-message.SystemMessageService}
          */
-        createService: function(sandbox) {
+        createService: function (sandbox) {
             var systemMessageService = Oskari.clazz.create(
                 'Oskari.framework.bundle.system.message.service.SystemMessageService',
                 this
@@ -109,7 +109,7 @@ Oskari.clazz.define(
             sandbox.registerService(systemMessageService);
             return systemMessageService;
         },
-        getService: function() {
+        getService: function () {
             return this.systemMessageService;
         },
         /**
@@ -118,7 +118,7 @@ Oskari.clazz.define(
          *
          * @return {Boolean} returns true if elements found, else false
          */
-        initDomElements: function() {
+        initDomElements: function () {
             var me = this;
             var container = me._messageContainer.clone();
             var field = me._messageField.clone();
@@ -130,12 +130,12 @@ Oskari.clazz.define(
                 return false;
             }
             var icon = this.messageElement.find('div.messageIcon');
-            icon.on('click', this, function(e) {
+            icon.on('click', this, function (e) {
                 e.data.showMessagesPopup(e.data.localization.title, e.data.messages);
             });
             return true;
         },
-        getMessages: function() {
+        getMessages: function () {
             this.getService().getStatusMessages();
         },
         /**
@@ -145,7 +145,7 @@ Oskari.clazz.define(
          * @param {String} message element message
          *
          */
-        showStatusMessage: function(message) {
+        showStatusMessage: function (message) {
             var me = this;
             me.toggleIcon();
             if (!message && this.messages.length) {
@@ -157,10 +157,10 @@ Oskari.clazz.define(
             var el = this.messageElement.find('.messagetext');
             el.show();
             el.text(message);
-            setTimeout(function(){
+            setTimeout(function () {
                 el.hide();
             },3000);
-            if(this.messages.length === 0){
+            if (this.messages.length === 0) {
                 el.empty();
             }
         },
@@ -169,12 +169,12 @@ Oskari.clazz.define(
          * controls the visibility of the icon informing about messages
          *
          */
-        toggleIcon: function(){
+        toggleIcon: function () {
             var container = this.messageElement.find('div.message-container');
-            if(this.messages.length > 0 && !container.hasClass('.flip')){
+            if (this.messages.length > 0 && !container.hasClass('.flip')) {
                 container.addClass('flip');
             }
-            if(this.messages.length === 0 && container.hasClass('flip')){
+            if (this.messages.length === 0 && container.hasClass('flip')) {
                 container.toggleClass('flip');
             }
         },
@@ -186,7 +186,7 @@ Oskari.clazz.define(
          * @param {String} message popup message
          *
          */
-        showMessagesPopup: function(title, message) {
+        showMessagesPopup: function (title, message) {
             if (this.popupIsOpen) {
                 this._dialog.close(true);
                 this.popupIsOpen = false;
@@ -198,7 +198,7 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.Popup'
             );
             var btn = this._dialog.createCloseButton('OK');
-            btn.setHandler(function() {
+            btn.setHandler(function () {
                 me._dialog.close();
                 me.popupIsOpen = false;
             });

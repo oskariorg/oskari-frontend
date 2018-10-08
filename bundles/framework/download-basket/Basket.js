@@ -38,7 +38,7 @@ Oskari.clazz.define(
         };
 
     },{
-        startBasket: function(){
+        startBasket: function () {
             this.setContent(this.createUi());
         },
 
@@ -99,7 +99,7 @@ Oskari.clazz.define(
 
             me.nextBtn.addClass('primary next');
             me.nextBtn.setTitle(me._getLocalization('basket-next'));
-            jQuery(me.nextBtn.getElement()).on('click', function() {
+            jQuery(me.nextBtn.getElement()).on('click', function () {
                 var el = me.container;
                 jQuery(el.find('input.empty')).hide();
                 jQuery(el.find('input.next')).hide();
@@ -113,7 +113,7 @@ Oskari.clazz.define(
             me.sendBtn.addClass('approve send');
             me.sendBtn.setTitle(me._getLocalization('basket-send'));
             jQuery(me.sendBtn.getElement()).on('click', function () {
-                if(!me.validateUserInputs(jQuery('.oskari__download-basket-user-info').find('form'))){
+                if (!me.validateUserInputs(jQuery('.oskari__download-basket-user-info').find('form'))) {
                     me.loadBasketItem();
                 }
             });
@@ -131,13 +131,13 @@ Oskari.clazz.define(
          * [loadBasketItem sends Ajax to download user selections]
          * @return {[none]}
          */
-        loadBasketItem: function(){
+        loadBasketItem: function () {
             var me = this;
             var downloadDetails = [];
             var el = me.getContainer();
             el.find('.oskari__download-basket-buttons').find('input.send').attr('disabled',true);
 
-            el.find('.download-basket__component').each(function(){
+            el.find('.download-basket__component').each(function () {
                 var parent = jQuery(this);
                 var details = {
                     croppingMode: parent.attr('data-cropping-mode'),
@@ -165,16 +165,16 @@ Oskari.clazz.define(
             var strUserDetails = JSON.stringify(userDetails);
 
             jQuery.ajax({
-                beforeSend : function(x) {
+                beforeSend : function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json;charset=UTF-8');
                     }
                 },
-                success : function(resp) {
-                    if(resp.success){
+                success : function (resp) {
+                    if (resp.success) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                             btn = dialog.createCloseButton('OK');
-                        btn.setHandler(function() {
+                        btn.setHandler(function () {
                             var buttons = el.find('.oskari__download-basket-buttons');
                             buttons.find('input.send').attr('disabled',false);
                             el.find('.oskari__download-basket-user-info').find('input').val('');
@@ -194,7 +194,7 @@ Oskari.clazz.define(
                     }
 
                 },
-                error : function(jqXHR, textStatus, errorThrown) {
+                error : function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
 
                     me._openPopup(
@@ -214,9 +214,9 @@ Oskari.clazz.define(
 
         },
 
-        _openPopup: function(title, message) {
+        _openPopup: function (title, message) {
             var me = this;
-            if(me._popup) {
+            if (me._popup) {
                 me._popup.close(true);
             } else {
                 me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -250,24 +250,24 @@ Oskari.clazz.define(
          * @param  {[form]} form [jQuery form element]
          * @return {[error]}      [true/false]
          */
-        validateUserInputs: function(form){
+        validateUserInputs: function (form) {
             var me = this,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                errorText = me._getLocalization('check-form-error')+' ',
+                errorText = me._getLocalization('check-form-error') + ' ',
                 error = false;
 
             form.find('input,select').each(function (index) {
                 var el = jQuery(this);
-                if(el.hasClass('email')){
-                    if(!me.validateEmail(el.val())){
+                if (el.hasClass('email')) {
+                    if (!me.validateEmail(el.val())) {
                         error = true;
                         errorText += el.prev('span').text().toLowerCase();
                         return false;
                     }
                 }
-                if(el.hasClass('email-re')){
+                if (el.hasClass('email-re')) {
                     var first = form.find('.email').val();
-                    if(el.val() !== first){
+                    if (el.val() !== first) {
                         error = true;
                         errorText += el.prev('span').text().toLowerCase();
                         return false;
@@ -275,7 +275,7 @@ Oskari.clazz.define(
                 }
             });
 
-            if(error){
+            if (error) {
                 dialog.show(me._getLocalization('check-form-error-huom'), errorText);
                 dialog.fadeout();
             }
@@ -305,21 +305,21 @@ Oskari.clazz.define(
 
             return me.container;
         },
-        createBasket: function(){
+        createBasket: function () {
             var me = this;
             var template = jQuery(
-                '<div class="download-basket__component">'+
-                    '<div class="download-basket__component-title">'+
-                        '<div class="download-basket__component-layer-name"></div>'+
-                        '<div class="icon-close-dark download-basket__component-title-close"></div>'+
-                        '<div class="download-basket__component-title-clear"></div>'+
-                    '</div>'+
-                        '<div class="download-basket__component-content">'+
-                            '<p class="basket__content-cropping"><strong></strong><span></span></p>'+
-                            '<p class="basket__content-license"><strong></strong><a target="_blank"></a></p>'+
-                        '</div>'+
+                '<div class="download-basket__component">' +
+                    '<div class="download-basket__component-title">' +
+                        '<div class="download-basket__component-layer-name"></div>' +
+                        '<div class="icon-close-dark download-basket__component-title-close"></div>' +
+                        '<div class="download-basket__component-title-clear"></div>' +
+                    '</div>' +
+                        '<div class="download-basket__component-content">' +
+                            '<p class="basket__content-cropping"><strong></strong><span></span></p>' +
+                            '<p class="basket__content-license"><strong></strong><a target="_blank"></a></p>' +
+                        '</div>' +
                 '</div>');
-            if(me._selected.length > 0) {
+            if (me._selected.length > 0) {
                 var el = me.container;
                 // Change basket to visible
                 el.find('.oskari__download-basket-wrapper').find('.empty-basket').hide();
@@ -333,7 +333,7 @@ Oskari.clazz.define(
                 el.find('.oskari__download-basket-user-info').hide();
                 el.find('.oskari__download-basket-wrapper').show();
 
-                me._selected.forEach(function(basketItem, index){
+                me._selected.forEach(function (basketItem, index) {
                     var basketEl = template.clone();
                     basketEl.attr('data-layer-name',basketItem.layerName);
                     basketEl.attr('data-layer-id',basketItem.layerUrl);
@@ -364,7 +364,7 @@ Oskari.clazz.define(
                     // License link handling
                     var licenseTitle = basketEl.find('.basket__content-license>strong');
                     var licenseLink = basketEl.find('.basket__content-license>a');
-                    if(me.instance.conf.licenseUrl) {
+                    if (me.instance.conf.licenseUrl) {
                         licenseTitle.text(me._getLocalization('basket-license-title'));
                         licenseLink.text(Oskari.getLocalized(me.instance.conf.licenseName) ||
                             me.instance.conf.licenseName ||
@@ -376,11 +376,11 @@ Oskari.clazz.define(
                         licenseLink.remove();
                     }
 
-                    basketEl.find('.icon-close-dark').on('click', function(event){
+                    basketEl.find('.icon-close-dark').on('click', function (event) {
                         var basketEl = jQuery(this).parents('.download-basket__component');
                         basketEl.remove();
 
-                        if(el.find('.download-basket__component').length === 0){
+                        if (el.find('.download-basket__component').length === 0) {
                             el.find('.oskari__download-basket-wrapper').find('.empty-basket').show();
                             el.find('.oskari__download-basket-buttons').find('input.next').hide();
                             el.find('.oskari__download-basket-buttons').find('input.empty').hide();
@@ -395,11 +395,11 @@ Oskari.clazz.define(
                     el.find('.oskari__download-basket-wrapper').append(basketEl);
 
                     el.find('.oskari__download-basket').parents('.oskariTabs').find('li').not('.active').css({opacity: 0.2});
-                    el.find('.oskari__download-basket').parents('.oskariTabs').find('li').not('.active').animate({opacity: 1}, 700 );
+                    el.find('.oskari__download-basket').parents('.oskariTabs').find('li').not('.active').animate({opacity: 1}, 700);
                 });
             }
         },
-        addToBasket: function(item){
+        addToBasket: function (item) {
             var me = this;
             me._selected.push(item);
         }

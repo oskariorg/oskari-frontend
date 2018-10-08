@@ -415,7 +415,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             }
         },
 
-        _informOfMaxFeatures: function(container) {
+        _informOfMaxFeatures: function (container) {
             var alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
             alert.insertTo(container);
             alert.setContent(this.loc('tab.maxFeaturesExceeded'));

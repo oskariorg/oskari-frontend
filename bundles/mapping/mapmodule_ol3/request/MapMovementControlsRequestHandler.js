@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
     function (mapModule) {
         this.mapModule = mapModule;
     }, {
-        getMapModule : function() {
+        getMapModule : function () {
             return this.mapModule;
         },
         /**
@@ -37,11 +37,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
         handleRequest: function (core, request) {
             var interactions = [];
             if (request.getName() === 'EnableMapKeyboardMovementRequest') {
-                if(request.getOptions()) {
-                    if(request.getOptions('pan')) {
+                if (request.getOptions()) {
+                    if (request.getOptions('pan')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardPan));
                     }
-                    if(request.getOptions('zoom')) {
+                    if (request.getOptions('zoom')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardZoom));
                     }
                 }
@@ -55,11 +55,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                     }
                 });
             } else if (request.getName() === 'DisableMapKeyboardMovementRequest') {
-                if(request.getOptions()) {
-                    if(request.getOptions('pan')) {
+                if (request.getOptions()) {
+                    if (request.getOptions('pan')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardPan));
                     }
-                    if(request.getOptions('zoom')) {
+                    if (request.getOptions('zoom')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardZoom));
                     }
                 }
@@ -73,11 +73,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                     }
                 });
             } else if (request.getName() === 'EnableMapMouseMovementRequest') {
-                if(request.getOptions()) {
-                    if(request.getOptions('pan')) {
+                if (request.getOptions()) {
+                    if (request.getOptions('pan')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragPan));
                     }
-                    if(request.getOptions('zoom')) {
+                    if (request.getOptions('zoom')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionMouseWheelZoom));
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragZoom));
@@ -95,11 +95,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                     }
                 });
             } else if (request.getName() === 'DisableMapMouseMovementRequest') {
-                if(request.getOptions()) {
-                    if(request.getOptions('pan')) {
+                if (request.getOptions()) {
+                    if (request.getOptions('pan')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragPan));
                     }
-                    if(request.getOptions('zoom')) {
+                    if (request.getOptions('zoom')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionMouseWheelZoom));
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragZoom));

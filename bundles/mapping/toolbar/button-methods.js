@@ -53,7 +53,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
         if (Oskari.util.keyExists(me.conf, 'style.toolStyle')) {
             // if style explicitly provided, add that as well
-            var style = me.conf.style.toolStyle.indexOf('light') > -1 ? '-light': '-dark';
+            var style = me.conf.style.toolStyle.indexOf('light') > -1 ? '-light' : '-dark';
 
             button.addClass(pConfig.iconCls);
             if (!me._isAllreadyThemedIcon(pConfig)) {

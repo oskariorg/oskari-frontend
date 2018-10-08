@@ -34,26 +34,26 @@ Oskari.clazz.define('Oskari.projection.change.instance',
         handleRequest: function (core, request) {
             this.plugin.getFlyout().show();
         },
-        createPlugin: function() {
+        createPlugin: function () {
             var params = {
                 views: this.getAppViews(),
                 loc: this.loc,
-                sb: this.sandbox  
+                sb: this.sandbox
             };
-            var plugin = Oskari.clazz.create('Oskari.projection.change.ProjectionChangerPlugin', params, this.loc );
+            var plugin = Oskari.clazz.create('Oskari.projection.change.ProjectionChangerPlugin', params, this.loc);
 
             this._mapmodule.registerPlugin(plugin);
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;
         },
-        stopPlugin: function() {
+        stopPlugin: function () {
             this._mapmodule.unregisterPlugin(this.plugin);
             this._mapmodule.stopPlugin(this.plugin);
             this.sandbox.removeRequestHandler('ShowProjectionChangerRequest', this);
             this.plugin = null;
         },
         createUi: function () {
-            if ( Oskari.util.isMobile() ) {
+            if (Oskari.util.isMobile()) {
                 this.plugin.createMobileUi();
             } else {
                 this.plugin.createUi();

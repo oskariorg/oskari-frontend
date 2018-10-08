@@ -1,6 +1,6 @@
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
-    function() {
+    function () {
     }, {
         index : 4,
         allowedLocations : ['top left', 'top right'],
@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
     *
     * @returns {Object} tool description
     */
-        getTool: function(){
+        getTool: function () {
             var coordinatetool = this.__sandbox.findRegisteredModuleInstance('coordinatetool') || null;
             return {
                 id: 'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
      * Initialise tool
      * @method init
      */
-        init: function(data) {
+        init: function (data) {
             var me = this;
             if (!data || !data.configuration[me.bundleName]) {
                 return;
@@ -62,28 +62,28 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
     */
         getValues: function () {
             var me = this;
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 var pluginConfig = this.getPlugin().getConfig();
                 pluginConfig.instance = null;
                 delete pluginConfig.instance;
 
-                if(me.toolConfig){
-                    for(var configName in me.toolConfig) {
+                if (me.toolConfig) {
+                    for (var configName in me.toolConfig) {
                         pluginConfig[configName] = me.toolConfig[configName];
                         // Not save supportedProjections if is not checked
-                        if(configName === 'supportedProjections' && !me.supportedProjections) {
+                        if (configName === 'supportedProjections' && !me.supportedProjections) {
                             pluginConfig[configName] = null;
                             delete pluginConfig[configName];
                         }
                         // Not save noUI if is not checked
-                        if(configName === 'noUI' && !me.noUI) {
+                        if (configName === 'noUI' && !me.noUI) {
                             pluginConfig[configName] = null;
                             delete pluginConfig[configName];
                         }
                     }
                 }
 
-                if(me.noUI) {
+                if (me.noUI) {
                     pluginConfig.noUI = me.noUI;
                 }
                 var json = {
@@ -114,13 +114,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
                 'Oskari.userinterface.component.CheckboxInput'
             );
 
-            if(me.toolConfig && me.toolConfig.supportedProjections) {
+            if (me.toolConfig && me.toolConfig.supportedProjections) {
                 var inputTransform = Oskari.clazz.create(
                     'Oskari.userinterface.component.CheckboxInput'
                 );
                 inputTransform.setTitle(loc.display.publisher.showTransformationTools);
-                inputTransform.setHandler(function(checked){
-                    if(checked === 'on') {
+                inputTransform.setHandler(function (checked) {
+                    if (checked === 'on') {
                         me.supportedProjections = me.toolConfig.supportedProjections;
                     } else {
                         me.supportedProjections = null;
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
                 });
 
 
-                if(me.projectionTrasformationIsCheckedInModifyMode) {
+                if (me.projectionTrasformationIsCheckedInModifyMode) {
                     inputTransform.setChecked(true);
                     me.supportedProjections = me.toolConfig.supportedProjections;
                 }
@@ -136,8 +136,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
             }
 
             input.setTitle(labelNoUI);
-            input.setHandler(function(checked){
-                if(checked === 'on') {
+            input.setHandler(function (checked) {
+                if (checked === 'on') {
                     me.noUI = true;
                     me.getPlugin().teardownUI();
                 //me.getPlugin().toggleIconVisibility(false);
@@ -148,12 +148,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
                 }
             });
 
-            if(me.noUiIsCheckedInModifyMode) {
+            if (me.noUiIsCheckedInModifyMode) {
                 input.setChecked(true);
                 me.noUI = true;
             }
             var inputEl = input.getElement();
-            if(inputEl.style) {
+            if (inputEl.style) {
                 inputEl.style.width = 'auto';
             }
 

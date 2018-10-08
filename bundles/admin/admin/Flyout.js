@@ -5,7 +5,7 @@
  *
  */
 Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
-    function() {
+    function () {
         this.tabsContainer = null;
     }, {
         tabs : [{
@@ -15,28 +15,28 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
 
         /* App specific methods */
         createUI : function () {
-            if(this.tabsContainer) {
+            if (this.tabsContainer) {
                 return;
             }
             var me = this;
             var tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
             this.tabsContainer = tabsContainer;
 
-            _.each(this.tabs, function(tabDef) {
+            _.each(this.tabs, function (tabDef) {
                 tabsContainer.addPanel(me.__createTab(tabDef));
             });
             tabsContainer.insertTo(this.getEl());
         },
-        __createTab : function(tabDef) {
+        __createTab : function (tabDef) {
             var tab = Oskari.clazz.create(tabDef.clazz, this.locale[tabDef.id] || {}, this.instance);
             tab.setId(tabDef.id);
-            if(tabDef.title) {
+            if (tabDef.title) {
                 tab.setTitle(tabDef.title, tabDef.id);
             }
-            if(tabDef.content) {
+            if (tabDef.content) {
                 tab.setContent(tabDef.content);
             }
-            if(tabDef.priority) {
+            if (tabDef.priority) {
                 tab.setPriority(tabDef.priority);
             }
             return tab;
@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
          * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
          *      request to handle
          */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             this.addTab({'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId()});
         }
     }, {

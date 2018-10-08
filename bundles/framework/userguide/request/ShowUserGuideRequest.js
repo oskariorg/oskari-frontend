@@ -7,7 +7,7 @@
 Oskari.clazz
     .define(
         'Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequest',
-        function(conf) {
+        function (conf) {
             var config = conf || {};
             this._creator = null;
             this._el = config.el;
@@ -18,32 +18,32 @@ Oskari.clazz
             this._content = config.content;
         }, {
             __name : 'userguide.ShowUserGuideRequest',
-            getName : function() {
+            getName : function () {
                 return this.__name;
             },
 
-            getUuid : function() {
+            getUuid : function () {
                 return this._uuid;
             },
 
-            getContext: function() {
+            getContext: function () {
                 return this._context;
             },
 
-            getExtension: function() {
+            getExtension: function () {
                 return this._extension;
             },
 
-            getEl: function() {
+            getEl: function () {
                 return this._el;
             } ,
-            isToggle: function() {
+            isToggle: function () {
                 return this._toggle;
             },
-            getPlacement: function() {
+            getPlacement: function () {
                 return this._placement;
             },
-            getContent: function() {
+            getContent: function () {
                 return this._content;
             }
 

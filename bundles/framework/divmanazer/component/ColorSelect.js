@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @method  @public setUIColors set custom colors for ui
          * @param {Object} config color config
          */
-        setUIColors: function(config){
+        setUIColors: function (config) {
             var me = this;
             me._colorsConfig = jQuery.extend({}, me._colorsConfig, config);
         },
@@ -110,19 +110,19 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         setValue: function (value, silent, defaultToFirst) {
             var me = this;
             me._element.find('.oskari-color-selection .oskari-color-option').css('background-color', '#' + me._colorsConfig.menu).attr('data-selected', false);
-            var option = me._element.find('.oskari-color-selection .oskari-color-option[data-id='+value+']');
+            var option = me._element.find('.oskari-color-selection .oskari-color-option[data-id=' + value + ']');
             var options = me._element.find('.oskari-color-selection .oskari-color-option');
             var optionClone = option.clone();
-            if(!optionClone.length && defaultToFirst) {
-                optionClone= jQuery(options[0]).clone();
+            if (!optionClone.length && defaultToFirst) {
+                optionClone = jQuery(options[0]).clone();
             }
-            if(optionClone.length>0) {
+            if (optionClone.length > 0) {
                 me._selectedValue = value;
                 optionClone.css('background-color','transparent');
                 me._selected.html(optionClone);
                 option.attr('data-selected', true);
                 option.css('background-color', '#' + me._colorsConfig.selected);
-                if(!silent && typeof me.getHandler() === 'function') {
+                if (!silent && typeof me.getHandler() === 'function') {
                     me.getHandler()(option.attr('data-id'));
                 }
                 me.close();
@@ -131,15 +131,15 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             me._setHandlers();
         },
 
-        refresh: function(){
+        refresh: function () {
             var me = this;
             me._setHandlers();
         },
 
-        _setHandlers: function(){
+        _setHandlers: function () {
             var me = this;
 
-            if(!me._selected){
+            if (!me._selected) {
                 return;
             }
             var handlers = me._handlers();
@@ -162,12 +162,12 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @param  {Object} colorsDef color defination
          * @return {Object} jQuery color option template
          */
-        _getColorTemplate: function(colorsDef, width){
+        _getColorTemplate: function (colorsDef, width) {
             var me = this;
-            if(colorsDef === null) {
+            if (colorsDef === null) {
                 return;
             }
-            if(typeof colorsDef === 'string') {
+            if (typeof colorsDef === 'string') {
                 // plain string - wrap to array and change width
                 return this._getColorTemplate([colorsDef], 16);
             }
@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
                 return;
             }
             var opt = me._templates.emptyDiv.clone();
-            colorsDef.forEach(function(color) {
+            colorsDef.forEach(function (color) {
                 var template = me._templates.color.clone();
                 template.css('background', '#' + color);
                 template.width(width || 6);
@@ -188,9 +188,9 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         /**
          * @public @method open open selection
          */
-        open: function(){
+        open: function () {
             var me = this;
-            if(me._enabled) {
+            if (me._enabled) {
                 me._selected.attr('data-state', 'opened');
                 me._selection.show();
             }
@@ -209,14 +209,14 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             me._selection.hide();
         },
 
-        _handlers: function() {
+        _handlers: function () {
             var me = this;
             return {
                 // Handler for color selection or pressing arrow down
-                selectHandler: function(event){
+                selectHandler: function (event) {
                     event.stopPropagation();
                     var arrow = me._element.find('.color-selection-arrow');
-                    if(me._selected.attr('data-state') === 'closed') {
+                    if (me._selected.attr('data-state') === 'closed') {
                         var posTop = me._selected.position().top + me._selected.outerHeight();
                         var posLeft = me._selected.position().left;
                         me._selection.css({
@@ -226,28 +226,28 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
                         });
                         me.open();
                     }
-                    else if(me._selected.attr('data-state') === 'opened') {
+                    else if (me._selected.attr('data-state') === 'opened') {
                         me.close();
                     }
                 },
                 // Color selection click handler
-                colorClickHandler: function(event){
+                colorClickHandler: function (event) {
                     event.stopPropagation();
                     var el = jQuery(this);
                     me.setValue(el.attr('data-id'));
                 },
                 // Hover in handler
-                hoverIn: function(){
+                hoverIn: function () {
                     me._element.find('.oskari-color-option').css('background-color[data-selected=false]', '#' + me._colorsConfig.menu);
                     var el = jQuery(this);
-                    if(el.attr('data-selected') !== 'true' || me._colorsConfig.selected === me._colorsConfig.menu) {
+                    if (el.attr('data-selected') !== 'true' || me._colorsConfig.selected === me._colorsConfig.menu) {
                         el.css('background-color', '#' + me._colorsConfig.hover);
                     }
                 },
                 // Hover out handler
-                hoverOut: function(){
+                hoverOut: function () {
                     var el = jQuery(this);
-                    if(el.attr('data-selected') !== 'true'  || me._colorsConfig.selected === me._colorsConfig.menu) {
+                    if (el.attr('data-selected') !== 'true' || me._colorsConfig.selected === me._colorsConfig.menu) {
                         el.css('background-color', '#' + me._colorsConfig.menu);
                     }
                 }
@@ -261,12 +261,12 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         setColorValues: function (colors) {
             var me = this;
 
-            if(me._selected) {
+            if (me._selected) {
                 me._selected.empty();
             } else {
-                me._selected =  me._templates.selected.clone();
+                me._selected = me._templates.selected.clone();
             }
-            if(me._selection) {
+            if (me._selection) {
                 me._selection.empty();
             } else {
                 me._selection = me._templates.selection.clone();

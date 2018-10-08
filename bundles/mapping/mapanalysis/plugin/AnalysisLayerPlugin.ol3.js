@@ -25,7 +25,7 @@ Oskari.clazz.define(
         /** @static @property layerType type of layers this plugin handles */
         layertype : 'analysislayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector : function () {
             return 'ANALYSIS';
         },
 
@@ -117,20 +117,20 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this;
             var source = layer.getSource();
 
-            source.on('imageloadstart', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            source.on('imageloadstart', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
             });
 
-            source.on('imageloadend', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            source.on('imageloadend', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
             });
 
-            source.on('imageloaderror', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            source.on('imageloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
 
         }

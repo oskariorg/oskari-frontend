@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.request.GetRouteR
      * @params {Object} lang, fromlon, fromlat, tolon, tolat, srs,
      *            date, time, arriveby, mode, maxwalkdistance, wheelchair
      */
-    function(params) {
+    function (params) {
         this._routeparams = params;
     }, {
         /** @static @property __name request name */
@@ -22,14 +22,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.request.GetRouteR
          * @method getName
          * @return {String} request name
          */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
          * @method getRouteParams
          * @return {Object} parameters given for route
          */
-        getRouteParams : function() {
+        getRouteParams : function () {
             return this._routeparams;
         }
     }, {

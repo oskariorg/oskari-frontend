@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
-    function ( instance ) {
+    function (instance) {
         var me = this;
         me.instance = instance;
         me.selectInstances = {};
@@ -18,20 +18,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
             var dropdowns = {};
             var selects = {};
             var options = {};
-            Object.keys( json ).forEach( function ( key ) {
+            Object.keys(json).forEach(function (key) {
                 var instanceKey = key;
                 var value = json[key];
-                var size = Object.keys( value ).length;
-                Object.keys( value ).forEach( function ( key ) {
+                var size = Object.keys(value).length;
+                Object.keys(value).forEach(function (key) {
                     var obj = value[key];
                     var valObject = {
                         id : obj.id,
                         title : obj.title,
                         cls: obj.cls
                     };
-                    selections.push( valObject );
+                    selections.push(valObject);
                     // First element, set placeholder
-                    if ( key === '0' ) {
+                    if (key === '0') {
                         options = {
                             placeholder_text: obj.title,
                             allow_single_deselect : true,
@@ -39,16 +39,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                             width: '100%'
                         };
                     }
-                    if ( key == size -1 ) {
+                    if (key == size - 1) {
                         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', 'id');
                         var dropdown = select.create(selections, options);
                         selections = [];
                         options = {};
-                        dropdown.css( { width:'180px' } );
+                        dropdown.css({ width:'180px' });
                         select.adjustChosen();
                         select.selectFirstValue();
                         selects[instanceKey] = select;
-                        dropdowns[instanceKey] = dropdown;  
+                        dropdowns[instanceKey] = dropdown;
                     }
                 });
             });
@@ -56,4 +56,3 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
             this.selectInstances = selects;
         }
     });
- 

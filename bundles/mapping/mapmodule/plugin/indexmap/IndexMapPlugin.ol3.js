@@ -71,7 +71,7 @@ Oskari.clazz.define(
                     // get/Set only base layer to index map
                     var layer = me._getBaseLayer();
                     if (layer) {
-                        if(typeof layer.createIndexMapLayer === 'function') {
+                        if (typeof layer.createIndexMapLayer === 'function') {
                             // this is used for statslayer to create a copied layer as indexmap
                             // as using it directly results in weird behavior:
                             // - the normal map not refreshing on move after indexmap is opened
@@ -89,7 +89,7 @@ Oskari.clazz.define(
                             })
                         };
                         // initialize control, pass container
-                        if(me._indexMap) {
+                        if (me._indexMap) {
                             me.getMap().removeControl(me._indexMap);
                         }
                         me._indexMap = new olControlOverviewMap(controlOptions);
@@ -151,7 +151,7 @@ Oskari.clazz.define(
             var layer = null;
             for (var i = 0; i < this._map.getLayers().getLength(); i += 1) {
                 layer = this._map.getLayers().item(i);
-                if(layer.getVisible()){
+                if (layer.getVisible()) {
                     return layer;
                 }
             }

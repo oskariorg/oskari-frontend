@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
                 header = this.templateTabHeader.clone();
                 this.header = header;
             }
-            var iconDiv =this.templateIconTemplate.clone();
+            var iconDiv = this.templateIconTemplate.clone();
             iconDiv.addClass(iconClass);
             this.header.find('a').after(iconDiv);
             if (_.isFunction(clickHandler)) {

@@ -27,28 +27,28 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
             numRatings: jQuery('<div class="numRatings"></div>'),
             feedbackTabErrorTemplate: _.template('<article><%=responseText%></article>'),
             feedbackSuccessTemplate: _.template(
-                '<article>'+
-                '   <div class="feedback-list-rating">'+
-                '       <span class="feedback-list-rating-subject"><%=locale.feedbackList.average%>: </span>'+
-                '       <%=average%>'+
-                '   </div>'+
-                '   <br/>'+
-                '   <br/>'+
-                '   <%_.forEach(feedbacks, function(feedback) { %>'+
-                '       <div class="feedbacklist-feedback">'+
-                '           <div class="feedback-list-rating">'+
-                '               <%=feedback.score%>'+
-                '               <span class="feedbacklist-userrole">'+
-                '                   <%=locale.userInformation[feedback.userRole] ? locale.userInformation[feedback.userRole] : feedback.userRole%>'+
-                '               </span>'+
-                '           </div>'+
-                '           <br/>'+
-                '           <br/>'+
-                '           <div>'+
-                '               <%=feedback.comment%>'+
-                '           </div>'+
-                '       </div>'+
-                '   <%})%>'+
+                '<article>' +
+                '   <div class="feedback-list-rating">' +
+                '       <span class="feedback-list-rating-subject"><%=locale.feedbackList.average%>: </span>' +
+                '       <%=average%>' +
+                '   </div>' +
+                '   <br/>' +
+                '   <br/>' +
+                '   <%_.forEach(feedbacks, function(feedback) { %>' +
+                '       <div class="feedbacklist-feedback">' +
+                '           <div class="feedback-list-rating">' +
+                '               <%=feedback.score%>' +
+                '               <span class="feedbacklist-userrole">' +
+                '                   <%=locale.userInformation[feedback.userRole] ? locale.userInformation[feedback.userRole] : feedback.userRole%>' +
+                '               </span>' +
+                '           </div>' +
+                '           <br/>' +
+                '           <br/>' +
+                '           <div>' +
+                '               <%=feedback.comment%>' +
+                '           </div>' +
+                '       </div>' +
+                '   <%})%>' +
                 '</article>')
         },
         /**
@@ -124,22 +124,22 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
          * @method _activateMetadataSearchResultsShowRating
          * @private
          */
-        _activateMetadataSearchResultsShowRating: function(){
+        _activateMetadataSearchResultsShowRating: function () {
             var me = this,
                 reqBuilder = Oskari.requestBuilder('AddSearchResultActionRequest');
 
             if (reqBuilder) {
                 var data = {
                     actionElement: jQuery('<div class="ratingInfo"></div>'),
-                    callback: function(metadata) {
+                    callback: function (metadata) {
                         me.sandbox.postRequestByName('catalogue.ShowFeedbackRequest', [metadata]);
                     },
                     bindCallbackTo: null,
                     actionTextElement: null,
                     actionText: null,
-                    showAction: function(metadata) {
+                    showAction: function (metadata) {
                         //add the span with metadata's id to be able to identify and update rating later
-                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>&nbsp;'+me._getAdminMetadataRating(metadata.latestAdminRating);
+                        this.actionText = '<span id="metadataRatingSpan_' + metadata.id + '" style="display:none;"/>&nbsp;' + me._getAdminMetadataRating(metadata.latestAdminRating);
 
                         return true;
                     }
@@ -148,24 +148,24 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
                 me.sandbox.request(me, request);
             }
         },
-        updateMetadataRating: function(metadata) {
-            var idSpan = $('#metadataRatingSpan_'+metadata.id);
+        updateMetadataRating: function (metadata) {
+            var idSpan = $('#metadataRatingSpan_' + metadata.id);
             var container = idSpan.parent();
             container.empty();
             container.append(idSpan);
-            container.append('&nbsp;'+this._getAdminMetadataRating(metadata.latestAdminRating));
+            container.append('&nbsp;' + this._getAdminMetadataRating(metadata.latestAdminRating));
         },
-        _addMetadataFeedbackTabToMetadataFlyout: function() {
+        _addMetadataFeedbackTabToMetadataFlyout: function () {
             var me = this,
                 reqBuilder = Oskari.requestBuilder('catalogue.AddTabRequest');
             var data = {
                 'feedback': {
                     template: null,
                     title: me._locale.feedbackList.tabTitle,
-                    tabActivatedCallback: function(uuid, panel) {
+                    tabActivatedCallback: function (uuid, panel) {
                         me.feedbackService.fetchFeedback({'category': 'ELF_METADATA' ,'categoryItem': uuid},
-                            function(response) {
-                                _.each(response[1], function(feedbackItem) {
+                            function (response) {
+                                _.each(response[1], function (feedbackItem) {
                                     feedbackItem.score = me._getMetadataRating(feedbackItem);
                                     feedbackItem.comment = feedbackItem.comment.split('\n').join('<br />');
                                 });
@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
                                 };
                                 panel.setContent(_.template(me.templates.feedbackSuccessTemplate(json)));
                             },
-                            function(error) {
+                            function (error) {
                                 panel.setContent(_.template(me.templates.feedbackTabErrorTemplate(error)));
                             }
                         );
@@ -264,7 +264,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
                 );
         },
 
-        _getAdminMetadataRating: function(score) {
+        _getAdminMetadataRating: function (score) {
             if (!score) {
                 score = 0;
             }
@@ -275,7 +275,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
          * @param {Object} metadata object
          * @return raty stars dom for current metadata
          */
-        _getMetadataRating: function(metadata) {
+        _getMetadataRating: function (metadata) {
             var me = this;
             var ratingContainer = me.templates.ratingContainer.clone();
             if (typeof metadata.score !== 'undefined') {
@@ -289,7 +289,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
 
                 if (metadata.amount !== undefined) {
                     var numRatingsContainer = me.templates.numRatings.clone();
-                    var numRatingsText = metadata.amount !== undefined ? '('+metadata.amount +')' : '&nbsp;';
+                    var numRatingsText = metadata.amount !== undefined ? '(' + metadata.amount + ')' : '&nbsp;';
                     numRatingsContainer.append(numRatingsText);
                     ratingContainer.append(numRatingsContainer);
                 }
@@ -302,17 +302,17 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
          *  @method _generateRatingSymbols
          *
          */
-        _generateRatingSymbols: function(input) {
-            if ((typeof input === 'undefined')||(input === null)) {
+        _generateRatingSymbols: function (input) {
+            if ((typeof input === 'undefined') || (input === null)) {
                 return null;
             }
             var ratingSymbols = [];
             var score = Number(input);
             var i;
-            for (i=0; i<5; i++) {
-                if (score < i+0.25) {
+            for (i = 0; i < 5; i++) {
+                if (score < i + 0.25) {
                     ratingSymbols.push('icon-star-off');
-                } else if ((i+0.25 <= score)&&(score < i+0.75)) {
+                } else if ((i + 0.25 <= score) && (score < i + 0.75)) {
                     ratingSymbols.push('icon-star-half');
                 } else {
                     ratingSymbols.push('icon-star-on');
@@ -320,7 +320,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
             }
             return ratingSymbols;
         },
-        _updateRating: function() {
+        _updateRating: function () {
         }
 
     },{

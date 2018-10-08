@@ -13,14 +13,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
         this.__templates = {
             itinerary: jQuery(
                 '<div class="itinerary">' +
-                '<div class="duration"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
-                '<div class="start-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
-                '<div class="end-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
-                '<div class="waiting-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
-                '<div class="walk-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
-                '<div class="transit-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
-                '<div class="walk-distance"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>'+
-                '<div class="actions"></div>'+
+                '<div class="duration"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>' +
+                '<div class="start-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>' +
+                '<div class="end-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>' +
+                '<div class="waiting-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>' +
+                '<div class="walk-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>' +
+                '<div class="transit-time"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>' +
+                '<div class="walk-distance"><div class="itinerary__title"></div><div class="itinerary__content"></div><div class="itinerary__clear"></div></div>' +
+                '<div class="actions"></div>' +
                 '</div>'
             )
         };
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
             sandbox.register(this);
 
             for (p in me.eventHandlers) {
-                if(me.eventHandlers.hasOwnProperty(p)) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
                     me.sandbox.registerForEventByName(me, p);
                 }
             }
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
      *
      * @method registerTool
      */
-        registerTool: function() {
+        registerTool: function () {
             var me = this,
                 sandbox = this.getSandbox(),
                 reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
@@ -141,9 +141,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
      * @method  @private __isPopupVisible is popup visible
      * @return {Boolean} is visible
      */
-        __isPopupVisible: function(){
+        __isPopupVisible: function () {
             var popup = jQuery('.tools_routing_selection:visible');
-            return popup.length>0;
+            return popup.length > 0;
         },
 
         /**
@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                     return;
                 }
 
-                if(!this.__isPopupVisible()) {
+                if (!this.__isPopupVisible()) {
                     return;
                 }
 
@@ -167,9 +167,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                     lonlat;
 
                 var hasRoundDecimalsConf = (conf && conf.decimals) ? true : false;
-                if(hasRoundDecimalsConf && !conf.decimals[mapModule.getProjection()]) {
+                if (hasRoundDecimalsConf && !conf.decimals[mapModule.getProjection()]) {
                     roundToDecimals = conf.decimals;
-                } else if(hasRoundDecimalsConf && conf.decimals[mapModule.getProjection()]){
+                } else if (hasRoundDecimalsConf && conf.decimals[mapModule.getProjection()]) {
                     roundToDecimals = conf.decimals[mapModule.getProjection()];
                 }
 
@@ -188,12 +188,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
             'RouteResultEvent': function (event) {
                 var me = this,
                     loc = me.localization;
-                if(!me.__isPopupVisible()) {
+                if (!me.__isPopupVisible()) {
                     return;
                 }
 
                 me.popup.progressSpinner.stop();
-                if(event.getSuccess()) {
+                if (event.getSuccess()) {
                     me.__renderPlan(event.getPlan());
                 } else {
                     me.__showMessage(loc.error.title, loc.error.message);
@@ -206,7 +206,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
      * @param  {String} title   message title
      * @param  {String} message message
      */
-        __showMessage: function(title, message){
+        __showMessage: function (title, message) {
             var me = this,
                 routeDiv = me.popup.popupContent.find('.route-instructions'),
                 titleDiv = routeDiv.find('.title'),
@@ -222,7 +222,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
      * @method @private __renderPlan render plan
      * @param  {Object} plan plan object
      */
-        __renderPlan: function(plan){
+        __renderPlan: function (plan) {
             var me = this,
                 loc = me.localization,
                 accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
@@ -235,14 +235,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
             instructionsDiv.empty();
 
             var title = loc.routeInstructions.titleOne;
-            if(plan.itineraries.length>1){
+            if (plan.itineraries.length > 1) {
                 title = loc.routeInstructions.titleMulti.replace('{count}',plan.itineraries.length);
             }
             titleDiv.html('<h4>' + title + '</h4>');
 
             _.forEach(plan.itineraries, function (itinerary, index) {
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                var panelTitle = loc.routeInstructions.route + ' ' + (index+1);
+                var panelTitle = loc.routeInstructions.route + ' ' + (index + 1);
                 panel.setTitle(panelTitle);
 
                 var content = me.__templates.itinerary.clone();
@@ -269,11 +269,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
 
                 var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 btn.setTitle(loc.routeInstructions.showRoute);
-                btn.setHandler(function() {
+                btn.setHandler(function () {
                     var routeColorIndex = index;
-                    if(index>me.routeColors.length-1) {
-                        var a = index % (me.routeColors.length-1);
-                        var b = index % (me.routeColors.length-1-a);
+                    if (index > me.routeColors.length - 1) {
+                        var a = index % (me.routeColors.length - 1);
+                        var b = index % (me.routeColors.length - 1 - a);
                         routeColorIndex = b + a;
                     }
                     me._renderRoute(itinerary.geoJSON, me.routeColors[routeColorIndex]);
@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                 style = {
                     stroke: {
                         width: 5,
-                        color: 'rgba('+colorRGB.r+', '+colorRGB.g+','+colorRGB.b+', 0.7)'
+                        color: 'rgba(' + colorRGB.r + ', ' + colorRGB.g + ',' + colorRGB.b + ', 0.7)'
                     }
                 };
             this.sandbox.postRequestByName(rn, [geom, {
@@ -319,8 +319,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
      * @param  {Float} dateMilliseconds millisecond presentation of day
      * @return {String} date formatted string
      */
-        _formatDate: function(dateMilliseconds){
-            var momentString = moment('' +dateMilliseconds, 'x').format('DD.MM.YYYY HH:mm:ss');
+        _formatDate: function (dateMilliseconds) {
+            var momentString = moment('' + dateMilliseconds, 'x').format('DD.MM.YYYY HH:mm:ss');
             return momentString;
         },
 
@@ -332,7 +332,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
         _formatLength: function (length) {
             var newLength = '';
             if (length > 1000) {
-                var kilometers = this._decimalAdjust('round', length/1000, -1);
+                var kilometers = this._decimalAdjust('round', length / 1000, -1);
                 newLength = kilometers + ' km';
             } else {
                 var meters = this._decimalAdjust('round', length, 1);

@@ -2,7 +2,7 @@
  * @class Oskari.elf.license.elements.ParamIntElement
  */
 Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
-    function(instance, validator) {
+    function (instance, validator) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this._templates = {
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
                 readOnlyElement = jQuery('<div></div>'),
                 showInput = true;
 
-            if(readOnly) {
+            if (readOnly) {
                 showInput = false;
             }
 
@@ -61,11 +61,11 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
                 title = param.name;
             }
 
-            if(showInput) {
+            if (showInput) {
                 data.append('<input type="text"></input>');
                 input = data.find('input');
                 input.val(param.value);
-                input.on('keydown keyup keypress change blur focus paste', function(evt) {
+                input.on('keydown keyup keypress change blur focus paste', function (evt) {
                     me._validator.number.keyListener(evt);
                 });
                 title += ' <span class="elf_license_required">*</span>';

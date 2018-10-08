@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SaveStateRe
  * @static
  * @param {String} viewname for the view to be saved
  */
-    function(viewname, viewdescription, isDefault) {
+    function (viewname, viewdescription, isDefault) {
         this._viewName = viewname;
         this._viewDescription = viewdescription;
         this._isDefault = isDefault;
@@ -22,28 +22,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SaveStateRe
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getViewName
      * @return {String} name for the view to be saved
      */
-        getViewName : function() {
+        getViewName : function () {
             return this._viewName;
         },
         /**
      * @method getViewDescription
      * @return {String} description for the view to be saved
      */
-        getViewDescription : function() {
+        getViewDescription : function () {
             return this._viewDescription;
         },
         /**
      * @method getIsDefault
      * @return {bool} whether the view to be saved is the user's default view.
      */
-        getIsDefault: function() {
+        getIsDefault: function () {
             return this._isDefault;
         }
     }, {

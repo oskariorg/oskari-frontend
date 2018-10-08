@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
  * @param {Oskari.mapframework.bundle.promote.PromoteBundleInstance}
  *        instance reference to component that created the tile
  */
-    function(instance) {
+    function (instance) {
         this.instance = instance;
         this.container = null;
         this.template = null;
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      * @method getName
      * @return {String} the name for the component
      */
-        getName : function() {
+        getName : function () {
             return 'Oskari.mapframework.bundle.promote.Flyout';
         },
 
@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      *
      * Interface method implementation
      */
-        setEl : function(el, width, height) {
+        setEl : function (el, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('promote')) {
                 jQuery(this.container).addClass('promote');
@@ -48,9 +48,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      * Interface method implementation, assigns the HTML templates
      * that will be used to create the UI
      */
-        startPlugin : function() {
+        startPlugin : function () {
             this.template = jQuery('<div class="promoteContainer">' +
-        		'<div class="promoteDescription"></div>'+
+        		'<div class="promoteDescription"></div>' +
                 '<div><a class="promoteSignup"></a></div>' +
                 '<div><a class="promoteRegister"></a></div>' +
             '</div>');
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      *
      * Interface method implementation, does nothing atm
      */
-        stopPlugin : function() {
+        stopPlugin : function () {
 
         },
 
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      * @method getTitle
      * @return {String} localized text for the title of the flyout
      */
-        getTitle : function() {
+        getTitle : function () {
             return this.instance.getLocalization('title');
         },
 
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      * @return {String} localized text for the description of the
      * flyout
      */
-        getDescription : function() {
+        getDescription : function () {
             return this.instance.getLocalization('desc');
         },
 
@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      * @method getOptions
      * Interface method implementation, does nothing atm
      */
-        getOptions : function() {
+        getOptions : function () {
 
         },
 
@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      * @method createUi
      * Creates the UI for a fresh start
      */
-        createUi : function() {
+        createUi : function () {
             var me = this;
 
             var flyout = jQuery(this.container);

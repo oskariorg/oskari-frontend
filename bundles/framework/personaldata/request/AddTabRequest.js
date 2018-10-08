@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
  * @static
  * @param {String} viewname for the view to be saved
  */
-    function(title, content, first, id) {
+    function (title, content, first, id) {
         this._title = title;
         this._content = content;
         this._first = !!first;
@@ -23,35 +23,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {String} tab title
      */
-        getId : function() {
+        getId : function () {
             return this._id;
         },
         /**
      * @method getTitle
      * @return {String} tab title
      */
-        getTitle : function() {
+        getTitle : function () {
             return this._title;
         },
         /**
      * @method getContent
      * @return {String} content for the tab to be added
      */
-        getContent : function() {
+        getContent : function () {
             return this._content;
         },
         /**
      * @method isFirst
      * @return {Boolean} is tab added as first
      */
-        isFirst : function() {
+        isFirst : function () {
             return this._first;
         }
     }, {

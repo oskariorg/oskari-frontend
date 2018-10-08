@@ -62,11 +62,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
         *
         * @param {String} mode tool mode name
         */
-        setMode: function(mode){
+        setMode: function (mode) {
             var me = this,
                 el = jQuery('.mapplugin.scalebar');
 
-            if(me._prevMode !== null){
+            if (me._prevMode !== null) {
                 el.removeClass(me._prevMode);
             }
 

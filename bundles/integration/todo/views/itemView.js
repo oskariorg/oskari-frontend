@@ -1,4 +1,4 @@
-define(['text!_bundle/templates/item.html'],function(Template) {
+define(['text!_bundle/templates/item.html'],function (Template) {
 
     return Backbone.View.extend({
 
@@ -20,30 +20,30 @@ define(['text!_bundle/templates/item.html'],function(Template) {
         // The TodoView listens for changes to its model, re-rendering. Since there's
         // a one-to-one correspondence between a **Todo** and a **TodoView** in this
         // app, we set a direct reference on the model for convenience.
-        initialize : function() {
+        initialize : function () {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.remove);
         },
         // Re-render the titles of the todo item.
-        render : function() {
+        render : function () {
             this.$el.html(this.template(this.model.toJSON()));
             this.$el.toggleClass('done', this.model.get('done'));
             this.input = this.$('.edit');
             return this;
         },
         // Toggle the `"done"` state of the model.
-        toggleDone : function() {
+        toggleDone : function () {
             this.model.toggle();
         },
         // Switch this view into `"editing"` mode, displaying the input field.
-        edit : function() {
+        edit : function () {
             this.$el.addClass('editing');
             this.input.focus();
         },
         // Close the `"editing"` mode, saving changes to the todo.
-        close : function() {
+        close : function () {
             var value = this.input.val();
-            if(!value) {
+            if (!value) {
                 this.clear();
             } else {
                 this.model.save({
@@ -53,13 +53,13 @@ define(['text!_bundle/templates/item.html'],function(Template) {
             }
         },
         // If you hit `enter`, we're through editing the item.
-        updateOnEnter : function(e) {
-            if(e.keyCode === 13) {
+        updateOnEnter : function (e) {
+            if (e.keyCode === 13) {
                 this.close();
             }
         },
         // Remove the item, destroy the model.
-        clear : function() {
+        clear : function () {
             this.model.destroy();
         }
     });

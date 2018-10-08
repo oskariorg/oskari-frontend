@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
  * @method create called automatically on construction
  * @static
  */
-    function() {
+    function () {
     }, {
     /**
      * @static
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @method getName
      * @return {String} the name for the component
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -54,27 +54,27 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @param {Oskari.Sandbox} sandbox
      * Sets the sandbox reference to this component
      */
-        setSandbox : function(sbx) {
+        setSandbox : function (sbx) {
             this.sandbox = sbx;
         },
         /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
-        getSandbox : function() {
+        getSandbox : function () {
             return this.sandbox;
         },
         /**
      * @method update
      * implements BundleInstance protocol update method - does nothing atm
      */
-        update : function() {
+        update : function () {
         },
         /**
      * @method start
      * implements BundleInstance protocol start methdod
      */
-        start : function() {
+        start : function () {
             var me = this;
             // Should this not come as a param?
             var sandbox = Oskari.getSandbox();
@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
 
             var conf = this.conf || {};
             // TODO: is there need for multiple styles? style.default, style.edit?
-            if(conf.style) {
+            if (conf.style) {
                 this.drawPlugin.setDefaultStyle(conf.style);
             }
 
@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @method init
      * implements Module protocol init method - initializes request handlers
      */
-        init : function() {
+        init : function () {
 
         // initialize drawPlugin
             this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
@@ -112,10 +112,10 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      *      reference to the application core (reference sandbox core.getSandbox())
      * @param {Oskari.mapping.drawtools.request.StartDrawingRequest|Oskari.mapping.drawtools.request.StopDrawingRequest} request
      */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             if (request.getName() === 'DrawTools.StartDrawingRequest') {
                 var shapeType = request.getShape();
-                if(!this.isValidShapeType(shapeType)){
+                if (!this.isValidShapeType(shapeType)) {
                     Oskari.log(this.getName()).error('Illegal shape type for StartDrawingRequest: ' + shapeType + '. Must be one of: ' + this.__validShapeTypes.join(', ') + '.');
                     return;
                 }
@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @param {string} shapeType shape type to be drawn
      * @return {boolean}
      */
-        isValidShapeType: function(shapeType){
+        isValidShapeType: function (shapeType) {
             return this.__validShapeTypes.indexOf(shapeType) >= 0;
         },
         /**
@@ -139,14 +139,14 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @param {Oskari.mapframework.event.Event} event a Oskari event object
      * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
      */
-        onEvent : function(event) {
+        onEvent : function (event) {
         },
 
         /**
      * @method stop
      * implements BundleInstance protocol stop method
      */
-        stop : function() {
+        stop : function () {
             var me = this;
             // TODO: maybe stop/unregister drawplugin?
             me.sandbox.unregister(me);

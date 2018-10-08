@@ -2,21 +2,21 @@ Oskari.clazz.define('Oskari.projection.change.view.ErrorListing', function () {
     this.loc = Oskari.getLocalization('projection-change');
     this.errorView = _.template('<div class="oskari-projection-warning"><div>${desc}</div></div>');
 }, {
-    setElement: function(el) {
+    setElement: function (el) {
         this.element = el;
     },
-    getElement: function() {
+    getElement: function () {
         return this.element;
     },
     createList: function (errorList) {
         var list = jQuery('<ul class="projection-errorlist"></ul>');
-        errorList.forEach( function ( unsupported ) {
-            list.append( jQuery('<li>'+ unsupported.getName() +'</li>') );
+        errorList.forEach(function (unsupported) {
+            list.append(jQuery('<li>' + unsupported.getName() + '</li>'));
         });
         return list;
     },
-    show: function( parentElement, errorList ) {
-        var error = jQuery( this.errorView ({
+    show: function (parentElement, errorList) {
+        var error = jQuery(this.errorView ({
             desc: this.loc.error.desc,
         }));
 
@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ErrorListing', function () {
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var btn = dialog.createCloseButton(this.loc.infoPopup.ok);
         btn.addClass('primary');
-        btn.setHandler( function () {
+        btn.setHandler(function () {
             dialog.close(true);
         });
         dialog.dialog.zIndex(parentElement.zIndex() + 1);

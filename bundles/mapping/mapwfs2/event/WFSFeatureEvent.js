@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureEvent',
  * @param {Object}
  *            feature values
  */
-    function(layer, feature) {
+    function (layer, feature) {
         this._layer = layer;
         this._feature = feature;
     }, {
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureEvent',
      * @method getName
      * @return {String} event name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
 
@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureEvent',
      * @method getLayer
      * @return {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
-        getLayer : function() {
+        getLayer : function () {
             return this._layer;
         },
 
@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureEvent',
      * @method getFeature
      * @return {Object} feature values
      */
-        getFeature : function() {
+        getFeature : function () {
             return this._feature;
         }
     }, {

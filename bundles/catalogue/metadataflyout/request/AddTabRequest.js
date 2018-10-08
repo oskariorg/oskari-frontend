@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.catalogue.request.AddTabRequest'
  * @method create called automatically on construction
  * @static
  */
-    function(data) {
+    function (data) {
         this._data = data;
     },{
     /** @static @property __name request name */
@@ -19,14 +19,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.catalogue.request.AddTabRequest'
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getData
      * @return {String} tab data
      */
-        getData : function() {
+        getData : function () {
             return this._data;
         }
     }, {

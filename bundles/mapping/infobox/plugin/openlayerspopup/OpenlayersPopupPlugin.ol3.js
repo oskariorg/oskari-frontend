@@ -120,12 +120,12 @@ Oskari.clazz.define(
                 lat = null,
                 marker = null;
 
-            if(position.marker && me.markers[position.marker]) {
+            if (position.marker && me.markers[position.marker]) {
                 lon = me.markers[position.marker].data.x;
                 lat = me.markers[position.marker].data.y;
                 marker = me.markers[position.marker];
                 me.markerPopups[position.marker] = id;
-            } else if(position.lon && position.lat){
+            } else if (position.lon && position.lat) {
                 lon = position.lon;
                 lat = position.lat;
             } else {
@@ -179,7 +179,7 @@ Oskari.clazz.define(
                 popup;
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
 
-            if(isMarker){
+            if (isMarker) {
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
                 offsetX = markerPosition.x;
                 offsetY = markerPosition.y;
@@ -287,7 +287,7 @@ Oskari.clazz.define(
 
 
             // Fix popup header height to match title content height if using desktop popup
-            if(title && !isInMobileMode) {
+            if (title && !isInMobileMode) {
                 var popupEl = jQuery(popup.getElement());
                 var popupHeaderEl = popupEl.find('.popupHeader');
 
@@ -298,7 +298,7 @@ Oskari.clazz.define(
                 };
 
                 var popupHeaderChildrens = popupHeaderEl.children();
-                popupHeaderChildrens.each(function(){
+                popupHeaderChildrens.each(function () {
                     var popupHeaderChildren = jQuery(this);
                     fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
                     fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
@@ -378,7 +378,7 @@ Oskari.clazz.define(
             headerWrapper.append(closeButton);
 
             //add additional btns
-            jQuery.each( additionalTools, function( index, key ){
+            jQuery.each(additionalTools, function (index, key) {
                 var additionalButton = me._headerAdditionalButton.clone();
                 additionalButton.attr({
                     'id': key.name,
@@ -437,7 +437,7 @@ Oskari.clazz.define(
                             link.attr('contentdata', index);
                             link.attr('id', 'oskari_' + id + '_actionLink');
                             link.append(sanitizedActionName);
-                        } else if(action.name){
+                        } else if (action.name) {
                             actionTemplate = me._actionButton.clone();
                             btn = actionTemplate.find('input');
                             btn.attr({
@@ -446,14 +446,14 @@ Oskari.clazz.define(
                             });
                         }
                         currentGroup = action.group;
-                        if (action.selector){
+                        if (action.selector) {
                             targetElem = contentWrapper.find(action.selector);
                         } else {
                             targetElem = null;
                         }
                         if (targetElem instanceof jQuery) {
                             targetElem.prepend(actionTemplate);
-                        }else if (currentGroup && currentGroup === group) {
+                        } else if (currentGroup && currentGroup === group) {
                             actionTemplateWrapper.append(actionTemplate);
                         } else {
                             actionTemplateWrapper = me._actionTemplateWrapper.clone();
@@ -462,7 +462,7 @@ Oskari.clazz.define(
                         }
                         group = currentGroup;
                     });
-                } else if(typeof actions === 'object') {
+                } else if (typeof actions === 'object') {
                     me.log.warn('Popup actions must be an Array. Cannot add tools.');
                 }
 
@@ -482,7 +482,7 @@ Oskari.clazz.define(
                 popupElement = popup.getElement();
             }
 
-            popupElement.onclick = function(evt) {
+            popupElement.onclick = function (evt) {
                 var link = jQuery(evt.target || evt.srcElement);
 
                 if (link.hasClass('olPopupCloseBox')) { // Close button
@@ -503,8 +503,8 @@ Oskari.clazz.define(
                         }
                     }
                 }
-                if(additionalTools.length > 0){
-                    jQuery.each( additionalTools, function( index, key ){
+                if (additionalTools.length > 0) {
+                    jQuery.each(additionalTools, function (index, key) {
                         if (link.hasClass(key.iconCls)) {
                             me.close(id);
                             key.callback(key.params);
@@ -512,7 +512,7 @@ Oskari.clazz.define(
                     });
                 }
 
-                if(!link.is('a') || link.parents('.getinforesult_table').length) {
+                if (!link.is('a') || link.parents('.getinforesult_table').length) {
                     evt.stopPropagation();
                 }
             };
@@ -572,14 +572,14 @@ Oskari.clazz.define(
             this.adaptable = isAdaptable;
         },
 
-        _adaptPopupSize: function(olPopupId, isOld) {
+        _adaptPopupSize: function (olPopupId, isOld) {
             var size = this.getMapModule().getSize(),
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left')),
                 maxWidth = size.width * 0.7,
                 maxHeight = size.height * 0.7;
 
-            if(isNaN(left)) {
+            if (isNaN(left)) {
                 left = 0;
             }
 
@@ -625,7 +625,7 @@ Oskari.clazz.define(
                 'height': height
             });
 
-            if(!isOverThanMax) {
+            if (!isOverThanMax) {
                 popup.css('min-height', 'inherit');
             }
         },
@@ -666,7 +666,7 @@ Oskari.clazz.define(
         _panMapToShowPopup: function (lonlatArray, positioning, margins) {
             var margins = margins || this._viewportMargins;
             // don't try to pan the map if gfi popup position isn't in the viewport (extended with isInViewport margin)
-            if (!this.getMapModule().isLonLatInViewport(lonlatArray, margins.isInViewport)){
+            if (!this.getMapModule().isLonLatInViewport(lonlatArray, margins.isInViewport)) {
                 return;
             }
 
@@ -685,13 +685,13 @@ Oskari.clazz.define(
             //if them aren't, then mapmove isn't ended before getPixelFromCoordinate called
             //and pixels aren't calculated correctly -> don't try to pan map
             var margin = margins.isInViewport / 2;
-            if (pixels.y > mapSize.height + margin || pixels.y < -margin || pixels.x > mapSize.width + margin || pixels.x < -margin){
+            if (pixels.y > mapSize.height + margin || pixels.y < -margin || pixels.x > mapSize.width + margin || pixels.x < -margin) {
                 return;
             }
 
             //If supported ol/OverlayPositioning is used, use it instead of default values
-            Object.keys(posClasses).forEach(function (pos){
-                if (positioning === posClasses[pos]){
+            Object.keys(posClasses).forEach(function (pos) {
+                if (positioning === posClasses[pos]) {
                     var popupDirection = positioning.split('-');
                     positionY = popupDirection[0];
                     positionX = popupDirection[1];
@@ -699,37 +699,37 @@ Oskari.clazz.define(
             });
             //TODO: popupHeaderArrow and header sizes are not included
             // Check panY
-            if (positionY === 'top'){
-                if (pixels.y + popupY + margins.bottom > mapSize.height){
+            if (positionY === 'top') {
+                if (pixels.y + popupY + margins.bottom > mapSize.height) {
                     panY = (pixels.y + popupY + margins.bottom) - mapSize.height;
                 // check that we are not "over the top"
-                } else if (pixels.y < margins.top){
+                } else if (pixels.y < margins.top) {
                     panY = pixels.y - margins.top;
                 }
-            }else if (positionY === 'center'){
-                if (pixels.y + (popupY/2) + margins.bottom > mapSize.height){
-                    panY = (pixels.y + popupY/2 + margins.bottom) - mapSize.height;
-                } else if (pixels.y - popupY/2 - margins.top < 0 ){
-                    panY = pixels.y - popupY/2 - margins.top;
+            } else if (positionY === 'center') {
+                if (pixels.y + (popupY / 2) + margins.bottom > mapSize.height) {
+                    panY = (pixels.y + popupY / 2 + margins.bottom) - mapSize.height;
+                } else if (pixels.y - popupY / 2 - margins.top < 0) {
+                    panY = pixels.y - popupY / 2 - margins.top;
                 }
-            }else if (positionY === 'bottom'){
-                if (pixels.y - popupY - margins.top < 0){
-                    panY =  pixels.y - popupY - margins.top;
+            } else if (positionY === 'bottom') {
+                if (pixels.y - popupY - margins.top < 0) {
+                    panY = pixels.y - popupY - margins.top;
                 }
             }
             // Check panX
-            if (positionX === 'left'){
-                if (pixels.x + popupX + margins.right  > mapSize.width){
+            if (positionX === 'left') {
+                if (pixels.x + popupX + margins.right > mapSize.width) {
                     panX = (pixels.x + popupX + margins.right) - mapSize.width;
                 }
-            }else if (positionX === 'center'){
-                if (pixels.x + popupX/2 + margins.right > mapSize.width){
-                    panX = (pixels.x + popupX/2 + margins.right) - mapSize.width;
-                } else if (pixels.x - popupX/2 - margins.left < 0 ){
-                    panX = pixels.x - popupX/2 - margins.left;
+            } else if (positionX === 'center') {
+                if (pixels.x + popupX / 2 + margins.right > mapSize.width) {
+                    panX = (pixels.x + popupX / 2 + margins.right) - mapSize.width;
+                } else if (pixels.x - popupX / 2 - margins.left < 0) {
+                    panX = pixels.x - popupX / 2 - margins.left;
                 }
-            }else if (positionX === 'right'){
-                if (pixels.x - popupX - margins.left < 0 ){
+            } else if (positionX === 'right') {
+                if (pixels.x - popupX - margins.left < 0) {
                     panX = pixels.x - popupX - margins.left;
                 }
             }
@@ -913,7 +913,7 @@ Oskari.clazz.define(
                             position.lon !== popup.lonlat.lon ||
                             position.lat !== popup.lonlat.lat) {
                             delete this._popups[pid];
-                            if(typeof popup.popup.setPosition === 'function') {
+                            if (typeof popup.popup.setPosition === 'function') {
                                 popup.popup.setPosition(undefined);
                             }
                             if (popup.popup && popup.type === 'desktop') {
