@@ -1,28 +1,27 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (title, options, instance) {
     this.instance = instance;
-    this.element = null;
+    this.uiElement = null;
     this.sandbox = this.instance.getSandbox();
     this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     var me = this;
     this.on('show', function () {
-        if (!me.getElement()) {
+        if (!me.getUiElement()) {
             me.createUi();
-            me.addClass('statsgrid-search-flyout');
-            me.setContent(me.getElement());
+            me.setContent(me.getUiElement());
         }
     });
 }, {
-    setElement: function (el) {
-        this.element = el;
+    setUiElement: function (el) {
+        this.uiElement = el;
     },
-    getElement: function () {
-        return this.element;
+    getUiElement: function () {
+        return this.uiElement;
     },
     clearUi: function () {
-        if (this.element === null) {
+        if (this.uiElement === null) {
             return;
         }
-        this.element.empty();
+        this.uiElement.empty();
     },
     /**
      * @method lazyRender
@@ -33,26 +32,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var locale = this.instance.getLocalization();
         // empties all
         this.clearUi();
-        this.setElement(jQuery('<div class="statsgrid-search-container"></div>'));
+        this.addClassForContent('statsgrid-search-container');
         var title = locale.flyout.title;
-        var parent = this.getElement().parent().parent();
+        var flyout = this.getElement();
         if (isEmbedded) {
-            parent.find('.oskari-flyout-title p').html(title);
             // Remove close button from published
-            parent.find('.oskari-flyouttools').hide();
+            flyout.find('.oskari-flyouttools').hide();
         } else {
             // resume defaults (important if user used publisher)
-            parent.find('.oskari-flyout-title p').html(title);
-            parent.find('.oskari-flyouttools').show();
+            flyout.find('.oskari-flyouttools').show();
         }
-        this.addContent(this.getElement(), isEmbedded);
+        this.addContent(isEmbedded);
     },
-    addContent: function (el, isEmbedded) {
+    addContent: function (isEmbedded) {
         if (isEmbedded) {
             // no search for embedded map
             return;
         }
-        el.append(this.getNewSearchElement());
+        this.setUiElement(this.getNewSearchElement());
     },
     getNewSearchElement: function () {
         var me = this;
