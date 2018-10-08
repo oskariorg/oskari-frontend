@@ -4,7 +4,7 @@
  * Registers TimeseriesService & TimeseriesLayerService
  * Creates UI control for timeseries, when TimeseriesService indicates it's needed
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance',
     /**
      * @method create called automatically on construction
      * @static

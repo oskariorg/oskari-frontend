@@ -17,7 +17,7 @@ function(config) {
     }
 
 }, {
-    __name : "DigiroadMyPlaces.StartDrawingRequest",
+    __name : 'DigiroadMyPlaces.StartDrawingRequest',
     getName : function() {
         return this.__name;
     },

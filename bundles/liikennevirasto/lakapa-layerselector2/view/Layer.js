@@ -3,7 +3,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.Layer",
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.Layer',
 
 /**
  * @method create called automatically on construction

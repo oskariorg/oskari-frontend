@@ -738,7 +738,7 @@ define([
                 }
 
                 if (!isValid) {
-                    me._showDialog("title", "Not valid sld xml");
+                    me._showDialog('title', 'Not valid sld xml');
                 }
                 return isValid;
 
@@ -769,7 +769,7 @@ define([
                     selectedStyles = {},
                     styles = [];
 
-                form.find("#add-layer-sld-style option:selected").each(function() {
+                form.find('#add-layer-sld-style option:selected').each(function() {
                     var sel = jQuery(this);
                     if (sel.length) {
                         var style = {};
@@ -1058,7 +1058,7 @@ define([
                 });
 
                 data.layerUrl = form.find('#add-layer-url').val();
-                if (typeof data.layerUrl === "undefined") {
+                if (typeof data.layerUrl === 'undefined') {
                     data.layerUrl = form.find('#add-layer-interface').val();
                 }
 
@@ -1359,10 +1359,10 @@ define([
                 me.model.setCapabilitiesResponse(response);
                 if (layerType === 'wfslayer') {
                     //check layers with error and act accordingly.
-                    var capabilities = me.model.get("capabilities");
+                    var capabilities = me.model.get('capabilities');
                     if (capabilities && capabilities.layersWithErrors && capabilities.layersWithErrors.length > 0) {
                         warningMessage = _.template(LayersWithErrorsPopupTemplate, {
-                            "capabilities": capabilities,
+                            'capabilities': capabilities,
                             title: me.instance.getLocalization('admin').warning_some_of_the_layers_could_not_be_parsed
                         });
                         warningDialog.show(me.instance.getLocalization('admin').warningTitle, warningMessage, [warningDialogOkBtn]);
@@ -1464,14 +1464,14 @@ define([
                     },
                     url: Oskari.urls.getRoute('SldStyles'),
                     success: function(resp) {
-                        me._showDialog("title", "New sld saved success / " + sldName);
+                        me._showDialog('title', 'New sld saved success / ' + sldName);
                         //Update UI
                         me._SldStylesAppendUI(resp.id, sldName);
 
                     },
                     error: function(jqXHR) {
                         if (jqXHR.status !== 0) {
-                            me._showDialog("title", "Save of new sld xml failed");
+                            me._showDialog('title', 'Save of new sld xml failed');
                         }
                     }
                 });

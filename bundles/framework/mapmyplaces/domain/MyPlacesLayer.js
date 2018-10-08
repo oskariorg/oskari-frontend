@@ -11,8 +11,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
  */
 function() {
     /* Layer Type */
-    this._layerType = "MYPLACES";
-    this._metaType = "MYPLACES";
+    this._layerType = 'MYPLACES';
+    this._metaType = 'MYPLACES';
 }, {
 	/* Layer type specific functions */
 
@@ -50,5 +50,5 @@ function() {
     }
 
 }, {
-    "extend": ["Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer"]
+    'extend': ['Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer']
 });

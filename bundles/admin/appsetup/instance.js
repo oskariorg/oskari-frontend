@@ -3,7 +3,7 @@
  *
  * Appsetup bundle for admins. Allows import appsetup jsons.
  */
-Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
+Oskari.clazz.define('Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -28,7 +28,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
         };
     }, {
         getName : function() {
-            return "AdminAppSetup";
+            return 'AdminAppSetup';
         },
         getLocalization: function (key) {
             if (!this._localization) {

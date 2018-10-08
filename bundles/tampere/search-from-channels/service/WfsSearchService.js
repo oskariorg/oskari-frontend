@@ -19,7 +19,7 @@ function (searchUrl) {
     this._searchUrl = searchUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.tampere.bundle.searchfromchannels.service.WfsSearchService",
+    __qname : 'Oskari.tampere.bundle.searchfromchannels.service.WfsSearchService',
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -28,7 +28,7 @@ function (searchUrl) {
         return this.__qname;
     },
     /** @static @property __name service name */
-    __name : "SearchService",
+    __name : 'SearchService',
     /**
      * @method getName
      * @return {String} service name
@@ -51,14 +51,14 @@ function (searchUrl) {
         var lang = Oskari.getLang(),
             epsg = Oskari.getSandbox().getMap().getSrsName();
         jQuery.ajax({
-            dataType : "json",
-            type : "POST",
+            dataType : 'json',
+            type : 'POST',
             url : this._searchUrl,
             data : {
-                "searchKey" : searchString,
-                "Language" : lang,
-                "epsg" : epsg,
-                "channels" : channelIds.join()
+                'searchKey' : searchString,
+                'Language' : lang,
+                'epsg' : epsg,
+                'channels' : channelIds.join()
             },
             error : onError,
             success : onSuccess

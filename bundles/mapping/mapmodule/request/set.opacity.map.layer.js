@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.ChangeMapLayerOpacityReq
 
     }, {
         /** @static @property __name request name */
-        __name: "ChangeMapLayerOpacityRequest",
+        __name: 'ChangeMapLayerOpacityRequest',
         /**
          * @method getName
          * @return {String} request name

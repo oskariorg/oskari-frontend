@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
      * These will be registered/unregistered automagically
      *
      */
-    "eventHandlers" : {
+    'eventHandlers' : {
     },
 
     /**
@@ -33,9 +33,9 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
      * requirejs requirements config to fix paths
      *
      */
-    "requirementsConfig" : {
-        "waitSeconds" : 15,
-        "paths" : {
+    'requirementsConfig' : {
+        'waitSeconds' : 15,
+        'paths' : {
             '_bundle' : '../../../Oskari/bundles/integration/todo'
         }
     },
@@ -46,14 +46,14 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
      * Called with requirements from above as arguments to method in
      * defined order.
      */
-    "render" : function() {
+    'render' : function() {
         var me = this;
         var container = this.getEl();
-        container.addClass("todo");
+        container.addClass('todo');
 
         /* _bundle - path conf is set in bundle loader based on bundle.js */
 
-        window.require(["_bundle/views/todoView"], function(ToDoView) {
+        window.require(['_bundle/views/todoView'], function(ToDoView) {
 
             // Finally, we kick things off by creating the **App**.
             me.view = new ToDoView({
@@ -62,5 +62,5 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         });
     }
 }, {
-    "extend" : ["Oskari.integration.bundle.backbone.View"]
+    'extend' : ['Oskari.integration.bundle.backbone.View']
 });

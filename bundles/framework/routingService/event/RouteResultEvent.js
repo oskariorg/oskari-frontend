@@ -19,7 +19,7 @@ function(success, requestParameters, plan, rawParams) {
     this._rawParams = rawParams;
 }, {
     /** @static @property __name event name */
-    __name : "RouteResultEvent",
+    __name : 'RouteResultEvent',
 
     /**
      * @method getName

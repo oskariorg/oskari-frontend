@@ -5,7 +5,7 @@ Oskari.clazz
                     this._creator = null;
                     this._selections = selections;
                 }, {
-                    __name : "printout.PrintMapRequest",
+                    __name : 'printout.PrintMapRequest',
                     getName : function() {
                         return this.__name;
                     },

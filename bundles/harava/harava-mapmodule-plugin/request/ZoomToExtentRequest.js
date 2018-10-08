@@ -22,7 +22,7 @@ function(minx,miny,maxx,maxy) {
 	this._maxy=maxy;
 }, {
     /** @static @property __name request name */
-	__name : "ZoomToExtentRequest",
+	__name : 'ZoomToExtentRequest',
     /**
      * @method getName
      * @return {String} request name

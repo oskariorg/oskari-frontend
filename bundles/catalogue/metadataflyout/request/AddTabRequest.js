@@ -14,7 +14,7 @@ function(data) {
     this._data = data;
 },{
     /** @static @property __name request name */
-    __name : "catalogue.AddTabRequest",
+    __name : 'catalogue.AddTabRequest',
     /**
      * @method getName
      * @return {String} request name

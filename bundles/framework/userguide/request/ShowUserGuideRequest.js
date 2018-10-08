@@ -17,7 +17,7 @@ Oskari.clazz
       this._placement = config.placement;
       this._content = config.content;
     }, {
-      __name : "userguide.ShowUserGuideRequest",
+      __name : 'userguide.ShowUserGuideRequest',
       getName : function() {
         return this.__name;
       },

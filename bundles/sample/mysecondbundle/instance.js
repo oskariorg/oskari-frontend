@@ -23,7 +23,7 @@
             instanceProps : {}
         }
  */
-Oskari.clazz.define("Oskari.sample.bundle.mysecondbundle.ModuleHelloWorldBundleInstance",
+Oskari.clazz.define('Oskari.sample.bundle.mysecondbundle.ModuleHelloWorldBundleInstance',
 
     /**
      * @method create called automatically on construction

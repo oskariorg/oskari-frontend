@@ -13,7 +13,7 @@ function(status, id) {
     this._id = id;
 }, {
     /** @static @property __name event name */
-    __name : "ProgressEvent",
+    __name : 'ProgressEvent',
     /**
      * @method getName
      * @return {String} the name for the event

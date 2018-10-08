@@ -52,8 +52,8 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
                 submit = template.find('#submit'),
                 cancel = template.find('#cancel');
 
-            username.attr("placeholder",this.locale.username);
-            password.attr("placeholder",this.locale.password);
+            username.attr('placeholder',this.locale.username);
+            password.attr('placeholder',this.locale.password);
 
             template.find('#asdicsrf').val(Oskari.app.getXSRFToken());
             submit.val(this.locale.login);

@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
         init: function (sandbox) {
             var me = this;
             this._sandbox = sandbox;
-            this._sandbox.printDebug("[HaravaQuestionsMapPlugin] init");
+            this._sandbox.printDebug('[HaravaQuestionsMapPlugin] init');
         },
         /**
          * @method register
@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * Get current module all features
          * @returns {OpenLayers.Feature[]} features
          */
-        "getCurrentModuleFeatures": function () {
+        'getCurrentModuleFeatures': function () {
             var me = this;
             var features = [];
             if (me._currentStep !== null && me._currentStep !== undefined) {
@@ -199,7 +199,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * Get all modules all features
          * @returns {OpenLayers.Feature[]} features
          */
-        "getAllModuleFeatures": function () {
+        'getAllModuleFeatures': function () {
             var me = this,
                 features = [];
             jQuery.each(me.modules, function (k, module) {
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @param {OpenLayers.Event} evt
          * @param {Object} me
          */
-        "onPopupClose": function (evt, me) {
+        'onPopupClose': function (evt, me) {
             me.showTools();
             if (me._currentControls && me._currentControls.select) {
                 me._currentControls.select.unselectAll();
@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @method reActivateModify
          * Reactivates modify control.
          */
-        "reActivateModify": function () {
+        'reActivateModify': function () {
             var me = this;
             var module = me.getModuleById(me._currentStep);
             if (module) {
@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
                     module.layer = new OpenLayers.Layer.Vector(me.drawLayerSubfix + module.questionId, {
 
                         eventListeners: {
-                            "featuresadded": function (layer) {
+                            'featuresadded': function (layer) {
                                 // send an event that the drawing has been completed
                                 me.finishedDrawing();
                             },
@@ -304,7 +304,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
                                 if (feature.attributes.toolHtml) {
                                     if (feature.popup === null) {
                                         popup = new OpenLayers.Popup.FramedCloud(
-                                            feature.id + ".popup",
+                                            feature.id + '.popup',
                                             OpenLayers.LonLat.fromString(feature.geometry.getCentroid().toShortString()),
                                             null,
                                             feature.attributes.toolHtml,
@@ -377,7 +377,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
                             // set offsets (used only point)
                             var finalStyle = me.setExternalGraphicStyles(style, module);
 
-                            module.layer.styleMap.styles["default"] = finalStyle;
+                            module.layer.styleMap.styles['default'] = finalStyle;
                             module.layer.styleMap.styles.select = finalStyle;
                             break;
                         }
@@ -765,7 +765,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @param centerLon center lon coordinate
          * @param centerLat center lat coordinate
          */
-        "scaleAndCenterMap": function (scale, centerLon, centerLat) {
+        'scaleAndCenterMap': function (scale, centerLon, centerLat) {
             var me = this;
             var mapModule = me.getMapModule();
 
@@ -781,7 +781,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @method finishedDrawing
          * Finish drawing
          */
-        "finishedDrawing": function () {
+        'finishedDrawing': function () {
             var me = this;
 
             // programmatically select the drawn feature ("not really supported by openlayers")
@@ -815,8 +815,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
             var maxAnswersExceeded = false;
             if (me._currentPopupHtml && isOk) {
                 currentFeature.attributes = {
-                    "toolHtml": me._currentPopupHtml,
-                    "stepAndQuestionId": me._currentStepAndQuestion
+                    'toolHtml': me._currentPopupHtml,
+                    'stepAndQuestionId': me._currentStepAndQuestion
                 };
 
                 if (me._currentQuestion.maxAnswers !== null && me._currentQuestion.maxAnswers > 0) {
@@ -849,7 +849,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * Move questions to defined step
          * @param {String} moduleId
          */
-        "showStep": function (moduleId) {
+        'showStep': function (moduleId) {
             var me = this;
             me.deActivateAll();
 
@@ -873,7 +873,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @param {String} moduleId
          * @returns {Object} founded module if exists. If not return null.
          */
-        "getModuleById": function (moduleId) {
+        'getModuleById': function (moduleId) {
             var me = this;
             var retModule = null;
             jQuery.each(me.modules, function (k, module) {
@@ -887,7 +887,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @method deActivateAll
          * Deactivate all module controls and tools
          */
-        "deActivateAll": function () {
+        'deActivateAll': function () {
             var me = this;
             me._currentPopupHtml = null;
             me._currentControls.modify = null;
@@ -920,7 +920,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @param {String[]} questions
          * @returns {Object} founded question if exists. If not return null.
          */
-        "getQuestionById": function (questionId, questions) {
+        'getQuestionById': function (questionId, questions) {
             var me = this;
             var retQuestion = null;
             jQuery.each(questions, function (k, question) {
@@ -936,7 +936,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @param {String} moduleId selected moduleid
          * @param {String} questionId selected qustion id
          */
-        "activateControl": function (moduleId, questionId) {
+        'activateControl': function (moduleId, questionId) {
             var me = this;
             var module = me.getModuleById(moduleId);
 
@@ -975,7 +975,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @method destroySelectedFeature
          * Destroy selected feature
          */
-        "destroySelectedFeature": function () {
+        'destroySelectedFeature': function () {
             var me = this;
             var feature = me._lastfeature;
             if (feature) {
@@ -992,7 +992,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * Hide selected feature
          * @param {Boolean} notCloseTools
          */
-        "hideSelectedFeature": function (notCloseTools) {
+        'hideSelectedFeature': function (notCloseTools) {
             var me = this;
             var feature = me._lastfeature;
             if (feature) {
@@ -1036,5 +1036,5 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          * @property {Object} protocol
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

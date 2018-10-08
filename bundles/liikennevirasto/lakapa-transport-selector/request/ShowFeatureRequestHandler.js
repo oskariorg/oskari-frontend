@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ShowFeatur
 	 */
     handleRequest : function(core, request) {
     	var me = this;
-        me.sandbox.printDebug("[Oskari.liikennevirasto.bundle.transport.selector.ShowFeatureRequest] Show feature on map");
+        me.sandbox.printDebug('[Oskari.liikennevirasto.bundle.transport.selector.ShowFeatureRequest] Show feature on map');
         me.plugin.showFeatureOnMap(request.getFeature());
     }
 }, {

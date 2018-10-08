@@ -10,7 +10,7 @@ Oskari.clazz.define(
             this._dblClick = dblClick;
             this._creatorId = creatorId;
         }, {
-            __name : "DrawPlugin.SelectedDrawingEvent",
+            __name : 'DrawPlugin.SelectedDrawingEvent',
             getName : function() {
                 return this.__name;
             },

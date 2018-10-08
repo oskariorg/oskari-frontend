@@ -3,7 +3,7 @@
  * JSON-parsing for analysis layer
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayerModelBuilder', function(sandbox) {
-	this.localization = Oskari.getLocalization("MapAnalysis");
+	this.localization = Oskari.getLocalization('MapAnalysis');
     this.sandbox = sandbox;
     this.wfsBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',sandbox);
 }, {
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
         var me = this;
         if (layer.isFilterSupported()) {
             var filterdataTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-            filterdataTool.setName("filterdata");
+            filterdataTool.setName('filterdata');
             filterdataTool.setIconCls('show-filter-tool');
             filterdataTool.setTooltip(me.localization.filterTooltip);
             filterdataTool.setCallback(function() {

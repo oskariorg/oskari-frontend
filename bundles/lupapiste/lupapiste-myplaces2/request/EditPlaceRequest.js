@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditPlaceRequest'
     function (placeId) {
         this._placeId = placeId;
     }, {
-        __name: "LupaPisteMyPlaces.EditPlaceRequest",
+        __name: 'LupaPisteMyPlaces.EditPlaceRequest',
         /**
          * @method getName
          * @return {String} request name

@@ -19,7 +19,7 @@ function(searchMode) {
     this._searchMode = searchMode;
 }, {
 	/** @static @property __name request name */
-    __name : "StartGeometrySearchRequest",
+    __name : 'StartGeometrySearchRequest',
     /**
      * @method getName
      * @return {String} request name

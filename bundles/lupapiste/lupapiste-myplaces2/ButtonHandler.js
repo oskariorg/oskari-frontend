@@ -3,7 +3,7 @@
  *
  * Handles the buttons for myplaces functionality
  */
-Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.ButtonHandler",
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.ButtonHandler',
 
     /**
      * @method create called automatically on construction
@@ -153,7 +153,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.ButtonHandler",
             var locTool = this.instance.getLocalization('tools')[drawMode];
             var locBtns = this.instance.getLocalization('buttons');
             var title = this.instance.getLocalization('title');
-            var message = locTool["new"];
+            var message = locTool['new'];
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.dialog = dialog;

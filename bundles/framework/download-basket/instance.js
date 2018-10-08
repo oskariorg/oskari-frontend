@@ -3,7 +3,7 @@
 *
 * Oskari.mapframework.bundle.downloadBasket.
 */
-Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
 
     /**
      * @method create called automatically on construction

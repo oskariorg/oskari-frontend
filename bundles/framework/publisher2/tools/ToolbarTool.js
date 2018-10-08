@@ -118,12 +118,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
 
             // unselect history tools only if both are unselected
-            if (!me.selectedTools["history_back"] && !me.selectedTools["history_forward"]) {
-                me.selectedOptionsUi["history"] = false;
+            if (!me.selectedTools['history_back'] && !me.selectedTools['history_forward']) {
+                me.selectedOptionsUi['history'] = false;
             } else {
                 // if one of history tools is selected, select the other one too
-                me.selectedTools["history_forward"] = true;
-                me.selectedTools["history_back"] = true;
+                me.selectedTools['history_forward'] = true;
+                me.selectedTools['history_back'] = true;
             }
 
             me.drawOptions = {
@@ -201,7 +201,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             };
 
             // we want toolbar always with no default tools
-            retValue.configuration.toolbar = { conf : {"history": false,"basictools": false,"viewtools": false } };
+            retValue.configuration.toolbar = { conf : {'history': false,'basictools': false,'viewtools': false } };
 
             //PublishedMyPlaces is not supported with ol3
 
@@ -278,22 +278,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     // if tool was selected, unselect tool and send removeToolButtonRequest
                     if (toolState) {
                         me.selectedOptionsUi[toolName] = false;
-                        if (toolName === "history") {
-                            tool.__plugin.removeToolButton("history_back");
-                            me.selectedTools["history_back"] = false;
-                            tool.__plugin.removeToolButton("history_forward");
-                            me.selectedTools["history_forward"] = false;
+                        if (toolName === 'history') {
+                            tool.__plugin.removeToolButton('history_back');
+                            me.selectedTools['history_back'] = false;
+                            tool.__plugin.removeToolButton('history_forward');
+                            me.selectedTools['history_forward'] = false;
                         } else {
                             tool.__plugin.removeToolButton(toolName);
                             me.selectedTools[toolName] = false;
                         }
                     } else {
                         me.selectedOptionsUi[toolName] = true;
-                        if (toolName === "history") {
-                            tool.__plugin.addToolButton("history_back");
-                            me.selectedTools["history_back"] = true;
-                            tool.__plugin.addToolButton("history_forward");
-                            me.selectedTools["history_forward"] = true;
+                        if (toolName === 'history') {
+                            tool.__plugin.addToolButton('history_back');
+                            me.selectedTools['history_back'] = true;
+                            tool.__plugin.addToolButton('history_forward');
+                            me.selectedTools['history_forward'] = true;
                         } else {
                             tool.__plugin.addToolButton(toolName);
                             me.selectedTools[toolName] = true;
@@ -320,9 +320,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                         //set selected values checked
                         if (me.selectedOptionsUi[toolName]) {
                             selectTool.find('input').prop('checked', true);
-                            if (toolName === "history") {
-                                tool.__plugin.addToolButton("history_back");
-                                tool.__plugin.addToolButton("history_forward");
+                            if (toolName === 'history') {
+                                tool.__plugin.addToolButton('history_back');
+                                tool.__plugin.addToolButton('history_forward');
                             } else {
                                 tool.__plugin.addToolButton(toolName);
                             }
@@ -339,7 +339,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                 // show drawing controls for admin users
                 me._checkAdminDrawControls();
-                tool.toolContainer.find(".extraOptions").append(options);
+                tool.toolContainer.find('.extraOptions').append(options);
             } else {
                 // remove buttons, handlers and toolbar toolbar tools
                 for (toolName in me.selectedTools) {
@@ -357,7 +357,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 if (tool._isPluginStarted) {
                     //remove eventlisteners
                     var _removeOptions = function (className, handler) {
-                        var optionContainer = tool.toolContainer.find(".extraOptions").find(className),
+                        var optionContainer = tool.toolContainer.find('.extraOptions').find(className),
                             toolOptionCheckboxes = optionContainer.find('input').off('change', handler);
                         //remove dom elements
                         toolOptionCheckboxes.remove();

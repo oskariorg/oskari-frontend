@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeom
 	 */
     handleRequest : function(core, request) {
         var visibility = request.getVisibility();
-        this.sandbox.printDebug("[Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequest] Toggle visibility: " + visibility);
+        this.sandbox.printDebug('[Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequest] Toggle visibility: ' + visibility);
         this.searchPlugin.toggleVisibility(visibility);
     }
 }, {

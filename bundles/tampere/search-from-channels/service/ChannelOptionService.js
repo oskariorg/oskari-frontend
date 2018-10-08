@@ -19,7 +19,7 @@ function(searchUrl) {
     this._searchUrl = searchUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.tampere.bundle.searchfromchannels.service.ChannelOptionService",
+    __qname : 'Oskari.tampere.bundle.searchfromchannels.service.ChannelOptionService',
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -28,7 +28,7 @@ function(searchUrl) {
         return this.__qname;
     },
     /** @static @property __name service name */
-    __name : "SearchService",
+    __name : 'SearchService',
     /**
      * @method getName
      * @return {String} service name
@@ -49,8 +49,8 @@ function(searchUrl) {
      */
     getOptions : function(onSuccess, onError) {
         jQuery.ajax({
-            dataType : "json",
-            type : "GET",
+            dataType : 'json',
+            type : 'GET',
             url : this._searchUrl,
             error : onError,
             success : onSuccess

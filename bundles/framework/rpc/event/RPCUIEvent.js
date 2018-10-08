@@ -15,7 +15,7 @@ function(bundleId, payload) {
     this._payload = payload;
 }, {
     /** @static @property __name event name */
-    __name : "RPCUIEvent",
+    __name : 'RPCUIEvent',
     /**
      * @method getName
      * Returns event name

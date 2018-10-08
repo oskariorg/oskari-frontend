@@ -23,7 +23,7 @@ function(id, group, config) {
     this._config = config;
 }, {
     /** @static @property __name request name */
-    __name : "Toolbar.AddToolButtonRequest",
+    __name : 'Toolbar.AddToolButtonRequest',
     /**
      * @method getName
      * @return {String} request name

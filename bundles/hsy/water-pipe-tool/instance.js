@@ -3,7 +3,7 @@
 *
 * Oskari.hsy.bundle.waterPipeTool.BundleInstance
 */
-Oskari.clazz.define("Oskari.hsy.bundle.waterPipeTool.BundleInstance",
+Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.BundleInstance',
 
     /**
      * @method create called automatically on construction

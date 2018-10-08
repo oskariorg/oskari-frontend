@@ -31,7 +31,7 @@ Oskari.clazz.define(
             if(!clientVer) {
                 return false;
             }
-            return clientVer.indexOf("2.0.") === 0;
+            return clientVer.indexOf('2.0.') === 0;
         },
         /**
          * @public @method start
@@ -142,7 +142,7 @@ Oskari.clazz.define(
 
           if (allowedEvents === null || allowedEvents === undefined) {
               allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-              'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
+              'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', 'FeatureEvent', 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
               'RPCUIEvent', 'map.rotated'];
           }
 
@@ -256,7 +256,7 @@ Oskari.clazz.define(
                 var me = this;
                 var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
-                mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                 mapResolutions = mapModule.getResolutionArray();
                 return layers.map(function (layer) {
                     if (layer.getMaxScale() && layer.getMinScale()) {

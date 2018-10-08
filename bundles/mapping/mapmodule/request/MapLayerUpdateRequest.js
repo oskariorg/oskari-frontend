@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
         this._parameters = optParameters;
     }, {
         /** @static @property __name request name */
-        __name: "MapModulePlugin.MapLayerUpdateRequest",
+        __name: 'MapModulePlugin.MapLayerUpdateRequest',
         /**
          * @method getName
          * @return {String} request name

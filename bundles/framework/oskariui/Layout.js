@@ -25,5 +25,5 @@ function() {
 
 	}
 }, {
-	"protocol" : ["Oskari.dom.Layout"]
+	'protocol' : ['Oskari.dom.Layout']
 });

@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.request.AddMarkerRequest
 	this._events = events;
 	this._iconUrl = iconUrl;
 }, {
-	__name : "lupakartta.AddMarkerRequest",
+	__name : 'lupakartta.AddMarkerRequest',
 	getName : function() {
 		return this.__name;
 	},

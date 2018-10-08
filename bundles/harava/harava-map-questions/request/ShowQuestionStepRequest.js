@@ -18,7 +18,7 @@ function(moduleId) {
 	this._moduleId = moduleId;
 }, {
 	/** @static @property __name request name */
-    __name : "ShowQuestionStepRequest",
+    __name : 'ShowQuestionStepRequest',
     /**
      * @method getName
      * @return {String} request name

@@ -667,7 +667,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 maxNumOfFields = me.max_analyse_layer_fields,
                 method = me._getSelectedMethod();
 
-            if (method === me.id_prefix + "aggregate") {
+            if (method === me.id_prefix + 'aggregate') {
                 me._preselectPropertiesAggregate(propertyList);
             } else {
                 propertyList
@@ -1166,7 +1166,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             option = _.find(contentOptions, {checked: 'checked'}, 'layerId');
             if (option && option.layerId) {
                 var layer = me.instance.sandbox.findMapLayerFromSelectedMapLayers(option.layerId);
-                if (layer && layer.isLayerOfType("WFS") || layer.isLayerOfType("analysis")) {
+                if (layer && layer.isLayerOfType('WFS') || layer.isLayerOfType('analysis')) {
                     me.WFSLayerService.setAnalysisWFSLayerId(layer.getId());
                 }
             }
@@ -2761,7 +2761,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         noDataCnt = false,
                         k;
 
-                    if (_.indexOf(fields, "NoDataCnt") !== -1) {
+                    if (_.indexOf(fields, 'NoDataCnt') !== -1) {
                         noDataCnt = true;
                     }
                     fields.unshift('Property');
@@ -3304,7 +3304,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 this._disableAllParamsSelection();
             } else if (selectedLayer) {
                 var layerType = selectedLayer.getLayerType();
-                if (layerType === "temp") {
+                if (layerType === 'temp') {
                     this._disableParamsIfNoList();
                 }
             } else {
@@ -3318,7 +3318,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 methodLabels = jQuery('.accordion').find('.method_radiolabel');
             if (selectedLayer) {
                 layerType = selectedLayer.getLayerType();
-                if (layerType === "temp") {
+                if (layerType === 'temp') {
                     this._disableMethodsForTempLayer(methodLabels);
                 } else {
                     this._enableAllMethods(methodLabels);
@@ -3425,7 +3425,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
         },
         ownStyleSaved: function () {
-            this.mainPanel.find('input[name=randomize_colors]').prop("checked", false);
+            this.mainPanel.find('input[name=randomize_colors]').prop('checked', false);
         },
 
         /**

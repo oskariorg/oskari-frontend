@@ -594,7 +594,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             },
             MapLayerEvent: function(event) {
                 /*add + no layerid -> mass load -> all map layers probably loaded*/
-                if (event.getOperation() === "add" && event.getLayerId() === null) {
+                if (event.getOperation() === 'add' && event.getLayerId() === null) {
                     this.renderMapLayerList();
                 }
             },
@@ -661,7 +661,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         );
                     } else if (me._additionalTabs && me._additionalTabs[tabId] && me._additionalTabs[tabId].tabActivatedCallback) {
                         additionalTabsFound = true;
-                        var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : "";
+                        var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : '';
                         entry.setTitle(newTabTitle);
                     }
                     me._tabContainer.addPanel(entry);
@@ -785,7 +785,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             container.find('table.metadataSearchResult').remove();
             container.append(me._templates['layerList']());
 
-            layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : "";
+            layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : '';
             container.find('h2').html(layerListHeader);
 
             layerListElement = container.find('ul.layerList');

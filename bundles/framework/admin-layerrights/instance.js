@@ -6,7 +6,7 @@
  * See Oskari.framework.bundle.admin-layerrights.AdminLayerRightsBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsBundleInstance",
+Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.AdminLayerRightsBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -32,7 +32,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             
             return this.__name;
         },
@@ -84,7 +84,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        "start": function () {
+        'start': function () {
             
             var me = this,
                 conf = me.conf,
@@ -131,7 +131,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        'init': function () {
             
             return null;
         },
@@ -141,7 +141,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
          * implements BundleInstance protocol update method - does
          * nothing atm
          */
-        "update": function () {
+        'update': function () {
             
         },
 
@@ -174,7 +174,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        'stop': function () {
             
             var me = this,
                 sandbox = me.sandbox(),
@@ -284,7 +284,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
          * @property {String[]} protocol
          * @static
          */
-        "protocol": [
+        'protocol': [
             'Oskari.bundle.BundleInstance',
             'Oskari.mapframework.module.Module',
             'Oskari.userinterface.Extension'

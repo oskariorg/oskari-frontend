@@ -23,7 +23,7 @@ function(id, group, state) {
     this._state = (state === true);
 }, {
     /** @static @property __name request name */
-    __name : "Toolbar.ToolButtonStateRequest",
+    __name : 'Toolbar.ToolButtonStateRequest',
     /**
      * @method getName
      * @return {String} request name

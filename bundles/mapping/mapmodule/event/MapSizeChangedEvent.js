@@ -15,7 +15,7 @@ function(width, height) {
     this._height = height;
 }, {
     /** @static @property __name event name */
-    __name : "MapSizeChangedEvent",
+    __name : 'MapSizeChangedEvent',
     /**
      * @method getName
      * @return {String} the name for the event

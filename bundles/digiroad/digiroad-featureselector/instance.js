@@ -2,7 +2,7 @@
  * @class Oskari.digiroad.bundle.featureselector.FeatureSelectorBundleInstance
  *
  */
-Oskari.clazz.define("Oskari.digiroad.bundle.featureselector.FeatureSelectorBundleInstance",
+Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.FeatureSelectorBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -24,7 +24,7 @@ function() {
      * @static
      * @property __name
     */
-    __name: "FeatureSelector",
+    __name: 'FeatureSelector',
 
     /**
      * @method getName
@@ -139,7 +139,7 @@ function() {
             }
         }
 
-        this.vectorLayerPlugin = sandbox.findRegisteredModuleInstance("MainMapModuleDigiroadVectorLayerPlugin");
+        this.vectorLayerPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleDigiroadVectorLayerPlugin');
         this.mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         //Let's extend UI with Flyout and Tile
@@ -195,7 +195,7 @@ function() {
     },
 
     afterFeaturesAddedEvent: function(event) {
-        var layerName = event.getLayerName().replace(/_vector$/, ""); // layerName is eg. 'nopeusrajoitus_vector'
+        var layerName = event.getLayerName().replace(/_vector$/, ''); // layerName is eg. 'nopeusrajoitus_vector'
         var features = event.getFeatures();
         var objectId = this.targetLayers[layerName].objectId;
 
@@ -206,7 +206,7 @@ function() {
     },
 
     afterFeaturesRemovedEvent: function(event) {
-        var layerName = event.getLayerName().replace(/_vector$/, "");
+        var layerName = event.getLayerName().replace(/_vector$/, '');
         var features = event.getFeatures();
         var objectId = this.targetLayers[layerName].objectId;
 
@@ -274,25 +274,25 @@ function() {
         var geomName = layerConf.geometryName || 'the_geom';
         var protocolType = layerConf.protocolType || 'WFS';
         var protocolOpts = layerConf.protocolOpts || {
-            "url": this.queryUrl,
-            "srsName": this.sandbox.getMap().getSrsName(),
-            "version": "1.1.0",
-            "featureType": layer.getWmsName(),
-            "geometryName": geomName,
-            "outputFormat": "json"
+            'url': this.queryUrl,
+            'srsName': this.sandbox.getMap().getSrsName(),
+            'version': '1.1.0',
+            'featureType': layer.getWmsName(),
+            'geometryName': geomName,
+            'outputFormat': 'json'
         };
 
         return {
-            "id": layer.getId() + this._layerPostFix,
-            "type": "dr-vectorlayer",
-            "opacity": 100,
-            "name": layer.getName() + this._layerPostFix,
-            "minScale": layer.getMinScale(),
-            "maxScale": layer.getMaxScale(),
-            "inspire": layer.getInspireName(),
-            "orgName": layer.getOrganizationName(),
-            "protocolType": protocolType,
-            "protocolOpts": protocolOpts
+            'id': layer.getId() + this._layerPostFix,
+            'type': 'dr-vectorlayer',
+            'opacity': 100,
+            'name': layer.getName() + this._layerPostFix,
+            'minScale': layer.getMinScale(),
+            'maxScale': layer.getMaxScale(),
+            'inspire': layer.getInspireName(),
+            'orgName': layer.getOrganizationName(),
+            'protocolType': protocolType,
+            'protocolOpts': protocolOpts
         };
     },
 

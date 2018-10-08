@@ -19,7 +19,7 @@ Ways to start the bundle in console:
         }
         appSetup.startupSequence.push(obj);
 */
-Oskari.clazz.define("Oskari.coordinatetransformation.instance",
+Oskari.clazz.define('Oskari.coordinatetransformation.instance',
 function () {
         var conf = this.getConfiguration();
         conf.name = 'coordinatetransformation';
@@ -169,9 +169,9 @@ function () {
                 return;
             }
             var state = event.getViewState();
-            if (state === "attach" || state === "restore"){
+            if (state === 'attach' || state === 'restore'){
                 this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            } else if (state === "close" || state === "minimize"){
+            } else if (state === 'close' || state === 'minimize'){
                 this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             }
         }
@@ -181,6 +181,6 @@ function () {
          * @property {String[]} protocol
          * @static
          */
-        extend : ["Oskari.userinterface.extension.DefaultExtension"],
+        extend : ['Oskari.userinterface.extension.DefaultExtension'],
         protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });

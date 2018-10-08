@@ -13,7 +13,7 @@ function(linkName, callback) {
     this._callback = callback;
 },{
     /** @static @property __name request name */
-    __name : "Search.AddSearchResultActionRequest",
+    __name : 'Search.AddSearchResultActionRequest',
     /**
      * @method getName
      * @return {String} request name

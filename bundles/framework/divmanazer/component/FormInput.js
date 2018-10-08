@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Integer} top value in px
          */
         _setTopPosition: function (elem, top) {
-            if (typeof top === "number"){
+            if (typeof top === 'number'){
                 elem.css('top', top + 'px');
             }
         },
@@ -239,7 +239,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setValue: function (value) {
             var input = this._field.find('input');
             input.attr('value', value);
-            if(value && input.hasClass("oskarifield_floating_input")){
+            if(value && input.hasClass('oskarifield_floating_input')){
                 this._field.addClass('oskarifield--not-empty');
             }
         },
@@ -464,7 +464,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         },
         bindAutocompleteSelect: function (callback) {
             var input = this._field.find('input');
-            input.on("autocompleteselect", callback);
+            input.on('autocompleteselect', callback);
         },
         autocomplete: function (results) {
             var input = this._field.find('input');

@@ -53,7 +53,7 @@ function(instance) {
 		var me = this;
 		this.template = jQuery('<div class="allLayersTabContent"></div>');
 
-        var inspireTab = Oskari.clazz.create("Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.LayersTab", this.instance, this.instance.getLocalization('filter').inspire);
+        var inspireTab = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.LayersTab', this.instance, this.instance.getLocalization('filter').inspire);
         inspireTab.groupingMethod = 'getInspireName';
 
 		me.layerTabs.push(inspireTab);
@@ -189,7 +189,7 @@ function(instance) {
                 }
                 var groupAttr = layer[groupingMethod]();
                 if (!group || group.getTitle() != groupAttr) {
-                    group = Oskari.clazz.create("Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.LayerGroup", groupAttr);
+                    group = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.LayerGroup', groupAttr);
                     groupList.push(group);
                 }
                 group.addLayer(layer);

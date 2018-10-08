@@ -1,7 +1,7 @@
 define([
-        "text!_bundle/templates/layerRowTemplate.html",
-        "_bundle/views/adminLayerSettingsView",
-        "text!_bundle/templates/group/subLayerTemplate.html",
+        'text!_bundle/templates/layerRowTemplate.html',
+        '_bundle/views/adminLayerSettingsView',
+        'text!_bundle/templates/group/subLayerTemplate.html',
         'text!_bundle/templates/adminGroupSettingsTemplate.html'
     ],
     function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
@@ -17,12 +17,12 @@ define([
              * @type {Object}
              */
             events: {
-                "click .admin-add-layer-cancel": "hideLayerSettings",
-                "click": "toggleLayerSettings",
-                "click .show-edit-layer": "clickLayerSettings",
-                "click .sublayer-name": "toggleSubLayerSettings",
-                "click .admin-add-sublayer-cancel": "toggleSubLayerSettings",
-                "click .admin-add-sublayer": "toggleSubLayerSettings"
+                'click .admin-add-layer-cancel': 'hideLayerSettings',
+                'click': 'toggleLayerSettings',
+                'click .show-edit-layer': 'clickLayerSettings',
+                'click .sublayer-name': 'toggleSubLayerSettings',
+                'click .admin-add-sublayer-cancel': 'toggleSubLayerSettings',
+                'click .admin-add-sublayer': 'toggleSubLayerSettings'
             },
 
             /**
@@ -104,7 +104,7 @@ define([
                         if (subLayers && subLayers.length > 0) {
                             for (s = 0; s < subLayers.length; s++) {
                                 subUuid = subLayers[s].getMetadataIdentifier();
-                                if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
+                                if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
                                     additionalUuidsCheck[subUuid] = true;
                                     additionalUuids.push({
                                         uuid: subUuid

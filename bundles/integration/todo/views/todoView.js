@@ -1,8 +1,8 @@
 define([
-    "_bundle/collections/todoCollection",
-    "_bundle/views/itemView",
-    "text!_bundle/templates/stats.html",
-    "text!_bundle/templates/view.html"],
+    '_bundle/collections/todoCollection',
+    '_bundle/views/itemView',
+    'text!_bundle/templates/stats.html',
+    'text!_bundle/templates/view.html'],
     function(TodoCollection, ItemView, StatsTemplate, ViewTemplate) {
     // Create our global collection of **Todos**.
     var Todos = new TodoCollection;
@@ -21,9 +21,9 @@ define([
 
         // Delegated events for creating new items, and clearing completed ones.
         events : {
-            "keypress #new-todo" : "createOnEnter",
-            "click #clear-completed" : "clearCompleted",
-            "click #toggle-all" : "toggleAllComplete"
+            'keypress #new-todo' : 'createOnEnter',
+            'click #clear-completed' : 'clearCompleted',
+            'click #toggle-all' : 'toggleAllComplete'
         },
 
         // At initialization we bind to the relevant events on the `Todos`
@@ -32,8 +32,8 @@ define([
         initialize : function() {
             this.el = this.options.el;
             this.options.el.append(this.appTemplate);
-            this.input = this.$("#new-todo");
-            this.allCheckbox = this.$("#toggle-all")[0];
+            this.input = this.$('#new-todo');
+            this.allCheckbox = this.$('#toggle-all')[0];
 
             this.listenTo(Todos, 'add', this.addOne);
             this.listenTo(Todos, 'reset', this.addAll);
@@ -70,7 +70,7 @@ define([
             var view = new ItemView({
                 model : todo
             });
-            this.$("#todo-list").append(view.render().el);
+            this.$('#todo-list').append(view.render().el);
         },
         // Add all items in the **Todos** collection at once.
         addAll : function() {

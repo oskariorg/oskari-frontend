@@ -12,7 +12,7 @@ function(inMode) {
     this._isInMode = inMode;
 }, {
     /** @static @property __name event name */
-    __name : "LayerToolsEditModeEvent",
+    __name : 'LayerToolsEditModeEvent',
     /**
      * @method getName
      * @return {String} the name for the event

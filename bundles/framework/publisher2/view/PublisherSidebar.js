@@ -194,7 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createMapPreviewPanel: function (publisherTools) {
             var me = this,
                 sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
+                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
                 form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview',
                     sandbox, mapModule, me.loc, me.instance, publisherTools
                 );
@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createMapLayersPanel: function () {
             var me = this,
                 sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule");
+                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
                 form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     sandbox, mapModule, me.loc, me.instance
                 );
@@ -231,7 +231,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createToolLayoutPanel: function (tools) {
             var me = this,
                 sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
+                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
                 form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout',
                     tools, sandbox, mapModule, me.loc, me.instance
                 );
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createLayoutPanel: function () {
             var me = this,
                 sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
+                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
                 form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                     sandbox, mapModule, me.loc, me.instance
                 );
@@ -286,7 +286,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createToolGroupings: function () {
             var me = this;
             var sandbox = this.instance.getSandbox();
-            var mapmodule = sandbox.findRegisteredModuleInstance("MainMapModule");
+            var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
             var definedTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool');
             var grouping = {};
             var allTools = [];

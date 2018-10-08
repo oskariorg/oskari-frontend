@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.VectorLayer',
         this._sldspec = null;
 
         /* Layer Type */
-        this._layerType = "VECTOR";
+        this._layerType = 'VECTOR';
     }, {
 
         /**
@@ -50,5 +50,5 @@ Oskari.clazz.define('Oskari.mapframework.domain.VectorLayer',
             return this.hoverOptions;
         }
     }, {
-        "extend": ["Oskari.mapframework.domain.AbstractLayer"]
+        'extend': ['Oskari.mapframework.domain.AbstractLayer']
     });

@@ -25,7 +25,7 @@ Oskari.clazz
             this._filterName = filterName;
     }, {
         /** @static @property __name request name */
-        __name : "AddLayerListFilterRequest",
+        __name : 'AddLayerListFilterRequest',
         /**
          * @method getName
          * @return {String} request name

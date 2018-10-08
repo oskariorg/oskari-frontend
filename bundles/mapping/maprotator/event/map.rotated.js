@@ -8,7 +8,7 @@ function( degrees ) {
     this.degrees = degrees;
 }, {
     /** @static @property __name event name */
-    __name : "map.rotated",
+    __name : 'map.rotated',
     /**
      * @method getName
      * @return {String} the name for the event

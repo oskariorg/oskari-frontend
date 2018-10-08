@@ -102,8 +102,8 @@
 
 
         }, {
-            __name: "HierarchicalLayerlist.LayerlistExtenderService",
-            __qname: "Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService",
+            __name: 'HierarchicalLayerlist.LayerlistExtenderService',
+            __qname: 'Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService',
 
             /*******************************************************************************************************************************
             /* PUBLIC METHODS

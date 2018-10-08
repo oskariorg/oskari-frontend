@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.mapframework.bundle.myplaces3.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
 
     /**
      * @method create called automatically on construction
@@ -149,10 +149,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
         },
         _setMeasurementResult: function (drawingData){
             if (this.form && drawingData){
-                if (drawingData.shape === "LineString"){
-                    this.form.setMeasurementResult(drawingData.length, "line");
-                } else if (drawingData.shape === "Polygon"){
-                    this.form.setMeasurementResult(drawingData.area, "area");
+                if (drawingData.shape === 'LineString'){
+                    this.form.setMeasurementResult(drawingData.length, 'line');
+                } else if (drawingData.shape === 'Polygon'){
+                    this.form.setMeasurementResult(drawingData.area, 'area');
                 }
             }
         },
@@ -214,7 +214,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
             var actions = [
                 {
                     name: me.loc('placeform.category.newLayer'),
-                    type: "link",
+                    type: 'link',
                     group: 0,
                     selector: '#newLayerForm > label',
                     action: function () {
@@ -222,14 +222,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                     }
                 }, {
                     name: me.loc('buttons.cancel'),
-                    type: "button",
+                    type: 'button',
                     group: 1,
                     action: function () {
                         me.cleanupPopup();
                     }
                 }, {
                     name: me.loc('buttons.save'),
-                    type: "button",
+                    type: 'button',
                     group: 1,
                     action: function () {
                         me._saveForm();
@@ -353,7 +353,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.MainView",
                 formValues = this.form.getValues();
 
             // Disable buttons to prevent duplicate jobs
-            jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop("disabled", true);
+            jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop('disabled', true);
 
             // validation
             var errors = this._validateForm(formValues);

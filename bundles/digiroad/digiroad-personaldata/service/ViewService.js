@@ -17,7 +17,7 @@ function(viewUrl) {
     this._viewUrl = viewUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.digiroad.bundle.personaldata.service.ViewService",
+    __qname : 'Oskari.digiroad.bundle.personaldata.service.ViewService',
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -26,7 +26,7 @@ function(viewUrl) {
         return this.__qname;
     },
     /** @static @property __name service name */
-    __name : "DigiroadViewService",
+    __name : 'DigiroadViewService',
     /**
      * @method getName
      * @return {String} service name
@@ -56,10 +56,10 @@ function(viewUrl) {
                 viewType : type
             },
             type : 'POST',
-            dataType : "json",
+            dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             success : function(response) {
@@ -91,7 +91,7 @@ function(viewUrl) {
             type : 'POST',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             success : function(response) {
@@ -128,7 +128,7 @@ function(viewUrl) {
             dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             success : function(response) {
@@ -164,7 +164,7 @@ function(viewUrl) {
             dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             success : function(response) {

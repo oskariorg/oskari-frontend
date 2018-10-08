@@ -201,9 +201,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         },
         calculateContainerHeightDuringSort: function(height) {
             var container = jQuery(this.container);
-            if (typeof height === "undefined") {
+            if (typeof height === 'undefined') {
                 container.css({
-                    height: ""
+                    height: ''
                 });
             }
             var totalHeight = container.height() + height;

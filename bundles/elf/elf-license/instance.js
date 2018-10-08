@@ -735,14 +735,14 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
                  me._showLoginInfo(title);
             }
         }
-        var licenseDialogLink = jQuery("<a>"+me._locale.getLicenseText+"</a>");
+        var licenseDialogLink = jQuery('<a>'+me._locale.getLicenseText+'</a>');
         licenseDialogLink.attr('href','JavaScript:void(0);');
         var closureMagic = function(metadataModel) {
             if (data) {
                 //fake a similar kind of json that is produced by the search channel -> the dialog only uses name and organization from here...
                 var metadata = {
-                    "name": metadataModel.identification.citation.title,
-                    "organization": metadataModel.metadataResponsibleParties[0].organisationName
+                    'name': metadataModel.identification.citation.title,
+                    'organization': metadataModel.metadataResponsibleParties[0].organisationName
                 };
                 if(data.userLicense){
                     me._showLicenseDeactivateDialog(data, metadata);
@@ -1103,5 +1103,5 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         return values;
     }
 }, {
-    "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
+    'extend' : ['Oskari.userinterface.extension.DefaultExtension']
 });

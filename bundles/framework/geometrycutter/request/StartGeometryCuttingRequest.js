@@ -14,10 +14,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCutt
         this._mode = mode;
 
     }, {
-        __name: "StartGeometryCuttingRequest",
+        __name: 'StartGeometryCuttingRequest',
         __modes: {
-            "lineSplit": true,
-            "polygonClip": true
+            'lineSplit': true,
+            'polygonClip': true
         },
         getName: function () {
             return this.__name;

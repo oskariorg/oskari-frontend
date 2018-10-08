@@ -30,16 +30,16 @@ define([
              * @type {Object}
              */
             events: {
-                "keyup .admin-filter-input": "filterLayers",
-                "click .accordion-header": "toggleLayerGroup",
-                "click .admin-add-layer-btn": "toggleAddLayer",
-                "click .admin-add-layer-cancel": "hideAddLayer",
-                "click .admin-edit-grouping-btn": "toggleGroupingSettings",
-                "click .admin-add-grouping-cancel": "toggleGroupingSettings",
-                "click .admin-add-grouping-btn": "toggleAddLayerGrouping",
-                "click .admin-add-grouping-ok": "saveLayerGrouping",
-                "click .admin-remove-grouping": "removeLayerGrouping",
-                "click .show-add-class": "catchClicks"
+                'keyup .admin-filter-input': 'filterLayers',
+                'click .accordion-header': 'toggleLayerGroup',
+                'click .admin-add-layer-btn': 'toggleAddLayer',
+                'click .admin-add-layer-cancel': 'hideAddLayer',
+                'click .admin-edit-grouping-btn': 'toggleGroupingSettings',
+                'click .admin-add-grouping-cancel': 'toggleGroupingSettings',
+                'click .admin-add-grouping-btn': 'toggleAddLayerGrouping',
+                'click .admin-add-grouping-ok': 'saveLayerGrouping',
+                'click .admin-remove-grouping': 'removeLayerGrouping',
+                'click .show-add-class': 'catchClicks'
             },
 
             /**
@@ -88,29 +88,29 @@ define([
             __setupSupportedLayerTypes: function() {
                 // generic list of layertypes supported
                 this.supportedTypes = [{
-                    id: "wfslayer",
-                    localeKey: "wfs"
+                    id: 'wfslayer',
+                    localeKey: 'wfs'
                 }, {
-                    id: "wmslayer",
-                    localeKey: "wms"
+                    id: 'wmslayer',
+                    localeKey: 'wms'
                 }, {
-                    id: "wmtslayer",
-                    localeKey: "wmts"
+                    id: 'wmtslayer',
+                    localeKey: 'wmts'
                 }, {
-                    id: "vectortilelayer",
-                    localeKey: "vectortile",
+                    id: 'vectortilelayer',
+                    localeKey: 'vectortile',
                     footer: false
                 }, {
-                    id: "arcgislayer",
-                    localeKey: "arcgis",
+                    id: 'arcgislayer',
+                    localeKey: 'arcgis',
                     footer: false
                 }, {
-                    id: "arcgis93layer",
-                    localeKey: "arcgis93",
+                    id: 'arcgis93layer',
+                    localeKey: 'arcgis93',
                     footer: false
                 }, {
-                    id: "tiles3dlayer",
-                    localeKey: "tiles3d",
+                    id: 'tiles3dlayer',
+                    localeKey: 'tiles3d',
                     footer: false
                 }];
                 // filter out ones that are not registered in current appsetup
@@ -128,7 +128,7 @@ define([
                     window.require([file], function(header) {
                         type.headerTemplate = _.template(header);
                     }, function() {
-                        sandbox.printWarn('No admin header template for layertype: ' + type.id + " file was: " + file);
+                        sandbox.printWarn('No admin header template for layertype: ' + type.id + ' file was: ' + file);
                     });
                 });
                 _.each(this.supportedTypes, function(type) {
@@ -139,7 +139,7 @@ define([
                     window.require([file], function(footer) {
                         type.footerTemplate = _.template(footer);
                     }, function() {
-                        sandbox.printWarn('No admin footer template for layertype: ' + type.id + " file was: " + file);
+                        sandbox.printWarn('No admin footer template for layertype: ' + type.id + ' file was: ' + file);
                     });
                 });
             },
@@ -196,7 +196,7 @@ define([
                         }
                         // add grouping template to group panel
                         var tab = this.tabTemplate({
-                            "lcId": group.id
+                            'lcId': group.id
                         });
 
                         // grouping edit panels
@@ -243,24 +243,24 @@ define([
                 var instance = this.options.instance,
                     adminLoc = instance.getLocalization('admin'),
                     groupingConfig = {
-                        "data": model,
+                        'data': model,
                         // localizations
-                        "title": adminLoc.addOrganizationName,
-                        "desc": adminLoc.addOrganizationNameTitle,
-                        "localeInput": adminLoc,
-                        "btnLoc": {
-                            "add": {
-                                "title": instance.getLocalization('add'),
-                                "desc": adminLoc.addNewOrganization
+                        'title': adminLoc.addOrganizationName,
+                        'desc': adminLoc.addOrganizationNameTitle,
+                        'localeInput': adminLoc,
+                        'btnLoc': {
+                            'add': {
+                                'title': instance.getLocalization('add'),
+                                'desc': adminLoc.addNewOrganization
                             },
-                            "save": {
-                                "title": instance.getLocalization('save')
+                            'save': {
+                                'title': instance.getLocalization('save')
                             },
-                            "delete": {
-                                "title": instance.getLocalization('delete')
+                            'delete': {
+                                'title': instance.getLocalization('delete')
                             },
-                            "cancel": {
-                                "title": instance.getLocalization('cancel')
+                            'cancel': {
+                                'title': instance.getLocalization('cancel')
                             }
                         }
                     };
@@ -455,7 +455,7 @@ define([
                             max: 100,
                             value: 100,
                             slide: function(event, ui) {
-                                jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
+                                jQuery(ui.handle).parents('.left-tools').find('#opacity-slider').val(ui.value);
                             }
                         });
                         // change the title of the button
@@ -524,7 +524,7 @@ define([
                 };
 
                 addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function() {
-                    lang = this.id.substring(10, this.id.indexOf("-name"));
+                    lang = this.id.substring(10, this.id.indexOf('-name'));
                     data.locales[lang] = this.value;
                 });
 

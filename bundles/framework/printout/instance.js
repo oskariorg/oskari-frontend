@@ -7,7 +7,7 @@
  * See Oskari.mapframework.bundle.printout.PrintoutBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -34,8 +34,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
         //  Format producers
         this.backendConfiguration = {
             formatProducers: {
-                "application/pdf": "",
-                "image/png": ""
+                'application/pdf': '',
+                'image/png': ''
             }
         };
         this._log = Oskari.log(this.getName());
@@ -49,7 +49,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             return this.__name;
         },
         /**
@@ -82,7 +82,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
          * @method start
          * Implements BundleInstance protocol start method
          */
-        "start": function () {
+        'start': function () {
             var me = this;
 
             if (me.started) {
@@ -105,14 +105,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 }
             }
 
-            me.backendConfiguration.formatProducers["application/pdf"] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers["application/pdf"] : null) || '';
-            me.backendConfiguration.formatProducers["image/png"] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers["image/png"] : null) || '';
+            me.backendConfiguration.formatProducers['application/pdf'] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers['application/pdf'] : null) || '';
+            me.backendConfiguration.formatProducers['image/png'] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers['image/png'] : null) || '';
 
-            if (!me.backendConfiguration.formatProducers["application/pdf"]){
-                me.backendConfiguration.formatProducers["application/pdf"] = Oskari.urls.getRoute('GetPrint') + '&format=application/pdf&';
+            if (!me.backendConfiguration.formatProducers['application/pdf']){
+                me.backendConfiguration.formatProducers['application/pdf'] = Oskari.urls.getRoute('GetPrint') + '&format=application/pdf&';
             }
-            if (!me.backendConfiguration.formatProducers["image/png"]){
-                me.backendConfiguration.formatProducers["image/png"] = Oskari.urls.getRoute('GetPrint') + '&format=image/png&';
+            if (!me.backendConfiguration.formatProducers['image/png']){
+                me.backendConfiguration.formatProducers['image/png'] = Oskari.urls.getRoute('GetPrint') + '&format=image/png&';
             }
             // requesthandler
             this.printoutHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, function () {
@@ -157,14 +157,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
          * @method init
          * Implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
          * @method update
          * Implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        'update': function () {
 
         },
         /**
@@ -188,7 +188,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 /* we might get 9 of these if 9 layers would have been selected */
                 if (this.printout && this.printout.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
-                    this._log.debug("PRINTOUT REFRESH");
+                    this._log.debug('PRINTOUT REFRESH');
                     this.printout.refresh(true);
                 }
             },
@@ -229,7 +229,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                     return;
                 }
 
-                var isOpen = event.getViewState() !== "close";
+                var isOpen = event.getViewState() !== 'close';
                 me.displayContent(isOpen);
 
             },
@@ -293,7 +293,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
          * @method stop
          * Implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        'stop': function () {
 
             if (this.printout) {
                 this.printout.destroy();
@@ -479,5 +479,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension', 'Oskari.userinterface.Stateful']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension', 'Oskari.userinterface.Stateful']
     });

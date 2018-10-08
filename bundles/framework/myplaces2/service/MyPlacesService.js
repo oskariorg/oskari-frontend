@@ -30,12 +30,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
         this._instance = pInstance;
         this.skipLoading = false;
     }, {
-        __qname: "Oskari.mapframework.bundle.myplaces2.service.MyPlacesService",
+        __qname: 'Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
         getQName: function () {
             return this.__qname;
         },
 
-        __name: "MyPlacesService",
+        __name: 'MyPlacesService',
         getName: function () {
             return this.__name;
         },
@@ -636,7 +636,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 data: {

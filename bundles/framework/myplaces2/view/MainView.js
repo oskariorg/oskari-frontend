@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.mapframework.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.MainView',
 
     /**
      * @method create called automatically on construction
@@ -209,14 +209,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var actions = [
                 {
                     name: me.loc('buttons.cancel'),
-                    type: "button",
+                    type: 'button',
                     group: 1,
                     action: function () {
                         me.cleanupPopup();
                     }
                 }, {
                     name: me.loc('buttons.save'),
-                    type: "button",
+                    type: 'button',
                     group: 1,
                     action: function () {
                         me._saveForm();
@@ -317,7 +317,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 formValues = this.form.getValues();
 
             // Disable buttons to prevent duplicate jobs
-            jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop("disabled", true);
+            jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop('disabled', true);
 
             // validation
             var errors = this._validateForm(formValues);

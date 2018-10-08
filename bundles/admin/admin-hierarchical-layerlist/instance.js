@@ -3,7 +3,7 @@
  *
  * Hierarchical layerlist bundle for admins. This extends hierarchical-layerlist bundle.
  */
-Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstance",
+Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstance',
     function() {
         this.locale = this.getLocalization();
         this.sandbox = Oskari.getSandbox();
@@ -240,7 +240,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 var draggedId = (draggedNode.type === 'layer') ? draggedNode.a_attr['data-layer-id'] : draggedNode.a_attr['data-group-id'];
                 var parentNode = data.data.origin.get_node(draggedNode.parent);
 
-                var draggedNodeOldParentId = originalParentNode.a_attr["data-group-id"];
+                var draggedNodeOldParentId = originalParentNode.a_attr['data-group-id'];
 
                 var ajaxData = {
                     orders: [],
@@ -390,7 +390,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             return this.locale;
         },
         getName: function() {
-            return "AdminHierarchicalLayerList";
+            return 'AdminHierarchicalLayerList';
         },
         start: function() {
             var me = this;

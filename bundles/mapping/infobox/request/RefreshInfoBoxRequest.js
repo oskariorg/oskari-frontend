@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
         this._contentId = contentId;
     }, {
         /** @static @property __name request name */
-        __name: "InfoBox.RefreshInfoBoxRequest",
+        __name: 'InfoBox.RefreshInfoBoxRequest',
         /**
          * @method getName
          * @return {String} request name

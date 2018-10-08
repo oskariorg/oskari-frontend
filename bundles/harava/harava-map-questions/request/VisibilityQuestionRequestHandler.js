@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.VisibilityQuestio
 	 * 		request to handle
 	 */
     handleRequest : function(core, request) {
-        this.sandbox.printDebug("[Oskari.harava.bundle.mapquestions.request.VisibilityQuestionRequest]");
+        this.sandbox.printDebug('[Oskari.harava.bundle.mapquestions.request.VisibilityQuestionRequest]');
         this.bundle.changeToolVisibility(request.getModuleId(),request.getQuestionId(),request.getEnabled());
     }
 }, {

@@ -20,7 +20,7 @@
             instanceProps : {}
         }
  */
-Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleInstance",
+Oskari.clazz.define('Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleInstance',
 
     /**
      * @method create called automatically on construction

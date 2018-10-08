@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
          */
         _languageChanged: function(value) {
             var me = this,
-                message = (value !== Oskari.getLang() ? me.loc.language.languageChangedDisclaimer:"");
+                message = (value !== Oskari.getLang() ? me.loc.language.languageChangedDisclaimer:'');
             jQuery(me.langField.element).find('div.info-label').html(message);
 
         },

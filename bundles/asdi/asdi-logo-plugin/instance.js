@@ -1,7 +1,7 @@
 /**
  * @class Oskari.asdi.login.BundleInstance
  */
-Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
+Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
     function() {
       this.dialog = null;
       this.data = null;
@@ -79,6 +79,6 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
         }
 
     }, {
-        "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
+        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
     }
 );

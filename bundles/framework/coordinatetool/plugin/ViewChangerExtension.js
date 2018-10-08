@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
             if (window.location.pathname && window.location.pathname.length) {
                 url += window.location.pathname;
             }
-            url += "?uuid="+uuid+"&noSavedState=true";
+            url += '?uuid='+uuid+'&noSavedState=true';
 
             window.location.href = url;
         },
@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
          */
         _toggleProjectionSelectionConfirmation: function(display) {
             var me = this,
-                cssDisplay = display ? "block" : "none";
+                cssDisplay = display ? 'block' : 'none';
             me._popup.dialog.find('.coordinate-tool-projection-change-confirmation').css('display', cssDisplay);
             if (!display) {
                 me._resetProjectionSelect();
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
          * @static @property {string[]} protocol array of superclasses
          */
         'protocol': [
-            "Oskari.mapframework.module.Module",
-            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
     });

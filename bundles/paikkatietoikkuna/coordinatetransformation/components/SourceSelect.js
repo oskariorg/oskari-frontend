@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
         Oskari.makeObservable(this);
         this.loc = loc;
         this.element = null;
-        this.sources = ["keyboard", "file", "map"];
+        this.sources = ['keyboard', 'file', 'map'];
         this.sourceElems = {};
         this.sourceSelection = null;
         this._template = {
@@ -167,10 +167,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
         handleRadioButtons: function () {
             var me = this;
             var elem = this.getElement();
-            elem.find('input[type=radio][name=load]').on("click", function(evt) {
+            elem.find('input[type=radio][name=load]').on('click', function(evt) {
                 if (me.sourceSelection !== this.value && me.dataHandler.hasInputCoords()){
                     var selectCb = function(){
-                        jQuery(evt.target).prop("checked", true);
+                        jQuery(evt.target).prop('checked', true);
                         me.handleSourceSelection(evt.target.value);
                     }
                     evt.preventDefault();

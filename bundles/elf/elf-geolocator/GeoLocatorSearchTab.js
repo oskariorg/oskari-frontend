@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
 
                var queryKey = val[i].find(':selected').val();
 
-               if( queryKey !== "empty" ){
+               if( queryKey !== 'empty' ){
                   obj[queryKey] = queryValue;
                }
           }
@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                   dropdownDef,
                   emptyOption,
                   newOption,
-                  names = { dropdown:["LocationType","NameLanguage"]
+                  names = { dropdown:['LocationType','NameLanguage']
                           },
                   regionInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput','elf-geolocator-region', this.sandbox),
                   countryInput = this.templates.countryAutoInput.clone(),
@@ -182,7 +182,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 if( i === 0 ){
                   for( var k = 0; k < _.keys( this.results.locationtypes.id ).length; k++ ){
                     resultArray.locationtypes.id.push( this.results.locationtypes.id[k] );
-                    resultArray.locationtypes.name.push( this.results.locationtypes.id[k]  + ": " + this.results.locationtypes.name[k]  );
+                    resultArray.locationtypes.name.push( this.results.locationtypes.id[k]  + ': ' + this.results.locationtypes.name[k]  );
                     }
                     newLabel = this.loc.locationFilter;
                   }
@@ -214,16 +214,16 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
 
                   advancedContainer.append(newRow);
 
-                  filterRow.find("input.nearestcheck").on('change', function(){
-                    if(filterRow.find("input.nearestcheck").is(":checked")){
-                      newCheckBoxRow.find("input.chk").prop('disabled', true);
-                      countryInput.find("input.ui-autocomplete-input").prop('disabled', true);
-                      advancedContainer.find("select.geolocatorDef").prop('disabled', true);
+                  filterRow.find('input.nearestcheck').on('change', function(){
+                    if(filterRow.find('input.nearestcheck').is(':checked')){
+                      newCheckBoxRow.find('input.chk').prop('disabled', true);
+                      countryInput.find('input.ui-autocomplete-input').prop('disabled', true);
+                      advancedContainer.find('select.geolocatorDef').prop('disabled', true);
                     }
                     else{
-                      newCheckBoxRow.find("input.chk").prop('disabled', false);
-                      countryInput.find("input.ui-autocomplete-input").prop('disabled', false);
-                      advancedContainer.find("select.geolocatorDef").prop('disabled', false);
+                      newCheckBoxRow.find('input.chk').prop('disabled', false);
+                      countryInput.find('input.ui-autocomplete-input').prop('disabled', false);
+                      advancedContainer.find('select.geolocatorDef').prop('disabled', false);
                     }
                   });
               },

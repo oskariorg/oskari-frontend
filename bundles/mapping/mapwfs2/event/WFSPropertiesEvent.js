@@ -16,7 +16,7 @@ function(layer, locales, fields) {
     this._fields = fields;
 }, {
     /** @static @property __name event name */
-    __name : "WFSPropertiesEvent",
+    __name : 'WFSPropertiesEvent',
 
     /**
      * @method getName

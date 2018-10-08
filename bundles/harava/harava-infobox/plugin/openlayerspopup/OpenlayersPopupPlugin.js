@@ -6,7 +6,7 @@ jQuery.fn.outerHTML = function (arg) {
 
     // If no items in the collection, return
     if (!this.length)
-        return typeof val == "undefined" ? this : null;
+        return typeof val == 'undefined' ? this : null;
     // Getter overload (no argument passed)
     if (!arg) {
         return this[0].outerHTML ||
@@ -16,7 +16,7 @@ jQuery.fn.outerHTML = function (arg) {
     jQuery.each(this, function (i, el) {
         var fnRet,
             pass = el,
-            inOrOut = el.outerHTML ? "outerHTML" : "innerHTML";
+            inOrOut = el.outerHTML ? 'outerHTML' : 'innerHTML';
 
         if (!el.outerHTML)
             el = jQuery(el).wrap('<div>').parent()[0];
@@ -216,9 +216,9 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.Openlay
 
             popup.moveTo = function (px) {
                 if (px && this.div) {
-                    this.div.style.left = px.x + "px";
+                    this.div.style.left = px.x + 'px';
                     var topy = px.y - 20;
-                    this.div.style.top = topy + "px";
+                    this.div.style.top = topy + 'px';
                 }
             };
 
@@ -234,12 +234,12 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.Openlay
             jQuery(popup.groupDiv).css('overflow', 'visible');
             // override
             popup.events.un({
-                "click": popup.onclick,
+                'click': popup.onclick,
                 scope: popup
             });
 
             popup.events.on({
-                "click": function (evt) {
+                'click': function (evt) {
                     var link = jQuery(evt.target || evt.srcElement);
                     if (link.hasClass('olPopupCloseBox')) { // Close button
                         me.close(id);
@@ -448,5 +448,5 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.Openlay
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

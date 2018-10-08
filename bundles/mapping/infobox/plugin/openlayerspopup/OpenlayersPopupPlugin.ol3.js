@@ -140,7 +140,7 @@ Oskari.clazz.define(
                     currPopup.lonlat.lat === lat);
 
             if (currPopup && !refresh) {
-                if (me._popups[id].type === "mobile") {
+                if (me._popups[id].type === 'mobile') {
                     me._popups[id].popup.dialog.remove();
                     me._popups[id].popup.__notifyListeners('close');
                 } else {
@@ -173,7 +173,7 @@ Oskari.clazz.define(
                 offsetY = -20,
                 mapModule = me.getMapModule(),
                 isMarker = (marker && marker.data) ? true : false,
-                positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : "no-position-info",
+                positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : 'no-position-info',
                 popupType,
                 popupDOM,
                 popup;
@@ -194,11 +194,11 @@ Oskari.clazz.define(
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
-                    popupType = "mobile";
+                    popupType = 'mobile';
                     popup.setContent(contentDiv);
                 } else {
                     popupDOM = jQuery('#' + id);
-                    popupType = "desktop";
+                    popupType = 'desktop';
                     jQuery(popup.getElement()).empty();
                     jQuery(popup.getElement()).html(popupContentHtml);
                     popup.setPosition(lonlatArray);
@@ -215,7 +215,7 @@ Oskari.clazz.define(
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                popupType = "mobile";
+                popupType = 'mobile';
 
                 popup.createCloseIcon();
                 me._showInMobileMode(popup);
@@ -235,7 +235,7 @@ Oskari.clazz.define(
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
-                popupType = "desktop";
+                popupType = 'desktop';
                 popup = new olOverlay({
                     element: popupElement[0],
                     position: lonlatArray,
@@ -418,9 +418,9 @@ Oskari.clazz.define(
                     sanitizedHtml,
                     targetElem;
 
-                if (typeof datum.html === "string") {
+                if (typeof datum.html === 'string') {
                     sanitizedHtml = Oskari.util.sanitize(datum.html);
-                } else if (typeof datum.html === "object") {
+                } else if (typeof datum.html === 'object') {
                     sanitizedHtml = Oskari.util.sanitize(datum.html.outerHTML());
                 }
 
@@ -694,43 +694,43 @@ Oskari.clazz.define(
             //If supported ol/OverlayPositioning is used, use it instead of default values
             Object.keys(posClasses).forEach(function (pos){
                 if (positioning === posClasses[pos]){
-                    var popupDirection = positioning.split("-");
+                    var popupDirection = positioning.split('-');
                     positionY = popupDirection[0];
                     positionX = popupDirection[1];
                 }
             });
             //TODO: popupHeaderArrow and header sizes are not included
             // Check panY
-            if (positionY === "top"){
+            if (positionY === 'top'){
                 if (pixels.y + popupY + margins.bottom > mapSize.height){
                     panY = (pixels.y + popupY + margins.bottom) - mapSize.height;
                 // check that we are not "over the top"
                 } else if (pixels.y < margins.top){
                     panY = pixels.y - margins.top;
                 }
-            }else if (positionY === "center"){
+            }else if (positionY === 'center'){
                 if (pixels.y + (popupY/2) + margins.bottom > mapSize.height){
                     panY = (pixels.y + popupY/2 + margins.bottom) - mapSize.height;
                 } else if (pixels.y - popupY/2 - margins.top < 0 ){
                     panY = pixels.y - popupY/2 - margins.top;
                 }
-            }else if (positionY === "bottom"){
+            }else if (positionY === 'bottom'){
                 if (pixels.y - popupY - margins.top < 0){
                     panY =  pixels.y - popupY - margins.top;
                 }
             }
             // Check panX
-            if (positionX === "left"){
+            if (positionX === 'left'){
                 if (pixels.x + popupX + margins.right  > mapSize.width){
                     panX = (pixels.x + popupX + margins.right) - mapSize.width;
                 }
-            }else if (positionX === "center"){
+            }else if (positionX === 'center'){
                 if (pixels.x + popupX/2 + margins.right > mapSize.width){
                     panX = (pixels.x + popupX/2 + margins.right) - mapSize.width;
                 } else if (pixels.x - popupX/2 - margins.left < 0 ){
                     panX = pixels.x - popupX/2 - margins.left;
                 }
-            }else if (positionX === "right"){
+            }else if (positionX === 'right'){
                 if (pixels.x - popupX - margins.left < 0 ){
                     panX = pixels.x - popupX - margins.left;
                 }
@@ -918,9 +918,9 @@ Oskari.clazz.define(
                             if(typeof popup.popup.setPosition === 'function') {
                                 popup.popup.setPosition(undefined);
                             }
-                            if (popup.popup && popup.type === "desktop") {
+                            if (popup.popup && popup.type === 'desktop') {
                                 this.getMapModule().getMap().removeOverlay(popup.popup);
-                            } else if (popup.popup && popup.type === "mobile") {
+                            } else if (popup.popup && popup.type === 'mobile') {
                                 popup.popup.close(true);
                             }
                         }
@@ -933,9 +933,9 @@ Oskari.clazz.define(
             popup = this._popups[id];
             if (popup) {
                 delete this._popups[id];
-                if (popup.popup && popup.type === "desktop") {
+                if (popup.popup && popup.type === 'desktop') {
                     this.getMapModule().getMap().removeOverlay(popup.popup);
-                } else if (popup.popup && popup.type === "mobile") {
+                } else if (popup.popup && popup.type === 'mobile') {
                     popup.popup.close();
                 }
                 event = Oskari.eventBuilder('InfoBox.InfoBoxEvent')(id, false);

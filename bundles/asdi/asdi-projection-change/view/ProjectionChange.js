@@ -58,13 +58,13 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
         if (window.location.pathname && window.location.pathname.length) {
             url += window.location.pathname;
         }
-        url += "?uuid="+uuid;
+        url += '?uuid='+uuid;
         url += this.getSelectedMapLayersUrlParam();
 
         window.location.href = url;
     },
     getSelectedMapLayersUrlParam: function () {
-        var maplayerUrlString = "&mapLayers="
+        var maplayerUrlString = '&mapLayers='
         var layerString = '';
         var layers = this.sb.getMap().getLayers();
         

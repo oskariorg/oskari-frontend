@@ -4,7 +4,7 @@
 Oskari.clazz.define('Oskari.userinterface.request.AddExtensionRequest', function(extension) {
 	this._extension = extension;
 }, {
-	__name : "userinterface.AddExtensionRequest",
+	__name : 'userinterface.AddExtensionRequest',
 	getName : function() {
 		return this.__name;
 	},

@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * @method setEl
      * sets the (jQuery) element for this view
      */
-    "setEl" : function(el) {
+    'setEl' : function(el) {
         this.container = el;
     },
 
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * @method getEl
      * gets the (jQuery) element for this view
      */
-    "getEl" : function() {
+    'getEl' : function() {
         return this.container;
     },
 
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * @propertyc
      * requirements to be processed with require()
      */
-    "requirements" : [],
+    'requirements' : [],
 
     /**
      * @method render
@@ -37,8 +37,8 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * in requirements property
      *
      */
-    "render" : function() {
-        throw "Abstract";
+    'render' : function() {
+        throw 'Abstract';
     },
 
     /**
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      *
      * returns localised Json object defined with 'view' key in locale/*.js
      */
-    "getLocalization" : function() {
+    'getLocalization' : function() {
         return this.locale;
     },
 
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      *
      * gets configuration for this bundle
      */
-    "getConfiguration" : function() {
+    'getConfiguration' : function() {
         return this.conf;
     },
 
@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * returns sandbox for binding to Oskari app functionality
      *
      */
-    "getSandbox" : function() {
+    'getSandbox' : function() {
         return this.instance.getSandbox();
     },
 
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * helper to get current language from Oskari
      *
      */
-    "getLang" : function()  {
+    'getLang' : function()  {
         return Oskari.getLang();
     },
     /**

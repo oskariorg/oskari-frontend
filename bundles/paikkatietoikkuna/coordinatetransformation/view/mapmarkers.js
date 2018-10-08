@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapmarkers',
 
             btn.setHandler(function() {
                 helper.removeMarkers();
-                me.instance.toggleViews("transformation");
+                me.instance.toggleViews('transformation');
             });
 
             dialog.show(this.loc('mapMarkers.show.title'), this.loc('mapMarkers.show.info'), [btn]);

@@ -11,8 +11,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
  */
 function() {
     /* Layer Type */
-    this._layerType = "ANALYSIS";
-    this._metaType = "ANALYSIS";
+    this._layerType = 'ANALYSIS';
+    this._metaType = 'ANALYSIS';
 }, {
 	/* Layer type specific functions */
 
@@ -83,5 +83,5 @@ function() {
     }
 
 }, {
-    "extend": ["Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer"]
+    'extend': ['Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer']
 });

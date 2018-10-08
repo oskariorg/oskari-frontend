@@ -18,7 +18,7 @@ function(originator, side) {
     this._originator = originator;
     this._side = side;
 }, {
-    __name : "MyPlaces.OpenAddLayerDialogRequest",
+    __name : 'MyPlaces.OpenAddLayerDialogRequest',
     /**
      * @method getName
      * @return {String} request name

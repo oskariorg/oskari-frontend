@@ -3,7 +3,7 @@
  *
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.PlaceForm',
 
     /**
      * @method create called automatically on construction
@@ -43,7 +43,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             '  </div>' +
             '  <div class="field" id="newLayerForm">' +
             '    <label for="category">' +
-            '      <a href="#" class="newLayerLink functional">' + this.loc('placeform.category.newLayer') + '</a>' + " " + this.loc('placeform.category.choose') +
+            '      <a href="#" class="newLayerLink functional">' + this.loc('placeform.category.newLayer') + '</a>' + ' ' + this.loc('placeform.category.choose') +
             '    </label>' +
             '    <br clear="all" />' +
             '    <select data-name="category"></select>' +
@@ -133,8 +133,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                     if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
                         placeLink = 'http://' + placeLink;
                     }
-                    placeLink = placeLink.replace("<", '');
-                    placeLink = placeLink.replace(">", '');
+                    placeLink = placeLink.replace('<', '');
+                    placeLink = placeLink.replace('>', '');
                 }
                 var imageLink = onScreenForm.find('input[data-name=imagelink]').val(),
                     categorySelection = onScreenForm.find('select[data-name=category]').val();

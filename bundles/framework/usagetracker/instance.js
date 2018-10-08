@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleInstance
  * Handles modules implementing Stateful protocol to track application state.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleInstance',
 /**
  * @method create called automatically on construction
  * @static
@@ -20,7 +20,7 @@ function() {}, {
      * @method getName
      * @return {String} the name for the component
      */
-    "getName" : function() {
+    'getName' : function() {
         return this.__name;
     },
     /**
@@ -42,7 +42,7 @@ function() {}, {
      * @method start
      * implements BundleInstance start methdod
      */
-    "start" : function() {
+    'start' : function() {
 
         var me = this;
         if (me.started) {
@@ -77,14 +77,14 @@ function() {}, {
      *
      * implements bundle instance update method
      */
-    "update" : function() {
+    'update' : function() {
 
     },
     /**
      * @method stop
      * implements BundleInstance protocol stop method
      */
-    "stop" : function() {
+    'stop' : function() {
         var me = this;
         var sandbox = me.sandbox;
 
@@ -103,7 +103,7 @@ function() {}, {
      * @method init
      * implements Module protocol init method - does nothing atm
      */
-    "init": function() {
+    'init': function() {
         // headless
         return null;
     },
@@ -139,11 +139,11 @@ function() {}, {
             logUrlWithLinkParams = me.conf.logUrl + '?'+ me.sandbox.generateMapLinkParameters();
 
         jQuery.ajax({
-            type : "GET",
+            type : 'GET',
             url : logUrlWithLinkParams
         });
     }
 
 }, {
-    "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+    'protocol' : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });

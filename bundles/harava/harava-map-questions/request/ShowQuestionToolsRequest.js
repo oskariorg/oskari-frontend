@@ -18,7 +18,7 @@ function(fast) {
     this._fast = fast;
 }, {
 	/** @static @property __name request name */
-    __name : "ShowQuestionToolsRequest",
+    __name : 'ShowQuestionToolsRequest',
     /**
      * @method getName
      * @return {String} request name

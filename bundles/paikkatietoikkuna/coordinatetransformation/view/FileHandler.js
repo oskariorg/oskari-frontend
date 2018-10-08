@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         getSettings: function (){
             // force unit to metric for non-degree systems
             if (this.degreeSystem === false && this.settings.selects){
-                this.settings.selects.unit = "metric";
+                this.settings.selects.unit = 'metric';
             }
             return this.settings;
         },
@@ -158,16 +158,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 lineSeparator: this.loc('fileSettings.options.lineSeparator.label'),
                 choose: this.loc('fileSettings.options.choose')
             };
-            if (this.type === "export"){
+            if (this.type === 'export'){
                 fileSettings.export = true;
             }
             element = jQuery(this._template.settings(fileSettings));
-            if (this.type === "import"){
+            if (this.type === 'import'){
                 this.fileInput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', {
                     'allowMultipleFiles': false,
                     'maxFileSize': 50,
-                    'allowedFileTypes': ["text/plain", "text/csv"],
-                    'allowedFileExtensions': ["txt", "csv"],
+                    'allowedFileTypes': ['text/plain', 'text/csv'],
+                    'allowedFileExtensions': ['txt', 'csv'],
                     'showNoFile': false
                 });
                 element.find('.fileInput').append(this.fileInput.getElement());
@@ -197,14 +197,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 unit: element.find('.unitFormat option:checked').val(),
                 decimalSeparator: element.find('.decimalSeparator option:checked').val(),
                 coordinateSeparator: element.find('.coordinateSeparator option:checked').val(),
-                prefixId: element.find('.prefixId input').is(":checked"),
-                axisFlip: element.find('.reverseCoordinates input').is(":checked"),
+                prefixId: element.find('.prefixId input').is(':checked'),
+                axisFlip: element.find('.reverseCoordinates input').is(':checked'),
                 headerLineCount: element.find('.headerLineCount input').val(),
-                lineSeparator: element.find(".lineSeparator option:checked").val(),
+                lineSeparator: element.find('.lineSeparator option:checked').val(),
                 decimalCount: element.find('.decimalCount input').val(),
-                writeHeader: element.find('.writeHeader input').is(":checked"),
-                writeLineEndings: element.find('.lineEnds').is(":checked"),
-                writeCardinals: element.find('.useCardinals input').is(":checked")
+                writeHeader: element.find('.writeHeader input').is(':checked'),
+                writeLineEndings: element.find('.lineEnds').is(':checked'),
+                writeCardinals: element.find('.useCardinals input').is(':checked')
             }
             return settings;
         },
@@ -217,8 +217,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             var elem = this.getElement();
             var formatRow = elem.find('.unitFormat');
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var title = this.type === "import" ? this.loc('fileSettings.import.title') : this.loc('fileSettings.export.title');
-            var btnText = this.type === "import" ? this.loc('actions.done') : this.loc('actions.export');
+            var title = this.type === 'import' ? this.loc('fileSettings.import.title') : this.loc('fileSettings.export.title');
+            var btnText = this.type === 'import' ? this.loc('actions.done') : this.loc('actions.export');
             var cancelBtn =  dialog.createCloseButton(this.loc('actions.cancel'));
             var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             var decimalInput = elem.find('.decimalCount input');
@@ -226,14 +226,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             btn.setTitle(btnText);
             btn.setHandler(function() {
                 me.settings.selects = me.getFormSelections();
-                if (me.type==="import"){
+                if (me.type==='import'){
                     me.settings.file = me.fileInput.getFiles();
                 }
                 me.settings.type = me.type;
                 if (me.helper.validateFileSelections(me.getSettings()) === false){
                     return;
                 }
-                if (typeof callback === "function"){
+                if (typeof callback === 'function'){
                     callback(me.getSettings());
                 }
                 dialog.close();
@@ -241,10 +241,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             dialog.createCloseIcon();
             dialog.makeDraggable();
             if (this.degreeSystem === false){
-                formatRow.css("display","none");
+                formatRow.css('display','none');
                 decimalInput.val(3);
             } else {
-                formatRow.css("display","");
+                formatRow.css('display','');
                 decimalInput.val(8);
             }
             this.bindInfoLinks();
@@ -255,7 +255,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             });
             // HACK //
             //TODO handle listeners if fileinput is moved to file settings form instead of flyout
-            if(this.type === "import" && jQuery._data(this.fileInput.getElement().get(0), "events") === undefined){
+            if(this.type === 'import' && jQuery._data(this.fileInput.getElement().get(0), 'events') === undefined){
                 this.fileInput._bindAdvancedUpload();
             }
             dialog.show(title, elem, [cancelBtn, btn]);

@@ -7,7 +7,7 @@
  * See Oskari.mapframework.bundle.postprocessor.PostProcessorBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -26,14 +26,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             return this.__name;
         },
         /**
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        "start": function () {
+        'start': function () {
             var me = this;
             var conf = this.conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
@@ -210,25 +210,25 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        'update': function () {
 
         },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {}
+        'stop': function () {}
     }, {
         /**
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

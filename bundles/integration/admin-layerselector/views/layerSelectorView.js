@@ -1,6 +1,6 @@
 define([
-        "text!_bundle/templates/layerSelectorTemplate.html",
-        "text!_bundle/templates/tabTitleTemplate.html",
+        'text!_bundle/templates/layerSelectorTemplate.html',
+        'text!_bundle/templates/tabTitleTemplate.html',
         '_bundle/collections/allLayersCollection',
         '_bundle/models/layersTabModel',
         '_bundle/views/tabPanelView'
@@ -17,10 +17,10 @@ define([
              * @type {Object}
              */
             events: {
-                "click .admin-layer-tab": "toggleTab",
-                "keydown .admin-layerselectorapp": "catchInputs",
-                "keyup .admin-layerselectorapp": "catchInputs",
-                "click .admin-layer-recheck-all": "recheckCapabilities"
+                'click .admin-layer-tab': 'toggleTab',
+                'keydown .admin-layerselectorapp': 'catchInputs',
+                'keyup .admin-layerselectorapp': 'catchInputs',
+                'click .admin-layer-recheck-all': 'recheckCapabilities'
             },
 
             /**
@@ -119,7 +119,7 @@ define([
             createUI: function(models) {
                 var collection = new LayerCollection(models);
                 this.instance.models = {
-                    "layers": collection
+                    'layers': collection
                 };
                 // clear everything
                 this.el.html(this.appTemplate);
@@ -130,9 +130,9 @@ define([
                     type: 'inspire',
                     baseUrl: Oskari.urls.getRoute() + '&action_route=',
                     actions: {
-                        load: "MapLayerGroups",
-                        save: "MapLayerGroups",
-                        remove: "MapLayerGroups"
+                        load: 'MapLayerGroups',
+                        save: 'MapLayerGroups',
+                        remove: 'MapLayerGroups'
                     },
                     title: this.instance.getLocalization('filter').inspire
                 });
@@ -145,9 +145,9 @@ define([
                     type: 'organization',
                     baseUrl: Oskari.urls.getRoute() + '&action_route=',
                     actions: {
-                        load: "GetMapLayerGroups",
-                        save: "SaveOrganization",
-                        remove: "DeleteOrganization"
+                        load: 'GetMapLayerGroups',
+                        save: 'SaveOrganization',
+                        remove: 'DeleteOrganization'
                     },
                     title: this.instance.getLocalization('filter').organization
                 });

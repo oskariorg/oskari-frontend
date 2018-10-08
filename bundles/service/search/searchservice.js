@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
         }
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.service.SearchService",
+        __qname: 'Oskari.service.SearchService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "SearchService",
+        __name: 'SearchService',
         /**
          * @method getName
          * @return {String} service name
@@ -82,14 +82,14 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             var sb = this.sandbox || Oskari.getSandbox();
             var evtBuilder = Oskari.eventBuilder('SearchResultEvent');
             jQuery.ajax({
-                dataType: "json",
-                type: "POST",
+                dataType: 'json',
+                type: 'POST',
                 url: this._searchUrl,
                 data: {
-                    "searchKey": searchString,
-                    "Language": lang,
-                    "epsg": sb.getMap().getSrsName(),
-                    "autocomplete": false
+                    'searchKey': searchString,
+                    'Language': lang,
+                    'epsg': sb.getMap().getSrsName(),
+                    'autocomplete': false
                 },
                 success: function(response) {
                     sb.notifyAll(evtBuilder(true, searchString, response));
@@ -112,14 +112,14 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             var lang = Oskari.getLang();
             var sb = this.sandbox || Oskari.getSandbox();
             jQuery.ajax({
-                dataType: "json",
-                type: "POST",
+                dataType: 'json',
+                type: 'POST',
                 url: this._searchUrl,
                 data: {
-                    "searchKey": searchKey,
-                    "Language": lang,
-                    "epsg": sb.getMap().getSrsName(),
-                    "autocomplete": true
+                    'searchKey': searchKey,
+                    'Language': lang,
+                    'epsg': sb.getMap().getSrsName(),
+                    'autocomplete': true
                 },
                 success: function(response) {
                     onSuccess(response);

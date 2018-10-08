@@ -24,7 +24,7 @@ function(layerId) {
 
 }, {
     /** @static @property __name event name */
-    __name : "WFSStatusChangedEvent",
+    __name : 'WFSStatusChangedEvent',
     status : {
         'loading' : 1,
         'complete' : 200,

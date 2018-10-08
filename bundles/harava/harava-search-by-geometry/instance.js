@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundleInstance plugin for main map.
  */
-Oskari.clazz.define("Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundleInstance",
+Oskari.clazz.define('Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundleInstance',
 
 /**
  * @method create called automatically on construction

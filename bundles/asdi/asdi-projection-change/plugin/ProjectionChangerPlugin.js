@@ -81,7 +81,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
         var me = this;
         var mobileDefs = this.getMobileDefs();
         this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-        this._element = jQuery('.' + mobileDefs.buttons["mobile-projectionchange"].iconCls);
+        this._element = jQuery('.' + mobileDefs.buttons['mobile-projectionchange'].iconCls);
         this._flyout.move(this.mobileOffsetRight, this.mobileOffsetTop, true);
         this._flyout.on('hide', function () {
           me.mobilePluginOnClose();
@@ -90,7 +90,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
     handleEvents: function () {
         var me = this;
         this._flyout.move(this.offsetRight, this.offsetTop, true);
-        this.getElement().on( "click", function() {
+        this.getElement().on( 'click', function() {
             me._flyout.toggle();
         });
     },
@@ -130,7 +130,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
   }, {
       'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
       'protocol': [
-          "Oskari.mapframework.module.Module",
-          "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+          'Oskari.mapframework.module.Module',
+          'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
       ]
   });
