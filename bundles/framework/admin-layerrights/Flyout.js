@@ -175,13 +175,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             }, []);
         },
         _collectResponseMessages: function( responseItems ) {
-          var responseArray = [];
-          jQuery.each( responseItems, function( index ) {
-              if ( !_.contains( responseArray, responseItems[index].name ) ) {
-                  responseArray.push( responseItems[index].name );
+            var responseArray = [];
+            jQuery.each( responseItems, function( index ) {
+                if ( !_.contains( responseArray, responseItems[index].name ) ) {
+                    responseArray.push( responseItems[index].name );
                 }
             });
-          return responseArray;
+            return responseArray;
         },
         /**
          * Split list into chunks of given size
@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 controlRow = me._templates.row.clone(),
                 columnsLoc = this.instance.getLocalization('rights');
 
-                controlRow.addClass('control');
+            controlRow.addClass('control');
 
 
             // Create headers
@@ -373,11 +373,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             return table;
         },
         togglePermissionsColumn: function(thead, tbody) {
-         var controlCell = thead.find('#checkboxCtrl');
-         controlCell.on('change', function() {
-           var checkboxes = tbody.find('input.'+ this.className);
-             checkboxes.prop('checked', !checkboxes.prop('checked'));
-         });
+            var controlCell = thead.find('#checkboxCtrl');
+            controlCell.on('change', function() {
+                var checkboxes = tbody.find('input.'+ this.className);
+                checkboxes.prop('checked', !checkboxes.prop('checked'));
+            });
         },
 
         /**
@@ -568,13 +568,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 }
                 externalIdSelect.append(optionEl);
                 for (d = 0; d < result.external.length; d += 1) {
-                  optionEl = document.createElement('option');
-                  optionEl.value = result.external[d].id;
-                  optionEl.textContent = result.external[d].name;
-                  if (result.external[d].id === selectedId) {
+                    optionEl = document.createElement('option');
+                    optionEl.value = result.external[d].id;
+                    optionEl.textContent = result.external[d].name;
+                    if (result.external[d].id === selectedId) {
                         optionEl.setAttribute('selected', 'selected');
-                  }
-                  externalIdSelect.append(optionEl);
+                    }
+                    externalIdSelect.append(optionEl);
                 }
             }
         }

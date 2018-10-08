@@ -141,20 +141,20 @@ Oskari.clazz.define(
 
         },
         _registerLayerEvents: function(layer, oskariLayer, prefix){
-          var me = this;
-          var source = layer.getSource();
+            var me = this;
+            var source = layer.getSource();
 
-          source.on(prefix + 'loadstart', function() {
-            me.getMapModule().loadingState( oskariLayer._id, true);
-          });
+            source.on(prefix + 'loadstart', function() {
+                me.getMapModule().loadingState( oskariLayer._id, true);
+            });
 
-          source.on(prefix + 'loadend', function() {
-            me.getMapModule().loadingState( oskariLayer._id, false);
-          });
+            source.on(prefix + 'loadend', function() {
+                me.getMapModule().loadingState( oskariLayer._id, false);
+            });
 
-          source.on(prefix + 'loaderror', function() {
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-          });
+            source.on(prefix + 'loaderror', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            });
 
         },
         /**
@@ -221,26 +221,26 @@ Oskari.clazz.define(
                     		//TileWMS -> original is olSourceTileWMS.getTileLoadFunction
                     		if (layerSource.getTileLoadFunction && typeof(layerSource.getTileLoadFunction) === 'function') {
                     			var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
-								layerSource.setTileLoadFunction(function(image, src) {
-									if (src.length >= 2048) {
-                                        proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
-										me._imagePostFunction(image, src, proxyUrl);
-									} else {
-										originalTileLoadFunction.apply(this, arguments);
-									}
-								});
+                            layerSource.setTileLoadFunction(function(image, src) {
+                                if (src.length >= 2048) {
+                                    proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
+                                    me._imagePostFunction(image, src, proxyUrl);
+                                } else {
+                                    originalTileLoadFunction.apply(this, arguments);
+                                }
+                            });
                     		}
                     		//ImageWMS -> original is olSourceImageWMS.getImageLoadFunction
                     		else if (layerSource.getImageLoadFunction && typeof(layerSource.getImageLoadFunction) === 'function') {
                     			var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
-								layerSource.setImageLoadFunction(function(image, src) {
-									if (src.length >= 2048) {
-                                        proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
-										me._imagePostFunction(image, src, proxyUrl);
-									} else {
-										originalImageLoadFunction.apply(this, arguments);
-									}
-								});
+                            layerSource.setImageLoadFunction(function(image, src) {
+                                if (src.length >= 2048) {
+                                    proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
+                                    me._imagePostFunction(image, src, proxyUrl);
+                                } else {
+                                    originalImageLoadFunction.apply(this, arguments);
+                                }
+                            });
                     		}
                         olLayerList[i].getSource().updateParams(params);
                     }
@@ -253,10 +253,10 @@ Oskari.clazz.define(
          *
          * http://gis.stackexchange.com/questions/175057/openlayers-3-wms-styling-using-sld-body-and-post-request
          */
-		_imagePostFunction: function(image, src, proxyUrl) {
-			var img = image.getImage();
-			if (typeof window.btoa === 'function') {
-				var xhr = new XMLHttpRequest();
+        _imagePostFunction: function(image, src, proxyUrl) {
+            var img = image.getImage();
+            if (typeof window.btoa === 'function') {
+                var xhr = new XMLHttpRequest();
 			  	//GET ALL THE PARAMETERS OUT OF THE SOURCE URL**
 			  	var dataEntries = src.split('&');
 			  	var params = '';
@@ -269,25 +269,25 @@ Oskari.clazz.define(
 			  	xhr.responseType = 'arraybuffer';
 			  	xhr.onload = function(e) {
 		    		if (this.status === 200) {
-						var uInt8Array = new Uint8Array(this.response);
-						var i = uInt8Array.length;
-						var binaryString = new Array(i);
-						while (i--) {
-							binaryString[i] = String.fromCharCode(uInt8Array[i]);
-						}
-						var data = binaryString.join('');
-						var type = xhr.getResponseHeader('content-type');
-						if (type.indexOf('image') === 0) {
-							img.src = 'data:' + type + ';base64,' + window.btoa(data);
-						}
-					}
-				};
-				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-				xhr.send(params);
-			} else {
+                        var uInt8Array = new Uint8Array(this.response);
+                        var i = uInt8Array.length;
+                        var binaryString = new Array(i);
+                        while (i--) {
+                            binaryString[i] = String.fromCharCode(uInt8Array[i]);
+                        }
+                        var data = binaryString.join('');
+                        var type = xhr.getResponseHeader('content-type');
+                        if (type.indexOf('image') === 0) {
+                            img.src = 'data:' + type + ';base64,' + window.btoa(data);
+                        }
+                    }
+                };
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.send(params);
+            } else {
 			  img.src = src;
-			}
-		}
+            }
+        }
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}

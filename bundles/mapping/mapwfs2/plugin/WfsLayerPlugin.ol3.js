@@ -108,8 +108,8 @@ Oskari.clazz.define(
                 me._config,
                 me
             );
-             me.WFSLayerService = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
+            me.WFSLayerService = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
 
             sandbox.registerService(me.WFSLayerService);
 
@@ -320,11 +320,11 @@ Oskari.clazz.define(
             // see if there's any wfs layers, show  if so
             for (i = 0; i < layers.length; i++) {
                 if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
-                   count++;
+                    count++;
                 }
             }
             if(count === 1 && layer.isManualRefresh()){
-               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
+                me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
             }
         },
         /**
@@ -903,7 +903,7 @@ Oskari.clazz.define(
                             tiles,
                             true
                         );
-                       // not in OL3 me._tilesLayer.redraw();
+                        // not in OL3 me._tilesLayer.redraw();
                     }
                 }
             });
@@ -1399,23 +1399,23 @@ Oskari.clazz.define(
             return false;
         },
         updateScale: function(layer, minscale, maxscale) {
-          var me = this;
-          layer.setMinScale(minscale);
-          layer.setMaxScale(maxscale);
-          var olLayer = this.getOLMapLayers(layer)
-          var layerResolutions = this.getMapModule().calculateLayerResolutions(maxscale, minscale);
-          olLayer[0].setMinResolution(layerResolutions[0]);
-          olLayer[0].setMaxResolution(layerResolutions[layerResolutions.length -1]);
+            var me = this;
+            layer.setMinScale(minscale);
+            layer.setMaxScale(maxscale);
+            var olLayer = this.getOLMapLayers(layer)
+            var layerResolutions = this.getMapModule().calculateLayerResolutions(maxscale, minscale);
+            olLayer[0].setMinResolution(layerResolutions[0]);
+            olLayer[0].setMaxResolution(layerResolutions[layerResolutions.length -1]);
 
-          this._dialog = Oskari.clazz.create(
-            'Oskari.userinterface.component.Popup'
-          );
-         var btn = this._dialog.createCloseButton('OK');
+            this._dialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.Popup'
+            );
+            var btn = this._dialog.createCloseButton('OK');
 
-         btn.setHandler(function() {
-             me._dialog.close();
-         });
-         this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
+            btn.setHandler(function() {
+                me._dialog.close();
+            });
+            this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
         },
         /**
          * @method _addMapLayerToMap
@@ -1472,22 +1472,22 @@ Oskari.clazz.define(
          *
          */
         _registerLayerEvents: function(layer, oskariLayer){
-          var me = this;
-          var source = layer.getSource();
+            var me = this;
+            var source = layer.getSource();
 
-          source.on('tileloadstart', function() {
-            me.getMapModule().loadingState( oskariLayer.getId(), true);
-          });
+            source.on('tileloadstart', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-          source.on('tileloadend', function() {
-            me.getMapModule().loadingState( oskariLayer.getId(), false);
-          });
+            source.on('tileloadend', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-          source.on('tileloaderror', function() {
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-          });
+            source.on('tileloaderror', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            });
 
-      },
+        },
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             var me = this,
                 map = me.getMap(),

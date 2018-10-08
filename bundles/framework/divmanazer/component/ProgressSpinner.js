@@ -450,19 +450,19 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                                 rotation: 360 / o.lines * i + 'deg',
                                 left: ~~dx
                             }), ins(css(vml('roundrect', {
-                                    arcsize: o.corners
-                                }), {
-                                    width: r,
-                                    height: o.width,
-                                    left: o.radius,
-                                    top: -o.width >> 1,
-                                    filter: filter
-                                }), vml('fill', {
-                                    color: o.color,
-                                    opacity: o.opacity
-                                }), vml('stroke', {
-                                    opacity: 0
-                                }) // transparent stroke to fix color bleeding upon opacity change
+                                arcsize: o.corners
+                            }), {
+                                width: r,
+                                height: o.width,
+                                left: o.radius,
+                                top: -o.width >> 1,
+                                filter: filter
+                            }), vml('fill', {
+                                color: o.color,
+                                opacity: o.opacity
+                            }), vml('stroke', {
+                                opacity: 0
+                            }) // transparent stroke to fix color bleeding upon opacity change
                             )));
                         }
 

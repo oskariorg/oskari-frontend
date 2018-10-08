@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 '<div class="datasource-wrapper">'+
                     '<h4></h4>'+
                     '<div class="coordinate-datasources-wrapper"></div>' +
-                    //'<div class="datasource-actions-wrapper"></div>' +
+                //'<div class="datasource-actions-wrapper"></div>' +
                 '</div>'
             ),
             source2: _.template(
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
          * @method handleRadioButtons
          * Inits the on change listeners for the radio buttons
          */
-         //TODO if source + radiobuttons are used then fix this -> trigger SourceSelectChange
+        //TODO if source + radiobuttons are used then fix this -> trigger SourceSelectChange
         handleRadioButtons: function () {
             var me = this;
             var elem = this.getElement();

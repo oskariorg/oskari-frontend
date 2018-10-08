@@ -43,10 +43,10 @@ Oskari.clazz.define('Oskari.elf.geolocator.service.GeoLocatorSearchService',
                 dataType : 'json',
                 type : 'GET',
                 beforeSend: function(x) {
-                  if(x && x.overrideMimeType) {
-                   x.overrideMimeType('application/json');
-                  }
-                 },
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType('application/json');
+                    }
+                },
                 url : url,
                 error : errorCb,
                 success : successCb
@@ -67,18 +67,18 @@ Oskari.clazz.define('Oskari.elf.geolocator.service.GeoLocatorSearchService',
             });
         },
         getLocationType: function( url, successCb, errorCb) {
-          jQuery.ajax({
-              dataType : 'json',
-              type : 'GET',
-              beforeSend: function(x) {
-                  if(x && x.overrideMimeType) {
-                      x.overrideMimeType('application/json');
-                  }
-              },
-              url : url,
-              error : errorCb,
-              success : successCb
-          });
+            jQuery.ajax({
+                dataType : 'json',
+                type : 'GET',
+                beforeSend: function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType('application/json');
+                    }
+                },
+                url : url,
+                error : errorCb,
+                success : successCb
+            });
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

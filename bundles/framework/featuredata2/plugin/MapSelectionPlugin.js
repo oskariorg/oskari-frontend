@@ -48,9 +48,9 @@ Oskari.clazz.define(
             var me = this;
             var sb = this.getSandbox();
             sb.postRequestByName('DrawTools.StopDrawingRequest', [
-                    me.DRAW_REQUEST_ID,
-                    true,
-                    true
+                me.DRAW_REQUEST_ID,
+                true,
+                true
             ]);
         },
         /**

@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
                 '   </div>' +
                 '</div>'+
                 '</form>'
-                )
+            )
         }
     }, {
         getName: function () {

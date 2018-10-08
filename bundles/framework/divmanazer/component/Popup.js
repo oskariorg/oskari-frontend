@@ -346,7 +346,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
             // Check at if popup is outside screen from bottom
             if(windowHeight < (me.dialog.outerHeight() + top)) {
-              //set the popup top-position to be the original top position - amount which is outside of screen
+                //set the popup top-position to be the original top position - amount which is outside of screen
                 top = top - ((me.dialog.outerHeight() + top) - windowHeight);
             }
 
@@ -529,9 +529,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         makeDraggable: function (options) {
             var me = this,
                 dragOptions = options ? options : {
-                scroll: false,
-                handle: '.popupHeader'
-            };
+                    scroll: false,
+                    handle: '.popupHeader'
+                };
             me.dialog.css('position', 'absolute');
             me.dialog.draggable(dragOptions);
         },

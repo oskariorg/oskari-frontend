@@ -145,7 +145,7 @@ Oskari.clazz.define(
          * @param {String} message element message
          *
          */
-         showStatusMessage: function(message) {
+        showStatusMessage: function(message) {
             var me = this;
             me.toggleIcon();
             if (!message && this.messages.length) {
@@ -158,10 +158,10 @@ Oskari.clazz.define(
             el.show();
             el.text(message);
             setTimeout(function(){
-              el.hide();
+                el.hide();
             },3000);
             if(this.messages.length === 0){
-              el.empty();
+                el.empty();
             }
         },
         /**
@@ -170,13 +170,13 @@ Oskari.clazz.define(
          *
          */
         toggleIcon: function(){
-          var container = this.messageElement.find('div.message-container');
-          if(this.messages.length > 0 && !container.hasClass('.flip')){
-              container.addClass('flip');
-          }
-          if(this.messages.length === 0 && container.hasClass('flip')){
-            container.toggleClass('flip');
-          }
+            var container = this.messageElement.find('div.message-container');
+            if(this.messages.length > 0 && !container.hasClass('.flip')){
+                container.addClass('flip');
+            }
+            if(this.messages.length === 0 && container.hasClass('flip')){
+                container.toggleClass('flip');
+            }
         },
         /**
          * @public @method showMessagesPopup

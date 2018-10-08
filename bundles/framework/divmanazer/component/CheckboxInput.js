@@ -155,4 +155,4 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

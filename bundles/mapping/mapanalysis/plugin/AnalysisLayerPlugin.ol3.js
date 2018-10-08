@@ -36,8 +36,8 @@ Oskari.clazz.define(
         _initImpl: function () {
             // register domain builder
             var mapLayerService = this.getSandbox().getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+                'Oskari.mapframework.service.MapLayerService'
+            );
 
             if (!mapLayerService) {
                 return;
@@ -118,22 +118,22 @@ Oskari.clazz.define(
          *
          */
         _registerLayerEvents: function(layer, oskariLayer){
-        var me = this;
-        var source = layer.getSource();
+            var me = this;
+            var source = layer.getSource();
 
-        source.on('imageloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), true);
-        });
+            source.on('imageloadstart', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-        source.on('imageloadend', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), false);
-        });
+            source.on('imageloadend', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-        source.on('imageloaderror', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-        });
+            source.on('imageloaderror', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            });
 
-      }
+        }
     }, {
         'extend' : ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**

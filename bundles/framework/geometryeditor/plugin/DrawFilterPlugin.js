@@ -316,19 +316,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this._updateLayerOrder();
 
         switch (params.drawMode) {
-            case 'point':
-                this._pointSplit(params);
-                break;
-            case 'line':
-                this._lineSplit(params);
-                break;
-            case 'edit':
-                this._editSplit(params);
-                break;
-            case 'remove':
-                // Nothing to do
-                break;
-            default:
+        case 'point':
+            this._pointSplit(params);
+            break;
+        case 'line':
+            this._lineSplit(params);
+            break;
+        case 'edit':
+            this._editSplit(params);
+            break;
+        case 'remove':
+            // Nothing to do
+            break;
+        default:
         }
     },
 

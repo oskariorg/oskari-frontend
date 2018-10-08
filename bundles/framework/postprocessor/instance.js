@@ -104,53 +104,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          */
         _showPoints: function (points) {
             var olPoints = {
-                _points: [],
-                addPoint: function(lon, lat) {
-                    this._points.push({lon:parseFloat(lon), lat:parseFloat(lat)});
-                },
-                getBounds: function() {
-                    var top=0,
-                        left=0,
-                        bottom=0,
-                        right=0;
+                    _points: [],
+                    addPoint: function(lon, lat) {
+                        this._points.push({lon:parseFloat(lon), lat:parseFloat(lat)});
+                    },
+                    getBounds: function() {
+                        var top=0,
+                            left=0,
+                            bottom=0,
+                            right=0;
 
-                    // Calculate bbox
-                    left = this._points[0].lon;
-                    bottom = this._points[0].lat;
+                        // Calculate bbox
+                        left = this._points[0].lon;
+                        bottom = this._points[0].lat;
 
-                    for(var i=0;i<this._points.length;i++){
-                        var point = this._points[i];
-                        if(point.lon > right) {
-                            right = point.lon;
-                        }
-                        if(point.lat > top) {
-                            top = point.lat;
+                        for(var i=0;i<this._points.length;i++){
+                            var point = this._points[i];
+                            if(point.lon > right) {
+                                right = point.lon;
+                            }
+                            if(point.lat > top) {
+                                top = point.lat;
+                            }
+
+                            if(point.lon < left) {
+                                left = point.lon;
+                            }
+                            if(point.lat < bottom) {
+                                bottom = point.lat;
+                            }
                         }
 
-                        if(point.lon < left) {
-                            left = point.lon;
-                        }
-                        if(point.lat < bottom) {
-                            bottom = point.lat;
-                        }
+                        return {
+                            left: left,
+                            bottom: bottom,
+                            right: right,
+                            top: top
+                        };
+                    },
+                    getCentroid: function() {
+                        var bbox = this.getBounds();
+                        return {
+                            x: bbox.left + (bbox.right - bbox.left)/2,
+                            y: bbox.bottom + (bbox.top - bbox.bottom)/2
+                        };
+
                     }
-
-                    return {
-                        left: left,
-                        bottom: bottom,
-                        right: right,
-                        top: top
-                    };
                 },
-                getCentroid: function() {
-                    var bbox = this.getBounds();
-                    return {
-                        x: bbox.left + (bbox.right - bbox.left)/2,
-                        y: bbox.bottom + (bbox.top - bbox.bottom)/2
-                    };
-
-                }
-            },
                 count,
                 point;
             for (count = 0; count < points.length; ++count) {

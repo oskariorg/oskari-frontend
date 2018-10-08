@@ -105,4 +105,4 @@ Oskari.clazz.define('Oskari.elf.geolocator.BundleInstance',
         }
     }, {
         'extend' : ['Oskari.userinterface.extension.DefaultExtension']
-});
+    });

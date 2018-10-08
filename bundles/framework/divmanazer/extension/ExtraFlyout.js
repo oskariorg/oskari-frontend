@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 
             if(!me._popup) {
                 if(!me.options.container) {
-                  jQuery('body').append(popup);
+                    jQuery('body').append(popup);
                 } else {
                     me.options.container.append(popup);
                 }
@@ -208,7 +208,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             return this._popup;
         },
 
-/************************************************************************************************
+        /************************************************************************************************
 * Side tool functions
 ************************************************************************************************/
         _updateSideLabelPositions: function(){
@@ -290,4 +290,4 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 jQuery(sidelabel).remove();
             });
         }
-});
+    });

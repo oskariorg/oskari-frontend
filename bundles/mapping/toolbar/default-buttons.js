@@ -59,161 +59,161 @@ Oskari.clazz.category(
                 group;
 
             var buttonGroups = [{
-                    'name': 'history',
-                    'buttons': {
-                        'reset': {
-                            iconCls: 'tool-reset',
-                            tooltip: loc.history.reset,
-                            sticky: false,
-                            callback: function () {
-                                // statehandler reset state
-                                var rb = Oskari.requestBuilder(
-                                    'StateHandler.SetStateRequest'
-                                );
-                                if (rb) {
-                                    me.getSandbox().request(me, rb());
-                                }
-                            }
-                        },
-                        'history_back': {
-                            iconCls: 'tool-history-back',
-                            tooltip: loc.history.back,
-                            sticky: false,
-                            callback: function () {
-                                me.getSandbox().request(
-                                    me,
-                                    reqBuilder('map_control_tool_prev')
-                                );
-                            }
-                        },
-                        'history_forward': {
-                            iconCls: 'tool-history-forward',
-                            tooltip: loc.history.next,
-                            sticky: false,
-                            callback: function () {
-                                me.getSandbox().request(
-                                    me,
-                                    reqBuilder('map_control_tool_next')
-                                );
+                'name': 'history',
+                'buttons': {
+                    'reset': {
+                        iconCls: 'tool-reset',
+                        tooltip: loc.history.reset,
+                        sticky: false,
+                        callback: function () {
+                            // statehandler reset state
+                            var rb = Oskari.requestBuilder(
+                                'StateHandler.SetStateRequest'
+                            );
+                            if (rb) {
+                                me.getSandbox().request(me, rb());
                             }
                         }
-                    }
-                }, {
-                    'name': 'basictools',
-                    'buttons': {
-                        'zoombox': {
-                            iconCls: 'tool-zoombox',
-                            tooltip: loc.zoom,
-                            sticky: true,
-                            callback: function () {
-                                var toolname = 'map_control_zoom_tool';
-                                if(gfiReqBuilder) {
-                                    me.getSandbox().request(
-                                        me,
-                                        gfiReqBuilder(false)
-                                    );
-                                }
-                                me.getSandbox().request(me, reqBuilder(toolname));
-                            }
-                        },
-                        'select': {
-                            iconCls: 'tool-pan',
-                            tooltip: loc.pan,
-                            selected: true,
-                            sticky: true,
-                            callback: function () {
-                                var toolname = 'map_control_navigate_tool';
-                                if(gfiReqBuilder) {
-                                    me.getSandbox().request(
-                                        me,
-                                        gfiReqBuilder(true)
-                                    );
-                                }
-                                me.getSandbox().request(me, reqBuilder(toolname));
-                            }
-                        },
-                        'measureline': {
-                            iconCls: 'tool-measure-line',
-                            tooltip: loc.measure.line,
-                            sticky: true,
-                            callback: function () {
-                                var toolname = 'map_control_measure_tool';
-                                if(gfiReqBuilder) {
-                                    me.getSandbox().request(
-                                        me,
-                                        gfiReqBuilder(false)
-                                    );
-                                }
-                                me.getSandbox().request(me, reqBuilder(toolname));
-                            }
-                        },
-                        'measurearea': {
-                            iconCls: 'tool-measure-area',
-                            tooltip: loc.measure.area,
-                            sticky: true,
-                            callback: function () {
-                                var toolname = 'map_control_measure_area_tool';
-                                if(gfiReqBuilder) {
-                                    me.getSandbox().request(
-                                        me,
-                                        gfiReqBuilder(false)
-                                    );
-                                }
-                                me.getSandbox().request(me, reqBuilder(toolname));
-                            }
+                    },
+                    'history_back': {
+                        iconCls: 'tool-history-back',
+                        tooltip: loc.history.back,
+                        sticky: false,
+                        callback: function () {
+                            me.getSandbox().request(
+                                me,
+                                reqBuilder('map_control_tool_prev')
+                            );
+                        }
+                    },
+                    'history_forward': {
+                        iconCls: 'tool-history-forward',
+                        tooltip: loc.history.next,
+                        sticky: false,
+                        callback: function () {
+                            me.getSandbox().request(
+                                me,
+                                reqBuilder('map_control_tool_next')
+                            );
                         }
                     }
-                }, {
-                    'name': 'viewtools',
-                    'buttons': {
-                        'link': {
-                            iconCls: 'tool-link',
-                            tooltip: loc.link.tooltip,
-                            sticky: false,
-                            callback: function () {
-                              if( me.dialog ){
+                }
+            }, {
+                'name': 'basictools',
+                'buttons': {
+                    'zoombox': {
+                        iconCls: 'tool-zoombox',
+                        tooltip: loc.zoom,
+                        sticky: true,
+                        callback: function () {
+                            var toolname = 'map_control_zoom_tool';
+                            if(gfiReqBuilder) {
+                                me.getSandbox().request(
+                                    me,
+                                    gfiReqBuilder(false)
+                                );
+                            }
+                            me.getSandbox().request(me, reqBuilder(toolname));
+                        }
+                    },
+                    'select': {
+                        iconCls: 'tool-pan',
+                        tooltip: loc.pan,
+                        selected: true,
+                        sticky: true,
+                        callback: function () {
+                            var toolname = 'map_control_navigate_tool';
+                            if(gfiReqBuilder) {
+                                me.getSandbox().request(
+                                    me,
+                                    gfiReqBuilder(true)
+                                );
+                            }
+                            me.getSandbox().request(me, reqBuilder(toolname));
+                        }
+                    },
+                    'measureline': {
+                        iconCls: 'tool-measure-line',
+                        tooltip: loc.measure.line,
+                        sticky: true,
+                        callback: function () {
+                            var toolname = 'map_control_measure_tool';
+                            if(gfiReqBuilder) {
+                                me.getSandbox().request(
+                                    me,
+                                    gfiReqBuilder(false)
+                                );
+                            }
+                            me.getSandbox().request(me, reqBuilder(toolname));
+                        }
+                    },
+                    'measurearea': {
+                        iconCls: 'tool-measure-area',
+                        tooltip: loc.measure.area,
+                        sticky: true,
+                        callback: function () {
+                            var toolname = 'map_control_measure_area_tool';
+                            if(gfiReqBuilder) {
+                                me.getSandbox().request(
+                                    me,
+                                    gfiReqBuilder(false)
+                                );
+                            }
+                            me.getSandbox().request(me, reqBuilder(toolname));
+                        }
+                    }
+                }
+            }, {
+                'name': 'viewtools',
+                'buttons': {
+                    'link': {
+                        iconCls: 'tool-link',
+                        tooltip: loc.link.tooltip,
+                        sticky: false,
+                        callback: function () {
+                            if( me.dialog ){
                                 me.dialog.close(true);
                                 me.dialog = null;
                                 return;
-                              }
-                                me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                                me.dialog.onClose(function(){
-                                  me.dialog = null;
-                                });
-                                var mapUrlPrefix = me.__getMapUrl();
-                                var linkParams = me.getSandbox().generateMapLinkParameters({});
-
-                                var viewUuid = me._getLinkUuid();
-                                if(!viewUuid) {
-                                    var closeBtn = me.dialog.createCloseButton();
-                                    me.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
-                                    return;
-                                }
-
-                                linkParams += '&uuid=' + viewUuid;
-
-                                // This is kinda ugly...
-                                // Only show marker if there's no markers.
-                                if (linkParams.indexOf('&markers=') === -1) {
-                                    linkParams += '&showMarker=true';
-                                }
-                                me.dialog.addClass('no_resize');
-                                var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                                okBtn.setTitle(loc.link.ok);
-                                okBtn.addClass('primary');
-                                okBtn.setHandler(function () {
-                                    me.dialog.close();
-                                    me.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest');
-                                });
-
-                                var linkContent = '<div class="linkcontent">' +
-                                    mapUrlPrefix + linkParams + '</div>';
-                                me.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest');
-                                me.dialog.show(loc.link.title, linkContent, [okBtn]);
                             }
+                            me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            me.dialog.onClose(function(){
+                                me.dialog = null;
+                            });
+                            var mapUrlPrefix = me.__getMapUrl();
+                            var linkParams = me.getSandbox().generateMapLinkParameters({});
+
+                            var viewUuid = me._getLinkUuid();
+                            if(!viewUuid) {
+                                var closeBtn = me.dialog.createCloseButton();
+                                me.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
+                                return;
+                            }
+
+                            linkParams += '&uuid=' + viewUuid;
+
+                            // This is kinda ugly...
+                            // Only show marker if there's no markers.
+                            if (linkParams.indexOf('&markers=') === -1) {
+                                linkParams += '&showMarker=true';
+                            }
+                            me.dialog.addClass('no_resize');
+                            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                            okBtn.setTitle(loc.link.ok);
+                            okBtn.addClass('primary');
+                            okBtn.setHandler(function () {
+                                me.dialog.close();
+                                me.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest');
+                            });
+
+                            var linkContent = '<div class="linkcontent">' +
+                                    mapUrlPrefix + linkParams + '</div>';
+                            me.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest');
+                            me.dialog.show(loc.link.title, linkContent, [okBtn]);
                         }
                     }
-                }];
+                }
+            }];
 
             for (group in buttonGroups) {
                 if (buttonGroups.hasOwnProperty(group)) {

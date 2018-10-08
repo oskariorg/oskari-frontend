@@ -269,7 +269,7 @@ Oskari.clazz.define(
                     return;
                 }
                 var olMap = this.mapModule.getMap(),
-                layer = olMap.getLayersByName('AnalyseFeatureLayer')[0];
+                    layer = olMap.getLayersByName('AnalyseFeatureLayer')[0];
                 this.mapModule.bringToTop(layer, 20);
             },
             'AfterMapLayerAddEvent': function(event) {
@@ -310,10 +310,10 @@ Oskari.clazz.define(
             };
 
             me.drawControls = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.DrawControls',
-                                me.instance,
-                                me.loc,
-                                function (isCancel) {me._stopDrawing(isCancel);},
-                                function (drawMode) {me._startNewDrawing(drawMode);});
+                me.instance,
+                me.loc,
+                function (isCancel) {me._stopDrawing(isCancel);},
+                function (drawMode) {me._startNewDrawing(drawMode);});
 
             me.dataPanel = me.drawControls.createDataPanel(me.loc);
             me.drawToolsPanel = me.drawControls.createDrawToolsPanel(me.loc);
@@ -741,7 +741,7 @@ Oskari.clazz.define(
                 this.helpDialog.addClass('drawfilterdialog');
                 this.helpDialog.show(dialogTitle, dialogText, controlButtons);
                 this.helpDialog.
-                moveTo('div.drawFilter.analysis-selection-' + config.mode, 'bottom');
+                    moveTo('div.drawFilter.analysis-selection-' + config.mode, 'bottom');
             }
 
             // Disable WFS highlight and GFI dialog
@@ -916,18 +916,18 @@ Oskari.clazz.define(
             //add select possibility to temp layers
             // requires highlight refactoring so is not in use yet
             me.highlightControl = new OpenLayers.Control.SelectFeature(
-                    layer,
-                    {
-                        hover: true,
-                        highlightOnly: true,
-                        renderIntent: 'temporary'
-                    });
+                layer,
+                {
+                    hover: true,
+                    highlightOnly: true,
+                    renderIntent: 'temporary'
+                });
 
             me.selectControl = new OpenLayers.Control.SelectFeature(
-                    layer,
-                    {
-                        clickout: true
-                    });
+                layer,
+                {
+                    clickout: true
+                });
 
             me.mapModule.getMap().addControl(this.highlightControl);
             me.mapModule.getMap().addControl(this.selectControl);
@@ -1082,24 +1082,24 @@ Oskari.clazz.define(
             var type = this.selectedGeometry.geometry.CLASS_NAME;
             // Enable or disable buttons depending on the selected feature type
             switch (type) {
-                case 'OpenLayers.Geometry.LineString':
-                    pointButton.removeClass('disabled');
-                    lineButton.addClass('disabled');
-                    editButton.addClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
-                case 'OpenLayers.Geometry.MultiPolygon':
-                    pointButton.addClass('disabled');
-                    lineButton.removeClass('disabled');
-                    editButton.removeClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
-                default:
-                    pointButton.addClass('disabled');
-                    lineButton.addClass('disabled');
-                    editButton.addClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
+            case 'OpenLayers.Geometry.LineString':
+                pointButton.removeClass('disabled');
+                lineButton.addClass('disabled');
+                editButton.addClass('disabled');
+                removeButton.addClass('disabled');
+                break;
+            case 'OpenLayers.Geometry.MultiPolygon':
+                pointButton.addClass('disabled');
+                lineButton.removeClass('disabled');
+                editButton.removeClass('disabled');
+                removeButton.addClass('disabled');
+                break;
+            default:
+                pointButton.addClass('disabled');
+                lineButton.addClass('disabled');
+                editButton.addClass('disabled');
+                removeButton.addClass('disabled');
+                break;
             }
         },
 

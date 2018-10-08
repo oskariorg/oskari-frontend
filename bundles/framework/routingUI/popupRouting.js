@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
         enableGFI: function (blnEnable) {
             var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
-                );
+            );
             // enable or disable gfi requests
             if (gfiReqBuilder) {
                 this.sandbox.request(this.instance, gfiReqBuilder(blnEnable));
@@ -245,4 +245,4 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
                 );
             }
         }
-});
+    });

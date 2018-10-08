@@ -329,7 +329,7 @@
                 var capabilitiesBlock = this.getCapabilities();
 
                 if (capabilitiesBlock && adminBlock) {
-                        return adminBlock.legendImage;
+                    return adminBlock.legendImage;
                 }
 
                 return '';
@@ -356,13 +356,13 @@
 
 
                 if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
-                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
-                            return style.name === styleName;
-                        });
+                    var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
+                        return style.name === styleName;
+                    });
 
-                        if (selectedStyle.length > 0) {
-                            return selectedStyle[0].legend;
-                        }
+                    if (selectedStyle.length > 0) {
+                        return selectedStyle[0].legend;
+                    }
                 }
 
                 return '';

@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
                     restartButtonText: loc.restartButtonText,
                     scoreText: loc.scoreText,
                     theme: {
-                          blocks: {
+                        blocks: {
                             line:     '#fa1e1e',
                             square:   '#f1fa1e',
                             arrow:    '#d838cb',
@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
                             leftHook: '#42c6f0',
                             rightZag: '#4bd838',
                             leftZag:  '#fa1e1e'
-                          }
+                        }
                     }
                 }
             );

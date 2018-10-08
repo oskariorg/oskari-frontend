@@ -27,8 +27,8 @@ Oskari.clazz.define(
         _initImpl: function () {
             // register domain builder
             var mapLayerService = this.getSandbox().getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+                'Oskari.mapframework.service.MapLayerService'
+            );
 
             if (!mapLayerService) {
                 return;
@@ -94,22 +94,22 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
-           var me = this;
+        _registerLayerEvents: function(layer, oskariLayer){
+            var me = this;
 
-           layer.events.register('tileloadstart', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), true);
-           });
+            layer.events.register('tileloadstart', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-           layer.events.register('tileloaded', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), false);
-           });
+            layer.events.register('tileloaded', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-          layer.events.register('tileerror', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            layer.events.register('tileerror', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
 
-         });
-       },
+            });
+        },
 
         /**
          * Make use of the layer bounding box information to set appropriate map view
@@ -148,7 +148,7 @@ Oskari.clazz.define(
                 }
             }
         },
-         /**
+        /**
          * Used when layer is modified. Just trigger an update.
          * @param  {Oskari.mapframework.domain.AbstractLayer} layer  [description]
          * @param  {Boolean} forced

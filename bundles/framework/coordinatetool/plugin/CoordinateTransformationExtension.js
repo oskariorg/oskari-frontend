@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._messageDialog.show(title, message);
             me._messageDialog.fadeout();
         },
-         /**
+        /**
          * Transforms the given coordinates
          * @method @public transformCoordinates
          * @param {Object} data: lat/lon coordinates to be transformed
@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             return data;
         },
-         /**
+        /**
          * Transforms the given coordinates using action_route=Coordinates and updates coordinates to the UI
          * @method getTransformedCoordinatesFromServer
          * @param {Object} data: {lonlat: lat: '', lon: ''} coordinates to be transformed
@@ -224,32 +224,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 secondsY;
 
             switch (type) {
-                case 'min':
-                    degreesX = parseInt(lon);
-                    degreesY = parseInt(lat);
-                    minutesX = Number((lon - degreesX) * 60).toFixed(5);
-                    minutesY = Number((lat - degreesY) * 60).toFixed(5);
-                    return {
-                        'degreesX': degreesX,
-                        'degreesY': degreesY,
-                        'minutesX': minutesX.replace('.', Oskari.getDecimalSeparator()),
-                        'minutesY': minutesY.replace('.', Oskari.getDecimalSeparator())
-                    };
-                case 'sec':
-                    degreesX = parseInt(lon);
-                    degreesY = parseInt(lat);
-                    minutesX = parseFloat((lon - degreesX) * 60);
-                    minutesY = parseFloat((lat - degreesY) * 60);
-                    secondsX = parseFloat((minutesX - parseInt(minutesX))*60).toFixed(3);
-                    secondsY = parseFloat((minutesY - parseInt(minutesY))*60).toFixed(3);
-                    return {
-                        'degreesX': degreesX,
-                        'degreesY': degreesY,
-                        'minutesX': parseInt(minutesX),
-                        'minutesY': parseInt(minutesY),
-                        'secondsX': secondsX.replace('.', Oskari.getDecimalSeparator()),
-                        'secondsY': secondsY.replace('.', Oskari.getDecimalSeparator())
-                    };
+            case 'min':
+                degreesX = parseInt(lon);
+                degreesY = parseInt(lat);
+                minutesX = Number((lon - degreesX) * 60).toFixed(5);
+                minutesY = Number((lat - degreesY) * 60).toFixed(5);
+                return {
+                    'degreesX': degreesX,
+                    'degreesY': degreesY,
+                    'minutesX': minutesX.replace('.', Oskari.getDecimalSeparator()),
+                    'minutesY': minutesY.replace('.', Oskari.getDecimalSeparator())
+                };
+            case 'sec':
+                degreesX = parseInt(lon);
+                degreesY = parseInt(lat);
+                minutesX = parseFloat((lon - degreesX) * 60);
+                minutesY = parseFloat((lat - degreesY) * 60);
+                secondsX = parseFloat((minutesX - parseInt(minutesX))*60).toFixed(3);
+                secondsY = parseFloat((minutesY - parseInt(minutesY))*60).toFixed(3);
+                return {
+                    'degreesX': degreesX,
+                    'degreesY': degreesY,
+                    'minutesX': parseInt(minutesX),
+                    'minutesY': parseInt(minutesY),
+                    'secondsX': secondsX.replace('.', Oskari.getDecimalSeparator()),
+                    'secondsY': secondsY.replace('.', Oskari.getDecimalSeparator())
+                };
             }
 
         },

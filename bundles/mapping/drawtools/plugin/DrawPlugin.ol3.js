@@ -245,15 +245,15 @@ Oskari.clazz.define(
                 feat,
                 feats = [];
             geometries.forEach(function (geom) {
-                    feat = new olFeature({geometry:geom});
-                    feat.setId(me.generateNewFeatureId());
-                    feats.push(feat);
-                    if (checkIntersection){
-                        me._sketch = feat;
-                        me.checkIntersection(geom);
-                    }
+                feat = new olFeature({geometry:geom});
+                feat.setId(me.generateNewFeatureId());
+                feats.push(feat);
+                if (checkIntersection){
+                    me._sketch = feat;
+                    me.checkIntersection(geom);
+                }
 
-                });
+            });
             me._sketch = null;
             return feats;
         },
@@ -451,11 +451,11 @@ Oskari.clazz.define(
         _cleanupInternalState: function() {
             // Remove measure result from map
             if(this._sketch) {
-               jQuery('div.' + this._tooltipClassForMeasure + '.' + this._sketch.getId()).remove();
+                jQuery('div.' + this._tooltipClassForMeasure + '.' + this._sketch.getId()).remove();
             }
             this._sketch = null;
         },
-         /**
+        /**
          * @method clearDrawing
          * -  remove features from the draw layers
          * @param {String} functionality id. If not given, will remove features from all drawLayers
@@ -514,26 +514,26 @@ Oskari.clazz.define(
             }
 
             switch (me.getCurrentDrawShape()) {
-                case 'Point':
-                    if(requestedBuffer > 0) {
-                        me.addBufferPropertyToFeatures(features, requestedBuffer);
-                    }
-                    break;
-                case 'Circle':
-                    // Do common stuff
-                    // buffer is used for circle's radius
-                    if(requestedBuffer > 0) {
-                        features = me.getCircleAsPolygonFeature(features, requestedBuffer);
-                        bufferedFeatures = features; // or = [];
-                    } else {
-                        features = me.getCircleAsPolygonFeature(features);
-                    }
-                    break;
-                case 'LineString':
-                    if(requestedBuffer > 0) {
-                        me.addBufferPropertyToFeatures(features, requestedBuffer);
-                    }
-                    break;
+            case 'Point':
+                if(requestedBuffer > 0) {
+                    me.addBufferPropertyToFeatures(features, requestedBuffer);
+                }
+                break;
+            case 'Circle':
+                // Do common stuff
+                // buffer is used for circle's radius
+                if(requestedBuffer > 0) {
+                    features = me.getCircleAsPolygonFeature(features, requestedBuffer);
+                    bufferedFeatures = features; // or = [];
+                } else {
+                    features = me.getCircleAsPolygonFeature(features);
+                }
+                break;
+            case 'LineString':
+                if(requestedBuffer > 0) {
+                    me.addBufferPropertyToFeatures(features, requestedBuffer);
+                }
+                break;
             }
 
             var geojson = me.getFeaturesAsGeoJSON(features);
@@ -667,17 +667,17 @@ Oskari.clazz.define(
             var featureGeom;
 
             switch (geometries[0].getType()) {
-                case 'Point':
-                    featureGeom = new olGeom.MultiPoint(coordinatesAgg);
-                    break;
-                case 'LineString':
-                    featureGeom = new olGeom.MultiLineString(coordinatesAgg);
-                    break;
-                case 'Polygon':
-                    featureGeom = new olGeom.MultiPolygon(coordinatesAgg);
-                    break;
-                default:
-                    throw new Error('Unsupported geometry type!');
+            case 'Point':
+                featureGeom = new olGeom.MultiPoint(coordinatesAgg);
+                break;
+            case 'LineString':
+                featureGeom = new olGeom.MultiLineString(coordinatesAgg);
+                break;
+            case 'Polygon':
+                featureGeom = new olGeom.MultiPolygon(coordinatesAgg);
+                break;
+            default:
+                throw new Error('Unsupported geometry type!');
             }
 
             return featureGeom;
@@ -732,14 +732,14 @@ Oskari.clazz.define(
         addVectorLayer : function(layerId) {
             var me = this;
             var vector = new olLayerVector({
-              id: layerId,
-              source: new olSourceVector({features: new olCollection()}),
-              style: me._styles.draw
+                id: layerId,
+                source: new olSourceVector({features: new olCollection()}),
+                style: me._styles.draw
             });
             me.getMap().addLayer(vector);
             me._drawLayers[layerId] = vector;
         },
-         /**
+        /**
          * @method addDrawInteraction
          * -  activates draw control
          * @param {String} layerId
@@ -763,7 +763,7 @@ Oskari.clazz.define(
                 });
             }
             if (shape === 'LineString') {
-                 geometryFunction = function (coordinates, geometry) {
+                geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
                         geometry = new olGeom.LineString(coordinates);
                     } else {
@@ -777,34 +777,34 @@ Oskari.clazz.define(
                     return geometry;
                 };
             } else if (shape === 'Box') {
-                 maxPoints = 2;
-                 geometryType = 'LineString';
-                 geometryFunction = function(coordinates, geometry) {
-                   var start = coordinates[0];
-                   var end = coordinates[1];
-                   var coords = [[start, [start[0], end[1]], end, [end[0], start[1]], start]];
-                   if (!geometry) {
-                     geometry = new olGeom.Polygon(coords);
-                   } else {
-                     geometry.setCoordinates(coords);
-                   }
+                maxPoints = 2;
+                geometryType = 'LineString';
+                geometryFunction = function(coordinates, geometry) {
+                    var start = coordinates[0];
+                    var end = coordinates[1];
+                    var coords = [[start, [start[0], end[1]], end, [end[0], start[1]], start]];
+                    if (!geometry) {
+                        geometry = new olGeom.Polygon(coords);
+                    } else {
+                        geometry.setCoordinates(coords);
+                    }
 
-                   me.pointerMoveHandler();
-                   me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
-                   return geometry;
-                 };
+                    me.pointerMoveHandler();
+                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    return geometry;
+                };
             } else if (shape === 'Point') {
-                 geometryFunction = function(coordinates, geometry) {
+                geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
                         geometry = new olGeom.Point(coordinates);
                     }
                     if (options.buffer > 0) {
                         me.drawBufferedGeometry(geometry, options.buffer);
                     }
-                   me.pointerMoveHandler();
-                   me.sendDrawingEvent(me._id, optionsForDrawingEvent);
-                   return geometry;
-                 };
+                    me.pointerMoveHandler();
+                    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
+                    return geometry;
+                };
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
                 geometryFunction = olInteractionDraw.createRegularPolygon(4);
@@ -812,13 +812,13 @@ Oskari.clazz.define(
                 geometryType = 'Point';
                 me._circleHasGeom = true;
                 geometryFunction = function(coordinates, geometry) {
-                     if (!geometry) {
-                         geometry = new olGeom.Circle(coordinates, options.buffer);
-                     }
-                     me.pointerMoveHandler();
-                     me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
-                     return geometry;
-                 };
+                    if (!geometry) {
+                        geometry = new olGeom.Circle(coordinates, options.buffer);
+                    }
+                    me.pointerMoveHandler();
+                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    return geometry;
+                };
             } else if (shape === 'Circle' && !options.buffer) {
                 geometryType = 'Circle';
                 geometryFunction = olInteractionDraw.createRegularPolygon(50);
@@ -836,14 +836,14 @@ Oskari.clazz.define(
                     me.pointerMoveHandler();
                     me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                     return geometry;
-                 };
+                };
             }
             var drawInteraction = new olInteractionDraw({
-              features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
-              type: geometryType,
-              style: me._styles.draw,
-              geometryFunction: geometryFunction,
-              maxPoints: maxPoints
+                features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
+                type: geometryType,
+                style: me._styles.draw,
+                geometryFunction: geometryFunction,
+                maxPoints: maxPoints
             });
             // does this need to be registered here and/or for each functionalityId?
             me._draw[functionalityId] = drawInteraction;
@@ -857,7 +857,7 @@ Oskari.clazz.define(
                 me.getMap().on('pointermove', me.pointerMoveHandler, me);
             }
         },
-         /**
+        /**
          * @method bindDrawStartEvent
          * -  binds drawstart event handling to interaction
          * @param {Object} options
@@ -879,7 +879,7 @@ Oskari.clazz.define(
                 me.createDrawingTooltip(id, tooltipClass);
             });
         },
-         /**
+        /**
          * @method bindDrawEndEvent
          * -  binds drawend event handling to interaction
          * @param {Object} options
@@ -911,7 +911,7 @@ Oskari.clazz.define(
                 me._sketch = null;
             });
         },
-         /**
+        /**
          * @method checkIntersection
          * -  checks if geometry intersects itself
          * @param {ol/geom/Geometry} geometry
@@ -1003,9 +1003,9 @@ Oskari.clazz.define(
                         overlay.setPosition(tooltipCoord);
                     }
                 }
-             }
+            }
         },
-         /**
+        /**
          * @method addModifyInteraction
          * -  activates modify control
          * @param {String} layerId
@@ -1017,16 +1017,16 @@ Oskari.clazz.define(
                 layer = me.getLayer(layerId);
             if(layer) {
                 me._modify[me._id] = new olInteractionModify({
-                   features: layer.getSource().getFeaturesCollection(),
-                   style: me._styles.modify,
-                   deleteCondition: function(event) {
-                       return olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event);
-                   }
-               });
-           }
-           me.modifyStartEvent(shape, options);
-           me.getMap().on('pointermove', me.pointerMoveHandler, me);
-           me.getMap().addInteraction(me._modify[me._id]);
+                    features: layer.getSource().getFeaturesCollection(),
+                    style: me._styles.modify,
+                    deleteCondition: function(event) {
+                        return olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event);
+                    }
+                });
+            }
+            me.modifyStartEvent(shape, options);
+            me.getMap().on('pointermove', me.pointerMoveHandler, me);
+            me.getMap().addInteraction(me._modify[me._id]);
         },
         /**
          * @method drawBufferedGeometry
@@ -1036,11 +1036,11 @@ Oskari.clazz.define(
          * @param {Number} buffer
          */
         drawBufferedGeometry : function(geometry, buffer) {
-             var bufferedFeature = this.getBufferedFeature(geometry, buffer, this._styles.draw, this._options.bufferAccuracy);
-             this.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
-             this.getBufferedFeatureLayer().getSource().getFeaturesCollection().push(bufferedFeature);
+            var bufferedFeature = this.getBufferedFeature(geometry, buffer, this._styles.draw, this._options.bufferAccuracy);
+            this.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
+            this.getBufferedFeatureLayer().getSource().getFeaturesCollection().push(bufferedFeature);
         },
-         /**
+        /**
          * @method modifyStartEvent
          * -  triggered upon feature modification start
          * @param {String} shape
@@ -1097,7 +1097,7 @@ Oskari.clazz.define(
             var me = this,
                 layer = me.getLayer(me.getCurrentLayerId());
             if(layer) {
-                 if (enable) {
+                if (enable) {
                     layer.getSource().on('changefeature', me.modifyFeatureChangeEventCallback, me);
                 } else {
                     layer.getSource().un('changefeature', me.modifyFeatureChangeEventCallback, me);
@@ -1236,7 +1236,7 @@ Oskari.clazz.define(
             });
             return polygonFeatures;
         },
-         /**
+        /**
          * @method getCircleAsPointFeature
          * - converts circle geometry to point geometry
          *
@@ -1251,14 +1251,14 @@ Oskari.clazz.define(
             }
             features.forEach(function (f) {
                 var feature = new olFeature({
-                      geometry:  new olGeom.Point(me._getFeatureCenter(f))
-                    });
+                    geometry:  new olGeom.Point(me._getFeatureCenter(f))
+                });
                 me.addBufferPropertyToFeatures([feature], me._getFeatureRadius(f));
                 pointFeatures.push(feature);
             });
             return pointFeatures;
         },
-         /**
+        /**
          * @method addBufferPropertyToFeatures
          * - adds buffer property to given features. This is needed for converting buffered Point and buffered LineString to geoJson
          *
@@ -1272,25 +1272,25 @@ Oskari.clazz.define(
                 });
             }
         },
-       /**@method createDrawingTooltip
+        /**@method createDrawingTooltip
        * - creates a new tooltip on drawing
        */
-       createDrawingTooltip : function(id, tooltipClass) {
-           var me = this;
-           var tooltipElement = document.createElement('div');
-           tooltipElement.className =  tooltipClass + ' ' + id;
-           var tooltip = new olOverlay({
-               element : tooltipElement,
-               offset : [ 0, -5 ],
-               positioning : 'bottom-center',
-               id: id
-           });
-           tooltipElement.parentElement.style.pointerEvents = 'none';
-           tooltip.id = id;
-           me.getMap().addOverlay(tooltip);
-           me._overlays[id] = tooltip;
-       }
-   }, {
+        createDrawingTooltip : function(id, tooltipClass) {
+            var me = this;
+            var tooltipElement = document.createElement('div');
+            tooltipElement.className =  tooltipClass + ' ' + id;
+            var tooltip = new olOverlay({
+                element : tooltipElement,
+                offset : [ 0, -5 ],
+                positioning : 'bottom-center',
+                id: id
+            });
+            tooltipElement.parentElement.style.pointerEvents = 'none';
+            tooltip.id = id;
+            me.getMap().addOverlay(tooltip);
+            me._overlays[id] = tooltip;
+        }
+    }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
@@ -1299,4 +1299,4 @@ Oskari.clazz.define(
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
-});
+    });

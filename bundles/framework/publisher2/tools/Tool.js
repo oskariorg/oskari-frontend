@@ -6,80 +6,80 @@
 */
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
-function(sandbox, mapmodule, localization) {
+    function(sandbox, mapmodule, localization) {
     // sandbox
-    this.__sandbox = sandbox;
-    // mapmodule
-    this.__mapmodule = mapmodule;
-    // localization
-    this.__loc = localization;
-    // plugin
-    this.__plugin = null;
-    // tool state
-    this.state= {
-        enabled: false,
-        mode:null
-    };
+        this.__sandbox = sandbox;
+        // mapmodule
+        this.__mapmodule = mapmodule;
+        // localization
+        this.__loc = localization;
+        // plugin
+        this.__plugin = null;
+        // tool state
+        this.state= {
+            enabled: false,
+            mode:null
+        };
 
-}, {
+    }, {
     // the panel group where tool is appended
-    group : 'maptools',
-    // tool index in group, 0 is top
-    index : 999,
-    // allowed locations
-    allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
-    allowedSiblings : [
-        'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons'
-    ],
+        group : 'maptools',
+        // tool index in group, 0 is top
+        index : 999,
+        // allowed locations
+        allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
+        allowedSiblings : [
+            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
+            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
+            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons'
+        ],
 
-    groupedSiblings : true,
-    /**
+        groupedSiblings : true,
+        /**
     * Get tool object.
     * @method getTool
     * @private
     *
     * @returns {Object} tool
     */
-    getTool: function(){
-        return {
-            id: '<plugin id>',
-            title: '<plugin name>',
-            config: {}
-        };
-    },
-    /**
+        getTool: function(){
+            return {
+                id: '<plugin id>',
+                title: '<plugin name>',
+                config: {}
+            };
+        },
+        /**
     * Set enabled.
     * @method setEnabled
     * @public
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-    setEnabled : function(enabled) {
+        setEnabled : function(enabled) {
 
-    },
-    /**
+        },
+        /**
     * Get extra options.
     * @method getExtraOptions
     * @public
     *
     * @returns {Object} jQuery element
     */
-    getExtraOptions: function() {
-        return null;
-    },
-    /**
+        getExtraOptions: function() {
+            return null;
+        },
+        /**
     * Get name.
     * @method getName
     * @public
     *
     * @returns {String} tool name
     */
-    getName: function() {
+        getName: function() {
 
-    },
-    /**
+        },
+        /**
     * Is displayed in mode.
     * @method isDisplayedInMode
     * @public
@@ -88,86 +88,86 @@ function(sandbox, mapmodule, localization) {
     *
     * @returns {Boolean} is displayed in wanted mode
     */
-    isDisplayedInMode: function(mode) {
-        var me = this,
-            supportedModes = [];
+        isDisplayedInMode: function(mode) {
+            var me = this,
+                supportedModes = [];
 
-        supportedModes = jQuery.grep(me.__supportedModes, function(modename) {
-            return modename === mode;
-        });
+            supportedModes = jQuery.grep(me.__supportedModes, function(modename) {
+                return modename === mode;
+            });
 
-        return supportedModes > 0;
-    },
-    /**
+            return supportedModes > 0;
+        },
+        /**
     * Is displayed.
     * @method isDisplayed
     * @public
     *
     * @returns {Boolean} is tool displayed
     */
-    isDisplayed: function() {
-        return true;
-    },
-    /**
+        isDisplayed: function() {
+            return true;
+        },
+        /**
     * Get group
     * @method getGroup
     * @public
     *
     * @returns {Integer} group id
     */
-    getGroup : function() {
-        var me = this;
-        return me.__group;
-    },
-    /**
+        getGroup : function() {
+            var me = this;
+            return me.__group;
+        },
+        /**
     * Get index
     * @method getIndex
     * @public
     *
     * @returns {Integer} index
     */
-    getIndex : function() {
-        var me = this;
-        return me.__index;
-    },
-    /**
+        getIndex : function() {
+            var me = this;
+            return me.__index;
+        },
+        /**
     * Get allowed locations
     * @method getAllowedLocations
     * @public
     *
     * @returns {Object} allowed locations array
     */
-    getAllowedLocations: function(){
-        var me = this;
-        return me.__allowedLocations;
-    },
-    /**
+        getAllowedLocations: function(){
+            var me = this;
+            return me.__allowedLocations;
+        },
+        /**
     * Get values.
     * @method getValues
     * @public
     *
     * @returns {Object} tool value object
     */
-    getValues: function () {
-        var me = this,
-            saveState = {
-                tool: me.getTool().id,
-                show: me.state.enabled,
-                subTools : []
-            };
+        getValues: function () {
+            var me = this,
+                saveState = {
+                    tool: me.getTool().id,
+                    show: me.state.enabled,
+                    subTools : []
+                };
 
-        return saveState;
-    },
-    /**
+            return saveState;
+        },
+        /**
     * Validate tool.
     *
     * @returns {Object} errors object
     */
-    validate: function() {
+        validate: function() {
         // always valid
-        return true;
+            return true;
         // or tool create validation
-    }
-}, {
-    'protocol' : ['Oskari.mapframework.publisher.Tool']
-});
+        }
+    }, {
+        'protocol' : ['Oskari.mapframework.publisher.Tool']
+    });

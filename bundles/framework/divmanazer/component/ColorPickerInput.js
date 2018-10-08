@@ -157,4 +157,4 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

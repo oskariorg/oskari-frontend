@@ -36,7 +36,7 @@ Oskari.clazz.define(
         this._previousTimer = null;
         this._featureUpdateFrequence = 200;
         this.statusHandler = Oskari.clazz.create(
-        'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler', plugin.getSandbox());
+            'Oskari.mapframework.bundle.mapwfs2.service.StatusHandler', plugin.getSandbox());
 
         this.WFSLayerService = plugin.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         this._log = Oskari.log('Oskari.mapframework.bundle.mapwfs2.service.Mediator');
@@ -128,10 +128,10 @@ Oskari.clazz.define(
             this.__latestTry = 0;
         },
         handleError : function(params) {
-          var oskariLayer = this.plugin.getSandbox().getMap().getSelectedLayer( params.data.layerId );
-          //assumption that all layers fail
-          this.plugin.getMapModule().loadingState( oskariLayer.getId(), null, true);
-          this.statusHandler.handleError(params.data, this.plugin);
+            var oskariLayer = this.plugin.getSandbox().getMap().getSelectedLayer( params.data.layerId );
+            //assumption that all layers fail
+            this.plugin.getMapModule().loadingState( oskariLayer.getId(), null, true);
+            this.statusHandler.handleError(params.data, this.plugin);
         },
         statusChange : function(params) {
             // handle init started
@@ -672,8 +672,8 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setLocation
          */
         setLocation: function (layerId, srs, bbox, zoom, grid, tiles, manualRefesh) {
-          var me = this;
-          var oskariLayer =me.plugin.getSandbox().getMap().getSelectedLayer( layerId );
+            var me = this;
+            var oskariLayer =me.plugin.getSandbox().getMap().getSelectedLayer( layerId );
             this.sendMessage('/service/wfs/setLocation', {
                 'layerId': layerId,
                 'srs': srs,
@@ -690,7 +690,7 @@ Oskari.clazz.category(
             // track loading state for WFS-layers
             oskariLayer.loadingDone(0);
             tiles.forEach(function(tile){
-               me.plugin.getMapModule().loadingState( oskariLayer.getId(), true);
+                me.plugin.getMapModule().loadingState( oskariLayer.getId(), true);
             });
         },
 

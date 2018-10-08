@@ -150,30 +150,30 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
 
     __getLayerConfig : function(caps, layer) {
 
-            // default params and options
-            // URL is tuned serverside so we use the correct one
-            var config = {
-                url : layer.getTileUrl(),
-                name : 'layer_' + layer.getId(),
-                style: layer.getCurrentStyle().getName(),
-                layer: layer.getLayerName(),
-                matrixSet: layer.getWmtsMatrixSetId(),
-                params : {},
-                buffer: 0,
-                displayInLayerSwitcher: false,
-                isBaseLayer: false,
-                crossOrigin : layer.getAttributes('crossOrigin')
-            };
+        // default params and options
+        // URL is tuned serverside so we use the correct one
+        var config = {
+            url : layer.getTileUrl(),
+            name : 'layer_' + layer.getId(),
+            style: layer.getCurrentStyle().getName(),
+            layer: layer.getLayerName(),
+            matrixSet: layer.getWmtsMatrixSetId(),
+            params : {},
+            buffer: 0,
+            displayInLayerSwitcher: false,
+            isBaseLayer: false,
+            crossOrigin : layer.getAttributes('crossOrigin')
+        };
 
             // override default params and options from layer
-            _.each(layer.getOptions(), function(value, key) {
-                config[key] = value;
-            });
+        _.each(layer.getOptions(), function(value, key) {
+            config[key] = value;
+        });
 
-            _.each(layer.getParams(), function(value, key) {
-                config.params[key] = value;
-            });
+        _.each(layer.getParams(), function(value, key) {
+            config.params[key] = value;
+        });
 
-            return config;
+        return config;
     }
 });

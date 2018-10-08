@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         _initImpl: function (sandbox, options, map) {
             /* Added to handle pink tiles */
-              var olOpts = options.openLayers || {};
+            var olOpts = options.openLayers || {};
             OpenLayers.IMAGE_RELOAD_ATTEMPTS = olOpts.imageReloadAttemps || 5;
             OpenLayers.Util.onImageLoadErrorColor = olOpts.onImageLoadErrorColor || 'transparent';
 
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
 
-/* OL2 specific - check if this can be done in a common way
+        /* OL2 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
         /**
          * Send map click event.
@@ -154,10 +154,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 Oskari.getDecimalSeparator()
             ) + unit;
         },
-/*<------------- / OL2 specific ----------------------------------- */
+        /*<------------- / OL2 specific ----------------------------------- */
 
 
-/* Impl specific - found in ol2 AND ol3 modules
+        /* Impl specific - found in ol2 AND ol3 modules
 ------------------------------------------------------------------> */
 
         getPixelFromCoordinate : function(lonlat) {
@@ -359,10 +359,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return extent.contains(x,y);
         },
 
-/* --------- /Impl specific --------------------------------------> */
+        /* --------- /Impl specific --------------------------------------> */
 
 
-/* Impl specific - PRIVATE
+        /* Impl specific - PRIVATE
 ------------------------------------------------------------------> */
         _calculateScalesImpl: function (resolutions) {
 
@@ -383,10 +383,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _setZoomLevelImpl : function(newZoomLevel) {
             this.getMap().zoomTo(newZoomLevel);
         },
-/* --------- /Impl specific - PRIVATE ----------------------------> */
+        /* --------- /Impl specific - PRIVATE ----------------------------> */
 
 
-/* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
+        /* Impl specific - found in ol2 AND ol3 modules BUT parameters and/or return value differ!!
 ------------------------------------------------------------------> */
 
         /**
@@ -526,58 +526,58 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     olStyle.graphicName = 'circle';
                 }
             }
-          if(style.text.font) {
-            var split = style.text.font.split(' ');
-            if(split[1]) {
-               olStyle.fontSize = split[1];
+            if(style.text.font) {
+                var split = style.text.font.split(' ');
+                if(split[1]) {
+                    olStyle.fontSize = split[1];
+                }
+                if(split[0]) {
+                    olStyle.fontWeight = split[0];
+                }
+                if(split[2]) {
+                    olStyle.fontFamily = split[2];
+                }
             }
-            if(split[0]) {
-                olStyle.fontWeight = split[0];
-            }
-            if(split[2]) {
-                olStyle.fontFamily = split[2];
-            }
-          }
 
-          if(style.text.stroke && typeof style.text.stroke.width === 'number') {
-            olStyle.labelOutlineWidth = style.text.stroke.width;
-          }
+            if(style.text.stroke && typeof style.text.stroke.width === 'number') {
+                olStyle.labelOutlineWidth = style.text.stroke.width;
+            }
 
-          if(Oskari.util.keyExists(style, 'fill.color')) {
+            if(Oskari.util.keyExists(style, 'fill.color')) {
                 olStyle.fillColor = style.fill.color;
-          }
-          if(Oskari.util.keyExists(style.text, 'fill.color')) {
-              olStyle.fontColor = style.text.fill.color;
-          }
-          if(style.text.stroke) {
-              if(style.text.stroke.color) {
-                  olStyle.labelOutlineColor = style.text.stroke.color;
-              }
-              if(style.text.stroke.width) {
-                  olStyle.labelOutlineWidth = style.text.stroke.width;
-              }
-          }
-          // TODO: remove support for labelAlign as ol3 uses textAlign and we only want to support one
-          if(style.text.labelAlign || style.text.textAlign) {
-             olStyle.labelAlign = style.text.labelAlign || style.text.textAlign;
-          }
-          if(style.text.offsetX) {
-             olStyle.labelXOffset = style.text.offsetX;
-          }
-          if(style.text.offsetY) {
-             olStyle.labelYOffset = style.text.offsetY;
-          }
+            }
+            if(Oskari.util.keyExists(style.text, 'fill.color')) {
+                olStyle.fontColor = style.text.fill.color;
+            }
+            if(style.text.stroke) {
+                if(style.text.stroke.color) {
+                    olStyle.labelOutlineColor = style.text.stroke.color;
+                }
+                if(style.text.stroke.width) {
+                    olStyle.labelOutlineWidth = style.text.stroke.width;
+                }
+            }
+            // TODO: remove support for labelAlign as ol3 uses textAlign and we only want to support one
+            if(style.text.labelAlign || style.text.textAlign) {
+                olStyle.labelAlign = style.text.labelAlign || style.text.textAlign;
+            }
+            if(style.text.offsetX) {
+                olStyle.labelXOffset = style.text.offsetX;
+            }
+            if(style.text.offsetY) {
+                olStyle.labelYOffset = style.text.offsetY;
+            }
 
-          //label
-          if (style.text.labelText) {
-              if(typeof style.text.labelText === 'number'){
-                  olStyle.label = style.text.labelText.toString();
-              } else {
-                  olStyle.label = style.text.labelText;
-              }
-          } else if (style.text.labelProperty) {
-             olStyle.label = '${'+style.text.labelProperty+'}';
-          }
+            //label
+            if (style.text.labelText) {
+                if(typeof style.text.labelText === 'number'){
+                    olStyle.label = style.text.labelText.toString();
+                } else {
+                    olStyle.label = style.text.labelText;
+                }
+            } else if (style.text.labelProperty) {
+                olStyle.label = '${'+style.text.labelProperty+'}';
+            }
             return olStyle;
         },
         /**
@@ -644,7 +644,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
             return urls;
         }
-/* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
+        /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
     }, {
         /**

@@ -12,10 +12,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDi
  * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} instance
  *          reference to my places bundle instance
  */
-function(sandbox, instance) {
-    this.sandbox = sandbox;
-    this.instance = instance;
-}, {
+    function(sandbox, instance) {
+        this.sandbox = sandbox;
+        this.instance = instance;
+    }, {
     /**
      * @method handleRequest
      * @param {Oskari.mapframework.core.Core} core
@@ -23,15 +23,15 @@ function(sandbox, instance) {
      * @param {Oskari.mapframework.bundle.myplaces2.request.EditPlaceRequest/Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogRequest} request
      *      request to handle
      */
-    handleRequest : function(core, request) {
-        if (this.instance) {
-            this.instance.openAddLayerDialog(request.getOriginator(), request.getSide());
+        handleRequest : function(core, request) {
+            if (this.instance) {
+                this.instance.openAddLayerDialog(request.getOriginator(), request.getSide());
+            }
         }
-    }
-}, {
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    protocol : ['Oskari.mapframework.core.RequestHandler']
-});
+        protocol : ['Oskari.mapframework.core.RequestHandler']
+    });

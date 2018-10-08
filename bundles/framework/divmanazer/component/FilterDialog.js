@@ -181,7 +181,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
             // Make the popup draggable
             me.popup.makeDraggable();
             if (_.isArray(layerAttributes) && _.isFunction(cb)) {
-               cb();
+                cb();
             }
         },
 

@@ -9,32 +9,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
  * @method create called automatically on construction
  * @static
  */
-function() {
-    this._localization = null;
-    this.sandbox = null;
-    this.buttons = undefined;
-    this.categoryHandler = undefined;
-    this.myPlacesService = undefined;
-    this.featureNS = undefined;
-    this.idPrefix = 'myplaces';
-    this._log = Oskari.log(this.getName());
-}, {
-    __name : 'PublishedMyPlaces',
-    /**
+    function() {
+        this._localization = null;
+        this.sandbox = null;
+        this.buttons = undefined;
+        this.categoryHandler = undefined;
+        this.myPlacesService = undefined;
+        this.featureNS = undefined;
+        this.idPrefix = 'myplaces';
+        this._log = Oskari.log(this.getName());
+    }, {
+        __name : 'PublishedMyPlaces',
+        /**
      * @method getName
      * @return {String} the name for the component
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName : function() {
+            return this.__name;
+        },
+        /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
-    getSandbox : function() {
-        return this.sandbox;
-    },
-    /**
+        getSandbox : function() {
+            return this.sandbox;
+        },
+        /**
      * @method getLocalization
      * Returns JSON presentation of bundles localization data for current language.
      * If key-parameter is not given, returns the whole localization data.
@@ -44,208 +44,208 @@ function() {
      *      JSON object for complete data depending on localization
      *      structure and if parameter key is given
      */
-    getLocalization : function(key) {
-        if(!this._localization) {
-            this._localization = Oskari.getLocalization(this.getName());
-        }
-        if (key) {
-            if (this._localization &&
-                this._localization[key]) {
-                return this._localization[key];
-            } else {
-                return key;
+        getLocalization : function(key) {
+            if(!this._localization) {
+                this._localization = Oskari.getLocalization(this.getName());
             }
-        }
-        return this._localization;
-    },
-    /**
+            if (key) {
+                if (this._localization &&
+                this._localization[key]) {
+                    return this._localization[key];
+                } else {
+                    return key;
+                }
+            }
+            return this._localization;
+        },
+        /**
      * @method showMessage
      * Shows user a message with ok button
      * @param {String} title popup title
      * @param {String} message popup message
      */
-    showMessage : function(title, message) {
-        var loc = this.getLocalization();
+        showMessage : function(title, message) {
+            var loc = this.getLocalization();
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     	okBtn.setTitle(loc.buttons.ok);
     	okBtn.addClass('primary');
     	okBtn.setHandler(function() {
-            dialog.close(true);
+                dialog.close(true);
     	});
     	dialog.show(title, message, [okBtn]);
-    },
-    /**
+        },
+        /**
      * @method forceDisable
      * Disables the functionality since something went wrong
      * (couldnt create default category)
      */
-    forceDisable : function() {
-        this.buttons.disableButtons();
-        var loc = this.getLocalization();
+        forceDisable : function() {
+            this.buttons.disableButtons();
+            var loc = this.getLocalization();
 
-        this.showMessage(loc.category.organization + ' - ' +
+            this.showMessage(loc.category.organization + ' - ' +
              loc.notification.error.title, loc.notification.error.generic);
-    },
-    /**
+        },
+        /**
      * @method enableGfi
      * Enables/disables the gfi functionality
      * @param {Boolean} blnEnable true to enable, false to disable
      */
-    enableGfi : function(blnEnable) {
-        var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
-        if(gfiReqBuilder) {
-            this.sandbox.request(this.buttons, gfiReqBuilder(blnEnable));
-        }
-    },
-    /**
+        enableGfi : function(blnEnable) {
+            var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            if(gfiReqBuilder) {
+                this.sandbox.request(this.buttons, gfiReqBuilder(blnEnable));
+            }
+        },
+        /**
      * @method getService
      * Returns the my places main service
      * @return {Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService}
      */
-    getService : function() {
-        return this.myPlacesService;
-    },
-    /**
+        getService : function() {
+            return this.myPlacesService;
+        },
+        /**
      * @method getDrawPlugin
      * Returns reference to the draw plugin
      * @return {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin}
      */
-    getDrawPlugin : function() {
-        return this.view.drawPlugin;
-    },
-    /**
+        getDrawPlugin : function() {
+            return this.view.drawPlugin;
+        },
+        /**
      * @method getCategoryHandler
      * Returns reference to the category handler
      * @return {Oskari.mapframework.bundle.publishedmyplaces.CategoryHandler}
      */
-    getCategoryHandler : function() {
-        return this.categoryHandler;
-    },
-    /**
+        getCategoryHandler : function() {
+            return this.categoryHandler;
+        },
+        /**
      * @method getMainView
      * Returns reference to the main view
      * @return {Oskari.mapframework.bundle.myplaces.view.MainView}
      */
-    getMainView : function() {
-        return this.view;
-    },
-    /**
+        getMainView : function() {
+            return this.view;
+        },
+        /**
      * @method update
      * implements BundleInstance protocol update method - does nothing atm
      */
-    update : function() {
-    },
-     /**
+        update : function() {
+        },
+        /**
      * @method init
      * implements Module protocol init method
      */
-    init : function() {
-    },
-    /**
+        init : function() {
+        },
+        /**
      * @method start
      * implements BundleInstance protocol start methdod
      */
-    start : function() {
-        var me = this;
-        var conf = me.conf || {};
-		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-		var sandbox = Oskari.getSandbox(sandboxName);
-        this.sandbox = sandbox;
+        start : function() {
+            var me = this;
+            var conf = me.conf || {};
+            var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+            var sandbox = Oskari.getSandbox(sandboxName);
+            this.sandbox = sandbox;
 
-        this.featureNS = conf ? conf.featureNS : null;
-        if (!this.featureNS) {
-            return;
-        }
+            this.featureNS = conf ? conf.featureNS : null;
+            if (!this.featureNS) {
+                return;
+            }
 
-        this._log.debug('Initializing my places module...');
+            this._log.debug('Initializing my places module...');
 
-        // handles toolbar buttons related to my places
-        this.buttons = Oskari.clazz.create('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler', this);
-        this.buttons.start();
+            // handles toolbar buttons related to my places
+            this.buttons = Oskari.clazz.create('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler', this);
+            this.buttons.start();
 
 
-        var user = Oskari.user();
+            var user = Oskari.user();
 
-        if(!user.isLoggedIn() && conf.allowGuest !== true) {
+            if(!user.isLoggedIn() && conf.allowGuest !== true) {
             // guest users don't need anything else
             // overrideable via conf.allowGuest
-            return;
-        }
+                return;
+            }
 
-        sandbox.register(me);
-        // handles category related logic - syncs categories to my places map layers etc
-        this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.publishedmyplaces.CategoryHandler', this);
-        this.categoryHandler.start();
+            sandbox.register(me);
+            // handles category related logic - syncs categories to my places map layers etc
+            this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.publishedmyplaces.CategoryHandler', this);
+            this.categoryHandler.start();
 
-        var defaults = this._getCategoryDefaults();
-        var actionUrl = this.conf.queryUrl;
+            var defaults = this._getCategoryDefaults();
+            var actionUrl = this.conf.queryUrl;
 
-        // back end communication
-        this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
-            actionUrl, user.getUuid(), sandbox, defaults, this);
-        // register service so personal data can access it
-        this.sandbox.registerService(this.myPlacesService);
+            // back end communication
+            this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
+                actionUrl, user.getUuid(), sandbox, defaults, this);
+            // register service so personal data can access it
+            this.sandbox.registerService(this.myPlacesService);
 
-        // init WITHOUT loading places/categories
-        this.myPlacesService.init(true);
+            // init WITHOUT loading places/categories
+            this.myPlacesService.init(true);
 
-        // handles my places insert form etc
-        var categoryId = (conf ? (conf.layer ? conf.layer.split('myplaces_')[1] : null) : null);
-        this.view = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.myplaces2.view.MainView', this, {
-                category: categoryId,
-                published: true
-            });
-        this.view.start();
-    },
-    /**
+            // handles my places insert form etc
+            var categoryId = (conf ? (conf.layer ? conf.layer.split('myplaces_')[1] : null) : null);
+            this.view = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.myplaces2.view.MainView', this, {
+                    category: categoryId,
+                    published: true
+                });
+            this.view.start();
+        },
+        /**
      * @method stop
      * implements BundleInstance protocol stop method - does nothing atm
      */
-    stop : function() {
-        this.sandbox = null;
-    },
+        stop : function() {
+            this.sandbox = null;
+        },
 
-    _getCategoryDefaults : function() {
-         var defaults = {
-             name: this.getLocalization('category').defaultName,
-             point: {
-                 shape: 1,
-                 color: '000000',
-                 size: 3
-             },
-             line: {
-                 style: '',
-                 cap: 0,
-                 corner: 0,
-                 width: 1,
-                 color: '3233ff'
-             },
-             area: {
-                 linestyle: '',
-                 linecorner: 0,
-                 linewidth: 1,
-                 linecolor: '000000',
-                 color: 'ffde00',
-                 fill: -1
+        _getCategoryDefaults : function() {
+            var defaults = {
+                name: this.getLocalization('category').defaultName,
+                point: {
+                    shape: 1,
+                    color: '000000',
+                    size: 3
+                },
+                line: {
+                    style: '',
+                    cap: 0,
+                    corner: 0,
+                    width: 1,
+                    color: '3233ff'
+                },
+                area: {
+                    linestyle: '',
+                    linecorner: 0,
+                    linewidth: 1,
+                    linecolor: '000000',
+                    color: 'ffde00',
+                    fill: -1
 
-             }
-         };
-         if (!this.conf) return defaults;
-         if (!this.conf.defaults) return defaults;
-         for (var prop in defaults) {
-             if(this.conf.defaults[prop]) {
-                 defaults[prop] = this.conf.defaults[prop];
-             }
-         }
-         return defaults;
-     }
+                }
+            };
+            if (!this.conf) return defaults;
+            if (!this.conf.defaults) return defaults;
+            for (var prop in defaults) {
+                if(this.conf.defaults[prop]) {
+                    defaults[prop] = this.conf.defaults[prop];
+                }
+            }
+            return defaults;
+        }
 
-}, {
+    }, {
     /**
      * @property {String[]} protocol
      * @static
      */
-    protocol : ['Oskari.bundle.BundleInstance']
-});
+        protocol : ['Oskari.bundle.BundleInstance']
+    });

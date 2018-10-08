@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.layerselector2.view.FilterButtons',
                 me.createButton(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
             });
         },
-          /**
+        /**
          * Set filter button tooltip
          * @method  @private _setFilterTooltip
          * @param {String} filterName filter name
@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.layerselector2.view.FilterButtons',
                     filterIcon.removeClass('active');
                     filterIcon.addClass(filter.cls.deactive);
                     // Set tooltip for one per filter
-                        me._setFilterTooltip(filter.name, filter.tooltip);
+                    me._setFilterTooltip(filter.name, filter.tooltip);
                 }
             });
 

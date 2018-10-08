@@ -224,7 +224,7 @@ Oskari.clazz.define(
 
                 // this is needed to add the functionality to filter with aggregate analyse values
                 // if value is true, the link to filter with aggregate analyse values is added to dialog
-                isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
+            isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
 
             var fixedOptions = {
                 bboxSelection: true,
@@ -290,7 +290,7 @@ Oskari.clazz.define(
             this.tabsContainer.addPanel(panel);
             if (!layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
                 panel.setTitleIcon('icon-funnel', function (event) {
-                me.addFilterFunctionality(event, layer);
+                    me.addFilterFunctionality(event, layer);
                 });
             }
         },
@@ -363,7 +363,7 @@ Oskari.clazz.define(
                 container.append(this.instance.getLocalization('layer')['out-of-content-area']);
 
                 if (!panel.grid) {
-                   container.parent().find('.grid-tools').remove();
+                    container.parent().find('.grid-tools').remove();
                 }
 
                 return;
@@ -607,9 +607,9 @@ Oskari.clazz.define(
 
                 if(!panel.grid){
                     panel.grid = Oskari.clazz.create(
-                            'Oskari.userinterface.component.Grid',
-                            me.instance.getLocalization('columnSelectorTooltip')
-                        );
+                        'Oskari.userinterface.component.Grid',
+                        me.instance.getLocalization('columnSelectorTooltip')
+                    );
 
                     // set selection handler
                     panel.grid.addSelectionListener(function (pGrid, dataId, isCtrlKey) {
@@ -815,7 +815,7 @@ Oskari.clazz.define(
             }
             var panel = this.layers['' + layer.getId()],
                 tabContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-content');
-                isOk = this.tabsContainer.isSelected(panel);
+            isOk = this.tabsContainer.isSelected(panel);
 
 
             if (isOk && panel.grid) {
@@ -840,49 +840,49 @@ Oskari.clazz.define(
                 values;
 
             eachFeature:
-                for (i = 0; i < features.length; i += 1) {
-                    featureData = {};
-                    values = features[i];
+            for (i = 0; i < features.length; i += 1) {
+                featureData = {};
+                values = features[i];
 
-                    // remove from selected if in feature list
-                    if (selectedFeatures !== null && selectedFeatures !== undefined && selectedFeatures.length > 0) {
-                        for (k = 0; k < selectedFeatures.length; k += 1) {
-                            if (values[0] === selectedFeatures[k][0]) { // fid match
-                                selectedFeatures.splice(k, 1);
-                            }
+                // remove from selected if in feature list
+                if (selectedFeatures !== null && selectedFeatures !== undefined && selectedFeatures.length > 0) {
+                    for (k = 0; k < selectedFeatures.length; k += 1) {
+                        if (values[0] === selectedFeatures[k][0]) { // fid match
+                            selectedFeatures.splice(k, 1);
                         }
                     }
-
-                    for (j = 0; j < fields.length; j += 1) {
-                        if (!values || values[j] === null || values[j] === undefined || values[j] === '') {
-                            featureData[fields[j]] = '';
-                        } else {
-                            // Generate and url links
-                            if (this._isUrlValid(values[j])) {
-                                if (values[j].substring(0, 4) === 'http') {
-                                    urlLink = values[j];
-                                } else {
-                                    urlLink = 'http://' + values[j];
-                                }
-                                featureData[fields[j]] = '<a href="' + urlLink + '" target="_blank">' + values[j] + '</a>';
-                            } else {
-                                featureData[fields[j]] = values[j];
-                            }
-                            // remove from empty fields
-                            this.remove_item(hiddenFields, fields[j]);
-                        }
-                    }
-
-                    // Remove this when better solution to handle duplicates is implemented
-                    var tableData = model.getData();
-                    for (j = 0; j < tableData.length; j += 1) {
-                        if (tableData[j].__fid === featureData.__fid) {
-                            continue eachFeature;
-                        }
-                    }
-
-                    model.addData(featureData);
                 }
+
+                for (j = 0; j < fields.length; j += 1) {
+                    if (!values || values[j] === null || values[j] === undefined || values[j] === '') {
+                        featureData[fields[j]] = '';
+                    } else {
+                        // Generate and url links
+                        if (this._isUrlValid(values[j])) {
+                            if (values[j].substring(0, 4) === 'http') {
+                                urlLink = values[j];
+                            } else {
+                                urlLink = 'http://' + values[j];
+                            }
+                            featureData[fields[j]] = '<a href="' + urlLink + '" target="_blank">' + values[j] + '</a>';
+                        } else {
+                            featureData[fields[j]] = values[j];
+                        }
+                        // remove from empty fields
+                        this.remove_item(hiddenFields, fields[j]);
+                    }
+                }
+
+                // Remove this when better solution to handle duplicates is implemented
+                var tableData = model.getData();
+                for (j = 0; j < tableData.length; j += 1) {
+                    if (tableData[j].__fid === featureData.__fid) {
+                        continue eachFeature;
+                    }
+                }
+
+                model.addData(featureData);
+            }
         },
 
         /**

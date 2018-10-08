@@ -99,21 +99,21 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
-           var me = this;
+        _registerLayerEvents: function(layer, oskariLayer){
+            var me = this;
 
-           layer.events.register('tileloadstart', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), true);
-           });
+            layer.events.register('tileloadstart', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-           layer.events.register('tileloaded', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), false);
-           });
+            layer.events.register('tileloaded', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-          layer.events.register('tileerror', layer, function(){
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-         });
-         },
+            layer.events.register('tileerror', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            });
+        },
         /**
          *
          */
@@ -141,19 +141,19 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             var wmtsHolderLayer = this._getPlaceHolderWmtsLayer(layer);
             map.addLayer(wmtsHolderLayer);
             index = map.layers.length;
-                this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
-                    me._log.debug('created WMTS layer ' + wmtsLayer);
-                    // Get the reserved current index for wmts layer
-                    var holderLayerIndex = map.getLayerIndex(wmtsHolderLayer);
-                    map.removeLayer(wmtsHolderLayer);
-                    me._registerLayerEvents(wmtsLayer, layer);
-                    map.addLayer(wmtsLayer);
-                    if (keepLayerOnTop) {
-                        // use the placeholder layer index for valid layer order because of async add
-                        map.setLayerIndex(wmtsLayer, holderLayerIndex);
-                    } else {
-                        map.setLayerIndex(wmtsLayer, 0);
-                    }
+            this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
+                me._log.debug('created WMTS layer ' + wmtsLayer);
+                // Get the reserved current index for wmts layer
+                var holderLayerIndex = map.getLayerIndex(wmtsHolderLayer);
+                map.removeLayer(wmtsHolderLayer);
+                me._registerLayerEvents(wmtsLayer, layer);
+                map.addLayer(wmtsLayer);
+                if (keepLayerOnTop) {
+                    // use the placeholder layer index for valid layer order because of async add
+                    map.setLayerIndex(wmtsLayer, holderLayerIndex);
+                } else {
+                    map.setLayerIndex(wmtsLayer, 0);
+                }
             }, function() {
             });
         },
@@ -251,7 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             });
             return layerHolder;
         }
-}, {
+    }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses

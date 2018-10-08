@@ -371,17 +371,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             if (builder) {
                 me._toolbarContent = me.templates.container.clone();
                 request = builder(
-                        me.toolbarId,
-                        'add',
-                        {
-                            show: true,
-                            toolbarContainer: me._toolbarContent,
-                            disableHover: mapInMobileMode,
-                            colours: {
-                                hover: themeColours.hoverColour,
-                                background: themeColours.backgroundColour
-                            }
+                    me.toolbarId,
+                    'add',
+                    {
+                        show: true,
+                        toolbarContainer: me._toolbarContent,
+                        disableHover: mapInMobileMode,
+                        colours: {
+                            hover: themeColours.hoverColour,
+                            background: themeColours.backgroundColour
                         }
+                    }
                 );
                 sandbox.request(me.getName(), request);
 
@@ -513,8 +513,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 'bodyBgColour': themeColours.backgroundColour
             });
 
-           if(sandbox.mapMode === 'mapPublishMode') {
-               var request,
+            if(sandbox.mapMode === 'mapPublishMode') {
+                var request,
                     builder = Oskari.requestBuilder('Toolbar.ToolbarRequest'),
                     mapmodule = me.getMapModule(),
                     theme = mapmodule.getTheme(),
@@ -523,14 +523,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
                 if (builder) {
                     request = builder(
-                            me.toolbarId,
-                            'update',
-                            {
-                                colours: {
-                                    hover: themeColours.hoverColour,
-                                    background: themeColours.backgroundColour
-                                }
+                        me.toolbarId,
+                        'update',
+                        {
+                            colours: {
+                                hover: themeColours.hoverColour,
+                                background: themeColours.backgroundColour
                             }
+                        }
                     );
                     sandbox.request(me.getName(), request);
 

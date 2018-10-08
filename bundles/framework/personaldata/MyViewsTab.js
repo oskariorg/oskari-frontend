@@ -114,8 +114,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             listContainer.empty();
 
             views.forEach(function(view) {
-              view.name = Oskari.util.sanitize(view.name);
-              view.description = Oskari.util.sanitize(view.description);
+                view.name = Oskari.util.sanitize(view.name);
+                view.description = Oskari.util.sanitize(view.description);
             });
 
             this.viewData = views;
@@ -328,8 +328,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     _.each(checkboxes, function(checkbox) {
                         //uncheck other checkboxes,
                         //disable all isDefault checkboxes
-                       checkbox.checked = false;
-                       checkbox.disabled = 'disabled';
+                        checkbox.checked = false;
+                        checkbox.disabled = 'disabled';
                     });
                     this.checked = wasChecked;
                     //start spinner

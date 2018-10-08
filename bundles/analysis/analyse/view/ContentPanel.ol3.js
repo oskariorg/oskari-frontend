@@ -34,48 +34,48 @@ Oskari.clazz.define(
         me._defaultStyle = {
             draw : {
                 fill : {
-                     color: 'rgba(255,255,255,0.4)'
+                    color: 'rgba(255,255,255,0.4)'
                 },
                 stroke : {
-                      color: '#3399CC',
-                      width: 2
+                    color: '#3399CC',
+                    width: 2
                 },
                 image : {
-                      radius: 4,
-                      fill: {
+                    radius: 4,
+                    fill: {
                         color: '#3399CC'
-                      }
+                    }
                 }
             },
             modify : {
                 fill : {
-                     color: 'rgba(255,255,255,0.4)'
+                    color: 'rgba(255,255,255,0.4)'
                 },
                 stroke : {
-                      color: '#3399CC',
-                      width: 2
+                    color: '#3399CC',
+                    width: 2
                 },
                 image : {
-                      radius: 4,
-                      fill: {
+                    radius: 4,
+                    fill: {
                         color: 'rgba(0,0,0,1)'
-                      }
+                    }
                 }
             },
             intersect : {
                 fill : {
-                     color: 'rgba(255,255,255,0.4)'
+                    color: 'rgba(255,255,255,0.4)'
                 },
                 stroke : {
-                      color: '#3399CC',
-                      width: 2,
-                      lineDash: 5
+                    color: '#3399CC',
+                    width: 2,
+                    lineDash: 5
                 },
                 image : {
-                      radius: 4,
-                      fill: {
+                    radius: 4,
+                    fill: {
                         color: 'rgba(0,0,0,1)'
-                      }
+                    }
                 }
             }
         };
@@ -324,10 +324,10 @@ Oskari.clazz.define(
                 area: 0
             };
             me.drawControls = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.DrawControls',
-                                me.instance,
-                                me.loc,
-                                function (isCancel) {me._stopDrawing(isCancel);},
-                                function (drawMode) {me._startNewDrawing(drawMode);});
+                me.instance,
+                me.loc,
+                function (isCancel) {me._stopDrawing(isCancel);},
+                function (drawMode) {me._startNewDrawing(drawMode);});
 
             me.dataPanel = me.drawControls.createDataPanel(me.loc);
             me.drawToolsPanel = me.drawControls.createDrawToolsPanel(me.loc);
@@ -692,20 +692,20 @@ Oskari.clazz.define(
             me.selectInteraction = me.analyseHelper.createSelectInteraction(me.featureLayer);
 
             me.selectInteraction.on('select', function (evt) {
-              if (evt.selected.length > 0) {
-                  var wkt = new olFormatWKT();
-                      featureWKT = wkt.writeFeature(evt.selected[0]);
+                if (evt.selected.length > 0) {
+                    var wkt = new olFormatWKT();
+                    featureWKT = wkt.writeFeature(evt.selected[0]);
 
-                  //set geometry for drawFilter
-                  me.selectedGeometry = featureWKT;
-                  //set geometry for filter Json
-                  var geometries = [];
-                  geometries.push(featureWKT);
-                  me.view.setFilterGeometry(geometries);
-                  me.WFSLayerService.emptyAllWFSFeatureSelections();
-              } else if (evt.deselected.length) {
-                  me.selectedGeometry = undefined;
-              }
+                    //set geometry for drawFilter
+                    me.selectedGeometry = featureWKT;
+                    //set geometry for filter Json
+                    var geometries = [];
+                    geometries.push(featureWKT);
+                    me.view.setFilterGeometry(geometries);
+                    me.WFSLayerService.emptyAllWFSFeatureSelections();
+                } else if (evt.deselected.length) {
+                    me.selectedGeometry = undefined;
+                }
             });
         },
 
@@ -1004,24 +1004,24 @@ Oskari.clazz.define(
             var type = this.selectedGeometry.geometry.GeometryType;
             // Enable or disable buttons depending on the selected feature type
             switch (type) {
-                case 'LineString':
-                    pointButton.removeClass('disabled');
-                    lineButton.addClass('disabled');
-                    editButton.addClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
-                case 'MultiPolygon':
-                    pointButton.addClass('disabled');
-                    lineButton.removeClass('disabled');
-                    editButton.removeClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
-                default:
-                    pointButton.addClass('disabled');
-                    lineButton.addClass('disabled');
-                    editButton.addClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
+            case 'LineString':
+                pointButton.removeClass('disabled');
+                lineButton.addClass('disabled');
+                editButton.addClass('disabled');
+                removeButton.addClass('disabled');
+                break;
+            case 'MultiPolygon':
+                pointButton.addClass('disabled');
+                lineButton.removeClass('disabled');
+                editButton.removeClass('disabled');
+                removeButton.addClass('disabled');
+                break;
+            default:
+                pointButton.addClass('disabled');
+                lineButton.addClass('disabled');
+                editButton.addClass('disabled');
+                removeButton.addClass('disabled');
+                break;
             }
         },
 

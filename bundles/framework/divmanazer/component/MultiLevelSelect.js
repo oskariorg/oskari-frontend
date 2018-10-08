@@ -325,4 +325,4 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

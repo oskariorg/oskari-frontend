@@ -126,35 +126,35 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     },
     __getLayerConfig : function(caps, layer) {
 
-            // default params and options
-            // URL is tuned serverside so we use the correct one
-            var config = {
-                url : layer.getTileUrl(),
-                name : 'layer_' + layer.getId(),
-                style: layer.getCurrentStyle().getName(),
-                layer: layer.getLayerName(),
-                matrixSet: layer.getWmtsMatrixSetId(),
-                params : {},
-                visibility: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible(),
-                opacity : layer.getOpacity() / 100,
-                displayInLayerSwitcher: false,
-                isBaseLayer: false,
-                buffer: 0
-            };
+        // default params and options
+        // URL is tuned serverside so we use the correct one
+        var config = {
+            url : layer.getTileUrl(),
+            name : 'layer_' + layer.getId(),
+            style: layer.getCurrentStyle().getName(),
+            layer: layer.getLayerName(),
+            matrixSet: layer.getWmtsMatrixSetId(),
+            params : {},
+            visibility: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible(),
+            opacity : layer.getOpacity() / 100,
+            displayInLayerSwitcher: false,
+            isBaseLayer: false,
+            buffer: 0
+        };
 
-            _.find(caps.contents.layers, function(capsLayer) {
-              return capsLayer.identifier === config.layer;
-            });
+        _.find(caps.contents.layers, function(capsLayer) {
+            return capsLayer.identifier === config.layer;
+        });
 
-            // override default params and options from layer
-            _.each(layer.getOptions(), function(value, key) {
-                config[key] = value;
-            });
+        // override default params and options from layer
+        _.each(layer.getOptions(), function(value, key) {
+            config[key] = value;
+        });
 
-            _.each(layer.getParams(), function(value, key) {
-                config.params[key] = value;
-            });
+        _.each(layer.getParams(), function(value, key) {
+            config.params[key] = value;
+        });
 
-            return config;
+        return config;
     }
 });

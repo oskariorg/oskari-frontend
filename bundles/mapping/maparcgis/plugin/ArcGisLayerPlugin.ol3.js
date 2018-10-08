@@ -136,23 +136,23 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          *
          */
         _registerLayerEvents: function(layer, oskariLayer){
-        var me = this;
-        var source = layer.getSource();
+            var me = this;
+            var source = layer.getSource();
 
-        source.on('tileloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), true);
-        });
+            source.on('tileloadstart', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-        source.on('tileloadend', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), false);
-        });
+            source.on('tileloadend', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-        source.on('tileloaderror', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            source.on('tileloaderror', function() {
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
 
-        });
+            });
 
-      }
+        }
     }, {
         'extend' : ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**

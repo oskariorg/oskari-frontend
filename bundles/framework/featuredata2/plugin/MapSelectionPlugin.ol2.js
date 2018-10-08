@@ -297,17 +297,17 @@ Oskari.clazz.define(
             }
 
             switch (featClass) {
-                case 'OpenLayers.Geometry.Point':
-                    drawing = new OpenLayers.Geometry.MultiPoint(components);
-                    break;
-                case 'OpenLayers.Geometry.LineString':
-                    drawing = new OpenLayers.Geometry.MultiLineString(
-                        components
-                    );
-                    break;
-                case 'OpenLayers.Geometry.Polygon':
-                    drawing = new OpenLayers.Geometry.MultiPolygon(components);
-                    break;
+            case 'OpenLayers.Geometry.Point':
+                drawing = new OpenLayers.Geometry.MultiPoint(components);
+                break;
+            case 'OpenLayers.Geometry.LineString':
+                drawing = new OpenLayers.Geometry.MultiLineString(
+                    components
+                );
+                break;
+            case 'OpenLayers.Geometry.Polygon':
+                drawing = new OpenLayers.Geometry.MultiPolygon(components);
+                break;
             }
             return drawing;
         },

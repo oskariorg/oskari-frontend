@@ -27,8 +27,8 @@ Oskari.clazz.define(
             '    <label>' + loc('categoryform.drawing.label') + '</label><br clear="all" />' +
             '    <div class="rendering"></div>' +
             '  </div>' +
-// Currently visible fields are not saved or used in any way so commenting out the UI for now
-/*            '<div class="field visibleFields">' +
+            // Currently visible fields are not saved or used in any way so commenting out the UI for now
+            /*            '<div class="field visibleFields">' +
             '<label>' + loc('categoryform.visibleFields.label') + '</label><br clear="all" />' +
             '<input type="checkbox" name="placename" checked="checked" />' + loc('categoryform.visibleFields.placename') + '<br/>' +
             '<input type="checkbox" name="placedesc" checked="checked" />' + loc('categoryform.visibleFields.placedesc') + '<br/>' +

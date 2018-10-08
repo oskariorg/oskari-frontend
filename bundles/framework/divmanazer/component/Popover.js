@@ -23,8 +23,8 @@
      * =============================== */
 
     var Tooltip = function (element, options) {
-        this.init('oskariTooltip', element, options);
-    },
+            this.init('oskariTooltip', element, options);
+        },
         Popover = function (element, options) {
             this.init('oskariPopover', element, options);
         };

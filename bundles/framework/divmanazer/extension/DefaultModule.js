@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
          */
         stop: function () {
             var sandbox = this.sandbox,
-            p;
+                p;
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {

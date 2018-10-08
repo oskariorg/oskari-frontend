@@ -43,10 +43,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.service.FindBy
                 dataType : 'json',
                 type : 'GET',
                 beforeSend: function(x) {
-                  if(x && x.overrideMimeType) {
-                   x.overrideMimeType('application/json');
-                  }
-                 },
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType('application/json');
+                    }
+                },
                 url : url,
                 error : errorCb,
                 success : successCb

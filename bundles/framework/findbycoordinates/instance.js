@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         },
         __colors: ['#ffffff', '#666666', '#ffde00', '#f8931f', '#ff3334', '#bf2652',
             '#000000', '#cccccc', '#652d90', '#3233ff', '#26bf4b', '#00ff01'
-            ],
+        ],
         getName : function () {
             return this.__name;
         },
@@ -162,10 +162,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          */
         enableGFI: function (blnEnable) {
             var gfiReqBuilder = Oskari.requestBuilder(
-                'MapModulePlugin.GetFeatureInfoActivationRequest'
+                    'MapModulePlugin.GetFeatureInfoActivationRequest'
                 ),
                 hiReqBuilder = Oskari.requestBuilder(
-                'WfsLayerPlugin.ActivateHighlightRequest'
+                    'WfsLayerPlugin.ActivateHighlightRequest'
                 );
             // enable or disable gfi requests
             if (gfiReqBuilder) {
@@ -435,4 +435,4 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         }
     }, {
         'extend' : ['Oskari.userinterface.extension.DefaultExtension']
-});
+    });

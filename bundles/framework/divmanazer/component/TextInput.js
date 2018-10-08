@@ -193,4 +193,4 @@ Oskari.clazz.define('Oskari.userinterface.component.TextInput',
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

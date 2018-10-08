@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var legendContent = me.generateLegendContainer(singleLegend);
 
             if( !singleLegend ) {
-              dropdown = legendContent.find('.oskari-select');
+                dropdown = legendContent.find('.oskari-select');
             }
 
             var title = singleLegend ? me._loc.singleLegend + legends[0].title : me._loc.title;
@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             }, singleLegend, dropdown );
 
             if( !singleLegend ) {
-              dropdown.trigger('change');
+                dropdown.trigger('change');
             }
 
             if ( me._isVisible ) {
@@ -173,14 +173,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     singleLegend = true;
                     me._popup.show(title, null);
                 } else {
-                  me._popup.show(title, null);
-                  me._popup.moveTo(legend, popupLocation, true);
+                    me._popup.show(title, null);
+                    me._popup.moveTo(legend, popupLocation, true);
                 }
 
                 var content = me._popup.getJqueryContent();
                 var legendContent = me.generateLegendContainer(singleLegend);
                 if( !singleLegend ) {
-                  dropdown = legendContent.find('.oskari-select');
+                    dropdown = legendContent.find('.oskari-select');
                 }
                 content.append(legendContent);
 
@@ -221,58 +221,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 }, singleLegend, dropdown);
 
                 if( !singleLegend ) {
-                  dropdown.trigger('change');
+                    dropdown.trigger('change');
                 }
             });
             return legend;
         },
         getPopupPosition: function() {
-          var popupLocation;
+            var popupLocation;
 
-          if (this._config.location && this._config.location.classes === 'top left') {
+            if (this._config.location && this._config.location.classes === 'top left') {
                 popupLocation = 'right';
             } else {
                 popupLocation = 'left';
             }
-        return popupLocation;
+            return popupLocation;
         },
         generateLegendContainer: function( singleLegend ) {
-          var me = this;
-          var legendContainer = this._templates.legendContainer.clone();
-          var legendInfo = this._templates.legendInfo.clone();
-          var legendDivider = this._templates.legendDivider.clone();
+            var me = this;
+            var legendContainer = this._templates.legendContainer.clone();
+            var legendInfo = this._templates.legendInfo.clone();
+            var legendDivider = this._templates.legendDivider.clone();
 
-          legendInfo.text(me._loc.infotext);
+            legendInfo.text(me._loc.infotext);
 
-          if( !singleLegend ) {
-            var dropdown = me.createDropdown();
-            legendContainer.append(legendInfo);
-            legendContainer.append(legendDivider);
-            legendContainer.append(dropdown);
-          } else {
-            legendContainer.append(legendDivider);
-          }
-          return legendContainer;
+            if( !singleLegend ) {
+                var dropdown = me.createDropdown();
+                legendContainer.append(legendInfo);
+                legendContainer.append(legendDivider);
+                legendContainer.append(dropdown);
+            } else {
+                legendContainer.append(legendDivider);
+            }
+            return legendContainer;
 
         },
         createDropdown: function() {
-          var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
 
-          var legendLayers = this.getLegends();
-          var options = {
-              placeholder_text: 'layers',
-              allow_single_deselect: false,
-              disable_search_threshold: 10,
-              width: '100%'
-          };
-          var dropdown = select.create(legendLayers, options);
-          dropdown.css({
-              width: '96%',
-              paddingBottom: '1em'
-          });
-          select.adjustChosen();
-          select.selectFirstValue();
-          return dropdown;
+            var legendLayers = this.getLegends();
+            var options = {
+                placeholder_text: 'layers',
+                allow_single_deselect: false,
+                disable_search_threshold: 10,
+                width: '100%'
+            };
+            var dropdown = select.create(legendLayers, options);
+            dropdown.css({
+                width: '96%',
+                paddingBottom: '1em'
+            });
+            select.adjustChosen();
+            select.selectFirstValue();
+            return dropdown;
         },
         getLayerLegend: function(successCb, errorCb, singleLegend, dropdown) {
 

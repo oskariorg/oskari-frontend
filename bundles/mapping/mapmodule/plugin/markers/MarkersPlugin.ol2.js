@@ -491,14 +491,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     data.color = '#' + data.color;
                 }
             } else {
-                 data.color = me._defaultData.color;
+                data.color = me._defaultData.color;
             }
             if (typeof data.stroke === 'string') {
-                 if(data.stroke.charAt(0)!=='#') {
-                     data.stroke = '#' + data.stroke;
-                 }
+                if(data.stroke.charAt(0)!=='#') {
+                    data.stroke = '#' + data.stroke;
+                }
             } else {
-                  data.stroke = me._strokeStyle.stroke;
+                data.stroke = me._strokeStyle.stroke;
             }
             var style = {
                 image : {
@@ -543,7 +543,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     markerId: data.id
                 },
                 markerStyle
-            );
+                );
             newMarker.id = data.id;
             this._markerFeatures[data.id] = newMarker;
             this._markers[data.id] = data;
@@ -632,7 +632,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {number} Size in pixels
          * @private
          */
-         //--> moved to AbstractMapModule.js
+        //--> moved to AbstractMapModule.js
         /*_getSizeInPixels: function(size) {
             return 40 + 10 * size;
         },*/
@@ -765,12 +765,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             _.each(state.markers, function(marker) {
                 var str = marker.shape + FIELD_SEPARATOR +
                     marker.size + FIELD_SEPARATOR;
-                    if(marker.color.indexOf('#') === 0) {
-                        str = str + marker.color.substring(1);
-                    } else {
-                        str = str + marker.color;
-                    }
-                    str = str  + FIELD_SEPARATOR +
+                if(marker.color.indexOf('#') === 0) {
+                    str = str + marker.color.substring(1);
+                } else {
+                    str = str + marker.color;
+                }
+                str = str  + FIELD_SEPARATOR +
                     marker.x + '_' + marker.y + FIELD_SEPARATOR +
                     encodeURIComponent(marker.msg);
                 markerParams.push(str);

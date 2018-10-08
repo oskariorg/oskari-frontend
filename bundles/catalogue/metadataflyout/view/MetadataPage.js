@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             if (me.panels && me.panels.length) {
                 _.each(me.panels, function(panel) {
-                      panel.addTabsAsync(data);
+                    panel.addTabsAsync(data);
                 });
             } else {
                 for (var key in data) {

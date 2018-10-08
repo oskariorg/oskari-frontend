@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
         this.tabsContainer = null;
         this._localization = this.instance.getLocalization('flyout');
     }, {
-  /*      tabs: [{
+        /*      tabs: [{
             'id': 'download-basket-cropping-tab',
             'clazz': 'Oskari.mapframework.bundle.downloadBasket.Cropping'
         },{

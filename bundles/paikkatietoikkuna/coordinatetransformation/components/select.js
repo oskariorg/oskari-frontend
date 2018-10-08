@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                             width: '100%'
                         };
                     }
-                     if ( key == size -1 ) {
+                    if ( key == size -1 ) {
                         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', 'id');
                         var dropdown = select.create(selections, options);
                         selections = [];
@@ -49,11 +49,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                         select.selectFirstValue();
                         selects[instanceKey] = select;
                         dropdowns[instanceKey] = dropdown;  
-                     }
+                    }
                 });
             });
             this.dropdowns = dropdowns;
             this.selectInstances = selects;
         }
-});
+    });
  

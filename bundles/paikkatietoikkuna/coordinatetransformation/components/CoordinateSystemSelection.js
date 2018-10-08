@@ -101,11 +101,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', dropdownId);
             var dropdown;
             var options = {
-                    placeholder_text: json['DEFAULT'].title,
-                    allow_single_deselect : true,
-                    disable_search_threshold: 50,
-                    width: '100%'
-                };
+                placeholder_text: json['DEFAULT'].title,
+                allow_single_deselect : true,
+                disable_search_threshold: 50,
+                width: '100%'
+            };
             var selections = [];
             Object.keys( json ).forEach( function ( key ) {
                 //don't add default/placeholder option
@@ -270,32 +270,32 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             var selectId = select.getId();
             var disableElevSystem = false;
             switch ( selectId ) {
-                case 'datum':
-                    this.resetAndUpdateSelects();
-                    break;
-                case 'coordinate':
-                    if (currentValue === 'COORD_PROJ_2D') {
-                        this.showProjectionSelect(true);
-                    } else {
-                        this.showProjectionSelect(false);
-                    }
-                    if (currentValue === 'COORD_GEOG_3D' || currentValue === 'COORD_PROJ_3D'){
-                        disableElevSystem = true;
-                    }
-                    this.resetAndUpdateCoordSelect();
-                    break;
-                case 'projection':
-                    showProjSystem = true;
-                    this.resetAndUpdateCoordSelect();
-                    break;
-                case 'elevation':
-                    break;
-                case 'geodetic-coordinate':
-                    //do common stuff
-                    break;
-                default:
-                    Oskari.log(this.getName()).warn('Invalid select');
-                    return;
+            case 'datum':
+                this.resetAndUpdateSelects();
+                break;
+            case 'coordinate':
+                if (currentValue === 'COORD_PROJ_2D') {
+                    this.showProjectionSelect(true);
+                } else {
+                    this.showProjectionSelect(false);
+                }
+                if (currentValue === 'COORD_GEOG_3D' || currentValue === 'COORD_PROJ_3D'){
+                    disableElevSystem = true;
+                }
+                this.resetAndUpdateCoordSelect();
+                break;
+            case 'projection':
+                showProjSystem = true;
+                this.resetAndUpdateCoordSelect();
+                break;
+            case 'elevation':
+                break;
+            case 'geodetic-coordinate':
+                //do common stuff
+                break;
+            default:
+                Oskari.log(this.getName()).warn('Invalid select');
+                return;
             }
             this.disableElevationSelection(disableElevSystem);
             this.trigger('CoordSystemChanged', this.type);

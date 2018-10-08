@@ -178,21 +178,21 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
-           var me = this;
+        _registerLayerEvents: function(layer, oskariLayer){
+            var me = this;
 
-           layer.events.register('tileloadstart', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), true);
-           });
+            layer.events.register('tileloadstart', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            });
 
-           layer.events.register('tileloaded', layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), false);
-           });
+            layer.events.register('tileloaded', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            });
 
-          layer.events.register('tileerror', layer, function(){
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-         });
-       },
+            layer.events.register('tileerror', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            });
+        },
 
         /**
          * Adds  map layers (Wms layer / label text layer / group layer) to this map
@@ -669,18 +669,18 @@ Oskari.clazz.define(
             });
 
             var clusterStrategy = new OpenLayers.Strategy.Cluster({
-                distance: 25,
-                threshold: 2
-            }),
-            clusterLayer = new OpenLayers.Layer.Vector(
-                'layer_name_' + layer.getId() + 'C',
-                {
-                    strategies: [clusterStrategy],
-                    styleMap: new OpenLayers.StyleMap({
-                        'default': style
-                    })
-                }
-            );
+                    distance: 25,
+                    threshold: 2
+                }),
+                clusterLayer = new OpenLayers.Layer.Vector(
+                    'layer_name_' + layer.getId() + 'C',
+                    {
+                        strategies: [clusterStrategy],
+                        styleMap: new OpenLayers.StyleMap({
+                            'default': style
+                        })
+                    }
+                );
 
             /*  GeoServer is used instead.
             if (myPlacesService) {

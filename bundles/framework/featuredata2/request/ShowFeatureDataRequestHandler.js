@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
      * @param {Oskari.mapframework.bundle.featuredata2.plugin.mapmodule.OpenlayersPopupPlugin} featureData
      *          reference to featureData
      */
-        function(featureData) {
+    function(featureData) {
         this.featureData = featureData;
     }, {
         /**

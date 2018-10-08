@@ -686,8 +686,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _preselectPropertiesAggregate: function(propertyList) {
             var me = this,
-                     maxNumOfFields = me.max_analyse_layer_fields,
-                     count = 0;
+                maxNumOfFields = me.max_analyse_layer_fields,
+                count = 0;
 
             propertyList
                 .find('input[name=analyse-feature-property]')
@@ -719,7 +719,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             fieldSelectionInfo.html('');
                         }
                     });
-            });
+                });
         },
         /**
          * @private @method _checkPropertyList
@@ -772,8 +772,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 tooltipCont = me.template.help.clone(),
                 visualizationForm = Oskari.clazz.create(
                     'Oskari.userinterface.component.VisualizationForm', {saveCallback: function() {
-                    me.ownStyleSaved();
-                }}
+                        me.ownStyleSaved();
+                    }}
                 );
 
             colorRandomizer.find('input')
@@ -1153,7 +1153,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _determineAnalysisWFSLayer: function(contentOptions) {
             var me = this,
-                     option;
+                option;
 
             me.WFSLayerService.setAnalysisWFSLayerId(null);
 
@@ -1776,8 +1776,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'differenceLayer',
                         'id': 'difference_' + option.id
                     })
-                    .prop('checked', !!option.selected)
-                    .on('change', closureMagic(option));
+                        .prop('checked', !!option.selected)
+                        .on('change', closureMagic(option));
                 }
 
                 // Second layer field selection
@@ -1968,8 +1968,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'differenceLayer',
                         'id': 'difference_' + option.id
                     })
-                    .prop('checked', !!option.selected)
-                    .on('change', closureMagic(option));
+                        .prop('checked', !!option.selected)
+                        .on('change', closureMagic(option));
                 }
 
                 // Second layer field selection
@@ -2385,7 +2385,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         refreshExtraParameters: function () {
             var me = this,
-                     selectedMethod = me._getSelectedMethod();
+                selectedMethod = me._getSelectedMethod();
             me._modifyExtraParameters(selectedMethod);
         },
 
@@ -2880,7 +2880,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 tmpfea = {},
                 fields;
             // Array Array is used for to keep order of rows and cols
-                    _.forEach(resultJson, function(feature, key) {
+            _.forEach(resultJson, function(feature, key) {
                 tmpfea = {};
                 _.forEach(feature, function(sfeature, skey) {
                     _.forEach(sfeature, function(ssfeature, sskey) {

@@ -130,23 +130,23 @@ Oskari.clazz.define(
             this.setOLMapLayers(layer.getId(), olLayers);
         },
         _registerLayerEvents: function(layer, oskariLayer){
-          var me = this;
+            var me = this;
           
-          layer.events.register('tileloadstart', layer, function(){
-            me.getMapModule().loadingState( oskariLayer._id, true);
-          });
+            layer.events.register('tileloadstart', layer, function(){
+                me.getMapModule().loadingState( oskariLayer._id, true);
+            });
 
-          layer.events.register('tileloaded', layer, function(){
-            me.getMapModule().loadingState( oskariLayer._id, false);
-          });
+            layer.events.register('tileloaded', layer, function(){
+                me.getMapModule().loadingState( oskariLayer._id, false);
+            });
 
-          layer.events.register('loadend', layer, function(){
-         });
+            layer.events.register('loadend', layer, function(){
+            });
 
-         layer.events.register('tileerror', layer, function(){
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            layer.events.register('tileerror', layer, function(){
+                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
 
-        });
+            });
         },
         /**
          * Handle AfterChangeMapLayerStyleEvent

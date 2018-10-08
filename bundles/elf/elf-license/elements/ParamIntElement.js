@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamIntElement',
          * @public
          */
         init: function () {},
-         /**
+        /**
          * Get int element
          * @method getElement
          * @public

@@ -32,7 +32,7 @@ Oskari.clazz.define(
                     SLD_BODY : this.__getSLD(layer),
                 },
                 layerParams = layer.getParams();
-                layerAttributes = layer.getAttributes() || undefined;
+            layerAttributes = layer.getAttributes() || undefined;
 
             if (layer.getMaxScale() || layer.getMinScale()) {
                 // use resolutions instead of scales to minimize chance of transformation errors
@@ -46,13 +46,13 @@ Oskari.clazz.define(
                 }
             }
             var projection = this.getMapModule().getProjection(),
-            reverseProjection;
+                reverseProjection;
 
             if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
-                    // use reverse coordinate order for this layer!
-                    if (layerAttributes.reverseXY[projectionCode]) {
-                        reverseProjection = this._createReverseProjection(projection);
-                    }
+                // use reverse coordinate order for this layer!
+                if (layerAttributes.reverseXY[projectionCode]) {
+                    reverseProjection = this._createReverseProjection(projection);
+                }
             }
 
             var wmsSource = new olSourceImageWMS({

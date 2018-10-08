@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         var data = request.getData();
         var newData = {};
 
-		// Request data is allready to new format
+        // Request data is allready to new format
         if(data && !data.iconUrl && (data.shape || typeof data.shape === 'number') && typeof data.shape !== 'object') {
         	newData = data;
         }

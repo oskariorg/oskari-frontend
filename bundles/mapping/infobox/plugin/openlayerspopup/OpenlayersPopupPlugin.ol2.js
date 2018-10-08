@@ -434,7 +434,7 @@ Oskari.clazz.define(
                     me._handleInfoboxClick(evt, id, contentData, additionalTools);
                 };
             } else {
-                 // override
+                // override
                 popup.events.un({
                     'click': popup.onclick,
                     scope: popup

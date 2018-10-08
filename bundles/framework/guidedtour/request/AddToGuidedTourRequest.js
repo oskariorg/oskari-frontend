@@ -22,4 +22,4 @@ Oskari.clazz.define('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequest',
     },
     {
         'protocol': ['Oskari.mapframework.request.Request']
-});
+    });

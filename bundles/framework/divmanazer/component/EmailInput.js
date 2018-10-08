@@ -16,4 +16,4 @@ Oskari.clazz.define('Oskari.userinterface.component.EmailInput',
     {
         extend: ['Oskari.userinterface.component.TextInput']
     }
-    );
+);

@@ -273,7 +273,7 @@ Oskari.clazz.define(
             plugin.stopPlugin(this.sandbox);
         },
 
-//FIXME
+        //FIXME
         /**
          * @method setCurrentViewId
          * @param {Number} Current view ID
@@ -288,7 +288,7 @@ Oskari.clazz.define(
         getCurrentViewId: function () {
             return this._currentViewId;
         },
-//
+        //
         /* state pop / push ie undo redo begins here */
 
         _stateComparators: [{
@@ -303,7 +303,7 @@ Oskari.clazz.define(
             cmp: function (prevState, nextState) {
                 if (prevState.east !== nextState.east ||
                         prevState.north !== nextState.north
-                        ) {
+                ) {
                     return true;
                 }
                 if (prevState.zoom !== nextState.zoom) {

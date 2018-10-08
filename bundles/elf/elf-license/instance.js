@@ -123,8 +123,8 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
 
         // Create the license service
         me.licenseService = Oskari.clazz.create(
-                'Oskari.elf.license.service.LicenseService',
-                me, me._licenseInformationUrl);
+            'Oskari.elf.license.service.LicenseService',
+            me, me._licenseInformationUrl);
 
         // Create validators
         me._validator.number = Oskari.clazz.create('Oskari.elf.license.validator.NumberValidator',me, false, true);
@@ -338,7 +338,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
                 if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
                     me._showMessage(me._locale.errors.failedConclude.title, errorMsg.error);
                 } else {
-                   me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
+                    me._showMessage(me._locale.errors.failedConclude.title, me._locale.errors.failedConclude.message);
                 }
             });
         } else {
@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
                 handler();
             });
         } else {
-             btn.setHandler(function(){
+            btn.setHandler(function(){
                 dialog.close();
             });
         }
@@ -400,7 +400,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         }
 
         dialog.onClose(function() {
-           me._showsMessage = false;
+            me._showsMessage = false;
         });
 
         if(!doFadeout) {
@@ -614,7 +614,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             if (errorMsg && errorMsg !== null && errorMsg.error && errorMsg.error !== null) {
                 me._showMessage(me._locale.errors.cannotDeactivateLicense.title, errorMsg.error);
             } else {
-               me._showMessage(me._locale.errors.cannotDeactivateLicense.title, me._locale.errors.cannotDeactivateLicense.message);
+                me._showMessage(me._locale.errors.cannotDeactivateLicense.title, me._locale.errors.cannotDeactivateLicense.message);
             }
         });
     },
@@ -631,8 +631,8 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             dialogContent = me._templates.licenseDialog.clone(),
             models = dialogContent.find('.elf_license_dialog_licensemodels'),
             title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
-//            licenseDescriptions = dialogContent.find('.elf_license_dialog_descriptions'),
-//            licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title'),
+            //            licenseDescriptions = dialogContent.find('.elf_license_dialog_descriptions'),
+            //            licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title'),
             metadataTitle = '',
             cancelBtn = me._dialog.createCloseButton(this._locale.buttons.close);
 
@@ -678,7 +678,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             }
             // Else if user has not logged in then show log in message
             else {
-                 me._showLoginInfo(title);
+                me._showLoginInfo(title);
             }
         }
 
@@ -731,7 +731,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             }
             // Else if user has not logged in then show log in message
             else {
-                 me._showLoginInfo(title);
+                me._showLoginInfo(title);
             }
         }
         var licenseDialogLink = jQuery('<a>'+me._locale.getLicenseText+'</a>');
@@ -944,7 +944,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
 
         licensePrice.append(licenseSummary);
     },
-     /**
+    /**
      * Show license information params
      * @method _showLicenseParams
      * @private

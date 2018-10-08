@@ -315,7 +315,7 @@ Oskari.clazz.define(
                 this.coverageButton.val(me.getLocalization('deleteArea'));
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
                 this.coverageButton.prop('disabled', false).css({
-                  'border-color': ''
+                    'border-color': ''
                 });
                 this.drawCoverage = false;
 
@@ -660,12 +660,12 @@ Oskari.clazz.define(
                 this.drawCoverage = true;
 
                 this.coverageButton.on('click', function (){
-                  if (me.drawCoverage === true) {
-                      me.coverageButton.prop('disabled', true).css({
-                      'border-color': '#0099CB'
-                      });
-                      me.coverageButton.val(me.getLocalization('startDraw'));
-                      me._getCoverage();
+                    if (me.drawCoverage === true) {
+                        me.coverageButton.prop('disabled', true).css({
+                            'border-color': '#0099CB'
+                        });
+                        me.coverageButton.val(me.getLocalization('startDraw'));
+                        me._getCoverage();
                     }else {
                         me.selectionPlugin.stopDrawing();
                         me.coverageButton.val(me.getLocalization('delimitArea'));
@@ -684,10 +684,10 @@ Oskari.clazz.define(
             me._updateOptions(advancedContainer);
         },
         _initCoverageButton: function(me, newButton){
-          this.coverageButton = newButton.find('.metadataCoverageDef');
-          this.coverageButton.attr('value', me.getLocalization('delimitArea'));
-          this.coverageButton.attr('name', 'coverage');
-          return this.coverageButton;
+            this.coverageButton = newButton.find('.metadataCoverageDef');
+            this.coverageButton.attr('value', me.getLocalization('delimitArea'));
+            this.coverageButton.attr('name', 'coverage');
+            return this.coverageButton;
         },
 
         /**
@@ -1050,7 +1050,7 @@ Oskari.clazz.define(
                                             callbackElement =  actionElement.first();
                                         }
                                         callbackElement.css({'cursor':'pointer'}).on('click', {metadata: row}, function(event){
-                                           action.callback(event.data.metadata);
+                                            action.callback(event.data.metadata);
                                         });
                                     }
 

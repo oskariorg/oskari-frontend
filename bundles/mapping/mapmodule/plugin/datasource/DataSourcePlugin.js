@@ -338,8 +338,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
             sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
                 uuid: uuid
             },
-                additionalUuids
-                ]);
+            additionalUuids
+            ]);
         }
     }, {
         /**

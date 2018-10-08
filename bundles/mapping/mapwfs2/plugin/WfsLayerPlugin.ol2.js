@@ -103,8 +103,8 @@ Oskari.clazz.define(
                 me
             );
 
-             me.WFSLayerService = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
+            me.WFSLayerService = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
 
             sandbox.registerService(me.WFSLayerService);
 
@@ -325,11 +325,11 @@ Oskari.clazz.define(
             // see if there's any wfs layers, show  if so
             for (i = 0; i < layers.length; i++) {
                 if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
-                   count++;
+                    count++;
                 }
             }
             if(count === 1 && layer.isManualRefresh()){
-               me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
+                me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
             }
 
 
@@ -794,17 +794,17 @@ Oskari.clazz.define(
             var pixelTolerance = 15;
             var selection = geojson_format.write(point);
             var json = {
-                    type: 'FeatureCollection',
-                    crs: this.getMap().getProjection(),
-                    features: [{
-                        type: 'Feature',
-                        geometry: JSON.parse(selection),
-                        properties : {
-                            // add buffer based on resolution
-                            buffer_radius : this.getMap().getResolution() * pixelTolerance
-                        }
-                    }]
-                };
+                type: 'FeatureCollection',
+                crs: this.getMap().getProjection(),
+                features: [{
+                    type: 'Feature',
+                    geometry: JSON.parse(selection),
+                    properties : {
+                        // add buffer based on resolution
+                        buffer_radius : this.getMap().getResolution() * pixelTolerance
+                    }
+                }]
+            };
             this.getIO().setMapClick({
                 lon : lonlat.lon,
                 lat : lonlat.lat,
@@ -909,7 +909,7 @@ Oskari.clazz.define(
 
             layers.forEach(function (layer) {
                 if (layer.hasFeatureData() && layer.isManualRefresh() && layer.isVisible()) {
-                   me.refreshLayer(layer.getId(), true);
+                    me.refreshLayer(layer.getId(), true);
                 }
             });
         },
@@ -1336,10 +1336,10 @@ Oskari.clazz.define(
                         var layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(this.layerId);
                         var style = layer.getCurrentStyle().getName();
                         var dataForTile = this._plugin._tileData.mget(
-                                this.layerId,
-                                style,
-                                bboxKey
-                            );
+                            this.layerId,
+                            style,
+                            bboxKey
+                        );
 
                         if (dataForTile) {
                             // remove from drawing
@@ -1609,7 +1609,7 @@ Oskari.clazz.define(
          *
          * @return {Boolean} is tile ok
          */
-         _isTile: function(tile) {
+        _isTile: function(tile) {
             var b = tile.bounds;
             // true if none of these is undefined
             return !(
@@ -1617,7 +1617,7 @@ Oskari.clazz.define(
                 typeof b.bottom === 'undefined' ||
                 typeof b.right === 'undefined' ||
                 typeof b.top === 'undefined');
-         },
+        },
 
         /*
          * @method getPrintTiles
@@ -1938,22 +1938,22 @@ Oskari.clazz.define(
             return false;
         },
         updateScale: function(layer, minscale, maxscale) {
-          var me = this;
-          layer.setMinScale(minscale);
-          layer.setMaxScale(maxscale);
-          var olLayer = this.getOLMapLayers(layer)
-          olLayer[0].minScale = minscale;
-          olLayer[0].maxScale = maxscale;
+            var me = this;
+            layer.setMinScale(minscale);
+            layer.setMaxScale(maxscale);
+            var olLayer = this.getOLMapLayers(layer)
+            olLayer[0].minScale = minscale;
+            olLayer[0].maxScale = maxscale;
 
-          this._dialog = Oskari.clazz.create(
-            'Oskari.userinterface.component.Popup'
-          );
-         var btn = this._dialog.createCloseButton('OK');
+            this._dialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.Popup'
+            );
+            var btn = this._dialog.createCloseButton('OK');
 
-         btn.setHandler(function() {
-             me._dialog.close();
-         });
-         this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
+            btn.setHandler(function() {
+                me._dialog.close();
+            });
+            this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
         },
         /*
         * add WMS layer as linked layer, if configured for wfs rendering

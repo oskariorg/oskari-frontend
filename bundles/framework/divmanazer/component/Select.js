@@ -289,4 +289,4 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

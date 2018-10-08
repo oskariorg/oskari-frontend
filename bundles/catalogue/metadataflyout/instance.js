@@ -250,9 +250,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             }
             tool.setCallback(function() {
                 me.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
-                        uuid: layer.getMetadataIdentifier()
-                    },
-                    additionalUuids
+                    uuid: layer.getMetadataIdentifier()
+                },
+                additionalUuids
                 ]);
             });
 

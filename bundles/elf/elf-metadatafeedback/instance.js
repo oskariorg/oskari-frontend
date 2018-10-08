@@ -8,15 +8,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
  * @method create called automatically on construction
  * @static
  */
-function () {
-    this.sandbox = null;
-    this._locale = null;
-    this.plugins = {};
-    this.loader = null;
-    this._requestHandlers = {};
-    this.feedbackService = null;
+    function () {
+        this.sandbox = null;
+        this._locale = null;
+        this.plugins = {};
+        this.loader = null;
+        this._requestHandlers = {};
+        this.feedbackService = null;
 
-}, {
+    }, {
         /**
          * @static
          * @property templates
@@ -250,7 +250,7 @@ function () {
         getState: function () {
             return this.plugins[
                 'Oskari.userinterface.Flyout'
-                ].getContentState();
+            ].getContentState();
         },
         eventHandlers: {},
 
@@ -324,9 +324,9 @@ function () {
         }
 
     },{
-    protocol: [
-        'Oskari.bundle.BundleInstance',
-        'Oskari.mapframework.module.Module',
-        'Oskari.userinterface.Extension'
-    ]
-});
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module',
+            'Oskari.userinterface.Extension'
+        ]
+    });

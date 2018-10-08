@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                                 '<span/>' +
                                 '${systems}' +
                             '</label>'+
-                            //'<div class="infolink icon-info" data-source="systems" title="${systemsInfo}"></div>' +
+                //'<div class="infolink icon-info" data-source="systems" title="${systemsInfo}"></div>' +
                         '</div>'+
                         '<div class="source-select">'+
                             '<input type="radio" id="filter-epsg" name="filter-select" value="epsg">' +
@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                                 '<span/>' +
                                 '${epsg}' +
                             '</label>'+
-                            //'<div class="infolink icon-info" data-source="espg" title="${epsgInfo}"></div>' +
+                //'<div class="infolink icon-info" data-source="espg" title="${epsgInfo}"></div>' +
                         '</div>'+
                     '</div>'+
                 '</div>'

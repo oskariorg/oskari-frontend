@@ -62,41 +62,41 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
 
                 jQuery.each(chars, function(key, value){
                     switch(value){
-                        case '0':
-                        case '1':
-                        case '2':
-                        case '3':
-                        case '4':
-                        case '5':
-                        case '6':
-                        case '7':
-                        case '8':
-                        case '9':
-                        case '.':
-                        case ',':
-                        case '-':
-                            if (value === '.' || value === ','){
-                                if(decimal_exist === false){
-                                    decimal_exist = true;
-                                } else{
-                                    remove_char = true;
-                                    chars[''+key+''] = '';
-                                }
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                    case '.':
+                    case ',':
+                    case '-':
+                        if (value === '.' || value === ','){
+                            if(decimal_exist === false){
+                                decimal_exist = true;
+                            } else{
+                                remove_char = true;
+                                chars[''+key+''] = '';
                             }
+                        }
 
-                            if(value === '-'){
-                                if(negative_exist === false){
-                                    negative_exist = true;
-                                } else{
-                                    remove_char = true;
-                                    chars[''+key+''] = '';
-                                }
+                        if(value === '-'){
+                            if(negative_exist === false){
+                                negative_exist = true;
+                            } else{
+                                remove_char = true;
+                                chars[''+key+''] = '';
                             }
-                            break;
-                        default:
-                            remove_char = true;
-                            chars[''+key+''] = '';
-                            break;
+                        }
+                        break;
+                    default:
+                        remove_char = true;
+                        chars[''+key+''] = '';
+                        break;
                     }
                 });
 

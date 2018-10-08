@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         },
         setMeasurementResult: function (measurement, drawMode) {
             if (drawMode === 'point' || typeof measurement !== 'number') {
-               return;
+                return;
             }
             var measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);
             this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;

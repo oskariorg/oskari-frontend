@@ -5,13 +5,13 @@
  */
 Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Tile',
 
-      /**
+    /**
        * @method create called automatically on construction
        * @static
        * @param {Oskari.mapframework.bundle.search.SearchBundleInstance} instance
        *        reference to component that created the tile
        */
-      function (instance) {
+    function (instance) {
         
         var me = this;
         me.instance = instance;
