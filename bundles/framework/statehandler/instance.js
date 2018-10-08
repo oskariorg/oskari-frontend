@@ -404,21 +404,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             return cmpResult;
         },
 
-        /**
-         * @method logState
-         * @private
-         * Sends a GET request to the url in the conf with map parameters
-         */
-        _logState: function () {
-            var me = this,
-                logUrlWithLinkParams = me.conf.logUrl + '?' + me.sandbox.generateMapLinkParameters();
-
-            jQuery.ajax({
-                type: 'GET',
-                url: logUrlWithLinkParams
-            });
-        },
-
         _pushState: function () {
             var me = this;
             if (me._historyEnabled) {
@@ -431,10 +416,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                     state.rule = cmpResult.rule;
                     me._historyPrevious.push(state);
                     me._historyNext = [];
-
-                    if (me.conf && me.conf.logUrl) {
-                        me._logState();
-                    }
                 }
             }
         },
