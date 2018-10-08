@@ -4,8 +4,8 @@ import olFeature from 'ol/Feature';
 import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 
-const LAYER_ID = 'id';
 const PROPERTY_ID = 'id';
+const LAYER_ID = 'oskariId';
 const LAYER_TYPE = 'oskariLayerType';
 const LAYER_HOVER = 'oskariHoverOptions';
 const HOVER = 'hover';

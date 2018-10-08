@@ -8,7 +8,7 @@ import VectorTileModelBuilder from './VectorTileModelBuilder';
 import VectorTileLayer from './VectorTileLayer';
 import styleGenerator from './styleGenerator';
 
-const LAYER_ID = 'id';
+const LAYER_ID = 'oskariId';
 const LAYER_TYPE = 'oskariLayerType';
 const LAYER_HOVER = 'oskariHoverOptions';
 

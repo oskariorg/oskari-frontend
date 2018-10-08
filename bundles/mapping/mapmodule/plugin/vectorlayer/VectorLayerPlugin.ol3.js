@@ -10,8 +10,7 @@ import * as olGeom from 'ol/geom';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 
-const LAYER_ID = 'id';
-const LAYER_NAME = 'name';
+const LAYER_ID = 'oskariId';
 const LAYER_TYPE = 'oskariLayerType';
 const LAYER_HOVER = 'oskariHoverOptions';
 
@@ -106,11 +105,9 @@ Oskari.clazz.define(
                     var opacity = 100;
                     var vectorSource = new olSourceVector();
                     var olLayer = new olLayerVector({
-                        name: me._olLayerPrefix + layerId,
-                        id: layerId,
                         source: vectorSource
                     });
-
+                    olLayer.set(LAYER_ID, layerId, true);
                     olLayer.setOpacity(opacity);
 
                     me._map.addLayer(olLayer);
@@ -418,7 +415,6 @@ Oskari.clazz.define(
                 olLayer.set(LAYER_ID, layer.getId(), silent);
                 olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
                 olLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-                olLayer.set(LAYER_NAME, me._olLayerPrefix + layer.getId(), silent);
                 me._olLayers[layer.getId()] = olLayer;
                 me._map.addLayer(olLayer);
                 me.raiseVectorLayer(olLayer);
