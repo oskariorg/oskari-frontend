@@ -418,8 +418,6 @@ Oskari.clazz.define(
                 olLayer.set(LAYER_ID, layer.getId(), silent);
                 olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
                 olLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-                // TODO the getter for the name property is only used in old Oskari ol builds.
-                // Check if we are missing some implementation in ol5.
                 olLayer.set(LAYER_NAME, me._olLayerPrefix + layer.getId(), silent);
                 me._olLayers[layer.getId()] = olLayer;
                 me._map.addLayer(olLayer);
