@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
             };
 
             for (var key in this._requestHandlers) {
-                sandbox.requestHandler(key, this._requestHandlers[key])
+                sandbox.requestHandler(key, this._requestHandlers[key]);
             }
 
             var request = Oskari.requestBuilder(

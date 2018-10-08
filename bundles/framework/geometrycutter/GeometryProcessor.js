@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
                 properties: {
                     id: i
                 }
-            }
+            };
         }, this);
     },
     clipByPolygon: function (sourceFeature, drawnFeature) {

@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param  {String[]} times time instants in timeseries, ISO-string
          */
         _filterSkipOptions: function (times) {
-            times = times.map(function (t) { return moment(t) }); // optimization: parse time strings once
+            times = times.map(function (t) { return moment(t); }); // optimization: parse time strings once
             var shortestInterval = Number.MAX_VALUE;
             for (var i = 0; i < times.length - 1; i++) {
                 var current = times[i];
@@ -367,7 +367,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 return {
                     title: me.loc(prefix + e.key),
                     value: e.value
-                }
+                };
             });
         },
         /**
@@ -465,7 +465,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                                 : d3.timeMonth(date) < date ? formatDay
                                     : d3.timeYear(date) < date ? formatMonth
                                         : (textEl.classed('bold', true), formatYear))(date);
-            }
+            };
         },
         /**
          * @method _updateTimelines Update timelines SVG
@@ -474,7 +474,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _updateTimelines: function (isMobile) {
             var me = this;
-            var margin = { left: 15, right: 15 }
+            var margin = { left: 15, right: 15 };
             var tickFormatter = me._getTickFormatter();
             var tickCount = me._timelineWidth / 60;
             var svg = d3.select(this._element.find('.timeline-svg').get(0));
@@ -582,8 +582,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             function brushed() {
                 var selection = d3.event.selection;
-                var inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString() });
-                scaleSubset.domain(inverted.map(function (t) { return new Date(me._getClosestTime(t)) }));
+                var inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString(); });
+                scaleSubset.domain(inverted.map(function (t) { return new Date(me._getClosestTime(t)); }));
                 svg.select('.subset-axis').call(axisSubset);
 
                 var changedTime = me._uiState.currentTime;

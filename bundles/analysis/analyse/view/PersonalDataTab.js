@@ -1,4 +1,4 @@
-import {getCenter as olExtentGetCenter, getArea as olExtentGetArea} from 'ol/extent'
+import {getCenter as olExtentGetCenter, getArea as olExtentGetArea} from 'ol/extent';
 
 /**
  * @class Oskari.mapframework.bundle.analyse.view.PersonalDataTab

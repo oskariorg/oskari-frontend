@@ -101,7 +101,7 @@
         getUserDatasource: function () {
             return this.datasources.find(function (src) {
                 return src.type === 'user';
-            })
+            });
         },
         getUILabels: function (indicator, callback) {
             var me = this;
@@ -631,7 +631,7 @@
                     ds: datasrc,
                     id: indicatorId
                 });
-            }
+            };
 
             if (!Oskari.user().isLoggedIn()) {
                 // successfully saved for guest user

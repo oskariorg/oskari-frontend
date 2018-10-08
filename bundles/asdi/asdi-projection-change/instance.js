@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.projection.change.instance',
                 views: this.getAppViews(),
                 loc: this.loc,
                 sb: this.sandbox  
-            }
+            };
             var plugin = Oskari.clazz.create('Oskari.projection.change.ProjectionChangerPlugin', params, this.loc );
 
             this._mapmodule.registerPlugin(plugin);

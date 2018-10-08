@@ -544,7 +544,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
         __guidedTourDelegateTemplate: {
             priority: 60,
             getTitle: function () {
-                return this.getLocalization().guidedTour.title
+                return this.getLocalization().guidedTour.title;
             },
             getContent: function () {
                 var content = jQuery('<div></div>');

@@ -215,7 +215,7 @@ Oskari.clazz.define(
             var allLayers = mapLayerService.getAllLayers();
 
             var wfsLayers = allLayers.filter(function(layer){
-                return layer.getLayerType() === 'wfs'
+                return layer.getLayerType() === 'wfs';
             });
 
             wfsLayers.forEach(function(layer){
@@ -530,7 +530,7 @@ Oskari.clazz.define(
                 dataObject.locale[item] = {
                     name : frm.find('[name=details-topic-'+item+']').val(),
                     desc : frm.find('[name=details-desc-'+item+']').val()
-                }
+                };
             });
 
             jQuery.each(frm.find('[name=choose-param-for-search]'), function(index, item) {

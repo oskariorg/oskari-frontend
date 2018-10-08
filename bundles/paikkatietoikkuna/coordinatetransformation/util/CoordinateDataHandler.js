@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
             lon: lonlat.lon,
             lat: lonlat.lat,
             id: id
-        }
+        };
         this.mapCoordId++;
         this.mapCoords.push(coord);
         return id;
@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
     removeMapCoord: function (id){
         var checkId = function (coord){
             return coord.id !== id;
-        }
+        };
         this.mapCoords = this.mapCoords.filter(checkId);
     },
     //add input coords as previously selected coordinates
@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
      */
     validateData: function( data ) {
         var lonlatKeyMatch = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
-        var numericWhitespaceMatch = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi)
+        var numericWhitespaceMatch = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi);
         
         var matched = data.match( lonlatKeyMatch );
         var numMatch = data.match( numericWhitespaceMatch );
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
                         obj[i] = {
                             lon: data[i][0],
                             lat: data[i][1]
-                        }
+                        };
                     }
                 }
             }

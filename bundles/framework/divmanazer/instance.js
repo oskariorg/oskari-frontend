@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             return {
                 'top': mapdiv.offset().top,
                 'left': mapdiv.offset().left
-            }
+            };
         },
         /**
          * HTML templates
@@ -833,7 +833,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     left: this.getMapdivOffset().left,
                     top: '30px'
                 }
-            }
+            };
         },
         /*
          * @static @property validStates

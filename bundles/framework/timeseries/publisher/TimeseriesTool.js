@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
                 location: 'top center',
                 widthMargin: 200,
                 topMargin: '90px'
-            }
+            };
             if (pdata && pdata.configuration && pdata.configuration.timeseries &&
                 pdata.configuration.timeseries.conf &&
                 pdata.configuration.timeseries.conf.plugins) {

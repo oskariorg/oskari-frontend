@@ -142,7 +142,7 @@ export default class MapModule extends AbstractMapModule {
                 evt.pixel[0],
                 evt.pixel[1]);
             sandbox.notifyAll(hoverEvent);
-        })
+        });
     }
     _startImpl () {
         this.getMap().render();

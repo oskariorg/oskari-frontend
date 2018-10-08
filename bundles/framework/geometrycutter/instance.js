@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
                 return;
             }
             var featureLayers = event.getFeatures();
-            var relevantLayers = featureLayers.filter(function (l) { return this._editsInProgress[l.layerId] }, this);
+            var relevantLayers = featureLayers.filter(function (l) { return this._editsInProgress[l.layerId]; }, this);
             if (!relevantLayers.length) {
                 return;
             }
@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             this.sandbox.request(this, request);
             return true;
         }
-        var editState = Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.EditState', drawId, mode, feature, requestFunction.bind(this))
+        var editState = Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.EditState', drawId, mode, feature, requestFunction.bind(this));
         this._editsInProgress[drawId] = editState;
         editState.startDrawing();
     },

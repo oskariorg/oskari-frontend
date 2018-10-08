@@ -60,7 +60,7 @@ Oskari.clazz.define(
         _updateLayer: function(layer) {
             if ( !layer.isLayerOfType( this.getLayerTypeSelector() ) ) {
                 // only handle layers of type heatmap
-                return
+                return;
             }
             var oLayers = this.getOLMapLayers(layer),
                 subs = layer.getSubLayers(),

@@ -1,6 +1,6 @@
 Oskari.clazz.define('Oskari.projection.change.view.ErrorListing', function () {
     this.loc = Oskari.getLocalization('projection-change');
-    this.errorView = _.template('<div class="oskari-projection-warning"><div>${desc}</div></div>')
+    this.errorView = _.template('<div class="oskari-projection-warning"><div>${desc}</div></div>');
 }, {
     setElement: function(el) {
         this.element = el;

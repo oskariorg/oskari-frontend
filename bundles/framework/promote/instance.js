@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
 
             //Let's extend UI
             var reqName = 'userinterface.AddExtensionRequest';
-            var reqBuilder = Oskari.requestBuilder(reqName)
+            var reqBuilder = Oskari.requestBuilder(reqName);
             var request = reqBuilder(this);
             sandbox.request(this, request);
 

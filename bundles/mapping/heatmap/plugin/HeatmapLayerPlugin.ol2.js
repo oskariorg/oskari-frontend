@@ -73,7 +73,7 @@ Oskari.clazz.define(
                 openLayer.mergeNewParams({
                     SLD_BODY : me.__getSLD(layer)
                 });
-            }
+            };
             // /hack
 
             this.getMap().addLayer(openLayer, !keepLayerOnTop);

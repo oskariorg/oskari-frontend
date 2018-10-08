@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.layerselector2.view.FilterButtons',
             if ( me.filterIsCreated(filterName) ) {
                 return;
             }
-            var filterButton = me.filterTemplate.clone()
+            var filterButton = me.filterTemplate.clone();
 
             filterButton.attr('data-filter', filterName);
             filterButton.find('.filter-text').html(toolText);

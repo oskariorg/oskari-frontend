@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.asdi.login.BundleInstance',
             this.flyout = this.getFlyout();
 
             var loginButton = this.templates.loginButton.clone();
-            loginButton.val(this.locale.flyout.login)
+            loginButton.val(this.locale.flyout.login);
             loginButton.on('click', function() {
                 me.showLoginFlyout();
             });

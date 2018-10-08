@@ -206,7 +206,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                 if (layerId === layer._id) {
                     layerName = layer.getName();
                 }
-            })
+            });
 
             return layerName;
 

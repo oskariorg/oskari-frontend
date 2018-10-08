@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         'allowedFileTypes': [], //MIME types e.g. "text/plain"
         'allowedFileExtensions': [], //File extensions without dot e.g. "txt"
         'showNoFile': true //shows error popup when getFiles() is called and file isn't given
-    }
+    };
     this.visible = true;
 
     this._template = {
@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             '<div class="<%= classes %>">' +
                 '<input type="file" class="basic__file" accept="<%= allowedFiles %>" <%= allowMultiple %> />' +
             '</div>')
-    }
+    };
     this.isAdvancedUpload = this._canUseAdvancedUpload();
     this._createUi();
 }, {

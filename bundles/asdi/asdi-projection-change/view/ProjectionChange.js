@@ -1,7 +1,7 @@
 
 Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (params) {
     this.views = params.views;
-    this.sb = params.sb
+    this.sb = params.sb;
     this.loc = params.loc;
     this.element = null;
     this.createUi();
@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
         window.location.href = url;
     },
     getSelectedMapLayersUrlParam: function () {
-        var maplayerUrlString = '&mapLayers='
+        var maplayerUrlString = '&mapLayers=';
         var layerString = '';
         var layers = this.sb.getMap().getLayers();
         

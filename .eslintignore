@@ -18,3 +18,4 @@ bundles/liikennevirasto/**
 bundles/lupapiste/**
 bundles/digiroad/**
 bundles/**/locale/*.js
+*.min.js

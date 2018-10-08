@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                             '<ul class="error-list"></ul>' +
                         '</div>'),
         listItem: jQuery('<li></li>')
-    }
+    };
 }, {
     getName: function() {
         return 'Oskari.coordinatetransformation.helper';
@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
     moveMapToMarkers: function(points){
         var closestZoom = 6;
         if (!Array.isArray(points) || points.length === 0 ){
-            return
+            return;
         } else if (points.length === 1 ){
             var x;
             var y;
@@ -326,7 +326,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             'projection': this.getProjectionOptions(),
             'geodetic-coordinate': geoCoords,
             'elevation': this.getElevationOptions()
-        }
+        };
 
     },
     getDatumOptions: function() {
@@ -343,7 +343,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 'title': 'EUREF-FIN',
                 'cls': 'DATUM_KKJ DATUM_EUREF-FIN'
             }
-        }
+        };
     },
     getCoordinateOptions: function() {
         return {
@@ -371,7 +371,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 'cls': 'DATUM_EUREF-FIN',
                 'dimension': 3
             }
-        }
+        };
     },
     getProjectionOptions: function() {
         return {
@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 'title': 'Lambert Conic Conformal',
                 'cls': 'DATUM_EUREF-FIN'
             }
-        }
+        };
     },
     //bounds:[minx, miny, maxx, maxy], lonFirst: true -> lonlat, EN, XY
     getGeodeticCoordinateOptions: function() {
@@ -678,7 +678,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 'bounds': [19.24, 59.75, 31.59, 70.09],
                 'lonFirst': false
             }
-        }
+        };
     },
     getElevationOptions: function(){
         return {
@@ -698,7 +698,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                 'title':'N43',
                 'cls':'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
             }
-        }
+        };
     },
     getCompoundSystem: function (epsg){
         switch(epsg) {

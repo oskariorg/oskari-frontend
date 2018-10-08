@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                                 '<tbody></tbody'+
                             '</table>'
         )
-    }
+    };
 },  {
     getContainer: function () {
         return jQuery(this.container);
@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             'rows': this.getContainer().find( '.oskari-coordinate-table tr' ),
             'header': this.getContainer().find( '.oskari-tbl-header' ),
             'tableContent': this.getContainer().find('.oskari-table-content')
-        }
+        };
         return elements;
     },
     setElement: function ( el ) {

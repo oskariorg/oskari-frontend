@@ -30,7 +30,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
                     callback: function () {
                         me._flyout.toggle();
                         if ( !me._flyout.isVisible() ) {
-                            me.mobilePluginOnClose()
+                            me.mobilePluginOnClose();
                         }
                     },
                     sticky: true,
@@ -58,7 +58,7 @@ Oskari.clazz.define( 'Oskari.projection.change.ProjectionChangerPlugin',
                         this._flyout.move(this.offsetRight, this.offsetTop, true);
                     }
                 }
-            }
+            };
         },
         mobilePluginOnClose: function () {
             this._resetMobileIcon(this.getElement(), this._mobileDefs.buttons['mobile-projectionchange'].iconCls);

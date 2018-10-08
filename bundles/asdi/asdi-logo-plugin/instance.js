@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
                 callback: function(event) {
                     me.createAboutDialog(event);
                 }
-            }
+            };
             logoService.addLabel(this._loc.title, options);
         },
 

@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                     '<a href="javascript:void(0);">${fileButton}</a>' +
                 '</div>'
             )
-        }
+        };
         this.createUi();
     }, {
         getName: function() {
@@ -172,7 +172,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                     var selectCb = function(){
                         jQuery(evt.target).prop('checked', true);
                         me.handleSourceSelection(evt.target.value);
-                    }
+                    };
                     evt.preventDefault();
                     me.confirmResetFlyout(true, selectCb);
                 } else {

@@ -59,7 +59,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             var data = {
                 uuid: Oskari.app.getUuid(),
                 noSavedState: true
-            }
+            };
             jQuery.ajax({
                 dataType: 'json',
                 data: data,

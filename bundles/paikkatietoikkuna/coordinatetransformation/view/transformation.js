@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         var me = this;
         me.instance = instance;
         me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
-        me.conversionContainer = null
+        me.conversionContainer = null;
         //me.sourceSelection = null; //TODO move
         me.helper = helper;
         me.dataHandler = dataHandler;
@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     '</div>'+
                 '</div>'
             )
-        }
+        };
     }, {
         getName: function() {
             return 'Oskari.coordinatetransformation.view.transformation';
@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 targetElevationCrs: target.getElevation(),
                 sourceDimension: dimensions.input,
                 targetDimension: dimensions.output
-            }
+            };
         },
         showMessage: function (title, message){
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
